@@ -8,6 +8,21 @@
 </head>
 <body>
 
+<header>
+  <div id="user-info">
+    <% if current_user %>
+      <%= current_user.email %> |
+      <%= link_to("Logout", destroy_user_session_path, method: :delete) %>
+    <% else %>
+      <%= link_to "Login with Google", user_omniauth_authorize_path(:google_oauth2) %>
+    <% end %>
+  </div>
+
+  <h1>MESS</h1>
+</header>
+
+<%= flash_messages %>
+
 <%= yield %>
 
 </body>

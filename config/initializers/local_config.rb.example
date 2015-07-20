@@ -1,0 +1,7 @@
+# Google OAuth2 credentials
+Devise.setup do |config|
+  config.omniauth :google_oauth2, "xxx.apps.googleusercontent.com", "xxx", {}
+end
+
+# generate your secret key with `rake secret`
+MESS::Application.config.secret_key_base = "xxx"

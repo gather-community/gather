@@ -33,6 +33,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rails-backbone'
 gem 'font-awesome-sass'
 gem 'simple_form'
+gem 'devise'
+gem 'omniauth-google-oauth2'
 
 gem 'bootstrap-sass', '~> 3.3.5'
 

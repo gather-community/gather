@@ -37,10 +37,18 @@ Follow these steps to setup a development environment for MESS.
   git checkout develop
   ```
 
+1. **Set local config**
+  - `cp config/initializers/local_config.rb.example config/initializers/local_config.rb`
+  - Edit `config/initializers/local_config.rb` to set config specific to your environment.
+
 1. **Create development and test databases**
   - See `createdb` command.
   - Should be named `mess_development` and `mess_test`.
   - Ensure adquate privileges for table creation, etc.
+
+1. **Insert a row in the users table so you can login**
+  - e.g. `INSERT INTO users (email, created_at, updated_at) VALUES ('you@gmail.com', now(), now())`
+  - Replace `you@gmail.com` with a Google account you control.
 
 1. **Bundle, configure, and migrate**
   - Install the required gems by running `bundle install` in the project directory.
@@ -55,4 +63,5 @@ Follow these steps to setup a development environment for MESS.
 
 1. **Start using the system**
   - Navigate to http://localhost:3000
+  - Login with the Google account given above
   - Enjoy!

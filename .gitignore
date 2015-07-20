@@ -15,3 +15,5 @@
 /log/*
 !/log/.keep
 /tmp
+
+config/initializers/local_config.rb

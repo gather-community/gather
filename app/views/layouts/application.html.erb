@@ -11,7 +11,7 @@
 <header>
   <div id="user-info">
     <% if current_user %>
-      <%= current_user.email %> |
+      <%= current_user.google_email %> |
       <%= link_to("Logout", destroy_user_session_path, method: :delete) %>
     <% else %>
       <%= link_to "Login with Google", user_omniauth_authorize_path(:google_oauth2) %>

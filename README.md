@@ -46,9 +46,14 @@ Follow these steps to setup a development environment for MESS.
   - Should be named `mess_development` and `mess_test`.
   - Ensure adquate privileges for table creation, etc.
 
-1. **Insert a row in the users table so you can login**
-  - e.g. `INSERT INTO users (email, google_email, created_at, updated_at) VALUES ('you@example.com', 'you@gmail.com', now(), now())`
-  - Replace `you@gmail.com` with a Google account you control.
+1. **Seed the db**
+  - `rake db:seed`
+  - This adds communities, households, etc.
+
+1. **Create a user so you can login**
+  - Open the rails console (`rails c`)
+  - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first)`
+  - Be sure to replace `you@gmail.com` with a Google account you control.
 
 1. **Bundle, configure, and migrate**
   - Install the required gems by running `bundle install` in the project directory.

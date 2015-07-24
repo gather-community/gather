@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722145704) do
+ActiveRecord::Schema.define(version: 20150724022313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,23 +33,24 @@ ActiveRecord::Schema.define(version: 20150722145704) do
   add_index "households", ["community_id"], name: "index_households_on_community_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.integer  "sign_in_count",      default: 0, null: false
+    t.integer  "sign_in_count",      default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
     t.string   "provider"
     t.string   "uid"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "google_email",                   null: false
-    t.string   "email",                          null: false
-    t.string   "first_name",                     null: false
-    t.string   "last_name",                      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "google_email",                       null: false
+    t.string   "email",                              null: false
+    t.string   "first_name",                         null: false
+    t.string   "last_name",                          null: false
     t.string   "home_phone"
     t.string   "mobile_phone"
     t.string   "work_phone"
-    t.integer  "household_id",                   null: false
+    t.integer  "household_id",                       null: false
+    t.boolean  "admin",              default: false, null: false
   end
 
 end

@@ -52,7 +52,7 @@ Follow these steps to setup a development environment for MESS.
 
 1. **Create a user so you can login**
   - Open the rails console (`rails c`)
-  - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first)`
+  - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first, admin: true)`
   - Be sure to replace `you@gmail.com` with a Google account you control.
 
 1. **Bundle, configure, and migrate**

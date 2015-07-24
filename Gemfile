@@ -36,6 +36,9 @@ gem 'simple_form'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 
+# Authorization
+gem 'cancancan', '~> 1.10'
+
 gem 'bootstrap-sass', '~> 3.3.5'
 
 group :development, :test do

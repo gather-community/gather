@@ -4,6 +4,13 @@ header {
 
   h1 {
     margin: 0;
+
+    i.fa {
+      font-size: 27px;
+      vertical-align: top;
+      display: inline-block;
+      margin-top: 7px;
+    }
   }
 
   #user-info {

@@ -52,5 +52,8 @@ group :development, :test do
   gem 'spring'
 
   gem 'rspec-rails', '~> 3.0'
+
+  # Fix silly schema stuff.
+  gem 'fix-db-schema-conflicts'
 end
 

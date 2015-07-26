@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # Makes sure authorization is performed in each controller. (CanCan method)
-  check_authorization
+  check_authorization unless: :devise_controller?
 
   before_action :mailer_set_url_options
   before_action :authenticate_user!

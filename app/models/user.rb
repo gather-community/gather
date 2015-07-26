@@ -32,13 +32,18 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def format_phone(kind)
+    read_attribute(:"#{kind}_phone").try(:phony_formatted, format: :national)
+  end
+
   private
 
   def at_least_one_phone
-    errors.add(:base, "You must enter at least one phone number") if no_phones?
+    errors.add(:mobile_phone, "You must enter at least one phone number") if no_phones?
   end
 
   def no_phones?
     [home_phone, mobile_phone, work_phone].compact.empty?
   end
+
 end

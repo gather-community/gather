@@ -1,1 +1,17 @@
 <% content_for(:title){ @user == current_user ? "Edit Profile" : "Edit User: #{@user.name}" } %>
+
+<%= simple_form_for(@user, html: { class: 'form-horizontal' }) do |f| %>
+
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+  <%= f.input :email %>
+  <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
+  <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
+  <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
+
+  <div class="form-actions col-sm-8">
+    <%= f.button :submit, class: "pull-right" %>
+  </div>
+
+<% end %>
+<br/><br/>

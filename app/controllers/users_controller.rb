@@ -1,4 +1,3 @@
 class UsersController < ApplicationController
-  def edit
-  end
+  load_and_authorize_resource
 end

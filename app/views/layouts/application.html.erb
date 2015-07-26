@@ -1,7 +1,8 @@
+<% @title = yield(:title) || (raise "No page title given") %>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mess</title>
+  <title>MESS: <%= @title %></title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
@@ -23,7 +24,11 @@
 
 <%= flash_messages %>
 
-<%= yield %>
+<div id="#content">
+  <h1><%= @title %></h1>
+
+  <%= yield %>
+</div>
 
 </body>
 </html>

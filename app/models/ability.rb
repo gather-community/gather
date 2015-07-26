@@ -7,8 +7,8 @@ class Ability
     # Anyone can read any other user's info.
     can :read, User
 
-    # Only user can edit own profile.
-    can :edit_profile, User, id: user.id
+    # User can edit own profile.
+    can :update, User, id: user.id
 
     if user.admin?
       # Admins can edit any user

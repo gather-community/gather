@@ -85,7 +85,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
 
-    b.wrapper tag: 'div', class: 'col-sm-offset-3 col-sm-6' do |wr|
+    b.wrapper tag: 'div', class: 'col-sm-offset-2 col-sm-6' do |wr|
       wr.wrapper tag: 'div', class: 'checkbox' do |ba|
         ba.use :label_input, class: 'col-sm-6'
       end
@@ -128,9 +128,9 @@ SimpleForm.setup do |config|
   # buttons and other elements.
   config.default_wrapper = :horizontal_form
   config.wrapper_mappings = {
-    check_boxes: :vertical_radio_and_checkboxes,
-    radio_buttons: :vertical_radio_and_checkboxes,
-    file: :vertical_file_input,
-    boolean: :vertical_boolean,
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean,
   }
 end

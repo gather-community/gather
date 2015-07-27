@@ -5,6 +5,7 @@ en:
         first_name: "First Name"
         last_name: "Last Name"
         email: "Email Address"
+        google_email: "Google ID"
         mobile_phone: "Mobile Phone"
         home_phone: "Home Phone"
         work_phone: "Work Phone"

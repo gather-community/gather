@@ -4,4 +4,4 @@ Devise.setup do |config|
 end
 
 # generate your secret key with `rake secret`
-MESS::Application.config.secret_key_base = "xxx"
+Mess::Application.config.secret_key_base = "xxx"

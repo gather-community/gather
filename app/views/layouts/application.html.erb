@@ -20,11 +20,14 @@
   </div>
 
   <h1><i class="fa fa-cutlery"></i> MESS</h1>
+  <div id="menu">
+    <%= link_to "Users", users_path %>
+  </div>
 </header>
 
-<%= flash_messages %>
-
 <div id="content">
+  <%= flash_messages %>
+
   <h1><%= @title %></h1>
 
   <%= yield %>

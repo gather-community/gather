@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
+  def index
+  end
+
   def update
     if @user.update_attributes(user_params)
+      flash[:success] = "User updated successfully."
       redirect_to root_path
     else
       render :edit

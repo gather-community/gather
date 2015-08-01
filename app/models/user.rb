@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   validates :google_email, format: Devise.email_regexp, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :household, presence: true
+  validates :household_id, presence: true
   validate :at_least_one_phone
 
   def self.from_omniauth(auth)

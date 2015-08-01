@@ -1,5 +1,9 @@
 <% content_for(:title){ "Users" } %>
 
+<div class="index-links">
+  <%= link_to("Create User", new_user_path) if can?(:create, User) %>
+</div>
+
 <table>
   <tr>
     <th class="col-md-2">Name</th>

@@ -1,11 +1,17 @@
 class User < ActiveRecord::Base
+  PHONE_TYPES = %w(home work mobile)
+
   devise :omniauthable, :trackable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household
 
-  %w(home_phone work_phone mobile_phone).each do |p|
-    phony_normalize p, default_country_code: 'US'
-    validates_plausible_phone p, normalized_country_code: 'US'
+  scope :by_name, -> { order("first_name, last_name") }
+
+  delegate :name, to: :household, prefix: true
+
+  PHONE_TYPES.each do |p|
+    phony_normalize "#{p}_phone", default_country_code: 'US'
+    validates_plausible_phone "#{p}_phone", normalized_country_code: 'US'
   end
 
   normalize_attributes :email, :google_email, :first_name, :last_name
@@ -34,6 +40,11 @@ class User < ActiveRecord::Base
 
   def format_phone(kind)
     read_attribute(:"#{kind}_phone").try(:phony_formatted, format: :national)
+  end
+
+  # Returns a string with all non-nil phone numbers
+  def phones
+    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact.join(",")
   end
 
   private

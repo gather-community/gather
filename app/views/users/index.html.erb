@@ -1,1 +1,20 @@
 <% content_for(:title){ "Users" } %>
+
+<table>
+  <tr>
+    <th class="col-md-2">Name</th>
+    <th class="col-md-2">Household</th>
+    <th class="col-md-2">Google ID</th>
+    <th class="col-md-2">Contact Email</th>
+    <th class="col-md-4">Phone</th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td class="col-md-2"><%= link_to(user.name, edit_user_path(user)) %></td>
+      <td class="col-md-2"><%= user.household_name %></td>
+      <td class="col-md-2"><%= link_to(user.google_email, "mailto:#{user.google_email}") %></td>
+      <td class="col-md-2"><%= link_to(user.email, "mailto:#{user.email}") %></td>
+      <td class="col-md-4"><%= user.phones %></td>
+    </tr>
+  <% end %>
+</table>

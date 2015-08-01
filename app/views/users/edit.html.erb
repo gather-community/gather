@@ -1,5 +1,14 @@
 <% content_for(:title){ @user == current_user ? "Edit Profile" : "Edit User: #{@user.name}" } %>
 
+<% if @user.deleted? %>
+  <div class="alert alert-info">
+    This user was deleted at <%= @user.deleted_at %>.
+    <% if can?(:undelete, @user) %>
+      You can <%= link_to("undelete them", undelete_user_path(@user), method: :put) %>.
+    <% end %>
+  </div>
+<% end %>
+
 <%= simple_form_for(@user, html: { class: 'form-horizontal' }) do |f| %>
 
   <%= f.input :first_name %>

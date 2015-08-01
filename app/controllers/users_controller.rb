@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @users = User.by_name
+    @users = User.by_active_and_name
   end
 
   def update
@@ -12,6 +12,17 @@ class UsersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @user.soft_delete!
+    flash[:success] = "User deactivated successfully."
+    redirect_to(users_path)
+  end
+
+  def undelete
+    @user.undelete!
+    redirect_to(users_path)
   end
 
   private

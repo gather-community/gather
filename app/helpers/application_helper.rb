@@ -14,4 +14,8 @@ module ApplicationHelper
     end
     nil
   end
+
+  def icon_tag(name)
+    content_tag(:i, "", class: "fa fa-#{name}")
+  end
 end

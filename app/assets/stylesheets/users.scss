@@ -1,0 +1,7 @@
+.users {
+  tr.deleted {
+    td, td a {
+      color: $inactive-color;
+    }
+  }
+}

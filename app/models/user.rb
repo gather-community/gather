@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   belongs_to :household
 
   scope :by_name, -> { order("first_name, last_name") }
+  scope :by_active_and_name, -> { order("(CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END)").by_name }
 
   delegate :name, to: :household, prefix: true
 
@@ -45,6 +46,22 @@ class User < ActiveRecord::Base
   # Returns a string with all non-nil phone numbers
   def phones
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact.join(",")
+  end
+
+  def soft_delete!
+    update_attribute(:deleted_at, Time.current)
+  end
+
+  def undelete!
+    update_attribute(:deleted_at, nil)
+  end
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  def active_for_authentication?
+    super && !deleted?
   end
 
   private

@@ -18,10 +18,6 @@ header {
   #menu {
     display: inline-block;
     vertical-align: top;
-
-    a {
-
-    }
   }
 
   #user-info {
@@ -41,4 +37,8 @@ table {
   tr {
     border-bottom: 1px solid #ccc;
   }
+}
+
+div.alert a {
+  text-decoration: underline;
 }

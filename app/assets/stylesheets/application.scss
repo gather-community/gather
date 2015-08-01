@@ -1,6 +1,9 @@
+$inactive-color: #ccc;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "layout";
 @import "forms";
+@import "users";

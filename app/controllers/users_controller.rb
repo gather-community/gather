@@ -47,6 +47,6 @@ class UsersController < ApplicationController
   end
 
   def redirect_to_index_or_root
-    redirect_to can(:index, User) ? users_path : root_path
+    redirect_to can?(:index, User) ? users_path : root_path
   end
 end

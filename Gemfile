@@ -33,6 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rails-backbone'
 gem 'font-awesome-sass'
 gem 'simple_form'
+gem 'cocoon'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 
@@ -43,6 +44,9 @@ gem 'bootstrap-sass', '~> 3.3.5'
 
 gem 'attribute_normalizer'
 gem 'phony_rails'
+
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

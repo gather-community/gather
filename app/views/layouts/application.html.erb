@@ -1,4 +1,4 @@
-<% @title = yield(:title) || (raise "No page title given") %>
+<% (@title = yield(:title)) && @title.blank? && (raise "No page title given") %>
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,0 +1,16 @@
+form {
+  .links {
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+}
+
+// Fix datetime select widths
+.form-group.datetime select.datetime {
+  display: inline-block;
+  width: 75px;
+
+  &[id$="_2i"] {
+    width: 125px;
+  }
+}

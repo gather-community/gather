@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_active_and_name, -> { order("(CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END)").by_name }
+  scope :active, -> { where(deleted_at: nil) }
 
   delegate :name, to: :household, prefix: true
 

@@ -1,9 +1,11 @@
 $inactive-color: #ccc;
 
 @import "bootstrap-sprockets";
+@import "bootstrap-datetimepicker";
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "layout";
 @import "forms";
 @import "users";
+@import "meals";

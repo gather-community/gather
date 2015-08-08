@@ -14,5 +14,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :meals
+
   root to: "home#index"
 end

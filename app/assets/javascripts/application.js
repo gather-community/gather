@@ -13,6 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
+//= require moment
+//= require bootstrap-datetimepicker
+//= require pickers
+//= require cocoon
 //= require underscore
 //= require backbone
 //= require backbone_rails_sync

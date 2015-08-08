@@ -1,0 +1,12 @@
+.meals {
+  // Leave room for trash icon
+  select[id$="_user_id"] {
+    width: calc(100% - 20px);
+    display: inline-block;
+  }
+
+  a.remove_fields {
+    margin-left: 5px;
+    display: inline-block;
+  }
+}

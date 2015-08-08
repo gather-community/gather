@@ -1,0 +1,33 @@
+<%= simple_form_for(@meal, html: { class: 'form-horizontal' }) do |f| %>
+
+  <%= f.input :served_at, as: :datetime_picker,
+    input_html: {data: {date_options: {minDate: @min_date}}} %>
+
+  <%= f.simple_fields_for :head_cook do |head_cook| %>
+    <%= render('head_cook_fields', f: head_cook) %>
+  <% end %>
+
+  <%= f.simple_fields_for :asst_cooks do |asst_cook| %>
+    <%= render('asst_cook_fields', f: asst_cook) %>
+  <% end %>
+
+  <!-- Can't use class="row" as it breaks cocoon -->
+  <div class="links col-sm-10 col-sm-offset-2">
+    <%= link_to_add_association 'Add Assistant Cook', f, :asst_cooks %>
+  </div>
+
+  <%= f.simple_fields_for :cleaners do |cleaner| %>
+    <%= render('cleaner_fields', f: cleaner) %>
+  <% end %>
+
+  <div class="links col-sm-10 col-sm-offset-2">
+    <%= link_to_add_association 'Add Cleaner', f, :cleaners %>
+  </div>
+
+  <div class="row">
+    <div class="form-actions col-sm-8">
+      <%= f.button :submit, class: "pull-right" %>
+    </div>
+  </div>
+
+<% end %>

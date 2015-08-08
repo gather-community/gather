@@ -9,4 +9,12 @@ en:
         mobile_phone: "Mobile Phone"
         home_phone: "Home Phone"
         work_phone: "Work Phone"
-
+      meal:
+        served_at: "Date/Time"
+  datepicker:
+    dformat: '%a %m/%d/%Y'             # display format of the date (this is the default, can be ommited)
+    pformat: 'ddd MM/DD/YYYY'           # picking format of the date (this is the default, can be ommited)
+  timepicker:
+    dformat: '%R'                   # display format of the time (this is the default, can be ommited)
+    pformat: 'HH:mm'                # picking format of the time (this is the default, can be ommited)
+  dayViewHeaderFormat: 'MMMM YYYY'  # picking format of the time (this is the default, can be ommited)

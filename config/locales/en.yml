@@ -10,6 +10,15 @@ en:
         home_phone: "Home Phone"
         work_phone: "Work Phone"
       meal:
+        allergen_gluten: "Gluten"
+        allergen_shellfish: "Shellfish"
+        allergen_soy: "Soy"
+        allergen_corn: "Corn"
+        allergen_dairy: "Dairy"
+        allergen_eggs: "Eggs"
+        allergen_peanuts: "Peanuts"
+        allergen_almonds: "Almonds"
+        allergen_none: "None of these"
         served_at: "Date/Time"
   datepicker:
     dformat: '%a %m/%d/%Y'             # display format of the date (this is the default, can be ommited)

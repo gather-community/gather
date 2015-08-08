@@ -2,6 +2,9 @@ class Meal < ActiveRecord::Base
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
+  ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds none)
+
+  serialize :allergens, JSON
 
   has_one :head_cook, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cooks, ->{ where(role: "asst_cook") }, class_name: "Assignment"
@@ -29,5 +32,19 @@ class Meal < ActiveRecord::Base
     assignments.where(role: 'head_cook').first.try(:id)
   end
 
+  (ALLERGENS).each do |allergen|
+    define_method("allergen_#{allergen}?") do
+      allergens.include?(allergen)
+    end
 
+    alias_method "allergen_#{allergen}", "allergen_#{allergen}?"
+
+    define_method("allergen_#{allergen}=") do |yn|
+      if yn
+        self.allergens << allergen unless send("allergen_#{allergen}?")
+      else
+        allergens.delete(allergen)
+      end
+    end
+  end
 end

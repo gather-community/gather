@@ -5,6 +5,7 @@ class MealsController < ApplicationController
     @meal = Meal.new_with_defaults
     @min_date = Date.today.strftime("%Y-%m-%d")
     @active_users = User.by_name.active
+    @communities = Community.by_name
   end
 
   private

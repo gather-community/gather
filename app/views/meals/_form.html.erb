@@ -3,6 +3,8 @@
   <%= f.input :served_at, as: :datetime_picker,
     input_html: {data: {date_options: {minDate: @min_date}}} %>
 
+  <%= f.input :community_id, collection: @communities %>
+
   <%= f.simple_fields_for :head_cook do |head_cook| %>
     <%= render('head_cook_fields', f: head_cook) %>
   <% end %>
@@ -22,6 +24,22 @@
 
   <div class="links col-sm-10 col-sm-offset-2">
     <%= link_to_add_association 'Add Cleaner', f, :cleaners %>
+  </div>
+
+  <% %w(entrees side kids dessert notes).each do |attrib| %>
+    <%= f.input attrib %>
+  <% end %>
+
+  <div class="form-group text optional meal_allergens">
+    <label class="text optional col-sm-2 control-label" for="meal_allergens">Allergens</label>
+    <div class="col-sm-6">
+      <% Meal::ALLERGENS.each do |allergen| %>
+        <div>
+          <%= f.check_box("allergen_#{allergen}") %>
+          <%= f.label("allergen_#{allergen}")%>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="row">

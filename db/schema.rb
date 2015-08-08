@@ -11,9 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801161648) do
+ActiveRecord::Schema.define(version: 20150808151714) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assignments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "meal_id", null: false
+    t.string "role", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+  end
+
+  add_index "assignments", ["meal_id"], name: "index_assignments_on_meal_id", using: :btree
+  add_index "assignments", ["role"], name: "index_assignments_on_role", using: :btree
+  add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -30,6 +42,24 @@ ActiveRecord::Schema.define(version: 20150801161648) do
   end
 
   add_index "households", ["community_id"], name: "index_households_on_community_id", using: :btree
+
+  create_table "meals", force: :cascade do |t|
+    t.text "allergens", default: "[]", null: false
+    t.integer "capacity", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.text "dessert"
+    t.text "entrees"
+    t.text "kids"
+    t.text "notes"
+    t.datetime "served_at", null: false
+    t.text "side"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "meals", ["community_id"], name: "index_meals_on_community_id", using: :btree
+  add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
@@ -52,4 +82,8 @@ ActiveRecord::Schema.define(version: 20150801161648) do
     t.datetime "updated_at", null: false
     t.string "work_phone"
   end
+
+  add_foreign_key "assignments", "meals"
+  add_foreign_key "assignments", "users"
+  add_foreign_key "meals", "communities"
 end

@@ -16,5 +16,9 @@ Rails.application.routes.draw do
 
   resources :meals
 
+  authenticated :user do
+    root to: "meals#index", as: :authenticated_root
+  end
+
   root to: "home#index"
 end

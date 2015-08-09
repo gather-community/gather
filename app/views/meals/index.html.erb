@@ -1,0 +1,5 @@
+<% content_for(:title){ "Meals" } %>
+
+<div class="top-buttons">
+  <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
+</div>

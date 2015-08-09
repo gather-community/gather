@@ -1,6 +1,9 @@
 class MealsController < ApplicationController
   load_and_authorize_resource
 
+  def index
+  end
+
   def new
     @meal = Meal.new_with_defaults
     prep_form_vars

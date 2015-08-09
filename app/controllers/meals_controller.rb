@@ -3,16 +3,56 @@ class MealsController < ApplicationController
 
   def new
     @meal = Meal.new_with_defaults
+    prep_form_vars
+  end
+
+  def edit
+    @meal = Meal.find(params[:id])
+    prep_form_vars
+  end
+
+  def create
+    if @meal.save
+      flash[:success] = "Meal created successfully."
+      redirect_to meals_path
+    else
+      prep_form_vars
+      render :new
+    end
+  end
+
+  def update
+    if @meal.update_attributes(meal_params)
+      flash[:success] = "Meal updated successfully."
+      redirect_to meals_path
+    else
+      prep_form_vars
+      render :edit
+    end
+  end
+
+  private
+
+  def prep_form_vars
+    @meal.ensure_assignments
     @min_date = Date.today.strftime("%Y-%m-%d")
     @active_users = User.by_name.active
     @communities = Community.by_name
   end
 
-  private
-
   def meal_params
-    permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone]
-    permitted += [:admin, :google_email, :household_id] if can?(:manage, Meal)
-    params.require(:meal).permit(permitted)
+    permitted = [:title, :capacity, :entrees, :side, :kids, :dessert, :notes, :allergen_gluten,
+      :allergen_shellfish, :allergen_soy, :allergen_corn, :allergen_dairy, :allergen_eggs,
+      :allergen_peanuts, :allergen_almonds, :allergen_none]
+
+    if can?(:manage, Meal)
+      permitted += [:served_at, :community_id, {
+        :head_cook_attributes => [:id, :user_id],
+        :asst_cooks_attributes => [:id, :user_id, :_destroy],
+        :cleaners_attributes => [:id, :user_id, :_destroy]
+      }]
+    end
+
+    params.require(:meal).permit(*permitted)
   end
 end

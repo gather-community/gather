@@ -3,6 +3,8 @@ class Meal < ActiveRecord::Base
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds none)
+  DEFAULT_ASST_COOKS = 2
+  DEFAULT_CLEANERS = 3
 
   serialize :allergens, JSON
 
@@ -14,22 +16,36 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :asst_cooks, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaners, reject_if: :all_blank, allow_destroy: true
 
+  before_validation do
+    # Ensure head cook, even if blank, so we can add error to it.
+    build_head_cook if head_cook.blank?
+  end
+
+  normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
+
+  validates :served_at, presence: true
+  validates :title, presence: true
+  validates :capacity, presence: true
+  validates :community_id, presence: true
+  validate :head_cook_presence
+  validates :entrees, presence: true
+  validate :allergen_none_alone
+
+
   def self.new_with_defaults
-    meal = new(served_at: default_datetime, capacity: DEFAULT_CAPACITY)
-    meal.build_head_cook
-    meal.asst_cooks.build
-    meal.asst_cooks.build
-    meal.cleaners.build
-    meal.cleaners.build
-    meal
+    new(served_at: default_datetime, capacity: DEFAULT_CAPACITY)
   end
 
   def self.default_datetime
     (Date.today + 7.days).to_time + DEFAULT_TIME
   end
 
-  def head_cook_id
-    assignments.where(role: 'head_cook').first.try(:id)
+  # Ensures there is one head_cook assignment and 2 each of the others.
+  # Creates blank ones if needed.
+  def ensure_assignments
+    build_head_cook if head_cook.nil?
+    (DEFAULT_ASST_COOKS - asst_cooks.size).times{ asst_cooks.build }
+    (DEFAULT_CLEANERS - cleaners.size).times{ cleaners.build }
   end
 
   (ALLERGENS).each do |allergen|
@@ -40,11 +56,23 @@ class Meal < ActiveRecord::Base
     alias_method "allergen_#{allergen}", "allergen_#{allergen}?"
 
     define_method("allergen_#{allergen}=") do |yn|
-      if yn
+      if yn == true || yn == "1"
         self.allergens << allergen unless send("allergen_#{allergen}?")
       else
         allergens.delete(allergen)
       end
+    end
+  end
+
+  private
+
+  def head_cook_presence
+    head_cook.errors.add(:user_id, "can't be blank") if head_cook.user_id.blank?
+  end
+
+  def allergen_none_alone
+    if allergen_none? && allergens.size > 1
+      errors.add(:allergens, "None can't be selected if other allergens present.")
     end
   end
 end

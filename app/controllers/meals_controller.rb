@@ -19,6 +19,7 @@ class MealsController < ApplicationController
       flash[:success] = "Meal created successfully."
       redirect_to meals_path
     else
+      set_validation_error_notice
       prep_form_vars
       render :new
     end
@@ -29,6 +30,7 @@ class MealsController < ApplicationController
       flash[:success] = "Meal updated successfully."
       redirect_to meals_path
     else
+      set_validation_error_notice
       prep_form_vars
       render :edit
     end

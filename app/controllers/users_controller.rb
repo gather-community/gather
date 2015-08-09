@@ -14,6 +14,7 @@ class UsersController < ApplicationController
       flash[:success] = "User created successfully."
       redirect_to users_path
     else
+      set_validation_error_notice
       render :new
     end
   end
@@ -23,6 +24,7 @@ class UsersController < ApplicationController
       flash[:success] = "User updated successfully."
       redirect_to_index_or_root
     else
+      set_validation_error_notice
       render :edit
     end
   end

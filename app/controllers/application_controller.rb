@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
       ActionMailer::Base.default_url_options[k] = v
     end
   end
+
+  def set_validation_error_notice
+    flash[:error] = "Please correct the errors below."
+  end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150808151714) do
+ActiveRecord::Schema.define(version: 20150809135554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,10 +43,17 @@ ActiveRecord::Schema.define(version: 20150808151714) do
 
   add_index "households", ["community_id"], name: "index_households_on_community_id", using: :btree
 
+  create_table "invitations", force: :cascade do |t|
+    t.integer "community_id", null: false
+    t.integer "meal_id", null: false
+  end
+
+  add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
+  add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
+
   create_table "meals", force: :cascade do |t|
     t.text "allergens", default: "[]", null: false
     t.integer "capacity", null: false
-    t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.text "dessert"
     t.text "entrees"
@@ -58,7 +65,6 @@ ActiveRecord::Schema.define(version: 20150808151714) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "meals", ["community_id"], name: "index_meals_on_community_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -85,5 +91,6 @@ ActiveRecord::Schema.define(version: 20150808151714) do
 
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
-  add_foreign_key "meals", "communities"
+  add_foreign_key "invitations", "communities"
+  add_foreign_key "invitations", "meals"
 end

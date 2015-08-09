@@ -4,7 +4,22 @@
     input_html: {data: {date_options: {minDate: @min_date}}} %>
 
   <%= f.input :title %>
-  <%= f.input :community_id, collection: @communities %>
+
+  <div class="form-group text optional
+    <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
+    <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
+    <div class="boxes col-sm-6">
+      <% @communities.each do |c| %>
+        <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", @meal.community_ids.include?(c.id)) %>
+        <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
+        &nbsp;&nbsp;
+      <% end %>
+    </div>
+    <% if @meal.errors['allergens'].present? %>
+      <div class="help-block col-sm-6 col-sm-offset-2"><%= @meal.errors['allergens'].join %></div>
+    <% end %>
+  </div>
+
   <%= f.input :capacity, min: 1 %>
 
   <%= f.simple_fields_for :head_cook, @meal.head_cook do |head_cook| %>

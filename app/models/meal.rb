@@ -11,6 +11,8 @@ class Meal < ActiveRecord::Base
   has_one :head_cook, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cooks, ->{ where(role: "asst_cook") }, class_name: "Assignment"
   has_many :cleaners, ->{ where(role: "cleaner") }, class_name: "Assignment"
+  has_many :invitations
+  has_many :communities, through: :invitations
 
   accepts_nested_attributes_for :head_cook, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cooks, reject_if: :all_blank, allow_destroy: true
@@ -26,11 +28,9 @@ class Meal < ActiveRecord::Base
   validates :served_at, presence: true
   validates :title, presence: true
   validates :capacity, presence: true
-  validates :community_id, presence: true
   validate :head_cook_presence
   validates :entrees, presence: true
   validate :allergen_none_alone
-
 
   def self.new_with_defaults
     new(served_at: default_datetime, capacity: DEFAULT_CAPACITY)
@@ -46,6 +46,29 @@ class Meal < ActiveRecord::Base
     build_head_cook if head_cook.nil?
     (DEFAULT_ASST_COOKS - asst_cooks.size).times{ asst_cooks.build }
     (DEFAULT_CLEANERS - cleaners.size).times{ cleaners.build }
+  end
+
+  def community_ids
+    invitations.map(&:community_id)
+  end
+
+  # Accepts values from the community checkboxes on the form.
+  # Hash is of form { <community_id> => "1", ... }
+  def community_boxes=(hash)
+    new_ids = hash.keys.map(&:to_i)
+    existing_ids = community_ids
+
+    to_create = new_ids - existing_ids
+    to_delete = existing_ids - new_ids
+
+    to_create.each{ |id| invitations.build(community_id: id) }
+
+    invitations.each do |inv|
+      if to_delete.include?(inv.community_id)
+        inv.destroy if inv.persisted?
+        invitations.delete(inv)
+      end
+    end
   end
 
   (ALLERGENS).each do |allergen|

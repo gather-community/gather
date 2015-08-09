@@ -46,10 +46,11 @@ class MealsController < ApplicationController
       :allergen_peanuts, :allergen_almonds, :allergen_none]
 
     if can?(:manage, Meal)
-      permitted += [:served_at, :community_id, {
+      permitted += [:served_at, {
         :head_cook_attributes => [:id, :user_id],
         :asst_cooks_attributes => [:id, :user_id, :_destroy],
-        :cleaners_attributes => [:id, :user_id, :_destroy]
+        :cleaners_attributes => [:id, :user_id, :_destroy],
+        :community_boxes => [Community.all.map(&:id).map(&:to_s)]
       }]
     end
 

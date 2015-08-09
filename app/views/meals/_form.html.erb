@@ -4,9 +4,9 @@
     <%= f.input :served_at, as: :datetime_picker,
       input_html: {data: {date_options: {minDate: @min_date}}} %>
   <% else %>
-    <div class="col-sm-10 col-sm-offset-2">
-      <%= @meal.served_at %>
-    </div>
+    <%= f.input :served_at do %>
+      <%= @meal.served_at.to_formatted_s(:full_datetime) %>
+    <% end %>
   <% end %>
 
   <%= f.input :title %>
@@ -28,26 +28,44 @@
 
   <%= f.input :capacity, min: 1 %>
 
-  <%= f.simple_fields_for :head_cook, @meal.head_cook do |head_cook| %>
-    <%= render('head_cook_fields', f: head_cook) %>
+  <% if can?(:manage, @meal) %>
+    <%= f.simple_fields_for :head_cook_assign, @meal.head_cook_assign do |head_cook| %>
+      <%= render('head_cook_assign_fields', f: head_cook) %>
+    <% end %>
+  <% else %>
+    <%= f.input :head_cook do %>
+      <%= @meal.head_cook.name %>
+    <% end %>
   <% end %>
 
-  <%= f.simple_fields_for :asst_cooks do |asst_cook| %>
-    <%= render('asst_cook_fields', f: asst_cook) %>
+  <% if can?(:manage, @meal) %>
+    <%= f.simple_fields_for :asst_cook_assigns do |asst_cook| %>
+      <%= render('asst_cook_assign_fields', f: asst_cook) %>
+    <% end %>
+
+    <!-- Can't use class="row" as it breaks cocoon -->
+    <div class="links col-sm-10 col-sm-offset-2">
+      <%= link_to_add_association 'Add Assistant Cook', f, :asst_cook_assigns %>
+    </div>
+  <% else %>
+    <%= f.input :asst_cooks do %>
+      <%= @meal.asst_cooks.blank? ? "[None]" : @meal.asst_cooks.map(&:name).join(", ") %>
+    <% end %>
   <% end %>
 
-  <!-- Can't use class="row" as it breaks cocoon -->
-  <div class="links col-sm-10 col-sm-offset-2">
-    <%= link_to_add_association 'Add Assistant Cook', f, :asst_cooks %>
-  </div>
+  <% if can?(:manage, @meal) %>
+    <%= f.simple_fields_for :cleaner_assigns do |cleaner| %>
+      <%= render('cleaner_assign_fields', f: cleaner) %>
+    <% end %>
 
-  <%= f.simple_fields_for :cleaners do |cleaner| %>
-    <%= render('cleaner_fields', f: cleaner) %>
+    <div class="links col-sm-10 col-sm-offset-2">
+      <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
+    </div>
+  <% else %>
+    <%= f.input :cleaners do %>
+      <%= @meal.cleaners.blank? ? "[None]" : @meal.cleaners.map(&:name).join(", ") %>
+    <% end %>
   <% end %>
-
-  <div class="links col-sm-10 col-sm-offset-2">
-    <%= link_to_add_association 'Add Cleaner', f, :cleaners %>
-  </div>
 
   <% %w(entrees side kids dessert notes).each do |attrib| %>
     <%= f.input attrib %>

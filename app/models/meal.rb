@@ -8,19 +8,22 @@ class Meal < ActiveRecord::Base
 
   serialize :allergens, JSON
 
-  has_one :head_cook, ->{ where(role: "head_cook") }, class_name: "Assignment"
-  has_many :asst_cooks, ->{ where(role: "asst_cook") }, class_name: "Assignment"
-  has_many :cleaners, ->{ where(role: "cleaner") }, class_name: "Assignment"
+  has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
+  has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
+  has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
+  has_one :head_cook, through: :head_cook_assign, source: :user
+  has_many :asst_cooks, through: :asst_cook_assigns, source: :user
+  has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations
   has_many :communities, through: :invitations
 
-  accepts_nested_attributes_for :head_cook, reject_if: :all_blank
-  accepts_nested_attributes_for :asst_cooks, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :cleaners, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
+  accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
-    build_head_cook if head_cook.blank?
+    build_head_cook_assign if head_cook_assign.blank?
   end
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
@@ -43,9 +46,9 @@ class Meal < ActiveRecord::Base
   # Ensures there is one head_cook assignment and 2 each of the others.
   # Creates blank ones if needed.
   def ensure_assignments
-    build_head_cook if head_cook.nil?
-    (DEFAULT_ASST_COOKS - asst_cooks.size).times{ asst_cooks.build }
-    (DEFAULT_CLEANERS - cleaners.size).times{ cleaners.build }
+    build_head_cook_assign if head_cook_assign.nil?
+    (DEFAULT_ASST_COOKS - asst_cook_assigns.size).times{ asst_cook_assigns.build }
+    (DEFAULT_CLEANERS - cleaner_assigns.size).times{ cleaner_assigns.build }
   end
 
   def community_ids
@@ -90,7 +93,7 @@ class Meal < ActiveRecord::Base
   private
 
   def head_cook_presence
-    head_cook.errors.add(:user_id, "can't be blank") if head_cook.user_id.blank?
+    head_cook_assign.errors.add(:user_id, "can't be blank") if head_cook_assign.user_id.blank?
   end
 
   def allergen_none_alone

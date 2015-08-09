@@ -19,6 +19,9 @@ en:
         allergen_peanuts: "Peanuts"
         allergen_almonds: "Almonds"
         allergen_none: "None of these"
+        asst_cooks: "Assistant Cooks"
+        cleaners: "Cleaners"
+        head_cook: "Head Cook"
         served_at: "Date/Time"
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)

@@ -14,3 +14,15 @@ form {
     width: 125px;
   }
 }
+
+// Labels inside control area shouldn't be bold
+.form-group > div label {
+  font-weight: normal;
+}
+
+// Overriding default label top padding
+@media (min-width: 768px) {
+  .form-horizontal .control-label {
+    padding-top: 0;
+  }
+}

@@ -46,14 +46,15 @@ class MealsController < ApplicationController
   def meal_params
     permitted = [:title, :capacity, :entrees, :side, :kids, :dessert, :notes, :allergen_gluten,
       :allergen_shellfish, :allergen_soy, :allergen_corn, :allergen_dairy, :allergen_eggs,
-      :allergen_peanuts, :allergen_almonds, :allergen_none]
+      :allergen_peanuts, :allergen_almonds, :allergen_none,
+      { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
+    ]
 
     if can?(:manage, Meal)
       permitted += [:served_at, {
-        :head_cook_attributes => [:id, :user_id],
-        :asst_cooks_attributes => [:id, :user_id, :_destroy],
-        :cleaners_attributes => [:id, :user_id, :_destroy],
-        :community_boxes => [Community.all.map(&:id).map(&:to_s)]
+        :head_cook_assign_attributes => [:id, :user_id],
+        :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
+        :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
       }]
     end
 

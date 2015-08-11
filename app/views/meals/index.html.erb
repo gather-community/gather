@@ -20,7 +20,7 @@
         <span class="date"><%= meal.served_at.to_formatted_s(:short_date) %></span>
         <span class="time"><%= meal.served_at.to_formatted_s(:regular_time) %></span>
       </td>
-      <td class="col-md-2"><%= meal.location_name %></td>
+      <td class="col-md-2"><%= meal.location_abbrv %></td>
       <td class="col-md-2"><%= meal.head_cook_name %></td>
       <td class="col-md-4">
         <%= link_to(meal.title || "[No Title]", "#") %>

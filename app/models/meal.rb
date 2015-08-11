@@ -25,7 +25,7 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
 
-  delegate :name, to: :location, prefix: true
+  delegate :name, :abbrv, to: :location, prefix: true
   delegate :name, to: :head_cook, prefix: true
 
   before_validation do

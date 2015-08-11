@@ -22,7 +22,10 @@
       </td>
       <td class="col-md-2"><%= meal.location_name %></td>
       <td class="col-md-2"><%= meal.head_cook_name %></td>
-      <td class="col-md-4"><%= link_to(meal.title, "#") %></td>
+      <td class="col-md-4">
+        <%= link_to(meal.title || "[No Title]", "#") %>
+        <%= icon_tag("question-circle", title: "No menu posted") unless meal.menu_posted? %>
+      </td>
       <td class="col-md-1"><%= meal.signup_for(current_user).try(:total) %></td>
       <td class="col-md-1"><%= meal.spots_left %> / <%= meal.capacity %></td>
       <td class="action-icons">

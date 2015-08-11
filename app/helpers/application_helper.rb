@@ -15,8 +15,8 @@ module ApplicationHelper
     nil
   end
 
-  def icon_tag(name)
-    content_tag(:i, "", class: "fa fa-#{name}")
+  def icon_tag(name, options = {})
+    content_tag(:i, "", options.merge(class: "fa fa-#{name}"))
   end
 
   # Sets twitter-bootstrap theme as default for pagination.

@@ -91,6 +91,10 @@ class Meal < ActiveRecord::Base
     (rand * 20).to_i
   end
 
+  def menu_posted?
+    entrees.present?
+  end
+
   (ALLERGENS).each do |allergen|
     define_method("allergen_#{allergen}?") do
       allergens.include?(allergen)

@@ -53,7 +53,7 @@ class MealsController < ApplicationController
     ]
 
     if can?(:manage, Meal)
-      permitted += [:served_at, {
+      permitted += [:served_at, :location_id, {
         :head_cook_assign_attributes => [:id, :user_id],
         :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
         :cleaner_assigns_attributes => [:id, :user_id, :_destroy]

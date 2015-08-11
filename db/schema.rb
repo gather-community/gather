@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150809135554) do
+ActiveRecord::Schema.define(version: 20150811025818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,13 @@ ActiveRecord::Schema.define(version: 20150809135554) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
+  create_table "locations", force: :cascade do |t|
+    t.string "abbrv", limit: 16, null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "meals", force: :cascade do |t|
     t.text "allergens", default: "[]", null: false
     t.integer "capacity", null: false
@@ -58,6 +65,7 @@ ActiveRecord::Schema.define(version: 20150809135554) do
     t.text "dessert"
     t.text "entrees"
     t.text "kids"
+    t.integer "location_id"
     t.text "notes"
     t.datetime "served_at", null: false
     t.text "side"
@@ -65,6 +73,7 @@ ActiveRecord::Schema.define(version: 20150809135554) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -93,4 +102,5 @@ ActiveRecord::Schema.define(version: 20150809135554) do
   add_foreign_key "assignments", "users"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
+  add_foreign_key "meals", "locations"
 end

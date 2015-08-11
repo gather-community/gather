@@ -8,6 +8,7 @@ class Meal < ActiveRecord::Base
 
   serialize :allergens, JSON
 
+  belongs_to :location
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
   has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
@@ -21,6 +22,8 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
 
+  delegate :name, to: :location, prefix: true
+
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
     build_head_cook_assign if head_cook_assign.blank?
@@ -29,6 +32,7 @@ class Meal < ActiveRecord::Base
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :served_at, presence: true
+  validates :location_id, presence: true
   validates :title, presence: true
   validates :capacity, presence: true
   validate :head_cook_presence

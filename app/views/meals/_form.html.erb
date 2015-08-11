@@ -1,12 +1,22 @@
 <%= simple_form_for(@meal, html: { class: 'form-horizontal' }) do |f| %>
 
   <% if can?(:manage, @meal) %>
+
     <%= f.input :served_at, as: :datetime_picker,
       input_html: {data: {date_options: {minDate: @min_date}}} %>
+
+    <%= f.input :location_id, collection: Location.by_name %>
+
   <% else %>
+
     <%= f.input :served_at do %>
       <%= @meal.served_at.to_formatted_s(:full_datetime) %>
     <% end %>
+
+    <%= f.input :location_id do %>
+      <%= @meal.location_name %>
+    <% end %>
+
   <% end %>
 
   <%= f.input :title %>

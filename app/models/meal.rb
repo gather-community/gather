@@ -39,7 +39,9 @@ class Meal < ActiveRecord::Base
   validates :location_id, presence: true
   validates :title, presence: true
   validates :capacity, presence: true
+  validate :entree_if_other_menu_items
   validate :head_cook_presence
+  validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
 
   def self.new_with_defaults
@@ -95,6 +97,10 @@ class Meal < ActiveRecord::Base
     entrees.present?
   end
 
+  def any_allergens?
+    allergens.present? && allergens != ["none"]
+  end
+
   (ALLERGENS).each do |allergen|
     define_method("allergen_#{allergen}?") do
       allergens.include?(allergen)
@@ -113,13 +119,29 @@ class Meal < ActiveRecord::Base
 
   private
 
+  def menu_items_present?
+    %w(entrees side kids dessert notes).any?{ |a| self[a].present? }
+  end
+
+  def entree_if_other_menu_items
+    if entrees.blank? && (menu_items_present? || allergens.present?)
+      errors.add(:entrees, "can't be blank if other menu items entered")
+    end
+  end
+
   def head_cook_presence
     head_cook_assign.errors.add(:user_id, "can't be blank") if head_cook_assign.user_id.blank?
   end
 
+  def allergens_some_or_none_if_menu
+    if menu_items_present? && allergens.empty?
+      errors.add(:allergens, "please check at least one box")
+    end
+  end
+
   def allergen_none_alone
     if allergen_none? && allergens.size > 1
-      errors.add(:allergens, "None can't be selected if other allergens present.")
+      errors.add(:allergens, "none can't be selected if other allergens present")
     end
   end
 end

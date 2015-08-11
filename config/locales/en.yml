@@ -30,3 +30,12 @@ en:
     dformat: '%l:%M%P'                   # display format of the time (this is the default, can be ommited)
     pformat: 'h:mma'                # picking format of the time (this is the default, can be ommited)
   dayViewHeaderFormat: 'MMMM YYYY'  # picking format of the time (this is the default, can be ommited)
+  simple_form:
+    placeholders:
+      meal:
+        title: "e.g. Southern Red Beans and Rice"
+        entrees: "e.g. Red beans, rice, and smoked pork sausage. Meat free version available. Mild spice!"
+        side: "e.g. Braised collard greens with butter and shallots"
+        kids: "e.g. Mac & cheese and boiled eggs"
+        dessert: "e.g. Dark chocolate squares"
+        notes: "e.g. Some ingredients organic and local where possible"

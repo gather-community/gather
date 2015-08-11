@@ -37,9 +37,8 @@ class Meal < ActiveRecord::Base
 
   validates :served_at, presence: true
   validates :location_id, presence: true
-  validates :title, presence: true
   validates :capacity, presence: true
-  validate :entree_if_other_menu_items
+  validate :title_and_entree_if_other_menu_items
   validate :head_cook_presence
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
@@ -120,12 +119,14 @@ class Meal < ActiveRecord::Base
   private
 
   def menu_items_present?
-    %w(entrees side kids dessert notes).any?{ |a| self[a].present? }
+    %w(title entrees side kids dessert notes).any?{ |a| self[a].present? }
   end
 
-  def entree_if_other_menu_items
-    if entrees.blank? && (menu_items_present? || allergens.present?)
-      errors.add(:entrees, "can't be blank if other menu items entered")
+  def title_and_entree_if_other_menu_items
+    %w(title entrees).each do |attrib|
+      if self[attrib].blank? && (menu_items_present? || allergens.present?)
+        errors.add(attrib, "can't be blank if other menu items entered")
+      end
     end
   end
 
@@ -135,7 +136,7 @@ class Meal < ActiveRecord::Base
 
   def allergens_some_or_none_if_menu
     if menu_items_present? && allergens.empty?
-      errors.add(:allergens, "please check at least one box")
+      errors.add(:allergens, "at least one box must be checked if menu entered")
     end
   end
 

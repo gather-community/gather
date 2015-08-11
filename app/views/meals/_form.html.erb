@@ -19,8 +19,6 @@
 
   <% end %>
 
-  <%= f.input :title %>
-
   <div class="form-group text optional
     <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
     <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
@@ -76,6 +74,8 @@
       <%= @meal.cleaners.blank? ? "[None]" : @meal.cleaners.map(&:name).join(", ") %>
     <% end %>
   <% end %>
+
+  <%= f.input :title %>
 
   <% %w(entrees side kids dessert notes).each do |attrib| %>
     <%= f.input attrib %>

@@ -3,7 +3,7 @@
   <% if can?(:manage, @meal) %>
 
     <%= f.input :served_at, as: :datetime_picker,
-      input_html: {data: {date_options: {minDate: @min_date}}} %>
+      input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
     <%= f.input :location_id, collection: Location.by_name %>
 

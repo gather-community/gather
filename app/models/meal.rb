@@ -18,11 +18,15 @@ class Meal < ActiveRecord::Base
   has_many :invitations
   has_many :communities, through: :invitations
 
+  scope :oldest_first, -> { order(served_at: :asc) }
+  scope :today_or_future, -> { where("served_at >= ?", Time.now.midnight) }
+
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
 
   delegate :name, to: :location, prefix: true
+  delegate :name, to: :head_cook, prefix: true
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
@@ -76,6 +80,16 @@ class Meal < ActiveRecord::Base
         invitations.delete(inv)
       end
     end
+  end
+
+  def signup_for(user)
+    # Stub
+    @signup ||= rand < 0.5 ? OpenStruct.new(total: (rand * 4).to_i) : nil
+  end
+
+  def spots_left
+    # Stub
+    (rand * 20).to_i
   end
 
   (ALLERGENS).each do |allergen|

@@ -2,6 +2,7 @@ class MealsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @meals = Meal.today_or_future.oldest_first
   end
 
   def new

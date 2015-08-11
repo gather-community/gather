@@ -3,3 +3,32 @@
 <div class="top-buttons">
   <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
 </div>
+
+<table class="index">
+  <tr>
+    <th class="col-md-2">Date/Time</th>
+    <th class="col-md-2">Location</th>
+    <th class="col-md-2">Cook</th>
+    <th class="col-md-4">Title</th>
+    <th class="col-md-1">Signed Up?</th>
+    <th class="col-md-1">Capacity</th>
+    <th></th>
+  </tr>
+  <% @meals.each do |meal| %>
+    <tr class="<%= meal.signup_for(current_user).present? ? "signed-up" : "" %>">
+      <td class="col-md-2">
+        <span class="date"><%= meal.served_at.to_formatted_s(:short_date) %></span>
+        <span class="time"><%= meal.served_at.to_formatted_s(:regular_time) %></span>
+      </td>
+      <td class="col-md-2"><%= meal.location_name %></td>
+      <td class="col-md-2"><%= meal.head_cook_name %></td>
+      <td class="col-md-4"><%= link_to(meal.title, "#") %></td>
+      <td class="col-md-1"><%= meal.signup_for(current_user).try(:total) %></td>
+      <td class="col-md-1"><%= meal.spots_left %> / <%= meal.capacity %></td>
+      <td class="action-icons">
+        <%= link_to(icon_tag('pencil'), edit_meal_path(meal)) if can?(:edit, meal) %>
+        <%= link_to(icon_tag('trash'), meal_path(meal), method: :delete) if can?(:destroy, meal) %>
+      </td>
+    </tr>
+  <% end %>
+</table>

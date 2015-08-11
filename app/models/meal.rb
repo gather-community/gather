@@ -40,7 +40,6 @@ class Meal < ActiveRecord::Base
   validates :title, presence: true
   validates :capacity, presence: true
   validate :head_cook_presence
-  validates :entrees, presence: true
   validate :allergen_none_alone
 
   def self.new_with_defaults

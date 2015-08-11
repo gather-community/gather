@@ -63,6 +63,9 @@ GEM
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-kaminari-views (0.0.5)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
@@ -115,6 +118,9 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.3)
     jwt (1.5.1)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -254,6 +260,7 @@ PLATFORMS
 
 DEPENDENCIES
   attribute_normalizer
+  bootstrap-kaminari-views
   bootstrap-sass (~> 3.3.5)
   byebug
   cancancan (~> 1.10)
@@ -265,6 +272,7 @@ DEPENDENCIES
   font-awesome-sass
   jbuilder (~> 2.0)
   jquery-rails
+  kaminari
   momentjs-rails (~> 2.9)!
   omniauth-google-oauth2
   pg

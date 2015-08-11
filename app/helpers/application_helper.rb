@@ -18,4 +18,10 @@ module ApplicationHelper
   def icon_tag(name)
     content_tag(:i, "", class: "fa fa-#{name}")
   end
+
+  # Sets twitter-bootstrap theme as default for pagination.
+  def paginate(objects, options = {})
+    options.reverse_merge!(theme: 'twitter-bootstrap-3')
+    super(objects, options)
+  end
 end

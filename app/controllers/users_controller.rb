@@ -9,6 +9,9 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def show
+  end
+
   def create
     if @user.save
       flash[:success] = "User created successfully."

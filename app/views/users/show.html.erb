@@ -1,0 +1,7 @@
+<% content_for(:title){ "User: #{@user.name}" } %>
+
+<ul>
+  <li>Household: <%= @user.household_name %></li>
+  <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
+  <li>Phone: <%= @user.phones %></li>
+</ul>

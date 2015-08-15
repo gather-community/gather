@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   scope :active, -> { where(deleted_at: nil) }
 
   delegate :name, to: :household, prefix: true
+  delegate :community_name, to: :household
 
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'

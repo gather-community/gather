@@ -7,6 +7,8 @@ class MealsController < ApplicationController
 
   def work_calendar
     authorize!(:read, Meal)
+    params[:uid] = current_user.id unless params.has_key?(:uid)
+    @users = User.all
     load_meals
   end
 
@@ -53,7 +55,9 @@ class MealsController < ApplicationController
   private
 
   def load_meals
-    @meals = Meal.today_or_future.oldest_first.page(params[:page])
+    @meals = Meal.today_or_future.oldest_first
+    @meals = @meals.worked_by(params[:uid]) if params[:uid].present?
+    @meals = @meals.page(params[:page])
   end
 
   def prep_form_vars

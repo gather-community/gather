@@ -9,6 +9,7 @@ class Meal < ActiveRecord::Base
   serialize :allergens, JSON
 
   belongs_to :location
+  has_many :assignments
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
   has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
@@ -20,6 +21,7 @@ class Meal < ActiveRecord::Base
 
   scope :oldest_first, -> { order(served_at: :asc) }
   scope :today_or_future, -> { where("served_at >= ?", Time.now.midnight) }
+  scope :worked_by, ->(user_id) { includes(:assignments).where("assignments.user_id" => user_id) }
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true

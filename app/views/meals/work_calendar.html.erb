@@ -1,5 +1,14 @@
 <% content_for(:title){ "Work Calendar" } %>
 
+<form class="form-inline index-filter">
+  <%= label_tag("uid", "Filter by User:") %>
+  <%= select_tag("uid", options_from_collection_for_select(@users, :id, :name, params[:uid]),
+    prompt: "Select User...", class: "form-control", onchange: "this.form.submit();") %>
+  <% if params[:uid].present? %>
+    <%= link_to("Clear", "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;") %>
+  <% end %>
+</form>
+
 <table class="index">
   <tr>
     <th class="col-md-2">Date/Time</th>
@@ -18,9 +27,9 @@
       </td>
       <td class="col-md-1"><%= meal.location_abbrv %></td>
       <td class="col-md-3"><%= render("meal_link", meal: meal) %></td>
-      <td class="col-md-2"><%= user_link(meal.head_cook) %></td>
-      <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c) }.reduce(:<<) %></td>
-      <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c) }.reduce(:<<) %></td>
+      <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
+      <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
+      <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
       <td></td>
     </tr>
   <% end %>

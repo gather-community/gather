@@ -1,4 +1,5 @@
 $inactive-color: #ccc;
+$light-border: 1px solid #ccc;
 
 @import "bootstrap-sprockets";
 @import "bootstrap-datetimepicker";
@@ -6,6 +7,7 @@ $inactive-color: #ccc;
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "layout";
+@import "mobile";
 @import "indexes";
 @import "forms";
 @import "users";

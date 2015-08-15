@@ -86,7 +86,7 @@ class Meal < ActiveRecord::Base
 
   def signup_for(user)
     # Stub
-    @signup ||= rand < 0.5 ? OpenStruct.new(total: (rand * 4).to_i) : nil
+    rand < 0.5 ? OpenStruct.new(total: (rand * 4).to_i + 1) : nil
   end
 
   def spots_left

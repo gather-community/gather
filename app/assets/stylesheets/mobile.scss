@@ -1,0 +1,13 @@
+.mobile {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .mobile {
+    display: inherit;
+  }
+
+  .non-mobile {
+    display: none;
+  }
+}

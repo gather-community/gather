@@ -17,11 +17,44 @@
     column-count: 3;
   }
 
-  table.index tr.signed-up {
+  tr.signed-up, div.meals-list div.meal.signed-up {
     background-color: #eeeeff;
   }
 
   table a.user-link {
     display: block;
+  }
+
+  // For mobile devices
+  div.meals-list {
+
+    div.meal {
+      border: $light-border;
+      border-radius: 5px;
+      background-color: #eee;
+      margin-bottom: 20px;
+      padding: 10px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+
+      h4 {
+        margin: 0;
+      }
+
+      div.title {
+        border-bottom: $light-border;
+        margin-bottom: 10px;
+      }
+
+      div.job {
+        display: inline-block;
+
+        &:not(:last-child)::after{
+          content: ", ";;
+        }
+      }
+    }
   }
 }

@@ -9,7 +9,7 @@
   <% end %>
 </form>
 
-<table class="index">
+<table class="index non-mobile">
   <tr>
     <th class="col-md-2">Date/Time</th>
     <th class="col-md-1">Location</th>
@@ -21,10 +21,7 @@
   </tr>
   <% @meals.each do |meal| %>
     <tr class="<%= signed_up_class(meal) %>">
-      <td class="col-md-2">
-        <span class="date"><%= meal.served_at.to_formatted_s(:short_date) %></span>
-        <span class="time"><%= meal.served_at.to_formatted_s(:regular_time) %></span>
-      </td>
+      <td class="col-md-2"><%= meal_date_time(meal) %></td>
       <td class="col-md-1"><%= meal.location_abbrv %></td>
       <td class="col-md-3"><%= render("meal_link", meal: meal) %></td>
       <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
@@ -34,5 +31,25 @@
     </tr>
   <% end %>
 </table>
+
+<div class="meals-list mobile">
+  <% @meals.each do |meal| %>
+    <div class="meal <%= signed_up_class(meal) %>">
+      <h4><%= meal_date_time(meal) %></h4>
+      <div class="title">
+        <%= render("meal_link", meal: meal) %> at <%= meal.location_abbrv %>
+      </div>
+      <div class="jobs">
+        <div class="job"><%= user_link(meal.head_cook, params[:uid]) %> (Head)</div>
+        <% meal.asst_cooks.each do |u| %>
+          <div class="job"><%= user_link(u, params[:uid]) %> (Asst)</div>
+        <% end %>
+        <% meal.cleaners.each do |u| %>
+          <div class="job"><%= user_link(u, params[:uid]) %> (Clean)</div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <%= paginate @meals %>

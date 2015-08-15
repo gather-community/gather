@@ -2,7 +2,12 @@ class MealsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @meals = Meal.today_or_future.oldest_first.page(params[:page])
+    load_meals
+  end
+
+  def work_calendar
+    authorize!(:read, Meal)
+    load_meals
   end
 
   def new
@@ -39,7 +44,17 @@ class MealsController < ApplicationController
     end
   end
 
+  protected
+
+  def default_url_options
+    {mode: params[:mode]}
+  end
+
   private
+
+  def load_meals
+    @meals = Meal.today_or_future.oldest_first.page(params[:page])
+  end
 
   def prep_form_vars
     @meal.ensure_assignments

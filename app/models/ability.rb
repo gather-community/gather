@@ -12,6 +12,7 @@ class Ability
 
     # Anyone can view all meals
     can :read, Meal
+    can :work_calendar, Meal
 
     # Head cooks can edit meals
     can :update, Meal do |meal|

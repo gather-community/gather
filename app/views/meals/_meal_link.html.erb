@@ -1,0 +1,2 @@
+<%= link_to(meal.title || "[No Title]", "#") %>
+<%= icon_tag("question-circle", title: "No menu posted") unless meal.menu_posted? %>

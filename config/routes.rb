@@ -14,7 +14,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :meals
+  resources :meals do
+    collection do
+      get :"work-calendar"
+    end
+  end
 
   authenticated :user do
     root to: "meals#index", as: :authenticated_root

@@ -7,9 +7,9 @@
 <table class="index non-mobile">
   <tr>
     <th class="col-md-2">Date/Time</th>
-    <th class="col-md-2">Location</th>
     <th class="col-md-2">Cook</th>
     <th class="col-md-4">Title</th>
+    <th class="col-md-2">Location</th>
     <th class="col-md-1">Going?</th>
     <th class="col-md-1">Spots Left</th>
     <th></th>
@@ -17,9 +17,9 @@
   <% @meals.each do |meal| %>
     <tr class="<%= signed_up_class(meal) %>">
       <td class="col-md-2"><%= meal_date_time(meal) %></td>
-      <td class="col-md-2"><%= meal.location_abbrv %></td>
-      <td class="col-md-2"><%= user_link(meal.head_cook) %></td>
+      <td class="col-md-2"><%= meal.head_cook.name %></td>
       <td class="col-md-4"><%= render("meal_link", meal: meal) %></td>
+      <td class="col-md-2"><%= meal.location_abbrv %></td>
       <td class="col-md-1">
         <% if signup = meal.signup_for(current_user) %>
           <%= icon_tag("check") %> <%= signup.total %>
@@ -35,7 +35,7 @@
   <% @meals.each do |meal| %>
     <div class="meal <%= signed_up_class(meal) %>">
       <div class="actions"><%= meal_action_icons(meal) %></div>
-      <h4><%= render("meal_link", meal: meal) %> by <%= user_link(meal.head_cook) %></h4>
+      <h4><%= render("meal_link", meal: meal) %> by <%= meal.head_cook.name %> </h4>
       <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
       <% if signup = meal.signup_for(current_user) %>
         <div class="signed-up">

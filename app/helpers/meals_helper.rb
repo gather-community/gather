@@ -7,4 +7,9 @@ module MealsHelper
     content_tag(:span, meal.served_at.to_formatted_s(:short_date), class: "date") <<
       " ".html_safe << content_tag(:span, meal.served_at.to_formatted_s(:regular_time), class: "time")
   end
+
+  def meal_action_icons(meal)
+    (can?(:edit, meal) ? link_to(icon_tag('pencil'), edit_meal_path(meal)) : "") <<
+      (can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
+  end
 end

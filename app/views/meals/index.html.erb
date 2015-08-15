@@ -26,10 +26,7 @@
         <% end %>
       </td>
       <td class="col-md-1"><%= icon_tag("users") %> <%= meal.spots_left %>/<%= meal.capacity %></td>
-      <td class="action-icons">
-        <%= link_to(icon_tag('pencil'), edit_meal_path(meal)) if can?(:edit, meal) %>
-        <%= link_to(icon_tag('trash'), meal_path(meal), method: :delete) if can?(:destroy, meal) %>
-      </td>
+      <td class="action-icons"><%= meal_action_icons(meal) %></td>
     </tr>
   <% end %>
 </table>
@@ -37,6 +34,7 @@
 <div class="meals-list mobile">
   <% @meals.each do |meal| %>
     <div class="meal <%= signed_up_class(meal) %>">
+      <div class="actions"><%= meal_action_icons(meal) %></div>
       <h4><%= render("meal_link", meal: meal) %> by <%= user_link(meal.head_cook) %></h4>
       <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
       <% if signup = meal.signup_for(current_user) %>

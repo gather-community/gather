@@ -27,7 +27,7 @@
       <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
       <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
       <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
-      <td></td>
+      <td class="action-icons"><%= meal_action_icons(meal) %></td>
     </tr>
   <% end %>
 </table>
@@ -35,6 +35,7 @@
 <div class="meals-list mobile">
   <% @meals.each do |meal| %>
     <div class="meal <%= signed_up_class(meal) %>">
+      <div class="actions"><%= meal_action_icons(meal) %></div>
       <h4><%= meal_date_time(meal) %></h4>
       <div class="title">
         <%= render("meal_link", meal: meal) %> at <%= meal.location_abbrv %>

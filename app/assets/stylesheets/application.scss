@@ -1,5 +1,6 @@
 $inactive-color: #ccc;
-$light-border: 1px solid #ccc;
+$light-border-color: #ccc;
+$light-border: 1px solid $light-border-color;
 
 @import "bootstrap-sprockets";
 @import "bootstrap-datetimepicker";
@@ -12,3 +13,4 @@ $light-border: 1px solid #ccc;
 @import "forms";
 @import "users";
 @import "meals";
+@import "meal_menu";

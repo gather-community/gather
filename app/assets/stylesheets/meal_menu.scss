@@ -1,0 +1,51 @@
+.meals.action-show {
+  position: relative;
+
+  h1 {
+    display: none;
+  }
+
+  .action-icons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  h3 {
+    margin-top: 10px;
+  }
+
+  .meal-menu {
+    border: $light-border;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+
+    p {
+      margin: 0;
+    }
+
+    .menu-label {
+      letter-spacing: 2px;
+      background-color: #fff;
+      margin: -32px auto 0 auto;
+      width: 90px;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    .smaller {
+      font-size: 80%;
+    }
+
+    hr {
+      width: 75%;
+      border-color: $light-border-color;
+      display: block;
+    }
+
+    section {
+      min-height: 20px;
+    }
+  }
+}

@@ -5,6 +5,7 @@ class Meal < ActiveRecord::Base
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds none)
   DEFAULT_ASST_COOKS = 2
   DEFAULT_CLEANERS = 3
+  MENU_ITEMS = %w(entrees side kids dessert notes)
 
   serialize :allergens, JSON
 
@@ -121,7 +122,7 @@ class Meal < ActiveRecord::Base
   private
 
   def menu_items_present?
-    %w(title entrees side kids dessert notes).any?{ |a| self[a].present? }
+    (['title'] + MENU_ITEMS).any?{ |a| self[a].present? }
   end
 
   def title_and_entree_if_other_menu_items

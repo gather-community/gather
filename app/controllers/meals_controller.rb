@@ -12,6 +12,9 @@ class MealsController < ApplicationController
     load_meals
   end
 
+  def show
+  end
+
   def new
     @meal = Meal.new_with_defaults
     @min_date = Date.today.strftime("%Y-%m-%d")

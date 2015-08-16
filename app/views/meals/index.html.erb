@@ -17,7 +17,7 @@
   <% @meals.each do |meal| %>
     <tr class="<%= signed_up_class(meal) %>">
       <td class="col-md-2"><%= meal_date_time(meal) %></td>
-      <td class="col-md-2"><%= meal.head_cook.name %></td>
+      <td class="col-md-2"><%= meal.head_cook_name %></td>
       <td class="col-md-4"><%= render("meal_link", meal: meal) %></td>
       <td class="col-md-2"><%= meal.location_abbrv %></td>
       <td class="col-md-1">
@@ -25,7 +25,7 @@
           <%= icon_tag("check") %> <%= signup.total %>
         <% end %>
       </td>
-      <td class="col-md-1"><%= icon_tag("users") %> <%= meal.spots_left %>/<%= meal.capacity %></td>
+      <td class="col-md-1"><%= spots_left(meal) %></td>
       <td class="action-icons"><%= meal_action_icons(meal) %></td>
     </tr>
   <% end %>
@@ -35,7 +35,7 @@
   <% @meals.each do |meal| %>
     <div class="meal <%= signed_up_class(meal) %>">
       <div class="actions"><%= meal_action_icons(meal) %></div>
-      <h4><%= render("meal_link", meal: meal) %> by <%= meal.head_cook.name %> </h4>
+      <h4><%= render("meal_link", meal: meal) %> by <%= meal.head_cook_name %> </h4>
       <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
       <% if signup = meal.signup_for(current_user) %>
         <div class="signed-up">

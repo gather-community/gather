@@ -51,14 +51,14 @@
         border-bottom: $light-border;
         margin-bottom: 10px;
       }
+    }
+  }
 
-      div.job {
-        display: inline-block;
+  div.job {
+    display: inline-block;
 
-        &:not(:last-child)::after{
-          content: ", ";;
-        }
-      }
+    &:not(:last-child)::after{
+      content: ", ";;
     }
   }
 }

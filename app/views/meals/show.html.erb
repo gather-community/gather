@@ -1,43 +1,45 @@
 <% content_for(:title){ "Meal: #{@meal.title}" } %>
 
 <div class="row">
-  <div class="meal-menu col-sm-8">
-    <div class="menu-label">menu</div>
-    <div class="action-icons"><%= meal_action_icons(@meal) %></div>
-    <h3><%= @meal.title %></h3>
-    <div class="time-place">
-      <%= icon_tag("calendar") %>
-      <strong><%= meal_date_time(@meal) %></strong> at
-      <%= @meal.location_name %>
-    </div>
-    <div class="head-cook-communities">
-      By <%= user_link(@meal.head_cook) %> for
-      <%= @meal.communities.map(&:name).join(', ') %>
-    </div>
-    <div class="asst-cooks">
-      Assistants:
-      <%= "[None]" if @meal.asst_cooks.empty? %>
-      <% @meal.asst_cooks.each do |u| %>
-        <div class="job"><%= user_link(u) %></div>
+  <div class="col-sm-8">
+    <div class="meal-menu ">
+      <div class="menu-label">menu</div>
+      <div class="action-icons"><%= meal_action_icons(@meal) %></div>
+      <h3><%= @meal.title %></h3>
+      <div class="time-place">
+        <%= icon_tag("calendar") %>
+        <strong><%= meal_date_time(@meal) %></strong> at
+        <%= @meal.location_name %>
+      </div>
+      <div class="head-cook-communities">
+        By <%= user_link(@meal.head_cook) %> for
+        <%= @meal.communities.map(&:name).join(', ') %>
+      </div>
+      <div class="asst-cooks">
+        Assistants:
+        <%= "[None]" if @meal.asst_cooks.empty? %>
+        <% @meal.asst_cooks.each do |u| %>
+          <div class="job"><%= user_link(u) %></div>
+        <% end %>
+      </div>
+      <div class="cleaners">
+        Cleaners:
+        <%= "[None]" if @meal.cleaners.empty? %>
+        <% @meal.cleaners.each do |u| %>
+          <div class="job"><%= user_link(u) %></div>
+        <% end %>
+      </div>
+      <% Meal::MENU_ITEMS.each do |item| %>
+        <hr/>
+        <div class="menu-label smaller"><%= item %></div>
+        <section><%= simple_format(@meal.send(item)) %></section>
       <% end %>
-    </div>
-    <div class="cleaners">
-      Cleaners:
-      <%= "[None]" if @meal.cleaners.empty? %>
-      <% @meal.cleaners.each do |u| %>
-        <div class="job"><%= user_link(u) %></div>
-      <% end %>
-    </div>
-    <% Meal::MENU_ITEMS.each do |item| %>
       <hr/>
-      <div class="menu-label smaller"><%= item %></div>
-      <section><%= simple_format(@meal.send(item)) %></section>
-    <% end %>
-    <hr/>
-    <div class="menu-label smaller">allergens</div>
-    <section>
-      <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
-    </section>
+      <div class="menu-label smaller">allergens</div>
+      <section>
+        <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
+      </section>
+    </div>
   </div>
 
   <div class="signup col-sm-4">

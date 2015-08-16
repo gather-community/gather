@@ -22,7 +22,8 @@ class Meal < ActiveRecord::Base
   has_many :signups
 
   scope :oldest_first, -> { order(served_at: :asc) }
-  scope :today_or_future, -> { where("served_at >= ?", Time.now.midnight) }
+  scope :newest_first, -> { order(served_at: :desc) }
+  scope :future, -> { where("served_at >= ?", Time.now.midnight) }
   scope :worked_by, ->(user_id) { includes(:assignments).where("assignments.user_id" => user_id) }
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
@@ -96,6 +97,16 @@ class Meal < ActiveRecord::Base
 
   def menu_posted?
     entrees.present?
+  end
+
+  # Returns a relation for all meals following the current one.
+  def following_meals
+    self.class.where("served_at > ?", served_at)
+  end
+
+  # Returns a relation for all meals before the current one.
+  def previous_meals
+    self.class.where("served_at < ?", served_at)
   end
 
   def any_allergens?

@@ -20,7 +20,7 @@ class Signup < ActiveRecord::Base
   end
 
   def save_or_destroy!
-    all_zero? ? destroy : save!
+    all_zero? ? (destroy if persisted?) : save!
   end
 
   def total

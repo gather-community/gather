@@ -14,6 +14,7 @@ class MealsController < ApplicationController
 
   def show
     @signup = Signup.for(current_user, @meal)
+    load_prev_next_meal
   end
 
   def new
@@ -59,7 +60,7 @@ class MealsController < ApplicationController
   private
 
   def load_meals
-    @meals = Meal.today_or_future.oldest_first
+    @meals = Meal.future.oldest_first
     @meals = @meals.worked_by(params[:uid]) if params[:uid].present?
     @meals = @meals.page(params[:page])
   end
@@ -68,6 +69,11 @@ class MealsController < ApplicationController
     @meal.ensure_assignments
     @active_users = User.by_name.active
     @communities = Community.by_name
+  end
+
+  def load_prev_next_meal
+    @next_meal = @meal.following_meals.future.oldest_first.accessible_by(current_ability).first
+    @prev_meal = @meal.previous_meals.future.newest_first.accessible_by(current_ability).first
   end
 
   def meal_params

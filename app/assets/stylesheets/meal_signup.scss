@@ -1,6 +1,25 @@
 .signup {
   @media screen and (min-width: 768px) {
-    max-width: 300px;
+    max-width: 350px;
+  }
+
+  .prev-meal, .next-meal {
+    line-height: 130%;
+    margin-bottom: 20px;
+
+    small {
+      color: $gray-text;
+      display: block;
+    }
+  }
+
+  .prev-meal {
+    padding-right: 5px;
+  }
+
+  .next-meal {
+    text-align: right;
+    padding-left: 5px;
   }
 
   h4 {
@@ -8,19 +27,18 @@
     margin-bottom: 20px;
   }
 
-  form {
-    // Override the responsive grid stuff because we want to preserve horizontal layout
-    // on small screens for this form
-    .col-sm-6 {
-      width: 50%;
-      float: left;
-    }
+  // Override the responsive grid stuff because we want to preserve horizontal layout
+  // on small screens for this form
+  .col-sm-6 {
+    width: 50%;
+    float: left;
+  }
 
-    div.signup_comments {
-      .col-sm-6 {
-        text-align: left;
-        width: 100%;
-      }
+  // But comments should always be full width.
+  div.signup_comments {
+    .col-sm-6 {
+      text-align: left;
+      width: 100%;
     }
   }
 }

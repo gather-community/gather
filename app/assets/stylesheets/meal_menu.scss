@@ -20,6 +20,7 @@
     border-radius: 10px;
     padding: 20px;
     text-align: center;
+    margin-bottom: 20px;
 
     p {
       margin: 0;
@@ -31,7 +32,7 @@
       margin: -32px auto 0 auto;
       width: 90px;
       text-transform: uppercase;
-      color: #999;
+      color: $gray-text;
     }
 
     .smaller {

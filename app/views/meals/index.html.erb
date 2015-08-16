@@ -21,7 +21,7 @@
       <td class="col-md-4"><%= render("meal_link", meal: meal) %></td>
       <td class="col-md-2"><%= meal.location_abbrv %></td>
       <td class="col-md-1">
-        <% if signup = meal.signup_for(current_user) %>
+        <% if signup = meal.signup_for(current_user.household) %>
           <%= icon_tag("check") %> <%= signup.total %>
         <% end %>
       </td>
@@ -37,7 +37,7 @@
       <div class="actions"><%= meal_action_icons(meal) %></div>
       <h4><%= render("meal_link", meal: meal) %> by <%= meal.head_cook_name %> </h4>
       <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
-      <% if signup = meal.signup_for(current_user) %>
+      <% if signup = meal.signup_for(current_user.household) %>
         <div class="signed-up">
           <%= icon_tag("check")%> <%= signup.total %> signed up from your household
         </div>

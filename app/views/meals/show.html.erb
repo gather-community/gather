@@ -43,10 +43,17 @@
   </div>
 
   <div class="signup col-sm-4">
-    <%= simple_form_for(@signup, wrapper: :signup_form, html: { class: 'form-horizontal' }) do |f| %>
+    <h4>Signups for <%= current_user.household_name %></h4>
+    <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
+      <%= f.input :meal_id, as: :hidden %>
       <% Signup::SIGNUP_TYPES.each do |type| %>
         <%= f.input type, collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
       <% end %>
+      <%= f.input :comments %>
+      <div class="pull-right">
+        <%= f.button :submit, "Save", name: "save" %>
+        <%= f.button :submit, "Save & Go To Next", name: "save_next", class: "btn-primary" %>
+      </div>
     <% end %>
   </div>
 </div>

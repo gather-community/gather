@@ -67,7 +67,7 @@ SimpleForm.setup do |config|
     end
   end
 
-  config.wrappers :signup_form, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+  config.wrappers :equal_width_form, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength

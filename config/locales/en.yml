@@ -29,6 +29,7 @@ en:
         teen: "Teen"
         big_kid: "Big Kid"
         little_kid: "Little Kid"
+        comments: "Comments for Cook"
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
     pformat: 'ddd YYYY-MM-DD'           # picking format of the date (this is the default, can be ommited)

@@ -9,8 +9,18 @@ class Signup < ActiveRecord::Base
 
   validate :max_signups
 
+  # TODO: Max sure don't exceed meal max cap.
+
   def self.for(user, meal)
     find_or_initialize_by(household_id: user.household_id, meal_id: meal.id)
+  end
+
+  def self.total_for_meal(meal)
+    where(meal_id: meal.id).sum(SIGNUP_TYPES.join("+"))
+  end
+
+  def total
+    @total ||= SIGNUP_TYPES.inject(0){ |sum, t| sum += send(t) }
   end
 
   private

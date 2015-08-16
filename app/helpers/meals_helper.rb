@@ -1,6 +1,6 @@
 module MealsHelper
   def signed_up_class(meal)
-    meal.signup_for(current_user).present? ? "signed-up" : ""
+    meal.signup_for(current_user.household).present? ? "signed-up" : ""
   end
 
   def meal_date_time(meal)

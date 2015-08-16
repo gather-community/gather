@@ -19,10 +19,15 @@ class Ability
       meal.head_cook == user
     end
 
+    # Can signup for meal if invited
+    can [:create, :update, :destroy], Signup do |signup|
+      signup.meal.communities.include?(user.community)
+    end
+
     if user.admin?
-      # Admins can edit any user or meal
       can :manage, User
       can :manage, Meal
+      can :manage, Signup
     end
   end
 end

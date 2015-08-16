@@ -1,0 +1,26 @@
+.signup {
+  @media screen and (min-width: 768px) {
+    max-width: 300px;
+  }
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  form {
+    // Override the responsive grid stuff because we want to preserve horizontal layout
+    // on small screens for this form
+    .col-sm-6 {
+      width: 50%;
+      float: left;
+    }
+
+    div.signup_comments {
+      .col-sm-6 {
+        text-align: left;
+        width: 100%;
+      }
+    }
+  }
+}

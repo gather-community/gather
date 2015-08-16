@@ -19,6 +19,7 @@ class Meal < ActiveRecord::Base
   has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations
   has_many :communities, through: :invitations
+  has_many :signups
 
   scope :oldest_first, -> { order(served_at: :asc) }
   scope :today_or_future, -> { where("served_at >= ?", Time.now.midnight) }
@@ -85,14 +86,12 @@ class Meal < ActiveRecord::Base
     end
   end
 
-  def signup_for(user)
-    # Stub
-    rand < 0.5 ? OpenStruct.new(total: (rand * 4).to_i + 1) : nil
+  def signup_for(household)
+    signups.where(household_id: household.id).first
   end
 
   def spots_left
-    # Stub
-    (rand * 20).to_i
+    @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
   end
 
   def menu_posted?

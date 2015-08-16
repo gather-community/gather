@@ -23,7 +23,7 @@
     <tr class="<%= signed_up_class(meal) %>">
       <td class="col-md-2"><%= meal_date_time(meal) %></td>
       <td class="col-md-1"><%= meal.location_abbrv %></td>
-      <td class="col-md-3"><%= render("meal_link", meal: meal) %></td>
+      <td class="col-md-3"><%= meal_link(meal) %></td>
       <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
       <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
       <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
@@ -38,7 +38,7 @@
       <div class="actions"><%= meal_action_icons(meal) %></div>
       <h4><%= meal_date_time(meal) %></h4>
       <div class="title">
-        <%= render("meal_link", meal: meal) %> at <%= meal.location_abbrv %>
+        <%= meal_link(meal) %> at <%= meal.location_abbrv %>
       </div>
       <div class="jobs">
         <div class="job"><%= user_link(meal.head_cook, params[:uid]) %> (Head)</div>

@@ -1,4 +1,8 @@
 module MealsHelper
+  def meal_link(meal)
+    link_to(meal.title || "[No Title]", meal_path(meal))
+  end
+
   def signed_up_class(meal)
     meal.signup_for(current_user.household).present? ? "signed-up" : ""
   end

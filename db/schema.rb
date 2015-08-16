@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150811043130) do
+ActiveRecord::Schema.define(version: 20150816022843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,6 +76,22 @@ ActiveRecord::Schema.define(version: 20150811043130) do
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
+  create_table "signups", force: :cascade do |t|
+    t.integer "adult_meat", default: 0, null: false
+    t.integer "adult_veg", default: 0, null: false
+    t.integer "big_kid", default: 0, null: false
+    t.text "comments"
+    t.datetime "created_at", null: false
+    t.integer "household_id", null: false
+    t.integer "little_kid", default: 0, null: false
+    t.integer "meal_id", null: false
+    t.integer "teen", default: 0, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "signups", ["household_id"], name: "index_signups_on_household_id", using: :btree
+  add_index "signups", ["meal_id"], name: "index_signups_on_meal_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
     t.datetime "created_at", null: false
@@ -103,4 +119,6 @@ ActiveRecord::Schema.define(version: 20150811043130) do
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "locations"
+  add_foreign_key "signups", "households"
+  add_foreign_key "signups", "meals"
 end

@@ -23,6 +23,12 @@ en:
         cleaners: "Cleaners"
         head_cook: "Head Cook"
         served_at: "Date/Time"
+      signup:
+        adult_meat: "Adult Meat"
+        adult_veg: "Adult Veg"
+        teen: "Teen"
+        big_kid: "Big Kid"
+        little_kid: "Little Kid"
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
     pformat: 'ddd YYYY-MM-DD'           # picking format of the date (this is the default, can be ommited)

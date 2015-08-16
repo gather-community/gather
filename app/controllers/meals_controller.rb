@@ -13,6 +13,7 @@ class MealsController < ApplicationController
   end
 
   def show
+    @signup = Signup.for(current_user, @meal)
   end
 
   def new

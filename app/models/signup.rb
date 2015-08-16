@@ -19,8 +19,16 @@ class Signup < ActiveRecord::Base
     where(meal_id: meal.id).sum(SIGNUP_TYPES.join("+"))
   end
 
+  def save_or_destroy!
+    all_zero? ? destroy : save!
+  end
+
   def total
     @total ||= SIGNUP_TYPES.inject(0){ |sum, t| sum += send(t) }
+  end
+
+  def all_zero?
+    SIGNUP_TYPES.all?{ |t| self[t] == 0 }
   end
 
   private

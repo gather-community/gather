@@ -7,7 +7,8 @@ class SignupsController < ApplicationController
   end
 
   def update
-    @signup.update_attributes!(signup_params)
+    @signup.assign_attributes(signup_params)
+    @signup.save_or_destroy!
     redirect_to meals_path
   end
 

@@ -43,7 +43,6 @@
   </div>
 
   <div class="signup col-sm-4">
-<!-- TODO add clear link -->
     <div class="row">
       <div class="prev-meal col-sm-6">
         <% if @prev_meal.present? %>
@@ -60,6 +59,9 @@
         <% end %>
       </div>
     </div>
+
+    <%= link_to(icon_tag('close'), "#", title: "Clear Form",
+      onclick: "$('.signup select').val(0); $('.signup textarea').val(''); return false") %>
 
     <h4>Signups for <%= current_user.household_name %></h4>
     <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>

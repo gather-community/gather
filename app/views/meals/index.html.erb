@@ -23,6 +23,8 @@
       <td class="col-md-1">
         <% if signup = meal.signup_for(current_user.household) %>
           <%= icon_tag("check") %> <%= signup.total %>
+        <% else %>
+          <%= link_to("Sign Up", meal_path(meal)) %>
         <% end %>
       </td>
       <td class="col-md-1"><%= spots_left(meal) %></td>

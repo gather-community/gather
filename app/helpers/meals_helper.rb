@@ -13,8 +13,8 @@ module MealsHelper
   end
 
   def meal_action_icons(meal)
-    (can?(:edit, meal) ? link_to(icon_tag('pencil'), edit_meal_path(meal)) : "") << " ".html_safe <<
-      (can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
+    (can?(:edit, meal) ? link_to(icon_tag('pencil'), edit_meal_path(meal)) : "") << " ".html_safe #<<
+      #(can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
   end
 
   def spots_left(meal)

@@ -145,7 +145,10 @@ class Meal < ActiveRecord::Base
   end
 
   def head_cook_presence
-    head_cook_assign.errors.add(:user_id, "can't be blank") if head_cook_assign.user_id.blank?
+    if head_cook_assign.user_id.blank?
+      head_cook_assign.errors.add(:user_id, "can't be blank")
+      add_dummy_base_error
+    end
   end
 
   def no_double_assignments
@@ -154,6 +157,7 @@ class Meal < ActiveRecord::Base
       send("#{role}_assigns").each do |a|
         if marked_user_ids[a.user_id]
           a.errors.add(:user_id, "user cannot be assigned to this role twice")
+          add_dummy_base_error
         else
           marked_user_ids[a.user_id] = true
         end
@@ -171,5 +175,11 @@ class Meal < ActiveRecord::Base
     if allergen_none? && allergens.size > 1
       errors.add(:allergens, "none can't be selected if other allergens present")
     end
+  end
+
+  # Adds an error to the base object so that valid? returns false and
+  # errors on associations are shown.
+  def add_dummy_base_error
+    errors.add(:__dummy, "x")
   end
 end

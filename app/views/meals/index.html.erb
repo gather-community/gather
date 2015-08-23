@@ -11,8 +11,7 @@
     <th class="col-md-4">Title</th>
     <th class="col-md-2">Location</th>
     <th class="col-md-1">Going?</th>
-    <th class="col-md-1">Spots Left</th>
-    <th></th>
+    <th class="col-md-1" colspan="2">Spots Left</th>
   </tr>
   <% @meals.each do |meal| %>
     <tr class="<%= signed_up_class(meal) %>">

@@ -3,33 +3,39 @@ require 'rails_helper'
 describe Ability do
   let(:other_community){ create(:community) }
 
-  describe "regular users" do
+  shared_examples_for :invite_only do
     it "should be able to see meals they're invited to" do
-      user = create(:user)
       meal = create(:meal, community_ids: user.community_id)
       expect_can_read(user, meal)
     end
 
     it "should not be able to see meals they're not invited to" do
-      user = create(:user)
       meal = create(:meal, communities: [other_community])
       expect(meal).not_to be_invited(user)
       expect_can_read(user, meal, false)
     end
 
     it "should be able to see meals they're not invited to but are working" do
-      user = create(:user)
       meal = create(:meal, communities: [other_community], cleaners: [user])
       expect(meal).not_to be_invited(user)
       expect_can_read(user, meal)
     end
 
     it "should be able to see meals they're not invited to but are signed up for" do
-      user = create(:user)
       meal = create(:meal, communities: [other_community], households: [user.household])
       expect(meal).not_to be_invited(user)
       expect_can_read(user, meal)
     end
+  end
+
+  describe "regular users" do
+    let(:user){ create(:user) }
+    it_should_behave_like :invite_only
+  end
+
+  describe "admins" do
+    let(:user){ create(:user, admin: true) }
+    it_should_behave_like :invite_only
   end
 
   def expect_can_read(user, meal, yn = true)

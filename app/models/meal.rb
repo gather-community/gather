@@ -32,11 +32,10 @@ class Meal < ActiveRecord::Base
     includes(:invitations).where("invitations.community_id" => user.community_id)
   end
   scope :visible_to, ->(user) do
-    joins("LEFT OUTER JOIN assignments ON assignments.meal_id = meals.id").
-    joins("LEFT OUTER JOIN invitations ON invitations.meal_id = meals.id").
-    joins("LEFT OUTER JOIN signups ON signups.meal_id = meals.id").
-      where("invitations.community_id = ? OR assignments.user_id = ? OR signups.household_id = ?",
-        user.community_id, user.id, user.household_id)
+    where("EXISTS (SELECT id FROM assignments WHERE assignments.meal_id = meals.id AND assignments.user_id = ?) OR
+      EXISTS (SELECT id FROM invitations WHERE invitations.meal_id = meals.id AND invitations.community_id = ?) OR
+      EXISTS (SELECT id FROM signups WHERE signups.meal_id = meals.id AND signups.household_id = ?)",
+      user.id, user.community_id, user.household_id)
   end
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank

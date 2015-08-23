@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823025218) do
+ActiveRecord::Schema.define(version: 20150823030513) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.integer "user_id", null: false
   end
 
+  add_index "assignments", ["meal_id", "role", "user_id"], name: "index_assignments_on_meal_id_and_role_and_user_id", unique: true, using: :btree
   add_index "assignments", ["meal_id"], name: "index_assignments_on_meal_id", using: :btree
   add_index "assignments", ["role"], name: "index_assignments_on_role", using: :btree
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
@@ -33,6 +34,9 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "communities", ["abbrv"], name: "index_communities_on_abbrv", unique: true, using: :btree
+  add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
 
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
@@ -54,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.integer "meal_id", null: false
   end
 
+  add_index "invitations", ["community_id", "meal_id"], name: "index_invitations_on_community_id_and_meal_id", unique: true, using: :btree
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
@@ -63,6 +68,9 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "locations", ["abbrv"], name: "index_locations_on_abbrv", unique: true, using: :btree
+  add_index "locations", ["name"], name: "index_locations_on_name", unique: true, using: :btree
 
   create_table "meals", force: :cascade do |t|
     t.text "allergens", default: "[]", null: false
@@ -95,6 +103,7 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "signups", ["household_id", "meal_id"], name: "index_signups_on_household_id_and_meal_id", unique: true, using: :btree
   add_index "signups", ["household_id"], name: "index_signups_on_household_id", using: :btree
   add_index "signups", ["meal_id"], name: "index_signups_on_meal_id", using: :btree
 
@@ -119,6 +128,8 @@ ActiveRecord::Schema.define(version: 20150823025218) do
     t.datetime "updated_at", null: false
     t.string "work_phone"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"

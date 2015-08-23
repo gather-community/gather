@@ -1,4 +1,6 @@
 class MealsController < ApplicationController
+  before_action :init_meal, only: :new
+
   load_and_authorize_resource
 
   def index
@@ -18,7 +20,6 @@ class MealsController < ApplicationController
   end
 
   def new
-    @meal = Meal.new_with_defaults
     @min_date = Date.today.strftime("%Y-%m-%d")
     prep_form_vars
   end
@@ -58,6 +59,10 @@ class MealsController < ApplicationController
   end
 
   private
+
+  def init_meal
+    @meal = Meal.new_with_defaults
+  end
 
   def load_meals
     @meals = @meals.future.oldest_first

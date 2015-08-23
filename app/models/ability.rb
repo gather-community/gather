@@ -32,5 +32,7 @@ class Ability
         meal.visible_to?(user)
       end
     end
+
+    cannot :manage_other_community, Meal # This will change later for superadmin
   end
 end

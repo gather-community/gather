@@ -20,4 +20,16 @@ module MealsHelper
   def spots_left(meal)
     "#{icon_tag("users")} #{meal.spots_left}/#{meal.capacity}".html_safe
   end
+
+  def community_invited?(meal, community)
+    meal.community_ids.include?(community.id)
+  end
+
+  # We should disable the "own" community checkbox for most users.
+  def disable_community_checkbox?(meal, community)
+    disable = current_user.community == community &&
+      community_invited?(meal, community) &&
+      current_ability.cannot?(:manage_other_community, meal)
+    disable ? "disabled" : nil
+  end
 end

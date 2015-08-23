@@ -24,7 +24,10 @@
     <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
     <div class="boxes col-sm-6">
       <% @communities.each do |c| %>
-        <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", @meal.community_ids.include?(c.id)) %>
+        <% checked = community_invited?(@meal, c) %>
+        <% disabled = disable_community_checkbox?(@meal, c) %>
+        <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
+        <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
         <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
         &nbsp;&nbsp;
       <% end %>

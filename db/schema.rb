@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823030513) do
+ActiveRecord::Schema.define(version: 20150823031209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20150823030513) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["household_id"], name: "index_users_on_household_id", using: :btree
 
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
@@ -138,4 +139,5 @@ ActiveRecord::Schema.define(version: 20150823030513) do
   add_foreign_key "meals", "locations"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"
+  add_foreign_key "users", "households"
 end

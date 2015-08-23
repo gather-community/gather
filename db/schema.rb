@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150816022843) do
+ActiveRecord::Schema.define(version: 20150823022317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20150816022843) do
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
+    t.string "abbrv", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
@@ -36,6 +37,9 @@ ActiveRecord::Schema.define(version: 20150816022843) do
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
+    t.integer "credit_limit", default: 50, null: false
+    t.integer "old_id"
+    t.boolean "over_limit", default: false, null: false
     t.string "suffix"
     t.integer "unit_num", null: false
     t.datetime "updated_at", null: false

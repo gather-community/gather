@@ -1,6 +1,6 @@
-ts = Community.find_or_create_by!(name: 'Touchstone')
-go = Community.find_or_create_by!(name: 'Great Oak')
-sw = Community.find_or_create_by!(name: 'Sunward')
+ts = Community.find_or_create_by!(name: 'Touchstone', abbrv: 'TS')
+go = Community.find_or_create_by!(name: 'Great Oak', abbrv: 'GO')
+sw = Community.find_or_create_by!(name: 'Sunward', abbrv: 'SW')
 
 if Household.all.empty?
   h1 = Household.create!(suffix: nil, unit_num: 1, community: ts)

@@ -4,7 +4,8 @@
   <%= f.input :last_name %>
   <%= f.input :email %>
   <%= f.input :google_email, disabled: cannot?(:manage, @user) %>
-  <%= f.input :household_id, collection: Household.sorted, disabled: cannot?(:manage, @user) %>
+  <%= f.input :household_id, collection: Household.sorted,
+    label_method: :full_name, disabled: cannot?(:manage, @user) %>
   <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
   <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>

@@ -50,7 +50,7 @@ class Meal < ActiveRecord::Base
   validate :allergen_none_alone
 
   def self.new_with_defaults
-    new(served_at: default_datetime, capacity: DEFAULT_CAPACITY)
+    new(served_at: default_datetime, capacity: DEFAULT_CAPACITY, community_ids: Community.all.map(&:id))
   end
 
   def self.default_datetime

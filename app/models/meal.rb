@@ -44,6 +44,7 @@ class Meal < ActiveRecord::Base
   validates :location_id, presence: true
   validates :capacity, presence: true
   validate :title_and_entree_if_other_menu_items
+  validate :at_least_one_community
   validate :head_cook_presence
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
@@ -141,6 +142,12 @@ class Meal < ActiveRecord::Base
       if self[attrib].blank? && (menu_items_present? || allergens.present?)
         errors.add(attrib, "can't be blank if other menu items entered")
       end
+    end
+  end
+
+  def at_least_one_community
+    if invitations.reject(&:blank?).empty?
+      errors.add(:invitations, "you must invite at least one community")
     end
   end
 

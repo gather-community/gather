@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   end
 
   delegate :full_name, to: :household, prefix: true
-  delegate :community, :community_name, to: :household
+  delegate :community, :community_id, :community_name, to: :household
 
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'

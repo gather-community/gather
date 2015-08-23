@@ -11,8 +11,9 @@ class Ability
     can :update, User, id: user.id
 
     # Anyone can view all meals
-    can :read, Meal
-    can :work_calendar, Meal
+    can [:read, :work_calendar], Meal, Meal.visible_to(user) do |meal|
+      meal.visible_to?(user)
+    end
 
     # Head cooks can edit meals
     can :update, Meal do |meal|

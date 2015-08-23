@@ -61,7 +61,7 @@ class MealsController < ApplicationController
 
   def load_meals
     @meals = Meal.future.oldest_first
-    @meals = @meals.worked_by(params[:uid]) if params[:uid].present?
+    @meals = @meals.worked_by(User.find(params[:uid])) if params[:uid].present?
     @meals = @meals.page(params[:page])
   end
 

@@ -20,11 +20,24 @@ class Meal < ActiveRecord::Base
   has_many :invitations
   has_many :communities, through: :invitations
   has_many :signups
+  has_many :households, through: :signups
 
   scope :oldest_first, -> { order(served_at: :asc) }
   scope :newest_first, -> { order(served_at: :desc) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
-  scope :worked_by, ->(user_id) { includes(:assignments).where("assignments.user_id" => user_id) }
+  scope :worked_by, ->(user) do
+    includes(:assignments).where("assignments.user_id" => user.id)
+  end
+  scope :inviting, ->(user) do
+    includes(:invitations).where("invitations.community_id" => user.community_id)
+  end
+  scope :visible_to, ->(user) do
+    joins("LEFT OUTER JOIN assignments ON assignments.meal_id = meals.id").
+    joins("LEFT OUTER JOIN invitations ON invitations.meal_id = meals.id").
+    joins("LEFT OUTER JOIN signups ON signups.meal_id = meals.id").
+      where("invitations.community_id = ? OR assignments.user_id = ? OR signups.household_id = ?",
+        user.community_id, user.id, user.household_id)
+  end
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
@@ -56,6 +69,22 @@ class Meal < ActiveRecord::Base
 
   def self.default_datetime
     (Date.today + 7.days).to_time + DEFAULT_TIME
+  end
+
+  def visible_to?(user)
+    invited?(user) || worked_by?(user) || signed_up?(user.household)
+  end
+
+  def invited?(user)
+    invitations.map(&:community_id).include?(user.community_id)
+  end
+
+  def worked_by?(user)
+    assignments.map(&:user_id).include?(user.id)
+  end
+
+  def signed_up?(household)
+    signups.map(&:household_id).include?(household.id)
   end
 
   # Ensures there is one head_cook assignment and 2 each of the others.

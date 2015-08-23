@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823023858) do
+ActiveRecord::Schema.define(version: 20150823025218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20150823023858) do
 
   add_index "households", ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true, using: :btree
   add_index "households", ["community_id"], name: "index_households_on_community_id", using: :btree
+  add_index "households", ["name"], name: "index_households_on_name", using: :btree
 
   create_table "invitations", force: :cascade do |t|
     t.integer "community_id", null: false

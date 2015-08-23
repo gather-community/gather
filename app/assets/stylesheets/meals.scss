@@ -17,6 +17,15 @@
     column-count: 3;
   }
 
+  @media screen and (max-width: 768px) {
+    .meal_allergens > div.boxes {
+      height: 170px;
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
+      column-count: 2;
+    }
+  }
+
   tr.signed-up, div.meals-list div.meal.signed-up {
     background-color: #eeeeff;
   }

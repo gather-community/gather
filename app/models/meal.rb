@@ -45,6 +45,7 @@ class Meal < ActiveRecord::Base
   validates :capacity, presence: true
   validate :title_and_entree_if_other_menu_items
   validate :head_cook_presence
+  validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
 
@@ -145,6 +146,19 @@ class Meal < ActiveRecord::Base
 
   def head_cook_presence
     head_cook_assign.errors.add(:user_id, "can't be blank") if head_cook_assign.user_id.blank?
+  end
+
+  def no_double_assignments
+    %w(asst_cook cleaner).each do |role|
+      marked_user_ids = {}
+      send("#{role}_assigns").each do |a|
+        if marked_user_ids[a.user_id]
+          a.errors.add(:user_id, "user cannot be assigned to this role twice")
+        else
+          marked_user_ids[a.user_id] = true
+        end
+      end
+    end
   end
 
   def allergens_some_or_none_if_menu

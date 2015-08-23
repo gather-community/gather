@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_active_and_name, -> { order("(CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END)").by_name }
   scope :active, -> { where(deleted_at: nil) }
+  scope :active_or_assigned_to, ->(meal) do
+    t = arel_table
+    where(t[:deleted_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
+  end
 
   delegate :full_name, to: :household, prefix: true
   delegate :community, :community_name, to: :household
@@ -38,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}" << (deleted? ? " (Inactive)" : "")
   end
 
   def format_phone(kind)

@@ -67,7 +67,7 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.ensure_assignments
-    @active_users = User.by_name.active
+    @active_users = User.active_or_assigned_to(@meal).by_name
     @communities = Community.by_name
   end
 

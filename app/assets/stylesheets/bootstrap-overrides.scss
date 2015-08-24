@@ -1,0 +1,12 @@
+.btn {
+  border-radius: 0;
+  border: none;
+}
+
+.btn-primary, a.btn-primary {
+  background-color: $accent-red;
+
+  &:hover, &:active, &:focus {
+    background-color: $accent-red-intense;
+  }
+}

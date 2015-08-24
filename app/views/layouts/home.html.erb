@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MESS</title>
+  <%= render("layouts/head") %>
+</head>
+<body class="home">
+  <div id="box">
+    <div id="logo">
+      <%= image_tag("logo-tagline-white.png") %>
+    </div>
+    <%= yield %>
+    <%= image_tag("three-coho-logos.png", id: "coho-logos") %>
+  </div>
+</body>
+</html>

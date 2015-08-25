@@ -1,10 +1,6 @@
 .meals.action-show {
   position: relative;
 
-  h1 {
-    display: none;
-  }
-
   .action-icons {
     position: absolute;
     top: 10px;
@@ -17,7 +13,7 @@
 
   .meal-menu {
     border: $light-border;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 20px;
     text-align: center;
     margin-bottom: 20px;

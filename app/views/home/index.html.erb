@@ -1,7 +1,6 @@
-<div id="login-text">
-  <div>
-    <%= link_to (icon_tag("google") << " Login with Google"),
-      user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary btn-lg" %>
-  </div>
-  <%= flash_messages %>
+<div id="blurb">
+  MESS is a tool for organizing cohousing common meals. Choose the meals you'd like to attend. See what meal shifts you're working. View and pay your meals bill. <strong>Let's eat together!</strong>
 </div>
+<%= link_to (icon_tag("google") << " Login with Google"),
+  user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary" %>
+<%= flash_messages %>

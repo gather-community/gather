@@ -1,35 +1,56 @@
-header > div, #content, footer {
+#content, footer {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-header {
-  background-color: #ddd;
+.nav-wrapper {
+  max-width: 1200px;
+}
 
-  > div {
-    padding: 5px 20px;
-  }
+nav.navbar {
+  border: none;
+  background-color: $theme-main;
+  margin-bottom: 0;
 
-  h1 {
-    margin: 0;
-    display: inline-block;
-    margin-right: 10px;
-
-    i.fa {
-      font-size: 27px;
-      vertical-align: top;
-      display: inline-block;
-      margin-top: 7px;
-    }
-  }
-
-  #menu {
-    display: inline-block;
-    vertical-align: top;
+  .navbar-toggle .icon-bar {
+    background-color: #fff;
   }
 
   #user-info {
     float: right;
+  }
+
+  a.navbar-brand {
+    height: 85px;
+    padding: 10px 30px 0 20px;
+  }
+
+  ul.navbar-nav {
+
+    a, .active a {
+      color: #ddd;
+      padding: 7px 15px;
+    }
+
+    a:hover, a:focus, .active a:hover, .active a:focus {
+      color: #fff;
+    }
+
+    &.main-links {
+      @media screen and (min-width: $grid-float-breakpoint) {
+        margin-top: 28px;
+      }
+
+      .active a {
+        background-color: #634265;
+      }
+    }
+
+    @media screen and (min-width: $grid-float-breakpoint) {
+      &.user-info {
+        margin-right: -28px;
+      }
+    }
   }
 }
 

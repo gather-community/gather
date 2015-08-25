@@ -24,4 +24,20 @@ module ApplicationHelper
     options.reverse_merge!(theme: 'twitter-bootstrap-3')
     super(objects, options)
   end
+
+  def nav_links
+    %w(meals work_calendar_meals users).map do |item|
+      case item
+      when "work_calendar_meals"
+        active = params[:controller] == "meals" && params[:action] == "work_calendar"
+        name = "Work"
+      else
+        active = params[:controller] == item && params[:action] == "index"
+        name = item.capitalize
+      end
+
+      link = link_to(name, send("#{item}_path"), class: "icon-bar")
+      content_tag(:li, link, class: active ? "active" : nil)
+    end.reduce(:<<)
+  end
 end

@@ -1,17 +1,10 @@
-$gray-text: #999;
-$inactive-color: #ccc;
-$light-border-color: #ccc;
-$light-border: 1px solid $light-border-color;
-$main-blue: #00B6DF;
-$accent-red: #F2715C;
-$accent-red-intense: #E81A05;
-
 @import "bootstrap-sprockets";
 @import "bootstrap-datetimepicker";
 @import "bootstrap";
-@import "bootstrap-overrides";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import "variables";
+@import "theme";
 @import "layout";
 @import "home";
 @import "mobile";

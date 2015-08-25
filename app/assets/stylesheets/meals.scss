@@ -27,7 +27,7 @@
   }
 
   tr.signed-up, div.meals-list div.meal.signed-up {
-    background-color: #eeeeff;
+    background-color: $highlight-color;
   }
 
   table a.user-link {
@@ -38,9 +38,7 @@
   div.meals-list {
 
     div.meal {
-      border: $light-border;
-      border-radius: 5px;
-      background-color: #eee;
+      background-color: #f3f3f3;
       margin-bottom: 20px;
       padding: 10px;
 

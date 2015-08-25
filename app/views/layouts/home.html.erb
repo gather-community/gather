@@ -9,8 +9,12 @@
     <div id="logo">
       <%= image_tag("logo-tagline-white.png") %>
     </div>
-    <%= yield %>
-    <%= image_tag("three-coho-logos.png", id: "coho-logos") %>
+    <div id="home-content">
+      <%= yield %>
+    </div>
+    <div id="coho-logos">
+      <%= image_tag("sunward.png") %><%= image_tag("touchstone.png") %><%= image_tag("great-oak.png") %>
+    </div>
   </div>
 </body>
 </html>

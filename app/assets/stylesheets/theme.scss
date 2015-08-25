@@ -1,0 +1,51 @@
+body {
+  font-family: 'Raleway', sans-serif;
+  color: #444;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+a, a:visited {
+  color: $theme-accent-light;
+}
+
+a:hover {
+  color: saturate($theme-accent-light, 20%);
+}
+
+.btn {
+  border-radius: 0;
+  border: none;
+}
+
+.btn-default {
+  background-color: #eee;
+
+  &:hover, &:active, &:focus {
+    background-color: #ddd;
+  }
+}
+
+.btn-primary, a.btn-primary {
+  color: white;
+  background-color: $theme-accent;
+
+  &:hover, &:active, &:focus {
+    background-color: $theme-accent-intense;
+  }
+}
+
+.datetimepicker .btn {
+  border: 1px solid $btn-default-border;
+}
+
+mark {
+  background-color: $highlight-color;
+}
+
+.alert {
+  border: none;
+  border-radius: 0;
+}

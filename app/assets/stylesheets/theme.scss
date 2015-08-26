@@ -8,11 +8,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a, a:visited {
-  color: $theme-accent-light;
+  color: $theme-accent;
 }
 
 a:hover {
-  color: saturate($theme-accent-light, 20%);
+  color: $theme-accent-intense;
 }
 
 .btn {
@@ -24,7 +24,7 @@ a:hover {
   background-color: #eee;
 
   &:hover, &:active, &:focus {
-    background-color: #ddd;
+    background-color: #ddd !important;
   }
 }
 
@@ -33,7 +33,7 @@ a:hover {
   background-color: $theme-accent;
 
   &:hover, &:active, &:focus {
-    background-color: $theme-accent-intense;
+    background-color: $theme-accent-intense !important;
   }
 }
 

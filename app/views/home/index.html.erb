@@ -1,6 +1,27 @@
-<div id="blurb">
-  MESS is a tool for organizing cohousing common meals. Choose the meals you'd like to attend. See what meal shifts you're working. View and pay your meals bill. <strong>Let's eat together!</strong>
-</div>
-<%= link_to (icon_tag("google") << " Login with Google"),
-  user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary" %>
-<%= flash_messages %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MESS</title>
+  <%= render("layouts/head") %>
+</head>
+<body class="home">
+  <div id="container">
+    <br/>
+    <div id="blurb">
+      It's never been easier to organize a common meal at cohousing.<br/>
+      <strong>Let's eat together!</strong>
+    </div>
+    <div id="logo">
+      <%= image_tag("logo-tagline-white.png") %>
+    </div>
+    <%= link_to (icon_tag("google") << " Log in with Google"),
+      user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary" %>
+    <%= flash_messages %>
+  </div>
+  <div id="footer" >
+    <div id="coho-logos">
+      <%= image_tag("sunward.png") %><%= image_tag("touchstone.png") %><%= image_tag("great-oak.png") %>
+    </div>
+  </div>
+</body>
+</html>

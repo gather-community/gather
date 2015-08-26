@@ -50,7 +50,7 @@ Follow these steps to setup a development environment for MESS.
   - `rake db:seed`
   - This adds communities, households, etc.
 
-1. **Create a user so you can login**
+1. **Create a user so you can log in**
   - Open the rails console (`rails c`)
   - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first, admin: true)`
   - Be sure to replace `you@gmail.com` with a Google account you control.
@@ -68,5 +68,5 @@ Follow these steps to setup a development environment for MESS.
 
 1. **Start using the system**
   - Navigate to http://localhost:3000
-  - Login with the Google account given above
+  - Log in with the Google account given above
   - Enjoy!

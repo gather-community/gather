@@ -21,7 +21,9 @@
         <%= icon_tag('trophy') if user.admin? %>
       </td>
       <td class="col-md-2"><%= user.household_full_name %></td>
-      <td class="col-md-2"><%= link_to(user.google_email, "mailto:#{user.google_email}") %></td>
+      <td class="col-md-2">
+        <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
+      </td>
       <td class="col-md-2"><%= link_to(user.email, "mailto:#{user.email}") %></td>
       <td class="col-md-3"><%= user.phones %></td>
       <td class="col-md-1">

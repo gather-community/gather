@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823032333) do
+ActiveRecord::Schema.define(version: 20150828034049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20150823032333) do
     t.inet "current_sign_in_ip"
     t.datetime "deleted_at"
     t.string "email", null: false
+    t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email", null: false
     t.string "home_phone"
@@ -123,6 +124,8 @@ ActiveRecord::Schema.define(version: 20150823032333) do
     t.inet "last_sign_in_ip"
     t.string "mobile_phone"
     t.string "provider"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
     t.datetime "updated_at", null: false
@@ -132,6 +135,7 @@ ActiveRecord::Schema.define(version: 20150823032333) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["google_email"], name: "index_users_on_google_email", unique: true, using: :btree
   add_index "users", ["household_id"], name: "index_users_on_household_id", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"

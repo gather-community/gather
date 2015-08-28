@@ -4,10 +4,6 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
 
-  devise_scope :user do
-    delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
-  end
-
   resources :users do
     collection do
       get :invite

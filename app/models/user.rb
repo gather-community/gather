@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   PHONE_TYPES = %w(home work mobile)
 
-  devise :omniauthable, :trackable, omniauth_providers: [:google_oauth2]
+  # Currently, :database_authenticatable is only needed for tha password reset token features
+  devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household
 

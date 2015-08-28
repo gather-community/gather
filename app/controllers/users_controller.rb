@@ -50,7 +50,9 @@ class UsersController < ApplicationController
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
     @users = User.find(params[:to_invite])
-
+    @users.each do |u|
+      u.send_reset_password_instructions
+    end
   end
 
   private

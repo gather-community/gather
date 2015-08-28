@@ -7,3 +7,12 @@ end
 Mess::Application.config.secret_key_base = "xxx"
 
 Rails.configuration.x.host = "example.com"
+
+Rails.configuration.action_mailer.smtp_settings = {
+  address: "example.com",
+  port: 587,
+  domain: "example.org",
+  authentication: :plain,
+  user_name: "user",
+  password: "xxx"
+}

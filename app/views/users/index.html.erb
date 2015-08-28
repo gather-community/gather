@@ -1,6 +1,7 @@
 <% content_for(:title){ "Users" } %>
 
 <div class="top-buttons">
+  <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if can?(:create, User) %>
   <%= link_to("Create User", new_user_path, class: "btn btn-primary") if can?(:create, User) %>
 </div>
 

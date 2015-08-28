@@ -1,0 +1,26 @@
+<% content_for(:title){ "Invite Users to Login" } %>
+
+<% if @users.empty? %>
+
+  There are no active users that have never logged in.
+
+<% else %>
+
+  The following users have never logged in. Check the ones you'd like to invite.
+
+  <%= form_tag("/users/send-invites", method: :post) do %>
+    <div id="invite-list">
+      <% @users.each do |u| %>
+        <div>
+          <label>
+            <input type="checkbox" name="to_invite[]" value="<%= u.id %>">
+            <%= u.name %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+
+    <input type="submit" value="Send Invites" class="btn btn-primary">
+  <% end %>
+
+<% end %>

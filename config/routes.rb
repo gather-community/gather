@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    collection do
+      get :invite
+      post :send_invites, path: "send-invites"
+    end
     member do
       put :undelete
     end

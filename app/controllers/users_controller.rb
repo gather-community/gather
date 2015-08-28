@@ -12,6 +12,10 @@ class UsersController < ApplicationController
   def show
   end
 
+  def invite
+    @users = User.never_logged_in.active.by_name
+  end
+
   def create
     if @user.save
       flash[:success] = "User created successfully."
@@ -41,6 +45,12 @@ class UsersController < ApplicationController
   def undelete
     @user.undelete!
     redirect_to(users_path)
+  end
+
+  # Expects params[to_invite] = ["1", "5", ...]
+  def send_invites
+    @users = User.find(params[:to_invite])
+
   end
 
   private

@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
     t = arel_table
     where(t[:deleted_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
   end
+  scope :never_logged_in, -> { where(sign_in_count: 0) }
 
   delegate :full_name, to: :household, prefix: true
   delegate :community, :community_id, :community_name, to: :household

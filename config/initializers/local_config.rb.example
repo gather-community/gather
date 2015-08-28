@@ -5,3 +5,5 @@ end
 
 # generate your secret key with `rake secret`
 Mess::Application.config.secret_key_base = "xxx"
+
+Rails.configuration.x.host = "example.com"

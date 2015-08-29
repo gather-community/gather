@@ -1,15 +1,23 @@
 class SignupsController < ApplicationController
+  include MealShowable
+
   load_and_authorize_resource
 
   def create
-    @signup.save_or_destroy!
-    redirect_after_save
+    if @signup.save_or_destroy
+      redirect_after_save
+    else
+      render_meal_show
+    end
   end
 
   def update
     @signup.assign_attributes(signup_params)
-    @signup.save_or_destroy!
-    redirect_after_save
+    if @signup.save_or_destroy
+      redirect_after_save
+    else
+      render_meal_show
+    end
   end
 
   private
@@ -21,6 +29,13 @@ class SignupsController < ApplicationController
     else
       redirect_to(meals_path)
     end
+  end
+
+  def render_meal_show
+    @meal = @signup.meal
+    authorize!(:show, @meal)
+    load_prev_next_meal # From MealShowable
+    render("meals/show")
   end
 
   def signup_params

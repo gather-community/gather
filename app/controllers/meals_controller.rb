@@ -1,4 +1,6 @@
 class MealsController < ApplicationController
+  include MealShowable
+
   before_action :init_meal, only: :new
 
   load_and_authorize_resource
@@ -74,11 +76,6 @@ class MealsController < ApplicationController
     @meal.ensure_assignments
     @active_users = User.active_or_assigned_to(@meal).by_name
     @communities = Community.by_name
-  end
-
-  def load_prev_next_meal
-    @next_meal = @meal.following_meals.future.oldest_first.accessible_by(current_ability).first
-    @prev_meal = @meal.previous_meals.future.newest_first.accessible_by(current_ability).first
   end
 
   def meal_params

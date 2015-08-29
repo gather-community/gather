@@ -66,6 +66,7 @@
     <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
       <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
       <%= f.input :meal_id, as: :hidden %>
+      <%= base_error(f) %>
       <%= f.input :spots_left do %>
         &nbsp;<strong><%= @meal.spots_left %></strong>
       <% end %>

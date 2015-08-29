@@ -31,6 +31,13 @@ en:
         big_kid: "Big Kid"
         little_kid: "Little Kid"
         comments: "Comments for Cook"
+    errors:
+      models:
+        signup:
+          exceeded_spots:
+            one: "You can only sign up one person."
+            other: "You can only sign up a maximum of %{count} people."
+
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
     pformat: 'ddd YYYY-MM-DD'           # picking format of the date (this is the default, can be ommited)

@@ -54,7 +54,8 @@ class Meal < ActiveRecord::Base
 
   validates :served_at, presence: true
   validates :location_id, presence: true
-  validates :capacity, presence: true
+  validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
+  validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
   validate :head_cook_presence
@@ -183,6 +184,12 @@ class Meal < ActiveRecord::Base
 
   def menu_items_present?
     (['title'] + MENU_ITEMS).any?{ |a| self[a].present? }
+  end
+
+  def enough_capacity_for_current_signups
+    if persisted? && capacity < (ttl = Signup.total_for_meal(self))
+      errors.add(:capacity, "must be at least #{ttl} due to current signups")
+    end
   end
 
   def title_and_entree_if_other_menu_items

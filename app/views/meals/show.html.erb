@@ -85,7 +85,8 @@
           <strong><%= @meal.spots_left %></strong>
         <% end %>
         <% Signup::SIGNUP_TYPES.each do |type| %>
-          <%= f.input type, collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
+          <%= f.input type, label: signup_label(type),
+            collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
         <% end %>
         <%= f.input :comments %>
         <div class="pull-right">
@@ -96,3 +97,9 @@
     <% end %>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+<% end %>

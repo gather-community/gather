@@ -26,7 +26,7 @@ en:
       signup:
         spots_left: "Spots Left"
         adult_meat: "Adult Meat"
-        adult_veg: "Adult Veg"
+        adult_veg: "Adult Vegetarian"
         teen: "Teen"
         big_kid: "Big Kid"
         little_kid: "Little Kid"
@@ -57,3 +57,11 @@ en:
 
   meals:
     over_limit_notice: "Your household has exceeded its credit limit and you are thus not permitted to sign up for meals. Please contact your meals coordinator."
+
+  signups:
+    tooltips:
+      adult_meat: "Adults intending to eat meat. For vegetarian meals you can use either adult type."
+      adult_veg: "Adults intending to eat vegetarian. Almost all meals have a vegetarian option."
+      teen: "Teens are ages 13-17 and are charged 75% of the adult rate."
+      big_kid: "Big kids are ages 7-12 and are charged 50% of the adult rate."
+      little_kid: "Little kids are ages 1-6 and eat for free!"

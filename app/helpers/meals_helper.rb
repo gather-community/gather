@@ -26,6 +26,11 @@ module MealsHelper
     "#{icon_tag(icon)} #{meal.signup_count}/#{meal.capacity}".html_safe
   end
 
+  def signup_label(type)
+    icon_tag("question-circle", title: t("signups.tooltips.#{type}"), data: {toggle: "tooltip"}) <<
+      Signup.human_attribute_name(type)
+  end
+
   def community_invited?(meal, community)
     meal.community_ids.include?(community.id)
   end

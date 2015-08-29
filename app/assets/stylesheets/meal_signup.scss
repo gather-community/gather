@@ -49,6 +49,10 @@
     margin-bottom: 20px;
   }
 
+  form i.fa-question-circle {
+    margin-right: 5px;
+  }
+
   // Override the responsive grid stuff because we want to preserve horizontal layout
   // on small screens for this form
   .col-sm-6 {

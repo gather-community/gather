@@ -24,8 +24,10 @@
           <%= link_to(icon_tag("check") << " #{signup.total}", meal_path(meal)) %>
         <% elsif meal.full? %>
           <span class="weak">[Full]</span>
+        <% elsif meal.signups_allowed? %>
+          <%= link_to("Sign Up", meal_path(meal)) %>
         <% else %>
-          <%= link_to("Sign Up", meal_path(meal)) unless meal.full? %>
+          No
         <% end %>
       </td>
       <td class="col-md-1"><%= signup_count(meal) %></td>
@@ -38,16 +40,19 @@
   <% @meals.each do |meal| %>
     <div class="meal <%= signed_up_class(meal) %>">
       <div class="actions"><%= meal_action_icons(meal) %></div>
-      <h4><%= meal_link(meal) %> by <%= meal.head_cook_name %> </h4>
+      <h5><%= meal_link(meal) %> by <%= meal.head_cook_name %></h5>
       <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
-      <% if signup = meal.signup_for(current_user.household) %>
-        <div class="signed-up">
-          <%= icon_tag("check")%> <%= signup.total %> signed up from your household
-        </div>
-      <% end %>
       <div class="signup-count">
         <%= signup_count(meal) %> signed up
       </div>
+      <% if signup = meal.signup_for(current_user.household) %>
+        <div class="signed-up">
+          <%= icon_tag("check") %> <%= signup.total %> signed up from your household
+          <%= link_to("(Edit)", meal_path(meal)) unless meal.signups_editable? %>
+        </div>
+      <% elsif meal.signups_allowed? %>
+        <%= link_to("Sign Up", meal_path(meal)) %>
+      <% end %>
     </div>
   <% end %>
 </div>

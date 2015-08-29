@@ -26,3 +26,14 @@ form {
     padding-top: 0;
   }
 }
+
+// Overriding error message style
+.has-error .help-block {
+  background-color: #f2dede;
+  padding: 0 5px;
+  border: 1px solid #ebccd1;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}

@@ -19,7 +19,7 @@
   <% @users.each do |user| %>
     <tr class="<%= user.deleted? ? "deleted" : "" %>">
       <td class="col-md-2">
-        <%= link_to(user.name, edit_user_path(user)) %>
+        <%= link_to(user.name, can?(:manage, User) ? edit_user_path(user) : user_path(user)) %>
         <%= icon_tag('trophy') if user.admin? %>
       </td>
       <td class="col-md-2"><%= user.household_full_name %></td>

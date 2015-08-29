@@ -59,25 +59,32 @@
       </div>
     </div>
 
-    <%= link_to(icon_tag('close'), "#", title: "Clear Form",
-      onclick: "$('.signup select').val(0); $('.signup textarea').val(''); return false") %>
+    <% unless @signup.not_allowed? %>
+      <%= link_to(icon_tag('close'), "#", title: "Clear Form",
+        onclick: "$('.signup select').val(0); $('.signup textarea').val(''); return false") %>
+    <% end %>
 
     <h4>Signups for <%= current_user.household_full_name %></h4>
-    <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
-      <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
-      <%= f.input :meal_id, as: :hidden %>
-      <%= base_error(f) %>
-      <%= f.input :spots_left do %>
-        &nbsp;<strong><%= @meal.spots_left %></strong>
+    <% if @signup.not_allowed? %>
+      You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
+    <% else %>
+      <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
+        <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
+        <%= f.input :meal_id, as: :hidden %>
+        <%= base_error(f) %>
+        <%= f.input :spots_left do %>
+          <%= icon_tag("exclamation-circle") if @meal.full? %>
+          <strong><%= @meal.spots_left %></strong>
+        <% end %>
+        <% Signup::SIGNUP_TYPES.each do |type| %>
+          <%= f.input type, collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
+        <% end %>
+        <%= f.input :comments %>
+        <div class="pull-right">
+          <%= f.button :submit, "Save & Go To Next", name: "save_and_next", class: "btn btn-default" if @next_meal %>
+          <%= f.button :submit, "Save", class: "btn btn-primary" %>
+        </div>
       <% end %>
-      <% Signup::SIGNUP_TYPES.each do |type| %>
-        <%= f.input type, collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
-      <% end %>
-      <%= f.input :comments %>
-      <div class="pull-right">
-        <%= f.button :submit, "Save", class: @next_meal ? "" : "btn-primary" %>
-        <%= f.button :submit, "Save & Go To Next", name: "save_and_next", class: "btn-primary" if @next_meal %>
-      </div>
     <% end %>
   </div>
 </div>

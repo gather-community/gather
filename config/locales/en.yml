@@ -35,8 +35,8 @@ en:
       models:
         signup:
           exceeded_spots:
-            one: "You can only sign up one person."
-            other: "You can only sign up a maximum of %{count} people."
+            one: "Based on the number of spots remaining, you can only sign up one person."
+            other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
 
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)

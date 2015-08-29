@@ -40,6 +40,10 @@ class Signup < ActiveRecord::Base
     SIGNUP_TYPES.all?{ |t| self[t] == 0 }
   end
 
+  def not_allowed?
+    new_record? && !meal.signups_allowed?
+  end
+
   private
 
   def max_signups_per_type

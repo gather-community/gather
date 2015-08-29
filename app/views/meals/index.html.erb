@@ -4,58 +4,61 @@
   <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
 </div>
 
-<table class="index non-mobile">
-  <tr>
-    <th class="col-md-2">Date/Time</th>
-    <th class="col-md-2">Cook</th>
-    <th class="col-md-4">Title</th>
-    <th class="col-md-2">Location</th>
-    <th class="col-md-1">Going?</th>
-    <th class="col-md-1" colspan="2">Signups</th>
-  </tr>
-  <% @meals.each do |meal| %>
-    <tr class="<%= signed_up_class(meal) %>">
-      <td class="col-md-2"><%= meal_date_time(meal) %></td>
-      <td class="col-md-2"><%= meal.head_cook_name %></td>
-      <td class="col-md-4"><%= meal_link(meal) %></td>
-      <td class="col-md-2"><%= meal.location_abbrv %></td>
-      <td class="col-md-1">
+<% if @meals.empty? %>
+  No meals found.
+<% else %>
+  <table class="index non-mobile">
+    <tr>
+      <th class="col-md-2">Date/Time</th>
+      <th class="col-md-2">Cook</th>
+      <th class="col-md-4">Title</th>
+      <th class="col-md-2">Location</th>
+      <th class="col-md-1">Going?</th>
+      <th class="col-md-1" colspan="2">Signups</th>
+    </tr>
+    <% @meals.each do |meal| %>
+      <tr class="<%= signed_up_class(meal) %>">
+        <td class="col-md-2"><%= meal_date_time(meal) %></td>
+        <td class="col-md-2"><%= meal.head_cook_name %></td>
+        <td class="col-md-4"><%= meal_link(meal) %></td>
+        <td class="col-md-2"><%= meal.location_abbrv %></td>
+        <td class="col-md-1">
+          <% if signup = meal.signup_for(current_user.household) %>
+            <%= link_to(icon_tag("check") << " #{signup.total}", meal_path(meal)) %>
+          <% elsif meal.full? %>
+            <span class="weak">[Full]</span>
+          <% elsif meal.signups_allowed? %>
+            <%= link_to("Sign Up", meal_path(meal)) %>
+          <% else %>
+            No
+          <% end %>
+        </td>
+        <td class="col-md-1"><%= signup_count(meal) %></td>
+        <td class="action-icons"><%= meal_action_icons(meal) %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <div class="meals-list mobile">
+    <% @meals.each do |meal| %>
+      <div class="meal <%= signed_up_class(meal) %>">
+        <div class="actions"><%= meal_action_icons(meal) %></div>
+        <h5><%= meal_link(meal) %> by <%= meal.head_cook_name %></h5>
+        <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
+        <div class="signup-count">
+          <%= signup_count(meal) %> signed up
+        </div>
         <% if signup = meal.signup_for(current_user.household) %>
-          <%= link_to(icon_tag("check") << " #{signup.total}", meal_path(meal)) %>
-        <% elsif meal.full? %>
-          <span class="weak">[Full]</span>
+          <div class="signed-up">
+            <%= icon_tag("check") %> <%= signup.total %> signed up from your household
+            <%= link_to("(Edit)", meal_path(meal)) unless meal.signups_editable? %>
+          </div>
         <% elsif meal.signups_allowed? %>
           <%= link_to("Sign Up", meal_path(meal)) %>
-        <% else %>
-          No
         <% end %>
-      </td>
-      <td class="col-md-1"><%= signup_count(meal) %></td>
-      <td class="action-icons"><%= meal_action_icons(meal) %></td>
-    </tr>
-  <% end %>
-</table>
-
-<div class="meals-list mobile">
-  <% @meals.each do |meal| %>
-    <div class="meal <%= signed_up_class(meal) %>">
-      <div class="actions"><%= meal_action_icons(meal) %></div>
-      <h5><%= meal_link(meal) %> by <%= meal.head_cook_name %></h5>
-      <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
-      <div class="signup-count">
-        <%= signup_count(meal) %> signed up
       </div>
-      <% if signup = meal.signup_for(current_user.household) %>
-        <div class="signed-up">
-          <%= icon_tag("check") %> <%= signup.total %> signed up from your household
-          <%= link_to("(Edit)", meal_path(meal)) unless meal.signups_editable? %>
-        </div>
-      <% elsif meal.signups_allowed? %>
-        <%= link_to("Sign Up", meal_path(meal)) %>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-
-<%= paginate @meals %>
+  <%= paginate @meals %>
+<% end %>

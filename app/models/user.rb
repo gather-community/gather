@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   scope :never_logged_in, -> { where(sign_in_count: 0) }
 
   delegate :full_name, to: :household, prefix: true
+  delegate :over_limit?, to: :household, prefix: false
   delegate :community, :community_id, :community_name, to: :household
 
   PHONE_TYPES.each do |p|

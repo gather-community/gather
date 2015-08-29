@@ -17,6 +17,10 @@ module MealsHelper
       #(can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
   end
 
+  def signup_link(meal)
+    current_user.over_limit? ? "" : link_to("Sign Up", meal_path(meal))
+  end
+
   def signup_count(meal)
     icon = meal.full? ? "exclamation-circle" : "users"
     "#{icon_tag(icon)} #{meal.signup_count}/#{meal.capacity}".html_safe

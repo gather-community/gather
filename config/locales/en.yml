@@ -54,3 +54,6 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
+
+  meals:
+    over_limit_notice: "Your household has exceeded its credit limit and you are thus not permitted to sign up for meals. Please contact your meals coordinator."

@@ -28,7 +28,7 @@
           <% elsif meal.full? %>
             <span class="weak">[Full]</span>
           <% elsif meal.signups_allowed? %>
-            <%= link_to("Sign Up", meal_path(meal)) %>
+            <%= signup_link(meal) %>
           <% else %>
             No
           <% end %>
@@ -54,7 +54,7 @@
             <%= link_to("(Edit)", meal_path(meal)) unless meal.signups_editable? %>
           </div>
         <% elsif meal.signups_allowed? %>
-          <%= link_to("Sign Up", meal_path(meal)) %>
+          <%= signup_link(meal) %>
         <% end %>
       </div>
     <% end %>

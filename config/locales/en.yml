@@ -24,6 +24,7 @@ en:
         head_cook: "Head Cook"
         served_at: "Date/Time"
       signup:
+        spots_left: "Spots Left"
         adult_meat: "Adult Meat"
         adult_veg: "Adult Veg"
         teen: "Teen"

@@ -17,8 +17,8 @@ module MealsHelper
       #(can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
   end
 
-  def spots_left(meal)
-    "#{icon_tag("users")} #{meal.spots_left}/#{meal.capacity}".html_safe
+  def signup_count(meal)
+    "#{icon_tag("users")} #{meal.signup_count}/#{meal.capacity}".html_safe
   end
 
   def community_invited?(meal, community)

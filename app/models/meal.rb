@@ -121,6 +121,10 @@ class Meal < ActiveRecord::Base
     signups.where(household_id: household.id).first
   end
 
+  def signup_count
+    @signup_count ||= Signup.total_for_meal(self)
+  end
+
   def spots_left
     @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
   end

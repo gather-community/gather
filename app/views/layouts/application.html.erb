@@ -25,8 +25,12 @@
         <%= nav_links %>
       </ul>
       <ul class="nav navbar-nav navbar-right user-info">
-        <li><%= link_to(current_user.name, edit_user_path(current_user)) %></li>
-        <li><%= link_to("Log out", destroy_user_session_path, method: :delete) %></li>
+        <li>
+          <%= link_to(icon_tag("user") << " " << current_user.name, edit_user_path(current_user)) %>
+        </li>
+        <li>
+          <%= link_to(icon_tag("sign-out") << " Log out", destroy_user_session_path, method: :delete) %>
+        </li>
       </ul>
     </div>
   </div>

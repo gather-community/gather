@@ -129,6 +129,10 @@ class Meal < ActiveRecord::Base
     @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
   end
 
+  def full?
+    spots_left == 0
+  end
+
   def menu_posted?
     entrees.present?
   end

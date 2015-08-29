@@ -18,7 +18,8 @@ module MealsHelper
   end
 
   def signup_count(meal)
-    "#{icon_tag("users")} #{meal.signup_count}/#{meal.capacity}".html_safe
+    icon = meal.full? ? "exclamation-circle" : "users"
+    "#{icon_tag(icon)} #{meal.signup_count}/#{meal.capacity}".html_safe
   end
 
   def community_invited?(meal, community)

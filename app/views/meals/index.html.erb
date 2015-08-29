@@ -21,9 +21,11 @@
       <td class="col-md-2"><%= meal.location_abbrv %></td>
       <td class="col-md-1">
         <% if signup = meal.signup_for(current_user.household) %>
-          <%= icon_tag("check") %> <%= signup.total %>
+          <%= link_to(icon_tag("check") << " #{signup.total}", meal_path(meal)) %>
+        <% elsif meal.full? %>
+          <span class="weak">[Full]</span>
         <% else %>
-          <%= link_to("Sign Up", meal_path(meal)) %>
+          <%= link_to("Sign Up", meal_path(meal)) unless meal.full? %>
         <% end %>
       </td>
       <td class="col-md-1"><%= signup_count(meal) %></td>

@@ -7,15 +7,36 @@
       color: $gray-text;
       display: block;
     }
+
+    i {
+      font-size: 28px;
+      margin-top: 12px;
+    }
   }
 
   .prev-meal {
     padding-right: 5px;
+
+    div {
+      margin-left: 20px;
+    }
+
+    i {
+      float: left;
+    }
   }
 
   .next-meal {
     text-align: right;
     padding-left: 5px;
+
+    div {
+      margin-right: 20px;
+    }
+
+    i {
+      float: right;
+    }
   }
 
   i.fa-close {

@@ -45,16 +45,22 @@
     <div class="row">
       <div class="prev-meal col-sm-6">
         <% if @prev_meal.present? %>
-          <small>Previous Meal</small>
-          <%= meal_link(@prev_meal) %>
-          <small><%= meal_date_time(@prev_meal) %></small>
+          <%= link_to(icon_tag("angle-left"), meal_path(@prev_meal)) %>
+          <div>
+            <small>Previous Meal</small>
+            <%= meal_link(@prev_meal) %>
+            <small><%= meal_date_time(@prev_meal) %></small>
+          </div>
         <% end %>
       </div>
       <div class="next-meal col-sm-6">
         <% if @next_meal.present? %>
-          <small>Next Meal</small>
-          <%= meal_link(@next_meal) %>
-          <small><%= meal_date_time(@next_meal) %></small>
+          <%= link_to(icon_tag("angle-right"), meal_path(@next_meal)) %>
+          <div>
+            <small>Next Meal</small>
+            <%= meal_link(@next_meal) %>
+            <small><%= meal_date_time(@next_meal) %></small>
+          </div>
         <% end %>
       </div>
     </div>

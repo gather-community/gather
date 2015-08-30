@@ -1,5 +1,6 @@
 class Household < ActiveRecord::Base
   belongs_to :community
+  has_many :credit_limits
 
   scope :sorted, -> { includes(:community).order('communities.abbrv, households.name') }
 
@@ -7,5 +8,9 @@ class Household < ActiveRecord::Base
 
   def full_name
     "#{community.abbrv}: #{name}"
+  end
+
+  def over_limit?(community)
+
   end
 end

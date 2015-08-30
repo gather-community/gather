@@ -42,21 +42,19 @@ ActiveRecord::Schema.define(version: 20150830121939) do
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.boolean "exceeded", default: false, null: false
+    t.integer "household_id", null: false
     t.integer "limit", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
   end
 
   add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
-  add_index "credit_limits", ["user_id"], name: "index_credit_limits_on_user_id", using: :btree
+  add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
 
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
-    t.integer "credit_limit", default: 50, null: false
     t.string "name", null: false
     t.integer "old_id"
-    t.boolean "over_limit", default: false, null: false
     t.integer "unit_num"
     t.datetime "updated_at", null: false
   end
@@ -152,7 +150,7 @@ ActiveRecord::Schema.define(version: 20150830121939) do
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
   add_foreign_key "credit_limits", "communities"
-  add_foreign_key "credit_limits", "users"
+  add_foreign_key "credit_limits", "households"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "locations"

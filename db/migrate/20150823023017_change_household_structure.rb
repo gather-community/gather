@@ -2,7 +2,7 @@ class ChangeHouseholdStructure < ActiveRecord::Migration
   NAMES = %w(Buckland Edmunds Payne Rutherford Gibson Brown Rees Walsh Powell)
 
   def up
-    add_column :households, :name, :string, index: true
+    add_column :households, :name, :string, index: true unless column_exists?(:households, :name)
     add_index :households, [:community_id, :name], unique: true
 
     # Add some random names for existing mock households

@@ -59,7 +59,7 @@ en:
         notes: "e.g. Some ingredients organic and local where possible"
 
   meals:
-    over_limit_notice: "Your household has exceeded its credit limit and you are thus not permitted to sign up for meals. Please contact your meals admin."
+    over_limit_notice: "Your household has exceeded its %{community} meals account credit limit and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals admin if you have questions."
 
   action_names:
     edit: "Edit"

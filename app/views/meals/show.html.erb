@@ -75,7 +75,7 @@
 
     <h4>Signups for <%= current_user.household_full_name %></h4>
     <% if current_user.over_limit?(@meal.host_community) && @signup.new_record? %>
-      <%= t("meals.over_limit_notice") %>
+      <%= t("meals.over_limit_notice", community: @meal.host_community.name) %>
     <% elsif @signup.not_allowed? %>
       You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
     <% else %>

@@ -11,6 +11,6 @@ class Household < ActiveRecord::Base
   end
 
   def over_limit?(community)
-
+    credit_limits.find_by(community: community).try(:exceeded?) || false
   end
 end

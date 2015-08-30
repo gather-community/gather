@@ -71,6 +71,10 @@ class Meal < ActiveRecord::Base
     (Date.today + 7.days).to_time + DEFAULT_TIME
   end
 
+  def host_community
+    head_cook.community
+  end
+
   def visible_to?(user)
     invited?(user) || worked_by?(user) || signed_up?(user.household)
   end

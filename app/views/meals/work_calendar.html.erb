@@ -30,7 +30,7 @@
         <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
         <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
         <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
-        <td class="action-icons"><%= meal_action_icons(meal) %></td>
+        <td><%= meal_action_icons(meal) %></td>
       </tr>
     <% end %>
   </table>

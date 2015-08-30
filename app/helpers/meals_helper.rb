@@ -12,9 +12,26 @@ module MealsHelper
       " ".html_safe << content_tag(:span, meal.served_at.to_formatted_s(:regular_time), class: "time")
   end
 
-  def meal_action_icons(meal)
-    (can?(:edit, meal) ? link_to(icon_tag('pencil'), edit_meal_path(meal)) : "") << " ".html_safe #<<
-      #(can?(:destroy, meal) ? link_to(icon_tag('trash'), meal_path(meal), method: :delete) : "")
+  def meal_action_icons(meal, options = {})
+    options[:except] = Array.wrap(options[:except] || [])
+    to_show = [:edit, :destroy] - options[:except]
+
+    links = []
+    title = meal.title || "Untitled"
+    to_show.each do |action|
+      next if cannot?(action, meal)
+      name = options[:show_name] ? " " << t("action_names.#{action}") : ""
+
+      case action
+      when :edit
+        links << link_to(icon_tag('pencil') << name, edit_meal_path(meal))
+      when :destroy
+        links << link_to(icon_tag('trash') << name, meal_path(meal), method: :delete,
+          data: { confirm: I18n.t("activerecord.delete_confirms.meal", title: title) })
+      end
+    end
+
+    content_tag(:div, links.reduce(:<<), class: "action-icons")
   end
 
   def signup_link(meal)

@@ -4,7 +4,10 @@
   <div class="col-sm-8">
     <div class="meal-menu ">
       <div class="menu-label">menu</div>
-      <div class="action-icons"><%= meal_action_icons(@meal) %></div>
+
+      <div class="actions">
+        <%= meal_action_icons(@meal, show_name: true) %>
+      </div>
       <div class="time-place">
         <%= icon_tag("calendar") %>
         <strong><%= meal_date_time(@meal) %></strong> at

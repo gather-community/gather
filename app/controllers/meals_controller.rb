@@ -54,6 +54,15 @@ class MealsController < ApplicationController
     end
   end
 
+  def destroy
+    if @meal.destroy
+      flash[:success] = "Meal deleted successfully."
+    else
+      flash[:error] = "Meal deletion failed."
+    end
+    redirect_to(meals_path)
+  end
+
   protected
 
   def default_url_options

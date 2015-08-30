@@ -37,6 +37,8 @@ en:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
+    delete_confirms:
+      meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
 
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
@@ -57,6 +59,10 @@ en:
 
   meals:
     over_limit_notice: "Your household has exceeded its credit limit and you are thus not permitted to sign up for meals. Please contact your meals coordinator."
+
+  action_names:
+    edit: "Edit"
+    destroy: "Delete"
 
   signups:
     tooltips:

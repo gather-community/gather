@@ -53,3 +53,19 @@ mark {
 .weak {
   color: $gray-text;
 }
+
+.action-icons {
+  white-space: nowrap;
+
+  i.fa {
+    font-size: 120%;
+  }
+
+  a:not(:first-of-type) i.fa {
+    margin-left: 5px;
+  }
+}
+
+h1 + .action-icons {
+  margin: -15px 0 10px 0;
+}

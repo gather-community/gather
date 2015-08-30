@@ -10,16 +10,16 @@ class Meal < ActiveRecord::Base
   serialize :allergens, JSON
 
   belongs_to :location
-  has_many :assignments
+  has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
   has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
   has_one :head_cook, through: :head_cook_assign, source: :user
   has_many :asst_cooks, through: :asst_cook_assigns, source: :user
   has_many :cleaners, through: :cleaner_assigns, source: :user
-  has_many :invitations
+  has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
-  has_many :signups
+  has_many :signups, dependent: :destroy
   has_many :households, through: :signups
 
   scope :oldest_first, -> { order(served_at: :asc) }

@@ -22,6 +22,7 @@ en:
         asst_cooks: "Assistant Cooks"
         cleaners: "Cleaners"
         head_cook: "Head Cook"
+        host_community_id: "Host Community"
         served_at: "Date/Time"
       signup:
         spots_left: "Spots Left"

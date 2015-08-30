@@ -10,6 +10,7 @@ class Meal < ActiveRecord::Base
   serialize :allergens, JSON
 
   belongs_to :location
+  belongs_to :host_community, class_name: "Community"
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
@@ -53,6 +54,7 @@ class Meal < ActiveRecord::Base
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :served_at, presence: true
+  validates :host_community_id, presence: true
   validates :location_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
   validate :enough_capacity_for_current_signups
@@ -63,16 +65,15 @@ class Meal < ActiveRecord::Base
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
 
-  def self.new_with_defaults
-    new(served_at: default_datetime, capacity: DEFAULT_CAPACITY, community_ids: Community.all.map(&:id))
+  def self.new_with_defaults(current_user)
+    new(served_at: default_datetime,
+      capacity: DEFAULT_CAPACITY,
+      community_ids: Community.all.map(&:id),
+      host_community_id: current_user.community_id)
   end
 
   def self.default_datetime
     (Date.today + 7.days).to_time + DEFAULT_TIME
-  end
-
-  def host_community
-    head_cook.community
   end
 
   def visible_to?(user)

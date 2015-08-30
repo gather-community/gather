@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150830121939) do
+ActiveRecord::Schema.define(version: 20150830124637) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150830121939) do
     t.datetime "created_at", null: false
     t.text "dessert"
     t.text "entrees"
+    t.integer "host_community_id", null: false
     t.text "kids"
     t.integer "location_id"
     t.text "notes"
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20150830121939) do
   add_foreign_key "credit_limits", "households"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
+  add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"

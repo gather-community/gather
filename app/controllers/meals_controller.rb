@@ -72,7 +72,7 @@ class MealsController < ApplicationController
   private
 
   def init_meal
-    @meal = Meal.new_with_defaults
+    @meal = Meal.new_with_defaults(current_user)
   end
 
   def load_meals
@@ -95,7 +95,10 @@ class MealsController < ApplicationController
     ]
 
     if can?(:manage, Meal)
-      permitted += [:served_at, :location_id, {
+      # Hardcoding this for now
+      params[:meal][:host_community_id] = current_user.community_id
+
+      permitted += [:served_at, :host_community_id, :location_id, {
         :head_cook_assign_attributes => [:id, :user_id],
         :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
         :cleaner_assigns_attributes => [:id, :user_id, :_destroy]

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828044448) do
+ActiveRecord::Schema.define(version: 20150830121939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,18 @@ ActiveRecord::Schema.define(version: 20150828044448) do
 
   add_index "communities", ["abbrv"], name: "index_communities_on_abbrv", unique: true, using: :btree
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
+
+  create_table "credit_limits", force: :cascade do |t|
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "exceeded", default: false, null: false
+    t.integer "limit", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+  end
+
+  add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
+  add_index "credit_limits", ["user_id"], name: "index_credit_limits_on_user_id", using: :btree
 
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
@@ -139,6 +151,8 @@ ActiveRecord::Schema.define(version: 20150828044448) do
 
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
+  add_foreign_key "credit_limits", "communities"
+  add_foreign_key "credit_limits", "users"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "locations"

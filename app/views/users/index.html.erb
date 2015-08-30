@@ -11,8 +11,8 @@
   <table class="index">
     <tr>
       <th class="col-md-2">Name</th>
-      <th class="col-md-2">Household</th>
       <% if can?(:manage, User) %>
+        <th class="col-md-2">Household</th>
         <th class="col-md-2">Google ID</th>
       <% end %>
       <th class="col-md-2">Contact Email</th>
@@ -25,8 +25,8 @@
           <%= link_to(user.name, can?(:manage, User) ? edit_user_path(user) : user_path(user)) %>
           <%= icon_tag('trophy') if user.admin? %>
         </td>
-        <td class="col-md-2"><%= user.household_full_name %></td>
         <% if can?(:manage, User) %>
+          <td class="col-md-2"><%= user.household_full_name %></td>
           <td class="col-md-2">
             <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
           </td>
@@ -34,12 +34,14 @@
         <td class="col-md-2"><%= link_to(user.email, "mailto:#{user.email}") %></td>
         <td class="col-md-3"><%= user.phones %></td>
         <td class="col-md-1">
-          <% if can?(:update, user) %>
-            <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
-          <% end %>
-          <% if can?(:destroy, user) && !user.deleted? %>
-            <%= link_to(icon_tag('trash'), user_path(user), method: :delete) %>
-          <% end %>
+          <div class="action-icons">
+            <% if can?(:update, user) %>
+              <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
+            <% end %>
+            <% if can?(:destroy, user) && !user.deleted? %>
+              <%= link_to(icon_tag('trash'), user_path(user), method: :delete) %>
+            <% end %>
+          </div>
         </td>
       </tr>
     <% end %>

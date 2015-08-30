@@ -66,6 +66,10 @@ mark {
   }
 }
 
+td .action-icons {
+  text-align: right;
+}
+
 h1 + .action-icons {
   margin: -15px 0 10px 0;
 }

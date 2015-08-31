@@ -9,7 +9,7 @@ class MealsController < ApplicationController
     load_meals
   end
 
-  def work_calendar
+  def work
     authorize!(:read, Meal)
     params[:uid] = current_user.id unless params.has_key?(:uid)
     @users = User.all

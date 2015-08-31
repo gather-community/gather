@@ -26,10 +26,10 @@ module ApplicationHelper
   end
 
   def nav_links
-    %w(meals work_calendar_meals users).map do |item|
+    %w(meals work_meals users).map do |item|
       case item
-      when "work_calendar_meals"
-        active = params[:controller] == "meals" && params[:action] == "work_calendar"
+      when "work_meals"
+        active = params[:controller] == "meals" && params[:action] == "work"
         name = "Work"
       else
         active = params[:controller] == item && params[:action] == "index"

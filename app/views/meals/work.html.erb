@@ -1,11 +1,11 @@
-<% content_for(:title){ "Work Calendar" } %>
+<% content_for(:title){ "Work" } %>
 
 <form class="form-inline index-filter">
   <%= label_tag("uid", "Filter by User:") %>
   <%= select_tag("uid", options_from_collection_for_select(@users, :id, :name, params[:uid]),
     prompt: "Select User...", class: "form-control", onchange: "this.form.submit();") %>
   <% if params[:uid].present? %>
-    <%= link_to("Clear", "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;") %>
+    &nbsp;<%= link_to("Show All", "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;") %>
   <% end %>
 </form>
 

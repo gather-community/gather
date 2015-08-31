@@ -20,8 +20,9 @@ a:hover {
   border: none;
 }
 
-.btn-default {
+.btn-default, a.btn-default {
   background-color: #eee;
+  color: #666;
 
   &:hover, &:active, &:focus {
     background-color: #ddd !important;
@@ -43,6 +44,7 @@ a:hover {
 
 mark {
   background-color: $highlight-color;
+  color: white;
 }
 
 .alert {

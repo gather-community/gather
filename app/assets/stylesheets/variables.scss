@@ -6,4 +6,4 @@ $theme-main: #4e2250;
 $theme-accent: #CF6C2F;
 $theme-accent-light: lighten($theme-accent, 20%);
 $theme-accent-intense: saturate($theme-accent, 20%);;
-$highlight-color: #F4E4F5;
+$highlight-color: lighten($theme-main, 20%);

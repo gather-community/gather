@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   resources :meals do
     collection do
-      get :"work-calendar"
+      get :work
     end
   end
 

@@ -39,6 +39,10 @@
 <div id="content" class="<%= controller.controller_name %> action-<%= controller.action_name %>">
   <%= flash_messages %>
 
+  <div class="top-buttons">
+    <%= yield(:top_buttons) %>
+  </div>
+
   <h1><%= @title %></h1>
 
   <%= yield %>

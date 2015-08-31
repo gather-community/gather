@@ -1,5 +1,9 @@
 <% content_for(:title){ (@meal.title || "Untitled Meal") } %>
 
+<% content_for(:top_buttons) do %>
+  <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
+<% end %>
+
 <div class="row">
   <div class="col-sm-8">
     <div class="meal-menu ">
@@ -50,9 +54,9 @@
         <% if @prev_meal.present? %>
           <%= link_to(icon_tag("angle-left"), meal_path(@prev_meal)) %>
           <div>
-            <small>Previous Meal</small>
+            <%= link_to(content_tag(:small, "Previous Meal"), meal_path(@prev_meal)) %>
             <%= meal_link(@prev_meal) %>
-            <small><%= meal_date_time(@prev_meal) %></small>
+            <%= link_to(content_tag(:small, meal_date_time(@prev_meal)), meal_path(@prev_meal)) %>
           </div>
         <% end %>
       </div>
@@ -60,9 +64,9 @@
         <% if @next_meal.present? %>
           <%= link_to(icon_tag("angle-right"), meal_path(@next_meal)) %>
           <div>
-            <small>Next Meal</small>
+            <%= link_to(content_tag(:small, "Next Meal"), meal_path(@next_meal)) %>
             <%= meal_link(@next_meal) %>
-            <small><%= meal_date_time(@next_meal) %></small>
+            <%= link_to(content_tag(:small, meal_date_time(@next_meal)), meal_path(@next_meal)) %>
           </div>
         <% end %>
       </div>
@@ -93,7 +97,7 @@
         <% end %>
         <%= f.input :comments %>
         <div class="pull-right">
-          <%= f.button :submit, "Save & Go To Next", name: "save_and_next", class: "btn btn-default" if @next_meal %>
+          <%= f.button :submit, "Save & Go To Next Meal", name: "save_and_next", class: "btn btn-default" if @next_meal %>
           <%= f.button :submit, "Save", class: "btn btn-primary" %>
         </div>
       <% end %>

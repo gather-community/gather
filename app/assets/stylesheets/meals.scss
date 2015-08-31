@@ -11,7 +11,7 @@
   }
 
   .meal_allergens > div.boxes {
-    height: 90px;
+    height: 120px;
     -webkit-column-count: 3;
     -moz-column-count: 3;
     column-count: 3;
@@ -19,7 +19,7 @@
 
   @media screen and (max-width: 768px) {
     .meal_allergens > div.boxes {
-      height: 170px;
+      height: 180px;
       -webkit-column-count: 2;
       -moz-column-count: 2;
       column-count: 2;
@@ -27,7 +27,7 @@
   }
 
   tr.signed-up, div.meals-list div.meal.signed-up {
-    background-color: $highlight-color;
+    background-color: #F4E4F5;
   }
 
   table a.user-link {

@@ -28,7 +28,7 @@ class Ability
       can :manage, Signup
     else
       # Anyone can view all meals
-      can [:read, :work_calendar], Meal, Meal.visible_to(user) do |meal|
+      can [:read, :work], Meal, Meal.visible_to(user) do |meal|
         meal.visible_to?(user)
       end
     end

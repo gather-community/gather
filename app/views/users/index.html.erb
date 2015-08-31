@@ -1,9 +1,9 @@
 <% content_for(:title){ "Users" } %>
 
-<div class="top-buttons">
+<% content_for(:top_buttons) do %>
   <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if can?(:create, User) %>
   <%= link_to("Create User", new_user_path, class: "btn btn-primary") if can?(:create, User) %>
-</div>
+<% end %>
 
 <% if @users.empty? %>
   No users found.
@@ -14,6 +14,8 @@
       <% if can?(:manage, User) %>
         <th class="col-md-2">Household</th>
         <th class="col-md-2">Google ID</th>
+      <% else %>
+        <th class="col-md-2">Community</th>
       <% end %>
       <th class="col-md-2">Contact Email</th>
       <th class="col-md-3">Phone</th>
@@ -30,6 +32,8 @@
           <td class="col-md-2">
             <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
           </td>
+        <% else %>
+          <td class="col-md-2"><%= user.community.name %></td>
         <% end %>
         <td class="col-md-2"><%= link_to(user.email, "mailto:#{user.email}") %></td>
         <td class="col-md-3"><%= user.phones %></td>

@@ -1,8 +1,8 @@
 <% content_for(:title){ "Meals" } %>
 
-<div class="top-buttons">
+<% content_for(:top_buttons) do %>
   <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
-</div>
+<% end %>
 
 <% if @meals.empty? %>
   No meals found.

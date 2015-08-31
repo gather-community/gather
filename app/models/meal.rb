@@ -2,7 +2,7 @@ class Meal < ActiveRecord::Base
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
-  ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds none)
+  ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds pineapple bananas none)
   DEFAULT_ASST_COOKS = 2
   DEFAULT_CLEANERS = 3
   MENU_ITEMS = %w(entrees side kids dessert notes)

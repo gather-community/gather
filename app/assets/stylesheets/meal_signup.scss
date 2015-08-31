@@ -3,7 +3,7 @@
     line-height: 130%;
     margin-bottom: 20px;
 
-    small {
+    > div a:first-of-type, > div a:nth-of-type(3) {
       color: $gray-text;
       display: block;
     }

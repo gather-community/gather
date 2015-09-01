@@ -1,6 +1,6 @@
 class Signup < ActiveRecord::Base
   MAX_PEOPLE_PER_TYPE = 10
-  SIGNUP_TYPES = %w(adult_meat adult_veg teen big_kid little_kid)
+  SIGNUP_TYPES = %w(adult_meat adult_veg teen_meat teen_veg big_kid little_kid)
 
   belongs_to :meal
   belongs_to :household

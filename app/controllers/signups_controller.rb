@@ -39,8 +39,7 @@ class SignupsController < ApplicationController
   end
 
   def signup_params
-    permitted = params.require(:signup).permit(:meal_id, :adult_meat, :adult_veg,
-      :teen, :big_kid, :little_kid, :comments)
+    permitted = params.require(:signup).permit(Signup::SIGNUP_TYPES + [:meal_id, :comments])
     permitted[:household_id] = current_user.household_id
     permitted
   end

@@ -5,28 +5,32 @@
   <%= render("layouts/head") %>
 </head>
 <body class="home">
-  <%= flash_messages %>
-  <div id="container">
-    <br/>
-    <div id="blurb">
-      It's never been easier to organize a common meal at cohousing.<br/>
-      <strong>Let's eat together!</strong>
+  <div id="main-wrapper">
+    <%= flash_messages %>
+    <div id="container">
+      <br/>
+      <div id="blurb">
+        It's never been easier to organize a common meal at cohousing.<br/>
+        <strong>Let's eat together!</strong>
+      </div>
+      <div id="logo">
+        <%= image_tag("logo-tagline-white.png") %>
+      </div>
+      <%= link_to(icon_tag("google") << " Log in with Google",
+        user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary btn-login") %>
+      <div id="help-link">
+        <%= link_to(icon_tag("question-circle") << " Need help logging in?", "#",
+           data: {toggle: "modal", target: "#help-modal"}) %>
+      </div>
     </div>
-    <div id="logo">
-      <%= image_tag("logo-tagline-white.png") %>
+    <div id="lower-block">
+      <div id="coho-logos">
+        <%= image_tag("sunward.png") %><%= image_tag("touchstone.png") %><%= image_tag("great-oak.png") %>
+      </div>
     </div>
-    <%= link_to(icon_tag("google") << " Log in with Google",
-      user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary btn-login") %>
-    <div id="help-link">
-      <%= link_to(icon_tag("question-circle") << " Need help logging in?", "#",
-         data: {toggle: "modal", target: "#help-modal"}) %>
-    </div>
+    <div id="footer-pusher"></div>
   </div>
-  <div id="footer" >
-    <div id="coho-logos">
-      <%= image_tag("sunward.png") %><%= image_tag("touchstone.png") %><%= image_tag("great-oak.png") %>
-    </div>
-  </div>
+  <%= render("layouts/footer") %>
 
   <div id="help-modal" class="modal fade">
     <div class="modal-dialog">

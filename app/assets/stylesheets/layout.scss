@@ -1,3 +1,18 @@
+html, body {
+  height: 100%; // So we can have sticky footer
+}
+
+#main-wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto $neg-footer-height 0; // the bottom margin is the negative value of the footer's height
+}
+
+footer, #footer-pusher {
+  height: $footer-height; // footer-pusher must be the same height as footer
+}
+
 #content, footer {
   max-width: 1200px;
   margin: 0 auto;
@@ -84,3 +99,13 @@ div.top-buttons {
   margin-bottom: 10px;
 }
 
+footer {
+  font-size: 11px;
+  color: $gray-text;
+  text-align: center;
+
+  a, a:visited, a:active, a:hover {
+    color: $gray-text;
+    text-decoration: underline;
+  }
+}

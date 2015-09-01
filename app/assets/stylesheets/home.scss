@@ -1,6 +1,14 @@
 body.home {
   background-color: white;
 
+  .alert {
+    background-color: $theme-accent;
+    border: none;
+    color: white;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
   #container {
     background: url(image-path("intro-bg.jpg")) no-repeat center 0px;
     text-align: center;
@@ -12,7 +20,7 @@ body.home {
     line-height: 180%;
     font-size: 24px;
     font-weight: 200;
-    margin: 80px 20px;
+    margin: 70px 20px;
   }
 
   #logo {
@@ -20,7 +28,7 @@ body.home {
     margin-bottom: 40px;
   }
 
-  .btn-primary {
+  .btn-login {
     width: 300px;
     height: 50px;
     padding-top: 10px;
@@ -28,14 +36,11 @@ body.home {
     margin-bottom: 10px;
   }
 
-  .alert {
-    background-color: $theme-accent;
-    border: none;
-    color: white;
-    margin-bottom: 0;
+  #help-link {
+    margin-top: 10px;
 
-    .close {
-      display: none;
+    a {
+      color: white;
     }
   }
 
@@ -47,10 +52,24 @@ body.home {
     text-align: center;
   }
 
+  #help-modal {
+    font-size: 16px;
+    line-height: 175%;
+
+    h5 {
+      font-size: 16px;
+    }
+
+    .modal-body {
+      height: 470px;
+      overflow-y: auto;
+    }
+  }
+
 
   @media (max-width: 550px) {
     #container {
-      height: 450px;
+      height: 500px;
     }
 
     #blurb {

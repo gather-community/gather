@@ -3,8 +3,12 @@ body {
   color: #444;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
   font-family: 'Montserrat Alternates', sans-serif;
+}
+
+h5, h6 {
+  font-weight: bold;
 }
 
 a, a:visited {
@@ -74,4 +78,14 @@ td .action-icons {
 
 h1 + .action-icons {
   margin: -15px 0 10px 0;
+}
+
+.modal {
+  h3 {
+    margin-top: 0;
+  }
+
+  h4, h5 {
+    margin-bottom: 5px;
+  }
 }

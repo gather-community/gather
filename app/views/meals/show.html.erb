@@ -6,34 +6,44 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <div class="meal-menu ">
+    <div id="meal-menu">
       <div class="menu-label">menu</div>
 
       <div class="actions">
         <%= meal_action_icons(@meal, show_name: true) %>
       </div>
-      <div class="time-place">
-        <%= icon_tag("calendar") %>
-        <strong><%= meal_date_time(@meal) %></strong> at
-        <%= @meal.location_name %>
+      <div id="time-cook">
+        <span class="chunk">
+          <%= icon_tag("calendar") %>
+          <strong><%= meal_date_time(@meal) %></strong>
+        </span>
+        <span class="chunk">
+          <%= image_tag("chef-hat.png") %>
+          <%= user_link(@meal.head_cook) %>
+        </span>
       </div>
-      <div class="head-cook-communities">
-        By <%= user_link(@meal.head_cook) %> for
-        <%= @meal.communities.map(&:name).join(', ') %>
-      </div>
-      <div class="asst-cooks">
-        Assistants:
-        <%= "[None]" if @meal.asst_cooks.empty? %>
-        <% @meal.asst_cooks.each do |u| %>
-          <div class="job"><%= user_link(u) %></div>
-        <% end %>
-      </div>
-      <div class="cleaners">
-        Cleaners:
-        <%= "[None]" if @meal.cleaners.empty? %>
-        <% @meal.cleaners.each do |u| %>
-          <div class="job"><%= user_link(u) %></div>
-        <% end %>
+      <div id="details">
+        <span class="chunk">
+          At <%= @meal.location_name %>
+        </span>
+        <span class="chunk">
+          for <%= @meal.communities.map(&:name).join(', ') %>
+        </span>
+        <br/>
+        <span class="chunk">
+          Assistants:
+          <%= "[None]" if @meal.asst_cooks.empty? %>
+          <% @meal.asst_cooks.each do |u| %>
+            <div class="job"><%= user_link(u) %></div>
+          <% end %>
+        </span>
+        <span class="chunk">
+          Cleaners:
+          <%= "[None]" if @meal.cleaners.empty? %>
+          <% @meal.cleaners.each do |u| %>
+            <div class="job"><%= user_link(u) %></div>
+          <% end %>
+        </span>
       </div>
       <% Meal::MENU_ITEMS.each do |item| %>
         <hr/>

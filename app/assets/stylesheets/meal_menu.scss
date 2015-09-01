@@ -5,12 +5,31 @@
     margin-top: 10px;
   }
 
-  .meal-menu {
+  #meal-menu {
     border: $light-border;
     border-radius: 5px;
     padding: 20px;
     text-align: center;
     margin-bottom: 20px;
+
+    #time-cook {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 5px;
+
+      span.chunk:last-of-type {
+        margin-left: 10px;
+      }
+    }
+
+    #details {
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    span.chunk {
+      display: inline-block;
+    }
 
     p {
       margin: 0;

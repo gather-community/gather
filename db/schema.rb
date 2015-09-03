@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901010707) do
+ActiveRecord::Schema.define(version: 20150903000114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,11 +39,11 @@ ActiveRecord::Schema.define(version: 20150901010707) do
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
 
   create_table "credit_limits", force: :cascade do |t|
+    t.integer "amount", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.boolean "exceeded", default: false, null: false
     t.integer "household_id", null: false
-    t.integer "limit", null: false
     t.datetime "updated_at", null: false
   end
 

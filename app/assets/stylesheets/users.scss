@@ -4,6 +4,11 @@
       color: $inactive-color;
     }
   }
+
+  .phones span {
+    display: inline-block;
+    margin-right: 10px;
+  }
 }
 
 #invite-list {

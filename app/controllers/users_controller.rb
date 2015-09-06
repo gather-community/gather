@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @users = User.by_active_and_name
+    @users = User.by_active_and_name.page(params[:page])
   end
 
   def new

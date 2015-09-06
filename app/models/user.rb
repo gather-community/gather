@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :household_id, presence: true
-  validate :at_least_one_phone
+  validate :at_least_one_phone, if: ->(u){ u.new_record? }
 
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first
@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
 
   # Returns a string with all non-nil phone numbers
   def phones
-    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact.join(",")
+    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
   end
 
   def soft_delete!

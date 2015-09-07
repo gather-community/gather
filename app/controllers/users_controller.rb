@@ -2,7 +2,15 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @users = User.by_active_and_name.page(params[:page])
+    respond_to do |format|
+      format.html do
+        @users = @users.by_active_and_name.page(params[:page])
+      end
+      format.json do
+        @users = @users.matching(params[:search]).active.by_name.page(params[:page]).per(20)
+        render(json: @users, meta: { more: @users.next_page.present? })
+      end
+    end
   end
 
   def new

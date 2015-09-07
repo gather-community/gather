@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
     where(t[:deleted_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
   end
   scope :never_logged_in, -> { where(sign_in_count: 0) }
+  scope :matching, ->(q) { where("first_name ILIKE ? OR last_name ILIKE ?", "%#{q}%", "%#{q}%") }
 
   delegate :full_name, to: :household, prefix: true
   delegate :over_limit?, to: :household, prefix: false

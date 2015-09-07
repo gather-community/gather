@@ -1,5 +1,1 @@
-<div class="nested-fields">
-  <%= f.input :user_id, as: :removable_select,
-    collection: @active_users, label: "Assistant Cook",
-    input_html: { remove_link: link_to_remove_association(icon_tag("trash"), f) } %>
-</div>
+<%= render("assign_select", f: f, multiple: true, required: false, label: 'Assistant Cook') %>

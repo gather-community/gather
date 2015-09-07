@@ -1,3 +1,1 @@
-<div class="nested-fields">
-  <%= f.input :user_id, collection: @active_users, label: "Head Cook", required: true %>
-</div>
+<%= render("assign_select", f: f, multiple: false, required: true, label: 'Head Cook') %>

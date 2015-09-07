@@ -1,4 +1,4 @@
-<%= simple_form_for(@meal, html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@meal, html: { class: 'form-horizontal meals-form' }) do |f| %>
 
   <% if can?(:manage, @meal) %>
 
@@ -106,4 +106,9 @@
     </div>
   </div>
 
+<% end %>
+
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Select2View({el: '.meals-form'}); });
 <% end %>

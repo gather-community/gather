@@ -11,8 +11,7 @@ class MealsController < ApplicationController
 
   def work
     authorize!(:read, Meal)
-    params[:uid] = current_user.id unless params.has_key?(:uid)
-    @users = User.all
+    @user = params.has_key?(:uid) ? User.find_by(id: params[:uid]) : current_user
     load_meals
   end
 
@@ -83,7 +82,6 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.ensure_assignments
-    @active_users = User.active_or_assigned_to(@meal).by_name
     @communities = Community.by_name
   end
 

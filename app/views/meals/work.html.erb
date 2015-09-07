@@ -2,8 +2,10 @@
 
 <form class="form-inline index-filter">
   <%= label_tag("uid", "Filter by User:") %>
-  <%= select_tag("uid", options_from_collection_for_select(@users, :id, :name, params[:uid]),
-    prompt: "Select User...", class: "form-control", onchange: "this.form.submit();") %>
+  <%= select_tag("uid",
+    @user ? content_tag(:option, @user.name, value: @user.id, selected: "selected") : "",
+    prompt: "Select User...", class: "form-control", onchange: "this.form.submit();",
+    data: { "select2-src" => "user" }) %>
   <% if params[:uid].present? %>
     &nbsp;<%= link_to("Show All", "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;") %>
   <% end %>
@@ -57,4 +59,8 @@
   </div>
 
   <%= paginate @meals %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Select2View({el: '.index-filter'}); });
 <% end %>

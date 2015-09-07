@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   end
 
   resources :signups
+  resources :households
 
   authenticated :user do
     root to: "meals#index", as: :authenticated_root

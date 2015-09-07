@@ -14,9 +14,11 @@ Mess.Views.Select2View = Backbone.View.extend({
   },
 
   setup_select2: function(el) {
+    var src = el.data("select2-src");
+
     el.select2({
       ajax: {
-        url: "/users",
+        url: "/" + src + "s",
         dataType: 'json',
         delay: 250,
         data: function (params) {
@@ -28,7 +30,7 @@ Mess.Views.Select2View = Backbone.View.extend({
         processResults: function (data, page) {
           console.log(data);
           return {
-            results: data.users.map(function(u){ return {id: u.id, text: u.name}; }),
+            results: data[src + "s"].map(function(u){ return {id: u.id, text: u.name}; }),
             pagination: { more: data.meta.more }
           }
         },
@@ -36,7 +38,7 @@ Mess.Views.Select2View = Backbone.View.extend({
       },
       language: {
         inputTooShort: function() {
-          return "Please type a few letters of the " + "user" + "'s name."
+          return "Please type a few letters of the " + src + "'s name."
         }
       },
       minimumInputLength: 1,

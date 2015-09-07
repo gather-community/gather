@@ -3,6 +3,7 @@ class Household < ActiveRecord::Base
   has_many :credit_limits
 
   scope :sorted, -> { includes(:community).order('communities.abbrv, households.name') }
+  scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 
   delegate :name, to: :community, prefix: true
 

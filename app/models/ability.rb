@@ -4,8 +4,9 @@ class Ability
   def initialize(user)
     return if user.nil?
 
-    # Anyone can read any other user's info.
+    # Anyone can read any other user or household's basic info.
     can :read, User
+    can :read, Household
 
     # User can edit own profile.
     can :update, User, id: user.id

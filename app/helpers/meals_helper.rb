@@ -59,4 +59,8 @@ module MealsHelper
       current_ability.cannot?(:manage_other_community, meal)
     disable ? "disabled" : nil
   end
+
+  def clear_work_filter_link(text)
+    link_to(text, "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;")
+  end
 end

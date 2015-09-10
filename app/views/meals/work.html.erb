@@ -6,13 +6,13 @@
     @user ? content_tag(:option, @user.name, value: @user.id, selected: "selected") : "",
     prompt: "Select User...", class: "form-control", onchange: "this.form.submit();",
     data: { "select2-src" => "user" }) %>
-  <% if params[:uid].present? %>
-    &nbsp;<%= link_to("Show All", "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;") %>
+  <% if @user.present? %>
+    &nbsp;<%= clear_work_filter_link("Show All") %>
   <% end %>
 </form>
 
 <% if @meals.empty? %>
-  No meals found.
+  No meals found for <%= @user.name %>.
 <% else %>
   <table class="index non-mobile">
     <tr>

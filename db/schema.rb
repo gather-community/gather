@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150910021117) do
+ActiveRecord::Schema.define(version: 20150910232756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,27 @@ ActiveRecord::Schema.define(version: 20150910021117) do
 
   add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
   add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
+
+  create_table "formulas", force: :cascade do |t|
+    t.decimal "adult_meat", precision: 5, scale: 3
+    t.decimal "adult_veg", precision: 5, scale: 3
+    t.decimal "big_kid_meat", precision: 5, scale: 3
+    t.decimal "big_kid_veg", precision: 5, scale: 3
+    t.integer "community_id", null: false
+    t.date "effective_on", null: false
+    t.decimal "little_kid_meat", precision: 5, scale: 3
+    t.decimal "little_kid_veg", precision: 5, scale: 3
+    t.string "meal_calc_type", null: false
+    t.string "pantry_calc_type"
+    t.decimal "pantry_fee", precision: 5, scale: 3
+    t.decimal "senior_meat", precision: 5, scale: 3
+    t.decimal "senior_veg", precision: 5, scale: 3
+    t.decimal "teen_meat", precision: 5, scale: 3
+    t.decimal "teen_veg", precision: 5, scale: 3
+  end
+
+  add_index "formulas", ["community_id"], name: "index_formulas_on_community_id", using: :btree
+  add_index "formulas", ["effective_on"], name: "index_formulas_on_effective_on", using: :btree
 
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
@@ -159,6 +180,7 @@ ActiveRecord::Schema.define(version: 20150910021117) do
   add_foreign_key "assignments", "users"
   add_foreign_key "credit_limits", "communities"
   add_foreign_key "credit_limits", "households"
+  add_foreign_key "formulas", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"

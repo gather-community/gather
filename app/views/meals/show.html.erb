@@ -101,9 +101,18 @@
           <%= icon_tag("exclamation-circle") if @meal.full? %>
           <strong><%= @meal.spots_left %></strong>
         <% end %>
-        <% Signup::SIGNUP_TYPES.each do |type| %>
-          <%= f.input type, label: signup_label(type),
-            collection: 0..Signup::MAX_PEOPLE_PER_TYPE, include_blank: false %>
+        <div id="col-labels">
+          <span>Meat</span>
+          <span>Veg</span>
+        </div>
+        <% Signup::DINER_TYPES.each do |dt| %>
+          <%= f.input dt, label: signup_label(dt) do %>
+            <% Signup::FOOD_TYPES.each do |ft| %>
+              <%= f.select("#{dt}_#{ft}",
+                (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
+                { include_blank: false }, class: "select form-control") %>
+            <% end %>
+          <% end %>
         <% end %>
         <%= f.input :comments %>
         <div class="pull-right">

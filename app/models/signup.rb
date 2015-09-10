@@ -1,6 +1,8 @@
 class Signup < ActiveRecord::Base
   MAX_PEOPLE_PER_TYPE = 10
-  SIGNUP_TYPES = %w(adult_meat adult_veg teen_meat teen_veg big_kid little_kid)
+  DINER_TYPES = %w(senior adult teen big_kid little_kid)
+  FOOD_TYPES = %w(meat veg)
+  SIGNUP_TYPES = DINER_TYPES.map{ |dt| FOOD_TYPES.map{ |ft| "#{dt}_#{ft}" } }.flatten
 
   belongs_to :meal
   belongs_to :household

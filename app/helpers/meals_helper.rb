@@ -45,7 +45,7 @@ module MealsHelper
 
   def signup_label(type)
     icon_tag("question-circle", title: t("signups.tooltips.#{type}"), data: {toggle: "tooltip"}) <<
-      Signup.human_attribute_name(type)
+      t("signups.diner_types.#{type}")
   end
 
   def community_invited?(meal, community)

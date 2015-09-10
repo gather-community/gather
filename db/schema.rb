@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903000114) do
+ActiveRecord::Schema.define(version: 20150910021117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20150903000114) do
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
-    t.string "abbrv", null: false
+    t.string "abbrv", limit: 2
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
@@ -53,8 +53,8 @@ ActiveRecord::Schema.define(version: 20150903000114) do
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.integer "old_id"
+    t.string "name", limit: 50, null: false
+    t.decimal "old_id", precision: 6
     t.integer "unit_num"
     t.datetime "updated_at", null: false
   end
@@ -104,12 +104,16 @@ ActiveRecord::Schema.define(version: 20150903000114) do
   create_table "signups", force: :cascade do |t|
     t.integer "adult_meat", default: 0, null: false
     t.integer "adult_veg", default: 0, null: false
-    t.integer "big_kid", default: 0, null: false
+    t.integer "big_kid_meat", default: 0, null: false
+    t.integer "big_kid_veg", default: 0, null: false
     t.text "comments"
     t.datetime "created_at", null: false
     t.integer "household_id", null: false
-    t.integer "little_kid", default: 0, null: false
+    t.integer "little_kid_meat", default: 0, null: false
+    t.integer "little_kid_veg", default: 0, null: false
     t.integer "meal_id", null: false
+    t.integer "senior_meat", default: 0, null: false
+    t.integer "senior_veg", default: 0, null: false
     t.integer "teen_meat", default: 0, null: false
     t.integer "teen_veg", default: 0, null: false
     t.datetime "updated_at", null: false

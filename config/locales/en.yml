@@ -28,12 +28,6 @@ en:
         served_at: "Date/Time"
       signup:
         spots_left: "Spots Left"
-        adult_meat: "Adult Meat"
-        adult_veg: "Adult Vegetarian"
-        teen_meat: "Teen Meat"
-        teen_veg: "Teen Vegetarian"
-        big_kid: "Big Kid"
-        little_kid: "Little Kid"
         comments: "Comments for Cook"
     errors:
       models:
@@ -70,9 +64,14 @@ en:
 
   signups:
     tooltips:
-      adult_meat: "Adults intending to eat meat. For vegetarian meals, use either adult type. Charged full rate."
-      adult_veg: "Adults intending to eat vegetarian. Almost all meals have a vegetarian option. Charged full rate."
-      teen_meat: "Ages 13-17 intending to eat meat. For vegetarian meals, use either teen type. Charged 75% of the adult rate."
-      teen_veg: "Ages 13-17 intending to eat vegetarian. Charged 75% of the adult rate."
+      senior: "Ages 70+."
+      adult: "Charged full rate."
+      teen: "Ages 13-17 intending to eat meat. For vegetarian meals, use either teen type. Charged 75% of the adult rate."
       big_kid: "Ages 7-12. Charged 50% of the adult rate."
       little_kid: "Ages 1-6. Eat for free!"
+    diner_types:
+      senior: Senior
+      adult: Adult
+      teen: Teen
+      big_kid: Big Kid
+      little_kid: Little Kid

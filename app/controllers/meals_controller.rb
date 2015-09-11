@@ -17,6 +17,7 @@ class MealsController < ApplicationController
 
   def show
     @signup = Signup.for(current_user, @meal)
+    @signups = @meal.signups.includes(household: :community).sorted
     load_prev_next_meal
   end
 

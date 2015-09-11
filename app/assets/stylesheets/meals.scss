@@ -71,4 +71,29 @@
       content: ", ";;
     }
   }
+
+  div.who-is-going {
+    ul {
+      -moz-column-count: 4;
+      -moz-column-gap: 1em;
+      -webkit-column-count: 4;
+      -webkit-column-gap: 1em;
+      column-count: 4;
+      column-gap: 1em;
+      padding-left: 0;
+      list-style-type: none;
+
+      @media (min-width: 550px) and (max-width: 768px) {
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
+      }
+
+      @media (max-width: 550px) {
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
+      }
+    }
+  }
 }

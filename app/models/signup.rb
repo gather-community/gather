@@ -7,11 +7,13 @@ class Signup < ActiveRecord::Base
   belongs_to :meal
   belongs_to :household
 
+  scope :sorted, -> { includes(household: :community).order('communities.abbrv, households.name') }
+
   normalize_attributes :comments
 
   validate :max_signups_per_type, :dont_exceed_spots
 
-  # TODO: Max sure don't exceed meal max cap.
+  delegate :full_name, to: :household, prefix: true
 
   def self.for(user, meal)
     find_or_initialize_by(household_id: user.household_id, meal_id: meal.id)

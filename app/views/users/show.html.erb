@@ -3,5 +3,5 @@
 <ul>
   <li>Household: <%= @user.household_full_name %></li>
   <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
-  <li>Phone: <%= user_phones(@user) %></li>
+  <li class="phones">Phone: <%= user_phones(@user) %></li>
 </ul>

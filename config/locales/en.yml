@@ -10,6 +10,7 @@ en:
         home_phone: "Home Phone"
         work_phone: "Work Phone"
       meal:
+        discount: "Discount %"
         allergen_gluten: "Gluten"
         allergen_shellfish: "Shellfish"
         allergen_soy: "Soy"

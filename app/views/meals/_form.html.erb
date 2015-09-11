@@ -40,6 +40,10 @@
   <%= f.input :capacity, min: 1 %>
 
   <% if can?(:manage, @meal) %>
+    <%= f.input :discount, min: 0, max: 100 %>
+  <% end %>
+
+  <% if can?(:manage, @meal) %>
     <%= f.simple_fields_for :head_cook_assign, @meal.head_cook_assign do |head_cook| %>
       <%= render('head_cook_assign_fields', f: head_cook) %>
     <% end %>

@@ -96,7 +96,7 @@ class MealsController < ApplicationController
       # Hardcoding this for now
       params[:meal][:host_community_id] = current_user.community_id
 
-      permitted += [:served_at, :host_community_id, :location_id, {
+      permitted += [:discount, :served_at, :host_community_id, :location_id, {
         :head_cook_assign_attributes => [:id, :user_id],
         :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
         :cleaner_assigns_attributes => [:id, :user_id, :_destroy]

@@ -5,7 +5,7 @@ class Household < ActiveRecord::Base
   scope :sorted, -> { includes(:community).order('communities.abbrv, households.name') }
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 
-  delegate :name, to: :community, prefix: true
+  delegate :name, :abbrv, to: :community, prefix: true
 
   def full_name
     "#{community.abbrv}: #{name}"

@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   belongs_to :household
 
   scope :by_name, -> { order("first_name, last_name") }
+  scope :by_community_and_name, -> { includes(:household => :community).order("communities.name").by_name }
   scope :by_active_and_name, -> { order("(CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END)").by_name }
   scope :active, -> { where(deleted_at: nil) }
   scope :active_or_assigned_to, ->(meal) do
@@ -18,7 +19,7 @@ class User < ActiveRecord::Base
 
   delegate :full_name, to: :household, prefix: true
   delegate :over_limit?, to: :household, prefix: false
-  delegate :community, :community_id, :community_name, to: :household
+  delegate :community, :community_id, :community_name, :community_abbrv, to: :household
 
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'

@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   end
 
   def invite
-    @users = User.never_logged_in.active.by_name
+    @users = User.never_logged_in.active.by_community_and_name
   end
 
   def create

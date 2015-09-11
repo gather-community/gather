@@ -24,6 +24,6 @@ module Mess
     config.active_record.raise_in_transactional_callbacks = true
 
     config.x.from_email = "MESS <mess@aacoho.org>"
-    config.x.webmaster_emails = ["tomsmyth@gmail.com", "willn@umich.edu"]
+    config.x.webmaster_emails = ["tomsmyth@gmail.com"]
   end
 end

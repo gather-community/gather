@@ -1,0 +1,56 @@
+----------------------------
+Basic Info
+----------------------------
+Time: <%= Time.zone.now %>
+<% if @info[:env] && @info[:params] %>
+Location: <%= raw @info[:env]['REQUEST_URI'] %>
+Action: <%= @info[:params][:action] %>
+Controller: <%= @info[:params][:controller] %>
+Query: <%= raw @info[:env]['QUERY_STRING'] %>
+Method: <%= @info[:env]['REQUEST_METHOD'] %>
+SSL: <%= @info[:env]['SERVER_PORT'].to_i == 443 ? "true" : "false" %>
+Agent: <%= raw @info[:env]['HTTP_USER_AGENT'] %>
+User: <%= @info[:user] ? @info[:user].email.html_safe : "None" %>
+<% end %>
+
+----------------------------
+Backtrace
+----------------------------
+<%= raw @info[:exception].class.to_s %>: <%= raw @info[:exception].message %>
+<%= raw @info[:exception].backtrace.to_a.join("\n") %>
+
+<% if @info[:headers] %>
+----------------------------
+Headers
+----------------------------
+<% @info[:headers].each do |key, val| -%>
+<%= raw key %>: <%= raw val %>
+<% end -%>
+<% end %>
+
+<% if @info[:params] %>
+----------------------------
+Params
+----------------------------
+<% @info[:params].each do |key, val| -%>
+<%= raw key %>: <%= raw val %>
+<% end -%>
+<% end %>
+
+<% if @info[:session] %>
+----------------------------
+Session
+----------------------------
+<% @info[:session].each do |key, val| -%>
+<%= raw key %>: <%= val %>
+<% end -%>
+<% end %>
+
+<% if @info[:env] %>
+----------------------------
+Environment
+----------------------------
+<% @info[:env].each do |key, val| -%>
+<%= raw key %>: <%= raw val %>
+<% end -%>
+<% end %>

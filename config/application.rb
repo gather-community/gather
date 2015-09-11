@@ -22,5 +22,8 @@ module Mess
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.x.from_email = "MESS <mess@aacoho.org>"
+    config.x.webmaster_emails = ["tomsmyth@gmail.com", "willn@umich.edu"]
   end
 end

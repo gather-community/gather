@@ -66,10 +66,10 @@ en:
   signups:
     tooltips:
       senior: "Ages 70+."
-      adult: "Charged full rate."
-      teen: "Ages 13-17 intending to eat meat. For vegetarian meals, use either teen type. Charged 75% of the adult rate."
-      big_kid: "Ages 7-12. Charged 50% of the adult rate."
-      little_kid: "Ages 1-6. Eat for free!"
+      adult: "People not in any other category."
+      teen: "Ages 13-17."
+      big_kid: "Ages 7-12."
+      little_kid: "Ages 1-6."
     diner_types:
       senior: Senior
       adult: Adult

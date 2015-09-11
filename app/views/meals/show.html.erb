@@ -23,27 +23,26 @@
         </span>
       </div>
       <div id="details">
-        <span class="chunk">
+        <div class="chunk">
           At <%= @meal.location_name %>
-        </span>
-        <span class="chunk">
+        </div>
+        <div class="chunk">
           for <%= @meal.communities.map(&:name).join(', ') %>
-        </span>
-        <br/>
-        <span class="chunk">
+        </div>
+        <div class="chunk">
           Assistants:
           <%= "[None]" if @meal.asst_cooks.empty? %>
           <% @meal.asst_cooks.each do |u| %>
             <div class="job"><%= user_link(u) %></div>
           <% end %>
-        </span>
-        <span class="chunk">
+        </div>
+        <div class="chunk">
           Cleaners:
           <%= "[None]" if @meal.cleaners.empty? %>
           <% @meal.cleaners.each do |u| %>
             <div class="job"><%= user_link(u) %></div>
           <% end %>
-        </span>
+        </div>
       </div>
       <% Meal::MENU_ITEMS.each do |item| %>
         <hr/>

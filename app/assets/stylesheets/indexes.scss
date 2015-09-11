@@ -1,5 +1,9 @@
 .index-filter {
   margin-bottom: 20px;
+
+  a {
+    display: inline-block;
+  }
 }
 
 table.index {
@@ -11,4 +15,11 @@ table.index {
     width: 15px;
     text-align: center;
   }
+}
+
+.none-found {
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 40px;
 }

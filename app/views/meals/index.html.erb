@@ -5,7 +5,9 @@
 <% end %>
 
 <% if @meals.empty? %>
-  No meals found.
+  <div class="none-found">
+    No meals found.
+  </div>
 <% else %>
   <table class="index non-mobile">
     <tr>

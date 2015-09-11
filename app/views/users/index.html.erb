@@ -6,7 +6,9 @@
 <% end %>
 
 <% if @users.empty? %>
-  No users found.
+  <div class="none-found">
+    No users found.
+  </div>
 <% else %>
   <table class="index">
     <tr>

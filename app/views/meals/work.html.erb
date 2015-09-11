@@ -7,12 +7,14 @@
     prompt: "Select User...", class: "form-control", onchange: "this.form.submit();",
     data: { "select2-src" => "user" }) %>
   <% if @user.present? %>
-    &nbsp;<%= clear_work_filter_link("Show All") %>
+    &nbsp;<%= clear_work_filter_link("Show All Workers") %>
   <% end %>
 </form>
 
 <% if @meals.empty? %>
-  No meals found for <%= @user.name %>.
+  <div class="none-found">
+    No work shifts found for <%= @user.name %>.
+  </div>
 <% else %>
   <table class="index non-mobile">
     <tr>

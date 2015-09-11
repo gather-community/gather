@@ -4,7 +4,9 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @users = @users.by_active_and_name.page(params[:page])
+        @users = @users.by_active_and_name
+        @users = @users.matching(params[:search]) if params[:search]
+        @users = @users.page(params[:page])
       end
       format.json do
         @users = @users.matching(params[:search]).active.by_name.page(params[:page]).per(20)

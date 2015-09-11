@@ -1,13 +1,21 @@
 <% content_for(:title){ "Users" } %>
 
 <% content_for(:top_buttons) do %>
+  <form class="form-inline search-form">
+    <%= text_field_tag("search", params[:search], placeholder: "Search Users...", class: "form-control") %>
+    <% unless params[:search].blank? %>
+      <%= link_to(icon_tag("times-circle"), "#",
+        onclick: "$('#search').val(''); $('.search-form').submit(); return false;") %>
+    <% end %>
+  </form>
+  &nbsp;
   <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if can?(:create, User) %>
   <%= link_to("Create User", new_user_path, class: "btn btn-primary") if can?(:create, User) %>
 <% end %>
 
 <% if @users.empty? %>
   <div class="none-found">
-    No users found.
+    No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
   </div>
 <% else %>
   <table class="index">

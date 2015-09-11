@@ -23,3 +23,21 @@ table.index {
   text-align: center;
   margin-top: 40px;
 }
+
+.search-form {
+  white-space: nowrap;
+  width: 200px;
+  margin-bottom: 10px;
+  display: inline-block;
+
+  input.form-control {
+    display: inline;
+    width: inherit;
+  }
+
+  a {
+    color: $gray-text;
+    margin-left: -25px;
+    margin-right: 8px;
+  }
+}

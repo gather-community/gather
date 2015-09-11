@@ -111,7 +111,7 @@
         </div>
 
         <% Signup::DINER_TYPES.each do |dt| %>
-          <% next unless @meal.formula.allows_diner_type?(dt) %>
+          <% next unless @meal.formula.nil? || @meal.formula.allows_diner_type?(dt) %>
 
           <%= f.input dt, label: signup_label(dt) do %>
             <% Signup::FOOD_TYPES.each do |ft| %>

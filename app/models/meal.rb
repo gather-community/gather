@@ -165,6 +165,10 @@ class Meal < ActiveRecord::Base
     self.class.where("served_at < ?", served_at)
   end
 
+  def formula
+    @formula ||= Formula.for_meal(self)
+  end
+
   def any_allergens?
     allergens.present? && allergens != ["none"]
   end

@@ -93,33 +93,49 @@
     <% elsif @signup.not_allowed? %>
       You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
     <% else %>
+
       <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
+
         <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
         <%= f.input :meal_id, as: :hidden %>
         <%= base_error(f) %>
+
         <%= f.input :spots_left do %>
           <%= icon_tag("exclamation-circle") if @meal.full? %>
           <strong><%= @meal.spots_left %></strong>
         <% end %>
+
         <div id="col-labels">
           <span>Meat</span>
           <span>Veg</span>
         </div>
+
         <% Signup::DINER_TYPES.each do |dt| %>
+          <% next unless @meal.formula.allows_diner_type?(dt) %>
+
           <%= f.input dt, label: signup_label(dt) do %>
             <% Signup::FOOD_TYPES.each do |ft| %>
-              <%= f.select("#{dt}_#{ft}",
-                (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
-                { include_blank: false }, class: "select form-control") %>
+              <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
+                <%= f.select("#{dt}_#{ft}",
+                  (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
+                  { include_blank: false }, class: "select form-control") %>
+              <% else %>
+                <div class="blank"></div>
+              <% end %>
             <% end %>
           <% end %>
+
         <% end %>
+
         <%= f.input :comments %>
+
         <div class="pull-right">
           <%= f.button :submit, "Save & Go To Next Meal", name: "save_and_next", class: "btn btn-default" if @next_meal %>
           <%= f.button :submit, "Save", class: "btn btn-primary" %>
         </div>
+
       <% end %>
+
     <% end %>
   </div>
 </div>

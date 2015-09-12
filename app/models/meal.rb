@@ -73,7 +73,7 @@ class Meal < ActiveRecord::Base
   end
 
   def self.default_datetime
-    (Date.today + 7.days).to_time + DEFAULT_TIME
+    Time.zone.now.midnight + 7.days + Meal::DEFAULT_TIME
   end
 
   def visible_to?(user)

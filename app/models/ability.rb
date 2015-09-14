@@ -43,9 +43,5 @@ class Ability
     cannot :destroy, Household do |h|
       h.any_assignments? || h.any_signups? || h.any_users?
     end
-
-    cannot :activate, User do |u|
-      !u.household.active?
-    end
   end
 end

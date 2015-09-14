@@ -31,13 +31,16 @@ class Household < ActiveRecord::Base
     credit_limits.find_by(community: community).try(:exceeded?) || false
   end
 
-  def activate!
-    super
+  def after_deactivate
+    users.each(&:deactivate!)
   end
 
-  def deactivate!
-    super
-    users.each(&:deactivate!)
+  def user_activated(user)
+    activate!
+  end
+
+  def user_deactivated(user)
+    deactivate!(skip_callback: true) if users.all?(&:inactive?)
   end
 
   def any_assignments?

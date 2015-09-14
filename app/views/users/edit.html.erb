@@ -5,9 +5,6 @@
     This user was marked inactive at <%= @user.deactivated_at.to_s(:full_datetime) %>.
     <% if can?(:activate, @user) %>
       You can <%= link_to("reactivate them", activate_user_path(@user), method: :put) %>.
-    <% elsif !@user.household.active? && can?(:manage, @user.household) %>
-      They cannot be reactivated because their
-      <%= link_to("household", edit_household_path(@user.household)) %> is also not active.
     <% end %>
   </div>
 <% end %>

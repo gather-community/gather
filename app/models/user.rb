@@ -62,6 +62,16 @@ class User < ActiveRecord::Base
     assignments.any?
   end
 
+  def activate!
+    super
+    household.user_activated(self)
+  end
+
+  def deactivate!
+    super
+    household.user_deactivated(self)
+  end
+
   # Returns a string with all non-nil phone numbers
   def phones
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact

@@ -6,9 +6,9 @@
   <%= f.input :google_email, disabled: cannot?(:manage, @user) %>
 
   <%= f.input :household_id,
-    collection: [@user.household].compact, label_method: :full_name, disabled: cannot?(:manage, @user),
+    collection: [@user.household].compact, label_method: :full_name,
+    disabled: cannot?(:manage, @user),
     input_html: { data: { "select2-src" => "household" } } %>
-
 
   <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>

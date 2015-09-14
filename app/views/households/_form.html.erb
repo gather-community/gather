@@ -3,9 +3,11 @@
   <%= f.input :name %>
   <%= f.input :community_id, collection: Community.by_name %>
   <%= f.input :unit_num %>
-  <%= f.input :old_id %>
-  <%= f.input :old_name %>
-  <%= f.input :google_email, disabled: cannot?(:manage, @household) %>
+
+  <% if @household.from_grot? %>
+    <%= f.input :old_id %>
+    <%= f.input :old_name %>
+  <% end %>
 
   <div class="row">
     <div class="form-actions col-sm-8">

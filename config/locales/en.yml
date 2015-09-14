@@ -9,6 +9,12 @@ en:
         mobile_phone: "Mobile Phone"
         home_phone: "Home Phone"
         work_phone: "Work Phone"
+      household:
+        name: "Name"
+        community_id: "Community"
+        unit_num: "Unit Number"
+        old_id: "Old Grot ID"
+        old_name: "Old Grot Name"
       meal:
         discount: "Discount %"
         allergen_gluten: "Gluten"

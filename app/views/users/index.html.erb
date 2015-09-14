@@ -38,7 +38,13 @@
           <%= icon_tag('trophy') if user.admin? %>
         </td>
         <% if can?(:manage, User) %>
-          <td class="col-md-2"><%= user.household_full_name %></td>
+          <td class="col-md-2">
+            <% if can?(:manage, Household) %>
+              <%= link_to(user.household_full_name, edit_household_path(user.household)) %>
+            <% else %>
+              <%= user.household_full_name %>
+            <% end %>
+          </td>
           <td class="col-md-2">
             <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
           </td>

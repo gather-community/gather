@@ -13,4 +13,30 @@ class HouseholdsController < ApplicationController
       end
     end
   end
+
+  def create
+    if @household.save
+      flash[:success] = "Household created successfully."
+      redirect_to households_path
+    else
+      set_validation_error_notice
+      render :new
+    end
+  end
+
+  def update
+    if @household.update_attributes(household_params)
+      flash[:success] = "Household updated successfully."
+      redirect_to households_path
+    else
+      set_validation_error_notice
+      render :edit
+    end
+  end
+
+  private
+
+  def household_params
+    params.require(:household).permit(:name, :community_id, :unit_num, :old_id, :old_name)
+  end
 end

@@ -9,6 +9,12 @@ class Household < ActiveRecord::Base
 
   delegate :name, :abbrv, to: :community, prefix: true
 
+  validates :name, presence: true, length: { maximum: 32 }
+  validates :community_id, presence: true
+  validates :unit_num, length: { maximum: 8 }
+
+  normalize_attributes :name, :unit_num, :old_id, :old_name
+
   def full_name
     "#{community.abbrv}: #{name}"
   end
@@ -19,5 +25,9 @@ class Household < ActiveRecord::Base
 
   def deleted?
     false # To be implemented later
+  end
+
+  def from_grot?
+    old_id.present? || old_name.present?
   end
 end

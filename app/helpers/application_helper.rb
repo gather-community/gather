@@ -26,18 +26,22 @@ module ApplicationHelper
   end
 
   def nav_links
-    %w(meals work_meals users households).map do |item|
-      active = case item
-      when "work_meals"
-        params[:controller] == "meals" && params[:action] == "work"
-      else
-        params[:controller] == item && params[:action] == "index"
-      end
-      name = t("nav_links.#{item}")
+    [Meal, [Meal, "work"], User, Household].map do |item|
+      controller = (item.is_a?(Class) ? item : item[0]).to_s.tableize
+      action = item.is_a?(Class) ? "index" : item[1]
+      route_key = item.is_a?(Class) ? controller : "#{action}_#{controller}"
+      klass = item.is_a?(Class) ? item : item[0]
 
-      link = link_to(name, send("#{item}_path"), class: "icon-bar")
-      content_tag(:li, link, class: active ? "active" : nil)
-    end.reduce(:<<)
+      active = params[:controller] == controller && params[:action] == action
+      name = t("nav_links.#{route_key}")
+
+      if can?(action.to_sym, klass)
+        link = link_to(name, send("#{route_key}_path"), class: "icon-bar")
+        content_tag(:li, link, class: active ? "active" : nil)
+      else
+        nil
+      end
+    end.compact.reduce(:<<)
   end
 
   def sep(separator)

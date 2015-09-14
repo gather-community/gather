@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150911013408) do
+ActiveRecord::Schema.define(version: 20150914012313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(version: 20150911013408) do
   add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
   add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
 
+  create_table "foo", id: false, force: :cascade do |t|
+    t.integer "community_id"
+    t.text "fnames"
+    t.text "hyphenated"
+    t.integer "id"
+  end
+
   create_table "formulas", force: :cascade do |t|
     t.decimal "adult_meat", precision: 5, scale: 3
     t.decimal "adult_veg", precision: 5, scale: 3
@@ -77,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150911013408) do
     t.string "name", limit: 50, null: false
     t.decimal "old_id", precision: 6
     t.string "old_name"
-    t.integer "unit_num"
+    t.string "unit_num"
     t.datetime "updated_at", null: false
   end
 

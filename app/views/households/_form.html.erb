@@ -1,0 +1,16 @@
+<%= simple_form_for(@household, html: { class: 'form-horizontal household-form' }) do |f| %>
+
+  <%= f.input :name %>
+  <%= f.input :community_id, collection: Community.by_name %>
+  <%= f.input :unit_num %>
+  <%= f.input :old_id %>
+  <%= f.input :old_name %>
+  <%= f.input :google_email, disabled: cannot?(:manage, @household) %>
+
+  <div class="row">
+    <div class="form-actions col-sm-8">
+      <%= f.button :submit, class: "pull-right btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

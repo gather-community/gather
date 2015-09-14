@@ -1,10 +1,10 @@
 <% content_for(:title){ @user == current_user ? "Edit Profile" : "Edit User: #{@user.name}" } %>
 
-<% if @user.deleted? %>
+<% unless @user.active? %>
   <div class="alert alert-info">
-    This user was deleted at <%= @user.deleted_at %>.
-    <% if can?(:undelete, @user) %>
-      You can <%= link_to("undelete them", undelete_user_path(@user), method: :put) %>.
+    This user was marked inactive at <%= @user.deactivated_at.to_s(:full_datetime) %>.
+    <% if can?(:activate, @user) %>
+      You can <%= link_to("reactivate them", activate_user_path(@user), method: :put) %>.
     <% end %>
   </div>
 <% end %>

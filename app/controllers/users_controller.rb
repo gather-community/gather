@@ -52,8 +52,8 @@ class UsersController < ApplicationController
     redirect_to(users_path)
   end
 
-  def undelete
-    @user.undelete!
+  def activate
+    @user.activate!
     redirect_to(users_path)
   end
 

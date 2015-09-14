@@ -32,7 +32,7 @@
       <th class="col-md-1"></th>
     </tr>
     <% @users.each do |user| %>
-      <tr class="<%= user.deleted? ? "deleted" : "" %>">
+      <tr class="<%= user.active? ? "" : "inactive" %>">
         <td class="col-md-2">
           <%= link_to(user.name, can?(:manage, User) ? edit_user_path(user) : user_path(user)) %>
           <%= icon_tag('trophy') if user.admin? %>
@@ -58,8 +58,8 @@
             <% if can?(:update, user) %>
               <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
             <% end %>
-            <% if can?(:destroy, user) && !user.deleted? %>
-              <%= link_to(icon_tag('trash'), user_path(user), method: :delete) %>
+            <% if can?(:destroy, user) && user.active? %>
+              <%= link_to(icon_tag('times-circle'), user_path(user), method: :delete) %>
             <% end %>
           </div>
         </td>

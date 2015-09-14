@@ -23,8 +23,8 @@ class Household < ActiveRecord::Base
     credit_limits.find_by(community: community).try(:exceeded?) || false
   end
 
-  def deleted?
-    false # To be implemented later
+  def active?
+    true # To be implemented later
   end
 
   def from_grot?

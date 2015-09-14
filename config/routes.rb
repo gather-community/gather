@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       post :send_invites, path: "send-invites"
     end
     member do
-      put :undelete
+      put :activate
     end
   end
 

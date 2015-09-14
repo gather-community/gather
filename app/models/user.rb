@@ -8,11 +8,11 @@ class User < ActiveRecord::Base
 
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
-  scope :by_active_and_name, -> { order("(CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END)").by_name }
-  scope :active, -> { where(deleted_at: nil) }
+  scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }
+  scope :active, -> { where(deactivated_at: nil) }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table
-    where(t[:deleted_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
+    where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
   end
   scope :never_logged_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("first_name ILIKE ? OR last_name ILIKE ?", "%#{q}%", "%#{q}%") }
@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    "#{first_name} #{last_name}" << (deleted? ? " (Inactive)" : "")
+    "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
   end
 
   def format_phone(kind)
@@ -62,19 +62,19 @@ class User < ActiveRecord::Base
   end
 
   def soft_delete!
-    update_attribute(:deleted_at, Time.current)
+    update_attribute(:deactivated_at, Time.current)
   end
 
-  def undelete!
-    update_attribute(:deleted_at, nil)
+  def activate!
+    update_attribute(:deactivated_at, nil)
   end
 
-  def deleted?
-    deleted_at.present?
+  def active?
+    deactivated_at.nil?
   end
 
   def active_for_authentication?
-    super && !deleted?
+    super && active?
   end
 
   private

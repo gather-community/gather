@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }
-  scope :active, -> { where(deactivated_at: nil) }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))

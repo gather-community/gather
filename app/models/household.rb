@@ -35,11 +35,11 @@ class Household < ActiveRecord::Base
     users.each(&:deactivate!)
   end
 
-  def user_activated(user)
+  def user_activated
     activate!
   end
 
-  def user_deactivated(user)
+  def user_deactivated
     deactivate!(skip_callback: true) if users.all?(&:inactive?)
   end
 

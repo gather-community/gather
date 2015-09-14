@@ -64,12 +64,12 @@ class User < ActiveRecord::Base
 
   def activate!
     super
-    household.user_activated(self)
+    household.user_activated
   end
 
   def deactivate!
     super
-    household.user_deactivated(self)
+    household.user_deactivated
   end
 
   # Returns a string with all non-nil phone numbers

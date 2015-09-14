@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household
+  has_many :assignments
 
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }

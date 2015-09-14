@@ -26,18 +26,21 @@ module ApplicationHelper
   end
 
   def nav_links
-    %w(meals work_meals users).map do |item|
-      case item
+    %w(meals work_meals users households).map do |item|
+      active = case item
       when "work_meals"
-        active = params[:controller] == "meals" && params[:action] == "work"
-        name = "Work"
+        params[:controller] == "meals" && params[:action] == "work"
       else
-        active = params[:controller] == item && params[:action] == "index"
-        name = item.capitalize
+        params[:controller] == item && params[:action] == "index"
       end
+      name = t("nav_links.#{item}")
 
       link = link_to(name, send("#{item}_path"), class: "icon-bar")
       content_tag(:li, link, class: active ? "active" : nil)
     end.reduce(:<<)
+  end
+
+  def sep(separator)
+    ->(a, b){ a << separator.html_safe << b }
   end
 end

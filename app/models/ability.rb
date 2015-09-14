@@ -6,7 +6,6 @@ class Ability
 
     # Anyone can read any other user or household's basic info.
     can :read, User
-    can :read, Household
 
     # User can edit own profile.
     can :update, User, id: user.id
@@ -27,6 +26,7 @@ class Ability
         meal.visible_to?(user)
       end
       can :manage, Signup
+      can :manage, Household
     else
       # Anyone can view all meals
       can [:read, :work], Meal, Meal.visible_to(user) do |meal|

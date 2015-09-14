@@ -76,3 +76,9 @@ en:
       teen: Teen
       big_kid: Big Kid
       little_kid: Little Kid
+
+  nav_links:
+    meals: "Meals"
+    work_meals: "Work"
+    users: "Users"
+    households: "Households"

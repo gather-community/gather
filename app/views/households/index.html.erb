@@ -1,0 +1,41 @@
+<% content_for(:title){ "Users" } %>
+
+<% content_for(:top_buttons) do %>
+  <%= link_to("Create Household", new_household_path, class: "btn btn-primary") if can?(:create, Household) %>
+<% end %>
+
+<% if @households.empty? %>
+  <div class="none-found">
+    No households found.
+  </div>
+<% else %>
+  <table class="index">
+    <tr>
+      <th class="col-md-2">Name</th>
+      <th class="col-md-1">Community</th>
+      <th class="col-md-1">Unit Number</th>
+      <th class="col-md-3">Users</th>
+      <th class="col-md-1"></th>
+    </tr>
+    <% @households.each do |household| %>
+      <tr class="<%= household.deleted? ? "deleted" : "" %>">
+        <td class="col-md-2">
+          <%= link_to(household.name, edit_household_path(household)) %>
+        </td>
+        <td class="col-md-1"><%= household.community_name %></td>
+        <td class="col-md-1">
+          <%= household.unit_num.present? ? household.unit_num : "" %>
+        </td>
+        <td class="col-md-3"><%= household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></td>
+        <td class="col-md-1">
+          <div class="action-icons">
+            <% if can?(:update, household) %>
+              <%= link_to(icon_tag('pencil'), edit_household_path(household)) %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <%= paginate @households %>
+<% end %>

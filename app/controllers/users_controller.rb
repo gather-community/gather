@@ -54,6 +54,7 @@ class UsersController < ApplicationController
 
   def activate
     @user.activate!
+    flash[:success] = "User activated successfully."
     redirect_to(users_path)
   end
 

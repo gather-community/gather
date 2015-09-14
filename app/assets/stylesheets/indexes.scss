@@ -7,6 +7,12 @@
 }
 
 table.index {
+  tr.inactive {
+    td, td a {
+      color: $inactive-color;
+    }
+  }
+
   .action-icons {
     padding-right: 3px;
   }

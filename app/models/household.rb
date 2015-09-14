@@ -1,10 +1,14 @@
 class Household < ActiveRecord::Base
+  include Deactivatable
+
   belongs_to :community
-  has_many :credit_limits
+  has_many :credit_limits, dependent: :destroy
+  has_many :signups
   has_many :users
 
   scope :by_name, -> { order("households.name") }
-  scope :by_commty_and_name, -> { includes(:community).order("communities.abbrv, households.name") }
+  scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }
+  scope :by_commty_and_name, -> { includes(:community).order("communities.abbrv").by_name }
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 
   delegate :name, :abbrv, to: :community, prefix: true
@@ -19,12 +23,33 @@ class Household < ActiveRecord::Base
     "#{community.abbrv}: #{name}"
   end
 
+  def name
+    "#{read_attribute(:name)}" << (active? ? "" : " (Inactive)")
+  end
+
   def over_limit?(community)
     credit_limits.find_by(community: community).try(:exceeded?) || false
   end
 
-  def active?
-    true # To be implemented later
+  def activate!
+    super
+  end
+
+  def deactivate!
+    super
+    users.each(&:deactivate!)
+  end
+
+  def any_assignments?
+    users.any?(&:any_assignments?)
+  end
+
+  def any_signups?
+    signups.any?
+  end
+
+  def any_users?
+    users.any?
   end
 
   def from_grot?

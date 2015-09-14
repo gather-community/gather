@@ -1,3 +1,14 @@
 <% content_for(:title){ "Edit Household: #{@household.name}" } %>
+
+<% unless @household.active? %>
+  <div class="alert alert-info">
+    This household was marked inactive at <%= @household.deactivated_at.to_s(:full_datetime) %>.
+    <% if can?(:activate, @household) %>
+      You can <%= link_to("reactivate them", activate_household_path(@household), method: :put) %>.
+      <strong>Note:</strong> You will need to reactivate the user(s) of the household separately.
+    <% end %>
+  </div>
+<% end %>
+
 <%= render("form") %>
 <br/><br/>

@@ -37,7 +37,15 @@ class Ability
     cannot :manage_other_community, Meal # This will change later for superadmin
 
     cannot :destroy, User do |u|
-      u.assignments.any?
+      u.any_assignments?
+    end
+
+    cannot :destroy, Household do |h|
+      h.any_assignments? || h.any_signups? || h.any_users?
+    end
+
+    cannot :activate, User do |u|
+      !u.household.active?
     end
   end
 end

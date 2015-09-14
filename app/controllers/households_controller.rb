@@ -4,7 +4,7 @@ class HouseholdsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @households = @households.includes(:users).by_name.page(params[:page])
+        @households = @households.includes(:users).by_active_and_name.page(params[:page])
       end
       format.json do
         @households = @households.matching(params[:search])
@@ -32,6 +32,24 @@ class HouseholdsController < ApplicationController
       set_validation_error_notice
       render :edit
     end
+  end
+
+  def destroy
+    @household.destroy
+    flash[:success] = "Household deleted successfully."
+    redirect_to(households_path)
+  end
+
+  def activate
+    @household.activate!
+    flash[:success] = "Household activated successfully."
+    redirect_to(households_path)
+  end
+
+  def deactivate
+    @household.deactivate!
+    flash[:success] = "Household deactivated successfully."
+    redirect_to(households_path)
   end
 
   private

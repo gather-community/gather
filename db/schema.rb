@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150914014554) do
+ActiveRecord::Schema.define(version: 20150914021346) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20150914014554) do
   create_table "households", force: :cascade do |t|
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
     t.string "name", limit: 50, null: false
     t.integer "old_id"
     t.string "old_name"
@@ -90,6 +91,7 @@ ActiveRecord::Schema.define(version: 20150914014554) do
 
   add_index "households", ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true, using: :btree
   add_index "households", ["community_id"], name: "index_households_on_community_id", using: :btree
+  add_index "households", ["deactivated_at"], name: "index_households_on_deactivated_at", using: :btree
   add_index "households", ["name"], name: "index_households_on_name", using: :btree
 
   create_table "invitations", force: :cascade do |t|
@@ -180,6 +182,7 @@ ActiveRecord::Schema.define(version: 20150914014554) do
   end
 
   add_index "users", ["alternate_id"], name: "index_users_on_alternate_id", using: :btree
+  add_index "users", ["deactivated_at"], name: "index_users_on_deactivated_at", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["google_email"], name: "index_users_on_google_email", unique: true, using: :btree
   add_index "users", ["household_id"], name: "index_users_on_household_id", using: :btree

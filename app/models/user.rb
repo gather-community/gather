@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Deactivatable
+
   PHONE_TYPES = %w(home work mobile)
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
@@ -57,21 +59,13 @@ class User < ActiveRecord::Base
     read_attribute(:"#{kind}_phone").try(:phony_formatted, format: :national)
   end
 
+  def any_assignments?
+    assignments.any?
+  end
+
   # Returns a string with all non-nil phone numbers
   def phones
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
-  end
-
-  def activate!
-    update_attribute(:deactivated_at, nil)
-  end
-
-  def deactivate!
-    update_attribute(:deactivated_at, Time.current)
-  end
-
-  def active?
-    deactivated_at.nil?
   end
 
   def active_for_authentication?

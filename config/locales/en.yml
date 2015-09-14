@@ -43,9 +43,11 @@ en:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
     delete_confirms:
+      household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
       user: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
     deact_confirms:
+      household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
       user: "Are you sure you want to deactivate the user '%{name}'?"
 
   datepicker:

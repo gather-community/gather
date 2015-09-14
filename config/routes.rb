@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
     member do
       put :activate
+      put :deactivate
     end
   end
 

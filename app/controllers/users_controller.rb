@@ -47,13 +47,19 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.soft_delete!
-    flash[:success] = "User deactivated successfully."
+    @user.destroy
+    flash[:success] = "User deleted successfully."
     redirect_to(users_path)
   end
 
   def activate
     @user.activate!
+    redirect_to(users_path)
+  end
+
+  def deactivate
+    @user.deactivate!
+    flash[:success] = "User deactivated successfully."
     redirect_to(users_path)
   end
 

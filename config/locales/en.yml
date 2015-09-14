@@ -44,6 +44,8 @@ en:
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
     delete_confirms:
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
+    deact_confirms:
+      user: "Are you sure you want to deactivate the user '%{name}'?"
 
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)

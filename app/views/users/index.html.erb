@@ -59,7 +59,8 @@
               <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
             <% end %>
             <% if can?(:destroy, user) && user.active? %>
-              <%= link_to(icon_tag('times-circle'), user_path(user), method: :delete) %>
+              <%= link_to(icon_tag('times-circle'), deactivate_user_path(user), method: :put,
+                data: { confirm: I18n.t("activerecord.deact_confirms.user", name: user.name) }) %>
             <% end %>
           </div>
         </td>

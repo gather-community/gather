@@ -61,12 +61,12 @@ class User < ActiveRecord::Base
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
   end
 
-  def soft_delete!
-    update_attribute(:deactivated_at, Time.current)
-  end
-
   def activate!
     update_attribute(:deactivated_at, nil)
+  end
+
+  def deactivate!
+    update_attribute(:deactivated_at, Time.current)
   end
 
   def active?

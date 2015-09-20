@@ -22,11 +22,18 @@
       <tr class="<%= signed_up_class(meal) %>">
         <td class="col-md-2"><%= meal_date_time(meal) %></td>
         <td class="col-md-2"><%= meal.head_cook_name %></td>
-        <td class="col-md-4"><%= meal_link(meal) %></td>
+        <td class="col-md-4">
+          <%= meal_link(meal) %>
+          <%= icon_tag("lock") if meal.closed? %>
+        </td>
         <td class="col-md-2"><%= meal.location_abbrv %></td>
         <td class="col-md-1">
           <% if signup = meal.signup_for(current_user.household) %>
-            <%= link_to(icon_tag("check") << " #{signup.total}", meal_path(meal)) %>
+            <% if meal.signups_editable? %>
+              <%= link_to(signup_info(signup), meal_path(meal)) %>
+            <% else %>
+              <%= signup_info(signup) %>
+            <% end %>
           <% elsif meal.full? %>
             <span class="weak">[Full]</span>
           <% elsif meal.signups_allowed? %>
@@ -52,8 +59,8 @@
         </div>
         <% if signup = meal.signup_for(current_user.household) %>
           <div class="signed-up">
-            <%= icon_tag("check") %> <%= signup.total %> signed up from your household
-            <%= link_to("(Edit)", meal_path(meal)) unless meal.signups_editable? %>
+            <%= signup_info(signup) %> signed up from your household
+            <%= link_to("(Edit)", meal_path(meal)) if meal.signups_editable? %>
           </div>
         <% elsif meal.signups_allowed? %>
           <%= signup_link(meal) %>

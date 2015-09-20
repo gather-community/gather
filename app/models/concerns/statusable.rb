@@ -27,4 +27,12 @@ module Statusable
   def reopenable?
     closed? && Time.now < served_at
   end
+
+  def signups_allowed?
+    !closed? && !full?
+  end
+
+  def signups_editable?
+    !closed?
+  end
 end

@@ -46,6 +46,10 @@ module MealsHelper
     content_tag(:div, links.reduce(:<<), class: "action-icons")
   end
 
+  def signup_info(signup)
+    icon_tag("check") << " #{signup.total}"
+  end
+
   def signup_link(meal)
     current_user.over_limit?(meal.host_community) ? "" : link_to("Sign Up", meal_path(meal))
   end

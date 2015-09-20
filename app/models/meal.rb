@@ -140,14 +140,6 @@ class Meal < ActiveRecord::Base
     spots_left == 0
   end
 
-  def signups_allowed?
-    !closed? && !full?
-  end
-
-  def signups_editable?
-    !closed?
-  end
-
   def menu_posted?
     entrees.present?
   end

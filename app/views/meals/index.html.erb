@@ -36,7 +36,7 @@
             <% end %>
           <% elsif meal.full? %>
             <span class="weak">[Full]</span>
-          <% elsif meal.signups_allowed? %>
+          <% elsif meal.new_signups_allowed? %>
             <%= signup_link(meal) %>
           <% else %>
             No
@@ -62,7 +62,7 @@
             <%= signup_info(signup) %> signed up from your household
             <%= link_to("(Edit)", meal_path(meal)) if meal.signups_editable? %>
           </div>
-        <% elsif meal.signups_allowed? %>
+        <% elsif meal.new_signups_allowed? %>
           <%= signup_link(meal) %>
         <% end %>
       </div>

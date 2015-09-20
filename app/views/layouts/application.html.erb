@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MESS: <%= @title %></title>
+  <title>MESS: <%= strip_tags(@title) %></title>
   <%= render("layouts/head") %>
 </head>
 <body>

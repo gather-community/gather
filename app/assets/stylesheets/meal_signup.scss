@@ -75,9 +75,15 @@
     }
   }
 
-  select.select {
+  select.select, div.ro-signup {
     width: 47%;
     display: inline-block;
+  }
+
+  div.ro-signup.nonzero {
+    text-align: center;
+    border: 1px solid $light-border-color;
+    border-radius: 3px;
   }
 
   // But comments should always be full width.

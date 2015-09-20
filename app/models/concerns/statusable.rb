@@ -28,7 +28,7 @@ module Statusable
     closed? && Time.now < served_at
   end
 
-  def signups_allowed?
+  def new_signups_allowed?
     !closed? && !full?
   end
 

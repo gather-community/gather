@@ -2,6 +2,8 @@
 module Statusable
   extend ActiveSupport::Concern
 
+  AUTO_CLOSE_LEAD_TIME = 1.day
+
   def close!
     raise "invalid status for closing" if status != "open"
     update_attribute(:status, "closed")
@@ -25,7 +27,7 @@ module Statusable
   end
 
   def reopenable?
-    closed? && Time.now < served_at
+    closed? && !past_auto_close_time?
   end
 
   def new_signups_allowed?
@@ -34,5 +36,13 @@ module Statusable
 
   def signups_editable?
     !closed?
+  end
+
+  def past_auto_close_time?
+    Time.now > served_at - AUTO_CLOSE_LEAD_TIME
+  end
+
+  def close_if_past_auto_close_time!
+    close! if open? && past_auto_close_time?
   end
 end

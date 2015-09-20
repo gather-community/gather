@@ -1,4 +1,5 @@
 class Meal < ActiveRecord::Base
+  include Statusable
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
@@ -137,10 +138,6 @@ class Meal < ActiveRecord::Base
 
   def full?
     spots_left == 0
-  end
-
-  def closed?
-    false
   end
 
   def signups_allowed?

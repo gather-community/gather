@@ -11,7 +11,7 @@ class Ability
     can :update, User, id: user.id
 
     # Head cooks can edit meals
-    can :update, Meal do |meal|
+    can [:update, :close, :reopen], Meal do |meal|
       meal.head_cook == user
     end
 

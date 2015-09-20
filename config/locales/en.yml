@@ -73,6 +73,8 @@ en:
   action_names:
     edit: "Edit"
     destroy: "Delete"
+    close: "Close"
+    reopen: "Reopen"
 
   signups:
     tooltips:

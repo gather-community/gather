@@ -14,7 +14,15 @@ module MealsHelper
 
   def meal_action_icons(meal, options = {})
     options[:except] = Array.wrap(options[:except] || [])
-    to_show = [:edit, :destroy] - options[:except]
+
+    # Build list of icons to show
+    to_show = [].tap do |a|
+      a << :edit
+      a << :reopen if meal.reopenable?
+      a << :close if meal.closeable?
+      a << :destroy
+      a -= options[:except]
+    end
 
     links = []
     title = meal.title || "Untitled"
@@ -25,6 +33,10 @@ module MealsHelper
       case action
       when :edit
         links << link_to(icon_tag('pencil') << name, edit_meal_path(meal))
+      when :close
+        links << link_to(icon_tag('lock') << name, close_meal_path(meal), method: :put)
+      when :reopen
+        links << link_to(icon_tag('unlock') << name, reopen_meal_path(meal), method: :put)
       when :destroy
         links << link_to(icon_tag('trash') << name, meal_path(meal), method: :delete,
           data: { confirm: I18n.t("activerecord.delete_confirms.meal", title: title) })

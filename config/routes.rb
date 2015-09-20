@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     collection do
       get :work
     end
+    member do
+      put :close
+      put :reopen
+    end
   end
 
   resources :signups

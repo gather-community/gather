@@ -54,6 +54,18 @@ class MealsController < ApplicationController
     end
   end
 
+  def close
+    @meal.close!
+    flash[:success] = "Meal closed successfully."
+    redirect_to(meals_path)
+  end
+
+  def reopen
+    @meal.reopen!
+    flash[:success] = "Meal reopened successfully."
+    redirect_to(meals_path)
+  end
+
   def destroy
     if @meal.destroy
       flash[:success] = "Meal deleted successfully."

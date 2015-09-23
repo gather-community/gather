@@ -165,8 +165,12 @@
   <div class="col-sm-12 who-is-going">
     <h4>Who is Going?</h4>
     <ul>
-      <% @signups.each do |s| %>
-        <li><%= s.household_full_name %> (<%= s.total %>)</li>
+      <% if @signups.empty? %>
+        Nobody, yet!
+      <% else %>
+        <% @signups.each do |s| %>
+          <li><%= s.household_full_name %> (<%= s.total %>)</li>
+        <% end %>
       <% end %>
     </ul>
   </div>

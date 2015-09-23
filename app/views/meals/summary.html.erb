@@ -4,4 +4,10 @@
   <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
 <% end %>
 
-Foo
+<%= meal_action_icons(@meal, show_name: true, except: :summary) %>
+
+<div class="row">
+  <div class="col-sm-8">
+    <%= render("menu") %>
+  </div>
+</div>

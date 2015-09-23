@@ -1,0 +1,45 @@
+<div id="meal-menu">
+  <div class="menu-label">menu</div>
+  <div id="time-cook">
+    <span class="chunk">
+      <%= icon_tag("calendar") %>
+      <strong><%= meal_date_time(@meal) %></strong>
+    </span>
+    <span class="chunk">
+      <%= image_tag("chef-hat.png") %>
+      <%= user_link(@meal.head_cook) %>
+    </span>
+  </div>
+  <div id="details">
+    <div class="chunk">
+      At <%= @meal.location_name %>
+    </div>
+    <div class="chunk">
+      for <%= @meal.communities.map(&:name).join(', ') %>
+    </div>
+    <div class="chunk">
+      Assistants:
+      <%= "[None]" if @meal.asst_cooks.empty? %>
+      <% @meal.asst_cooks.each do |u| %>
+        <div class="job"><%= user_link(u) %></div>
+      <% end %>
+    </div>
+    <div class="chunk">
+      Cleaners:
+      <%= "[None]" if @meal.cleaners.empty? %>
+      <% @meal.cleaners.each do |u| %>
+        <div class="job"><%= user_link(u) %></div>
+      <% end %>
+    </div>
+  </div>
+  <% Meal::MENU_ITEMS.each do |item| %>
+    <hr/>
+    <div class="menu-label smaller"><%= item %></div>
+    <section><%= simple_format(@meal.send(item)) %></section>
+  <% end %>
+  <hr/>
+  <div class="menu-label smaller">allergens</div>
+  <section>
+    <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
+  </section>
+</div>

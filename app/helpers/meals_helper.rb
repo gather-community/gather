@@ -18,10 +18,11 @@ module MealsHelper
     # Build list of icons to show
     to_show = [].tap do |a|
       a << :edit
+      a << :summary
       a << :reopen if meal.reopenable?
       a << :close if meal.closeable?
       a << :destroy
-      a -= options[:except]
+      options[:except].each{ |x| a.delete(x) }
     end
 
     links = []
@@ -33,6 +34,8 @@ module MealsHelper
       case action
       when :edit
         links << link_to(icon_tag('pencil') << name, edit_meal_path(meal))
+      when :summary
+        links << link_to(icon_tag('file-text') << name, summary_meal_path(meal))
       when :close
         links << link_to(icon_tag('lock') << name, close_meal_path(meal), method: :put)
       when :reopen
@@ -43,7 +46,8 @@ module MealsHelper
       end
     end
 
-    content_tag(:div, links.reduce(:<<), class: "action-icons")
+    cls = options[:show_name] ? "action-icons-with-names" : ""
+    content_tag(:div, links.reduce(:<<), class: "action-icons #{cls}")
   end
 
   def signup_info(signup)

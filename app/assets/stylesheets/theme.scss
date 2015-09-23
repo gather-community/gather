@@ -63,6 +63,18 @@ mark {
 .action-icons {
   white-space: nowrap;
 
+  &.action-icons-with-names {
+    margin-bottom: 10px;
+
+    a:not(:first-of-type) i.fa {
+      margin-left: 10px;
+    }
+  }
+}
+
+td .action-icons {
+  text-align: right;
+
   i.fa {
     font-size: 120%;
   }
@@ -70,10 +82,6 @@ mark {
   a:not(:first-of-type) i.fa {
     margin-left: 5px;
   }
-}
-
-td .action-icons {
-  text-align: right;
 }
 
 h1 + .action-icons {

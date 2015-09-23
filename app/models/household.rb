@@ -13,7 +13,9 @@ class Household < ActiveRecord::Base
 
   delegate :name, :abbrv, to: :community, prefix: true
 
-  validates :name, presence: true, length: { maximum: 32 }
+  validates :name, presence: true, length: { maximum: 32 },
+    uniqueness: { scope: :community_id, message:
+      "There is already a household with this name at this community" }
   validates :community_id, presence: true
   validates :unit_num, length: { maximum: 8 }
 

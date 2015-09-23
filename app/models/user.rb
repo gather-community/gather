@@ -90,5 +90,4 @@ class User < ActiveRecord::Base
   def no_phones?
     [home_phone, mobile_phone, work_phone].compact.empty?
   end
-
 end

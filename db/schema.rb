@@ -50,13 +50,6 @@ ActiveRecord::Schema.define(version: 20150920021359) do
   add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
   add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
 
-  create_table "foo", id: false, force: :cascade do |t|
-    t.integer "community_id"
-    t.text "fnames"
-    t.text "hyphenated"
-    t.integer "id"
-  end
-
   create_table "formulas", force: :cascade do |t|
     t.decimal "adult_meat", precision: 5, scale: 3
     t.decimal "adult_veg", precision: 5, scale: 3

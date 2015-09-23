@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150920021359) do
+ActiveRecord::Schema.define(version: 20150923020644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20150920021359) do
   add_foreign_key "credit_limits", "communities"
   add_foreign_key "credit_limits", "households"
   add_foreign_key "formulas", "communities"
+  add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"

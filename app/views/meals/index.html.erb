@@ -12,21 +12,21 @@
   <table class="index non-mobile">
     <tr>
       <th class="col-md-2">Date/Time</th>
+      <th class="col-md-1">Location</th>
       <th class="col-md-2">Cook</th>
       <th class="col-md-4">Title</th>
-      <th class="col-md-2">Location</th>
       <th class="col-md-1">Going?</th>
       <th class="col-md-1" colspan="2">Signups</th>
     </tr>
     <% @meals.each do |meal| %>
       <tr class="<%= signed_up_class(meal) %>">
         <td class="col-md-2"><%= meal_date_time(meal) %></td>
+        <td class="col-md-1"><%= meal.location_abbrv %></td>
         <td class="col-md-2"><%= meal.head_cook_name %></td>
         <td class="col-md-4">
           <%= meal_link(meal) %>
           <%= icon_tag("lock") if meal.closed? %>
         </td>
-        <td class="col-md-2"><%= meal.location_abbrv %></td>
         <td class="col-md-1">
           <% if signup = meal.signup_for(current_user.household) %>
             <% if meal.signups_editable? %>

@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @users = @users.by_active_and_name
+        @users = @users.includes(household: :community).by_active_and_name
         @users = @users.matching(params[:search]) if params[:search]
         @users = @users.page(params[:page])
       end

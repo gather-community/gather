@@ -4,8 +4,11 @@ class Ability
   def initialize(user)
     return if user.nil?
 
-    # Anyone can read any other user or household's basic info.
-    can :read, User
+    # Anyone can index any active user or household's basic info.
+    can :index, User, deactivated_at: nil
+
+    # Can show inactive users too, in case there are links out there, don't want to break them.
+    can :show, User
 
     # User can edit own profile.
     can :update, User, id: user.id

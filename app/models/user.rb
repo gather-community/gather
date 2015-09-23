@@ -28,7 +28,8 @@ class User < ActiveRecord::Base
     validates_plausible_phone "#{p}_phone", normalized_country_code: 'US'
   end
 
-  normalize_attributes :email, :google_email, :first_name, :last_name
+  normalize_attributes :email, :google_email, with: :email
+  normalize_attributes :first_name, :last_name
 
   validates :email, format: Devise.email_regexp, presence: true, uniqueness: true
   validates :google_email, format: Devise.email_regexp, uniqueness: true,

@@ -68,6 +68,9 @@ class MealsController < ApplicationController
     redirect_to(meals_path)
   end
 
+  def summary
+  end
+
   def destroy
     if @meal.destroy
       flash[:success] = "Meal deleted successfully."

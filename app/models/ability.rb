@@ -14,7 +14,7 @@ class Ability
     can :update, User, id: user.id
 
     # Head cooks can edit meals
-    can [:update, :close, :reopen], Meal do |meal|
+    can [:update, :close, :reopen, :summary], Meal do |meal|
       meal.head_cook == user
     end
 
@@ -45,6 +45,10 @@ class Ability
 
     cannot :destroy, Household do |h|
       h.any_assignments? || h.any_signups? || h.any_users?
+    end
+
+    cannot :summary, Meal do |m|
+      m.open?
     end
   end
 end

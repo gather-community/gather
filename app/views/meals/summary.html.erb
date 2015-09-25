@@ -11,3 +11,44 @@
     <%= render("menu") %>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-8">
+    <div id="gen-time">Generated: <%= Time.now.to_s(:full_datetime) %></div>
+    <h2>Signups</h2>
+    <div id="portion-counts">
+      <%= portion_counts(@meal) %>
+    </div>
+    <table>
+      <tr>
+        <th rowspan="2">Household</th>
+        <% @meal.allowed_diner_types.each do |dt| %>
+          <th colspan="2"><%= t("signups.diner_types.#{dt}") %></th>
+        <% end %>
+        <th rowspan="2">Comments</th>
+      </tr>
+      <tr>
+        <% @meal.allowed_diner_types.each do %>
+          <% Signup::FOOD_TYPES.each do |ft| %>
+            <th><%= t("signups.food_types.#{ft}") %></th>
+          <% end %>
+        <% end %>
+      </tr>
+      <% @signups.each do |signup| %>
+        <tr>
+          <td><%= signup.household_full_name %></td>
+          <% @meal.allowed_signup_types.each do |st| %>
+            <td><%= signup[st] unless signup[st] == 0 %></td>
+          <% end %>
+          <td><%= signup.comments %></td>
+        </tr>
+      <% end %>
+      <tr class="total">
+        <td>Total</td>
+        <% @meal.allowed_signup_types.each do |st| %>
+          <td><%= @meal.signup_totals[st] %></td>
+        <% end %>
+        <td><strong><%= @meal.signup_count %></strong></td>
+    </table>
+  </div>
+</div>

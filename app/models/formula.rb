@@ -8,11 +8,20 @@ class Formula < ActiveRecord::Base
       order(effective_on: :desc).first
   end
 
+  def allowed_diner_types
+    Signup::DINER_TYPES.select{ |dt| allows_diner_type?(dt) }
+  end
+
+  def allowed_signup_types
+    Signup::SIGNUP_TYPES.select{ |st| allows_signup_type?(st) }
+  end
+
   def allows_diner_type?(diner_type)
     Signup::SIGNUP_TYPES.any?{ |st| st =~ /^#{diner_type}_/ && send("#{st}").present? }
   end
 
-  def allows_signup_type?(diner_type, meal_type)
-    !send("#{diner_type}_#{meal_type}").nil?
+  def allows_signup_type?(diner_type_or_both, meal_type = nil)
+    attrib = meal_type.present? ? "#{diner_type_or_both}_#{meal_type}" : diner_type_or_both
+    !self[attrib].nil?
   end
 end

@@ -3,10 +3,20 @@ class Signup < ActiveRecord::Base
   DINER_TYPES = %w(senior adult teen big_kid little_kid)
   FOOD_TYPES = %w(meat veg)
   SIGNUP_TYPES = DINER_TYPES.map{ |dt| FOOD_TYPES.map{ |ft| "#{dt}_#{ft}" } }.flatten
+  PORTION_FACTORS = {
+    senior: 1,
+    adult: 1,
+    teen: 0.75,
+    big_kid: 0.5,
+    little_kid: 0
+  }
 
   belongs_to :meal
   belongs_to :household
 
+  scope :host_community_first, ->(c) do
+    includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
+  end
   scope :sorted, -> { includes(household: :community).order('communities.abbrv, households.name') }
 
   normalize_attributes :comments
@@ -21,6 +31,19 @@ class Signup < ActiveRecord::Base
 
   def self.total_for_meal(meal)
     where(meal_id: meal.id).sum(SIGNUP_TYPES.join("+"))
+  end
+
+  def self.totals_for_meal(meal)
+    @totals ||= {}
+    return @totals[meal] if @totals[meal]
+    query = where(meal_id: meal.id)
+    SIGNUP_TYPES.each{ |st| query = query.select("SUM(#{st}) AS #{st}") }
+    @totals[meal] = query.to_a.first
+  end
+
+  def self.portions_for_meal(meal, food_type)
+    totals = totals_for_meal(meal)
+    DINER_TYPES.map{ |dt| totals["#{dt}_#{food_type}"] * PORTION_FACTORS[dt.to_sym] }.reduce(:+)
   end
 
   def save_or_destroy

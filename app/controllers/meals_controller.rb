@@ -18,7 +18,7 @@ class MealsController < ApplicationController
 
   def show
     @signup = Signup.for(current_user, @meal)
-    @signups = @meal.signups.includes(household: :community).sorted
+    load_signups
     load_prev_next_meal
     auto_close(@meal)
   end
@@ -69,6 +69,7 @@ class MealsController < ApplicationController
   end
 
   def summary
+    load_signups
   end
 
   def destroy
@@ -96,6 +97,10 @@ class MealsController < ApplicationController
     @meals = @meals.future.oldest_first
     @meals = @meals.worked_by(@user) if @user.present?
     @meals = @meals.page(params[:page])
+  end
+
+  def load_signups
+    @signups = @meal.signups.host_community_first(@meal.host_community).sorted
   end
 
   def prep_form_vars

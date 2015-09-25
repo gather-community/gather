@@ -46,6 +46,7 @@ class Meal < ActiveRecord::Base
 
   delegate :name, :abbrv, to: :location, prefix: true
   delegate :name, to: :head_cook, prefix: true
+  delegate :allowed_diner_types, :allowed_signup_types, to: :formula
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
@@ -132,8 +133,16 @@ class Meal < ActiveRecord::Base
     @signup_count ||= Signup.total_for_meal(self)
   end
 
+  def signup_totals
+    @signup_totals = Signup.totals_for_meal(self)
+  end
+
   def spots_left
     @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
+  end
+
+  def portions(food_type)
+    Signup.portions_for_meal(self, food_type)
   end
 
   def full?

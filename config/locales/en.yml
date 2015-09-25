@@ -90,6 +90,9 @@ en:
       teen: Teen
       big_kid: Big Kid
       little_kid: Little Kid
+    food_types:
+      veg: "Veg"
+      meat: "Meat"
 
   nav_links:
     meals: "Meals"

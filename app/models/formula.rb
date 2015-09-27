@@ -9,11 +9,11 @@ class Formula < ActiveRecord::Base
   end
 
   def allowed_diner_types
-    Signup::DINER_TYPES.select{ |dt| allows_diner_type?(dt) }
+    @allowed_diner_types ||= Signup::DINER_TYPES.select{ |dt| allows_diner_type?(dt) }
   end
 
   def allowed_signup_types
-    Signup::SIGNUP_TYPES.select{ |st| allows_signup_type?(st) }
+    @allowed_signup_types ||= Signup::SIGNUP_TYPES.select{ |st| allows_signup_type?(st) }
   end
 
   def allows_diner_type?(diner_type)
@@ -27,5 +27,9 @@ class Formula < ActiveRecord::Base
 
   def portion_factors
     allowed_diner_types.map{ |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
+  end
+
+  def fixed_pantry?
+    pantry_calc_type == "fixed"
   end
 end

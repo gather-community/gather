@@ -21,7 +21,7 @@
     <div id="portion-counts">
       <%= portion_counts(@meal) %>
     </div>
-    <table id="signups">
+    <table id="signups" class="compact">
       <%= render("summary_signups_header") %>
       <% @signups.each do |signup| %>
         <tr>
@@ -59,5 +59,33 @@
         f == 0 ? nil : "#{f} &times; #{dt}"
       end.compact.join(" + ").html_safe %>.
     </small>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-8">
+    <h2>Grocery Calculator</h2>
+    <% if @cost_calculator.type == :fixed %>
+      Based on the fixed cost of this meal, you should spend no more than
+      <strong><%= number_to_currency(@cost_calculator.max_grocery) %></strong> on groceries,
+      not including pantry/staple items (see your community's meals guidelines
+      for a list of qualifying staple items).
+    <% else %>
+      Based on the cost-sharing formula of this meal, the below table shows how
+      much you can spend on groceries depending on how much you would like the meal to cost.
+      <table id="cost-table" class="compact">
+        <tr>
+          <th>Per-Adult Cost</th>
+          <th>Max Grocery Amount</th>
+        </tr>
+        <% MealSummaryHelper::COST_TABLE_AMOUNTS.each do |cost| %>
+          <tr>
+            <td><%= number_to_currency(cost) %></td>
+            <td><%= number_to_currency(@cost_calculator.max_grocery_for_per_adult_cost(cost)) %></td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
   </div>
 </div>

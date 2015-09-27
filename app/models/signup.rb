@@ -38,7 +38,7 @@ class Signup < ActiveRecord::Base
     return @totals[meal] if @totals[meal]
     query = where(meal_id: meal.id)
     SIGNUP_TYPES.each{ |st| query = query.select("SUM(#{st}) AS #{st}") }
-    @totals[meal] = query.to_a.first
+    @totals[meal] = query.to_a.first.attributes.slice(*SIGNUP_TYPES)
   end
 
   def self.portions_for_meal(meal, food_type)

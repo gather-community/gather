@@ -9,6 +9,12 @@
     margin-bottom: 10px;
   }
 
+  table.compact td {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 90%;
+  }
+
   #signups {
     width: 100%;
 
@@ -31,11 +37,18 @@
     th, td {
       border: $light-border;
       padding: 0 4px;
-      font-size: 90%;
 
       &.count-col {
         width: 40px;
       }
+    }
+  }
+
+  #cost-table {
+    margin-top: 10px;
+
+    th {
+      padding-right: 10px;
     }
   }
 }

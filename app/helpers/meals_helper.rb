@@ -83,15 +83,4 @@ module MealsHelper
   def clear_work_filter_link(text)
     link_to(text, "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;")
   end
-
-  def portion_counts(meal)
-    "This meal will require approximately ".html_safe <<
-      Signup::FOOD_TYPES.map do |ft|
-        content_tag(:strong) do
-          num = meal.portions(ft).ceil
-          ft_str = t("signups.food_types.#{ft}").downcase
-          "#{num} #{ft_str}"
-        end << " portions"
-      end.reduce(&sep(" and ")) << ".*"
-  end
 end

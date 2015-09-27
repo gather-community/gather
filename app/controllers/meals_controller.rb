@@ -70,6 +70,7 @@ class MealsController < ApplicationController
 
   def summary
     load_signups
+    @cost_calculator = MealCostCalculator.build(@meal)
   end
 
   def destroy

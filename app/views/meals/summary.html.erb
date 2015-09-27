@@ -92,27 +92,43 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <h2>Reimbursement Form</h2>
-    <% if @cost_calculator.type == :fixed %>
-      Based on the fixed cost of this meal, you should spend no more than
-      <strong><%= number_to_currency(@cost_calculator.max_grocery) %></strong> on groceries,
-      not including pantry/staple items (see your community's meals guidelines
-      for a list of qualifying staple items).
-    <% else %>
-      Based on the cost-sharing formula of this meal, the below table shows how
-      much you can spend on groceries depending on how much you would like the meal to cost.
-      <table id="cost-table" class="compact">
-        <tr>
-          <th>Per-Adult Cost</th>
-          <th>Max Grocery Amount</th>
-        </tr>
-        <% MealSummaryHelper::COST_TABLE_AMOUNTS.each do |cost| %>
-          <tr>
-            <td><%= number_to_currency(cost) %></td>
-            <td><%= number_to_currency(@cost_calculator.max_grocery_for_per_adult_cost(cost)) %></td>
-          </tr>
-        <% end %>
-      </table>
-    <% end %>
+    <h2>Cook Reimbursement Form</h2>
+    <table id="reimb-form">
+      <tr>
+        <td>Name as should appear on check:</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Date of grocery purchase:</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</td>
+      </tr>
+      <tr>
+        <td>Amount spent for groceries:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Amount spent on staple items:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Total amount to be reimbursed:</td>
+        <td>$</td>
+      </tr>
+    </table>
+    Cooks, to obtain reimbursement, please:
+    <ol>
+      <li>Print and fill out the above form.</li>
+      <li>Write your name and meal date on all receipts.</li>
+      <li>Circle any staple items you purchased.</li>
+      <li>
+        Assemble: <strong>reimbursement form</strong>, <strong>receipts</strong>,
+        and <strong>late signup list</strong>.
+      </li>
+      <% if dropoff_loc = @meal.host_community.settings[:meal_reimb_dropoff_loc] %>
+        <li>Place <%= dropoff_loc %>.</li>
+      <% else %>
+        <li>Give to your meals admin.</li>
+      <% end %>
+    </ol>
   </div>
 </div>

@@ -65,7 +65,7 @@ module MealsHelper
 
   def signup_label(type)
     icon_tag("question-circle", title: t("signups.tooltips.#{type}"), data: {toggle: "tooltip"}) <<
-      t("signups.diner_types.#{type}")
+      t("signups.diner_types.#{type}", count: 1)
   end
 
   def community_invited?(meal, community)
@@ -92,6 +92,6 @@ module MealsHelper
           ft_str = t("signups.food_types.#{ft}").downcase
           "#{num} #{ft_str}"
         end << " portions"
-      end.reduce(&sep(" and ")) << "."
+      end.reduce(&sep(" and ")) << ".*"
   end
 end

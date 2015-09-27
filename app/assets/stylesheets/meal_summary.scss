@@ -1,0 +1,41 @@
+.meals.action-summary {
+  #gen-time {
+    float: right;
+    font-weight: bold;
+  }
+
+  #portion-counts {
+    font-size: 130%;
+    margin-bottom: 10px;
+  }
+
+  #signups {
+    width: 100%;
+
+    tr {
+    }
+
+    tr.total {
+      td {
+        font-weight: bold;
+      }
+    }
+
+    tr.late-signups-header td {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    th, td {
+      border: $light-border;
+      padding: 0 4px;
+      font-size: 90%;
+
+      &.count-col {
+        width: 40px;
+      }
+    }
+  }
+}

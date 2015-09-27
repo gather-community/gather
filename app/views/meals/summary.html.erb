@@ -21,21 +21,8 @@
     <div id="portion-counts">
       <%= portion_counts(@meal) %>
     </div>
-    <table>
-      <tr>
-        <th rowspan="2">Household</th>
-        <% @meal.allowed_diner_types.each do |dt| %>
-          <th colspan="2"><%= t("signups.diner_types.#{dt}") %></th>
-        <% end %>
-        <th rowspan="2">Comments</th>
-      </tr>
-      <tr>
-        <% @meal.allowed_diner_types.each do %>
-          <% Signup::FOOD_TYPES.each do |ft| %>
-            <th><%= t("signups.food_types.#{ft}") %></th>
-          <% end %>
-        <% end %>
-      </tr>
+    <table id="signups">
+      <%= render("summary_signups_header") %>
       <% @signups.each do |signup| %>
         <tr>
           <td><%= signup.household_full_name %></td>
@@ -50,7 +37,27 @@
         <% @meal.allowed_signup_types.each do |st| %>
           <td><%= @meal.signup_totals[st] %></td>
         <% end %>
-        <td><strong><%= @meal.signup_count %></strong></td>
+        <td><%= @meal.signup_count %></td>
+      </tr>
+      <% cols = @meal.allowed_signup_types.size + 2 %>
+      <tr class="late-signups-header">
+        <td colspan="<%= cols %>">
+          Late Signups
+        </td>
+      </tr>
+      <%= render("summary_signups_header") %>
+      <% 8.times do %>
+        <tr class="late-signup">
+          <% cols.times do %><td>&nbsp;</td><% end %>
+        </tr>
+      <% end %>
     </table>
+    <small id="portion-formula">
+      Total portions calculated as
+      <%= @meal.portion_factors.map do |dt, f|
+        dt = t("signups.diner_types.#{dt}", count: 2)
+        f == 0 ? nil : "#{f} &times; #{dt}"
+      end.compact.join(" + ").html_safe %>.
+    </small>
   </div>
 </div>

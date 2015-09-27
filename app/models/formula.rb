@@ -24,4 +24,8 @@ class Formula < ActiveRecord::Base
     attrib = meal_type.present? ? "#{diner_type_or_both}_#{meal_type}" : diner_type_or_both
     !self[attrib].nil?
   end
+
+  def portion_factors
+    allowed_diner_types.map{ |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
+  end
 end

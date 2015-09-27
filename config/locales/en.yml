@@ -85,11 +85,21 @@ en:
       big_kid: "Ages 7-12."
       little_kid: "Ages 1-6."
     diner_types:
-      senior: Senior
-      adult: Adult
-      teen: Teen
-      big_kid: Big Kid
-      little_kid: Little Kid
+      senior:
+        one: Senior
+        other: Seniors
+      adult:
+        one: Adult
+        other: Adults
+      teen:
+        one: Teen
+        other: Teens
+      big_kid:
+        one: Big Kid
+        other: Big Kids
+      little_kid:
+        one: Little Kid
+        other: Little Kids
     food_types:
       veg: "Veg"
       meat: "Meat"

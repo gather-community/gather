@@ -46,7 +46,7 @@ class Meal < ActiveRecord::Base
 
   delegate :name, :abbrv, to: :location, prefix: true
   delegate :name, to: :head_cook, prefix: true
-  delegate :allowed_diner_types, :allowed_signup_types, to: :formula
+  delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.

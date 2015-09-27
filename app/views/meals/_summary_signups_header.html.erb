@@ -1,0 +1,14 @@
+<tr>
+  <th rowspan="2">Household</th>
+  <% @meal.allowed_diner_types.each do |dt| %>
+    <th colspan="2"><%= t("signups.diner_types.#{dt}", count: 2) %></th>
+  <% end %>
+  <th rowspan="2">Comments</th>
+</tr>
+<tr>
+  <% @meal.allowed_diner_types.each do %>
+    <% Signup::FOOD_TYPES.each do |ft| %>
+      <th class="count-col"><%= t("signups.food_types.#{ft}") %></th>
+    <% end %>
+  <% end %>
+</tr>

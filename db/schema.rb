@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150927201738) do
+ActiveRecord::Schema.define(version: 20150928015747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -51,6 +51,22 @@ ActiveRecord::Schema.define(version: 20150927201738) do
 
   add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
   add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "attempts", default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "failed_at"
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "locked_at"
+    t.string "locked_by"
+    t.integer "priority", default: 0, null: false
+    t.string "queue"
+    t.datetime "run_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "formulas", force: :cascade do |t|
     t.decimal "adult_meat", precision: 5, scale: 3

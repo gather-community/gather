@@ -25,5 +25,7 @@ module Mess
 
     config.x.from_email = "MESS <mess@aacoho.org>"
     config.x.webmaster_emails = ["tomsmyth@gmail.com"]
+
+    config.active_job.queue_adapter = :delayed_job
   end
 end

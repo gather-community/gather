@@ -24,8 +24,10 @@ class Meal < ActiveRecord::Base
   has_many :signups, dependent: :destroy
   has_many :households, through: :signups
 
-  scope :oldest_first, -> { order(served_at: :asc) }
-  scope :newest_first, -> { order(served_at: :desc) }
+  scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
+  scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
+  scope :by_community, -> { joins(:host_community).order("communities.name") }
+  scope :by_community_reverse, -> { joins(:host_community).order("communities.name DESC") }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
   scope :worked_by, ->(user) do
     includes(:assignments).where("assignments.user_id" => user.id)
@@ -45,6 +47,7 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
 
   delegate :name, :abbrv, to: :location, prefix: true
+  delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
 
@@ -158,13 +161,21 @@ class Meal < ActiveRecord::Base
   end
 
   # Returns a relation for all meals following the current one.
+  # We break ties using community name and then ID.
   def following_meals
-    self.class.where("served_at > ?", served_at)
+    self.class.joins(:host_community).
+      where("served_at > ? OR served_at = ? AND
+        (communities.name > ? OR communities.name = ? AND meals.id > ?)",
+        served_at, served_at, host_community_name, host_community_name, id)
   end
 
   # Returns a relation for all meals before the current one.
+  # We break ties using community name and then ID.
   def previous_meals
-    self.class.where("served_at < ?", served_at)
+    self.class.joins(:host_community).
+      where("served_at < ? OR served_at = ? AND
+        (communities.name < ? OR communities.name = ? AND meals.id < ?)",
+        served_at, served_at, host_community_name, host_community_name, id)
   end
 
   def formula

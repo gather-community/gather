@@ -76,7 +76,11 @@ td .action-icons {
   text-align: right;
 
   i.fa {
-    font-size: 120%;
+    font-size: 16px;
+
+    &.fa-file-text {
+      font-size: 15px;
+    }
   }
 
   a:not(:first-of-type) i.fa {

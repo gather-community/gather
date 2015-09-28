@@ -1,6 +1,5 @@
 class AddSettingsToCommunities < ActiveRecord::Migration
   def change
-    enable_extension "hstore"
     add_column :communities, :settings, :text, default: "{}"
     Community.all.each do |c|
       c.update_attribute(:settings,

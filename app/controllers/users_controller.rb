@@ -66,17 +66,11 @@ class UsersController < ApplicationController
 
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
-    if (params[:to_invite] || []).size > 20
-      flash[:error] = "You can only invite up to 20 users at a time."
-      redirect_to(invite_users_path)
+    if params[:to_invite].blank?
+      flash[:error] = "You didn't select any users."
     else
-      @users = User.find(params[:to_invite])
-      if @users.empty?
-        flash[:error] = "You didn't select any users."
-      else
-        @users.each{ |u| u.send_reset_password_instructions }
-        flash[:success] = "Invites sent."
-      end
+      Delayed::Job.enqueue(InviteJob.new(params[:to_invite]))
+      flash[:success] = "Invites sent."
       redirect_to(users_path)
     end
   end

@@ -153,6 +153,10 @@ class Meal < ActiveRecord::Base
     entrees.present?
   end
 
+  def nonempty_menu_items
+    MENU_ITEMS.map{ |i| [i, self[i]] }.to_h.reject{ |i, t| t.blank? }
+  end
+
   # Returns a relation for all meals following the current one.
   def following_meals
     self.class.where("served_at > ?", served_at)

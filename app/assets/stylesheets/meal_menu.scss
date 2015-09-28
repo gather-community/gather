@@ -57,5 +57,18 @@
     section {
       min-height: 20px;
     }
+
+    @media print {
+      border: none;
+      padding: 0;
+
+      .menu-label {
+        margin-top: 10px;
+      }
+
+      hr {
+        display: none;
+      }
+    }
   }
 }

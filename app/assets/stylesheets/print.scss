@@ -1,0 +1,23 @@
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  #print-logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    height: 60px;
+  }
+
+  .action-icons, .top-buttons, footer, #footer-pusher {
+    display: none;
+  }
+}

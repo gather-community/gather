@@ -1,4 +1,4 @@
-<% content_for(:title){ h((@meal.title || "Untitled Meal") << ": Summary") } %>
+<% content_for(:title){ @meal.title || "Untitled Meal" } %>
 
 <% content_for(:top_buttons) do %>
   <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
@@ -9,19 +9,19 @@
 <%= meal_action_icons(@meal, show_name: true, except: :summary) %>
 
 <div class="row">
-  <div class="col-sm-8">
+  <div class="col-sm-12">
     <%= render("menu") %>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-8">
+<div id="signups" class="row">
+  <div class="col-sm-12">
     <div id="gen-time">Generated: <%= Time.now.to_s(:full_datetime) %></div>
     <h2>Signups</h2>
     <div id="portion-counts">
       <%= portion_counts(@meal) %>
     </div>
-    <table id="signups" class="compact">
+    <table class="compact">
       <%= render("summary_signups_header") %>
       <% @signups.each do |signup| %>
         <tr>
@@ -53,7 +53,7 @@
       <% end %>
     </table>
     <small id="portion-formula">
-      Total portions calculated as
+      * Total portions calculated as
       <%= @meal.portion_factors.map do |dt, f|
         dt = t("signups.diner_types.#{dt}", count: 2)
         f == 0 ? nil : "#{f} &times; #{dt}"
@@ -63,8 +63,8 @@
 </div>
 
 
-<div class="row">
-  <div class="col-sm-8">
+<div id="groc-calc" class="row">
+  <div class="col-sm-12">
     <h2>Grocery Calculator</h2>
     <% if @cost_calculator.type == :fixed %>
       Based on the fixed cost of this meal, you should spend no more than
@@ -76,13 +76,19 @@
       much you can spend on groceries depending on how much you would like the meal to cost.
       <table id="cost-table" class="compact">
         <tr>
-          <th>Per-Adult Cost</th>
-          <th>Max Grocery Amount</th>
+          <% 2.times do %>
+            <th>Per-Adult Cost</th>
+            <th>Max Grocery Amt.</th>
+            <th></th>
+          <% end %>
         </tr>
-        <% MealSummaryHelper::COST_TABLE_AMOUNTS.each do |cost| %>
+        <% MealSummaryHelper::COST_TABLE_AMOUNTS.each_slice(2).to_a.each do |costs| %>
           <tr>
-            <td><%= number_to_currency(cost) %></td>
-            <td><%= number_to_currency(@cost_calculator.max_grocery_for_per_adult_cost(cost)) %></td>
+            <% 2.times do |i| %>
+              <td><%= number_to_currency(costs[i]) %></td>
+              <td><%= number_to_currency(@cost_calculator.max_grocery_for_per_adult_cost(costs[i])) %></td>
+              <td>&nbsp;&nbsp;&nbsp;</td>
+            <% end %>
           </tr>
         <% end %>
       </table>
@@ -91,7 +97,7 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-8">
+  <div class="col-sm-12">
     <h2>Cook Reimbursement Form</h2>
     <table id="reimb-form">
       <tr>

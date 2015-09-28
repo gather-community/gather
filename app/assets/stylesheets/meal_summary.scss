@@ -1,4 +1,11 @@
 .meals.action-summary {
+  @media print {
+    &#content h1 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+  }
+
   #gen-time {
     float: right;
     font-weight: bold;
@@ -9,39 +16,52 @@
     margin-bottom: 10px;
   }
 
-  table.compact td {
-    padding-top: 0;
-    padding-bottom: 0;
-    font-size: 90%;
+  table.compact {
+    td, th {
+      padding-top: 0;
+      padding-bottom: 0;
+      font-size: 12px;
+    }
   }
 
   #signups {
-    width: 100%;
+    page-break-before: always;
 
-    tr {
-    }
+    table {
+      width: 100%;
 
-    tr.total {
-      td {
+      tr.total {
+        td {
+          font-weight: bold;
+        }
+      }
+
+      tr.late-signups-header td {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
         font-weight: bold;
       }
-    }
 
-    tr.late-signups-header td {
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-align: center;
-      font-weight: bold;
-    }
+      th, td {
+        border: $light-border;
+        padding: 0 4px;
+        line-height: 20px;
 
-    th, td {
-      border: $light-border;
-      padding: 0 4px;
+        &.count-col {
+          width: 35px;
+        }
+      }
 
-      &.count-col {
-        width: 40px;
+      th.count-col {
+        font-weight: normal;
+        font-size: 11px;
       }
     }
+  }
+
+  #groc-calc {
+    page-break-before: always;
   }
 
   #cost-table {
@@ -49,6 +69,12 @@
 
     th {
       padding-right: 10px;
+    }
+
+    th, td {
+      &:nth-of-type(3) {
+        border-bottom: 1px solid white;
+      }
     }
   }
 

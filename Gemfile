@@ -54,6 +54,7 @@ gem 'active_model_serializers'
 gem 'inline_svg'
 gem 'delayed_job_active_record'
 gem "daemons"
+gem 'exception_notification'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

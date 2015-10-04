@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/sassafrastech/dj_cron.git
-  revision: 13b3939137ee904631353e278e13799a75ce8e92
+  revision: fd017d61665a0d57d5184e79b555ca34e09fde4b
   specs:
     dj_cron (0.0.1)
 
@@ -93,6 +93,8 @@ GEM
     capistrano-rails (1.1.3)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano3-delayed-job (1.4.1)
+      capistrano (>= 3.0.0)
     chronic (0.10.2)
     cocoon (1.2.6)
     coffee-rails (4.1.0)
@@ -317,6 +319,7 @@ DEPENDENCIES
   capistrano-bundler (~> 1.1.2)
   capistrano-passenger
   capistrano-rails (~> 1.1)
+  capistrano3-delayed-job (~> 1.0)
   cocoon
   coffee-rails (~> 4.1.0)
   daemons

@@ -15,6 +15,7 @@ set :default_env, {
   gem_home: "$HOME/webapps/rails/gems",
   pgoptions: "'-c statement_timeout=0'"
 }
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
   after :migrate, :seed do

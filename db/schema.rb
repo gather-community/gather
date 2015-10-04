@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928015747) do
+ActiveRecord::Schema.define(version: 20151004042006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20150928015747) do
     t.integer "little_kid_meat", default: 0, null: false
     t.integer "little_kid_veg", default: 0, null: false
     t.integer "meal_id", null: false
+    t.boolean "notified", default: false, null: false
     t.integer "senior_meat", default: 0, null: false
     t.integer "senior_veg", default: 0, null: false
     t.integer "teen_meat", default: 0, null: false
@@ -166,6 +167,7 @@ ActiveRecord::Schema.define(version: 20150928015747) do
   add_index "signups", ["household_id", "meal_id"], name: "index_signups_on_household_id_and_meal_id", unique: true, using: :btree
   add_index "signups", ["household_id"], name: "index_signups_on_household_id", using: :btree
   add_index "signups", ["meal_id"], name: "index_signups_on_meal_id", using: :btree
+  add_index "signups", ["notified"], name: "index_signups_on_notified", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false

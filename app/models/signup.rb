@@ -23,7 +23,7 @@ class Signup < ActiveRecord::Base
 
   validate :max_signups_per_type, :dont_exceed_spots
 
-  delegate :full_name, to: :household, prefix: true
+  delegate :full_name, :users, to: :household, prefix: true
 
   def self.for(user, meal)
     find_or_initialize_by(household_id: user.household_id, meal_id: meal.id)

@@ -66,6 +66,9 @@ Follow these steps to setup a development environment for MESS.
 1. **Start the server**
   - Run `bundle exec rails s`.
 
+1. **Start DelayedJob**
+  - Run `bin/delayed_job start`
+
 1. **Start using the system**
   - Navigate to http://localhost:3000
   - Log in with the Google account given above

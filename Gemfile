@@ -55,6 +55,7 @@ gem 'inline_svg'
 gem 'delayed_job_active_record'
 gem "daemons"
 gem 'exception_notification'
+gem "whenever"
 gem 'dj_cron', github: 'sassafrastech/dj_cron'
 
 group :development, :test do

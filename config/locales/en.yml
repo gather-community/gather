@@ -109,3 +109,9 @@ en:
     work_meals: "Work"
     users: "Users"
     households: "Households"
+
+  assignment_roles:
+    head_cook: "Head Cook"
+    asst_cook: "Assistant Cook"
+    cleaner: "Cleaner"
+

@@ -2,7 +2,9 @@ Dear <%= @user.name %>,
 
 This is a reminder that you are signed up for <%= @meal.title ? "the meal '#{@meal.title}'" : "a meal" -%>
  by <%= @meal.head_cook_name %> on <%= @meal.served_at.to_s(:datetime_no_yr).sub("  ", " ") %> at <%= @meal.location_name %>.
+<% if @signup.total > 1 %>
 
-<% if @signup.total > 1 %>There are <%= @signup.total %> diners signed up from your household.<% end %>
+There are <%= @signup.total %> diners signed up from your household.
+<% end %>
 
 Enjoy the meal!

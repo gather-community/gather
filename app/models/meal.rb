@@ -81,6 +81,10 @@ class Meal < ActiveRecord::Base
     Time.zone.now.midnight + 7.days + Meal::DEFAULT_TIME
   end
 
+  def self.ids_in_time_from_now(time)
+    where("served_at > ?", Time.now).where("served_at < ?", Time.now + time).pluck(:id)
+  end
+
   def visible_to?(user)
     invited?(user) || worked_by?(user) || signed_up?(user.household)
   end

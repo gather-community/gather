@@ -2,7 +2,6 @@ class NotificationMailer < ActionMailer::Base
 
   default from: Rails.configuration.x.from_email
 
-  # Sends a meal notification
   def meal_reminder(user, signup)
     @user = user
     @signup = signup
@@ -12,5 +11,16 @@ class NotificationMailer < ActionMailer::Base
 
     mail(to: @user.email, subject:
       "Meal Reminder: #{title}#{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
+  end
+
+  def shift_reminder(assignment)
+    @assignment = assignment
+    @user = assignment.user
+    @meal = assignment.meal
+    @role = I18n.t("assignment_roles.#{assignment.role}")
+    @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
+
+    mail(to: @user.email, subject:
+      "Work Reminder: You are #{@role} for meal at #{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
   end
 end

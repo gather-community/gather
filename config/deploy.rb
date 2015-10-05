@@ -9,7 +9,6 @@ set :repo_url, 'git@github.com:touchstone-cohousing/mess.git'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/initializers/local_config.rb')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 set :tmp_dir, '/home/tscoho/tmp'
-set :bundle_path, -> { "/home/tscoho/webapps/rails/gems" }
 set :default_env, {
   path: "$HOME/bin:$HOME/webapps/rails/bin:$PATH",
   gem_home: "$HOME/webapps/rails/gems",

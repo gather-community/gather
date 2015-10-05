@@ -36,6 +36,7 @@ gem 'simple_form'
 gem 'cocoon'
 gem 'devise'
 gem 'omniauth-google-oauth2'
+gem 'config'
 
 # Authorization
 gem 'cancancan', '~> 1.10'

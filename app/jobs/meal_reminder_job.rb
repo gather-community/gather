@@ -1,12 +1,10 @@
 # Sends notifications of meals that people have signed up for.
 # Checks the DB to see when to send.
 class MealReminderJob
-  MEAL_REMINDER_TIME = 18.hours
-
   def perform
     # Get all meals in next N hours.
     meal_ids = Meal.where("served_at > ?", Time.now).
-      where("served_at < ?", Time.now + MEAL_REMINDER_TIME).pluck(:id)
+      where("served_at < ?", Time.now + Settings.meal_reminder_lead_time.hours).pluck(:id)
 
     if meal_ids.any?
       # Find all households for meals in the next N hours that have not yet been notified.

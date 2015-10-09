@@ -27,7 +27,7 @@ module Statusable
   end
 
   def reopenable?
-    closed? && !past_auto_close_time?
+    closed?
   end
 
   def new_signups_allowed?

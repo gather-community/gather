@@ -7,7 +7,6 @@ class MealsController < ApplicationController
 
   def index
     load_meals
-    auto_close(@meals)
   end
 
   def work
@@ -20,7 +19,6 @@ class MealsController < ApplicationController
     @signup = Signup.for(current_user, @meal)
     load_signups
     load_prev_next_meal
-    auto_close(@meal)
   end
 
   def new
@@ -128,10 +126,5 @@ class MealsController < ApplicationController
     end
 
     params.require(:meal).permit(*permitted)
-  end
-
-  # If any of the given meals should be closed, close it before displaying.
-  def auto_close(meals)
-    Array.wrap(meals).each(&:close_if_past_auto_close_time!)
   end
 end

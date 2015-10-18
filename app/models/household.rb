@@ -70,9 +70,4 @@ class Household < ActiveRecord::Base
   def from_grot?
     old_id.present? || old_name.present?
   end
-
-  # Changes user's account balance by the given amount.
-  def change_balance!(diff)
-    update_attribute(:account_balance, account_balance + diff)
-  end
 end

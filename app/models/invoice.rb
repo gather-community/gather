@@ -4,14 +4,6 @@ class Invoice < ActiveRecord::Base
   belongs_to :household
   has_many :line_items, dependent: :nullify
 
-  after_create do
-    household.change_balance!(total_due)
-  end
-
-  after_destroy do
-    household.change_balance!(-total_due)
-  end
-
   # Populates the invoice with
   def populate
     self.line_items = LineItem.where(invoice_id: nil).to_a

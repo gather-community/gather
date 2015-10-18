@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018192143) do
+ActiveRecord::Schema.define(version: 20151018194112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -92,7 +92,6 @@ ActiveRecord::Schema.define(version: 20151018192143) do
   add_index "formulas", ["effective_on"], name: "index_formulas_on_effective_on", using: :btree
 
   create_table "households", force: :cascade do |t|
-    t.decimal "account_balance", precision: 10, scale: 3, default: 0.0, null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"

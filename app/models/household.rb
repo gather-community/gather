@@ -3,6 +3,8 @@ class Household < ActiveRecord::Base
 
   belongs_to :community
   has_many :credit_limits, dependent: :destroy
+  has_many :invoices
+  has_many :line_items
   has_many :signups
   has_many :users
 
@@ -55,6 +57,14 @@ class Household < ActiveRecord::Base
 
   def any_users?
     users.any?
+  end
+
+  def any_line_items?
+    line_items.any?
+  end
+
+  def any_invoices?
+    invoices.any?
   end
 
   def from_grot?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018142054) do
+ActiveRecord::Schema.define(version: 20151018152150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -117,6 +117,22 @@ ActiveRecord::Schema.define(version: 20151018142054) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
+  create_table "invoices", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "due_on", null: false
+    t.date "ended_on", null: false
+    t.integer "household_id", null: false
+    t.decimal "prev_balance", precision: 10, scale: 3, null: false
+    t.date "started_on", null: false
+    t.decimal "total_due", precision: 10, scale: 3, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "invoices", ["due_on"], name: "index_invoices_on_due_on", using: :btree
+  add_index "invoices", ["ended_on"], name: "index_invoices_on_ended_on", using: :btree
+  add_index "invoices", ["household_id"], name: "index_invoices_on_household_id", using: :btree
+  add_index "invoices", ["started_on"], name: "index_invoices_on_started_on", using: :btree
+
   create_table "line_items", force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 3, null: false
     t.string "code", limit: 16, null: false
@@ -124,6 +140,7 @@ ActiveRecord::Schema.define(version: 20151018142054) do
     t.string "description", limit: 255, null: false
     t.integer "household_id", null: false
     t.date "incurred_on", null: false
+    t.integer "invoice_id"
     t.integer "invoiceable_id"
     t.string "invoiceable_type", limit: 32
     t.datetime "updated_at", null: false
@@ -132,6 +149,7 @@ ActiveRecord::Schema.define(version: 20151018142054) do
   add_index "line_items", ["code"], name: "index_line_items_on_code", using: :btree
   add_index "line_items", ["household_id"], name: "index_line_items_on_household_id", using: :btree
   add_index "line_items", ["incurred_on"], name: "index_line_items_on_incurred_on", using: :btree
+  add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
   add_index "line_items", ["invoiceable_id", "invoiceable_type"], name: "index_line_items_on_invoiceable_id_and_invoiceable_type", using: :btree
 
   create_table "locations", force: :cascade do |t|
@@ -230,7 +248,9 @@ ActiveRecord::Schema.define(version: 20151018142054) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
+  add_foreign_key "invoices", "households"
   add_foreign_key "line_items", "households"
+  add_foreign_key "line_items", "invoices"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
   add_foreign_key "signups", "households"

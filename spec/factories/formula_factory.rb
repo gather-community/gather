@@ -5,5 +5,4 @@ FactoryGirl.define do
     meal_calc_type "MyString"
     pantry_calc_type "MyString"
   end
-
 end

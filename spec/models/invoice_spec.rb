@@ -1,9 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  describe "populate" do
-    let(:household){ create(:household) }
+  let(:household){ create(:household) }
 
+  context "on create" do
+    it "updates household account balance" do
+      bal = household.account_balance
+      create(:invoice, household: household, total_due: 1.23)
+      expect(household.reload.account_balance - bal).to eq 1.23
+    end
+  end
+
+  context "on destroy" do
+    it "updates household account balance" do
+      invoice = create(:invoice, household: household, total_due: 1.23)
+      bal = household.reload.account_balance
+      invoice.destroy
+      expect(household.reload.account_balance - bal).to eq -1.23
+    end
+  end
+
+  describe "populate" do
     it "should populate properly" do
       item1 = create(:line_item, household: household, incurred_on: "2015-01-01", amount: 1.23)
       item2 = create(:line_item, household: household, incurred_on: "2015-01-02", amount: 2.34)

@@ -4,6 +4,14 @@ class Invoice < ActiveRecord::Base
   belongs_to :household
   has_many :line_items, dependent: :nullify
 
+  after_create do
+    household.change_balance!(total_due)
+  end
+
+  after_destroy do
+    household.change_balance!(-total_due)
+  end
+
   # Populates the invoice with
   def populate
     self.line_items = LineItem.incurred_between(started_on, ended_on).to_a

@@ -14,7 +14,7 @@ class Invoice < ActiveRecord::Base
 
   # Populates the invoice with
   def populate
-    self.line_items = LineItem.incurred_between(started_on, ended_on).to_a
+    self.line_items = LineItem.where(invoice_id: nil).to_a
     self.due_on = Date.today + TERMS
     self.total_due = prev_balance + line_items.map(&:amount).sum
   end

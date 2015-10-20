@@ -3,7 +3,7 @@ class Household < ActiveRecord::Base
 
   belongs_to :community
   has_many :credit_limits, dependent: :destroy
-  has_many :invoices
+  has_many :invoices, inverse_of: :household
   has_many :line_items
   has_many :signups
   has_many :users

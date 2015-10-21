@@ -31,11 +31,15 @@ module Statusable
   end
 
   def new_signups_allowed?
-    !closed? && !full?
+    !closed? && !full? && !past_time?
   end
 
   def signups_editable?
-    !closed?
+    !closed? && !past_time?
+  end
+
+  def past_time?
+    Time.now > served_at
   end
 
   def past_auto_close_time?

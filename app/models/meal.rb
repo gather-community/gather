@@ -28,6 +28,7 @@ class Meal < ActiveRecord::Base
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:host_community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:host_community).order("communities.name DESC") }
+  scope :past, -> { where("served_at <= ?", Time.now) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
   scope :worked_by, ->(user) do
     includes(:assignments).where("assignments.user_id" => user.id)

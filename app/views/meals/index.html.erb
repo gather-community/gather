@@ -1,6 +1,11 @@
 <% content_for(:title){ "Meals" } %>
 
 <% content_for(:top_buttons) do %>
+  <% if params[:past] %>
+    <%= link_to("Future Meals", meals_path, class: "btn btn-default") %>
+  <% else %>
+    <%= link_to("Past Meals", meals_path(past: 1), class: "btn btn-default") %>
+  <% end %>
   <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
 <% end %>
 

@@ -93,7 +93,7 @@ class MealsController < ApplicationController
   end
 
   def load_meals
-    @meals = @meals.future.oldest_first
+    @meals = params[:past] ? @meals.past.newest_first : @meals.future.oldest_first
     @meals = @meals.worked_by(@user) if @user.present?
     @meals = @meals.page(params[:page])
   end

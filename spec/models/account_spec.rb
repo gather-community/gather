@@ -7,7 +7,7 @@ RSpec.describe Account, type: :model do
   context "no invoices or line items" do
     shared_examples_for "main household" do
       it "should be correct" do
-        expect(account.last_invoice).to be_nil
+        expect(account.send(:last_invoice)).to be_nil
         expect(account.total_new_credits).to eq 0
         expect(account.total_new_charges).to eq 0
         expect(account.outstanding_balance).to eq 0
@@ -29,7 +29,7 @@ RSpec.describe Account, type: :model do
   context "with invoices and items" do
     shared_examples_for "main household" do
       it "should be correct" do
-        expect(account.last_invoice).to eq inv1
+        expect(account.send(:last_invoice)).to eq inv1
         expect(account.total_new_credits).to eq 12.45
         expect(account.total_new_charges).to eq 11.34
         expect(account.outstanding_balance).to eq 3.34

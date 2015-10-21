@@ -23,6 +23,13 @@ class Ability
       signup.meal.communities.include?(user.community)
     end
 
+    if user.admin? || user.biller?
+      can :read, Account
+      can :manage, Invoice, Invoice.for_community(user.community) do |invoice|
+        invoice.community_id == user.community_id
+      end
+    end
+
     if user.admin?
       can :manage, User
       can :manage, Meal, Meal.visible_to(user) do |meal|

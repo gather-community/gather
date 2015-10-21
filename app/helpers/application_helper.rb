@@ -26,7 +26,7 @@ module ApplicationHelper
   end
 
   def nav_links
-    [Meal, [Meal, "work"], User, Household].map do |item|
+    [Meal, [Meal, "work"], User, Household, Account].map do |item|
       controller = (item.is_a?(Class) ? item : item[0]).to_s.tableize
       action = item.is_a?(Class) ? "index" : item[1]
       route_key = item.is_a?(Class) ? controller : "#{action}_#{controller}"

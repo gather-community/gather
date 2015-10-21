@@ -109,6 +109,7 @@ en:
     work_meals: "Work"
     users: "Users"
     households: "Households"
+    accounts: "Accounts"
 
   assignment_roles:
     head_cook: "Head Cook"

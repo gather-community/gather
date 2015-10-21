@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :accounts, only: [:index, :show]
+
   get "ping", to: "home#ping"
 
   authenticated :user do

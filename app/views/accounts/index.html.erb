@@ -1,0 +1,44 @@
+<% content_for(:title){ "Accounts" } %>
+
+<% if @accounts.empty? %>
+  <div class="none-found">
+    No accounts found.
+  </div>
+<% else %>
+  <table class="index">
+    <tr>
+      <th class="col-md-2">Household</th>
+      <th class="col-md-1">Last Inv. Date</th>
+      <th class="col-md-1">Due Last Inv.</th>
+      <th class="col-md-1">Payments</th>
+      <th class="col-md-1">Outstanding Bal.</th>
+      <th class="col-md-1">New Charges</th>
+      <th class="col-md-1">Current Bal.</th>
+    </tr>
+    <% @accounts.each do |account| %>
+      <tr>
+        <td class="col-md-2">
+          <%= account.household_name %>
+        </td>
+        <td class="col-md-1">
+          <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
+        </td>
+        <td class="col-md-1">
+          <%= number_to_currency(account.due_last_invoice) || "N/A" %>
+        </td>
+        <td class="col-md-1">
+          <%= number_to_currency(account.total_new_credits) %>
+        </td>
+        <td class="col-md-1">
+          <%= number_to_currency(account.outstanding_balance) %>
+        </td>
+        <td class="col-md-1">
+          <%= number_to_currency(account.total_new_charges) %>
+        </td>
+        <td class="col-md-1">
+          <%= number_to_currency(account.current_balance) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

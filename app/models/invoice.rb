@@ -4,6 +4,10 @@ class Invoice < ActiveRecord::Base
   belongs_to :household, inverse_of: :invoices
   has_many :line_items, dependent: :nullify
 
+  scope :for_community, ->(c){ includes(:household).where("households.community_id = ?", c.id) }
+
+  delegate :community_id, to: :household
+
   # Populates the invoice with
   def populate
     self.line_items = LineItem.where(household: household).uninvoiced.to_a

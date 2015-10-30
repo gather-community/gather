@@ -1,67 +1,58 @@
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do
-  let(:household){ create(:household) }
-  let(:account){ Account.new(household) }
+  let(:account){ create(:account, total_new_credits: 4, total_new_charges: 7) }
+  let(:invoice){ create(:invoice, household: account.household) }
 
-  context "no invoices or line items" do
-    shared_examples_for "main household" do
-      it "should be correct" do
-        expect(account.send(:last_invoice)).to be_nil
-        expect(account.total_new_credits).to eq 0
-        expect(account.total_new_charges).to eq 0
-        expect(account.outstanding_balance).to eq 0
-        expect(account.current_balance).to eq 0
-      end
+  describe "invoice_added" do
+    it "should work for new charge" do
+      create(:line_item, household: account.household, amount: 6)
+      expect(account.reload.total_new_credits).to eq 4
+      expect(account.total_new_charges).to eq 13
     end
 
-    context "no preload" do
-      it_behaves_like "main household"
-    end
-
-    context "with preload" do
-      let(:account) { Account.for_households([household]).first }
-
-      it_behaves_like "main household"
+    it "should work for new credit" do
+      create(:line_item, household: account.household, amount: -6)
+      expect(account.reload.total_new_credits).to eq 10
+      expect(account.total_new_charges).to eq 7
     end
   end
 
-  context "with invoices and items" do
-    shared_examples_for "main household" do
-      it "should be correct" do
-        expect(account.send(:last_invoice)).to eq inv1
-        expect(account.total_new_credits).to eq 12.45
-        expect(account.total_new_charges).to eq 11.34
-        expect(account.outstanding_balance).to eq 3.34
-        expect(account.current_balance).to eq 14.68
+  describe "line_item_added" do
+    it "should update fields" do
+      invoice
+      expect(account.last_invoiced_on).to eq invoice.created_on
+      expect(account.due_last_invoice).to eq invoice.total_due
+      expect(account.total_new_credits).to eq 0
+      expect(account.total_new_charges).to eq 0
+    end
+  end
+
+  describe "recalculate!" do
+    it "should work with existing invoices and line items" do
+      Timecop.travel(Date.today - 30.days) do
+        @inv1 = create(:invoice, household: account.household, total_due: 10)
       end
+      @inv2 = create(:invoice, household: account.household, total_due: 15)
+      create(:line_item, household: account.household, amount: 5, invoice: @inv2)
+      create(:line_item, household: account.household, amount: -8, invoice: @inv2)
+      create(:line_item, household: account.household, amount: 4.5, invoice: @inv2)
+      create(:line_item, household: account.household, amount: -2.35, invoice: @inv2)
+      @inv2.destroy
+      expect(account.last_invoiced_on).to eq @inv1.created_on
+      expect(account.due_last_invoice).to eq 10
+      expect(account.total_new_credits).to eq 10.35
+      expect(account.total_new_charges).to eq 9.5
+      expect(account.outstanding_balance).to eq -0.35
+      expect(account.current_balance).to eq 9.15
     end
 
-    let(:inv1){ create(:invoice, household: household, prev_balance: 15.67) }
-    let(:inv2){ create(:invoice, household: household) }
-    let(:household2){ create(:household) }
-
-    before do
-      create(:line_item, household: household, amount: 0.12)
-      inv1.populate!
-      inv2.update_attribute(:created_at, 2.days.ago)
-      create(:line_item, household: household, amount: 1.23)
-      create(:line_item, household: household, amount: -4.56)
-      create(:line_item, household: household, amount: -7.89)
-      create(:line_item, household: household, amount: 10.11)
-
-      create(:line_item, household: household2, amount: 1.23)
-      build(:invoice, household: household2).populate!
-    end
-
-    context "no preload" do
-      it_behaves_like "main household"
-    end
-
-    context "with preload" do
-      let(:account) { Account.for_households([household, household2]).first }
-
-      it_behaves_like "main household"
+    it "should work with no line items or invoices" do
+      account.recalculate!
+      expect(account.last_invoiced_on).to be_nil
+      expect(account.due_last_invoice).to be_nil
+      expect(account.total_new_credits).to eq 0
+      expect(account.total_new_charges).to eq 0
     end
   end
 end

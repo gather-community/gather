@@ -4,6 +4,7 @@ class Household < ActiveRecord::Base
   belongs_to :community
   has_many :credit_limits, dependent: :destroy
   has_many :invoices, inverse_of: :household
+  has_one :account, inverse_of: :household, dependent: :destroy
   has_many :line_items
   has_many :signups
   has_many :users
@@ -23,6 +24,10 @@ class Household < ActiveRecord::Base
   validates :unit_num, length: { maximum: 8 }
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
+
+  after_create do
+    create_account!
+  end
 
   def full_name
     "#{community.abbrv}: #{name}"

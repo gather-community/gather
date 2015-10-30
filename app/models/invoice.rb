@@ -8,6 +8,14 @@ class Invoice < ActiveRecord::Base
 
   delegate :community_id, to: :household
 
+  after_create do
+    household.account.invoice_added!(self)
+  end
+
+  after_destroy do
+    household.account.recalculate!
+  end
+
   # Populates the invoice with
   def populate
     self.line_items = LineItem.where(household: household).uninvoiced.to_a
@@ -20,5 +28,9 @@ class Invoice < ActiveRecord::Base
   def populate!
     populate
     line_items.any? && save!
+  end
+
+  def created_on
+    created_at.try(:to_date)
   end
 end

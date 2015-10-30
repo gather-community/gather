@@ -37,6 +37,7 @@ gem 'cocoon'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 gem 'config'
+gem 'timecop'
 
 # Authorization
 gem 'cancancan', '~> 1.10'

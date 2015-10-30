@@ -1,6 +1,6 @@
 <% content_for(:title){ "Accounts" } %>
 
-<% if @accounts.empty? %>
+<% if @households.empty? %>
   <div class="none-found">
     No accounts found.
   </div>
@@ -15,7 +15,8 @@
       <th class="col-md-1">New Charges</th>
       <th class="col-md-1">Current Bal.</th>
     </tr>
-    <% @accounts.each do |account| %>
+    <% @households.each do |household| %>
+      <% account = household.account %>
       <tr>
         <td class="col-md-2">
           <%= account.household_name %>
@@ -41,4 +42,6 @@
       </tr>
     <% end %>
   </table>
+
+  <%= paginate @households, params: {controller: 'accounts'} %>
 <% end %>

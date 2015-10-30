@@ -2,6 +2,7 @@ class Account < ActiveRecord::Base
   belongs_to :household, inverse_of: :account
 
   delegate :name, to: :household, prefix: true
+  delegate :due_on, to: :last_invoice, prefix: true, allow_nil: true
 
   # Updates account for latest invoice. Assumes invoice is latest one since the UI enforces this.
   def invoice_added!(invoice)
@@ -37,12 +38,12 @@ class Account < ActiveRecord::Base
     save!
   end
 
-  def outstanding_balance
+  def balance_due
     (due_last_invoice || 0) - total_new_credits
   end
 
   def current_balance
-    outstanding_balance + total_new_charges
+    balance_due + total_new_charges
   end
 
   def last_invoice

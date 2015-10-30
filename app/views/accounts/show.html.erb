@@ -1,0 +1,34 @@
+<% content_for(:title){ "Account: #{@account.household.name}" } %>
+
+<table class="key-value">
+  <tr>
+    <td>Last Invoice Date</td>
+    <td>
+      <%= @account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
+    </td>
+  </tr>
+  <tr>
+    <td>Last Invoice Amount</td>
+    <td>
+      <%= number_to_currency(@account.due_last_invoice) || "N/A" %>
+    </td>
+  </tr>
+  <tr>
+    <td>Payments</td>
+    <td>
+      <%= number_to_currency(@account.total_new_credits) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Balance Due</td>
+    <td>
+      <%= number_to_currency(@account.balance_due) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Due Date</td>
+    <td>
+      <%= @account.last_invoice_due_on.try(:to_s, :short_date) || "N/A" %>
+    </td>
+  </tr>
+</table>

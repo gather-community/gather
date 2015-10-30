@@ -43,7 +43,7 @@ RSpec.describe Account, type: :model do
       expect(account.due_last_invoice).to eq 10
       expect(account.total_new_credits).to eq 10.35
       expect(account.total_new_charges).to eq 9.5
-      expect(account.outstanding_balance).to eq -0.35
+      expect(account.balance_due).to eq -0.35
       expect(account.current_balance).to eq 9.15
     end
 

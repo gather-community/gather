@@ -11,15 +11,15 @@
       <th class="col-md-1">Last Inv. Date</th>
       <th class="col-md-1">Due Last Inv.</th>
       <th class="col-md-1">Payments</th>
-      <th class="col-md-1">Outstanding Bal.</th>
+      <th class="col-md-1">Balance Due</th>
       <th class="col-md-1">New Charges</th>
-      <th class="col-md-1">Current Bal.</th>
+      <th class="col-md-1">Current Balance</th>
     </tr>
     <% @households.each do |household| %>
       <% account = household.account %>
       <tr>
         <td class="col-md-2">
-          <%= account.household_name %>
+          <%= link_to(account.household_name, account_path(account)) %>
         </td>
         <td class="col-md-1">
           <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
@@ -31,7 +31,7 @@
           <%= number_to_currency(account.total_new_credits) %>
         </td>
         <td class="col-md-1">
-          <%= number_to_currency(account.outstanding_balance) %>
+          <%= number_to_currency(account.balance_due) %>
         </td>
         <td class="col-md-1">
           <%= number_to_currency(account.total_new_charges) %>

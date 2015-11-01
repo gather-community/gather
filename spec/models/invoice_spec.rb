@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Invoice, type: :model do
   let(:household){ create(:household) }
 
-  describe "populate" do
+  describe "populate!" do
     it "should populate properly" do
       item1 = create(:line_item, household: household, incurred_on: "2015-01-01",
         amount: 1.23, invoice: create(:invoice, household: household))
@@ -19,20 +19,18 @@ RSpec.describe Invoice, type: :model do
       expect(invoice.due_on).to eq Date.today + Invoice::TERMS
     end
 
-    it "should save on populate! if there are no relevant line items but balance is nonzero" do
+    it "should not raise if there are no relevant line items but balance is nonzero" do
       item1 = create(:line_item, household: household, incurred_on: "2015-01-01",
         amount: 1.23, invoice: create(:invoice))
       invoice = Invoice.new(household: household, prev_balance: -0.12)
-      expect(invoice.populate!).to be true
-      expect(invoice).to be_persisted
+      invoice.populate!
     end
 
-    it "should not save on populate! if there are no relevant line items and balance is zero" do
+    it "should raise if there are no relevant line items and balance is zero" do
       item1 = create(:line_item, household: household, incurred_on: "2015-01-01",
         amount: 1.23, invoice: create(:invoice))
       invoice = Invoice.new(household: household, prev_balance: 0)
-      expect(invoice.populate!).to be false
-      expect(invoice).not_to be_persisted
+      expect{invoice.populate!}.to raise_error(InvoiceError)
     end
   end
 end

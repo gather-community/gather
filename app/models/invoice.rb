@@ -17,18 +17,18 @@ class Invoice < ActiveRecord::Base
     household.account.recalculate!
   end
 
-  # Populates the invoice with
+  # Populates the invoice with available line items.
   def populate
     self.line_items = LineItem.where(household: household).uninvoiced.to_a
     self.due_on = Date.today + TERMS
     self.total_due = prev_balance + line_items.map(&:amount).sum
   end
 
-  # Populates the invoice and saves only if there are any line items.
+  # Populates the invoice and saves only if the balance is nonzero or there are any line items.
   # Returns whether the invoice was saved.
   def populate!
     populate
-    line_items.any? && save!
+    (line_items.any? || total_due.abs >= 0.01) && save!
   end
 
   def created_on

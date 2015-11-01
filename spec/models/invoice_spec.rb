@@ -19,10 +19,18 @@ RSpec.describe Invoice, type: :model do
       expect(invoice.due_on).to eq Date.today + Invoice::TERMS
     end
 
-    it "should not save on populate! if there are no relevant line items" do
+    it "should save on populate! if there are no relevant line items but balance is nonzero" do
       item1 = create(:line_item, household: household, incurred_on: "2015-01-01",
         amount: 1.23, invoice: create(:invoice))
       invoice = Invoice.new(household: household, prev_balance: -0.12)
+      expect(invoice.populate!).to be true
+      expect(invoice).to be_persisted
+    end
+
+    it "should not save on populate! if there are no relevant line items and balance is zero" do
+      item1 = create(:line_item, household: household, incurred_on: "2015-01-01",
+        amount: 1.23, invoice: create(:invoice))
+      invoice = Invoice.new(household: household, prev_balance: 0)
       expect(invoice.populate!).to be false
       expect(invoice).not_to be_persisted
     end

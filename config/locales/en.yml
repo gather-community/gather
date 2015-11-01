@@ -118,4 +118,17 @@ en:
 
   line_item_codes:
     meal: "Meal"
+    payment: "Payment"
+
+  accounts:
+    index:
+      summary:
+        one: "There is one account owing a total of %{amount}."
+        other: "There are %{count} accounts owing a total of %{amount}."
+
+  households:
+    accounts:
+      intro:
+        one: "You have a MESS account with one community. Each community manages its own accounts."
+        other: "You have MESS accounts with %{count} communities. Each community manages its own accounts."
 

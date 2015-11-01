@@ -36,7 +36,8 @@
                   <%= link_to(icon_tag("user") << " Profile", user_path(current_user)) %>
                 </li>
                 <li>
-                  <%= link_to(icon_tag("money") << " Account", account_path(current_user.account)) %>
+                  <%= link_to(icon_tag("money") << " Accounts",
+                    accounts_household_path(current_user.household)) %>
                 </li>
                 <li>
                   <%= link_to(icon_tag("sign-out") << " Log out",

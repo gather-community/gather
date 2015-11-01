@@ -40,6 +40,11 @@ class HouseholdsController < ApplicationController
     redirect_to(households_path)
   end
 
+  def accounts
+    @is_self = @household.id == current_user.household_id
+    @accounts = @household.accounts.accessible_by(current_ability)
+  end
+
   def activate
     @household.activate!
     flash[:success] = "Household activated successfully."

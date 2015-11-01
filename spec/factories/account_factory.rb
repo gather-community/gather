@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :account do
     household
+    community
     last_invoiced_on "2015-10-27"
     due_last_invoice "8.81"
     total_new_credits "10.99"

@@ -3,6 +3,6 @@ FactoryGirl.define do
     prev_balance "9.99"
     total_due "9.99"
     due_on "2015-10-18"
-    household
+    account
   end
 end

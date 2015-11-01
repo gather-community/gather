@@ -1,5 +1,5 @@
 class LineItem < ActiveRecord::Base
-  belongs_to :household
+  belongs_to :account
   belongs_to :invoice
   belongs_to :invoiceable, polymorphic: true
 
@@ -9,11 +9,11 @@ class LineItem < ActiveRecord::Base
   scope :charge, ->{ where("amount > 0") }
 
   after_create do
-    household.account.line_item_added!(self)
+    account.line_item_added!(self)
   end
 
   after_destroy do
-    household.account.recalculate! if invoice_id.nil?
+    account.recalculate! if invoice_id.nil?
   end
 
   validate :nonzero

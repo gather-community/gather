@@ -23,13 +23,16 @@ class Ability
       signup.meal.communities.include?(user.community)
     end
 
-    # Can see own account and invoices.
+    # Can see own accounts and invoices.
+    can :accounts, Household, id: user.household_id
     can :show, Account, household_id: user.household_id
     can :show, Invoice, household_id: user.household_id
 
     # Can see all accounts and invoices if biller or admin.
     if user.admin? || user.biller?
-      can :read, Account
+      can :read, Account, Account.for_community(user.community) do |account|
+        account.community_id == user.community_id
+      end
       can :manage, Invoice, Invoice.for_community(user.community) do |invoice|
         invoice.community_id == user.community_id
       end

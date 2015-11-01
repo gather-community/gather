@@ -3,9 +3,8 @@ class Household < ActiveRecord::Base
 
   belongs_to :community
   has_many :credit_limits, dependent: :destroy
-  has_many :invoices, inverse_of: :household
-  has_one :account, inverse_of: :household, dependent: :destroy
-  has_many :line_items
+  has_many :accounts, ->{ joins(:community).includes(:community).order("communities.name") },
+    inverse_of: :household
   has_many :signups
   has_many :users
 
@@ -24,10 +23,6 @@ class Household < ActiveRecord::Base
   validates :unit_num, length: { maximum: 8 }
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
-
-  after_create do
-    create_account!
-  end
 
   def full_name
     "#{community.abbrv}: #{name}"
@@ -66,11 +61,11 @@ class Household < ActiveRecord::Base
   end
 
   def any_line_items?
-    line_items.any?
+    accounts.any?{ |a| a.line_items.any? }
   end
 
   def any_invoices?
-    invoices.any?
+    accounts.any?{ |a| a.invoices.any? }
   end
 
   def from_grot?

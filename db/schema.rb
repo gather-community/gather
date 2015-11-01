@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101170932) do
+ActiveRecord::Schema.define(version: 20151101192022) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
     t.decimal "balance_due", precision: 10, scale: 3, default: 0.0, null: false
+    t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.decimal "current_balance", precision: 10, scale: 3, default: 0.0, null: false
     t.decimal "due_last_invoice", precision: 10, scale: 2
@@ -29,6 +30,7 @@ ActiveRecord::Schema.define(version: 20151101170932) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "accounts", ["community_id"], name: "index_accounts_on_community_id", using: :btree
   add_index "accounts", ["household_id"], name: "index_accounts_on_household_id", using: :btree
 
   create_table "assignments", force: :cascade do |t|
@@ -132,23 +134,23 @@ ActiveRecord::Schema.define(version: 20151101170932) do
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
   create_table "invoices", force: :cascade do |t|
+    t.integer "account_id", null: false
     t.datetime "created_at", null: false
     t.date "due_on", null: false
-    t.integer "household_id", null: false
     t.decimal "prev_balance", precision: 10, scale: 3, null: false
     t.decimal "total_due", precision: 10, scale: 3, null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
   add_index "invoices", ["due_on"], name: "index_invoices_on_due_on", using: :btree
-  add_index "invoices", ["household_id"], name: "index_invoices_on_household_id", using: :btree
 
   create_table "line_items", force: :cascade do |t|
+    t.integer "account_id", null: false
     t.decimal "amount", precision: 10, scale: 3, null: false
     t.string "code", limit: 16, null: false
     t.datetime "created_at", null: false
     t.string "description", limit: 255, null: false
-    t.integer "household_id", null: false
     t.date "incurred_on", null: false
     t.integer "invoice_id"
     t.integer "invoiceable_id"
@@ -156,8 +158,8 @@ ActiveRecord::Schema.define(version: 20151101170932) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "line_items", ["account_id"], name: "index_line_items_on_account_id", using: :btree
   add_index "line_items", ["code"], name: "index_line_items_on_code", using: :btree
-  add_index "line_items", ["household_id"], name: "index_line_items_on_household_id", using: :btree
   add_index "line_items", ["incurred_on"], name: "index_line_items_on_incurred_on", using: :btree
   add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
   add_index "line_items", ["invoiceable_id", "invoiceable_type"], name: "index_line_items_on_invoiceable_id_and_invoiceable_type", using: :btree
@@ -251,6 +253,7 @@ ActiveRecord::Schema.define(version: 20151101170932) do
   add_index "users", ["household_id"], name: "index_users_on_household_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "invoices", column: "last_invoice_id"
   add_foreign_key "assignments", "meals"
@@ -261,8 +264,8 @@ ActiveRecord::Schema.define(version: 20151101170932) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
-  add_foreign_key "invoices", "households"
-  add_foreign_key "line_items", "households"
+  add_foreign_key "invoices", "accounts"
+  add_foreign_key "line_items", "accounts"
   add_foreign_key "line_items", "invoices"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"

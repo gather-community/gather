@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resources :signups
   resources :households do
     member do
+      get :accounts
       put :activate
       put :deactivate
     end

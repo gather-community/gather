@@ -4,6 +4,6 @@ FactoryGirl.define do
     code "meal"
     description "Some stuff"
     amount "9.99"
-    household
+    account
   end
 end

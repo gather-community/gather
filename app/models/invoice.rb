@@ -1,20 +1,26 @@
 class Invoice < ActiveRecord::Base
   TERMS = 30 # days
 
-  belongs_to :household, inverse_of: :invoices
+  belongs_to :account, inverse_of: :invoices
   has_many :line_items, ->{ order(:incurred_on) }, dependent: :nullify
-  has_one :account, foreign_key: :last_invoice_id, inverse_of: :last_invoice, dependent: :nullify
 
   scope :for_community, ->(c){ includes(:household).where("households.community_id = ?", c.id) }
 
-  delegate :community_id, to: :household
+  delegate :community_id, :household_full_name, to: :account
 
   after_create do
-    household.account.invoice_added!(self)
+    account.invoice_added!(self)
+  end
+
+  before_destroy do
+    if account.last_invoice_id == id
+      account.last_invoice = nil
+      account.save!
+    end
   end
 
   after_destroy do
-    household.account.recalculate!
+    account.recalculate!
   end
 
   def populate
@@ -23,7 +29,7 @@ class Invoice < ActiveRecord::Base
   # Populates the invoice with available line items.
   # Raises InvoiceError unless the balance is nonzero or there are any line items.
   def populate!
-    self.line_items = LineItem.where(household: household).uninvoiced.to_a
+    self.line_items = LineItem.where(account: account).uninvoiced.to_a
     self.due_on = Date.today + TERMS
     self.total_due = prev_balance + line_items.map(&:amount).sum
 

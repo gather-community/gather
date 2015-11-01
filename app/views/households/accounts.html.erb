@@ -1,0 +1,54 @@
+<% content_for(:title){ @is_self ? "Accounts" : "Accounts: #{@household.name}" } %>
+
+<% if @accounts.empty? %>
+
+  There are not yet any charges associated with <%= @is_self ? "your" : "this" %> household.
+
+<% else %>
+
+  <% if @is_self %>
+    <p class="subtitle">
+      <%= t(".intro", count: @accounts.size) %>
+    </p>
+  <% end %>
+
+  <% @accounts.each do |account| %>
+    <h4>
+      Account for <%= account.community.name %>
+    </h4>
+
+    <table class="key-value">
+      <tr>
+        <td>Last Invoice Date</td>
+        <td>
+          <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
+        </td>
+      </tr>
+      <tr>
+        <td>Last Invoice Amount</td>
+        <td>
+          <%= invoice_amount(account.last_invoice) %>
+        </td>
+      </tr>
+      <tr>
+        <td>Payments</td>
+        <td>
+          <%= number_to_currency(account.total_new_credits) %>
+        </td>
+      </tr>
+      <tr>
+        <td>Balance Due</td>
+        <td>
+          <%= number_to_currency(account.balance_due) %>
+        </td>
+      </tr>
+      <tr>
+        <td>Due Date</td>
+        <td>
+          <%= account.last_invoice_due_on.try(:to_s, :short_date) || "N/A" %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+
+<% end %>

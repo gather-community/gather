@@ -2,7 +2,7 @@
 
 <% content_for(:top_buttons) do %>
   <strong>
-    There are <%= @nonzero_accounts %> accounts owing a total of <%= currency_with_cr(@grand_total_due) %>.
+    <%= t(".summary", count: @nonzero_accounts, amount: currency_with_cr(@grand_total_due)) %>
     <% unless @nonzero_accounts == 0 %>
       &nbsp;
       <%= link_to(icon_tag("send") << " Generate Invoices", generate_invoices_path,
@@ -12,7 +12,7 @@
   </strong>
 <% end %>
 
-<% if @households.empty? %>
+<% if @accounts.empty? %>
   <div class="none-found">
     No accounts found.
   </div>
@@ -27,11 +27,10 @@
       <th class="col-md-1">New Charges</th>
       <th class="col-md-1">Current Balance</th>
     </tr>
-    <% @households.each do |household| %>
-      <% account = household.account %>
+    <% @accounts.each do |account| %>
       <tr>
         <td class="col-md-2">
-          <%= link_to(account.household_name, account_path(account)) %>
+          <%= link_to(account.household_full_name, accounts_household_path(account.household)) %>
         </td>
         <td class="col-md-1">
           <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
@@ -55,5 +54,5 @@
     <% end %>
   </table>
 
-  <%= paginate @households, params: {controller: 'accounts'} %>
+  <%= paginate @accounts, params: {controller: 'accounts'} %>
 <% end %>

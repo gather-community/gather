@@ -123,8 +123,8 @@ en:
   accounts:
     index:
       summary:
-        one: "There is one account owing a total of %{amount}."
-        other: "There are %{count} accounts owing a total of %{amount}."
+        one: "There is one account with current activity owing a total of %{amount}."
+        other: "There are %{count} accounts with current activity owing a total of %{amount}."
 
   households:
     accounts:

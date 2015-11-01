@@ -10,6 +10,6 @@ class AccountsController < ApplicationController
       page(params[:page]).per(20)
 
     @grand_total_due = Account.for_community(current_user.community).sum("current_balance")
-    @nonzero_accounts = Account.for_community(current_user.community).where("current_balance >= 0.01").count
+    @active_accounts = Account.for_community(current_user.community).with_recent_activity.count
   end
 end

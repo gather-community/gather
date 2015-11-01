@@ -2,12 +2,12 @@
 
 <% content_for(:top_buttons) do %>
   <strong>
-    <%= t(".summary", count: @nonzero_accounts, amount: currency_with_cr(@grand_total_due)) %>
-    <% unless @nonzero_accounts == 0 %>
+    <%= t(".summary", count: @active_accounts, amount: currency_with_cr(@grand_total_due)) %>
+    <% unless @active_accounts == 0 %>
       &nbsp;
       <%= link_to(icon_tag("send") << " Generate Invoices", generate_invoices_path,
         method: :post, class: "btn btn-primary",
-        data: { confirm: "Are you sure? Invoices will be sent out to #{@nonzero_accounts} people."}) %>
+        data: { confirm: "Are you sure? Invoices will be sent out to #{@active_accounts} people."}) %>
     <% end %>
   </strong>
 <% end %>
@@ -42,13 +42,13 @@
           <%= number_to_currency(account.total_new_credits) %>
         </td>
         <td class="col-md-1">
-          <%= number_to_currency(account.balance_due) %>
+          <%= currency_with_cr(account.balance_due) %>
         </td>
         <td class="col-md-1">
           <%= number_to_currency(account.total_new_charges) %>
         </td>
         <td class="col-md-1">
-          <strong><%= number_to_currency(account.current_balance) %></strong>
+          <strong><%= currency_with_cr(account.current_balance) %></strong>
         </td>
       </tr>
     <% end %>

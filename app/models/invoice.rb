@@ -6,7 +6,7 @@ class Invoice < ActiveRecord::Base
 
   scope :for_community, ->(c){ includes(:household).where("households.community_id = ?", c.id) }
 
-  delegate :community_id, :household_full_name, to: :account
+  delegate :community_id, :household, :household_full_name, to: :account
 
   after_create do
     account.invoice_added!(self)
@@ -21,9 +21,6 @@ class Invoice < ActiveRecord::Base
 
   after_destroy do
     account.recalculate!
-  end
-
-  def populate
   end
 
   # Populates the invoice with available line items.

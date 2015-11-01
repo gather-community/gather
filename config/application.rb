@@ -27,5 +27,12 @@ module Mess
     config.x.webmaster_emails = ["tomsmyth@gmail.com"]
 
     config.active_job.queue_adapter = :delayed_job
+
+    config.middleware.use ExceptionNotification::Rack,
+      email: {
+        email_prefix: "[MESS ERROR] ",
+        sender_address: Rails.configuration.x.from_email,
+        exception_recipients: %w{tomsmyth@gmail.com}
+      }
   end
 end

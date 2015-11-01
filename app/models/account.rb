@@ -19,6 +19,10 @@ class Account < ActiveRecord::Base
     joins(household: :community).order("households.name, communities.abbrv")
   end
 
+  def self.with_recent_activity
+    where("total_new_credits >= 0.01 OR total_new_charges >= 0.01 OR current_balance >= 0.01")
+  end
+
   # Updates account for latest invoice. Assumes invoice is latest one since the UI enforces this.
   def invoice_added!(invoice)
     self.last_invoiced_on = invoice.created_on

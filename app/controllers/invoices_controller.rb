@@ -3,4 +3,10 @@ class InvoicesController < ApplicationController
 
   def show
   end
+
+  def generate
+    Delayed::Job.enqueue(InvoiceJob.new(current_user.community))
+    flash[:success] = "Invoice generation started."
+    redirect_to(accounts_path)
+  end
 end

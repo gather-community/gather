@@ -1,5 +1,6 @@
 class Account < ActiveRecord::Base
   belongs_to :household, inverse_of: :account
+  belongs_to :last_invoice, class_name: "Invoice"
 
   delegate :name, to: :household, prefix: true
   delegate :due_on, to: :last_invoice, prefix: true, allow_nil: true
@@ -8,6 +9,7 @@ class Account < ActiveRecord::Base
   def invoice_added!(invoice)
     self.last_invoiced_on = invoice.created_on
     self.due_last_invoice = invoice.total_due
+    self.last_invoice = invoice
     self.total_new_credits = 0
     self.total_new_charges = 0
     save!
@@ -29,8 +31,7 @@ class Account < ActiveRecord::Base
       where(household_id: household_id).
       where(invoice_id: nil).to_a.first
 
-    last_invoice = Invoice.order(:created_at).last
-
+    self.last_invoice = Invoice.order(:created_at).last
     self.last_invoiced_on = last_invoice.try(:created_on)
     self.due_last_invoice = last_invoice.try(:total_due)
     self.total_new_credits = new_amounts.try(:[], "new_credits").try(:abs) || 0
@@ -44,9 +45,5 @@ class Account < ActiveRecord::Base
 
   def current_balance
     balance_due + total_new_charges
-  end
-
-  def last_invoice
-    @last_invoice ||= household.invoices.order(:created_at).last
   end
 end

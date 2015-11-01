@@ -3,6 +3,7 @@ class Invoice < ActiveRecord::Base
 
   belongs_to :household, inverse_of: :invoices
   has_many :line_items, dependent: :nullify
+  has_one :account, foreign_key: :last_invoice_id, inverse_of: :last_invoice, dependent: :nullify
 
   scope :for_community, ->(c){ includes(:household).where("households.community_id = ?", c.id) }
 

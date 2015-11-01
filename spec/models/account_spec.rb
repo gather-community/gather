@@ -4,7 +4,7 @@ RSpec.describe Account, type: :model do
   let(:account){ create(:account, total_new_credits: 4, total_new_charges: 7) }
   let(:invoice){ create(:invoice, household: account.household) }
 
-  describe "invoice_added" do
+  describe "line_item_added" do
     it "should work for new charge" do
       create(:line_item, household: account.household, amount: 6)
       expect(account.reload.total_new_credits).to eq 4
@@ -18,11 +18,12 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  describe "line_item_added" do
+  describe "invoice_added" do
     it "should update fields" do
       invoice
       expect(account.last_invoiced_on).to eq invoice.created_on
       expect(account.due_last_invoice).to eq invoice.total_due
+      expect(account.last_invoice).to eq invoice
       expect(account.total_new_credits).to eq 0
       expect(account.total_new_charges).to eq 0
     end
@@ -41,6 +42,7 @@ RSpec.describe Account, type: :model do
       @inv2.destroy
       expect(account.last_invoiced_on).to eq @inv1.created_on
       expect(account.due_last_invoice).to eq 10
+      expect(account.last_invoice).to eq @inv1
       expect(account.total_new_credits).to eq 10.35
       expect(account.total_new_charges).to eq 9.5
       expect(account.balance_due).to eq -0.35
@@ -51,6 +53,7 @@ RSpec.describe Account, type: :model do
       account.recalculate!
       expect(account.last_invoiced_on).to be_nil
       expect(account.due_last_invoice).to be_nil
+      expect(account.last_invoice).to be_nil
       expect(account.total_new_credits).to eq 0
       expect(account.total_new_charges).to eq 0
     end

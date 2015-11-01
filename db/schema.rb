@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151030005946) do
+ActiveRecord::Schema.define(version: 20151101144153) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20151030005946) do
     t.datetime "created_at", null: false
     t.decimal "due_last_invoice", precision: 10, scale: 2
     t.integer "household_id", null: false
+    t.integer "last_invoice_id"
     t.date "last_invoiced_on"
     t.decimal "total_new_charges", precision: 10, scale: 2, default: 0.0, null: false
     t.decimal "total_new_credits", precision: 10, scale: 2, default: 0.0, null: false
@@ -249,6 +250,7 @@ ActiveRecord::Schema.define(version: 20151030005946) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "accounts", "households"
+  add_foreign_key "accounts", "invoices", column: "last_invoice_id"
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
   add_foreign_key "credit_limits", "communities"

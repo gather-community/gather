@@ -37,7 +37,7 @@
           <%= number_to_currency(account.total_new_charges) %>
         </td>
         <td class="col-md-1">
-          <%= number_to_currency(account.current_balance) %>
+          <strong><%= number_to_currency(account.current_balance) %></strong>
         </td>
       </tr>
     <% end %>

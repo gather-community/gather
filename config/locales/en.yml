@@ -116,3 +116,6 @@ en:
     asst_cook: "Assistant Cook"
     cleaner: "Cleaner"
 
+  line_item_codes:
+    meal: "Meal"
+

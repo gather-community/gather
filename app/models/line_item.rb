@@ -1,6 +1,7 @@
 class LineItem < ActiveRecord::Base
   belongs_to :household
   belongs_to :invoice
+  belongs_to :invoiceable, polymorphic: true
 
   scope :incurred_between, ->(a,b){ where("incurred_on >= ? AND incurred_on <= ?", a, b) }
   scope :uninvoiced, ->{ where(invoice_id: nil) }
@@ -19,6 +20,10 @@ class LineItem < ActiveRecord::Base
 
   def charge?
     amount > 0
+  end
+
+  def credit?
+    amount < 0
   end
 
   def abs_amount

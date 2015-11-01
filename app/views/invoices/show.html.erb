@@ -1,0 +1,61 @@
+<% content_for(:title){ "Invoice ##{@invoice.id.to_s.rjust(5, '0')}" } %>
+
+<table class="key-value">
+  <tr>
+    <td>Date</td>
+    <td>
+      <%= @invoice.created_on.to_s(:short_date) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Household</td>
+    <td>
+      <%= @invoice.household.full_name %>
+    </td>
+  </tr>
+  <tr>
+    <td>Payment Due Date</td>
+    <td>
+      <strong><%= @invoice.due_on.to_s(:short_date) %></strong>
+    </td>
+  </tr>
+</table>
+
+<table class="index">
+  <tr>
+    <th class="col-md-1">Date</th>
+    <th class="col-md-1">Type</th>
+    <th class="col-md-4">Description</th>
+    <th class="col-md-1">Amount</th>
+  </tr>
+  <tr>
+    <td class="col-md-1"></td>
+    <td class="col-md-1"></td>
+    <td class="col-md-4">Previous balance</td>
+    <td class="col-md-1">
+      <%= number_to_currency(@invoice.prev_balance) %>
+      <%= "CR" if @invoice.prev_balance < 0 %>
+    </td>
+  </tr>
+  <% @invoice.line_items.each do |li| %>
+    <tr>
+      <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
+      <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
+      <td class="col-md-4">
+        <% if li.invoiceable.present? %>
+          <%= link_to(li.description, polymorphic_path(li.invoiceable)) %>
+        <% else %>
+          <%= li.description %>
+        <% end %>
+      </td>
+      <td class="col-md-1">
+        <%= number_to_currency(li.amount.abs) %>
+        <%= "CR" if li.credit? %>
+      </td>
+    </tr>
+  <% end %>
+  <tr class="total">
+    <td class="col-md-6" colspan="3">Total</td>
+    <td class="col-md-1"><%= number_to_currency(@invoice.total_due) %></td>
+  </tr>
+</table>

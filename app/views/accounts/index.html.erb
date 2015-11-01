@@ -25,7 +25,7 @@
           <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
         </td>
         <td class="col-md-1">
-          <%= number_to_currency(account.due_last_invoice) || "N/A" %>
+          <%= invoice_amount(account.last_invoice) %>
         </td>
         <td class="col-md-1">
           <%= number_to_currency(account.total_new_credits) %>

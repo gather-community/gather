@@ -1,0 +1,15 @@
+.invoices {
+  table.key-value {
+    margin-bottom: 30px;
+  }
+
+  tr.total {
+    td {
+      font-weight: bold;
+
+      &:first-of-type {
+        text-align: right;
+      }
+    }
+  }
+}

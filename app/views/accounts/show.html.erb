@@ -10,7 +10,7 @@
   <tr>
     <td>Last Invoice Amount</td>
     <td>
-      <%= number_to_currency(@account.due_last_invoice) || "N/A" %>
+      <%= invoice_amount(@account.last_invoice) %>
     </td>
   </tr>
   <tr>

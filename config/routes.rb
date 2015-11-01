@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   end
 
   resources :accounts, only: [:index, :show]
+  resources :invoices, only: [:show]
 
   get "ping", to: "home#ping"
 

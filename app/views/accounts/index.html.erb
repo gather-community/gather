@@ -1,5 +1,17 @@
 <% content_for(:title){ "Accounts" } %>
 
+<% content_for(:top_buttons) do %>
+  <strong>
+    There are <%= @nonzero_accounts %> accounts owing a total of <%= currency_with_cr(@grand_total_due) %>.
+    <% unless @nonzero_accounts == 0 %>
+      &nbsp;
+      <%= link_to(icon_tag("send") << " Generate Invoices", generate_invoices_path,
+        method: :post, class: "btn btn-primary",
+        data: { confirm: "Are you sure? Invoices will be sent out to #{@nonzero_accounts} people."}) %>
+    <% end %>
+  </strong>
+<% end %>
+
 <% if @households.empty? %>
   <div class="none-found">
     No accounts found.

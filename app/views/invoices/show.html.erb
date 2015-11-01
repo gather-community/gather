@@ -32,10 +32,7 @@
     <td class="col-md-1"></td>
     <td class="col-md-1"></td>
     <td class="col-md-4">Previous balance</td>
-    <td class="col-md-1">
-      <%= number_to_currency(@invoice.prev_balance) %>
-      <%= "CR" if @invoice.prev_balance < 0 %>
-    </td>
+    <td class="col-md-1"><%= currency_with_cr(@invoice.prev_balance) %></td>
   </tr>
   <% @invoice.line_items.each do |li| %>
     <tr>
@@ -48,10 +45,7 @@
           <%= li.description %>
         <% end %>
       </td>
-      <td class="col-md-1">
-        <%= number_to_currency(li.amount.abs) %>
-        <%= "CR" if li.credit? %>
-      </td>
+      <td class="col-md-1"><%= currency_with_cr(li.amount) %></td>
     </tr>
   <% end %>
   <tr class="total">

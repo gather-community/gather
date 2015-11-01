@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101192022) do
+ActiveRecord::Schema.define(version: 20151101215524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20151101192022) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "accounts", ["community_id", "household_id"], name: "index_accounts_on_community_id_and_household_id", unique: true, using: :btree
   add_index "accounts", ["community_id"], name: "index_accounts_on_community_id", using: :btree
   add_index "accounts", ["household_id"], name: "index_accounts_on_household_id", using: :btree
 

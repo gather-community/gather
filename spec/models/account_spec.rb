@@ -9,12 +9,16 @@ RSpec.describe Account, type: :model do
       create(:line_item, household: account.household, amount: 6)
       expect(account.reload.total_new_credits).to eq 4
       expect(account.total_new_charges).to eq 13
+      expect(account.balance_due).to eq 4.81
+      expect(account.current_balance).to eq 17.81
     end
 
     it "should work for new credit" do
       create(:line_item, household: account.household, amount: -6)
       expect(account.reload.total_new_credits).to eq 10
       expect(account.total_new_charges).to eq 7
+      expect(account.balance_due).to eq -1.19
+      expect(account.current_balance).to eq 5.81
     end
   end
 
@@ -26,6 +30,8 @@ RSpec.describe Account, type: :model do
       expect(account.last_invoice).to eq invoice
       expect(account.total_new_credits).to eq 0
       expect(account.total_new_charges).to eq 0
+      expect(account.balance_due).to eq 9.99
+      expect(account.current_balance).to eq 9.99
     end
   end
 
@@ -56,6 +62,8 @@ RSpec.describe Account, type: :model do
       expect(account.last_invoice).to be_nil
       expect(account.total_new_credits).to eq 0
       expect(account.total_new_charges).to eq 0
+      expect(account.balance_due).to eq 0
+      expect(account.current_balance).to eq 0
     end
   end
 end

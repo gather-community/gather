@@ -11,13 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101144153) do
+ActiveRecord::Schema.define(version: 20151101170932) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
+    t.decimal "balance_due", precision: 10, scale: 3, default: 0.0, null: false
     t.datetime "created_at", null: false
+    t.decimal "current_balance", precision: 10, scale: 3, default: 0.0, null: false
     t.decimal "due_last_invoice", precision: 10, scale: 2
     t.integer "household_id", null: false
     t.integer "last_invoice_id"

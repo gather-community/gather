@@ -3,5 +3,14 @@
     table.key-value {
       margin-bottom: 20px;
     }
+
+    form {
+      margin-bottom: 20px;
+
+      select {
+        display: inline-block;
+        width: 200px;
+      }
+    }
   }
 }

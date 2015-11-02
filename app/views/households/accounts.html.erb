@@ -10,47 +10,56 @@
     <%= t(".intro", count: @accounts.size) %>
   </p>
 
-  <% @accounts.each do |account| %>
-    <h4>
-      Account for <%= account.community.name %>
-    </h4>
-
-    <table class="key-value">
-      <tr>
-        <td>Last Statement Date</td>
-        <td>
-          <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
-        </td>
-      </tr>
-      <tr>
-        <td>Last Statement Amount</td>
-        <td>
-          <%= statement_amount(account.last_statement) %>
-        </td>
-      </tr>
-      <tr>
-        <td>New Payments/Credits</td>
-        <td>
-          <%= number_to_currency(account.total_new_credits) %>
-        </td>
-      </tr>
-      <tr>
-        <td>Balance Due</td>
-        <td>
-          <%= number_to_currency(account.balance_due) %>
-          <% if account.balance_due >= 0.01 %>
-            <strong>*</strong>
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td>Due Date</td>
-        <td>
-          <%= account.last_statement_due_on.try(:to_s, :short_date) || "N/A" %>
-        </td>
-      </tr>
-    </table>
+  <% if @accounts.size > 1 %>
+    <form>
+      Select Community:
+      <%= select_tag(:community,
+        options_from_collection_for_select(@communities, :id, :name, @account.community_id),
+        class: "form-control", onchange: "this.form.submit()") %>
+    </form>
   <% end %>
 
-  <strong>*</strong> <small>If you have already sent payment, please disregard.</small>
+  <h4>
+    Account for <%= @account.community.name %>
+  </h4>
+
+  <table class="key-value">
+    <tr>
+      <td>Last Statement Date</td>
+      <td>
+        <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+      </td>
+    </tr>
+    <tr>
+      <td>Last Statement Amount</td>
+      <td>
+        <%= statement_amount(@account.last_statement) %>
+      </td>
+    </tr>
+    <tr>
+      <td>New Payments/Credits</td>
+      <td>
+        <%= number_to_currency(@account.total_new_credits) %>
+      </td>
+    </tr>
+    <tr>
+      <td>Balance Due</td>
+      <td>
+        <%= number_to_currency(@account.balance_due) %>
+        <% if @account.balance_due >= 0.01 %>
+          <strong>*</strong>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Due Date</td>
+      <td>
+        <%= @account.last_statement_due_on.try(:to_s, :short_date) || "N/A" %>
+      </td>
+    </tr>
+  </table>
+
+  <% if @account.balance_due >= 0.01 %>
+    <strong>*</strong> <small>If you have already sent payment, please disregard.</small>
+  <% end %>
 <% end %>

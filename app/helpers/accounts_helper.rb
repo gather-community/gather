@@ -1,6 +1,6 @@
 module AccountsHelper
-  def invoice_amount(invoice)
-    invoice.nil? ? "N/A" : link_to(number_to_currency(invoice.total_due), invoice)
+  def statement_amount(statement)
+    statement.nil? ? "N/A" : link_to(number_to_currency(statement.total_due), statement)
   end
 
   def currency_with_cr(amount)

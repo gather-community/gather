@@ -1,7 +1,7 @@
-class Invoice < ActiveRecord::Base
+class Statement < ActiveRecord::Base
   TERMS = 30 # days
 
-  belongs_to :account, inverse_of: :invoices
+  belongs_to :account, inverse_of: :statements
   has_many :line_items, ->{ order(:incurred_on) }, dependent: :nullify
 
   scope :for_community, ->(c){ joins(account: :household).where("households.community_id = ?", c.id) }
@@ -11,12 +11,12 @@ class Invoice < ActiveRecord::Base
   delegate :community_id, :household, :household_full_name, to: :account
 
   after_create do
-    account.invoice_added!(self)
+    account.statement_added!(self)
   end
 
   before_destroy do
-    if account.last_invoice_id == id
-      account.last_invoice = nil
+    if account.last_statement_id == id
+      account.last_statement = nil
       account.save!
     end
   end
@@ -25,15 +25,15 @@ class Invoice < ActiveRecord::Base
     account.recalculate!
   end
 
-  # Populates the invoice with available line items.
-  # Raises InvoiceError unless the balance is nonzero or there are any line items.
+  # Populates the statement with available line items.
+  # Raises StatementError unless the balance is nonzero or there are any line items.
   def populate!
-    self.line_items = LineItem.where(account: account).uninvoiced.to_a
+    self.line_items = LineItem.where(account: account).no_statement.to_a
     self.due_on = Date.today + TERMS
     self.total_due = prev_balance + line_items.map(&:amount).sum
 
     if line_items.empty? && total_due.abs < 0.01
-      raise InvoiceError.new("Must have line items or a total due.")
+      raise StatementError.new("Must have line items or a total due.")
     else
       save!
     end
@@ -44,4 +44,4 @@ class Invoice < ActiveRecord::Base
   end
 end
 
-class InvoiceError < StandardError; end
+class StatementError < StandardError; end

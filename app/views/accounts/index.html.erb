@@ -4,9 +4,9 @@
   <strong>
     <% unless @active_accounts == 0 %>
       &nbsp;
-      <%= link_to(icon_tag("send") << " Send Invoices", generate_invoices_path,
+      <%= link_to(icon_tag("send") << " Send Statements", generate_statements_path,
         method: :post, class: "btn btn-primary",
-        data: { confirm: "Are you sure? Invoices will be sent out to #{@active_accounts} households."}) %>
+        data: { confirm: "Are you sure? Statements will be sent out to #{@active_accounts} households."}) %>
     <% end %>
   </strong>
 <% end %>
@@ -19,10 +19,10 @@
   <p class="subtitle">
     <%= t(".summary", count: @active_accounts, amount: currency_with_cr(@grand_total_due)) %>
 
-    <% if @last_invoice_run.present? %>
-      <%= t(".last_invoice_run", date: @last_invoice_run.to_s(:short_date)) %>
+    <% if @last_statement_run.present? %>
+      <%= t(".last_statement_run", date: @last_statement_run.to_s(:short_date)) %>
     <% else %>
-      <%= t(".invoices_never_run") %>
+      <%= t(".statements_never_run") %>
     <% end %>
   </p>
 
@@ -42,10 +42,10 @@
           <%= link_to(account.household_full_name, account.household) %>
         </td>
         <td class="col-md-1">
-          <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
+          <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
         </td>
         <td class="col-md-1">
-          <%= invoice_amount(account.last_invoice) %>
+          <%= statement_amount(account.last_statement) %>
         </td>
         <td class="col-md-1">
           <%= number_to_currency(account.total_new_credits) %>

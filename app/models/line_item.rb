@@ -1,10 +1,10 @@
 class LineItem < ActiveRecord::Base
   belongs_to :account
-  belongs_to :invoice
-  belongs_to :invoiceable, polymorphic: true
+  belongs_to :statement
+  belongs_to :statementable, polymorphic: true
 
   scope :incurred_between, ->(a,b){ where("incurred_on >= ? AND incurred_on <= ?", a, b) }
-  scope :uninvoiced, ->{ where(invoice_id: nil) }
+  scope :no_statement, ->{ where(statement_id: nil) }
   scope :credit, ->{ where("amount < 0") }
   scope :charge, ->{ where("amount > 0") }
 
@@ -13,7 +13,7 @@ class LineItem < ActiveRecord::Base
   end
 
   after_destroy do
-    account.recalculate! if invoice_id.nil?
+    account.recalculate! if statement_id.nil?
   end
 
   validate :nonzero

@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   end
 
   resources :accounts, only: [:index, :show]
-  resources :invoices, only: [:show] do
+  resources :statements, only: [:show] do
     collection do
       post :generate
     end

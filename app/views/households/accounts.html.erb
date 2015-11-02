@@ -17,15 +17,15 @@
 
     <table class="key-value">
       <tr>
-        <td>Last Invoice Date</td>
+        <td>Last Statement Date</td>
         <td>
-          <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>
+          <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
         </td>
       </tr>
       <tr>
-        <td>Last Invoice Amount</td>
+        <td>Last Statement Amount</td>
         <td>
-          <%= invoice_amount(account.last_invoice) %>
+          <%= statement_amount(account.last_statement) %>
         </td>
       </tr>
       <tr>
@@ -46,7 +46,7 @@
       <tr>
         <td>Due Date</td>
         <td>
-          <%= account.last_invoice_due_on.try(:to_s, :short_date) || "N/A" %>
+          <%= account.last_statement_due_on.try(:to_s, :short_date) || "N/A" %>
         </td>
       </tr>
     </table>

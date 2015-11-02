@@ -24,11 +24,11 @@ class NotificationMailer < ActionMailer::Base
       "Work Reminder: You are #{@role} for meal at #{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
   end
 
-  def invoice_notice(invoice)
-    @invoice = invoice
-    @account = invoice.account
-    @household = invoice.household
+  def statement_notice(statement)
+    @statement = statement
+    @account = statement.account
+    @household = statement.household
 
-    mail(to: @household.users.map(&:email), subject: "New Invoice")
+    mail(to: @household.users.map(&:email), subject: "New Account Statement")
   end
 end

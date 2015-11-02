@@ -1,22 +1,22 @@
-<% content_for(:title){ "Invoice ##{@invoice.id.to_s.rjust(5, '0')}" } %>
+<% content_for(:title){ "Account Statement ##{@statement.id.to_s.rjust(5, '0')}" } %>
 
 <table class="key-value">
   <tr>
     <td>Date</td>
     <td>
-      <%= @invoice.created_on.to_s(:short_date) %>
+      <%= @statement.created_on.to_s(:short_date) %>
     </td>
   </tr>
   <tr>
     <td>Household</td>
     <td>
-      <%= @invoice.household_full_name %>
+      <%= @statement.household_full_name %>
     </td>
   </tr>
   <tr>
     <td>Payment Due Date</td>
     <td>
-      <strong><%= @invoice.due_on.to_s(:short_date) %></strong>
+      <strong><%= @statement.due_on.to_s(:short_date) %></strong>
     </td>
   </tr>
 </table>
@@ -32,22 +32,22 @@
     <td class="col-md-1"></td>
     <td class="col-md-1"></td>
     <td class="col-md-4">Previous balance</td>
-    <td class="col-md-1"><%= currency_with_cr(@invoice.prev_balance) %></td>
+    <td class="col-md-1"><%= currency_with_cr(@statement.prev_balance) %></td>
   </tr>
-  <% if @invoice.line_items.empty? %>
+  <% if @statement.line_items.empty? %>
     <tr>
       <td class="col-md-7 no-items" colspan="4">
         There are no new charges or credits on this statement. Please pay the outstanding balance below. Thanks!
       </td>
     </tr>
   <% else %>
-    <% @invoice.line_items.each do |li| %>
+    <% @statement.line_items.each do |li| %>
       <tr>
         <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
         <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
         <td class="col-md-4">
-          <% if li.invoiceable.present? %>
-            <%= link_to(li.description, polymorphic_path(li.invoiceable)) %>
+          <% if li.statementable.present? %>
+            <%= link_to(li.description, polymorphic_path(li.statementable)) %>
           <% else %>
             <%= li.description %>
           <% end %>
@@ -58,6 +58,6 @@
   <% end %>
   <tr class="total">
     <td class="col-md-6" colspan="3">Total Due</td>
-    <td class="col-md-1"><%= number_to_currency(@invoice.total_due) %></td>
+    <td class="col-md-1"><%= number_to_currency(@statement.total_due) %></td>
   </tr>
 </table>

@@ -64,8 +64,8 @@ class Household < ActiveRecord::Base
     accounts.any?{ |a| a.line_items.any? }
   end
 
-  def any_invoices?
-    accounts.any?{ |a| a.invoices.any? }
+  def any_statements?
+    accounts.any?{ |a| a.statements.any? }
   end
 
   def from_grot?

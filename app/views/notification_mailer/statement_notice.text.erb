@@ -1,0 +1,9 @@
+Dear <%= @household.name %> Household,
+
+A new statement has been created in MESS for your <%= @account.community.name %> account.
+
+Please visit the link below to see the details:
+
+<%= statement_url(@statement) %>
+
+Thanks for your prompt payment!

@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = @accounts.joins(:household).
-      includes(:last_invoice, household: :community).
+      includes(:last_statement, household: :community).
       for_community(current_user.community).
       where("households.deactivated_at IS NULL OR current_balance >= 0.01").
       by_household_full_name.
@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
     @grand_total_due = Account.for_community(current_user.community).sum("current_balance")
     @active_accounts = Account.for_community(current_user.community).with_recent_activity.count
 
-    last_invoice = Invoice.for_community(current_user.community).order(:created_at).last
-    @last_invoice_run = last_invoice.try(:created_on)
+    last_statement = Statement.for_community(current_user.community).order(:created_at).last
+    @last_statement_run = last_statement.try(:created_on)
   end
 end

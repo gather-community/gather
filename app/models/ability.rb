@@ -24,20 +24,20 @@ class Ability
     end
 
 
-    # Can see all accounts and invoices if biller or admin.
+    # Can see all accounts and statements if biller or admin.
     if user.admin? || user.biller?
       can :read, Household
       can :manage, Account, Account.for_community_or_household(user.community, user.household) do |account|
         account.community_id == user.community_id || account.household_id == user.household_id
       end
-      can :manage, Invoice, Invoice.for_community_or_household(user.community, user.household) do |invoice|
-        invoice.community_id == user.community_id || invoice.household_id == user.household_id
+      can :manage, Statement, Statement.for_community_or_household(user.community, user.household) do |statement|
+        statement.community_id == user.community_id || statement.household_id == user.household_id
       end
     else
-      # Can see own accounts and invoices.
+      # Can see own accounts and statements.
       can :accounts, Household, id: user.household_id
       can :read, Account, household_id: user.household_id
-      can :read, Invoice, household_id: user.household_id
+      can :read, Statement, household_id: user.household_id
     end
 
     if user.admin?
@@ -61,7 +61,7 @@ class Ability
     end
 
     cannot :destroy, Household do |h|
-      h.any_assignments? || h.any_signups? || h.any_users? || h.any_line_items? || h.any_invoices?
+      h.any_assignments? || h.any_signups? || h.any_users? || h.any_line_items? || h.any_statements?
     end
 
     cannot :summary, Meal do |m|

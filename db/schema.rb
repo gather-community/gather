@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101215524) do
+ActiveRecord::Schema.define(version: 20151102023645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(version: 20151101215524) do
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.decimal "current_balance", precision: 10, scale: 3, default: 0.0, null: false
-    t.decimal "due_last_invoice", precision: 10, scale: 2
+    t.decimal "due_last_statement", precision: 10, scale: 2
     t.integer "household_id", null: false
-    t.integer "last_invoice_id"
-    t.date "last_invoiced_on"
+    t.integer "last_statement_id"
+    t.date "last_statement_on"
     t.decimal "total_new_charges", precision: 10, scale: 2, default: 0.0, null: false
     t.decimal "total_new_credits", precision: 10, scale: 2, default: 0.0, null: false
     t.datetime "updated_at", null: false
@@ -134,18 +134,6 @@ ActiveRecord::Schema.define(version: 20151101215524) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
-  create_table "invoices", force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.datetime "created_at", null: false
-    t.date "due_on", null: false
-    t.decimal "prev_balance", precision: 10, scale: 3, null: false
-    t.decimal "total_due", precision: 10, scale: 3, null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "invoices", ["account_id"], name: "index_invoices_on_account_id", using: :btree
-  add_index "invoices", ["due_on"], name: "index_invoices_on_due_on", using: :btree
-
   create_table "line_items", force: :cascade do |t|
     t.integer "account_id", null: false
     t.decimal "amount", precision: 10, scale: 3, null: false
@@ -153,17 +141,17 @@ ActiveRecord::Schema.define(version: 20151101215524) do
     t.datetime "created_at", null: false
     t.string "description", limit: 255, null: false
     t.date "incurred_on", null: false
-    t.integer "invoice_id"
-    t.integer "invoiceable_id"
-    t.string "invoiceable_type", limit: 32
+    t.integer "statement_id"
+    t.integer "statementable_id"
+    t.string "statementable_type", limit: 32
     t.datetime "updated_at", null: false
   end
 
   add_index "line_items", ["account_id"], name: "index_line_items_on_account_id", using: :btree
   add_index "line_items", ["code"], name: "index_line_items_on_code", using: :btree
   add_index "line_items", ["incurred_on"], name: "index_line_items_on_incurred_on", using: :btree
-  add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
-  add_index "line_items", ["invoiceable_id", "invoiceable_type"], name: "index_line_items_on_invoiceable_id_and_invoiceable_type", using: :btree
+  add_index "line_items", ["statement_id"], name: "index_line_items_on_statement_id", using: :btree
+  add_index "line_items", ["statementable_id", "statementable_type"], name: "index_line_items_on_statementable_id_and_statementable_type", using: :btree
 
   create_table "locations", force: :cascade do |t|
     t.string "abbrv", limit: 8, null: false
@@ -220,6 +208,18 @@ ActiveRecord::Schema.define(version: 20151101215524) do
   add_index "signups", ["meal_id"], name: "index_signups_on_meal_id", using: :btree
   add_index "signups", ["notified"], name: "index_signups_on_notified", using: :btree
 
+  create_table "statements", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.datetime "created_at", null: false
+    t.date "due_on", null: false
+    t.decimal "prev_balance", precision: 10, scale: 3, null: false
+    t.decimal "total_due", precision: 10, scale: 3, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "statements", ["account_id"], name: "index_statements_on_account_id", using: :btree
+  add_index "statements", ["due_on"], name: "index_statements_on_due_on", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
     t.string "alternate_id"
@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 20151101215524) do
 
   add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
-  add_foreign_key "accounts", "invoices", column: "last_invoice_id"
+  add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
   add_foreign_key "credit_limits", "communities"
@@ -265,12 +265,12 @@ ActiveRecord::Schema.define(version: 20151101215524) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
-  add_foreign_key "invoices", "accounts"
   add_foreign_key "line_items", "accounts"
-  add_foreign_key "line_items", "invoices"
+  add_foreign_key "line_items", "statements"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"
+  add_foreign_key "statements", "accounts"
   add_foreign_key "users", "households"
 end

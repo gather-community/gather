@@ -11,5 +11,8 @@ class AccountsController < ApplicationController
 
     @grand_total_due = Account.for_community(current_user.community).sum("current_balance")
     @active_accounts = Account.for_community(current_user.community).with_recent_activity.count
+
+    last_invoice = Invoice.for_community(current_user.community).order(:created_at).last
+    @last_invoice_run = last_invoice.try(:created_on)
   end
 end

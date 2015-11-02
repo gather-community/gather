@@ -6,7 +6,7 @@ class Household < ActiveRecord::Base
   has_many :accounts, ->{ joins(:community).includes(:community).order("communities.name") },
     inverse_of: :household
   has_many :signups
-  has_many :users
+  has_many :users, ->{ by_name }
 
   scope :by_name, -> { order("households.name") }
   scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }

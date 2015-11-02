@@ -125,6 +125,8 @@ en:
       summary:
         one: "There is one account with current activity owing a total of %{amount}."
         other: "There are %{count} accounts with current activity owing a total of %{amount}."
+      last_invoice_run: "Invoices were last sent out on %{date}."
+      invoices_never_run: "Invoices have never been sent out."
 
   households:
     accounts:

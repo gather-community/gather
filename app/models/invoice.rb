@@ -4,7 +4,9 @@ class Invoice < ActiveRecord::Base
   belongs_to :account, inverse_of: :invoices
   has_many :line_items, ->{ order(:incurred_on) }, dependent: :nullify
 
-  scope :for_community, ->(c){ includes(:household).where("households.community_id = ?", c.id) }
+  scope :for_community, ->(c){ joins(account: :household).where("households.community_id = ?", c.id) }
+  scope :for_community_or_household,
+    ->(c,h){ joins(account: :household).where("households.community_id = ? OR households.id = ?", c.id, h.id) }
 
   delegate :community_id, :household, :household_full_name, to: :account
 

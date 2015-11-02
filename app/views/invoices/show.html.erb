@@ -34,22 +34,30 @@
     <td class="col-md-4">Previous balance</td>
     <td class="col-md-1"><%= currency_with_cr(@invoice.prev_balance) %></td>
   </tr>
-  <% @invoice.line_items.each do |li| %>
+  <% if @invoice.line_items.empty? %>
     <tr>
-      <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
-      <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
-      <td class="col-md-4">
-        <% if li.invoiceable.present? %>
-          <%= link_to(li.description, polymorphic_path(li.invoiceable)) %>
-        <% else %>
-          <%= li.description %>
-        <% end %>
+      <td class="col-md-7 no-items" colspan="4">
+        There are no new charges or credits on this statement. Please pay the outstanding balance below. Thanks!
       </td>
-      <td class="col-md-1"><%= currency_with_cr(li.amount) %></td>
     </tr>
+  <% else %>
+    <% @invoice.line_items.each do |li| %>
+      <tr>
+        <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
+        <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
+        <td class="col-md-4">
+          <% if li.invoiceable.present? %>
+            <%= link_to(li.description, polymorphic_path(li.invoiceable)) %>
+          <% else %>
+            <%= li.description %>
+          <% end %>
+        </td>
+        <td class="col-md-1"><%= currency_with_cr(li.amount) %></td>
+      </tr>
+    <% end %>
   <% end %>
   <tr class="total">
-    <td class="col-md-6" colspan="3">Total</td>
+    <td class="col-md-6" colspan="3">Total Due</td>
     <td class="col-md-1"><%= number_to_currency(@invoice.total_due) %></td>
   </tr>
 </table>

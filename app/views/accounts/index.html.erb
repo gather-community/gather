@@ -2,12 +2,11 @@
 
 <% content_for(:top_buttons) do %>
   <strong>
-    <%= t(".summary", count: @active_accounts, amount: currency_with_cr(@grand_total_due)) %>
     <% unless @active_accounts == 0 %>
       &nbsp;
-      <%= link_to(icon_tag("send") << " Generate Invoices", generate_invoices_path,
+      <%= link_to(icon_tag("send") << " Send Invoices", generate_invoices_path,
         method: :post, class: "btn btn-primary",
-        data: { confirm: "Are you sure? Invoices will be sent out to #{@active_accounts} people."}) %>
+        data: { confirm: "Are you sure? Invoices will be sent out to #{@active_accounts} households."}) %>
     <% end %>
   </strong>
 <% end %>
@@ -17,12 +16,22 @@
     No accounts found.
   </div>
 <% else %>
+  <p class="subtitle">
+    <%= t(".summary", count: @active_accounts, amount: currency_with_cr(@grand_total_due)) %>
+
+    <% if @last_invoice_run.present? %>
+      <%= t(".last_invoice_run", date: @last_invoice_run.to_s(:short_date)) %>
+    <% else %>
+      <%= t(".invoices_never_run") %>
+    <% end %>
+  </p>
+
   <table class="index">
     <tr>
       <th class="col-md-2">Household</th>
       <th class="col-md-1">Last Inv. Date</th>
       <th class="col-md-1">Due Last Inv.</th>
-      <th class="col-md-1">Payments</th>
+      <th class="col-md-1">New Credits</th>
       <th class="col-md-1">Balance Due</th>
       <th class="col-md-1">New Charges</th>
       <th class="col-md-1">Current Balance</th>
@@ -30,7 +39,7 @@
     <% @accounts.each do |account| %>
       <tr>
         <td class="col-md-2">
-          <%= link_to(account.household_full_name, accounts_household_path(account.household)) %>
+          <%= link_to(account.household_full_name, account.household) %>
         </td>
         <td class="col-md-1">
           <%= account.last_invoiced_on.try(:to_s, :short_date) || "N/A" %>

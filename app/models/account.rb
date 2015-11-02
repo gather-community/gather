@@ -6,6 +6,8 @@ class Account < ActiveRecord::Base
   has_many :line_items
 
   scope :for_community, ->(c){ where(community_id: c.id) }
+  scope :for_community_or_household,
+    ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
 
   delegate :name, :full_name, to: :household, prefix: true
   delegate :due_on, to: :last_invoice, prefix: true, allow_nil: true

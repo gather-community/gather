@@ -1,16 +1,14 @@
-<% content_for(:title){ @is_self ? "Accounts" : "Accounts: #{@household.name}" } %>
+<% content_for(:title){ "Accounts" } %>
 
 <% if @accounts.empty? %>
 
-  There are not yet any charges associated with <%= @is_self ? "your" : "this" %> household.
+  There are not yet any charges associated with your household.
 
 <% else %>
 
-  <% if @is_self %>
-    <p class="subtitle">
-      <%= t(".intro", count: @accounts.size) %>
-    </p>
-  <% end %>
+  <p class="subtitle">
+    <%= t(".intro", count: @accounts.size) %>
+  </p>
 
   <% @accounts.each do |account| %>
     <h4>
@@ -31,7 +29,7 @@
         </td>
       </tr>
       <tr>
-        <td>Payments</td>
+        <td>New Payments/Credits</td>
         <td>
           <%= number_to_currency(account.total_new_credits) %>
         </td>
@@ -40,6 +38,9 @@
         <td>Balance Due</td>
         <td>
           <%= number_to_currency(account.balance_due) %>
+          <% if account.balance_due >= 0.01 %>
+            <strong>*</strong>
+          <% end %>
         </td>
       </tr>
       <tr>
@@ -51,4 +52,5 @@
     </table>
   <% end %>
 
+  <strong>*</strong> <small>If you have already sent payment, please disregard.</small>
 <% end %>

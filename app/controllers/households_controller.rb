@@ -14,6 +14,9 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  def show
+  end
+
   def create
     if @household.save
       flash[:success] = "Household created successfully."
@@ -41,7 +44,6 @@ class HouseholdsController < ApplicationController
   end
 
   def accounts
-    @is_self = @household.id == current_user.household_id
     @accounts = @household.accounts.accessible_by(current_ability)
   end
 

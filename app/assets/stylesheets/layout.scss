@@ -65,8 +65,16 @@ nav.navbar {
       }
     }
 
-    .dropdown-menu a {
-      color: $main-text-color;
+    .dropdown-menu {
+      a {
+        color: $main-text-color;
+      }
+
+      i {
+        width: 20px;
+        display: inline-block;
+        text-align: center;
+      }
     }
 
     @media screen and (min-width: $grid-float-breakpoint) {

@@ -19,9 +19,7 @@
     </form>
   <% end %>
 
-  <h4>
-    Account for <%= @account.community.name %>
-  </h4>
+  <h4><%= @account.community.name %>: Account Overview</h4>
 
   <table class="key-value">
     <tr>
@@ -55,5 +53,18 @@
 
   <% if @account.balance_due >= 0.01 %>
     <strong>*</strong> <small>If you have already sent payment, please disregard.</small>
+  <% end %>
+
+  <% if @statements.any? %>
+    <h4><%= @account.community.name %>: Past Statements</h4>
+
+    <table class="index">
+      <tr>
+        <th class="col-md-1">Date</th>
+        <th class="col-md-1">New Activity</th>
+        <th class="col-md-1">Total Due</th>
+      </tr>
+      <%= render("statement_rows") %>
+    </table>
   <% end %>
 <% end %>

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :statements, only: [:show] do
     collection do
       post :generate
+      get :more
     end
   end
 

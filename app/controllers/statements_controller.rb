@@ -9,4 +9,11 @@ class StatementsController < ApplicationController
     flash[:success] = "Statement generation started."
     redirect_to(accounts_path)
   end
+
+  def more
+    @account = Account.find(params[:account_id])
+    authorize!(:read, @account)
+    @statements = @account.statements.page(params[:page])
+    render(partial: "households/statement_rows")
+  end
 end

@@ -1,0 +1,19 @@
+<% @statements.each do |statement| %>
+  <tr>
+    <td class="col-md-1"><%= statement.created_on.to_s(:short_date) %></td>
+    <td class="col-md-1"><%= currency_with_cr(statement.new_charges) %></td>
+    <td class="col-md-1"><%= link_to(currency_with_cr(statement.total_due), statement) %></td>
+  </tr>
+<% end %>
+<% unless @statements.last_page? %>
+  <tr id="load-more">
+    <td class="col-md-3" colspan="3">
+      <%= link_to("Load More...", "#",
+        onclick: "
+          var url = '/statements/more?account_id=#{@account.id}&page=#{(params[:page] || 1).to_i + 1}';
+          $('#load-more td').html('Loading...');
+          $.get(url, null, function(html){ $('#load-more').replaceWith(html); });
+          return false;") %>
+    </td>
+  </tr>
+<% end %>

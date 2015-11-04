@@ -1,9 +1,5 @@
 .households {
   &.action-accounts {
-    table.key-value {
-      margin-bottom: 20px;
-    }
-
     form {
       margin-bottom: 20px;
 
@@ -11,6 +7,18 @@
         display: inline-block;
         width: 200px;
       }
+    }
+
+    table.key-value {
+      margin-bottom: 5px;
+    }
+
+    table.index {
+      width: 600px;
+    }
+
+    h4:last-of-type {
+      margin-top: 20px;
     }
   }
 }

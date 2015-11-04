@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104005920) do
+ActiveRecord::Schema.define(version: 20151104010524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20151104005920) do
   end
 
   add_index "statements", ["account_id"], name: "index_statements_on_account_id", using: :btree
+  add_index "statements", ["created_at"], name: "index_statements_on_created_at", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false

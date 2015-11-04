@@ -8,6 +8,8 @@ class Statement < ActiveRecord::Base
 
   delegate :community_id, :household, :household_full_name, to: :account
 
+  paginates_per 10
+
   after_create do
     account.statement_added!(self)
   end
@@ -34,6 +36,10 @@ class Statement < ActiveRecord::Base
     else
       save!
     end
+  end
+
+  def new_charges
+    total_due - prev_balance
   end
 
   def created_on

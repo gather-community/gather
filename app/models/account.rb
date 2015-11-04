@@ -2,7 +2,7 @@ class Account < ActiveRecord::Base
   belongs_to :household, inverse_of: :accounts
   belongs_to :community
   belongs_to :last_statement, class_name: "Statement"
-  has_many :statements
+  has_many :statements, ->{ order(created_at: :desc) }
   has_many :line_items
 
   scope :for_community, ->(c){ where(community_id: c.id) }

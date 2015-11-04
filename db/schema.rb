@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102023645) do
+ActiveRecord::Schema.define(version: 20151104005920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -211,14 +211,12 @@ ActiveRecord::Schema.define(version: 20151102023645) do
   create_table "statements", force: :cascade do |t|
     t.integer "account_id", null: false
     t.datetime "created_at", null: false
-    t.date "due_on", null: false
     t.decimal "prev_balance", precision: 10, scale: 3, null: false
     t.decimal "total_due", precision: 10, scale: 3, null: false
     t.datetime "updated_at", null: false
   end
 
   add_index "statements", ["account_id"], name: "index_statements_on_account_id", using: :btree
-  add_index "statements", ["due_on"], name: "index_statements_on_due_on", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false

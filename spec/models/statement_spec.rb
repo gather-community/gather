@@ -17,7 +17,6 @@ RSpec.describe Statement, type: :model do
       statement.reload
       expect(statement.line_items.sort_by(&:id)).to eq [item2, item3, item4]
       expect(statement.total_due).to eq 10.23
-      expect(statement.due_on).to eq Date.today + Statement::TERMS
     end
 
     it "should not raise if there are no relevant line items but balance is nonzero" do

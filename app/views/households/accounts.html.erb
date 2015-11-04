@@ -51,12 +51,6 @@
         <% end %>
       </td>
     </tr>
-    <tr>
-      <td>Due Date</td>
-      <td>
-        <%= @account.last_statement_due_on.try(:to_s, :short_date) || "N/A" %>
-      </td>
-    </tr>
   </table>
 
   <% if @account.balance_due >= 0.01 %>

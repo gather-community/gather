@@ -1,6 +1,4 @@
 class Statement < ActiveRecord::Base
-  TERMS = 30 # days
-
   belongs_to :account, inverse_of: :statements
   has_many :line_items, ->{ order(:incurred_on) }, dependent: :nullify
 
@@ -29,7 +27,6 @@ class Statement < ActiveRecord::Base
   # Raises StatementError unless the balance is nonzero or there are any line items.
   def populate!
     self.line_items = LineItem.where(account: account).no_statement.to_a
-    self.due_on = Date.today + TERMS
     self.total_due = prev_balance + line_items.map(&:amount).sum
 
     if line_items.empty? && total_due.abs < 0.01

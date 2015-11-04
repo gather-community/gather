@@ -8,6 +8,12 @@
     </td>
   </tr>
   <tr>
+    <td>Previous Statement Date</td>
+    <td>
+      <%= @statement.prev_stmt_on.try(:to_s, :short_date) || "None" %>
+    </td>
+  </tr>
+  <tr>
     <td>Household</td>
     <td>
       <%= @statement.household_full_name %>

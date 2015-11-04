@@ -30,6 +30,7 @@ class Statement < ActiveRecord::Base
   def populate!
     self.line_items = LineItem.where(account: account).no_statement.to_a
     self.total_due = prev_balance + line_items.map(&:amount).sum
+    self.prev_stmt_on = account.last_statement.try(:created_on)
 
     if line_items.empty? && total_due.abs < 0.01
       raise StatementError.new("Must have line items or a total due.")

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104010524) do
+ActiveRecord::Schema.define(version: 20151104020348) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -212,6 +212,7 @@ ActiveRecord::Schema.define(version: 20151104010524) do
     t.integer "account_id", null: false
     t.datetime "created_at", null: false
     t.decimal "prev_balance", precision: 10, scale: 3, null: false
+    t.date "prev_stmt_on"
     t.decimal "total_due", precision: 10, scale: 3, null: false
     t.datetime "updated_at", null: false
   end

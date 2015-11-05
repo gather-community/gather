@@ -80,5 +80,7 @@ group :development, :test do
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'
   gem 'capistrano-bundler', '~> 1.1.2'
+
+  gem 'faker'
 end
 

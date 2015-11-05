@@ -17,7 +17,7 @@ class Account < ActiveRecord::Base
   end
 
   def self.by_household_full_name
-    joins(household: :community).order("households.name, communities.abbrv")
+    joins(household: :community).order("communities.abbrv, households.name")
   end
 
   def self.with_recent_activity

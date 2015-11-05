@@ -1,4 +1,4 @@
-<% content_for(:title){ "Account Statement ##{@statement.id.to_s.rjust(5, '0')}" } %>
+<% content_for(:title){ "Statement ##{@statement.id.to_s.rjust(5, '0')}" } %>
 
 <table class="key-value">
   <tr>
@@ -8,7 +8,7 @@
     </td>
   </tr>
   <tr>
-    <td>Previous Statement Date</td>
+    <td>Previous Statement</td>
     <td>
       <%= @statement.prev_stmt_on.try(:to_s, :short_date) || "None" %>
     </td>
@@ -37,7 +37,12 @@
   <% if @statement.line_items.empty? %>
     <tr>
       <td class="col-md-7 no-items" colspan="4">
-        There are no new charges or credits on this statement. Please pay the outstanding balance below. Thanks!
+        There are no new charges or credits on this statement.
+        <% if @statement.total_due > 0 %>
+          Please pay the outstanding balance below. Thanks!
+        <% else %>
+          Please note your credit balance below.
+        <% end %>
       </td>
     </tr>
   <% else %>

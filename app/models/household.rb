@@ -8,6 +8,7 @@ class Household < ActiveRecord::Base
   has_many :signups
   has_many :users, ->{ by_name }
 
+  scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("households.name") }
   scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }
   scope :by_commty_and_name, -> { includes(:community).order("communities.abbrv").by_name }

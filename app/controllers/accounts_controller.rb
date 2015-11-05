@@ -9,7 +9,6 @@ class AccountsController < ApplicationController
       by_household_full_name.
       page(params[:page]).per(20)
 
-    @grand_total_due = Account.for_community(current_user.community).sum("current_balance")
     @active_accounts = Account.for_community(current_user.community).with_recent_activity.count
 
     last_statement = Statement.for_community(current_user.community).order(:created_at).last

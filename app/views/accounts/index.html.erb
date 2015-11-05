@@ -17,7 +17,7 @@
   </div>
 <% else %>
   <p class="subtitle">
-    <%= t(".summary", count: @active_accounts, amount: currency_with_cr(@grand_total_due)) %>
+    <%= t(".summary", count: @active_accounts) %>
 
     <% if @last_statement_run.present? %>
       <%= t(".last_statement_run", date: @last_statement_run.to_s(:short_date)) %>

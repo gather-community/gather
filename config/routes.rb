@@ -36,7 +36,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :accounts, only: [:index, :show]
+  resources :accounts, only: [:index] do
+    collection do
+      put :apply_late_fees
+    end
+  end
+
   resources :statements, only: [:show] do
     collection do
       post :generate

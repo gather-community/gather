@@ -3,7 +3,12 @@
 <% content_for(:top_buttons) do %>
   <strong>
     <% unless @active_accounts == 0 %>
-      &nbsp;
+      <% if @late_fee_count > 0 %>
+        <%= link_to(icon_tag("thumbs-down") << " Apply Late Fees", apply_late_fees_accounts_path,
+          method: :put, class: "btn btn-default",
+          data: { confirm: late_fee_confirm }) %>
+      <% end %>
+
       <%= link_to(icon_tag("send") << " Send Statements", generate_statements_path,
         method: :post, class: "btn btn-primary",
         data: { confirm: "Are you sure? Statements will be sent out to #{@active_accounts} households."}) %>

@@ -21,7 +21,8 @@ class Account < ActiveRecord::Base
   end
 
   def self.with_recent_activity
-    where("total_new_credits >= 0.01 OR total_new_charges >= 0.01 OR current_balance >= 0.01")
+    where("total_new_credits >= 0.01 OR total_new_charges >= 0.01
+      OR current_balance >= 0.01 OR current_balance <= 0.01")
   end
 
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.

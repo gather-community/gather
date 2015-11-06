@@ -1,0 +1,26 @@
+<% content_for(:title){ "Apply Payments" } %>
+
+<% if @payments.empty? %>
+  You did not enter any payments.
+<% else %>
+  <p>Please review the below payments carefully and make any necessary corrections.</p>
+
+  <%= form_tag("/accounts/apply_payments", method: :put) do %>
+    <%= hidden_field_tag("confirmed", "1") %>
+
+    <table class="key-value">
+      <% @payments.each do |payment| %>
+        <tr>
+          <td><%= payment[:account].household_full_name %></td>
+          <td>
+            <input type="text" name="payment[<%= payment[:account].id %>]"
+              class="form-control" value="<%= payment[:amount] %>"/>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+    <button type="submit" class="btn btn-primary"><%= icon_tag('thumbs-up') %> Apply Payments</button>
+    <span class="back"><%= link_to(icon_tag("reply") << " Back to Accounts", accounts_path) %></span>
+  <% end %>
+<% end %>

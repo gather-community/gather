@@ -1,0 +1,29 @@
+.accounts {
+  input[type='text'] {
+    height: 25px;
+    text-align: right;
+  }
+
+  button[type='submit'] {
+    margin-top: 20px;
+  }
+
+  &.action-index {
+    button[type='submit'] {
+      float: right;
+    }
+  }
+
+  &.action-apply-payments {
+    input[type='text'] {
+      width: 150px;
+    }
+
+    span.back {
+      display: inline-block;
+      margin-left: 20px;
+      margin-bottom: 5px;
+      vertical-align: bottom;
+    }
+  }
+}

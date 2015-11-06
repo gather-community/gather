@@ -6,8 +6,7 @@ class AccountsController < ApplicationController
       includes(:last_statement, household: :community).
       for_community(community).
       where("households.deactivated_at IS NULL OR current_balance >= 0.01").
-      by_household_full_name.
-      page(params[:page]).per(20)
+      by_household_full_name
 
     @active_accounts = Account.for_community(community).with_recent_activity.count
 
@@ -27,6 +26,21 @@ class AccountsController < ApplicationController
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)
+  end
+
+  def apply_payments
+    if params[:confirmed]
+      Account.find(params[:payment].keys).each{ |a| authorize!(:apply_payments, a) }
+      PaymentApplier.new(params[:payment]).apply!
+      flash[:success] = "Payments applied."
+      redirect_to(accounts_path)
+    else
+      # Build set of payment hashes to confirm with the user.
+      @payments = Account.where(id: params[:payment].reject{ |_, a| a.blank? }.keys).
+        by_household_full_name.map do |account|
+          { account: account, amount: params[:payment][account.id.to_s] }
+      end
+    end
   end
 
   private

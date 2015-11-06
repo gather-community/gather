@@ -43,7 +43,7 @@
     <tr>
       <td>Balance Due</td>
       <td>
-        <%= number_to_currency(@account.balance_due) %>
+        <%= currency_with_cr(@account.balance_due) %>
         <% if @account.balance_due >= 0.01 %>
           <strong>*</strong>
         <% end %>

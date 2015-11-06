@@ -31,42 +31,47 @@
     <% end %>
   </p>
 
-  <table class="index">
-    <tr>
-      <th class="col-md-2">Household</th>
-      <th class="col-md-1">Last Inv. Date</th>
-      <th class="col-md-1">Due Last Inv.</th>
-      <th class="col-md-1">New Credits</th>
-      <th class="col-md-1">Balance Due</th>
-      <th class="col-md-1">New Charges</th>
-      <th class="col-md-1">Current Balance</th>
-    </tr>
-    <% @accounts.each do |account| %>
+  <%= form_tag("/accounts/apply_payments", method: :put) do %>
+    <table class="index">
       <tr>
-        <td class="col-md-2">
-          <%= link_to(account.household_full_name, account.household) %>
-        </td>
-        <td class="col-md-1">
-          <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
-        </td>
-        <td class="col-md-1">
-          <%= statement_amount(account.last_statement) %>
-        </td>
-        <td class="col-md-1">
-          <%= number_to_currency(account.total_new_credits) %>
-        </td>
-        <td class="col-md-1">
-          <%= currency_with_cr(account.balance_due) %>
-        </td>
-        <td class="col-md-1">
-          <%= number_to_currency(account.total_new_charges) %>
-        </td>
-        <td class="col-md-1">
-          <strong><%= currency_with_cr(account.current_balance) %></strong>
-        </td>
+        <th class="col-md-2">Household</th>
+        <th class="col-md-1">Last Inv. Date</th>
+        <th class="col-md-1">Due Last Inv.</th>
+        <th class="col-md-1">New Credits</th>
+        <th class="col-md-1">Balance Due</th>
+        <th class="col-md-1">New Charges</th>
+        <th class="col-md-1">Current Balance</th>
+        <th class="col-md-1">Payment</th>
       </tr>
-    <% end %>
-  </table>
-
-  <%= paginate @accounts, params: {controller: 'accounts'} %>
+      <% @accounts.each do |account| %>
+        <tr>
+          <td class="col-md-2">
+            <%= link_to(account.household_full_name, account.household) %>
+          </td>
+          <td class="col-md-1">
+            <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+          </td>
+          <td class="col-md-1">
+            <%= statement_amount(account.last_statement) %>
+          </td>
+          <td class="col-md-1">
+            <%= number_to_currency(account.total_new_credits) %>
+          </td>
+          <td class="col-md-1">
+            <%= currency_with_cr(account.balance_due) %>
+          </td>
+          <td class="col-md-1">
+            <%= number_to_currency(account.total_new_charges) %>
+          </td>
+          <td class="col-md-1">
+            <strong><%= currency_with_cr(account.current_balance) %></strong>
+          </td>
+          <td class="col-md-1 payment">
+            <input type="text" name="payment[<%= account.id %>]" class="form-control" />
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <button type="submit" class="btn btn-default"><%= icon_tag('thumbs-up') %> Apply Payments</button>
+  <% end %>
 <% end %>

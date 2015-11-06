@@ -43,7 +43,7 @@ RSpec.describe Account, type: :model do
       @inv2 = create(:statement, account: account, total_due: 15)
       create(:line_item, account: account, amount: 5, statement: @inv2)
       create(:line_item, account: account, amount: -8, statement: @inv2)
-      create(:line_item, account: account, amount: 4.5, statement: @inv2)
+      create(:line_item, account: account, quantity: 2, unit_price: 2.25, statement: @inv2)
       create(:line_item, account: account, amount: -2.35, statement: @inv2)
       @inv2.destroy
       expect(account.last_statement_on).to eq @inv1.created_on

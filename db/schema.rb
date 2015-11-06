@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104020348) do
+ActiveRecord::Schema.define(version: 20151106005115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -141,9 +141,11 @@ ActiveRecord::Schema.define(version: 20151104020348) do
     t.datetime "created_at", null: false
     t.string "description", limit: 255, null: false
     t.date "incurred_on", null: false
+    t.integer "quantity"
     t.integer "statement_id"
     t.integer "statementable_id"
     t.string "statementable_type", limit: 32
+    t.decimal "unit_price", precision: 10, scale: 3
     t.datetime "updated_at", null: false
   end
 

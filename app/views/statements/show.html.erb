@@ -26,13 +26,17 @@
     <th class="col-md-1">Date</th>
     <th class="col-md-1">Type</th>
     <th class="col-md-4">Description</th>
+    <th class="col-md-1">Quantity</th>
+    <th class="col-md-1">Unit Price</th>
     <th class="col-md-1">Amount</th>
   </tr>
   <tr>
     <td class="col-md-1"></td>
     <td class="col-md-1"></td>
     <td class="col-md-4">Previous balance</td>
-    <td class="col-md-1"><%= currency_with_cr(@statement.prev_balance) %></td>
+    <td class="col-md-1"></td>
+    <td class="col-md-1"></td>
+    <td class="col-md-1 num"><%= currency_with_cr_span(@statement.prev_balance) %></td>
   </tr>
   <% if @statement.line_items.empty? %>
     <tr>
@@ -57,12 +61,18 @@
             <%= li.description %>
           <% end %>
         </td>
-        <td class="col-md-1"><%= currency_with_cr(li.amount) %></td>
+        <td class="col-md-1 num"><%= li.quantity %></td>
+        <td class="col-md-1 num"><%= currency_with_cr(li.unit_price) %></td>
+        <td class="col-md-1 num">
+          <%= currency_with_cr_span(li.amount) %>
+        </td>
       </tr>
     <% end %>
   <% end %>
   <tr class="total">
-    <td class="col-md-6" colspan="3">Total Due</td>
-    <td class="col-md-1"><%= number_to_currency(@statement.total_due) %></td>
+    <td class="col-md-8" colspan="5">Total <%= @statement.total_due < 0 ? "Credit" : "Due" %></td>
+    <td class="col-md-1 num">
+      <%= currency_with_cr_span(@statement.total_due) %>
+    </td>
   </tr>
 </table>

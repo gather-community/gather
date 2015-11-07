@@ -1,7 +1,9 @@
 <% content_for(:title){ "#{@user.name}" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= link_to(icon_tag("pencil") << " Edit Profile", edit_user_path(@user), class: "btn btn-primary") %>
+  <% if can?(:edit, @user) %>
+    <%= link_to(icon_tag("pencil") << " Edit Profile", edit_user_path(@user), class: "btn btn-primary") %>
+  <% end %>
 <% end %>
 
 <ul>

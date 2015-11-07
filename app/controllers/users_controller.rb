@@ -20,6 +20,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @head_cook_meals = Meal.head_cooked_by(@user).includes(:signups).past.newest_first
   end
 
   def invite

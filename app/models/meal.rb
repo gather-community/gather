@@ -33,6 +33,9 @@ class Meal < ActiveRecord::Base
   scope :worked_by, ->(user) do
     includes(:assignments).where("assignments.user_id" => user.id)
   end
+  scope :head_cooked_by, ->(user) do
+    worked_by(user).where("assignments.role = 'head_cook'")
+  end
   scope :inviting, ->(user) do
     includes(:invitations).where("invitations.community_id" => user.community_id)
   end

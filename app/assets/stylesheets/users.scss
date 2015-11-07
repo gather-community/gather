@@ -3,6 +3,16 @@
     display: inline-block;
     margin-right: 10px;
   }
+
+  &.action-show {
+    table.index {
+      max-width: 600px;
+    }
+
+    h4 {
+      margin-top: 20px;
+    }
+  }
 }
 
 #invite-list {

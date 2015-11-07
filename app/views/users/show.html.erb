@@ -1,7 +1,35 @@
-<% content_for(:title){ "User: #{@user.name}" } %>
+<% content_for(:title){ "#{@user.name}" } %>
+
+<% content_for(:top_buttons) do %>
+  <%= link_to(icon_tag("pencil") << " Edit Profile", edit_user_path(@user), class: "btn btn-primary") %>
+<% end %>
 
 <ul>
   <li>Household: <%= @user.household_full_name %></li>
   <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
   <li class="phones">Phone: <%= user_phones(@user) %></li>
 </ul>
+
+<% if @head_cook_meals.any? %>
+  <h4>Past Head Cook Meals</h4>
+  <table class="index">
+    <tr>
+      <th class="col-md-1">Date</th>
+      <th class="col-md-3">Title</th>
+      <th class="col-md-1">Signups</th>
+    </tr>
+    <% @head_cook_meals.each do |meal| %>
+      <tr>
+        <td class="col-md-1">
+          <%= meal.served_at.to_date.to_s(:short_date) %>
+        </td>
+        <td class="col-md-3">
+          <%= link_to(meal.title || "[No title]", meal) %>
+        </td>
+        <td class="col-md-1">
+          <%= meal.signup_count %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

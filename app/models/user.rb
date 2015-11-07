@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   scope :never_logged_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("first_name ILIKE ? OR last_name ILIKE ?", "%#{q}%", "%#{q}%") }
 
-  delegate :full_name, to: :household, prefix: true
+  delegate :name, :full_name, to: :household, prefix: true
   delegate :over_limit?, to: :household, prefix: false
   delegate :community, :community_id, :community_name, :community_abbrv, to: :household
 

@@ -2,6 +2,8 @@ class StatementsController < ApplicationController
   load_and_authorize_resource
 
   def show
+    @charges = @statement.line_items.select(&:charge?)
+    @credits = @statement.line_items.select(&:credit?)
   end
 
   def generate

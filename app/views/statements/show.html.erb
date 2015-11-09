@@ -2,6 +2,12 @@
 
 <table class="key-value">
   <tr>
+    <td>Household</td>
+    <td>
+      <%= @statement.household_full_name %>
+    </td>
+  </tr>
+  <tr>
     <td>Date</td>
     <td>
       <%= @statement.created_on.to_s(:short_date) %>
@@ -14,43 +20,54 @@
     </td>
   </tr>
   <tr>
-    <td>Household</td>
+    <td>Previous Balance</td>
     <td>
-      <%= @statement.household_full_name %>
+      <%= currency_with_cr_span(@statement.prev_balance) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Charges</td>
+    <td>
+      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Payments/Credits</td>
+    <td>
+      <%= currency_with_cr_span(@credits.sum(&:amount)) %>
+    </td>
+  </tr>
+  <tr>
+    <td>New Balance</td>
+    <td>
+      <strong><%= currency_with_cr_span(@statement.total_due) %></strong>
     </td>
   </tr>
 </table>
 
-<table class="index">
-  <tr>
-    <th class="col-md-1">Date</th>
-    <th class="col-md-1">Type</th>
-    <th class="col-md-4">Description</th>
-    <th class="col-md-1">Quantity</th>
-    <th class="col-md-1">Unit Price</th>
-    <th class="col-md-1">Amount</th>
-  </tr>
-  <tr>
-    <td class="col-md-1"></td>
-    <td class="col-md-1"></td>
-    <td class="col-md-4">Previous balance</td>
-    <td class="col-md-1"></td>
-    <td class="col-md-1"></td>
-    <td class="col-md-1 num"><%= currency_with_cr_span(@statement.prev_balance) %></td>
-  </tr>
-  <% if @statement.line_items.empty? %>
+<% if @statement.line_items.empty? %>
+  <p>
+    There are no new charges or credits on this statement.
+    <% if @statement.total_due > 0 %>
+      Please pay the outstanding balance above. Thanks!
+    <% else %>
+      Please note your credit balance above.
+    <% end %>
+  </p>
+<% end %>
+
+<% if @charges.any? %>
+  <h4>Charges</h4>
+  <table class="index charges">
     <tr>
-      <td class="col-md-7 no-items" colspan="4">
-        There are no new charges or credits on this statement.
-        <% if @statement.total_due > 0 %>
-          Please pay the outstanding balance below. Thanks!
-        <% else %>
-          Please note your credit balance below.
-        <% end %>
-      </td>
+      <th class="col-md-1">Date</th>
+      <th class="col-md-1">Type</th>
+      <th class="col-md-4">Description</th>
+      <th class="col-md-1">Quantity</th>
+      <th class="col-md-1">Unit Price</th>
+      <th class="col-md-1">Amount</th>
     </tr>
-  <% else %>
-    <% @statement.line_items.each do |li| %>
+    <% @charges.each do |li| %>
       <tr>
         <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
         <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
@@ -68,11 +85,27 @@
         </td>
       </tr>
     <% end %>
-  <% end %>
-  <tr class="total">
-    <td class="col-md-8" colspan="5">Total <%= @statement.total_due < 0 ? "Credit" : "Due" %></td>
-    <td class="col-md-1 num">
-      <%= currency_with_cr_span(@statement.total_due) %>
-    </td>
-  </tr>
-</table>
+  </table>
+<% end %>
+
+<% if @credits.any? %>
+  <h4>Payments/Credits</h4>
+  <table class="index credits">
+    <tr>
+      <th class="col-md-1">Date</th>
+      <th class="col-md-1">Type</th>
+      <th class="col-md-6">Description</th>
+      <th class="col-md-1">Amount</th>
+    </tr>
+    <% @credits.each do |li| %>
+      <tr>
+        <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
+        <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
+        <td class="col-md-6"><%= li.description %></td>
+        <td class="col-md-1 num">
+          <%= currency_with_cr_span(li.amount) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

@@ -27,7 +27,7 @@ module Statusable
   end
 
   def reopenable?
-    closed?
+    closed? && !past_day?
   end
 
   def new_signups_allowed?
@@ -40,6 +40,10 @@ module Statusable
 
   def past_time?
     Time.now > served_at
+  end
+
+  def past_day?
+    Time.now.midnight > served_at
   end
 
   def past_auto_close_time?

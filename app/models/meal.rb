@@ -24,11 +24,12 @@ class Meal < ActiveRecord::Base
   has_many :signups, dependent: :destroy
   has_many :households, through: :signups
 
+  scope :open, -> { where(status: "open") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:host_community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:host_community).order("communities.name DESC") }
-  scope :past, -> { where("served_at <= ?", Time.now) }
+  scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
   scope :worked_by, ->(user) do
     includes(:assignments).where("assignments.user_id" => user.id)
@@ -87,6 +88,10 @@ class Meal < ActiveRecord::Base
 
   def self.ids_in_time_from_now(time)
     where("served_at > ?", Time.now).where("served_at < ?", Time.now + time).pluck(:id)
+  end
+
+  def self.close_all_past!
+    past.open.update_all(status: "closed")
   end
 
   def visible_to?(user)

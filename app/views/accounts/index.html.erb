@@ -41,7 +41,6 @@
         <th class="col-md-1">Balance Due</th>
         <th class="col-md-1">New Charges</th>
         <th class="col-md-1">Current Balance</th>
-        <th class="col-md-1">Payment</th>
       </tr>
       <% @accounts.each do |account| %>
         <tr>
@@ -66,12 +65,8 @@
           <td class="col-md-1">
             <strong><%= currency_with_cr(account.current_balance) %></strong>
           </td>
-          <td class="col-md-1 payment">
-            <input type="text" name="payment[<%= account.id %>]" class="form-control" />
-          </td>
         </tr>
       <% end %>
     </table>
-    <button type="submit" class="btn btn-default"><%= icon_tag('thumbs-up') %> Apply Payments</button>
   <% end %>
 <% end %>

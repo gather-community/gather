@@ -1,4 +1,6 @@
-<tr class="nested-fields <%= f.object.marked_for_destruction? ? "hidden" : "" %>">
+<% hidden = f.object.marked_for_destruction? ? "hidden" : "" %>
+<% dupe = @dupes.include?(f.object) ? "dupe" : "" %>
+<tr class="nested-fields <%= dupe %> <%= hidden %>">
   <td>
     <% if f.object.persisted? %>
       <%= f.object.household_full_name %>

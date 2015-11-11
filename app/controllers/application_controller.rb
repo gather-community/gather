@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   def set_validation_error_notice
-    flash[:error] = "Please correct the errors below."
+    flash.now[:error] = "Please correct the errors below."
   end
 end

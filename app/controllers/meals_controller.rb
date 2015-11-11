@@ -73,7 +73,11 @@ class MealsController < ApplicationController
 
     @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
-    if @reimb_request.valid?
+    if (@dupes = @meal.duplicate_signups).any?
+      flash.now[:error] = "There are duplicate signups. "\
+        "Please correct by adding numbers for each diner type."
+      render(:finalize)
+    elsif @reimb_request.valid?
       @meal.save! # Should be no validation issues
       flash[:success] = "Meal finalized successfully"
       redirect_to(meals_path(finalizable: 1))

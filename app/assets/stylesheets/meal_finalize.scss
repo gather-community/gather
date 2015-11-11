@@ -11,11 +11,16 @@
   table.index {
     margin-bottom: 5px;
 
+    tr.dupe {
+      background-color: $error-red-bg;
+    }
+
     th.diner-type, th.food-type {
       text-align: center;
     }
 
-    td:first-of-type {
+    th:first-of-type, td:first-of-type {
+      padding-left: 10px;
       width: 200px;
     }
 
@@ -38,7 +43,7 @@
     }
 
     td.remove {
-      width: 30px;
+      padding: 0 15px;
       text-align: center;
     }
   }

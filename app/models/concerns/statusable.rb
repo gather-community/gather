@@ -18,6 +18,10 @@ module Statusable
     status == "closed"
   end
 
+  def finalized?
+    status == "finalized"
+  end
+
   def open?
     status == "open"
   end

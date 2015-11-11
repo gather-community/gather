@@ -21,7 +21,7 @@ class Meal < ActiveRecord::Base
   has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
-  has_many :signups, ->{ sorted }, dependent: :destroy
+  has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
   has_many :households, through: :signups
 
   scope :open, -> { where(status: "open") }
@@ -224,7 +224,7 @@ class Meal < ActiveRecord::Base
   end
 
   def enough_capacity_for_current_signups
-    if persisted? && capacity < (ttl = Signup.total_for_meal(self))
+    if persisted? && !finalized? && capacity < (ttl = Signup.total_for_meal(self))
       errors.add(:capacity, "must be at least #{ttl} due to current signups")
     end
   end

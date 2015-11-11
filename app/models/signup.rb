@@ -11,7 +11,7 @@ class Signup < ActiveRecord::Base
     little_kid: 0
   }
 
-  belongs_to :meal
+  belongs_to :meal, inverse_of: :signups
   belongs_to :household
 
   scope :host_community_first, ->(c) do
@@ -88,7 +88,7 @@ class Signup < ActiveRecord::Base
   end
 
   def dont_exceed_spots
-    if total_change > meal.spots_left
+    if !meal.finalized? && total_change > meal.spots_left
       errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
     end
   end

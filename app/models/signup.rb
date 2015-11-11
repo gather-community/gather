@@ -44,6 +44,10 @@ class Signup < ActiveRecord::Base
     DINER_TYPES.map{ |dt| totals["#{dt}_#{food_type}"] * PORTION_FACTORS[dt.to_sym] }.reduce(:+)
   end
 
+  def self.all_zero_attribs?(attribs)
+    attribs.slice(*SIGNUP_TYPES).values.map(&:to_i).uniq == [0]
+  end
+
   def save_or_destroy
     all_zero? ? (destroy if persisted?) : save
   end

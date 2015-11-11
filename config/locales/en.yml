@@ -76,6 +76,7 @@ en:
     close: "Close"
     reopen: "Reopen"
     summary: "Summary"
+    finalize: "Finalize"
 
   signups:
     tooltips:

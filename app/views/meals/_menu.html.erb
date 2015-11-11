@@ -1,15 +1,6 @@
 <div id="meal-menu">
   <div class="menu-label">menu</div>
-  <div id="time-cook">
-    <span class="chunk">
-      <%= icon_tag("calendar") %>
-      <strong><%= meal_date_time(@meal) %></strong>
-    </span>
-    <span class="chunk">
-      <%= image_tag("chef-hat.png") %>
-      <%= user_link(@meal.head_cook) %>
-    </span>
-  </div>
+  <%= render("time_cook") %>
   <div id="details">
     <div class="chunk">
       At <%= @meal.location_name %>

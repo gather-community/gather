@@ -1,12 +1,15 @@
 <% content_for(:title){ "Meals" } %>
 
 <% content_for(:top_buttons) do %>
-  <% if params[:past] %>
-    <%= link_to("Future Meals", meals_path, class: "btn btn-default") %>
-  <% else %>
-    <%= link_to("Past Meals", meals_path(past: 1), class: "btn btn-default") %>
+  <% if can?(:finalize, Meal) %>
+    <%= link_to(icon_tag("save") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
   <% end %>
-  <%= link_to("Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
+  <% if params[:past] %>
+    <%= link_to(icon_tag("clock-o") << " Future Meals", meals_path, class: "btn btn-default") %>
+  <% else %>
+    <%= link_to(icon_tag("clock-o") << " Past Meals", meals_path(past: 1), class: "btn btn-default") %>
+  <% end %>
+  <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
 <% end %>
 
 <% if @meals.empty? %>
@@ -48,7 +51,13 @@
           <% end %>
         </td>
         <td class="col-md-1"><%= signup_count(meal) %></td>
-        <td><%= meal_action_icons(meal) %></td>
+        <td>
+          <% if params[:finalizable] %>
+            <%= link_to("Finalize", finalize_meal_path(meal)) %>
+          <% else %>
+            <%= meal_action_icons(meal) %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

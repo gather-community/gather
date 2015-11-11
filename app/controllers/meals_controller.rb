@@ -62,6 +62,10 @@ class MealsController < ApplicationController
     redirect_to(meals_path)
   end
 
+  def finalize
+    @signups = @meal.signups.sorted
+  end
+
   def reopen
     @meal.reopen!
     flash[:success] = "Meal reopened successfully."
@@ -95,7 +99,13 @@ class MealsController < ApplicationController
   end
 
   def load_meals
-    @meals = params[:past] ? @meals.past.newest_first : @meals.future.oldest_first
+    if params[:finalizable]
+      @meals = @meals.finalizable.oldest_first
+    elsif params[:past]
+      @meals = @meals.past.newest_first
+    else
+      @meals = @meals.future.oldest_first
+    end
     @meals = @meals.worked_by(@user) if @user.present?
     @meals = @meals.page(params[:page])
   end

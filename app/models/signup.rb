@@ -48,6 +48,10 @@ class Signup < ActiveRecord::Base
     all_zero? ? (destroy if persisted?) : save
   end
 
+  def count_for(diner_type, food_type)
+    self["#{diner_type}_#{food_type}"]
+  end
+
   def total
     @total ||= SIGNUP_TYPES.inject(0){ |sum, t| sum += (send(t) || 0) }
   end

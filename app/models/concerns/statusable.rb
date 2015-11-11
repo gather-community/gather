@@ -30,6 +30,10 @@ module Statusable
     closed? && !past_day?
   end
 
+  def finalizable?
+    closed? && past_day?
+  end
+
   def new_signups_allowed?
     !closed? && !full? && !past_time?
   end

@@ -25,6 +25,7 @@ class Meal < ActiveRecord::Base
   has_many :households, through: :signups
 
   scope :open, -> { where(status: "open") }
+  scope :finalizable, -> { past.where("status != ?", "finalized") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:host_community).order("communities.name") }
@@ -50,6 +51,7 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :signups, allow_destroy: true
 
   delegate :name, :abbrv, to: :location, prefix: true
   delegate :name, to: :host_community, prefix: true

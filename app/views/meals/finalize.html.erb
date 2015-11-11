@@ -1,0 +1,42 @@
+<% content_for(:title){ "Finalize Meal: #{@meal.title || "Untitled"}" } %>
+
+<%= render("time_cook") %>
+
+<%= form_for(@meal) do |form| %>
+  <table class="index">
+    <tr>
+      <th rowspan="2">Household</th>
+      <% Signup::DINER_TYPES.each do |dt| %>
+        <% if @meal.formula.nil? || @meal.formula.allows_diner_type?(dt) %>
+          <th colspan="2"><%= t("signups.diner_types.#{dt}", count: 1) %></th>
+        <% end %>
+      <% end %>
+    </tr>
+    <tr>
+      <% Signup::DINER_TYPES.each do |dt| %>
+        <% Signup::FOOD_TYPES.each do |ft| %>
+          <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
+            <th>
+              <%= t("signups.food_types.#{ft}", count: 1) %>
+            </th>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tr>
+    <% @signups.each do |signup| %>
+      <%= form.fields_for(:signups, signup) do |signup_form| %>
+        <%= render("signup_fields", f: signup_form) %>
+      <% end %>
+    <% end %>
+  </table>
+  <%= link_to_add_association 'Add Household', form, :signups,
+    data: {
+      "association-insertion-node" => "table.index",
+      "association-insertion-method" => "append"
+    } %>
+  <button type="submit" class="btn btn-primary">Submit</button>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Select2View({el: 'table.index'}); });
+<% end %>

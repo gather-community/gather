@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     member do
       put :close
       put :reopen
+      get :finalize
       get :summary
     end
   end

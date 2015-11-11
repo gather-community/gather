@@ -21,6 +21,7 @@ module MealsHelper
       a << :summary
       a << :reopen if meal.reopenable?
       a << :close if meal.closeable?
+      a << :finalize if meal.finalizable?
       a << :destroy
       options[:except].each{ |x| a.delete(x) }
     end
@@ -30,18 +31,21 @@ module MealsHelper
     to_show.each do |action|
       next if cannot?(action, meal)
       name = options[:show_name] ? " " << t("action_names.#{action}") : ""
+      title = t("action_names.#{action}")
 
       case action
       when :edit
-        links << link_to(icon_tag('pencil') << name, edit_meal_path(meal))
+        links << link_to(icon_tag('pencil') << name, edit_meal_path(meal), title: title)
       when :summary
-      links << link_to(icon_tag('file-text') << name, summary_meal_path(meal))
+      links << link_to(icon_tag('file-text') << name, summary_meal_path(meal), title: title)
       when :close
-        links << link_to(icon_tag('lock') << name, close_meal_path(meal), method: :put)
+        links << link_to(icon_tag('lock') << name, close_meal_path(meal), title: title, method: :put)
+      when :finalize
+        links << link_to(icon_tag('save') << name, finalize_meal_path(meal), title: title)
       when :reopen
-        links << link_to(icon_tag('unlock') << name, reopen_meal_path(meal), method: :put)
+        links << link_to(icon_tag('unlock') << name, reopen_meal_path(meal), title: title, method: :put)
       when :destroy
-        links << link_to(icon_tag('trash') << name, meal_path(meal), method: :delete,
+        links << link_to(icon_tag('trash') << name, meal_path(meal), title: title, method: :delete,
           data: { confirm: I18n.t("activerecord.delete_confirms.meal", title: title) })
       end
     end

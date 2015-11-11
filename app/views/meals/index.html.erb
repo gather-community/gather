@@ -1,13 +1,22 @@
-<% content_for(:title){ "Meals" } %>
+<% content_for(:title) do
+     if params[:finalizable]
+       "Finalizable Meals"
+     elsif params[:past]
+       "Past Meals"
+     else
+       "Meals"
+     end
+   end %>
 
 <% content_for(:top_buttons) do %>
-  <% if can?(:finalize, Meal) %>
+  <% if can?(:finalize, Meal) && !params[:finalizable] %>
     <%= link_to(icon_tag("save") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
   <% end %>
-  <% if params[:past] %>
-    <%= link_to(icon_tag("clock-o") << " Future Meals", meals_path, class: "btn btn-default") %>
-  <% else %>
+  <% if !params[:past] %>
     <%= link_to(icon_tag("clock-o") << " Past Meals", meals_path(past: 1), class: "btn btn-default") %>
+  <% end %>
+  <% if params[:past] || params[:finalizable] %>
+    <%= link_to(icon_tag("clock-o") << " Future Meals", meals_path, class: "btn btn-default") %>
   <% end %>
   <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
 <% end %>

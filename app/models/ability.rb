@@ -25,7 +25,7 @@ class Ability
 
     # Can see all accounts and statements if biller or admin.
     if user.admin? || user.biller?
-      can :finalize, Meal
+      can [:finalize, :do_finalize], Meal
       can :read, Household
       can :manage, Account, Account.for_community_or_household(user.community, user.household) do |account|
         account.community_id == user.community_id || account.household_id == user.household_id

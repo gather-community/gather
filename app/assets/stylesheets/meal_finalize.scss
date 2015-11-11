@@ -1,9 +1,53 @@
-.meals.action-finalize {
+.meals.action-finalize, .meals.action-do-finalize {
   #time-cook {
-    margin-bottom: 20px;
+    margin-top: -5px;
+    margin-bottom: 10px;
   }
 
-  select.zero {
-    display: none;
+  p {
+    max-width: 800px;
+  }
+
+  table.index {
+    margin-bottom: 5px;
+
+    th.diner-type, th.food-type {
+      text-align: center;
+    }
+
+    td:first-of-type {
+      width: 200px;
+    }
+
+    td.count {
+      width: 65px;
+      text-align: center;
+
+      a {
+        color: #e6e6e6;
+      }
+
+      select {
+        width: 50px;
+        display: inline;
+
+        &.zero {
+          display: none;
+        }
+      }
+    }
+
+    td.remove {
+      width: 30px;
+      text-align: center;
+    }
+  }
+
+  h4 {
+    margin: 20px 0;
+  }
+
+  #reimb-fields input[type=text] {
+    width: 150px;
   }
 }

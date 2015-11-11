@@ -21,7 +21,7 @@ class Meal < ActiveRecord::Base
   has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
-  has_many :signups, dependent: :destroy
+  has_many :signups, ->{ sorted }, dependent: :destroy
   has_many :households, through: :signups
 
   scope :open, -> { where(status: "open") }

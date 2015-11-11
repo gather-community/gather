@@ -136,3 +136,6 @@ en:
         one: "You have a MESS account with one community. Each community manages its own accounts."
         other: "You have MESS accounts with %{count} communities. Each community manages its own accounts."
 
+  payment_methods:
+    check: "Check"
+    credit: "Balance Credit"

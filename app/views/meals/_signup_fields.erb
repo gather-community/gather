@@ -3,16 +3,18 @@
     <% if f.object.persisted? %>
       <%= f.object.household_full_name %>
     <% else %>
-      <%= f.select(:household_id, [], {}, class: "form-control", data: {
-        "select2-src" => "household",
-        "select2-label-attr" => "full_name" }) %>
+      <%= f.select(:household_id, household_selected_option(f.object.household), {},
+        class: "form-control", data: {
+          "select2-src" => "household",
+          "select2-label-attr" => "full_name"
+      }) %>
     <% end %>
   </td>
   <% Signup::DINER_TYPES.each do |dt| %>
     <% Signup::FOOD_TYPES.each do |ft| %>
       <% hide_select = f.object.persisted? && f.object.count_for(dt, ft) == 0 %>
       <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
-        <td>
+        <td class="count">
           <%= f.select("#{dt}_#{ft}",
             (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map do |i|
               [i == 0 ? "" : i, i]
@@ -20,11 +22,11 @@
             { include_blank: false },
             class: "select form-control #{hide_select ? 'zero' : ''}") %>
           <% if hide_select %>
-            <a href="#" class="xyz" onclick="$(this).hide().closest('td').find('select').show(); return false">Add</a>
+            <a href="#" class="xyz" onclick="$(this).hide().closest('td').find('select').show(); return false"><%= icon_tag("plus") %></a>
           <% end %>
         </td>
       <% end %>
     <% end %>
   <% end %>
-  <td><%= link_to_remove_association(icon_tag("trash"), f) %></td>
+  <td class="remove"><%= link_to_remove_association(icon_tag("trash"), f) %></td>
 </tr>

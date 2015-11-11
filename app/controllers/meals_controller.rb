@@ -63,7 +63,24 @@ class MealsController < ApplicationController
   end
 
   def finalize
-    @signups = @meal.signups.sorted
+    @reimb_request = ReimbursementRequest.new
+  end
+
+  def do_finalize
+    @reimb_request = ReimbursementRequest.new
+    @reimb_request.assign_attributes(reimb_request_params)
+    params[:meal].delete(:reimbursement_request)
+
+    @meal.assign_attributes(finalize_params.merge(status: "finalized"))
+
+    if @reimb_request.valid?
+      @meal.save! # Should be no validation issues
+      flash[:success] = "Meal finalized successfully"
+      redirect_to(meals_path(finalizable: 1))
+    else
+      set_validation_error_notice
+      render(:finalize)
+    end
   end
 
   def reopen
@@ -138,5 +155,15 @@ class MealsController < ApplicationController
     end
 
     params.require(:meal).permit(*permitted)
+  end
+
+  def finalize_params
+    params.require(:meal).permit(signups_attributes:
+      [:id, :household_id, :_destroy] + Signup::SIGNUP_TYPES)
+  end
+
+  def reimb_request_params
+    params.require(:meal).require(:reimbursement_request).
+      permit(:ingredient_cost, :pantry_cost, :payment_method)
   end
 end

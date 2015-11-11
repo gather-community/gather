@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       put :close
       put :reopen
       get :finalize
+      put :do_finalize
       get :summary
     end
   end

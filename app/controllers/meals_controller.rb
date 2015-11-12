@@ -64,6 +64,7 @@ class MealsController < ApplicationController
 
   def finalize
     @reimb_request = ReimbursementRequest.new
+    @dupes = []
   end
 
   def do_finalize

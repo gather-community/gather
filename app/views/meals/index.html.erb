@@ -10,7 +10,7 @@
 
 <% content_for(:top_buttons) do %>
   <% if can?(:finalize, Meal) && !params[:finalizable] %>
-    <%= link_to(icon_tag("save") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
+    <%= link_to(icon_tag("certificate") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
   <% end %>
   <% if !params[:past] %>
     <%= link_to(icon_tag("clock-o") << " Past Meals", meals_path(past: 1), class: "btn btn-default") %>
@@ -43,6 +43,7 @@
         <td class="col-md-4">
           <%= meal_link(meal) %>
           <%= icon_tag("lock") if meal.closed? %>
+          <%= icon_tag("certificate") if meal.finalized? %>
         </td>
         <td class="col-md-1">
           <% if signup = meal.signup_for(current_user.household) %>
@@ -75,7 +76,11 @@
     <% @meals.each do |meal| %>
       <div class="meal <%= signed_up_class(meal) %>">
         <div class="actions"><%= meal_action_icons(meal) %></div>
-        <h5><%= meal_link(meal) %> by <%= meal.head_cook_name %></h5>
+        <h5>
+          <%= meal_link(meal) %> by <%= meal.head_cook_name %>
+          <%= icon_tag("lock") if meal.closed? %>
+          <%= icon_tag("certificate") if meal.finalized? %>
+        </h5>
         <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
         <div class="signup-count">
           <%= signup_count(meal) %> signed up

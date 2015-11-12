@@ -8,7 +8,7 @@ class StatementsController < ApplicationController
 
   def generate
     Delayed::Job.enqueue(StatementJob.new(current_user.community))
-    flash[:success] = "Statement generation started."
+    flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
     redirect_to(accounts_path)
   end
 

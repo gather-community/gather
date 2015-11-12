@@ -12,6 +12,12 @@ class ShareMealCostCalculator < MealCostCalculator
     end
   end
 
+  def base_price_for(signup_type)
+    raise "ingredient_cost must be set to calculate base price" unless meal.ingredient_cost.present?
+    per_adult_cost = meal.ingredient_cost / adult_equivs
+    formula[signup_type] * per_adult_cost
+  end
+
   def adult_equivs
     sum_product
   end

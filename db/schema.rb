@@ -14,7 +14,6 @@
 ActiveRecord::Schema.define(version: 20151112023939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "accounts", force: :cascade do |t|
     t.decimal "balance_due", precision: 10, scale: 3, default: 0.0, null: false

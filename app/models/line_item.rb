@@ -8,7 +8,7 @@ class LineItem < ActiveRecord::Base
   scope :credit, ->{ where("amount < 0") }
   scope :charge, ->{ where("amount > 0") }
 
-  before_save do
+  before_validation do
     if quantity.present? && unit_price.present?
       self.amount = quantity * unit_price
     end

@@ -24,9 +24,21 @@ class Finalizer
           incurred_on: meal.served_at.to_date,
           description: "#{meal.title}: #{I18n.t('signups.types.' << signup_type)}",
           quantity: signup[signup_type],
-          unit_price: price
+          unit_price: price,
+          statementable: meal
         )
      end
+    end
+
+    if meal.payment_method == "credit"
+      LineItem.create!(
+        account: Account.for(meal.head_cook.household_id, meal.host_community_id),
+        code: "reimb",
+        incurred_on: meal.served_at.to_date,
+        description: "#{meal.title}: Grocery Reimbursement",
+        amount: -(meal.ingredient_cost + meal.pantry_cost),
+        statementable: meal
+      )
     end
   end
 end

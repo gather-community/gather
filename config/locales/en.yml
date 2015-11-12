@@ -33,6 +33,9 @@ en:
         head_cook: "Head Cook"
         host_community_id: "Host Community"
         served_at: "Date/Time"
+        ingredient_cost: "Ingredient Cost"
+        pantry_cost: "Pantry Cost"
+        payment_method: "Payment Method"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -104,6 +107,17 @@ en:
     food_types:
       veg: "Veg"
       meat: "Meat"
+    types:
+      senior_meat: "Senior (Meat)"
+      adult_meat: "Adult (Meat)"
+      teen_meat: "Teen (Meat)"
+      big_kid_meat: "Big Kid (Meat)"
+      little_kid_meat: "Little Kid (Meat)"
+      senior_veg: "Senior (Veg)"
+      adult_veg: "Adult (Veg)"
+      teen_veg: "Teen (Veg)"
+      big_kid_veg: "Big Kid (Veg)"
+      little_kid_veg: "Little Kid (Veg)"
 
   nav_links:
     meals: "Meals"

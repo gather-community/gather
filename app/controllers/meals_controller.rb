@@ -73,7 +73,11 @@ class MealsController < ApplicationController
       flash.now[:error] = "There are duplicate signups. "\
         "Please correct by adding numbers for each diner type."
       render(:finalize)
-    elsif @meal.save
+    elsif @meal.valid?
+      Meal.transaction do
+        @meal.save
+        Finalizer.new(@meal).finalize!
+      end
       flash[:success] = "Meal finalized successfully"
       redirect_to(meals_path(finalizable: 1))
     else

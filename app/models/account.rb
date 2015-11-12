@@ -25,6 +25,10 @@ class Account < ActiveRecord::Base
       OR current_balance >= 0.01 OR current_balance <= 0.01")
   end
 
+  def self.for(household_id, community_id)
+    find_or_create_by!(household_id: household_id, community_id: community_id)
+  end
+
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.
   def statement_added!(statement)
     self.last_statement_on = statement.created_on

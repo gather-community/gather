@@ -7,6 +7,7 @@ class Meal < ActiveRecord::Base
   DEFAULT_ASST_COOKS = 2
   DEFAULT_CLEANERS = 3
   MENU_ITEMS = %w(entrees side kids dessert notes)
+  PAYMENT_METHODS = %w(check credit)
 
   serialize :allergens, JSON
 
@@ -77,6 +78,9 @@ class Meal < ActiveRecord::Base
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
+  validates :ingredient_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
+  validates :pantry_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
+  validates :payment_method, presence: true, if: :finalized?
 
   def self.new_with_defaults(current_user)
     new(served_at: default_datetime,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106005115) do
+ActiveRecord::Schema.define(version: 20151112023939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -173,9 +173,12 @@ ActiveRecord::Schema.define(version: 20151106005115) do
     t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
     t.text "entrees"
     t.integer "host_community_id", null: false
+    t.decimal "ingredient_cost", precision: 10, scale: 3
     t.text "kids"
     t.integer "location_id"
     t.text "notes"
+    t.decimal "pantry_cost", precision: 10, scale: 3
+    t.string "payment_method"
     t.datetime "served_at", null: false
     t.text "side"
     t.string "status", default: "open", null: false

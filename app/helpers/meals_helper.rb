@@ -87,4 +87,8 @@ module MealsHelper
   def clear_work_filter_link(text)
     link_to(text, "#", onclick: "$('#uid').val(''); $('.index-filter').submit(); return false;")
   end
+
+  def payment_method_options
+    Meal::PAYMENT_METHODS.map{ |m| [I18n.t("payment_methods.#{m}"), m] }
+  end
 end

@@ -63,23 +63,17 @@ class MealsController < ApplicationController
   end
 
   def finalize
-    @reimb_request = ReimbursementRequest.new
     @dupes = []
   end
 
   def do_finalize
-    @reimb_request = ReimbursementRequest.new
-    @reimb_request.assign_attributes(reimb_request_params)
-    params[:meal].delete(:reimbursement_request)
-
     @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
     if (@dupes = @meal.duplicate_signups).any?
       flash.now[:error] = "There are duplicate signups. "\
         "Please correct by adding numbers for each diner type."
       render(:finalize)
-    elsif @reimb_request.valid?
-      @meal.save! # Should be no validation issues
+    elsif @meal.save
       flash[:success] = "Meal finalized successfully"
       redirect_to(meals_path(finalizable: 1))
     else
@@ -163,12 +157,7 @@ class MealsController < ApplicationController
   end
 
   def finalize_params
-    params.require(:meal).permit(signups_attributes:
+    params.require(:meal).permit(:ingredient_cost, :pantry_cost, :payment_method, signups_attributes:
       [:id, :household_id, :_destroy] + Signup::SIGNUP_TYPES)
-  end
-
-  def reimb_request_params
-    params.require(:meal).require(:reimbursement_request).
-      permit(:ingredient_cost, :pantry_cost, :payment_method)
   end
 end

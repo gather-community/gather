@@ -21,6 +21,9 @@
 
     th:first-of-type, td:first-of-type {
       padding-left: 10px;
+    }
+
+    td:first-of-type {
       width: 200px;
     }
 

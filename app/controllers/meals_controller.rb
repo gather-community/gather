@@ -116,7 +116,7 @@ class MealsController < ApplicationController
 
   def load_meals
     if params[:finalizable]
-      @meals = @meals.finalizable.oldest_first
+      @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
     elsif params[:past]
       @meals = @meals.past.newest_first
     else

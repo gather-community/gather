@@ -36,7 +36,7 @@ class Ability
     else
       # Can see own accounts and statements.
       can :accounts, Household, id: user.household_id
-      can :read, Account, household_id: user.household_id
+      can :show, Account, household_id: user.household_id
       can :read, Statement, household_id: user.household_id
     end
 

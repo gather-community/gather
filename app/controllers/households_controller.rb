@@ -44,7 +44,7 @@ class HouseholdsController < ApplicationController
   end
 
   def accounts
-    @accounts = @household.accounts.accessible_by(current_ability).includes(:community).to_a
+    @accounts = @household.accounts.accessible_by(current_ability, :show).includes(:community).to_a
     @communities = @accounts.map(&:community)
 
     @account = @accounts.detect{ |a| a.community_id == params[:community].to_i } if params[:community]

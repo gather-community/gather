@@ -133,6 +133,7 @@ en:
 
   line_item_codes:
     meal: "Meal"
+    oldbal: "Old System"
     payment: "Payment"
     reimb: "Reimbursement"
 

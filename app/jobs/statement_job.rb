@@ -1,7 +1,7 @@
 # Sends statements to accounts from the given community with current activity.
 StatementJob = Struct.new(:community) do
   def perform
-    Account.with_activity_and_users(community).each do |account|
+    Account.with_activity_and_users_and_no_recent_statement(community).each do |account|
       begin
         # Run in a transaction so that if there is an issue sending the statement,
         # it gets rolled back.
@@ -20,7 +20,7 @@ StatementJob = Struct.new(:community) do
   end
 
   def max_attempts
-    3
+    1
   end
 
   def error(job, exception)

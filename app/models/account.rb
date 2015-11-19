@@ -1,4 +1,6 @@
 class Account < ActiveRecord::Base
+  RECENT_STATEMENT_WINDOW = 24.hours
+
   belongs_to :household, inverse_of: :accounts
   belongs_to :community
   belongs_to :last_statement, class_name: "Statement"
@@ -29,8 +31,10 @@ class Account < ActiveRecord::Base
     find_or_create_by!(household_id: household_id, community_id: community_id)
   end
 
-  def self.with_activity_and_users(community)
-    with_activity(community).reject(&:household_no_users?)
+  def self.with_activity_and_users_and_no_recent_statement(community)
+    with_activity(community).joins("LEFT JOIN statements ON statements.id = accounts.last_statement_id").
+      where("statements.created_at <= ? OR statements.created_at IS NULL", RECENT_STATEMENT_WINDOW.ago).
+      reject(&:household_no_users?)
   end
 
   def self.with_activity_but_no_users(community)
@@ -38,8 +42,14 @@ class Account < ActiveRecord::Base
   end
 
   def self.with_activity(community)
-    Account.for_community(community).includes(:last_statement, household: [:users, :community]).with_recent_activity
+    for_community(community).includes(:last_statement, household: [:users, :community]).with_recent_activity
   end
+
+  def self.with_recent_statement(community)
+    for_community(community).joins(:last_statement).
+      where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
+  end
+
 
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.
   def statement_added!(statement)

@@ -10,6 +10,7 @@ class AccountsController < ApplicationController
 
     @active_accounts = Account.with_activity(community).count
     @no_user_accounts = Account.with_activity_but_no_users(community).count
+    @recent_stmt_accounts = Account.with_recent_statement(community).count
 
     last_statement = Statement.for_community(community).order(:created_at).last
     @last_statement_run = last_statement.try(:created_on)

@@ -140,9 +140,8 @@ class MealsController < ApplicationController
   end
 
   def meal_params
-    permitted = [:title, :capacity, :entrees, :side, :kids, :dessert, :notes, :allergen_gluten,
-      :allergen_shellfish, :allergen_soy, :allergen_corn, :allergen_dairy, :allergen_eggs,
-      :allergen_peanuts, :allergen_almonds, :allergen_none,
+    allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
+    permitted = allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
       { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
     ]
 

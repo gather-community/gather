@@ -9,7 +9,7 @@ class Account < ActiveRecord::Base
   scope :for_community_or_household,
     ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
 
-  delegate :name, :full_name, to: :household, prefix: true
+  delegate :name, :full_name, :no_users?, to: :household, prefix: true
 
   before_save do
     self.balance_due = (due_last_statement || 0) - total_new_credits
@@ -27,6 +27,18 @@ class Account < ActiveRecord::Base
 
   def self.for(household_id, community_id)
     find_or_create_by!(household_id: household_id, community_id: community_id)
+  end
+
+  def self.with_activity_and_users(community)
+    with_activity(community).reject(&:household_no_users?)
+  end
+
+  def self.with_activity_but_no_users(community)
+    with_activity(community).select(&:household_no_users?)
+  end
+
+  def self.with_activity(community)
+    Account.for_community(community).includes(:last_statement, household: [:users, :community]).with_recent_activity
   end
 
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.

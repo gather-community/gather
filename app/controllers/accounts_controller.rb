@@ -3,12 +3,13 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = @accounts.joins(:household).
-      includes(:last_statement, household: :community).
+      includes(:last_statement, household: [:users, :community]).
       for_community(community).
       where("households.deactivated_at IS NULL OR current_balance >= 0.01").
       by_household_full_name
 
-    @active_accounts = Account.for_community(community).with_recent_activity.count
+    @active_accounts = Account.with_activity(community).count
+    @no_user_accounts = Account.with_activity_but_no_users(community).count
 
     last_statement = Statement.for_community(community).order(:created_at).last
     @last_statement_run = last_statement.try(:created_on)

@@ -1,7 +1,8 @@
 <% content_for(:title){ "Household: #{@household.name}" } %>
 
 <ul>
-  <li>Members: <%= @household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></li>
+  <li>Members: <%= @household.users.none? ? "[None]" :
+    @household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></li>
   <li>Community: <%= @household.community_name %></li>
   <li>Unit Number: <%= @household.unit_num %></li>
 </ul>

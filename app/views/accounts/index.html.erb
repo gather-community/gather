@@ -11,7 +11,8 @@
 
       <%= link_to(icon_tag("send") << " Send Statements", generate_statements_path,
         method: :post, class: "btn btn-primary",
-        data: { confirm: "Are you sure? Statements will be sent out to #{@active_accounts} households."}) %>
+        data: { confirm: "Are you sure? Statements will be sent out to "\
+          "#{@active_accounts - @no_user_accounts} households."}) %>
     <% end %>
   </strong>
 <% end %>
@@ -22,20 +23,24 @@
   </div>
 <% else %>
   <p class="subtitle">
-    <%= t(".summary", count: @active_accounts) %>
-
-    <% if @last_statement_run.present? %>
-      <%= t(".last_statement_run", date: @last_statement_run.to_s(:short_date)) %>
-    <% else %>
-      <%= t(".statements_never_run") %>
-    <% end %>
+    <ul>
+      <li><%= t(".summary", count: @active_accounts) %></li>
+      <% if @no_user_accounts > 0 %>
+        <li><%= t(".no_users", count: @no_user_accounts) %></li>
+      <% end %>
+      <% if @last_statement_run.present? %>
+        <li><%= t(".last_statement_run", date: @last_statement_run.to_s(:short_date)) %></li>
+      <% else %>
+        <li><%= t(".statements_never_run") %></li>
+      <% end %>
+    </ul>
   </p>
 
   <%= form_tag("/accounts/apply_payments", method: :put) do %>
     <table class="index">
       <tr>
         <th class="col-md-2">Household</th>
-        <th class="col-md-1">Last Inv. Date</th>
+        <th class="col-md-1">Last Stmt. Date</th>
         <th class="col-md-1">Due Last Inv.</th>
         <th class="col-md-1">New Credits</th>
         <th class="col-md-1">Balance Due</th>
@@ -45,7 +50,7 @@
       <% @accounts.each do |account| %>
         <tr>
           <td class="col-md-2">
-            <%= link_to(account.household_full_name, account.household) %>
+            <%= link_to(account.household_full_name.html_safe << no_user_warning(account), account.household) %>
           </td>
           <td class="col-md-1">
             <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>

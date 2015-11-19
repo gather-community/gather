@@ -23,4 +23,12 @@ module AccountsHelper
         "Fees were last applied #{@late_fee_days_ago} days ago."
       end
   end
+
+  def no_user_warning(account)
+    if account.household_no_users?
+      " ".html_safe << icon_tag("warning", title: "Account household has no associated users")
+    else
+      ""
+    end
+  end
 end

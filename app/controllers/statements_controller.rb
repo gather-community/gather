@@ -8,7 +8,15 @@ class StatementsController < ApplicationController
 
   def generate
     Delayed::Job.enqueue(StatementJob.new(current_user.community))
+
     flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
+
+    if (no_users = Account.with_activity_but_no_users(current_user.community)).any?
+      flash[:alert] = "The following households have no associated users and thus "\
+        "statements were not generated for them: " << (no_users.map(&:household_full_name).join(", ")) <<
+        ". Try sending statements again once the households have associated users."
+    end
+
     redirect_to(accounts_path)
   end
 

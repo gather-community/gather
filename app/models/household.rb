@@ -25,6 +25,10 @@ class Household < ActiveRecord::Base
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
 
+  def no_users?
+    users.empty?
+  end
+
   def full_name
     "#{community.abbrv}: #{name}"
   end

@@ -140,10 +140,13 @@ en:
   accounts:
     index:
       summary:
-        one: "There is one account with current activity."
+        one: "There is 1 account with current activity."
         other: "There are %{count} accounts with current activity."
       last_statement_run: "Statements were last sent out on %{date}."
       statements_never_run: "Statements have never been sent out."
+      no_users:
+        one: "There is 1 account with no associated users. A statement will not be generated for that account."
+        other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
 
   households:
     accounts:

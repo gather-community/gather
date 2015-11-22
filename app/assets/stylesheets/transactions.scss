@@ -4,7 +4,11 @@
   }
 
   &.action-create {
-    table {
+    table.key-value tr {
+      border-top: 1px solid $light-border-color;
+    }
+
+    table.index {
       margin-bottom: 20px;
     }
   }

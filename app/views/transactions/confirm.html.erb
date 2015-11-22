@@ -14,6 +14,15 @@
     Please verify the information below is correct.
   </p>
 
+  <table class="key-value">
+    <tr>
+      <td>Household</td>
+      <td>
+        <%= @transaction.household_full_name %>
+      </td>
+    </tr>
+  </table>
+
   <table class="index">
     <%= render("transactions/#{@transaction.chg_crd}_header") %>
     <%= render("transactions/#{@transaction.chg_crd}_row", txn: @transaction) %>

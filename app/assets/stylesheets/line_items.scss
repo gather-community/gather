@@ -1,0 +1,11 @@
+.line-items {
+  .line_item_amount input {
+    width: 200px;
+  }
+
+  &.action-create {
+    table {
+      margin-bottom: 20px;
+    }
+  }
+}

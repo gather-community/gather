@@ -1,0 +1,30 @@
+<% content_for(:title){ "Confirm Transaction" } %>
+
+<%= simple_form_for([@account, @line_item]) do |f| %>
+  <%= hidden_field_tag :account_id, @account.id %>
+  <%= hidden_field_tag :confirmed, "1" %>
+  <%= f.hidden_field :incurred_on %>
+  <%= f.hidden_field :code  %>
+  <%= f.hidden_field :description %>
+  <%= f.hidden_field :amount  %>
+
+  <p>
+    Below is how the new transaction will appear on the household's statement.
+    Transactions cannot be edited once they are created.
+    Please verify the information below is correct.
+  </p>
+
+  <table class="index">
+    <%= render("line_items/#{@line_item.chg_crd}_header") %>
+    <%= render("line_items/#{@line_item.chg_crd}_row", txn: @line_item) %>
+  </table>
+
+  <div class="row">
+    <div class="form-actions col-sm-12">
+      <%= f.button :submit, "Confirm", class: "pull-right btn-primary" %>
+      <%= f.button :submit, "Cancel/Modify", class: "pull-right btn-default",
+         onclick: "this.form.confirmed.value = '0'" %>
+    </div>
+  </div>
+
+<% end %>

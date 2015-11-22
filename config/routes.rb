@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       put :apply_late_fees
       put :apply_payments
     end
+    resources :line_items, path: "items"
   end
 
   resources :statements, only: [:show] do

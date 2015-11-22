@@ -39,6 +39,10 @@ en:
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
+      line_item:
+        incurred_on: "Item Date"
+        household_name: "Household Name"
+        code: "Type"
     errors:
       models:
         signup:
@@ -69,6 +73,8 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
+      line_item:
+        description: "e.g. Check #12345"
 
   meals:
     over_limit_notice: "Your household has exceeded its %{community} meals account credit limit and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals admin if you have questions."
@@ -136,6 +142,8 @@ en:
     oldbal: "Old System"
     payment: "Payment"
     reimb: "Reimbursement"
+    othcrd: "Other Credit"
+    othchg: "Other Charge"
 
   accounts:
     index:

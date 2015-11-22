@@ -59,31 +59,9 @@
 <% if @charges.any? %>
   <h4>Charges</h4>
   <table class="index charges">
-    <tr>
-      <th class="col-md-1">Date</th>
-      <th class="col-md-1">Type</th>
-      <th class="col-md-4">Description</th>
-      <th class="col-md-1">Quantity</th>
-      <th class="col-md-1">Unit Price</th>
-      <th class="col-md-1">Amount</th>
-    </tr>
+    <%= render("line_items/charge_header") %>
     <% @charges.each do |li| %>
-      <tr>
-        <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
-        <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
-        <td class="col-md-4">
-          <% if li.statementable.present? %>
-            <%= link_to(li.description, polymorphic_path(li.statementable)) %>
-          <% else %>
-            <%= li.description %>
-          <% end %>
-        </td>
-        <td class="col-md-1 num"><%= li.quantity %></td>
-        <td class="col-md-1 num"><%= currency_with_cr(li.unit_price) %></td>
-        <td class="col-md-1 num">
-          <%= currency_with_cr_span(li.amount) %>
-        </td>
-      </tr>
+      <%= render("line_items/charge_row", txn: li) %>
     <% end %>
   </table>
 <% end %>
@@ -91,21 +69,9 @@
 <% if @credits.any? %>
   <h4>Payments/Credits</h4>
   <table class="index credits">
-    <tr>
-      <th class="col-md-1">Date</th>
-      <th class="col-md-1">Type</th>
-      <th class="col-md-6">Description</th>
-      <th class="col-md-1">Amount</th>
-    </tr>
+    <%= render("line_items/credit_header") %>
     <% @credits.each do |li| %>
-      <tr>
-        <td class="col-md-1"><%= li.incurred_on.to_s(:short_date) %></td>
-        <td class="col-md-1"><%= t("line_item_codes.#{li.code}") %></td>
-        <td class="col-md-6"><%= li.description %></td>
-        <td class="col-md-1 num">
-          <%= currency_with_cr_span(li.amount) %>
-        </td>
-      </tr>
+      <%= render("line_items/credit_row", txn: li) %>
     <% end %>
   </table>
 <% end %>

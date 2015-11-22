@@ -12,6 +12,24 @@
     button[type='submit'] {
       float: right;
     }
+
+    table.index {
+      width: 100%;
+
+      th, td {
+        &:first-of-type {
+          width: 24%;
+        }
+
+        .amount {
+          width: 12%;
+        }
+
+        &:last-of-type {
+          width: 4%;
+        }
+      }
+    }
   }
 
   &.action-apply-payments {

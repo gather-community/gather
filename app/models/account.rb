@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
   belongs_to :community
   belongs_to :last_statement, class_name: "Statement"
   has_many :statements, ->{ order(created_at: :desc) }
-  has_many :line_items
+  has_many :transactions
 
   scope :for_community, ->(c){ where(community_id: c.id) }
   scope :for_community_or_household,
@@ -61,17 +61,17 @@ class Account < ActiveRecord::Base
     save!
   end
 
-  def line_item_added!(line_item)
-    if line_item.charge?
-      self.total_new_charges += line_item.amount
+  def transaction_added!(transaction)
+    if transaction.charge?
+      self.total_new_charges += transaction.amount
     else
-      self.total_new_credits += line_item.abs_amount
+      self.total_new_credits += transaction.abs_amount
     end
     save!
   end
 
   def recalculate!
-    new_amounts = LineItem.select("
+    new_amounts = Transaction.select("
       SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) AS new_credits,
       SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS new_charges").
       where(account_id: id).

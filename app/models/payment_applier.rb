@@ -11,7 +11,7 @@ class PaymentApplier
   def apply!
     data.each do |account_id, amount|
       next if amount.to_f <= 0
-      LineItem.create!(
+      Transaction.create!(
         account_id: account_id,
         code: "payment",
         description: "Payment - Thank You!",

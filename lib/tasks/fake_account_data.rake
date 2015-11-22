@@ -3,7 +3,7 @@ namespace :db do
     raise "Please specify household_ids, separated by the | character" unless args.household_ids.present?
 
     Account.update_all("last_statement_id = NULL")
-    [LineItem, Statement, Account].each{ |k| k.delete_all }
+    [Transaction, Statement, Account].each{ |k| k.delete_all }
 
     households = Household.active.shuffle[0...20] | Household.find(args.household_ids.split("|"))
     households.each do |household|
@@ -18,7 +18,7 @@ namespace :db do
             charges = rand(8)
             charges.times do
               Timecop.freeze(Time.now + rand(28).days) do
-                account.line_items.create!(code: "meal", description: Faker::Lorem.sentence(4)[0..-2],
+                account.transactions.create!(code: "meal", description: Faker::Lorem.sentence(4)[0..-2],
                   incurred_on: Date.today, amount: (rand(1000).to_f + 50) / 100)
               end
             end
@@ -27,7 +27,7 @@ namespace :db do
             has_balance = !(prev_balance.nil? || prev_balance == 0)
             if has_balance && prev_balance > 0
               Timecop.freeze(Time.now + rand(28).days) do
-                account.line_items.create!(code: "payment", description: "Check ##{rand(10000) + 100}",
+                account.transactions.create!(code: "payment", description: "Check ##{rand(10000) + 100}",
                   incurred_on: Date.today,
                   amount: -(rand(10) < 1 ? prev_balance - 5 + rand(10) : prev_balance))
               end
@@ -36,7 +36,7 @@ namespace :db do
             # Reimbursement
             if rand(20) < 1
               Timecop.freeze(Time.now + rand(28).days) do
-                account.line_items.create!(code: "reimb", description: Faker::Lorem.sentence(4)[0..-2],
+                account.transactions.create!(code: "reimb", description: Faker::Lorem.sentence(4)[0..-2],
                   incurred_on: Date.today,
                   amount: -(rand(10000).to_f + 5000) / 100)
               end

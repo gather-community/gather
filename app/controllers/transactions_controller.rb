@@ -1,18 +1,18 @@
-class LineItemsController < ApplicationController
+class TransactionsController < ApplicationController
   before_action :load_and_authorize_account
   load_resource
   skip_authorize_resource
 
   def new
-    @line_item = LineItem.new(incurred_on: Date.today, account_id: params[:account_id])
+    @transaction = Transaction.new(incurred_on: Date.today, account_id: params[:account_id])
   end
 
   def create
-    @line_item.account = @account
-    if @line_item.valid?
+    @transaction.account = @account
+    if @transaction.valid?
       # If confirmed not present, we show a confirm screen.
       if params[:confirmed] == "1"
-        @line_item.save
+        @transaction.save
         flash[:success] = "Transaction added successfully."
         redirect_to accounts_path
       elsif params[:confirmed] == "0"
@@ -30,8 +30,8 @@ class LineItemsController < ApplicationController
 
   private
 
-  def line_item_params
-    params.require(:line_item).permit(:incurred_on, :code, :description, :amount)
+  def transaction_params
+    params.require(:transaction).permit(:incurred_on, :code, :description, :amount)
   end
 
   def load_and_authorize_account

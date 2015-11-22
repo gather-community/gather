@@ -1,6 +1,6 @@
 <% content_for(:title){ "Confirm Transaction" } %>
 
-<%= simple_form_for([@account, @line_item]) do |f| %>
+<%= simple_form_for([@account, @transaction]) do |f| %>
   <%= hidden_field_tag :account_id, @account.id %>
   <%= hidden_field_tag :confirmed, "1" %>
   <%= f.hidden_field :incurred_on %>
@@ -15,8 +15,8 @@
   </p>
 
   <table class="index">
-    <%= render("line_items/#{@line_item.chg_crd}_header") %>
-    <%= render("line_items/#{@line_item.chg_crd}_row", txn: @line_item) %>
+    <%= render("transactions/#{@transaction.chg_crd}_header") %>
+    <%= render("transactions/#{@transaction.chg_crd}_row", txn: @transaction) %>
   </table>
 
   <div class="row">

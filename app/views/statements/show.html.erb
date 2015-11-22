@@ -45,7 +45,7 @@
   </tr>
 </table>
 
-<% if @statement.line_items.empty? %>
+<% if @statement.transactions.empty? %>
   <p>
     There are no new charges or credits on this statement.
     <% if @statement.total_due > 0 %>
@@ -59,9 +59,9 @@
 <% if @charges.any? %>
   <h4>Charges</h4>
   <table class="index charges">
-    <%= render("line_items/charge_header") %>
+    <%= render("transactions/charge_header") %>
     <% @charges.each do |li| %>
-      <%= render("line_items/charge_row", txn: li) %>
+      <%= render("transactions/charge_row", txn: li) %>
     <% end %>
   </table>
 <% end %>
@@ -69,9 +69,9 @@
 <% if @credits.any? %>
   <h4>Payments/Credits</h4>
   <table class="index credits">
-    <%= render("line_items/credit_header") %>
+    <%= render("transactions/credit_header") %>
     <% @credits.each do |li| %>
-      <%= render("line_items/credit_row", txn: li) %>
+      <%= render("transactions/credit_row", txn: li) %>
     <% end %>
   </table>
 <% end %>

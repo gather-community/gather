@@ -1,6 +1,6 @@
 class Statement < ActiveRecord::Base
   belongs_to :account, inverse_of: :statements
-  has_many :line_items, ->{ order(:incurred_on) }, dependent: :nullify
+  has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
 
   scope :for_community, ->(c){ joins(account: :household).where("households.community_id = ?", c.id) }
   scope :for_community_or_household,
@@ -28,11 +28,11 @@ class Statement < ActiveRecord::Base
   # Populates the statement with available line items.
   # Raises StatementError unless the balance is nonzero or there are any line items.
   def populate!
-    self.line_items = LineItem.where(account: account).no_statement.to_a
-    self.total_due = prev_balance + line_items.map(&:amount).sum
+    self.transactions = Transaction.where(account: account).no_statement.to_a
+    self.total_due = prev_balance + transactions.map(&:amount).sum
     self.prev_stmt_on = account.last_statement.try(:created_on)
 
-    if line_items.empty? && total_due.abs < 0.01
+    if transactions.empty? && total_due.abs < 0.01
       raise StatementError.new("Must have line items or a total due.")
     else
       save!

@@ -61,7 +61,7 @@ class Ability
     end
 
     cannot :destroy, Household do |h|
-      h.any_assignments? || h.any_signups? || h.any_users? || h.any_line_items? || h.any_statements?
+      h.any_assignments? || h.any_signups? || h.any_users? || h.any_transactions? || h.any_statements?
     end
 
     cannot :summary, Meal do |m|

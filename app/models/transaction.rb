@@ -1,4 +1,4 @@
-class LineItem < ActiveRecord::Base
+class Transaction < ActiveRecord::Base
   TYPES = [
     OpenStruct.new(code: "meal", charge?: true),
     OpenStruct.new(code: "oldbal", charge?: true, credit?: true),
@@ -33,7 +33,7 @@ class LineItem < ActiveRecord::Base
   end
 
   after_create do
-    account.line_item_added!(self)
+    account.transaction_added!(self)
   end
 
   after_destroy do

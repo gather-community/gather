@@ -19,7 +19,7 @@ class LateFeeApplier
   def apply!
     return unless policy?
     late_accounts.each do |account|
-      account.line_items.create!(
+      account.transactions.create!(
         incurred_on: Date.today,
         code: "late_fee",
         description: "Late payment fee",

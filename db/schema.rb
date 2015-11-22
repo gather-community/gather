@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112023939) do
+ActiveRecord::Schema.define(version: 20151122203343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,27 +133,6 @@ ActiveRecord::Schema.define(version: 20151112023939) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
-  create_table "line_items", force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.decimal "amount", precision: 10, scale: 3, null: false
-    t.string "code", limit: 16, null: false
-    t.datetime "created_at", null: false
-    t.string "description", limit: 255, null: false
-    t.date "incurred_on", null: false
-    t.integer "quantity"
-    t.integer "statement_id"
-    t.integer "statementable_id"
-    t.string "statementable_type", limit: 32
-    t.decimal "unit_price", precision: 10, scale: 3
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "line_items", ["account_id"], name: "index_line_items_on_account_id", using: :btree
-  add_index "line_items", ["code"], name: "index_line_items_on_code", using: :btree
-  add_index "line_items", ["incurred_on"], name: "index_line_items_on_incurred_on", using: :btree
-  add_index "line_items", ["statement_id"], name: "index_line_items_on_statement_id", using: :btree
-  add_index "line_items", ["statementable_id", "statementable_type"], name: "index_line_items_on_statementable_id_and_statementable_type", using: :btree
-
   create_table "locations", force: :cascade do |t|
     t.string "abbrv", limit: 8, null: false
     t.datetime "created_at", null: false
@@ -224,6 +203,27 @@ ActiveRecord::Schema.define(version: 20151112023939) do
   add_index "statements", ["account_id"], name: "index_statements_on_account_id", using: :btree
   add_index "statements", ["created_at"], name: "index_statements_on_created_at", using: :btree
 
+  create_table "transactions", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.decimal "amount", precision: 10, scale: 3, null: false
+    t.string "code", limit: 16, null: false
+    t.datetime "created_at", null: false
+    t.string "description", limit: 255, null: false
+    t.date "incurred_on", null: false
+    t.integer "quantity"
+    t.integer "statement_id"
+    t.integer "statementable_id"
+    t.string "statementable_type", limit: 32
+    t.decimal "unit_price", precision: 10, scale: 3
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree
+  add_index "transactions", ["code"], name: "index_transactions_on_code", using: :btree
+  add_index "transactions", ["incurred_on"], name: "index_transactions_on_incurred_on", using: :btree
+  add_index "transactions", ["statement_id"], name: "index_transactions_on_statement_id", using: :btree
+  add_index "transactions", ["statementable_id", "statementable_type"], name: "index_transactions_on_statementable_id_and_statementable_type", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
     t.string "alternate_id"
@@ -269,12 +269,12 @@ ActiveRecord::Schema.define(version: 20151112023939) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
-  add_foreign_key "line_items", "accounts"
-  add_foreign_key "line_items", "statements"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"
   add_foreign_key "statements", "accounts"
+  add_foreign_key "transactions", "accounts"
+  add_foreign_key "transactions", "statements"
   add_foreign_key "users", "households"
 end

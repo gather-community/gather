@@ -65,8 +65,8 @@ class Household < ActiveRecord::Base
     users.any?
   end
 
-  def any_line_items?
-    accounts.any?{ |a| a.line_items.any? }
+  def any_transactions?
+    accounts.any?{ |a| a.transactions.any? }
   end
 
   def any_statements?

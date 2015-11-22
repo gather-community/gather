@@ -39,7 +39,7 @@ en:
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
-      line_item:
+      transaction:
         incurred_on: "Item Date"
         household_name: "Household Name"
         code: "Type"
@@ -73,7 +73,7 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
-      line_item:
+      transaction:
         description: "e.g. Check #12345"
 
   meals:
@@ -137,7 +137,7 @@ en:
     asst_cook: "Assistant Cook"
     cleaner: "Cleaner"
 
-  line_item_codes:
+  transaction_codes:
     meal: "Meal"
     oldbal: "Old System"
     payment: "Payment"

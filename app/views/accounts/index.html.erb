@@ -67,7 +67,7 @@
             <strong><%= currency_with_cr(account.current_balance) %></strong>
           </td>
           <td>
-            <%= link_to(icon_tag("plus"), new_account_line_item_path(account), title: 'Add Item') %>
+            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Item') %>
           </td>
         </tr>
       <% end %>

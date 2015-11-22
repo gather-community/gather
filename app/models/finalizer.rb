@@ -18,7 +18,7 @@ class Finalizer
         price = calculator.price_for(signup_type)
         next if price < 0.01
 
-        LineItem.create!(
+        Transaction.create!(
           account: Account.for(signup.household_id, meal.host_community_id),
           code: "meal",
           incurred_on: meal.served_at.to_date,
@@ -31,7 +31,7 @@ class Finalizer
     end
 
     if meal.payment_method == "credit"
-      LineItem.create!(
+      Transaction.create!(
         account: Account.for(meal.head_cook.household_id, meal.host_community_id),
         code: "reimb",
         incurred_on: meal.served_at.to_date,

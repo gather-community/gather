@@ -4,9 +4,9 @@ RSpec.describe Account, type: :model do
   let(:account){ create(:account, total_new_credits: 4, total_new_charges: 7) }
   let(:statement){ create(:statement, account: account) }
 
-  describe "line_item_added" do
+  describe "transaction_added" do
     it "should work for new charge" do
-      create(:line_item, account: account, amount: 6)
+      create(:transaction, account: account, amount: 6)
       expect(account.reload.total_new_credits).to eq 4
       expect(account.total_new_charges).to eq 13
       expect(account.balance_due).to eq 4.81
@@ -14,7 +14,7 @@ RSpec.describe Account, type: :model do
     end
 
     it "should work for new credit" do
-      create(:line_item, account: account, amount: -6)
+      create(:transaction, account: account, amount: -6)
       expect(account.reload.total_new_credits).to eq 10
       expect(account.total_new_charges).to eq 7
       expect(account.balance_due).to eq -1.19
@@ -41,10 +41,10 @@ RSpec.describe Account, type: :model do
         @inv1 = create(:statement, account: account, total_due: 10)
       end
       @inv2 = create(:statement, account: account, total_due: 15)
-      create(:line_item, account: account, amount: 5, statement: @inv2)
-      create(:line_item, account: account, amount: -8, statement: @inv2)
-      create(:line_item, account: account, quantity: 2, unit_price: 2.25, statement: @inv2)
-      create(:line_item, account: account, amount: -2.35, statement: @inv2)
+      create(:transaction, account: account, amount: 5, statement: @inv2)
+      create(:transaction, account: account, amount: -8, statement: @inv2)
+      create(:transaction, account: account, quantity: 2, unit_price: 2.25, statement: @inv2)
+      create(:transaction, account: account, amount: -2.35, statement: @inv2)
       @inv2.destroy
       expect(account.last_statement_on).to eq @inv1.created_on
       expect(account.due_last_statement).to eq 10

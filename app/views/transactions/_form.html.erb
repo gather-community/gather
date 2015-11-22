@@ -1,14 +1,14 @@
-<%= simple_form_for([@account, @line_item], html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for([@account, @transaction], html: { class: 'form-horizontal' }) do |f| %>
 
   <%= hidden_field_tag :account_id, @account.id %>
 
   <%= f.input :household_name do %>
-    <%= @line_item.household_full_name %>
+    <%= @transaction.household_full_name %>
   <% end %>
 
   <%= f.input :incurred_on, as: :date_picker,
       input_html: {data: {date_options: {maxDate: Date.today}}} %>
-  <%= f.input :code, as: :radio_buttons, collection: line_item_code_options %>
+  <%= f.input :code, as: :radio_buttons, collection: transaction_code_options %>
   <%= f.input :description %>
   <%= f.input :amount, input_html: {value: number_with_precision(f.object.abs_amount, precision: 2) } %>
 

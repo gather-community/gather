@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
 
     @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
 
-    last_fee = LineItem.joins(:account).
+    last_fee = Transaction.joins(:account).
       where(code: "late_fee", accounts: { community_id: community.id }).
       order(:incurred_on).last
 

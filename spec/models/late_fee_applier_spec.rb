@@ -38,11 +38,11 @@ RSpec.describe LateFeeApplier, type: :model do
       LateFeeApplier.new(community).apply!
       amounts.each_with_index do |amt, i|
         if amt == 0
-          expect(accounts[i].line_items).to be_empty
+          expect(accounts[i].transactions).to be_empty
         else
-          expect(accounts[i].line_items.last.incurred_on).to eq Date.today
-          expect(accounts[i].line_items.last.code).to eq "late_fee"
-          expect(accounts[i].line_items.last.amount).to eq amt
+          expect(accounts[i].transactions.last.incurred_on).to eq Date.today
+          expect(accounts[i].transactions.last.code).to eq "late_fee"
+          expect(accounts[i].transactions.last.amount).to eq amt
         end
       end
     end

@@ -6,7 +6,7 @@ class Statement < ActiveRecord::Base
   scope :for_community_or_household,
     ->(c,h){ joins(account: :household).where("households.community_id = ? OR households.id = ?", c.id, h.id) }
 
-  delegate :community_id, :household, :household_id, :household_full_name, to: :account
+  delegate :community, :community_id, :household, :household_id, :household_full_name, to: :account
 
   paginates_per 10
 

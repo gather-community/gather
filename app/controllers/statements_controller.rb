@@ -4,6 +4,7 @@ class StatementsController < ApplicationController
   def show
     @charges = @statement.transactions.select(&:charge?)
     @credits = @statement.transactions.select(&:credit?)
+    @community = @statement.community
   end
 
   def generate

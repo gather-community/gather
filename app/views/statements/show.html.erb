@@ -2,6 +2,12 @@
 
 <table class="key-value">
   <tr>
+    <td>Community Account</td>
+    <td>
+      <%= @community.name %>
+    </td>
+  </tr>
+  <tr>
     <td>Household</td>
     <td>
       <%= @statement.household_full_name %>
@@ -74,4 +80,9 @@
       <%= render("transactions/credit_row", txn: li) %>
     <% end %>
   </table>
+<% end %>
+
+<% if @community.settings[:payment_instructions] %>
+  <br/>
+  <%= simple_format(@community.settings[:payment_instructions]) %>
 <% end %>

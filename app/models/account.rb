@@ -12,6 +12,7 @@ class Account < ActiveRecord::Base
     ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
 
   delegate :name, :full_name, :no_users?, to: :household, prefix: true
+  delegate :name, to: :community, prefix: true
 
   before_save do
     self.balance_due = (due_last_statement || 0) - total_new_credits

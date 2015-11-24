@@ -33,7 +33,7 @@
       <th class="col-md-2">Cook</th>
       <th class="col-md-4">Title</th>
       <th class="col-md-1">Going?</th>
-      <th class="col-md-1" colspan="2">Signups</th>
+      <th class="col-md-2" colspan="2">Signups</th>
     </tr>
     <% @meals.each do |meal| %>
       <tr class="<%= signed_up_class(meal) %>">
@@ -61,7 +61,7 @@
           <% end %>
         </td>
         <td class="col-md-1"><%= signup_count(meal) %></td>
-        <td>
+        <td class="col-md-1">
           <% if params[:finalizable] %>
             <%= link_to("Finalize", finalize_meal_path(meal)) %>
           <% else %>

@@ -36,7 +36,10 @@ class Signup < ActiveRecord::Base
   def self.totals_for_meal(meal)
     query = where(meal_id: meal.id)
     SIGNUP_TYPES.each{ |st| query = query.select("SUM(#{st}) AS #{st}") }
-    query.to_a.first.attributes.slice(*SIGNUP_TYPES)
+    query.to_a.first.attributes.slice(*SIGNUP_TYPES).tap do |totals|
+      # Totals may be nil if no signups. Ensure zeros instead.
+      totals.each{ |k, v| totals[k] ||= 0 }
+    end
   end
 
   def self.portions_for_meal(meal, food_type)

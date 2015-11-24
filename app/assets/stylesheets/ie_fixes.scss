@@ -1,0 +1,6 @@
+// Make ie dropdown arrows less gross
+select::-ms-expand {
+  width:12px;
+  border:none;
+  background:#fff;
+}

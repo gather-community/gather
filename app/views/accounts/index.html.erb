@@ -55,13 +55,13 @@
             <%= statement_amount(account.last_statement) %>
           </td>
           <td class="amount">
-            <%= number_to_currency(account.total_new_credits) %>
+            <%= link_to_currency_if_nonzero(account.total_new_credits, account_transactions_path(account)) %>
           </td>
           <td class="amount">
             <%= currency_with_cr(account.balance_due) %>
           </td>
           <td class="amount">
-            <%= number_to_currency(account.total_new_charges) %>
+            <%= link_to_currency_if_nonzero(account.total_new_charges, account_transactions_path(account)) %>
           </td>
           <td class="amount">
             <strong><%= currency_with_cr(account.current_balance) %></strong>

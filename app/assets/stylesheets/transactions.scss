@@ -1,4 +1,4 @@
-.transactions {
+.transactions, .statements {
   .transaction_amount input {
     width: 200px;
   }
@@ -11,5 +11,11 @@
     table.index {
       margin-bottom: 20px;
     }
+  }
+
+  span.cr {
+    display: inline-block;
+    width: 20px;
+    padding-left: 4px;
   }
 }

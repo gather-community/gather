@@ -15,12 +15,15 @@ class Transaction < ActiveRecord::Base
   belongs_to :statement
   belongs_to :statementable, polymorphic: true
 
+  scope :for_household, ->(h){ joins(account: :household).where("households.id = ?", h.id) }
+  scope :for_community_or_household,
+    ->(c,h){ joins(account: :household).where("households.community_id = ? OR households.id = ?", c.id, h.id) }
   scope :incurred_between, ->(a,b){ where("incurred_on >= ? AND incurred_on <= ?", a, b) }
   scope :no_statement, ->{ where(statement_id: nil) }
   scope :credit, ->{ where("amount < 0") }
   scope :charge, ->{ where("amount > 0") }
 
-  delegate :household_full_name, to: :account
+  delegate :household_id, :household_full_name, :community_id, to: :account
 
   before_validation do
     # Respect qty and unit price

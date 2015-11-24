@@ -29,6 +29,6 @@ class NotificationMailer < ActionMailer::Base
     @account = statement.account
     @household = statement.household
 
-    mail(to: @household.users.map(&:email), subject: "New Account Statement")
+    mail(to: @household.users.map(&:email), subject: "New Account Statement for #{@account.community_name}")
   end
 end

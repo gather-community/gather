@@ -62,25 +62,7 @@
   </p>
 <% end %>
 
-<% if @charges.any? %>
-  <h4>Charges</h4>
-  <table class="index charges">
-    <%= render("transactions/charge_header") %>
-    <% @charges.each do |li| %>
-      <%= render("transactions/charge_row", txn: li) %>
-    <% end %>
-  </table>
-<% end %>
-
-<% if @credits.any? %>
-  <h4>Payments/Credits</h4>
-  <table class="index credits">
-    <%= render("transactions/credit_header") %>
-    <% @credits.each do |li| %>
-      <%= render("transactions/credit_row", txn: li) %>
-    <% end %>
-  </table>
-<% end %>
+<%= render("transactions/charges_and_credits") %>
 
 <% if @community.settings[:payment_instructions] %>
   <br/>

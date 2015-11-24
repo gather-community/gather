@@ -37,7 +37,7 @@
     <tr>
       <td>New Payments/Credits</td>
       <td>
-        <%= number_to_currency(@account.total_new_credits) %>
+        <%= link_to_currency_if_nonzero(@account.total_new_credits, account_transactions_path(@account)) %>
       </td>
     </tr>
     <tr>
@@ -49,11 +49,26 @@
         <% end %>
       </td>
     </tr>
+    <tr>
+      <td>New Charges</td>
+      <td>
+        <%= link_to_currency_if_nonzero(@account.total_new_charges, account_transactions_path(@account)) %>
+        <% if @account.total_new_charges >= 0.01 %>
+          <strong>**</strong>
+        <% end %>
+      </td>
+    </tr>
   </table>
 
   <% if @account.balance_due >= 0.01 %>
-    <strong>*</strong> <small>If you have already sent payment, please disregard.</small>
+    <strong>*</strong> <small>This is the amount due on your last statement minus any payments received.
+      If you have already sent payment, please disregard.</small><br/>
   <% end %>
+  <% if @account.total_new_charges >= 0.01 %>
+    <strong>**</strong> <small>These charges were added since your last statement
+      and are not included in your balance due.</small><br/>
+  <% end %>
+
 
   <% if @statements.any? %>
     <h4><%= @account.community.name %>: Past Statements</h4>

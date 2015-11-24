@@ -14,6 +14,13 @@ module AccountsHelper
       content_tag(:span, amount < 0 ? "CR" : "", class: "cr")
   end
 
+  def link_to_currency_if_nonzero(amt, target)
+    if amt.abs > 0.01
+      link_to(number_to_currency(amt), target)
+    else
+      number_to_currency(amt)
+    end
+  end
 
   def late_fee_confirm
     "Are you sure? Fees will be charged to #{@late_fee_count} households. " <<

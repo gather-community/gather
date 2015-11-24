@@ -1,7 +1,13 @@
 class TransactionsController < ApplicationController
-  before_action :load_and_authorize_account
-  load_resource
-  skip_authorize_resource
+  load_and_authorize_resource :account
+  load_and_authorize_resource :transaction, through: :account
+
+  def index
+    @transactions = @transactions.no_statement
+    @charges = @transactions.select(&:charge?)
+    @credits = @transactions.select(&:credit?)
+    @community = @account.community
+  end
 
   def new
     @transaction = Transaction.new(incurred_on: Date.today, account_id: params[:account_id])
@@ -32,10 +38,5 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(:incurred_on, :code, :description, :amount)
-  end
-
-  def load_and_authorize_account
-    @account = Account.find(params[:account_id])
-    authorize!(:manage, @account)
   end
 end

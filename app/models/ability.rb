@@ -33,11 +33,17 @@ class Ability
       can :manage, Statement, Statement.for_community_or_household(user.community, user.household) do |statement|
         statement.community_id == user.community_id || statement.household_id == user.household_id
       end
+      can :manage, Transaction, Transaction.for_community_or_household(user.community, user.household) do |txn|
+        txn.community_id == user.community_id || txn.household_id == user.household_id
+      end
     else
       # Can see own accounts and statements.
       can :accounts, Household, id: user.household_id
       can :show, Account, household_id: user.household_id
       can :read, Statement, household_id: user.household_id
+      can :read, Transaction, Transaction.for_household(user.household) do |txn|
+        txn.household_id == user.household_id
+      end
     end
 
     if user.admin?

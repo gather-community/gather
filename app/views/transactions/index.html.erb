@@ -1,0 +1,34 @@
+<% content_for(:title){ "Recent Transactions" } %>
+
+<table class="key-value">
+  <tr>
+    <td>Community Account</td>
+    <td>
+      <%= @community.name %>
+    </td>
+  </tr>
+  <tr>
+    <td>Household</td>
+    <td>
+      <%= @account.household_full_name %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Charges</td>
+    <td>
+      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Payments/Credits</td>
+    <td>
+      <%= currency_with_cr_span(@credits.sum(&:amount)) %>
+    </td>
+  </tr>
+</table>
+
+<% if @transactions.none? %>
+  You have no recent transactions for this account.
+<% else %>
+  <%= render("charges_and_credits") %>
+<% end %>

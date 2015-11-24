@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
     OpenStruct.new(code: "payment", credit?: true, manual?: true),
     OpenStruct.new(code: "reimb", credit?: true, manual?: true),
     OpenStruct.new(code: "othcrd", credit?: true, manual?: true),
+    OpenStruct.new(code: "late", charge?: true, manual?: false),
     OpenStruct.new(code: "othchg", charge?: true, manual?: true)
   ]
   TYPES_BY_CODE = TYPES.index_by(&:code)

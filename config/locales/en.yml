@@ -144,6 +144,7 @@ en:
     reimb: "Reimbursement"
     othcrd: "Other Credit"
     othchg: "Other Charge"
+    late: "Late Fee"
 
   accounts:
     index:

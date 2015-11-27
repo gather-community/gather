@@ -19,6 +19,7 @@ class MealsController < ApplicationController
 
   def show
     @signup = Signup.for(current_user, @meal)
+    @account = current_user.account_for(@meal.host_community)
     load_signups
     load_prev_next_meal
   end
@@ -126,6 +127,7 @@ class MealsController < ApplicationController
     else
       @meals = @meals.future.oldest_first
     end
+    @meals = @meals.includes(:signups)
     @meals = @meals.worked_by(@user) if @user.present?
     @meals = @meals.page(params[:page])
   end

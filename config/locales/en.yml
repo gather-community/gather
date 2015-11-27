@@ -77,7 +77,7 @@ en:
         description: "e.g. Check #12345"
 
   meals:
-    over_limit_notice: "Your household has exceeded its %{community} meals account credit limit and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals admin if you have questions."
+    over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals admin if you have questions."
 
   action_names:
     edit: "Edit"

@@ -43,7 +43,7 @@
     <tr>
       <td>Balance Due</td>
       <td>
-        <%= currency_with_cr(@account.balance_due) %>
+        <strong><%= currency_with_cr(@account.balance_due) %></strong>
         <% if @account.balance_due >= 0.01 %>
           <strong>*</strong>
         <% end %>
@@ -56,6 +56,18 @@
         <% if @account.total_new_charges >= 0.01 %>
           <strong>**</strong>
         <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Current Balance</td>
+      <td>
+        <%= currency_with_cr(@account.current_balance) %>
+      </td>
+    </tr>
+    <tr>
+      <td>Credit Limit</td>
+      <td>
+        <%= credit_limit(@account) %>
       </td>
     </tr>
   </table>

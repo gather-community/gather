@@ -25,7 +25,7 @@ class Account < ActiveRecord::Base
 
   def self.with_recent_activity
     where("total_new_credits >= 0.01 OR total_new_charges >= 0.01
-      OR current_balance >= 0.01 OR current_balance <= 0.01")
+      OR ABS(current_balance) >= 0.01")
   end
 
   def self.for(household_id, community_id)

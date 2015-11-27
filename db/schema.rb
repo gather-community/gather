@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151122203343) do
+ActiveRecord::Schema.define(version: 20151127171021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20151122203343) do
     t.decimal "balance_due", precision: 10, scale: 3, default: 0.0, null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
+    t.decimal "credit_limit", precision: 10, scale: 2
     t.decimal "current_balance", precision: 10, scale: 3, default: 0.0, null: false
     t.decimal "due_last_statement", precision: 10, scale: 2
     t.integer "household_id", null: false
@@ -58,18 +59,6 @@ ActiveRecord::Schema.define(version: 20151122203343) do
 
   add_index "communities", ["abbrv"], name: "index_communities_on_abbrv", unique: true, using: :btree
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
-
-  create_table "credit_limits", force: :cascade do |t|
-    t.integer "amount", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.boolean "exceeded", default: false, null: false
-    t.integer "household_id", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "credit_limits", ["community_id"], name: "index_credit_limits_on_community_id", using: :btree
-  add_index "credit_limits", ["household_id"], name: "index_credit_limits_on_household_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "attempts", default: 0, null: false
@@ -263,8 +252,6 @@ ActiveRecord::Schema.define(version: 20151122203343) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
-  add_foreign_key "credit_limits", "communities"
-  add_foreign_key "credit_limits", "households"
   add_foreign_key "formulas", "communities"
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"

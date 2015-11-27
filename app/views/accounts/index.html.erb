@@ -41,6 +41,7 @@
         <th class="amount">Balance Due</th>
         <th class="amount">New Charges</th>
         <th class="amount">Current Balance</th>
+        <th class="amount">Credit Limit</th>
         <th></th>
       </tr>
       <% @accounts.each do |account| %>
@@ -65,6 +66,9 @@
           </td>
           <td class="amount">
             <strong><%= currency_with_cr(account.current_balance) %></strong>
+          </td>
+          <td class="amount">
+            <%= credit_limit(account) %>
           </td>
           <td>
             <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Item') %>

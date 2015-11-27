@@ -85,4 +85,8 @@ class Account < ActiveRecord::Base
     self.total_new_charges = new_amounts.try(:[], "new_charges") || 0
     save!
   end
+
+  def credit_exceeded?
+    credit_limit < current_balance
+  end
 end

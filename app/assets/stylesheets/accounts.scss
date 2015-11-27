@@ -22,7 +22,7 @@
         }
 
         .amount {
-          width: 12%;
+          width: 10%;
         }
 
         &:last-of-type {
@@ -43,5 +43,10 @@
       margin-bottom: 5px;
       vertical-align: bottom;
     }
+  }
+
+  .exceeded {
+    color: red;
+    font-weight: bold;
   }
 }

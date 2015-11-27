@@ -50,4 +50,13 @@ module AccountsHelper
     end
     msg
   end
+
+  def credit_limit(account)
+    if account.credit_limit
+      num = number_to_currency(account.credit_limit)
+      account.credit_exceeded? ? content_tag(:span, num, class: "exceeded") : num
+    else
+      "None"
+    end
+  end
 end

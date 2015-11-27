@@ -59,7 +59,7 @@ module MealsHelper
   end
 
   def signup_link(meal)
-    current_user.over_limit?(meal.host_community) ? "" : link_to("Sign Up", meal_path(meal))
+    current_user.credit_exceeded?(meal.host_community) ? "" : link_to("Sign Up", meal_path(meal))
   end
 
   def signup_count(meal)

@@ -25,6 +25,14 @@ class Household < ActiveRecord::Base
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
 
+  def account_for(community)
+    accounts.find_by(community_id: community.id)
+  end
+
+  def credit_exceeded?(community)
+    account_for(community).try(:credit_exceeded?) || false
+  end
+
   def no_users?
     users.empty?
   end
@@ -35,10 +43,6 @@ class Household < ActiveRecord::Base
 
   def name
     "#{read_attribute(:name)}" << (active? ? "" : " (Inactive)")
-  end
-
-  def over_limit?(community)
-    credit_limits.find_by(community: community).try(:exceeded?) || false
   end
 
   def after_deactivate

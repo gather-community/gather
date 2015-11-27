@@ -87,6 +87,6 @@ class Account < ActiveRecord::Base
   end
 
   def credit_exceeded?
-    credit_limit < current_balance
+    credit_limit && credit_limit < current_balance
   end
 end

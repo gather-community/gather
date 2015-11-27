@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   scope :matching, ->(q) { where("first_name ILIKE ? OR last_name ILIKE ?", "%#{q}%", "%#{q}%") }
 
   delegate :name, :full_name, to: :household, prefix: true
-  delegate :account, :over_limit?, to: :household, prefix: false
+  delegate :credit_exceeded?, to: :household
   delegate :community, :community_id, :community_name, :community_abbrv, to: :household
 
   PHONE_TYPES.each do |p|

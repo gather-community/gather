@@ -28,7 +28,7 @@
 </table>
 
 <% if @transactions.none? %>
-  You have no recent transactions for this account.
+  There are no recent transactions for this account.
 <% else %>
   <%= render("charges_and_credits") %>
 <% end %>

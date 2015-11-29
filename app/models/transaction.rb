@@ -17,7 +17,7 @@ class Transaction < ActiveRecord::Base
 
   scope :for_household, ->(h){ joins(account: :household).where("households.id = ?", h.id) }
   scope :for_community_or_household,
-    ->(c,h){ joins(account: :household).where("households.community_id = ? OR households.id = ?", c.id, h.id) }
+    ->(c,h){ joins(:account).merge(Account.for_community_or_household(c, h)) }
   scope :incurred_between, ->(a,b){ where("incurred_on >= ? AND incurred_on <= ?", a, b) }
   scope :no_statement, ->{ where(statement_id: nil) }
   scope :credit, ->{ where("amount < 0") }

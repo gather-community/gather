@@ -43,6 +43,11 @@ en:
         incurred_on: "Item Date"
         household_name: "Household Name"
         code: "Type"
+      account:
+        household_id: "Household"
+        community_id: "Community Account"
+        current_balance: "Current Balance"
+        credit_limit: "Credit Limit"
     errors:
       models:
         signup:
@@ -75,6 +80,9 @@ en:
         notes: "e.g. Some ingredients organic and local where possible"
       transaction:
         description: "e.g. Check #12345"
+    hints:
+      account:
+        credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals admin if you have questions."

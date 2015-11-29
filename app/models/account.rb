@@ -14,6 +14,8 @@ class Account < ActiveRecord::Base
   delegate :name, :full_name, :no_users?, to: :household, prefix: true
   delegate :name, to: :community, prefix: true
 
+  validates :credit_limit, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+
   before_save do
     self.balance_due = (due_last_statement || 0) - total_new_credits
     self.current_balance = balance_due + total_new_charges
@@ -50,7 +52,6 @@ class Account < ActiveRecord::Base
     for_community(community).joins(:last_statement).
       where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
   end
-
 
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.
   def statement_added!(statement)

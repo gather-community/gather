@@ -24,6 +24,19 @@ class AccountsController < ApplicationController
     @late_fee_days_ago = last_fee.nil? ? nil : (Date.today - last_fee.incurred_on).to_i
   end
 
+  def edit
+  end
+
+  def update
+    if @account.update_attributes(account_params)
+      flash[:success] = "Account updated successfully."
+      redirect_to(accounts_path)
+    else
+      set_validation_error_notice
+      render(:edit)
+    end
+  end
+
   def apply_late_fees
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
@@ -46,6 +59,10 @@ class AccountsController < ApplicationController
   end
 
   private
+
+  def account_params
+    params.require(:account).permit(:credit_limit)
+  end
 
   def community
     current_user.community

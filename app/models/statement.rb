@@ -2,9 +2,9 @@ class Statement < ActiveRecord::Base
   belongs_to :account, inverse_of: :statements
   has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
 
-  scope :for_community, ->(c){ joins(account: :household).where("households.community_id = ?", c.id) }
+  scope :for_community, ->(c){ joins(:account).where("accounts.community_id = ?", c.id) }
   scope :for_community_or_household,
-    ->(c,h){ joins(account: :household).where("households.community_id = ? OR households.id = ?", c.id, h.id) }
+    ->(c,h){ joins(:account).merge(Account.for_community_or_household(c, h)) }
 
   delegate :community, :community_id, :household, :household_id, :household_full_name, to: :account
 

@@ -2,10 +2,10 @@ class AccountsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @accounts = @accounts.joins(:household).
+    @community = community
+    @accounts = @accounts.
       includes(:last_statement, household: [:users, :community]).
-      for_community(community).
-      where("households.deactivated_at IS NULL OR current_balance >= 0.01").
+      with_any_activity(community).
       by_household_full_name
 
     @active_accounts = Account.with_activity(community).count

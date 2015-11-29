@@ -53,6 +53,13 @@ class Account < ActiveRecord::Base
       where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
   end
 
+  # Returns accounts that have a balance OR a past statement AND an active household
+  def self.with_any_activity(community)
+    for_community(community).joins(:household)
+      where("ABS(balance_due) >= 0.01 OR ABS(current_balance) >= 0.01 OR
+        last_statement_id IS NOT NULL AND households.deactivated_at IS NULL")
+  end
+
   # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.
   def statement_added!(statement)
     self.last_statement_on = statement.created_on

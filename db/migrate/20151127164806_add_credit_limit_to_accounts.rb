@@ -1,3 +1,6 @@
+class CreditLimit < ActiveRecord::Base
+end
+
 class AddCreditLimitToAccounts < ActiveRecord::Migration
   def up
     add_column :accounts, :credit_limit, :decimal, precision: 10, scale: 2

@@ -46,7 +46,7 @@
       Signups for <%= current_user.household_full_name %>
       <%= @meal.closed? ? icon_tag("lock") : "" %>
     </h4>
-    <% if @account.credit_exceeded? && @signup.new_record? %>
+    <% if @account.present? && @account.credit_exceeded? && @signup.new_record? %>
       <%= t("meals.over_limit_notice_html", community: @meal.host_community.name,
         account_link: link_to("account",
           accounts_household_path(current_user.household, community: @meal.host_community_id)),

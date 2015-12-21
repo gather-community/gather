@@ -32,7 +32,8 @@ class User < ActiveRecord::Base
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name
 
-  validates :email, format: Devise.email_regexp, presence: true, uniqueness: true
+  # Contact email does not have to be unique because some people share them (grrr!)
+  validates :email, format: Devise.email_regexp, presence: true
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true

@@ -96,7 +96,7 @@
     <div class="boxes col-sm-6">
       <% Meal::ALLERGENS.sort.each do |allergen| %>
         <div>
-          <%= f.check_box("allergen_#{allergen}", disabled: cannot?(:set_menu, @user)) %>
+          <%= f.check_box("allergen_#{allergen}", disabled: cannot?(:set_menu, @meal)) %>
           <%= f.label("allergen_#{allergen}")%>
         </div>
       <% end %>

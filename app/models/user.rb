@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include Deactivatable
+  rolify
 
   PHONE_TYPES = %w(home work mobile)
 

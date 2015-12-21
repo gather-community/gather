@@ -14,7 +14,7 @@ class Ability
     can :update, User, id: user.id
 
     # Head cooks can edit meals
-    can [:update, :close, :reopen, :summary], Meal do |meal|
+    can [:update, :set_menu, :close, :reopen, :summary], Meal do |meal|
       meal.head_cook == user
     end
 
@@ -54,8 +54,8 @@ class Ability
       can :manage, Signup
       can :manage, Household
     else
-      # Anyone can view all meals
-      can [:read, :work], Meal, Meal.visible_to(user) do |meal|
+      # Anyone can view all meals or change workers with notification.
+      can [:read, :work, :update], Meal, Meal.visible_to(user) do |meal|
         meal.visible_to?(user)
       end
     end

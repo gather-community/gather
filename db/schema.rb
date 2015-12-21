@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127171021) do
+ActiveRecord::Schema.define(version: 20151221031534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -156,6 +156,17 @@ ActiveRecord::Schema.define(version: 20151127171021) do
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
+  create_table "roles", force: :cascade do |t|
+    t.datetime "created_at"
+    t.string "name"
+    t.integer "resource_id"
+    t.string "resource_type"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
   create_table "signups", force: :cascade do |t|
     t.integer "adult_meat", default: 0, null: false
     t.integer "adult_veg", default: 0, null: false
@@ -247,6 +258,13 @@ ActiveRecord::Schema.define(version: 20151127171021) do
   add_index "users", ["household_id"], name: "index_users_on_household_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "users_roles", id: false, force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
+  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
+
   add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "statements", column: "last_statement_id"
@@ -264,4 +282,6 @@ ActiveRecord::Schema.define(version: 20151127171021) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "statements"
   add_foreign_key "users", "households"
+  add_foreign_key "users_roles", "roles"
+  add_foreign_key "users_roles", "users"
 end

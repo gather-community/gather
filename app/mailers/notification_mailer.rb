@@ -31,4 +31,17 @@ class NotificationMailer < ActionMailer::Base
 
     mail(to: @household.users.map(&:email), subject: "New Account Statement for #{@account.community_name}")
   end
+
+  def worker_change_notice(initiator, meal, added, removed)
+    @initiator = initiator
+    @meal = meal
+    @added = added
+    @removed = removed
+
+    recips = (@meal.assignments + removed).map(&:user).map(&:email)
+    recips << @meal.host_community.settings[:meals_admin]
+    recips << @initiator.email
+
+    mail(to: recips.compact.uniq, subject: "Meal Work Assignment Change Notice")
+  end
 end

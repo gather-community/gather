@@ -19,41 +19,50 @@
 
   <% end %>
 
-  <div class="form-group text optional
-    <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
-    <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
-    <div class="boxes col-sm-6">
-      <% @communities.each do |c| %>
-        <% checked = community_invited?(@meal, c) %>
-        <% disabled = disable_community_checkbox?(@meal, c) %>
-        <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
-        <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
-        <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
-        &nbsp;&nbsp;
+  <% if can?(:set_menu, @meal) %>
+
+    <div class="form-group text optional
+      <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
+      <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
+      <div class="boxes col-sm-6">
+        <% @communities.each do |c| %>
+          <% checked = community_invited?(@meal, c) %>
+          <% disabled = disable_community_checkbox?(@meal, c) %>
+          <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
+          <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
+          <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
+          &nbsp;&nbsp;
+        <% end %>
+      </div>
+      <% if @meal.errors['invitations'].present? %>
+        <div class="help-block col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
       <% end %>
     </div>
-    <% if @meal.errors['invitations'].present? %>
-      <div class="help-block col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
-    <% end %>
-  </div>
 
-  <%= f.input :capacity, min: 1 %>
+  <% else %>
+
+    <%= f.input :communities do %>
+      <%= @meal.communities.map(&:name).join(", ") %>
+    <% end %>
+
+  <% end %>
+
+  <% if can?(:set_menu, @meal) %>
+    <%= f.input :capacity, min: 1 %>
+  <% else %>
+    <%= f.input :capacity do %><%= @meal.capacity %><% end %>
+  <% end %>
 
   <% if can?(:manage, @meal) %>
     <%= f.input :discount, min: 0, max: 100 %>
   <% end %>
 
-  <% if can?(:manage, @meal) %>
+  <div id="assignment_fields">
+
     <%= f.simple_fields_for :head_cook_assign, @meal.head_cook_assign do |head_cook| %>
       <%= render('head_cook_assign_fields', f: head_cook) %>
     <% end %>
-  <% else %>
-    <%= f.input :head_cook do %>
-      <%= @meal.head_cook_name %>
-    <% end %>
-  <% end %>
 
-  <% if can?(:manage, @meal) %>
     <%= f.simple_fields_for :asst_cook_assigns do |asst_cook| %>
       <%= render('asst_cook_assign_fields', f: asst_cook) %>
     <% end %>
@@ -62,30 +71,23 @@
     <div class="links col-sm-10 col-sm-offset-2">
       <%= link_to_add_association 'Add Assistant Cook', f, :asst_cook_assigns %>
     </div>
-  <% else %>
-    <%= f.input :asst_cooks do %>
-      <%= @meal.asst_cooks.blank? ? "[None]" : @meal.asst_cooks.map(&:name).join(", ") %>
-    <% end %>
-  <% end %>
 
-  <% if can?(:manage, @meal) %>
     <%= f.simple_fields_for :cleaner_assigns do |cleaner| %>
       <%= render('cleaner_assign_fields', f: cleaner) %>
     <% end %>
 
-    <div class="links col-sm-10 col-sm-offset-2">
-      <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
-    </div>
-  <% else %>
-    <%= f.input :cleaners do %>
-      <%= @meal.cleaners.blank? ? "[None]" : @meal.cleaners.map(&:name).join(", ") %>
+  </div>
+
+  <div class="links col-sm-10 col-sm-offset-2">
+    <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
+  </div>
+
+  <% %w(title entrees side kids dessert notes).each do |attrib| %>
+    <% if can?(:set_menu, @meal) %>
+      <%= f.input attrib %>
+    <% else %>
+      <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
     <% end %>
-  <% end %>
-
-  <%= f.input :title %>
-
-  <% %w(entrees side kids dessert notes).each do |attrib| %>
-    <%= f.input attrib %>
   <% end %>
 
   <div class="form-group text optional meal_allergens
@@ -94,7 +96,7 @@
     <div class="boxes col-sm-6">
       <% Meal::ALLERGENS.sort.each do |allergen| %>
         <div>
-          <%= f.check_box("allergen_#{allergen}") %>
+          <%= f.check_box("allergen_#{allergen}", disabled: cannot?(:set_menu, @user)) %>
           <%= f.label("allergen_#{allergen}")%>
         </div>
       <% end %>
@@ -114,5 +116,11 @@
 
 
 <%= javascript_tag do %>
-  $(function(){ new Mess.Views.Select2View({el: '.meals-form'}); });
+  $(function(){
+    new Mess.Views.Select2View({el: '.meals-form'});
+
+    <% if @notify_on_worker_change %>
+      new Mess.Views.WorkerChangeNotificationView({el: '#assignment_fields'});
+    <% end %>
+  });
 <% end %>

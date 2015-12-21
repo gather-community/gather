@@ -2,6 +2,7 @@ class MealsController < ApplicationController
   include MealShowable
 
   before_action :init_meal, only: :new
+  before_action :create_worker_change_notifier, only: :update
 
   load_and_authorize_resource
 
@@ -32,6 +33,7 @@ class MealsController < ApplicationController
   def edit
     @meal = Meal.find(params[:id])
     @min_date = nil
+    @notify_on_worker_change = cannot?(:manage, @meal)
     prep_form_vars
   end
 
@@ -49,6 +51,7 @@ class MealsController < ApplicationController
   def update
     if @meal.update_attributes(meal_params)
       flash[:success] = "Meal updated successfully."
+      @worker_change_notifier.try(:check_and_send!)
       redirect_to meals_path
     else
       set_validation_error_notice
@@ -142,20 +145,24 @@ class MealsController < ApplicationController
   end
 
   def meal_params
-    allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
-    permitted = allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-      { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
-    ]
+    # Anybody that can update a meal can change the assignments.
+    permitted = [{
+      :head_cook_assign_attributes => [:id, :user_id],
+      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
+      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
+    }]
+
+    if can?(:set_menu, Meal)
+      allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
+      permitted += allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
+        { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
+      ]
+    end
 
     if can?(:manage, Meal)
       # Hardcoding this for now
       params[:meal][:host_community_id] = current_user.community_id
-
-      permitted += [:discount, :served_at, :host_community_id, :location_id, {
-        :head_cook_assign_attributes => [:id, :user_id],
-        :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-        :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-      }]
+      permitted += [:discount, :served_at, :host_community_id, :location_id]
     end
 
     params.require(:meal).permit(*permitted)
@@ -164,5 +171,12 @@ class MealsController < ApplicationController
   def finalize_params
     params.require(:meal).permit(:ingredient_cost, :pantry_cost, :payment_method, signups_attributes:
       [:id, :household_id, :_destroy] + Signup::SIGNUP_TYPES)
+  end
+
+  def create_worker_change_notifier
+    @meal = Meal.find(params[:id])
+    if cannot?(:manage, @meal)
+      @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
+    end
   end
 end

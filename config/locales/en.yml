@@ -36,6 +36,7 @@ en:
         ingredient_cost: "Ingredient Cost"
         pantry_cost: "Pantry Cost"
         payment_method: "Payment Method"
+        communities: "Communities"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"

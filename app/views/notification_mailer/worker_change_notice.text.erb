@@ -1,0 +1,14 @@
+<%= @initiator.name %> just made the following change(s) to <%= @meal.title ? "the meal '#{@meal.title}'" : "a meal" -%> on <%= @meal.served_at.to_s(:datetime_no_yr).gsub("  ", " ") %> at <%= @meal.location_name %>.
+
+<% if @added.any? -%>
+<% @added.each do |a| -%>
+- <%= a.user.name %> was added as <%= t("assignment_roles.#{a.role}") %>
+<% end -%>
+<% end -%>
+<% if @removed.any? -%>
+<% @removed.each do |a| -%>
+- <%= a.user.name %> was removed as <%= t("assignment_roles.#{a.role}") %>
+<% end -%>
+<% end -%>
+
+Thanks and enjoy the meal!

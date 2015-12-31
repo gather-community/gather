@@ -31,6 +31,7 @@ class Statement < ActiveRecord::Base
     self.transactions = Transaction.where(account: account).no_statement.to_a
     self.total_due = prev_balance + transactions.map(&:amount).sum
     self.prev_stmt_on = account.last_statement.try(:created_on)
+    self.due_on = terms ? (Time.zone.now + terms.days).to_date : nil
 
     if transactions.empty? && total_due.abs < 0.01
       raise StatementError.new("Must have line items or a total due.")
@@ -45,6 +46,12 @@ class Statement < ActiveRecord::Base
 
   def created_on
     created_at.try(:to_date)
+  end
+
+  private
+
+  def terms
+    community.settings[:statement_terms]
   end
 end
 

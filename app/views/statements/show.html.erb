@@ -49,6 +49,14 @@
       <strong><%= currency_with_cr_span(@statement.total_due) %></strong>
     </td>
   </tr>
+  <% if @statement.due_on %>
+    <tr>
+      <td>Due Date</td>
+      <td>
+        <%= @statement.due_on.to_s(:short_date) %>
+      </td>
+    </tr>
+  <% end %>
 </table>
 
 <% if @statement.transactions.empty? %>

@@ -1,3 +1,7 @@
+def default_community
+  Community.first || create(:community)
+end
+
 FactoryGirl.define do
   factory :community do
     sequence(:name){ |n| "Community #{n}" }

@@ -1,2 +1,3 @@
 meal_reminder_lead_time: 18 # hours
 shift_reminder_lead_time: 24 # hours
+statement_reminder_lead_time: 5 # days

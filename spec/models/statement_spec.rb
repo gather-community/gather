@@ -47,4 +47,15 @@ RSpec.describe Statement, type: :model do
       expect{statement.populate!}.to raise_error(StatementError)
     end
   end
+
+  describe "due_within_t_from_now" do
+    let!(:s1){ create(:statement, due_on: Date.today + 29.days) }
+    let!(:s2){ create(:statement, due_on: Date.today + 30.days) }
+    let!(:s3){ create(:statement, due_on: Date.today + 32.days) }
+    let!(:s4){ create(:statement, due_on: nil) } # 30 days by default
+
+    it "should return the correct statements" do
+      expect(Statement.due_within_t_from_now(30.days).to_a).to eq([s1, s2, s4])
+    end
+  end
 end

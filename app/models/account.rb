@@ -10,6 +10,7 @@ class Account < ActiveRecord::Base
   scope :for_community, ->(c){ where(community_id: c.id) }
   scope :for_community_or_household,
     ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
+  scope :with_balance_owing, ->{ where("accounts.balance_due > 0") }
 
   delegate :name, :full_name, :no_users?, to: :household, prefix: true
   delegate :name, to: :community, prefix: true

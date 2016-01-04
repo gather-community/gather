@@ -24,14 +24,6 @@ class NotificationMailer < ActionMailer::Base
       "Work Reminder: You are #{@role} for meal at #{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
   end
 
-  def statement_notice(statement)
-    @statement = statement
-    @account = statement.account
-    @household = statement.household
-
-    mail(to: @household.users.map(&:email), subject: "New Account Statement for #{@account.community_name}")
-  end
-
   def worker_change_notice(initiator, meal, added, removed)
     @initiator = initiator
     @meal = meal

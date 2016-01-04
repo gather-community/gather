@@ -1,10 +1,20 @@
 class Statement < ActiveRecord::Base
+  # Used to compute an assumed due date when community has no due date policy.
+  # Used when e.g. determining when to send payment reminders.
+  DEFAULT_TERMS = 30.days
+
   belongs_to :account, inverse_of: :statements
   has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
 
   scope :for_community, ->(c){ joins(:account).where("accounts.community_id = ?", c.id) }
   scope :for_community_or_household,
     ->(c,h){ joins(:account).merge(Account.for_community_or_household(c, h)) }
+  scope :due_within_t_from_now, ->(t){
+    where("COALESCE(due_on, statements.created_at + INTERVAL '1' DAY * #{DEFAULT_TERMS / 1.day})
+      BETWEEN ? AND ?", Time.now, Time.now + t) }
+  scope :reminder_not_sent, ->{ where(reminder_sent: false) }
+  scope :with_balance_owing, ->{ joins(:account).merge(Account.with_balance_owing) }
+  scope :is_latest, ->{ joins(:account).where("accounts.last_statement_id = statements.id") }
 
   delegate :community, :community_id, :household, :household_id, :household_full_name, to: :account
 

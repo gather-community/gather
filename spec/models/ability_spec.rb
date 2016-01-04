@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe Ability do
-  let(:other_community){ create(:community) }
+   # Force two communities to be created. Users will be in first one by default.
+  let!(:community){ default_community }
+  let!(:other_community){ create(:community) }
 
   shared_examples_for :invite_only do
     it "should be able to see meals they're invited to" do

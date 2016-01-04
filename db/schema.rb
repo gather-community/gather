@@ -197,6 +197,7 @@ ActiveRecord::Schema.define(version: 20160104024804) do
     t.date "due_on"
     t.decimal "prev_balance", precision: 10, scale: 3, null: false
     t.date "prev_stmt_on"
+    t.boolean "reminder_sent", default: false, null: false
     t.decimal "total_due", precision: 10, scale: 3, null: false
     t.datetime "updated_at", null: false
   end

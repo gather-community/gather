@@ -7,3 +7,7 @@ job_type :enqueue,  "cd :path && RAILS_ENV=:environment bundle exec djc-enqueue 
 every 1.hour do
   enqueue "MealReminderJob ShiftReminderJob"
 end
+
+every 1.day, at: "4:30 am" do
+  enqueue "StatementReminderJob"
+end

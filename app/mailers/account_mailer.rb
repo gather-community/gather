@@ -4,7 +4,7 @@ class AccountMailer < ActionMailer::Base
 
   def statement_notice(statement)
     load_statement_vars(statement)
-    mail(to: @household.users.map(&:email), subject: "New Account Statement for #{@account.community_name}")
+    mail(to: @household.users.map(&:email), subject: "New Account Statement for #{@community.name}")
   end
 
   def statement_reminder(statement)

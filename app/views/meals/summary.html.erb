@@ -3,7 +3,7 @@
 <% content_for(:top_buttons) do %>
   <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
   <%= link_to(icon_tag("print") << " Print", "#", class: "btn btn-primary",
-    onclick: "window.print(); return false;") %>
+    onclick: "window.print(); return false;") unless @meal.open? %>
 <% end %>
 
 <%= meal_action_icons(@meal, show_name: true, except: :summary) %>

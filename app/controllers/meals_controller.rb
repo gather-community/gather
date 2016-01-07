@@ -99,6 +99,10 @@ class MealsController < ApplicationController
   def summary
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
+    if @meal.open?
+      flash[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
+        "You should close the meal using the link below before printing this summary."
+    end
   end
 
   def destroy

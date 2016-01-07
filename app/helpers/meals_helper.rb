@@ -37,7 +37,7 @@ module MealsHelper
       when :edit
         links << link_to(icon_tag("pencil") << name, edit_meal_path(meal), title: title)
       when :summary
-      links << link_to(icon_tag("file-text") << name, summary_meal_path(meal), title: title)
+        links << link_to(icon_tag("file-text") << name, summary_meal_path(meal), title: title)
       when :close
         links << link_to(icon_tag("lock") << name, close_meal_path(meal), title: title, method: :put)
       when :finalize

@@ -173,7 +173,7 @@ class Meal < ActiveRecord::Base
   end
 
   def menu_posted?
-    entrees.present?
+    MENU_ITEMS.any?{ |i| self[i].present? } || any_allergens?
   end
 
   def nonempty_menu_items

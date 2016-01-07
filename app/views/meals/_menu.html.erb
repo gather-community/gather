@@ -23,14 +23,23 @@
       <% end %>
     </div>
   </div>
-  <% @meal.nonempty_menu_items.each do |item, text| %>
+  <% if @meal.menu_posted? %>
+    <% @meal.nonempty_menu_items.each do |item, text| %>
+      <hr/>
+      <div class="menu-label smaller"><%= item %></div>
+      <section><%= simple_format(text) %></section>
+    <% end %>
     <hr/>
-    <div class="menu-label smaller"><%= item %></div>
-    <section><%= simple_format(text) %></section>
+    <div class="menu-label smaller">allergens</div>
+    <section>
+      <% if @meal.any_allergens? %>
+        <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
+      <% else %>
+        [None]
+      <% end %>
+    </section>
+  <% else %>
+    <hr/>
+    No menu posted yet.
   <% end %>
-  <hr/>
-  <div class="menu-label smaller">allergens</div>
-  <section>
-    <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
-  </section>
 </div>

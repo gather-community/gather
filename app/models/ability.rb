@@ -60,8 +60,6 @@ class Ability
       end
     end
 
-    cannot :manage_other_community, Meal # This will change later for superadmin
-
     cannot :destroy, User do |u|
       u.any_assignments?
     end

@@ -78,9 +78,7 @@ module MealsHelper
 
   # We should disable the "own" community checkbox for most users.
   def disable_community_checkbox?(meal, community)
-    disable = meal.host_community == community &&
-      community_invited?(meal, community) &&
-      current_ability.cannot?(:manage_other_community, meal)
+    disable = meal.host_community == community && community_invited?(meal, community)
     disable ? "disabled" : nil
   end
 

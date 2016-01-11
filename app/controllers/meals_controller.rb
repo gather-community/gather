@@ -38,6 +38,7 @@ class MealsController < ApplicationController
   end
 
   def create
+    @meal.host_community_id = current_user.community_id
     if @meal.save
       flash[:success] = "Meal created successfully."
       redirect_to meals_path

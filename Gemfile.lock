@@ -209,6 +209,8 @@ GEM
       countries (~> 0.11, >= 0.11.5)
       phony (~> 2.12)
     powerpack (0.1.1)
+    pundit (1.0.1)
+      activesupport (>= 3.0.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -349,6 +351,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   pg
   phony_rails
+  pundit
   rails (= 4.2.3)
   rails-backbone
   rolify

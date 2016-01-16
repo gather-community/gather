@@ -60,6 +60,7 @@ gem 'exception_notification'
 gem "whenever"
 gem 'dj_cron', github: 'sassafrastech/dj_cron'
 gem "rolify"
+gem "pundit"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

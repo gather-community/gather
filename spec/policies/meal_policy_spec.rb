@@ -3,19 +3,7 @@ require 'rails_helper'
 describe MealPolicy do
 
   describe "permissions" do
-    subject { described_class }
-    let(:community) { Community.new }
-    let(:user) { User.new }
-    let(:admin) { User.new(admin: true) }
-    let(:biller) { User.new(biller: true) }
-    let(:outside_admin) { User.new(admin: true, household: Household.new) }
-    let(:outside_biller) { User.new(biller: true, household: Household.new) }
-
-    before do
-      allow(user).to receive(:community).and_return(community)
-      allow(admin).to receive(:community).and_return(community)
-      allow(biller).to receive(:community).and_return(community)
-    end
+    include_context "policy objs"
 
     permissions :index? do
       it "grants access to everyone" do
@@ -134,16 +122,15 @@ describe MealPolicy do
 
     it "returns meals invited to, assigned to, or signed up for" do
       permitted = MealPolicy::Scope.new(user, Meal.all).resolve
-      expect(permitted.size).to eq 3
-      expect(permitted).to include(meal1, meal2, meal3)
+      expect(permitted).to contain_exactly(meal1, meal2, meal3)
     end
   end
 
-  describe "permitted_params" do
+  describe "permitted_attributes" do
+    subject { MealPolicy.new(user, meal).permitted_attributes }
     let(:community) { Community.new }
     let(:user) { User.new(household: Household.new(community: community)) }
     let(:meal) { Meal.new(host_community: community) }
-    let(:policy) { MealPolicy.new(user, meal) }
     let(:assign_attribs) {{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
@@ -152,10 +139,10 @@ describe MealPolicy do
 
     context "regular user" do
       it "should allow only assignment attribs" do
-        expect(policy.permitted_attributes).to include(assign_attribs)
-        expect(policy.permitted_attributes).not_to include(:allergen_dairy)
-        expect(policy.permitted_attributes).not_to include(:title, :capacity, :entrees)
-        expect(policy.permitted_attributes).not_to include(:discount, :host_community_id)
+        expect(subject).to include(assign_attribs)
+        expect(subject).not_to include(:allergen_dairy)
+        expect(subject).not_to include(:title, :capacity, :entrees)
+        expect(subject).not_to include(:discount, :host_community_id)
       end
     end
 
@@ -163,10 +150,10 @@ describe MealPolicy do
       before { meal.head_cook = user }
 
       it "should allow more stuff" do
-        expect(policy.permitted_attributes).to include(assign_attribs)
-        expect(policy.permitted_attributes).to include(:allergen_dairy)
-        expect(policy.permitted_attributes).to include(:title, :capacity, :entrees)
-        expect(policy.permitted_attributes).not_to include(:discount, :host_community_id)
+        expect(subject).to include(assign_attribs)
+        expect(subject).to include(:allergen_dairy)
+        expect(subject).to include(:title, :capacity, :entrees)
+        expect(subject).not_to include(:discount, :host_community_id)
       end
     end
 
@@ -174,11 +161,11 @@ describe MealPolicy do
       before { user.admin = true }
 
       it "should allow more stuff" do
-        expect(policy.permitted_attributes).to include(assign_attribs)
-        expect(policy.permitted_attributes).to include(:allergen_dairy)
-        expect(policy.permitted_attributes).to include(:title, :capacity, :entrees)
-        expect(policy.permitted_attributes).to include(:discount)
-        expect(policy.permitted_attributes).not_to include(:host_community_id)
+        expect(subject).to include(assign_attribs)
+        expect(subject).to include(:allergen_dairy)
+        expect(subject).to include(:title, :capacity, :entrees)
+        expect(subject).to include(:discount)
+        expect(subject).not_to include(:host_community_id)
       end
     end
   end

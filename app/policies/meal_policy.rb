@@ -1,8 +1,6 @@
 class MealPolicy < ApplicationPolicy
   alias_method :meal, :record
 
-  delegate :admin?, :biller?, to: :user
-
   class Scope < Scope
     def resolve
       scope.where("EXISTS (SELECT id FROM assignments
@@ -28,7 +26,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def create?
-    admin?
+    user.admin?
   end
 
   def update?
@@ -37,7 +35,7 @@ class MealPolicy < ApplicationPolicy
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    admin? && host?
+    user.admin? && host?
   end
 
   def destroy?
@@ -61,7 +59,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    host? && (admin? || biller?)
+    host? && (user.admin? || user.biller?)
   end
 
   def permitted_attributes
@@ -89,7 +87,7 @@ class MealPolicy < ApplicationPolicy
   private
 
   def hosting_admin_or_head_cook?
-    admin? && host? || head_cook?
+    user.admin? && host? || head_cook?
   end
 
   def host?

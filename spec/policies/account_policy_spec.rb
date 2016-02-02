@@ -4,13 +4,16 @@ describe AccountPolicy do
 
   describe "permissions" do
     include_context "policy objs"
+
+    let(:account) { Account.new }
     let(:account_owner) { User.new(household: Household.new) }
 
     before do
       allow(account).to receive(:household).and_return(account_owner.household)
+      allow(account).to receive(:community).and_return(community)
     end
 
-    shared_examples_for :admins_and_billers do
+    shared_examples_for :admin_or_biller do
       it "grants access to admins" do
         expect(subject).to permit(admin, Account)
       end
@@ -24,7 +27,7 @@ describe AccountPolicy do
       end
     end
 
-    shared_examples_for :admins_and_billers_with_community do
+    shared_examples_for :admin_or_biller_with_community do
       it "grants access to admins from community" do
         expect(subject).to permit(admin, account)
       end
@@ -47,11 +50,11 @@ describe AccountPolicy do
     end
 
     permissions :index? do
-      it_behaves_like :admins_and_billers
+      it_behaves_like :admin_or_biller
     end
 
     permissions :show? do
-      it_behaves_like :admins_and_billers_with_community
+      it_behaves_like :admin_or_biller_with_community
 
       it "grants access to owner of account" do
         expect(subject).to permit(account_owner, account)
@@ -65,7 +68,7 @@ describe AccountPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like :admins_and_billers_with_community
+      it_behaves_like :admin_or_biller_with_community
     end
   end
 

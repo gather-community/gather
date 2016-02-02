@@ -1,15 +1,7 @@
 class AccountPolicy < ApplicationPolicy
-  alias_method :account, :record
+  include Accountish
 
-  class Scope < Scope
-    def resolve
-      if user.admin? || user.biller?
-        scope.for_community_or_household(user.community, user.household)
-      else
-        scope.for_household(user.household)
-      end
-    end
-  end
+  alias_method :account, :record
 
   def index?
     admin_or_biller?
@@ -25,19 +17,5 @@ class AccountPolicy < ApplicationPolicy
 
   def permitted_attributes
     [:credit_limit]
-  end
-
-  private
-
-  def admin_or_biller?
-    user.admin? || user.biller?
-  end
-
-  def same_community_admin_or_biller?
-    admin_or_biller? && user.community == account.community
-  end
-
-  def account_owner?
-    user.household == account.household
   end
 end

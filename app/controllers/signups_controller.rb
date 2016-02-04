@@ -4,6 +4,7 @@ class SignupsController < ApplicationController
   load_and_authorize_resource
 
   def create
+    # TODO force household here instead of signup_params
     if @signup.save_or_destroy
       redirect_after_save
     else
@@ -12,6 +13,7 @@ class SignupsController < ApplicationController
   end
 
   def update
+    # TODO force household here instead of signup_params
     @signup.assign_attributes(signup_params)
     if @signup.save_or_destroy
       redirect_after_save

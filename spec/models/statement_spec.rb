@@ -55,7 +55,7 @@ RSpec.describe Statement, type: :model do
     let!(:s4){ create(:statement, due_on: nil) } # 30 days by default
 
     it "should return the correct statements" do
-      expect(Statement.due_within_t_from_now(30.days).to_a).to eq([s1, s2, s4])
+      expect(Statement.due_within_t_from_now(31.days).to_a).to contain_exactly(s1, s2, s4)
     end
   end
 end

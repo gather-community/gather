@@ -49,7 +49,7 @@ describe AccountPolicy do
       end
     end
 
-    permissions :index? do
+    permissions :index?, :apply_late_fees? do
       it_behaves_like :admin_or_biller
     end
 
@@ -67,7 +67,7 @@ describe AccountPolicy do
       end
     end
 
-    permissions :edit?, :update? do
+    permissions :edit?, :update?, :apply_payments? do
       it_behaves_like :admin_or_biller_with_community
     end
   end

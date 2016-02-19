@@ -78,9 +78,20 @@ describe UserPolicy do
     let!(:user2) { create(:user) }
     let!(:deactivated) { create(:user, deactivated_at: Time.now - 1.day) }
 
-    it "returns active users" do
-      permitted = UserPolicy::Scope.new(user1, User.all).resolve
-      expect(permitted).to contain_exactly(user1, user2)
+    context "for admin" do
+      let!(:admin) { create(:user, admin: true) }
+
+      it "returns active users" do
+        permitted = UserPolicy::Scope.new(admin, User.all).resolve
+        expect(permitted).to contain_exactly(user1, user2, deactivated, admin)
+      end
+    end
+
+    context "for regular user" do
+      it "returns active users" do
+        permitted = UserPolicy::Scope.new(user1, User.all).resolve
+        expect(permitted).to contain_exactly(user1, user2)
+      end
     end
   end
 

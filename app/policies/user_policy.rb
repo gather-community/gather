@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where("deactivated_at IS NULL")
+      user.admin? ? scope : scope.where("deactivated_at IS NULL")
     end
   end
 

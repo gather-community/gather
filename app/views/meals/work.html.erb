@@ -15,7 +15,7 @@
 
 <% if @meals.empty? %>
   <div class="none-found">
-    No work shifts found for <%= @user.name %>.
+    No work shifts found<% @user ? "for #{@user.name}" : "" %>.
   </div>
 <% else %>
   <table class="index non-mobile">

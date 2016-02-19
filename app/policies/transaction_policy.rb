@@ -14,4 +14,8 @@ class TransactionPolicy < ApplicationPolicy
   def create?
     admin_or_biller?
   end
+
+  def permitted_attributes
+    [:incurred_on, :code, :description, :amount]
+  end
 end

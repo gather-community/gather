@@ -73,4 +73,12 @@ describe TransactionPolicy do
       end
     end
   end
+
+  describe "permitted attributes" do
+    subject { TransactionPolicy.new(User.new, Transaction.new).permitted_attributes }
+
+    it "should allow basic attribs" do
+      expect(subject).to contain_exactly(:incurred_on, :code, :description, :amount)
+    end
+  end
 end

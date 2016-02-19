@@ -1,9 +1,10 @@
 class AccountsController < ApplicationController
-  load_and_authorize_resource
 
   def index
+    authorize Account
+    @accounts = policy_scope(Account)
     @community = community
-    @accounts = @accounts.
+    @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
       with_any_activity(community).
       by_household_full_name
@@ -25,10 +26,14 @@ class AccountsController < ApplicationController
   end
 
   def edit
+    @account = Account.find(params[:id])
+    authorize @account
   end
 
   def update
-    if @account.update_attributes(account_params)
+    @account = Account.find(params[:id])
+    authorize @account
+    if @account.update_attributes(permitted_attributes(@account))
       flash[:success] = "Account updated successfully."
       redirect_to(accounts_path)
     else
@@ -38,6 +43,7 @@ class AccountsController < ApplicationController
   end
 
   def apply_late_fees
+    authorize Account
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)
@@ -45,15 +51,16 @@ class AccountsController < ApplicationController
 
   def apply_payments
     if params[:confirmed]
-      Account.find(params[:payment].keys).each{ |a| authorize!(:apply_payments, a) }
+      Account.find(params[:payment].keys).each{ |a| authorize a }
       PaymentApplier.new(params[:payment]).apply!
       flash[:success] = "Payments applied."
       redirect_to(accounts_path)
     else
       # Build set of payment hashes to confirm with the user.
-      @payments = Account.where(id: params[:payment].reject{ |_, a| a.blank? }.keys).
-        by_household_full_name.map do |account|
-          { account: account, amount: params[:payment][account.id.to_s] }
+      @accounts = Account.where(id: params[:payment].reject{ |_, a| a.blank? }.keys).by_household_full_name
+      @payments = @accounts.map do |account|
+        authorize @account
+        { account: account, amount: params[:payment][account.id.to_s] }
       end
     end
   end

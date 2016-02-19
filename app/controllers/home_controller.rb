@@ -1,8 +1,9 @@
 class HomeController < ApplicationController
   skip_before_action :authenticate_user!
-  skip_authorization_check
 
   def index
+    skip_policy_scope
+
     # Store invite token if provided
     session[:invite_token] = params[:token] if params.has_key?(:token)
 
@@ -11,6 +12,7 @@ class HomeController < ApplicationController
 
   # Used by uptime checker
   def ping
+    skip_authorization
     if dj_pid = (File.read(File.join(Rails.root, "tmp/pids/delayed_job.pid")).to_i rescue nil)
       @dj = (Process.kill(0, dj_pid) && true rescue false)
     else

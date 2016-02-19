@@ -1,20 +1,28 @@
 class TransactionsController < ApplicationController
-  load_and_authorize_resource :account
-  load_and_authorize_resource :transaction, through: :account
-
   def index
-    @transactions = @transactions.no_statement
+    @account = Account.find(params[:account_id])
+    authorize @account, :show?
+    authorize Transaction
+    @transactions = policy_scope(Transaction)
+    @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
     @credits = @transactions.select(&:credit?)
     @community = @account.community
   end
 
   def new
-    @transaction = Transaction.new(incurred_on: Date.today, account_id: params[:account_id])
+    @account = Account.find(params[:account_id])
+    authorize @account, :update?
+    @transaction = Transaction.new(incurred_on: Date.today, account: @account)
+    authorize @transaction
   end
 
   def create
-    @transaction.account = @account
+    @account = Account.find(params[:account_id])
+    authorize @account, :update?
+    @transaction = Transaction.new(account: @account)
+    authorize @transaction
+    @transaction.assign_attributes(permitted_attributes(@transaction))
     if @transaction.valid?
       # If confirmed not present, we show a confirm screen.
       if params[:confirmed] == "1"
@@ -32,11 +40,5 @@ class TransactionsController < ApplicationController
       set_validation_error_notice
       render :new
     end
-  end
-
-  private
-
-  def transaction_params
-    params.require(:transaction).permit(:incurred_on, :code, :description, :amount)
   end
 end

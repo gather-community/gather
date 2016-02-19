@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource
 
   def index
+    @users = policy_scope(User)
     respond_to do |format|
       format.html do
         @users = @users.includes(household: :community).by_active_and_name
@@ -15,19 +15,21 @@ class UsersController < ApplicationController
     end
   end
 
-  def new
-    @user = User.new
-  end
-
   def show
+    @user = User.find(params[:id])
+    authorize @user
     @head_cook_meals = Meal.head_cooked_by(@user).includes(:signups).past.newest_first
   end
 
-  def invite
-    @users = User.never_logged_in.active.by_community_and_name
+  def new
+    @user = User.new
+    authorize @user
   end
 
   def create
+    @user = User.new
+    authorize @user
+    @user.assign_attributes(permitted_attributes(@user))
     if @user.save
       flash[:success] = "User created successfully."
       redirect_to users_path
@@ -37,8 +39,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+    authorize @user
+  end
+
   def update
-    if @user.update_attributes(user_params)
+    @user = User.find(params[:id])
+    authorize @user
+    if @user.update_attributes(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
       redirect_to_index_or_root
     else
@@ -48,25 +57,37 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    @user = User.find(params[:id])
+    authorize @user
     @user.destroy
     flash[:success] = "User deleted successfully."
     redirect_to(users_path)
   end
 
   def activate
+    @user = User.find(params[:id])
+    authorize @user
     @user.activate!
     flash[:success] = "User activated successfully."
     redirect_to(users_path)
   end
 
   def deactivate
+    @user = User.find(params[:id])
+    authorize @user
     @user.deactivate!
     flash[:success] = "User deactivated successfully."
     redirect_to(users_path)
   end
 
+  def invite
+    authorize User
+    @users = User.never_logged_in.active.by_community_and_name
+  end
+
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
+    authorize User
     if params[:to_invite].blank?
       flash[:error] = "You didn't select any users."
     else

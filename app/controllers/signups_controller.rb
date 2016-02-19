@@ -1,10 +1,10 @@
 class SignupsController < ApplicationController
   include MealShowable
 
-  load_and_authorize_resource
-
   def create
-    # TODO force household here instead of signup_params
+    @signup = Signup.new(household_id: current_user.household_id)
+    @signup.assign_attributes(permitted_attributes(@signup))
+    authorize @signup
     if @signup.save_or_destroy
       redirect_after_save
     else
@@ -13,8 +13,9 @@ class SignupsController < ApplicationController
   end
 
   def update
-    # TODO force household here instead of signup_params
-    @signup.assign_attributes(signup_params)
+    @signup = Signup.find(params[:id])
+    authorize @signup
+    @signup.assign_attributes(permitted_attributes(@signup))
     if @signup.save_or_destroy
       redirect_after_save
     else
@@ -39,11 +40,5 @@ class SignupsController < ApplicationController
     authorize!(:show, @meal)
     load_prev_next_meal # From MealShowable
     render("meals/show")
-  end
-
-  def signup_params
-    permitted = params.require(:signup).permit(Signup::SIGNUP_TYPES + [:meal_id, :comments])
-    permitted[:household_id] = current_user.household_id
-    permitted
   end
 end

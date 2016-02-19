@@ -1,13 +1,14 @@
 class StatementsController < ApplicationController
-  load_and_authorize_resource
-
   def show
+    @statement = Statement.find(params[:id])
+    authorize @statement
     @charges = @statement.transactions.select(&:charge?)
     @credits = @statement.transactions.select(&:credit?)
     @community = @statement.community
   end
 
   def generate
+    authorize Statement
     Delayed::Job.enqueue(StatementJob.new(current_user.community))
 
     flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
@@ -23,7 +24,7 @@ class StatementsController < ApplicationController
 
   def more
     @account = Account.find(params[:account_id])
-    authorize!(:read, @account)
+    authorize @account, :show?
     @statements = @account.statements.page(params[:page])
     render(partial: "households/statement_rows")
   end

@@ -4,8 +4,6 @@ class MealsController < ApplicationController
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
 
-  load_and_authorize_resource
-
   def index
     # Trivially, a meal in the past must be closed.
     Meal.close_all_past!
@@ -13,12 +11,14 @@ class MealsController < ApplicationController
   end
 
   def work
-    authorize!(:read, Meal)
+    authorize Meal, :index?
     @user = params.has_key?(:uid) ? User.find_by(id: params[:uid]) : current_user
     load_meals
   end
 
   def show
+    @meal = Meal.find(params[:id])
+    authorize @meal
     @signup = Signup.for(current_user, @meal)
     @account = current_user.account_for(@meal.host_community)
     load_signups
@@ -26,19 +26,23 @@ class MealsController < ApplicationController
   end
 
   def new
+    authorize @meal
     @min_date = Date.today.strftime("%Y-%m-%d")
     prep_form_vars
   end
 
   def edit
     @meal = Meal.find(params[:id])
+    authorize @meal
     @min_date = nil
     @notify_on_worker_change = cannot?(:manage, @meal)
     prep_form_vars
   end
 
   def create
-    @meal.host_community_id = current_user.community_id
+    @meal = Meal.new(host_community_id: current_user.community_id)
+    @meal.assign_attributes(permitted_attributes(@meal))
+    authorize @meal
     if @meal.save
       flash[:success] = "Meal created successfully."
       redirect_to meals_path
@@ -50,7 +54,9 @@ class MealsController < ApplicationController
   end
 
   def update
-    if @meal.update_attributes(meal_params)
+    @meal = Meal.find(params[:id])
+    authorize @meal
+    if @meal.update_attributes(permitted_attributes(@meal))
       flash[:success] = "Meal updated successfully."
       @worker_change_notifier.try(:check_and_send!)
       redirect_to meals_path
@@ -62,16 +68,22 @@ class MealsController < ApplicationController
   end
 
   def close
+    @meal = Meal.find(params[:id])
+    authorize @meal
     @meal.close!
     flash[:success] = "Meal closed successfully."
     redirect_to(meals_path)
   end
 
   def finalize
+    @meal = Meal.find(params[:id])
+    authorize @meal
     @dupes = []
   end
 
   def do_finalize
+    @meal = Meal.find(params[:id])
+    authorize @meal
     @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
     if (@dupes = @meal.duplicate_signups).any?
@@ -92,12 +104,16 @@ class MealsController < ApplicationController
   end
 
   def reopen
+    @meal = Meal.find(params[:id])
+    authorize @meal
     @meal.reopen!
     flash[:success] = "Meal reopened successfully."
     redirect_to(meals_path)
   end
 
   def summary
+    @meal = Meal.find(params[:id])
+    authorize @meal
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
     if @meal.open?
@@ -107,6 +123,8 @@ class MealsController < ApplicationController
   end
 
   def destroy
+    @meal = Meal.find(params[:id])
+    authorize @meal
     if @meal.destroy
       flash[:success] = "Meal deleted successfully."
     else
@@ -128,6 +146,7 @@ class MealsController < ApplicationController
   end
 
   def load_meals
+    @meals = policy_scope(Meal)
     if params[:finalizable]
       @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
     elsif params[:past]
@@ -147,30 +166,6 @@ class MealsController < ApplicationController
   def prep_form_vars
     @meal.ensure_assignments
     @communities = Community.by_name
-  end
-
-  def meal_params
-    # Anybody that can update a meal can change the assignments.
-    permitted = [{
-      :head_cook_assign_attributes => [:id, :user_id],
-      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-    }]
-
-    if can?(:set_menu, Meal)
-      allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
-      permitted += allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-        { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
-      ]
-    end
-
-    if can?(:manage, Meal)
-      # Hardcoding this for now
-      params[:meal][:host_community_id] = current_user.community_id
-      permitted += [:discount, :served_at, :host_community_id, :location_id]
-    end
-
-    params.require(:meal).permit(*permitted)
   end
 
   def finalize_params

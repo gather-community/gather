@@ -2,7 +2,6 @@ class Household < ActiveRecord::Base
   include Deactivatable
 
   belongs_to :community
-  has_many :credit_limits, dependent: :destroy
   has_many :accounts, ->{ joins(:community).includes(:community).order("communities.name") },
     inverse_of: :household
   has_many :signups
@@ -60,6 +59,10 @@ class Household < ActiveRecord::Base
 
   def any_assignments?
     users.any?(&:any_assignments?)
+  end
+
+  def any_accounts?
+    accounts.any?
   end
 
   def any_signups?

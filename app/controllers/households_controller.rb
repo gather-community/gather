@@ -1,7 +1,8 @@
 class HouseholdsController < ApplicationController
-  load_and_authorize_resource
 
   def index
+    authorize Household
+    @households = policy_scope(Household)
     respond_to do |format|
       format.html do
         @households = @households.includes(:users).by_active_and_name.page(params[:page])
@@ -15,9 +16,19 @@ class HouseholdsController < ApplicationController
   end
 
   def show
+    @household = Household.find(params[:id])
+    authorize @household
+  end
+
+  def new
+    @household = Household.new
+    authorize @household
   end
 
   def create
+    @household = Household.new
+    @household.assign_attributes(permitted_attributes(@household))
+    authorize @household
     if @household.save
       flash[:success] = "Household created successfully."
       redirect_to households_path
@@ -27,8 +38,15 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  def edit
+    @household = Household.find(params[:id])
+    authorize @household
+  end
+
   def update
-    if @household.update_attributes(household_params)
+    @household = Household.find(params[:id])
+    authorize @household
+    if @household.update_attributes(permitted_attributes(@household))
       flash[:success] = "Household updated successfully."
       redirect_to households_path
     else
@@ -38,12 +56,17 @@ class HouseholdsController < ApplicationController
   end
 
   def destroy
+    @household = Household.find(params[:id])
+    authorize @household
     @household.destroy
     flash[:success] = "Household deleted successfully."
     redirect_to(households_path)
   end
 
   def accounts
+    @household = Household.find(params[:id])
+    authorize @household
+
     @accounts = @household.accounts.accessible_by(current_ability, :show).includes(:community).to_a
     @communities = @accounts.map(&:community)
 
@@ -54,20 +77,19 @@ class HouseholdsController < ApplicationController
   end
 
   def activate
+    @household = Household.find(params[:id])
+    authorize @household
     @household.activate!
     flash[:success] = "Household activated successfully."
     redirect_to(households_path)
   end
 
   def deactivate
+    @household = Household.find(params[:id])
+    authorize @household
     @household.deactivate!
     flash[:success] = "Household deactivated successfully."
     redirect_to(households_path)
   end
 
-  private
-
-  def household_params
-    params.require(:household).permit(:name, :community_id, :unit_num, :old_id, :old_name)
-  end
 end

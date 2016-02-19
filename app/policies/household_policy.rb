@@ -23,6 +23,14 @@ class HouseholdPolicy < ApplicationPolicy
     admin?
   end
 
+  def activate?
+    admin?
+  end
+
+  def deactivate?
+    admin?
+  end
+
   def accounts?
     admin? || biller? || household == user.household
   end

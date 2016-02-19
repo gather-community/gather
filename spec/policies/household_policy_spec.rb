@@ -30,7 +30,7 @@ describe HouseholdPolicy do
       end
     end
 
-    permissions :new?, :create?, :edit?, :update? do
+    permissions :new?, :create?, :edit?, :update?, :activate?, :deactivate? do
       it_behaves_like "admins only"
     end
 

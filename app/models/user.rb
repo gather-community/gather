@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
-  belongs_to :household
+  belongs_to :household, inverse_of: :users
   has_many :assignments
 
   scope :by_name, -> { order("first_name, last_name") }

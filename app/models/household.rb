@@ -6,7 +6,7 @@ class Household < ActiveRecord::Base
   has_many :accounts, ->{ joins(:community).includes(:community).order("communities.name") },
     inverse_of: :household
   has_many :signups
-  has_many :users, ->{ by_name }
+  has_many :users, ->{ by_name }, inverse_of: :household
 
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("households.name") }
@@ -72,6 +72,10 @@ class Household < ActiveRecord::Base
 
   def any_transactions?
     accounts.any?{ |a| a.transactions.any? }
+  end
+
+  def any_accounts?
+    accounts.any?
   end
 
   def any_statements?

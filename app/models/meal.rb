@@ -42,12 +42,6 @@ class Meal < ActiveRecord::Base
   scope :inviting, ->(user) do
     includes(:invitations).where("invitations.community_id" => user.community_id)
   end
-  scope :visible_to, ->(user) do
-    where("EXISTS (SELECT id FROM assignments WHERE assignments.meal_id = meals.id AND assignments.user_id = ?) OR
-      EXISTS (SELECT id FROM invitations WHERE invitations.meal_id = meals.id AND invitations.community_id = ?) OR
-      EXISTS (SELECT id FROM signups WHERE signups.meal_id = meals.id AND signups.household_id = ?)",
-      user.id, user.community_id, user.household_id)
-  end
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
@@ -99,22 +93,6 @@ class Meal < ActiveRecord::Base
 
   def self.close_all_past!
     past.open.update_all(status: "closed")
-  end
-
-  def visible_to?(user)
-    invited?(user) || worked_by?(user) || signed_up?(user.household)
-  end
-
-  def invited?(user)
-    invitations.map(&:community_id).include?(user.community_id)
-  end
-
-  def worked_by?(user)
-    assignments.map(&:user_id).include?(user.id)
-  end
-
-  def signed_up?(household)
-    signups.map(&:household_id).include?(household.id)
   end
 
   # Ensures there is one head_cook assignment and 2 each of the others.

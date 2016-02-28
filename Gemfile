@@ -39,9 +39,6 @@ gem 'omniauth-google-oauth2'
 gem 'config'
 gem 'timecop'
 
-# Authorization
-gem 'cancancan', '~> 1.10'
-
 gem 'bootstrap-sass', '~> 3.3.5'
 
 gem 'attribute_normalizer'

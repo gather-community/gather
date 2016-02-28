@@ -9,7 +9,7 @@
    end %>
 
 <% content_for(:top_buttons) do %>
-  <% if can?(:finalize, Meal) && !params[:finalizable] %>
+  <% if policy(Meal).finalize? && !params[:finalizable] %>
     <%= link_to(icon_tag("certificate") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
   <% end %>
   <% if !params[:past] %>
@@ -18,7 +18,7 @@
   <% if params[:past] || params[:finalizable] %>
     <%= link_to(icon_tag("clock-o") << " Future Meals", meals_path, class: "btn btn-default") %>
   <% end %>
-  <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if can?(:create, Meal) %>
+  <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if policy(Meal).create? %>
 <% end %>
 
 <% if @meals.empty? %>

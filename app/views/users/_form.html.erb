@@ -14,19 +14,19 @@
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
   <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
 
-  <% if can?(:manage, @user) %>
+  <% if policy(@user).adminify? %>
     <%= f.input :admin %>
   <% end %>
 
   <div class="row">
     <div class="form-actions col-sm-8">
       <%= f.button :submit, class: "pull-right btn-primary" %>
-      <% if can?(:destroy, @user) && !@user.new_record? %>
+      <% if policy(@user).destroy? && !@user.new_record? %>
         <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
           class: "btn btn-default pull-right", method: :delete,
           data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
       <% end %>
-      <% if can?(:deactivate, @user) && !@user.new_record? && @user.active? %>
+      <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
         <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
           class: "btn btn-default pull-right", method: :put,
           data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>

@@ -33,7 +33,7 @@ describe UserPolicy do
       end
     end
 
-    permissions :new?, :create?, :invite?, :send_invites? do
+    permissions :new?, :create?, :invite?, :send_invites?, :administer? do
       it "grants access to admins" do
         expect(subject).to permit(admin, User)
       end

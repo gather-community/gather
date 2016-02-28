@@ -46,6 +46,10 @@ class UserPolicy < ApplicationPolicy
     self? || admin?
   end
 
+  def administer?
+    admin?
+  end
+
   def permitted_attributes
     [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] +
       (admin? ? [:admin, :google_email, :household_id] : [])

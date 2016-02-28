@@ -1,6 +1,6 @@
 <%= simple_form_for(@meal, html: { class: 'form-horizontal meals-form' }) do |f| %>
 
-  <% if can?(:manage, @meal) %>
+  <% if policy(@meal).administer? %>
 
     <%= f.input :served_at, as: :datetime_picker,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
@@ -19,7 +19,7 @@
 
   <% end %>
 
-  <% if can?(:set_menu, @meal) %>
+  <% if policy(@meal).set_menu? %>
 
     <div class="form-group text optional
       <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
@@ -47,13 +47,13 @@
 
   <% end %>
 
-  <% if can?(:set_menu, @meal) %>
+  <% if policy(@meal).set_menu? %>
     <%= f.input :capacity, min: 1 %>
   <% else %>
     <%= f.input :capacity do %><%= @meal.capacity %><% end %>
   <% end %>
 
-  <% if can?(:manage, @meal) %>
+  <% if policy(@meal).administer? %>
     <%= f.input :discount, min: 0, max: 100 %>
   <% end %>
 
@@ -83,7 +83,7 @@
   </div>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>
-    <% if can?(:set_menu, @meal) %>
+    <% if policy(@meal).set_menu? %>
       <%= f.input attrib %>
     <% else %>
       <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>

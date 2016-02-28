@@ -101,11 +101,11 @@ class UsersController < ApplicationController
 
   def user_params
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone]
-    permitted += [:admin, :google_email, :household_id] if can?(:manage, User)
+    permitted += [:admin, :google_email, :household_id] if policy(User).create?
     params.require(:user).permit(permitted)
   end
 
   def redirect_to_index_or_root
-    redirect_to can?(:index, User) ? users_path : root_path
+    redirect_to policy(User).index? ? users_path : root_path
   end
 end

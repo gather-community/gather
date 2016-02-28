@@ -3,7 +3,7 @@
 <% unless @user.active? %>
   <div class="alert alert-info">
     This user was marked inactive at <%= @user.deactivated_at.to_s(:full_datetime) %>.
-    <% if can?(:activate, @user) %>
+    <% if policy(@user).activate? %>
       You can <%= link_to("reactivate them", activate_user_path(@user), method: :put) %>.
     <% end %>
   </div>

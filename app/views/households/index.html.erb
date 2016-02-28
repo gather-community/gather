@@ -1,7 +1,7 @@
 <% content_for(:title){ "Households" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= link_to("Create Household", new_household_path, class: "btn btn-primary") if can?(:create, Household) %>
+  <%= link_to("Create Household", new_household_path, class: "btn btn-primary") if policy(Household).create? %>
 <% end %>
 
 <% if @households.empty? %>
@@ -29,10 +29,10 @@
         <td class="col-md-3"><%= household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></td>
         <td class="col-md-1">
           <div class="action-icons">
-            <% if can?(:update, household) %>
+            <% if policy(household).update? %>
               <%= link_to(icon_tag('pencil'), edit_household_path(household)) %>
             <% end %>
-            <% if can?(:deactivate, household) && household.active? %>
+            <% if policy(household).deactivate? && household.active? %>
               <%= link_to(icon_tag('times-circle'), deactivate_household_path(household), method: :put,
                 data: { confirm: I18n.t("activerecord.deact_confirms.household", name: household.name) }) %>
             <% end %>

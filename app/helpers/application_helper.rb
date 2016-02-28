@@ -26,16 +26,16 @@ module ApplicationHelper
   end
 
   def nav_links
-    [Meal, [Meal, "work"], User, Household, Account].map do |item|
+    [Meal, [Meal, "work?"], User, Household, Account].map do |item|
       controller = (item.is_a?(Class) ? item : item[0]).to_s.tableize
-      action = item.is_a?(Class) ? "index" : item[1]
+      action = item.is_a?(Class) ? "index?" : item[1]
       route_key = item.is_a?(Class) ? controller : "#{action}_#{controller}"
       klass = item.is_a?(Class) ? item : item[0]
 
       active = params[:controller] == controller && params[:action] == action
       name = t("nav_links.#{route_key}")
 
-      if can?(action.to_sym, klass)
+      if policy(klass).send(action)
         link = link_to(name, send("#{route_key}_path"), class: "icon-bar")
         content_tag(:li, link, class: active ? "active" : nil)
       else

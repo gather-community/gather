@@ -9,8 +9,8 @@
     <% end %>
   </form>
   &nbsp;
-  <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if can?(:create, User) %>
-  <%= link_to("Create User", new_user_path, class: "btn btn-primary") if can?(:create, User) %>
+  <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if policy(User).create? %>
+  <%= link_to("Create User", new_user_path, class: "btn btn-primary") if policy(User).create? %>
 <% end %>
 
 <% if @users.empty? %>
@@ -21,7 +21,7 @@
   <table class="index">
     <tr>
       <th class="col-md-2">Name</th>
-      <% if can?(:manage, User) %>
+      <% if policy(User).administer? %>
         <th class="col-md-2">Household</th>
         <th class="col-md-2">Google ID</th>
       <% else %>
@@ -37,13 +37,9 @@
           <%= link_to(user.name, user) %>
           <%= icon_tag('trophy') if user.admin? %>
         </td>
-        <% if can?(:manage, User) %>
+        <% if policy(User).administer? %>
           <td class="col-md-2">
-            <% if can?(:manage, Household) %>
-              <%= link_to(user.household_full_name, edit_household_path(user.household)) %>
-            <% else %>
-              <%= user.household_full_name %>
-            <% end %>
+            <%= link_to(user.household_full_name, edit_household_path(user.household)) %>
           </td>
           <td class="col-md-2">
             <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
@@ -55,10 +51,10 @@
         <td class="col-md-3 phones"><%= user_phones(user) %></td>
         <td class="col-md-1">
           <div class="action-icons">
-            <% if can?(:update, user) %>
+            <% if policy(user).update? %>
               <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
             <% end %>
-            <% if can?(:deactivate, user) && user.active? %>
+            <% if policy(user).deactivate? && user.active? %>
               <%= link_to(icon_tag('times-circle'), deactivate_user_path(user), method: :put,
                 data: { confirm: I18n.t("activerecord.deact_confirms.user", name: user.name) }) %>
             <% end %>

@@ -16,6 +16,7 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+//= require prevent-double-submission
 //= require cocoon
 //= require underscore
 //= require backbone
@@ -23,3 +24,5 @@
 //= require backbone_datalink
 //= require backbone/mess
 //= require_tree .
+
+$(document).ready(function(){ $('form').preventDoubleSubmission(); });

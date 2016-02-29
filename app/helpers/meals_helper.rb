@@ -29,7 +29,7 @@ module MealsHelper
     links = []
     title = meal.title || "Untitled"
     to_show.each do |action|
-      next if cannot?(action, meal)
+      next unless policy(meal).send("#{action}?")
       name = options[:show_name] ? " " << t("action_names.#{action}") : ""
       title = t("action_names.#{action}")
 

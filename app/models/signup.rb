@@ -17,7 +17,7 @@ class Signup < ActiveRecord::Base
   scope :host_community_first, ->(c) do
     includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
   end
-  scope :sorted, -> { includes(household: :community).order('communities.abbrv, households.name') }
+  scope :sorted, -> { joins(household: :community).order('communities.abbrv, households.name') }
 
   normalize_attributes :comments
 

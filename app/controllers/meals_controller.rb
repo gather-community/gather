@@ -35,7 +35,7 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @min_date = nil
-    @notify_on_worker_change = cannot?(:manage, @meal)
+    @notify_on_worker_change = !policy(@meal).administer?
     prep_form_vars
   end
 
@@ -83,7 +83,7 @@ class MealsController < ApplicationController
 
   def do_finalize
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize @meal, :finalize?
     @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
     if (@dupes = @meal.duplicate_signups).any?
@@ -175,7 +175,7 @@ class MealsController < ApplicationController
 
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
-    if cannot?(:manage, @meal)
+    if !policy(@meal).administer?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
   end

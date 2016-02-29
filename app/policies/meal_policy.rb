@@ -22,7 +22,7 @@ class MealPolicy < ApplicationPolicy
 
   # Means they can see the work shifts for the meal
   def work?
-    associated?
+    not_specific_meal? || associated?
   end
 
   def create?
@@ -91,7 +91,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def host?
-    user.community == meal.host_community
+    not_specific_meal? || user.community == meal.host_community
   end
 
   def associated?
@@ -107,10 +107,14 @@ class MealPolicy < ApplicationPolicy
   end
 
   def signed_up?
-    meal.households.any?{ |h| user.household }
+    meal.signups.find_by(household_id: user.household_id).present?
   end
 
   def head_cook?
     user == meal.head_cook
+  end
+
+  def not_specific_meal?
+    meal.is_a?(Class)
   end
 end

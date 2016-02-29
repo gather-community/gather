@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     authorize @user
-    @head_cook_meals = Meal.head_cooked_by(@user).includes(:signups).past.newest_first
+    @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
   end
 
   def new

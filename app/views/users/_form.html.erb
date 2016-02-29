@@ -3,18 +3,18 @@
   <%= f.input :first_name %>
   <%= f.input :last_name %>
   <%= f.input :email %>
-  <%= f.input :google_email, disabled: cannot?(:manage, @user) %>
+  <%= f.input :google_email, disabled: !policy(@user).administer? %>
 
   <%= f.input :household_id,
     collection: [@user.household].compact, label_method: :full_name,
-    disabled: cannot?(:manage, @user),
+    disabled: !policy(@user).administer?,
     input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
 
   <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
   <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
 
-  <% if policy(@user).adminify? %>
+  <% if policy(@user).administer? %>
     <%= f.input :admin %>
   <% end %>
 

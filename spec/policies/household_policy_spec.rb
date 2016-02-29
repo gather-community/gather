@@ -22,7 +22,7 @@ describe HouseholdPolicy do
       end
     end
 
-    permissions :index?, :show? do
+    permissions :show? do
       it_behaves_like "admins but not regular users"
 
       it "grants access to billers" do
@@ -30,7 +30,7 @@ describe HouseholdPolicy do
       end
     end
 
-    permissions :new?, :create?, :edit?, :update?, :activate?, :deactivate? do
+    permissions :index?, :new?, :create?, :edit?, :update?, :activate?, :deactivate? do
       it_behaves_like "admins only"
     end
 

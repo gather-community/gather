@@ -107,7 +107,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def signed_up?
-    meal.signups.find_by(household_id: user.household_id).present?
+    meal.signups.any?{ |s| s.household == user.household }
   end
 
   def head_cook?

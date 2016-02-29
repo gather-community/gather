@@ -21,7 +21,7 @@ describe MealPolicy do
       end
 
       it "grants access to those signed up even if not invited" do
-        expect(subject).to permit(outside_admin, Meal.new(households: [outside_admin.household]))
+        expect(subject).to permit(outside_admin, Meal.new(signups: [Signup.new(household: outside_admin.household)]))
       end
 
       it "denies access to plain others" do

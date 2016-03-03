@@ -8,7 +8,7 @@ class ShiftReminderJob < ReminderJob
     Assignment::ROLES.each do |role|
 
       lead_days = Settings.reminder_lead_times.shift[role]
-      raise "No lead time found in settings for #{role} notification" if lead_days.blank?
+      raise "No lead time found in settings for #{role} shift notification" if lead_days.blank?
 
       meal_ids = Meal.served_within_days_from_now(lead_days).pluck(:id)
 

@@ -1,11 +1,16 @@
 # Sends notifications of meals that people have signed up for.
 # Checks the DB to see when to send.
-class MealReminderJob
+class MealReminderJob < ReminderJob
   def perform
-    meal_ids = Meal.ids_in_time_from_now(Settings.meal_reminder_lead_time.hours)
+    return unless correct_hour?
+
+    lead_days = Settings.reminder_lead_times.meal
+    raise "No lead time found in settings for meal notification" if lead_days.blank?
+
+    meal_ids = Meal.served_within_days_from_now(lead_days).pluck(:id)
 
     if meal_ids.any?
-      # Find all households for meals in the next N hours that have not yet been notified.
+      # Find all households for target meals that have not yet been notified.
       signups = Signup.where(meal_id: meal_ids).where(notified: false).includes(household: :users)
 
       # Send emails

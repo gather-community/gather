@@ -1,9 +1,11 @@
-# Reminder lead times in days
+# Reminder lead times in days.
+# Reminders sent if object is before 11:59pm on `days` days from now.
+# So 0 means anytime today, 1 means anytime today or tomorrow, etc.
 reminder_lead_times:
-  meal: 1
+  meal: 0
   statement: 5
   shift:
     head_cook: 3
     asst_cook: 2
     cleaner: 2
-reminder_time_of_day: 8 # 8am
+reminder_time_of_day: 6 # 6:00am

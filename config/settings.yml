@@ -1,3 +1,9 @@
-meal_reminder_lead_time: 18 # hours
-shift_reminder_lead_time: 24 # hours
-statement_reminder_lead_time: 5 # days
+# Reminder lead times in days
+reminder_lead_times:
+  meal: 1
+  statement: 5
+  shift:
+    head_cook: 3
+    asst_cook: 2
+    cleaner: 2
+reminder_time_of_day: 8 # 8am

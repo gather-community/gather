@@ -1,5 +1,5 @@
 class Meal < ActiveRecord::Base
-  include Statusable
+  include Statusable, TimeCalculable
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
@@ -87,8 +87,8 @@ class Meal < ActiveRecord::Base
     Time.zone.now.midnight + 7.days + Meal::DEFAULT_TIME
   end
 
-  def self.ids_in_time_from_now(time)
-    where("served_at > ?", Time.now).where("served_at < ?", Time.now + time).pluck(:id)
+  def self.served_within_days_from_now(days)
+    within_days_from_now(:served_at, days)
   end
 
   def self.close_all_past!

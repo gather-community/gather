@@ -1,5 +1,5 @@
 class Assignment < ActiveRecord::Base
-  ROLE_ORDER = %w(head_cook asst_cook cleaner)
+  ROLES = %w(head_cook asst_cook cleaner) # In order
 
   belongs_to :user
   belongs_to :meal
@@ -9,6 +9,6 @@ class Assignment < ActiveRecord::Base
   end
 
   def <=>(other)
-    ROLE_ORDER.index(role) <=> ROLE_ORDER.index(other.role)
+    ROLES.index(role) <=> ROLES.index(other.role)
   end
 end

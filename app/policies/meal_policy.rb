@@ -2,40 +2,46 @@ class MealPolicy < ApplicationPolicy
   alias_method :meal, :record
 
   class Scope < Scope
+    ASSIGNED = "EXISTS (SELECT id FROM assignments
+      WHERE assignments.meal_id = meals.id AND assignments.user_id = ?)"
+    INVITED = "EXISTS (SELECT id FROM invitations
+      WHERE invitations.meal_id = meals.id AND invitations.community_id = ?)"
+    SIGNED_UP = "EXISTS (SELECT id FROM signups
+      WHERE signups.meal_id = meals.id AND signups.household_id = ?)"
+
     def resolve
-      scope.where("EXISTS (SELECT id FROM assignments
-        WHERE assignments.meal_id = meals.id AND assignments.user_id = ?) OR
-          EXISTS (SELECT id FROM invitations
-            WHERE invitations.meal_id = meals.id AND invitations.community_id = ?) OR
-          EXISTS (SELECT id FROM signups WHERE signups.meal_id = meals.id AND signups.household_id = ?)",
-        user.id, user.community_id, user.household_id)
+      if user.active?
+        scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}", user.id, user.community_id, user.household_id)
+      else
+        scope.where(SIGNED_UP, user.household_id)
+      end
     end
   end
 
   def index?
-    true
+    active?
   end
 
   def show?
-    associated?
+    active? && associated? || signed_up?
   end
 
   # Means they can see the work shifts for the meal
   def work?
-    not_specific_meal? || associated?
+    active? && (not_specific_meal? || associated?)
   end
 
   def create?
-    user.admin?
+    admin?
   end
 
   def update?
-    host? || assigned?
+    active? && (host? || assigned?)
   end
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    user.admin? && host?
+    admin? && host?
   end
 
   def destroy?
@@ -59,7 +65,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    host? && (user.admin? || user.biller?)
+    host? && (admin? || biller?)
   end
 
   def permitted_attributes
@@ -87,7 +93,7 @@ class MealPolicy < ApplicationPolicy
   private
 
   def hosting_admin_or_head_cook?
-    user.admin? && host? || head_cook?
+    active? && (admin? && host? || head_cook?)
   end
 
   def host?

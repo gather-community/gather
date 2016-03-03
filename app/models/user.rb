@@ -80,10 +80,6 @@ class User < ActiveRecord::Base
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
   end
 
-  def active_for_authentication?
-    super && active?
-  end
-
   private
 
   def at_least_one_phone

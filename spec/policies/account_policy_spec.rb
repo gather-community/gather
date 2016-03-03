@@ -59,6 +59,14 @@ describe AccountPolicy do
       it "grants access to owner of account" do
         expect(subject).to permit(account_owner, account)
       end
+
+      context "with inactive owner" do
+        before { account_owner.deactivated_at = Time.now }
+
+        it "still grants access" do
+          expect(subject).to permit(account_owner, account)
+        end
+      end
     end
 
     permissions :new?, :create?, :destroy? do

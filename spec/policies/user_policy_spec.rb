@@ -16,20 +16,30 @@ describe UserPolicy do
     end
 
     permissions :index? do
-      it "grants access to everyone" do
+      it "grants access to active users" do
         expect(subject).to permit(user, User)
+      end
+
+      it "denies access to inactive users" do
+        expect(subject).not_to permit(inactive_user, User)
       end
     end
 
     permissions :show? do
-      it "grants access to everyone to any user" do
+      it "grants access to everyone to any active user" do
         user2 = build(:user)
         expect(subject).to permit(user, user2)
       end
 
-      it "even disabled users" do
-        user2 = build(:user, deactivated_at: Time.now - 1.day)
-        expect(subject).to permit(user, user2)
+      context "for inactive user" do
+        it "denies access to other users" do
+          user2 = build(:user)
+          expect(subject).not_to permit(inactive_user, user2)
+        end
+
+        it "allows access to self" do
+          expect(subject).to permit(inactive_user, inactive_user)
+        end
       end
     end
 
@@ -52,6 +62,10 @@ describe UserPolicy do
 
       it "grants access to self" do
         expect(subject).to permit(user, user)
+      end
+
+      it "grants access to self for inactive user" do
+        expect(subject).to permit(inactive_user, inactive_user)
       end
     end
 

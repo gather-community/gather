@@ -3,7 +3,9 @@
   (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "") } %>
 
 <% content_for(:top_buttons) do %>
-  <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
+  <% if policy(Meal).index? %>
+    <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
+  <% end %>
 <% end %>
 
 <%= meal_action_icons(@meal, show_name: true) %>

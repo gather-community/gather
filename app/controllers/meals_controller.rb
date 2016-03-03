@@ -6,6 +6,7 @@ class MealsController < ApplicationController
 
   def index
     # Trivially, a meal in the past must be closed.
+    authorize Meal
     Meal.close_all_past!
     load_meals
   end

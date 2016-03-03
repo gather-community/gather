@@ -115,14 +115,22 @@ describe MealPolicy do
     let!(:meal2) { create(:meal, cleaners: [user], communities: [other_community]) } # Assigned
     let!(:meal3) { create(:meal, communities: [other_community]) } # Signed up
     let!(:meal4) { create(:meal, communities: [other_community]) } # None of the above
+    let(:permitted) { MealPolicy::Scope.new(user, Meal.all).resolve }
 
     before do
       meal3.households << user.household
     end
 
     it "returns meals invited to, assigned to, or signed up for" do
-      permitted = MealPolicy::Scope.new(user, Meal.all).resolve
       expect(permitted).to contain_exactly(meal1, meal2, meal3)
+    end
+
+    context "with inactive user" do
+      before { user.deactivated_at = Time.now }
+
+      it "returns meals only signed up for" do
+        expect(permitted).to contain_exactly(meal3)
+      end
     end
   end
 

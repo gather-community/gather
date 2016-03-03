@@ -48,12 +48,4 @@ class HouseholdPolicy < ApplicationPolicy
   def self?
     record == user
   end
-
-  def admin?
-    user.admin?
-  end
-
-  def biller?
-    user.biller?
-  end
 end

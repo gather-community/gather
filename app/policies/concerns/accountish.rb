@@ -15,7 +15,7 @@ module Accountish
   private
 
   def admin_or_biller?
-    user.admin? || user.biller?
+    admin? || biller?
   end
 
   def same_community_admin_or_biller?

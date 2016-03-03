@@ -11,11 +11,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    true
+    active?
   end
 
   def show?
-    true
+    active? || self?
   end
 
   def create?
@@ -59,9 +59,5 @@ class UserPolicy < ApplicationPolicy
 
   def self?
     record == user
-  end
-
-  def admin?
-    user.admin?
   end
 end

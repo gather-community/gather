@@ -51,4 +51,16 @@ class ApplicationPolicy
       scope
     end
   end
+
+  protected
+
+  delegate :active?, to: :user
+
+  def admin?
+    active? && user.admin?
+  end
+
+  def biller?
+    active? && user.biller?
+  end
 end

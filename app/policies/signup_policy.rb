@@ -2,7 +2,7 @@ class SignupPolicy < ApplicationPolicy
   alias_method :signup, :record
 
   def create?
-    invited?
+    active? && invited?
   end
 
   def update?

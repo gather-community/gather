@@ -59,6 +59,14 @@ describe StatementPolicy do
       it "grants access to owner of statement" do
         expect(subject).to permit(statement_owner, statement)
       end
+
+      context "with inactive owner" do
+        before { statement_owner.deactivated_at = Time.now }
+
+        it "still grants access" do
+          expect(subject).to permit(statement_owner, statement)
+        end
+      end
     end
 
     permissions :new?, :create?, :edit?, :update?, :destroy? do

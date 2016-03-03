@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     authorize @user
     if @user.update_attributes(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
-      redirect_to_index_or_root
+      redirect_to_index_or_home
     else
       set_validation_error_notice
       render :edit
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(permitted)
   end
 
-  def redirect_to_index_or_root
-    redirect_to policy(User).index? ? users_path : root_path
+  def redirect_to_index_or_home
+    policy(User).index? ? redirect_to(users_path) : redirect_to_home
   end
 end

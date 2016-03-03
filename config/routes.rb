@@ -53,11 +53,12 @@ Rails.application.routes.draw do
     end
   end
 
-  get "ping", to: "home#ping"
+  get "ping", to: "landing#ping"
+  get "inactive", to: "home#inactive"
 
   authenticated :user do
     root to: "meals#index", as: :authenticated_root
   end
 
-  root to: "home#index"
+  root to: "landing#index"
 end

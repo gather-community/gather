@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104024804) do
+ActiveRecord::Schema.define(version: 20160303024740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
-    t.decimal "balance_due", precision: 10, scale: 3, default: 0.0, null: false
+    t.decimal "balance_due", precision: 10, scale: 2, default: 0.0, null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.decimal "credit_limit", precision: 10, scale: 2
-    t.decimal "current_balance", precision: 10, scale: 3, default: 0.0, null: false
+    t.decimal "current_balance", precision: 10, scale: 2, default: 0.0, null: false
     t.decimal "due_last_statement", precision: 10, scale: 2
     t.integer "household_id", null: false
     t.integer "last_statement_id"
@@ -77,21 +77,21 @@ ActiveRecord::Schema.define(version: 20160104024804) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "formulas", force: :cascade do |t|
-    t.decimal "adult_meat", precision: 5, scale: 3
-    t.decimal "adult_veg", precision: 5, scale: 3
-    t.decimal "big_kid_meat", precision: 5, scale: 3
-    t.decimal "big_kid_veg", precision: 5, scale: 3
+    t.decimal "adult_meat", precision: 10, scale: 2
+    t.decimal "adult_veg", precision: 10, scale: 2
+    t.decimal "big_kid_meat", precision: 10, scale: 2
+    t.decimal "big_kid_veg", precision: 10, scale: 2
     t.integer "community_id", null: false
     t.date "effective_on", null: false
-    t.decimal "little_kid_meat", precision: 5, scale: 3
-    t.decimal "little_kid_veg", precision: 5, scale: 3
+    t.decimal "little_kid_meat", precision: 10, scale: 2
+    t.decimal "little_kid_veg", precision: 10, scale: 2
     t.string "meal_calc_type", null: false
     t.string "pantry_calc_type"
-    t.decimal "pantry_fee", precision: 5, scale: 3
-    t.decimal "senior_meat", precision: 5, scale: 3
-    t.decimal "senior_veg", precision: 5, scale: 3
-    t.decimal "teen_meat", precision: 5, scale: 3
-    t.decimal "teen_veg", precision: 5, scale: 3
+    t.decimal "pantry_fee", precision: 10, scale: 2
+    t.decimal "senior_meat", precision: 10, scale: 2
+    t.decimal "senior_veg", precision: 10, scale: 2
+    t.decimal "teen_meat", precision: 10, scale: 2
+    t.decimal "teen_veg", precision: 10, scale: 2
   end
 
   add_index "formulas", ["community_id"], name: "index_formulas_on_community_id", using: :btree
@@ -140,11 +140,11 @@ ActiveRecord::Schema.define(version: 20160104024804) do
     t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
     t.text "entrees"
     t.integer "host_community_id", null: false
-    t.decimal "ingredient_cost", precision: 10, scale: 3
+    t.decimal "ingredient_cost", precision: 10, scale: 2
     t.text "kids"
     t.integer "location_id"
     t.text "notes"
-    t.decimal "pantry_cost", precision: 10, scale: 3
+    t.decimal "pantry_cost", precision: 10, scale: 2
     t.string "payment_method"
     t.datetime "served_at", null: false
     t.text "side"
@@ -195,10 +195,10 @@ ActiveRecord::Schema.define(version: 20160104024804) do
     t.integer "account_id", null: false
     t.datetime "created_at", null: false
     t.date "due_on"
-    t.decimal "prev_balance", precision: 10, scale: 3, null: false
+    t.decimal "prev_balance", precision: 10, scale: 2, null: false
     t.date "prev_stmt_on"
     t.boolean "reminder_sent", default: false, null: false
-    t.decimal "total_due", precision: 10, scale: 3, null: false
+    t.decimal "total_due", precision: 10, scale: 2, null: false
     t.datetime "updated_at", null: false
   end
 
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 20160104024804) do
 
   create_table "transactions", force: :cascade do |t|
     t.integer "account_id", null: false
-    t.decimal "amount", precision: 10, scale: 3, null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "code", limit: 16, null: false
     t.datetime "created_at", null: false
     t.string "description", limit: 255, null: false
@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 20160104024804) do
     t.integer "statement_id"
     t.integer "statementable_id"
     t.string "statementable_type", limit: 32
-    t.decimal "unit_price", precision: 10, scale: 3
+    t.decimal "unit_price", precision: 10, scale: 2
     t.datetime "updated_at", null: false
   end
 

@@ -48,14 +48,14 @@ RSpec.describe Statement, type: :model do
     end
   end
 
-  describe "due_within_t_from_now" do
+  describe "due_within_days_from_now" do
     let!(:s1){ create(:statement, due_on: Date.today + 29.days) }
-    let!(:s2){ create(:statement, due_on: Date.today + 30.days) }
-    let!(:s3){ create(:statement, due_on: Date.today + 32.days) }
+    let!(:s2){ create(:statement, due_on: Date.today + 31.days) }
+    let!(:s3){ create(:statement, due_on: Date.today + 33.days) }
     let!(:s4){ create(:statement, due_on: nil) } # 30 days by default
 
     it "should return the correct statements" do
-      expect(Statement.due_within_t_from_now(31.days).to_a).to contain_exactly(s1, s2, s4)
+      expect(Statement.due_within_days_from_now(31).to_a).to contain_exactly(s1, s2, s4)
     end
   end
 end

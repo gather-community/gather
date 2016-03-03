@@ -1,7 +1,9 @@
 class Statement < ActiveRecord::Base
+  include TimeCalculable
   # Used to compute an assumed due date when community has no due date policy.
   # Used when e.g. determining when to send payment reminders.
   DEFAULT_TERMS = 30.days
+  DUE_DATE_EXPR = "COALESCE(due_on, statements.created_at + INTERVAL '1' DAY * #{DEFAULT_TERMS / 1.day})"
 
   belongs_to :account, inverse_of: :statements
   has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
@@ -10,9 +12,6 @@ class Statement < ActiveRecord::Base
   scope :for_household, ->(h){ joins(:account).where("accounts.household_id = ?", h.id) }
   scope :for_community_or_household,
     ->(c,h){ joins(:account).merge(Account.for_community_or_household(c, h)) }
-  scope :due_within_t_from_now, ->(t){
-    where("COALESCE(due_on, statements.created_at + INTERVAL '1' DAY * #{DEFAULT_TERMS / 1.day})
-      BETWEEN ? AND ?", Time.now, Time.now + t) }
   scope :reminder_not_sent, ->{ where(reminder_sent: false) }
   scope :with_balance_owing, ->{ joins(:account).merge(Account.with_balance_owing) }
   scope :is_latest, ->{ joins(:account).where("accounts.last_statement_id = statements.id") }
@@ -20,6 +19,10 @@ class Statement < ActiveRecord::Base
   delegate :community, :community_id, :household, :household_id, :household_full_name, to: :account
 
   paginates_per 10
+
+  def self.due_within_days_from_now(days)
+    within_days_from_now(DUE_DATE_EXPR, days)
+  end
 
   after_create do
     account.statement_added!(self)

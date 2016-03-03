@@ -25,12 +25,4 @@ class ShiftReminderJob < ReminderJob
       end
     end
   end
-
-  def max_attempts
-    3
-  end
-
-  def error(job, exception)
-    ExceptionNotifier.notify_exception(exception)
-  end
 end

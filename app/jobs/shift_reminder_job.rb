@@ -1,7 +1,7 @@
 # Sends notifications of work shifts that people have signed up for.
 # Checks the DB to see when to send.
 # Runs every hour
-class ShiftReminderJob < ReminderJob
+class ShiftReminderJob
   def perform
     return unless correct_hour?
 
@@ -25,4 +25,17 @@ class ShiftReminderJob < ReminderJob
       end
     end
   end
+
+  def correct_hour?
+    Time.zone.now.hour == Settings.reminder_time_of_day
+  end
+
+  def max_attempts
+    1
+  end
+
+  def error(job, exception)
+    ExceptionNotifier.notify_exception(exception)
+  end
+
 end

@@ -1,5 +1,5 @@
 # Sends notifications of outstanding statements a few days before they are due.
-class StatementReminderJob < ReminderJob
+class StatementReminderJob
   def perform
     return unless correct_hour?
 
@@ -19,5 +19,17 @@ class StatementReminderJob < ReminderJob
 
     @remindable_statements = Statement.due_within_days_from_now(lead_days).
       reminder_not_sent.with_balance_owing.is_latest
+  end
+
+  def correct_hour?
+    Time.zone.now.hour == Settings.reminder_time_of_day
+  end
+
+  def max_attempts
+    1
+  end
+
+  def error(job, exception)
+    ExceptionNotifier.notify_exception(exception)
   end
 end

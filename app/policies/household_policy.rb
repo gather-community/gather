@@ -3,7 +3,7 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      user.admin? ? scope : scope.none
+      user.admin? || user.biller? ? scope : scope.none
     end
   end
 

@@ -8,7 +8,7 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def index?
-    admin?
+    admin? || biller?
   end
 
   def show?

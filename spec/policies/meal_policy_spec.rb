@@ -11,7 +11,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :show? do
+    permissions :show?, :summary? do
       it "grants access to invitees" do
         expect(subject).to permit(user, Meal.new(communities: [community]))
       end

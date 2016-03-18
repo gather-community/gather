@@ -49,7 +49,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def summary?
-    hosting_admin_or_head_cook?
+    active? && associated? || signed_up?
   end
 
   def set_menu?

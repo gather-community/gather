@@ -5,12 +5,10 @@ class ShareMealCostCalculator < MealCostCalculator
   end
 
   def max_grocery_for_per_adult_cost(per_adult_cost)
-    if formula.fixed_pantry?
-      per_adult_cost * adult_equivs - total_fixed_pantry
-    else
-      per_adult_cost * adult_equivs / (1 + formula.pantry_fee)
-    end
+    per_adult_cost * adult_equivs
   end
+
+  protected
 
   def base_price_for(signup_type)
     raise "ingredient_cost must be set to calculate base price" unless meal.ingredient_cost.present?

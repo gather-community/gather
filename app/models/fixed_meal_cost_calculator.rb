@@ -5,14 +5,12 @@ class FixedMealCostCalculator < MealCostCalculator
   end
 
   def max_grocery
-    total_revenue - total_pantry
+    sum_product
   end
+
+  protected
 
   def base_price_for(signup_type)
     formula[signup_type]
-  end
-
-  def total_revenue
-    sum_product
   end
 end

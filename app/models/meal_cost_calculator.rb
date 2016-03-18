@@ -1,5 +1,4 @@
 class MealCostCalculator
-  attr_accessor :meal, :formula, :prices
 
   def self.build(meal)
     formula = Formula.for_meal(meal)
@@ -26,6 +25,18 @@ class MealCostCalculator
     self.prices[signup_type] = base_price + pantry_fee_for(base_price)
   end
 
+  protected
+
+  attr_accessor :meal, :formula, :prices
+
+  def sum_product
+    @sum_product ||= Signup.totals_for_meal(meal).map do |signup_type, count|
+      (formula[signup_type] || 0) * count
+    end.reduce(:+)
+  end
+
+  private
+
   def pantry_fee_for(base_price)
     return 0 if base_price < 0.01
     if formula.fixed_pantry?
@@ -35,24 +46,4 @@ class MealCostCalculator
     end
   end
 
-  def total_pantry
-    @total_patry ||= if formula.fixed_pantry?
-      total_fixed_pantry
-    else
-      total_revenue - (total_revenue / (1 + formula.pantry_fee))
-    end
-  end
-
-  def total_fixed_pantry
-    # Fixed fee for everyone except those with zero meal costs.
-    Signup.totals_for_meal(meal).map do |signup_type, count|
-      formula[signup_type] == 0 ? 0 : formula.pantry_fee * count
-    end.reduce(:+)
-  end
-
-  def sum_product
-    @total_revenue ||= Signup.totals_for_meal(meal).map do |signup_type, count|
-      (formula[signup_type] || 0) * count
-    end.reduce(:+)
-  end
 end

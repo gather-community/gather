@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :formula do
     community_id 1
+    effective_on "2015-01-01"
     pantry_fee "9.99"
     meal_calc_type "MyString"
     pantry_calc_type "MyString"

@@ -20,7 +20,11 @@
     <% @households.each do |household| %>
       <tr class="<%= household.active? ? "" : "inactive" %>">
         <td class="col-md-2">
-          <%= link_to(household.name, edit_household_path(household)) %>
+          <% if policy(household).show? %>
+            <%= link_to(household.name, household) %>
+          <% else %>
+            <% household.name %>
+          <% end %>
         </td>
         <td class="col-md-1"><%= household.community_name %></td>
         <td class="col-md-1">

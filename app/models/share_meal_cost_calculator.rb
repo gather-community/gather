@@ -4,7 +4,7 @@ class ShareMealCostCalculator < MealCostCalculator
     :share
   end
 
-  def max_grocery_for_per_adult_cost(per_adult_cost)
+  def max_ingredient_cost_for_per_adult_cost(per_adult_cost)
     per_adult_cost * adult_equivs
   end
 

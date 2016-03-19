@@ -33,10 +33,10 @@ RSpec.describe ShareMealCostCalculator, type: :model do
       end
     end
 
-    describe "max_grocery_for_per_adult_cost" do
+    describe "max_ingredient_cost_for_per_adult_cost" do
       it "should be correct" do
-        expect(calculator.max_grocery_for_per_adult_cost(7)).to be_within(0.001).of(78.75)
-        expect(calculator.max_grocery_for_per_adult_cost(8)).to be_within(0.001).of(90)
+        expect(calculator.max_ingredient_cost_for_per_adult_cost(7)).to be_within(0.001).of(78.75)
+        expect(calculator.max_ingredient_cost_for_per_adult_cost(8)).to be_within(0.001).of(90)
       end
     end
   end

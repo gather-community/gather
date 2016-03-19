@@ -4,7 +4,7 @@ class FixedMealCostCalculator < MealCostCalculator
     :fixed
   end
 
-  def max_grocery
+  def max_ingredient_cost
     sum_product
   end
 

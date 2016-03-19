@@ -33,9 +33,9 @@ RSpec.describe FixedMealCostCalculator, type: :model do
       end
     end
 
-    describe "max_grocery" do
+    describe "max_ingredient_cost" do
       it "should be correct" do
-        expect(calculator.max_grocery).to eq 45
+        expect(calculator.max_ingredient_cost).to eq 45
       end
     end
   end

@@ -19,10 +19,11 @@ class MealCostCalculator
     raise NotImplementedError
   end
 
+  # Returns a price for the given signup type, rounded to the nearest cent.
   def price_for(signup_type)
     return prices[signup_type] if prices[signup_type].present?
     base_price = base_price_for(signup_type)
-    self.prices[signup_type] = base_price + pantry_fee_for(base_price)
+    self.prices[signup_type] = (base_price + pantry_fee_for(base_price)).round(2)
   end
 
   protected

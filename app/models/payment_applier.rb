@@ -16,7 +16,7 @@ class PaymentApplier
         code: "payment",
         description: "Payment - Thank You!",
         incurred_on: Date.today,
-        amount: -amount.to_f
+        amount: -amount.to_f.round(2)
       )
     end
   end

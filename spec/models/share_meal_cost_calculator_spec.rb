@@ -27,8 +27,8 @@ RSpec.describe ShareMealCostCalculator, type: :model do
 
     describe "price_for" do
       it "should be correct" do
-        expect(calculator.price_for("adult_meat")).to be_within(0.001).of(9.389)
-        expect(calculator.price_for("adult_veg")).to be_within(0.001).of(7.167)
+        expect(calculator.price_for("adult_meat")).to be_within(0.0001).of(9.39)
+        expect(calculator.price_for("adult_veg")).to be_within(0.0001).of(7.17)
         expect(calculator.price_for("little_kid_veg")).to eq 0
       end
     end
@@ -47,8 +47,8 @@ RSpec.describe ShareMealCostCalculator, type: :model do
 
     describe "price_for" do
       it "should be correct" do
-        expect(calculator.price_for("adult_meat")).to be_within(0.001).of(9.777)
-        expect(calculator.price_for("adult_veg")).to be_within(0.001).of(7.333)
+        expect(calculator.price_for("adult_meat")).to be_within(0.0001).of(9.78)
+        expect(calculator.price_for("adult_veg")).to be_within(0.0001).of(7.33)
         expect(calculator.price_for("little_kid_veg")).to eq 0
       end
     end

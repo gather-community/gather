@@ -45,7 +45,7 @@ class LateFeeApplier
       policy["fee_amount"]
     when "percent"
       raise "Late fee policy must have fee_pct if fee_type is 'percent'" unless policy["fee_pct"]
-      balance_due * policy["fee_pct"] / 100
+      (balance_due * policy["fee_pct"] / 100).round(2)
     else
       raise "Invalid fee_type '#{policy['fee_type']}'"
     end

@@ -107,12 +107,8 @@
       <h2>Cook Reimbursement Form</h2>
       <table id="reimb-form">
         <tr>
-          <td>Name as should appear on check:</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
           <td>Date of grocery purchase:</td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</td>
+          <td></td>
         </tr>
         <tr>
           <td>Amount spent for ingredients:</td>
@@ -125,6 +121,13 @@
         <tr>
           <td>Total amount to be reimbursed:</td>
           <td>$</td>
+        </tr>
+        <tr>
+          <td>Reimbursement method:</td>
+          <td>
+            <%= icon_tag("square-o") %> Account credit<br/>
+            <%= icon_tag("square-o") %> Check payable to <span class="payable-to"></span>
+          </td>
         </tr>
       </table>
       Cooks, to obtain reimbursement, please:

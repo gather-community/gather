@@ -84,18 +84,24 @@
   }
 
   #reimb-form {
-    width: 500px;
+    width: 700px;
     margin-bottom: 20px;
 
     td:first-child {
-      width: 50%;
+      width: 40%;
       text-align: right;
     }
 
     td:last-child {
-      width: 50%;
+      width: 60%;
       padding-left: 10px;
       font-weight: bold;
+    }
+
+    span.payable-to {
+      display: inline-block;
+      border-bottom: 1px solid black;
+      width: 220px;
     }
   }
 }

@@ -69,11 +69,13 @@ describe MealPolicy do
 
     permissions :set_menu?, :close?, :reopen?, :summary? do
       it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(host_community: community))
+        expect(subject).to permit(admin, Meal.new(host_community: community, communities: [community]))
       end
 
       it "grants access to head cook" do
-        expect(subject).to permit(user, Meal.new(head_cook: user))
+        user = create(:user)
+        meal = create(:meal, head_cook: user, communities: [create(:community)])
+        expect(subject).to permit(user, meal)
       end
 
       it "denies access to regular users" do

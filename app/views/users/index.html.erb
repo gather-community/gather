@@ -9,8 +9,10 @@
     <% end %>
   </form>
   &nbsp;
-  <%= link_to("Invite Users", invite_users_path, class: "btn btn-default") if policy(User).create? %>
-  <%= link_to("Create User", new_user_path, class: "btn btn-primary") if policy(User).create? %>
+  <% if policy(User).create? %>
+    <%= link_to(icon_tag("plus") << " Invite Users", invite_users_path, class: "btn btn-default") %>
+    <%= link_to(icon_tag("plus") << " Create User", new_user_path, class: "btn btn-primary") %>
+  <% end %>
 <% end %>
 
 <% if @users.empty? %>

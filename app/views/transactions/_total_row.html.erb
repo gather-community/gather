@@ -1,0 +1,10 @@
+<tr class="total">
+  <td colspan="2"></td>
+  <td class="col-md-1">Total</td>
+  <% if type == :charge %>
+    <td colspan="2"></td>
+  <% end %>
+  <td class="col-md-1 num">
+    <%= currency_with_cr_span(total) %>
+  </td>
+</tr>

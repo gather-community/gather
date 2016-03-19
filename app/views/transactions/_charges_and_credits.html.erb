@@ -5,6 +5,7 @@
     <% @charges.each do |txn| %>
       <%= render("transactions/charge_row", txn: txn) %>
     <% end %>
+    <%= render("transactions/total_row", total: @total_charges, type: :charge) %>
   </table>
 <% end %>
 
@@ -15,5 +16,6 @@
     <% @credits.each do |txn| %>
       <%= render("transactions/credit_row", txn: txn) %>
     <% end %>
+    <%= render("transactions/total_row", total: @total_credits, type: :credit) %>
   </table>
 <% end %>

@@ -1,4 +1,10 @@
 .statements, .transactions {
+  div.summary {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
   table.key-value {
     margin-bottom: 30px;
   }

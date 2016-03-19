@@ -54,6 +54,22 @@ class Statement < ActiveRecord::Base
     end
   end
 
+  def charges
+    @charges ||= transactions.select(&:charge?)
+  end
+
+  def credits
+    @credits ||= transactions.select(&:credit?)
+  end
+
+  def total_charges
+    @total_charges ||= charges.sum(&:amount)
+  end
+
+  def total_credits
+    @total_credits ||= credits.sum(&:amount)
+  end
+
   def new_charges
     total_due - prev_balance
   end

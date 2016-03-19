@@ -2,8 +2,10 @@ class StatementsController < ApplicationController
   def show
     @statement = Statement.find(params[:id])
     authorize @statement
-    @charges = @statement.transactions.select(&:charge?)
-    @credits = @statement.transactions.select(&:credit?)
+    @charges = @statement.charges
+    @credits = @statement.credits
+    @total_charges = @statement.total_charges
+    @total_credits = @statement.total_credits
     @community = @statement.community
   end
 

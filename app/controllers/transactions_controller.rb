@@ -7,6 +7,8 @@ class TransactionsController < ApplicationController
     @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
     @credits = @transactions.select(&:credit?)
+    @total_charges = @charges.sum(&:amount)
+    @total_credits = @credits.sum(&:amount)
     @community = @account.community
   end
 

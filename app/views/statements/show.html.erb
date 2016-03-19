@@ -1,5 +1,17 @@
 <% content_for(:title){ "Statement ##{@statement.id.to_s.rjust(5, '0')}" } %>
 
+<div class="summary">
+  <% if @statement.total_due > 0 %>
+    <%= icon_tag("warning") %> Please pay <%= number_to_currency(@statement.total_due) %>
+    by <%= @statement.due_on.to_s(:short_date) %>. Thanks!
+  <% elsif @statement.total_due == 0 %>
+    <%= icon_tag("info-circle") %> Your account balance is zero. Nice job!
+  <% else %>
+    <%= icon_tag("info-circle") %> Your account has a credit of
+    <%= number_to_currency(-@statement.total_due) %>. No payment necessary!
+  <% end %>
+</div>
+
 <table class="key-value">
   <tr>
     <td>Community Account</td>
@@ -34,13 +46,13 @@
   <tr>
     <td>Total Charges</td>
     <td>
-      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
+      <%= currency_with_cr_span(@statement.total_charges) %>
     </td>
   </tr>
   <tr>
     <td>Total Payments/Credits</td>
     <td>
-      <%= currency_with_cr_span(@credits.sum(&:amount)) %>
+      <%= currency_with_cr_span(@statement.total_credits) %>
     </td>
   </tr>
   <tr>

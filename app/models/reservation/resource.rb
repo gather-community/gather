@@ -1,5 +1,9 @@
-module Reservations
+module Reservation
   class Resource < ActiveRecord::Base
+    self.table_name = "resources"
+
+    belongs_to :community
+
     has_attached_file :photo,
       styles: { thumb: "160x120#" },
       default_url: "/images/missing/:style.png"

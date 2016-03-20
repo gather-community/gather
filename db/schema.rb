@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320015611) do
+ActiveRecord::Schema.define(version: 20160320023457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -155,6 +155,19 @@ ActiveRecord::Schema.define(version: 20160320015611) do
 
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
+
+  create_table "reservation_protocols", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.time "fixed_end_time"
+    t.time "fixed_start_time"
+    t.string "kinds"
+    t.integer "max_lead_days"
+    t.integer "max_length_minutes"
+    t.integer "resource_id"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reservation_protocols", ["resource_id"], name: "index_reservation_protocols_on_resource_id", using: :btree
 
   create_table "reservations", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -306,6 +319,7 @@ ActiveRecord::Schema.define(version: 20160320015611) do
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
+  add_foreign_key "reservation_protocols", "resources"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users"
   add_foreign_key "resources", "communities"

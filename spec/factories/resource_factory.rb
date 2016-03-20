@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :resource, class: Reservations::Resource do
+  factory :resource, class: "Reservation::Resource" do
     name "Sitting Room"
     community
   end

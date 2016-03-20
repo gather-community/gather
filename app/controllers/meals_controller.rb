@@ -20,6 +20,10 @@ class MealsController < ApplicationController
   def show
     @meal = Meal.find(params[:id])
     authorize @meal
+
+    # Don't want the singup form to get cached
+    set_no_cache unless @meal.in_past?
+
     @signup = Signup.for(current_user, @meal)
     @account = current_user.account_for(@meal.host_community)
     load_signups

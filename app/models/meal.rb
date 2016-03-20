@@ -150,6 +150,10 @@ class Meal < ActiveRecord::Base
     spots_left == 0
   end
 
+  def in_past?
+    served_at < Time.now
+  end
+
   def menu_posted?
     MENU_ITEMS.any?{ |i| self[i].present? } || any_allergens?
   end

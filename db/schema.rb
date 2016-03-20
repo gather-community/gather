@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303024740) do
+ActiveRecord::Schema.define(version: 20160320015611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -156,6 +156,34 @@ ActiveRecord::Schema.define(version: 20160303024740) do
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
+  create_table "reservations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.string "kind"
+    t.string "name", limit: 24, null: false
+    t.integer "resource_id", null: false
+    t.datetime "starts_at"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+  end
+
+  add_index "reservations", ["resource_id"], name: "index_reservations_on_resource_id", using: :btree
+  add_index "reservations", ["user_id"], name: "index_reservations_on_user_id", using: :btree
+
+  create_table "resources", force: :cascade do |t|
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "meal_hostable", default: false, null: false
+    t.string "name", limit: 24, null: false
+    t.string "photo_content_type"
+    t.string "photo_file_name"
+    t.integer "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "resources", ["community_id"], name: "index_resources_on_community_id", using: :btree
+
   create_table "roles", force: :cascade do |t|
     t.datetime "created_at"
     t.string "name"
@@ -278,6 +306,9 @@ ActiveRecord::Schema.define(version: 20160303024740) do
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
+  add_foreign_key "reservations", "resources"
+  add_foreign_key "reservations", "users"
+  add_foreign_key "resources", "communities"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"
   add_foreign_key "statements", "accounts"

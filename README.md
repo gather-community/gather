@@ -18,6 +18,7 @@ To install the software below we recommend the following package managers:
 1. [Bundler](http://bundler.io/)
   1. Once Ruby is installed, run `gem install bundler` to install.
 1. PostgreSQL v9.2+ (database)
+1. ImageMagick
 
 ## Development Setup Guide
 Follow these steps to setup a development environment for MESS.

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320023457) do
+ActiveRecord::Schema.define(version: 20160321022419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20160320023457) do
     t.string "kinds"
     t.integer "max_lead_days"
     t.integer "max_length_minutes"
+    t.boolean "requires_sponsor", default: true, null: false
     t.integer "resource_id"
     t.datetime "updated_at", null: false
   end
@@ -174,14 +175,16 @@ ActiveRecord::Schema.define(version: 20160320023457) do
     t.datetime "ends_at"
     t.string "kind"
     t.string "name", limit: 24, null: false
+    t.integer "reserver_id", null: false
     t.integer "resource_id", null: false
+    t.integer "sponsor_id"
     t.datetime "starts_at"
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
   end
 
+  add_index "reservations", ["reserver_id"], name: "index_reservations_on_reserver_id", using: :btree
   add_index "reservations", ["resource_id"], name: "index_reservations_on_resource_id", using: :btree
-  add_index "reservations", ["user_id"], name: "index_reservations_on_user_id", using: :btree
+  add_index "reservations", ["sponsor_id"], name: "index_reservations_on_sponsor_id", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.integer "community_id", null: false
@@ -321,7 +324,8 @@ ActiveRecord::Schema.define(version: 20160320023457) do
   add_foreign_key "meals", "locations"
   add_foreign_key "reservation_protocols", "resources"
   add_foreign_key "reservations", "resources"
-  add_foreign_key "reservations", "users"
+  add_foreign_key "reservations", "users", column: "reserver_id"
+  add_foreign_key "reservations", "users", column: "sponsor_id"
   add_foreign_key "resources", "communities"
   add_foreign_key "signups", "households"
   add_foreign_key "signups", "meals"

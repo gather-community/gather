@@ -2,8 +2,12 @@
 
 <div class="summary">
   <% if @statement.total_due > 0 %>
-    <%= icon_tag("warning") %> Please pay <%= number_to_currency(@statement.total_due) %>
-    by <%= @statement.due_on.to_s(:short_date) %>. Thanks!
+    <%= icon_tag("warning") %> Please pay
+    <% if @statement.due_on.present? %>
+      <%= number_to_currency(@statement.total_due) %> by <%= @statement.due_on.to_s(:short_date) %>. Thanks!
+    <% else %>
+      <%= number_to_currency(@statement.total_due) %>. Thanks!
+    <% end %>
   <% elsif @statement.total_due == 0 %>
     <%= icon_tag("info-circle") %> Your account balance is zero. Nice job!
   <% else %>

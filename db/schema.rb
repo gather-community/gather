@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160324131405) do
+ActiveRecord::Schema.define(version: 20160331000208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -156,6 +156,15 @@ ActiveRecord::Schema.define(version: 20160324131405) do
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
+  create_table "reservation_protocolings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "protocol_id", null: false
+    t.integer "resource_id", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reservation_protocolings", ["resource_id", "protocol_id"], name: "protocolings_unique", unique: true, using: :btree
+
   create_table "reservation_protocols", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.time "fixed_end_time"
@@ -165,11 +174,8 @@ ActiveRecord::Schema.define(version: 20160324131405) do
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
     t.boolean "requires_sponsor", default: true, null: false
-    t.integer "resource_id"
     t.datetime "updated_at", null: false
   end
-
-  add_index "reservation_protocols", ["resource_id"], name: "index_reservation_protocols_on_resource_id", using: :btree
 
   create_table "reservations", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -323,7 +329,8 @@ ActiveRecord::Schema.define(version: 20160324131405) do
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
-  add_foreign_key "reservation_protocols", "resources"
+  add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"
+  add_foreign_key "reservation_protocolings", "resources"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users", column: "reserver_id"
   add_foreign_key "reservations", "users", column: "sponsor_id"

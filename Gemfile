@@ -82,5 +82,6 @@ group :development, :test do
   gem 'capistrano-bundler', '~> 1.1.2'
 
   gem 'faker'
+  gem "awesome_print"
 end
 

@@ -4,11 +4,7 @@ FactoryGirl.define do
       resources []
     end
 
-    kinds "personal"
-    max_length_minutes 120
-    fixed_start_time "9:00"
-    fixed_end_time "11:00"
-    max_lead_days 14
+    kinds nil
 
     after(:create) do |protocol, evaluator|
       protocol.resources = evaluator.resources

@@ -31,7 +31,7 @@ RSpec.describe Reservation::Protocol, type: :model do
     let(:resource1) { create(:resource) }
     let(:rules) { Reservation::Protocol.rules_for(resource1) }
 
-    it "should return empty hash with no protocols" do
+    it "should return empty hash with no rules" do
       expect(rules).to eq({})
     end
 

@@ -55,6 +55,10 @@ module Reservation
     def has_kind?(k)
       kinds.present? && kinds.include?(k)
     end
+
+    def community
+      resources.first.try(:community)
+    end
   end
 
   class ProtocolDuplicateDefinitionError < StandardError

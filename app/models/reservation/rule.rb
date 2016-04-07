@@ -4,6 +4,9 @@ module Reservation
   class Rule
     attr_accessor :name, :value, :protocol
 
+    NAMES = %i(fixed_start_time fixed_end_time max_lead_days
+      max_length_minutes max_minutes_per_year requires_sponsor)
+
     def initialize(name: nil, value: nil, protocol: nil)
       self.name = name
       self.value = value

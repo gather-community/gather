@@ -14,28 +14,28 @@ module Reservation
       case name
       when "fixed_start_time"
         value.strftime("%T") == reservation.starts_at.strftime("%T") ||
-          "it must start at #{value.to_s(:regular_time)}"
+          [:starts_at, "it must start at #{value.to_s(:regular_time)}"]
 
       when "fixed_end_time"
         value.strftime("%T") == reservation.ends_at.strftime("%T") ||
-          "it must end at #{value.to_s(:regular_time)}"
+          [:ends_at, "it must end at #{value.to_s(:regular_time)}"]
 
       when "max_lead_days"
         reservation.starts_at.to_date - Date.today <= value ||
-          "it can be at most #{value} days in the future"
+          [:starts_at, "it can be at most #{value} days in the future"]
 
       when "max_length_minutes"
         reservation.ends_at - reservation.starts_at <= value * 60 ||
-          "it can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} in length"
+          [:ends_at, "it can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} in length"]
 
       when "max_minutes_per_year"
         booked = booked_time_for_year(reservation, :seconds)
         if booked >= value * 60
-          "you have already reached your yearly limit of "\
-            "#{Utils::TimeUtils::humanize_interval(value * 60)} for this resource"
+          [:base, "you have already reached your yearly limit of "\
+            "#{Utils::TimeUtils::humanize_interval(value * 60)} for this resource"]
         elsif booked + reservation.seconds > value * 60
-          "you can book at most #{Utils::TimeUtils::humanize_interval(value * 60)} per year "\
-            "and you have already booked #{Utils::TimeUtils::humanize_interval(booked)}"
+          [:base, "you can book at most #{Utils::TimeUtils::humanize_interval(value * 60)} per year "\
+            "and you have already booked #{Utils::TimeUtils::humanize_interval(booked)}"]
         else
           true
         end
@@ -43,10 +43,10 @@ module Reservation
       when "max_days_per_year"
         booked = booked_time_for_year(reservation, :days)
         if booked >= value
-          "you have already reached your yearly limit of #{value} days for this resource"
+          [:base, "you have already reached your yearly limit of #{value} days for this resource"]
         elsif booked + reservation.days > value
-          "you can book at most #{value} days per year and "\
-            "you have already booked #{booked} days"
+          [:base, "you can book at most #{value} days per year and "\
+            "you have already booked #{booked} days"]
         else
           true
         end
@@ -54,7 +54,7 @@ module Reservation
       when "requires_sponsor"
         reservation.user_community == protocol.community ||
           reservation.sponsor_community == protocol.community ||
-          "you must have a sponsor"
+          [:sponsor_id, "you must have a sponsor"]
 
       else
         raise "Unknown rule name"

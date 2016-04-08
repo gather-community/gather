@@ -196,5 +196,18 @@ RSpec.describe Reservation::Rule, type: :model do
         expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
       end
     end
+
+    describe "requires_kind" do
+      let(:rule) { Reservation::Rule.new(name: "requires_kind", value: true) }
+
+      it "should pass if reservation has kind" do
+        reservation.kind = "personal"
+        expect(rule.check(reservation)).to be true
+      end
+
+      it "should fail if reservation has no kind" do
+        expect(rule.check(reservation)).to eq [:kind, "can't be blank"]
+      end
+    end
   end
 end

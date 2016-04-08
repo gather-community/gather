@@ -59,6 +59,9 @@ module Reservation
           reservation.sponsor_community == protocol.community ||
           [:sponsor_id, "you must have a sponsor"]
 
+      when "requires_kind"
+        reservation.kind.present? || [:kind, "can't be blank"]
+
       else
         raise "Unknown rule name"
       end

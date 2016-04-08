@@ -5,7 +5,7 @@ module Reservation
     attr_accessor :name, :value, :protocol
 
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
-      max_length_minutes max_minutes_per_year requires_sponsor)
+      max_length_minutes max_minutes_per_year requires_sponsor requires_kind)
 
     def initialize(name: nil, value: nil, protocol: nil)
       self.name = name
@@ -15,23 +15,23 @@ module Reservation
 
     def check(reservation)
       case name
-      when "fixed_start_time"
+      when :fixed_start_time
         value.strftime("%T") == reservation.starts_at.strftime("%T") ||
           [:starts_at, "it must start at #{value.to_s(:regular_time)}"]
 
-      when "fixed_end_time"
+      when :fixed_end_time
         value.strftime("%T") == reservation.ends_at.strftime("%T") ||
           [:ends_at, "it must end at #{value.to_s(:regular_time)}"]
 
-      when "max_lead_days"
+      when :max_lead_days
         reservation.starts_at.to_date - Date.today <= value ||
           [:starts_at, "it can be at most #{value} days in the future"]
 
-      when "max_length_minutes"
+      when :max_length_minutes
         reservation.ends_at - reservation.starts_at <= value * 60 ||
           [:ends_at, "it can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} in length"]
 
-      when "max_minutes_per_year"
+      when :max_minutes_per_year
         booked = booked_time_for_year(reservation, :seconds)
         if booked >= value * 60
           [:base, "you have already reached your yearly limit of "\
@@ -43,7 +43,7 @@ module Reservation
           true
         end
 
-      when "max_days_per_year"
+      when :max_days_per_year
         booked = booked_time_for_year(reservation, :days)
         if booked >= value
           [:base, "you have already reached your yearly limit of #{value} days for this resource"]
@@ -54,12 +54,12 @@ module Reservation
           true
         end
 
-      when "requires_sponsor"
+      when :requires_sponsor
         reservation.user_community == protocol.community ||
           reservation.sponsor_community == protocol.community ||
           [:sponsor_id, "you must have a sponsor"]
 
-      when "requires_kind"
+      when :requires_kind
         reservation.kind.present? || [:kind, "can't be blank"]
 
       else

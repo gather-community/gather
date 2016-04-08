@@ -10,17 +10,17 @@ module Reservation
       protocols = Protocol.matching(reservation.resource, reservation.kind)
 
       rules = {}.tap do |result|
-        Rule::NAMES.each do |a|
-          protocols_with_attr = protocols.select{ |p| p[a].present? }
+        Rule::NAMES.each do |n|
+          protocols_with_attr = protocols.select{ |p| p[n].present? }
 
           if protocols_with_attr.size > 1
-            raise ProtocolDuplicateDefinitionError.new(attrib: a, protocols: protocols_with_attr)
+            raise ProtocolDuplicateDefinitionError.new(attrib: n, protocols: protocols_with_attr)
           elsif protocols_with_attr.size == 0
             next
           end
 
           protocol = protocols_with_attr.first
-          result[a] = Rule.new(name: a, value: protocol[a], protocol: protocol)
+          result[n] = Rule.new(name: n, value: protocol[n], protocol: protocol)
         end
       end
 

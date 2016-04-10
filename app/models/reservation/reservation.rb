@@ -2,6 +2,8 @@ module Reservation
   class Reservation < ActiveRecord::Base
     self.table_name = "reservations"
 
+    attr_accessor :guidelines_ok
+
     belongs_to :user, foreign_key: "reserver_id"
     belongs_to :sponsor, class_name: "User"
     belongs_to :resource
@@ -12,6 +14,7 @@ module Reservation
 
     validates :name, presence: true, length: { maximum: 24 }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
+    validate :guidelines_accepted
     validate :start_before_end
     validate :no_overlap
     validate :apply_rules
@@ -23,6 +26,14 @@ module Reservation
     # counts as 2 days.
     def self.booked_time_for(resources:, household:, period:, unit:)
       where(resource: resources, user: household.users, starts_at: period).to_a.sum(&unit)
+    end
+
+    def self.new_with_defaults(resource)
+      new(
+        starts_at: Time.zone.now.midnight + 1.week + 17.hours,
+        ends_at: Time.zone.now.midnight + 1.week + 18.hours,
+        resource: resource
+      )
     end
 
     def seconds
@@ -45,7 +56,17 @@ module Reservation
       Time.now - created_at < 1.hour
     end
 
+    def guidelines_ok?
+      guidelines_ok == "1"
+    end
+
     private
+
+    def guidelines_accepted
+      if resource.has_guidelines? && !guidelines_ok?
+        errors.add(:guidelines, "You must agree to the guidelines")
+      end
+    end
 
     def start_before_end
       if starts_at.present? && ends_at.present? && starts_at >= ends_at

@@ -49,6 +49,13 @@ en:
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
+      reservation/reservation:
+        name: "Name"
+        starts_at: "Start Time"
+        ends_at: "End Time"
+        kind: "Type"
+        note: "Note"
+        guidelines: "Guidelines"
     errors:
       models:
         signup:
@@ -79,6 +86,8 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
+      reservation_reservation:
+        name: "e.g. Game night"
       transaction:
         description: "e.g. Check #12345"
     hints:

@@ -59,6 +59,7 @@ gem 'dj_cron', github: 'sassafrastech/dj_cron'
 gem "rolify"
 gem "pundit"
 gem "paperclip", "~> 4.3"
+gem "redcarpet"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

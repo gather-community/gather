@@ -257,6 +257,7 @@ GEM
     rainbow (2.0.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    redcarpet (3.3.4)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rolify (4.1.1)
@@ -366,6 +367,7 @@ DEPENDENCIES
   pundit
   rails (= 4.2.3)
   rails-backbone
+  redcarpet
   rolify
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)

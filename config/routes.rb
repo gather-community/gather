@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :reservations
+
   resources :signups
   resources :households do
     member do

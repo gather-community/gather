@@ -1,0 +1,7 @@
+<% content_for(:title){ "Reservations" } %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(Reservation::Reservation).create? %>
+    <%= link_to(icon_tag("plus") << " Create Reservation", new_reservation_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>

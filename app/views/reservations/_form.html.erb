@@ -1,0 +1,29 @@
+<%= simple_form_for(@reservation,
+      url: @reservation.new_record? ? reservations_path : reservation_path(@reservation),
+      html: { class: 'form-horizontal reservation-form' }) do |f| %>
+
+  <%= f.input :name %>
+  <%= f.input :starts_at, as: :datetime_picker %>
+  <%= f.input :ends_at, as: :datetime_picker %>
+  <%= f.input :kind, collection: @kinds, required: true unless @kinds.blank? %>
+  <%= f.input :note %>
+
+  <% if @resource.has_guidelines? %>
+    <%= f.input :guidelines, required: true do %>
+      <div id="guidelines">
+        <%= safe_render_markdown(@resource.all_guidelines) %>
+      </div>
+      <label>
+        <%= f.check_box(:guidelines_ok) %>
+        <strong>I agree to the above guidelines</strong>
+      </label>
+    <% end %>
+  <% end %>
+
+  <div class="row">
+    <div class="form-actions col-sm-8">
+      <%= f.button :submit, class: "pull-right btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

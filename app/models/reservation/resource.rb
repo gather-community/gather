@@ -3,6 +3,9 @@ module Reservation
     self.table_name = "resources"
 
     belongs_to :community
+    has_and_belongs_to_many :shared_guidelines,
+      class_name: "Reservation::SharedGuidelines",
+      join_table: "reservation_guideline_inclusions"
 
     has_attached_file :photo,
       styles: { thumb: "160x120#" },
@@ -22,8 +25,15 @@ module Reservation
       all_guidelines.present?
     end
 
+    # Concatenates own guidelines and shared guidelines together
+    # Returns empty string if no guidelines.
     def all_guidelines
-      guidelines
+      return @all_guidelines if @all_guidelines
+
+      own = guidelines.blank? ? nil : guidelines
+      shared = shared_guidelines.map(&:body)
+      all = ([own] + shared).compact.map(&:strip)
+      @all_guidelines = all.join("\n\n---\n\n")
     end
   end
 end

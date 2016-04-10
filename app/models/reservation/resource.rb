@@ -8,6 +8,6 @@ module Reservation
       styles: { thumb: "160x120#" },
       default_url: "/images/missing/:style.png"
     validates_attachment_content_type :photo, content_type: /\Aimage\/jpeg/
-    validates_attachment_file_name :photo, matches: /jpe?g\Z/
+    validates_attachment_file_name :photo, matches: /jpe?g\Z/i
   end
 end

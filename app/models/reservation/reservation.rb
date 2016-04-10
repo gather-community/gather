@@ -37,6 +37,14 @@ module Reservation
       RuleSet.build_for(self).rules
     end
 
+    def future?
+      starts_at.future?
+    end
+
+    def recently_created?
+      Time.now - created_at < 1.hour
+    end
+
     private
 
     def start_before_end

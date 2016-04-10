@@ -2,6 +2,7 @@ shared_context "policy objs" do
   subject { described_class }
   let(:community) { Community.new }
   let(:user) { User.new }
+  let(:other_user) { User.new }
   let(:inactive_user) { User.new(deactivated_at: Time.now) }
   let(:household) { Household.new(users: [user]) }
   let(:admin) { User.new(admin: true) }

@@ -3,8 +3,8 @@ FactoryGirl.define do
     name "Fun times"
     resource
     user
-    starts_at "2016-03-19 21:56:11"
-    ends_at "2016-03-19 21:56:11"
+    sequence(:starts_at) { |n| Time.now.tomorrow.midnight + n.hours }
+    sequence(:ends_at) { |n| Time.now.tomorrow.midnight + (n + 1).hours }
     kind nil
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407235639) do
+ActiveRecord::Schema.define(version: 20160410032512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 20160407235639) do
     t.datetime "ends_at"
     t.string "kind"
     t.string "name", limit: 24, null: false
+    t.text "note"
     t.integer "reserver_id", null: false
     t.integer "resource_id", null: false
     t.integer "sponsor_id"
@@ -198,6 +199,7 @@ ActiveRecord::Schema.define(version: 20160407235639) do
   create_table "resources", force: :cascade do |t|
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
+    t.text "guidelines"
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
     t.string "photo_content_type"

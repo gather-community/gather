@@ -35,6 +35,14 @@
       <%= @statement.created_on.to_s(:short_date) %>
     </td>
   </tr>
+  <% if @statement.due_on %>
+    <tr>
+      <td>Due Date</td>
+      <td>
+        <%= @statement.due_on.to_s(:short_date) %>
+      </td>
+    </tr>
+  <% end %>
   <tr>
     <td>Previous Statement</td>
     <td>
@@ -48,31 +56,23 @@
     </td>
   </tr>
   <tr>
-    <td>Total Charges</td>
+    <td>Charges</td>
     <td>
       <%= currency_with_cr_span(@statement.total_charges) %>
     </td>
   </tr>
   <tr>
-    <td>Total Payments/Credits</td>
+    <td>Payments/Credits</td>
     <td>
       <%= currency_with_cr_span(@statement.total_credits) %>
     </td>
   </tr>
   <tr>
-    <td>New Balance</td>
+    <td>Balance</td>
     <td>
-      <strong><%= currency_with_cr_span(@statement.total_due) %></strong>
+      <strong id="balance"><%= currency_with_cr_span(@statement.total_due) %></strong>
     </td>
   </tr>
-  <% if @statement.due_on %>
-    <tr>
-      <td>Due Date</td>
-      <td>
-        <%= @statement.due_on.to_s(:short_date) %>
-      </td>
-    </tr>
-  <% end %>
 </table>
 
 <% if @statement.transactions.empty? %>

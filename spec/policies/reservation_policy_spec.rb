@@ -80,7 +80,8 @@ describe Reservation::ReservationPolicy do
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
     it "should allow appropriate attribs" do
-      expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id sponsor_id starts_at ends_at))
+      expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
+        sponsor_id starts_at ends_at guidelines_ok))
     end
   end
 end

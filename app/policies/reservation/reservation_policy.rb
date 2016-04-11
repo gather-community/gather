@@ -23,7 +23,7 @@ module Reservation
     end
 
     def permitted_attributes
-      %i(name kind reserver_id resource_id sponsor_id starts_at ends_at)
+      %i(name kind reserver_id resource_id sponsor_id starts_at ends_at guidelines_ok)
     end
 
     private

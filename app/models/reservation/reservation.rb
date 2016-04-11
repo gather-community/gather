@@ -19,6 +19,8 @@ module Reservation
     validate :no_overlap
     validate :apply_rules
 
+    normalize_attributes :kind, :note
+
     # Counts the number of seconds or days booked for the given resources by the given
     # household over the given period.
     # The number of days is rounded up for each event.
@@ -57,6 +59,7 @@ module Reservation
     end
 
     def guidelines_ok?
+      ap guidelines_ok
       guidelines_ok == "1"
     end
 

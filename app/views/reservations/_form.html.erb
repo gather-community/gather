@@ -2,6 +2,10 @@
       url: @reservation.new_record? ? reservations_path : reservation_path(@reservation),
       html: { class: 'form-horizontal reservation-form' }) do |f| %>
 
+  <%= f.hidden_field :resource_id %>
+
+  <%= base_error(f) %>
+
   <%= f.input :name %>
   <%= f.input :starts_at, as: :datetime_picker %>
   <%= f.input :ends_at, as: :datetime_picker %>

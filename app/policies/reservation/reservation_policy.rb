@@ -31,7 +31,7 @@ module Reservation
     delegate :future?, :recently_created?, to: :reservation
 
     def active_reserver?
-      active? && reservation.user == user
+      active? && reservation.reserver == user
     end
   end
 end

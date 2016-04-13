@@ -55,7 +55,7 @@ module Reservation
         end
 
       when :requires_sponsor
-        reservation.user_community == protocol.community ||
+        reservation.reserver_community == protocol.community ||
           reservation.sponsor_community == protocol.community ||
           [:sponsor_id, "you must have a sponsor"]
 

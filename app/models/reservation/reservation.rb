@@ -4,12 +4,12 @@ module Reservation
 
     attr_accessor :guidelines_ok
 
-    belongs_to :user, foreign_key: "reserver_id"
+    belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :resource
 
-    delegate :household, to: :user
-    delegate :community, to: :user, prefix: true
+    delegate :household, to: :reserver
+    delegate :community, to: :reserver, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
 
     validates :name, presence: true, length: { maximum: 24 }
@@ -27,7 +27,7 @@ module Reservation
     # i.e., a 1-hour event and a 10-hour event both counts as 1 day, while a 36-hour event
     # counts as 2 days.
     def self.booked_time_for(resources:, household:, period:, unit:)
-      where(resource: resources, user: household.users, starts_at: period).to_a.sum(&unit)
+      where(resource: resources, reserver: household.users, starts_at: period).to_a.sum(&unit)
     end
 
     def self.new_with_defaults(resource)

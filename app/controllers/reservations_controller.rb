@@ -14,7 +14,7 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    @reservation = Reservation::Reservation.new(user: current_user)
+    @reservation = Reservation::Reservation.new(reserver: current_user)
     @reservation.assign_attributes(reservation_params)
     authorize @reservation
     if @reservation.save

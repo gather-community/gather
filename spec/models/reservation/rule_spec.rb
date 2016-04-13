@@ -76,13 +76,13 @@ RSpec.describe Reservation::Rule, type: :model do
       let(:protocol) { create(:reservation_protocol, resources: [resource1, resource2]) }
 
       # Create 107.5 hours total (7 days) reservations for resources 1&2 for household.
-      let!(:reservation1) { create(:reservation, user: user1, resource: resource1,
+      let!(:reservation1) { create(:reservation, reserver: user1, resource: resource1,
         starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00") } # 8 hours
-      let!(:reservation2) { create(:reservation, user: user2, resource: resource2,
+      let!(:reservation2) { create(:reservation, reserver: user2, resource: resource2,
         starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00") } # 26 hours (2 days)
-      let!(:reservation3) { create(:reservation, user: user2, resource: resource1,
+      let!(:reservation3) { create(:reservation, reserver: user2, resource: resource1,
         starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30") } # 3.5 hours
-      let!(:reservation4) { create(:reservation, user: user2, resource: resource1,
+      let!(:reservation4) { create(:reservation, reserver: user2, resource: resource1,
         starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00") } # 70 hours (3 days)
 
       describe "max_days_per_year" do
@@ -91,7 +91,7 @@ RSpec.describe Reservation::Rule, type: :model do
         end
 
         before do
-          reservation.user = user1
+          reservation.reserver = user1
           reservation.starts_at = Time.parse("2016-01-30 6:00pm")
         end
 
@@ -128,7 +128,7 @@ RSpec.describe Reservation::Rule, type: :model do
         end
 
         before do
-          reservation.user = user1
+          reservation.reserver = user1
           reservation.starts_at = Time.parse("2016-01-30 6:00pm")
         end
 
@@ -175,24 +175,24 @@ RSpec.describe Reservation::Rule, type: :model do
       let(:rule) { Reservation::Rule.new(name: :requires_sponsor, value: true, protocol: protocol) }
 
       it "should pass if insider has no sponsor" do
-        reservation.user = insider
+        reservation.reserver = insider
         expect(rule.check(reservation)).to be true
       end
 
       it "should pass if outsider has sponsor from community" do
-        reservation.user = outsider
+        reservation.reserver = outsider
         reservation.sponsor = insider
         expect(rule.check(reservation)).to be true
       end
 
       it "should fail if outsider has sponsor from outside community" do
-        reservation.user = outsider
+        reservation.reserver = outsider
         reservation.sponsor = outsider2
         expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
       end
 
       it "should fail if outsider has no sponsor" do
-        reservation.user = outsider
+        reservation.reserver = outsider
         expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
       end
     end

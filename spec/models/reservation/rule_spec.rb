@@ -164,39 +164,6 @@ RSpec.describe Reservation::Rule, type: :model do
       end
     end
 
-    describe "requires_sponsor" do
-      let(:resource) { create(:resource) }
-      let(:household1) { create(:household, community: resource.community) }
-      let(:insider) { create(:user, household: household1) }
-      let(:outsider) { create(:user) }
-      let(:outsider2) { create(:user) }
-      let(:protocol) { create(:reservation_protocol, resources: [resource]) }
-
-      let(:rule) { Reservation::Rule.new(name: :requires_sponsor, value: true, protocol: protocol) }
-
-      it "should pass if insider has no sponsor" do
-        reservation.reserver = insider
-        expect(rule.check(reservation)).to be true
-      end
-
-      it "should pass if outsider has sponsor from community" do
-        reservation.reserver = outsider
-        reservation.sponsor = insider
-        expect(rule.check(reservation)).to be true
-      end
-
-      it "should fail if outsider has sponsor from outside community" do
-        reservation.reserver = outsider
-        reservation.sponsor = outsider2
-        expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
-      end
-
-      it "should fail if outsider has no sponsor" do
-        reservation.reserver = outsider
-        expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
-      end
-    end
-
     describe "requires_kind" do
       let(:rule) { Reservation::Rule.new(name: :requires_kind, value: true) }
 
@@ -209,5 +176,66 @@ RSpec.describe Reservation::Rule, type: :model do
         expect(rule.check(reservation)).to eq [:kind, "can't be blank"]
       end
     end
+
+    describe "other_communities" do
+      let(:resource) { create(:resource) }
+      let(:household1) { create(:household, community: resource.community) }
+      let(:insider) { create(:user, household: household1) }
+      let(:outsider) { create(:user) }
+      let(:outsider2) { create(:user) }
+      let(:protocol) { create(:reservation_protocol, resources: [resource]) }
+      let(:rule) { Reservation::Rule.new(name: :other_communities, value: value, protocol: protocol) }
+
+      shared_examples_for "insiders only" do
+        it "should pass for insider" do
+          reservation.reserver = insider
+          expect(rule.check(reservation)).to be true
+        end
+
+        it "should fail for outsider even with sponsor" do
+          reservation.reserver = outsider
+          reservation.sponsor = insider
+          expect(rule.check(reservation)).to eq [:base,
+            "residents from other communities may not make reservations"]
+        end
+      end
+
+      context "forbidden" do
+        let(:value) { "forbidden" }
+        it_behaves_like "insiders only"
+      end
+
+      context "read_only" do
+        let(:value) { "read_only" }
+        it_behaves_like "insiders only"
+      end
+
+      context "sponsor" do
+        let(:value) { "sponsor" }
+
+        it "should pass if insider has no sponsor" do
+          reservation.reserver = insider
+          expect(rule.check(reservation)).to be true
+        end
+
+        it "should pass if outsider has sponsor from community" do
+          reservation.reserver = outsider
+          reservation.sponsor = insider
+          expect(rule.check(reservation)).to be true
+        end
+
+        it "should fail if outsider has sponsor from outside community" do
+          reservation.reserver = outsider
+          reservation.sponsor = outsider2
+          expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
+        end
+
+        it "should fail if outsider has no sponsor" do
+          reservation.reserver = outsider
+          expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
+        end
+      end
+    end
+
   end
 end

@@ -5,7 +5,8 @@ module Reservation
     attr_accessor :name, :value, :protocol
 
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
-      max_length_minutes max_minutes_per_year requires_sponsor requires_kind)
+      max_length_minutes max_minutes_per_year
+      other_communities requires_kind)
 
     def initialize(name: nil, value: nil, protocol: nil)
       self.name = name
@@ -54,10 +55,18 @@ module Reservation
           true
         end
 
-      when :requires_sponsor
-        reservation.reserver_community == protocol.community ||
-          reservation.sponsor_community == protocol.community ||
-          [:sponsor_id, "you must have a sponsor"]
+      when :other_communities
+        case value
+        when "forbidden", "read_only"
+          reservation.reserver_community == protocol.community ||
+            [:base, "residents from other communities may not make reservations"]
+        when "sponsor"
+          reservation.reserver_community == protocol.community ||
+            reservation.sponsor_community == protocol.community ||
+            [:sponsor_id, "you must have a sponsor"]
+        else
+          raise "Unknown value for other_communities rule"
+        end
 
       when :requires_kind
         reservation.kind.present? || [:kind, "can't be blank"]

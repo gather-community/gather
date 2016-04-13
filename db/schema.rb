@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410200423) do
+ActiveRecord::Schema.define(version: 20160413023503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -181,8 +181,8 @@ ActiveRecord::Schema.define(version: 20160410200423) do
     t.integer "max_lead_days"
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
+    t.string "other_communities"
     t.boolean "requires_kind"
-    t.boolean "requires_sponsor"
     t.datetime "updated_at", null: false
   end
 

@@ -6,19 +6,13 @@
 # Another sets max_minutes_per_year for a subset of resources.
 # etc.
 #
-# Rule attributes:
-#   fixed_start_time
-#   fixed_end_time
-#   max_lead_days
-#   max_length_minutes
-#   max_minutes_per_year
-#   requires_sponsor
+# See Reservation::Rule::NAMES for list of rule attributes
 module Reservation
   class Protocol < ActiveRecord::Base
     has_many :protocolings, class_name: "Reservation::Protocoling", foreign_key: "protocol_id"
     has_many :resources, through: :protocolings
 
-    serialize :kinds
+    serialize :kinds, JSON
 
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.

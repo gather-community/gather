@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413023503) do
+ActiveRecord::Schema.define(version: 20160413024518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -173,9 +173,11 @@ ActiveRecord::Schema.define(version: 20160413023503) do
   add_index "reservation_protocolings", ["resource_id", "protocol_id"], name: "protocolings_unique", unique: true, using: :btree
 
   create_table "reservation_protocols", force: :cascade do |t|
+    t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.time "fixed_end_time"
     t.time "fixed_start_time"
+    t.boolean "general", default: false, null: false
     t.string "kinds"
     t.integer "max_days_per_year"
     t.integer "max_lead_days"
@@ -185,6 +187,8 @@ ActiveRecord::Schema.define(version: 20160413023503) do
     t.boolean "requires_kind"
     t.datetime "updated_at", null: false
   end
+
+  add_index "reservation_protocols", ["community_id"], name: "index_reservation_protocols_on_community_id", using: :btree
 
   create_table "reservation_shared_guidelines", force: :cascade do |t|
     t.text "body", null: false
@@ -354,6 +358,7 @@ ActiveRecord::Schema.define(version: 20160413023503) do
   add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"
   add_foreign_key "reservation_protocolings", "resources"
+  add_foreign_key "reservation_protocols", "communities"
   add_foreign_key "reservation_shared_guidelines", "communities"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users", column: "reserver_id"

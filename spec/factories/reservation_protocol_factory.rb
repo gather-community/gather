@@ -5,6 +5,7 @@ FactoryGirl.define do
     end
 
     kinds nil
+    community { resources.first.try(:community) }
 
     after(:create) do |protocol, evaluator|
       protocol.resources = evaluator.resources

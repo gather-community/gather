@@ -11,6 +11,7 @@ module Reservation
   class Protocol < ActiveRecord::Base
     has_many :protocolings, class_name: "Reservation::Protocoling", foreign_key: "protocol_id"
     has_many :resources, through: :protocolings
+    belongs_to :community
 
     serialize :kinds, JSON
 
@@ -18,7 +19,10 @@ module Reservation
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.
     def self.matching(resource, kind = nil)
-      includes(:protocolings).where("reservation_protocolings.resource_id": resource.id).
+      joins("LEFT JOIN reservation_protocolings
+          ON reservation_protocolings.protocol_id = reservation_protocols.id").
+        where(community_id: resource.community_id).
+        where("reservation_protocolings.resource_id = ? OR general = 't'", resource.id).
         select { |p| p.has_kind?(kind) || p.kinds.nil? }
     end
 

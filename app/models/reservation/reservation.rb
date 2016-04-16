@@ -11,6 +11,7 @@ module Reservation
     delegate :household, to: :reserver
     delegate :community, to: :reserver, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
+    delegate :community_id, to: :resource
 
     validates :name, presence: true, length: { maximum: 24 }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true

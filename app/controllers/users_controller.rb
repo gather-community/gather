@@ -9,7 +9,11 @@ class UsersController < ApplicationController
         @users = @users.page(params[:page])
       end
       format.json do
-        @users = @users.matching(params[:search]).active.by_name.page(params[:page]).per(20)
+        @users = @users.matching(params[:search]).active
+        if params[:community_id]
+          @users = @users.joins(:household).where("households.community_id" => params[:community_id])
+        end
+        @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users, meta: { more: @users.next_page.present? })
       end
     end

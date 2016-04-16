@@ -38,5 +38,8 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){ new Mess.Views.Select2View({el: '.reservation-form'}); });
+  $(function(){ new Mess.Views.Select2View({
+    el: '.reservation_reservation_sponsor_id',
+    extra_data: { community_id: <%= @reservation.community_id %> }
+  }); });
 <% end %>

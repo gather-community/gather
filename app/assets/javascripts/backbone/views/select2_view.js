@@ -2,6 +2,8 @@ Mess.Views.Select2View = Backbone.View.extend({
 
   initialize: function(options) {
     var self = this;
+    this.options = options;
+    this.options.extra_data = this.options.extra_data || {};
 
     this.$el.on('cocoon:after-insert', function(e, inserted) {
       console.log("after insert")
@@ -24,10 +26,10 @@ Mess.Views.Select2View = Backbone.View.extend({
         dataType: 'json',
         delay: 250,
         data: function (params) {
-          return {
+          return $.extend(self.options.extra_data, {
             search: params.term,
             page: params.page
-          };
+          });
         },
         processResults: function (data, page) {
           console.log(data);

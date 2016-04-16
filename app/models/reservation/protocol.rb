@@ -13,6 +13,8 @@ module Reservation
     has_many :resources, through: :protocolings
     belongs_to :community
 
+    delegate :name, to: :community, prefix: true
+
     serialize :kinds, JSON
 
     # Finds all matching protocols for the given resource and kind.
@@ -28,10 +30,6 @@ module Reservation
 
     def has_kind?(k)
       kinds.present? && kinds.include?(k)
-    end
-
-    def community
-      resources.first.try(:community)
     end
   end
 

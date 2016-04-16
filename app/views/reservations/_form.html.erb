@@ -10,6 +10,11 @@
   <%= f.input :starts_at, as: :datetime_picker %>
   <%= f.input :ends_at, as: :datetime_picker %>
   <%= f.input :kind, collection: @kinds, required: true unless @kinds.blank? %>
+
+  <%= f.input :sponsor_id,
+    collection: [@reservation.sponsor].compact,
+    input_html: { data: { "select2-src" => "user" } } %>
+
   <%= f.input :note %>
 
   <% if @resource.has_guidelines? %>
@@ -30,4 +35,8 @@
     </div>
   </div>
 
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Select2View({el: '.reservation-form'}); });
 <% end %>

@@ -31,5 +31,9 @@ module Reservation
       self.reservation = reservation
       self.rules = rules
     end
+
+    def to_s
+      rules.values.map(&:to_s).join("\n")
+    end
   end
 end

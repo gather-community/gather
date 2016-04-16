@@ -76,6 +76,10 @@ module Reservation
       end
     end
 
+    def to_s
+      "#{name}: #{value}"
+    end
+
     private
 
     def booked_time_for_year(reservation, unit)

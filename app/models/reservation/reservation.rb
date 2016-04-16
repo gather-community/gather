@@ -59,7 +59,6 @@ module Reservation
     end
 
     def guidelines_ok?
-      ap guidelines_ok
       guidelines_ok == "1"
     end
 

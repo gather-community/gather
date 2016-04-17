@@ -6,7 +6,7 @@
 
   <%= base_error(f) %>
 
-  <%= f.input :name %>
+  <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
 
   <%= f.input :starts_at, as: :datetime_picker,
     wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>

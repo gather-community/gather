@@ -1,5 +1,6 @@
 module Reservation
   class Reservation < ActiveRecord::Base
+    NAME_MAX_LENGTH = 24
     self.table_name = "reservations"
 
     attr_accessor :guidelines_ok
@@ -15,7 +16,7 @@ module Reservation
     delegate :requires_sponsor?, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
 
-    validates :name, presence: true, length: { maximum: 24 }
+    validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted
     validate :start_before_end

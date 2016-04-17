@@ -7,13 +7,23 @@
   <%= base_error(f) %>
 
   <%= f.input :name %>
-  <%= f.input :starts_at, as: :datetime_picker %>
-  <%= f.input :ends_at, as: :datetime_picker %>
-  <%= f.input :kind, collection: @kinds, required: true unless @kinds.blank? %>
 
-  <%= f.input :sponsor_id,
-    collection: [@reservation.sponsor].compact,
-    input_html: { data: { "select2-src" => "user" } } %>
+  <%= f.input :starts_at, as: :datetime_picker,
+    wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>
+
+  <%= f.input :ends_at, as: :datetime_picker,
+    wrapper_html: { class: @reservation.fixed_end_time? ? "no-time-picker" : "" } %>
+
+  <% if @kinds.present? && @reservation.requires_kind? %>
+    <%= f.input :kind, collection: @kinds, required: true %>
+  <% end %>
+
+  <% if @reservation.requires_sponsor? %>
+    <%= f.input :sponsor_id,
+      required: true,
+      collection: [@reservation.sponsor].compact,
+      input_html: { data: { "select2-src" => "user" } } %>
+  <% end %>
 
   <%= f.input :note %>
 

@@ -76,6 +76,11 @@ module Reservation
       end
     end
 
+    # Only called on :other_communities rules
+    def requires_sponsor?(reservation)
+      value == "sponsor" && reservation.reserver_community != protocol.community
+    end
+
     def to_s
       "#{name}: #{value}"
     end

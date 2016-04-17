@@ -12,6 +12,8 @@ module Reservation
     delegate :community, to: :reserver, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :resource
+    delegate :requires_sponsor?, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
+
 
     validates :name, presence: true, length: { maximum: 24 }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
@@ -31,12 +33,25 @@ module Reservation
       where(resource: resources, reserver: household.users, starts_at: period).to_a.sum(&unit)
     end
 
-    def self.new_with_defaults(resource)
-      new(
+    def self.new_with_defaults(attribs)
+      reservation = new(attribs.merge(
         starts_at: Time.zone.now.midnight + 1.week + 17.hours,
         ends_at: Time.zone.now.midnight + 1.week + 18.hours,
-        resource: resource
-      )
+      ))
+
+      # Set fixed start/end time
+      rule_set = reservation.rule_set
+      if fst = rule_set[:fixed_start_time].try(:value)
+        reservation.starts_at = reservation.starts_at.change(hour: fst.hour, min: fst.min)
+      end
+      if fet = rule_set[:fixed_end_time].try(:value)
+        reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
+      end
+      if fst && fet && fst >= fet
+        reservation.ends_at = reservation.ends_at.change(day: reservation.ends_at.day + 1)
+      end
+
+      reservation
     end
 
     def seconds
@@ -47,8 +62,8 @@ module Reservation
       (seconds.to_f / 1.day).ceil
     end
 
-    def rules
-      RuleSet.build_for(self).rules
+    def rule_set
+      @rule_set ||= RuleSet.build_for(self)
     end
 
     def future?
@@ -84,7 +99,7 @@ module Reservation
     end
 
     def apply_rules
-      rules.each do |_, rule|
+      rule_set.rules.each do |_, rule|
         # Check returns 2 element array on failure
         unless (result = rule.check(self)) == true
           errors.add(*result)

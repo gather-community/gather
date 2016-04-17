@@ -8,7 +8,7 @@ class ReservationsController < ApplicationController
     @resource = Reservation::Resource.find_by(id: params[:resource])
     raise "Resource not found" unless @resource
 
-    @reservation = Reservation::Reservation.new_with_defaults(@resource)
+    @reservation = Reservation::Reservation.new_with_defaults(resource: @resource, reserver: current_user)
     authorize @reservation
     prep_form_vars
   end

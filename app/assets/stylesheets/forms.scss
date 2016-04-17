@@ -52,3 +52,10 @@ form {
 .form-actions .btn {
   margin-left: 10px;
 }
+
+// Allow hiding the time picker switch with special class.
+.datetime_picker.no-time-picker {
+  .picker-switch {
+    display: none;
+  }
+}

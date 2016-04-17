@@ -2,10 +2,29 @@
       url: @reservation.new_record? ? reservations_path : reservation_path(@reservation),
       html: { class: 'form-horizontal reservation-form' }) do |f| %>
 
-  <%= f.input :name %>
-  <%= f.input :starts_at, as: :datetime_picker %>
-  <%= f.input :ends_at, as: :datetime_picker %>
-  <%= f.input :kind, collection: @kinds, required: true unless @kinds.blank? %>
+  <%= f.hidden_field :resource_id %>
+
+  <%= base_error(f) %>
+
+  <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
+
+  <%= f.input :starts_at, as: :datetime_picker,
+    wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>
+
+  <%= f.input :ends_at, as: :datetime_picker,
+    wrapper_html: { class: @reservation.fixed_end_time? ? "no-time-picker" : "" } %>
+
+  <% if @kinds.present? && @reservation.requires_kind? %>
+    <%= f.input :kind, collection: @kinds, required: true %>
+  <% end %>
+
+  <% if @reservation.requires_sponsor? %>
+    <%= f.input :sponsor_id,
+      required: true,
+      collection: [@reservation.sponsor].compact,
+      input_html: { data: { "select2-src" => "user" } } %>
+  <% end %>
+
   <%= f.input :note %>
 
   <% if @resource.has_guidelines? %>
@@ -26,4 +45,11 @@
     </div>
   </div>
 
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Select2View({
+    el: '.reservation_reservation_sponsor_id',
+    extra_data: { community_id: <%= @reservation.community_id %> }
+  }); });
 <% end %>

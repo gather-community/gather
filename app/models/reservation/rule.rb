@@ -5,7 +5,8 @@ module Reservation
     attr_accessor :name, :value, :protocol
 
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
-      max_length_minutes max_minutes_per_year requires_sponsor requires_kind)
+      max_length_minutes max_minutes_per_year
+      other_communities requires_kind)
 
     def initialize(name: nil, value: nil, protocol: nil)
       self.name = name
@@ -17,27 +18,27 @@ module Reservation
       case name
       when :fixed_start_time
         value.strftime("%T") == reservation.starts_at.strftime("%T") ||
-          [:starts_at, "it must start at #{value.to_s(:regular_time)}"]
+          [:starts_at, "Must be #{value.to_s(:regular_time)}"]
 
       when :fixed_end_time
         value.strftime("%T") == reservation.ends_at.strftime("%T") ||
-          [:ends_at, "it must end at #{value.to_s(:regular_time)}"]
+          [:ends_at, "Must be #{value.to_s(:regular_time)}"]
 
       when :max_lead_days
         reservation.starts_at.to_date - Date.today <= value ||
-          [:starts_at, "it can be at most #{value} days in the future"]
+          [:starts_at, "Can be at most #{value} days in the future"]
 
       when :max_length_minutes
         reservation.ends_at - reservation.starts_at <= value * 60 ||
-          [:ends_at, "it can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} in length"]
+          [:ends_at, "Can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} after start time"]
 
       when :max_minutes_per_year
         booked = booked_time_for_year(reservation, :seconds)
         if booked >= value * 60
-          [:base, "you have already reached your yearly limit of "\
+          [:base, "You have already reached your yearly limit of "\
             "#{Utils::TimeUtils::humanize_interval(value * 60)} for this resource"]
         elsif booked + reservation.seconds > value * 60
-          [:base, "you can book at most #{Utils::TimeUtils::humanize_interval(value * 60)} per year "\
+          [:base, "You can book at most #{Utils::TimeUtils::humanize_interval(value * 60)} per year "\
             "and you have already booked #{Utils::TimeUtils::humanize_interval(booked)}"]
         else
           true
@@ -46,18 +47,26 @@ module Reservation
       when :max_days_per_year
         booked = booked_time_for_year(reservation, :days)
         if booked >= value
-          [:base, "you have already reached your yearly limit of #{value} days for this resource"]
+          [:base, "You have already reached your yearly limit of #{value} days for this resource"]
         elsif booked + reservation.days > value
-          [:base, "you can book at most #{value} days per year and "\
+          [:base, "You can book at most #{value} days per year and "\
             "you have already booked #{booked} days"]
         else
           true
         end
 
-      when :requires_sponsor
-        reservation.user_community == protocol.community ||
-          reservation.sponsor_community == protocol.community ||
-          [:sponsor_id, "you must have a sponsor"]
+      when :other_communities
+        case value
+        when "forbidden", "read_only"
+          reservation.reserver_community == protocol.community ||
+            [:base, "Residents from other communities may not make reservations"]
+        when "sponsor"
+          reservation.reserver_community == protocol.community ||
+            reservation.sponsor_community == protocol.community ||
+            [:sponsor_id, "You must have a sponsor from #{protocol.community_name}"]
+        else
+          raise "Unknown value for other_communities rule"
+        end
 
       when :requires_kind
         reservation.kind.present? || [:kind, "can't be blank"]
@@ -65,6 +74,15 @@ module Reservation
       else
         raise "Unknown rule name"
       end
+    end
+
+    # Only called on :other_communities rules
+    def requires_sponsor?(reservation)
+      value == "sponsor" && reservation.reserver_community != protocol.community
+    end
+
+    def to_s
+      "#{name}: #{value}"
     end
 
     private

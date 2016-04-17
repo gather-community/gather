@@ -28,13 +28,20 @@ form {
 }
 
 // Overriding error message style
-.has-error .help-block {
-  background-color: #f2dede;
-  padding: 0 5px;
-  border: 1px solid #ebccd1;
+.has-error {
+  .help-block {
+    background-color: #f2dede;
+    padding: 0 5px;
+    border: 1px solid #ebccd1;
+    margin-bottom: 5px;
 
-  &:first-letter {
-    text-transform: uppercase;
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &.base-error {
+    padding-bottom: 25px;
   }
 }
 
@@ -44,4 +51,11 @@ form {
 
 .form-actions .btn {
   margin-left: 10px;
+}
+
+// Allow hiding the time picker switch with special class.
+.datetime_picker.no-time-picker {
+  .picker-switch {
+    display: none;
+  }
 }

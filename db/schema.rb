@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410032512) do
+ActiveRecord::Schema.define(version: 20160413024518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -156,6 +156,13 @@ ActiveRecord::Schema.define(version: 20160410032512) do
   add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
+  create_table "reservation_guideline_inclusions", force: :cascade do |t|
+    t.integer "resource_id", null: false
+    t.integer "shared_guidelines_id", null: false
+  end
+
+  add_index "reservation_guideline_inclusions", ["resource_id", "shared_guidelines_id"], name: "index_reservation_guideline_inclusions", unique: true, using: :btree
+
   create_table "reservation_protocolings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "protocol_id", null: false
@@ -166,18 +173,32 @@ ActiveRecord::Schema.define(version: 20160410032512) do
   add_index "reservation_protocolings", ["resource_id", "protocol_id"], name: "protocolings_unique", unique: true, using: :btree
 
   create_table "reservation_protocols", force: :cascade do |t|
+    t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.time "fixed_end_time"
     t.time "fixed_start_time"
+    t.boolean "general", default: false, null: false
     t.string "kinds"
     t.integer "max_days_per_year"
     t.integer "max_lead_days"
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
+    t.string "other_communities"
     t.boolean "requires_kind"
-    t.boolean "requires_sponsor"
     t.datetime "updated_at", null: false
   end
+
+  add_index "reservation_protocols", ["community_id"], name: "index_reservation_protocols_on_community_id", using: :btree
+
+  create_table "reservation_shared_guidelines", force: :cascade do |t|
+    t.text "body", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", limit: 64, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "reservation_shared_guidelines", ["community_id"], name: "index_reservation_shared_guidelines_on_community_id", using: :btree
 
   create_table "reservations", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -333,8 +354,12 @@ ActiveRecord::Schema.define(version: 20160410032512) do
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "locations"
+  add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
+  add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"
   add_foreign_key "reservation_protocolings", "resources"
+  add_foreign_key "reservation_protocols", "communities"
+  add_foreign_key "reservation_shared_guidelines", "communities"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users", column: "reserver_id"
   add_foreign_key "reservations", "users", column: "sponsor_id"

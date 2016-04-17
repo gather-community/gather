@@ -23,7 +23,7 @@ module Reservation
     end
 
     def permitted_attributes
-      %i(name kind reserver_id resource_id sponsor_id starts_at ends_at)
+      %i(name kind reserver_id resource_id sponsor_id starts_at ends_at guidelines_ok)
     end
 
     private
@@ -31,7 +31,7 @@ module Reservation
     delegate :future?, :recently_created?, to: :reservation
 
     def active_reserver?
-      active? && reservation.user == user
+      active? && reservation.reserver == user
     end
   end
 end

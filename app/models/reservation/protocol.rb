@@ -6,34 +6,30 @@
 # Another sets max_minutes_per_year for a subset of resources.
 # etc.
 #
-# Rule attributes:
-#   fixed_start_time
-#   fixed_end_time
-#   max_lead_days
-#   max_length_minutes
-#   max_minutes_per_year
-#   requires_sponsor
+# See Reservation::Rule::NAMES for list of rule attributes
 module Reservation
   class Protocol < ActiveRecord::Base
     has_many :protocolings, class_name: "Reservation::Protocoling", foreign_key: "protocol_id"
     has_many :resources, through: :protocolings
+    belongs_to :community
 
-    serialize :kinds
+    delegate :name, to: :community, prefix: true
+
+    serialize :kinds, JSON
 
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.
     def self.matching(resource, kind = nil)
-      includes(:protocolings).where("reservation_protocolings.resource_id": resource.id).
+      joins("LEFT JOIN reservation_protocolings
+          ON reservation_protocolings.protocol_id = reservation_protocols.id").
+        where(community_id: resource.community_id).
+        where("reservation_protocolings.resource_id = ? OR general = 't'", resource.id).
         select { |p| p.has_kind?(kind) || p.kinds.nil? }
     end
 
     def has_kind?(k)
       kinds.present? && kinds.include?(k)
-    end
-
-    def community
-      resources.first.try(:community)
     end
   end
 

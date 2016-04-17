@@ -31,5 +31,29 @@ module Reservation
       self.reservation = reservation
       self.rules = rules
     end
+
+    def [](key)
+      rules[key]
+    end
+
+    def requires_sponsor?
+      rules[:other_communities].try(:requires_sponsor?, reservation)
+    end
+
+    def fixed_start_time?
+      rules[:fixed_start_time].present?
+    end
+
+    def fixed_end_time?
+      rules[:fixed_end_time].present?
+    end
+
+    def requires_kind?
+      rules[:requires_kind].present?
+    end
+
+    def to_s
+      rules.values.map(&:to_s).join("\n")
+    end
   end
 end

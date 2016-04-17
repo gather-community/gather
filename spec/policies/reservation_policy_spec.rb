@@ -29,25 +29,25 @@ describe Reservation::ReservationPolicy do
     end
 
     permissions :edit?, :update? do
-      let(:reservation) { Reservation::Reservation.new(user: user) }
+      let(:reservation) { Reservation::Reservation.new(reserver: user) }
 
       it_behaves_like "modify"
     end
 
     permissions :destroy? do
       context "future reservation" do
-        let(:reservation) { Reservation::Reservation.new(user: user, starts_at: 1.day.from_now) }
+        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.from_now) }
         it_behaves_like "modify"
       end
 
       context "just created reservation" do
-        let(:reservation) { Reservation::Reservation.new(user: user, starts_at: 1.day.ago,
+        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.ago,
           created_at: 50.minutes.ago) }
         it_behaves_like "modify"
       end
 
       context "old past reservation" do
-        let(:reservation) { Reservation::Reservation.new(user: user, starts_at: 1.day.ago,
+        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.ago,
           created_at: 1.week.ago) }
 
         it "denies access to non-admins" do
@@ -76,11 +76,12 @@ describe Reservation::ReservationPolicy do
 
   describe "permitted_attributes" do
     let(:user) { User.new }
-    let(:reservation) { Reservation::Reservation.new(user: user) }
+    let(:reservation) { Reservation::Reservation.new(reserver: user) }
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
     it "should allow appropriate attribs" do
-      expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id sponsor_id starts_at ends_at))
+      expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
+        sponsor_id starts_at ends_at guidelines_ok))
     end
   end
 end

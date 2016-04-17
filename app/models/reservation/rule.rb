@@ -30,7 +30,7 @@ module Reservation
 
       when :max_length_minutes
         reservation.ends_at - reservation.starts_at <= value * 60 ||
-          [:ends_at, "Can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} in after start time"]
+          [:ends_at, "Can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} after start time"]
 
       when :max_minutes_per_year
         booked = booked_time_for_year(reservation, :seconds)

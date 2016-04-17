@@ -13,7 +13,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       it "fails on no match" do
         reservation.starts_at = Time.parse("2016-01-01 12:00am")
-        expect(rule.check(reservation)).to eq [:starts_at, "it must start at 12:00pm"]
+        expect(rule.check(reservation)).to eq [:starts_at, "Must be 12:00pm"]
       end
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       it "fails on no match" do
         reservation.ends_at = Time.parse("2016-01-01 6:01pm")
-        expect(rule.check(reservation)).to eq [:ends_at, "it must end at  6:00pm"]
+        expect(rule.check(reservation)).to eq [:ends_at, "Must be  6:00pm"]
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       it "fails for event too far in future" do
         reservation.starts_at = Time.parse("2016-02-01 6:00pm")
-        expect(rule.check(reservation)).to eq [:starts_at, "it can be at most 30 days in the future"]
+        expect(rule.check(reservation)).to eq [:starts_at, "Can be at most 30 days in the future"]
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       it "fails for too long event" do
         reservation.ends_at = Time.parse("2016-01-30 6:31pm")
-        expect(rule.check(reservation)).to eq [:ends_at, "it can be at most 30 minutes in length"]
+        expect(rule.check(reservation)).to eq [:ends_at, "Can be at most 30 minutes after start time"]
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
           it "should fail for event 3 days long" do
             reservation.ends_at = Time.parse("2016-02-01 7:30pm")
-            expect(rule.check(reservation)).to eq [:base, "you can book at most 9 days "\
+            expect(rule.check(reservation)).to eq [:base, "You can book at most 9 days "\
               "per year and you have already booked 7 days"]
           end
         end
@@ -115,7 +115,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
           it "should fail for even very short event" do
             reservation.ends_at = Time.parse("2016-01-30 6:30pm")
-            expect(rule.check(reservation)).to eq [:base, "you have already reached "\
+            expect(rule.check(reservation)).to eq [:base, "You have already reached "\
               "your yearly limit of 7 days for this resource"]
           end
         end
@@ -147,7 +147,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
           it "should fail with longer reservation" do
             reservation.ends_at = Time.parse("2016-01-30 8:31pm")
-            expect(rule.check(reservation)).to eq [:base, "you can book at most "\
+            expect(rule.check(reservation)).to eq [:base, "You can book at most "\
               "4 days 14 hours per year and you have already booked 4 days 11 hours 30 minutes"]
           end
         end
@@ -157,7 +157,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
           it "even a short reservation should fail" do
             reservation.ends_at = Time.parse("2016-01-30 6:15pm")
-            expect(rule.check(reservation)).to eq [:base, "you have already reached "\
+            expect(rule.check(reservation)).to eq [:base, "You have already reached "\
               "your yearly limit of 4 days 11 hours 30 minutes for this resource"]
           end
         end
@@ -196,7 +196,7 @@ RSpec.describe Reservation::Rule, type: :model do
           reservation.reserver = outsider
           reservation.sponsor = insider
           expect(rule.check(reservation)).to eq [:base,
-            "residents from other communities may not make reservations"]
+            "Residents from other communities may not make reservations"]
         end
       end
 
@@ -227,12 +227,14 @@ RSpec.describe Reservation::Rule, type: :model do
         it "should fail if outsider has sponsor from outside community" do
           reservation.reserver = outsider
           reservation.sponsor = outsider2
-          expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
+          expect(rule.check(reservation)).to eq [:sponsor_id,
+            "You must have a sponsor from #{resource.community.name}"]
         end
 
         it "should fail if outsider has no sponsor" do
           reservation.reserver = outsider
-          expect(rule.check(reservation)).to eq [:sponsor_id, "you must have a sponsor"]
+          expect(rule.check(reservation)).to eq [:sponsor_id,
+            "You must have a sponsor from #{resource.community.name}"]
         end
       end
     end

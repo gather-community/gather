@@ -2,10 +2,21 @@ class ReservationsController < ApplicationController
   def index
     authorize Reservation::Reservation
     skip_policy_scope
+
     @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
     return render nothing: true, status: 404 unless @community
-    @communities = Community.by_name.all
-    @resources = Reservation::Resource.where(community_id: @community.id)
+
+    if params[:resource_id]
+      @resource = Reservation::Resource.find(params[:resource_id])
+      @other_resources = Reservation::Resource.where(community_id: @community.id).
+        where("id != ?", @resource.id)
+      @other_communities = Community.where("id != ?", @community.id)
+      render("calendar")
+    else
+      @communities = Community.by_name.all
+      @resources = Reservation::Resource.where(community_id: @community.id)
+      render("home")
+    end
   end
 
   def new

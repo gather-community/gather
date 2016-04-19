@@ -1,0 +1,30 @@
+<% content_for(:title){ "Reservations: #{@resource.full_name}" } %>
+
+<% content_for(:top_buttons) do %>
+  <% if @resource && policy(Reservation::Reservation).create? %>
+    <%= link_to(icon_tag("plus") << " Create Reservation",
+      new_reservation_path_for_resource(@resource),
+      class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<div class="row">
+  <div class="col-lg-2">
+    <small>Other Resources</small>
+    <ul class="no-marker">
+      <% @other_resources.each do |resource| %>
+        <li><%= link_to(resource.name, reservations_path_for_resource(resource)) %></li>
+      <% end %>
+    </ul>
+    <br/>
+    <small>Other Communities</small>
+    <ul class="no-marker">
+      <% @other_communities.each do |community| %>
+        <li><%= link_to(community.name, reservations_path_for_community(community)) %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-lg-10">
+    Calendar
+  </div>
+</div>

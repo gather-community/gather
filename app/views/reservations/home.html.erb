@@ -1,0 +1,22 @@
+<% content_for(:title){ "Reservations" } %>
+
+<form class="form-inline index-filter">
+  <%= label_tag("community", "Community:") %>
+  <%= select_tag("community",
+    options_from_collection_for_select(@communities, "abbrv", "name", @community.abbrv),
+    class: "form-control",
+    onchange: "window.location.href = '/reservations/' + $(this).val().toLowerCase()") %>
+</form>
+
+<% if @resources.empty? %>
+  No reservable resources found.
+<% else %>
+  <% @resources.each do |resource| %>
+    <div class="resource">
+      <%= link_to(reservations_path_for_resource(resource)) do %>
+        <%= image_tag(resource.photo.url(:thumb)) %>
+        <%= resource.name %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

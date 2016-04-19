@@ -1,4 +1,17 @@
 .reservations {
+  &.action-index {
+    .resource {
+      display: inline-block;
+      margin: 0 20px 20px 0;
+
+      img {
+        display: block;
+        width: 220px;
+        height: 165px;
+      }
+    }
+  }
+
   #guidelines {
     height: 200px;
     background-color: #eee;

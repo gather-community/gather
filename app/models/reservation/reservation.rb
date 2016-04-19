@@ -15,7 +15,6 @@ module Reservation
     delegate :community_id, to: :resource
     delegate :requires_sponsor?, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-
     validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted

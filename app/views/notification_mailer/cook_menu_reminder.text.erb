@@ -1,0 +1,15 @@
+Dear <%= @user.name %>,
+
+<% if @type == :second -%>
+** Second Reminder **
+
+<% end -%>
+This is a reminder to post a menu for your meal at <%= @meal.served_at.to_s(:datetime_no_yr).gsub("  ", " ") %> at <%= @meal.location_name %>.
+
+Please post a menu as soon as possible so that residents can plan ahead and to ensure good attendance!
+
+You can post a menu by going here:
+
+<%= edit_meal_url(@meal) %>
+
+Thanks!

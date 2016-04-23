@@ -31,6 +31,7 @@ class Meal < ActiveRecord::Base
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:host_community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:host_community).order("communities.name DESC") }
+  scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
   scope :worked_by, ->(user) do

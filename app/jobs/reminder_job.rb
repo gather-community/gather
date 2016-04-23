@@ -3,7 +3,7 @@ class ReminderJob
   protected
 
   def correct_hour?
-    Time.zone.now.hour == Settings.reminder_time_of_day
+    Rails.env.development? || Time.zone.now.hour == Settings.reminder_time_of_day
   end
 
   def max_attempts

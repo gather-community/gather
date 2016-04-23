@@ -9,5 +9,6 @@ every 1.hour do
     StatementReminderJob
     MealReminderJob
     ShiftReminderJob
+    CookMenuReminderJob
   ).join(",")
 end

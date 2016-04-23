@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160419014220) do
+ActiveRecord::Schema.define(version: 20160419122957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20160419014220) do
   create_table "assignments", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "meal_id", null: false
-    t.boolean "notified", default: false, null: false
+    t.integer "reminder_count", default: 0, null: false
     t.string "role", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(version: 20160419014220) do
 
   add_index "assignments", ["meal_id", "role", "user_id"], name: "index_assignments_on_meal_id_and_role_and_user_id", unique: true, using: :btree
   add_index "assignments", ["meal_id"], name: "index_assignments_on_meal_id", using: :btree
-  add_index "assignments", ["notified"], name: "index_assignments_on_notified", using: :btree
   add_index "assignments", ["role"], name: "index_assignments_on_role", using: :btree
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 

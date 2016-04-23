@@ -6,12 +6,6 @@ GIT
       railties (>= 3.1)
 
 GIT
-  remote: git://github.com/sassafrastech/dj_cron.git
-  revision: fd017d61665a0d57d5184e79b555ca34e09fde4b
-  specs:
-    dj_cron (0.0.1)
-
-GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -349,7 +343,6 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise
-  dj_cron!
   exception_notification
   factory_girl_rails (~> 4.0)
   faker

@@ -1,7 +1,7 @@
 # Sends notifications of work shifts that people have signed up for.
 # Checks the DB to see when to send.
 # Runs every hour
-class ShiftReminderJob
+class ShiftReminderJob < ReminderJob
   def perform
     return unless correct_hour?
 
@@ -14,28 +14,15 @@ class ShiftReminderJob
 
       if meal_ids.any?
         # Find all assignments for the target meals that have not yet been notified.
-        assignments = Assignment.where(meal_id: meal_ids).where(notified: false).
+        assignments = Assignment.where(meal_id: meal_ids).where(reminder_count: 0).
           where(role: role).includes(:user, :meal)
 
         # Send emails
         assignments.each do |assignment|
           NotificationMailer.shift_reminder(assignment).deliver_now
-          assignment.update_attribute(:notified, true)
+          assignment.update_attribute(:reminder_count, 1)
         end
       end
     end
   end
-
-  def correct_hour?
-    Time.zone.now.hour == Settings.reminder_time_of_day
-  end
-
-  def max_attempts
-    1
-  end
-
-  def error(job, exception)
-    ExceptionNotifier.notify_exception(exception)
-  end
-
 end

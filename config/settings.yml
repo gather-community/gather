@@ -8,4 +8,7 @@ reminder_lead_times:
     head_cook: 3
     asst_cook: 2
     cleaner: 2
+  cook_menu:
+    early: 10
+    late: 5
 reminder_time_of_day: 6 # 6:00am

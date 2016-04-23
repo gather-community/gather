@@ -1,6 +1,6 @@
 # Sends notifications of meals that people have signed up for.
 # Checks the DB to see when to send.
-class MealReminderJob
+class MealReminderJob < ReminderJob
   def perform
     return unless correct_hour?
 
@@ -22,17 +22,4 @@ class MealReminderJob
       end
     end
   end
-
-  def correct_hour?
-    Time.zone.now.hour == Settings.reminder_time_of_day
-  end
-
-  def max_attempts
-    1
-  end
-
-  def error(job, exception)
-    ExceptionNotifier.notify_exception(exception)
-  end
-
 end

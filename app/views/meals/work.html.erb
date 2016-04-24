@@ -33,9 +33,9 @@
         <td class="col-md-2"><%= meal_date_time(meal) %></td>
         <td class="col-md-1"><%= meal.location_abbrv %></td>
         <td class="col-md-3"><%= meal_link(meal) %></td>
-        <td class="col-md-2"><%= user_link(meal.head_cook, params[:uid]) %></td>
-        <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
-        <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, params[:uid]) }.reduce(:<<) %></td>
+        <td class="col-md-2"><%= user_link(meal.head_cook, highlight: params[:uid]) %></td>
+        <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, highlight: params[:uid]) }.reduce(:<<) %></td>
+        <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, highlight: params[:uid]) }.reduce(:<<) %></td>
         <td><%= meal_action_icons(meal) %></td>
       </tr>
     <% end %>
@@ -50,12 +50,12 @@
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
         </div>
         <div class="jobs">
-          <div class="job"><%= user_link(meal.head_cook, params[:uid]) %> (Head)</div>
+          <div class="job"><%= user_link(meal.head_cook, highlight: params[:uid]) %> (Head)</div>
           <% meal.asst_cooks.each do |u| %>
-            <div class="job"><%= user_link(u, params[:uid]) %> (Asst)</div>
+            <div class="job"><%= user_link(u, highlight: params[:uid]) %> (Asst)</div>
           <% end %>
           <% meal.cleaners.each do |u| %>
-            <div class="job"><%= user_link(u, params[:uid]) %> (Clean)</div>
+            <div class="job"><%= user_link(u, highlight: params[:uid]) %> (Clean)</div>
           <% end %>
         </div>
       </div>

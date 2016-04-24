@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  helper_method :home_path
+  helper_method :home_path, :current_community
 
   def set_validation_error_notice
     flash.now[:error] = "Please correct the errors below."
@@ -33,5 +33,9 @@ class ApplicationController < ActionController::Base
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
+
+  def current_community
+    current_user.try(:community)
   end
 end

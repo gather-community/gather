@@ -7,5 +7,15 @@ table.key-value {
 
   td:last-of-type {
     width: 250px;
+
+    p:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &.wide {
+    td:last-of-type {
+      width: 400px;
+    }
   }
 }

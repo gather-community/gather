@@ -19,6 +19,11 @@ class ReservationsController < ApplicationController
     end
   end
 
+  def show
+    @reservation = Reservation::Reservation.find(params[:id])
+    authorize @reservation
+  end
+
   def new
     @resource = Reservation::Resource.find_by(id: params[:resource_id])
     raise "Resource not found" unless @resource

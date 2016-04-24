@@ -29,8 +29,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get "reservations(/:community(/:resource_id))" => "reservations#index", as: :reservations
-  get "reservations/:community/:resource_id/new" => "reservations#new", as: :new_reservation
+  get "reservations(/:community(/:resource_id))" => "reservations#index",
+    community: /[a-z]{1,2}/, as: :reservations
+  get "reservations/:community/:resource_id/new" => "reservations#new",
+    community: /[a-z]{1,2}/, as: :new_reservation
   resources :reservations, except: [:index, :new]
 
   resources :signups

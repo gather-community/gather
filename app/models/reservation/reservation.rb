@@ -10,9 +10,11 @@ module Reservation
     belongs_to :resource
 
     delegate :household, to: :reserver
-    delegate :community, to: :reserver, prefix: true
+    delegate :name, :community, to: :reserver, prefix: true
+    delegate :name, to: :reserver_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :resource
+    delegate :name, :full_name, to: :resource, prefix: true
     delegate :requires_sponsor?, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
@@ -76,6 +78,15 @@ module Reservation
 
     def guidelines_ok?
       guidelines_ok == "1"
+    end
+
+    def timespan
+      starts_at.to_s(:full_datetime) << " - " <<
+        ends_at.to_s(single_day? ? :regular_time : :full_datetime)
+    end
+
+    def single_day?
+      ends_at.to_date == starts_at.to_date
     end
 
     private

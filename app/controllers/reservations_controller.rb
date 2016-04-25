@@ -22,6 +22,7 @@ class ReservationsController < ApplicationController
   def show
     @reservation = Reservation::Reservation.find(params[:id])
     authorize @reservation
+    @resource = @reservation.resource
   end
 
   def new

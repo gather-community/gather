@@ -9,7 +9,8 @@
 <% end %>
 
 <div class="row">
-  <div class="col-lg-2">
+  <div class="col-lg-2 sidebar">
+    <%= image_tag(@resource.photo.url(:thumb)) %><br/><br/>
     <small>Other Resources</small>
     <ul class="no-marker">
       <% @other_resources.each do |resource| %>

@@ -16,7 +16,10 @@
 <table class="key-value wide">
   <tr>
     <td>Resource</td>
-    <td><%= @reservation.resource_full_name %></td>
+    <td>
+      <%= image_tag(@resource.photo.url(:thumb)) %><br/>
+      <%= @resource.full_name %>
+    </td>
   </tr>
   <tr>
     <td>Date/Time</td>

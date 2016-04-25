@@ -7,7 +7,8 @@
   <% end %>
   <% if policy(@reservation).destroy? %>
     <%= link_to(icon_tag("trash") << " Delete Reservation",
-      reservation_path(@reservation, method: :delete),
+      reservation_path(@reservation),
+      method: :delete,
       class: "btn btn-default",
       data: { confirm: "Are you sure you want to delete this reservation?" }) %>
   <% end %>

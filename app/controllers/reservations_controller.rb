@@ -34,10 +34,18 @@ class ReservationsController < ApplicationController
     prep_form_vars
   end
 
+  def edit
+    @reservation = Reservation::Reservation.find(params[:id])
+    authorize @reservation
+    @reservation.guidelines_ok = "1"
+    @resource = @reservation.resource
+    prep_form_vars
+  end
+
   def create
     @reservation = Reservation::Reservation.new(reserver: current_user)
-    @reservation.assign_attributes(reservation_params)
     authorize @reservation
+    @reservation.assign_attributes(reservation_params)
     if @reservation.save
       flash[:success] = "Reservation created successfully."
       redirect_to reservations_path
@@ -47,6 +55,28 @@ class ReservationsController < ApplicationController
       set_validation_error_notice
       render :new
     end
+  end
+
+  def update
+    @reservation = Reservation::Reservation.find(params[:id])
+    authorize @reservation
+    if @reservation.update_attributes(reservation_params)
+      flash[:success] = "Reservation updated successfully."
+      redirect_to reservations_path
+    else
+      @resource = @reservation.resource
+      prep_form_vars
+      set_validation_error_notice
+      render :edit
+    end
+  end
+
+  def destroy
+    @reservation = Reservation::Reservation.find(params[:id])
+    authorize @reservation
+    @reservation.destroy
+    flash[:success] = "Reservation deleted successfully."
+    redirect_to(reservations_path_for_resource(@reservation.resource))
   end
 
   private

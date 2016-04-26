@@ -1,21 +1,34 @@
 class ReservationsController < ApplicationController
   def index
     authorize Reservation::Reservation
-    skip_policy_scope
 
-    @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
-    return render nothing: true, status: 404 unless @community
+    # JSON list of reservations for calendar plugin
+    if request.xhr?
+      @reservations = policy_scope(Reservation::Reservation).
+        where(resource_id: params[:resource_id]).
+        where("starts_at < ? AND ends_at > ?", params[:end], params[:start])
+      render json: @reservations
 
-    if params[:resource_id]
-      @resource = Reservation::Resource.find(params[:resource_id])
-      @other_resources = Reservation::Resource.where(community_id: @community.id).
-        where("id != ?", @resource.id)
-      @other_communities = Community.where("id != ?", @community.id)
-      render("calendar")
+    # Main reservation pages
     else
-      @communities = Community.by_name.all
-      @resources = Reservation::Resource.where(community_id: @community.id)
-      render("home")
+      # This will happen in JSON mode.
+      # We don't actually return any Reservations here.
+      skip_policy_scope
+
+      @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
+      return render nothing: true, status: 404 unless @community
+
+      if params[:resource_id]
+        @resource = Reservation::Resource.find(params[:resource_id])
+        @other_resources = Reservation::Resource.where(community_id: @community.id).
+          where("id != ?", @resource.id)
+        @other_communities = Community.where("id != ?", @community.id)
+        render("calendar")
+      else
+        @communities = Community.by_name.all
+        @resources = Reservation::Resource.where(community_id: @community.id)
+        render("home")
+      end
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160419122957) do
+ActiveRecord::Schema.define(version: 20160426013429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 20160419122957) do
   add_index "reservations", ["reserver_id"], name: "index_reservations_on_reserver_id", using: :btree
   add_index "reservations", ["resource_id"], name: "index_reservations_on_resource_id", using: :btree
   add_index "reservations", ["sponsor_id"], name: "index_reservations_on_sponsor_id", using: :btree
+  add_index "reservations", ["starts_at"], name: "index_reservations_on_starts_at", using: :btree
 
   create_table "resources", force: :cascade do |t|
     t.integer "community_id", null: false

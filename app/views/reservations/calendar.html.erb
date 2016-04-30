@@ -25,16 +25,36 @@
       <% end %>
     </ul>
   </div>
-  <div class="col-lg-10">
+  <div id="calendar-col" class="col-lg-10">
     <div id="calendar"></div>
+
+    <div id="create-confirm-modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create Reservation?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <%= javascript_tag do %>
   $(function(){
     new Mess.Views.ReservationCalendarView({
-      el: '#calendar',
-      feed_url: <%=json reservations_path_for_resource(@resource) %>
+      el: '#calendar-col',
+      feedUrl: <%=json reservations_path_for_resource(@resource) %>,
+      newUrl: <%=json new_reservation_path_for_resource(@resource) %>
     });
   });
 <% end %>

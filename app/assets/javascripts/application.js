@@ -29,3 +29,9 @@
 //= require_tree .
 
 $(document).ready(function(){ $('form').preventDoubleSubmission(); });
+
+Mess.timeFormats = {
+  fullDatetime: 'ddd MMM D YYYY h:mm a',
+  regDate: 'ddd MMM D YYYY',
+  regTime: 'h:mm a'
+}

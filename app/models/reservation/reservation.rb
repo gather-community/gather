@@ -36,10 +36,10 @@ module Reservation
     end
 
     def self.new_with_defaults(attribs)
-      reservation = new(attribs.merge(
-        starts_at: Time.zone.now.midnight + 1.week + 17.hours,
-        ends_at: Time.zone.now.midnight + 1.week + 18.hours,
-      ))
+      reservation = new(attribs)
+
+      reservation.starts_at ||= Time.zone.now.midnight + 1.week + 17.hours
+      reservation.ends_at ||= Time.zone.now.midnight + 1.week + 18.hours
 
       # Set fixed start/end time
       rule_set = reservation.rule_set

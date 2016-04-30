@@ -16,6 +16,9 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+//= require moment
+//= require jquery-ui
+//= require fullcalendar
 //= require prevent-double-submission
 //= require cocoon
 //= require underscore

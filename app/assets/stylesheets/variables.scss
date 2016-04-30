@@ -4,6 +4,7 @@ $inactive-color: #ccc;
 $light-border-color: #ccc;
 $light-border: 1px solid $light-border-color;
 $theme-main: #4e2250;
+$theme-main-lightest: lighten($theme-main, 70%);
 $theme-accent: #CF6C2F;
 $theme-accent-light: lighten($theme-accent, 20%);
 $theme-accent-intense: saturate($theme-accent, 20%);;

@@ -38,4 +38,8 @@ class ApplicationController < ActionController::Base
   def current_community
     current_user.try(:community)
   end
+
+  def default_serializer_options
+    { root: false }
+  end
 end

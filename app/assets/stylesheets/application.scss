@@ -4,7 +4,12 @@
 @import "bootstrap-select2";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import "jquery-ui";
+@import "jquery-ui.structure";
+@import "jquery-ui.theme";
+@import "fullcalendar";
 @import "variables";
+@import "fullcalendar_overrides";
 @import "theme";
 @import "layout";
 @import "print";

@@ -4,7 +4,7 @@
   <% if @resource && policy(Reservation::Reservation).create? %>
     <%= link_to(icon_tag("plus") << " Create Reservation",
       new_reservation_path_for_resource(@resource),
-      class: "btn btn-primary") %>
+      class: "btn btn-default") %>
   <% end %>
 <% end %>
 
@@ -26,6 +26,15 @@
     </ul>
   </div>
   <div class="col-lg-10">
-    Calendar
+    <div id="calendar"></div>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  $(function(){
+    new Mess.Views.ReservationCalendarView({
+      el: '#calendar',
+      feed_url: <%=json reservations_path_for_resource(@resource) %>
+    });
+  });
+<% end %>

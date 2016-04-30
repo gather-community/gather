@@ -6,7 +6,8 @@ class ReservationsController < ApplicationController
     if request.xhr?
       @reservations = policy_scope(Reservation::Reservation).
         where(resource_id: params[:resource_id]).
-        where("starts_at < ? AND ends_at > ?", params[:end], params[:start])
+        where("starts_at < ? AND ends_at > ?",
+          Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
       render json: @reservations
 
     # Main reservation pages

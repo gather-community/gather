@@ -1,0 +1,19 @@
+.fc {
+  .fc-button {
+    text-transform: capitalize;
+  }
+
+  &.fc-unthemed .fc-today {
+    background-color: $theme-main-lightest;
+  }
+
+  .fc-event-container {
+    a {
+      color: white;
+    }
+  }
+
+  .fc-event.own-reservation {
+    background-color: #0072AB;
+  }
+}

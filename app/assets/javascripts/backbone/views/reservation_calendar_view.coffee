@@ -2,7 +2,9 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
   initialize: (options) ->
     @newUrl = options.newUrl
-    @$('#calendar').fullCalendar
+    @calendar = @$('#calendar')
+
+    @calendar.fullCalendar
       events: options.feedUrl,
       defaultView: 'agendaWeek',
       allDaySlot: false,
@@ -16,6 +18,8 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
         right: 'today prev,next'
       },
       select: @onSelect.bind(this)
+
+    @calendar.fullCalendar('gotoDate', moment(options.focusDate)) if options.focusDate
 
   events:
     'click .modal .btn-primary': 'create'

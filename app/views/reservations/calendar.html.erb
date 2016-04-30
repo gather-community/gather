@@ -54,7 +54,8 @@
     new Mess.Views.ReservationCalendarView({
       el: '#calendar-col',
       feedUrl: <%=json reservations_path_for_resource(@resource) %>,
-      newUrl: <%=json new_reservation_path_for_resource(@resource) %>
+      newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
+      focusDate: <%=json params[:date] %>
     });
   });
 <% end %>

@@ -105,6 +105,7 @@ module Reservation
 
     def no_overlap
       query = self.class.where("ends_at > ? AND starts_at < ?", starts_at, ends_at)
+      query = query.where(resource_id: resource_id)
       query = query.where("id != #{id}") if persisted?
       errors.add(:base, "This reservation overlaps an existing one") if query.any?
     end

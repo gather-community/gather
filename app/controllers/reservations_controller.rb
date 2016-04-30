@@ -67,7 +67,7 @@ class ReservationsController < ApplicationController
     @reservation.assign_attributes(reservation_params)
     if @reservation.save
       flash[:success] = "Reservation created successfully."
-      redirect_to reservations_path_for_resource(@reservation.resource)
+      redirect_to_reservation_in_context(@reservation)
     else
       @resource = @reservation.resource
       prep_form_vars
@@ -107,5 +107,10 @@ class ReservationsController < ApplicationController
   # Pundit built-in helper doesn't work due to namespacing
   def reservation_params
     params.require(:reservation_reservation).permit(policy(@reservation).permitted_attributes)
+  end
+
+  def redirect_to_reservation_in_context(reservation)
+    redirect_to reservations_path_for_resource(reservation.resource,
+      date: reservation.starts_at.to_s(:compact_date))
   end
 end

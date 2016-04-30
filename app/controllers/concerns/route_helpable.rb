@@ -11,8 +11,8 @@ module RouteHelpable
     reservations_path(community: community.abbrv.downcase)
   end
 
-  def reservations_path_for_resource(resource)
-    reservations_path(community: resource.community.abbrv.downcase, resource_id: resource.id)
+  def reservations_path_for_resource(resource, params = {})
+    reservations_path(params.merge(community: resource.community.abbrv.downcase, resource_id: resource.id))
   end
 
   def new_reservation_path_for_resource(resource)

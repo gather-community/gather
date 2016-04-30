@@ -62,7 +62,7 @@ class ReservationsController < ApplicationController
     @reservation.assign_attributes(reservation_params)
     if @reservation.save
       flash[:success] = "Reservation created successfully."
-      redirect_to reservations_path
+      redirect_to reservations_path_for_resource(@reservation.resource)
     else
       @resource = @reservation.resource
       prep_form_vars
@@ -76,7 +76,7 @@ class ReservationsController < ApplicationController
     authorize @reservation
     if @reservation.update_attributes(reservation_params)
       flash[:success] = "Reservation updated successfully."
-      redirect_to reservations_path
+      redirect_to reservations_path_for_resource(@reservation.resource)
     else
       @resource = @reservation.resource
       prep_form_vars

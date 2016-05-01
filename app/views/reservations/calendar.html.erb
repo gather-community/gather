@@ -9,23 +9,8 @@
 <% end %>
 
 <div class="row">
-  <div class="col-lg-2 sidebar">
-    <%= image_tag(@resource.photo.url(:thumb)) %><br/><br/>
-    <small>Other Resources</small>
-    <ul class="no-marker">
-      <% @other_resources.each do |resource| %>
-        <li><%= link_to(resource.name, reservations_path_for_resource(resource)) %></li>
-      <% end %>
-    </ul>
-    <br/>
-    <small>Other Communities</small>
-    <ul class="no-marker">
-      <% @other_communities.each do |community| %>
-        <li><%= link_to(community.name, reservations_path_for_community(community)) %></li>
-      <% end %>
-    </ul>
-  </div>
-  <div id="calendar-col" class="col-lg-10">
+
+  <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
 
     <div id="create-confirm-modal" class="modal fade">
@@ -46,6 +31,24 @@
       </div>
     </div>
   </div>
+
+  <div class="col-md-2 col-sm-3 sidebar">
+    <%= image_tag(@resource.photo.url(:thumb)) %><br/><br/>
+    <small>Other Resources</small>
+    <ul class="no-marker">
+      <% @other_resources.each do |resource| %>
+        <li><%= link_to(resource.name, reservations_path_for_resource(resource)) %></li>
+      <% end %>
+    </ul>
+    <br/>
+    <small>Other Communities</small>
+    <ul class="no-marker">
+      <% @other_communities.each do |community| %>
+        <li><%= link_to(community.name, reservations_path_for_community(community)) %></li>
+      <% end %>
+    </ul>
+  </div>
+
 </div>
 
 

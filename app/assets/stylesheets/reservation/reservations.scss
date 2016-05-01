@@ -54,4 +54,12 @@
       margin-left: -10px;
     }
   }
+
+  &.action-show {
+    @media (max-width: 320px) {
+      img {
+        width: 100%;
+      }
+    }
+  }
 }

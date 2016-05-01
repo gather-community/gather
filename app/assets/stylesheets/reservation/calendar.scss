@@ -1,0 +1,22 @@
+#calendar {
+  margin-bottom: 30px;
+
+  .fc-toolbar h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .fc-toolbar h2 {
+      margin-bottom: 0;
+    }
+
+    .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
+      display: inherit;
+    }
+  }
+}

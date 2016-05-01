@@ -6,7 +6,8 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
     @calendar.fullCalendar
       events: options.feedUrl,
-      defaultView: 'agendaWeek',
+      defaultView: if @forceDay() then 'agendaDay' else 'agendaWeek',
+      height: 500,
       allDaySlot: false,
       eventOverlap: false,
       selectable: true,
@@ -17,7 +18,8 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
         center: 'agendaDay,agendaWeek,month',
         right: 'today prev,next'
       },
-      select: @onSelect.bind(this)
+      select: @onSelect.bind(this),
+      windowResize: @onWindowResize.bind(this)
 
     @calendar.fullCalendar('gotoDate', moment(options.focusDate)) if options.focusDate
 
@@ -40,6 +42,15 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
       body.html("Reserve from <b>#{startTime}</b> to <b>#{endTime}</b>?")
 
     modal.modal('show')
+
+  onWindowResize: ->
+    @setViewForWidth()
+
+  setViewForWidth: ->
+    @calendar.fullCalendar('changeView', 'agendaDay') if @forceDay()
+
+  forceDay: ->
+    $(window).width() < 640
 
   create: ->
     window.location.href = "#{@newUrl}?#{$.param(@selection)}"

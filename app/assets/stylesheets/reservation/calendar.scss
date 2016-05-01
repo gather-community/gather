@@ -1,22 +1,28 @@
-#calendar {
-  margin-bottom: 30px;
-
-  .fc-toolbar h2 {
-    margin-bottom: 10px;
-    font-size: 18px;
+#calendar-col {
+  #permalink {
+    margin-bottom: 30px;
+    color: $gray-text;
+    font-size: 11px;
   }
 
-  .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
+  #calendar {
     .fc-toolbar h2 {
-      margin-bottom: 0;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
 
     .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
-      display: inherit;
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .fc-toolbar h2 {
+        margin-bottom: 0;
+      }
+
+      .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
+        display: inherit;
+      }
     }
   }
 }

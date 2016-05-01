@@ -12,6 +12,7 @@
 
   <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
+    <a href="#" id="permalink">Permalink</a>
 
     <div id="create-confirm-modal" class="modal fade">
       <div class="modal-dialog">
@@ -58,7 +59,8 @@
       el: '#calendar-col',
       feedUrl: <%=json reservations_path_for_resource(@resource) %>,
       newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
-      focusDate: <%=json params[:date] %>
+      focusDate: <%=json params[:date] %>,
+      viewType: <%=json params[:view] %>
     });
   });
 <% end %>

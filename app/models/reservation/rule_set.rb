@@ -36,8 +36,12 @@ module Reservation
       rules[key]
     end
 
-    def requires_sponsor?
-      rules[:other_communities].try(:requires_sponsor?, reservation)
+    def access_level
+      if (oc = rules[:other_communities]) && oc.protocol_community != reservation.reserver_community
+        oc.value
+      else
+        "ok"
+      end
     end
 
     def fixed_start_time?

@@ -23,7 +23,7 @@
     <%= f.input :kind, collection: @kinds, required: true %>
   <% end %>
 
-  <% if @reservation.requires_sponsor? %>
+  <% if @reservation.access_level == "sponsor" %>
     <%= f.input :sponsor_id,
       required: true,
       collection: [@reservation.sponsor].compact,

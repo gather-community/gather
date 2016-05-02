@@ -15,7 +15,7 @@ module Reservation
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :resource
     delegate :name, :full_name, to: :resource, prefix: true
-    delegate :requires_sponsor?, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
+    delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true

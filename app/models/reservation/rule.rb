@@ -4,6 +4,8 @@ module Reservation
   class Rule
     attr_accessor :name, :value, :protocol
 
+    delegate :community, to: :protocol, prefix: true
+
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
       max_length_minutes max_minutes_per_year
       other_communities requires_kind)
@@ -74,11 +76,6 @@ module Reservation
       else
         raise "Unknown rule name"
       end
-    end
-
-    # Only called on :other_communities rules
-    def requires_sponsor?(reservation)
-      value == "sponsor" && reservation.reserver_community != protocol.community
     end
 
     def to_s

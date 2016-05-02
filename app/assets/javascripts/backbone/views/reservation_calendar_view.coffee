@@ -12,7 +12,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     @calendar.fullCalendar
       events: options.feedUrl,
       defaultView: @initialViewType(options.viewType)
-      height: 500,
+      height: 700,
       allDaySlot: false,
       eventOverlap: false,
       selectable: true,

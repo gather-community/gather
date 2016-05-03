@@ -11,22 +11,22 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     @ruleSet = options.ruleSet
 
     @calendar.fullCalendar
-      events: options.feedUrl,
+      events: options.feedUrl
       defaultView: @initialViewType(options.viewType)
-      height: 700,
-      allDaySlot: false,
-      eventOverlap: false,
-      selectable: @ruleSet.access_level != "read_only",
-      selectOverlap: false,
-      selectHelper: true,
-      header: {
-        left: 'title',
-        center: 'agendaDay,agendaWeek,month',
+      height: 700
+      allDaySlot: false
+      eventOverlap: false
+      selectable: @ruleSet.access_level != "read_only"
+      selectOverlap: false
+      selectHelper: true
+      header:
+        left: 'title'
+        center: 'agendaDay,agendaWeek,month'
         right: 'today prev,next'
-      },
-      select: @onSelect.bind(this),
-      windowResize: @onWindowResize.bind(this),
+      select: @onSelect.bind(this)
+      windowResize: @onWindowResize.bind(this)
       viewRender: @onViewRender.bind(this)
+      loading: @onLoading.bind(this)
 
     @calendar.fullCalendar('gotoDate', moment(options.focusDate)) if options.focusDate
 
@@ -77,6 +77,9 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
   onViewRender: ->
     @updatePermalink()
+
+  onLoading: (isLoading) ->
+    Mess.loadingIndicator[if isLoading then 'show' else 'hide']()
 
   updatePermalink: ->
     @$('#permalink').attr('href', @permalink())

@@ -2,16 +2,19 @@ module Reservation
   class ReservationPolicy < ApplicationPolicy
     alias_method :reservation, :record
 
+    delegate :rule_set, to: :reservation
+
     def index?
-      active?
+      # If record is a Class (not a specific reservation), can't check protocol
+      active? && (reservation.is_a?(Class) || !forbidden_by_protocol?)
     end
 
     def show?
-      active?
+      active? && !forbidden_by_protocol?
     end
 
     def create?
-      active?
+      active? && !forbidden_by_protocol? && !read_only_by_protocol?
     end
 
     def update?
@@ -32,6 +35,14 @@ module Reservation
 
     def active_reserver?
       active? && reservation.reserver == user
+    end
+
+    def forbidden_by_protocol?
+      rule_set.access_level == "forbidden"
+    end
+
+    def read_only_by_protocol?
+      rule_set.access_level == "read_only"
     end
   end
 end

@@ -1,7 +1,7 @@
 <% content_for(:title){ "Reservations: #{@resource.full_name}" } %>
 
 <% content_for(:top_buttons) do %>
-  <% if @resource && policy(Reservation::Reservation).create? %>
+  <% if @resource && policy(@sample_reservation).create? %>
     <%= link_to(icon_tag("plus") << " Create Reservation",
       new_reservation_path_for_resource(@resource),
       class: "btn btn-default") %>
@@ -60,7 +60,8 @@
       feedUrl: <%=json reservations_path_for_resource(@resource) %>,
       newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
       focusDate: <%=json params[:date] %>,
-      viewType: <%=json params[:view] %>
+      viewType: <%=json params[:view] %>,
+      accessLevel: <%=json @rule_set.access_level %>
     });
   });
 <% end %>

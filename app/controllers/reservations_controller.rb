@@ -1,35 +1,52 @@
 class ReservationsController < ApplicationController
   def index
-    authorize Reservation::Reservation
+    @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
+    return render nothing: true, status: 404 unless @community
 
-    # JSON list of reservations for calendar plugin
-    if request.xhr?
-      @reservations = policy_scope(Reservation::Reservation).
-        where(resource_id: params[:resource_id]).
-        where("starts_at < ? AND ends_at > ?",
-          Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
-      render json: @reservations
+    if params[:resource_id]
+      @resource = Reservation::Resource.find(params[:resource_id])
 
-    # Main reservation pages
+      # We use an unsaved sample reservation to authorize against
+      @sample_reservation = Reservation::Reservation.new(resource: @resource, reserver: current_user)
+      authorize @sample_reservation
+
+      # JSON list of reservations for calendar plugin
+      if request.xhr?
+        raise "Resource required" unless @resource
+
+        @reservations = policy_scope(Reservation::Reservation).
+          where(resource_id: params[:resource_id]).
+          where("starts_at < ? AND ends_at > ?",
+            Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
+        render json: @reservations
+
+      # Main reservation pages
+      else
+        # This will happen in JSON mode.
+        # We don't actually return any Reservations here.
+        skip_policy_scope
+
+        @rule_set = @sample_reservation.rule_set
+        if @rule_set.access_level == "read_only"
+          flash.now[:notice] = "Only #{@community.name} residents may reserve this resource."
+        end
+
+        @other_resources = policy_scope(Reservation::Resource).
+          where(community_id: @community.id).
+          where("id != ?", @resource.id)
+        @other_communities = Community.where("id != ?", @community.id)
+        render("calendar")
+      end
     else
+      authorize Reservation::Reservation
+
       # This will happen in JSON mode.
       # We don't actually return any Reservations here.
       skip_policy_scope
 
-      @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
-      return render nothing: true, status: 404 unless @community
-
-      if params[:resource_id]
-        @resource = Reservation::Resource.find(params[:resource_id])
-        @other_resources = Reservation::Resource.where(community_id: @community.id).
-          where("id != ?", @resource.id)
-        @other_communities = Community.where("id != ?", @community.id)
-        render("calendar")
-      else
-        @communities = Community.by_name.all
-        @resources = Reservation::Resource.where(community_id: @community.id)
-        render("home")
-      end
+      @communities = Community.by_name.all
+      @resources = policy_scope(Reservation::Resource).where(community_id: @community.id)
+      render("home")
     end
   end
 
@@ -63,8 +80,8 @@ class ReservationsController < ApplicationController
 
   def create
     @reservation = Reservation::Reservation.new(reserver: current_user)
-    authorize @reservation
     @reservation.assign_attributes(reservation_params)
+    authorize @reservation
     if @reservation.save
       flash[:success] = "Reservation created successfully."
       redirect_to_reservation_in_context(@reservation)

@@ -3,14 +3,16 @@ require 'rails_helper'
 describe Reservation::ReservationPolicy do
   describe "permissions" do
     include_context "policy objs"
+    let(:resource) { create(:resource) }
+    let(:reservation) { Reservation::Reservation.new(reserver: user, resource: resource) }
 
     permissions :index?, :show?, :new?, :create? do
       it "grants access to active users" do
-        expect(subject).to permit(user, Reservation::Reservation)
+        expect(subject).to permit(user, reservation)
       end
 
       it "denies access to inactive users" do
-        expect(subject).not_to permit(inactive_user, Reservation::Reservation)
+        expect(subject).not_to permit(inactive_user, reservation)
       end
     end
 

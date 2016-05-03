@@ -8,6 +8,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
   initialize: (options) ->
     @newUrl = options.newUrl
     @calendar = @$('#calendar')
+    @editable = options.accessLevel != "read_only"
 
     @calendar.fullCalendar
       events: options.feedUrl,
@@ -15,7 +16,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
       height: 700,
       allDaySlot: false,
       eventOverlap: false,
-      selectable: true,
+      selectable: @editable,
       selectOverlap: false,
       selectHelper: true,
       header: {

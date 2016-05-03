@@ -2,6 +2,8 @@
 # Represents the unification of one or more protocols.
 module Reservation
   class RuleSet
+    include ActiveModel::SerializerSupport
+
     attr_accessor :reservation, :rules
 
     # Finds all matching protocols and unions them into one.
@@ -54,6 +56,14 @@ module Reservation
 
     def requires_kind?
       rules[:requires_kind].present?
+    end
+
+    def fixed_start_time
+      rules[:fixed_start_time].try(:value)
+    end
+
+    def fixed_end_time
+      rules[:fixed_end_time].try(:value)
     end
 
     def to_s

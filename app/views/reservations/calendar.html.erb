@@ -61,7 +61,7 @@
       newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
       focusDate: <%=json params[:date] %>,
       viewType: <%=json params[:view] %>,
-      accessLevel: <%=json @rule_set.access_level %>
+      ruleSet: <%=json ReservationRuleSetSerializer.new(@rule_set).as_json %>
     });
   });
 <% end %>

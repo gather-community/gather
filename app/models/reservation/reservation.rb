@@ -49,7 +49,7 @@ module Reservation
       if fet = rule_set[:fixed_end_time].try(:value)
         reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
       end
-      if fst && fet && fst >= fet
+      if reservation.starts_at >= reservation.ends_at
         reservation.ends_at = reservation.ends_at.change(day: reservation.ends_at.day + 1)
       end
 

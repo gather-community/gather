@@ -5,7 +5,7 @@
     <%= f.input :served_at, as: :datetime_picker,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
-    <%= f.input :location_id, collection: Location.by_name %>
+    <%= f.input :resource_id, collection: @resource_options, label_method: :full_name %>
 
   <% else %>
 
@@ -13,7 +13,7 @@
       <%= @meal.served_at.to_formatted_s(:full_datetime) %>
     <% end %>
 
-    <%= f.input :location_id do %>
+    <%= f.input :resource_id do %>
       <%= @meal.location_name %>
     <% end %>
 

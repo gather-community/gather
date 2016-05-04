@@ -14,7 +14,7 @@ class UsersController < ApplicationController
           @users = @users.joins(:household).where("households.community_id" => params[:community_id])
         end
         @users = @users.by_name.page(params[:page]).per(20)
-        render(json: @users, meta: { more: @users.next_page.present? })
+        render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
       end
     end
   end

@@ -11,7 +11,7 @@ class Meal < ActiveRecord::Base
 
   serialize :allergens, JSON
 
-  belongs_to :location
+  belongs_to :resource, class_name: "Reservation::Resource"
   belongs_to :host_community, class_name: "Community"
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
@@ -50,7 +50,6 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :signups, allow_destroy: true,
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
 
-  delegate :name, :abbrv, to: :location, prefix: true
   delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
@@ -64,7 +63,7 @@ class Meal < ActiveRecord::Base
 
   validates :served_at, presence: true
   validates :host_community_id, presence: true
-  validates :location_id, presence: true
+  validates :resource_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
@@ -106,6 +105,14 @@ class Meal < ActiveRecord::Base
 
   def community_ids
     invitations.map(&:community_id)
+  end
+
+  def location_name
+    resource.full_name
+  end
+
+  def location_abbrv
+    resource.full_meal_abbrv
   end
 
   # Accepts values from the community checkboxes on the form.

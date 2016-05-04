@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504001434) do
+ActiveRecord::Schema.define(version: 20160504020144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -121,16 +121,6 @@ ActiveRecord::Schema.define(version: 20160504001434) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
-  create_table "locations", force: :cascade do |t|
-    t.string "abbrv", limit: 8, null: false
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "locations", ["abbrv"], name: "index_locations_on_abbrv", unique: true, using: :btree
-  add_index "locations", ["name"], name: "index_locations_on_name", unique: true, using: :btree
-
   create_table "meals", force: :cascade do |t|
     t.text "allergens", default: "[]", null: false
     t.integer "capacity", null: false
@@ -141,10 +131,10 @@ ActiveRecord::Schema.define(version: 20160504001434) do
     t.integer "host_community_id", null: false
     t.decimal "ingredient_cost", precision: 10, scale: 2
     t.text "kids"
-    t.integer "location_id"
     t.text "notes"
     t.decimal "pantry_cost", precision: 10, scale: 2
     t.string "payment_method"
+    t.integer "resource_id", null: false
     t.datetime "served_at", null: false
     t.text "side"
     t.string "status", default: "open", null: false
@@ -152,7 +142,7 @@ ActiveRecord::Schema.define(version: 20160504001434) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "meals", ["location_id"], name: "index_meals_on_location_id", using: :btree
+  add_index "meals", ["resource_id"], name: "index_meals_on_resource_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
@@ -222,6 +212,7 @@ ActiveRecord::Schema.define(version: 20160504001434) do
     t.datetime "created_at", null: false
     t.string "default_calendar_view", default: "week", null: false
     t.text "guidelines"
+    t.string "meal_abbrv", limit: 6
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
     t.string "photo_content_type"
@@ -355,7 +346,7 @@ ActiveRecord::Schema.define(version: 20160504001434) do
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
-  add_foreign_key "meals", "locations"
+  add_foreign_key "meals", "resources"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"

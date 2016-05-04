@@ -13,8 +13,15 @@ module Reservation
     validates_attachment_content_type :photo, content_type: /\Aimage\/jpeg/
     validates_attachment_file_name :photo, matches: /jpe?g\Z/i
 
+    scope :meal_hostable, ->{ where("meal_abbrv IS NOT NULL") }
+    scope :by_full_name, ->{ joins(:community).order("communities.abbrv, name") }
+
     def full_name
       "#{community.abbrv} #{name}"
+    end
+
+    def full_meal_abbrv
+      "#{community.abbrv} #{meal_abbrv}"
     end
 
     def kinds

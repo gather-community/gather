@@ -171,6 +171,7 @@ class MealsController < ApplicationController
   def prep_form_vars
     @meal.ensure_assignments
     @communities = Community.by_name
+    @resource_options = Reservation::Resource.meal_hostable.by_full_name
   end
 
   def finalize_params

@@ -10,7 +10,7 @@ class HouseholdsController < ApplicationController
       format.json do
         @households = @households.active.matching(params[:search])
         @households = @households.by_commty_and_name.page(params[:page]).per(20)
-        render(json: @households, meta: { more: @households.next_page.present? })
+        render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
       end
     end
   end

@@ -32,9 +32,8 @@ Mess.Views.Select2View = Backbone.View.extend({
           });
         },
         processResults: function (data, page) {
-          console.log(data);
           return {
-            results: data[src + "s"].map(function(u){ return {id: u.id, text: u[label_attr]}; }),
+            results: data.results.map(function(u){ return {id: u.id, text: u[label_attr]}; }),
             pagination: { more: data.meta.more }
           }
         },

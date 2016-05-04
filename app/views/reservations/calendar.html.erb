@@ -60,7 +60,7 @@
       feedUrl: <%=json reservations_path_for_resource(@resource) %>,
       newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
       focusDate: <%=json params[:date] %>,
-      viewType: <%=json params[:view] %>,
+      viewType: <%=json params[:view] || @resource.default_calendar_view %>,
       ruleSet: <%=json ReservationRuleSetSerializer.new(@rule_set).as_json %>
     });
   });

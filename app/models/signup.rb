@@ -4,7 +4,7 @@ class Signup < ActiveRecord::Base
   FOOD_TYPES = %w(meat veg)
   SIGNUP_TYPES = DINER_TYPES.map{ |dt| FOOD_TYPES.map{ |ft| "#{dt}_#{ft}" } }.flatten
   PORTION_FACTORS = {
-    senior: 1,
+    senior: 0.75,
     adult: 1,
     teen: 0.75,
     big_kid: 0.5,

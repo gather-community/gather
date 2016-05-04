@@ -1,0 +1,7 @@
+<p>The following error(s) occurred in trying to save your changes:</p>
+<ul>
+  <% @reservation.errors.each do |attrib, error| %>
+    <% attrib = "Reservation" if attrib == :base %>
+    <li><%= "#{Reservation::Reservation.human_attribute_name(attrib)}: #{error}" %></li>
+  <% end %>
+</ul>

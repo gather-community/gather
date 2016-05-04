@@ -27,6 +27,8 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
       windowResize: @onWindowResize.bind(this)
       viewRender: @onViewRender.bind(this)
       loading: @onLoading.bind(this)
+      eventDrop: @onEventChange.bind(this)
+      eventResize: @onEventChange.bind(this)
 
     @calendar.fullCalendar('gotoDate', moment(options.focusDate)) if options.focusDate
 
@@ -80,6 +82,19 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
   onLoading: (isLoading) ->
     Mess.loadingIndicator[if isLoading then 'show' else 'hide']()
+
+  onEventChange: (event, _, revertFunc) ->
+    $.ajax
+      url: "/reservations/#{event.id}"
+      method: "POST"
+      data:
+        _method: "PATCH"
+        reservation_reservation:
+          starts_at: event.start.format()
+          ends_at: event.end.format()
+      error: (xhr) =>
+        revertFunc()
+        Mess.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   updatePermalink: ->
     @$('#permalink').attr('href', @permalink())

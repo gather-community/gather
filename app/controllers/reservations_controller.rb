@@ -96,14 +96,23 @@ class ReservationsController < ApplicationController
   def update
     @reservation = Reservation::Reservation.find(params[:id])
     authorize @reservation
-    if @reservation.update_attributes(reservation_params)
-      flash[:success] = "Reservation updated successfully."
-      redirect_to reservations_path_for_resource(@reservation.resource)
+
+    if request.xhr?
+      if @reservation.update_attributes(reservation_params.merge(guidelines_ok: "1"))
+        render nothing: true
+      else
+        render partial: "update_error_messages", status: 422
+      end
     else
-      @resource = @reservation.resource
-      prep_form_vars
-      set_validation_error_notice
-      render :edit
+      if @reservation.update_attributes(reservation_params)
+        flash[:success] = "Reservation updated successfully."
+        redirect_to reservations_path_for_resource(@reservation.resource)
+      else
+        @resource = @reservation.resource
+        prep_form_vars
+        set_validation_error_notice
+        render :edit
+      end
     end
   end
 

@@ -106,7 +106,7 @@ class ReservationsController < ApplicationController
     else
       if @reservation.update_attributes(reservation_params)
         flash[:success] = "Reservation updated successfully."
-        redirect_to reservations_path_for_resource(@reservation.resource)
+        redirect_to_reservation_in_context(@reservation)
       else
         @resource = @reservation.resource
         prep_form_vars

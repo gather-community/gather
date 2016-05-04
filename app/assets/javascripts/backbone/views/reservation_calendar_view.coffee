@@ -117,7 +117,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
   permalink: ->
     base = [location.protocol, '//', location.host, location.pathname].join('')
     view = @calendar.fullCalendar('getView')
-    viewType = view.name.replace('agenda', '')
+    viewType = view.name.replace('agenda', '').toLowerCase()
     date = view.intervalStart.format(Mess.TIME_FORMATS.compactDate)
     "#{base}?view=#{viewType}&date=#{date}"
 

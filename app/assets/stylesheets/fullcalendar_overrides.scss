@@ -16,4 +16,9 @@
   .fc-event.own-reservation {
     background-color: #0072AB;
   }
+
+  .fc-event.has-meal {
+    background-color: $theme-main;
+    border-color: $theme-main;
+  }
 }

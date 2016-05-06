@@ -26,10 +26,23 @@
     <td>Date/Time</td>
     <td><%= @reservation.timespan %></td>
   </tr>
-  <tr>
-    <td>Reserved By</td>
-    <td><%= user_link(@reservation.reserver, show_cmty_if_foreign: true) %></td>
-  </tr>
+  <% if @reservation.meal %>
+    <tr>
+      <td>Meal</td>
+      <td>
+        <% if policy(@reservation.meal).show? %>
+          <%= link_to(@reservation.meal_title, meal_path(@reservation.meal)) %>
+        <% else %>
+          <%= @reservation.meal_title %>
+        <% end %>
+      </td>
+    </tr>
+  <% else %>
+    <tr>
+      <td>Reserved By</td>
+      <td><%= user_link(@reservation.reserver, show_cmty_if_foreign: true) %></td>
+    </tr>
+  <% end %>
   <% if @reservation.sponsor %>
     <tr>
       <td>Sponsor</td>

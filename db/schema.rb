@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504020144) do
+ActiveRecord::Schema.define(version: 20160506015427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 20160504020144) do
     t.datetime "created_at", null: false
     t.datetime "ends_at"
     t.string "kind"
+    t.integer "meal_id"
     t.string "name", limit: 24, null: false
     t.text "note"
     t.integer "reserver_id", null: false
@@ -202,6 +203,7 @@ ActiveRecord::Schema.define(version: 20160504020144) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "reservations", ["meal_id"], name: "index_reservations_on_meal_id", using: :btree
   add_index "reservations", ["reserver_id"], name: "index_reservations_on_reserver_id", using: :btree
   add_index "reservations", ["resource_id"], name: "index_reservations_on_resource_id", using: :btree
   add_index "reservations", ["sponsor_id"], name: "index_reservations_on_sponsor_id", using: :btree
@@ -353,6 +355,7 @@ ActiveRecord::Schema.define(version: 20160504020144) do
   add_foreign_key "reservation_protocolings", "resources"
   add_foreign_key "reservation_protocols", "communities"
   add_foreign_key "reservation_shared_guidelines", "communities"
+  add_foreign_key "reservations", "meals"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users", column: "reserver_id"
   add_foreign_key "reservations", "users", column: "sponsor_id"

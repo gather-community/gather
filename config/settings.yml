@@ -12,3 +12,5 @@ reminder_lead_times:
     early: 10
     late: 5
 reminder_time_of_day: 6 # 6:00am
+meal_reservation_default_length: 330 # mins
+meal_reservation_default_prep_time: 180 # mins

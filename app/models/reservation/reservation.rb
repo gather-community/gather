@@ -8,7 +8,7 @@ module Reservation
     belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :resource
-    belongs_to :meal
+    has_one :meal
 
     delegate :household, to: :reserver
     delegate :name, :community, to: :reserver, prefix: true
@@ -91,8 +91,9 @@ module Reservation
       ends_at.to_date == starts_at.to_date
     end
 
-    def has_meal?
-      meal.present?
+    def meal?
+      # We add an underscore to differentiate from user-specified kinds
+      kind == "_meal"
     end
 
     private

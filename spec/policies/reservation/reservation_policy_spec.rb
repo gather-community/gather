@@ -69,8 +69,7 @@ describe Reservation::ReservationPolicy do
     end
 
     context "meal reservation" do
-      let(:meal) { create(:meal) }
-      let(:reservation) { build(:reservation, reserver: user, resource: resource, meal: meal) }
+      let(:reservation) { build(:reservation, reserver: user, resource: resource, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "allow all active users"

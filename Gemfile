@@ -83,5 +83,7 @@ group :development, :test do
 
   gem 'faker'
   gem "awesome_print"
+  gem 'term-ansicolor'
+
 end
 

@@ -50,6 +50,7 @@ class MealsController < ApplicationController
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))
+    @meal.sync_reservation
     authorize @meal
     if @meal.save
       flash[:success] = "Meal created successfully."
@@ -64,7 +65,9 @@ class MealsController < ApplicationController
   def update
     @meal = Meal.find(params[:id])
     authorize @meal
-    if @meal.update_attributes(permitted_attributes(@meal))
+    @meal.assign_attributes(permitted_attributes(@meal))
+    @meal.sync_reservation
+    if @meal.save
       flash[:success] = "Meal updated successfully."
       @worker_change_notifier.try(:check_and_send!)
       redirect_to meals_path

@@ -1,6 +1,6 @@
 module MealsHelper
   def meal_link(meal)
-    link_to(meal.title || "[No Title]", meal_path(meal))
+    link_to(meal.title_or_no_title, meal_path(meal))
   end
 
   def signed_up_class(meal)

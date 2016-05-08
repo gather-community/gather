@@ -1,5 +1,7 @@
 <%= simple_form_for(@meal, html: { class: 'form-horizontal meals-form' }) do |f| %>
 
+  <%= base_error(f) %>
+
   <% if policy(@meal).administer? %>
 
     <%= f.input :served_at, as: :datetime_picker,

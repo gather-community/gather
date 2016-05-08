@@ -11,7 +11,6 @@ class Meal < ActiveRecord::Base
 
   serialize :allergens, JSON
 
-  belongs_to :resource, class_name: "Reservation::Resource"
   belongs_to :host_community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   has_many :assignments, dependent: :destroy
@@ -25,6 +24,10 @@ class Meal < ActiveRecord::Base
   has_many :communities, through: :invitations
   has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
   has_many :households, through: :signups
+
+  # Resource is chosen by the user. Reservation is then automatically created.
+  belongs_to :resource, class_name: "Reservation::Resource"
+  belongs_to :reservation, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }
   scope :finalizable, -> { past.where("status != ?", "finalized") }
@@ -77,6 +80,7 @@ class Meal < ActiveRecord::Base
   validates :ingredient_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
   validates :pantry_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
   validates :payment_method, presence: true, if: :finalized?
+  validate { reservation_handler.validate if reservation.present? }
 
   def self.new_with_defaults(current_user)
     new(served_at: default_datetime,
@@ -105,6 +109,10 @@ class Meal < ActiveRecord::Base
     (DEFAULT_CLEANERS - cleaner_assigns.size).times{ cleaner_assigns.build }
   end
 
+  def title_or_no_title
+    title || "[No Title]"
+  end
+
   def community_ids
     invitations.map(&:community_id)
   end
@@ -115,6 +123,14 @@ class Meal < ActiveRecord::Base
 
   def location_abbrv
     resource.full_meal_abbrv
+  end
+
+  def reservation_handler
+    @reservation_handler ||= Reservation::MealReservationHandler.new(self)
+  end
+
+  def sync_reservation
+    reservation_handler.sync
   end
 
   # Accepts values from the community checkboxes on the form.

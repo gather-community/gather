@@ -2,7 +2,7 @@ module Reservation
   class ReservationPolicy < ApplicationPolicy
     alias_method :reservation, :record
 
-    delegate :rule_set, to: :reservation
+    delegate :rule_set, :has_meal?, to: :reservation
 
     def index?
       # If record is a Class (not a specific reservation), can't check protocol
@@ -14,15 +14,15 @@ module Reservation
     end
 
     def create?
-      active? && !forbidden_by_protocol? && !read_only_by_protocol?
+      active? && !forbidden_by_protocol? && !read_only_by_protocol? && !has_meal?
     end
 
     def update?
-      active_reserver? || admin?
+      (active_reserver? || admin?) && !has_meal?
     end
 
     def destroy?
-      active_reserver? && (future? || recently_created?) || admin?
+      (active_reserver? && (future? || recently_created?) || admin?) && !has_meal?
     end
 
     def permitted_attributes

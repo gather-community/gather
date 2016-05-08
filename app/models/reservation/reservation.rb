@@ -91,6 +91,10 @@ module Reservation
       ends_at.to_date == starts_at.to_date
     end
 
+    def has_meal?
+      meal.present?
+    end
+
     private
 
     def guidelines_accepted

@@ -4,9 +4,8 @@ describe Reservation::ReservationPolicy do
   describe "permissions" do
     include_context "policy objs"
     let(:resource) { create(:resource) }
-    let(:reservation) { Reservation::Reservation.new(reserver: user, resource: resource) }
 
-    permissions :index?, :show?, :new?, :create? do
+    shared_examples_for "allow all active users" do
       it "grants access to active users" do
         expect(subject).to permit(user, reservation)
       end
@@ -16,7 +15,7 @@ describe Reservation::ReservationPolicy do
       end
     end
 
-    shared_examples_for "modify" do
+    shared_examples_for "allow reserver and admins" do
       it "grants access to reserver" do
         expect(subject).to permit(user, reservation)
       end
@@ -30,39 +29,62 @@ describe Reservation::ReservationPolicy do
       end
     end
 
-    permissions :edit?, :update? do
-      let(:reservation) { Reservation::Reservation.new(reserver: user) }
+    context "non-meal reservation" do
+      let(:reservation) { build(:reservation, reserver: user, resource: resource) }
 
-      it_behaves_like "modify"
+      permissions :index?, :show?, :new?, :create? do
+        it_behaves_like "allow all active users"
+      end
+
+      permissions :edit?, :update? do
+        it_behaves_like "allow reserver and admins"
+      end
+
+      permissions :destroy? do
+        context "future reservation" do
+          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.from_now) }
+          it_behaves_like "allow reserver and admins"
+        end
+
+        context "just created reservation" do
+          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.ago,
+            created_at: 50.minutes.ago) }
+          it_behaves_like "allow reserver and admins"
+        end
+
+        context "old past reservation" do
+          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.ago,
+            created_at: 1.week.ago) }
+
+          it "denies access to non-admins" do
+            expect(subject).not_to permit(user, reservation)
+            expect(subject).not_to permit(other_user, reservation)
+          end
+
+          it "grants access to admins" do
+            expect(subject).to permit(admin, reservation)
+          end
+        end
+      end
     end
 
-    permissions :destroy? do
-      context "future reservation" do
-        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.from_now) }
-        it_behaves_like "modify"
+    context "meal reservation" do
+      let(:meal) { create(:meal) }
+      let(:reservation) { build(:reservation, reserver: user, resource: resource, meal: meal) }
+
+      permissions :index?, :show? do
+        it_behaves_like "allow all active users"
       end
 
-      context "just created reservation" do
-        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.ago,
-          created_at: 50.minutes.ago) }
-        it_behaves_like "modify"
-      end
-
-      context "old past reservation" do
-        let(:reservation) { Reservation::Reservation.new(reserver: user, starts_at: 1.day.ago,
-          created_at: 1.week.ago) }
-
-        it "denies access to non-admins" do
+      permissions :new?, :create?, :edit?, :update?, :destroy? do
+        it "denies access to all" do
           expect(subject).not_to permit(user, reservation)
           expect(subject).not_to permit(other_user, reservation)
-        end
-
-        it "grants access to admins" do
-          expect(subject).to permit(admin, reservation)
+          expect(subject).not_to permit(admin, reservation)
         end
       end
-    end
 
+    end
   end
 
   describe "scope" do
@@ -78,7 +100,7 @@ describe Reservation::ReservationPolicy do
 
   describe "permitted_attributes" do
     let(:user) { User.new }
-    let(:reservation) { Reservation::Reservation.new(reserver: user) }
+    let(:reservation) { build(:reservation, reserver: user) }
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
     it "should allow appropriate attribs" do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160508010052) do
+ActiveRecord::Schema.define(version: 20160508015033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 20160508010052) do
     t.text "allergens", default: "[]", null: false
     t.integer "capacity", null: false
     t.datetime "created_at", null: false
+    t.integer "creator_id", null: false
     t.text "dessert"
     t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
     t.text "entrees"
@@ -143,6 +144,7 @@ ActiveRecord::Schema.define(version: 20160508010052) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
   add_index "meals", ["reservation_id"], name: "index_meals_on_reservation_id", using: :btree
   add_index "meals", ["resource_id"], name: "index_meals_on_resource_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
@@ -350,6 +352,7 @@ ActiveRecord::Schema.define(version: 20160508010052) do
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "reservations"
   add_foreign_key "meals", "resources"
+  add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"

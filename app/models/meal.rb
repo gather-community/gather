@@ -13,6 +13,7 @@ class Meal < ActiveRecord::Base
 
   belongs_to :resource, class_name: "Reservation::Resource"
   belongs_to :host_community, class_name: "Community"
+  belongs_to :creator, class_name: "User"
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
@@ -61,6 +62,7 @@ class Meal < ActiveRecord::Base
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
+  validates :creator_id, presence: true
   validates :served_at, presence: true
   validates :host_community_id, presence: true
   validates :resource_id, presence: true

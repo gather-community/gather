@@ -9,6 +9,7 @@ FactoryGirl.define do
     resource
     association :head_cook, factory: :user
     association :host_community, factory: :community
+    association :creator, factory: :user
 
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.host_community]

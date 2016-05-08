@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   belongs_to :household, inverse_of: :users
   has_many :assignments
 
+  scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
+  scope :admin, -> { where(admin: true) }
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }

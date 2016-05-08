@@ -45,7 +45,10 @@ class MealsController < ApplicationController
   end
 
   def create
-    @meal = Meal.new(host_community_id: current_user.community_id)
+    @meal = Meal.new(
+      host_community_id: current_user.community_id,
+      creator: current_user
+    )
     @meal.assign_attributes(permitted_attributes(@meal))
     authorize @meal
     if @meal.save

@@ -1,0 +1,10 @@
+class CreateReservationsForMeals < ActiveRecord::Migration
+  def up
+    Meal.transaction do
+      Meal.where("reservation_id IS NULL").find_each do |m|
+        m.sync_reservation
+        m.save!
+      end
+    end
+  end
+end

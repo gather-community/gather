@@ -1,6 +1,8 @@
 # Handles creation and updating of reservations associated with meals.
 module Reservation
   class MealReservationHandler
+    include ActionView::Helpers::TextHelper
+
     attr_accessor :meal
 
     def initialize(meal)
@@ -11,10 +13,13 @@ module Reservation
     def sync
       starts_at = meal.served_at - Settings.meal_reservation_default_prep_time.minutes
       ends_at = starts_at + Settings.meal_reservation_default_length.minutes
+      prefix = "Meal:"
+      title = truncate(meal.title_or_no_title,
+        length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       attribs = {
         resource: meal.resource,
         reserver: meal.creator,
-        name: "Meal: #{meal.title_or_no_title}",
+        name: "#{prefix} #{title}",
         kind: "_meal",
         starts_at: starts_at,
         ends_at: ends_at,

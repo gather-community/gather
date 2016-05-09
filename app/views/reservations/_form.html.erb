@@ -13,6 +13,12 @@
 
   <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
 
+  <% if policy(@reservation).choose_reserver? %>
+    <%= f.input :reserver_id,
+      collection: [@reservation.reserver].compact, label_method: :name,
+      input_html: { data: { "select2-src" => "user", "select2-label-attr" => "name" } } %>
+  <% end %>
+
   <%= f.input :starts_at, as: :datetime_picker,
     wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>
 
@@ -53,8 +59,13 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){ new Mess.Views.Select2View({
-    el: '.reservation_reservation_sponsor_id',
-    extra_data: { community_id: <%= @reservation.community_id %> }
-  }); });
+  $(function(){
+    new Mess.Views.Select2View({
+      el: '.reservation_reservation_sponsor_id',
+      extra_data: { community_id: <%= @reservation.community_id %> }
+    });
+    new Mess.Views.Select2View({
+      el: '.reservation_reservation_reserver_id'
+    });
+  });
 <% end %>

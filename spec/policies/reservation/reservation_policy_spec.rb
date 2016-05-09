@@ -4,6 +4,7 @@ describe Reservation::ReservationPolicy do
   describe "permissions" do
     include_context "policy objs"
     let(:resource) { create(:resource) }
+    let(:reservation) { build(:reservation, reserver: user, resource: resource) }
 
     shared_examples_for "allow all active users" do
       it "grants access to active users" do
@@ -29,9 +30,14 @@ describe Reservation::ReservationPolicy do
       end
     end
 
-    context "non-meal reservation" do
-      let(:reservation) { build(:reservation, reserver: user, resource: resource) }
+    permissions :choose_reserver? do
+      it "allows admins only" do
+        expect(subject).not_to permit(user, reservation)
+        expect(subject).to permit(admin, reservation)
+      end
+    end
 
+    context "non-meal reservation" do
       permissions :index?, :show?, :new?, :create? do
         it_behaves_like "allow all active users"
       end
@@ -98,13 +104,25 @@ describe Reservation::ReservationPolicy do
   end
 
   describe "permitted_attributes" do
-    let(:user) { User.new }
     let(:reservation) { build(:reservation, reserver: user) }
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
-    it "should allow appropriate attribs" do
-      expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
-        sponsor_id starts_at ends_at guidelines_ok))
+    context "regular user" do
+      let(:user) { User.new }
+
+      it "should allow appropriate attribs" do
+        expect(subject).to contain_exactly(*%i(name kind resource_id
+          sponsor_id starts_at ends_at guidelines_ok))
+      end
+    end
+
+    context "admin" do
+      let(:user) { build(:user, admin: true) }
+
+      it "should allow appropriate attribs" do
+        expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
+          sponsor_id starts_at ends_at guidelines_ok))
+      end
     end
   end
 end

@@ -21,12 +21,18 @@ module Reservation
       (active_reserver? || admin?) && !meal?
     end
 
+    def choose_reserver?
+      admin?
+    end
+
     def destroy?
       (active_reserver? && (future? || recently_created?) || admin?) && !meal?
     end
 
     def permitted_attributes
-      %i(name kind reserver_id resource_id sponsor_id starts_at ends_at guidelines_ok)
+      attribs = %i(name kind resource_id sponsor_id starts_at ends_at guidelines_ok)
+      attribs << :reserver_id if choose_reserver?
+      attribs
     end
 
     private

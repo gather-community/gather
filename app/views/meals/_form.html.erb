@@ -7,7 +7,8 @@
     <%= f.input :served_at, as: :datetime_picker,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
-    <%= f.input :resource_id, collection: @resource_options, label_method: :full_name %>
+    <%= f.input :resource_ids, collection: @resource_options, label_method: :full_name, required: true,
+      input_html: { multiple: "multiple" } %>
 
   <% else %>
 
@@ -15,7 +16,7 @@
       <%= @meal.served_at.to_formatted_s(:full_datetime) %>
     <% end %>
 
-    <%= f.input :resource_id do %>
+    <%= f.input :resource_ids do %>
       <%= @meal.location_name %>
     <% end %>
 
@@ -120,6 +121,7 @@
 <%= javascript_tag do %>
   $(function(){
     new Mess.Views.Select2View({el: '.meals-form'});
+    $("#meal_resource_ids").select2();
 
     <% if @notify_on_worker_change %>
       new Mess.Views.WorkerChangeNotificationView({el: '#assignment_fields'});

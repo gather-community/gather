@@ -25,9 +25,10 @@ class Meal < ActiveRecord::Base
   has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
   has_many :households, through: :signups
 
-  # Resource is chosen by the user. Reservation is then automatically created.
-  belongs_to :resource, class_name: "Reservation::Resource"
-  belongs_to :reservation, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
+  # Resources are chosen by the user. Reservations are then automatically created.
+  has_many :reservation_resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
+  has_many :resources, class_name: "Reservation::Resource", through: :reservation_resourcings
+  has_many :reservations, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }
   scope :finalizable, -> { past.where("status != ?", "finalized") }
@@ -63,12 +64,15 @@ class Meal < ActiveRecord::Base
     build_head_cook_assign if head_cook_assign.blank?
   end
 
+  after_validation do
+    errors[:resources].each { |m| errors.add(:resource_ids, m) }
+  end
+
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :creator_id, presence: true
   validates :served_at, presence: true
   validates :host_community_id, presence: true
-  validates :resource_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
@@ -80,7 +84,8 @@ class Meal < ActiveRecord::Base
   validates :ingredient_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
   validates :pantry_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
   validates :payment_method, presence: true, if: :finalized?
-  validate { reservation_handler.validate if reservation.present? }
+  validate { reservation_handler.validate if reservations.any? }
+  validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(current_user)
     new(served_at: default_datetime,
@@ -118,18 +123,18 @@ class Meal < ActiveRecord::Base
   end
 
   def location_name
-    resource.full_name
+    resources.first.full_name
   end
 
   def location_abbrv
-    resource.full_meal_abbrv
+    resources.first.full_meal_abbrv
   end
 
   def reservation_handler
     @reservation_handler ||= Reservation::MealReservationHandler.new(self)
   end
 
-  def sync_reservation
+  def sync_reservations
     reservation_handler.sync
   end
 

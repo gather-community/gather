@@ -50,7 +50,7 @@ class MealsController < ApplicationController
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))
-    @meal.sync_reservation
+    @meal.sync_reservations
     authorize @meal
     if @meal.save
       flash[:success] = "Meal created successfully."
@@ -66,7 +66,7 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @meal.assign_attributes(permitted_attributes(@meal))
-    @meal.sync_reservation
+    @meal.sync_reservations
     if @meal.save
       flash[:success] = "Meal updated successfully."
       @worker_change_notifier.try(:check_and_send!)

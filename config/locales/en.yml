@@ -37,7 +37,7 @@ en:
         pantry_cost: "Pantry Cost"
         payment_method: "Payment Method"
         communities: "Communities"
-        resource_id: "Location"
+        resource_ids: "Location(s)"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"

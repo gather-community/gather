@@ -84,7 +84,7 @@ class MealPolicy < ApplicationPolicy
     end
 
     if administer?
-      permitted += [:discount, :served_at, :resource_id]
+      permitted += [:discount, :served_at, resource_ids: []]
     end
 
     permitted

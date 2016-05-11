@@ -59,3 +59,9 @@ form {
     display: none;
   }
 }
+
+#main-wrapper {
+  .select2-container .select2-selection {
+    border: 1px solid #ccc !important;
+  }
+}

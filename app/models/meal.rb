@@ -64,6 +64,10 @@ class Meal < ActiveRecord::Base
     build_head_cook_assign if head_cook_assign.blank?
   end
 
+  after_validation do
+    errors[:resources].each { |m| errors.add(:resource_ids, m) }
+  end
+
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :creator_id, presence: true

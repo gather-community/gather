@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :meal do
     transient do
       communiites []
+      no_resources false
     end
 
     served_at { Time.now + 7.days }
@@ -12,7 +13,7 @@ FactoryGirl.define do
 
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.host_community]
-      meal.resources = [build(:resource)]
+      meal.resources = [create(:resource)] if meal.resources.empty? && !evaluator.no_resources
     end
 
     trait :with_menu do

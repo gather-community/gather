@@ -4,7 +4,7 @@ RSpec.describe Meal, type: :model do
   describe "validations" do
     describe "resources" do
       it "fails if none" do
-        meal = build(:meal, resources: [])
+        meal = build(:meal, no_resources: true)
         expect(meal).not_to be_valid
         expect(meal.errors[:resources].join).to match /must choose at least one location/
       end

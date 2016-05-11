@@ -12,6 +12,7 @@ FactoryGirl.define do
 
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.host_community]
+      meal.resources = [build(:resource)]
     end
 
     trait :with_menu do

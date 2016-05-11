@@ -81,6 +81,7 @@ class Meal < ActiveRecord::Base
   validates :pantry_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
   validates :payment_method, presence: true, if: :finalized?
   validate { reservation_handler.validate if reservations.any? }
+  validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(current_user)
     new(served_at: default_datetime,

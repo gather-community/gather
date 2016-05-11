@@ -15,6 +15,8 @@ module Reservation
 
     scope :meal_hostable, ->{ where("meal_abbrv IS NOT NULL") }
     scope :by_full_name, ->{ joins(:community).order("communities.abbrv, name") }
+    scope :visible, ->{ where(hidden: false) }
+    scope :hidden, ->{ where(hidden: true) }
 
     def full_name
       "#{community.abbrv} #{name}"

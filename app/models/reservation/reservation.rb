@@ -8,7 +8,7 @@ module Reservation
     belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :resource
-    has_one :meal, autosave: false # This association is always saved via the meal.
+    belongs_to :meal
 
     delegate :household, to: :reserver
     delegate :name, :community, to: :reserver, prefix: true

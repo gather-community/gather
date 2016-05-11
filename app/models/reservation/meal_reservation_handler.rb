@@ -47,7 +47,7 @@ module Reservation
             end
           end.join(", ")
           meal.errors.add(:base,
-            "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
+            "The following error(s) occurred in making a #{reservation.resource_full_name} reservation "\
             "for this meal: #{errors}.")
         end
       end

@@ -6,7 +6,6 @@ FactoryGirl.define do
 
     served_at { Time.now + 7.days }
     capacity 64
-    resource
     association :head_cook, factory: :user
     association :host_community, factory: :community
     association :creator, factory: :user

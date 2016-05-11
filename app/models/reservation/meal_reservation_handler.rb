@@ -16,36 +16,40 @@ module Reservation
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
-      attribs = {
-        resource: meal.resource,
-        reserver: meal.creator,
-        name: "#{prefix} #{title}",
-        kind: "_meal",
-        starts_at: starts_at,
-        ends_at: ends_at,
-        guidelines_ok: "1"
-      }
 
-      if meal.reservation # Update
-        meal.reservation.assign_attributes(attribs)
-      else # Create
-        meal.build_reservation(attribs)
+      meal.reservations.destroy_all
+
+      meal.resources.each do |resource|
+        attribs = {
+          resource: resource,
+          reserver: meal.creator,
+          name: "#{prefix} #{title}",
+          kind: "_meal",
+          starts_at: starts_at,
+          ends_at: ends_at,
+          guidelines_ok: "1"
+        }
+
+        meal.reservations.build(attribs)
       end
     end
 
     # Validates the reservation and copies errors to meal.
     # Assumes reservation has been setup already.
     def validate
-      unless meal.reservation.valid?
-        errors = meal.reservation.errors.map do |attrib, msg|
-          if attrib == :base
-            msg
-          else
-            "#{Reservation.human_attribute_name(attrib)}: #{msg}"
-          end
-        end.join(", ")
-        meal.errors.add(:base,
-          "The following error(s) occurred in making a reservation for this meal: #{errors}.")
+      meal.reservations.each do |reservation|
+        unless reservation.valid?
+          errors = reservation.errors.map do |attrib, msg|
+            if attrib == :base
+              msg
+            else
+              "#{Reservation.human_attribute_name(attrib)}: #{msg}"
+            end
+          end.join(", ")
+          meal.errors.add(:base,
+            "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
+            "for this meal: #{errors}.")
+        end
       end
     end
   end

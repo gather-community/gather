@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511002049) do
+ActiveRecord::Schema.define(version: 20160511004201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -135,8 +135,6 @@ ActiveRecord::Schema.define(version: 20160511002049) do
     t.text "notes"
     t.decimal "pantry_cost", precision: 10, scale: 2
     t.string "payment_method"
-    t.integer "reservation_id"
-    t.integer "resource_id", null: false
     t.datetime "served_at", null: false
     t.text "side"
     t.string "status", default: "open", null: false
@@ -145,8 +143,6 @@ ActiveRecord::Schema.define(version: 20160511002049) do
   end
 
   add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
-  add_index "meals", ["reservation_id"], name: "index_meals_on_reservation_id", using: :btree
-  add_index "meals", ["resource_id"], name: "index_meals_on_resource_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
@@ -204,6 +200,7 @@ ActiveRecord::Schema.define(version: 20160511002049) do
     t.datetime "created_at", null: false
     t.datetime "ends_at"
     t.string "kind"
+    t.integer "meal_id"
     t.string "name", limit: 24, null: false
     t.text "note"
     t.integer "reserver_id", null: false
@@ -213,6 +210,7 @@ ActiveRecord::Schema.define(version: 20160511002049) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "reservations", ["meal_id"], name: "index_reservations_on_meal_id", using: :btree
   add_index "reservations", ["reserver_id"], name: "index_reservations_on_reserver_id", using: :btree
   add_index "reservations", ["resource_id"], name: "index_reservations_on_resource_id", using: :btree
   add_index "reservations", ["sponsor_id"], name: "index_reservations_on_sponsor_id", using: :btree
@@ -357,8 +355,6 @@ ActiveRecord::Schema.define(version: 20160511002049) do
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
-  add_foreign_key "meals", "reservations"
-  add_foreign_key "meals", "resources"
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
@@ -368,6 +364,7 @@ ActiveRecord::Schema.define(version: 20160511002049) do
   add_foreign_key "reservation_resourcings", "meals"
   add_foreign_key "reservation_resourcings", "resources"
   add_foreign_key "reservation_shared_guidelines", "communities"
+  add_foreign_key "reservations", "meals"
   add_foreign_key "reservations", "resources"
   add_foreign_key "reservations", "users", column: "reserver_id"
   add_foreign_key "reservations", "users", column: "sponsor_id"

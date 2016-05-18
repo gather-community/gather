@@ -28,7 +28,7 @@ Follow these steps to setup a development environment for MESS.
 1. **Retrieve project files using Git**
 
   ```
-  git clone ssh://git@github.com:touchstonecohousing/mess.git
+  git clone https://github.com/touchstone-cohousing/mess.git
   cd mess
   ```
 
@@ -38,14 +38,18 @@ Follow these steps to setup a development environment for MESS.
   git checkout develop
   ```
 
+1. **Install gems**
+  - Install the required gems by running `bundle install` in the project directory.
+
 1. **Set local config**
   - `cp config/initializers/local_config.rb.example config/initializers/local_config.rb`
   - Edit `config/initializers/local_config.rb` to set config specific to your environment.
 
-1. **Create development and test databases**
+1. **Create and setup development and test databases**
   - See `createdb` command.
   - Should be named `mess_development` and `mess_test`.
   - Ensure adquate privileges for table creation, etc.
+  - Setup tables: `bundle exec rake db:schema:load`.
 
 1. **Seed the db**
   - `rake db:seed`
@@ -55,10 +59,6 @@ Follow these steps to setup a development environment for MESS.
   - Open the rails console (`rails c`)
   - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first, admin: true)`
   - Be sure to replace `you@gmail.com` with a Google account you control.
-
-1. **Bundle, configure, and migrate**
-  - Install the required gems by running `bundle install` in the project directory.
-  - Run database migrations: `bundle exec rake db:migrate`.
 
 1. **Run the tests**
   - Run `bundle exec rspec`.

@@ -99,7 +99,7 @@ module Reservation
     private
 
     def guidelines_accepted
-      if resource.has_guidelines? && !guidelines_ok?
+      if new_record? && resource.has_guidelines? && !guidelines_ok?
         errors.add(:guidelines, "You must agree to the guidelines")
       end
     end

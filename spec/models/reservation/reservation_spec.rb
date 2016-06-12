@@ -63,6 +63,16 @@ RSpec.describe Reservation::Reservation, type: :model do
         expect(reservation.errors[:kind]).to eq ["can't be blank"]
       end
     end
+
+    context "with missing starts_at" do
+      let!(:protocol) { create(:reservation_protocol, resources: [resource2], max_lead_days: 30) }
+      let(:reservation) { Reservation::Reservation.new(resource: resource2) }
+
+      it "should not apply rules since doing so would cause problems" do
+        reservation.save
+        expect(reservation.errors[:starts_at]).to eq ["can't be blank"]
+      end
+    end
   end
 
   def expect_no_error(method)

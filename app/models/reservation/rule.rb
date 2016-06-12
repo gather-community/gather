@@ -16,6 +16,8 @@ module Reservation
       self.protocol = protocol
     end
 
+    # Returns true if reservation passes the check (conforms to the rule).
+    # Returns a 2-element array for AR errors.add if not.
     def check(reservation)
       case name
       when :fixed_start_time

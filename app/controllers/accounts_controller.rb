@@ -29,6 +29,7 @@ class AccountsController < ApplicationController
     @account = Account.find(params[:id])
     authorize @account
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
+    @last_statement = @account.last_statement
   end
 
   def edit

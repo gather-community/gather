@@ -1,21 +1,5 @@
 <% content_for(:title){ "Statement ##{@statement.id.to_s.rjust(5, '0')}" } %>
 
-<div class="summary">
-  <% if @statement.total_due > 0 %>
-    <%= icon_tag("warning") %> Please pay
-    <% if @statement.due_on.present? %>
-      <%= number_to_currency(@statement.total_due) %> by <%= @statement.due_on.to_s(:short_date) %>. Thanks!
-    <% else %>
-      <%= number_to_currency(@statement.total_due) %>. Thanks!
-    <% end %>
-  <% elsif @statement.total_due == 0 %>
-    <%= icon_tag("info-circle") %> Your account balance is zero. Nice job!
-  <% else %>
-    <%= icon_tag("info-circle") %> Your account has a credit of
-    <%= number_to_currency(-@statement.total_due) %>. No payment necessary!
-  <% end %>
-</div>
-
 <table class="key-value">
   <tr>
     <td>Community Account</td>
@@ -35,6 +19,49 @@
       <%= @statement.created_on.to_s(:short_date) %>
     </td>
   </tr>
+</table>
+
+<% if @statement.transactions.empty? %>
+  <p class="inner">
+    There are no new charges or credits on this statement.
+    <% if @statement.total_due > 0 %>
+      Please pay the outstanding balance below. Thanks!
+    <% else %>
+      Please note your credit balance below.
+    <% end %>
+  </p>
+<% else %>
+  <%= render("transactions/charges_and_credits") %>
+<% end %>
+
+
+<h4 class="inner">Summary</h4>
+
+<table class="key-value">
+  <tr>
+    <td>Previous Balance</td>
+    <td>
+      <%= currency_with_cr_span(@statement.prev_balance) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Payments/Credits</td>
+    <td>
+      <%= currency_with_cr_span(@statement.total_credits) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Charges</td>
+    <td>
+      <%= currency_with_cr_span(@statement.total_charges) %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Pay This Amount</strong></td>
+    <td>
+      <strong><%= currency_with_cr_span(@statement.total_due) %></strong>
+    </td>
+  </tr>
   <% if @statement.due_on %>
     <tr>
       <td>Due Date</td>
@@ -43,50 +70,23 @@
       </td>
     </tr>
   <% end %>
-  <tr>
-    <td>Previous Statement</td>
-    <td>
-      <%= @statement.prev_stmt_on.try(:to_s, :short_date) || "None" %>
-    </td>
-  </tr>
-  <tr>
-    <td>Previous Balance</td>
-    <td>
-      <%= currency_with_cr_span(@statement.prev_balance) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Charges</td>
-    <td>
-      <%= currency_with_cr_span(@statement.total_charges) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Payments/Credits</td>
-    <td>
-      <%= currency_with_cr_span(@statement.total_credits) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Balance</td>
-    <td>
-      <strong id="balance"><%= currency_with_cr_span(@statement.total_due) %></strong>
-    </td>
-  </tr>
 </table>
 
-<% if @statement.transactions.empty? %>
-  <p class="inner">
-    There are no new charges or credits on this statement.
-    <% if @statement.total_due > 0 %>
-      Please pay the outstanding balance above. Thanks!
+<div class="summary">
+  <% if @statement.total_due > 0 %>
+    <%= icon_tag("warning") %> Please pay
+    <% if @statement.due_on.present? %>
+      <%= number_to_currency(@statement.total_due) %> by <%= @statement.due_on.to_s(:short_date) %>. Thanks!
     <% else %>
-      Please note your credit balance above.
+      <%= number_to_currency(@statement.total_due) %>. Thanks!
     <% end %>
-  </p>
-<% end %>
-
-<%= render("transactions/charges_and_credits") %>
+  <% elsif @statement.total_due == 0 %>
+    <%= icon_tag("info-circle") %> Your account balance is zero. Nice job!
+  <% else %>
+    <%= icon_tag("info-circle") %> Your account has a credit of
+    <%= number_to_currency(-@statement.total_due) %>. No payment necessary!
+  <% end %>
+</div>
 
 <% if @community.settings[:payment_instructions] %>
   <br/>

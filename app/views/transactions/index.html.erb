@@ -18,21 +18,21 @@
     </td>
   </tr>
   <tr>
-    <td>Total Charges</td>
-    <td>
-      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
-    </td>
-  </tr>
-  <tr>
     <td>Total Payments/Credits</td>
     <td>
       <%= currency_with_cr_span(@credits.sum(&:amount)) %>
     </td>
   </tr>
+  <tr>
+    <td>Total Charges</td>
+    <td>
+      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
+    </td>
+  </tr>
 </table>
 
 <% if @transactions.none? %>
-  There are no recent transactions for this account.
+  <p class="inner">There are no recent transactions for this account.</p>
 <% else %>
   <%= render("charges_and_credits") %>
 <% end %>

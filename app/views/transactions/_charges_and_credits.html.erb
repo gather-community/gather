@@ -1,14 +1,3 @@
-<% if @charges.any? %>
-  <h4 class="inner">Charges</h4>
-  <table class="index charges">
-    <%= render("transactions/charge_header") %>
-    <% @charges.each do |txn| %>
-      <%= render("transactions/charge_row", txn: txn) %>
-    <% end %>
-    <%= render("transactions/total_row", total: @total_charges, type: :charge) %>
-  </table>
-<% end %>
-
 <% if @credits.any? %>
   <h4 class="inner">Payments/Credits</h4>
   <table class="index credits">
@@ -16,6 +5,15 @@
     <% @credits.each do |txn| %>
       <%= render("transactions/credit_row", txn: txn) %>
     <% end %>
-    <%= render("transactions/total_row", total: @total_credits, type: :credit) %>
+  </table>
+<% end %>
+
+<% if @charges.any? %>
+  <h4 class="inner">Charges</h4>
+  <table class="index charges">
+    <%= render("transactions/charge_header") %>
+    <% @charges.each do |txn| %>
+      <%= render("transactions/charge_row", txn: txn) %>
+    <% end %>
   </table>
 <% end %>

@@ -1,0 +1,18 @@
+.accounts.action-show, .households.action-accounts {
+  form {
+    margin-bottom: 20px;
+
+    select {
+      display: inline-block;
+      width: 200px;
+    }
+  }
+
+  table.index {
+    max-width: 600px;
+  }
+
+  table.key-value {
+    margin-bottom: 5px;
+  }
+}

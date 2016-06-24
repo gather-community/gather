@@ -76,7 +76,7 @@
 </table>
 
 <% if @statement.transactions.empty? %>
-  <p>
+  <p class="inner">
     There are no new charges or credits on this statement.
     <% if @statement.total_due > 0 %>
       Please pay the outstanding balance above. Thanks!

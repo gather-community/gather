@@ -11,10 +11,18 @@ h1, h2, h3, h4 {
     font-weight: normal;
     font-family: 'Raleway';
   }
+
+  &.inner {
+    margin-top: $large-margin;
+  }
 }
 
 h5, h6 {
   font-weight: bold;
+}
+
+p.inner {
+  margin-top: $large-margin;
 }
 
 a, a:visited {

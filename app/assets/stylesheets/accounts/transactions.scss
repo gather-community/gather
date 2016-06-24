@@ -1,3 +1,4 @@
+// See account_summary and statements for more styles affecting transactions
 .transactions {
   &.action-create {
     table.key-value tr {
@@ -11,13 +12,5 @@
 
   .transaction_amount input {
     width: 200px;
-  }
-}
-
-.accounts, .statements, .transactions {
-  span.cr {
-    display: inline-block;
-    width: 20px;
-    padding-left: 4px;
   }
 }

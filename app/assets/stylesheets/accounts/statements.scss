@@ -1,16 +1,8 @@
-.statements {
+.statements, .transactions.action-index {
   div.summary {
     font-weight: bold;
     font-size: 16px;
     margin-bottom: 10px;
-  }
-
-  table.key-value {
-    margin-bottom: 30px;
-  }
-
-  table.charges {
-    margin-bottom: 20px;
   }
 
   tr.total {

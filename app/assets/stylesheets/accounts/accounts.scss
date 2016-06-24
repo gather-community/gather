@@ -1,13 +1,5 @@
-.accounts, .households.action-accounts {
-  input[type='text'] {
-    height: 25px;
-    text-align: right;
-  }
-
-  button[type='submit'] {
-    margin-top: 20px;
-  }
-
+// See account_summary for more styles affecting accounts
+.accounts {
   &.action-index {
     button[type='submit'] {
       float: right;

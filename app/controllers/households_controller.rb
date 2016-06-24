@@ -73,7 +73,7 @@ class HouseholdsController < ApplicationController
     @account = @accounts.detect{ |a| a.community_id == params[:community].to_i } if params[:community]
     @account ||= @accounts.detect{ |a| a.community == current_user.community } || @accounts.first
 
-    @statements = @account.statements.page(1) if @account
+    @statements = @account.statements.page(1).per(StatementsController::PER_PAGE) if @account
   end
 
   def activate

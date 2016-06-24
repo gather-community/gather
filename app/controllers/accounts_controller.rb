@@ -25,6 +25,12 @@ class AccountsController < ApplicationController
     @late_fee_days_ago = last_fee.nil? ? nil : (Date.today - last_fee.incurred_on).to_i
   end
 
+  def show
+    @account = Account.find(params[:id])
+    authorize @account
+    @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
+  end
+
   def edit
     @account = Account.find(params[:id])
     authorize @account

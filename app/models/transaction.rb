@@ -22,6 +22,7 @@ class Transaction < ActiveRecord::Base
   scope :no_statement, ->{ where(statement_id: nil) }
   scope :credit, ->{ where("amount < 0") }
   scope :charge, ->{ where("amount > 0") }
+  scope :latest_first, ->{ order(incurred_on: :desc) }
 
   delegate :household_id, :household_full_name, :community_id, to: :account
 

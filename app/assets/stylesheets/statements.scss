@@ -1,4 +1,4 @@
-.statements, .transactions {
+.statements {
   div.summary {
     font-weight: bold;
     font-size: 16px;
@@ -11,12 +11,6 @@
 
   table.charges {
     margin-bottom: 20px;
-  }
-
-  span.cr {
-    display: inline-block;
-    width: 20px;
-    padding-left: 4px;
   }
 
   tr.total {

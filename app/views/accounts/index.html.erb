@@ -47,8 +47,7 @@
       <% @accounts.each do |account| %>
         <tr>
           <td>
-            <%= link_to(account.household_full_name.html_safe << no_user_warning(account),
-              edit_account_path(account)) %>
+            <%= link_to(account.household_full_name.html_safe << no_user_warning(account), account) %>
           </td>
           <td class="amount">
             <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
@@ -72,7 +71,7 @@
             <%= credit_limit(account) %>
           </td>
           <td>
-            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Item') %>
+            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
           </td>
         </tr>
       <% end %>

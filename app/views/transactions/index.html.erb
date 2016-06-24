@@ -1,8 +1,12 @@
-<% content_for(:title){ "Recent Transactions" } %>
+<% content_for(:title) do
+    suffix = @account.household == current_user.household ? "" : ": #{@account.household_full_name}"
+    "Recent Transactions#{suffix}"
+  end
+%>
 
 <table class="key-value">
   <tr>
-    <td>Community Account</td>
+    <td>Account Community</td>
     <td>
       <%= @community.name %>
     </td>

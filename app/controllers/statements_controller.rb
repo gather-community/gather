@@ -1,4 +1,6 @@
 class StatementsController < ApplicationController
+  PER_PAGE = 5
+
   def show
     @statement = Statement.find(params[:id])
     authorize @statement
@@ -27,7 +29,7 @@ class StatementsController < ApplicationController
   def more
     @account = Account.find(params[:account_id])
     authorize @account, :show?
-    @statements = @account.statements.page(params[:page])
-    render(partial: "households/statement_rows")
+    @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
+    render(partial: "statements/statement_rows")
   end
 end

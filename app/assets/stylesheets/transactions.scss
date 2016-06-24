@@ -1,8 +1,4 @@
-.transactions, .statements {
-  .transaction_amount input {
-    width: 200px;
-  }
-
+.transactions {
   &.action-create {
     table.key-value tr {
       border-top: 1px solid $light-border-color;
@@ -13,6 +9,12 @@
     }
   }
 
+  .transaction_amount input {
+    width: 200px;
+  }
+}
+
+.accounts, .statements, .transactions {
   span.cr {
     display: inline-block;
     width: 20px;

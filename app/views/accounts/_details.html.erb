@@ -1,0 +1,80 @@
+<h4>Account Overview</h4>
+
+<table class="key-value">
+  <tr>
+    <td>Account Community</td>
+    <td><%= @account.community.name %></td>
+  </tr>
+  <tr>
+    <td>Last Statement Date</td>
+    <td>
+      <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+    </td>
+  </tr>
+  <tr>
+    <td>Last Statement Amount</td>
+    <td>
+      <%= statement_amount(@account.last_statement) %>
+    </td>
+  </tr>
+  <tr>
+    <td>New Payments/Credits</td>
+    <td>
+      <%= link_to_currency_if_nonzero(@account.total_new_credits, account_transactions_path(@account)) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Balance Due</td>
+    <td>
+      <strong><%= currency_with_cr(@account.balance_due) %></strong>
+      <% if footnotes && @account.balance_due >= 0.01 %>
+        <strong>*</strong>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>New Charges</td>
+    <td>
+      <%= link_to_currency_if_nonzero(@account.total_new_charges, account_transactions_path(@account)) %>
+      <% if footnotes && @account.total_new_charges >= 0.01 %>
+        <strong>**</strong>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>Current Balance</td>
+    <td>
+      <%= currency_with_cr(@account.current_balance) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Credit Limit</td>
+    <td>
+      <%= credit_limit(@account) %>
+    </td>
+  </tr>
+</table>
+
+<% if footnotes %>
+  <% if @account.balance_due >= 0.01 %>
+    <strong>*</strong> <small>This is the amount due on your last statement minus any payments received.
+      If you have already sent payment, please disregard.</small><br/>
+  <% end %>
+  <% if @account.total_new_charges >= 0.01 %>
+    <strong>**</strong> <small>These charges were added since your last statement
+      and are not included in your balance due.</small><br/>
+  <% end %>
+<% end %>
+
+<% if @statements.any? %>
+  <h4>Past Statements</h4>
+
+  <table class="index">
+    <tr>
+      <th class="col-md-1">Date</th>
+      <th class="col-md-1">Activity</th>
+      <th class="col-md-1">Total Due</th>
+    </tr>
+    <%= render("statements/statement_rows") %>
+  </table>
+<% end %>

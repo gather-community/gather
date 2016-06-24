@@ -1,0 +1,10 @@
+<% content_for(:title){ "Account: #{@account.household_full_name}" } %>
+
+<% content_for(:top_buttons) do %>
+  <%= link_to(icon_tag("pencil") << " Edit Account", edit_account_path(@account),
+    class: "btn btn-default") %>
+  <%= link_to(icon_tag("plus") << " Add Transaction", new_account_transaction_path(@account),
+    class: "btn btn-default") %>
+<% end %>
+
+<%= render("accounts/details", footnotes: false) %>

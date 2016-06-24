@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   scope :with_balance_owing, ->{ where("accounts.balance_due > 0") }
 
   delegate :name, :full_name, :no_users?, to: :household, prefix: true
-  delegate :name, to: :community, prefix: true
+  delegate :name, :abbrv, to: :community, prefix: true
 
   validates :credit_limit, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 

@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :accounts, only: [:index, :edit, :update] do
+  resources :accounts, only: [:index, :show, :edit, :update] do
     collection do
       put :apply_late_fees
       put :apply_payments

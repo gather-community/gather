@@ -35,12 +35,10 @@
       </tr>
     </table>
 
-    <% if footnotes %>
-      <% if @account.balance_due >= 0.01 %>
-        <strong>*</strong> <small>This is the amount you currently owe. It is the amount due on your last
-          statement minus any payments received since then.
-          If you have already sent payment but it is not reflected here, please disregard.</small><br/>
-      <% end %>
+    <% if footnotes && @account.balance_due >= 0.01 %>
+      <strong>*</strong> <small>This is the amount you currently owe. It is the amount due on your last
+        statement minus any payments received since then.
+        If you have already sent payment but it is not reflected here, please disregard.</small><br/>
     <% end %>
   </div>
 
@@ -79,11 +77,9 @@
         </td>
       </tr>
     </table>
-    <% if footnotes %>
-      <% if @account.total_new_charges >= 0.01 %>
-        <strong>**</strong> <small>This balance includes charges and credits since your last statement.
-          If it exceeds your credit limit, you will not be able to sign up meals.</small><br/>
-      <% end %>
+    <% if footnotes && @account.current_balance >= 0.01 %>
+      <strong>**</strong> <small>This balance includes charges and credits since your last statement.
+        If it exceeds your credit limit, you will not be able to sign up meals.</small><br/>
     <% end %>
   </div>
 </div>

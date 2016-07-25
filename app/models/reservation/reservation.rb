@@ -52,7 +52,7 @@ module Reservation
         reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
       end
       if reservation.starts_at >= reservation.ends_at
-        reservation.ends_at = reservation.ends_at.change(day: reservation.ends_at.day + 1)
+        reservation.ends_at += 1.day
       end
 
       reservation

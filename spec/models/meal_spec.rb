@@ -89,8 +89,8 @@ RSpec.describe Meal, type: :model do
         it "should update reservation" do
           meal.served_at = Time.now + 2.days
           meal.sync_reservations
-          meal.save!
-          expect(meal.reservations(true).first.starts_at).to eq meal.served_at - 30.minutes
+          meal.save
+          expect((meal.reservations(true).first.starts_at).change(:usec => 0)).to eq (meal.served_at.change(:usec => 0) - 30.minutes)
         end
 
         it "should handle validation errors" do

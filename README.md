@@ -49,12 +49,12 @@ Follow these steps to setup a development environment for MESS.
       Get a `<secret key>` by running `rake secret`.
       Replace `<hostname>` with your web and smtp servers. 
 
-1. **Create development and test databases**
+1. **Create development and test databases and schemas**
   - Copy `config.database.yml.example` to `config.database.yml`.
   - Run `rake db:create` to create `mess_development` and `mess_test` databases.
   - Run `rake db:schema:load` to create the schema in both databases.
 
-1. **Seed the db**
+1. **Seed the development db**
   - Copy `db/seeds.rb.example` to `db/seeds.rb`.
   - Edit `db/seeds.rb`, replacing `<your gmail name>` with your GMail name.
   - Run `rake db:seed` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.

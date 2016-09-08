@@ -39,40 +39,40 @@ Follow these steps to setup a development environment for MESS.
 
   The remaining steps should all be done from the project directory. 
 
-1. **Install gems in the project**
-  - Run `bundle install`
+1. **Install gems**
+  - Run `bundle install` to install the required gems.
 
 1. **Set local config**
-  - Copy `config/initializers/local_config.rb.example` to `config/initializers/local_config.rb`
+  - Copy `config/initializers/local_config.rb.example` to `config/initializers/local_config.rb`.
   - Edit `config/initializers/local_config.rb` as follows:
       Get `<client ID>` and `<client secret>` from your Google Developers MESS OAuth client.
-      Get a `<secret key>` by running `rake secret`
+      Get a `<secret key>` by running `rake secret`.
       Replace `<hostname>` with your web and smtp servers. 
 
 1. **Create development and test databases**
-  - Copy `config/database.yml.example` to `config/database.yml`
-  - Create development and test databases: `rake db:create`
-  - Create schema in both databases: `rake db:schema:load`
+  - Copy `config.database.yml.example` to `config.database.yml`.
+  - Run `rake db:create` to create `mess_development` and `mess_test` databases.
+  - Run `rake db:schema:load` to create the schema in both databases.
 
-1. **Seed the db** 
-  - Copy `db/seeds.rb.example` to `db/seeds.rb`
-  - Edit `db/seeds.rb`: replace `<your gmail name>` with your GMail name.
-  - Run `rake db:seed` to create one community, household, and user (with admin privileges and your gmail name)
+1. **Seed the db**
+  - Copy `db/seeds.rb.example` to `db/seeds.rb`.
+  - Edit `db/seeds.rb`, replacing `<your gmail name>` with your GMail name.
+  - Run `rake db:seed` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.
 
 1. **Run the tests**
-  - Run `bundle exec rspec`
+  - Run `bundle exec rspec`.
   - All tests should pass.
 
 1. **Start the server**
-  - Run `bundle exec rails s`
+  - Run `bundle exec rails s`.
   - Leave this console open.
 
 1. **Start DelayedJob**
   - Open a new console.
   - Go to the project directory.
-  - Run `bin/delayed_job start`
+  - Run `bin/delayed_job start`.
 
 1. **Start using the system**
-  - Open `http://localhost:3000` in a browser
-  - Click `Log in with Google`
+  - In a browser, go to `http://localhost:3000` to start MESS.
+  - Click "Log in with Google" to use MESS as the user you just created.
   - Enjoy!

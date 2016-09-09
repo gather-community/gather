@@ -1,0 +1,33 @@
+# Replace <your gmail name> with your GMail name below.
+
+namespace :db do
+  task :fake_user_data do
+
+    Community.create!(
+      name: "My Community", 
+      abbrv: "MC"
+    )
+
+    Household.create!(
+      community_id: Community.first, 
+      name: "Admins"
+    )
+
+    User.create!(
+      household_id: 1, 
+      first_name: "Alice", 
+      last_name: "Admin", 
+      email: "<your gmail name>@gmail.com", 
+      google_email: "<your gmail name>@gmail.com", 
+      mobile_phone: "17345551212",
+      admin: true
+    )
+
+    Reservation::Resource.create!(
+      community_id: 1, 
+      name: "Dining Hall",
+      meal_hostable: true
+    )
+
+  end
+end

@@ -1,17 +1,17 @@
 # Replace all <bracketed> items with your config info.
 
-# Google OAuth2 credentials
+# Google OAuth2 credentials.  Get <client ID> and <client secret> from your Google Developers MESS OAuth client.
 Devise.setup do |config
   config.omniauth :google_oauth2, "<client ID>", "<client secret>"
 end
 
-# Secret key, generated with `rake secret`
+# Get a '<secret key>' by running 'rake secret'.
 Mess::Application.config.secret_key_base = "<secret key>"
 
-# The hostname of your web server. Enter `localhost` for a standard development setup.
+# Replace '<hostname>' with your web server.  Enter 'localhost' for a standard development setup.
 Rails.configuration.x.host = "<hostname>"
 
-# The hostname of your smtp server. Enter `localhost` for a standard development setup.
+# Replace '<hostname>' with your smtp server.  Enter 'localhost' for a standard development setup.
 Rails.configuration.action_mailer.smtp_settings = {
   address: "<hostname>",
   port: 1025

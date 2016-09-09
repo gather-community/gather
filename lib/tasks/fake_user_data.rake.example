@@ -3,18 +3,18 @@
 namespace :db do
   task :fake_user_data do
 
-    Community.create!(
+    community = Community.create!(
       name: "My Community", 
       abbrv: "MC"
     )
 
-    Household.create!(
-      community_id: Community.first, 
+    household = Household.create!(
+      community: community, 
       name: "Admins"
     )
 
     User.create!(
-      household_id: 1, 
+      household = household, 
       first_name: "Alice", 
       last_name: "Admin", 
       email: "<your gmail name>@gmail.com", 
@@ -24,7 +24,7 @@ namespace :db do
     )
 
     Reservation::Resource.create!(
-      community_id: 1, 
+      community: community, 
       name: "Dining Hall",
       meal_hostable: true
     )

@@ -14,7 +14,9 @@
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
   <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
 
+
   <% if policy(@user).administer? %>
+    <%= f.input :alternate_id %>
     <%= f.input :admin %>
   <% end %>
 

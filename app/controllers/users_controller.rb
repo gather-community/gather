@@ -103,12 +103,6 @@ class UsersController < ApplicationController
 
   private
 
-  def user_params
-    permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone]
-    permitted += [:admin, :google_email, :household_id] if policy(User).create?
-    params.require(:user).permit(permitted)
-  end
-
   def redirect_to_index_or_home
     policy(User).index? ? redirect_to(users_path) : redirect_to_home
   end

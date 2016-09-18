@@ -74,10 +74,6 @@ class AccountsController < ApplicationController
 
   private
 
-  def account_params
-    params.require(:account).permit(:credit_limit)
-  end
-
   def community
     current_user.community
   end

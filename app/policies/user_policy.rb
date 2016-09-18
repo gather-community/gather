@@ -52,7 +52,7 @@ class UserPolicy < ApplicationPolicy
 
   def permitted_attributes
     [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] +
-      (admin? ? [:admin, :google_email, :household_id] : [])
+      (admin? ? [:admin, :google_email, :household_id, :alternate_id] : [])
   end
 
   private

@@ -1,20 +1,7 @@
 <% content_for(:title){ "Work" } %>
 
 <% content_for(:top_buttons) do %>
-  <form class="form-inline index-filter">
-    <%= select_tag("uid",
-      @user ? content_tag(:option, @user.name, value: @user.id, selected: "selected") : "",
-      prompt: "All Users", class: "form-control", onchange: "this.form.submit();",
-      data: { "select2-src" => "user" }) %>
-    <% if @communities.size > 1 %>
-      <%= select_tag("community",
-        options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
-        prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
-    <% end %>
-    <% if %i(uid community).any? { |k| params[k].present? } %>
-      <%= link_to(icon_tag("times-circle"), request.path, class: "clear") %>
-    <% end %>
-  </form>
+  <%= filter_bar(:user, :community) %>
 <% end %>
 
 <% if @meals.empty? %>
@@ -37,9 +24,9 @@
         <td class="col-md-2"><%= meal_date_time(meal) %></td>
         <td class="col-md-1"><%= meal.location_abbrv %></td>
         <td class="col-md-3"><%= meal_link(meal) %></td>
-        <td class="col-md-2"><%= user_link(meal.head_cook, highlight: params[:uid]) %></td>
-        <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, highlight: params[:uid]) }.reduce(:<<) %></td>
-        <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, highlight: params[:uid]) }.reduce(:<<) %></td>
+        <td class="col-md-2"><%= user_link(meal.head_cook, highlight: params[:user]) %></td>
+        <td class="col-md-2"><%= meal.asst_cooks.map{ |c| user_link(c, highlight: params[:user]) }.reduce(:<<) %></td>
+        <td class="col-md-2"><%= meal.cleaners.map{ |c| user_link(c, highlight: params[:user]) }.reduce(:<<) %></td>
         <td><%= meal_action_icons(meal) %></td>
       </tr>
     <% end %>
@@ -54,12 +41,12 @@
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
         </div>
         <div class="jobs">
-          <div class="job"><%= user_link(meal.head_cook, highlight: params[:uid]) %> (Head)</div>
+          <div class="job"><%= user_link(meal.head_cook, highlight: params[:user]) %> (Head)</div>
           <% meal.asst_cooks.each do |u| %>
-            <div class="job"><%= user_link(u, highlight: params[:uid]) %> (Asst)</div>
+            <div class="job"><%= user_link(u, highlight: params[:user]) %> (Asst)</div>
           <% end %>
           <% meal.cleaners.each do |u| %>
-            <div class="job"><%= user_link(u, highlight: params[:uid]) %> (Clean)</div>
+            <div class="job"><%= user_link(u, highlight: params[:user]) %> (Clean)</div>
           <% end %>
         </div>
       </div>

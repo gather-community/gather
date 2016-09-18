@@ -14,7 +14,7 @@ class MealsController < ApplicationController
 
   def work
     authorize Meal, :index?
-    @user = User.find(params[:uid]) if params[:uid].present?
+    @user = User.find(params[:user]) if params[:user].present?
     load_meals
     load_communities
   end
@@ -168,7 +168,7 @@ class MealsController < ApplicationController
       @meals = @meals.future.oldest_first
     end
     @meals = @meals.includes(:signups)
-    @meals = @meals.worked_by(params[:uid]) if params[:uid].present?
+    @meals = @meals.worked_by(params[:user]) if params[:user].present?
     @meals = @meals.hosted_by(params[:community]) if params[:community].present?
     @meals = @meals.page(params[:page])
   end

@@ -9,6 +9,9 @@
     <%= select_tag("community",
       options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
       prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
+    <% if %i(uid community).any? { |k| params[k].present? } %>
+      <%= link_to(icon_tag("times-circle"), request.path, class: "clear") %>
+    <% end %>
   </form>
 <% end %>
 

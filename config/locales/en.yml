@@ -28,6 +28,7 @@ en:
         allergen_almonds: "Almonds"
         allergen_pineapple: "Pineapple"
         allergen_bananas: "Bananas"
+        allergen_tofu: "Tofu"
         allergen_none: "None of these"
         asst_cooks: "Assistant Cooks"
         cleaners: "Cleaners"

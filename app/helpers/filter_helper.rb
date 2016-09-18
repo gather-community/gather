@@ -36,7 +36,7 @@ module FilterHelper
       return "" if objects[:communities].size < 1
 
       select_tag("community",
-        options_from_collection_for_select(objects[:communities], 'id', 'name', params[:community]),
+        options_from_collection_for_select(objects[:communities], 'lc_abbrv', 'name', params[:community]),
         prompt: "All Communities",
         class: "form-control",
         onchange: "this.form.submit();"

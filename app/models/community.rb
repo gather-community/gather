@@ -8,4 +8,8 @@ class Community < ActiveRecord::Base
   def self.find_by_abbrv(abbrv)
     where("LOWER(abbrv) = ?", abbrv.downcase).first
   end
+
+  def lc_abbrv
+    abbrv.downcase
+  end
 end

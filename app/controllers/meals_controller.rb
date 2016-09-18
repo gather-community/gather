@@ -169,7 +169,7 @@ class MealsController < ApplicationController
     end
     @meals = @meals.includes(:signups)
     @meals = @meals.worked_by(params[:user]) if params[:user].present?
-    @meals = @meals.hosted_by(params[:community]) if params[:community].present?
+    @meals = @meals.hosted_by(Community.find_by_abbrv(params[:community])) if params[:community].present?
     @meals = @meals.page(params[:page])
   end
 

@@ -6,8 +6,12 @@ class UsersController < ApplicationController
       format.html do
         load_communities
         @users = @users.includes(household: :community).by_active_and_name
-        @users = @users.matching(params[:search]) if params[:search].present?
-        @users = @users.in_community(params[:community]) if params[:community].present?
+        if params[:search].present?
+          @users = @users.matching(params[:search])
+        end
+        if params[:community].present?
+          @users = @users.in_community(Community.find_by_abbrv(params[:community]))
+        end
         @users = @users.page(params[:page])
       end
       format.json do

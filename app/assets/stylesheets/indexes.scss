@@ -1,19 +1,24 @@
 // Extra classes needed for specificity.
 .form-inline.index-filter {
   margin-bottom: 20px;
+  display: inline-block;
+  margin-right: 10px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 
   a {
     display: inline-block;
   }
 
-  select.form-control {
+  .form-control {
     width: 150px;
   }
 
   a.clear {
-    color: $main-text-color;
+    color: #666;
     display: inline-block;
-    margin-left: 5px;
     font-size: 16px;
   }
 }
@@ -44,22 +49,4 @@ table.index {
   font-weight: bold;
   text-align: center;
   margin-top: 40px;
-}
-
-.search-form {
-  white-space: nowrap;
-  width: 200px;
-  margin-bottom: 10px;
-  display: inline-block;
-
-  input.form-control {
-    display: inline;
-    width: inherit;
-  }
-
-  a {
-    color: $gray-text;
-    margin-left: -25px;
-    margin-right: 8px;
-  }
 }

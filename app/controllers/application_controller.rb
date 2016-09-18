@@ -40,6 +40,10 @@ class ApplicationController < ActionController::Base
     { root: false }
   end
 
+  def load_communities
+    @communities = Community.by_name
+  end
+
   private
 
   # Saves the location before loading each page so we can return to the right page after sign in.

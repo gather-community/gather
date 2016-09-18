@@ -9,6 +9,17 @@
    end %>
 
 <% content_for(:top_buttons) do %>
+  <form class="form-inline index-filter">
+    <% if @communities.size > 1 %>
+      <%= select_tag("community",
+        options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
+        prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
+    <% end %>
+    <% if %i(community).any? { |k| params[k].present? } %>
+      <%= link_to(icon_tag("times-circle"), request.path, class: "clear") %>
+    <% end %>
+  </form>
+
   <% if policy(Meal).finalize? && !params[:finalizable] %>
     <%= link_to(icon_tag("certificate") << " Finalizable Meals", meals_path(finalizable: 1), class: "btn btn-default") %>
   <% end %>

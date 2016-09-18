@@ -9,6 +9,7 @@ class MealsController < ApplicationController
     authorize Meal
     Meal.close_all_past!
     load_meals
+    load_communities
   end
 
   def work
@@ -174,10 +175,6 @@ class MealsController < ApplicationController
 
   def load_signups
     @signups = @meal.signups.host_community_first(@meal.host_community).sorted
-  end
-
-  def load_communities
-    @communities = Community.by_name
   end
 
   def prep_form_vars

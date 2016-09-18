@@ -4,8 +4,10 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
+        load_communities
         @users = @users.includes(household: :community).by_active_and_name
-        @users = @users.matching(params[:search]) if params[:search]
+        @users = @users.matching(params[:search]) if params[:search].present?
+        @users = @users.in_community(params[:community]) if params[:community].present?
         @users = @users.page(params[:page])
       end
       format.json do

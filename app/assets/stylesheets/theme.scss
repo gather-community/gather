@@ -39,7 +39,7 @@ a:hover {
 }
 
 .btn-default, a.btn-default {
-  background-color: #eee;
+  background-color: $faint-gray;
   color: #666;
 
   &:hover, &:active, &:focus {

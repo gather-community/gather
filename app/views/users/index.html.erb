@@ -1,11 +1,17 @@
 <% content_for(:title){ "Users" } %>
 
 <% content_for(:top_buttons) do %>
-  <form class="form-inline search-form">
+  <form class="form-inline index-filter">
+    <% if @communities.size > 1 %>
+      <%= select_tag("community",
+        options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
+        prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
+    <% end %>
+
     <%= text_field_tag("search", params[:search], placeholder: "Search Users...", class: "form-control") %>
-    <% unless params[:search].blank? %>
-      <%= link_to(icon_tag("times-circle"), "#",
-        onclick: "$('#search').val(''); $('.search-form').submit(); return false;") %>
+
+    <% if %i(community search).any? { |k| params[k].present? } %>
+      <%= link_to(icon_tag("times-circle"), request.path, class: "clear") %>
     <% end %>
   </form>
   &nbsp;

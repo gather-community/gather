@@ -6,9 +6,11 @@
       @user ? content_tag(:option, @user.name, value: @user.id, selected: "selected") : "",
       prompt: "All Users", class: "form-control", onchange: "this.form.submit();",
       data: { "select2-src" => "user" }) %>
-    <%= select_tag("community",
-      options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
-      prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
+    <% if @communities.size > 1 %>
+      <%= select_tag("community",
+        options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
+        prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
+    <% end %>
     <% if %i(uid community).any? { |k| params[k].present? } %>
       <%= link_to(icon_tag("times-circle"), request.path, class: "clear") %>
     <% end %>

@@ -1,8 +1,13 @@
-.index-filter {
+// Extra classes needed for specificity.
+.form-inline.index-filter {
   margin-bottom: 20px;
 
   a {
     display: inline-block;
+  }
+
+  select.form-control {
+    width: 150px;
   }
 }
 

@@ -13,8 +13,9 @@ class MealsController < ApplicationController
 
   def work
     authorize Meal, :index?
-    @user = params.has_key?(:uid) ? User.find_by(id: params[:uid]) : current_user
+    @user = User.find(params[:uid]) if params[:uid].present?
     load_meals
+    load_communities
   end
 
   def show
@@ -166,7 +167,8 @@ class MealsController < ApplicationController
       @meals = @meals.future.oldest_first
     end
     @meals = @meals.includes(:signups)
-    @meals = @meals.worked_by(@user) if @user.present?
+    @meals = @meals.worked_by(params[:uid]) if params[:uid].present?
+    @meals = @meals.hosted_by(params[:community]) if params[:community].present?
     @meals = @meals.page(params[:page])
   end
 
@@ -174,9 +176,13 @@ class MealsController < ApplicationController
     @signups = @meal.signups.host_community_first(@meal.host_community).sorted
   end
 
+  def load_communities
+    @communities = Community.by_name
+  end
+
   def prep_form_vars
     @meal.ensure_assignments
-    @communities = Community.by_name
+    load_communities
     @resource_options = Reservation::Resource.meal_hostable.by_full_name
   end
 

@@ -2,14 +2,13 @@
 
 <% content_for(:top_buttons) do %>
   <form class="form-inline index-filter">
-    <%= label_tag("uid", "Filter by User:") %>
     <%= select_tag("uid",
       @user ? content_tag(:option, @user.name, value: @user.id, selected: "selected") : "",
-      prompt: "Select User...", class: "form-control", onchange: "this.form.submit();",
+      prompt: "All Users", class: "form-control", onchange: "this.form.submit();",
       data: { "select2-src" => "user" }) %>
-    <% if @user.present? %>
-      &nbsp;<%= clear_work_filter_link("Show All Workers") %>
-    <% end %>
+    <%= select_tag("community",
+      options_from_collection_for_select(@communities, 'id', 'name', params[:community]),
+      prompt: "All Communities", class: "form-control", onchange: "this.form.submit();") %>
   </form>
 <% end %>
 

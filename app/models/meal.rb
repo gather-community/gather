@@ -31,6 +31,7 @@ class Meal < ActiveRecord::Base
   has_many :reservations, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }
+  scope :hosted_by, ->(community) { where(host_community: community) }
   scope :finalizable, -> { past.where("status != ?", "finalized") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
@@ -39,15 +40,8 @@ class Meal < ActiveRecord::Base
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
-  scope :worked_by, ->(user) do
-    includes(:assignments).where("assignments.user_id" => user.id)
-  end
-  scope :head_cooked_by, ->(user) do
-    worked_by(user).where("assignments.role = 'head_cook'")
-  end
-  scope :inviting, ->(user) do
-    includes(:invitations).where("invitations.community_id" => user.community_id)
-  end
+  scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
+  scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true

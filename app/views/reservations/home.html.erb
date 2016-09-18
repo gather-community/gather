@@ -1,12 +1,8 @@
 <% content_for(:title){ "Reservations" } %>
 
-<form class="form-inline index-filter">
-  <%= label_tag("community", "Community:") %>
-  <%= select_tag("community",
-    options_from_collection_for_select(@communities, "abbrv", "name", @community.abbrv),
-    class: "form-control",
-    onchange: "window.location.href = '/reservations/' + $(this).val().toLowerCase()") %>
-</form>
+<% content_for(:top_buttons) do %>
+  <%= filter_bar(:community, required: true) %>
+<% end %>
 
 <% if @resources.empty? %>
   No reservable resources found.

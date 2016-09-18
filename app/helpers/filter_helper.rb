@@ -1,25 +1,28 @@
 module FilterHelper
   def filter_bar(*fields)
-    FilterBar.new(self, fields: fields, params: params, objects: {
+    options = fields.last.is_a?(Hash) ? fields.pop : {}
+
+    FilterBar.new(self, fields: fields, params: params, options: options, objects: {
       communities: @communities,
       user: @user
     }).to_html
   end
 
   class FilterBar
-    attr_accessor :template, :fields, :params, :objects
+    attr_accessor :template, :fields, :params, :options, :objects
 
-    def initialize(template, fields:, params:, objects:)
+    def initialize(template, fields:, params:, options:, objects:)
       self.template = template
       self.fields = fields
       self.params = params
+      self.options = options
       self.objects = objects
     end
 
     def to_html
       content_tag(:form, class: "form-inline index-filter") do
         html = fields.map { |f| send("#{f}_filter") << " " }
-        html << clear_link
+        html << clear_link unless options[:required]
         html.reduce(:<<)
       end
     end
@@ -37,7 +40,7 @@ module FilterHelper
 
       select_tag("community",
         options_from_collection_for_select(objects[:communities], 'lc_abbrv', 'name', params[:community]),
-        prompt: "All Communities",
+        prompt: options[:required] ? nil : "All Communities",
         class: "form-control",
         onchange: "this.form.submit();"
       )

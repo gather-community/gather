@@ -1,6 +1,7 @@
 class ReservationsController < ApplicationController
   def index
-    @community = params[:community] ? Community.find_by_abbrv(params[:community]) : current_user.community
+    load_community
+
     return render nothing: true, status: 404 unless @community
 
     if params[:resource_id]
@@ -44,7 +45,7 @@ class ReservationsController < ApplicationController
       # We don't actually return any Reservations here.
       skip_policy_scope
 
-      @communities = Community.by_name.all
+      load_communities
       @resources = policy_scope(Reservation::Resource).where(community_id: @community.id)
       render("home")
     end
@@ -138,5 +139,14 @@ class ReservationsController < ApplicationController
   def redirect_to_reservation_in_context(reservation)
     redirect_to reservations_path_for_resource(reservation.resource,
       date: reservation.starts_at.to_s(:compact_date))
+  end
+
+  def load_community
+    if params[:community]
+      @community = Community.find_by_abbrv(params[:community])
+    else
+      @community = current_user.community
+      params[:community] = @community.lc_abbrv
+    end
   end
 end

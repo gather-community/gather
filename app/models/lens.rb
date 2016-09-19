@@ -24,12 +24,12 @@ class Lens
       self[f] = params[f] if params.has_key?(f)
     end
 
-    # Save the path if params explictly given, but clear path if all params are blank.
+    # Save the path if parms explictly given, but clear path if all params are blank.
     if (params.keys & fields.map(&:to_s)).present?
       if params.slice(*fields).values.all?(&:blank?)
         delete(:_path)
       else
-        self[:_path] = context.request.fullpath
+        self[:_path] = context.request.fullpath.gsub(/(&\w+=\z|\w+=&)/, "")
       end
     end
   end

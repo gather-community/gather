@@ -1,5 +1,8 @@
 class ReservationsController < ApplicationController
+  include Lensable
+
   def index
+    prepare_lens(:community)
     load_community
 
     return render nothing: true, status: 404 unless @community
@@ -142,11 +145,11 @@ class ReservationsController < ApplicationController
   end
 
   def load_community
-    if params[:community]
-      @community = Community.find_by_abbrv(params[:community])
+    if lens[:community]
+      @community = Community.find_by_abbrv(lens[:community])
     else
       @community = current_user.community
-      params[:community] = @community.lc_abbrv
+      lens[:community] = @community.lc_abbrv
     end
   end
 end

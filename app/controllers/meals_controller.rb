@@ -1,11 +1,11 @@
 class MealsController < ApplicationController
-  include MealShowable
+  include MealShowable, Lensable
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
 
   def index
-    params[:time]
+    prepare_lens(:community, :time)
 
     # Trivially, a meal in the past must be closed.
     authorize Meal
@@ -16,7 +16,8 @@ class MealsController < ApplicationController
 
   def work
     authorize Meal, :index?
-    @user = User.find(params[:user]) if params[:user].present?
+    prepare_lens(:user, :community)
+    @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
     load_communities
   end
@@ -162,18 +163,18 @@ class MealsController < ApplicationController
 
   def load_meals
     @meals = policy_scope(Meal)
-    if params[:time] == "finalizable"
+    if lens[:time] == "finalizable"
       @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
-    elsif params[:time] == "past"
+    elsif lens[:time] == "past"
       @meals = @meals.past.newest_first
-    elsif params[:time] == "all"
+    elsif lens[:time] == "all"
       @meals = @meals.oldest_first
     else
       @meals = @meals.future.oldest_first
     end
     @meals = @meals.includes(:signups)
-    @meals = @meals.worked_by(params[:user]) if params[:user].present?
-    @meals = @meals.hosted_by(Community.find_by_abbrv(params[:community])) if params[:community].present?
+    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
+    @meals = @meals.hosted_by(Community.find_by_abbrv(lens[:community])) if lens[:community].present?
     @meals = @meals.page(params[:page])
   end
 

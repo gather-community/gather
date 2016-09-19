@@ -1,16 +1,18 @@
 class UsersController < ApplicationController
+  include Lensable
 
   def index
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
+        prepare_lens(:community, :search)
         load_communities
         @users = @users.includes(household: :community).by_active_and_name
-        if params[:search].present?
-          @users = @users.matching(params[:search])
+        if lens[:search].present?
+          @users = @users.matching(lens[:search])
         end
-        if params[:community].present?
-          @users = @users.in_community(Community.find_by_abbrv(params[:community]))
+        if lens[:community].present?
+          @users = @users.in_community(Community.find_by_abbrv(lens[:community]))
         end
         @users = @users.page(params[:page])
       end

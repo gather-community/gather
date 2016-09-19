@@ -1,7 +1,7 @@
 <% content_for(:title){ "Reservations" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= filter_bar(:community, required: true) %>
+  <%= lens_bar(required: true) %>
 <% end %>
 
 <% if @resources.empty? %>

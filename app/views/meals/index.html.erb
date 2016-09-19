@@ -1,6 +1,6 @@
 <% content_for(:title, "Meals") %>
 <% content_for(:top_buttons) do %>
-  <%= filter_bar(:community, :meal_time) %>
+  <%= lens_bar %>
   <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if policy(Meal).create? %>
 <% end %>
 

@@ -1,7 +1,7 @@
 <% content_for(:title){ "Users" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= filter_bar(:community, :search) %>
+  <%= lens_bar %>
 
   <% if policy(User).create? %>
     <%= link_to(icon_tag("plus") << " Invite Users", invite_users_path, class: "btn btn-default") %>

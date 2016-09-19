@@ -5,6 +5,8 @@ class MealsController < ApplicationController
   before_action :create_worker_change_notifier, only: :update
 
   def index
+    params[:time]
+
     # Trivially, a meal in the past must be closed.
     authorize Meal
     Meal.close_all_past!
@@ -160,10 +162,12 @@ class MealsController < ApplicationController
 
   def load_meals
     @meals = policy_scope(Meal)
-    if params[:finalizable]
+    if params[:time] == "finalizable"
       @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
-    elsif params[:past]
+    elsif params[:time] == "past"
       @meals = @meals.past.newest_first
+    elsif params[:time] == "all"
+      @meals = @meals.oldest_first
     else
       @meals = @meals.future.oldest_first
     end

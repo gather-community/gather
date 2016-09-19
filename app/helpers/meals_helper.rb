@@ -8,7 +8,8 @@ module MealsHelper
   end
 
   def meal_date_time(meal)
-    content_tag(:span, meal.served_at.to_formatted_s(:short_date), class: "date") <<
+    date_fmt = params[:time] == "all" ? :short_date_with_year : :short_date
+    content_tag(:span, meal.served_at.to_formatted_s(date_fmt), class: "date") <<
       " ".html_safe << content_tag(:span, meal.served_at.to_formatted_s(:regular_time), class: "time")
   end
 

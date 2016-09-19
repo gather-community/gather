@@ -9,6 +9,8 @@ module FilterHelper
   end
 
   class FilterBar
+    PARAM_ALIASES = {meal_time: :time}
+
     attr_accessor :template, :fields, :params, :options, :objects
 
     def initialize(template, fields:, params:, options:, objects:)
@@ -27,8 +29,14 @@ module FilterHelper
       end
     end
 
+    private
+
+    def param_key(param)
+      PARAM_ALIASES[param] || param
+    end
+
     def clear_link
-      if fields.any? { |k| params[k].present? }
+      if fields.any? { |k| params[param_key(k)].present? }
         link_to(icon_tag("times-circle"), request.path, class: "clear")
       else
         ""
@@ -58,6 +66,17 @@ module FilterHelper
         class: "form-control",
         onchange: "this.form.submit();",
         data: { "select2-src" => "user" }
+      )
+    end
+
+    def meal_time_filter
+      opts = %w(past finalizable all)
+      opt_key = "simple_form.options.meal.time"
+      select_tag("time",
+        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, params[:time]),
+        prompt: "Upcoming",
+        class: "form-control",
+        onchange: "this.form.submit();"
       )
     end
 

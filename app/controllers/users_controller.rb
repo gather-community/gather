@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  include Lensable
-
   def index
     @users = policy_scope(User)
     respond_to do |format|

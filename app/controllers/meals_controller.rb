@@ -1,5 +1,5 @@
 class MealsController < ApplicationController
-  include MealShowable, Lensable
+  include MealShowable
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update

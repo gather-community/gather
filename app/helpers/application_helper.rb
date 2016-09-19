@@ -35,8 +35,11 @@ module ApplicationHelper
       active = params[:controller] == controller && params[:action] == action
       name = t("nav_links.#{route_key}")
 
+      path = Lens.path_for(context: self, controller: controller, action: action) ||
+        send("#{route_key}_path")
+
       if policy(klass).send("#{action}?")
-        link = link_to(name, send("#{route_key}_path"), class: "icon-bar")
+        link = link_to(name, path, class: "icon-bar")
         content_tag(:li, link, class: active ? "active" : nil)
       else
         nil

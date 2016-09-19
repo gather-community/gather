@@ -1,6 +1,4 @@
 class ReservationsController < ApplicationController
-  include Lensable
-
   def index
     prepare_lens(:community)
     load_community

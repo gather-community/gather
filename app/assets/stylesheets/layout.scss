@@ -98,11 +98,6 @@ nav.navbar {
 #content {
   padding: 20px;
   line-height: 180%;
-
-  h1 {
-    margin-top: 0;
-    margin-bottom: 25px;
-  }
 }
 
 table {
@@ -120,9 +115,74 @@ div.alert a {
   text-decoration: underline;
 }
 
-div.top-buttons {
-  float: right;
-  margin-bottom: 10px;
+div.title-and-buttons {
+  margin-bottom: 20px;
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  // Extra classes needed for specificity.
+  .form-inline.lens-bar {
+    display: inline-block;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @media screen and (min-width: $grid-float-breakpoint) {
+      margin-right: 10px;
+
+      .form-control {
+        width: 150px;
+      }
+
+      a.clear {
+        color: #666;
+        display: inline-block;
+        font-size: 16px;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    @media screen and (max-width: $grid-float-breakpoint) {
+      display: block;
+
+      .form-control {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      a.clear {
+        display: block;
+        margin-top: -5px;
+      }
+    }
+  }
+
+  @media screen and (min-width: $grid-float-breakpoint) {
+    display: table;
+    width: 100%;
+
+    h1, div.top-buttons {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+    div.top-buttons {
+      text-align: right;
+
+      > * {
+        text-align: left;
+      }
+    }
+  }
 }
 
 p.subtitle {

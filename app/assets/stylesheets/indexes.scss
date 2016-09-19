@@ -1,28 +1,3 @@
-// Extra classes needed for specificity.
-.form-inline.lens-bar {
-  margin-bottom: 20px;
-  display: inline-block;
-  margin-right: 10px;
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  a {
-    display: inline-block;
-  }
-
-  .form-control {
-    width: 150px;
-  }
-
-  a.clear {
-    color: #666;
-    display: inline-block;
-    font-size: 16px;
-  }
-}
-
 table.index {
   tr.inactive {
     td, td a {

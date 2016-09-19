@@ -26,7 +26,7 @@ module LensHelper
       if lens.blank?
         ""
       else
-        link_to(icon_tag("times-circle"),
+        link_to(icon_tag("times-circle") << " " << content_tag(:span, "Clear Filter"),
           request.path << "?" << lens.fields.map { |f| "#{f}=" }.join("&"),
           class: "clear")
       end

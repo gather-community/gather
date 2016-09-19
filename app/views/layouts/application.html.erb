@@ -60,11 +60,12 @@
 
       <%= flash_messages %>
 
-      <div class="top-buttons">
-        <%= yield(:top_buttons) %>
+      <div class="title-and-buttons">
+        <h1><%= @title %></h1>
+        <div class="top-buttons">
+          <%= yield(:top_buttons) %>
+        </div>
       </div>
-
-      <h1><%= @title %></h1>
 
       <%= yield %>
     </div>

@@ -127,7 +127,7 @@ describe UserPolicy do
 
       it "should allow basic attribs" do
         expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
-          :home_phone, :work_phone, :admin, :google_email, :household_id)
+          :home_phone, :work_phone, :admin, :google_email, :household_id, :alternate_id)
       end
     end
   end

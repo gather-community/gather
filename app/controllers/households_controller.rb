@@ -5,7 +5,15 @@ class HouseholdsController < ApplicationController
     @households = policy_scope(Household)
     respond_to do |format|
       format.html do
-        @households = @households.includes(:users).by_active_and_name.page(params[:page])
+        prepare_lens(:community, :search)
+        @households = @households.includes(:users)
+        if lens[:search].present?
+          @households = @households.matching(lens[:search])
+        end
+        if lens[:community].present?
+          @households = @households.in_community(Community.find_by_abbrv(lens[:community]))
+        end
+        @households = @households.by_active_and_name.page(params[:page])
       end
       format.json do
         @households = @households.active.matching(params[:search])

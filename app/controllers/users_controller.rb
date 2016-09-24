@@ -5,14 +5,14 @@ class UsersController < ApplicationController
       format.html do
         prepare_lens(:community, :search)
         load_communities
-        @users = @users.includes(household: :community).by_active_and_name
+        @users = @users.includes(household: :community)
         if lens[:search].present?
           @users = @users.matching(lens[:search])
         end
         if lens[:community].present?
           @users = @users.in_community(Community.find_by_abbrv(lens[:community]))
         end
-        @users = @users.page(params[:page])
+        @users = @users.by_active_and_name.page(params[:page])
       end
       format.json do
         @users = @users.matching(params[:search]).active

@@ -2,6 +2,7 @@
 
 <% content_for(:top_buttons) do %>
   <%= lens_bar(required: true) %>
+  <%= calendar_exports_link %>
 <% end %>
 
 <% if @resources.empty? %>

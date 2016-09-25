@@ -5,6 +5,7 @@
     <%= link_to(icon_tag("plus") << " Create Reservation",
       new_reservation_path_for_resource(@resource),
       class: "btn btn-default") %>
+    <%= calendar_exports_link %>
   <% end %>
 <% end %>
 

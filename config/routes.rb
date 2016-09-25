@@ -35,7 +35,10 @@ Rails.application.routes.draw do
     community: /[a-z][a-z0-9]?/, as: :new_reservation
   resources :reservations, except: [:index, :new]
 
+  resources :calendar_exports, only: [:index, :show], path: "calendars"
+
   resources :signups
+
   resources :households do
     member do
       get :accounts

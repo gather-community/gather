@@ -44,6 +44,10 @@
                     accounts_household_path(current_user.household)) %>
                 </li>
                 <li>
+                  <%= link_to(icon_tag("calendar") << " Calendars",
+                    calendar_exports_path) %>
+                </li>
+                <li>
                   <%= link_to(icon_tag("sign-out") << " Log out",
                     destroy_user_session_path, method: :delete) %>
                 </li>

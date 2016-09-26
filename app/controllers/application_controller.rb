@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  helper_method :home_path, :current_community
+  helper_method :home_path, :current_community, :multi_community?
 
   def set_validation_error_notice
     flash.now[:error] = "Please correct the errors below."
@@ -42,6 +42,11 @@ class ApplicationController < ActionController::Base
 
   def load_communities
     @communities = Community.by_name
+  end
+
+  def multi_community?
+    return @multi_community if defined?(@multi_community)
+    @multi_community = Community.multiple?
   end
 
   private

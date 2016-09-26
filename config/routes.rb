@@ -35,7 +35,13 @@ Rails.application.routes.draw do
     community: /[a-z][a-z0-9]?/, as: :new_reservation
   resources :reservations, except: [:index, :new]
 
-  resources :calendar_exports, only: [:index, :show], path: "calendars"
+  resources :calendar_exports, only: [:index], path: "calendars" do
+    member do
+      # This is the show action, allowing paths to include the user's calendar token,
+      # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4
+      get ":token", to: "calendar_exports#show", as: ""
+    end
+  end
 
   resources :signups
 

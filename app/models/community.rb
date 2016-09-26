@@ -9,6 +9,10 @@ class Community < ActiveRecord::Base
     where("LOWER(abbrv) = ?", abbrv.downcase).first
   end
 
+  def self.multiple?
+    count > 1
+  end
+
   def lc_abbrv
     abbrv.downcase
   end

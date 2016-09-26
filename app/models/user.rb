@@ -82,6 +82,14 @@ class User < ActiveRecord::Base
     PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
   end
 
+  def ensure_calendar_token!
+    reset_calendar_token! unless calendar_token.present?
+  end
+
+  def reset_calendar_token!
+    update_attribute(:calendar_token, SecureRandom.hex(16))
+  end
+
   private
 
   def at_least_one_phone

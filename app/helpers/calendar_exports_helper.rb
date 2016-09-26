@@ -7,4 +7,18 @@ module CalendarExportsHelper
       end
     end
   end
+
+  def calendar_link(label, id)
+    content_tag(:div) do
+      url = calendar_export_url(id, token: current_user.calendar_token, format: :ics)
+      link_to(icon_tag("calendar"), url) <<
+      " " <<
+      link_to(label, url) <<
+      " " <<
+      link_to("Copy", url,
+        class: "copy",
+        onclick: "copyTextToClipboard('#{url}'); return false"
+      )
+    end
+  end
 end

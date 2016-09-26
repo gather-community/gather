@@ -13,3 +13,58 @@ a.calendar-export {
     margin-top: -4px;
   }
 }
+
+.calendar-exports.action-index {
+  .links-and-note {
+    @media screen and (min-width: $grid-float-breakpoint) {
+      display: table;
+      width: 100%;
+
+      > div {
+        display: table-cell;
+        vertical-align: top;
+      }
+
+      .note {
+        width: 300px;
+      }
+    }
+  }
+
+  .links {
+    margin-bottom: 20px;
+
+    div {
+      font-size: 1.1em;
+      line-height: 1.8em;
+
+      i.fa {
+        color: $gray-text;
+        margin: 0 10px 0 20px;
+      }
+    }
+
+    a.copy {
+      display: inline-block;
+      margin-left: 5px;
+      color: $gray-text;
+      font-size: 0.7em;
+    }
+  }
+
+  .note {
+    div {
+      background-color: #eee;
+      padding: 20px;
+
+      h5 {
+        color: $theme-main;
+        margin-top: 0;
+      }
+    }
+  }
+
+  .instructions {
+    margin-top: 30px;
+  }
+}

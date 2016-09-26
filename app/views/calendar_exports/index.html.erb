@@ -1,3 +1,50 @@
 <% content_for(:title, "Calendars") %>
 
-Foo
+<div class="links-and-note">
+  <div class="links">
+    <p>You can view MESS calendars in your favorite calendar app:</p>
+
+    <%= calendar_link("Meals You're Attending", "meals") %>
+    <%= calendar_link("All Meals", "all-meals") %>
+    <%= calendar_link("#{current_community.name} Meals", "community-meals") if multi_community? %>
+    <%= calendar_link("Your Meal Work Shifts", "shifts") %>
+    <%= calendar_link("#{multi_community? ? current_community.name : ''} Reservations", "reservations") %>
+  </div>
+
+  <div class="note">
+    <div>
+      <h5><%= icon_tag("share-alt") %> A Note on Sharing</h5>
+      Calendar links are tailored and unique to you, so don't share them. If you want to tell
+      someone about this fun feature, send them the
+      <%= link_to("link to this page", calendar_exports_path) %>,
+      not an individual calendar.
+    </div>
+  </div>
+</div>
+
+<div class="instructions">
+  <h4>Instructions</h4>
+
+  <h5><%= icon_tag("google") %> Google Calendar</h5>
+
+  <ol>
+    <li>Click 'Copy' above to copy the calendar URL to the clipboard.</li>
+    <li>On the left of the Google Calendar screen, click the small down arrow next to 'Other Calendars'.</li>
+    <li>Click 'Add by URL'.</li>
+    <li>Paste the URL you copied above.</li>
+    <li>Click 'Add Calendar'.</li>
+    <li>The events should appear on your calendar after a few seconds.</li>
+  </ol>
+
+  <h5><%= icon_tag("apple") %> iCal</h5>
+
+  <ol>
+    <li>Click 'Copy' above to copy the calendar URL to the clipboard.</li>
+    <li>Open iCal.</li>
+    <li>Click the 'File' menu.</li>
+    <li>Click 'Subscribe' or 'New Calendar Subscription'.</li>
+    <li>Paste the URL you copied above.</li>
+    <li>Click OK.</li>
+    <li>The events should now appear on your calendar.</li>
+  </ol>
+</div>

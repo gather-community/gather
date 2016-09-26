@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     member do
       # This is the show action, allowing paths to include the user's calendar token,
       # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4
-      get ":token", to: "calendar_exports#show", as: ""
+      get ":calendar_token", to: "calendar_exports#show", as: ""
     end
   end
 

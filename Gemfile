@@ -85,5 +85,9 @@ group :development, :test do
   gem "awesome_print"
   gem 'term-ansicolor'
 
+  gem "capybara", "~> 2.0"
+  gem "capybara-screenshot", "~> 1.0"
+  gem "selenium-webdriver", "~> 2.0"
+  gem "poltergeist", "~> 1.0"
 end
 

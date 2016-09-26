@@ -10,7 +10,7 @@ module CalendarExportsHelper
 
   def calendar_link(label, id)
     content_tag(:div) do
-      url = calendar_export_url(id, token: current_user.calendar_token, format: :ics)
+      url = calendar_export_url(id, calendar_token: current_user.calendar_token, format: :ics)
       link_to(icon_tag("calendar"), url) <<
       " " <<
       link_to(label, url) <<

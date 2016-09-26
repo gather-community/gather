@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
   end
 
   def reset_calendar_token!
-    update_attribute(:calendar_token, SecureRandom.hex(16))
+    update_attribute(:calendar_token, generate_token)
   end
 
   private
@@ -98,5 +98,12 @@ class User < ActiveRecord::Base
 
   def no_phones?
     [home_phone, mobile_phone, work_phone].compact.empty?
+  end
+
+  def generate_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(authentication_token: token).first
+    end
   end
 end

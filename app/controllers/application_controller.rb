@@ -60,4 +60,13 @@ class ApplicationController < ActionController::Base
     return if devise_controller? || request.fullpath == '/'
     store_location_for(:user, request.url)
   end
+
+  # Currently we are only checking for calendar_token, but could add others later.
+  def authenticate_user_from_token!
+    if params[:calendar_token] && user = User.find_by_calendar_token(params[:calendar_token])
+      # We are passing store false, so the user is not
+      # actually stored in the session and a token is needed for every request.
+      sign_in user, store: false
+    end
+  end
 end

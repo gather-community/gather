@@ -30,7 +30,7 @@ module Reservation
     end
 
     def permitted_attributes
-      attribs = %i(name kind resource_id sponsor_id starts_at ends_at guidelines_ok)
+      attribs = %i(name kind resource_id sponsor_id starts_at ends_at note guidelines_ok)
       attribs << :reserver_id if choose_reserver?
       attribs
     end

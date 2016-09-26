@@ -4,6 +4,8 @@ class FixedMealCostCalculator < MealCostCalculator
     :fixed
   end
 
+  # Calculates the maximum the cook can spend on ingredients to stay within the
+  # fixed maximum meal cost per person.
   def max_ingredient_cost
     sum_product
   end

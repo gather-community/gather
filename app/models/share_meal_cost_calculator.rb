@@ -4,8 +4,14 @@ class ShareMealCostCalculator < MealCostCalculator
     :share
   end
 
+  # Calculates the maximum amount the cook can spend on ingredients in order for
+  # the meal to cost the given amount per adult.
   def max_ingredient_cost_for_per_adult_cost(per_adult_cost)
-    per_adult_cost * adult_equivs
+    if formula.fixed_pantry?
+      adult_equivs * (per_adult_cost - formula.pantry_fee)
+    else
+      adult_equivs * per_adult_cost / (formula.pantry_fee + 1)
+    end
   end
 
   protected

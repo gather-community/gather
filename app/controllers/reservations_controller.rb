@@ -1,10 +1,5 @@
 class ReservationsController < ApplicationController
   def index
-    prepare_lens(:community)
-    load_community
-
-    return render nothing: true, status: 404 unless @community
-
     if params[:resource_id]
       @resource = Reservation::Resource.find(params[:resource_id])
 
@@ -30,16 +25,19 @@ class ReservationsController < ApplicationController
 
         @rule_set = @sample_reservation.rule_set
         if @rule_set.access_level == "read_only"
-          flash.now[:notice] = "Only #{@community.name} residents may reserve this resource."
+          flash.now[:notice] = "Only #{@resource.community_name} residents may reserve this resource."
         end
 
         @other_resources = policy_scope(Reservation::Resource).
-          where(community_id: @community.id).
+          where(community_id: @resource.community_id).
           where("id != ?", @resource.id)
-        @other_communities = Community.where("id != ?", @community.id)
+        @other_communities = Community.where("id != ?", @resource.community_id)
         render("calendar")
       end
     else
+      prepare_lens(:community)
+      load_community
+
       authorize Reservation::Reservation
 
       # This will happen in JSON mode.

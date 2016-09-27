@@ -18,6 +18,8 @@ module Reservation
     scope :visible, ->{ where(hidden: false) }
     scope :hidden, ->{ where(hidden: true) }
 
+    delegate :name, to: :community, prefix: true
+
     def full_name
       "#{community.abbrv} #{name}"
     end

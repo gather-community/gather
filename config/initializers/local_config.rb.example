@@ -9,6 +9,9 @@ Mess::Application.config.secret_key_base = "xxx"
 # The hostname of your server. Enter `localhost` for a standard development setup.
 Rails.configuration.x.host = "example.com"
 
+# The protocol to be used when building URLs.
+Rails.configuration.x.protocol = "https"
+
 Rails.configuration.action_mailer.smtp_settings = {
   address: "example.com",
   port: 587,

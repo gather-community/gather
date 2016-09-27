@@ -8,5 +8,7 @@ class CalendarExportsController < ApplicationController
 
   def show
     skip_authorization
+    data = CalendarExporter.new(params[:id].gsub("-", "_"), current_user).generate
+    send_data(data, filename: "#{params[:id]}.ics", type: "text/calendar")
   end
 end

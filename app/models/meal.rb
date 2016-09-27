@@ -40,8 +40,10 @@ class Meal < ActiveRecord::Base
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
+  scope :with_max_age, ->(age) { where("served_at >= ?", Time.now - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
   scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
+  scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
@@ -114,6 +116,15 @@ class Meal < ActiveRecord::Base
 
   def community_ids
     invitations.map(&:community_id)
+  end
+
+  # Duck type for calendaring.
+  def starts_at
+    served_at
+  end
+
+  def ends_at
+    served_at + 1.hour
   end
 
   def location_name

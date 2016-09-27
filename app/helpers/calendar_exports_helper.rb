@@ -8,14 +8,16 @@ module CalendarExportsHelper
     end
   end
 
-  def calendar_link(label, id)
+  def calendar_link(type)
     content_tag(:div) do
-      url = calendar_export_url(id, calendar_token: current_user.calendar_token, format: :ics)
-      link_to(icon_tag("calendar"), url) <<
-      " " <<
-      link_to(label, url) <<
-      " " <<
-      link_to("Copy", url,
+      url = calendar_export_url(type.gsub("_", "-"),
+        calendar_token: current_user.calendar_token,
+        format: :ics
+      )
+
+      link_to(icon_tag("calendar"), url) << " " <<
+      link_to(CalendarExporter.new(type, current_user).name, url) << " " <<
+      link_to("Copy Link", url,
         class: "copy",
         onclick: "copyTextToClipboard('#{url}'); return false"
       )

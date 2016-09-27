@@ -4,8 +4,22 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :meal
 
+  delegate :location_name, to: :meal
+
   def empty?
     user_id.blank?
+  end
+
+  def starts_at
+    meal.served_at + Settings.default_shift_times.start[role].minutes
+  end
+
+  def ends_at
+    meal.served_at + Settings.default_shift_times.end[role].minutes
+  end
+
+  def title
+    I18n.t("assignment_roles.#{role}") << ": " << meal.title_or_no_title
   end
 
   def <=>(other)

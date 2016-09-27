@@ -1,7 +1,7 @@
 <% content_for(:title, "Calendars") %>
 
-<div class="links-and-note">
-  <div class="links">
+<div id="links-and-note">
+  <div id="links">
     <p>You can view MESS calendars in your favorite calendar app:</p>
 
     <%= calendar_link("meals") %>
@@ -11,7 +11,7 @@
     <%= calendar_link("reservations") %>
   </div>
 
-  <div class="note">
+  <div id="note">
     <div>
       <h5><%= icon_tag("share-alt") %> A Note on Sharing</h5>
       Calendar links are tailored and unique to you, so don't share them. If you want to tell
@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<div class="instructions">
+<div id="instructions">
   <h4>Instructions</h4>
 
   <h5><%= icon_tag("google") %> Google Calendar</h5>
@@ -49,3 +49,9 @@
     <li>The events should now appear on your calendar.</li>
   </ol>
 </div>
+
+<small id="reset">
+  If you accidentally share your calendar links and want to make them private again,
+  <%= link_to("click here to reset your secret token", reset_token_calendar_exports_path, method: :put) %>.
+  Note: This will make the old links inoperative, so you will need to update your calendar app.
+</small>

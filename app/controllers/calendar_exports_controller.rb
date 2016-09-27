@@ -11,4 +11,11 @@ class CalendarExportsController < ApplicationController
     data = CalendarExporter.new(params[:id].gsub("-", "_"), current_user).generate
     send_data(data, filename: "#{params[:id]}.ics", type: "text/calendar")
   end
+
+  def reset_token
+    skip_authorization
+    current_user.reset_calendar_token!
+    flash[:success] = "Token reset successfully."
+    redirect_to(calendar_exports_path)
+  end
 end

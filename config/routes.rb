@@ -41,6 +41,9 @@ Rails.application.routes.draw do
       # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4
       get ":calendar_token", to: "calendar_exports#show", as: ""
     end
+    collection do
+      put :reset_token
+    end
   end
 
   resources :signups

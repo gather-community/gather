@@ -15,7 +15,7 @@ a.calendar-export {
 }
 
 .calendar-exports.action-index {
-  .links-and-note {
+  #links-and-note {
     @media screen and (min-width: $grid-float-breakpoint) {
       display: table;
       width: 100%;
@@ -25,18 +25,19 @@ a.calendar-export {
         vertical-align: top;
       }
 
-      .note {
+      #note {
         width: 300px;
       }
     }
   }
 
-  .links {
+  #links {
     margin-bottom: 20px;
 
     div {
       font-size: 1.1em;
-      line-height: 1.8em;
+      line-height: 1.1em;
+      margin-bottom: 10px;
 
       i.fa {
         color: $gray-text;
@@ -46,13 +47,13 @@ a.calendar-export {
 
     a.copy {
       display: inline-block;
-      margin-left: 5px;
+      margin-left: 49px;
       color: $gray-text;
       font-size: 0.7em;
     }
   }
 
-  .note {
+  #note {
     div {
       background-color: #eee;
       padding: 20px;
@@ -64,7 +65,11 @@ a.calendar-export {
     }
   }
 
-  .instructions {
+  #instructions {
     margin-top: 30px;
+  }
+
+  #reset {
+    margin-top: 20px;
   }
 }

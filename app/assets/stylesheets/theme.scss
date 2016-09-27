@@ -25,6 +25,12 @@ p.inner {
   margin-top: $large-margin;
 }
 
+small {
+  display: inline-block;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
 a, a:visited {
   color: $theme-accent;
 }

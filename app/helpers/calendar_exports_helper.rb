@@ -16,7 +16,7 @@ module CalendarExportsHelper
       )
 
       link_to(icon_tag("calendar"), url) << " " <<
-      link_to(CalendarExporter.new(type, current_user).name, url) << " " <<
+      link_to(CalendarExporter.new(type, current_user).name, url) << tag(:br) <<
       link_to("Copy Link", url,
         class: "copy",
         onclick: "copyTextToClipboard('#{url}'); return false"

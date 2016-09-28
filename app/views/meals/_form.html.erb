@@ -75,14 +75,25 @@
       <%= link_to_add_association 'Add Assistant Cook', f, :asst_cook_assigns %>
     </div>
 
+    <% if @meal.host_community.settings[:has_table_setters] %>
+
+      <%= f.simple_fields_for :table_setter_assigns do |table_setter| %>
+        <%= render('table_setter_assign_fields', f: table_setter) %>
+      <% end %>
+
+      <div class="links col-sm-10 col-sm-offset-2">
+        <%= link_to_add_association 'Add Table Setter', f, :table_setter_assigns %>
+      </div>
+
+    <% end %>
+
     <%= f.simple_fields_for :cleaner_assigns do |cleaner| %>
       <%= render('cleaner_assign_fields', f: cleaner) %>
     <% end %>
 
-  </div>
-
-  <div class="links col-sm-10 col-sm-offset-2">
-    <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
+    <div class="links col-sm-10 col-sm-offset-2">
+      <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
+    </div>
   </div>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>

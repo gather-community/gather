@@ -1,12 +1,30 @@
 table.index {
+  width: 100%;
+
+  &.part-width {
+    width: auto;
+  }
+
   tr.inactive {
     td, td a {
       color: $inactive-color;
     }
   }
 
-  .action-icons {
+  th, td {
     padding-right: 10px;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    &.nowrap {
+      white-space: nowrap;
+    }
+  }
+
+  .action-icons {
+    padding-right: 3px;
   }
 
   i.fa { // Icons

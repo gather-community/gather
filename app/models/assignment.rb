@@ -1,5 +1,5 @@
 class Assignment < ActiveRecord::Base
-  ROLES = %w(head_cook asst_cook cleaner) # In order
+  ROLES = %w(head_cook asst_cook table_setter cleaner) # In order
 
   belongs_to :user
   belongs_to :meal

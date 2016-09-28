@@ -7,6 +7,7 @@ reminder_lead_times:
   shift:
     head_cook: 3
     asst_cook: 2
+    table_setter: 2
     cleaner: 2
   cook_menu:
     early: 10

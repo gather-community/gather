@@ -7,10 +7,11 @@ module MealsHelper
     meal.signup_for(current_user.household).present? ? "signed-up" : ""
   end
 
-  def meal_date_time(meal)
+  def meal_date_time(meal, with_break: false)
     date_fmt = params[:time] == "all" ? :short_date_with_year : :short_date
+    spacer = with_break ? tag(:br) : " "
     content_tag(:span, meal.served_at.to_formatted_s(date_fmt), class: "date") <<
-      " ".html_safe << content_tag(:span, meal.served_at.to_formatted_s(:regular_time), class: "time")
+      spacer << content_tag(:span, meal.served_at.to_formatted_s(:regular_time), class: "time")
   end
 
   def meal_action_icons(meal, options = {})

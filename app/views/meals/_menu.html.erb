@@ -15,6 +15,15 @@
         <div class="job"><%= user_link(u) %></div>
       <% end %>
     </div>
+    <% if @meal.host_community.settings[:has_table_setters] %>
+      <div class="chunk">
+        Table Setters:
+        <%= "[None]" if @meal.table_setters.empty? %>
+        <% @meal.table_setters.each do |u| %>
+          <div class="job"><%= user_link(u) %></div>
+        <% end %>
+      </div>
+    <% end %>
     <div class="chunk">
       Cleaners:
       <%= "[None]" if @meal.cleaners.empty? %>

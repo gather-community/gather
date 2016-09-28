@@ -73,6 +73,7 @@ class MealPolicy < ApplicationPolicy
     permitted = [{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
+      :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
       :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
     }]
 

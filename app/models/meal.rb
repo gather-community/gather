@@ -5,6 +5,7 @@ class Meal < ActiveRecord::Base
   DEFAULT_CAPACITY = 64
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds pineapple bananas tofu none)
   DEFAULT_ASST_COOKS = 2
+  DEFAULT_TABLE_SETTERS = 1
   DEFAULT_CLEANERS = 3
   MENU_ITEMS = %w(entrees side kids dessert notes)
   PAYMENT_METHODS = %w(check credit)
@@ -16,9 +17,11 @@ class Meal < ActiveRecord::Base
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
+  has_many :table_setter_assigns, ->{ where(role: "table_setter") }, class_name: "Assignment"
   has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
   has_one :head_cook, through: :head_cook_assign, source: :user
   has_many :asst_cooks, through: :asst_cook_assigns, source: :user
+  has_many :table_setters, through: :table_setter_assigns, source: :user
   has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
@@ -47,6 +50,7 @@ class Meal < ActiveRecord::Base
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true,
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
@@ -107,6 +111,9 @@ class Meal < ActiveRecord::Base
   def ensure_assignments
     build_head_cook_assign if head_cook_assign.nil?
     (DEFAULT_ASST_COOKS - asst_cook_assigns.size).times{ asst_cook_assigns.build }
+    if host_community.settings[:has_table_setters]
+      (DEFAULT_TABLE_SETTERS - table_setter_assigns.size).times{ table_setter_assigns.build }
+    end
     (DEFAULT_CLEANERS - cleaner_assigns.size).times{ cleaner_assigns.build }
   end
 
@@ -279,7 +286,7 @@ class Meal < ActiveRecord::Base
   end
 
   def no_double_assignments
-    %w(asst_cook cleaner).each do |role|
+    %w(asst_cook table_setter cleaner).each do |role|
       marked_user_ids = {}
       send("#{role}_assigns").each do |a|
         if marked_user_ids[a.user_id]

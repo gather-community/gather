@@ -112,7 +112,7 @@ describe Reservation::ReservationPolicy do
 
       it "should allow appropriate attribs" do
         expect(subject).to contain_exactly(*%i(name kind resource_id
-          sponsor_id starts_at ends_at guidelines_ok))
+          sponsor_id starts_at ends_at guidelines_ok note))
       end
     end
 
@@ -121,7 +121,7 @@ describe Reservation::ReservationPolicy do
 
       it "should allow appropriate attribs" do
         expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
-          sponsor_id starts_at ends_at guidelines_ok))
+          sponsor_id starts_at ends_at guidelines_ok note))
       end
     end
   end

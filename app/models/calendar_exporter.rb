@@ -1,6 +1,8 @@
 # Generates ICS files for various calendars in the system.
 require 'icalendar'
 class CalendarExporter
+  class CalendarTypeError < StandardError; end
+
   MAX_EVENT_AGE = 1.year
   CALENDAR_TYPES = %w(meals community_meals all_meals shifts reservations)
   UID_SIGNATURE = "91a772a5ae4a"
@@ -9,12 +11,12 @@ class CalendarExporter
 
   def initialize(type, user)
     self.type = type
-    raise "Invalid calendar type #{type}" unless CALENDAR_TYPES.include?(type)
+    raise CalendarTypeError unless CALENDAR_TYPES.include?(type)
     self.user = user
   end
 
   def name
-    I18n.t("calendars.#{type}", community: Community.multiple? ? user.community_name : "")
+    I18n.t("calendars.#{type}", community: Community.multiple? ? user.community_name : "").strip
   end
 
   def generate

@@ -21,6 +21,7 @@ class CalendarExporter
 
   def generate
     cal = Icalendar::Calendar.new
+    cal.timezone { |t| t.tzid = Time.zone.tzinfo.name }
 
     if objects.present?
       class_name = objects.first.class.name.underscore
@@ -33,7 +34,6 @@ class CalendarExporter
           e.location = obj.location_name
           e.summary = summary(obj)
           e.url = url(obj)
-          e.ip_class = "PRIVATE"
         end
       end
     end

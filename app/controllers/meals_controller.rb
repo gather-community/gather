@@ -100,7 +100,7 @@ class MealsController < ApplicationController
   def do_finalize
     @meal = Meal.find(params[:id])
     authorize @meal, :finalize?
-    @meal.assign_attributes(finalize_params.merge(status: "finalized"))
+    @meal.assign_attributes(finalize_params)
 
     if (@dupes = @meal.duplicate_signups).any?
       flash.now[:error] = "There are duplicate signups. "\
@@ -108,8 +108,7 @@ class MealsController < ApplicationController
       render(:finalize)
     elsif @meal.valid?
       Meal.transaction do
-        @meal.save
-        Finalizer.new(@meal).finalize!
+        Meals::Finalizer.new(@meal).finalize!
       end
       flash[:success] = "Meal finalized successfully"
       redirect_to(meals_path(finalizable: 1))

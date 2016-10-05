@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :meal do
     transient do
-      communiites []
+      communities []
       no_resources false
     end
 

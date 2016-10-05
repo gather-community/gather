@@ -27,6 +27,7 @@ class Meal < ActiveRecord::Base
   has_many :communities, through: :invitations
   has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
   has_many :households, through: :signups
+  has_one :meal_cost, dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
   has_many :reservation_resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
@@ -58,6 +59,7 @@ class Meal < ActiveRecord::Base
   delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
+  delegate :pantry_cost, :ingredient_cost, to: :meal_cost
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.

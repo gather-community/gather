@@ -1,5 +1,7 @@
 class MealCostCalculator
 
+  delegate :meal_calc_type, :pantry_calc_type, :pantry_fee, to: :formula
+
   def self.build(meal)
     formula = Formula.for_meal(meal)
     case formula.meal_calc_type
@@ -21,9 +23,9 @@ class MealCostCalculator
 
   # Returns a price for the given signup type, rounded to the nearest cent.
   def price_for(signup_type)
-    return prices[signup_type] if prices[signup_type].present?
+    return prices[signup_type] if prices.has_key?(signup_type)
     base_price = base_price_for(signup_type)
-    self.prices[signup_type] = (base_price + pantry_fee_for(base_price)).round(2)
+    self.prices[signup_type] = base_price ? (base_price + pantry_fee_for(base_price)).round(2) : nil
   end
 
   protected

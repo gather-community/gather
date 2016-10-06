@@ -1,10 +1,11 @@
 # Finalizes meals
 module Meals
   class Finalizer
-    attr_accessor :meal
+    attr_accessor :meal, :meal_cost
 
     def initialize(meal)
       self.meal = meal
+      self.meal_cost = meal.meal_cost
     end
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
@@ -12,10 +13,10 @@ module Meals
     # Assumes that meal is valid and ready to be saved.
     def finalize!
       create_diner_transactions
-      create_reimbursement_transaction if meal.payment_method == "credit"
+      create_reimbursement_transaction if meal_cost.payment_method == "credit"
       copy_meal_costs
-      @meal.status = "finalized"
-      @meal.save!
+      meal.status = "finalized"
+      meal.save!
     end
 
     private
@@ -56,11 +57,11 @@ module Meals
       attribs = {}
       meal.allowed_signup_types.each { |st| attribs[st] = calculator.price_for(st) }
       %i(meal_calc_type pantry_calc_type pantry_fee).each { |a| attribs[a] = calculator.send(a) }
-      meal.meal_cost.update_attributes!(attribs)
+      meal_cost.update_attributes!(attribs)
     end
 
     def calculator
-      @calculator ||= MealCostCalculator.build(meal)
+      @calculator ||= MealCostCalculator.build(meal_cost)
     end
   end
 end

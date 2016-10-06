@@ -2,17 +2,17 @@ class MealCostCalculator
 
   delegate :meal_calc_type, :pantry_calc_type, :pantry_fee, to: :formula
 
-  def self.build(meal)
-    formula = Formula.for_meal(meal)
+  def self.build(meal_cost)
+    formula = Formula.for_meal(meal_cost.meal)
     case formula.meal_calc_type
-    when "fixed" then FixedMealCostCalculator.new(meal, formula)
-    when "share" then ShareMealCostCalculator.new(meal, formula)
+    when "fixed" then FixedMealCostCalculator.new(meal_cost, formula)
+    when "share" then ShareMealCostCalculator.new(meal_cost, formula)
     else raise "Unknown meal calc type"
     end
   end
 
-  def initialize(meal, formula)
-    self.meal = meal
+  def initialize(meal_cost, formula)
+    self.meal_cost = meal_cost
     self.formula = formula
     self.prices = {}
   end
@@ -30,10 +30,10 @@ class MealCostCalculator
 
   protected
 
-  attr_accessor :meal, :formula, :prices
+  attr_accessor :meal_cost, :formula, :prices
 
   def sum_product
-    @sum_product ||= Signup.totals_for_meal(meal).map do |signup_type, count|
+    @sum_product ||= Signup.totals_for_meal(meal_cost.meal).map do |signup_type, count|
       (formula[signup_type] || 0) * count
     end.reduce(:+)
   end

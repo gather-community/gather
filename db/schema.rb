@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006113515) do
+ActiveRecord::Schema.define(version: 20161006115918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -156,7 +156,6 @@ ActiveRecord::Schema.define(version: 20161006113515) do
     t.integer "host_community_id", null: false
     t.text "kids"
     t.text "notes"
-    t.string "payment_method"
     t.datetime "served_at", null: false
     t.text "side"
     t.string "status", default: "open", null: false

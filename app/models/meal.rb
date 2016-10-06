@@ -55,6 +55,7 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true,
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
+  accepts_nested_attributes_for :meal_cost
 
   delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
@@ -83,9 +84,7 @@ class Meal < ActiveRecord::Base
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
-  validates :ingredient_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
-  validates :pantry_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :finalized?
-  validates :payment_method, presence: true, if: :finalized?
+  validates :meal_cost, presence: true, if: :finalized?
   validate { reservation_handler.validate if reservations.any? }
   validates :resources, presence: { message: :need_location }
 

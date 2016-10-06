@@ -40,9 +40,11 @@
 
   <h4>Cook Reimbursement Request</h4>
   <div id="reimb-fields">
-    <%= form.input(:ingredient_cost) %>
-    <%= form.input(:pantry_cost) %>
-    <%= form.input(:payment_method, collection: payment_method_options, as: :radio_buttons) %>
+    <%= form.simple_fields_for(:meal_cost, @meal.meal_cost) do |mc_form| %>
+      <%= mc_form.input(:ingredient_cost) %>
+      <%= mc_form.input(:pantry_cost) %>
+      <%= mc_form.input(:payment_method, collection: payment_method_options, as: :radio_buttons) %>
+    <% end %>
   </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>

@@ -12,7 +12,7 @@ RSpec.describe ShareMealCostCalculator, type: :model do
       little_kid_veg: 0
     )
   end
-  let(:calculator) { ShareMealCostCalculator.new(meal, formula) }
+  let(:calculator) { ShareMealCostCalculator.new(meal_cost, formula) }
 
   before do
     allow(Signup).to receive(:totals_for_meal).and_return(
@@ -21,7 +21,7 @@ RSpec.describe ShareMealCostCalculator, type: :model do
   end
 
   context "with regular meal" do
-    let(:meal) { build(:meal, ingredient_cost: 100, pantry_cost: 15) }
+    let(:meal_cost) { build(:meal_cost, ingredient_cost: 100, pantry_cost: 15) }
 
     context "with fixed pantry_calc_type" do
       let(:pantry_calc_type) { "fixed" }
@@ -71,7 +71,7 @@ RSpec.describe ShareMealCostCalculator, type: :model do
   context "with zero dollar ingredient and zero signup meal" do
     let(:pantry_calc_type) { "fixed" }
     let(:pantry_fee) { 0.5 }
-    let(:meal) { build(:meal, ingredient_cost: 0, pantry_cost: 15) }
+    let(:meal_cost) { build(:meal_cost, ingredient_cost: 0, pantry_cost: 15) }
 
     before do
       allow(Signup).to receive(:totals_for_meal).and_return("adult_meat" => 0)

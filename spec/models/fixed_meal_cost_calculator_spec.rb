@@ -12,8 +12,8 @@ RSpec.describe FixedMealCostCalculator, type: :model do
       little_kid_veg: 0
     )
   end
-  let(:meal) { build(:meal) }
-  let(:calculator) { FixedMealCostCalculator.new(meal, formula) }
+  let(:meal_cost) { build(:meal_cost) }
+  let(:calculator) { FixedMealCostCalculator.new(meal_cost, formula) }
 
   before do
     allow(Signup).to receive(:totals_for_meal).and_return(

@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Meals::Finalizer, type: :model do
-  let(:meal) { create(:meal, :with_menu, payment_method: "credit") }
+  let(:meal) { create(:meal, :with_menu,
+    meal_cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"}) }
   let(:households) { create_list(:household, 2) }
   let(:formula) { create(:form) }
   let(:finalizer) { Meals::Finalizer.new(meal) }
@@ -18,7 +19,6 @@ RSpec.describe Meals::Finalizer, type: :model do
     allow(calculator).to receive(:pantry_calc_type).and_return("ratio")
     allow(calculator).to receive(:pantry_fee).and_return(0.1) # 10%
 
-    meal.create_meal_cost!(ingredient_cost: 20.23, pantry_cost: 5.11)
     finalizer.finalize!
   end
 

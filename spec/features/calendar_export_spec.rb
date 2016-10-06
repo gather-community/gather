@@ -6,31 +6,31 @@ feature "calendar export" do
   scenario "your meals" do
     visit("/calendars/meals/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals You're Attending END:VCALENDAR")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals You're Attending")
   end
 
   scenario "all meals" do
     visit("/calendars/all-meals/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:All Meals END:VCALENDAR")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:All Meals")
   end
 
   scenario "community meals" do
     visit("/calendars/community-meals/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals END:VCALENDAR")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals")
   end
 
   scenario "community meals" do
     visit("/calendars/shifts/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Meal Work Shifts END:VCALENDAR")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Meal Work Shifts")
   end
 
   scenario "reservations" do
     visit("/calendars/reservations/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Reservations END:VCALENDAR")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Reservations")
   end
 
   scenario "bad calendar type" do

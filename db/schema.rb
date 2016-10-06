@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161002020641) do
+ActiveRecord::Schema.define(version: 20161006113515) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,14 +127,15 @@ ActiveRecord::Schema.define(version: 20161002020641) do
     t.decimal "big_kid_meat", precision: 10, scale: 2
     t.decimal "big_kid_veg", precision: 10, scale: 2
     t.datetime "created_at", null: false
-    t.decimal "ingredient_cost", precision: 10, scale: 2
+    t.decimal "ingredient_cost", precision: 10, scale: 2, null: false
     t.decimal "little_kid_meat", precision: 10, scale: 2
     t.decimal "little_kid_veg", precision: 10, scale: 2
     t.string "meal_calc_type"
     t.integer "meal_id", null: false
     t.string "pantry_calc_type"
-    t.decimal "pantry_cost", precision: 10, scale: 2
+    t.decimal "pantry_cost", precision: 10, scale: 2, null: false
     t.decimal "pantry_fee", precision: 10, scale: 2
+    t.string "payment_method", null: false
     t.decimal "senior_meat", precision: 10, scale: 2
     t.decimal "senior_veg", precision: 10, scale: 2
     t.decimal "teen_meat", precision: 10, scale: 2

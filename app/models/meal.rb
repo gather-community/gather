@@ -27,7 +27,7 @@ class Meal < ActiveRecord::Base
   has_many :communities, through: :invitations
   has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
   has_many :households, through: :signups
-  has_one :meal_cost, dependent: :destroy, inverse_of: :meal
+  has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
   has_many :reservation_resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
@@ -55,12 +55,11 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true,
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
-  accepts_nested_attributes_for :meal_cost
+  accepts_nested_attributes_for :cost
 
   delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
-  delegate :pantry_cost, :ingredient_cost, to: :meal_cost
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
@@ -84,7 +83,7 @@ class Meal < ActiveRecord::Base
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
-  validates :meal_cost, presence: true, if: :finalized?
+  validates :cost, presence: true, if: :finalized?
   validate { reservation_handler.validate if reservations.any? }
   validates :resources, presence: { message: :need_location }
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006115918) do
+ActiveRecord::Schema.define(version: 20161006121008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -121,7 +121,28 @@ ActiveRecord::Schema.define(version: 20161006115918) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
-  create_table "meal_costs", force: :cascade do |t|
+  create_table "meals", force: :cascade do |t|
+    t.text "allergens", default: "[]", null: false
+    t.integer "capacity", null: false
+    t.datetime "created_at", null: false
+    t.integer "creator_id", null: false
+    t.text "dessert"
+    t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
+    t.text "entrees"
+    t.integer "host_community_id", null: false
+    t.text "kids"
+    t.text "notes"
+    t.datetime "served_at", null: false
+    t.text "side"
+    t.string "status", default: "open", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
+  add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
+
+  create_table "meals_costs", force: :cascade do |t|
     t.decimal "adult_meat", precision: 10, scale: 2
     t.decimal "adult_veg", precision: 10, scale: 2
     t.decimal "big_kid_meat", precision: 10, scale: 2
@@ -143,28 +164,7 @@ ActiveRecord::Schema.define(version: 20161006115918) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "meal_costs", ["meal_id"], name: "index_meal_costs_on_meal_id", using: :btree
-
-  create_table "meals", force: :cascade do |t|
-    t.text "allergens", default: "[]", null: false
-    t.integer "capacity", null: false
-    t.datetime "created_at", null: false
-    t.integer "creator_id", null: false
-    t.text "dessert"
-    t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
-    t.text "entrees"
-    t.integer "host_community_id", null: false
-    t.text "kids"
-    t.text "notes"
-    t.datetime "served_at", null: false
-    t.text "side"
-    t.string "status", default: "open", null: false
-    t.string "title"
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
-  add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
+  add_index "meals_costs", ["meal_id"], name: "index_meals_costs_on_meal_id", using: :btree
 
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
     t.integer "resource_id", null: false
@@ -377,9 +377,9 @@ ActiveRecord::Schema.define(version: 20161006115918) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
-  add_foreign_key "meal_costs", "meals"
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "users", column: "creator_id"
+  add_foreign_key "meals_costs", "meals"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"

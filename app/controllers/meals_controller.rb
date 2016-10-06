@@ -94,7 +94,7 @@ class MealsController < ApplicationController
   def finalize
     @meal = Meal.find(params[:id])
     authorize @meal
-    @meal.build_meal_cost
+    @meal.build_cost
     @dupes = []
   end
 
@@ -191,7 +191,7 @@ class MealsController < ApplicationController
   def finalize_params
     params.require(:meal).permit(
       signups_attributes: [:id, :household_id, :_destroy] + Signup::SIGNUP_TYPES,
-      meal_cost_attributes: [:ingredient_cost, :pantry_cost, :payment_method]
+      cost_attributes: [:ingredient_cost, :pantry_cost, :payment_method]
     )
   end
 

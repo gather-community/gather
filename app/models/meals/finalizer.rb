@@ -5,7 +5,7 @@ module Meals
 
     def initialize(meal)
       self.meal = meal
-      self.meal_cost = meal.meal_cost
+      self.meal_cost = meal.cost
     end
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
@@ -48,7 +48,7 @@ module Meals
         code: "reimb",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: Grocery Reimbursement",
-        amount: -(meal.ingredient_cost + meal.pantry_cost),
+        amount: -(meal_cost.ingredient_cost + meal_cost.pantry_cost),
         statementable: meal
       )
     end

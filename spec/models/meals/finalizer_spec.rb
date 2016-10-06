@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Meals::Finalizer, type: :model do
   let(:meal) { create(:meal, :with_menu,
-    meal_cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"}) }
+    cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"}) }
   let(:households) { create_list(:household, 2) }
   let(:formula) { create(:form) }
   let(:finalizer) { Meals::Finalizer.new(meal) }
@@ -57,7 +57,7 @@ RSpec.describe Meals::Finalizer, type: :model do
   end
 
   it "copies meal costs to MealCost model" do
-    mcs = MealCost.all.to_a
+    mcs = Meals::Cost.all.to_a
     expect(mcs.size).to eq 1
     expect(mcs.first).to have_attributes(
       meal: meal,

@@ -1,6 +1,11 @@
 <% content_for(:title, "Meals") %>
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
+  <% if policy(Meal).report? %>
+    <%= link_to(icon_tag("line-chart"),
+      Lens.path_for(context: self, controller: "meals", action: "report") || report_meals_path,
+      class: "btn btn-default ") %>
+  <% end %>
   <%= calendar_exports_link %>
   <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if policy(Meal).create? %>
 <% end %>

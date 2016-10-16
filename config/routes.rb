@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :meals do
     collection do
       get :work
+      get :report
     end
     member do
       put :close

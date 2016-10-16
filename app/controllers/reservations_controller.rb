@@ -1,4 +1,6 @@
 class ReservationsController < ApplicationController
+  include Lensable
+
   def index
     if params[:resource_id]
       @resource = Reservation::Resource.find(params[:resource_id])
@@ -36,7 +38,7 @@ class ReservationsController < ApplicationController
       end
     else
       prepare_lens(:community)
-      load_community
+      load_community_from_lens_with_default
 
       authorize Reservation::Reservation
 
@@ -138,14 +140,5 @@ class ReservationsController < ApplicationController
   def redirect_to_reservation_in_context(reservation)
     redirect_to reservations_path_for_resource(reservation.resource,
       date: reservation.starts_at.to_s(:compact_date))
-  end
-
-  def load_community
-    if lens[:community]
-      @community = Community.find_by_abbrv(lens[:community])
-    else
-      @community = current_user.community
-      lens[:community] = @community.lc_abbrv
-    end
   end
 end

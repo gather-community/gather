@@ -1,5 +1,5 @@
 class MealsController < ApplicationController
-  include MealShowable
+  include MealShowable, Lensable
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
@@ -33,6 +33,13 @@ class MealsController < ApplicationController
     @account = current_user.account_for(@meal.host_community)
     load_signups
     load_prev_next_meal
+  end
+
+  def report
+    authorize Meal, :report?
+    prepare_lens(:community)
+    load_community_from_lens_with_default
+    @report = Meals::Report.new(@community)
   end
 
   def new

@@ -1,4 +1,5 @@
 class HouseholdsController < ApplicationController
+  include Lensable
 
   def index
     authorize Household

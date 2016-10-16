@@ -14,7 +14,8 @@ module Meals
     def overview
       @overview ||= breakout(
         breakout_expr: "meals.host_community_id::integer",
-        all_communities: true
+        all_communities: true,
+        ignore_range: true
       )
     end
 
@@ -47,7 +48,7 @@ module Meals
       result[:all]["ttl_meals"] == 0 ? nil : result
     end
 
-    def meals_query(breakout_expr: nil, all_communities: false)
+    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
 
@@ -58,6 +59,11 @@ module Meals
       unless all_communities
         wheres << "meals.host_community_id = ?"
         vars << community.id
+      end
+
+      unless ignore_range
+        wheres << "served_at >= ?" << "served_at < ?"
+        vars << range.first << range.last
       end
 
       query("
@@ -116,8 +122,8 @@ module Meals
       types.map { |c| "#{tbl}.#{c}" }.join("+")
     end
 
-    def query(str, *params)
-      connection.execute(Meal.send(:sanitize_sql, [str, params])).tap do |result|
+    def query(str, *vars)
+      connection.execute(Meal.send(:sanitize_sql, [str, *vars])).tap do |result|
         result.type_map = type_map
       end
     end

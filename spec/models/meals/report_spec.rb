@@ -5,6 +5,9 @@ RSpec.describe Meals::Report, type: :model do
   let(:cid) { community.id }
   let(:report) { Meals::Report.new(community) }
 
+  before { Timecop.freeze(Time.parse("2016-10-15 12:00:00")) }
+  after { Timecop.return }
+
   describe "range" do
     it "should end on the last full month" do
       Timecop.freeze(Date.civil(2016,3,15)) do
@@ -27,7 +30,10 @@ RSpec.describe Meals::Report, type: :model do
     context "with finalized meals" do
       before do
         meals = create_list(:meal, 2, :finalized, host_community_id: cid)
-        meals << create(:meal, :finalized, host_community_id: create(:community).id)
+
+        # Very old meal in different community.
+        meals << create(:meal, :finalized, host_community_id: create(:community).id, served_at: 2.years.ago)
+
         meals.each do |m|
           m.signups << build(:signup, meal: m, adult_meat: 2)
           m.signups << build(:signup, meal: m, adult_veg: 1)
@@ -73,6 +79,9 @@ RSpec.describe Meals::Report, type: :model do
           m.signups << build(:signup, meal: m, senior_veg: counts[i][1])
           m.save!
         end
+
+        # Very old meal, should be ignored.
+        meals << create(:meal, :finalized, host_community_id: cid, served_at: 2.years.ago)
       end
 
       describe "by_month" do

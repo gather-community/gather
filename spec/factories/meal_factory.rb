@@ -21,5 +21,14 @@ FactoryGirl.define do
       entrees "Good stuff"
       allergen_gluten true
     end
+
+    trait :finalized do
+      with_menu
+      status "finalized"
+
+      after(:build) do |meal|
+        meal.cost = build(:meal_cost)
+      end
+    end
   end
 end

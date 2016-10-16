@@ -12,54 +12,57 @@ module Meals
     end
 
     def overview
-      return @overview if @overview
-
-      @overview = query("
-        SELECT
-          meals.host_community_id,
-          COUNT(*) AS ttl_meals,
-          SUM(signup_ttls.ttl_attendees)::integer AS ttl_attendees,
-          SUM(ingredient_cost + pantry_cost)::real AS ttl_cost
-        FROM meals
-          INNER JOIN meals_costs ON meals.id = meals_costs.meal_id
-          LEFT OUTER JOIN (
-            SELECT
-              signups.meal_id,
-              SUM(#{full_signup_col_sum_expr}) AS ttl_attendees
-            FROM signups
-            GROUP BY signups.meal_id
-          ) signup_ttls ON signup_ttls.meal_id = meals.id
-        GROUP BY meals.host_community_id
-      ").to_a.index_by { |r| r["host_community_id"] }
-
-      # Generate totals.
-      @overview[:all] = %w(ttl_meals ttl_attendees ttl_cost).map do |col|
-        [col, @overview.sum { |_, v| v[col] || 0 }]
-      end.to_h
-
-      @overview[:all]["ttl_meals"] == 0 ? nil : @overview
+      @overview ||= breakout(
+        breakout_expr: "meals.host_community_id::integer",
+        all_communities: true
+      )
     end
 
     def by_month
-      @by_month ||= disaggregated(
-        by: "TO_CHAR(served_at, 'YYYY-MM-01')",
-        key_func: ->(row) { Date.parse(row["disagg_expr"]) }
+      @by_month ||= breakout(
+        breakout_expr: "TO_CHAR(served_at, 'YYYY-MM-01')",
+        key: ->(row) { Date.parse(row["breakout_expr"]) }
       )
     end
 
     def by_weekday
-      @by_weekday ||= disaggregated(
-        by: "EXTRACT(DOW FROM served_at)::integer",
-        key_func: ->(row) { SUNDAY + row["disagg_expr"] }
+      @by_weekday ||= breakout(
+        breakout_expr: "EXTRACT(DOW FROM served_at)::integer",
+        key: ->(row) { SUNDAY + row["breakout_expr"] }
       )
     end
 
     private
 
-    def disaggregated(by:, key_func:)
-      @by_month = query("
+    def breakout(key: nil, **sql_options)
+      key = ->(row) { row["breakout_expr"] } if key.nil?
+
+      # Get main rows.
+      result = meals_query(sql_options).index_by(&key)
+
+      # Get totals.
+      result[:all] = meals_query(sql_options.except(:breakout_expr)).first
+
+      # Return nil if no results.
+      result[:all]["ttl_meals"] == 0 ? nil : result
+    end
+
+    def meals_query(breakout_expr: nil, all_communities: false)
+      breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
+      breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
+
+      wheres, vars = [], []
+
+      wheres << "meals.status = 'finalized'"
+
+      unless all_communities
+        wheres << "meals.host_community_id = ?"
+        vars << community.id
+      end
+
+      query("
         SELECT
-          #{by} AS disagg_expr,
+          #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
           AVG(meals_costs.adult_meat)::real AS avg_adult_cost,
@@ -79,17 +82,9 @@ module Meals
             FROM signups
             GROUP BY signups.meal_id
           ) signup_ttls ON signup_ttls.meal_id = meals.id
-        WHERE meals.status = 'finalized' AND meals.host_community_id = ?
-        GROUP BY #{by}
-        ORDER BY disagg_expr
-      ", community.id).to_a.index_by(&key_func)
-
-      # Generate totals.
-      @by_month[:all] = %w(ttl_meals ttl_attendees ttl_cost).map do |col|
-        [col, @by_month.sum { |_, v| v[col] || 0 }]
-      end.to_h
-
-      @by_month[:all]["ttl_meals"] == 0 ? nil : @by_month
+        WHERE #{wheres.join(' AND ')}
+        #{breakout_group_order}
+      ", *vars).to_a
     end
 
     def diner_type_avg_exprs

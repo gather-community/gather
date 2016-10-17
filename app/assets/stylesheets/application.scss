@@ -21,13 +21,8 @@
 @import "forms";
 @import "users";
 @import "households";
-@import "meals";
-@import "meal_finalize";
-@import "meal_menu";
-@import "meal_signup";
-@import "meal_summary";
-@import "reservation/reservations";
-@import "reservation/calendar";
+@import "meals/*";
+@import "reservation/*";
 @import "tables";
 @import "ie_fixes";
 @import "calendar_exports";

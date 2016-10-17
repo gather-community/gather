@@ -78,6 +78,11 @@ en:
       household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
       user: "Are you sure you want to deactivate the user '%{name}'?"
 
+  date:
+    formats:
+      month_yr: '%B %Y'
+      weekday: '%A'
+
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
     pformat: 'ddd YYYY-MM-DD'           # picking format of the date (this is the default, can be ommited)

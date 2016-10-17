@@ -178,7 +178,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "other_communities" do
-      let(:resource) { create(:resource) }
+      let(:resource) { create(:resource, community: create(:community)) }
       let(:household1) { create(:household, community: resource.community) }
       let(:insider) { create(:user, household: household1) }
       let(:outsider) { create(:user) }

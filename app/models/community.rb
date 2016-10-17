@@ -2,6 +2,7 @@ class Community < ActiveRecord::Base
   resourcify
 
   scope :by_name, -> { order("name") }
+  scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }
 
   serialize :settings
 

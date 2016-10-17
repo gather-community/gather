@@ -40,6 +40,7 @@ class MealsController < ApplicationController
     prepare_lens(:community)
     load_community_from_lens_with_default
     @report = Meals::Report.new(@community)
+    @communities = Community.by_name_with_first(@community).to_a
   end
 
   def new

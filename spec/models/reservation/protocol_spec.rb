@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Reservation::Protocol, type: :model do
   describe "matching" do
-    let(:resource1) { create(:resource) }
-    let(:resource2) { create(:resource) }
-    let(:resource3) { create(:resource) }
+    let(:resource1) { create(:resource, community: create(:community)) }
+    let(:resource2) { create(:resource, community: create(:community)) }
+    let(:resource3) { create(:resource, community: create(:community)) }
     let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
     let!(:p2) { create(:reservation_protocol, resources: [resource1], kinds: %w(personal special)) }
     let!(:p3) { create(:reservation_protocol, resources: [resource1], kinds: %w(official)) }

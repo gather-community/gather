@@ -11,6 +11,11 @@ module Meals
       @range ||= Date.today.prev_year.beginning_of_month..Date.today.prev_month.end_of_month
     end
 
+    # Returns all diner types that appear in range-constrained results.
+    def diner_types
+      by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"] > 0 } : []
+    end
+
     def overview
       @overview ||= breakout(
         breakout_expr: "meals.host_community_id::integer",
@@ -72,20 +77,23 @@ module Meals
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
           AVG(meals_costs.adult_meat)::real AS avg_adult_cost,
-          SUM(signup_ttls.ttl_attendees)::integer AS ttl_attendees,
-          AVG(signup_ttls.ttl_attendees)::real AS avg_attendees,
+          SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
+          AVG(signup_ttls.ttl_diners)::real AS avg_diners,
           AVG(signup_ttls.ttl_veg)::real AS avg_veg,
-          (AVG(signup_ttls.ttl_veg) / AVG(signup_ttls.ttl_attendees))::real AS avg_veg_pct,
-          #{diner_type_avg_exprs}
+          (AVG(signup_ttls.ttl_veg) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_veg_pct,
+          #{diner_type_avg_exprs},
+          #{community_avg_exprs}
         FROM meals
           INNER JOIN meals_costs ON meals.id = meals_costs.meal_id
           LEFT OUTER JOIN (
             SELECT
               signups.meal_id,
-              SUM(#{full_signup_col_sum_expr}) AS ttl_attendees,
+              SUM(#{full_signup_col_sum_expr}) AS ttl_diners,
               SUM(#{signup_col_sum_expr(food_types: ['veg'])}) AS ttl_veg,
-              #{diner_type_sum_exprs}
+              #{diner_type_sum_exprs},
+              #{community_sum_exprs}
             FROM signups
+              INNER JOIN households ON households.id = signups.household_id
             GROUP BY signups.meal_id
           ) signup_ttls ON signup_ttls.meal_id = meals.id
         WHERE #{wheres.join(' AND ')}
@@ -96,7 +104,7 @@ module Meals
     def diner_type_avg_exprs
       Signup::DINER_TYPES.map do |dt|
         "AVG(ttl_#{dt})::real AS avg_#{dt}, "\
-        "(AVG(ttl_#{dt}) / AVG(signup_ttls.ttl_attendees))::real AS avg_#{dt}_pct"
+        "(AVG(ttl_#{dt}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_#{dt}_pct"
       end.join(",\n")
     end
 
@@ -104,6 +112,20 @@ module Meals
       Signup::DINER_TYPES.map do |dt|
         expr = signup_col_sum_expr(diner_types: [dt])
         "SUM(#{expr}) AS ttl_#{dt}"
+      end.join(",\n")
+    end
+
+    def community_avg_exprs
+      communities.map do |c|
+        "AVG(ttl_from_#{c.abbrv})::real AS avg_from_#{c.abbrv}, "\
+        "(AVG(ttl_from_#{c.abbrv}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_from_#{c.abbrv}_pct"
+      end.join(",\n")
+    end
+
+    def community_sum_exprs
+      communities.map do |c|
+        expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN #{full_signup_col_sum_expr} ELSE 0 END)"
+        "#{expr} AS ttl_from_#{c.abbrv}"
       end.join(",\n")
     end
 
@@ -120,6 +142,10 @@ module Meals
       food_types ||= Signup::FOOD_TYPES
       types = diner_types.map{ |dt| food_types.map{ |ft| "#{prefix}#{dt}_#{ft}" } }.flatten
       types.map { |c| "#{tbl}.#{c}" }.join("+")
+    end
+
+    def communities
+      @communities ||= Community.by_name_with_first(community).to_a
     end
 
     def query(str, *vars)

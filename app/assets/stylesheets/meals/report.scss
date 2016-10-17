@@ -1,7 +1,13 @@
 .meals.action-report {
-  .range {
-    margin-top: -15px;
+  small {
+    font-size: 12px;
     color: $gray-text;
+    display: block;
   }
 
+  .footnote {
+    margin-top: 20px;
+    font-size: 13px;
+    color: $gray-text;
+  }
 }

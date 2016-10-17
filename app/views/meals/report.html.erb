@@ -6,16 +6,13 @@
   <% end %>
 <% end %>
 
-<div class="range">
-  <%= l(@report.range.first, format: :month_yr) %> - <%= l(@report.range.last, format: :month_yr) %>,
-  Finalized meals only
-</div>
-
 <% if @report.overview.nil? %>
 
   No matching data found.
 
 <% else %>
+
+  <% range = %w(first last).map { |m| l(@report.range.send(m), format: :month_yr) }.join(" - ") %>
 
   <table class="overview stats">
     <tr>
@@ -40,16 +37,20 @@
     <% end %>
   </table>
 
-  <h2>By Month</h2>
+  <h3>By Month</h3>
+  <small><%= range %>, <%= @community.name %> meals only</small>
   <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
 
-  <h2>By Weekday</h2>
+  <h3>By Weekday</h3>
+  <small><%= range %>, <%= @community.name %> meals only</small>
   <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
 
   <% if multi_community? %>
-    <h2>By Community</h2>
+    <h3>By Community</h3>
+    <small><%= range %></small>
     <%= render("report_main_table", name: "by-community", data: @report.by_community,
       highlight: @community.name) %>
   <% end %>
 
+  <div class="footnote">All reports include finalized meals only.</div>
 <% end %>

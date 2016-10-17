@@ -1,7 +1,11 @@
+<% highlight = :all if local_assigns[:highlight].nil? %>
+
 <table class="<%= name %> stats">
   <tr>
     <th colspan="5"></th>
-    <th colspan="<%= @communities.size %>">Avg. Community Representation</th>
+    <% if multi_community? %>
+      <th colspan="<%= @communities.size %>">Avg. Community Representation</th>
+    <% end %>
     <th colspan="<%= @report.diner_types.size %>">Avg. Diner Types</th>
     <th colspan="2"></th>
   </tr>
@@ -11,8 +15,10 @@
     <th>Avg. Adult Cost</th>
     <th>Avg. Diners</th>
     <th>Avg. Veg. Diners</th>
-    <% @communities.each do |community| %>
-      <th><%= community.name %></th>
+    <% if multi_community? %>
+      <% @communities.each do |community| %>
+        <th><%= community.name %></th>
+      <% end %>
     <% end %>
     <% @report.diner_types.each do |dt| %>
       <th><%= I18n.t("signups.diner_types.#{dt}", count: 2) %></th>
@@ -21,8 +27,15 @@
     <th>Total Cost</th>
   </tr>
   <% data.each do |period, cols| %>
-    <tr>
-      <td><%= period == :all ? "Total" : I18n.l(period, format: period_format) %></td>
+    <tr <%= period == highlight ? %Q{class=highlight} : "" %>>
+      <td>
+        <%=
+          case period
+          when :all then "Total"
+          when Date then I18n.l(period, format: period_format)
+          else period
+          end %>
+      </td>
       <td><%= number_with_delimiter(cols["ttl_meals"]) %></td>
       <td><%= number_to_currency(cols["avg_adult_cost"]) %></td>
       <td><%= number_with_precision(cols["avg_diners"], precision: 1) %></td>
@@ -30,11 +43,13 @@
         <%= number_with_precision(cols["avg_veg"], precision: 1) %>
         (<%= number_to_percentage(cols["avg_veg_pct"], precision: 0) %>)
       </td>
-      <% @communities.each do |c| %>
-        <td>
-          <%= number_with_precision(cols["avg_from_#{c.abbrv.downcase}"], precision: 1) %>
-          (<%= number_to_percentage(cols["avg_from_#{c.abbrv.downcase}_pct"], precision: 0) %>)
-        </td>
+      <% if multi_community? %>
+        <% @communities.each do |c| %>
+          <td>
+            <%= number_with_precision(cols["avg_from_#{c.abbrv.downcase}"], precision: 1) %>
+            (<%= number_to_percentage(cols["avg_from_#{c.abbrv.downcase}_pct"], precision: 0) %>)
+          </td>
+        <% end %>
       <% end %>
       <% @report.diner_types.each do |dt| %>
         <td>

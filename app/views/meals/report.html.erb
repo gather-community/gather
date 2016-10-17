@@ -1,7 +1,9 @@
 <% content_for(:title){ "Meals Report" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= lens_bar(required: true) %>
+  <% if multi_community? %>
+    <%= lens_bar(required: true) %>
+  <% end %>
 <% end %>
 
 <div class="range">
@@ -28,12 +30,14 @@
       <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_diners"]) %></td>
       <td><%= number_to_currency(@report.overview[@community.id]["ttl_cost"]) %></td>
     </tr>
-    <tr>
-      <td>Overall - All Time</td>
-      <td><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></td>
-      <td><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></td>
-      <td><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></td>
-    </tr>
+    <% if multi_community? %>
+      <tr>
+        <td>Overall - All Time</td>
+        <td><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></td>
+        <td><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></td>
+        <td><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></td>
+      </tr>
+    <% end %>
   </table>
 
   <h2>By Month</h2>
@@ -41,4 +45,11 @@
 
   <h2>By Weekday</h2>
   <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
+
+  <% if multi_community? %>
+    <h2>By Community</h2>
+    <%= render("report_main_table", name: "by-community", data: @report.by_community,
+      highlight: @community.name) %>
+  <% end %>
+
 <% end %>

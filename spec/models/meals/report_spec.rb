@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Meals::Report, type: :model do
-  let(:community) { create(:community, abbrv: "C1") }
-  let(:community2) { create(:community, abbrv: "C2") }
-  let(:cid) { community.id }
-  let(:report) { Meals::Report.new(community) }
+  let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
+  let!(:community) { create(:community, name: "Community 1", abbrv: "C1") }
+  let!(:cid) { community.id }
+  let!(:report) { Meals::Report.new(community) }
 
   before { Timecop.freeze(Time.parse("2016-10-15 12:00:00")) }
   after { Timecop.return }
@@ -100,6 +100,13 @@ RSpec.describe Meals::Report, type: :model do
 
         # Very old meal, should be ignored.
         meals << create(:meal, :finalized, host_community_id: cid, served_at: 2.years.ago)
+
+        # Meals from community 2
+        other = create_list(:meal, 2, :finalized, host_community_id: community2.id, served_at: 2.months.ago)
+        other.each do |m|
+          m.signups << build(:signup, meal: m, adult_meat: 2)
+          m.save!
+        end
       end
 
       describe "by_month" do
@@ -152,6 +159,14 @@ RSpec.describe Meals::Report, type: :model do
         it "should have correct data" do
           expect(report.by_weekday.size).to eq 3
           expect(report.by_weekday.keys.map { |k| k.strftime("%a") }).to eq %w(Tue Wed Fri)
+        end
+      end
+
+      # This method shares most functionality with by_month, so testing it lightly.
+      describe "by_community" do
+        it "should have correct data" do
+          expect(report.by_community.size).to eq 2
+          expect(report.by_community.keys).to eq ["Community 1", "Community 2"]
         end
       end
     end

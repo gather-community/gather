@@ -40,6 +40,14 @@ module Meals
       )
     end
 
+    def by_community
+      @by_community ||= breakout(
+        breakout_expr: "communities.name",
+        all_communities: true,
+        include_host_community: true
+      )
+    end
+
     private
 
     def breakout(key: nil, totals: false, **sql_options)
@@ -57,7 +65,9 @@ module Meals
       result.except(:all).empty? ? nil : result
     end
 
-    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
+    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false,
+      include_host_community: false)
+
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
 
@@ -75,6 +85,12 @@ module Meals
         vars << range.first << range.last
       end
 
+      community_join = if include_host_community
+        "INNER JOIN communities ON meals.host_community_id = communities.id"
+      else
+        ""
+      end
+
       query("
         SELECT
           #{breakout_select}
@@ -89,6 +105,7 @@ module Meals
           #{community_avg_exprs}
         FROM meals
           INNER JOIN meals_costs ON meals.id = meals_costs.meal_id
+          #{community_join}
           INNER JOIN (
             SELECT
               signups.meal_id,

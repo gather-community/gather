@@ -85,7 +85,7 @@ module Meals
           #{community_avg_exprs}
         FROM meals
           INNER JOIN meals_costs ON meals.id = meals_costs.meal_id
-          LEFT OUTER JOIN (
+          INNER JOIN (
             SELECT
               signups.meal_id,
               SUM(#{full_signup_col_sum_expr}) AS ttl_diners,

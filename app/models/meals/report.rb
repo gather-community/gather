@@ -20,14 +20,16 @@ module Meals
       @overview ||= breakout(
         breakout_expr: "meals.host_community_id::integer",
         all_communities: true,
-        ignore_range: true
+        ignore_range: true,
+        totals: true
       )
     end
 
     def by_month
       @by_month ||= breakout(
         breakout_expr: "TO_CHAR(served_at, 'YYYY-MM-01')",
-        key: ->(row) { Date.parse(row["breakout_expr"]) }
+        key: ->(row) { Date.parse(row["breakout_expr"]) },
+        totals: true
       )
     end
 
@@ -40,17 +42,19 @@ module Meals
 
     private
 
-    def breakout(key: nil, **sql_options)
+    def breakout(key: nil, totals: false, **sql_options)
       key = ->(row) { row["breakout_expr"] } if key.nil?
 
       # Get main rows.
       result = meals_query(sql_options).index_by(&key)
 
       # Get totals.
-      result[:all] = meals_query(sql_options.except(:breakout_expr)).first
+      if totals
+        result[:all] = meals_query(sql_options.except(:breakout_expr)).first
+      end
 
       # Return nil if no results.
-      result[:all]["ttl_meals"] == 0 ? nil : result
+      result.except(:all).empty? ? nil : result
     end
 
     def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)

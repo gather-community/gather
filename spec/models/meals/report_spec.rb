@@ -150,8 +150,8 @@ RSpec.describe Meals::Report, type: :model do
       # This method shares most functionality with by_month, so testing it lightly.
       describe "by_weekday" do
         it "should have correct data" do
-          expect(report.by_weekday.size).to eq 4
-          expect((report.by_weekday.keys - [:all]).map { |k| k.strftime("%a") }).to eq %w(Tue Wed Fri)
+          expect(report.by_weekday.size).to eq 3
+          expect(report.by_weekday.keys.map { |k| k.strftime("%a") }).to eq %w(Tue Wed Fri)
         end
       end
     end

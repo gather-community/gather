@@ -85,7 +85,7 @@ RSpec.describe Meal, type: :model do
         end
       end
 
-      context "on time change" do
+      context "on time change" do  
         it "should update reservation" do
           meal.served_at = Time.now + 2.days
           meal.sync_reservations

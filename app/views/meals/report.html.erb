@@ -37,6 +37,19 @@
     <% end %>
   </table>
 
+  <div id="charts">
+    <div class="row">
+      <div id="chart1" class="col-sm-4"><svg></svg></div>
+      <div id="chart2" class="col-sm-4"><svg></svg></div>
+      <div id="chart3" class="col-sm-4"><svg></svg></div>
+    </div>
+    <div class="row">
+      <div id="chart4" class="col-sm-4"><svg></svg></div>
+      <div id="chart5" class="col-sm-4"><svg></svg></div>
+      <div id="chart6" class="col-sm-4"><svg></svg></div>
+    </div>
+  </div>
+
   <h3>By Month</h3>
   <small><%= range %>, <%= @community.name %> meals only</small>
   <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
@@ -53,4 +66,13 @@
   <% end %>
 
   <div class="footnote">All reports include finalized meals only.</div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){ new Mess.Views.Meals.ReportChartsView(<%=json(
+    el: "#charts",
+    data: @report.chart_data,
+    cmty: @community.abbrv,
+    multiCommunity: multi_community?
+  )%>); });
 <% end %>

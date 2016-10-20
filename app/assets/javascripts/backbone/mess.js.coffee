@@ -8,4 +8,5 @@ window.Mess =
   Models: {}
   Collections: {}
   Routers: {}
-  Views: {}
+  Views:
+    Meals: {}

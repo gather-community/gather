@@ -18,6 +18,8 @@
 //= require pickers
 //= require moment
 //= require jquery-ui
+//= require d3
+//= require nv.d3
 //= require fullcalendar
 //= require prevent-double-submission
 //= require cocoon

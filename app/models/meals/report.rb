@@ -48,6 +48,39 @@ module Meals
       )
     end
 
+    def chart_data
+      @chart_data ||= {}.tap do |data|
+        by_month_no_totals = strip_totals(by_month)
+
+        data[:diners_by_month] = [
+          by_month_no_totals.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%b")}
+          end
+        ]
+        data[:cost_by_month] = [
+          by_month_no_totals.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%b")}
+          end
+        ]
+        data[:meals_by_month] = [
+          by_month_no_totals.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["ttl_meals"], l: k_v[0].strftime("%b")}
+          end
+        ]
+        data[:diners_cost_by_weekday] = [
+          by_weekday.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%A")}
+          end
+        ]
+        data[:community_rep] = communities.map do |c|
+          {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]}
+        end
+        data[:diner_types] = diner_types.map do |dt|
+          {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]}
+        end
+      end
+    end
+
     private
 
     def breakout(key: nil, totals: false, **sql_options)
@@ -179,6 +212,10 @@ module Meals
       @connection ||= Meal.connection.tap do |conn|
         @type_map = PG::BasicTypeMapForResults.new(conn.raw_connection)
       end
+    end
+
+    def strip_totals(hash)
+      hash.reject { |k, _| k == :all }
     end
   end
 end

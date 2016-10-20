@@ -10,4 +10,16 @@
     font-size: 13px;
     color: $gray-text;
   }
+
+  #charts {
+    h5 {
+      font-size: 13px;
+      text-align: center;
+    }
+
+    svg {
+      height: 250px;
+    }
+  }
+
 }

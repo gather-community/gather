@@ -39,7 +39,8 @@ module Meals
     def by_month
       @by_month ||= breakout(
         breakout_expr: "TO_CHAR(served_at, 'YYYY-MM-01')",
-        key: ->(row) { Date.parse(row["breakout_expr"]) },
+        key_func: ->(row) { Date.parse(row["breakout_expr"]) },
+        ensure_keys: months,
         totals: true
       )
     end
@@ -47,7 +48,7 @@ module Meals
     def by_weekday
       @by_weekday ||= breakout(
         breakout_expr: "EXTRACT(DOW FROM served_at)::integer",
-        key: ->(row) { SUNDAY + row["breakout_expr"] }
+        key_func: ->(row) { SUNDAY + row["breakout_expr"] }
       )
     end
 
@@ -65,17 +66,17 @@ module Meals
 
         data[:diners_by_month] = [
           by_month_no_totals.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_diners"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:cost_by_month] = [
           by_month_no_totals.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_adult_cost"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:meals_by_month] = [
           by_month_no_totals.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["ttl_meals"], l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:diners_cost_by_weekday] = [
@@ -94,11 +95,17 @@ module Meals
 
     private
 
-    def breakout(key: nil, totals: false, **sql_options)
-      key = ->(row) { row["breakout_expr"] } if key.nil?
+    def breakout(key_func: nil, totals: false, ensure_keys: nil, **sql_options)
+      key_func = ->(row) { row["breakout_expr"] } if key_func.nil?
 
       # Get main rows.
-      result = meals_query(sql_options).index_by(&key)
+      result = meals_query(sql_options).index_by(&key_func)
+
+      if ensure_keys
+        result = ActiveSupport::OrderedHash.new.tap do |hash|
+          ensure_keys.each { |k| hash[k] = result[k] || {} }
+        end
+      end
 
       # Get totals.
       if totals
@@ -106,7 +113,7 @@ module Meals
       end
 
       # Return nil if no results.
-      result.except(:all).empty? ? nil : result
+      result.except(:all).reject { |k, v| v == {} }.empty? ? nil : result
     end
 
     def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false,

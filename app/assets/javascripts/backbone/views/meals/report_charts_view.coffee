@@ -9,7 +9,10 @@ Mess.Views.Meals.ReportChartsView = Backbone.View.extend
     @addCostByMonth(2)
     @addMealsByMonth(3)
     @addDinersByWeekday(4)
-    @addCommunityRep(5)
+    if options.multiCommunity
+      @addCommunityRep(5)
+    else
+      @addCostByWeekday(5)
     @addDinerTypes(6)
 
   addDinersByMonth: (num) ->
@@ -21,7 +24,7 @@ Mess.Views.Meals.ReportChartsView = Backbone.View.extend
 
   addCostByMonth: (num) ->
     data = [{key: 'Avg. Cost', values: @data.cost_by_month[0]}]
-    chart = @lineChart().forceY([0,10])
+    chart = @lineChart().forceY([0,8])
     @setMonthXAxis(chart, data)
     chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickFormat(d3.format('$.2f'))
     @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Month")
@@ -34,11 +37,18 @@ Mess.Views.Meals.ReportChartsView = Backbone.View.extend
     @addChart(num, chart, data, "Number of #{@cmty}Meals by Month")
 
   addDinersByWeekday: (num) ->
-    data = [{values: @data.diners_cost_by_weekday[0]}]
+    data = [{values: @data.diners_by_weekday[0]}]
     chart = @barChart().forceY([0,40])
     chart.xAxis.axisLabel('Weekday').tickFormat (d) -> data[0].values[d].l
     chart.yAxis.axisLabel('Avg. Diners per Meal').tickValues([10,20,30,40]).tickFormat(d3.format(',.1f'))
     @addChart(num, chart, data, "Avg. Diners per #{@cmty}Meal by Weekday")
+
+  addCostByWeekday: (num) ->
+    data = [{values: @data.cost_by_weekday[0]}]
+    chart = @barChart().forceY([0,8])
+    chart.xAxis.axisLabel('Weekday').tickFormat (d) -> data[0].values[d].l
+    chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
+    @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Weekday")
 
   addCommunityRep: (num) ->
     data = @data.community_rep

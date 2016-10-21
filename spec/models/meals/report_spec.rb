@@ -133,8 +133,8 @@ RSpec.describe Meals::Report, type: :model do
 
       describe "by_month" do
         it "should have correct data" do
-          expect(report.by_month.size).to eq 13
-          expect((report.by_month.keys - [:all]).map(&:month)).to eq [10,11,12,1,2,3,4,5,6,7,8,9]
+          expect(report.by_month.size).to eq 4
+          expect((report.by_month.keys - [:all]).map(&:month)).to eq [1,2,4]
 
           jan = report.by_month[Date.civil(2016,1,1)]
           feb = report.by_month[Date.civil(2016,2,1)]
@@ -160,7 +160,7 @@ RSpec.describe Meals::Report, type: :model do
           expect(feb["avg_from_c2"]).to eq 1.5
           expect(feb["avg_from_c2_pct"]).to be_within(0.1).of 21.4
 
-          expect(mar).to eq({})
+          expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq 1
           expect(apr["ttl_diners"]).to eq 9
@@ -176,6 +176,14 @@ RSpec.describe Meals::Report, type: :model do
           expect(all["avg_veg_pct"]).to be_within(0.1).of 17.2
           expect(all["avg_adult"]).to eq 6
           expect(all["avg_adult_pct"]).to be_within(0.1).of 82.7
+        end
+      end
+
+      describe "by_month_no_totals_or_gaps" do
+        it "should have correct data" do
+          expect(report.by_month_no_totals_or_gaps.size).to eq 4
+          expect(report.by_month_no_totals_or_gaps.keys.map(&:month)).to eq [1,2,3,4]
+          expect(report.by_month_no_totals_or_gaps[Date.civil(2016,3,1)]).to eq({})
         end
       end
 

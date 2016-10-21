@@ -40,9 +40,19 @@ module Meals
       @by_month ||= breakout(
         breakout_expr: "TO_CHAR(served_at, 'YYYY-MM-01')",
         key_func: ->(row) { Date.parse(row["breakout_expr"]) },
-        ensure_keys: months,
         totals: true
       )
+    end
+
+    def by_month_no_totals_or_gaps
+      @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
+        months = by_month.keys - [:all]
+        month, max = months.min, months.max
+        while month <= max do
+          result[month] = by_month[month] || {}
+          month = month >> 1
+        end
+      end
     end
 
     def by_weekday
@@ -62,20 +72,18 @@ module Meals
 
     def chart_data
       @chart_data ||= {}.tap do |data|
-        by_month_no_totals = strip_totals(by_month)
-
         data[:diners_by_month] = [
-          by_month_no_totals.each_with_index.map do |k_v, i|
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_diners"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:cost_by_month] = [
-          by_month_no_totals.each_with_index.map do |k_v, i|
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_adult_cost"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:meals_by_month] = [
-          by_month_no_totals.each_with_index.map do |k_v, i|
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
@@ -100,17 +108,11 @@ module Meals
 
     private
 
-    def breakout(key_func: nil, totals: false, ensure_keys: nil, **sql_options)
+    def breakout(key_func: nil, totals: false, **sql_options)
       key_func = ->(row) { row["breakout_expr"] } if key_func.nil?
 
       # Get main rows.
       result = meals_query(sql_options).index_by(&key_func)
-
-      if ensure_keys
-        result = ActiveSupport::OrderedHash.new.tap do |hash|
-          ensure_keys.each { |k| hash[k] = result[k] || {} }
-        end
-      end
 
       # Get totals.
       if totals
@@ -206,10 +208,6 @@ module Meals
       end.join(",\n")
     end
 
-    def months
-      (0...12).to_a.map { |i| range.first >> i }
-    end
-
     def full_signup_col_sum_expr
       @full_signup_col_sum_expr ||= signup_col_sum_expr
     end
@@ -235,10 +233,6 @@ module Meals
       @connection ||= Meal.connection.tap do |conn|
         @type_map = PG::BasicTypeMapForResults.new(conn.raw_connection)
       end
-    end
-
-    def strip_totals(hash)
-      hash.reject { |k, _| k == :all }
     end
   end
 end

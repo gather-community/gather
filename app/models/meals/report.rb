@@ -69,7 +69,7 @@ module Meals
         ]
         data[:diners_cost_by_weekday] = [
           by_weekday.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%A")}
+            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:community_rep] = communities.map do |c|

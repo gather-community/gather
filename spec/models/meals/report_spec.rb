@@ -12,35 +12,29 @@ RSpec.describe Meals::Report, type: :model do
   describe "range" do
     context "with no meals" do
       it "should end on the last full month" do
-        Timecop.freeze(Date.civil(2016,3,15)) do
-          expect(report.range).to eq Date.civil(2015, 3, 1)..Date.civil(2016, 2, 29)
-        end
+        expect(report.range).to eq Date.civil(2015, 10, 1)..Date.civil(2016, 9, 30)
       end
     end
 
     context "with previous month having unfinalized meals" do
       before do
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-01-15 17:00")
-        create(:meal, host_community_id: cid, served_at: "2016-02-15 17:00")
+        create(:meal, :finalized, host_community_id: cid, served_at: "2016-08-15 17:00")
+        create(:meal, host_community_id: cid, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
-        Timecop.freeze(Date.civil(2016,3,15)) do
-          expect(report.range).to eq Date.civil(2015, 2, 1)..Date.civil(2016, 1, 31)
-        end
+        expect(report.range).to eq Date.civil(2015, 9, 1)..Date.civil(2016, 8, 31)
       end
     end
 
     context "with previous month having all finalized meals" do
       before do
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-01-15 17:00")
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-02-15 17:00")
+        create(:meal, :finalized, host_community_id: cid, served_at: "2016-08-15 17:00")
+        create(:meal, :finalized, host_community_id: cid, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
-        Timecop.freeze(Date.civil(2016,3,15)) do
-          expect(report.range).to eq Date.civil(2015, 3, 1)..Date.civil(2016, 2, 29)
-        end
+        expect(report.range).to eq Date.civil(2015, 10, 1)..Date.civil(2016, 9, 30)
       end
     end
   end

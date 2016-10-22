@@ -14,28 +14,44 @@
 
   <% range = %w(first last).map { |m| l(@report.range.send(m), format: :month_yr) }.join(" - ") %>
 
-  <table class="overview stats">
-    <tr>
-      <th></th>
-      <th>Meals</th>
-      <th>Diners</th>
-      <th>Revenue</th>
-    </tr>
-    <tr>
-      <td><%= @community.name %> - All Time</td>
-      <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_meals"]) %></td>
-      <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_diners"]) %></td>
-      <td><%= number_to_currency(@report.overview[@community.id]["ttl_cost"]) %></td>
-    </tr>
+  <div class="overview row">
+    <div class="set col-sm-4 <%= multi_community? ? "col-sm-offset-1" : "col-sm-offset-4" %>">
+      <div class="title"><%= multi_community? ? "#{@community.name} " : "" %>All-Time</div>
+      <div class="numbers">
+        <div>
+          <div class="number"><%= number_with_delimiter(@report.overview[@community.id]["ttl_meals"]) %></div>
+          <div class="caption">Meals</div>
+        </div>
+        <div>
+          <div class="number"><%= number_with_delimiter(@report.overview[@community.id]["ttl_diners"]) %></div>
+          <div class="caption">Diners</div>
+        </div>
+        <div class="cost">
+          <div class="number"><%= number_to_currency(@report.overview[@community.id]["ttl_cost"]) %></div>
+          <div class="caption">Cost</div>
+        </div>
+      </div>
+    </div>
     <% if multi_community? %>
-      <tr>
-        <td>Overall - All Time</td>
-        <td><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></td>
-        <td><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></td>
-        <td><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></td>
-      </tr>
+      <div class="set col-sm-4 col-sm-offset-2">
+        <div class="title">Overall All-Time</div>
+        <div class="numbers">
+          <div>
+            <div class="number"><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></div>
+            <div class="caption">Meals</div>
+          </div>
+          <div>
+            <div class="number"><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></div>
+            <div class="caption">Diners</div>
+          </div>
+          <div class="cost">
+            <div class="number"><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></div>
+            <div class="caption">Cost</div>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </table>
+  </div>
 
   <div id="charts">
     <div class="row">

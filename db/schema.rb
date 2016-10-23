@@ -166,6 +166,14 @@ ActiveRecord::Schema.define(version: 20161006121008) do
 
   add_index "meals_costs", ["meal_id"], name: "index_meals_costs_on_meal_id", using: :btree
 
+  create_table "old_credit_balances", id: false, force: :cascade do |t|
+    t.decimal "balance", precision: 5, scale: 2
+    t.integer "community_program_id", default: 2
+    t.string "name", limit: 65
+    t.integer "new_id"
+    t.decimal "old_id", precision: 6
+  end
+
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
     t.integer "resource_id", null: false
     t.integer "shared_guidelines_id", null: false

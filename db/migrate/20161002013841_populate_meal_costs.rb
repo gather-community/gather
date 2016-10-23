@@ -2,7 +2,7 @@ class PopulateMealCosts < ActiveRecord::Migration
   def up
     transaction do
       Meal.where(status: "finalized").find_each do |meal|
-        mcost = meal.meal_cost
+        mcost = meal.cost
         mcost.pantry_cost = meal.read_attribute(:pantry_cost)
         mcost.ingredient_cost = meal.read_attribute(:ingredient_cost)
         calculator = MealCostCalculator.build(meal)

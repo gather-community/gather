@@ -61,7 +61,7 @@ module Meals
     end
 
     def calculator
-      @calculator ||= MealCostCalculator.build(meal_cost)
+      @calculator ||= MealCostCalculator.build(meal)
     end
   end
 end

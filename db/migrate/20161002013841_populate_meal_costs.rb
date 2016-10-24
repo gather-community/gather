@@ -10,7 +10,7 @@ class PopulateMealCosts < ActiveRecord::Migration
         mcost = meal.build_cost(meal: meal)
         mcost.pantry_cost = meal.read_attribute(:pantry_cost)
         mcost.ingredient_cost = meal.read_attribute(:ingredient_cost)
-        calculator = MealCostCalculator.build(mcost)
+        calculator = MealCostCalculator.build(meal)
         Signup::SIGNUP_TYPES.each do |st|
           mcost[st] = calculator.price_for(st)
         end

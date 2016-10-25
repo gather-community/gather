@@ -7,4 +7,6 @@ This is a reminder that you are signed up for <%= @meal.title ? "the meal '#{@me
 There are <%= @signup.total %> diners signed up from your household.
 <% end %>
 
-Enjoy the meal!
+See more about the meal here: <%= meal_url(@meal) %>
+
+Bon appetit!

@@ -78,8 +78,9 @@ Mess.Views.Meals.ReportChartsView = Backbone.View.extend
 
   pieChart: ->
     nv.models.pieChart()
-      .margin({top: 0, right: 0, bottom: 0, left: 0})
+      .margin({top: 10, right: 0, bottom: 10, left: 0})
       .showTooltipPercent(true)
+      .labelsOutside(true)
       .x((d) -> d.key)
       .y((d) -> d.y)
       .valueFormat(d3.format(',.1f'))

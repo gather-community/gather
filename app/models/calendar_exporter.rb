@@ -33,6 +33,7 @@ class CalendarExporter
           e.dtend = obj.ends_at
           e.location = obj.location_name
           e.summary = summary(obj)
+          e.description = description(obj)
           e.url = url(obj)
         end
       end
@@ -83,6 +84,15 @@ class CalendarExporter
     when "Meal" then obj.title_or_no_title
     when "Assignment" then obj.title
     when "Reservation::Reservation" then obj.name << (obj.meal? ? "" : " (#{obj.reserver_name})")
+    else unknown_class(obj)
+    end
+  end
+
+  def description(obj)
+    case obj.class.name
+    when "Meal" then "By #{obj.head_cook_name}"
+    when "Assignment" then nil
+    when "Reservation::Reservation" then nil
     else unknown_class(obj)
     end
   end

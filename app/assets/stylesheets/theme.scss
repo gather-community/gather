@@ -25,10 +25,11 @@ p.inner {
   margin-top: $large-margin;
 }
 
-small {
-  display: inline-block;
-  font-size: 0.8em;
-  line-height: 1.4em;
+.footnote {
+  margin-top: 10px;
+  font-size: 13px;
+  color: $gray-text;
+  line-height: 1.4;
 }
 
 a, a:visited {

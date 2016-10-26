@@ -39,12 +39,6 @@
     display: block;
   }
 
-  .footnote {
-    margin-top: 20px;
-    font-size: 13px;
-    color: $gray-text;
-  }
-
   #charts {
     h5 {
       font-size: 13px;
@@ -107,5 +101,10 @@
         }
       }
     }
+  }
+
+  .footnote {
+    margin-top: 40px;
+    text-align: center;
   }
 }

@@ -76,11 +76,12 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     authorize @household
 
+    @community = params[:community] ? Community.find(params[:community]) : current_user.community
+
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
     @communities = @accounts.map(&:community)
 
-    @account = @accounts.detect{ |a| a.community_id == params[:community].to_i } if params[:community]
-    @account ||= @accounts.detect{ |a| a.community == current_user.community } || @accounts.first
+    @account = @accounts.detect{ |a| a.community_id == @community.id } || @accounts.first
 
     @statements = @account.statements.page(1).per(StatementsController::PER_PAGE) if @account
     @last_statement = @account.last_statement

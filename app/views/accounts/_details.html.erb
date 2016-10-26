@@ -1,102 +1,112 @@
-<div class="row">
-  <div class="col-md-6 col-sm-12">
-    <h4>
-      Current Statement&nbsp;
-      <%= link_to("View", @last_statement) %>
-    </h4>
-
-    <table class="key-value">
-      <tr>
-        <td>Statement Date</td>
-        <td>
-          <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
-        </td>
-      </tr>
-      <tr>
-        <td>Payments/Credits</td>
-        <td>
-          <%= @last_statement ? currency_with_cr(@last_statement.total_credits) : "N/A" %>
-        </td>
-      </tr>
-      <tr>
-        <td>Charges</td>
-        <td>
-          <%= @last_statement ? currency_with_cr(@last_statement.total_charges) : "N/A" %>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Pay This Amount</strong></td>
-        <td>
-          <strong><%= currency_with_cr(@account.balance_due) %></strong>
-          <% if footnotes && @account.balance_due >= 0.01 %>
-            <strong>*</strong>
-          <% end %>
-        </td>
-      </tr>
-    </table>
-
-    <% if footnotes && @account.balance_due >= 0.01 %>
-      <div class="footnote">
-        <strong>*</strong> This is the amount you currently owe. It is the amount due on your last
-        statement minus any payments received since then.
-        If you have already sent payment but it is not reflected here, please disregard.
-      </div>
-    <% end %>
-  </div>
-
-  <div class="col-md-6 col-sm-12">
-    <h4>
-      Activity Since Current Statement&nbsp;
-      <%= link_to("View", account_transactions_path(@account)) %>
-    </h4>
-
-    <table class="key-value">
-      <tr>
-        <td>Payments/Credits</td>
-        <td>
-          <%= currency_with_cr(@account.total_new_credits) %>
-        </td>
-      </tr>
-      <tr>
-        <td>Charges</td>
-        <td>
-          <%= currency_with_cr(@account.total_new_charges) %>
-        </td>
-      </tr>
-      <tr>
-        <td>Current Balance</td>
-        <td>
-          <%= currency_with_cr(@account.current_balance) %>
-          <% if footnotes && @account.current_balance >= 0.01 %>
-            <strong>**</strong>
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td>Credit Limit</td>
-        <td>
-          <%= credit_limit(@account) %>
-        </td>
-      </tr>
-    </table>
-    <% if footnotes && @account.current_balance >= 0.01 %>
-      <div class="footnote">
-        <strong>**</strong> This balance includes charges and credits since your last statement.
-          If it exceeds your credit limit, you will not be able to sign up for meals.
-      </div>
-    <% end %>
-  </div>
-</div>
-
 <% if @statements.any? %>
-  <h4 class="inner">All Statements</h4>
+  <div class="row">
+    <div class="col-sm-6">
+      <h4>
+        Current Statement&nbsp;
+        <%= link_to("View", @last_statement) %>
+      </h4>
 
-  <table class="index part-width">
-    <tr>
-      <th class="col-md-1">Date</th>
-      <th class="col-md-1">Activity</th>
-      <th class="col-md-1">Total Due</th>
-    </tr>
-    <%= render("statements/statement_rows") %>
-  </table>
+      <table class="key-value">
+        <tr>
+          <td>Statement Date</td>
+          <td>
+            <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+          </td>
+        </tr>
+        <tr>
+          <td>Payments/Credits</td>
+          <td>
+            <%= @last_statement ? currency_with_cr(@last_statement.total_credits) : "N/A" %>
+          </td>
+        </tr>
+        <tr>
+          <td>Charges</td>
+          <td>
+            <%= @last_statement ? currency_with_cr(@last_statement.total_charges) : "N/A" %>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Pay This Amount</strong></td>
+          <td>
+            <strong><%= currency_with_cr(@account.balance_due) %></strong>
+            <% if footnotes && @account.balance_due >= 0.01 %>
+              <strong>*</strong>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+
+      <% if footnotes && @account.balance_due >= 0.01 %>
+        <div class="footnote">
+          <strong>*</strong> This is the amount you currently owe. It is the amount due on your last
+          statement minus any payments received since then.
+          If you have already sent payment but it is not reflected here, please disregard.
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-sm-6">
+      <h4>
+        Activity Since Current Statement&nbsp;
+        <%= link_to("View", account_transactions_path(@account)) %>
+      </h4>
+
+      <table class="key-value">
+        <tr>
+          <td>Payments/Credits</td>
+          <td>
+            <%= currency_with_cr(@account.total_new_credits) %>
+          </td>
+        </tr>
+        <tr>
+          <td>Charges</td>
+          <td>
+            <%= currency_with_cr(@account.total_new_charges) %>
+          </td>
+        </tr>
+        <tr>
+          <td>Current Balance</td>
+          <td>
+            <%= currency_with_cr(@account.current_balance) %>
+            <% if footnotes && @account.current_balance >= 0.01 %>
+              <strong>**</strong>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>Credit Limit</td>
+          <td>
+            <%= credit_limit(@account) %>
+          </td>
+        </tr>
+      </table>
+      <% if footnotes && @account.current_balance >= 0.01 %>
+        <div class="footnote">
+          <strong>**</strong> This balance includes charges and credits since your last statement.
+            If it exceeds your credit limit, you will not be able to sign up for meals.
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <h4 class="inner">All Statements</h4>
+
+      <table class="index">
+        <tr>
+          <th>Date</th>
+          <th>Activity</th>
+          <th>Total Due</th>
+        </tr>
+        <%= render("statements/statement_rows") %>
+      </table>
+    </div>
+    <div class="col-sm-6">
+      <h4 class="inner">How to Pay</h4>
+      <%= simple_format(@community.settings[:payment_instructions]) %>
+    </div>
+  </div>
+<% else %>
+  There is no activity on this account.
 <% end %>

@@ -21,7 +21,7 @@ feature "calendar export" do
       "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals")
   end
 
-  scenario "community meals" do
+  scenario "work shifts" do
     visit("/calendars/shifts/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
       "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Meal Work Shifts")
@@ -31,6 +31,12 @@ feature "calendar export" do
     visit("/calendars/reservations/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
       "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Reservations")
+  end
+
+  scenario "your reservations" do
+    visit("/calendars/your-reservations/xyz.ics")
+    expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Reservations")
   end
 
   scenario "bad calendar type" do

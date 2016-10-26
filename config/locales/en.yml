@@ -130,6 +130,7 @@ en:
     community_meals: "%{community} Meals"
     shifts: "Your Meal Work Shifts"
     reservations: "%{community} Reservations"
+    your_reservations: "Your Reservations"
 
   signups:
     tooltips:

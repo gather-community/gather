@@ -10,6 +10,8 @@ module Reservation
     belongs_to :resource
     belongs_to :meal
 
+    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.now - age) }
+
     delegate :household, to: :reserver
     delegate :name, :community, to: :reserver, prefix: true
     delegate :name, to: :reserver_community, prefix: true

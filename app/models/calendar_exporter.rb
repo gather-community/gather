@@ -4,7 +4,7 @@ class CalendarExporter
   class CalendarTypeError < StandardError; end
 
   MAX_EVENT_AGE = 1.year
-  CALENDAR_TYPES = %w(meals community_meals all_meals shifts reservations)
+  CALENDAR_TYPES = %w(meals community_meals all_meals shifts reservations your_reservations)
   UID_SIGNATURE = "91a772a5ae4a"
 
   attr_accessor :type, :user
@@ -56,10 +56,9 @@ class CalendarExporter
     when "shifts"
       user.assignments.includes(:meal).to_a
     when "reservations"
-      Reservation::ReservationPolicy::Scope.new(user, Reservation::Reservation).resolve.
-        includes(:resource, :reserver).
-        where(resources: {community_id: user.community_id}).
-        to_a
+      base_reservations_scope.where(resources: {community_id: user.community_id}).to_a
+    when "your_reservations"
+      base_reservations_scope.where(reserver_id: user.id).to_a
     else
       raise "Invalid calendar type #{type}"
     end
@@ -71,6 +70,12 @@ class CalendarExporter
       includes(:resources).
       with_max_age(MAX_EVENT_AGE).
       oldest_first
+  end
+
+  def base_reservations_scope
+    Reservation::ReservationPolicy::Scope.new(user, Reservation::Reservation).resolve.
+      includes(:resource, :reserver).
+      with_max_age(MAX_EVENT_AGE)
   end
 
   def summary(obj)

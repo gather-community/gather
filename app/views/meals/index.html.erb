@@ -17,24 +17,24 @@
 <% else %>
   <table class="index non-mobile">
     <tr>
-      <th class="col-md-2">Date/Time</th>
-      <th class="col-md-1">Location</th>
-      <th class="col-md-2">Cook</th>
-      <th class="col-md-4">Title</th>
-      <th class="col-md-1">Going?</th>
-      <th class="col-md-2" colspan="2">Signups</th>
+      <th class="nowrap">Date/Time</th>
+      <th>Location</th>
+      <th>Cook</th>
+      <th>Title</th>
+      <th>Going?</th>
+      <th>Signups</th>
     </tr>
     <% @meals.each do |meal| %>
       <tr class="<%= signed_up_class(meal) %>">
-        <td class="col-md-2"><%= meal_date_time(meal) %></td>
-        <td class="col-md-1"><%= meal.location_abbrv %></td>
-        <td class="col-md-2"><%= link_to(meal.head_cook_name, meal.head_cook) %></td>
-        <td class="col-md-4">
+        <td class="nowrap"><%= meal_date_time(meal) %></td>
+        <td><%= meal.location_abbrv %></td>
+        <td><%= meal.head_cook_name %></td>
+        <td>
           <%= meal_link(meal) %>
           <%= icon_tag("lock") if meal.closed? %>
           <%= icon_tag("certificate") if meal.finalized? %>
         </td>
-        <td class="col-md-1">
+        <td>
           <% if signup = meal.signup_for(current_user.household) %>
             <% if meal.signups_editable? %>
               <%= link_to(signup_info(signup), meal_path(meal)) %>
@@ -49,14 +49,7 @@
             No
           <% end %>
         </td>
-        <td class="col-md-1"><%= signup_count(meal) %></td>
-        <td class="col-md-1">
-          <% if params[:finalizable] %>
-            <%= link_to("Finalize", finalize_meal_path(meal)) %>
-          <% else %>
-            <%= meal_action_icons(meal) %>
-          <% end %>
-        </td>
+        <td><%= signup_count(meal) %></td>
       </tr>
     <% end %>
   </table>
@@ -64,7 +57,6 @@
   <div class="meals-list mobile">
     <% @meals.each do |meal| %>
       <div class="meal <%= signed_up_class(meal) %>">
-        <div class="actions"><%= meal_action_icons(meal) %></div>
         <h5>
           <%= meal_link(meal) %> by <%= meal.head_cook_name %>
           <%= icon_tag("lock") if meal.closed? %>

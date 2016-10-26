@@ -14,6 +14,10 @@ table.index {
   th, td {
     padding-right: 10px;
 
+    &:first-of-type {
+      padding-left: 10px;
+    }
+
     &:last-child {
       padding-right: 0;
     }

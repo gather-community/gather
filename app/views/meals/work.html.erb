@@ -14,7 +14,7 @@
 <% else %>
   <table class="index non-mobile">
     <tr>
-      <th>Date/Time</th>
+      <th class="nowrap">Date/Time</th>
       <th>Location</th>
       <th>Title</th>
       <th>Head Cook</th>
@@ -23,11 +23,10 @@
         <th>Table Setters</th>
       <% end %>
       <th>Cleaners</th>
-      <th></th>
     </tr>
     <% @meals.each do |meal| %>
       <tr class="<%= signed_up_class(meal) %>">
-        <td><%= meal_date_time(meal, with_break: true) %></td>
+        <td class="nowrap"><%= meal_date_time(meal, with_break: true) %></td>
         <td><%= meal.location_abbrv %></td>
         <td><%= meal_link(meal) %></td>
         <td class="nowrap"><%= user_link(meal.head_cook, highlight: lens[:user]) %></td>
@@ -36,7 +35,6 @@
           <td class="nowrap"><%= meal.table_setters.map{ |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
         <% end %>
         <td class="nowrap"><%= meal.cleaners.map{ |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
-        <td><%= meal_action_icons(meal) %></td>
       </tr>
     <% end %>
   </table>
@@ -44,7 +42,6 @@
   <div class="meals-list mobile">
     <% @meals.each do |meal| %>
       <div class="meal <%= signed_up_class(meal) %>">
-        <div class="actions"><%= meal_action_icons(meal) %></div>
         <h4><%= meal_date_time(meal) %></h4>
         <div class="title">
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>

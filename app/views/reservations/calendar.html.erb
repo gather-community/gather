@@ -56,13 +56,15 @@
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.ReservationCalendarView({
+    new Mess.Views.ReservationCalendarView(<%=json(
       el: '#calendar-col',
-      feedUrl: <%=json reservations_path_for_resource(@resource) %>,
-      newUrl: <%=json new_reservation_path_for_resource(@resource) %>,
-      focusDate: <%=json params[:date] %>,
-      viewType: <%=json params[:view] || @resource.default_calendar_view %>,
-      ruleSet: <%=json ReservationRuleSetSerializer.new(@rule_set).as_json %>
-    });
+      resourceId: @resource.id,
+      feedUrl: reservations_path_for_resource(@resource),
+      newUrl: new_reservation_path_for_resource(@resource),
+      focusDate: params[:date],
+      viewType: params[:view],
+      defaultViewType: @resource.default_calendar_view,
+      ruleSet: ReservationRuleSetSerializer.new(@rule_set)
+    )%>);
   });
 <% end %>

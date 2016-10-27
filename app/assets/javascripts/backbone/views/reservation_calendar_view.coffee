@@ -9,10 +9,13 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     @newUrl = options.newUrl
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
+    @resourceId = options.resourceId
+    @storageKey = "calendar#{@resourceId}Settings"
 
     @calendar.fullCalendar
       events: options.feedUrl
-      defaultView: @initialViewType(options.viewType)
+      defaultView: @initialViewType(options.viewType, options.defaultViewType)
+      defaultDate: options.focusDate || @savedSettings().currentDate
       height: 700
       allDaySlot: false
       eventOverlap: false
@@ -29,8 +32,6 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
       loading: @onLoading.bind(this)
       eventDrop: @onEventChange.bind(this)
       eventResize: @onEventChange.bind(this)
-
-    @calendar.fullCalendar('gotoDate', moment(options.focusDate)) if options.focusDate
 
   events:
     'click .modal .btn-primary': 'create'
@@ -79,6 +80,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
   onViewRender: ->
     @updatePermalink()
+    @saveSettings()
 
   onLoading: (isLoading) ->
     Mess.loadingIndicator[if isLoading then 'show' else 'hide']()
@@ -108,18 +110,19 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
   create: ->
     window.location.href = "#{@newUrl}?#{$.param(@selection)}"
 
-  initialViewType: (param) ->
-    if @forceDay()
-      'agendaDay'
-    else
-      @URL_PARAMS_TO_VIEW_TYPES[param] || 'agendaWeek'
+  initialViewType: (linkParam, defaultType) ->
+    type = @forceDay() && 'day' || linkParam || @savedSettings().viewType || defaultType || 'week'
+    @URL_PARAMS_TO_VIEW_TYPES[type]
 
   permalink: ->
     base = [location.protocol, '//', location.host, location.pathname].join('')
-    view = @calendar.fullCalendar('getView')
-    viewType = view.name.replace('agenda', '').toLowerCase()
-    date = view.intervalStart.format(Mess.TIME_FORMATS.compactDate)
-    "#{base}?view=#{viewType}&date=#{date}"
+    "#{base}?view=#{@viewType()}&date=#{@currentDate()}"
+
+  viewType: ->
+    @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()
+
+  currentDate: ->
+    @calendar.fullCalendar('getView').intervalStart.format(Mess.TIME_FORMATS.compactDate)
 
   hasEventInInterval: (start, end) ->
     matches = @calendar.fullCalendar 'clientEvents', (event) ->
@@ -158,3 +161,20 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     nearest.add(1, 'days') if selectedTime.diff(nearest, 'hours', true) > 12
 
     nearest
+
+  savedSettings: ->
+    settings = JSON.parse(window.localStorage.getItem(@storageKey) || '{}')
+
+    # currentDate setting expires after one hour
+    if settings.savedAt
+      settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds()
+      delete settings.currentDate if settingsAge > 3600
+
+    settings
+
+  saveSettings: ->
+    window.localStorage.setItem(@storageKey, JSON.stringify(
+      viewType: @viewType()
+      currentDate: @currentDate()
+      savedAt: new Date()
+    ))

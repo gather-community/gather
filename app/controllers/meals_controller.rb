@@ -5,7 +5,7 @@ class MealsController < ApplicationController
   before_action :create_worker_change_notifier, only: :update
 
   def index
-    prepare_lens(:community, :time)
+    prepare_lens(:community, :time, :search)
 
     # Trivially, a meal in the past must be closed.
     authorize Meal
@@ -181,6 +181,13 @@ class MealsController < ApplicationController
       @meals = @meals.future.oldest_first
     end
     @meals = @meals.includes(:signups)
+    if params[:search]
+      @meals = @meals.
+        joins(:head_cook).
+        where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
+          "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+
     @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
     @meals = @meals.hosted_by(Community.find_by_abbrv(lens[:community])) if lens[:community].present?
     @meals = @meals.page(params[:page])

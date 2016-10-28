@@ -50,7 +50,7 @@ RSpec.describe Meals::Report, type: :model do
     end
 
     it "should return all diner types in results" do
-      expect(report.diner_types).to eq %w(senior adult little_kid)
+      expect(report.diner_types).to eq %w(adult senior little_kid)
     end
   end
 

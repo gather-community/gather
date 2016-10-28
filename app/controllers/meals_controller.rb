@@ -182,8 +182,7 @@ class MealsController < ApplicationController
     end
     @meals = @meals.includes(:signups)
     if params[:search]
-      @meals = @meals.
-        joins(:head_cook).
+      @meals = @meals.joins(:head_cook).
         where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end

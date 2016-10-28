@@ -11,7 +11,7 @@
   }
 
   .meal_allergens > div.boxes {
-    height: 120px;
+    height: 150px;
     -webkit-column-count: 3;
     -moz-column-count: 3;
     column-count: 3;
@@ -19,7 +19,7 @@
 
   @media screen and (max-width: 768px) {
     .meal_allergens > div.boxes {
-      height: 180px;
+      height: 210px;
       -webkit-column-count: 2;
       -moz-column-count: 2;
       column-count: 2;

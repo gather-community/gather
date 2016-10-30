@@ -38,11 +38,11 @@ class Household < ActiveRecord::Base
   end
 
   def full_name
-    "#{community.abbrv}: #{name}"
+    "#{community.abbrv}: #{display_name}"
   end
 
-  def name
-    "#{read_attribute(:name)}" << (active? ? "" : " (Inactive)")
+  def display_name
+    "#{name}#{active? ? '' : ' (Inactive)'}"
   end
 
   def after_deactivate

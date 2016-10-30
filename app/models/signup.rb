@@ -1,5 +1,6 @@
 class Signup < ActiveRecord::Base
   MAX_PEOPLE_PER_TYPE = 10
+  MAX_COMMENT_LENGTH = 500
   DINER_TYPES = %w(adult senior teen big_kid little_kid)
   FOOD_TYPES = %w(meat veg)
   SIGNUP_TYPES = DINER_TYPES.map{ |dt| FOOD_TYPES.map{ |ft| "#{dt}_#{ft}" } }.flatten
@@ -22,6 +23,7 @@ class Signup < ActiveRecord::Base
 
   normalize_attributes :comments
 
+  validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
   validate :max_signups_per_type, :dont_exceed_spots
 
   delegate :full_name, :users, to: :household, prefix: true

@@ -102,7 +102,7 @@
         <% end %>
 
         <% if @meal.signups_editable? %>
-          <%= f.input :comments %>
+          <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>
         <% else %>
           <%= f.input :comments do %>
             <%= simple_format(@signup.comments) %>

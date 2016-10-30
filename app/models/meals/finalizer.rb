@@ -13,7 +13,7 @@ module Meals
     # Assumes that meal is valid and ready to be saved.
     def finalize!
       create_diner_transactions
-      create_reimbursement_transaction if meal_cost.payment_method == "credit"
+      create_reimbursement_transaction
       copy_meal_costs
       meal.status = "finalized"
       meal.save!
@@ -43,14 +43,16 @@ module Meals
     end
 
     def create_reimbursement_transaction
-      Transaction.create!(
-        account: Account.for(meal.head_cook.household_id, meal.host_community_id),
-        code: "reimb",
-        incurred_on: meal.served_at.to_date,
-        description: "#{meal.title}: Grocery Reimbursement",
-        amount: -(meal_cost.ingredient_cost + meal_cost.pantry_cost),
-        statementable: meal
-      )
+      if meal_cost.payment_method == "credit" && meal_cost.total_cost > 0
+        Transaction.create!(
+          account: Account.for(meal.head_cook.household_id, meal.host_community_id),
+          code: "reimb",
+          incurred_on: meal.served_at.to_date,
+          description: "#{meal.title}: Grocery Reimbursement",
+          amount: -(meal_cost.total_cost),
+          statementable: meal
+        )
+      end
     end
 
     def copy_meal_costs

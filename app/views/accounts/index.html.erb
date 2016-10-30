@@ -31,50 +31,48 @@
     </ul>
   </p>
 
-  <%= form_tag("/accounts/apply_payments", method: :put) do %>
-    <table class="index">
+  <table class="index">
+    <tr>
+      <th>Household</th>
+      <th class="amount">Last Stmt. Date</th>
+      <th class="amount">Due Last Stmt.</th>
+      <th class="amount">New Credits</th>
+      <th class="amount">Balance Due</th>
+      <th class="amount">New Charges</th>
+      <th class="amount">Current Balance</th>
+      <th class="amount">Credit Limit</th>
+      <th></th>
+    </tr>
+    <% @accounts.each do |account| %>
       <tr>
-        <th>Household</th>
-        <th class="amount">Last Stmt. Date</th>
-        <th class="amount">Due Last Stmt.</th>
-        <th class="amount">New Credits</th>
-        <th class="amount">Balance Due</th>
-        <th class="amount">New Charges</th>
-        <th class="amount">Current Balance</th>
-        <th class="amount">Credit Limit</th>
-        <th></th>
+        <td>
+          <%= link_to(account.household_full_name.html_safe << no_user_warning(account), account) %>
+        </td>
+        <td class="amount">
+          <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+        </td>
+        <td class="amount">
+          <%= statement_amount(account.last_statement) %>
+        </td>
+        <td class="amount">
+          <%= link_to_currency_if_nonzero(account.total_new_credits, account_transactions_path(account)) %>
+        </td>
+        <td class="amount">
+          <%= currency_with_cr(account.balance_due) %>
+        </td>
+        <td class="amount">
+          <%= link_to_currency_if_nonzero(account.total_new_charges, account_transactions_path(account)) %>
+        </td>
+        <td class="amount">
+          <strong><%= currency_with_cr(account.current_balance) %></strong>
+        </td>
+        <td class="amount">
+          <%= credit_limit(account) %>
+        </td>
+        <td>
+          <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
+        </td>
       </tr>
-      <% @accounts.each do |account| %>
-        <tr>
-          <td>
-            <%= link_to(account.household_full_name.html_safe << no_user_warning(account), account) %>
-          </td>
-          <td class="amount">
-            <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
-          </td>
-          <td class="amount">
-            <%= statement_amount(account.last_statement) %>
-          </td>
-          <td class="amount">
-            <%= link_to_currency_if_nonzero(account.total_new_credits, account_transactions_path(account)) %>
-          </td>
-          <td class="amount">
-            <%= currency_with_cr(account.balance_due) %>
-          </td>
-          <td class="amount">
-            <%= link_to_currency_if_nonzero(account.total_new_charges, account_transactions_path(account)) %>
-          </td>
-          <td class="amount">
-            <strong><%= currency_with_cr(account.current_balance) %></strong>
-          </td>
-          <td class="amount">
-            <%= credit_limit(account) %>
-          </td>
-          <td>
-            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
+    <% end %>
+  </table>
 <% end %>

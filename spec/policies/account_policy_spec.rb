@@ -75,7 +75,7 @@ describe AccountPolicy do
       end
     end
 
-    permissions :edit?, :update?, :apply_payments? do
+    permissions :edit?, :update? do
       it_behaves_like :admin_or_biller_with_community
     end
   end

@@ -19,10 +19,6 @@ class AccountPolicy < ApplicationPolicy
     admin_or_biller?
   end
 
-  def apply_payments?
-    same_community_admin_or_biller?
-  end
-
   def permitted_attributes
     [:credit_limit]
   end

@@ -56,22 +56,6 @@ class AccountsController < ApplicationController
     redirect_to(accounts_path)
   end
 
-  def apply_payments
-    if params[:confirmed]
-      Account.find(params[:payment].keys).each{ |a| authorize a }
-      PaymentApplier.new(params[:payment]).apply!
-      flash[:success] = "Payments applied."
-      redirect_to(accounts_path)
-    else
-      # Build set of payment hashes to confirm with the user.
-      @accounts = Account.where(id: params[:payment].reject{ |_, a| a.blank? }.keys).by_household_full_name
-      @payments = @accounts.map do |account|
-        authorize @account
-        { account: account, amount: params[:payment][account.id.to_s] }
-      end
-    end
-  end
-
   private
 
   def community

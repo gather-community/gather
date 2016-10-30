@@ -260,7 +260,7 @@ class Meal < ActiveRecord::Base
   end
 
   def enough_capacity_for_current_signups
-    if persisted? && !finalized? && capacity < (ttl = Signup.total_for_meal(self))
+    if persisted? && !finalized? && capacity && capacity < (ttl = Signup.total_for_meal(self))
       errors.add(:capacity, "must be at least #{ttl} due to current signups")
     end
   end

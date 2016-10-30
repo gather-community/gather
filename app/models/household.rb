@@ -2,15 +2,15 @@ class Household < ActiveRecord::Base
   include Deactivatable
 
   belongs_to :community
-  has_many :accounts, ->{ joins(:community).includes(:community).order("communities.name") },
+  has_many :accounts, ->{ joins(:community).includes(:community).order("LOWER(communities.name)") },
     inverse_of: :household
   has_many :signups
   has_many :users, ->{ by_name }, inverse_of: :household
 
   scope :active, -> { where("deactivated_at IS NULL") }
-  scope :by_name, -> { order("households.name") }
+  scope :by_name, -> { order("LOWER(households.name)") }
   scope :by_active_and_name, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)").by_name }
-  scope :by_commty_and_name, -> { includes(:community).order("communities.abbrv").by_name }
+  scope :by_commty_and_name, -> { includes(:community).order("LOWER(communities.abbrv)").by_name }
   scope :in_community, ->(c) { where(community_id: c.id) }
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 

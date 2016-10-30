@@ -14,6 +14,19 @@ class ApplicationController < ActionController::Base
 
   helper_method :home_path, :current_community, :multi_community?
 
+  rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
+
+  private
+
+  # Redirects to inactive page when user is inactive.
+  def handle_unauthorized(exception)
+    if current_user.try(:inactive?)
+      redirect_to(inactive_path)
+    else
+      raise exception
+    end
+  end
+
   def set_validation_error_notice
     flash.now[:error] = "Please correct the errors below."
   end

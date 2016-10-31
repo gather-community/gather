@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
 
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'
-    validates_plausible_phone "#{p}_phone", normalized_country_code: 'US'
+    validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'
   end
 
   normalize_attributes :email, :google_email, with: :email
@@ -59,8 +59,14 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
   end
 
+  # Returns formatted phone number, except if phone number has errors, returns raw value w/o +.
   def format_phone(kind)
-    read_attribute(:"#{kind}_phone").try(:phony_formatted, format: :national)
+    attrib = :"#{kind}_phone"
+    if errors[attrib].any?
+      read_attribute(attrib).sub(/\A\+/, "")
+    else
+      read_attribute(attrib).try(:phony_formatted, format: :national)
+    end
   end
 
   def any_assignments?

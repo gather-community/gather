@@ -65,7 +65,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def reopen?
-    hosting_admin_or_head_cook?
+    hosting_admin_or_head_cook? && !meal.in_past?
   end
 
   def finalize?

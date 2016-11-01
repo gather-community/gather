@@ -195,7 +195,7 @@ class Meal < ActiveRecord::Base
   end
 
   def in_past?
-    served_at < Time.now
+    served_at && served_at < Time.now
   end
 
   def menu_posted?

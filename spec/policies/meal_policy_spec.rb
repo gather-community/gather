@@ -87,6 +87,14 @@ describe MealPolicy do
       end
     end
 
+    permissions :reopen? do
+      it "denies access to head cook if meal in past" do
+        user = create(:user)
+        meal = create(:meal, served_at: Time.now - 7.days, head_cook: user, communities: [create(:community)])
+        expect(subject).not_to permit(user, meal)
+      end
+    end
+
     permissions :finalize? do
       it "grants access to admins in community" do
         expect(subject).to permit(admin, Meal.new(host_community: community))

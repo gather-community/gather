@@ -19,6 +19,7 @@ To install the software below we recommend the following package managers:
   1. Once Ruby is installed, run `gem install bundler` to install.
 1. PostgreSQL v9.2+ (database)
 1. ImageMagick
+1. Set up a MESS OAuth client, if you don't have one, on Google Developers.
 
 ## Development Setup Guide
 Follow these steps to setup a development environment for MESS.
@@ -26,51 +27,49 @@ Follow these steps to setup a development environment for MESS.
 1. **Install all above dependencies**
 
 1. **Retrieve project files using Git**
-
   ```
   git clone https://github.com/touchstone-cohousing/mess.git
   cd mess
   ```
 
   If developing, it's best to work off the development branch:
-
   ```
   git checkout develop
   ```
 
+  The remaining steps should all be done from the project directory. 
+
 1. **Install gems**
-  - Install the required gems by running `bundle install` in the project directory.
+  1. Run `bundle install` to install the required gems.
 
 1. **Set local config**
-  - `cp config/initializers/local_config.rb.example config/initializers/local_config.rb`
-  - Edit `config/initializers/local_config.rb` to set config specific to your environment.
+  1. Copy `config/initializers/local_config.rb.example` to `config/initializers/local_config.rb`.
+  1. Edit `config/initializers/local_config.rb` to fit your environment.
 
-1. **Create and setup development and test databases**
-  - See `createdb` command.
-  - Should be named `mess_development` and `mess_test`.
-  - Ensure adquate privileges for table creation, etc.
-  - Setup tables: `bundle exec rake db:schema:load`.
-
-1. **Seed the db**
-  - `rake db:seed`
-  - This adds communities, households, etc.
+1. **Create development and test databases and schemas**
+  1. Copy `config/database.yml.example` to `config/database.yml`.
+  1. Run `rake db:create` to create `mess_development` and `mess_test` databases.
+  1. Run `rake db:schema:load` to create the schema in both databases.
 
 1. **Create a user so you can log in**
-  - Open the rails console (`rails c`)
-  - Type e.g. `User.create!(email: "you@example.com", google_email: "you@gmail.com", first_name: "Jane", last_name: "Doe", mobile_phone: "17345551212", household: Household.first, admin: true)`
-  - Be sure to replace `you@gmail.com` with a Google account you control.
+  1. Copy `lib/tasks/fake_user_data.rake.example` to `lib/tasks/fake_user_data.rake`.
+  1. Edit `lib/tasks/fake_user_data.rake`, inserting your GMail name.
+  1. Run `rake db:fake_user_data` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.
 
 1. **Run the tests**
-  - Run `bundle exec rspec`.
-  - All tests should pass.
+  1. Run `bundle exec rspec`.
+  1. All tests should pass.
 
 1. **Start the server**
-  - Run `bundle exec rails s`.
+  1. Run `bundle exec rails s`.
+  1. Leave this console open.
 
 1. **Start DelayedJob**
-  - Run `bin/delayed_job start`
+  1. Open a new console.
+  1. Go to the project directory.
+  1. Run `bin/delayed_job start`.
 
 1. **Start using the system**
-  - Navigate to http://localhost:3000
-  - Log in with the Google account given above
-  - Enjoy!
+  1. In a browser, go to `http://localhost:3000` to start MESS.
+  1. Click "Log in with Google" to use MESS as the user you just created.
+  1. Enjoy!

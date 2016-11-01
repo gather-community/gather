@@ -37,15 +37,21 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <%= link_to(icon_tag("user") << " Profile", user_path(current_user)) %>
+                  <% if policy(current_user).show? %>
+                    <%= link_to(icon_tag("user") << " Profile", user_path(current_user)) %>
+                  <% end %>
                 </li>
                 <li>
-                  <%= link_to(icon_tag("money") << " Accounts",
-                    accounts_household_path(current_user.household)) %>
+                  <% if policy(current_user.household).accounts? %>
+                    <%= link_to(icon_tag("money") << " Accounts",
+                      accounts_household_path(current_user.household)) %>
+                  <% end %>
                 </li>
                 <li>
-                  <%= link_to(icon_tag("calendar") << " Calendars",
-                    calendar_exports_path) %>
+                  <% if policy(CalendarExport).index? %>
+                    <%= link_to(icon_tag("calendar") << " Calendars",
+                      calendar_exports_path) %>
+                  <% end %>
                 </li>
                 <li>
                   <%= link_to(icon_tag("sign-out") << " Log out",

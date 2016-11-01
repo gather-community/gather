@@ -3,21 +3,22 @@ class CalendarExportsController < ApplicationController
 
   def index
     skip_policy_scope
+    authorize CalendarExport
     current_user.ensure_calendar_token!
   end
 
   def show
-    skip_authorization
+    authorize CalendarExport
     begin
-      data = CalendarExporter.new(params[:id].gsub("-", "_"), current_user).generate
+      data = CalendarExport.new(params[:id].gsub("-", "_"), current_user).generate
       send_data(data, filename: "#{params[:id]}.ics", type: "text/calendar")
-    rescue CalendarExporter::CalendarTypeError
+    rescue CalendarExport::CalendarTypeError
       render plain: "Invalid calendar type", status: 404
     end
   end
 
   def reset_token
-    skip_authorization
+    authorize CalendarExport
     current_user.reset_calendar_token!
     flash[:success] = "Token reset successfully."
     redirect_to(calendar_exports_path)

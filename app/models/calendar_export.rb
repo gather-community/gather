@@ -1,6 +1,6 @@
 # Generates ICS files for various calendars in the system.
 require 'icalendar'
-class CalendarExporter
+class CalendarExport
   class CalendarTypeError < StandardError; end
 
   MAX_EVENT_AGE = 1.year

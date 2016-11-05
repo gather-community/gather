@@ -63,7 +63,7 @@
 
         <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
         <%= f.input :meal_id, as: :hidden %>
-        <%= base_error(f) %>
+        <%= base_error(f, full_width: true) %>
 
         <%= f.input :spots_left do %>
           <%= icon_tag("exclamation-circle") if @meal.full? %>

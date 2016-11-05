@@ -24,7 +24,7 @@ class Signup < ActiveRecord::Base
   normalize_attributes :comments
 
   validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
-  validate :max_signups_per_type, :dont_exceed_spots
+  validate :max_signups_per_type, :dont_exceed_spots, :nonzero_signups_if_new
 
   delegate :full_name, :users, to: :household, prefix: true
   delegate :communities, to: :meal
@@ -56,7 +56,7 @@ class Signup < ActiveRecord::Base
   end
 
   def save_or_destroy
-    all_zero? ? (destroy if persisted?) : save
+    all_zero? && persisted? ? destroy : save
   end
 
   def count_for(diner_type, food_type)
@@ -101,6 +101,12 @@ class Signup < ActiveRecord::Base
   def dont_exceed_spots
     if !meal.finalized? && total_change > meal.spots_left
       errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
+    end
+  end
+
+  def nonzero_signups_if_new
+    if new_record? && all_zero?
+      errors.add(:base, "You must sign up at least one person")
     end
   end
 end

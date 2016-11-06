@@ -21,4 +21,14 @@ class LandingController < ApplicationController
 
     render layout: nil, formats: :text, status: @dj ? 200 : 503
   end
+
+  def logged_out
+    skip_authorization
+    if user_signed_in?
+      redirect_to root_path
+    else
+      flash.delete(:notice)
+      render(layout: false)
+    end
+  end
 end

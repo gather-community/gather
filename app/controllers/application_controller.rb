@@ -82,4 +82,8 @@ class ApplicationController < ActionController::Base
       sign_in user, store: false
     end
   end
+
+  def after_sign_out_path_for(user)
+    logged_out_path
+  end
 end

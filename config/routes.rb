@@ -73,6 +73,7 @@ Rails.application.routes.draw do
 
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
+  get "logged-out", to: "landing#logged_out", as: :logged_out
 
   authenticated :user do
     root to: "meals#index", as: :authenticated_root

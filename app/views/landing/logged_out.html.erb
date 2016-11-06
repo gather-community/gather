@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MESS - Logged Out</title>
+  <%= render("layouts/head") %>
+</head>
+<body class="home logged-out">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <%= icon_tag("sign-out") %>
+      <p>You are now logged out of MESS.</p>
+      <br/>
+      <p>
+        If this is a <strong>public computer</strong>, you may also want to<br/>
+        <%= link_to("log out of your Google account",
+          "https://accounts.google.com/logout?continue=https://google.com") %>.
+      </p>
+      <br/>
+      <p>
+        <%= link_to("Return to home", root_path) %>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

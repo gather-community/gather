@@ -31,7 +31,6 @@
       <tr class="<%= user.active? ? "" : "inactive" %>">
         <td class="col-md-2">
           <%= link_to(user.name, user) %>
-          <%= icon_tag('trophy') if user.admin? %>
         </td>
         <% if policy(User).administer? %>
           <td class="col-md-2">

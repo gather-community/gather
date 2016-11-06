@@ -128,7 +128,7 @@ describe MealPolicy do
     let(:permitted) { MealPolicy::Scope.new(user, Meal.all).resolve }
 
     before do
-      meal3.households << user.household
+      meal3.signups.create!(household: user.household, adult_meat: 2)
     end
 
     it "returns meals invited to, assigned to, or signed up for" do

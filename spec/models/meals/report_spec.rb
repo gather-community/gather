@@ -112,7 +112,7 @@ RSpec.describe Meals::Report, type: :model do
         meals << create(:meal, :finalized, host_community_id: cid, served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
-        counts = [[5, 1], [7, 3], [4, 0], [8, 1]]
+        counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
         meals.each_with_index do |m, i|
           m.cost.adult_meat = i + 1
           m.signups << build(:signup, meal: m, adult_meat: counts[i][0], household: hholds[0])
@@ -147,18 +147,18 @@ RSpec.describe Meals::Report, type: :model do
           expect(jan["ttl_cost"]).to eq 12
 
           expect(feb["ttl_meals"]).to eq 2
-          expect(feb["ttl_diners"]).to eq 14
+          expect(feb["ttl_diners"]).to eq 16
           expect(feb["ttl_cost"]).to eq 24
           expect(feb["avg_adult_cost"]).to eq 2.50
-          expect(feb["avg_diners"]).to eq 7.0
-          expect(feb["avg_veg"]).to eq 1.5
-          expect(feb["avg_veg_pct"]).to be_within(0.1).of 21.4
+          expect(feb["avg_diners"]).to eq 8.0
+          expect(feb["avg_veg"]).to eq 2.5
+          expect(feb["avg_veg_pct"]).to be_within(0.1).of 31.25
           expect(feb["avg_adult"]).to eq 5.5
-          expect(feb["avg_adult_pct"]).to be_within(0.1).of 78.5
+          expect(feb["avg_adult_pct"]).to be_within(0.1).of 68.75
           expect(feb["avg_from_c1"]).to eq 5.5
-          expect(feb["avg_from_c1_pct"]).to be_within(0.1).of 78.5
-          expect(feb["avg_from_c2"]).to eq 1.5
-          expect(feb["avg_from_c2_pct"]).to be_within(0.1).of 21.4
+          expect(feb["avg_from_c1_pct"]).to be_within(0.1).of 68.75
+          expect(feb["avg_from_c2"]).to eq 2.5
+          expect(feb["avg_from_c2_pct"]).to be_within(0.1).of 31.25
 
           expect(mar).to be_nil
 
@@ -168,14 +168,14 @@ RSpec.describe Meals::Report, type: :model do
           expect(apr["avg_adult_cost"]).to eq 4.00
 
           expect(all["ttl_meals"]).to eq 4
-          expect(all["ttl_diners"]).to eq 29
+          expect(all["ttl_diners"]).to eq 31
           expect(all["ttl_cost"]).to eq 48
           expect(all["avg_adult_cost"]).to eq 2.50
-          expect(all["avg_diners"]).to eq 7.25
-          expect(all["avg_veg"]).to eq 1.25
-          expect(all["avg_veg_pct"]).to be_within(0.1).of 17.2
+          expect(all["avg_diners"]).to eq 7.75
+          expect(all["avg_veg"]).to eq 1.75
+          expect(all["avg_veg_pct"]).to be_within(0.1).of 22.58
           expect(all["avg_adult"]).to eq 6
-          expect(all["avg_adult_pct"]).to be_within(0.1).of 82.7
+          expect(all["avg_adult_pct"]).to be_within(0.1).of 77.4
         end
       end
 

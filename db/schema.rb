@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006121008) do
+ActiveRecord::Schema.define(version: 20161106162334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,8 +48,17 @@ ActiveRecord::Schema.define(version: 20161006121008) do
   add_index "assignments", ["role"], name: "index_assignments_on_role", using: :btree
   add_index "assignments", ["user_id"], name: "index_assignments_on_user_id", using: :btree
 
+  create_table "clusters", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "clusters", ["name"], name: "index_clusters_on_name", using: :btree
+
   create_table "communities", force: :cascade do |t|
     t.string "abbrv", limit: 2
+    t.integer "cluster_id"
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.text "settings", default: "--- {}\n"
@@ -57,6 +66,7 @@ ActiveRecord::Schema.define(version: 20161006121008) do
   end
 
   add_index "communities", ["abbrv"], name: "index_communities_on_abbrv", unique: true, using: :btree
+  add_index "communities", ["cluster_id"], name: "index_communities_on_cluster_id", using: :btree
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -381,6 +391,7 @@ ActiveRecord::Schema.define(version: 20161006121008) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
+  add_foreign_key "communities", "clusters"
   add_foreign_key "formulas", "communities"
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"

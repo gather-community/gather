@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   has_many :assignments
 
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
-  scope :admin, -> { where(admin: true) }
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :by_active_and_name, -> { order("users.deactivated_at IS NOT NULL").by_name }

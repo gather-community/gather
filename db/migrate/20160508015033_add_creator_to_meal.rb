@@ -5,7 +5,8 @@ class AddCreatorToMeal < ActiveRecord::Migration
 
     admins = {}
     Meal.find_each do |meal|
-      admin = (admins[meal.host_community_id] ||= User.in_community(meal.host_community_id).admin.first)
+      admin = (admins[meal.host_community_id] ||= User.in_community(meal.host_community_id).
+        where(admin: true).first)
       raise "Couldn't find admin to set as creator for meal #{meal.id}" unless admin
       meal.update_attribute(:creator_id, admin.id)
     end

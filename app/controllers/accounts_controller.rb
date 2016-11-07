@@ -27,6 +27,7 @@ class AccountsController < ApplicationController
 
   def show
     @account = Account.find(params[:id])
+    @community = @account.community
     authorize @account
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
     @last_statement = @account.last_statement

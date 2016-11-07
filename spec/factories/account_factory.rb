@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :account do
+  factory :account, class: "Billing::Account" do
     household
     community
     last_statement_on "2015-10-27"

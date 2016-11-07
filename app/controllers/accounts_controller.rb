@@ -1,24 +1,24 @@
 class AccountsController < ApplicationController
 
   def index
-    authorize Account
-    @accounts = policy_scope(Account)
+    authorize Billing::Account
+    @accounts = policy_scope(Billing::Account)
     @community = community
     @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
       with_any_activity(community).
       by_household_full_name
 
-    @active_accounts = Account.with_activity(community).count
-    @no_user_accounts = Account.with_activity_but_no_users(community).count
-    @recent_stmt_accounts = Account.with_recent_statement(community).count
+    @active_accounts = Billing::Account.with_activity(community).count
+    @no_user_accounts = Billing::Account.with_activity_but_no_users(community).count
+    @recent_stmt_accounts = Billing::Account.with_recent_statement(community).count
 
-    last_statement = Statement.for_community(community).order(:created_at).last
+    last_statement = Billing::Statement.for_community(community).order(:created_at).last
     @last_statement_run = last_statement.try(:created_on)
 
     @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
 
-    last_fee = Transaction.joins(:account).
+    last_fee = Billing::Transaction.joins(:account).
       where(code: "late_fee", accounts: { community_id: community.id }).
       order(:incurred_on).last
 
@@ -26,7 +26,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Account.find(params[:id])
+    @account = Billing::Account.find(params[:id])
     @community = @account.community
     authorize @account
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
@@ -34,14 +34,14 @@ class AccountsController < ApplicationController
   end
 
   def edit
-    @account = Account.find(params[:id])
+    @account = Billing::Account.find(params[:id])
     authorize @account
   end
 
   def update
-    @account = Account.find(params[:id])
+    @account = Billing::Account.find(params[:id])
     authorize @account
-    if @account.update_attributes(permitted_attributes(@account))
+    if @account.update_attributes(account_params)
       flash[:success] = "Account updated successfully."
       redirect_to(accounts_path)
     else
@@ -51,7 +51,7 @@ class AccountsController < ApplicationController
   end
 
   def apply_late_fees
-    authorize Account
+    authorize Billing::Account
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)
@@ -63,7 +63,12 @@ class AccountsController < ApplicationController
     current_user.community
   end
 
+  # Pundit built-in helper doesn't work due to namespacing
+  def account_params
+    params.require(:billing_account).permit(policy(@account).permitted_attributes)
+  end
+
   def late_fee_applier
-    @late_fee_applier ||= LateFeeApplier.new(community)
+    @late_fee_applier ||= Billing::LateFeeApplier.new(community)
   end
 end

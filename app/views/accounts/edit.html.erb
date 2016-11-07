@@ -6,7 +6,9 @@
   </div>
 <% end %>
 
-<%= simple_form_for(@account, html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@account,
+  url: @account.new_record? ? accounts_path : account_path(@account),
+  html: { class: 'form-horizontal' }) do |f| %>
 
   <%= f.input :household_id do %><%= @account.household_full_name %><% end %>
   <%= f.input :community_id do %><%= @account.community_name %><% end %>

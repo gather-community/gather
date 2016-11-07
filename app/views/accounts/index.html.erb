@@ -46,7 +46,8 @@
     <% @accounts.each do |account| %>
       <tr>
         <td>
-          <%= link_to(account.household_full_name.html_safe << no_user_warning(account), account) %>
+          <%= link_to(account.household_full_name.html_safe << no_user_warning(account),
+            account_path(account)) %>
         </td>
         <td class="amount">
           <%= account.last_statement_on.try(:to_s, :short_date) || "N/A" %>

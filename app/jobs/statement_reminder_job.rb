@@ -17,7 +17,7 @@ class StatementReminderJob < ReminderJob
     lead_days = Settings.reminder_lead_times.statement
     raise "No lead time found in settings for statement notification" if lead_days.blank?
 
-    @remindable_statements = Statement.due_within_days_from_now(lead_days).
+    @remindable_statements = Billing::Statement.due_within_days_from_now(lead_days).
       reminder_not_sent.with_balance_owing.is_latest
   end
 end

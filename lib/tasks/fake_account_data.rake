@@ -2,8 +2,8 @@ namespace :db do
   task :fake_account_data, [:household_ids] => :environment do |t, args|
     raise "Please specify household_ids, separated by the | character" unless args.household_ids.present?
 
-    Account.update_all("last_statement_id = NULL")
-    [Transaction, Statement, Account].each{ |k| k.delete_all }
+    Billing::Account.update_all("last_statement_id = NULL")
+    [Billing::Transaction, Billing::Statement, Billing::Account].each{ |k| k.delete_all }
 
     households = Household.active.shuffle[0...20] | Household.find(args.household_ids.split("|"))
     households.each do |household|
@@ -45,7 +45,7 @@ namespace :db do
             # Statement (don't run in last month)
             if (has_balance || charges > 0) && i < months - 1
               Timecop.freeze(Time.now + 30.days) do
-                statement = Statement.new(account: account, prev_balance: prev_balance || 0)
+                statement = Billing::Statement.new(account: account, prev_balance: prev_balance || 0)
                 statement.populate!
                 prev_balance = statement.total_due
               end

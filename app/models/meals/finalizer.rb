@@ -3,6 +3,8 @@ module Meals
   class Finalizer
     attr_accessor :meal, :meal_cost
 
+    delegate :signups, to: :meal
+
     def initialize(meal)
       self.meal = meal
       self.meal_cost = meal.cost
@@ -22,15 +24,15 @@ module Meals
     private
 
     def create_diner_transactions
-      meal.signups.each do |signup|
+      signups.each do |signup|
         meal.allowed_signup_types.each do |signup_type|
           next if signup[signup_type] == 0
 
           price = calculator.price_for(signup_type)
           next if price < 0.01
 
-          Transaction.create!(
-            account: Account.for(signup.household_id, meal.host_community_id),
+          Billing::Transaction.create!(
+            account: Billing::Account.for(signup.household_id, meal.host_community_id),
             code: "meal",
             incurred_on: meal.served_at.to_date,
             description: "#{meal.title}: #{I18n.t('signups.types.' << signup_type)}",
@@ -44,8 +46,8 @@ module Meals
 
     def create_reimbursement_transaction
       if meal_cost.payment_method == "credit" && meal_cost.total_cost > 0
-        Transaction.create!(
-          account: Account.for(meal.head_cook.household_id, meal.host_community_id),
+        Billing::Transaction.create!(
+          account: Billing::Account.for(meal.head_cook.household_id, meal.host_community_id),
           code: "reimb",
           incurred_on: meal.served_at.to_date,
           description: "#{meal.title}: Grocery Reimbursement",

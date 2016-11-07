@@ -1,6 +1,6 @@
 module AccountsHelper
   def statement_amount(statement)
-    statement.nil? ? "N/A" : link_to(currency_with_cr(statement.total_due), statement)
+    statement.nil? ? "N/A" : link_to(currency_with_cr(statement.total_due), statement_path(statement))
   end
 
   def currency_with_cr(amount)

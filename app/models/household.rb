@@ -3,7 +3,7 @@ class Household < ActiveRecord::Base
 
   belongs_to :community
   has_many :accounts, ->{ joins(:community).includes(:community).order("LOWER(communities.name)") },
-    inverse_of: :household
+    inverse_of: :household, class_name: "Billing::Account"
   has_many :signups
   has_many :users, ->{ by_name }, inverse_of: :household
 

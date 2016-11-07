@@ -7,7 +7,7 @@ shared_context "policy objs" do
   let(:household) { Household.new(users: [user]) }
   let(:admin) { User.new(admin: true) }
   let(:biller) { User.new(biller: true) }
-  let(:account) { Account.new }
+  let(:account) { Billing::Account.new }
 
   let(:outside_admin) { User.new(admin: true, household: Household.new) }
   let(:outside_biller) { User.new(biller: true, household: Household.new) }

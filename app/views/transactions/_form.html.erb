@@ -1,4 +1,6 @@
-<%= simple_form_for([@account, @transaction], html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for([@account, @transaction],
+  url: account_transactions_path(@account),
+  html: { class: 'form-horizontal' }) do |f| %>
 
   <%= hidden_field_tag :account_id, @account.id %>
 

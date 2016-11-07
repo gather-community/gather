@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :transaction do
+  factory :transaction, class: "Billing::Transaction" do
     incurred_on "2015-10-18"
     code "othchg"
     description "Some stuff"

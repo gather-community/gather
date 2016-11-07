@@ -8,11 +8,14 @@ RSpec.describe Meals::Finalizer, type: :model do
   let(:finalizer) { Meals::Finalizer.new(meal) }
 
   before do
-    meal.signups.create!(adult_meat: 2, household: households[0])
-    meal.signups.create!(senior_veg: 1, little_kid_meat: 1, household: households[1])
+    signups = [
+      meal.signups.create!(adult_meat: 2, household: households[0]),
+      meal.signups.create!(senior_veg: 1, little_kid_meat: 1, household: households[1])
+    ]
 
     calculator = double
     allow(meal).to receive(:allowed_signup_types).and_return(%w(adult_meat senior_veg little_kid_meat))
+    allow(finalizer).to receive(:signups).and_return(signups)
     allow(finalizer).to receive(:calculator).and_return(calculator)
     allow(calculator).to receive(:price_for).and_return(4.56, 1.23, 0, 4.56, 1.23, 0) # Called from two loops
     allow(calculator).to receive(:meal_calc_type).and_return("fixed")
@@ -23,11 +26,11 @@ RSpec.describe Meals::Finalizer, type: :model do
   end
 
   it "creates the appropriate transactions" do
-    txs = Transaction.all.to_a
+    txs = Billing::Transaction.all.to_a.index_by(&:household_id)
+
     expect(txs.size).to eq 3
 
-    expect(txs[0].household_id).to eq households[0].id
-    expect(txs[0]).to have_attributes(
+    expect(txs[households[0].id]).to have_attributes(
       code: "meal",
       description: "#{meal.title}: Adult (Meat)",
       incurred_on: meal.served_at.to_date,
@@ -36,8 +39,7 @@ RSpec.describe Meals::Finalizer, type: :model do
       statementable: meal
     )
 
-    expect(txs[1].household_id).to eq households[1].id
-    expect(txs[1]).to have_attributes(
+    expect(txs[households[1].id]).to have_attributes(
       code: "meal",
       description: "#{meal.title}: Senior (Veg)",
       incurred_on: meal.served_at.to_date,
@@ -46,8 +48,7 @@ RSpec.describe Meals::Finalizer, type: :model do
       statementable: meal
     )
 
-    expect(txs[2].household_id).to eq meal.head_cook.household_id
-    expect(txs[2]).to have_attributes(
+    expect(txs[meal.head_cook.household_id]).to have_attributes(
       code: "reimb",
       description: "#{meal.title}: Grocery Reimbursement",
       incurred_on: meal.served_at.to_date,

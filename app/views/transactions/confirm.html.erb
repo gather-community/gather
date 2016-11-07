@@ -1,6 +1,6 @@
 <% content_for(:title){ "Confirm Transaction" } %>
 
-<%= simple_form_for([@account, @transaction]) do |f| %>
+<%= simple_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
   <%= hidden_field_tag :account_id, @account.id %>
   <%= hidden_field_tag :confirmed, "1" %>
   <%= f.hidden_field :incurred_on %>

@@ -2,7 +2,7 @@ class StatementsController < ApplicationController
   PER_PAGE = 5
 
   def show
-    @statement = Statement.find(params[:id])
+    @statement = Billing::Statement.find(params[:id])
     authorize @statement
     @charges = @statement.charges
     @credits = @statement.credits
@@ -12,12 +12,12 @@ class StatementsController < ApplicationController
   end
 
   def generate
-    authorize Statement
+    authorize Billing::Statement
     Delayed::Job.enqueue(StatementJob.new(current_user.community))
 
     flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
 
-    if (no_users = Account.with_activity_but_no_users(current_user.community)).any?
+    if (no_users = Billing::Account.with_activity_but_no_users(current_user.community)).any?
       flash[:alert] = "The following households have no associated users and thus "\
         "statements were not generated for them: " << (no_users.map(&:household_full_name).join(", ")) <<
         ". Try sending statements again once the households have associated users."
@@ -27,7 +27,7 @@ class StatementsController < ApplicationController
   end
 
   def more
-    @account = Account.find(params[:account_id])
+    @account = Billing::Account.find(params[:account_id])
     authorize @account, :show?
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
     render(partial: "statements/statement_rows")

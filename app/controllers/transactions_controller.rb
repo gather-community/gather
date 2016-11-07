@@ -1,9 +1,9 @@
 class TransactionsController < ApplicationController
   def index
-    @account = Account.find(params[:account_id])
+    @account = Billing::Account.find(params[:account_id])
     authorize @account, :show?
-    authorize Transaction
-    @transactions = policy_scope(Transaction)
+    authorize Billing::Transaction
+    @transactions = policy_scope(Billing::Transaction)
     @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
     @credits = @transactions.select(&:credit?)
@@ -13,18 +13,18 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @account = Account.find(params[:account_id])
+    @account = Billing::Account.find(params[:account_id])
     authorize @account, :update?
-    @transaction = Transaction.new(incurred_on: Date.today, account: @account)
+    @transaction = Billing::Transaction.new(incurred_on: Date.today, account: @account)
     authorize @transaction
   end
 
   def create
-    @account = Account.find(params[:account_id])
+    @account = Billing::Account.find(params[:account_id])
     authorize @account, :update?
-    @transaction = Transaction.new(account: @account)
+    @transaction = Billing::Transaction.new(account: @account)
     authorize @transaction
-    @transaction.assign_attributes(permitted_attributes(@transaction))
+    @transaction.assign_attributes(transaction_params)
     if @transaction.valid?
       # If confirmed not present, we show a confirm screen.
       if params[:confirmed] == "1"
@@ -42,5 +42,10 @@ class TransactionsController < ApplicationController
       set_validation_error_notice
       render :new
     end
+  end
+
+  # Pundit built-in helper doesn't work due to namespacing
+  def transaction_params
+    params.require(:billing_transaction).permit(policy(@transaction).permitted_attributes)
   end
 end

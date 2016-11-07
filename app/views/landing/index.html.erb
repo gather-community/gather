@@ -40,20 +40,20 @@
           <h4>Why Google?</h4>
           <p>MESS uses Google for log in so that you don't have to remember yet another password. This increases security and decreases headache! Most people have a Google account. If you use Gmail or an Android phone, you have one.</p>
           <p>When you click the 'Log in with Google' button, you will be taken to a Google page where you will be asked to authorize MESS to see your basic info. The only piece of information that MESS actually uses is your Google email address. You only have to do this step once.</p>
-          <p>If you suspect you have a Google account but you don't know your username or password, <strong>do not create a new Google account</strong>. This will cause confusion later on. Use the 'Need help?' link on the Google log in page to get access to your existing account. Contact your tech team or meals admin if you can't figure it out.</p>
+          <p>If you suspect you have a Google account but you don't know your username or password, <strong>do not create a new Google account</strong>. This will cause confusion later on. Use the 'Need help?' link on the Google log in page to get access to your existing account. Contact your tech team or MESS admin if you can't figure it out.</p>
           <p>If you are certain you do not have a Google account, you can create one after you click the 'Log in with Google' button.</p>
 
           <h4>Invitations</h4>
           <p>If you got an invitation in your email, be sure to use the link in the email to reach this page, otherwise you may not be able to log in.</p>
-          <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. If you receive an 'invitation expired' error, you will need to contact your meals admin to get a new one.</p>
+          <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. If you receive an 'invitation expired' error, you will need to contact your MESS admin to get a new one.</p>
 
           <h4>Troubleshooting</h4>
           <p><h5>Error: "Your Google ID xxx@gmail.com was not found in the system"</h5></p>
-          <p>This means you tried to login with a Google ID that is not recognized. Please contact your meals admin to get your Google ID added.</p>
+          <p>This means you tried to login with a Google ID that is not recognized. Please contact your MESS admin to get your Google ID added.</p>
           <p><h5>Error: "You must login with the Google ID xyz@gmail.com"</h5></p>
-          <p>This means your meals admin has specified a Google ID for your account but you have attempted to log in with a different Google ID. Please log in with the specified Google ID, or contact the meals admin to have your Google ID changed.</p>
+          <p>This means your MESS admin has specified a Google ID for your account but you have attempted to log in with a different Google ID. Please log in with the specified Google ID, or contact the MESS admin to have your Google ID changed.</p>
           <p><h5>Error: "Your invitation has expired"</h5></p>
-          <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. Contact your meals admin to get a new one.</p>
+          <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. Contact your MESS admin to get a new one.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

@@ -11,7 +11,7 @@ module Billing
     end
 
     def show?
-      same_community_admin_or_biller? || account_owner?
+      admin_or_biller? || account_owner?
     end
   end
 end

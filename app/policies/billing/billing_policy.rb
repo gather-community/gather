@@ -12,10 +12,6 @@ module Billing
 
     private
 
-    def same_community_admin_or_biller?
-      admin_or_biller? && user.community == record.community
-    end
-
     def account_owner?
       user.household == record.household
     end

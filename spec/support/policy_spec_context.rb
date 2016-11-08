@@ -4,9 +4,9 @@ shared_context "policy objs" do
   let(:user) { User.new }
   let(:other_user) { User.new }
   let(:inactive_user) { User.new(deactivated_at: Time.now) }
-  let(:household) { Household.new(users: [user]) }
-  let(:admin) { User.new(admin: true) }
-  let(:biller) { User.new(biller: true) }
+  let(:household) { Household.new(users: [user], community: community) }
+  let(:admin) { User.new(admin: true, household: Household.new(community: community)) }
+  let(:biller) { User.new(biller: true, household: Household.new(community: community)) }
   let(:account) { Billing::Account.new }
 
   let(:outside_admin) { User.new(admin: true, household: Household.new) }

@@ -50,6 +50,10 @@ class ApplicationPolicy
     def resolve
       scope
     end
+
+    def admin_or_biller?
+      user.active? && (user.admin? || user.biller?)
+    end
   end
 
   protected
@@ -62,5 +66,9 @@ class ApplicationPolicy
 
   def biller?
     active? && user.biller?
+  end
+
+  def admin_or_biller?
+    (admin? || biller?) && (record.is_a?(Class) || record.community == user.community)
   end
 end

@@ -122,6 +122,10 @@ class Meal < ActiveRecord::Base
     title || "[No Title]"
   end
 
+  def community
+    host_community
+  end
+
   def community_ids
     invitations.map(&:community_id)
   end

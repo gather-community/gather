@@ -3,16 +3,16 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      user.admin? || user.biller? ? scope : scope.none
+      admin_or_biller? ? scope : scope.none
     end
   end
 
   def index?
-    admin? || biller?
+    admin_or_biller?
   end
 
   def show?
-    admin? || biller?
+    admin_or_biller?
   end
 
   def create?
@@ -32,7 +32,7 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def accounts?
-    admin? || biller? || household == user.household
+    admin_or_biller? || household == user.household
   end
 
   def destroy?

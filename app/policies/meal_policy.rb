@@ -69,7 +69,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    host? && (admin? || biller?)
+    host? && admin_or_biller?
   end
 
   def permitted_attributes

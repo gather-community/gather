@@ -1,7 +1,5 @@
 module Billing
-  class StatementPolicy < ApplicationPolicy
-    include Accountish
-
+  class StatementPolicy < BillingPolicy
     alias_method :statement, :record
 
     def index?

@@ -1,7 +1,5 @@
 module Billing
-  class AccountPolicy < ApplicationPolicy
-    include Accountish
-
+  class AccountPolicy < BillingPolicy
     alias_method :account, :record
 
     def index?

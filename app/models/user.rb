@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   def format_phone(kind)
     attrib = :"#{kind}_phone"
     if errors[attrib].any?
-      read_attribute(attrib).sub(/\A\+/, "")
+      read_attribute(attrib).try(:sub, /\A\+/, "")
     else
       read_attribute(attrib).try(:phony_formatted, format: :national)
     end

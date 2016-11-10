@@ -42,6 +42,8 @@ class ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
+    delegate :active?, to: :user
+
     def initialize(user, scope)
       @user = user
       @scope = scope
@@ -51,7 +53,11 @@ class ApplicationPolicy
       scope
     end
 
-    def admin_or_biller?
+    def active_admin?
+      active? && user.admin?
+    end
+
+    def active_admin_or_biller?
       user.active? && (user.admin? || user.biller?)
     end
   end
@@ -60,15 +66,15 @@ class ApplicationPolicy
 
   delegate :active?, to: :user
 
-  def admin?
+  def active_admin?
     active? && user.admin?
   end
 
-  def biller?
+  def active_biller?
     active? && user.biller?
   end
 
-  def admin_or_biller?
-    (admin? || biller?) && (record.is_a?(Class) || record.community == user.community)
+  def active_admin_or_biller?
+    (active_admin? || active_biller?) && (record.is_a?(Class) || record.community == user.community)
   end
 end

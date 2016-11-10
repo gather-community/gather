@@ -11,7 +11,7 @@ module Billing
     end
 
     def create?
-      admin_or_biller?
+      active_admin_or_biller?
     end
 
     def permitted_attributes

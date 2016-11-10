@@ -18,15 +18,15 @@ module Reservation
     end
 
     def update?
-      (active_reserver? || admin?) && !meal?
+      (active_reserver? || active_admin?) && !meal?
     end
 
     def choose_reserver?
-      admin?
+      active_admin?
     end
 
     def destroy?
-      (active_reserver? && (future? || recently_created?) || admin?) && !meal?
+      (active_reserver? && (future? || recently_created?) || active_admin?) && !meal?
     end
 
     def permitted_attributes

@@ -23,7 +23,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def show?
-    active? && associated? || signed_up?
+    active_and_associated_or_signed_up?
   end
 
   def report?
@@ -36,7 +36,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def create?
-    admin?
+    active_admin?
   end
 
   def update?
@@ -45,7 +45,7 @@ class MealPolicy < ApplicationPolicy
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    admin? && host?
+    active_admin? && host?
   end
 
   def destroy?
@@ -53,7 +53,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def summary?
-    active? && associated? || signed_up?
+    active_and_associated_or_signed_up?
   end
 
   def set_menu?
@@ -69,7 +69,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    host? && admin_or_biller?
+    host? && active_admin_or_biller?
   end
 
   def permitted_attributes
@@ -98,11 +98,15 @@ class MealPolicy < ApplicationPolicy
   private
 
   def hosting_admin_or_head_cook?
-    active? && (admin? && host? || head_cook?)
+    active_admin? && host? || active? && head_cook?
   end
 
   def host?
     not_specific_meal? || user.community == meal.host_community
+  end
+
+  def active_and_associated_or_signed_up?
+    active? && associated? || signed_up?
   end
 
   def associated?

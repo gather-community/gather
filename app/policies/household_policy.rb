@@ -3,49 +3,43 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      admin_or_biller? ? scope : scope.none
+      active_admin_or_biller? ? scope : scope.none
     end
   end
 
   def index?
-    admin_or_biller?
+    active_admin_or_biller?
   end
 
   def show?
-    admin_or_biller?
+    active_admin_or_biller?
   end
 
   def create?
-    admin?
+    active_admin?
   end
 
   def update?
-    admin?
+    active_admin?
   end
 
   def activate?
-    admin?
+    active_admin?
   end
 
   def deactivate?
-    admin?
+    active_admin?
   end
 
   def accounts?
-    admin_or_biller? || household == user.household
+    active_admin_or_biller? || household == user.household
   end
 
   def destroy?
-    admin? && !record.any_users? && !record.any_assignments? && !record.any_signups? && !record.any_accounts?
+    active_admin? && !record.any_users? && !record.any_assignments? && !record.any_signups? && !record.any_accounts?
   end
 
   def permitted_attributes
     [:name, :community_id, :unit_num, :old_id, :old_name]
-  end
-
-  private
-
-  def self?
-    record == user
   end
 end

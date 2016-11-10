@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      user.admin? ? scope : scope.where("users.deactivated_at IS NULL")
+      active_admin? ? scope : scope.where("users.deactivated_at IS NULL")
     end
   end
 
@@ -19,40 +19,40 @@ class UserPolicy < ApplicationPolicy
   end
 
   def create?
-    admin?
+    active_admin?
   end
 
   def destroy?
-    admin? && !record.any_assignments?
+    active_admin? && !record.any_assignments?
   end
 
   def activate?
-    admin?
+    active_admin?
   end
 
   def deactivate?
-    admin?
+    active_admin?
   end
 
   def invite?
-    admin?
+    active_admin?
   end
 
   def send_invites?
-    admin?
+    active_admin?
   end
 
   def update?
-    self? || admin?
+    self? || active_admin?
   end
 
   def administer?
-    admin?
+    active_admin?
   end
 
   def permitted_attributes
     [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] +
-      (admin? ? [:admin, :google_email, :household_id, :alternate_id] : [])
+      (active_admin? ? [:admin, :google_email, :household_id, :alternate_id] : [])
   end
 
   private

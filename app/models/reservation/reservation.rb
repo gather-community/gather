@@ -12,6 +12,10 @@ module Reservation
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.now - age) }
 
+    # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+    # and sponsor_community for other uses.
+    delegate :community, to: :reserver
+
     delegate :household, to: :reserver
     delegate :name, :community, to: :reserver, prefix: true
     delegate :name, to: :reserver_community, prefix: true

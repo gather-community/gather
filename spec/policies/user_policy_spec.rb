@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe UserPolicy do
+  include_context "policy objs"
+
   describe "permissions" do
-    include_context "policy objs"
 
     shared_examples_for "admins only" do
       it "grants access to admins" do
@@ -110,12 +111,17 @@ describe UserPolicy do
   end
 
   describe "permitted attributes" do
-    let!(:user2) { User.new }
+    let!(:user2) { User.new(household: household) }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
-    context "regular user" do
-      let!(:user) { User.new }
+    shared_examples_for "admin params" do
+      it "should allow basic attribs" do
+        expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
+          :home_phone, :work_phone, :admin, :google_email, :household_id, :alternate_id)
+      end
+    end
 
+    context "regular user" do
       it "should allow basic attribs" do
         expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
           :home_phone, :work_phone)
@@ -123,12 +129,13 @@ describe UserPolicy do
     end
 
     context "admin" do
-      let!(:user) { User.new(admin: true) }
+      let!(:user) { admin }
+      it_behaves_like "admin params"
+    end
 
-      it "should allow basic attribs" do
-        expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
-          :home_phone, :work_phone, :admin, :google_email, :household_id, :alternate_id)
-      end
+    context "admin from other community" do
+      let!(:user) { outside_admin }
+      it_behaves_like "admin params"
     end
   end
 end

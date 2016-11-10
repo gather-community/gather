@@ -117,7 +117,7 @@ describe Reservation::ReservationPolicy do
     end
 
     context "admin" do
-      let(:user) { build(:user, admin: true) }
+      let(:user) { create(:admin) }
 
       it "should allow appropriate attribs" do
         expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id

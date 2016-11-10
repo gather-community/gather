@@ -94,7 +94,7 @@ describe UserPolicy do
     let!(:deactivated) { create(:user, deactivated_at: Time.now - 1.day) }
 
     context "for admin" do
-      let!(:admin) { create(:user, admin: true) }
+      let!(:admin) { create(:admin) }
 
       it "returns active users" do
         permitted = UserPolicy::Scope.new(admin, User.all).resolve

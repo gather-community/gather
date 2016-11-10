@@ -54,11 +54,11 @@ class ApplicationPolicy
     end
 
     def active_admin?
-      active? && user.admin?
+      active? && user.has_role?(:admin)
     end
 
     def active_admin_or_biller?
-      user.active? && (user.admin? || user.biller?)
+      user.active? && (user.has_role?(:admin) || user.has_role?(:biller))
     end
   end
 
@@ -67,15 +67,15 @@ class ApplicationPolicy
   delegate :active?, to: :user
 
   def active_admin?
-    active? && user.admin? && own_community_record?
+    active? && user.has_role?(:admin) && own_community_record?
   end
 
   def active_biller?
-    active? && user.biller? && own_community_record?
+    active? && user.has_role?(:biller) && own_community_record?
   end
 
   def active_admin_or_biller?
-    active? && (user.admin? || user.biller?) && own_community_record?
+    active? && (user.has_role?(:admin) || user.has_role?(:biller)) && own_community_record?
   end
 
   def own_community_record?

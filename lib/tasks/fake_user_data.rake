@@ -12,15 +12,15 @@ namespace :db do
       )
 
       raise "admin_google_id setting not found" unless Rails.configuration.x.admin_google_id
-      User.create!(
+      admin = User.create!(
         household: household,
         first_name: "Alice",
         last_name: "Admin",
         email: Rails.configuration.x.admin_google_id,
         google_email: Rails.configuration.x.admin_google_id,
-        mobile_phone: "17345551212",
-        admin: true
+        mobile_phone: "17345551212"
       )
+      admin.add_role(:admin)
 
       Reservation::Resource.create!(
         community: community,

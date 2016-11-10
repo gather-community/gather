@@ -82,7 +82,7 @@ describe HouseholdPolicy do
   end
 
   describe "scope" do
-    let!(:admin) { create(:user, admin: true) }
+    let!(:admin) { create(:admin) }
     let!(:household2) { create(:household) }
 
     it "returns all households for admins" do

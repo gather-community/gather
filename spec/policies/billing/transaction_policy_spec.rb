@@ -56,12 +56,12 @@ module Billing
       end
 
       context "admin" do
-        let!(:user) { create(:user, admin: true) }
+        let!(:user) { create(:admin) }
         it_behaves_like :admin_or_biller
       end
 
       context "biller" do
-        let!(:user) { create(:user, biller: true) }
+        let!(:user) { create(:biller) }
         it_behaves_like :admin_or_biller
       end
 

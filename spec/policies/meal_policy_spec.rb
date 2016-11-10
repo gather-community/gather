@@ -177,7 +177,7 @@ describe MealPolicy do
     end
 
     context "hosting admin" do
-      before { user.admin = true }
+      before { allow(user).to receive(:has_role?) { |r| r == :admin } }
 
       it "should allow more stuff" do
         expect(subject).to include(assign_attribs)

@@ -1,4 +1,6 @@
 class ApplicationPolicy
+  class CommunityNotSetError < StandardError; end
+
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -85,12 +87,21 @@ class ApplicationPolicy
   end
 
   def own_community_record?
-    not_specific_record? || !record.community.nil? && record.community == user.community
+    return true if not_specific_record?
+    ensure_community
+    record.community == user.community
   end
 
   def own_cluster_record?
-    not_specific_record? ||
-      !record.community.cluster.nil? && record.community.cluster == user.community.cluster
+    return true if not_specific_record?
+    ensure_community
+    record.community.cluster == user.community.cluster
+  end
+
+  def ensure_community
+    if record.community.nil?
+      raise CommunityNotSetError.new("community must be set on record when checking admin role")
+    end
   end
 
   def not_specific_record?

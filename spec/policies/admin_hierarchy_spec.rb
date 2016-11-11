@@ -8,6 +8,7 @@ describe "admin hierarchy" do
   let(:cmtyB) { create(:community, cluster: clusterB) }
   let(:recordA) { double(community: cmtyA2) }
   let(:recordB) { double(community: cmtyB) }
+  let(:recordC) { double(community: nil) }
 
   shared_examples_for "admin for class and scope" do
     it "should be admin for class" do
@@ -30,6 +31,11 @@ describe "admin hierarchy" do
 
     it "should not be admin for record outside cluster" do
       expect(ApplicationPolicy.new(user, recordB).send(:active_admin?)).to be false
+    end
+
+    it "should raise error if record has no community set" do
+      expect { ApplicationPolicy.new(user, recordC).send(:active_admin?) }.to raise_error(
+        ApplicationPolicy::CommunityNotSetError)
     end
   end
 

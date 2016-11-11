@@ -14,7 +14,7 @@ module Reservation
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
     # and sponsor_community for other uses.
-    delegate :community, to: :reserver
+    delegate :community, to: :resource, allow_nil: true
 
     delegate :household, to: :reserver
     delegate :name, :community, to: :reserver, prefix: true

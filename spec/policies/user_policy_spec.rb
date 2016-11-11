@@ -98,11 +98,12 @@ describe UserPolicy do
       end
 
       context "with assignments" do
-        before { user.assignments.build }
+        before { allow(user).to receive(:any_assignments?).and_return(true) }
         it_behaves_like "full denial"
       end
 
       context "without assignment" do
+        before { allow(user).to receive(:any_assignments?).and_return(false) }
         it_behaves_like "admins only"
       end
     end
@@ -131,31 +132,32 @@ describe UserPolicy do
   end
 
   describe "permitted attributes" do
-    let!(:user2) { User.new(household: household) }
+    let(:user2) { double(community: community) }
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] }
     let(:admin_attribs) { [:google_email, :alternate_id, :admin] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
-    shared_examples_for "admin params" do
-      it "should allow basic attribs" do
-        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs))
-      end
-    end
-
-    context "regular user" do
+    shared_examples_for "basic attribs" do
       it "should allow basic attribs" do
         expect(subject).to contain_exactly(*basic_attribs)
       end
     end
 
+    context "regular user" do
+      it_behaves_like "basic attribs"
+    end
+
     context "admin" do
-      let!(:user) { admin }
-      it_behaves_like "admin params"
+      let(:user) { admin }
+
+      it "should allow admin attribs" do
+        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs))
+      end
     end
 
     context "admin from other community" do
-      let!(:user) { outside_admin }
-      it_behaves_like "admin params"
+      let(:user) { outside_admin }
+      it_behaves_like "basic attribs"
     end
   end
 end

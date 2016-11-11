@@ -111,8 +111,7 @@ describe Reservation::ReservationPolicy do
       let(:user) { User.new }
 
       it "should allow appropriate attribs" do
-        expect(subject).to contain_exactly(*%i(name kind resource_id
-          sponsor_id starts_at ends_at guidelines_ok note))
+        expect(subject).to contain_exactly(*%i(name kind sponsor_id starts_at ends_at guidelines_ok note))
       end
     end
 
@@ -120,7 +119,7 @@ describe Reservation::ReservationPolicy do
       let(:user) { create(:admin) }
 
       it "should allow appropriate attribs" do
-        expect(subject).to contain_exactly(*%i(name kind reserver_id resource_id
+        expect(subject).to contain_exactly(*%i(name kind reserver_id
           sponsor_id starts_at ends_at guidelines_ok note))
       end
     end

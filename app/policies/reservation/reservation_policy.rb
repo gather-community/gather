@@ -30,7 +30,9 @@ module Reservation
     end
 
     def permitted_attributes
-      attribs = %i(name kind resource_id sponsor_id starts_at ends_at note guidelines_ok)
+      # We don't include resource_id here because that must be set explicitly because the admin
+      # community check relies on it.
+      attribs = %i(name kind sponsor_id starts_at ends_at note guidelines_ok)
       attribs << :reserver_id if choose_reserver?
       attribs
     end

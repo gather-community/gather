@@ -76,19 +76,18 @@ class ReservationsController < ApplicationController
     @reservation = Reservation::Reservation.find(params[:id])
     authorize @reservation
     @reservation.guidelines_ok = "1"
-    @resource = @reservation.resource
     prep_form_vars
   end
 
   def create
     @reservation = Reservation::Reservation.new(reserver: current_user)
+    set_resource
     @reservation.assign_attributes(reservation_params)
     authorize @reservation
     if @reservation.save
       flash[:success] = "Reservation created successfully."
       redirect_to_reservation_in_context(@reservation)
     else
-      @resource = @reservation.resource
       prep_form_vars
       set_validation_error_notice
       render :new
@@ -110,7 +109,6 @@ class ReservationsController < ApplicationController
         flash[:success] = "Reservation updated successfully."
         redirect_to_reservation_in_context(@reservation)
       else
-        @resource = @reservation.resource
         prep_form_vars
         set_validation_error_notice
         render :edit
@@ -129,7 +127,15 @@ class ReservationsController < ApplicationController
   private
 
   def prep_form_vars
+    @resource = @reservation.resource
     @kinds = @resource.kinds # May be nil
+  end
+
+  # We need to set the resource separately from the other parameters because
+  # the resource is what determines the community, and that determines what attributes
+  # are permitted to be set. So we don't allow resource_id itself through permitted_attributes.
+  def set_household
+    @reservation.resource = Reservation::Resource.find(params[:reservation_reservation][:resource_id])
   end
 
   # Pundit built-in helper doesn't work due to namespacing

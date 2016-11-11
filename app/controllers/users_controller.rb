@@ -34,14 +34,15 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    @user = User.new(household: Household.new(community: current_community))
     authorize @user
   end
 
   def create
     @user = User.new
-    authorize @user
+    set_household
     @user.assign_attributes(permitted_attributes(@user))
+    authorize @user
     if @user.save
       flash[:success] = "User created successfully."
       redirect_to users_path
@@ -58,6 +59,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    set_household
     authorize @user
     if @user.update_attributes(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
@@ -110,6 +112,13 @@ class UsersController < ApplicationController
   end
 
   private
+
+  # We need to set the household separately from the other parameters because
+  # the household is what determines the community, and that determines what attributes
+  # are permitted to be set. So we don't allow household_id itself through permitted_attributes.
+  def set_household
+    @user.household = Household.find(params[:user][:household_id])
+  end
 
   def redirect_to_index_or_home
     policy(User).index? ? redirect_to(users_path) : redirect_to_home

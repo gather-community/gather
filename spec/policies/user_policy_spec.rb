@@ -132,19 +132,19 @@ describe UserPolicy do
 
   describe "permitted attributes" do
     let!(:user2) { User.new(household: household) }
+    let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] }
+    let(:admin_attribs) { [:google_email, :household_id, :alternate_id, :admin] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
     shared_examples_for "admin params" do
       it "should allow basic attribs" do
-        expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
-          :home_phone, :work_phone, :admin, :google_email, :household_id, :alternate_id)
+        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs))
       end
     end
 
     context "regular user" do
       it "should allow basic attribs" do
-        expect(subject).to contain_exactly(:email, :first_name, :last_name, :mobile_phone,
-          :home_phone, :work_phone)
+        expect(subject).to contain_exactly(*basic_attribs)
       end
     end
 

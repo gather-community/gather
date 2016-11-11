@@ -54,7 +54,7 @@ describe UserPolicy do
       end
     end
 
-    permissions :activate?, :deactivate?, :administer? do
+    permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
       it_behaves_like "admins only"
     end
 

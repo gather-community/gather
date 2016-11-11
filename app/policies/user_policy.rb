@@ -50,6 +50,11 @@ class UserPolicy < ApplicationPolicy
     active_admin?
   end
 
+  # Basic roles are non-admin roles like biller or photographer
+  def add_basic_role?
+    administer?
+  end
+
   def cluster_adminify?
     active? && user.has_role?(:cluster_admin)
   end

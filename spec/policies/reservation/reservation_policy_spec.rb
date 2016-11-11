@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Reservation::ReservationPolicy do
   describe "permissions" do
     include_context "policy objs"
-    let(:resource) { create(:resource) }
+    let(:resource) { create(:resource, community: community) }
     let(:reservation) { build(:reservation, reserver: user, resource: resource) }
 
     shared_examples_for "allow all active users" do
@@ -48,19 +48,25 @@ describe Reservation::ReservationPolicy do
 
       permissions :destroy? do
         context "future reservation" do
-          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.from_now) }
+          let(:reservation) do
+            build(:reservation, reserver: user, starts_at: 1.day.from_now, resource: resource)
+          end
           it_behaves_like "allow reserver and admins"
         end
 
         context "just created reservation" do
-          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.ago,
-            created_at: 50.minutes.ago) }
+          let(:reservation) do
+            build(:reservation, reserver: user, resource: resource,
+              starts_at: 1.day.ago, created_at: 50.minutes.ago)
+          end
           it_behaves_like "allow reserver and admins"
         end
 
         context "old past reservation" do
-          let(:reservation) { build(:reservation, reserver: user, starts_at: 1.day.ago,
-            created_at: 1.week.ago) }
+          let(:reservation) do
+            build(:reservation, reserver: user, resource: resource,
+              starts_at: 1.day.ago, created_at: 1.week.ago)
+          end
 
           it "denies access to non-admins" do
             expect(subject).not_to permit(user, reservation)

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Reservation::ReservationPolicy do
-  describe "permissions" do
-    include_context "policy objs"
-    let(:resource) { create(:resource, community: community) }
-    let(:reservation) { build(:reservation, reserver: user, resource: resource) }
+  include_context "policy objs"
+  let(:resource) { create(:resource, community: community) }
+  let(:reservation) { build(:reservation, reserver: user, resource: resource) }
 
+  describe "permissions" do
     shared_examples_for "allow all active users" do
       it "grants access to active users" do
         expect(subject).to permit(user, reservation)
@@ -110,24 +110,30 @@ describe Reservation::ReservationPolicy do
   end
 
   describe "permitted_attributes" do
-    let(:reservation) { build(:reservation, reserver: user) }
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
-    context "regular user" do
-      let(:user) { User.new }
-
-      it "should allow appropriate attribs" do
+    shared_examples_for "basic attribs" do
+      it "should allow basic attribs" do
         expect(subject).to contain_exactly(*%i(name kind sponsor_id starts_at ends_at guidelines_ok note))
       end
     end
 
-    context "admin" do
-      let(:user) { create(:admin) }
+    context "regular user" do
+      it_behaves_like "basic attribs"
+    end
 
-      it "should allow appropriate attribs" do
+    context "admin" do
+      let(:user) { admin }
+
+      it "should allow admin-only attribs" do
         expect(subject).to contain_exactly(*%i(name kind reserver_id
           sponsor_id starts_at ends_at guidelines_ok note))
       end
+    end
+
+    context "outside admin" do
+      let(:user) { outside_admin }
+      it_behaves_like "basic attribs"
     end
   end
 end

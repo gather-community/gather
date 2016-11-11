@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 describe MealPolicy do
+  include_context "policy objs"
 
   describe "permissions" do
-    include_context "policy objs"
-
     permissions :index?, :report? do
       it "grants access to everyone" do
         expect(subject).to permit(user, Meal)
@@ -146,22 +145,18 @@ describe MealPolicy do
 
   describe "permitted_attributes" do
     subject { MealPolicy.new(user, meal).permitted_attributes }
-    let(:community) { Community.new }
-    let(:user) { User.new(household: Household.new(community: community)) }
     let(:meal) { Meal.new(host_community: community) }
-    let(:assign_attribs) {{
+    let(:assign_attribs) {[{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
       :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
       :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-    }}
+    }]}
+    let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
 
     context "regular user" do
       it "should allow only assignment attribs" do
-        expect(subject).to include(assign_attribs)
-        expect(subject).not_to include(:allergen_dairy)
-        expect(subject).not_to include(:title, :capacity, :entrees)
-        expect(subject).not_to include(:discount, :host_community_id)
+        expect(subject).to contain_exactly(*assign_attribs)
       end
     end
 
@@ -169,24 +164,26 @@ describe MealPolicy do
       before { meal.head_cook = user }
 
       it "should allow more stuff" do
-        expect(subject).to include(assign_attribs)
-        expect(subject).to include(:allergen_dairy)
-        expect(subject).to include(:title, :capacity, :entrees)
+        expect(subject).to include(*(assign_attribs + head_cook_attribs))
         expect(subject).not_to include(:discount, :host_community_id)
       end
     end
 
     context "hosting admin" do
-      before { allow(user).to receive(:has_role?) { |r| r == :admin } }
+      let(:user) { admin }
 
-      it "should allow more stuff" do
-        expect(subject).to include(assign_attribs)
-        expect(subject).to include(:allergen_dairy)
-        expect(subject).to include(:title, :capacity, :entrees)
-        expect(subject).to include(:discount)
+      it "should allow even more stuff" do
+        expect(subject).to include(*(assign_attribs + head_cook_attribs + [:discount]))
         expect(subject).not_to include(:host_community_id)
       end
     end
-  end
 
+    context "outside admin" do
+      let(:user) { outside_admin }
+
+      it "should have only basic attribs" do
+        expect(subject).to contain_exactly(*assign_attribs)
+      end
+    end
+  end
 end

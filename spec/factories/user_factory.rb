@@ -7,15 +7,11 @@ FactoryGirl.define do
     mobile_phone "5555551212"
     association :household, with_members: false # Don't want to create extra users.
 
-    factory :admin do
-      after(:create) do |user|
-        user.add_role(:admin)
-      end
-    end
-
-    factory :biller do
-      after(:create) do |user|
-        user.add_role(:biller)
+    %i(admin cluster_admin super_admin biller).each do |role|
+      factory role do
+        after(:create) do |user|
+          user.add_role(role)
+        end
       end
     end
   end

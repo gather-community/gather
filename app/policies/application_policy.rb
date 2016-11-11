@@ -85,10 +85,15 @@ class ApplicationPolicy
   end
 
   def own_community_record?
-    record.is_a?(Class) || record.community == user.community
+    not_specific_record? || !record.community.nil? && record.community == user.community
   end
 
   def own_cluster_record?
-    record.is_a?(Class) || record.community.cluster == user.community.cluster
+    not_specific_record? ||
+      !record.community.cluster.nil? && record.community.cluster == user.community.cluster
+  end
+
+  def not_specific_record?
+    record.is_a?(Class)
   end
 end

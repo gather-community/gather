@@ -6,7 +6,7 @@ module Reservation
 
     def index?
       # If record is a Class (not a specific reservation), can't check protocol
-      active? && (reservation.is_a?(Class) || !forbidden_by_protocol?)
+      active? && (not_specific_record? || !forbidden_by_protocol?)
     end
 
     def show?

@@ -50,6 +50,14 @@ class UserPolicy < ApplicationPolicy
     active_admin?
   end
 
+  def cluster_adminify?
+    active? && user.has_role?(:cluster_admin)
+  end
+
+  def super_adminify?
+    active? && user.has_role?(:super_admin)
+  end
+
   def permitted_attributes
     [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] +
       (active_admin? ? [:admin, :google_email, :household_id, :alternate_id] : [])

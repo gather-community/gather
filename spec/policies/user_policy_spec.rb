@@ -44,7 +44,7 @@ describe UserPolicy do
       end
     end
 
-    permissions :new?, :create?, :invite?, :send_invites?, :administer? do
+    permissions :new?, :create?, :invite?, :send_invites? do
       it "grants access to admins" do
         expect(subject).to permit(admin, User)
       end
@@ -54,8 +54,28 @@ describe UserPolicy do
       end
     end
 
-    permissions :activate?, :deactivate? do
+    permissions :activate?, :deactivate?, :administer? do
       it_behaves_like "admins only"
+    end
+
+    permissions :cluster_adminify? do
+      it "grants access to cluster admin and above" do
+        expect(subject).to permit(cluster_admin, user)
+      end
+
+      it "denies access to regular admins" do
+        expect(subject).not_to permit(admin, user)
+      end
+    end
+
+    permissions :super_adminify? do
+      it "grants access to super admin" do
+        expect(subject).to permit(super_admin, user)
+      end
+
+      it "denies access to cluster admins" do
+        expect(subject).not_to permit(cluster_admin, user)
+      end
     end
 
     permissions :edit?, :update? do

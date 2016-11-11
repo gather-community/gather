@@ -20,7 +20,7 @@ namespace :db do
         google_email: Rails.configuration.x.admin_google_id,
         mobile_phone: "17345551212"
       )
-      admin.add_role(:admin)
+      admin.add_role(:super_admin)
 
       Reservation::Resource.create!(
         community: community,

@@ -5,6 +5,7 @@ class MealsController < ApplicationController
   before_action :create_worker_change_notifier, only: :update
 
   def index
+    nav_context(:meals, :meals)
     prepare_lens(:community, :time, :search)
 
     # Trivially, a meal in the past must be closed.
@@ -16,6 +17,7 @@ class MealsController < ApplicationController
 
   def work
     authorize Meal, :index?
+    nav_context(:meals, :work)
     prepare_lens(:user, :community)
     @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
@@ -37,6 +39,7 @@ class MealsController < ApplicationController
 
   def report
     authorize Meal, :report?
+    nav_context(:meals, :report)
     prepare_lens(:community)
     load_community_from_lens_with_default
     @report = Meals::Report.new(@community)

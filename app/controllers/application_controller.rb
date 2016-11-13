@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_action :set_default_nav_context
   before_action :store_current_location
   before_action :authenticate_user!
 
@@ -60,6 +61,14 @@ class ApplicationController < ActionController::Base
   def multi_community?
     return @multi_community if defined?(@multi_community)
     @multi_community = Community.multiple?
+  end
+
+  def set_default_nav_context
+    @context = {}
+  end
+
+  def nav_context(section, subsection = nil)
+    @context = {section: section, subsection: subsection}
   end
 
   private

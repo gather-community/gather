@@ -223,3 +223,9 @@ en:
     cluster_admin: "Cluster Admin"
     super_admin: "Super Admin"
     biller: "Biller"
+
+  subnavs:
+    meals:
+      meals: "Meals"
+      work: "Work"
+      report: "Report"

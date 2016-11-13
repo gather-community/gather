@@ -64,6 +64,20 @@
       </div>
     </nav>
 
+    <% if @context[:subsection] %>
+      <nav id="subnav">
+        <ul class="nav nav-tabs" role="tablist">
+          <% subnav_items.each do |item| %>
+            <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
+              <a href="<%= item[:path] %>" aria-controls="<%= item[:name] %>" role="tab">
+                <%= t("subnavs.#{@context[:section]}.#{item[:name]}") %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+    <% end %>
+
     <div id="content" class="<%= controller.controller_name.dasherize %>
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-black.svg", id: "print-logo") %>

@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   rolify
 
   PHONE_TYPES = %w(home work mobile)
+  ROLES = %i(admin cluster_admin super_admin biller)
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
@@ -94,6 +95,16 @@ class User < ActiveRecord::Base
 
   def reset_calendar_token!
     update_attribute(:calendar_token, generate_token)
+  end
+
+  ROLES.each do |role|
+    define_method("role_#{role}") do
+      has_role?(role)
+    end
+
+    define_method("role_#{role}=") do |bool|
+      bool == true || bool == "1" ? add_role(role) : remove_role(role)
+    end
   end
 
   private

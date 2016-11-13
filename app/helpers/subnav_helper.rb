@@ -7,15 +7,18 @@ module SubnavHelper
         {
           name: :meals,
           path: meals_path,
-          permitted: policy.index?
+          permitted: policy.index?,
+          icon: "cutlery"
         },{
           name: :work,
           path: work_meals_path,
-          permitted: policy.work?
+          permitted: policy.work?,
+          icon: "briefcase"
         },{
           name: :report,
           path: report_meals_path,
-          permitted: policy.report?
+          permitted: policy.report?,
+          icon: "line-chart"
         }
       ]
     end

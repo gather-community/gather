@@ -13,7 +13,7 @@ footer, #footer-pusher {
   height: $footer-height; // footer-pusher must be the same height as footer
 }
 
-#content, footer {
+#content, nav#subnav, footer {
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -93,6 +93,28 @@ nav.navbar {
       }
     }
   }
+}
+
+nav#subnav {
+  padding: 10px 20px 0 20px;
+  font-size: 13px;
+
+  .nav > li {
+    a {
+      padding: 5px 15px;
+      color: $gray-text;
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    &.active a {
+      color: $main-text-color;
+    }
+
+  }
+
 }
 
 #content {

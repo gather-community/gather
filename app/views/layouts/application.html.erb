@@ -70,6 +70,7 @@
           <% subnav_items.each do |item| %>
             <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
               <a href="<%= item[:path] %>" aria-controls="<%= item[:name] %>" role="tab">
+                <%= icon_tag(item[:icon]) %>
                 <%= t("subnavs.#{@context[:section]}.#{item[:name]}") %>
               </a>
             </li>

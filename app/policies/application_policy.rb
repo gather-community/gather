@@ -71,11 +71,16 @@ class ApplicationPolicy
   delegate :active?, to: :user
 
   def active_admin?
-    active? && (
-      (user.has_role?(:admin) && own_community_record?) ||
-      (user.has_role?(:cluster_admin) && own_cluster_record?) ||
-      user.has_role?(:super_admin)
-    )
+    active? && user.has_role?(:admin) && own_community_record? ||
+      active_cluster_admin? || active_super_admin?
+  end
+
+  def active_cluster_admin?
+    active? && user.has_role?(:cluster_admin) && own_cluster_record? || active_super_admin?
+  end
+
+  def active_super_admin?
+    active? && user.has_role?(:super_admin)
   end
 
   def active_biller?

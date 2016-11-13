@@ -134,7 +134,7 @@ describe UserPolicy do
   describe "permitted attributes" do
     let(:user2) { double(community: community) }
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] }
-    let(:admin_attribs) { [:google_email, :alternate_id, :admin] }
+    let(:admin_attribs) { [:google_email, :alternate_id, :role_admin, :role_biller] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
     shared_examples_for "basic attribs" do
@@ -158,6 +158,23 @@ describe UserPolicy do
     context "admin from other community" do
       let(:user) { outside_admin }
       it_behaves_like "basic attribs"
+    end
+
+    context "cluster admin" do
+      let(:user) { cluster_admin }
+
+      it "should allow cluster admin attribs" do
+        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs + [:role_cluster_admin]))
+      end
+    end
+
+    context "super admin" do
+      let(:user) { super_admin }
+
+      it "should allow super admin attribs" do
+        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs +
+          [:role_cluster_admin, :role_super_admin]))
+      end
     end
   end
 end

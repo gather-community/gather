@@ -117,7 +117,9 @@ class UsersController < ApplicationController
   # the household is what determines the community, and that determines what attributes
   # are permitted to be set. So we don't allow household_id itself through permitted_attributes.
   def set_household
-    @user.household = Household.find(params[:user][:household_id])
+    if params[:user][:household_id]
+      @user.household = Household.find(params[:user][:household_id])
+    end
   end
 
   def redirect_to_index_or_home

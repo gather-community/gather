@@ -134,7 +134,7 @@ class ReservationsController < ApplicationController
   # We need to set the resource separately from the other parameters because
   # the resource is what determines the community, and that determines what attributes
   # are permitted to be set. So we don't allow resource_id itself through permitted_attributes.
-  def set_household
+  def set_resource
     @reservation.resource = Reservation::Resource.find(params[:reservation_reservation][:resource_id])
   end
 

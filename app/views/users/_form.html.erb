@@ -14,10 +14,21 @@
   <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
   <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
 
-
   <% if policy(@user).administer? %>
     <%= f.input :alternate_id %>
-    <%= f.input :admin %>
+    <%= f.input :roles do %>
+      <div class="roles">
+        <% User::ROLES.each do |role| %>
+          <% disabled = !policy(@user).grantable_roles.include?(role) %>
+          <div class="role <%= disabled ? 'disabled' : '' %>">
+            <label>
+              <%= f.input_field :"role_#{role}", as: :boolean, disabled: disabled %>
+              <%= t("roles.#{role}") %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 
   <div class="row">

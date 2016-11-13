@@ -217,3 +217,9 @@ en:
   payment_methods:
     check: "Check"
     credit: "Balance Credit"
+
+  roles:
+    admin: "Admin"
+    cluster_admin: "Cluster Admin"
+    super_admin: "Super Admin"
+    biller: "Biller"

@@ -65,9 +65,14 @@ class UserPolicy < ApplicationPolicy
 
   def permitted_attributes
     [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone] +
-      (active_admin? ? [:role_admin, :role_biller, :google_email, :alternate_id] : []) +
-      (active_cluster_admin? ? [:role_cluster_admin] : []) +
-      (active_super_admin? ? [:role_super_admin] : [])
+      (active_admin? ? [:google_email, :alternate_id] : []) +
+      grantable_roles.map { |r| :"role_#{r}" }
+  end
+
+  def grantable_roles
+    (active_admin? ? [:admin, :biller] : []) +
+    (active_cluster_admin? ? [:cluster_admin] : []) +
+    (active_super_admin? ? [:super_admin] : [])
   end
 
   private

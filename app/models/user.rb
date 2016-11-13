@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   rolify
 
   PHONE_TYPES = %w(home work mobile)
-  ROLES = %i(admin cluster_admin super_admin biller)
+  ROLES = %i(super_admin cluster_admin admin biller)
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]

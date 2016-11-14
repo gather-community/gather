@@ -4,30 +4,10 @@ describe HouseholdPolicy do
   describe "permissions" do
     include_context "policy objs"
 
-    shared_examples_for "admins but not regular users" do
-      it "grants access to admins" do
-        expect(subject).to permit(admin, household)
-      end
-
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, household)
-      end
-    end
-
-    shared_examples_for "admins only" do
-      it_behaves_like "admins but not regular users"
-
-      it "denies access to billers" do
-        expect(subject).not_to permit(biller, household)
-      end
-    end
+    let(:record) { household }
 
     permissions :index?, :show? do
-      it_behaves_like "admins but not regular users"
-
-      it "grants access to billers" do
-        expect(subject).to permit(biller, household)
-      end
+      it_behaves_like "grants access to users in cluster"
     end
 
     permissions :new?, :create?, :edit?, :update?, :activate?, :deactivate? do
@@ -82,17 +62,12 @@ describe HouseholdPolicy do
   end
 
   describe "scope" do
-    let!(:admin) { create(:admin) }
+    let!(:user) { create(:user) }
     let!(:household2) { create(:household) }
 
-    it "returns all households for admins" do
-      permitted = HouseholdPolicy::Scope.new(admin, Household.all).resolve
-      expect(permitted).to contain_exactly(admin.household, household2)
-    end
-
-    it "returns no households for regular users" do
-      permitted = HouseholdPolicy::Scope.new(User.new, Household.all).resolve
-      expect(permitted).to eq([])
+    it "returns all households for regular users" do
+      permitted = HouseholdPolicy::Scope.new(user, Household.all).resolve
+      expect(permitted).to contain_exactly(user.household, household2)
     end
   end
 

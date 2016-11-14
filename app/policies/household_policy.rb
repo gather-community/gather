@@ -3,16 +3,16 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      active_admin_or_biller? ? scope : scope.none
+      active? ? scope : scope.none
     end
   end
 
   def index?
-    active_admin_or_biller?
+    active_in_cluster?
   end
 
   def show?
-    active_admin_or_biller?
+    active_in_cluster?
   end
 
   def create?

@@ -21,8 +21,22 @@ module SubnavHelper
           icon: "line-chart"
         }
       ]
+    when :people
+      [
+        {
+          name: :directory,
+          path: users_path,
+          permitted: policy(User).index?,
+          icon: "vcard"
+        },{
+          name: :households,
+          path: households_path,
+          permitted: policy(Household).index?,
+          icon: "home"
+        }
+      ]
     end
-    items.select { |i| i[:permitted] }
+    items.select! { |i| i[:permitted] }
     items.each { |i| i[:active] = true if i[:name] == @context[:subsection] }
   end
 end

@@ -5,6 +5,7 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
+        nav_context(:people, :directory)
         prepare_lens(:community, :search)
         load_communities
         @users = @users.includes(household: :community)

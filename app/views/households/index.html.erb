@@ -27,7 +27,7 @@
           <% if policy(household).show? %>
             <%= link_to(household.name, household) %>
           <% else %>
-            <% household.name %>
+            <%= household.name %>
           <% end %>
         </td>
         <td class="col-md-1"><%= household.community_name %></td>

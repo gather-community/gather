@@ -6,6 +6,7 @@ class HouseholdsController < ApplicationController
     @households = policy_scope(Household)
     respond_to do |format|
       format.html do
+        nav_context(:people, :households)
         prepare_lens(:community, :search)
         @households = @households.includes(:users)
         if lens[:search].present?

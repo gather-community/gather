@@ -1,9 +1,12 @@
 class TransactionsController < ApplicationController
+
+  before_action -> { nav_context(:accounts) }
+
   def index
     @account = Billing::Account.find(params[:account_id])
     authorize @account, :show?
     authorize Billing::Transaction
-    @transactions = policy_scope(Billing::Transaction)
+    @transactions = policy_scope(Billing::Transaction).includes(:commmunity)
     @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
     @credits = @transactions.select(&:credit?)

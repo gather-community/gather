@@ -1,4 +1,4 @@
-# Sends notifications of work shifts that people have signed up for.
+# Sends notifications of jobs that people have signed up for.
 # Checks the DB to see when to send.
 # Runs every hour
 class ShiftReminderJob < ReminderJob

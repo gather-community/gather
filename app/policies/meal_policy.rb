@@ -26,12 +26,12 @@ class MealPolicy < ApplicationPolicy
     active_and_associated_or_signed_up?
   end
 
-  def report?
+  def reports?
     index?
   end
 
   # Means they can see the work shifts for the meal
-  def work?
+  def jobs?
     active? && (not_specific_record? || associated?)
   end
 

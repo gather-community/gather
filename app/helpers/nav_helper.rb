@@ -33,14 +33,14 @@ module NavHelper
           permitted: policy.index?,
           icon: "cutlery"
         },{
-          name: :work,
-          path: work_meals_path,
-          permitted: policy.work?,
+          name: :jobs,
+          path: jobs_meals_path,
+          permitted: policy.jobs?,
           icon: "briefcase"
         },{
-          name: :report,
-          path: report_meals_path,
-          permitted: policy.report?,
+          name: :reports,
+          path: reports_meals_path,
+          permitted: policy.reports?,
           icon: "line-chart"
         }
       ]

@@ -130,7 +130,7 @@ en:
     meals: "Meals You're Attending"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
-    shifts: "Your Meal Work Shifts"
+    shifts: "Your Meal Jobs"
     reservations: "%{community} Reservations"
     your_reservations: "Your Reservations"
 
@@ -181,8 +181,8 @@ en:
     sub:
       meals:
         meals: "Meals"
-        work: "Work"
-        report: "Report"
+        jobs: "Jobs"
+        reports: "Reports"
 
   assignment_roles:
     head_cook: "Head Cook"

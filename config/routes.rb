@@ -18,8 +18,8 @@ Rails.application.routes.draw do
 
   resources :meals do
     collection do
-      get :work
-      get :report
+      get :jobs
+      get :reports
     end
     member do
       put :close

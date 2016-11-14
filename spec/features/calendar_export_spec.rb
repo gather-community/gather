@@ -21,10 +21,10 @@ feature "calendar export" do
       "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals")
   end
 
-  scenario "work shifts" do
+  scenario "jobs" do
     visit("/calendars/shifts/xyz.ics")
     expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Meal Work Shifts")
+      "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Your Meal Jobs")
   end
 
   scenario "reservations" do

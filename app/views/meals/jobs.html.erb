@@ -1,4 +1,4 @@
-<% content_for(:title){ "Work" } %>
+<% content_for(:title){ "Jobs" } %>
 
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
@@ -9,7 +9,7 @@
 
 <% if @meals.empty? %>
   <div class="none-found">
-    No work shifts found<% @user ? "for #{@user.name}" : "" %>.
+    No jobs found<% @user ? "for #{@user.name}" : "" %>.
   </div>
 <% else %>
   <table class="index non-mobile">

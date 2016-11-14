@@ -4,7 +4,7 @@ describe MealPolicy do
   include_context "policy objs"
 
   describe "permissions" do
-    permissions :index?, :report? do
+    permissions :index?, :reports? do
       it "grants access to everyone" do
         expect(subject).to permit(user, Meal)
       end

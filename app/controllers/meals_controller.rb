@@ -16,9 +16,9 @@ class MealsController < ApplicationController
     load_communities
   end
 
-  def work
+  def jobs
     authorize Meal, :index?
-    nav_context(:meals, :work)
+    nav_context(:meals, :jobs)
     prepare_lens(:user, :community)
     @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
@@ -38,9 +38,9 @@ class MealsController < ApplicationController
     load_prev_next_meal
   end
 
-  def report
-    authorize Meal, :report?
-    nav_context(:meals, :report)
+  def reports
+    authorize Meal, :reports?
+    nav_context(:meals, :reports)
     prepare_lens(:community)
     load_community_from_lens_with_default
     @report = Meals::Report.new(@community)

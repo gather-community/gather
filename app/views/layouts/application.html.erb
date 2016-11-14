@@ -27,7 +27,10 @@
 
         <div class="collapse navbar-collapse" id="navbar-collapse">
           <ul class="nav navbar-nav main-links">
-            <%= nav_links %>
+            <% nav_items.each do |item| %>
+              <li class="<%= item[:active] ? 'active' : '' %>">
+              <%= link_to(t("nav_links.main.#{item[:name]}"), item[:path], class: "icon-bar") %>
+            <% end %>
           </ul>
           <ul class="nav navbar-nav navbar-right user-info">
             <li class="dropdown">

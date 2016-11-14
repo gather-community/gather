@@ -173,11 +173,16 @@ en:
       little_kid_veg: "Little Kid (Veg)"
 
   nav_links:
-    meals: "Meals"
-    work_meals: "Work"
-    users: "Users"
-    households: "Households"
-    accounts: "Accounts"
+    main:
+      people: "People"
+      meals: "Meals"
+      reservations: "Reservations"
+      accounts: "Accounts"
+    sub:
+      meals:
+        meals: "Meals"
+        work: "Work"
+        report: "Report"
 
   assignment_roles:
     head_cook: "Head Cook"
@@ -223,9 +228,3 @@ en:
     cluster_admin: "Cluster Admin"
     super_admin: "Super Admin"
     biller: "Biller"
-
-  subnavs:
-    meals:
-      meals: "Meals"
-      work: "Work"
-      report: "Report"

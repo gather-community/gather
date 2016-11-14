@@ -3,6 +3,7 @@ class MealsController < ApplicationController
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
+  before_action -> { nav_context(:meals) }
 
   def index
     nav_context(:meals, :meals)

@@ -1,6 +1,8 @@
 class StatementsController < ApplicationController
   PER_PAGE = 5
 
+  before_action -> { nav_context(:accounts) }
+
   def show
     @statement = Billing::Statement.find(params[:id])
     authorize @statement

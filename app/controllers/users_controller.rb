@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   include Lensable
 
+  before_action -> { nav_context(:people) }
+
   def index
     @users = policy_scope(User)
     respond_to do |format|

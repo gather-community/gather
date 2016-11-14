@@ -1,6 +1,8 @@
 class ReservationsController < ApplicationController
   include Lensable
 
+  before_action -> { nav_context(:reservations) }
+
   def index
     if params[:resource_id]
       @resource = Reservation::Resource.find(params[:resource_id])

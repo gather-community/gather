@@ -1,6 +1,8 @@
 class HouseholdsController < ApplicationController
   include Lensable
 
+  before_action -> { nav_context(:people) }, except: :accounts
+
   def index
     authorize Household
     @households = policy_scope(Household)

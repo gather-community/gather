@@ -1,6 +1,8 @@
 class SignupsController < ApplicationController
   include MealShowable
 
+  before_action -> { nav_context(:meals) }
+
   def create
     @signup = Signup.new(household_id: current_user.household_id)
     @signup.assign_attributes(permitted_attributes(@signup))

@@ -1,5 +1,7 @@
 class AccountsController < ApplicationController
 
+  before_action -> { nav_context(:accounts) }
+
   def index
     authorize Billing::Account
     @accounts = policy_scope(Billing::Account)

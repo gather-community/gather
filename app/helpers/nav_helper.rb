@@ -62,9 +62,39 @@ module NavHelper
     filter_and_set_active_nav_items(items, @context[:subsection])
   end
 
-  def filter_and_set_active_nav_items(items, active)
+  def personal_nav_items
+    items =
+    [
+      {
+        name: :profile,
+        path: user_path(current_user),
+        permitted: policy(current_user).show?,
+        icon: "user"
+      },{
+        name: :accounts,
+        path: accounts_household_path(current_user.household),
+        permitted: policy(current_user.household).accounts?,
+        icon: "money"
+      },{
+        name: :calendars,
+        path: calendar_exports_path,
+        permitted: policy(CalendarExport).index?,
+        icon: "calendar"
+      },{
+        name: :sign_out,
+        path: destroy_user_session_path,
+        permitted: true,
+        icon: "sign-out",
+        method: :delete
+      }
+    ]
+    filter_and_set_active_nav_items(items)
+  end
+
+  def filter_and_set_active_nav_items(items, active = nil)
     items.select! { |i| i[:permitted] }
-    items.each { |i| i[:active] = true if i[:name] == active }
+    items.each { |i| i[:active] = true if i[:name] == active } if active
+    items
   end
 
   def lens_path_if_present(controller)

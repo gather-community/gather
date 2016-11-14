@@ -183,6 +183,14 @@ en:
         meals: "Meals"
         jobs: "Jobs"
         reports: "Reports"
+      people:
+        directory: "Directory"
+        households: "Households"
+    personal:
+      profile: "Profile"
+      accounts: "Accounts"
+      calendars: "Calendars"
+      sign_out: "Sign Out"
 
   assignment_roles:
     head_cook: "Head Cook"

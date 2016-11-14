@@ -39,27 +39,12 @@
                   <%= icon_tag("user") << " " << current_user.name %> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>
-                  <% if policy(current_user).show? %>
-                    <%= link_to(icon_tag("user") << " Profile", user_path(current_user)) %>
-                  <% end %>
-                </li>
-                <li>
-                  <% if policy(current_user.household).accounts? %>
-                    <%= link_to(icon_tag("money") << " Accounts",
-                      accounts_household_path(current_user.household)) %>
-                  <% end %>
-                </li>
-                <li>
-                  <% if policy(CalendarExport).index? %>
-                    <%= link_to(icon_tag("calendar") << " Calendars",
-                      calendar_exports_path) %>
-                  <% end %>
-                </li>
-                <li>
-                  <%= link_to(icon_tag("sign-out") << " Log out",
-                    destroy_user_session_path, method: :delete) %>
-                </li>
+                <% personal_nav_items.each do |item| %>
+                  <li>
+                    <%= link_to(icon_tag(item[:icon]) << " " << t("nav_links.personal.#{item[:name]}"),
+                      item[:path], method: item[:method]) %>
+                  </li>
+                <% end %>
               </ul>
             </li>
           </ul>

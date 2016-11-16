@@ -49,7 +49,6 @@ nav.navbar {
   }
 
   ul.navbar-nav {
-
     a, .active a {
       color: #ddd;
       font-weight: bold;
@@ -71,11 +70,7 @@ nav.navbar {
       }
     }
 
-    .dropdown-menu {
-      a {
-        color: $main-text-color;
-      }
-
+    li {
       i {
         width: 20px;
         display: inline-block;
@@ -98,10 +93,6 @@ nav.navbar {
 }
 
 nav#subnav {
-  @media screen and (max-width: $grid-float-breakpoint) {
-    display: none;
-  }
-
   padding: 10px 20px 0 20px;
   font-size: 13px;
 

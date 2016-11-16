@@ -4,41 +4,49 @@ module NavHelper
       {
         name: :people,
         path: lens_path_if_present("users"),
-        permitted: policy(User).index?
+        permitted: policy(User).index?,
+        icon: "users"
       },{
         name: :meals,
         path: lens_path_if_present("meals"),
-        permitted: policy(Meal).index?
+        permitted: policy(Meal).index?,
+        icon: "cutlery"
       },{
         name: :reservations,
         path: lens_path_if_present("reservations"),
-        permitted: policy(Reservation::Reservation).index?
+        permitted: policy(Reservation::Reservation).index?,
+        icon: "book"
       },{
         name: :accounts,
         path: lens_path_if_present("accounts"),
-        permitted: policy(Billing::Account).index?
+        permitted: policy(Billing::Account).index?,
+        icon: "money"
       }
     ]
-    filter_and_set_active_nav_items(items, @context[:section])
+    filter_and_set_active_nav_items(items, type: :main, active: @context[:section])
   end
 
-  def subnav_items
-    items = case @context[:section]
+  def subnav_items(main = nil)
+    main ||= @context[:section]
+    items = case main
     when :meals
       policy = policy(Meal)
       [
         {
           name: :meals,
+          parent: :meals,
           path: meals_path,
           permitted: policy.index?,
           icon: "cutlery"
         },{
           name: :jobs,
+          parent: :meals,
           path: jobs_meals_path,
           permitted: policy.jobs?,
           icon: "briefcase"
         },{
           name: :reports,
+          parent: :meals,
           path: reports_meals_path,
           permitted: policy.reports?,
           icon: "line-chart"
@@ -48,18 +56,22 @@ module NavHelper
       [
         {
           name: :directory,
+          parent: :people,
           path: users_path,
           permitted: policy(User).index?,
-          icon: "vcard"
+          icon: "address-book"
         },{
           name: :households,
+          parent: :people,
           path: households_path,
           permitted: policy(Household).index?,
           icon: "home"
         }
       ]
+    else
+      []
     end
-    filter_and_set_active_nav_items(items, @context[:subsection])
+    filter_and_set_active_nav_items(items, type: :sub, active: @context[:subsection])
   end
 
   def personal_nav_items
@@ -69,7 +81,7 @@ module NavHelper
         name: :profile,
         path: user_path(current_user),
         permitted: policy(current_user).show?,
-        icon: "user"
+        icon: "vcard"
       },{
         name: :accounts,
         path: accounts_household_path(current_user.household),
@@ -88,13 +100,28 @@ module NavHelper
         method: :delete
       }
     ]
-    filter_and_set_active_nav_items(items)
+    filter_and_set_active_nav_items(items, type: :personal)
   end
 
-  def filter_and_set_active_nav_items(items, active = nil)
+  def filter_and_set_active_nav_items(items, type:, active: nil)
     items.select! { |i| i[:permitted] }
-    items.each { |i| i[:active] = true if i[:name] == active } if active
+    items.each do |i|
+      i[:type] = type
+      i[:active] = true if active && i[:name] == active
+    end
     items
+  end
+
+  def nav_link(item, tab: false)
+    params = {}
+    params[:method] = item[:method]
+    params[:role] = "tab" if tab
+    params[:"aria-controls"] = item[:name] if tab
+
+    i18n_sub_key = item[:type] == :sub ? "#{item[:parent]}." : ""
+    name = t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:name]}")
+
+    link_to(icon_tag(item[:icon]) << " #{name}", item[:path], params)
   end
 
   def lens_path_if_present(controller)

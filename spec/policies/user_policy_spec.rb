@@ -56,6 +56,14 @@ describe UserPolicy do
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
       it_behaves_like "admins only"
+
+      it "denies access to self" do
+        expect(subject).not_to permit(user, user)
+      end
+
+      it "denies access to guardians for own children" do
+        expect(subject).not_to permit(guardian, child)
+      end
     end
 
     permissions :cluster_adminify? do

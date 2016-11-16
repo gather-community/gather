@@ -26,20 +26,20 @@
           <%= link_to(image_tag("logo-white.png"), home_path, class: "navbar-brand") %>
         </div>
 
-        <ul class="nav navbar-nav main-links hidden-xs">
+        <ul class="nav navbar-nav main-nav hidden-xs">
           <% nav_items.each do |item| %>
             <li class="<%= item[:active] ? 'active' : '' %>">
             <%= link_to(t("nav_links.main.#{item[:name]}"),
               item[:path], class: "icon-bar") %>
           <% end %>
         </ul>
-        <ul class="nav navbar-nav navbar-right user-info hidden-xs">
+        <ul class="nav navbar-nav navbar-right personal-nav hidden-xs">
           <%= render("layouts/personal_dropdown") %>
         </ul>
 
         <%# MOBILE MAIN, SUB, AND PERSONAL NAVS %>
         <div class="collapse navbar-collapse" id="mobile-nav">
-          <ul class="nav navbar-nav hidden-sm hidden visible-xs">
+          <ul class="nav navbar-nav mobile-nav hidden visible-xs">
             <% nav_items.each do |item| %>
               <% if (sub_items = subnav_items(item[:name])).any? %>
                 <li class="dropdown">

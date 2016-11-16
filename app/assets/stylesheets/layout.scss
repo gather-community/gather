@@ -26,6 +26,7 @@ footer, #footer-pusher {
   max-width: 1200px;
 }
 
+// Main, personal, and mobile navs.
 nav.navbar {
   border: none;
   background-color: $theme-main;
@@ -33,10 +34,6 @@ nav.navbar {
 
   .navbar-toggle .icon-bar {
     background-color: #fff;
-  }
-
-  #user-info {
-    float: right;
   }
 
   a.navbar-brand {
@@ -51,7 +48,6 @@ nav.navbar {
   ul.navbar-nav {
     a, .active a {
       color: #ddd;
-      font-weight: bold;
       font-size: 15px;
       padding: 7px 15px;
     }
@@ -60,34 +56,28 @@ nav.navbar {
       color: #fff;
     }
 
-    &.main-links {
-      @media screen and (min-width: $grid-float-breakpoint) {
-        margin-top: 28px;
-      }
+    &.main-nav {
+      margin-top: 28px;
 
       .active a {
         background-color: #634265;
       }
     }
 
-    li {
-      i {
-        width: 20px;
-        display: inline-block;
-        text-align: center;
+    &.personal-nav .dropdown-menu {
+      a, .active a {
+        color: $main-text-color;
       }
     }
 
-    @media screen and (min-width: $grid-float-breakpoint) {
-      &.user-info {
-        margin-right: -28px;
-      }
+    &.mobile-nav .open .dropdown-menu a {
+      color: #ddd;
     }
 
-    @media screen and (max-width: $grid-float-breakpoint) {
-      .open .dropdown-menu a {
-        color: #ddd;
-      }
+    li i {
+      width: 20px;
+      display: inline-block;
+      text-align: center;
     }
   }
 }
@@ -109,9 +99,7 @@ nav#subnav {
     &.active a {
       color: $main-text-color;
     }
-
   }
-
 }
 
 #content {

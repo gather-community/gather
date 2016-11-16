@@ -13,6 +13,10 @@ shared_context "policy objs" do
   let(:household) { Household.new(users: [user], community: community) }
   let(:account) { Billing::Account.new(household: Household.new(community: community)) }
 
+  let(:guardian) { user }
+  let(:child) { new_user_from(community, guardian: guardian) }
+  let(:other_child) { new_user_from(community, guardian: other_user) }
+
   let(:admin) { new_user_from(community) }
   let(:cluster_admin) { new_user_from(community) }
   let(:super_admin) { new_user_from(community) }

@@ -43,7 +43,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    self? || active_admin?
+    self? || guardian? || active_admin?
   end
 
   def administer?
@@ -81,5 +81,10 @@ class UserPolicy < ApplicationPolicy
 
   def self?
     record == user
+  end
+
+  # Checks if the user is a guardian of the user being tested.
+  def guardian?
+    record.guardian == user
   end
 end

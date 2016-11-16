@@ -85,6 +85,18 @@ describe UserPolicy do
         expect(subject).to permit(user, user)
       end
 
+      it "allows guardians to edit own children" do
+        expect(subject).to permit(guardian, child)
+      end
+
+      it "disallows guardians from editing other children" do
+        expect(subject).not_to permit(guardian, other_child)
+      end
+
+      it "disallows children from editing parent" do
+        expect(subject).not_to permit(child, guardian)
+      end
+
       it "grants access to self for inactive user" do
         expect(subject).to permit(inactive_user, inactive_user)
       end

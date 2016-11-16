@@ -9,7 +9,9 @@ class User < ActiveRecord::Base
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
+  belongs_to :guardian, class_name: "User", inverse_of: :children
   has_many :assignments
+  has_many :children, class_name: "User", foreign_key: :guardian_id, inverse_of: :guardian
 
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order("first_name, last_name") }

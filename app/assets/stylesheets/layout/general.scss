@@ -1,0 +1,13 @@
+#content, #nav-wrapper, #subnav, footer {
+  max-width: $content-max-width;
+  margin: 0 auto;
+}
+
+#content {
+  padding: 20px;
+  line-height: 180%;
+}
+
+p.subtitle {
+  margin-top: -10px;
+}

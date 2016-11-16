@@ -1,0 +1,27 @@
+html, body {
+  height: 100%; // So we can have sticky footer
+}
+
+// The main purpose of this wrapper is to allow for a sticky footer, hence it's in this file.
+#main-wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto $neg-footer-height 0; // the bottom margin is the negative value of the footer's height
+}
+
+footer, #footer-pusher {
+  height: $footer-height; // footer-pusher must be the same height as footer
+}
+
+footer {
+  font-size: 11px;
+  color: $gray-text;
+  text-align: center;
+  padding: 0 20px;
+
+  a, a:visited, a:active, a:hover {
+    color: $gray-text;
+    text-decoration: underline;
+  }
+}

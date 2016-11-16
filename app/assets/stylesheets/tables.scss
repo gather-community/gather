@@ -1,3 +1,14 @@
+table {
+  tr {
+    border-bottom: $light-border;
+
+    td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+}
+
 table.key-value {
   td:first-of-type {
     width: 250px;

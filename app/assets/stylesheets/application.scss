@@ -1,3 +1,4 @@
+// Vendor
 @import "bootstrap-sprockets";
 @import "bootstrap-datetimepicker";
 @import "bootstrap";
@@ -9,22 +10,26 @@
 @import "jquery-ui.theme";
 @import "nv.d3";
 @import "fullcalendar";
+
+// Global
 @import "variables";
 @import "fullcalendar_overrides";
 @import "theme";
-@import "layout";
+@import "layout/*";
 @import "print";
+@import "ie_fixes";
 @import "global_loading_indicator";
-@import "home";
 @import "mobile";
 @import "indexes";
-@import "accounts/*";
 @import "forms";
-@import "users";
+@import "tables";
+
+// Contextual
+@import "accounts/*";
+@import "calendar_exports";
+@import "home";
 @import "households";
+@import "logged_out";
 @import "meals/*";
 @import "reservation/*";
-@import "tables";
-@import "ie_fixes";
-@import "calendar_exports";
-@import "logged_out";
+@import "users";

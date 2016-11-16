@@ -75,6 +75,10 @@ mark {
 .alert {
   border: none;
   border-radius: 0;
+
+  a {
+    text-decoration: underline;
+  }
 }
 
 .weak {

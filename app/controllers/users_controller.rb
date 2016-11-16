@@ -37,13 +37,14 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new(household: Household.new(community: current_community))
+    @user = User.new
+    set_blank_household
     authorize @user
   end
 
   def create
     @user = User.new
-    set_household
+    return unless check_household
     @user.assign_attributes(permitted_attributes(@user))
     authorize @user
     if @user.save
@@ -62,7 +63,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    set_household
+    return unless check_household
     authorize @user
     if @user.update_attributes(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
@@ -119,10 +120,29 @@ class UsersController < ApplicationController
   # We need to set the household separately from the other parameters because
   # the household is what determines the community, and that determines what attributes
   # are permitted to be set. So we don't allow household_id itself through permitted_attributes.
-  def set_household
+  def check_household
     if params[:user][:household_id]
-      @user.household = Household.find(params[:user][:household_id])
+      @user.household = Household.find_by_id(params[:user][:household_id])
     end
+
+    if @user.household_id.nil?
+      # If household was not found, validation needs to fail, but the Policy won't let us get that far, so
+      # we have to work around it. We can use permit! since we know these attribs will not be saved.
+      @user.assign_attributes(params[:user].permit!)
+      @user.validate
+      skip_authorization
+      set_blank_household
+      set_validation_error_notice
+      render :edit
+      return false
+    else
+      return true
+    end
+  end
+
+  # Sets a blank, unpersisted household that will be acceptable to the policy.
+  def set_blank_household
+    @user.household = Household.new(community: current_community)
   end
 
   def redirect_to_index_or_home

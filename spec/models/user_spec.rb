@@ -41,4 +41,32 @@ describe User do
       expect(user.reload.has_role?(:admin)).to be false
     end
   end
+
+  describe "active_for_authentication?" do
+    shared_examples_for "active_for_auth" do |bool|
+      it "should be true/false" do
+        expect(user.active_for_authentication?).to be bool
+      end
+    end
+
+    context "regular user" do
+      let(:user) { build(:user) }
+      it_behaves_like "active_for_auth", true
+    end
+
+    context "inactive user" do
+      let(:user) { build(:user, :inactive) }
+      it_behaves_like "active_for_auth", true
+    end
+
+    context "active child" do
+      let(:user) { build(:user, :child) }
+      it_behaves_like "active_for_auth", false
+    end
+
+    context "inactive child" do
+      let(:user) { build(:user, :inactive, :child) }
+      it_behaves_like "active_for_auth", false
+    end
+  end
 end

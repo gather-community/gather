@@ -107,6 +107,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  def adult?
+    !child?
+  end
+
+  # Devise method, instantly signs out user if returns false.
+  def active_for_authentication?
+    # We don't return false for adult inactive users because they
+    # can still see some pages.
+    adult?
+  end
+
   private
 
   def at_least_one_phone

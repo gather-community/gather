@@ -117,17 +117,17 @@ class UsersController < ApplicationController
 
   private
 
-  # We need to set the household separately from the other parameters because
-  # the household is what determines the community, and that determines what attributes
-  # are permitted to be set. So we don't allow household_id itself through permitted_attributes.
   def check_household
+    # We need to set the household separately from the other parameters because
+    # the household is what determines the community, and that determines what attributes
+    # are permitted to be set. So we don't allow household_id itself through permitted_attributes.
     if params[:user][:household_id]
       @user.household = Household.find_by_id(params[:user][:household_id])
     end
 
+    # If household was not found, validation needs to fail, but the Policy won't let us get that far, so
+    # we have to work around it. We can use permit! since we know these attribs will not be saved.
     if @user.household_id.nil?
-      # If household was not found, validation needs to fail, but the Policy won't let us get that far, so
-      # we have to work around it. We can use permit! since we know these attribs will not be saved.
       @user.assign_attributes(params[:user].permit!)
       @user.validate
       skip_authorization
@@ -135,9 +135,18 @@ class UsersController < ApplicationController
       set_validation_error_notice
       render :edit
       return false
-    else
-      return true
     end
+
+    # This prevents non-admins (e.g. self, parent) from changing their household
+    if @user.household_id_changed? && !policy(@user).administer?
+      raise Pundit::NotAuthorizedError, "Can't change household without administer permission"
+    end
+
+    # If we get to here, it means we have assigned the household and it hasn't changed without the
+    # administer permission. So we can return to the main method and use the normal `authorize` method
+    # which will check that the current_user has the appropriate permissions to create/update a user
+    # with the given household.
+    return true
   end
 
   # Sets a blank, unpersisted household that will be acceptable to the policy.

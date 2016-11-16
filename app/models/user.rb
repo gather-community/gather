@@ -36,12 +36,14 @@ class User < ActiveRecord::Base
   normalize_attributes :first_name, :last_name
 
   # Contact email does not have to be unique because some people share them (grrr!)
-  validates :email, format: Devise.email_regexp, presence: true
+  validates :email, format: Devise.email_regexp
+  validates :email, presence: true, if: :adult?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :household_id, presence: true
+  validates :guardian_id, presence: true, if: :child?
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
 
   def self.from_omniauth(auth)
@@ -121,7 +123,7 @@ class User < ActiveRecord::Base
   private
 
   def at_least_one_phone
-    errors.add(:mobile_phone, "You must enter at least one phone number") if no_phones?
+    errors.add(:mobile_phone, "You must enter at least one phone number") if adult? && no_phones?
   end
 
   def no_phones?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161113164518) do
+ActiveRecord::Schema.define(version: 20161116015012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 20161113164518) do
   create_table "users", force: :cascade do |t|
     t.string "alternate_id"
     t.string "calendar_token"
+    t.boolean "child", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
@@ -356,6 +357,7 @@ ActiveRecord::Schema.define(version: 20161113164518) do
     t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email"
+    t.integer "guardian_id"
     t.string "home_phone"
     t.integer "household_id", null: false
     t.string "last_name", null: false
@@ -416,6 +418,7 @@ ActiveRecord::Schema.define(version: 20161113164518) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "statements"
   add_foreign_key "users", "households"
+  add_foreign_key "users", "users", column: "guardian_id"
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
 end

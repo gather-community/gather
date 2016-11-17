@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116015012) do
+ActiveRecord::Schema.define(version: 20161117130049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(version: 20161116015012) do
 
   create_table "users", force: :cascade do |t|
     t.string "alternate_id"
+    t.date "birthdate"
     t.string "calendar_token"
     t.boolean "child", default: false, null: false
     t.datetime "created_at", null: false
@@ -354,12 +355,14 @@ ActiveRecord::Schema.define(version: 20161116015012) do
     t.inet "current_sign_in_ip"
     t.datetime "deactivated_at"
     t.string "email", null: false
+    t.jsonb "emergency_contacts"
     t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email"
     t.integer "guardian_id"
     t.string "home_phone"
     t.integer "household_id", null: false
+    t.date "joined_on"
     t.string "last_name", null: false
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"

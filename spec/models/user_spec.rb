@@ -69,4 +69,80 @@ describe User do
       it_behaves_like "active_for_auth", false
     end
   end
+
+  describe "age and birthdate" do
+    context "with no birthdate" do
+      let(:user) { create(:user, birthdate: nil) }
+
+      it "has nil age" do
+        expect(user.age).to eq nil
+      end
+    end
+
+    context "with no year" do
+      let(:user) { create(:user, birthdate: Date.new(1,2,15)) }
+      before { user.reload }
+
+      it "retrieves properly" do
+        expect(user.birthdate.year).to eq 1
+        expect(user.birthdate.month).to eq 2
+        expect(user.birthdate.day).to eq 15
+      end
+
+      it "has nil age" do
+        expect(user.age).to eq nil
+      end
+    end
+
+    context "with full birthdate" do
+      let(:user) { create(:user, birthdate: "2000-6-15") }
+
+      it "has correct age when today is before bday" do
+        Timecop.freeze("2016-2-1") do
+          expect(user.age).to eq 15
+        end
+      end
+
+      it "has correct age when today is after bday" do
+        Timecop.freeze("2016-9-1") do
+          expect(user.age).to eq 16
+        end
+      end
+    end
+  end
+
+  describe "emergency_contacts" do
+    let(:user) { create(:user, emergency_contacts: [
+      {
+        name: "Lozer Whips",
+        relationship: "Pinn's Dad",
+        city: "Jonkler, KY",
+        phones: [
+          {
+            number: "+16548768903",
+            type: "mobile"
+          },{
+            number: "+16467446452",
+            type: "home"
+          }
+        ]
+      },{
+        name: "Jep Numbles",
+        relationship: "Burl's interlocutor",
+        city: "Olo Ponto Nuevo, PR",
+        phones: [
+          {
+            number: "+14426242232",
+            type: "mobile"
+          }
+        ]
+      }
+    ]) }
+
+    before { user.reload }
+
+    it "should allow retrieval" do
+      expect(user.emergency_contacts[0]["phones"][0]["type"]).to eq "mobile"
+    end
+  end
 end

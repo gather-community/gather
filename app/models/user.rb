@@ -74,6 +74,20 @@ class User < ActiveRecord::Base
     end
   end
 
+  def age
+    if has_full_birthdate?
+      today = Date.today
+      bday_this_year = Date.new(today.year, birthdate.month, birthdate.day)
+      today.year - birthdate.year - (bday_this_year > today ? 1 : 0)
+    else
+      nil
+    end
+  end
+
+  def has_full_birthdate?
+    birthdate && birthdate.year != 1
+  end
+
   def any_assignments?
     assignments.any?
   end

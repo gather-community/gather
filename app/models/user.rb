@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   delegate :community_id, :community_name, :community_abbrv, to: :household
   delegate :community, to: :household, allow_nil: true
 
+  serialize :emergency_contacts, JSON
+
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'
     validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'

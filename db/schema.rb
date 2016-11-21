@@ -355,7 +355,7 @@ ActiveRecord::Schema.define(version: 20161117130049) do
     t.inet "current_sign_in_ip"
     t.datetime "deactivated_at"
     t.string "email", null: false
-    t.jsonb "emergency_contacts"
+    t.text "emergency_contacts"
     t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email"

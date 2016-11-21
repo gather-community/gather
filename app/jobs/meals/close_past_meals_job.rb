@@ -1,3 +1,4 @@
+# Closes past meals after a certain delay period.
 module Meals
   class ClosePastMealsJob
     CLOSE_CUTOFF_AGE = 2.hours

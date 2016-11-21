@@ -1,14 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe StatementReminderJob, type: :model do
-
+describe Billing::StatementReminderJob do
   describe "perform" do
     before { Timecop.freeze(Time.zone.now.midnight + Settings.reminder_time_of_day.hours) }
     after { Timecop.return }
 
     it "should send no emails if no statements" do
       expect do
-        StatementReminderJob.new.perform
+        Billing::StatementReminderJob.new.perform
       end.to change{ActionMailer::Base.deliveries.size}.by(0)
     end
 
@@ -19,7 +18,7 @@ RSpec.describe StatementReminderJob, type: :model do
       it "should send two reminders the first time, then none the second time" do
         [2, 0].each do |count|
           expect do
-            StatementReminderJob.new.perform
+            Billing::StatementReminderJob.new.perform
           end.to change{ActionMailer::Base.deliveries.size}.by(count)
         end
       end
@@ -42,7 +41,7 @@ RSpec.describe StatementReminderJob, type: :model do
     let!(:s7){ create(:statement, account: s6.account, due_on: Date.today + 7.days) }
 
     it "should select the right statements" do
-      expect(StatementReminderJob.new.send(:remindable_statements).map(&:id)).to eq [s1, s2].map(&:id)
+      expect(Billing::StatementReminderJob.new.send(:remindable_statements).map(&:id)).to eq [s1, s2].map(&:id)
     end
   end
 end

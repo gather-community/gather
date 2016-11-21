@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe CookMenuReminderJob, type: :model do
+describe Meals::CookMenuReminderJob do
   describe "remindable_assignments" do
     let(:user1) { create(:user) }
     let(:user2) { create(:user) }
     let!(:meal1) { create(:meal, meal1_traits, head_cook: user1, served_at: Time.now + 4.days) }
     let!(:meal2) { create(:meal, meal2_traits, head_cook: user2, served_at: Time.now + 9.days) }
     let!(:decoy) { create(:meal, head_cook: user2, cleaners: [user1], served_at: Time.now + 13.days) }
-    subject { CookMenuReminderJob.new.send(:remindable_assignments) }
+    subject { Meals::CookMenuReminderJob.new.send(:remindable_assignments) }
 
     context "both meals without menus" do
       let(:meal1_traits) { nil }
@@ -47,5 +47,4 @@ RSpec.describe CookMenuReminderJob, type: :model do
       end
     end
   end
-
 end

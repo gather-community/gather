@@ -6,10 +6,10 @@ job_type :enqueue,  "cd :path && RAILS_ENV=:environment bundle exec rake jobs:en
 
 every 1.hour do
   enqueue %w(
-    StatementReminderJob
-    MealReminderJob
-    ShiftReminderJob
-    CookMenuReminderJob
+    Billing::StatementReminderJob
+    Meals::MealReminderJob
+    Meals::ShiftReminderJob
+    Meals::CookMenuReminderJob
     Meals::ClosePastMealsJob
   ).join(",")
 end

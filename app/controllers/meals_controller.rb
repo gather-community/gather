@@ -7,7 +7,7 @@ class MealsController < ApplicationController
 
   def index
     nav_context(:meals, :meals)
-    prepare_lens(:community, :time, :search)
+    prepare_lens(:search, :time, :community)
 
     authorize Meal
     load_meals
@@ -17,7 +17,7 @@ class MealsController < ApplicationController
   def jobs
     authorize Meal, :index?
     nav_context(:meals, :jobs)
-    prepare_lens(:user, :community)
+    prepare_lens(:user, :time, :community)
     @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
     load_communities

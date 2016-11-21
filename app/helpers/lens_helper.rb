@@ -63,6 +63,7 @@ module LensHelper
     # Could end up with collisions here in future. Should refactor to scope this better.
     def time_field
       opts = %w(past finalizable all)
+      opts.delete("finalizable") if params[:action] == "jobs"
       opt_key = "simple_form.options.meal.time"
       select_tag("time",
         options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:time]),

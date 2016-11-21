@@ -6,7 +6,7 @@ class TransactionsController < ApplicationController
     @account = Billing::Account.find(params[:account_id])
     authorize @account, :show?
     authorize Billing::Transaction
-    @transactions = policy_scope(Billing::Transaction).includes(:commmunity)
+    @transactions = policy_scope(Billing::Transaction).includes(account: :community)
     @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
     @credits = @transactions.select(&:credit?)

@@ -45,6 +45,7 @@ class Meal < ActiveRecord::Base
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
+  scope :with_min_age, ->(age) { where("served_at <= ?", Time.now - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.now - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
   scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
@@ -101,10 +102,6 @@ class Meal < ActiveRecord::Base
 
   def self.served_within_days_from_now(days)
     within_days_from_now(:served_at, days)
-  end
-
-  def self.close_all_past!
-    past.open.update_all(status: "closed")
   end
 
   # Ensures there is one head_cook assignment and 2 each of the others.
@@ -234,6 +231,10 @@ class Meal < ActiveRecord::Base
 
   def any_allergens?
     allergens.present? && allergens != ["none"]
+  end
+
+  def close!
+    update_attribute(:status, "closed")
   end
 
   ALLERGENS.each do |allergen|

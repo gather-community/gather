@@ -9,9 +9,7 @@ class MealsController < ApplicationController
     nav_context(:meals, :meals)
     prepare_lens(:community, :time, :search)
 
-    # Trivially, a meal in the past must be closed.
     authorize Meal
-    Meal.close_all_past!
     load_meals
     load_communities
   end

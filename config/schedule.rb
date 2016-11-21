@@ -10,5 +10,6 @@ every 1.hour do
     MealReminderJob
     ShiftReminderJob
     CookMenuReminderJob
+    Meals::ClosePastMealsJob
   ).join(",")
 end

@@ -22,5 +22,9 @@ FactoryGirl.define do
     trait :child do
       child true
     end
+
+    trait :with_photo do
+      photo { File.open("#{Rails.root}/spec/fixtures/cooper.jpg") }
+    end
   end
 end

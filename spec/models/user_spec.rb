@@ -145,4 +145,14 @@ describe User do
       expect(user.emergency_contacts[0]["phones"][0]["type"]).to eq "mobile"
     end
   end
+
+  describe "photo" do
+    it "should be created by factory when requested" do
+      expect(create(:user, :with_photo).photo.size).to be > 0
+    end
+
+    it "should return missing image when no photo" do
+      expect(create(:user).photo(:medium)).to eq "/images/missing/users/medium.png"
+    end
+  end
 end

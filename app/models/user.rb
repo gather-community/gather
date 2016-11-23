@@ -50,6 +50,11 @@ class User < ActiveRecord::Base
   validates :guardian_id, presence: true, if: :child?
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
 
+  has_attached_file :photo,
+    styles: { thumb: "150x150#", medium: "300x300#" },
+    default_url: "/images/missing/users/:style.png"
+  validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
+
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first
   end

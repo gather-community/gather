@@ -57,7 +57,7 @@ gem 'exception_notification'
 gem "whenever"
 gem "rolify"
 gem "pundit"
-gem "paperclip", "~> 4.3"
+gem "paperclip", "~> 5.0"
 gem "redcarpet"
 gem "icalendar", "~> 2.0"
 
@@ -93,4 +93,3 @@ group :development, :test do
   gem "selenium-webdriver", "~> 2.0"
   gem "poltergeist", "~> 1.0"
 end
-

@@ -33,7 +33,7 @@ class HouseholdsController < ApplicationController
   end
 
   def new
-    @household = Household.new
+    @household = Household.new(community: current_community)
     authorize @household
   end
 

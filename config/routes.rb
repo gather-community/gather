@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post "uploads", to: "uploads#create"
+
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
   get "logged-out", to: "landing#logged_out", as: :logged_out

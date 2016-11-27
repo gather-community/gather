@@ -37,7 +37,7 @@ Follow these steps to setup a development environment for MESS.
   git checkout develop
   ```
 
-  The remaining steps should all be done from the project directory. 
+  The remaining steps should all be done from the project directory.
 
 1. **Install gems**
   1. Run `bundle install` to install the required gems.

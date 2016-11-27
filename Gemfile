@@ -57,9 +57,10 @@ gem 'exception_notification'
 gem "whenever"
 gem "rolify"
 gem "pundit"
-gem "paperclip", "~> 5.0"
+gem "paperclip", github: "sassafrastech/paperclip", branch: "tmp_uploads"
 gem "redcarpet"
 gem "icalendar", "~> 2.0"
+gem "dropzonejs-rails", "~> 0.7"
 
 gem 'mailcatcher'
 

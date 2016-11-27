@@ -6,6 +6,18 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/sassafrastech/paperclip.git
+  revision: 69f2da3feb719e0c7a5373d9e578f842afbc1140
+  branch: tmp_uploads
+  specs:
+    paperclip (5.1.0)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      cocaine (~> 0.5.5)
+      mime-types
+      mimemagic (~> 0.3.0)
+
+GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -141,6 +153,8 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    dropzonejs-rails (0.7.3)
+      rails (> 3.1)
     ejs (1.1.1)
     erubis (2.7.0)
     eventmachine (1.0.9.1)
@@ -198,10 +212,10 @@ GEM
       skinny (~> 0.2.3)
       sqlite3 (~> 1.3)
       thin (~> 1.5.0)
-    mime-types (2.6.1)
+    mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
-    minitest (5.7.0)
+    minitest (5.9.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -226,12 +240,6 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    paperclip (5.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      cocaine (~> 0.5.5)
-      mime-types
-      mimemagic (~> 0.3.0)
     parser (2.2.2.6)
       ast (>= 1.1, < 3.0)
     pg (0.18.2)
@@ -404,6 +412,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise
+  dropzonejs-rails (~> 0.7)
   exception_notification
   factory_girl_rails (~> 4.0)
   faker
@@ -417,7 +426,7 @@ DEPENDENCIES
   mailcatcher
   momentjs-rails (~> 2.9)!
   omniauth-google-oauth2
-  paperclip (~> 5.0)
+  paperclip!
   pg
   phony_rails
   poltergeist (~> 1.0)

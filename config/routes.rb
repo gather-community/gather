@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     end
   end
 
-  post "uploads", to: "uploads#create"
+  resources :uploads, only: [:create, :destroy]
 
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"

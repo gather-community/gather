@@ -8,3 +8,6 @@ class Mess.Views.ApplicationView extends Backbone.View
   initialize: ->
     Mess.loadingIndicator = @$('#glb-load-ind')
     Mess.errorModal = @$('#glb-error-modal')
+
+    # We prefer to instantiate these ourselves.
+    Dropzone.autoDiscover = false

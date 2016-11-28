@@ -4,6 +4,7 @@
   <%= hidden_field_tag(:model, "user") %>
   <%= hidden_field_tag(:attribute, "photo") %>
   <%= hidden_field_tag(:tmp_id, @user.photo_tmp_id) %>
+  <%= link_to(icon_tag("trash"), "#", class: "delete") %>
 <% end %>
 
 <%= simple_form_for(@user, html: { class: "form-horizontal user-form" }) do |f| %>
@@ -61,6 +62,6 @@
 <%= javascript_tag do %>
   $(function(){
     new Mess.Views.Select2View({el: '.user-form'});
-    new Mess.Views.UserFormView({el: '.user-form'});
+    new Mess.Views.FileUploadView({el: '#user-photo'});
   });
 <% end %>

@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
 
   has_attached_file :photo,
     styles: { thumb: "150x150#", medium: "300x300#" },
-    default_url: "/images/missing/users/:style.png"
+    default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
   def self.from_omniauth(auth)

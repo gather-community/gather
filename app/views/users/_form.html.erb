@@ -1,67 +1,74 @@
-<%= image_tag(@user.photo.url(:thumb, allow_tmp: true)) %>
-
-<%= form_tag "/uploads", class: "dropzone", id: "user-photo" do %>
-  <%= hidden_field_tag(:model, "user") %>
-  <%= hidden_field_tag(:attribute, "photo") %>
-  <%= hidden_field_tag(:tmp_id, @user.photo_tmp_id) %>
-  <%= link_to(icon_tag("trash"), "#", class: "delete") %>
-<% end %>
-
-<%= simple_form_for(@user, html: { class: "form-horizontal user-form" }) do |f| %>
-  <%= f.input :photo_tmp_id, as: :hidden %>
-
-  <%= f.input :first_name %>
-  <%= f.input :last_name %>
-  <%= f.input :email %>
-  <%= f.input :google_email, disabled: !policy(@user).administer? %>
-
-  <%= f.input :household_id,
-    collection: [@user.household].compact, label_method: :full_name,
-    disabled: !policy(@user).administer?,
-    input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
-
-  <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
-  <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
-  <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
-
-  <% if policy(@user).administer? %>
-    <%= f.input :alternate_id %>
-    <%= f.input :roles do %>
-      <div class="roles">
-        <% User::ROLES.each do |role| %>
-          <% disabled = !policy(@user).grantable_roles.include?(role) %>
-          <div class="role <%= disabled ? 'disabled' : '' %>">
-            <label>
-              <%= f.input_field :"role_#{role}", as: :boolean, disabled: disabled %>
-              <%= t("roles.#{role}") %>
-            </label>
-          </div>
-        <% end %>
-      </div>
+<div class="row" id="user-forms">
+  <div class="col-sm-3 col-sm-push-9">
+    <%= form_tag "/uploads", class: "dropzone", id: "user-photo" do %>
+      <%= hidden_field_tag(:model, "user") %>
+      <%= hidden_field_tag(:attribute, "photo") %>
+      <%= hidden_field_tag(:tmp_id, @user.photo_tmp_id) %>
+      <%= hidden_field_tag(:id, @user.id) %>
+      <%= image_tag(@user.photo.url(:thumb, allow_tmp: true),
+        class: "existing #{@user.photo_destroy? ? 'hidden' : ''}") %>
+      <%= link_to(icon_tag("trash"), "#", class: "delete") %>
     <% end %>
-  <% end %>
-
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, class: "pull-right btn-primary" %>
-      <% if policy(@user).destroy? && !@user.new_record? %>
-        <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
-          class: "btn btn-default pull-right", method: :delete,
-          data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
-      <% end %>
-      <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
-        <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
-          class: "btn btn-default pull-right", method: :put,
-          data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
-      <% end %>
-    </div>
   </div>
 
-<% end %>
+  <div class="col-sm-9 col-sm-pull-3">
+    <%= simple_form_for(@user, html: { class: "form-horizontal user-form" }) do |f| %>
+      <%= f.input :photo_tmp_id, as: :hidden %>
+      <%= f.input :photo_destroy, as: :hidden %>
+
+      <%= f.input :first_name %>
+      <%= f.input :last_name %>
+      <%= f.input :email %>
+      <%= f.input :google_email, disabled: !policy(@user).administer? %>
+
+      <%= f.input :household_id,
+        collection: [@user.household].compact, label_method: :full_name,
+        disabled: !policy(@user).administer?,
+        input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
+
+      <%= f.input :mobile_phone, input_html: { value: @user.format_phone(:mobile) } %>
+      <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
+      <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
+
+      <% if policy(@user).administer? %>
+        <%= f.input :alternate_id %>
+        <%= f.input :roles do %>
+          <div class="roles">
+            <% User::ROLES.each do |role| %>
+              <% disabled = !policy(@user).grantable_roles.include?(role) %>
+              <div class="role <%= disabled ? 'disabled' : '' %>">
+                <label>
+                  <%= f.input_field :"role_#{role}", as: :boolean, disabled: disabled %>
+                  <%= t("roles.#{role}") %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="row">
+        <div class="form-actions col-sm-8">
+          <%= f.button :submit, class: "pull-right btn-primary" %>
+          <% if policy(@user).destroy? && !@user.new_record? %>
+            <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
+              class: "btn btn-default pull-right", method: :delete,
+              data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
+          <% end %>
+          <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
+            <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
+              class: "btn btn-default pull-right", method: :put,
+              data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
 
 <%= javascript_tag do %>
   $(function(){
     new Mess.Views.Select2View({el: '.user-form'});
-    new Mess.Views.FileUploadView({el: '#user-photo'});
+    new Mess.Views.FileUploadView({el: '#user-forms'});
   });
 <% end %>

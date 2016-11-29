@@ -66,7 +66,8 @@ class UserPolicy < ApplicationPolicy
   def permitted_attributes
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.
-    [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone, :photo, :photo_tmp_id] +
+    [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
+      :photo, :photo_tmp_id, :photo_destroy] +
       (active_admin? ? [:google_email, :alternate_id] : []) +
       grantable_roles.map { |r| :"role_#{r}" }
   end

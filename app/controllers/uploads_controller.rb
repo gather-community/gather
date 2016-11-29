@@ -3,7 +3,7 @@ class UploadsController < ApplicationController
 
   def create
     skip_authorization
-    if object = build_object
+    if object = build_tmp_object
       object.send("#{params[:attribute]}=", params[:file])
       object.send(params[:attribute]).save_tmp
       render nothing: true
@@ -12,27 +12,35 @@ class UploadsController < ApplicationController
 
   def destroy
     skip_authorization
-    params[:tmp_id] = params[:id]
-    if object = build_object
-      object.send(params[:attribute]).destroy
-      render nothing: true
-    end
+    object = build_tmp_object
+    object.send(params[:attribute]).destroy
+    render nothing: true
   end
 
   private
 
-  def build_object
+  def verify_params
     uploadable_attrs = UPLOADABLES[params[:model].to_sym]
     if uploadable_attrs.nil?
       render plain: 'Invalid model', status: 403
-      return nil
+      false
     elsif !uploadable_attrs.include?(params[:attribute].to_sym)
       render plain: 'Invalid attribute', status: 403
-      return nil
+      false
     else
-      params[:model].camelize.constantize.new.tap do |object|
-        object.send("#{params[:attribute]}_tmp_id=", params[:tmp_id])
-      end
+      true
     end
+  end
+
+  def build_tmp_object
+    if verify_params
+      object = params[:model].camelize.constantize.new
+      set_tmp_id_on(object)
+    end
+  end
+
+  def set_tmp_id_on(object)
+    object.send("#{params[:attribute]}_tmp_id=", params[:tmp_id])
+    object
   end
 end

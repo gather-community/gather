@@ -111,7 +111,9 @@ class MealsController < ApplicationController
   def do_finalize
     @meal = Meal.find(params[:id])
     authorize @meal, :finalize?
-    @meal.assign_attributes(finalize_params)
+
+    # We assign finalized here so that the meal/signup validations don't complain about no spots left.
+    @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
     if (@dupes = @meal.duplicate_signups).any?
       flash.now[:error] = "There are duplicate signups. "\

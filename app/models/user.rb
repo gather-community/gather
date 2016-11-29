@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   delegate :community_id, :community_name, :community_abbrv, to: :household
   delegate :community, to: :household, allow_nil: true
 
+  attr_accessor :photo_destroy
+
   serialize :emergency_contacts, JSON
 
   PHONE_TYPES.each do |p|
@@ -55,8 +57,16 @@ class User < ActiveRecord::Base
     default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
+  before_save do
+    photo.destroy if photo_destroy?
+  end
+
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first
+  end
+
+  def photo_destroy?
+    photo_destroy.to_i == 1
   end
 
   # Ensures provider and uid are set.

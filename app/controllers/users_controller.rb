@@ -133,7 +133,7 @@ class UsersController < ApplicationController
       skip_authorization
       set_blank_household
       set_validation_error_notice
-      render :edit
+      render @user.new_record? ? :new : :edit
       return false
     end
 

@@ -18,7 +18,7 @@
 
       <%= f.input :first_name %>
       <%= f.input :last_name %>
-      <%= f.input :email %>
+      <%= f.input :email, required: true %>
       <%= f.input :google_email, disabled: !policy(@user).administer? %>
 
       <%= f.input :household_id,

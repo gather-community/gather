@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     authorize @user
     if @user.save
       flash[:success] = "User created successfully."
-      redirect_to users_path
+      redirect_to user_path(@user)
     else
       set_validation_error_notice
       render :new
@@ -67,7 +67,7 @@ class UsersController < ApplicationController
     authorize @user
     if @user.update_attributes(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
-      redirect_to_index_or_home
+      redirect_to user_path(@user)
     else
       set_validation_error_notice
       render :edit
@@ -154,7 +154,4 @@ class UsersController < ApplicationController
     @user.household = Household.new(community: current_community)
   end
 
-  def redirect_to_index_or_home
-    policy(User).index? ? redirect_to(users_path) : redirect_to_home
-  end
 end

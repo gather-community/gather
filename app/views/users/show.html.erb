@@ -6,7 +6,7 @@
   <% end %>
 <% end %>
 
-<%= image_tag(@user.photo.url(:medium, allow_tmp: true)) %>
+<%= image_tag(@user.photo.url(:medium, allow_tmp: true), class: "photo") %>
 
 <ul>
   <li>Community: <%= @user.community_name %></li>

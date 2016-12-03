@@ -2,7 +2,7 @@ class UploadsController < ApplicationController
   UPLOADABLES = {user: [:photo]}
 
   def create
-    skip_authorization
+    authorize Upload
     if object = build_tmp_object
       object.send("#{params[:attribute]}=", params[:file])
       object.send(params[:attribute]).save_tmp
@@ -11,7 +11,7 @@ class UploadsController < ApplicationController
   end
 
   def destroy
-    skip_authorization
+    authorize Upload
     object = build_tmp_object
     object.send(params[:attribute]).destroy
     render nothing: true

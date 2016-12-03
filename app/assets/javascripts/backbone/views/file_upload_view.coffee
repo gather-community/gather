@@ -23,6 +23,17 @@ Mess.Views.FileUploadView = Backbone.View.extend
           dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing file if present
           view.setMainPhotoDestroyFlag(false)
           view.showExisting(false)
+        dz.on 'thumbnail', (file) ->
+          # This code fixes the issue with rotated photos from iPhones.
+          # loadImage comes from blueimp-load-image.
+          window.loadImage.parseMetaData file, (data) ->
+            if (data.exif)
+              # In case the EXIF is readable, we display a canvas element
+              # with the rotated image and hide the default thumbnail.
+              window.loadImage file, ((img) ->
+                view.dzForm.find('.dz-image img').hide()
+                view.dzForm.find('.dz-image').append(img)
+              ), orientation: data.exif.get('Orientation')
 
   events:
     'click a.delete': 'delete'

@@ -22,6 +22,7 @@
 //= require nv.d3
 //= require fullcalendar
 //= require dropzone
+//= require load-image.all.min
 //= require prevent-double-submission
 //= require cocoon
 //= require underscore

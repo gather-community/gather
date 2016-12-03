@@ -3,6 +3,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
   initialize: (params) ->
     @dzForm = @$('.dropzone')
     @mainForm = @$('form:not(.dropzone)')
+    @params = params
 
     @tmpId = @dzForm.find('[name=tmp_id]').val()
     @model = @dzForm.find('[name=model]').val()
@@ -15,6 +16,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
     view = @
     @dropzone = new Dropzone @dzForm.get(0),
       maxFiles: 1
+      maxFilesize: @params.maxFilesize
       init: ->
         dz = this
         dz.on 'addedfile', ->

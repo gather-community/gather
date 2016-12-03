@@ -69,6 +69,9 @@
 <%= javascript_tag do %>
   $(function(){
     new Mess.Views.Select2View({el: '.user-form'});
-    new Mess.Views.FileUploadView({el: '#user-forms'});
+    new Mess.Views.FileUploadView(<%=json(
+      el: '#user-forms',
+      maxFilesize: Rails.configuration.x.max_photo_size / 1.megabyte
+    )%>);
   });
 <% end %>

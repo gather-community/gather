@@ -56,6 +56,7 @@ class User < ActiveRecord::Base
     styles: { thumb: "150x150#", medium: "300x300#" },
     default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
+  validates_attachment_size :photo, less_than: Rails.configuration.x.max_photo_size
 
   before_save do
     photo.destroy if photo_destroy?

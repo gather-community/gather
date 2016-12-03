@@ -36,5 +36,7 @@ module Mess
         sender_address: Rails.configuration.x.from_email,
         exception_recipients: %w{tomsmyth@gmail.com}
       }
+
+    config.x.max_photo_size = 8.megabytes
   end
 end

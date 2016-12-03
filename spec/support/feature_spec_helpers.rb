@@ -42,4 +42,16 @@ module FeatureSpecHelpers
       $('.dropzone')[0].dropzone.listeners[0].events.drop(e);
     JS
   end
+
+  def delete_from_dropzone
+    find(:css, "form.dropzone a.delete").click
+  end
+
+  def expect_profile_photo(pattern)
+    expect(page.find("img.photo")["src"]).to match(pattern)
+  end
+
+  def expect_title(pattern)
+    expect(page).to have_css("h1", text: pattern)
+  end
 end

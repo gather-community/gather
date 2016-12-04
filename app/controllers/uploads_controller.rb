@@ -5,8 +5,12 @@ class UploadsController < ApplicationController
     authorize Upload
     if object = build_tmp_object
       object.send("#{params[:attribute]}=", params[:file])
-      object.send(params[:attribute]).save_tmp
-      render nothing: true
+      if (errors = object.errors.full_messages_for(params[:attribute].to_sym)).any?
+        render plain: errors.join(", "), status: 422
+      else
+        object.send(params[:attribute]).save_tmp
+        render nothing: true
+      end
     end
   end
 

@@ -71,6 +71,11 @@ en:
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
         meal:
           need_location: "You must choose at least one location"
+        user:
+          attributes:
+            photo_content_type:
+              invalid: "has incorrect type"
+
 
     delete_confirms:
       household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."

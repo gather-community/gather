@@ -6,6 +6,15 @@ feature "calendar export" do
   let!(:household) { create(:household, name: "Gingerbread") }
   let!(:household2) { create(:household, name: "Potatoheads") }
 
+  before do
+    @old_max_size = Rails.configuration.x.max_photo_size
+    Rails.configuration.x.max_photo_size = 1.megabyte
+  end
+
+  after do
+    Rails.configuration.x.max_photo_size = @old_max_size
+  end
+
   shared_examples_for "editing user" do
     scenario "edit user", js: true do
       visit(edit_user_path(user))
@@ -83,6 +92,20 @@ feature "calendar export" do
 
       expect_validation_success
       expect_profile_photo(/missing/)
+    end
+
+    describe "upload validations" do
+      scenario "too big", js: true do
+        visit(edit_user_path(user))
+        drop_in_dropzone(fixture_file_path("large.jpg"))
+        expect(page).to have_css("form.dropzone .dz-error-message", text: /too big/)
+      end
+
+      scenario "wrong format", js: true do
+        visit(edit_user_path(user))
+        drop_in_dropzone(fixture_file_path("article.pdf"))
+        expect(page).to have_css("form.dropzone .dz-error-message", text: /Photo has incorrect type/)
+      end
     end
   end
 

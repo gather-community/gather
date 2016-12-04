@@ -33,6 +33,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
               window.loadImage file, ((img) ->
                 view.dzForm.find('.dz-image img').hide()
                 view.dzForm.find('.dz-image').append(img)
+                img.className = 'data-dz-thumbnail'
               ), orientation: data.exif.get('Orientation')
 
   events:

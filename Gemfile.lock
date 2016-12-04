@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/sassafrastech/paperclip.git
-  revision: 69f2da3feb719e0c7a5373d9e578f842afbc1140
+  revision: b677892be5f5cf03efc2b7e6913a246a572fd7df
   branch: tmp_uploads
   specs:
     paperclip (5.1.0)
@@ -215,7 +215,7 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
-    minitest (5.9.1)
+    minitest (5.10.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)

@@ -17,24 +17,13 @@ Mess.Views.FileUploadView = Backbone.View.extend
     @dropzone = new Dropzone @dzForm.get(0),
       maxFiles: 1
       maxFilesize: @params.maxFilesize
+      thumbnailHeight: 150 # Should match $thumbnail-size in dropzone.scss
+      thumbnailWidth: 150
       init: ->
         dz = this
         dz.on 'addedfile', ->
           dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing file if present
           view.setMainPhotoDestroyFlag(false)
-          view.showExisting(false)
-        dz.on 'thumbnail', (file) ->
-          # This code fixes the issue with rotated photos from iPhones.
-          # loadImage comes from blueimp-load-image.
-          window.loadImage.parseMetaData file, (data) ->
-            if (data.exif)
-              # In case the EXIF is readable, we display a canvas element
-              # with the rotated image and hide the default thumbnail.
-              window.loadImage file, ((img) ->
-                view.dzForm.find('.dz-image img').hide()
-                view.dzForm.find('.dz-image').append(img)
-                img.className = 'data-dz-thumbnail'
-              ), orientation: data.exif.get('Orientation')
 
   events:
     'click a.delete': 'delete'
@@ -43,7 +32,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
     e.preventDefault()
     @deleteTmpFile()
     @setMainPhotoDestroyFlag(true)
-    @showExisting(false)
+    @dzForm.addClass('existing-deleted')
 
   deleteTmpFile: ->
     if @dropzone.files[0]

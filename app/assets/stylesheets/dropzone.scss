@@ -1,0 +1,85 @@
+.dropzone {
+  $thumbnail-size: 150px;
+
+  width: $thumbnail-size + 20px;
+  line-height: 140%;
+  margin-bottom: 20px;
+
+  a.delete {
+    float: right;
+    font-size: 18px;
+    color: $gray-text;
+  }
+
+  .dz-preview {
+    margin: 0;
+    width: $thumbnail-size;
+
+    .dz-success-mark, .dz-error-mark {
+      top: 47px;
+    }
+  }
+
+  .dz-image {
+    width: $thumbnail-size;
+  }
+
+  .dz-details {
+    margin: 5px 0;
+  }
+
+  .dz-preview.dz-error {
+    .dz-image {
+      height: $thumbnail-size;
+      background-color: $faint-gray;
+    }
+  }
+
+  .dz-message {
+    width: $thumbnail-size;
+    height: $thumbnail-size;
+    background: url(image-path("missing/users/thumb.png"));
+    background-position: center center;
+    background-size: $thumbnail-size - 20px $thumbnail-size - 20px;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding: 50px 10px 10px 10px;
+    cursor: pointer;
+    border: 3px dashed $light-border-color;
+  }
+
+  &.dz-drag-hover .dz-message {
+    border: 3px solid $medium-gray;
+  }
+
+  .dz-error-message {
+    margin-top: 5px;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////
+  // Show and hide message, existing thumbnail, and delete link depending on state
+
+  &.dz-started, &.existing-deleted {
+    img.existing {
+      display: none;
+    }
+  }
+
+  &, &.has-existing.existing-deleted {
+    .dz-message {
+      display: block;
+    }
+    a.delete {
+      display: none;
+    }
+  }
+
+  &.has-existing, &.dz-started, &.has-existing.dz-started {
+    .dz-message {
+      display: none;
+    }
+    a.delete {
+      display: inline;
+    }
+  }
+}

@@ -12,7 +12,7 @@
   </div>
 
   <div class="col-sm-9 col-sm-pull-3">
-    <%= simple_form_for(@user, html: { class: "form-horizontal user-form" }) do |f| %>
+    <%= horizontal_form_for(@user, width: :full) do |f| %>
       <%= f.input :photo_tmp_id, as: :hidden %>
       <%= f.input :photo_destroy, as: :hidden %>
 
@@ -47,21 +47,19 @@
         <% end %>
       <% end %>
 
-      <div class="row">
-        <div class="form-actions col-sm-8">
-          <%= f.button :submit, class: "pull-right btn-primary" %>
-          <% if policy(@user).destroy? && !@user.new_record? %>
-            <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
-              class: "btn btn-default pull-right", method: :delete,
-              data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
-          <% end %>
-          <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
-            <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
-              class: "btn btn-default pull-right", method: :put,
-              data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
-          <% end %>
-        </div>
-      </div>
+      <%= form_actions do %>
+        <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
+          <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
+            class: "btn btn-default", method: :put,
+            data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
+        <% end %>
+        <% if policy(@user).destroy? && !@user.new_record? %>
+          <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
+            class: "btn btn-default", method: :delete,
+            data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
+        <% end %>
+        <%= f.button :submit, class: "btn-primary" %>
+      <% end %>
     <% end %>
   </div>
 </div>

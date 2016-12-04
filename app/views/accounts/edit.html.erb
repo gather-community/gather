@@ -6,20 +6,17 @@
   </div>
 <% end %>
 
-<%= simple_form_for(@account,
-  url: @account.new_record? ? accounts_path : account_path(@account),
-  html: { class: 'form-horizontal' }) do |f| %>
+<%= horizontal_form_for(@account,
+  url: @account.new_record? ? accounts_path : account_path(@account)) do |f| %>
 
   <%= f.input :household_id do %><%= @account.household_full_name %><% end %>
   <%= f.input :community_id do %><%= @account.community_name %><% end %>
   <%= f.input :current_balance do %><%= currency_with_cr(@account.current_balance) %><% end %>
   <%= f.input :credit_limit, input_html: { value: number_with_precision(@account.credit_limit, precision: 2) } %>
 
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, class: "pull-right btn-primary" %>
-      <%= link_to("Cancel", accounts_path, class: "pull-right btn btn-default") %>
-    </div>
-  </div>
+  <%= form_actions do %>
+    <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
 
 <% end %>

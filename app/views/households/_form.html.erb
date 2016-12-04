@@ -1,4 +1,4 @@
-<%= simple_form_for(@household, html: { class: 'form-horizontal household-form' }) do |f| %>
+<%= horizontal_form_for(@household) do |f| %>
 
   <%= f.input :name %>
   <%= f.input :community_id, collection: Community.by_name %>
@@ -9,20 +9,17 @@
     <%= f.input :old_name %>
   <% end %>
 
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, class: "pull-right btn-primary" %>
-      <% if policy(@household).destroy? && !@household.new_record? %>
-        <%= link_to(icon_tag("trash") << " Delete Household", household_path(@household),
-          class: "btn btn-default pull-right", method: :delete,
-          data: { confirm: I18n.t("activerecord.delete_confirms.household", name: @household.name) }) %>
-      <% end %>
-      <% if policy(@household).deactivate? && !@household.new_record? && @household.active? %>
-        <%= link_to(icon_tag("times-circle") << " Deactivate Household", deactivate_household_path(@household),
-          class: "btn btn-default pull-right", method: :put,
-          data: { confirm: I18n.t("activerecord.deact_confirms.household", name: @household.name) }) %>
-      <% end %>
-    </div>
-  </div>
-
+  <%= form_actions do %>
+    <% if policy(@household).deactivate? && !@household.new_record? && @household.active? %>
+      <%= link_to(icon_tag("times-circle") << " Deactivate Household", deactivate_household_path(@household),
+        class: "btn btn-default", method: :put,
+        data: { confirm: I18n.t("activerecord.deact_confirms.household", name: @household.name) }) %>
+    <% end %>
+    <% if policy(@household).destroy? && !@household.new_record? %>
+      <%= link_to(icon_tag("trash") << " Delete Household", household_path(@household),
+        class: "btn btn-default", method: :delete,
+        data: { confirm: I18n.t("activerecord.delete_confirms.household", name: @household.name) }) %>
+    <% end %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
 <% end %>

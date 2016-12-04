@@ -4,8 +4,7 @@
 
 <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
 
-<%= simple_form_for(@meal, url: do_finalize_meal_path(@meal), method: :put,
-  html: { class: 'form-horizontal' }) do |form| %>
+<%= horizontal_form_for(@meal, width: :full, url: do_finalize_meal_path(@meal), method: :put) do |form| %>
   <table class="index">
     <tr>
       <th rowspan="2">Household</th>
@@ -47,8 +46,9 @@
     <% end %>
   </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-
+  <%= form_actions do %>
+    <%= form.button :submit, "Save", class: "btn-primary" %>
+  <% end %>
 <% end %>
 
 <%= javascript_tag do %>

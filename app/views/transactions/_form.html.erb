@@ -1,7 +1,4 @@
-<%= simple_form_for([@account, @transaction],
-  url: account_transactions_path(@account),
-  html: { class: 'form-horizontal' }) do |f| %>
-
+<%= horizontal_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
   <%= hidden_field_tag :account_id, @account.id %>
 
   <%= f.input :household_name do %>
@@ -14,11 +11,8 @@
   <%= f.input :description %>
   <%= f.input :amount, input_html: {value: number_with_precision(f.object.abs_amount, precision: 2) } %>
 
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, "Enter Transaction", class: "pull-right btn btn-primary" %>
-      <%= link_to("Cancel", accounts_path, class: "pull-right btn btn-default") %>
-    </div>
-  </div>
-
+  <%= form_actions do %>
+    <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>
+    <%= f.button :submit, "Enter Transaction", class: "btn btn-primary" %>
+  <% end %>
 <% end %>

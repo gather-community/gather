@@ -1,4 +1,4 @@
-<%= simple_form_for(@meal, html: { class: 'form-horizontal meals-form' }) do |f| %>
+<%= horizontal_form_for(@meal) do |f| %>
 
   <%= base_error(f) %>
 
@@ -26,8 +26,8 @@
 
     <div class="form-group text optional
       <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
-      <label class="text optional col-sm-2 control-label" for="meal_invitations">Communities</label>
-      <div class="boxes col-sm-6">
+      <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>
+      <div class="boxes col-sm-9">
         <% @communities.each do |c| %>
           <% checked = community_invited?(@meal, c) %>
           <% disabled = disable_community_checkbox?(@meal, c) %>
@@ -71,7 +71,7 @@
     <% end %>
 
     <!-- Can't use class="row" as it breaks cocoon -->
-    <div class="links col-sm-10 col-sm-offset-2">
+    <div class="links col-sm-9 col-sm-offset-3">
       <%= link_to_add_association 'Add Assistant Cook', f, :asst_cook_assigns %>
     </div>
 
@@ -81,7 +81,7 @@
         <%= render('table_setter_assign_fields', f: table_setter) %>
       <% end %>
 
-      <div class="links col-sm-10 col-sm-offset-2">
+      <div class="links col-sm-9 col-sm-offset-3">
         <%= link_to_add_association 'Add Table Setter', f, :table_setter_assigns %>
       </div>
 
@@ -91,7 +91,7 @@
       <%= render('cleaner_assign_fields', f: cleaner) %>
     <% end %>
 
-    <div class="links col-sm-10 col-sm-offset-2">
+    <div class="links col-sm-9 col-sm-offset-3">
       <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
     </div>
   </div>
@@ -106,8 +106,8 @@
 
   <div class="form-group text optional meal_allergens
     <%= @meal.errors['allergens'].present? ? "has-error" : "" %>">
-    <label class="text optional col-sm-2 control-label" for="meal_allergens">Allergens</label>
-    <div class="boxes col-sm-6">
+    <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
+    <div class="boxes col-sm-9">
       <% sorted_allergens.each do |allergen| %>
         <div>
           <%= f.check_box("allergen_#{allergen}", disabled: !policy(@meal).set_menu?) %>
@@ -116,22 +116,18 @@
       <% end %>
     </div>
     <% if @meal.errors['allergens'].present? %>
-      <div class="help-block col-sm-6 col-sm-offset-2"><%= @meal.errors['allergens'].join %></div>
+      <div class="help-block col-sm-9 col-sm-offset-3"><%= @meal.errors['allergens'].join %></div>
     <% end %>
   </div>
 
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, class: "pull-right btn-primary" %>
-    </div>
-  </div>
-
+  <%= form_actions do %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
 <% end %>
-
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.Select2View({el: '.meals-form'});
+    new Mess.Views.Select2View({el: '.meal-form'});
     $("#meal_resource_ids").select2();
 
     <% if @notify_on_worker_change %>

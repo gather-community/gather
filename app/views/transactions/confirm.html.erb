@@ -1,6 +1,8 @@
 <% content_for(:title){ "Confirm Transaction" } %>
 
-<%= simple_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
+<%= horizontal_form_for([@account, @transaction], width: :full,
+  url: account_transactions_path(@account)) do |f| %>
+
   <%= hidden_field_tag :account_id, @account.id %>
   <%= hidden_field_tag :confirmed, "1" %>
   <%= f.hidden_field :incurred_on %>
@@ -28,12 +30,9 @@
     <%= render("transactions/#{@transaction.chg_crd}_row", txn: @transaction) %>
   </table>
 
-  <div class="row">
-    <div class="form-actions col-sm-12">
-      <%= f.button :submit, "Confirm", class: "pull-right btn-primary" %>
-      <%= f.button :submit, "Cancel/Modify", class: "pull-right btn-default",
-         onclick: "this.form.confirmed.value = '0'" %>
-    </div>
-  </div>
-
+  <%= form_actions do %>
+    <%= f.button :submit, "Cancel/Modify", class: "btn-default",
+      onclick: "this.form.confirmed.value = '0'" %>
+    <%= f.button :submit, "Confirm", class: "btn-primary" %>
+  <% end %>
 <% end %>

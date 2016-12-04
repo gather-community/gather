@@ -1,6 +1,5 @@
-<%= simple_form_for(@reservation,
-      url: @reservation.new_record? ? reservations_path : reservation_path(@reservation),
-      html: { class: 'form-horizontal reservation-form' }) do |f| %>
+<%= horizontal_form_for(@reservation,
+      url: @reservation.new_record? ? reservations_path : reservation_path(@reservation)) do |f| %>
 
   <%= f.hidden_field :resource_id %>
 
@@ -50,12 +49,9 @@
     <% end %>
   <% end %>
 
-  <div class="row">
-    <div class="form-actions col-sm-8">
-      <%= f.button :submit, class: "pull-right btn-primary" %>
-    </div>
-  </div>
-
+  <%= form_actions do %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
 <% end %>
 
 <%= javascript_tag do %>

@@ -59,8 +59,7 @@
       You have not signed up for this meal and it is now closed.
     <% else %>
 
-      <%= simple_form_for(@signup, wrapper: :equal_width_form, html: { class: 'form-horizontal' }) do |f| %>
-
+      <%= horizontal_form_for(@signup, width: :full, wrapper: :equal_width_form) do |f| %>
         <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
         <%= f.input :meal_id, as: :hidden %>
         <%= base_error(f, full_width: true) %>
@@ -110,10 +109,10 @@
         <% end %>
 
         <% if @meal.signups_editable? %>
-          <div class="pull-right">
+          <%= form_actions do %>
             <%= f.button :submit, "Save & Go To Next Meal", name: "save_and_next", class: "btn btn-default" if @next_meal %>
             <%= f.button :submit, "Save", class: "btn btn-primary" %>
-          </div>
+          <% end %>
         <% end %>
       <% end %>
 

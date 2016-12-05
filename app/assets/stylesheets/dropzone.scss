@@ -26,6 +26,12 @@
 
   .dz-details {
     margin: 5px 0;
+
+    .dz-filename {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .dz-preview.dz-error {

@@ -152,7 +152,7 @@ describe User do
     end
 
     it "should return missing image when no photo" do
-      expect(create(:user).photo(:medium)).to eq "/images/missing/users/medium.png"
+      expect(create(:user).photo(:medium)).to eq "missing/users/medium.png"
     end
   end
 end

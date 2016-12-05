@@ -154,7 +154,7 @@ describe UserPolicy do
   describe "permitted attributes" do
     let(:user2) { double(community: community) }
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id] }
+      :photo, :photo_tmp_id, :photo_destroy] }
     let(:admin_attribs) { [:google_email, :alternate_id, :role_admin, :role_biller] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 

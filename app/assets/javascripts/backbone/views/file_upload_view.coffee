@@ -21,13 +21,15 @@ Mess.Views.FileUploadView = Backbone.View.extend
       thumbnailWidth: 150
       init: ->
         dz = this
-        dz.on 'addedfile', ->
-          dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
-          view.dzForm.addClass('existing-deleted') if view.dzForm.is('.has-existing')
-          view.setMainPhotoDestroyFlag(false)
+        dz.on 'addedfile', (file) -> view.fileAdded.apply(view, [file, dz])
 
   events:
     'click a.delete': 'delete'
+
+  fileAdded: (file, dz) ->
+    dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
+    @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
+    @setMainPhotoDestroyFlag(false)
 
   delete: (e) ->
     e.preventDefault()

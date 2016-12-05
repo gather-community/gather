@@ -16,3 +16,9 @@
     <%= f.button :submit, "Enter Transaction", class: "btn btn-primary" %>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    new Mess.Views.DirtyChecker({el: '.billing--transaction-form'});
+  });
+<% end %>

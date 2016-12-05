@@ -9,15 +9,15 @@ Mess.Views.DirtyChecker = Backbone.View.extend
   events:
     'click': 'foo'
     'dp.change': 'datetimePickerChanged'
-    'cocoon:after-insert': 'cocoonChange'
-    'cocoon:after-remove': 'cocoonChange'
+    'cocoon:after-insert': 'rescan'
+    'cocoon:after-remove': 'rescan'
 
   datetimePickerChanged: (e) ->
     # Event always fires on page load, so the first time, we just save the original value.
     if !@$(e.target).data('original-datetime')
       @$(e.target).data('original-datetime', e.date)
 
-  cocoonChange: ->
+  rescan: ->
     @$el.dirtyForms('rescan')
 
   # A helper that lets other code manually mark the form as dirty by adding the .dirty-flag class.

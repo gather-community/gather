@@ -4,7 +4,8 @@
 
 <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
 
-<%= horizontal_form_for(@meal, width: :full, url: do_finalize_meal_path(@meal), method: :put) do |form| %>
+<%= horizontal_form_for(@meal, width: :full, name: "finalize",
+  url: do_finalize_meal_path(@meal), method: :put) do |form| %>
   <table class="index">
     <tr>
       <th rowspan="2">Household</th>
@@ -52,5 +53,8 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){ new Mess.Views.Select2View({el: 'table.index'}); });
+  $(function(){
+    new Mess.Views.Select2View({el: 'table.index'});
+    new Mess.Views.DirtyChecker({el: '.finalize-form'});
+  });
 <% end %>

@@ -41,7 +41,8 @@
 
     <% if @signup.allowed? && @meal.signups_editable? %>
       <%= link_to(icon_tag('close'), "#", title: "Clear Form",
-        onclick: "$('.signup select').val(0); $('.signup textarea').val(''); return false") %>
+        onclick: "$('.signup select').val(0).trigger('change');
+          $('.signup textarea').val(''); return false") %>
     <% end %>
 
     <h4>
@@ -116,6 +117,12 @@
         <% end %>
       <% end %>
 
+      <%= javascript_tag do %>
+        $(function(){
+          new Mess.Views.DirtyChecker({el: '.signup-form'});
+        });
+      <% end %>
+
     <% end %>
   </div>
 </div>
@@ -137,6 +144,6 @@
 
 <%= javascript_tag do %>
   $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
   })
 <% end %>

@@ -7,34 +7,35 @@
 <% end %>
 
 <%= image_tag(@user.photo.url(:medium, allow_tmp: true), class: "photo") %>
+<div class="user-info">
+  <ul class="details">
+    <li>Community: <%= @user.community_name %></li>
+    <li>Household: <%= @user.household_name %></li>
+    <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
+    <li class="phones">Phone: <%= user_phones(@user) %></li>
+  </ul>
 
-<ul>
-  <li>Community: <%= @user.community_name %></li>
-  <li>Household: <%= @user.household_name %></li>
-  <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
-  <li class="phones">Phone: <%= user_phones(@user) %></li>
-</ul>
-
-<% if @head_cook_meals.any? %>
-  <h4>Past Head Cook Meals</h4>
-  <table class="index part-width">
-    <tr>
-      <th class="col-md-1">Date</th>
-      <th class="col-md-3">Title</th>
-      <th class="col-md-1">Signups</th>
-    </tr>
-    <% @head_cook_meals.each do |meal| %>
+  <% if @head_cook_meals.any? %>
+    <h4>Past Head Cook Meals</h4>
+    <table class="index part-width">
       <tr>
-        <td class="col-md-1">
-          <%= meal.served_at.to_date.to_s(:short_date) %>
-        </td>
-        <td class="col-md-3">
-          <%= link_to(meal.title || "[No title]", meal) %>
-        </td>
-        <td class="col-md-1">
-          <%= meal.signup_count %>
-        </td>
+        <th class="col-md-1">Date</th>
+        <th class="col-md-3">Title</th>
+        <th class="col-md-1">Signups</th>
       </tr>
-    <% end %>
-  </table>
-<% end %>
+      <% @head_cook_meals.each do |meal| %>
+        <tr>
+          <td class="col-md-1">
+            <%= meal.served_at.to_date.to_s(:short_date) %>
+          </td>
+          <td class="col-md-3">
+            <%= link_to(meal.title || "[No title]", meal) %>
+          </td>
+          <td class="col-md-1">
+            <%= meal.signup_count %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>

@@ -22,4 +22,10 @@
     <% end %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
+
+  <%= javascript_tag do %>
+    $(function(){
+      new Mess.Views.DirtyChecker({el: '.household-form'});
+    });
+  <% end %>
 <% end %>

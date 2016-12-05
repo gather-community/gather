@@ -6,8 +6,8 @@
   </div>
 <% end %>
 
-<%= horizontal_form_for(@account,
-  url: @account.new_record? ? accounts_path : account_path(@account)) do |f| %>
+<% form_url = @account.new_record? ? accounts_path : account_path(@account) %>
+<%= horizontal_form_for(@account, url: form_url) do |f| %>
 
   <%= f.input :household_id do %><%= @account.household_full_name %><% end %>
   <%= f.input :community_id do %><%= @account.community_name %><% end %>
@@ -19,4 +19,9 @@
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
 
+  <%= javascript_tag do %>
+    $(function(){
+      new Mess.Views.DirtyChecker({el: '.billing--account-form'});
+    });
+  <% end %>
 <% end %>

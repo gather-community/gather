@@ -129,7 +129,7 @@
   $(function(){
     new Mess.Views.Select2View({el: '.meal-form'});
     $("#meal_resource_ids").select2();
-
+    new Mess.Views.DirtyChecker({el: '.meal-form'});
     <% if @notify_on_worker_change %>
       new Mess.Views.WorkerChangeNotificationView({el: '#assignment_fields'});
     <% end %>

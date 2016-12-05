@@ -4,6 +4,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
     @dzForm = @$('.dropzone')
     @mainForm = @$('form:not(.dropzone)')
     @params = params
+    @mainPhotoDestroy = false
 
     @tmpId = @dzForm.find('[name=tmp_id]').val()
     @model = @dzForm.find('[name=model]').val()
@@ -38,7 +39,7 @@ Mess.Views.FileUploadView = Backbone.View.extend
     @dzForm.addClass('existing-deleted')
 
   deleteTmpFile: ->
-    if @dropzone.files[0]
+    if @hasNewFile()
       @dropzone.removeFile(@dropzone.files[0])
       $.post "/uploads/#{@tmpId}",
         _method: "DELETE"
@@ -46,8 +47,20 @@ Mess.Views.FileUploadView = Backbone.View.extend
         attribute: @attribute
         tmp_id: @tmpId
 
+  hasNewFile: ->
+    !!@dropzone.files[0]
+
   setMainPhotoDestroyFlag: (bool) ->
-    @mainForm.find('#user_photo_destroy').val(if bool then '1' else '0')
+    if @dzForm.is('.has-existing')
+      @mainPhotoDestroy = bool
+      @mainForm.find('#user_photo_destroy').val(if bool then '1' else '0')
 
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()
+
+  # Part of a ducktype defined by the jquery.dirtyForms plugin.
+  # The file upload is dirty if any files have been dragged,
+  # or if the existing file has been marked for deletion.
+  isDirty: (node) ->
+    if node.get(0) == @mainForm.get(0)
+      @hasNewFile() || @mainPhotoDestroy

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "calendar export" do
+feature "user form" do
   let(:admin) { create(:admin) }
   let(:user) { create(:user, :with_photo) }
   let!(:household) { create(:household, name: "Gingerbread") }

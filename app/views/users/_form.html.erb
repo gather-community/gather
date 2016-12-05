@@ -10,9 +10,7 @@
       <%= hidden_field_tag(:tmp_id, @user.photo_tmp_id) %>
       <%= hidden_field_tag(:id, @user.id) %>
       <%= link_to(icon_tag("trash"), "#", class: "delete") %>
-      <% if photo_present %>
-        <%= image_tag(photo_path, class: "existing") %>
-      <% end %>
+      <%= image_tag(photo_path, class: "existing") %>
       <div class="dz-message" data-dz-message>
         <span>Click or Drag<br/>Photo Here</span>
       </div>

@@ -59,9 +59,9 @@
   /////////////////////////////////////////////////////////////////////////////////////
   // Show and hide message, existing thumbnail, and delete link depending on state
 
-  &.dz-started, &.existing-deleted {
+  &.has-existing {
     img.existing {
-      display: none;
+      display: block;
     }
   }
 
@@ -70,6 +70,9 @@
       display: block;
     }
     a.delete {
+      display: none;
+    }
+    img.existing {
       display: none;
     }
   }

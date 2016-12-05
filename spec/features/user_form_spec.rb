@@ -39,7 +39,7 @@ feature "calendar export" do
 
     scenario "new user", js: true do
       visit(new_user_path)
-      expect_image_upload(mode: :existing, path: /missing\/users/)
+      expect_no_image_upload
       drop_in_dropzone(fixture_file_path("cooper.jpg"))
       expect_image_upload(mode: :dz_preview)
       click_on("Create User")

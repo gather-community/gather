@@ -19,12 +19,21 @@ module FeatureSpecHelpers
     if mode == :dz_preview
       expect(page).to have_css("form.dropzone img[data-dz-thumbnail]", visible: true)
       expect(page.find("form.dropzone img[data-dz-thumbnail]")["src"]).to match /base64/
-      expect(page).to have_css("form.dropzone img.existing", visible: false)
+      expect(page).to have_no_css("form.dropzone img.existing", visible: true)
     else
       expect(page).not_to have_css("form.dropzone img[data-dz-thumbnail]")
       expect(page).to have_css("form.dropzone img.existing", visible: true)
       expect(page.find("form.dropzone img.existing")["src"]).to match path
     end
+    expect(page).to have_css("form.dropzone a.delete", visible: true)
+    expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
+  end
+
+  def expect_no_image_upload
+    expect(page).to have_css("form.dropzone .dz-message", visible: true)
+    expect(page).not_to have_css("form.dropzone img[data-dz-thumbnail]")
+    expect(page).to have_no_css("form.dropzone img.existing", visible: true)
+    expect(page).to have_no_css("form.dropzone a.delete", visible: true)
   end
 
   def drop_in_dropzone(file_path)
@@ -45,6 +54,7 @@ module FeatureSpecHelpers
 
   def delete_from_dropzone
     find(:css, "form.dropzone a.delete").click
+    expect_no_image_upload
   end
 
   def expect_profile_photo(pattern)

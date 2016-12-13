@@ -86,6 +86,6 @@ class UserPolicy < ApplicationPolicy
 
   # Checks if the user is a guardian of the user being tested.
   def guardian?
-    record.guardian == user
+    record.guardians.include?(user)
   end
 end

@@ -1,0 +1,38 @@
+require "rails_helper"
+
+describe People::Guardianship do
+  describe "validations and assertions" do
+    context "child user" do
+      it "works with one guardian" do
+        child = build(:user, :child, guardians: [create(:user)])
+        expect(child.valid?).to be true
+      end
+
+      it "works with two guardians" do
+        child = build(:user, :child, guardians: create_list(:user, 2))
+        expect(child.valid?).to be true
+      end
+
+      it "fails with zero guardians" do
+        (child = build(:user, :child, no_guardians: true)).valid?
+        expect(child.errors[:guardians]).not_to be_empty
+      end
+    end
+
+    context "adult user" do
+      it "works with children" do
+        adult = build(:user, children: create_list(:user, 2, :child))
+        expect(adult.valid?).to be true
+      end
+
+      it "works with no children" do
+        adult = build(:user, children: [])
+        expect(adult.valid?).to be true
+      end
+
+      it "raises error if has guardians" do
+        expect { create(:user, guardians: [create(:user)]) }.to raise_error(People::AdultWithGuardianError)
+      end
+    end
+  end
+end

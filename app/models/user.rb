@@ -9,9 +9,11 @@ class User < ActiveRecord::Base
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
-  belongs_to :guardian, class_name: "User", inverse_of: :children
+  has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id
+  has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :child_id
+  has_many :guardians, through: :up_guardianships
+  has_many :children, through: :down_guardianships
   has_many :assignments
-  has_many :children, class_name: "User", foreign_key: :guardian_id, inverse_of: :guardian
 
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order("first_name, last_name") }
@@ -49,7 +51,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :household_id, presence: true
-  validates :guardian_id, presence: true, if: :child?
+  validates :guardians, presence: true, if: :child?
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
 
   has_attached_file :photo,
@@ -60,6 +62,7 @@ class User < ActiveRecord::Base
 
   before_save do
     photo.destroy if photo_destroy?
+    raise People::AdultWithGuardianError if adult? && guardians.present?
   end
 
   def self.from_omniauth(auth)

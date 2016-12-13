@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123020344) do
+ActiveRecord::Schema.define(version: 20161213133511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -183,6 +183,16 @@ ActiveRecord::Schema.define(version: 20161123020344) do
     t.integer "new_id"
     t.decimal "old_id", precision: 6
   end
+
+  create_table "people_guardianships", force: :cascade do |t|
+    t.integer "child_id"
+    t.datetime "created_at", null: false
+    t.integer "guardian_id"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "people_guardianships", ["child_id"], name: "index_people_guardianships_on_child_id", using: :btree
+  add_index "people_guardianships", ["guardian_id"], name: "index_people_guardianships_on_guardian_id", using: :btree
 
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
     t.integer "resource_id", null: false
@@ -359,7 +369,6 @@ ActiveRecord::Schema.define(version: 20161123020344) do
     t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email"
-    t.integer "guardian_id"
     t.string "home_phone"
     t.integer "household_id", null: false
     t.date "joined_on"
@@ -425,7 +434,6 @@ ActiveRecord::Schema.define(version: 20161123020344) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "statements"
   add_foreign_key "users", "households"
-  add_foreign_key "users", "users", column: "guardian_id"
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
 end

@@ -20,7 +20,14 @@ FactoryGirl.define do
     end
 
     trait :child do
+      transient do
+        no_guardians false
+      end
       child true
+
+      after(:build) do |child, evaluator|
+        child.guardians = [create(:user)] unless evaluator.no_guardians
+      end
     end
 
     trait :with_photo do

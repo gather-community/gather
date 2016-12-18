@@ -33,8 +33,6 @@ class User < ActiveRecord::Base
 
   attr_accessor :photo_destroy
 
-  serialize :emergency_contacts, JSON
-
   PHONE_TYPES.each do |p|
     phony_normalize "#{p}_phone", default_country_code: 'US'
     validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'

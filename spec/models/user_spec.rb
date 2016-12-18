@@ -111,41 +111,6 @@ describe User do
     end
   end
 
-  describe "emergency_contacts" do
-    let(:user) { create(:user, emergency_contacts: [
-      {
-        name: "Lozer Whips",
-        relationship: "Pinn's Dad",
-        city: "Jonkler, KY",
-        phones: [
-          {
-            number: "+16548768903",
-            type: "mobile"
-          },{
-            number: "+16467446452",
-            type: "home"
-          }
-        ]
-      },{
-        name: "Jep Numbles",
-        relationship: "Burl's interlocutor",
-        city: "Olo Ponto Nuevo, PR",
-        phones: [
-          {
-            number: "+14426242232",
-            type: "mobile"
-          }
-        ]
-      }
-    ]) }
-
-    before { user.reload }
-
-    it "should allow retrieval" do
-      expect(user.emergency_contacts[0]["phones"][0]["type"]).to eq "mobile"
-    end
-  end
-
   describe "photo" do
     it "should be created by factory when requested" do
       expect(create(:user, :with_photo).photo.size).to be > 0

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213133511) do
+ActiveRecord::Schema.define(version: 20161218174514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -110,11 +110,14 @@ ActiveRecord::Schema.define(version: 20161213133511) do
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
+    t.text "emergency_contacts"
+    t.string "garages"
     t.string "name", limit: 50, null: false
     t.integer "old_id"
     t.string "old_name"
     t.string "unit_num"
     t.datetime "updated_at", null: false
+    t.text "vehicles"
   end
 
   add_index "households", ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true, using: :btree
@@ -365,7 +368,6 @@ ActiveRecord::Schema.define(version: 20161213133511) do
     t.inet "current_sign_in_ip"
     t.datetime "deactivated_at"
     t.string "email", null: false
-    t.text "emergency_contacts"
     t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "google_email"
@@ -380,6 +382,7 @@ ActiveRecord::Schema.define(version: 20161213133511) do
     t.string "photo_file_name"
     t.integer "photo_file_size"
     t.datetime "photo_updated_at"
+    t.string "preferred_contact"
     t.string "provider"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"

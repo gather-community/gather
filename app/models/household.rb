@@ -22,6 +22,8 @@ class Household < ActiveRecord::Base
   validates :community_id, presence: true
   validates :unit_num, length: { maximum: 8 }
 
+  serialize :emergency_contacts, JSON
+
   normalize_attributes :name, :unit_num, :old_id, :old_name
 
   def account_for(community)

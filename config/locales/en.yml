@@ -9,6 +9,7 @@ en:
         mobile_phone: "Mobile Phone"
         home_phone: "Home Phone"
         work_phone: "Work Phone"
+        birthdate_str: "Birthdate"
         alternate_id: "Alternate ID"
       household:
         name: "Name"
@@ -89,6 +90,8 @@ en:
     formats:
       month_yr: '%B %Y'
       weekday: '%A'
+      month_day: '%B %e'
+      date_full: '%B %e, %Y'
 
   datepicker:
     dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
@@ -110,6 +113,8 @@ en:
         name: "e.g. Game night"
       transaction:
         description: "e.g. Check #12345"
+      user:
+        birthdate_str: "e.g. Feb 29 1981 (year optional)"
     hints:
       account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."

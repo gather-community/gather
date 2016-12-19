@@ -30,6 +30,8 @@ class User < ActiveRecord::Base
   delegate :account_for, :credit_exceeded?, to: :household
   delegate :community_id, :community_name, :community_abbrv, to: :household
   delegate :community, to: :household, allow_nil: true
+  delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
+  delegate :age, to: :birthdate_wrapper
 
   attr_accessor :photo_destroy
 
@@ -51,6 +53,7 @@ class User < ActiveRecord::Base
   validates :household_id, presence: true
   validates :guardians, presence: true, if: :child?
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
+  validate { birthdate_wrapper.validate }
 
   has_attached_file :photo,
     styles: { thumb: "150x150#", medium: "300x300#" },
@@ -93,18 +96,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def age
-    if has_full_birthdate?
-      today = Date.today
-      bday_this_year = Date.new(today.year, birthdate.month, birthdate.day)
-      today.year - birthdate.year - (bday_this_year > today ? 1 : 0)
-    else
-      nil
-    end
-  end
-
-  def has_full_birthdate?
-    birthdate && birthdate.year != 1
+  def birthdate_wrapper
+    @birthdate_wrapper ||= People::Birthdate.new(self)
   end
 
   def any_assignments?

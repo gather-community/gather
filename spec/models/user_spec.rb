@@ -70,47 +70,6 @@ describe User do
     end
   end
 
-  describe "age and birthdate" do
-    context "with no birthdate" do
-      let(:user) { create(:user, birthdate: nil) }
-
-      it "has nil age" do
-        expect(user.age).to eq nil
-      end
-    end
-
-    context "with no year" do
-      let(:user) { create(:user, birthdate: Date.new(1,2,15)) }
-      before { user.reload }
-
-      it "retrieves properly" do
-        expect(user.birthdate.year).to eq 1
-        expect(user.birthdate.month).to eq 2
-        expect(user.birthdate.day).to eq 15
-      end
-
-      it "has nil age" do
-        expect(user.age).to eq nil
-      end
-    end
-
-    context "with full birthdate" do
-      let(:user) { create(:user, birthdate: "2000-6-15") }
-
-      it "has correct age when today is before bday" do
-        Timecop.freeze("2016-2-1") do
-          expect(user.age).to eq 15
-        end
-      end
-
-      it "has correct age when today is after bday" do
-        Timecop.freeze("2016-9-1") do
-          expect(user.age).to eq 16
-        end
-      end
-    end
-  end
-
   describe "photo" do
     it "should be created by factory when requested" do
       expect(create(:user, :with_photo).photo.size).to be > 0

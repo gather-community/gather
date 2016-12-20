@@ -18,10 +18,10 @@
       input_html: { data: { "select2-src" => "user", "select2-label-attr" => "name" } } %>
   <% end %>
 
-  <%= f.input :starts_at, as: :datetime_picker,
+  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>
 
-  <%= f.input :ends_at, as: :datetime_picker,
+  <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: @reservation.fixed_end_time? ? "no-time-picker" : "" } %>
 
   <% if @kinds.present? && @reservation.requires_kind? %>

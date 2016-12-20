@@ -36,6 +36,7 @@
       <%= f.input :home_phone, input_html: { value: @user.format_phone(:home) } %>
       <%= f.input :work_phone, input_html: { value: @user.format_phone(:work) } %>
       <%= f.input :birthdate_str, as: :string %>
+      <%= f.input :joined_on, as: :date_picker %>
 
       <% if policy(@user).administer? %>
         <%= f.input :alternate_id %>

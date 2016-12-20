@@ -87,19 +87,20 @@ en:
       user: "Are you sure you want to deactivate the user '%{name}'?"
 
   date:
+    # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
       month_yr: '%B %Y'
       weekday: '%A'
-      month_day: '%B %e'
-      date_full: '%B %e, %Y'
+      month_day: '%b %e'
+      date_full: '%b %e %Y'
 
   datepicker:
-    dformat: '%a %Y-%m-%d'             # display format of the date (this is the default, can be ommited)
-    pformat: 'ddd YYYY-MM-DD'           # picking format of the date (this is the default, can be ommited)
+    dformat: '%b %e %Y'
+    pformat: 'MMM D YYYY'
   timepicker:
-    dformat: '%l:%M%P'                   # display format of the time (this is the default, can be ommited)
-    pformat: 'h:mma'                # picking format of the time (this is the default, can be ommited)
-  dayViewHeaderFormat: 'MMMM YYYY'  # picking format of the time (this is the default, can be ommited)
+    dformat: '%l:%M%P'
+    pformat: 'h:mma'
+  dayViewHeaderFormat: 'MMMM YYYY'
   simple_form:
     placeholders:
       meal:

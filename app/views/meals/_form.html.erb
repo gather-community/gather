@@ -4,7 +4,7 @@
 
   <% if policy(@meal).administer? %>
 
-    <%= f.input :served_at, as: :datetime_picker,
+    <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
     <%= f.input :resource_ids, collection: @resource_options, label_method: :full_name, required: true,

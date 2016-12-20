@@ -147,6 +147,6 @@ class ReservationsController < ApplicationController
 
   def redirect_to_reservation_in_context(reservation)
     redirect_to reservations_path_for_resource(reservation.resource,
-      date: reservation.starts_at.to_s(:compact_date))
+      date: reservation.starts_at.to_s(:url_date))
   end
 end

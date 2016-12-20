@@ -2,8 +2,9 @@ class User < ActiveRecord::Base
   include Deactivatable
   rolify
 
-  PHONE_TYPES = %w(home work mobile)
+  PHONE_TYPES = %i(home work mobile)
   ROLES = %i(super_admin cluster_admin admin biller)
+  CONTACT_TYPES = %i(email text phone)
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
@@ -116,7 +117,7 @@ class User < ActiveRecord::Base
 
   # Returns a string with all non-nil phone numbers
   def phones
-    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t[0]}" : nil }.compact
+    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t.to_s[0]}" : nil }.compact
   end
 
   def ensure_calendar_token!

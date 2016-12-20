@@ -11,3 +11,5 @@ class Mess.Views.ApplicationView extends Backbone.View
 
     # We prefer to instantiate these ourselves.
     Dropzone.autoDiscover = false
+
+    new Mess.Views.SelectPromptStyler()

@@ -11,6 +11,7 @@ en:
         work_phone: "Work Phone"
         birthdate_str: "Birthdate"
         alternate_id: "Alternate ID"
+        preferred_contact: "Preferred Contact"
       household:
         name: "Name"
         community_id: "Community"
@@ -125,6 +126,14 @@ en:
           past: "Past"
           finalizable: "Finalizable"
           all: "All Time"
+      user:
+        preferred_contact:
+          email: "Email"
+          text: "Text"
+          phone: "Phone"
+    prompts:
+      user:
+        preferred_contact: "How should people contact you?"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."

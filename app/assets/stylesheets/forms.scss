@@ -49,6 +49,10 @@ form {
   }
 }
 
+select.prompt-selected {
+  color: $placeholder-color;
+}
+
 .select2-container .select2-selection--single {
   height: 33px;
 }

@@ -59,7 +59,7 @@ form {
 
 // Allow hiding the time picker switch with special class.
 .datetime_picker.no-time-picker {
-  .picker-switch {
+  .accordion-toggle {
     display: none;
   }
 }

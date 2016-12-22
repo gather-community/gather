@@ -1,0 +1,18 @@
+<%= f.hidden_field :id %>
+<div class="nested-fields">
+  <div class="remove-link-col">
+    <%= link_to_remove_association(icon_tag("trash"), f) %>
+  </div>
+  <div class="fields-col fields-horiz-3">
+    <div>
+      <label>Make</label>
+      <%= f.input_field :make, class: "form-control" %>
+    </div><div>
+      <label>Model</label>
+      <%= f.input_field :model, class: "form-control" %>
+    </div><div>
+      <label>Color</label>
+      <%= f.input_field :color, class: "form-control" %>
+    </div>
+  </div>
+</div>

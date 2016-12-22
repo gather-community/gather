@@ -35,6 +35,7 @@ class HouseholdsController < ApplicationController
   def new
     @household = Household.new(community: current_community)
     authorize @household
+    prepare_household
   end
 
   def create
@@ -46,6 +47,7 @@ class HouseholdsController < ApplicationController
       redirect_to households_path
     else
       set_validation_error_notice
+      prepare_household
       render :new
     end
   end
@@ -53,6 +55,7 @@ class HouseholdsController < ApplicationController
   def edit
     @household = Household.find(params[:id])
     authorize @household
+    prepare_household
   end
 
   def update
@@ -63,6 +66,7 @@ class HouseholdsController < ApplicationController
       redirect_to households_path
     else
       set_validation_error_notice
+      prepare_household
       render :edit
     end
   end
@@ -106,4 +110,9 @@ class HouseholdsController < ApplicationController
     redirect_to(households_path)
   end
 
+  private
+
+  def prepare_household
+    @household.vehicles.build if @household.vehicles.empty?
+  end
 end

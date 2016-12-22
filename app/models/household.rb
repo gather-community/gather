@@ -6,6 +6,7 @@ class Household < ActiveRecord::Base
     inverse_of: :household, class_name: "Billing::Account"
   has_many :signups
   has_many :users, ->{ by_name }, inverse_of: :household
+  has_many :vehicles, class_name: "People::Vehicle"
 
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("LOWER(households.name)") }
@@ -21,8 +22,9 @@ class Household < ActiveRecord::Base
       "There is already a household with this name at this community" }
   validates :community_id, presence: true
   validates :unit_num, length: { maximum: 8 }
+  validates_associated :vehicles
 
-  serialize :emergency_contacts, JSON
+  accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
 

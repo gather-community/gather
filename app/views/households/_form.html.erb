@@ -4,6 +4,18 @@
   <%= f.input :community_id, collection: Community.by_name %>
   <%= f.input :unit_num %>
 
+  <%= f.input :vehicles, error: false do %>
+    <% if @household.errors[:vehicles].present? %>
+      <div class="help-block">All fields are required</div>
+    <% end %>
+    <div class="nested-field-set">
+      <%= f.simple_fields_for :vehicles do |vehicle| %>
+        <%= render("households/vehicle_fields", f: vehicle) %>
+      <% end %>
+      <div><%= link_to_add_association 'Add Vehicle', f, :vehicles %></div>
+    </div>
+  <% end %>
+
   <% if @household.from_grot? %>
     <%= f.input :old_id %>
     <%= f.input :old_name %>

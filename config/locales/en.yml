@@ -18,6 +18,7 @@ en:
         unit_num: "Unit Number"
         old_id: "Old Grot ID"
         old_name: "Old Grot Name"
+        vehicles: "Vehicles"
       meal:
         discount: "Discount %"
         allergen_gluten: "Gluten"
@@ -117,6 +118,11 @@ en:
         description: "e.g. Check #12345"
       user:
         birthdate_str: "e.g. Feb 29 1981 (year optional)"
+      household:
+        vehicles:
+          make: "e.g. Toyota"
+          model: "e.g. Prius"
+          color: "e.g. Blue"
     hints:
       account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."

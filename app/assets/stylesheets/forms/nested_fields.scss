@@ -1,0 +1,39 @@
+.nested-fields {
+  margin-bottom: 5px;
+
+  @media screen and (max-width: 767px) {
+    margin-bottom: 10px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .fields-col {
+    margin-right: 20px;
+
+    label {
+      color: $gray-text;
+      font-size: 90%;
+      margin-bottom: 0;
+      line-height: 1;
+    }
+
+    @media screen and (min-width: 768px) {
+      &.fields-horiz-3 > div {
+        display: inline-block;
+        width: 33.333333%;
+      }
+    }
+  }
+
+  .remove-link-col {
+    width: 20px;
+    padding: 20px 0 0 5px;
+    float: right;
+  }
+}
+
+.has-error .nested-fields .form-control {
+  border-color: #ccc;
+}

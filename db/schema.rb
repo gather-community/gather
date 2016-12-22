@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218174514) do
+ActiveRecord::Schema.define(version: 20161222025619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -110,14 +110,12 @@ ActiveRecord::Schema.define(version: 20161218174514) do
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
-    t.text "emergency_contacts"
     t.string "garages"
     t.string "name", limit: 50, null: false
     t.integer "old_id"
     t.string "old_name"
     t.string "unit_num"
     t.datetime "updated_at", null: false
-    t.text "vehicles"
   end
 
   add_index "households", ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true, using: :btree
@@ -196,6 +194,17 @@ ActiveRecord::Schema.define(version: 20161218174514) do
 
   add_index "people_guardianships", ["child_id"], name: "index_people_guardianships_on_child_id", using: :btree
   add_index "people_guardianships", ["guardian_id"], name: "index_people_guardianships_on_guardian_id", using: :btree
+
+  create_table "people_vehicles", force: :cascade do |t|
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.integer "household_id"
+    t.string "make"
+    t.string "model"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "people_vehicles", ["household_id"], name: "index_people_vehicles_on_household_id", using: :btree
 
   create_table "reservation_guideline_inclusions", force: :cascade do |t|
     t.integer "resource_id", null: false
@@ -418,6 +427,7 @@ ActiveRecord::Schema.define(version: 20161218174514) do
   add_foreign_key "meals", "communities", column: "host_community_id"
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "meals_costs", "meals"
+  add_foreign_key "people_vehicles", "households"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
   add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"

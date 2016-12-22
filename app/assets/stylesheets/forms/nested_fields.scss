@@ -20,6 +20,7 @@
     }
 
     @media screen and (min-width: 768px) {
+
       &.fields-horiz-3 > div {
         display: inline-block;
         width: 33.333333%;
@@ -29,10 +30,26 @@
 
   .remove-link-col {
     width: 20px;
-    padding: 20px 0 0 5px;
+    padding-top: 25px;
+    padding-left: 5px;
     float: right;
   }
+
+  // This block makes labels show for only the first group on larger screens,
+  // but for all groups on mobile.
+  @media screen and (min-width: 768px) {
+    &:not(:first-of-type) {
+      .fields-col label {
+        display: none;
+      }
+
+      .remove-link-col {
+        padding-top: 0;
+      }
+    }
+  }
 }
+
 
 .has-error .nested-fields .form-control {
   border-color: #ccc;

@@ -29,8 +29,8 @@ describe People::Birthdate do
         expect(user.birthdate.month).to eq 2
         expect(user.birthdate.day).to eq day
         expect(user.birthdate).to eq Date.new(4, 2, day)
-        expect(user.birthdate_str).to eq "February #{day}"
-        expect(user.reload.birthdate_str).to eq "February #{day}"
+        expect(user.birthdate_str).to eq "Feb #{day}"
+        expect(user.reload.birthdate_str).to eq "Feb #{day}"
       end
 
       it "has nil age" do
@@ -72,9 +72,9 @@ describe People::Birthdate do
       let(:user) { create(:user, birthdate_str: "2000-6-15") }
 
       it "gets set properly" do
-        expect(user.birthdate_str).to eq "June 15, 2000"
+        expect(user.birthdate_str).to eq "Jun 15 2000"
         expect(user.birthdate).to eq Date.new(2000, 6, 15)
-        expect(user.reload.birthdate_str).to eq "June 15, 2000"
+        expect(user.reload.birthdate_str).to eq "Jun 15 2000"
       end
 
       it "can be set to nil" do

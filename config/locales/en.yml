@@ -12,6 +12,7 @@ en:
         birthdate_str: "Birthdate"
         alternate_id: "Alternate ID"
         preferred_contact: "Preferred Contact"
+        joined_on: "Join Date"
       household:
         name: "Name"
         community_id: "Community"

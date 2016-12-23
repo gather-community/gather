@@ -264,3 +264,9 @@ en:
     cluster_admin: "Cluster Admin"
     super_admin: "Super Admin"
     biller: "Biller"
+
+  phone_types:
+    abbreviations:
+      home: "h"
+      work: "w"
+      mobile: "m"

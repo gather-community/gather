@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
-  include Deactivatable
+  include Deactivatable, Phoneable
   rolify
 
-  PHONE_TYPES = %i(home work mobile)
   ROLES = %i(super_admin cluster_admin admin biller)
   CONTACT_TYPES = %i(email text phone)
 
@@ -36,13 +35,10 @@ class User < ActiveRecord::Base
 
   attr_accessor :photo_destroy
 
-  PHONE_TYPES.each do |p|
-    phony_normalize "#{p}_phone", default_country_code: 'US'
-    validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'
-  end
-
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name
+
+  handle_phone_types :home, :work, :mobile
 
   # Contact email does not have to be unique because some people share them (grrr!)
   validates :email, format: Devise.email_regexp
@@ -87,16 +83,6 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
   end
 
-  # Returns formatted phone number, except if phone number has errors, returns raw value w/o +.
-  def format_phone(kind)
-    attrib = :"#{kind}_phone"
-    if errors[attrib].any?
-      read_attribute(attrib).try(:sub, /\A\+/, "")
-    else
-      read_attribute(attrib).try(:phony_formatted, format: :national)
-    end
-  end
-
   def birthdate_wrapper
     @birthdate_wrapper ||= People::Birthdate.new(self)
   end
@@ -113,11 +99,6 @@ class User < ActiveRecord::Base
   def deactivate!
     super
     household.user_deactivated
-  end
-
-  # Returns a string with all non-nil phone numbers
-  def phones
-    PHONE_TYPES.map{ |t| (p = format_phone(t)) ? "#{p} #{t.to_s[0]}" : nil }.compact
   end
 
   def ensure_calendar_token!
@@ -153,10 +134,6 @@ class User < ActiveRecord::Base
 
   def at_least_one_phone
     errors.add(:mobile_phone, "You must enter at least one phone number") if adult? && no_phones?
-  end
-
-  def no_phones?
-    [home_phone, mobile_phone, work_phone].compact.empty?
   end
 
   def generate_token

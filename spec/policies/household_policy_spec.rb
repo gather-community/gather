@@ -76,7 +76,9 @@ describe HouseholdPolicy do
 
     it "should allow basic attribs" do
       expect(subject).to contain_exactly(:name, :community_id, :unit_num, :old_id, :old_name,
-        vehicles_attributes: [:id, :make, :model, :color, :_destroy])
+        vehicles_attributes: [:id, :make, :model, :color, :_destroy],
+        emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
+          :email, :location, :_destroy])
     end
   end
 end

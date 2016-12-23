@@ -3,16 +3,20 @@
   <div class="remove-link-col">
     <%= link_to_remove_association(icon_tag("trash"), f) %>
   </div>
-  <div class="fields-col fields-horiz-3">
-    <div>
-      <label>Make</label>
-      <%= f.input_field :make, class: "form-control" %>
-    </div><div>
-      <label>Model</label>
-      <%= f.input_field :model, class: "form-control" %>
-    </div><div>
-      <label>Color</label>
-      <%= f.input_field :color, class: "form-control" %>
+  <div class="fields-col">
+    <div class="row">
+      <div class="col-sm-4">
+        <%= f.label(:make) %>
+        <%= f.input_field :make, class: "form-control" %>
+      </div>
+      <div class="col-sm-4">
+        <%= f.label(:model) %>
+        <%= f.input_field :model, class: "form-control" %>
+      </div>
+      <div class="col-sm-4">
+        <%= f.label(:color) %>
+        <%= f.input_field :color, class: "form-control" %>
+      </div>
     </div>
   </div>
 </div>

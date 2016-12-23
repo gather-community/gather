@@ -1,0 +1,40 @@
+<%= f.hidden_field :id %>
+<div class="nested-fields">
+  <div class="remove-link-col">
+    <%= link_to_remove_association(icon_tag("trash"), f) %>
+  </div>
+  <div class="fields-col">
+    <div class="row">
+      <div class="col-sm-6">
+        <%= f.label(:name) %>
+        <%= f.input_field :name, class: "form-control" %>
+      </div>
+      <div class="col-sm-6">
+        <%= f.label(:relationship) %>
+        <%= f.input_field :relationship, class: "form-control" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <%= f.label(:main_phone) %>
+        <%= f.input_field :main_phone, as: :tel, class: "form-control",
+          value: f.object.format_phone(:main) %>
+      </div>
+      <div class="col-sm-6">
+        <%= f.label(:location) %>
+        <%= f.input_field :location, class: "form-control" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <%= f.label(:alt_phone) %>
+        <%= f.input_field :alt_phone, as: :tel, class: "form-control",
+          value: f.object.format_phone(:alt) %>
+      </div>
+      <div class="col-sm-6">
+        <%= f.label(:email) %>
+        <%= f.input_field :email, class: "form-control" %>
+      </div>
+    </div>
+  </div>
+</div>

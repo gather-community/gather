@@ -7,6 +7,7 @@ class Household < ActiveRecord::Base
   has_many :signups
   has_many :users, ->{ by_name }, inverse_of: :household
   has_many :vehicles, class_name: "People::Vehicle"
+  has_many :emergency_contacts, class_name: "People::EmergencyContact"
 
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("LOWER(households.name)") }
@@ -25,6 +26,7 @@ class Household < ActiveRecord::Base
   validates_associated :vehicles
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
 
   normalize_attributes :name, :unit_num, :old_id, :old_name
 

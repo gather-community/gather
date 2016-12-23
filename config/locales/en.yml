@@ -20,6 +20,7 @@ en:
         old_id: "Old Grot ID"
         old_name: "Old Grot Name"
         vehicles: "Vehicles"
+        emergency_contacts: "Emergency Contacts"
       meal:
         discount: "Discount %"
         allergen_gluten: "Gluten"
@@ -67,6 +68,17 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
+      people/emergency_contact:
+        name: "Name"
+        relationship: "Relationship to Household"
+        main_phone: "Main Phone"
+        alt_phone: "Alternate Phone"
+        email: "Email"
+        location: "Location"
+      people/vehicle:
+        make: "Make"
+        model: "Model"
+        color: "Color"
     errors:
       models:
         signup:
@@ -125,6 +137,9 @@ en:
           make: "e.g. Toyota"
           model: "e.g. Prius"
           color: "e.g. Blue"
+        emergency_contacts:
+          relationship: "e.g. Sharon's Mom"
+          location: "e.g. Hastings, MI"
     hints:
       account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
@@ -142,6 +157,11 @@ en:
     prompts:
       user:
         preferred_contact: "How should people contact you?"
+
+  cocoon:
+    add_links:
+      vehicles: "Add Vehicle"
+      emergency_contacts: "Add Emergency Contact"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."

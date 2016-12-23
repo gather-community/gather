@@ -114,5 +114,6 @@ class HouseholdsController < ApplicationController
 
   def prepare_household
     @household.vehicles.build if @household.vehicles.empty?
+    @household.emergency_contacts.build if @household.emergency_contacts.empty?
   end
 end

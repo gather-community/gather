@@ -34,4 +34,8 @@ module ApplicationHelper
   def json(obj)
     obj.to_json.html_safe
   end
+
+  def nested_field_set(form, assoc)
+    render("shared/nested_field_set", f: form, assoc: assoc)
+  end
 end

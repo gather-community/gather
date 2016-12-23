@@ -14,7 +14,7 @@ en:
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
       household:
-        name: "Name"
+        name: "Household Name"
         community_id: "Community"
         unit_num: "Unit Number"
         old_id: "Old Grot ID"
@@ -120,6 +120,7 @@ en:
       user:
         birthdate_str: "e.g. Feb 29 1981 (year optional)"
       household:
+        name: "e.g. Smith or Singh-Whitman"
         vehicles:
           make: "e.g. Toyota"
           model: "e.g. Prius"

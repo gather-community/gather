@@ -3,7 +3,7 @@
   <%= f.input :name %>
   <%= f.input :community_id, collection: Community.by_name %>
   <%= f.input :unit_num %>
-
+  <%= f.input :garage_nums %>
   <%= nested_field_set(f, :vehicles) %>
   <%= nested_field_set(f, :emergency_contacts) %>
 

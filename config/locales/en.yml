@@ -21,6 +21,7 @@ en:
         old_name: "Old Grot Name"
         vehicles: "Vehicles"
         emergency_contacts: "Emergency Contacts"
+        garage_nums: "Garage Number(s)"
       meal:
         discount: "Discount %"
         allergen_gluten: "Gluten"

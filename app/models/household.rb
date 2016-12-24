@@ -50,6 +50,10 @@ class Household < ActiveRecord::Base
     "#{name}#{active? ? '' : ' (Inactive)'}"
   end
 
+  def garage_nums=(str)
+    write_attribute(:garage_nums, str.strip.blank? ? nil : str.split(/\s*,\s*/).join(", "))
+  end
+
   def after_deactivate
     users.each(&:deactivate!)
   end

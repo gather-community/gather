@@ -40,7 +40,7 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:name, :community_id, :unit_num, :old_id, :old_name,
+    [:name, :community_id, :unit_num, :garage_nums, :old_id, :old_name,
       vehicles_attributes: [:id, :make, :model, :color, :_destroy],
       emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
         :email, :location, :_destroy]]

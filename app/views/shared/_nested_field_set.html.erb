@@ -4,6 +4,7 @@
     <%= f.simple_fields_for assoc, wrapper: :nested_fields do |f2| %>
       <%= render("#{assoc.to_s.singularize}_fields", f: f2) %>
     <% end %>
-    <span><%= link_to_add_association t("cocoon.add_links.#{assoc}"), f, assoc %></span>
+    <span><%= link_to_add_association t("cocoon.add_links.#{assoc}"), f, assoc,
+      render_options: {wrapper: :nested_fields} %></span>
   </div>
 <% end %>

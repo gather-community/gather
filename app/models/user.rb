@@ -133,7 +133,7 @@ class User < ActiveRecord::Base
   private
 
   def at_least_one_phone
-    errors.add(:mobile_phone, "You must enter at least one phone number") if adult? && no_phones?
+    errors.add(:phone, "You must enter at least one phone number") if adult? && no_phones?
   end
 
   def generate_token

@@ -32,9 +32,25 @@
         disabled: !policy(@user).administer?,
         input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
 
-      <%= f.input :mobile_phone, as: :tel, input_html: { value: @user.format_phone(:mobile) } %>
-      <%= f.input :home_phone, as: :tel, input_html: { value: @user.format_phone(:home) } %>
-      <%= f.input :work_phone, as: :tel, input_html: { value: @user.format_phone(:work) } %>
+      <%= f.input :phone, required: true do %>
+        <div class="nested-fields">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
+                input_html: { value: @user.format_phone(:mobile) } %>
+            </div>
+            <div class="col-sm-4">
+              <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
+                input_html: { value: @user.format_phone(:home) } %>
+            </div>
+            <div class="col-sm-4">
+              <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
+                input_html: { value: @user.format_phone(:work) } %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
       <%= f.input :birthdate_str, as: :string %>
       <%= f.input :joined_on, as: :date_picker %>

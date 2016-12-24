@@ -12,4 +12,19 @@
     @household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></li>
   <li>Community: <%= @household.community_name %></li>
   <li>Unit Number: <%= @household.unit_num %></li>
+  <li>Garage Number(s): <%= @household.garage_nums %></li>
+  <li>Vehicles:
+    <% if @household.vehicles.any? %>
+      <ul><%= @household.vehicles.map { |v| content_tag(:li, v) }.reduce(:<<) %></ul>
+    <% else %>
+      [None]
+    <% end %>
+  </li>
+  <li>Emergency Contacts:
+    <% if @household.emergency_contacts.any? %>
+      <ul><%= @household.emergency_contacts.map { |v| content_tag(:li, v) }.reduce(:<<) %></ul>
+    <% else %>
+      [None]
+    <% end %>
+  </li>
 </ul>

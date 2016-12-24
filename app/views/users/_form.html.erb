@@ -21,41 +21,48 @@
     <%= horizontal_form_for(@user, width: :full) do |f| %>
       <%= f.input :photo_tmp_id, as: :hidden %>
       <%= f.input :photo_destroy, as: :hidden %>
+      <%= f.input :child, as: :hidden %>
 
       <%= f.input :first_name %>
       <%= f.input :last_name %>
-      <%= f.input :email, required: true %>
-      <%= f.input :google_email, disabled: !policy(@user).administer? %>
-
       <%= f.input :household_id,
         collection: [@user.household].compact, label_method: :full_name,
         disabled: !policy(@user).administer?,
         input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
 
-      <%= f.input :phone, required: true do %>
-        <div class="nested-fields">
-          <div class="row">
-            <div class="col-sm-4">
-              <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
-                input_html: { value: @user.format_phone(:mobile) } %>
-            </div>
-            <div class="col-sm-4">
-              <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
-                input_html: { value: @user.format_phone(:home) } %>
-            </div>
-            <div class="col-sm-4">
-              <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
-                input_html: { value: @user.format_phone(:work) } %>
+      <% if @user.child? %>
+
+      <% else %>
+
+        <%= f.input :email, required: true %>
+        <%= f.input :google_email, disabled: !policy(@user).administer? %>
+
+        <%= f.input :phone, required: true do %>
+          <div class="nested-fields">
+            <div class="row">
+              <div class="col-sm-4">
+                <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
+                  input_html: { value: @user.format_phone(:mobile) } %>
+              </div>
+              <div class="col-sm-4">
+                <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
+                  input_html: { value: @user.format_phone(:home) } %>
+              </div>
+              <div class="col-sm-4">
+                <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
+                  input_html: { value: @user.format_phone(:work) } %>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
+
+        <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
       <% end %>
 
-      <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
       <%= f.input :birthdate_str, as: :string %>
       <%= f.input :joined_on, as: :date_picker %>
 
-      <% if policy(@user).administer? %>
+      <% if policy(@user).administer? && @user.adult? %>
         <%= f.input :alternate_id %>
         <%= f.input :roles do %>
           <div class="roles">

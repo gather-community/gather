@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    @user = User.new(child: params[:child].present?)
     set_blank_household
     authorize @user
   end

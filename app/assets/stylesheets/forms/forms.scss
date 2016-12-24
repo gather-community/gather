@@ -3,6 +3,11 @@ form {
     margin-top: -5px;
     margin-bottom: 10px;
   }
+
+  // Don't show dotted bottom border on required mark
+  abbr[title="required"] {
+    border-bottom: none;
+  }
 }
 
 // Fix datetime select widths

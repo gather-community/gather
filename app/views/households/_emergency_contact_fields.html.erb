@@ -14,7 +14,7 @@
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <%= f.input :main_phone, as: :tel, value: f.object.format_phone(:main) %>
+        <%= f.input :main_phone, as: :tel, input_html: {value: f.object.format_phone(:main)} %>
       </div>
       <div class="col-sm-6">
         <%= f.input :location %>
@@ -22,7 +22,7 @@
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <%= f.input :alt_phone, as: :tel, value: f.object.format_phone(:alt) %>
+        <%= f.input :alt_phone, as: :tel, input_html: {value: f.object.format_phone(:alt)} %>
       </div>
       <div class="col-sm-6">
         <%= f.input :email %>

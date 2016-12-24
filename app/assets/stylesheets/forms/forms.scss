@@ -34,9 +34,9 @@ form {
 // Overriding error message style
 .has-error {
   .help-block {
-    background-color: #f2dede;
+    background-color: $error-red-bg;
     padding: 0 5px;
-    border: 1px solid #ebccd1;
+    border: 1px solid $error-red-border;
     margin-bottom: 5px;
 
     &:first-letter {

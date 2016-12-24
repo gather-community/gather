@@ -31,11 +31,19 @@
       }
     }
 
+    label, span.help-block {
+      font-size: 90%;
+      display: inline-block;
+    }
+
     label {
       color: $gray-text;
-      font-size: 90%;
-      margin-bottom: 0;
-      line-height: 1;
+    }
+
+    span.help-block {
+      margin: 0 5px;
+      padding: 0 3px;
+      line-height: 1.2;
     }
   }
 

@@ -1,7 +1,7 @@
 <%# Renders a set of nested fields handled by cocoon. Assumes all model stuff is in place. %>
-<%= f.input assoc, error: false do %>
+<%= f.input assoc do %>
   <div class="nested-field-set">
-    <%= f.simple_fields_for assoc do |f2| %>
+    <%= f.simple_fields_for assoc, wrapper: :nested_fields do |f2| %>
       <%= render("#{assoc.to_s.singularize}_fields", f: f2) %>
     <% end %>
     <span><%= link_to_add_association t("cocoon.add_links.#{assoc}"), f, assoc %></span>

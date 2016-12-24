@@ -21,6 +21,19 @@ SimpleForm.setup do |config|
     b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
   end
 
+  config.wrappers :nested_fields, error_class: "has-error" do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+
+    b.use :label, class: "control-label"
+    b.use :error, wrap_with: { tag: "span", class: "help-block" }
+    b.use :input, class: "form-control"
+  end
+
   config.wrappers :vertical_file_input, tag: "div", class: "form-group", error_class: "has-error" do |b|
     b.use :html5
     b.use :placeholder

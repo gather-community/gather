@@ -6,34 +6,26 @@
   <div class="fields-col">
     <div class="row">
       <div class="col-sm-6">
-        <%= f.label(:name) %>
-        <%= f.input_field :name, class: "form-control" %>
+        <%= f.input :name %>
       </div>
       <div class="col-sm-6">
-        <%= f.label(:relationship) %>
-        <%= f.input_field :relationship, class: "form-control" %>
+        <%= f.input :relationship %>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <%= f.label(:main_phone) %>
-        <%= f.input_field :main_phone, as: :tel, class: "form-control",
-          value: f.object.format_phone(:main) %>
+        <%= f.input :main_phone, as: :tel, value: f.object.format_phone(:main) %>
       </div>
       <div class="col-sm-6">
-        <%= f.label(:location) %>
-        <%= f.input_field :location, class: "form-control" %>
+        <%= f.input :location %>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <%= f.label(:alt_phone) %>
-        <%= f.input_field :alt_phone, as: :tel, class: "form-control",
-          value: f.object.format_phone(:alt) %>
+        <%= f.input :alt_phone, as: :tel, value: f.object.format_phone(:alt) %>
       </div>
       <div class="col-sm-6">
-        <%= f.label(:email) %>
-        <%= f.input_field :email, class: "form-control" %>
+        <%= f.input :email %>
       </div>
     </div>
   </div>

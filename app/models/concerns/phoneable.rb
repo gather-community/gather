@@ -4,13 +4,17 @@ module Phoneable
 
   included do |base|
     def self.handle_phone_types(*phone_types)
-      @@phone_types = phone_types
+      class_variable_set("@@phone_types", phone_types)
 
       phone_types.each do |p|
         phony_normalize "#{p}_phone", default_country_code: 'US'
         validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'
       end
     end
+  end
+
+  def phone_types
+    self.class.class_variable_get("@@phone_types")
   end
 
   # Returns formatted phone number, except if phone number has errors, returns raw value w/o +.
@@ -25,7 +29,7 @@ module Phoneable
 
   # Returns a string with all non-nil phone numbers
   def phones
-    @@phone_types.map do |type|
+    phone_types.map do |type|
       num = format_phone(type)
       if num
         type_abbrv = I18n.t("phone_types.abbreviations.#{type}")
@@ -37,6 +41,6 @@ module Phoneable
   end
 
   def no_phones?
-    @@phone_types.all? { |t| send("#{t}_phone").nil? }
+    phone_types.all? { |t| send("#{t}_phone").nil? }
   end
 end

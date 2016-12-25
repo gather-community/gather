@@ -88,7 +88,4 @@
   <% end %>
 </div>
 
-<% if @community.settings[:payment_instructions] %>
-  <h4 class="inner">How to Pay</h4>
-  <%= simple_format(@community.settings[:payment_instructions]) %>
-<% end %>
+<%= payment_instructions %>

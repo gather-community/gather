@@ -102,10 +102,7 @@
         <%= render("statements/statement_rows") %>
       </table>
     </div>
-    <div class="col-sm-6">
-      <h4 class="inner">How to Pay</h4>
-      <%= simple_format(@community.settings[:payment_instructions]) %>
-    </div>
+    <div class="col-sm-6"><%= payment_instructions %></div>
   </div>
 <% else %>
   There is no activity on this account.

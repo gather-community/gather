@@ -56,7 +56,7 @@ module LensHelper
         prompt: "All Users",
         class: "form-control",
         onchange: "this.form.submit();",
-        data: { "select2-src" => "user" }
+        data: {"select2-src" => "users"}
       )
     end
 

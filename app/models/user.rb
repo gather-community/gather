@@ -9,12 +9,13 @@ class User < ActiveRecord::Base
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
-  has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id
-  has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :child_id
+  has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id
+  has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :assignments
 
+  scope :active, -> { where(deactivated_at: nil) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order("first_name, last_name") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
@@ -25,6 +26,7 @@ class User < ActiveRecord::Base
   end
   scope :never_logged_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
+  scope :can_be_guardian, -> { active.where(child: false) }
 
   delegate :name, :full_name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, to: :household
@@ -41,14 +43,14 @@ class User < ActiveRecord::Base
   handle_phone_types :home, :work, :mobile
 
   # Contact email does not have to be unique because some people share them (grrr!)
-  validates :email, format: Devise.email_regexp
+  validates :email, format: Devise.email_regexp, if: :adult?
   validates :email, presence: true, if: :adult?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :household_id, presence: true
-  validates :guardians, presence: true, if: :child?
+  validates :up_guardianships, presence: true, if: :child?
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
   validate { birthdate_wrapper.validate }
 
@@ -57,6 +59,8 @@ class User < ActiveRecord::Base
     default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
   validates_attachment_size :photo, less_than: Settings.photos.max_size
+
+  accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   before_save do
     photo.destroy if photo_destroy?

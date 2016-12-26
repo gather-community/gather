@@ -15,7 +15,7 @@
   <% if policy(@reservation).choose_reserver? %>
     <%= f.input :reserver_id,
       collection: [@reservation.reserver].compact, label_method: :name,
-      input_html: { data: { "select2-src" => "user", "select2-label-attr" => "name" } } %>
+      input_html: {data: {"select2-src" => "users", "select2-label-attr" => "name"}} %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
@@ -32,7 +32,7 @@
     <%= f.input :sponsor_id,
       required: true,
       collection: [@reservation.sponsor].compact,
-      input_html: { data: { "select2-src" => "user" } } %>
+      input_html: {data: {"select2-src" => "users"}} %>
   <% end %>
 
   <%= f.input :note %>

@@ -1,0 +1,11 @@
+<% options = {} if local_assigns[:options].nil? %>
+<%= f.hidden_field :id %>
+<div class="nested-fields <%= options[:label] == false ? "no-label" : "" %>">
+  <div class="remove-link-col">
+    <%= link_to_remove_association(icon_tag("trash"), f) %>
+  </div>
+  <div class="fields-col">
+    <%= f.input :guardian_id, options.slice(:label).merge(
+      collection: [f.object.guardian], input_html: {data: {"select2-src" => "users?guardians=1"}}) %>
+  </div>
+</div>

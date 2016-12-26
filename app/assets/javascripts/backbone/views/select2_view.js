@@ -22,7 +22,7 @@ Mess.Views.Select2View = Backbone.View.extend({
 
     el.select2({
       ajax: {
-        url: "/" + src + "s",
+        url: "/" + src,
         dataType: 'json',
         delay: 250,
         data: function (params) {

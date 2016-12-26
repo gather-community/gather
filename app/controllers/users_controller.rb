@@ -21,8 +21,11 @@ class UsersController < ApplicationController
       end
       format.json do
         @users = @users.matching(params[:search]).active
+        if params[:guardians]
+          @users = @users.can_be_guardian
+        end
         if params[:community_id]
-          @users = @users.joins(:household).where("households.community_id" => params[:community_id])
+          @users = @users.in_community(params[:community_id])
         end
         @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
@@ -39,6 +42,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new(child: params[:child].present?)
     set_blank_household
+    prepare_user
     authorize @user
   end
 
@@ -52,6 +56,7 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     else
       set_validation_error_notice
+      prepare_user
       render :new
     end
   end
@@ -59,6 +64,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     authorize @user
+    prepare_user
   end
 
   def update
@@ -70,6 +76,7 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     else
       set_validation_error_notice
+      prepare_user
       render :edit
     end
   end
@@ -154,4 +161,7 @@ class UsersController < ApplicationController
     @user.household = Household.new(community: current_community)
   end
 
+  def prepare_user
+    @user.up_guardianships.build if @user.up_guardianships.empty?
+  end
 end

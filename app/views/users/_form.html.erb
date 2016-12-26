@@ -28,9 +28,11 @@
       <%= f.input :household_id,
         collection: [@user.household].compact, label_method: :full_name,
         disabled: !policy(@user).administer?,
-        input_html: { data: { "select2-src" => "household", "select2-label-attr" => "full_name" } } %>
+        input_html: {data: {"select2-src" => "households", "select2-label-attr" => "full_name"}} %>
 
       <% if @user.child? %>
+
+        <%= nested_field_set(f, :up_guardianships, label: false, required: true) %>
 
       <% else %>
 

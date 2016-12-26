@@ -14,6 +14,7 @@ en:
         alternate_id: "Alternate ID"
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
+        up_guardianships: "Parents/Guardians"
       household:
         name: "Household Name"
         community_id: "Community"
@@ -164,6 +165,7 @@ en:
     add_links:
       vehicles: "Add Vehicle"
       emergency_contacts: "Add Emergency Contact"
+      up_guardianships: "Add Parent/Guardian"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."

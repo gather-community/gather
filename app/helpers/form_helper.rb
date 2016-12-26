@@ -26,4 +26,8 @@ module FormHelper
       content_tag(:div, f.error(:base), class: "has-error base-error #{col_styles}")
     end
   end
+
+  def nested_field_set(form, assoc, options = {})
+    render("shared/nested_field_set", f: form, assoc: assoc, options: options)
+  end
 end

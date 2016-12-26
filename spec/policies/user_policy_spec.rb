@@ -152,11 +152,24 @@ describe UserPolicy do
   end
 
   describe "permitted attributes" do
-    let(:user2) { double(community: community) }
+    let(:user2) { double(community: community, household: double(community: community)) }
+    let(:vehicles_and_contacts_attribs) { [
+      {vehicles_attributes: [:id, :make, :model, :color, :_destroy]},
+      {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
+        :email, :location, :_destroy]}
+    ] }
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      up_guardianships_attributes: [:id, :guardian_id, :_destroy]] }
-    let(:admin_attribs) { [:google_email, :alternate_id, :role_admin, :role_biller] }
+      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
+      {household_attributes: [:name].concat(vehicles_and_contacts_attribs)}
+    ] }
+    let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
+      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
+      :google_email, :alternate_id, :role_admin, :role_biller,
+      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
+      {household_attributes: [:name, :community_id, :unit_num, :garage_nums, :old_id, :old_name].
+        concat(vehicles_and_contacts_attribs)}
+    ] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
     shared_examples_for "basic attribs" do
@@ -173,7 +186,7 @@ describe UserPolicy do
       let(:user) { admin }
 
       it "should allow admin attribs" do
-        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs))
+        expect(subject).to contain_exactly(*(admin_attribs))
       end
     end
 
@@ -186,7 +199,7 @@ describe UserPolicy do
       let(:user) { cluster_admin }
 
       it "should allow cluster admin attribs" do
-        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs + [:role_cluster_admin]))
+        expect(subject).to contain_exactly(*(admin_attribs + [:role_cluster_admin]))
       end
     end
 
@@ -194,8 +207,7 @@ describe UserPolicy do
       let(:user) { super_admin }
 
       it "should allow super admin attribs" do
-        expect(subject).to contain_exactly(*(basic_attribs + admin_attribs +
-          [:role_cluster_admin, :role_super_admin]))
+        expect(subject).to contain_exactly(*(admin_attribs + [:role_cluster_admin, :role_super_admin]))
       end
     end
   end

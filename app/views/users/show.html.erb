@@ -11,8 +11,10 @@
   <ul class="details">
     <li>Community: <%= @user.community_name %></li>
     <li>Household: <%= @user.household_name %></li>
-    <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
-    <li class="phones">Phone: <%= user_phones(@user) %></li>
+    <% unless @user.child? %>
+      <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
+      <li class="phones">Phone: <%= user_phones(@user) %></li>
+    <% end %>
   </ul>
 
   <% if @head_cook_meals.any? %>

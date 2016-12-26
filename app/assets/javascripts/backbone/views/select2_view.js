@@ -19,10 +19,12 @@ Mess.Views.Select2View = Backbone.View.extend({
     var src = el.data("select2-src");
     var label_attr = el.data("select2-label-attr") || "name";
     var self = this;
+    var params = el.data("select2-request-params");
+    params = params ? "?" + params : "";
 
     el.select2({
       ajax: {
-        url: "/" + src,
+        url: "/" + src + params,
         dataType: 'json',
         delay: 250,
         data: function (params) {
@@ -41,7 +43,7 @@ Mess.Views.Select2View = Backbone.View.extend({
       },
       language: {
         inputTooShort: function() {
-          return "Please type a few letters of the " + src + "'s name."
+          return el.data("select2-prompt");
         }
       },
       minimumInputLength: 1,

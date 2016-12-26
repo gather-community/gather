@@ -8,7 +8,8 @@
       <%= f.select(:household_id, household_selected_option(f.object.household), {},
         class: "form-control", data: {
           "select2-src" => "households",
-          "select2-label-attr" => "full_name"
+          "select2-label-attr" => "full_name",
+          "select2-prompt" => t("select2_prompts.household")
       }) %>
     <% end %>
   </td>

@@ -167,6 +167,13 @@ en:
       emergency_contacts: "Add Emergency Contact"
       up_guardianships: "Add Parent/Guardian"
 
+  select2_prompts:
+    reserver: "Please type a few letters of the reserver's name."
+    sponsor: "Please type a few letters of the sponsor's name."
+    household: "Please type a few letters of the household's name."
+    guardian: "Please type a few letters of the guardian's name."
+    user: "Please type a few letters of the user's name."
+
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
 

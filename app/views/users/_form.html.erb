@@ -25,10 +25,8 @@
 
       <%= f.input :first_name %>
       <%= f.input :last_name %>
-      <%= f.input :household_id,
-        collection: [@user.household].compact, label_method: :full_name,
-        disabled: !policy(@user).administer?,
-        input_html: {data: {"select2-src" => "households", "select2-label-attr" => "full_name"}} %>
+      <%= f.input :household_id, as: :assoc_select2, label_method: :full_name,
+        disabled: !policy(@user).administer? %>
 
       <% if @user.child? %>
 

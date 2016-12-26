@@ -6,6 +6,6 @@
   </div>
   <div class="fields-col">
     <%= f.input :guardian_id, options.slice(:label).merge(
-      collection: [f.object.guardian], input_html: {data: {"select2-src" => "users?guardians=1"}}) %>
+      as: :assoc_select2, request_params: "guardians=1") %>
   </div>
 </div>

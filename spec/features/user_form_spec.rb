@@ -50,7 +50,7 @@ feature "user form" do
       fill_in("Last Name", with: "Barre")
       fill_in("Email", with: "foo@example.com")
       select2("Ginger", from: "user_household_id")
-      fill_in("Mobile Phone", with: "5556667777")
+      fill_in("Mobile", with: "5556667777")
       click_on("Create User")
 
       expect_validation_success

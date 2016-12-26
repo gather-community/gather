@@ -15,7 +15,7 @@ describe People::Guardianship do
 
       it "fails with zero guardians" do
         (child = build(:user, :child, no_guardians: true)).valid?
-        expect(child.errors[:guardians]).not_to be_empty
+        expect(child.errors[:up_guardianships]).not_to be_empty
       end
     end
 

@@ -79,6 +79,23 @@
         <% end %>
       <% end %>
 
+      <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
+        <%= hf.input :id, as: :hidden %>
+        <div id="household-fields">
+          <div class="row title">
+            <div class="col-sm-8 col-sm-offset-2">
+              <h4>Household Info</h4>
+              <p>
+                The below fields are associated with the
+                <%= @user.household_name || "user's" %> household.
+                Changing them here will change them for <em>all users in the household</em>.
+              </p>
+            </div>
+          </div>
+          <%= render("households/fields", f: hf) %>
+        </div>
+      <% end %>
+
       <%= form_actions do %>
         <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
           <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),

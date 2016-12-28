@@ -161,13 +161,13 @@ describe UserPolicy do
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:name].concat(vehicles_and_contacts_attribs)}
+      {household_attributes: [:id, :name].concat(vehicles_and_contacts_attribs)}
     ] }
     let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :google_email, :alternate_id, :role_admin, :role_biller,
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:name, :community_id, :unit_num, :garage_nums, :old_id, :old_name].
+      {household_attributes: [:id, :name, :community_id, :unit_num, :garage_nums, :old_id, :old_name].
         concat(vehicles_and_contacts_attribs)}
     ] }
     subject { UserPolicy.new(user, user2).permitted_attributes }

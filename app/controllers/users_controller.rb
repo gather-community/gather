@@ -163,5 +163,8 @@ class UsersController < ApplicationController
 
   def prepare_user
     @user.up_guardianships.build if @user.up_guardianships.empty?
+    @user.build_household if @user.household.nil?
+    @user.household.vehicles.build if @user.household.vehicles.empty?
+    @user.household.emergency_contacts.build if @user.household.emergency_contacts.empty?
   end
 end

@@ -60,6 +60,7 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
   validates_attachment_size :photo, less_than: Settings.photos.max_size
 
+  accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   before_save do

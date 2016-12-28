@@ -66,10 +66,11 @@ class UserPolicy < ApplicationPolicy
   def permitted_attributes
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.
+    household_permitted = HouseholdPolicy.new(user, record.household).permitted_attributes
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact]
     permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
-    permitted << {household_attributes: HouseholdPolicy.new(user, record.household).permitted_attributes}
+    permitted << {household_attributes: household_permitted << :id}
     permitted.concat([:google_email, :alternate_id]) if active_admin?
     grantable_roles.each { |r| permitted << :"role_#{r}" }
     permitted

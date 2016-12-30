@@ -41,7 +41,7 @@ class HouseholdPolicy < ApplicationPolicy
 
   def permitted_attributes
     permitted = [:name]
-    permitted += [:community_id, :unit_num, :garage_nums, :old_id, :old_name] if active_admin?
+    permitted += [:community_id, :unit_num, :garage_nums, :old_id, :old_name]
     permitted << {vehicles_attributes: [:id, :make, :model, :color, :_destroy]}
     permitted << {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
       :email, :location, :_destroy]}

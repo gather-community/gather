@@ -11,3 +11,8 @@
 p.subtitle {
   margin-top: -10px;
 }
+
+// The .hide and .hidden classes provided by Bootstrap both have !important, which is not good!
+.hiding {
+  display: none;
+}

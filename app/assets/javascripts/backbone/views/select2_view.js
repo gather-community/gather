@@ -47,6 +47,7 @@ Mess.Views.Select2View = Backbone.View.extend({
         }
       },
       minimumInputLength: 1,
+      width: '100%'
     });
   }
 });

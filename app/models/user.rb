@@ -49,8 +49,8 @@ class User < ActiveRecord::Base
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :household_id, presence: true
   validates :up_guardianships, presence: true, if: :child?
+  validate :household_present
   validate :at_least_one_phone, if: ->(u){ u.new_record? }
   validate { birthdate_wrapper.validate }
 
@@ -70,6 +70,18 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first
+  end
+
+  # Transient variable indicating whether the User's household is being edited by setting the ID.
+  # The alternative is to edit it by using nested attributes. Used only in rendering the form.
+  def household_by_id?
+    @household_by_id
+  end
+  alias_method :household_by_id, :household_by_id?
+
+  # Setter for household_by_id?
+  def household_by_id=(val)
+    @household_by_id = val.is_a?(String) ? val == "true" : val
   end
 
   def photo_destroy?
@@ -145,6 +157,12 @@ class User < ActiveRecord::Base
     loop do
       token = Devise.friendly_token
       break token unless User.where(calendar_token: token).first
+    end
+  end
+
+  def household_present
+    unless household_id.present? || household.present? && !household.marked_for_destruction?
+      errors.add(:household_id, :blank)
     end
   end
 end

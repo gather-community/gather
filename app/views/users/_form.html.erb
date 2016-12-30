@@ -25,8 +25,6 @@
 
       <%= f.input :first_name %>
       <%= f.input :last_name %>
-      <%= f.input :household_id, as: :assoc_select2, label_method: :full_name,
-        disabled: !policy(@user).administer? %>
 
       <% if @user.child? %>
 
@@ -79,9 +77,17 @@
         <% end %>
       <% end %>
 
+      <%= f.input :household_by_id, as: :hidden %>
+
+      <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
+      <%= f.input :household_id, wrapper_class: wrapper_class do %>
+        <%= f.input_field :household_id, as: :assoc_select2, label_method: :full_name,
+          disabled: !policy(@user).administer?, class: "form-control" %>
+        <%= link_to("Edit Household Info", "#", class: "edit-household-info") %>
+      <% end %>
+
       <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
-        <%= hf.input :id, as: :hidden %>
-        <div id="household-fields">
+        <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
           <div class="row title">
             <div class="col-sm-8 col-sm-offset-2">
               <h4>Household Info</h4>
@@ -93,6 +99,7 @@
             </div>
           </div>
           <%= render("households/fields", f: hf) %>
+          <%= link_to("Change Household", "#", class: "change-household") %>
         </div>
       <% end %>
 
@@ -121,5 +128,6 @@
       maxFilesize: Settings.photos.max_size / 1.megabyte
     )%>);
     new Mess.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
+    new Mess.Views.UserFormView({el: '.user-form'});
   });
 <% end %>

@@ -68,9 +68,18 @@ class UserPolicy < ApplicationPolicy
     # community check relies on it.
     household_permitted = HouseholdPolicy.new(user, record.household).permitted_attributes
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact]
+      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on,
+      :preferred_contact, :household_by_id]
     permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
-    permitted << {household_attributes: household_permitted << :id}
+
+    # We allow household_attributes.id through here even though changing the household ID is very sensitive
+    # security-wise. But Rails doesn't let you set change the ID this way. It only uses the ID to determine
+    # if you are passing in a new object or modifying an exsiting one. If you try to pass an ID that is
+    # different from user.household_id (even if the latter is nil), ActiveRecord::RecordNotFound will be
+    # raised. Therefore the only way to change the household_id is via the attribute itself, and allowing
+    # ID through here is safe.
+    permitted << {household_attributes: [:id] + household_permitted}
+
     permitted.concat([:google_email, :alternate_id]) if active_admin?
     grantable_roles.each { |r| permitted << :"role_#{r}" }
     permitted

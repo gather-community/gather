@@ -28,7 +28,7 @@
     }
   }
 
-  label, span.help-block {
+  label, span.error {
     font-size: 90%;
     display: inline-block;
     margin-bottom: 0;
@@ -38,7 +38,7 @@
     color: $gray-text;
   }
 
-  span.help-block {
+  span.error {
     margin: 0 5px;
     padding: 0 3px;
     line-height: 1.2;

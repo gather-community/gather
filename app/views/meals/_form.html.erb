@@ -38,7 +38,7 @@
         <% end %>
       </div>
       <% if @meal.errors['invitations'].present? %>
-        <div class="help-block col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
+        <div class="error col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
       <% end %>
     </div>
 
@@ -116,7 +116,7 @@
       <% end %>
     </div>
     <% if @meal.errors['allergens'].present? %>
-      <div class="help-block col-sm-9 col-sm-offset-3"><%= @meal.errors['allergens'].join %></div>
+      <div class="error col-sm-9 col-sm-offset-3"><%= @meal.errors['allergens'].join %></div>
     <% end %>
   </div>
 

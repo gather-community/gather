@@ -7,20 +7,6 @@ SimpleForm.setup do |config|
   horiz_label_cols = 3
   horiz_control_cols = 9
 
-  config.wrappers :vertical_form, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.use :placeholder
-    b.optional :maxlength
-    b.optional :pattern
-    b.optional :min_max
-    b.optional :readonly
-    b.use :label, class: "control-label"
-
-    b.use :input, class: "form-control"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
-  end
-
   config.wrappers :nested_fields, error_class: "has-error" do |b|
     b.use :html5
     b.use :placeholder
@@ -30,41 +16,9 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.use :label, class: "control-label"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
+    b.use :error, wrap_with: { tag: "span", class: "error" }
     b.use :input, class: "form-control"
-  end
-
-  config.wrappers :vertical_file_input, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.use :placeholder
-    b.optional :maxlength
-    b.optional :readonly
-    b.use :label, class: "control-label"
-
-    b.use :input
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
-  end
-
-  config.wrappers :vertical_boolean, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.optional :readonly
-
-    b.wrapper tag: "div", class: "checkbox" do |ba|
-      ba.use :label_input
-    end
-
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
-  end
-
-  config.wrappers :vertical_radio_and_checkboxes, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.optional :readonly
-    b.use :label, class: "control-label"
-    b.use :input
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+    b.use :hint,  wrap_with: { tag: "div", class: "hint" }
   end
 
   config.wrappers :horizontal_form, tag: "div", class: "form-group", error_class: "has-error" do |b|
@@ -78,8 +32,8 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
       ba.use :input, class: "form-control"
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
+      ba.use :error, wrap_with: { tag: "div", class: "error" }
     end
   end
 
@@ -94,8 +48,8 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: "div", class: "col-sm-6" do |ba|
       ba.use :input, class: "form-control"
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
+      ba.use :error, wrap_with: { tag: "div", class: "error" }
     end
   end
 
@@ -108,8 +62,8 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
       ba.use :input
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
+      ba.use :error, wrap_with: { tag: "div", class: "error" }
     end
   end
 
@@ -122,8 +76,8 @@ SimpleForm.setup do |config|
         ba.use :label_input, class: "col-sm-#{horiz_control_cols}"
       end
 
-      wr.use :error, wrap_with: { tag: "span", class: "help-block" }
-      wr.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      wr.use :hint,  wrap_with: { tag: "div", class: "hint" }
+      wr.use :error, wrap_with: { tag: "div", class: "error" }
     end
   end
 
@@ -135,23 +89,9 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
       ba.use :input
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
+      ba.use :error, wrap_with: { tag: "div", class: "error" }
     end
-  end
-
-  config.wrappers :inline_form, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.use :placeholder
-    b.optional :maxlength
-    b.optional :pattern
-    b.optional :min_max
-    b.optional :readonly
-    b.use :label, class: "sr-only"
-
-    b.use :input, class: "form-control"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
   end
 
   # Wrappers for forms and inputs using the Bootstrap toolkit.

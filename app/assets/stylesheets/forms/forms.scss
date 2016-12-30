@@ -8,68 +8,81 @@ form {
   abbr[title="required"] {
     border-bottom: none;
   }
-}
 
-// Fix datetime select widths
-.form-group.datetime select.datetime {
-  display: inline-block;
-  width: 75px;
+  // Fix datetime select widths
+  .form-group.datetime select.datetime {
+    display: inline-block;
+    width: 75px;
 
-  &[id$="_2i"] {
-    width: 125px;
+    &[id$="_2i"] {
+      width: 125px;
+    }
   }
-}
 
-// Labels inside control area shouldn't be bold
-.form-group > div label {
-  font-weight: normal;
-}
+  // Labels inside control area shouldn't be bold
+  .form-group > div label {
+    font-weight: normal;
+  }
 
-.form-actions {
-  text-align: right;
+  .form-actions {
+    text-align: right;
+  }
+
+  .hint {
+    color: $gray-text;
+    margin-top: 2px;
+    margin-bottom: 5px;
+  }
+
+  // Overriding error message style
+  .has-error {
+    .hint {
+      margin-bottom: 0;
+    }
+
+    .error {
+      color: $error-red;
+      display: block;
+      background-color: $error-red-bg;
+      padding: 0 5px;
+      border: 1px solid $error-red-border;
+      margin-top: 5px;
+      margin-bottom: 5px;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
+
+    &.base-error {
+      padding-bottom: 15px;
+    }
+  }
+
+  select.prompt-selected {
+    color: $placeholder-color;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 33px;
+  }
+
+  .form-actions .btn {
+    margin-left: 10px;
+  }
+
+  // Allow hiding the time picker switch with special class.
+  .datetime_picker.no-time-picker {
+    .accordion-toggle {
+      display: none;
+    }
+  }
 }
 
 // Overriding default label top padding
 @media (min-width: 768px) {
   .form-horizontal .control-label {
     padding-top: 0;
-  }
-}
-
-// Overriding error message style
-.has-error {
-  .help-block {
-    background-color: $error-red-bg;
-    padding: 0 5px;
-    border: 1px solid $error-red-border;
-    margin-bottom: 5px;
-
-    &:first-letter {
-      text-transform: uppercase;
-    }
-  }
-
-  &.base-error {
-    padding-bottom: 15px;
-  }
-}
-
-select.prompt-selected {
-  color: $placeholder-color;
-}
-
-.select2-container .select2-selection--single {
-  height: 33px;
-}
-
-.form-actions .btn {
-  margin-left: 10px;
-}
-
-// Allow hiding the time picker switch with special class.
-.datetime_picker.no-time-picker {
-  .accordion-toggle {
-    display: none;
   }
 }
 

@@ -146,6 +146,8 @@ en:
     hints:
       account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
+      user:
+        joined_on: "Approximate date when this person joined the community"
     options:
       meal:
         time:

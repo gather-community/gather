@@ -1,32 +1,24 @@
-<%= f.hidden_field :id %>
-<div class="nested-fields">
-  <div class="remove-link-col">
-    <%= link_to_remove_association(icon_tag("trash"), f) %>
+<div class="row">
+  <div class="col-sm-6">
+    <%= f.input :name %>
   </div>
-  <div class="fields-col">
-    <div class="row">
-      <div class="col-sm-6">
-        <%= f.input :name %>
-      </div>
-      <div class="col-sm-6">
-        <%= f.input :relationship %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <%= f.input :main_phone, as: :tel, input_html: {value: f.object.format_phone(:main)} %>
-      </div>
-      <div class="col-sm-6">
-        <%= f.input :location %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <%= f.input :alt_phone, as: :tel, input_html: {value: f.object.format_phone(:alt)} %>
-      </div>
-      <div class="col-sm-6">
-        <%= f.input :email %>
-      </div>
-    </div>
+  <div class="col-sm-6">
+    <%= f.input :relationship %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <%= f.input :main_phone, as: :tel, input_html: {value: f.object.format_phone(:main)} %>
+  </div>
+  <div class="col-sm-6">
+    <%= f.input :location %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <%= f.input :alt_phone, as: :tel, input_html: {value: f.object.format_phone(:alt)} %>
+  </div>
+  <div class="col-sm-6">
+    <%= f.input :email %>
   </div>
 </div>

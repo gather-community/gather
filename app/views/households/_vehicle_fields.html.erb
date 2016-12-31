@@ -1,19 +1,11 @@
-<%= f.hidden_field :id %>
-<div class="nested-fields">
-  <div class="remove-link-col">
-    <%= link_to_remove_association(icon_tag("trash"), f) %>
+<div class="row">
+  <div class="col-sm-4">
+    <%= f.input :make %>
   </div>
-  <div class="fields-col">
-    <div class="row">
-      <div class="col-sm-4">
-        <%= f.input :make %>
-      </div>
-      <div class="col-sm-4">
-        <%= f.input :model %>
-      </div>
-      <div class="col-sm-4">
-        <%= f.input :color %>
-      </div>
-    </div>
+  <div class="col-sm-4">
+    <%= f.input :model %>
+  </div>
+  <div class="col-sm-4">
+    <%= f.input :color %>
   </div>
 </div>

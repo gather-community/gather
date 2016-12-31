@@ -27,7 +27,25 @@ module FormHelper
     end
   end
 
-  def nested_field_set(form, assoc, options = {})
-    render("shared/nested_field_set", f: form, assoc: assoc, options: options)
+  # Renders a set of nested fields handled by cocoon. Assumes all model stuff is in place.
+  def nested_field_set(f, assoc, options = {})
+    wrapper_partial = "shared/nested_fields_wrapper"
+    options[:inner_partial] = "#{f.object.class.model_name.route_key}/#{assoc.to_s.singularize}_fields"
+    f.input(assoc, options.slice(:required)) do
+      content_tag(:div, class: "nested-field-set") do
+        f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
+          render(wrapper_partial, f: f2, options: options)
+        end <<
+        content_tag(:span) do
+          link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
+            partial: wrapper_partial,
+            render_options: {
+              wrapper: :nested_fields, # Simple form wrapper
+              locals: {options: options}
+            }
+          )
+        end
+      end
+    end
   end
 end

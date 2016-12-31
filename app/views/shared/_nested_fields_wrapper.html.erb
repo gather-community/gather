@@ -1,0 +1,9 @@
+<div class="nested-fields <%= options[:label] == false ? "no-label" : "" %>">
+  <%= f.hidden_field :id %>
+  <div class="remove-link-col">
+    <%= link_to_remove_association(icon_tag("trash"), f) %>
+  </div>
+  <div class="fields-col">
+    <%= render(options[:inner_partial], f: f, options: options) %>
+  </div>
+</div>

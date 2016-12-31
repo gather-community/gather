@@ -1,6 +1,0 @@
-<%= f.input :user_id, as: multiple ? :removable_select : :select,
-  collection: [f.object.user], label: label, required: required,
-  input_html: {
-    remove_link: multiple ? link_to_remove_association(icon_tag("trash"), f) : nil,
-    data: {"select2-src" => "users", "select2-prompt" => t("select2_prompts.user")}
-  } %>

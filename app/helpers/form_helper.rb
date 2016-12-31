@@ -30,22 +30,35 @@ module FormHelper
   # Renders a set of nested fields handled by cocoon. Assumes all model stuff is in place.
   def nested_field_set(f, assoc, options = {})
     wrapper_partial = "shared/nested_fields_wrapper"
-    options[:inner_partial] = "#{f.object.class.model_name.route_key}/#{assoc.to_s.singularize}_fields"
+    options[:inner_partial] ||= "#{f.object.class.model_name.route_key}/#{assoc.to_s.singularize}_fields"
+    options[:multiple] = true unless options.has_key?(:multiple)
+
+    wrapper_classes = ["nested-fields"]
+    wrapper_classes << "no-label" if options[:label] == false
+    wrapper_classes << "multiple" if options[:multiple]
+
     f.input(assoc, options.slice(:required)) do
       content_tag(:div, class: "nested-field-set") do
         f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
-          render(wrapper_partial, f: f2, options: options)
+          render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
         end <<
-        content_tag(:span) do
-          link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
-            partial: wrapper_partial,
-            render_options: {
-              wrapper: :nested_fields, # Simple form wrapper
-              locals: {options: options}
-            }
-          )
+        if options[:multiple]
+          content_tag(:span) do
+            link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
+              partial: wrapper_partial,
+              render_options: {
+                wrapper: :nested_fields, # Simple form wrapper
+                locals: {options: options, classes: wrapper_classes}
+              }
+            )
+          end
         end
       end
     end
+  end
+
+  # Nested field set consisting only of user selects.
+  def user_nested_field_set(f, assoc, options = {})
+    nested_field_set(f, assoc, options.merge(label: false, inner_partial: "shared/user_select"))
   end
 end

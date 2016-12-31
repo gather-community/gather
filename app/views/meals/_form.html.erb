@@ -60,40 +60,13 @@
     <%= f.input :discount, min: 0, max: 100 %>
   <% end %>
 
-  <div id="assignment_fields">
-
-    <%= f.simple_fields_for :head_cook_assign, @meal.head_cook_assign do |head_cook| %>
-      <%= render('head_cook_assign_fields', f: head_cook) %>
-    <% end %>
-
-    <%= f.simple_fields_for :asst_cook_assigns do |asst_cook| %>
-      <%= render('asst_cook_assign_fields', f: asst_cook) %>
-    <% end %>
-
-    <!-- Can't use class="row" as it breaks cocoon -->
-    <div class="links col-sm-9 col-sm-offset-3">
-      <%= link_to_add_association 'Add Assistant Cook', f, :asst_cook_assigns %>
-    </div>
-
+  <div id="assignment-fields">
+    <%= user_nested_field_set(f, :head_cook_assign, multiple: false) %>
+    <%= user_nested_field_set(f, :asst_cook_assigns) %>
     <% if @meal.host_community.settings[:has_table_setters] %>
-
-      <%= f.simple_fields_for :table_setter_assigns do |table_setter| %>
-        <%= render('table_setter_assign_fields', f: table_setter) %>
-      <% end %>
-
-      <div class="links col-sm-9 col-sm-offset-3">
-        <%= link_to_add_association 'Add Table Setter', f, :table_setter_assigns %>
-      </div>
-
+      <%= user_nested_field_set(f, :table_setter_assigns) %>
     <% end %>
-
-    <%= f.simple_fields_for :cleaner_assigns do |cleaner| %>
-      <%= render('cleaner_assign_fields', f: cleaner) %>
-    <% end %>
-
-    <div class="links col-sm-9 col-sm-offset-3">
-      <%= link_to_add_association 'Add Cleaner', f, :cleaner_assigns %>
-    </div>
+    <%= user_nested_field_set(f, :cleaner_assigns) %>
   </div>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>
@@ -131,7 +104,7 @@
     $("#meal_resource_ids").select2();
     new Mess.Views.DirtyChecker({el: '.meal-form'});
     <% if @notify_on_worker_change %>
-      new Mess.Views.WorkerChangeNotificationView({el: '#assignment_fields'});
+      new Mess.Views.WorkerChangeNotificationView({el: '#assignment-fields'});
     <% end %>
   });
 <% end %>

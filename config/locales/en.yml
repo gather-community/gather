@@ -54,11 +54,11 @@ en:
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
-      transaction:
+      billing/transaction:
         incurred_on: "Item Date"
         household_name: "Household Name"
         code: "Type"
-      account:
+      billing/account:
         household_id: "Household"
         community_id: "Community Account"
         current_balance: "Current Balance"
@@ -130,7 +130,7 @@ en:
         notes: "e.g. Some ingredients organic and local where possible"
       reservation_reservation:
         name: "e.g. Game night"
-      transaction:
+      billing_transaction:
         description: "e.g. Check #12345"
       user:
         birthdate_str: "e.g. Feb 29 1981 (year optional)"
@@ -144,7 +144,7 @@ en:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
     hints:
-      account:
+      billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       user:
         joined_on: "Approximate date when this person joined the community"

@@ -1,0 +1,37 @@
+# Replace all <bracketed> items with your config info.
+# Note: For a production environment, it is better to use environment variables to set these settings.
+# e.g. `export SETTINGS__OAUTH__GOOGLE__CLIENT_ID=you@gmail.com`
+
+# Google account email to be used when creating initial admin user.
+admin_google_id: <you>@gmail.com
+
+oauth:
+  google:
+    client_id: <client ID>
+    client_secret: <client secret>
+
+# Get a secret key by running 'rake secret'.
+secret_key_base: <secret key>
+
+# Replace '<hostname>' with your hostname.  Enter 'localhost' for a standard development setup.
+url:
+  host: <hostname>
+  protocol: <http or https>
+
+# To use a real production server, uncomment the below and enter SMTP settings.
+# For production, use of mailcatcher (default) is recommended.
+# See http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+# To send a test email from the Rails console, enter:
+#
+#   class M < ActionMailer::Base; def t; mail(to: "to@example.com", from: "from@example.com",
+#   subject: "Test", body: "Test"); end; end; M.t.deliver_now
+#
+# replacing the to and from email addresses with valid ones.
+#
+# smtp:
+#   address: "example.com"
+#   port: 587
+#   domain: "example.org"
+#   authentication: :plain
+#   user_name: "user"
+#   password: "xxx"

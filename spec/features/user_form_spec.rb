@@ -7,12 +7,12 @@ feature "user form" do
   let!(:household2) { create(:household, name: "Potatoheads") }
 
   before do
-    @old_max_size = Rails.configuration.x.max_photo_size
-    Rails.configuration.x.max_photo_size = 1.megabyte
+    @old_max_size = Settings.photos.max_size
+    Settings.photos.max_size = 1.megabyte
   end
 
   after do
-    Rails.configuration.x.max_photo_size = @old_max_size
+    Settings.photos.max_size = @old_max_size
   end
 
   shared_examples_for "editing user" do

@@ -43,8 +43,8 @@ Follow these steps to setup a development environment for MESS.
   1. Run `bundle install` to install the required gems.
 
 1. **Set local config**
-  1. Copy `config/initializers/local_config.rb.example` to `config/initializers/local_config.rb`.
-  1. Edit `config/initializers/local_config.rb` to fit your environment.
+  1. Copy `config/settings.local.yml.example` to `config/settings.local.yml.rb`.
+  1. Edit `config/settings.local.yml` to fit your environment.
 
 1. **Create development and test databases and schemas**
   1. Copy `config/database.yml.example` to `config/database.yml`.
@@ -52,8 +52,6 @@ Follow these steps to setup a development environment for MESS.
   1. Run `rake db:schema:load` to create the schema in both databases.
 
 1. **Create a user so you can log in**
-  1. Copy `lib/tasks/fake_user_data.rake.example` to `lib/tasks/fake_user_data.rake`.
-  1. Edit `lib/tasks/fake_user_data.rake`, inserting your GMail name.
   1. Run `rake db:fake_user_data` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.
 
 1. **Run the tests**

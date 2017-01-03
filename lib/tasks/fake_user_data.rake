@@ -11,13 +11,13 @@ namespace :db do
         name: "Admins"
       )
 
-      raise "admin_google_id setting not found" unless Rails.configuration.x.admin_google_id
+      raise "admin_google_id setting not found" unless Settings.admin_google_id
       admin = User.create!(
         household: household,
         first_name: "Alice",
         last_name: "Admin",
-        email: Rails.configuration.x.admin_google_id,
-        google_email: Rails.configuration.x.admin_google_id,
+        email: Settings.admin_google_id,
+        google_email: Settings.admin_google_id,
         mobile_phone: "17345551212"
       )
       admin.add_role(:super_admin)

@@ -37,6 +37,23 @@ module Mess
         exception_recipients: %w{tomsmyth@gmail.com}
       }
 
-    config.x.max_photo_size = 8.megabytes
+    Devise.setup do |config|
+      config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret
+    end
+
+    config.secret_key_base = Settings.secret_key_base
+
+    if Settings.smtp
+      config.action_mailer.smtp_settings = {
+        address: Settings.smtp.address,
+        port: Settings.smtp.port,
+        domain: Settings.smtp.domain,
+        authentication: Settings.smtp.authentication.try(:to_sym),
+        user_name: Settings.smtp.user_name,
+        password: Settings.smtp.password
+      }
+    end
+
+    config.action_mailer.default_url_options = { host: Settings.url.host }
   end
 end

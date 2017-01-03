@@ -130,16 +130,16 @@ GEM
     coffee-script-source (1.9.1.1)
     colorize (0.7.7)
     columnize (0.9.0)
-    config (1.0.0)
+    config (1.4.0)
       activesupport (>= 3.0)
-      deep_merge (~> 1.0.0)
+      deep_merge (~> 1.1.1)
     countries (0.11.5)
       currencies (~> 0.4.2)
       i18n_data (~> 0.7.0)
     currencies (0.4.2)
     daemons (1.2.3)
     debug_inspector (0.0.2)
-    deep_merge (1.0.1)
+    deep_merge (1.1.1)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -407,7 +407,7 @@ DEPENDENCIES
   capybara-screenshot (~> 1.0)
   cocoon
   coffee-rails (~> 4.1.0)
-  config
+  config (~> 1.4)
   daemons
   datetimepicker-rails!
   delayed_job_active_record

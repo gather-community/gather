@@ -112,8 +112,8 @@ class CalendarExport
 
   def url_for(obj, url_helper_method)
     Rails.application.routes.url_helpers.send(url_helper_method, obj,
-      host: Rails.configuration.x.host,
-      protocol: Rails.configuration.x.protocol
+      host: Settings.url.host,
+      protocol: Settings.url.protocol
     )
   end
 end

@@ -6,7 +6,7 @@ set :deploy_to, -> { "/home/tscoho/webapps/rails/mess_#{fetch(:stage)}" }
 set :pty, true
 set :passenger_restart_with_touch, true
 set :repo_url, 'git@github.com:touchstone-cohousing/mess.git'
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/initializers/local_config.rb')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 set :tmp_dir, '/home/tscoho/tmp'
 set :default_env, {

@@ -26,3 +26,5 @@ default_shift_times: # Minutes relative to meal start
     asst_cook: 0
     table_setter: 0
     cleaner: 165
+photos:
+  max_size: <%= 8.megabytes %>

@@ -36,7 +36,7 @@ gem 'simple_form'
 gem 'cocoon'
 gem 'devise'
 gem 'omniauth-google-oauth2'
-gem 'config'
+gem 'config', '~> 1.4'
 gem 'timecop'
 
 gem 'bootstrap-sass', '~> 3.3.5'

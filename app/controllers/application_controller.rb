@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  helper_method :home_path, :current_community, :multi_community?
+  helper_method :home_path, :current_community, :multi_community?, :app_version
 
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
 
@@ -69,6 +69,10 @@ class ApplicationController < ActionController::Base
 
   def nav_context(section, subsection = nil)
     @context = {section: section, subsection: subsection}
+  end
+
+  def app_version
+    @app_version ||= File.read(Rails.root.join("VERSION"))
   end
 
   private

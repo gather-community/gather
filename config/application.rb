@@ -31,7 +31,7 @@ module Mess
       email: {
         email_prefix: "[MESS ERROR] ",
         sender_address: Settings.email.from,
-        exception_recipients: %w{tomsmyth@gmail.com}
+        exception_recipients: Settings.email.webmaster
       }
 
     Devise.setup do |config|

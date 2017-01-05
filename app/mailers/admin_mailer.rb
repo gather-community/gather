@@ -1,6 +1,6 @@
 class AdminMailer < ActionMailer::Base
 
-  default from: Rails.configuration.x.from_email
+  default from: Settings.email.from
 
   # Mails an error report to the webmaster.
   def error(info)
@@ -8,6 +8,6 @@ class AdminMailer < ActionMailer::Base
     path = (info[:env] && info[:env]['REQUEST_URI']) ? (": " + info[:env]['REQUEST_URI']) : ""
     exception_name = info[:exception] ? ": #{info[:exception].class} #{info[:exception].message}" : ""
     subject_extra = " #{info[:when]}"
-    mail(to: Rails.configuration.x.webmaster_emails, subject: "Error#{subject_extra}#{path}#{exception_name}")
+    mail(to: Settings.email.webmaster, subject: "Error#{subject_extra}#{path}#{exception_name}")
   end
 end

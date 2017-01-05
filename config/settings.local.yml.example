@@ -18,6 +18,10 @@ url:
   host: <hostname>
   protocol: <http or https>
 
+email:
+  from: MESS <mess@example.coop>
+  webmaster: someone@example.com
+
 # To use a real production server, uncomment the below and enter SMTP settings.
 # For production, use of mailcatcher (default) is recommended.
 # See http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration

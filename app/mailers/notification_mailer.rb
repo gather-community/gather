@@ -1,6 +1,6 @@
 class NotificationMailer < ActionMailer::Base
 
-  default from: Rails.configuration.x.from_email
+  default from: Settings.email.from
 
   def meal_reminder(user, signup)
     @user = user

@@ -1,5 +1,5 @@
 class AccountMailer < ActionMailer::Base
-  default from: Rails.configuration.x.from_email
+  default from: Settings.email.from
 
   def statement_notice(statement)
     load_statement_vars(statement)

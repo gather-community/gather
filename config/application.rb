@@ -25,15 +25,12 @@ module Mess
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    config.x.from_email = "MESS <mess@aacoho.org>"
-    config.x.webmaster_emails = ["tomsmyth@gmail.com"]
-
     config.active_job.queue_adapter = :delayed_job
 
     config.middleware.use ExceptionNotification::Rack,
       email: {
         email_prefix: "[MESS ERROR] ",
-        sender_address: Rails.configuration.x.from_email,
+        sender_address: Settings.email.from,
         exception_recipients: %w{tomsmyth@gmail.com}
       }
 

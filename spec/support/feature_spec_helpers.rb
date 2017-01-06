@@ -1,10 +1,18 @@
 module FeatureSpecHelpers
+  def reload_page
+    page.evaluate_script("window.location.reload()")
+  end
+
   # Fills in the given value into the box with given ID, then selects the first matching option.
   # Assumes a dropdown-style select2 box. Works with a remote data source.
   def select2(value, from:)
     execute_script("$('##{from}').select2('open')")
     find(".select2-search__field").set(value)
     find(".select2-results li", text: /#{value}/).click
+  end
+
+  def enter_datetime(value, into:)
+    find(".#{into} input.datetime_picker").set(value)
   end
 
   def expect_validation_success
@@ -63,5 +71,21 @@ module FeatureSpecHelpers
 
   def expect_title(pattern)
     expect(page).to have_css("h1", text: pattern)
+  end
+
+  def expect_confirm_on_reload
+    begin
+      accept_confirm { reload_page }
+    rescue Capybara::ModalNotFound
+      fail("Confirm dialog expected but not shown")
+    end
+  end
+
+  def expect_no_confirm_on_reload
+    begin
+      accept_confirm { reload_page }
+      fail("Confirm dialog not expected but one was shown")
+    rescue Capybara::ModalNotFound
+    end
   end
 end

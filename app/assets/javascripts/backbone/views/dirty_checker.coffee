@@ -12,11 +12,6 @@ Mess.Views.DirtyChecker = Backbone.View.extend
     'cocoon:after-insert': 'rescan'
     'cocoon:after-remove': 'rescan'
 
-  datetimePickerChanged: (e) ->
-    # Event always fires on page load, so the first time, we just save the original value.
-    if !@$(e.target).data('original-datetime')
-      @$(e.target).data('original-datetime', e.date)
-
   rescan: ->
     @$el.dirtyForms('rescan')
 
@@ -32,7 +27,7 @@ Mess.Views.DirtyChecker = Backbone.View.extend
     isDirty: ($node) ->
       isDirty = false
       $node.find('.input-group.datetimepicker').each ->
-        orig = $(this).data('original-datetime')
+        orig = moment($(this).find('input').data('initial-value'))
         current = $(this).data('DateTimePicker').date()
         if orig && current && !orig.isSame(current) || (!orig && !current)
           isDirty = true

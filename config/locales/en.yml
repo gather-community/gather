@@ -111,6 +111,9 @@ en:
       weekday: '%A'
       month_day: '%b %e'
       date_full: '%b %e %Y'
+  time:
+    formats:
+      full_datetime: "%a %b %e %Y %l:%M%P"
 
   datepicker:
     dformat: '%b %e %Y'

@@ -28,7 +28,10 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   def set_html_options
     input_html_options[:type] = 'text'
     input_html_options[:data] ||= {}
-    input_html_options[:data].merge!(date_options: date_options)
+    input_html_options[:data].merge!(
+      date_options: date_options,
+      initial_value: value.try(:iso8601)
+    )
   end
 
   def set_value_html_option

@@ -1,11 +1,11 @@
 <%= f.input :name %>
-<%= f.input :community_id, collection: Community.by_name %>
-<%= f.input :unit_num %>
+<%= f.input :community_id, collection: Community.by_name if policy(f.object).administer? %>
+<%= f.input :unit_num, disabled: !policy(f.object).administer? %>
 <%= f.input :garage_nums %>
 <%= nested_field_set(f, :vehicles) %>
 <%= nested_field_set(f, :emergency_contacts) %>
 
-<% if f.object.from_grot? %>
+<% if f.object.from_grot? && policy(f.object).administer? %>
   <%= f.input :old_id %>
   <%= f.input :old_name %>
 <% end %>

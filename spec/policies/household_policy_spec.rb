@@ -6,21 +6,41 @@ describe HouseholdPolicy do
 
     let(:record) { household }
 
-    permissions :index?, :show? do
-      it_behaves_like "grants access to users in cluster"
-    end
-
-    permissions :new?, :create?, :edit?, :update?, :activate?, :deactivate? do
-      it_behaves_like "admins only"
-    end
-
-    permissions :accounts? do
+    shared_examples_for "admins and members of household" do
       it "grants access for regular users to own household" do
         expect(subject).to permit(user, user.household)
       end
 
       it "denies access for regular users to other households" do
         expect(subject).not_to permit(user, Household.new)
+      end
+
+      it "grants access to admins" do
+        expect(subject).to permit(admin, user.household)
+      end
+    end
+
+    permissions :index?, :show? do
+      it_behaves_like "grants access to users in cluster"
+    end
+
+    permissions :new?, :create?, :activate?, :deactivate?, :administer? do
+      it_behaves_like "admins only"
+    end
+
+    permissions :edit?, :update? do
+      it_behaves_like "admins and members of household"
+
+      it "denies access to billers" do
+        expect(subject).not_to permit(biller, user.household)
+      end
+    end
+
+    permissions :accounts? do
+      it_behaves_like "admins and members of household"
+
+      it "grants access to billers" do
+        expect(subject).to permit(biller, user.household)
       end
     end
 

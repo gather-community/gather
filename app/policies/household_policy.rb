@@ -20,7 +20,7 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def update?
-    active_admin?
+    active_admin? || household == user.household
   end
 
   def activate?
@@ -28,6 +28,10 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def deactivate?
+    active_admin?
+  end
+
+  def administer?
     active_admin?
   end
 

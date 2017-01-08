@@ -34,6 +34,7 @@
 
         <%= f.input :email, required: true %>
         <%= f.input :google_email, disabled: !policy(@user).administer? %>
+        <%= f.input :alternate_id if policy(@user).administer? %>
 
         <%= f.input :phone, required: true do %>
           <div class="nested-fields">
@@ -61,7 +62,6 @@
       <%= f.input :joined_on, as: :date_picker %>
 
       <% if policy(@user).administer? && @user.adult? %>
-        <%= f.input :alternate_id %>
         <%= f.input :roles do %>
           <div class="roles">
             <% User::ROLES.each do |role| %>
@@ -101,7 +101,7 @@
                   The below fields are associated with the
                   <%= @user.household_name || "user's" %> household.
                   Changing them here will change them for <em>all users in the household</em>.
-                  <% if @user.persisted? %>
+                  <% if @user.persisted? && policy(@user).administer? %>
                     <br/>You can also <%= link_to("move them to another household", "#",
                       class: "change-household") %>.
                   <% end %>

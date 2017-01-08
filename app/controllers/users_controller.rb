@@ -164,18 +164,10 @@ class UsersController < ApplicationController
       # Don't need this.
       params[:user].delete(:household_id)
 
-      # If the user is persisted, we know it must already have a household, so we are done.
-      # We just need to copy the household ID to the nested params,
-      # or the model assumes we are creating a new one.
-      if @user.persisted?
-        # We need to include the ID in household_attributes or the model assumes we are creating a new one.
-        # We copy the existing ID since changing ID via nested attribs is not allowed.
-        params[:user][:household_attributes][:id] = @user.household_id
-      else
-        # Otherwise, we have to create a blank community with the given community_id.
-        # The other attributes will be filled in by normal nested assignment.
-        @user.build_household(community_id: params[:user][:household_attributes][:community_id])
-      end
+      # This style should only be available if the user is persisted.
+      # We need to include the ID in household_attributes or the model assumes we are creating a new one.
+      # We copy the existing ID since changing ID via nested attribs is not allowed.
+      params[:user][:household_attributes][:id] = @user.household_id
     else
       raise "household_by_id is required for this action"
     end

@@ -16,4 +16,3 @@ Mess.Views.SelectPromptStyler = Backbone.View.extend
       select.addClass('prompt-selected')
     else
       select.removeClass('prompt-selected')
-    

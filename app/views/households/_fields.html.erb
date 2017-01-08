@@ -1,6 +1,8 @@
 <%= f.input :name %>
 <% if policy(f.object).administer? %>
-  <%= f.input :community_id, collection: Community.by_name, disabled: !policy(f.object).change_community? %>
+  <%= f.input :community_id,
+        collection: @allowed_community_changes,
+        disabled: !policy(f.object).change_community? %>
 <% end %>
 <%= f.input :unit_num, disabled: !policy(f.object).administer? %>
 <%= f.input :garage_nums %>

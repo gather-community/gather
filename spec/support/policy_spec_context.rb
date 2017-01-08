@@ -1,17 +1,17 @@
 shared_context "policy objs" do
   subject { described_class }
-  let(:cluster) { Cluster.new(name: "Main Cluster") }
-  let(:clusterB) { Cluster.new(name: "Other Cluster") }
-  let(:community) { Community.new(name: "Community A", cluster: cluster) }
-  let(:communityB) { Community.new(name: "Community B", cluster: cluster) }
-  let(:communityX) { Community.new(name: "Community X", cluster: clusterB) }
+  let(:cluster) { build(:cluster, name: "Main Cluster") }
+  let(:clusterB) { build(:cluster, name: "Other Cluster") }
+  let(:community) { build(:community, name: "Community A", cluster: cluster) }
+  let(:communityB) { build(:community, name: "Community B", cluster: cluster) }
+  let(:communityX) { build(:community, name: "Community X", cluster: clusterB) }
   let(:user) { new_user_from(community) }
   let(:other_user) { new_user_from(community) }
   let(:cluster_user) { new_user_from(communityB) }
   let(:outside_user) { new_user_from(communityX) }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.now) }
-  let(:household) { Household.new(users: [user], community: community) }
-  let(:account) { Billing::Account.new(household: Household.new(community: community)) }
+  let(:household) { build(:household, users: [user], community: community) }
+  let(:account) { build(:account, household: build(:household, community: community)) }
 
   let(:guardian) { user }
   let(:child) { new_user_from(community, child: true, guardians: [guardian]) }
@@ -93,6 +93,6 @@ shared_context "policy objs" do
   end
 
   def new_user_from(community, attribs = {})
-    User.new(attribs.merge(household: Household.new(community: community)))
+    build(:user, attribs.merge(household: build(:household, community: community)))
   end
 end

@@ -18,6 +18,7 @@ class UsersController < ApplicationController
           @users = @users.in_community(Community.find_by_abbrv(lens[:community]))
         end
         @users = @users.by_active_and_name.page(params[:page])
+        @allowed_community_changes = policy(Household).allowed_community_changes
       end
       format.json do
         @users = @users.matching(params[:search]).active
@@ -42,7 +43,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new(child: params[:child].present?, household_by_id: true)
     set_blank_household
-    prepare_user
+    prepare_user_form
     authorize @user
   end
 
@@ -56,7 +57,7 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     else
       set_validation_error_notice
-      prepare_user
+      prepare_user_form
       render :new
     end
   end
@@ -65,7 +66,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.household_by_id = false
     authorize @user
-    prepare_user
+    prepare_user_form
   end
 
   def update
@@ -77,7 +78,7 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     else
       set_validation_error_notice
-      prepare_user
+      prepare_user_form
       render :edit
     end
   end
@@ -191,7 +192,8 @@ class UsersController < ApplicationController
     @user.household = Household.new(community: current_community)
   end
 
-  def prepare_user
+  def prepare_user_form
+    @allowed_community_changes = policy(Household).allowed_community_changes.by_name
     @user.up_guardianships.build if @user.up_guardianships.empty?
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?

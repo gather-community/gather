@@ -85,6 +85,26 @@ describe HouseholdPolicy do
     end
   end
 
+  describe "allowed_community_changes" do
+    before do
+      [cluster, clusterB, community, communityB, communityX].each(&:save!)
+    end
+
+    it "returns empty set for admins and lower" do
+      expect(HouseholdPolicy.new(admin, Household).allowed_community_changes).to eq []
+    end
+
+    it "returns cluster communities for cluster admins" do
+      expect(HouseholdPolicy.new(cluster_admin, Household).allowed_community_changes).to(
+        contain_exactly(community, communityB))
+    end
+
+    it "returns all communities for super admins" do
+      expect(HouseholdPolicy.new(super_admin, Household).allowed_community_changes).to(
+        contain_exactly(community, communityB, communityX))
+    end
+  end
+
   describe "scope" do
     let!(:user) { create(:user) }
     let!(:household2) { create(:household) }

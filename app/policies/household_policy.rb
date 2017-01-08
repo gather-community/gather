@@ -39,6 +39,16 @@ class HouseholdPolicy < ApplicationPolicy
     active_cluster_admin?
   end
 
+  def allowed_community_changes
+    if active_super_admin?
+      Community.all
+    elsif active_cluster_admin?
+      user.cluster.communities
+    else
+      []
+    end
+  end
+
   def accounts?
     active_admin_or_biller? || household == user.household
   end

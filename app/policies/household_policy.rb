@@ -35,6 +35,10 @@ class HouseholdPolicy < ApplicationPolicy
     active_admin?
   end
 
+  def change_community?
+    active_cluster_admin?
+  end
+
   def accounts?
     active_admin_or_biller? || household == user.household
   end
@@ -44,8 +48,9 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    permitted = [:name]
-    permitted += [:community_id, :unit_num, :garage_nums, :old_id, :old_name]
+    permitted = [:name, :garage_nums]
+    permitted.concat([:unit_num, :old_id, :old_name]) if administer?
+    permitted << :community_id if change_community?
     permitted << {vehicles_attributes: [:id, :make, :model, :color, :_destroy]}
     permitted << {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
       :email, :location, :_destroy]}

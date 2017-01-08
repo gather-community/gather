@@ -74,6 +74,24 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "cluster admins only" do
+    it "grants access to cluster admins" do
+      expect(subject).to permit(cluster_admin, record)
+    end
+
+    it "denies access to admins" do
+      expect(subject).not_to permit(admin, record)
+    end
+
+    it "denies access to regular users" do
+      expect(subject).not_to permit(user, record)
+    end
+
+    it "denies access to billers" do
+      expect(subject).not_to permit(biller, record)
+    end
+  end
+
   def new_user_from(community, attribs = {})
     User.new(attribs.merge(household: Household.new(community: community)))
   end

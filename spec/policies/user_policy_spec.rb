@@ -157,14 +157,21 @@ describe UserPolicy do
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :household_by_id,
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :community_id, :unit_num, :garage_nums, :old_id, :old_name].
+      {household_attributes: [:id, :name, :garage_nums].
         concat(vehicles_and_contacts_attribs)}
     ] }
     let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :google_email, :alternate_id, :role_admin, :role_biller, :household_by_id,
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :community_id, :unit_num, :garage_nums, :old_id, :old_name].
+      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].
+        concat(vehicles_and_contacts_attribs)}
+    ] }
+    let(:cluster_admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
+      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
+      :google_email, :alternate_id, :role_cluster_admin, :role_admin, :role_biller, :household_by_id,
+      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
+      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name, :community_id].
         concat(vehicles_and_contacts_attribs)}
     ] }
     let(:vehicles_and_contacts_attribs) { [
@@ -201,7 +208,7 @@ describe UserPolicy do
       let(:user) { cluster_admin }
 
       it "should allow cluster admin attribs" do
-        expect(subject).to contain_exactly(*(admin_attribs + [:role_cluster_admin]))
+        expect(subject).to contain_exactly(*cluster_admin_attribs)
       end
     end
 
@@ -209,7 +216,7 @@ describe UserPolicy do
       let(:user) { super_admin }
 
       it "should allow super admin attribs" do
-        expect(subject).to contain_exactly(*(admin_attribs + [:role_cluster_admin, :role_super_admin]))
+        expect(subject).to contain_exactly(*(cluster_admin_attribs << :role_super_admin))
       end
     end
   end

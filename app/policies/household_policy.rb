@@ -49,6 +49,14 @@ class HouseholdPolicy < ApplicationPolicy
     end
   end
 
+  # Checks that the community_id param in the given hash is an allowable change.
+  # If it is not, sets the param to nil.
+  def ensure_allowed_community_id(params)
+    unless allowed_community_changes.map(&:id).include?(params[:community_id].to_i)
+      params[:community_id] = nil
+    end
+  end
+
   def accounts?
     active_admin_or_biller? || household == user.household
   end

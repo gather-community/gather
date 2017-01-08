@@ -67,6 +67,10 @@ class UserPolicy < ApplicationPolicy
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.
     household_permitted = HouseholdPolicy.new(user, record.household).permitted_attributes
+
+    # Changing community is only allowed on the main household form.
+    household_permitted.delete(:community_id)
+
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on,
       :preferred_contact, :household_by_id]

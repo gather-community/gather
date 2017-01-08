@@ -193,7 +193,6 @@ class UsersController < ApplicationController
   end
 
   def prepare_user_form
-    @allowed_community_changes = policy(Household).allowed_community_changes.by_name
     @user.up_guardianships.build if @user.up_guardianships.empty?
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?

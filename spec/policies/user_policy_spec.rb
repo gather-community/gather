@@ -171,7 +171,7 @@ describe UserPolicy do
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :google_email, :alternate_id, :role_cluster_admin, :role_admin, :role_biller, :household_by_id,
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name, :community_id].
+      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].
         concat(vehicles_and_contacts_attribs)}
     ] }
     let(:vehicles_and_contacts_attribs) { [

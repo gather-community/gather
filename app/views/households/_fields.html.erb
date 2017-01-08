@@ -1,5 +1,7 @@
 <%= f.input :name %>
-<% if policy(f.object).administer? %>
+<%# We only want to allow changes to community on the main household form because it is a serious
+  change and involves extra complexity (e.g. @allowed_community_changes) %>
+<% if controller_name == "households" && policy(f.object).administer? %>
   <%= f.input :community_id,
         collection: @allowed_community_changes,
         disabled: !policy(f.object).change_community? %>

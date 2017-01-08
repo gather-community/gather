@@ -40,7 +40,7 @@ class HouseholdsController < ApplicationController
 
   def create
     @household = Household.new
-    @household.assign_attributes(permitted_attributes(@household))
+    @household.assign_attributes(household_attributes)
     authorize @household
     if @household.save
       flash[:success] = "Household created successfully."
@@ -61,7 +61,7 @@ class HouseholdsController < ApplicationController
   def update
     @household = Household.find(params[:id])
     authorize @household
-    if @household.update_attributes(permitted_attributes(@household))
+    if @household.update_attributes(household_attributes)
       flash[:success] = "Household updated successfully."
       redirect_to households_path
     else
@@ -111,6 +111,12 @@ class HouseholdsController < ApplicationController
   end
 
   private
+
+  def household_attributes
+    permitted_attributes(@household).tap do |permitted|
+      policy(@household).ensure_allowed_community_id(permitted)
+    end
+  end
 
   def prepare_household_form
     @allowed_community_changes = policy(Household).allowed_community_changes.by_name

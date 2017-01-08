@@ -105,6 +105,30 @@ describe HouseholdPolicy do
     end
   end
 
+  describe "ensure_allowed_community_id" do
+    let(:params) { {community_id: target_id} }
+    let(:policy) { described_class.new(user, Household) }
+
+    before do
+      allow(policy).to receive(:allowed_community_changes).and_return([double(id: 1), double(id: 2)])
+      policy.ensure_allowed_community_id(params)
+    end
+
+    context "when attempting to set permitted community_id" do
+      let(:target_id) { 1 }
+      it "should leave community_id param alone" do
+        expect(params[:community_id]).to eq 1
+      end
+    end
+
+    context "when attempting to set unpermitted community_id" do
+      let(:target_id) { 3 }
+      it "should nullify community_id param" do
+        expect(params[:community_id]).to be_nil
+      end
+    end
+  end
+
   describe "scope" do
     let!(:user) { create(:user) }
     let!(:household2) { create(:household) }

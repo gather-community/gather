@@ -150,7 +150,7 @@ en:
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       user:
-        joined_on: "Approximate date when this person joined the community"
+        joined_on: "Approximate date when you joined the community"
     options:
       meal:
         time:
@@ -164,7 +164,7 @@ en:
           phone: "Phone"
     prompts:
       user:
-        preferred_contact: "How should people contact you?"
+        preferred_contact: "How should people contact you for non-emergencies?"
 
   cocoon:
     add_links:

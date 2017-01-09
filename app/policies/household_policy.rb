@@ -43,9 +43,11 @@ class HouseholdPolicy < ApplicationPolicy
     if active_super_admin?
       Community.all
     elsif active_cluster_admin?
-      user.cluster.communities
+      Community.where(cluster: user.cluster)
+    elsif active_admin?
+      Community.where(id: user.community_id)
     else
-      []
+      Community.none
     end
   end
 

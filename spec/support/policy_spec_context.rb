@@ -36,6 +36,16 @@ shared_context "policy objs" do
     allow(outside_biller).to receive(:has_role?) { |r| r == :biller }
   end
 
+  # Saves commonly used objects from above. This is not done by default
+  # to make specs faster where it is not needed.
+  def save_policy_objects!
+    [cluster, clusterB, community, communityB, communityX].each(&:save!)
+    [user, admin, cluster_admin, super_admin].each do |u|
+      u.household.community_id = u.household.community.id
+      u.save!
+    end
+  end
+
   shared_examples_for "grants access to users in community" do
     it "grants access to users in community" do
       expect(subject).to permit(user, record)

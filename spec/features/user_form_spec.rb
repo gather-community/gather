@@ -60,7 +60,7 @@ feature "user form" do
 
     scenario "editing household", js: true do
       visit(edit_user_path(user))
-      click_on("Change Household")
+      click_on("move them to another household")
       select2("Potatoheads", from: "user_household_id")
       click_on("Update User")
 

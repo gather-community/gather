@@ -19,18 +19,17 @@ Mess.Views.Select2View = Backbone.View.extend({
     var src = el.data("select2-src");
     var label_attr = el.data("select2-label-attr") || "name";
     var self = this;
-    var params = el.data("select2-request-params");
-    params = params ? "?" + params : "";
 
     el.select2({
       ajax: {
-        url: "/" + src + params,
+        url: "/" + src,
         dataType: 'json',
         delay: 250,
         data: function (params) {
           return $.extend(self.options.extra_data, {
             search: params.term,
-            page: params.page
+            page: params.page,
+            context: el.data("select2-context")
           });
         },
         processResults: function (data, page) {

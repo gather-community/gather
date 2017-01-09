@@ -22,12 +22,8 @@ class UsersController < ApplicationController
       end
       format.json do
         @users = @users.matching(params[:search]).active
-        if params[:guardians]
-          @users = @users.can_be_guardian
-        end
-        if params[:community_id]
-          @users = @users.in_community(params[:community_id])
-        end
+        @users = @users.can_be_guardian if params[:context] == "guardian"
+        @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
       end

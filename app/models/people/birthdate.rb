@@ -36,7 +36,10 @@ module People
       else
         year = nil
         begin
-          time = Time.parse(@str) { |y| year = y } # Extract year if given.
+          # We pretend it's 2000 when we parse to that Feb 29 will parse properly
+          time = Timecop.freeze("2000-01-01") do
+            Time.parse(@str) { |y| year = y } # Extract year if given.
+          end
           if year.nil?
             year = NO_YEAR
           elsif year < YEAR_MIN || year > Date.today.year

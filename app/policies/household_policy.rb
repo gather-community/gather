@@ -5,6 +5,18 @@ class HouseholdPolicy < ApplicationPolicy
     def resolve
       active? ? scope : scope.none
     end
+
+    def administerable
+      if active_super_admin?
+        scope
+      elsif active_cluster_admin?
+        scope.in_cluster(user.cluster)
+      elsif active_admin?
+        scope.where(community_id: user.community_id)
+      else
+        scope.none
+      end
+    end
   end
 
   def index?
@@ -39,6 +51,8 @@ class HouseholdPolicy < ApplicationPolicy
     active_cluster_admin?
   end
 
+  # TODO: This should probably move into the CommunityPolicy as a scope method similar to
+  # administerable above.
   def allowed_community_changes
     if active_super_admin?
       Community.all
@@ -51,6 +65,7 @@ class HouseholdPolicy < ApplicationPolicy
     end
   end
 
+  # TODO: This should probably move too.
   # Checks that the community_id param in the given hash is an allowable change.
   # If it is not, sets the param to nil.
   def ensure_allowed_community_id(params)

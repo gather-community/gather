@@ -135,12 +135,49 @@ describe HouseholdPolicy do
   end
 
   describe "scope" do
-    let!(:user) { create(:user) }
-    let!(:household2) { create(:household) }
+    context "normal" do
+      let!(:user) { create(:user) }
+      let!(:household2) { create(:household) }
 
-    it "returns all households for regular users" do
-      permitted = HouseholdPolicy::Scope.new(user, Household.all).resolve
-      expect(permitted).to contain_exactly(user.household, household2)
+      it "returns all households for regular users" do
+        permitted = HouseholdPolicy::Scope.new(user, Household.all).resolve
+        expect(permitted).to contain_exactly(user.household, household2)
+      end
+    end
+
+    describe "administerable" do
+      let(:scope) { HouseholdPolicy::Scope }
+      let!(:cluster) { create(:cluster, name: "Main Cluster") }
+      let!(:clusterB) { create(:cluster, name: "Other Cluster") }
+      let!(:community) { create(:community, name: "Community A", cluster: cluster) }
+      let!(:communityB) { create(:community, name: "Community B", cluster: cluster) }
+      let!(:communityX) { create(:community, name: "Community X", cluster: clusterB) }
+      let!(:household1) { create(:household, community: community) } # Main cluster
+      let!(:household2) { create(:household, community: communityB) } # Main cluster
+      let!(:household3) { create(:household, community: communityX) } # Other cluster
+      let(:user) { create(:user, household: household1) }
+      let(:admin) { create(:admin, household: household1) }
+      let(:cluster_admin) { create(:cluster_admin, household: household1) }
+      let(:super_admin) { create(:super_admin, household: household1) }
+
+      it "returns nothing for regular user" do
+        expect(scope.new(user, Household.all).administerable.to_a).to eq []
+      end
+
+      it "returns households in community for admin" do
+        results = scope.new(admin, Household.all).administerable
+        expect(results).to contain_exactly(household1)
+      end
+
+      it "returns households in cluster for cluster admin" do
+        results = scope.new(cluster_admin, Household.all).administerable
+        expect(results).to contain_exactly(household1, household2)
+      end
+
+      it "returns all households for super admin" do
+        results = scope.new(super_admin, Household.all).administerable
+        expect(results).to contain_exactly(household1, household2, household3)
+      end
     end
   end
 

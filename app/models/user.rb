@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   delegate :account_for, :credit_exceeded?, to: :household
   delegate :community_id, :community_name, :community_abbrv, to: :household
   delegate :community, to: :household, allow_nil: true
-  delegate :cluster, to: :community, allow_nil: true
+  delegate :cluster, :cluster_id, to: :community, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
 

@@ -55,6 +55,14 @@ class ApplicationPolicy
       scope
     end
 
+    def active_super_admin?
+      active? && user.has_role?(:super_admin)
+    end
+
+    def active_cluster_admin?
+      active? && user.has_role?(:cluster_admin) || active_super_admin?
+    end
+
     def active_admin?
       active? && %i(admin cluster_admin super_admin).any? { |r| user.has_role?(r) }
     end

@@ -21,6 +21,9 @@ class HouseholdsController < ApplicationController
       end
       format.json do
         @households = @households.active.matching(params[:search])
+        if params[:context] == "user_form"
+          @households = HouseholdPolicy::Scope.new(current_user, @households).administerable
+        end
         @households = @households.by_commty_and_name.page(params[:page]).per(20)
         render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
       end

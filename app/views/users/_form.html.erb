@@ -81,6 +81,7 @@
 
       <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
       <%= f.input :household_id,
+            required: true,
             wrapper_class: wrapper_class,
             hint: @user.persisted? ? "" : "Choose an existing household for this user.
               If one doesn't exist you must ".html_safe <<

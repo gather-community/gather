@@ -143,6 +143,8 @@ class UsersController < ApplicationController
       @user.household = Household.find_by_id(params[:user][:household_id])
 
       # This prevents non-admins (e.g. self, parent) from changing their household.
+      # It also prevents admins from changing users to a household they don't have permission to do so.
+      # This is because we set the @user.household above, and THEN check the administer permission.
       # This would normally be something checked by UserPolicy.permitted_attributes, but since we are
       # bootstrapping, that object is not available yet.
       if @user.household_id_changed? && !policy(@user).administer?
@@ -167,6 +169,7 @@ class UsersController < ApplicationController
       # This style should only be available if the user is persisted.
       # We need to include the ID in household_attributes or the model assumes we are creating a new one.
       # We copy the existing ID since changing ID via nested attribs is not allowed.
+      params[:user][:household_attributes] ||= {}
       params[:user][:household_attributes][:id] = @user.household_id
     else
       raise "household_by_id is required for this action"

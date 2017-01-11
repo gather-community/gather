@@ -17,7 +17,9 @@ class User < ActiveRecord::Base
 
   scope :active, -> { where(deactivated_at: nil) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
-  scope :by_name, -> { order("first_name, last_name") }
+  scope :by_name, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_name_adults_first, -> {
+    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, LOWER(first_name), LOWER(last_name)") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :by_active_and_name, -> { order("users.deactivated_at IS NOT NULL").by_name }
   scope :active_or_assigned_to, ->(meal) do

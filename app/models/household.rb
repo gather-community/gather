@@ -29,7 +29,7 @@ class Household < ActiveRecord::Base
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
 
-  normalize_attributes :name, :unit_num, :old_id, :old_name
+  normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
 
   def account_for(community)
     @accounts_by_community ||= {}

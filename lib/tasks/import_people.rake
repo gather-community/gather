@@ -6,6 +6,9 @@ namespace :db do
     kids = []
 
     CSV.foreach("tmp/ts-people/people.csv") do |row|
+      img_path = row[0].blank? ? nil : "tmp/ts-people/#{row[0]}"
+      photo = img_path ? File.open(img_path, "r") : nil
+
       if row[1] == "adult"
         name = row[4]
         if name =~ /\A(.+?)\s*\((.+)\)\z/
@@ -35,11 +38,17 @@ namespace :db do
         raise "Wrong unit number for #{name}" unless u.household.unit_num == row[2]
 
         vehicles = (row[8] || "").split(" and ")
+        vehicles.map! do |str|
+          str = str.split(/\s*,\s*/)
+          str[0] = str[0].split(" ")
+          str.flatten.each { |s| s[0] = s[0].capitalize }
+          {make: str[0][0], model: str[0][1..-1].join(" "), color: str[1]}
+        end
 
         birthdate = row[7] ? Date.parse(row[7].split("-").reverse.join(" ") << " 0001") : nil
 
         adults << {
-          img: row[0],
+          photo: photo,
           user: u,
           name: name,
           first_name: first_name,
@@ -59,7 +68,7 @@ namespace :db do
         birthdate = row[7] ? Date.strptime(row[7], "%m/%d/%y") : nil
 
         kids << {
-          img: row[0],
+          photo: photo,
           name: name,
           first_name: first_name,
           last_name: last_name,
@@ -109,6 +118,29 @@ namespace :db do
       h[:vehicles].uniq!
     end
 
-    puts households.values.join("\n")
+    User.transaction do
+      begin
+        adults.each do |user|
+          attribs = [:first_name, :last_name, :birthdate]
+          attribs << :photo unless user[:user].photo.present?
+          user[:user].update_attributes!(user.slice(*attribs))
+        end
+        kids.each do |kid|
+          if User.find_by(kid.slice(:first_name, :last_name)).nil?
+            User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo).
+              merge(household: kid[:guardians].first.household, child: true))
+          end
+        end
+        households.each do |household, attribs|
+          household.update_attributes!(garage_nums: attribs[:garages].join(", "))
+          attribs[:vehicles].each do |v|
+            household.vehicles.find_or_create_by!(v)
+          end
+        end
+      rescue ActiveRecord::RecordInvalid
+        p $!.record
+        p $!.record.errors
+      end
+    end
   end
 end

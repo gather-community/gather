@@ -22,7 +22,7 @@ div.title-and-buttons {
     @media screen and (min-width: $grid-float-breakpoint) {
       margin-right: 10px;
 
-      .form-control {
+      .form-control, .select2.select2-container {
         width: 150px;
       }
 

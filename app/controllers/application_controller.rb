@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
     { root: false }
   end
 
-  def load_communities
+  def load_communities_in_cluster
     @communities = Community.by_name
   end
 

@@ -11,7 +11,7 @@ class MealsController < ApplicationController
 
     authorize Meal
     load_meals
-    load_communities
+    load_communities_in_cluster
   end
 
   def jobs
@@ -20,7 +20,7 @@ class MealsController < ApplicationController
     prepare_lens(:user, :time, :community)
     @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
-    load_communities
+    load_communities_in_cluster
   end
 
   def show
@@ -39,7 +39,7 @@ class MealsController < ApplicationController
   def reports
     authorize Meal, :reports?
     nav_context(:meals, :reports)
-    prepare_lens(:community)
+    prepare_lens(community: {required: true})
     load_community_from_lens_with_default
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
@@ -202,7 +202,7 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.ensure_assignments
-    load_communities
+    load_communities_in_cluster
     @resource_options = Reservation::Resource.meal_hostable.by_full_name
   end
 

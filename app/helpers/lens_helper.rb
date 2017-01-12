@@ -14,8 +14,8 @@ module LensHelper
 
     def to_html
       content_tag(:form, class: "form-inline lens-bar") do
-        html = lens.fields.map { |f| send("#{f}_field") << " " }
-        html << clear_link unless options[:required]
+        html = lens.fields.map { |f| send("#{f}_field", f) << " " }
+        html << clear_link unless lens.all_required?
         html.reduce(:<<)
       end
     end
@@ -23,28 +23,28 @@ module LensHelper
     private
 
     def clear_link
-      if lens.blank?
+      if lens.optional_fields_blank?
         ""
       else
         link_to(icon_tag("times-circle") << " " << content_tag(:span, "Clear Filter"),
-          request.path << "?" << lens.fields.map { |f| "#{f}=" }.join("&"),
+          request.path << "?" << lens.query_string_to_clear,
           class: "clear")
       end
     end
 
-    def community_field
+    def community_field(field)
       communities = Community.by_name
       return "" if communities.size < 1
 
       select_tag("community",
         options_from_collection_for_select(communities, 'lc_abbrv', 'name', lens[:community]),
-        prompt: options[:required] ? nil : "All Communities",
+        prompt: field.options[:required] ? nil : "All Communities",
         class: "form-control",
         onchange: "this.form.submit();"
       )
     end
 
-    def user_field
+    def user_field(field)
       selected_option_tag = if lens[:user].present?
         user = User.find(lens[:user])
         content_tag(:option, user.name, value: user.id, selected: "selected")
@@ -61,7 +61,7 @@ module LensHelper
     end
 
     # Could end up with collisions here in future. Should refactor to scope this better.
-    def time_field
+    def time_field(field)
       opts = %w(past finalizable all)
       opts.delete("finalizable") if params[:action] == "jobs"
       opt_key = "simple_form.options.meal.time"
@@ -73,7 +73,7 @@ module LensHelper
       )
     end
 
-    def search_field
+    def search_field(field)
       text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
     end
 

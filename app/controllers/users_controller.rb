@@ -8,15 +8,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         nav_context(:people, :directory)
-        prepare_lens(:community, :search)
-        load_communities
+        prepare_lens({community: {required: true}}, :search)
+        load_community_from_lens_with_default
+        load_communities_in_cluster
         @users = @users.includes(household: :community)
         if lens[:search].present?
           @users = @users.matching(lens[:search])
         end
-        if lens[:community].present?
-          @users = @users.in_community(Community.find_by_abbrv(lens[:community]))
-        end
+        @users = @users.in_community(@community)
         @users = @users.by_active_and_name.page(params[:page])
         @allowed_community_changes = policy(Household).allowed_community_changes
       end

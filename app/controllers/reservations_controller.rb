@@ -39,7 +39,7 @@ class ReservationsController < ApplicationController
         render("calendar")
       end
     else
-      prepare_lens(:community)
+      prepare_lens(community: {required: true})
       load_community_from_lens_with_default
 
       authorize Reservation::Reservation
@@ -48,7 +48,7 @@ class ReservationsController < ApplicationController
       # We don't actually return any Reservations here.
       skip_policy_scope
 
-      load_communities
+      load_communities_in_cluster
       @resources = policy_scope(Reservation::Resource).where(community_id: @community.id)
       render("home")
     end

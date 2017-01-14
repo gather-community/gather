@@ -16,7 +16,7 @@ class UsersController < ApplicationController
           @users = @users.matching(lens[:search])
         end
         @users = @users.in_community(@community)
-        @users = @users.by_active_and_name.page(params[:page])
+        @users = @users.by_active_and_name.page(params[:page]).per(36)
         @allowed_community_changes = policy(Household).allowed_community_changes
       end
       format.json do

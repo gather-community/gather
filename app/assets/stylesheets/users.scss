@@ -1,31 +1,76 @@
 .users {
-  .photo {
-    width: 150px;
-    display: block;
-    margin-bottom: 20px;
-  }
+  &.action-index {
+    .user {
+      margin-bottom: 15px;
 
-  ul.details {
-    list-style-type: none;
-    padding: 0;
-  }
+      .inner {
+        background-color: $fainter-gray;
+      }
 
-  @media screen and (min-width: 768px) {
-    .photo {
-      float: left;
+      img {
+        width: 25%;
+        float: left;
+      }
+
+      .info {
+        margin-left: 25%;
+        padding: 5px 10px;
+        line-height: 1.5;
+        overflow-x: hidden;
+        white-space: nowrap;
+
+        a {
+          color: $main-text-color;
+        }
+
+        .email, .unit-phone {
+          &, a {
+            color: $gray-text;
+          }
+        }
+      }
+
+      &.inactive {
+        img {
+          filter: grayscale(100%);
+        }
+
+        .info {
+          &, a {
+            color: $gray-text;
+          }
+        }
+      }
     }
-
-    .user-info {
-      margin-left: 170px;
-    }
-  }
-
-  .phones span {
-    display: inline-block;
-    margin-right: 10px;
   }
 
   &.action-show {
+    .photo {
+      width: 150px;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    ul.details {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    @media screen and (min-width: 768px) {
+      .photo {
+        float: left;
+      }
+
+      .user-info {
+        margin-left: 170px;
+      }
+    }
+
+    .phones span {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
     table.index {
       max-width: 600px;
     }

@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
 
   delegate :name, :full_name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, to: :household
-  delegate :community_id, :community_name, :community_abbrv, to: :household
+  delegate :community_id, :community_name, :community_abbrv, :unit_num, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :cluster, :cluster_id, to: :community, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name
 
-  handle_phone_types :home, :work, :mobile
+  handle_phone_types :mobile, :home, :work # In order of general preference
 
   # Contact email does not have to be unique because some people share them (grrr!)
   validates :email, format: Devise.email_regexp, if: :adult?

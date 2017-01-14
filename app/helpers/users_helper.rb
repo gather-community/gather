@@ -10,6 +10,6 @@ module UsersHelper
   end
 
   def user_phones(user)
-    user.phones.map{ |p| content_tag(:span, p) }.reduce(:<<)
+    user.phone_strs.map{ |p| content_tag(:span, p) }.reduce(:<<)
   end
 end

@@ -27,8 +27,13 @@ module Phoneable
     end
   end
 
-  # Returns a string with all non-nil phone numbers
+  # Returns an array of all raw phone numbers
   def phones
+    phone_types.map { |type| send(:"#{type}_phone") }.compact
+  end
+
+  # Returns an array of formatted strings with abbreviations for all non-nil phone numbers
+  def phone_strs
     phone_types.map do |type|
       num = format_phone(type)
       if num

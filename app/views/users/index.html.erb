@@ -22,55 +22,23 @@
     No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
   </div>
 <% else %>
-  <table class="index">
-    <tr>
-      <th class="col-md-2">Name</th>
-      <% if policy(User).administer? %>
-        <th class="col-md-2">Household</th>
-        <th class="col-md-2">Google ID</th>
-      <% else %>
-        <th class="col-md-2">Community</th>
-      <% end %>
-      <th class="col-md-2">Contact Email</th>
-      <th class="col-md-3">Phone</th>
-      <th class="col-md-1"></th>
-    </tr>
+  <div class="row clearfix">
     <% @users.each do |user| %>
-      <tr class="<%= user.active? ? "" : "inactive" %>">
-        <td class="col-md-2">
-          <%= link_to(user.name, user) %>
-        </td>
-        <% if policy(User).administer? %>
-          <td class="col-md-2">
-            <% if policy(user.household).edit? %>
-              <%= link_to(user.household_full_name, edit_household_path(user.household)) %>
-            <% elsif policy(user.household).show? %>
-              <%= link_to(user.household_full_name, household_path(user.household)) %>
-            <% else %>
-              <%= user.household_full_name %>
-            <% end %>
-          </td>
-          <td class="col-md-2">
-            <%= user.google_email ? link_to(user.google_email, "mailto:#{user.google_email}") : "[None]" %>
-          </td>
-        <% else %>
-          <td class="col-md-2"><%= user.community.name %></td>
-        <% end %>
-        <td class="col-md-2"><%= link_to(user.email, "mailto:#{user.email}") if user.email %></td>
-        <td class="col-md-3 phones"><%= user_phones(user) %></td>
-        <td class="col-md-1">
-          <div class="action-icons">
-            <% if policy(user).update? %>
-              <%= link_to(icon_tag('pencil'), edit_user_path(user)) %>
-            <% end %>
-            <% if policy(user).deactivate? && user.active? %>
-              <%= link_to(icon_tag('times-circle'), deactivate_user_path(user), method: :put,
-                data: { confirm: I18n.t("activerecord.deact_confirms.user", name: user.name) }) %>
-            <% end %>
+      <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
+        <div class="inner clearfix">
+          <%= link_to(image_tag(user.photo.url(:thumb)), user) %>
+          <div class="info">
+            <div><%= link_to(user.name, user) %></div>
+            <div class="email"><%= link_to(user.email, "mailto:#{user.email}") if user.email %></div>
+            <div class="unit-phone">
+              <% unit = user.unit_num.nil? ? nil : link_to("#" << user.unit_num, user.household) %>
+              <% phone = user.no_phones? ? nil : link_to(user.phone_strs.first, "tel:#{user.phones.first}") %>
+              <%= [unit, phone].compact.join(" &bull; ").html_safe %>
+            </div>
           </div>
-        </td>
-      </tr>
+        </div>
+      </div>
     <% end %>
-  </table>
+  </div>
   <%= paginate @users %>
 <% end %>

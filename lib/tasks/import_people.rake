@@ -45,7 +45,7 @@ namespace :db do
           {make: str[0][0], model: str[0][1..-1].join(" "), color: str[1]}
         end
 
-        birthdate = row[7] ? Date.parse(row[7].split("-").reverse.join(" ") << " 0001") : nil
+        birthdate = row[7] ? Date.parse(row[7].split("-").reverse.join(" ") << " 0004") : nil
 
         adults << {
           photo: photo,

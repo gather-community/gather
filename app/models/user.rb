@@ -103,6 +103,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
   end
 
+  def birthday
+    birthdate_wrapper
+  end
+
   def birthdate_wrapper
     @birthdate_wrapper ||= People::Birthdate.new(self)
   end

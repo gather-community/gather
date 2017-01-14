@@ -6,38 +6,120 @@
   <% end %>
 <% end %>
 
-<%= image_tag(@user.photo.url(:medium, allow_tmp: true), class: "photo") %>
-<div class="user-info">
-  <ul class="details">
-    <li>Community: <%= @user.community_name %></li>
-    <li>Household: <%= @user.household_name %></li>
-    <% unless @user.child? %>
-      <li>Email: <%= link_to(@user.email, "mailto:#{@user.email}") %></li>
-      <li class="phones">Phone: <%= user_phones(@user) %></li>
-    <% end %>
-  </ul>
+<div class="row">
+  <div class="col-md-9 col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <%= image_tag(@user.photo.url(:medium), class: "photo") %>
+      </div>
+      <div class="col-sm-8">
+        <table class="key-value">
+          <tr>
+            <td>Unit</td>
+            <td><%= @user.community_name if multi_community? %> #<%= @user.unit_num || "[None]"%></td>
+          </tr>
+          <% if @user.email? %>
+            <tr>
+              <td>Email</td>
+              <td><%= email_link(@user.email) %></td>
+            </tr>
+          <% end %>
+          <% unless @user.no_phones? %>
+            <tr>
+              <td>Phone</td>
+              <td class="phones">
+                <%= safe_join(@user.phones.map{ |p| phone_link(p, kind_abbrv: true) }, tag(:br)) %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @user.preferred_contact %>
+            <tr>
+              <td>Preferred Contact Method</td>
+              <td><%= t("simple_form.options.user.preferred_contact.#{@user.preferred_contact}") %></td>
+            </tr>
+          <% end %>
+          <% if @user.birthdate %>
+            <tr>
+              <td>Birthday</td>
+              <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
+            </tr>
+          <% end %>
+          <% if @user.joined_on %>
+            <tr>
+              <td>Join Date</td>
+              <td><%= l(@user.joined_on, format: :date_full) %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>Household <%= link_to(icon_tag("link"), @user.household, class: "household") %></td>
+            <td>
+              <%= safe_join(@user.household.users.map { |u| link_to(u.first_name, u) }, ", ".html_safe) %>
+            </td>
+          </tr>
+          <% if @user.household.vehicles.any? %>
+            <tr>
+              <td>Vehicles</td>
+              <td>
+                <% @user.household.vehicles.each do |v| %>
+                  <div><%= v.to_s %></div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @user.household.garage_nums.present? %>
+            <tr>
+              <td>Garage</td>
+              <td><%= @user.household.garage_nums %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>Emergency Contacts</td>
+            <td>
+              <% if (contacts = @user.household.emergency_contacts).any? %>
+                <% contacts.each do |contact| %>
+                  <div class="emergency-contact">
+                    <strong><%= contact.name_relationship %></strong><br/>
+                    <% lines = [contact.location] %>
+                    <% lines.concat(contact.phones.map { |p| phone_link(p) }) %>
+                    <% lines << email_link(contact.email) if contact.email.present? %>
+                    <%= safe_join(lines, tag(:br)) %>
+                  </div>
+                <% end %>
+              <% else %>
+                [None]
+              <% end %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
 
-  <% if @head_cook_meals.any? %>
-    <h4>Past Head Cook Meals</h4>
-    <table class="index part-width">
-      <tr>
-        <th class="col-md-1">Date</th>
-        <th class="col-md-3">Title</th>
-        <th class="col-md-1">Signups</th>
-      </tr>
-      <% @head_cook_meals.each do |meal| %>
-        <tr>
-          <td class="col-md-1">
-            <%= meal.served_at.to_date.to_s(:short_date) %>
-          </td>
-          <td class="col-md-3">
-            <%= link_to(meal.title || "[No title]", meal) %>
-          </td>
-          <td class="col-md-1">
-            <%= meal.signup_count %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
+    <div class="row">
+      <div class="col-sm-12">
+        <% if @head_cook_meals.any? %>
+          <h4>Past Head Cook Meals</h4>
+          <table class="index part-width">
+            <tr>
+              <th class="col-md-1">Date</th>
+              <th class="col-md-3">Title</th>
+              <th class="col-md-1">Signups</th>
+            </tr>
+            <% @head_cook_meals.each do |meal| %>
+              <tr>
+                <td class="col-md-1">
+                  <%= meal.served_at.to_date.to_s(:short_date) %>
+                </td>
+                <td class="col-md-3">
+                  <%= link_to(meal.title || "[No title]", meal) %>
+                </td>
+                <td class="col-md-1">
+                  <%= meal.signup_count %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

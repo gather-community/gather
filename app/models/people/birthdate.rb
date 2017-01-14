@@ -54,7 +54,7 @@ module People
     end
 
     def age
-      if has_full_birthdate?
+      if full?
         today = Date.today
         bday_this_year = Date.new(today.year, date.month, date.day)
         today.year - date.year - (bday_this_year > today ? 1 : 0)
@@ -63,8 +63,12 @@ module People
       end
     end
 
-    def has_full_birthdate?
+    def full?
       date && date.year != NO_YEAR
+    end
+
+    def format
+      full? ? :date_full : :month_day
     end
 
     def validate

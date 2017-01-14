@@ -41,15 +41,15 @@
             <div class="row">
               <div class="col-sm-4">
                 <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
-                  input_html: { value: @user.format_phone(:mobile) } %>
+                  input_html: { value: @user.phone(:mobile).formatted } %>
               </div>
               <div class="col-sm-4">
                 <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
-                  input_html: { value: @user.format_phone(:home) } %>
+                  input_html: { value: @user.phone(:home).formatted } %>
               </div>
               <div class="col-sm-4">
                 <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
-                  input_html: { value: @user.format_phone(:work) } %>
+                  input_html: { value: @user.phone(:work).formatted } %>
               </div>
             </div>
           </div>

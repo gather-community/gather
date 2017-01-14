@@ -9,7 +9,11 @@ module UsersHelper
     link = link_to(contents, user_path(user), class: "user-link")
   end
 
-  def user_phones(user)
-    user.phone_strs.map{ |p| content_tag(:span, p) }.reduce(:<<)
+  def phone_link(phone, options = {})
+    link_to(phone.formatted(options), "tel:#{phone.raw}")
+  end
+
+  def email_link(email)
+    link_to(email, "mailto:#{email}")
   end
 end

@@ -6,8 +6,11 @@ class People::EmergencyContact < ActiveRecord::Base
   handle_phone_types :main, :alt
   validates :name, :main_phone, :location, :relationship, presence: true
 
+  def name_relationship
+    "#{name} (#{relationship})"
+  end
+
   def to_s
-    "#{name} (#{relationship}) - #{location}, " <<
-      [format_phone(:main), format_phone(:alt), email].compact.join(", ")
+    "#{name_relationship} - #{location}, " << (phones.map(&:formatted) << email).compact.join(", ")
   end
 end

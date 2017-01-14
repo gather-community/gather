@@ -1,35 +1,28 @@
-.users &.action-show {
-  .photo {
-    width: 150px;
-    display: block;
-    margin-bottom: 20px;
-  }
-
-  ul.details {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  @media screen and (min-width: 768px) {
-    .photo {
-      float: left;
-    }
-
-    .user-info {
-      margin-left: 170px;
-    }
-  }
-
-  .phones span {
-    display: inline-block;
-    margin-right: 10px;
-  }
-
-  table.index {
-    max-width: 600px;
-  }
-
+.users.action-show {
   h4 {
     margin-top: 20px;
+  }
+
+  img.photo {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  td.phones {
+    span {
+      display: block;
+    }
+  }
+
+  a.household {
+    color: $gray-text;
+  }
+
+  .emergency-contact {
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 }

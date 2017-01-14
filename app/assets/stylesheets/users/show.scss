@@ -1,0 +1,35 @@
+.users &.action-show {
+  .photo {
+    width: 150px;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  ul.details {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 768px) {
+    .photo {
+      float: left;
+    }
+
+    .user-info {
+      margin-left: 170px;
+    }
+  }
+
+  .phones span {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  table.index {
+    max-width: 600px;
+  }
+
+  h4 {
+    margin-top: 20px;
+  }
+}

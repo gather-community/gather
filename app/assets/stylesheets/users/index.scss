@@ -1,0 +1,44 @@
+.users &.action-index {
+  .user {
+    margin-bottom: 15px;
+
+    .inner {
+      background-color: $fainter-gray;
+    }
+
+    img {
+      width: 25%;
+      float: left;
+    }
+
+    .info {
+      margin-left: 25%;
+      padding: 5px 10px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      white-space: nowrap;
+
+      a {
+        color: $main-text-color;
+      }
+
+      .email, .unit-phone {
+        &, a {
+          color: $gray-text;
+        }
+      }
+    }
+
+    &.inactive {
+      img {
+        filter: grayscale(100%);
+      }
+
+      .info {
+        &, a {
+          color: $gray-text;
+        }
+      }
+    }
+  }
+}

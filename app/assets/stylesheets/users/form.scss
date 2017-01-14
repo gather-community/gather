@@ -1,0 +1,30 @@
+.users form {
+  .user_roles .roles {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+
+    label {
+      margin-bottom: 0;
+    }
+  }
+
+  .role.disabled {
+    color: $gray-text;
+  }
+
+  #household-fields {
+    background-color: $fainter-gray;
+    padding: 15px;
+    margin: 15px -15px;
+
+    .title {
+      text-align: center;
+      margin-bottom: 10px;
+
+      h4 {
+        margin-top: 0;
+      }
+    }
+  }
+}

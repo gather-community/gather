@@ -10,22 +10,23 @@
     <%= safe_join(household.users.map { |u| link_to(u.first_name, u) }, ", ".html_safe) %>
   </td>
 </tr>
-<% if !child && household.vehicles.any? %>
-  <tr>
-    <td>Vehicles</td>
-    <td>
-      <% household.vehicles.each do |v| %>
-        <div><%= v.to_s %></div>
-      <% end %>
-    </td>
-  </tr>
-<% end %>
-<% if !child && household.garage_nums.present? %>
-  <tr>
-    <td>Garage</td>
-    <td><%= household.garage_nums %></td>
-  </tr>
-<% end %>
+<% if context == :household || !child %>
+  <% if household.vehicles.any? %>
+    <tr>
+      <td>Vehicles</td>
+      <td>
+        <% household.vehicles.each do |v| %>
+          <div><%= v.to_s %></div>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% household.garage_nums.present? %>
+    <tr>
+      <td>Garage</td>
+      <td><%= household.garage_nums %></td>
+    </tr>
+  <% end %>
 <tr>
   <td>Emergency Contacts</td>
   <td>

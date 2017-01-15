@@ -31,7 +31,7 @@
             <div><%= link_to(user.name, user) %></div>
             <div class="email"><%= email_link(user.email) if user.email %></div>
             <div class="unit-phone">
-              <% unit = user.unit_num.nil? ? nil : link_to("#" << user.unit_num, user.household) %>
+              <% unit = user.unit_num.nil? ? nil : link_to("##{user.unit_num}", user.household) %>
               <% phone = user.no_phones? ? nil : phone_link(user.phones.first, kind_abbrv: true) %>
               <%= [unit, phone].compact.join(" &bull; ").html_safe %>
             </div>

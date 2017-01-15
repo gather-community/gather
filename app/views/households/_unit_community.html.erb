@@ -1,6 +1,6 @@
 <tr>
   <td>Unit</td>
-  <td><%= "##{household.unit_num}" || "[None]"%></td>
+  <td><%= household.unit_num.nil? ? "[None]" : "##{household.unit_num}" %></td>
 </tr>
 <% if multi_community? %>
   <tr>

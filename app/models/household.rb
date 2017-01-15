@@ -24,7 +24,7 @@ class Household < ActiveRecord::Base
     uniqueness: { scope: :community_id, message:
       "There is already a household with this name at this community" }
   validates :community_id, presence: true
-  validates :unit_num, length: { maximum: 8 }
+  validates :unit_num, length: { maximum: 8 }, numericality: true, allow_nil: true
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true

@@ -14,12 +14,14 @@ div.title-and-buttons {
   .form-inline.lens-bar {
     display: inline-block;
     margin-bottom: 10px;
+    white-space: nowrap;
 
     &:last-child {
       margin-right: 0;
     }
 
     @media screen and (min-width: $screen-sm-min) {
+      margin-left: 10px;
       margin-right: 10px;
 
       .form-control, .select2.select2-container {

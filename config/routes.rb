@@ -78,7 +78,7 @@ Rails.application.routes.draw do
   get "logged-out", to: "landing#logged_out", as: :logged_out
 
   authenticated :user do
-    root to: "meals#index", as: :authenticated_root
+    root to: "users#index", as: :authenticated_root
   end
 
   root to: "landing#index"

@@ -50,7 +50,7 @@
               <td><%= l(@user.joined_on, format: :date_full) %></td>
             </tr>
           <% end %>
-          <%= render("households/attribs", household: @user.household, context: :user) %>
+          <%= render("households/attribs", household: @user.household, context: :user, child: @user.child?) %>
         </table>
       </div>
     </div>

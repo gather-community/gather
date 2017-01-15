@@ -16,7 +16,7 @@ a.calendar-export {
 
 .calendar-exports.action-index {
   #links-and-note {
-    @media screen and (min-width: $grid-float-breakpoint) {
+    @media screen and (min-width: $screen-sm-min) {
       display: table;
       width: 100%;
 

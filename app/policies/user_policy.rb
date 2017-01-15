@@ -15,7 +15,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    active? || self?
+    active_in_cluster? || self?
   end
 
   def create?

@@ -4,6 +4,7 @@ describe UserPolicy do
   include_context "policy objs"
 
   describe "permissions" do
+    let(:record) { other_user }
 
     permissions :index? do
       it "grants access to active users" do
@@ -16,15 +17,11 @@ describe UserPolicy do
     end
 
     permissions :show? do
-      it "grants access to everyone to any active user" do
-        user2 = build(:user)
-        expect(subject).to permit(user, user2)
-      end
+      it_behaves_like "grants access to users in cluster"
 
       context "for inactive user" do
         it "denies access to other users" do
-          user2 = build(:user)
-          expect(subject).not_to permit(inactive_user, user2)
+          expect(subject).not_to permit(inactive_user, other_user)
         end
 
         it "allows access to self" do
@@ -44,7 +41,6 @@ describe UserPolicy do
     end
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
-      let(:record) { other_user }
       it_behaves_like "admins only"
 
       it "denies access to self" do
@@ -77,7 +73,6 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update? do
-      let(:record) { other_user }
       it_behaves_like "admins only"
 
       it "grants access to self" do
@@ -115,7 +110,6 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        let(:record) { other_user }
         it_behaves_like "admins only"
       end
     end

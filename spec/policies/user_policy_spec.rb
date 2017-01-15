@@ -31,13 +31,7 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it "grants access to admins" do
-        expect(subject).to permit(admin, User)
-      end
-
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, User)
-      end
+      it_behaves_like "admins only"
     end
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do

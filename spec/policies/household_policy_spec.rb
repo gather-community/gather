@@ -87,7 +87,8 @@ describe HouseholdPolicy do
 
   describe "allowed_community_changes" do
     before do
-      save_policy_objects!
+      save_policy_objects!(cluster, clusterB, community, communityB, communityX, 
+        user, admin, cluster_admin, super_admin)
     end
 
     it "returns empty set for regular users" do

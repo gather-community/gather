@@ -110,23 +110,43 @@ describe UserPolicy do
   end
 
   describe "scope" do
-    let!(:user1) { create(:user) }
-    let!(:user2) { create(:user) }
-    let!(:deactivated) { create(:user, deactivated_at: Time.now - 1.day) }
+    before do
+      save_policy_objects!(cluster, clusterB, community, communityB, communityX,
+        user, other_user, inactive_user, user_in_cluster, outside_user,
+        admin, cluster_admin, super_admin,
+        child, other_child, inactive_child, child_in_cluster, outside_child)
+    end
+
+    context "for super admin" do
+      it "returns all users" do
+        permitted = UserPolicy::Scope.new(super_admin, User.all).resolve
+        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster,
+          outside_user, outside_child)
+      end
+    end
+
+    context "for cluster admin" do
+      it "returns adults and children in cluster only" do
+        permitted = UserPolicy::Scope.new(cluster_admin, User.all).resolve
+        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster)
+      end
+    end
 
     context "for admin" do
-      let!(:admin) { create(:admin) }
-
-      it "returns active users" do
+      it "returns adults in cluster and children in community" do
         permitted = UserPolicy::Scope.new(admin, User.all).resolve
-        expect(permitted).to contain_exactly(user1, user2, deactivated, admin)
+        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+          admin, cluster_admin, super_admin, child, inactive_child, other_child)
       end
     end
 
     context "for regular user" do
-      it "returns active users" do
-        permitted = UserPolicy::Scope.new(user1, User.all).resolve
-        expect(permitted).to contain_exactly(user1, user2)
+      it "returns adults in cluster and children in community" do
+        permitted = UserPolicy::Scope.new(user, User.all).resolve
+        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+          admin, cluster_admin, super_admin, child, inactive_child, other_child)
       end
     end
   end

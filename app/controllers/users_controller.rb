@@ -14,6 +14,7 @@ class UsersController < ApplicationController
         @users = @users.in_community(@community)
         @users = @users.matching(lens[:search]) if lens[:search].present?
         @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
+        @users = @users.active unless policy(User).administer? # Regular folks don't care about inactives
         if lens[:user_sort].present?
           @users = @users.by_active.sorted_by(lens[:user_sort])
         else

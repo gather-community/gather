@@ -6,7 +6,16 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      active_admin? ? scope : scope.where("users.deactivated_at IS NULL")
+      # This scope limits what the user can *ever* see. Other scopes may be applied depending on the view.
+      # For example, while a cluster admin can see all users in the cluster, the directory view
+      # only allows viewing one community at a time.
+      if active_super_admin?
+        scope
+      elsif active_cluster_admin?
+        scope.in_cluster(user.cluster_id)
+      else
+        result = scope.all_in_community_or_adult_in_cluster(user.community)
+      end
     end
   end
 

@@ -5,25 +5,33 @@ shared_context "policy objs" do
   let(:community) { build(:community, name: "Community A", cluster: cluster) }
   let(:communityB) { build(:community, name: "Community B", cluster: cluster) }
   let(:communityX) { build(:community, name: "Community X", cluster: clusterB) }
-  let(:user) { new_user_from(community) }
-  let(:other_user) { new_user_from(community) }
-  let(:user_in_cluster) { new_user_from(communityB) }
-  let(:outside_user) { new_user_from(communityX) }
-  let(:inactive_user) { new_user_from(community, deactivated_at: Time.now) }
+
+  let(:user) { new_user_from(community, label: "user") }
+  let(:other_user) { new_user_from(community, label: "other_user") }
+  let(:user_in_cluster) { new_user_from(communityB, label: "user_in_cluster") }
+  let(:outside_user) { new_user_from(communityX, label: "outside_user") }
+  let(:inactive_user) { new_user_from(community, deactivated_at: Time.now, label: "inactive_user") }
+
   let(:household) { build(:household, users: [user], community: community) }
   let(:account) { build(:account, household: build(:household, community: community)) }
 
   let(:guardian) { user }
-  let(:child) { new_user_from(community, child: true, guardians: [guardian]) }
-  let(:other_child) { new_user_from(community, guardians: [other_user]) }
+  let(:child) { new_user_from(community, child: true, guardians: [guardian], label: "child") }
+  let(:other_child) { new_user_from(community, child: true, guardians: [other_user], label: "other_child") }
+  let(:child_in_cluster) { new_user_from(communityB, child: true,
+    guardians: [user_in_cluster], label: "child_in_cluster") }
+  let(:outside_child) { new_user_from(communityX, child: true,
+    guardians: [outside_user], label: "outside_child") }
+  let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user], 
+    deactivated_at: Time.now, label: "inactive_child") }
 
-  let(:admin) { new_user_from(community) }
-  let(:cluster_admin) { new_user_from(community) }
-  let(:super_admin) { new_user_from(community) }
-  let(:admin_in_cluster) { new_user_from(communityB) }
+  let(:admin) { new_user_from(community, label: "admin") }
+  let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
+  let(:super_admin) { new_user_from(community, label: "super_admin") }
+  let(:admin_in_cluster) { new_user_from(communityB, label: "admin_in_cluster") }
 
-  let(:biller) { new_user_from(community) }
-  let(:biller_in_cluster) { new_user_from(communityB) }
+  let(:biller) { new_user_from(community, label: "biller") }
+  let(:biller_in_cluster) { new_user_from(communityB, label: "biller_in_cluster") }
 
   before do
     allow(user).to receive(:has_role?) { false }
@@ -38,11 +46,11 @@ shared_context "policy objs" do
 
   # Saves commonly used objects from above. This is not done by default
   # to make specs faster where it is not needed.
-  def save_policy_objects!
-    [cluster, clusterB, community, communityB, communityX].each(&:save!)
-    [user, admin, cluster_admin, super_admin].each do |u|
-      u.household.community_id = u.household.community.id
-      u.save!
+  def save_policy_objects!(*objs)
+    objs.each do |obj|
+      # If we don't do this it doesn't save correctly.
+      obj.household.community_id = obj.household.community.id if obj.is_a?(User)
+      obj.save!
     end
   end
 
@@ -107,6 +115,9 @@ shared_context "policy objs" do
   end
 
   def new_user_from(community, attribs = {})
-    build(:user, attribs.merge(household: build(:household, community: community)))
+    build(:user, attribs.merge(
+      first_name: attribs.delete(:label).capitalize.gsub("_", " "),
+      household: build(:household, community: community))
+    )
   end
 end

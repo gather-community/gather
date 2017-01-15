@@ -31,6 +31,10 @@ class Household < ActiveRecord::Base
 
   normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
 
+  def adults
+    users.select(&:adult?)
+  end
+
   def account_for(community)
     @accounts_by_community ||= {}
     @accounts_by_community[community] ||= accounts.find_by(community_id: community.id)

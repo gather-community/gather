@@ -9,8 +9,4 @@ class People::EmergencyContact < ActiveRecord::Base
   def name_relationship
     "#{name} (#{relationship})"
   end
-
-  def to_s
-    "#{name_relationship} - #{location}, " << (phones.map(&:formatted) << email).compact.join(", ")
-  end
 end

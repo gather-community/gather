@@ -7,24 +7,19 @@
   <% end %>
 <% end %>
 
-<ul>
-  <li>Members: <%= @household.users.none? ? "[None]" :
-    @household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></li>
-  <li>Community: <%= @household.community_name %></li>
-  <li>Unit Number: <%= @household.unit_num %></li>
-  <li>Garage Number(s): <%= @household.garage_nums %></li>
-  <li>Vehicles:
-    <% if @household.vehicles.any? %>
-      <ul><%= @household.vehicles.map { |v| content_tag(:li, v) }.reduce(:<<) %></ul>
-    <% else %>
-      [None]
-    <% end %>
-  </li>
-  <li>Emergency Contacts:
-    <% if @household.emergency_contacts.any? %>
-      <ul><%= @household.emergency_contacts.map { |v| content_tag(:li, v) }.reduce(:<<) %></ul>
-    <% else %>
-      [None]
-    <% end %>
-  </li>
-</ul>
+<div class="row">
+  <div class="col-md-9 col-sm-12">
+    <div class="row">
+      <div class="col-sm-4 photos <%= @household.users.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
+        <% @household.users.each do |user| -%><%=
+          image_tag(user.photo.url(:medium), class: "photo") -%><% end %>
+      </div>
+      <div class="col-sm-8">
+        <table class="key-value">
+          <%= render("households/unit_community", household: @household) %>
+          <%= render("households/attribs", household: @household, context: :household) %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

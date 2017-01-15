@@ -1,0 +1,10 @@
+<tr>
+  <td>Unit</td>
+  <td><%= "##{household.unit_num}" || "[None]"%></td>
+</tr>
+<% if multi_community? %>
+  <tr>
+    <td>Community</td>
+    <td><%= household.community_name %></td>
+  </tr>
+<% end %>

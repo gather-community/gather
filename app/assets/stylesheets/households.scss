@@ -1,0 +1,30 @@
+.households.action-show {
+  .photos {
+    margin-bottom: 10px;
+
+    img.photo {
+      display: inline-block;
+      margin: 0;
+    }
+
+    &.two-or-less img.photo {
+      width: 100%;
+    }
+
+    &.three-or-more img.photo {
+      width: 50%;
+    }
+  }
+}
+
+
+// Shared styles for user and household shared attribs.
+.users.action-show, .households.action-show {
+  .emergency-contact {
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}

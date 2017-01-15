@@ -5,17 +5,6 @@ describe UserPolicy do
 
   describe "permissions" do
 
-    shared_examples_for "admins only" do
-      it "grants access to admins" do
-        expect(subject).to permit(admin, user)
-      end
-
-      it "denies access to regular users" do
-        user2 = build(:user)
-        expect(subject).not_to permit(user, user2)
-      end
-    end
-
     permissions :index? do
       it "grants access to active users" do
         expect(subject).to permit(user, User)
@@ -55,6 +44,7 @@ describe UserPolicy do
     end
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
+      let(:record) { other_user }
       it_behaves_like "admins only"
 
       it "denies access to self" do
@@ -87,6 +77,7 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update? do
+      let(:record) { other_user }
       it_behaves_like "admins only"
 
       it "grants access to self" do
@@ -124,6 +115,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
+        let(:record) { other_user }
         it_behaves_like "admins only"
       end
     end

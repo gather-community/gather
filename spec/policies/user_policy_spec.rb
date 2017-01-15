@@ -180,7 +180,7 @@ describe UserPolicy do
     end
 
     context "admin from other community" do
-      let(:user) { outside_admin }
+      let(:user) { admin_in_cluster }
       it_behaves_like "basic attribs"
     end
 

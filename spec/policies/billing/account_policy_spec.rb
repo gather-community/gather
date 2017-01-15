@@ -37,11 +37,11 @@ module Billing
         end
 
         it "denies access to admins from outside community" do
-          expect(subject).not_to permit(outside_admin, account)
+          expect(subject).not_to permit(admin_in_cluster, account)
         end
 
         it "denies access to billers from outside community" do
-          expect(subject).not_to permit(outside_biller, account)
+          expect(subject).not_to permit(biller_in_cluster, account)
         end
 
         it "denies access to regular user" do

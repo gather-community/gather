@@ -16,11 +16,11 @@ describe MealPolicy do
       end
 
       it "grants access to assignees even if not invited" do
-        expect(subject).to permit(outside_admin, Meal.new(assignments: [Assignment.new(user: outside_admin)]))
+        expect(subject).to permit(admin_in_cluster, Meal.new(assignments: [Assignment.new(user: admin_in_cluster)]))
       end
 
       it "grants access to those signed up even if not invited" do
-        expect(subject).to permit(outside_admin, Meal.new(signups: [Signup.new(household: outside_admin.household)]))
+        expect(subject).to permit(admin_in_cluster, Meal.new(signups: [Signup.new(household: admin_in_cluster.household)]))
       end
 
       it "denies access to plain others" do
@@ -44,11 +44,11 @@ describe MealPolicy do
       end
 
       it "grants access to assignees even if not in host community" do
-        expect(subject).to permit(outside_admin, Meal.new(assignments: [Assignment.new(user: outside_admin)]))
+        expect(subject).to permit(admin_in_cluster, Meal.new(assignments: [Assignment.new(user: admin_in_cluster)]))
       end
 
       it "denies access to those in other communities" do
-        expect(subject).not_to permit(outside_admin, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
       end
     end
 
@@ -62,7 +62,7 @@ describe MealPolicy do
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(outside_admin, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
       end
     end
 
@@ -82,7 +82,7 @@ describe MealPolicy do
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(outside_admin, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
       end
     end
 
@@ -104,11 +104,11 @@ describe MealPolicy do
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(outside_admin, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
       end
 
       it "denies access to billers in other communities" do
-        expect(subject).not_to permit(outside_biller, Meal.new(host_community: community))
+        expect(subject).not_to permit(biller_in_cluster, Meal.new(host_community: community))
       end
 
       it "denies access to regular users" do
@@ -179,7 +179,7 @@ describe MealPolicy do
     end
 
     context "outside admin" do
-      let(:user) { outside_admin }
+      let(:user) { admin_in_cluster }
 
       it "should have only basic attribs" do
         expect(subject).to contain_exactly(*assign_attribs)

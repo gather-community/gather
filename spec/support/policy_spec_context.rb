@@ -7,7 +7,7 @@ shared_context "policy objs" do
   let(:communityX) { build(:community, name: "Community X", cluster: clusterB) }
   let(:user) { new_user_from(community) }
   let(:other_user) { new_user_from(community) }
-  let(:cluster_user) { new_user_from(communityB) }
+  let(:user_in_cluster) { new_user_from(communityB) }
   let(:outside_user) { new_user_from(communityX) }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.now) }
   let(:household) { build(:household, users: [user], community: community) }
@@ -20,10 +20,10 @@ shared_context "policy objs" do
   let(:admin) { new_user_from(community) }
   let(:cluster_admin) { new_user_from(community) }
   let(:super_admin) { new_user_from(community) }
-  let(:outside_admin) { new_user_from(communityB) }
+  let(:admin_in_cluster) { new_user_from(communityB) }
 
   let(:biller) { new_user_from(community) }
-  let(:outside_biller) { new_user_from(communityB) }
+  let(:biller_in_cluster) { new_user_from(communityB) }
 
   before do
     allow(user).to receive(:has_role?) { false }
@@ -32,8 +32,8 @@ shared_context "policy objs" do
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(biller).to receive(:has_role?) { |r| r == :biller }
-    allow(outside_admin).to receive(:has_role?) { |r| r == :admin }
-    allow(outside_biller).to receive(:has_role?) { |r| r == :biller }
+    allow(admin_in_cluster).to receive(:has_role?) { |r| r == :admin }
+    allow(biller_in_cluster).to receive(:has_role?) { |r| r == :biller }
   end
 
   # Saves commonly used objects from above. This is not done by default
@@ -52,7 +52,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to users from other communities" do
-      expect(subject).not_to permit(cluster_user, record)
+      expect(subject).not_to permit(user_in_cluster, record)
     end
   end
 
@@ -62,7 +62,7 @@ shared_context "policy objs" do
     end
 
     it "grants access to users from other communities in cluster" do
-      expect(subject).to permit(cluster_user, record)
+      expect(subject).to permit(user_in_cluster, record)
     end
 
     it "denies access from users from communities outside cluster" do
@@ -76,7 +76,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to admins in other community in cluster" do
-      expect(subject).not_to permit(outside_admin, record)
+      expect(subject).not_to permit(admin_in_cluster, record)
     end
 
     it "denies access to regular users" do

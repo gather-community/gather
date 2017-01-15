@@ -73,6 +73,28 @@ module LensHelper
       )
     end
 
+    def life_stage_field(field)
+      opts = %w(adult child)
+      opt_key = "simple_form.options.user.life_stage"
+      select_tag("life_stage",
+        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:life_stage]),
+        prompt: I18n.t("#{opt_key}.any"),
+        class: "form-control",
+        onchange: "this.form.submit();"
+      )
+    end
+
+    def user_sort_field(field)
+      opts = %w(unit)
+      opt_key = "simple_form.options.user.sort"
+      select_tag("user_sort",
+        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_sort]),
+        prompt: I18n.t("#{opt_key}.name"),
+        class: "form-control",
+        onchange: "this.form.submit();"
+      )
+    end
+
     def search_field(field)
       text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
     end

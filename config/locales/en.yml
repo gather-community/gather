@@ -162,6 +162,13 @@ en:
           email: "Email"
           text: "Text"
           phone: "Phone"
+        life_stage:
+          any: "Adults + Children"
+          adult: "Adults"
+          child: "Children"
+        sort:
+          name: "By Name"
+          unit: "By Unit"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -309,4 +316,3 @@ en:
       home: "h"
       work: "w"
       mobile: "m"
-      

@@ -7,17 +7,23 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
-        prepare_lens({community: {required: true}}, :search)
+        prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
         load_community_from_lens_with_default
         load_communities_in_cluster
         @users = @users.includes(household: :community)
-        if lens[:search].present?
-          @users = @users.matching(lens[:search])
-        end
         @users = @users.in_community(@community)
-        @users = @users.by_active_and_name.page(params[:page]).per(36)
+        @users = @users.matching(lens[:search]) if lens[:search].present?
+        @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
+        if lens[:user_sort].present?
+          @users = @users.by_active.sorted_by(lens[:user_sort])
+        else
+          @users = @users.by_active.by_name
+        end
+        @users = @users.page(params[:page]).per(36)
         @allowed_community_changes = policy(Household).allowed_community_changes
       end
+
+      # For select2 user lookups
       format.json do
         @users = @users.matching(params[:search]).active
         @users = @users.can_be_guardian if params[:context] == "guardian"

@@ -26,6 +26,11 @@ div.title-and-buttons {
         width: 150px;
       }
 
+      select#community { width: 135px; }
+      select#time { width: 100px; }
+      select#life_stage { width: 140px; }
+      select#user_sort { width: 90px; }
+
       a.clear {
         color: #666;
         display: inline-block;

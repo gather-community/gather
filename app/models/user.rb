@@ -18,10 +18,12 @@ class User < ActiveRecord::Base
   scope :active, -> { where(deactivated_at: nil) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_unit, -> { joins(:household).order("households.unit_num") }
+  scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
+  scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> {
     order("CASE WHEN child = 't' THEN 1 ELSE 0 END, LOWER(first_name), LOWER(last_name)") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
-  scope :by_active_and_name, -> { order("users.deactivated_at IS NOT NULL").by_name }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
@@ -29,6 +31,7 @@ class User < ActiveRecord::Base
   scope :never_logged_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }
+  scope :in_life_stage, ->(s) { s == "any" ? all : where(child: s == "child") }
 
   delegate :name, :full_name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, to: :household

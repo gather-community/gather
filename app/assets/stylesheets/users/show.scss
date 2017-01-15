@@ -1,4 +1,5 @@
-.users.action-show, .households.action-show {
+// NOTE: Some shared styles are located in household style files.
+.users.action-show {
   h4 {
     margin-top: 20px;
   }
@@ -26,13 +27,5 @@
 
   a.household {
     color: $gray-text;
-  }
-
-  .emergency-contact {
-    margin-bottom: 10px;
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
   }
 }

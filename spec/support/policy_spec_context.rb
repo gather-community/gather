@@ -71,8 +71,12 @@ shared_context "policy objs" do
   end
 
   shared_examples_for "admins only" do
-    it "grants access to admins" do
+    it "grants access to admins in community" do
       expect(subject).to permit(admin, record)
+    end
+
+    it "denies access to admins in other community in cluster" do
+      expect(subject).not_to permit(outside_admin, record)
     end
 
     it "denies access to regular users" do

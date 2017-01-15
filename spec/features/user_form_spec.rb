@@ -65,7 +65,7 @@ feature "user form" do
       click_on("Update User")
 
       expect_validation_success
-      expect(page).to have_css("li", text: "Household: Potatoheads")
+      expect(page).to have_css(%Q{a.household[href$="/households/#{household2.id}"]})
     end
 
     scenario "deleting photo", js: true do

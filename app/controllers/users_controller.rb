@@ -1,13 +1,12 @@
 class UsersController < ApplicationController
   include Lensable
 
-  before_action -> { nav_context(:people) }
+  before_action -> { nav_context(:people, :directory) }
 
   def index
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
-        nav_context(:people, :directory)
         prepare_lens({community: {required: true}}, :search)
         load_community_from_lens_with_default
         load_communities_in_cluster

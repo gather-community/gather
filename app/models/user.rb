@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   attr_accessor :photo_destroy
 
   normalize_attributes :email, :google_email, with: :email
-  normalize_attributes :first_name, :last_name
+  normalize_attributes :first_name, :last_name, :preferred_contact
 
   handle_phone_types :mobile, :home, :work # In order of general preference
 

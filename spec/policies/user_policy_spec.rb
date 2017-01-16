@@ -6,67 +6,79 @@ describe UserPolicy do
   describe "permissions" do
     let(:record) { other_user }
 
-    shared_examples_for "own community and cluster community adults" do
-      it "lets user perform action on adults in same community" do
+    shared_examples_for "permits action on own community" do
+      it "permits action on adults in same community" do
         expect(subject).to permit(actor, other_user)
       end
 
-      it "lets user perform action on children in same community" do
+      it "permits action on children in same community" do
         expect(subject).to permit(actor, other_child)
       end
 
-      it "lets user perform action on adults in other community in cluster" do
-        expect(subject).to permit(actor, user_in_cluster)
-      end
-
-      it "lets user perform action on inactive users" do
+      it "permits action on inactive users" do
         expect(subject).to permit(actor, inactive_user)
       end
     end
 
-    shared_examples_for "cluster access except non-community children" do
-      it_behaves_like "own community and cluster community adults"
+    shared_examples_for "permits action on own community and cluster community adults" do
+      it_behaves_like "permits action on own community"
 
-      it "doesn't let user perform action on children in other community in cluster" do
+      it "permits action on adults in other community in cluster" do
+        expect(subject).to permit(actor, user_in_cluster)
+      end
+    end
+
+    shared_examples_for "permits action on own community users but denies on all others" do
+      it_behaves_like "permits action on own community"
+
+      it "denies action on users in other community in cluster" do
+        expect(subject).not_to permit(actor, user_in_cluster)
         expect(subject).not_to permit(actor, child_in_cluster)
       end
 
-      it "doesn't let user perform action on users outside cluster" do
+      it "denies action on users outside cluster" do
         expect(subject).not_to permit(actor, outside_user)
         expect(subject).not_to permit(actor, outside_child)
       end
     end
 
-    permissions :index? do
-      it "grants access to active users" do
-        expect(subject).to permit(user, User)
+    shared_examples_for "permits action on cluster users except non-community children, denies on others" do
+      it_behaves_like "permits action on own community and cluster community adults"
+
+      it "denies action on children in other community in cluster" do
+        expect(subject).not_to permit(actor, child_in_cluster)
       end
 
-      it "denies access to inactive users" do
-        expect(subject).not_to permit(inactive_user, User)
+      it "denies action on users outside cluster" do
+        expect(subject).not_to permit(actor, outside_user)
+        expect(subject).not_to permit(actor, outside_child)
       end
     end
 
-    permissions :show? do
-      context "for normal user" do
-        let(:actor) { user }
-        it_behaves_like "cluster access except non-community children"
-      end
+    shared_examples_for "inactive users" do
+      context "for inactive user" do
+        let(:actor) { inactive_user }
 
-      context "for admin" do
-        let(:actor) { admin }
-        it_behaves_like "cluster access except non-community children"
-      end
+        it "denies action on other users" do
+          expect(subject).not_to permit(actor, other_user)
+        end
 
+        it "permits action on self" do
+          expect(subject).to permit(actor, actor)
+        end
+      end
+    end
+
+    shared_examples_for "cluster and super admins" do
       context "for cluster admin" do
         let(:actor) { cluster_admin }
-        it_behaves_like "own community and cluster community adults"
+        it_behaves_like "permits action on own community and cluster community adults"
 
-        it "lets user view children in other community in cluster" do
+        it "permits action on children in other community in cluster" do
           expect(subject).to permit(actor, child_in_cluster)
         end
 
-        it "doesn't let user view users outside cluster" do
+        it "denies action on users outside cluster" do
           expect(subject).not_to permit(actor, outside_user)
           expect(subject).not_to permit(actor, outside_child)
         end
@@ -74,27 +86,57 @@ describe UserPolicy do
 
       context "for super admin" do
         let(:actor) { super_admin }
-        it_behaves_like "own community and cluster community adults"
+        it_behaves_like "permits action on own community and cluster community adults"
 
-        it "lets user view children in other community in cluster" do
+        it "permits action on children in other community in cluster" do
           expect(subject).to permit(actor, child_in_cluster)
         end
 
-        it "lets user view users outside cluster" do
+        it "permits action on users outside cluster" do
           expect(subject).to permit(actor, outside_user)
           expect(subject).to permit(actor, outside_child)
         end
       end
+    end
 
-      context "for inactive user" do
-        it "doesn't let user view other users" do
-          expect(subject).not_to permit(inactive_user, other_user)
-        end
-
-        it "lets user view self" do
-          expect(subject).to permit(inactive_user, inactive_user)
-        end
+    permissions :index? do
+      it "permits action on active users" do
+        expect(subject).to permit(user, User)
       end
+
+      it "denies action on inactive users" do
+        expect(subject).not_to permit(inactive_user, User)
+      end
+    end
+
+    permissions :show? do
+      context "for normal user" do
+        let(:actor) { user }
+        it_behaves_like "permits action on cluster users except non-community children, denies on others"
+      end
+
+      context "for admin" do
+        let(:actor) { admin }
+        it_behaves_like "permits action on cluster users except non-community children, denies on others"
+      end
+
+      it_behaves_like "cluster and super admins"
+      it_behaves_like "inactive users"
+    end
+
+    permissions :show_personal_info? do
+      context "for normal user" do
+        let(:actor) { user }
+        it_behaves_like "permits action on own community users but denies on all others"
+      end
+
+      context "for admin" do
+        let(:actor) { admin }
+        it_behaves_like "permits action on own community users but denies on all others"
+      end
+
+      it_behaves_like "cluster and super admins"
+      it_behaves_like "inactive users"
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
@@ -104,31 +146,31 @@ describe UserPolicy do
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
       it_behaves_like "admins only"
 
-      it "denies access to self" do
+      it "denies action on self" do
         expect(subject).not_to permit(user, user)
       end
 
-      it "denies access to guardians for own children" do
+      it "denies action on guardians for own children" do
         expect(subject).not_to permit(guardian, child)
       end
     end
 
     permissions :cluster_adminify? do
-      it "grants access to cluster admin and above" do
+      it "permits action on cluster admin and above" do
         expect(subject).to permit(cluster_admin, user)
       end
 
-      it "denies access to regular admins" do
+      it "denies action on regular admins" do
         expect(subject).not_to permit(admin, user)
       end
     end
 
     permissions :super_adminify? do
-      it "grants access to super admin" do
+      it "permits action on super admin" do
         expect(subject).to permit(super_admin, user)
       end
 
-      it "denies access to cluster admins" do
+      it "denies action on cluster admins" do
         expect(subject).not_to permit(cluster_admin, user)
       end
     end
@@ -136,7 +178,7 @@ describe UserPolicy do
     permissions :edit?, :update? do
       it_behaves_like "admins only"
 
-      it "grants access to self" do
+      it "permits action on self" do
         expect(subject).to permit(user, user)
       end
 
@@ -152,14 +194,14 @@ describe UserPolicy do
         expect(subject).not_to permit(child, guardian)
       end
 
-      it "grants access to self for inactive user" do
+      it "permits action on self for inactive user" do
         expect(subject).to permit(inactive_user, inactive_user)
       end
     end
 
     permissions :destroy? do
       shared_examples_for "full denial" do
-        it "denies access to admins" do
+        it "denies action on admins" do
           expect(subject).not_to permit(admin, user)
         end
       end

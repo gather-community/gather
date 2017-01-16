@@ -34,7 +34,9 @@
         <td class="col-md-1">
           <%= household.unit_num.present? ? household.unit_num : "" %>
         </td>
-        <td class="col-md-3"><%= household.users.map{ |u| user_link(u) }.reduce(&sep(", ")) %></td>
+        <td class="col-md-3">
+          <%= household.users.select { |u| policy(u).show? }.map{ |u| user_link(u) }.reduce(&sep(", ")) %>
+        </td>
         <td class="col-md-1">
           <div class="action-icons">
             <% if policy(household).update? %>

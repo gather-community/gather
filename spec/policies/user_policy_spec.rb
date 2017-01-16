@@ -148,7 +148,7 @@ describe UserPolicy do
       context "for normal user with flag set to hide on target" do
         let(:actor) { user }
         before do
-          user_in_cluster.privacy_settings[:hide_photo_from_cluster] = true
+          user_in_cluster.privacy_settings["hide_photo_from_cluster"] = true
         end
         it_behaves_like "permits action on own community users but denies on all others"
       end

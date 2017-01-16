@@ -38,6 +38,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     authorize @user
+    @household_members = policy_scope(@user.household.users)
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
   end
 

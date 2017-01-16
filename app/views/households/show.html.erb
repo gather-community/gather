@@ -10,14 +10,16 @@
 <div class="row">
   <div class="col-md-9 col-sm-12">
     <div class="row">
-      <div class="col-sm-4 photos <%= @household.users.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
-        <% @household.users.each do |user| -%><%=
-          image_tag(user.photo.url(:medium), class: "photo") -%><% end %>
+      <div class="col-sm-4 photos <%= @members.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
+        <% @members.each do |user| %><%= user_photo_if_permitted(user, :medium) %><% end %>
       </div>
       <div class="col-sm-8">
         <table class="key-value">
           <%= render("households/unit_community", household: @household) %>
-          <%= render("households/attribs", household: @household, context: :household) %>
+          <%= render("households/attribs",
+                household: @household,
+                members: @members,
+                context: :household) %>
         </table>
       </div>
     </div>

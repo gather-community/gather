@@ -31,6 +31,7 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Household.find(params[:id])
+    @members = policy_scope(@household.users)
     authorize @household
   end
 

@@ -10,7 +10,7 @@
   <div class="col-md-9 col-sm-12">
     <div class="row">
       <div class="col-sm-4">
-        <%= image_tag(@user.photo.url(:medium), class: "photo") %>
+        <%= user_photo_if_permitted(@user, :medium) %>
         <% @user.roles.each do |role| %>
           <div class="role"><%= icon_tag("star-o") %> <%= t("roles.#{role.name}") %></div>
         <% end %>
@@ -38,19 +38,25 @@
               <td><%= t("simple_form.options.user.preferred_contact.#{@user.preferred_contact}") %></td>
             </tr>
           <% end %>
-          <% if @user.birthdate %>
-            <tr>
-              <td>Birthday</td>
-              <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
-            </tr>
+          <% if policy(@user).show_personal_info? %>
+            <% if @user.birthdate %>
+              <tr>
+                <td>Birthday</td>
+                <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
+              </tr>
+            <% end %>
+            <% if @user.joined_on %>
+              <tr>
+                <td>Join Date</td>
+                <td><%= l(@user.joined_on, format: :date_full) %></td>
+              </tr>
+            <% end %>
           <% end %>
-          <% if @user.joined_on %>
-            <tr>
-              <td>Join Date</td>
-              <td><%= l(@user.joined_on, format: :date_full) %></td>
-            </tr>
-          <% end %>
-          <%= render("households/attribs", household: @user.household, context: :user, child: @user.child?) %>
+          <%= render("households/attribs",
+                household: @user.household,
+                members: @household_members,
+                context: :user,
+                child: @user.child?) %>
         </table>
       </div>
     </div>

@@ -80,7 +80,7 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "admins only" do
+  shared_examples_for "permits action by admins and denies on all others" do
     it "grants access to admins in community" do
       expect(subject).to permit(admin, record)
     end

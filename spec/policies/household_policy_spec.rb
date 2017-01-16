@@ -7,16 +7,18 @@ describe HouseholdPolicy do
     let(:record) { household }
 
     shared_examples_for "permits action by admins and members of household" do
+      # We don't need to check cluster admins/super admins here or in every other place where
+      # admin permissions are tested. We are trusting the active_admin? method which is tested elsewhere.
+      it "grants access to admins" do
+        expect(subject).to permit(admin, record)
+      end
+
       it "grants access for regular users to own household" do
         expect(subject).to permit(user, user.household)
       end
 
-      it "denies access for regular users to other households" do
+      it "denies access to regular users to other households" do
         expect(subject).not_to permit(user, Household.new)
-      end
-
-      it "grants access to admins" do
-        expect(subject).to permit(admin, user.household)
       end
     end
 
@@ -63,7 +65,7 @@ describe HouseholdPolicy do
     end
 
     permissions :new?, :create?, :activate?, :deactivate?, :administer? do
-      it_behaves_like "admins only"
+      it_behaves_like "permits action by admins and denies on all others"
     end
 
     permissions :edit?, :update? do
@@ -118,7 +120,7 @@ describe HouseholdPolicy do
 
       context "without any of the above" do
         before { household.users = [] }
-        it_behaves_like "admins only"
+        it_behaves_like "permits action by admins and denies on all others"
       end
     end
   end

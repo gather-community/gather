@@ -158,11 +158,11 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it_behaves_like "admins only"
+      it_behaves_like "permits action by admins and denies on all others"
     end
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
-      it_behaves_like "admins only"
+      it_behaves_like "permits action by admins and denies on all others"
 
       it "denies action on self" do
         expect(subject).not_to permit(user, user)
@@ -194,7 +194,7 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like "admins only"
+      it_behaves_like "permits action by admins and denies on all others"
 
       it "permits action on self" do
         expect(subject).to permit(user, user)
@@ -231,7 +231,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "admins only"
+        it_behaves_like "permits action by admins and denies on all others"
       end
     end
   end

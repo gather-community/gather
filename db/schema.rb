@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170115161911) do
+ActiveRecord::Schema.define(version: 20170116023741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -406,6 +406,7 @@ ActiveRecord::Schema.define(version: 20170115161911) do
     t.integer "photo_file_size"
     t.datetime "photo_updated_at"
     t.string "preferred_contact"
+    t.jsonb "privacy_settings", default: {}, null: false
     t.string "provider"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"

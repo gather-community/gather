@@ -32,6 +32,13 @@ class UserPolicy < ApplicationPolicy
     self? || active_admin? || active_in_community?
   end
 
+  def show_photo?
+    self? || active_admin? || (active? && (
+      own_community_record? ||
+      (record.adult? && own_cluster_record? && !record.privacy_settings[:hide_photo_from_cluster])
+    ))
+  end
+
   def create?
     active_admin?
   end

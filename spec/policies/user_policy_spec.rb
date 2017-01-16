@@ -139,6 +139,24 @@ describe UserPolicy do
       it_behaves_like "inactive users"
     end
 
+    permissions :show_photo? do
+      context "for normal user without flag set on target" do
+        let(:actor) { user }
+        it_behaves_like "permits action on cluster users except non-community children, denies on others"
+      end
+
+      context "for normal user with flag set to hide on target" do
+        let(:actor) { user }
+        before do
+          user_in_cluster.privacy_settings[:hide_photo_from_cluster] = true
+        end
+        it_behaves_like "permits action on own community users but denies on all others"
+      end
+
+      it_behaves_like "cluster and super admins"
+      it_behaves_like "inactive users"
+    end
+
     permissions :new?, :create?, :invite?, :send_invites? do
       it_behaves_like "admins only"
     end

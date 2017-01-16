@@ -22,7 +22,7 @@ shared_context "policy objs" do
     guardians: [user_in_cluster], label: "child_in_cluster") }
   let(:outside_child) { new_user_from(communityX, child: true,
     guardians: [outside_user], label: "outside_child") }
-  let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user], 
+  let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user],
     deactivated_at: Time.now, label: "inactive_child") }
 
   let(:admin) { new_user_from(community, label: "admin") }
@@ -73,7 +73,7 @@ shared_context "policy objs" do
       expect(subject).to permit(user_in_cluster, record)
     end
 
-    it "denies access from users from communities outside cluster" do
+    it "denies access to users from communities outside cluster" do
       expect(subject).not_to permit(outside_user, record)
     end
   end

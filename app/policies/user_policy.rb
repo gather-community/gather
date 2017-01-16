@@ -24,7 +24,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    active_in_cluster? || self?
+    self? || active_admin? ||
+      (active? && ((record.adult? && own_cluster_record?) || own_community_record?))
   end
 
   def create?

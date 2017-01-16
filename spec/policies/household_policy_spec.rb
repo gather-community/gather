@@ -6,7 +6,7 @@ describe HouseholdPolicy do
   describe "permissions" do
     let(:record) { household }
 
-    shared_examples_for "admins and members of household" do
+    shared_examples_for "permits action by admins and members of household" do
       it "grants access for regular users to own household" do
         expect(subject).to permit(user, user.household)
       end
@@ -20,8 +20,46 @@ describe HouseholdPolicy do
       end
     end
 
+    shared_examples_for "permits action on own community" do
+      it "permits action on households in same community" do
+        expect(subject).to permit(user, other_user.household)
+      end
+
+      it "permits action on inactive households" do
+        expect(subject).to permit(user, inactive_household)
+      end
+    end
+
+    shared_examples_for "permits action on own cluster but not outside" do
+      it_behaves_like "permits action on own community"
+
+      it "permits action on households in other community in cluster" do
+        expect(subject).to permit(user, user_in_cluster.household)
+      end
+
+      it "denies action on households outside cluster" do
+        expect(subject).not_to permit(user, outside_user.household)
+      end
+    end
+
+    shared_examples_for "permits action on own community users but denies on all others" do
+      it_behaves_like "permits action on own community"
+
+      it "denies action on households in other community in cluster" do
+        expect(subject).not_to permit(user, user_in_cluster.household)
+      end
+
+      it "denies action on households outside cluster" do
+        expect(subject).not_to permit(user, outside_user.household)
+      end
+    end
+
     permissions :index?, :show? do
-      it_behaves_like "grants access to users in cluster"
+      it_behaves_like "permits action on own cluster but not outside"
+    end
+
+    permissions :show_personal_info? do
+      it_behaves_like "permits action on own community users but denies on all others"
     end
 
     permissions :new?, :create?, :activate?, :deactivate?, :administer? do
@@ -29,7 +67,7 @@ describe HouseholdPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like "admins and members of household"
+      it_behaves_like "permits action by admins and members of household"
 
       it "denies access to billers" do
         expect(subject).not_to permit(biller, user.household)
@@ -37,7 +75,7 @@ describe HouseholdPolicy do
     end
 
     permissions :accounts? do
-      it_behaves_like "admins and members of household"
+      it_behaves_like "permits action by admins and members of household"
 
       it "grants access to billers" do
         expect(subject).to permit(biller, user.household)
@@ -87,7 +125,7 @@ describe HouseholdPolicy do
 
   describe "allowed_community_changes" do
     before do
-      save_policy_objects!(cluster, clusterB, community, communityB, communityX, 
+      save_policy_objects!(cluster, clusterB, community, communityB, communityX,
         user, admin, cluster_admin, super_admin)
     end
 

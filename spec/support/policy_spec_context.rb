@@ -13,6 +13,8 @@ shared_context "policy objs" do
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.now, label: "inactive_user") }
 
   let(:household) { build(:household, users: [user], community: community) }
+  let(:inactive_household) { build(:household, users: [inactive_user],
+    deactivated_at: Time.now, community: community) }
   let(:account) { build(:account, household: build(:household, community: community)) }
 
   let(:guardian) { user }

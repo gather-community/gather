@@ -27,6 +27,10 @@ class HouseholdPolicy < ApplicationPolicy
     active_in_cluster?
   end
 
+  def show_personal_info?
+    active_in_community?
+  end
+
   def create?
     active_admin?
   end

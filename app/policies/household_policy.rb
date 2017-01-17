@@ -24,11 +24,11 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def show?
-    active_in_cluster?
+    active_in_cluster? || active_admin?
   end
 
   def show_personal_info?
-    active_in_community?
+    active_in_community? || active_admin?
   end
 
   def create?

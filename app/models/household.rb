@@ -31,6 +31,10 @@ class Household < ActiveRecord::Base
 
   normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
 
+  def other_cluster_communities
+    cluster.communities - [community]
+  end
+
   def adults
     users.select(&:adult?)
   end

@@ -15,6 +15,7 @@ en:
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
         up_guardianships: "Parents/Guardians"
+        privacy_settings: "Privacy Settings"
       household:
         name: "Household Name"
         community_id: "Community"

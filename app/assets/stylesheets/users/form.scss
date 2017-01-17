@@ -13,6 +13,12 @@
     color: $gray-text;
   }
 
+  .user_privacy_settings {
+    label {
+      margin-bottom: 0;
+    }
+  }
+
   #household-fields {
     background-color: $fainter-gray;
     padding: 15px;

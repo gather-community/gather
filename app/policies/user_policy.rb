@@ -95,6 +95,7 @@ class UserPolicy < ApplicationPolicy
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on,
       :preferred_contact, :household_by_id]
+    permitted << {privacy_settings: [:hide_photo_from_cluster]}
     permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
 
     # We allow household_attributes.id through here even though changing the household ID is very sensitive

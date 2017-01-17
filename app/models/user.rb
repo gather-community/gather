@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   scope :in_life_stage, ->(s) { s == "any" ? all : where(child: s == "child") }
 
   delegate :name, :full_name, to: :household, prefix: true
-  delegate :account_for, :credit_exceeded?, to: :household
+  delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv, :unit_num, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :cluster, :cluster_id, to: :community, allow_nil: true
@@ -115,6 +115,14 @@ class User < ActiveRecord::Base
 
   def birthdate_wrapper
     @birthdate_wrapper ||= People::Birthdate.new(self)
+  end
+
+  def privacy_settings=(settings)
+    settings = {} if settings.blank?
+    settings.each do |k,v|
+      settings[k] = v == "1" || v == "true" || v == true
+    end
+    write_attribute(:privacy_settings, settings)
   end
 
   def any_assignments?

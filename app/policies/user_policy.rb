@@ -88,6 +88,11 @@ class UserPolicy < ApplicationPolicy
     active? && user.has_role?(:super_admin)
   end
 
+  # Returns all user records from the given set that are showable for the current user.
+  def filter(users)
+    users.select { |u| self.class.new(user, u).show? }
+  end
+
   def permitted_attributes
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.

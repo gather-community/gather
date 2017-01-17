@@ -13,7 +13,8 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  helper_method :home_path, :current_community, :multi_community?, :app_version
+  helper_method :home_path, :current_community, :multi_community?, :app_version,
+    :showable_users_and_children_in
 
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
 
@@ -73,6 +74,11 @@ class ApplicationController < ActionController::Base
 
   def app_version
     @app_version ||= File.read(Rails.root.join("VERSION"))
+  end
+
+  # Users and children related to the given household that the UserPolicy says we can show.
+  def showable_users_and_children_in(household)
+    UserPolicy.new(current_user, User).filter(household.users_and_children)
   end
 
   private

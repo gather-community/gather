@@ -9,7 +9,7 @@ class HouseholdsController < ApplicationController
     respond_to do |format|
       format.html do
         prepare_lens({community: {required: true}}, :search)
-        @households = @households.includes(:users)
+        @households = @households.includes(users: :children)
         if lens[:search].present?
           @households = @households.matching(lens[:search])
         end
@@ -31,7 +31,7 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Household.find(params[:id])
-    @members = policy_scope(@household.users)
+    @members = showable_users_and_children_in(@household)
     authorize @household
   end
 

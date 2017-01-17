@@ -8,7 +8,7 @@ class HouseholdsController < ApplicationController
     @households = policy_scope(Household)
     respond_to do |format|
       format.html do
-        prepare_lens(:community, :search)
+        prepare_lens({community: {required: true}}, :search)
         @households = @households.includes(:users)
         if lens[:search].present?
           @households = @households.matching(lens[:search])

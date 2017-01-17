@@ -70,6 +70,10 @@ class Lens
     fields.reject(&:required?)
   end
 
+  def remove_field(name)
+    fields.reject! { |f| f.name == name }
+  end
+
   def query_string_to_clear
     optional_fields.map { |f| "#{f.to_s}=" }.join("&")
   end

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
         prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
         load_community_from_lens_with_default
         load_communities_in_cluster
+        lens.remove_field(:life_stage) unless policy(User).index_children_for_community?(@community)
         @users = @users.includes(household: :community)
         @users = @users.in_community(@community)
         @users = @users.matching(lens[:search]) if lens[:search].present?

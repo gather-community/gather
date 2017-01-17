@@ -23,6 +23,10 @@ class UserPolicy < ApplicationPolicy
     active?
   end
 
+  def index_children_for_community?(community)
+    community == user.community
+  end
+
   def show?
     self? || active_admin? ||
       (active? && ((record.adult? && own_cluster_record?) || own_community_record?))

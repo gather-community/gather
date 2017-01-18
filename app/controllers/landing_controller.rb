@@ -31,4 +31,8 @@ class LandingController < ApplicationController
       render(layout: false)
     end
   end
+
+  def privacy_policy
+    skip_authorization
+  end
 end

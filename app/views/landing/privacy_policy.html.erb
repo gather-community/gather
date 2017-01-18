@@ -1,0 +1,3 @@
+<% content_for(:title){ "Privacy Policy" } %>
+
+<%= safe_render_markdown(File.read(Rails.root.join("config/locales/en/privacy_policy.md"))) %>

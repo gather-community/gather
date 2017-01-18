@@ -10,11 +10,11 @@ module UsersHelper
   end
 
   def phone_link(phone, options = {})
-    link_to(phone.formatted(options), "tel:#{phone.raw}")
+    phone.blank? ? "" : link_to(phone.formatted(options), "tel:#{phone.raw}")
   end
 
   def email_link(email)
-    link_to(email, "mailto:#{email}")
+    email.blank? ? "" : link_to(email, "mailto:#{email}")
   end
 
   def user_photo_if_permitted(user, format)

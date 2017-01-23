@@ -26,6 +26,10 @@ module Phoneable
     phone_types.map { |k| phone(k) }.reject(&:blank?)
   end
 
+  def phone_list
+    phones.map { |p| p.formatted(kind_abbrv: true) }.join(", ")
+  end
+
   def no_phones?
     phone_types.all? { |t| send("#{t}_phone").nil? }
   end

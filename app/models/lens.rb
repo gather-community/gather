@@ -2,6 +2,8 @@
 class Lens
   attr_accessor :fields, :params, :values
 
+  LENS_VERSION = 2
+
   class Field
     attr_reader :name, :options
 
@@ -34,8 +36,13 @@ class Lens
     add_fields(fields)
     fields = self.fields
 
-    # Prepare the store.
     store = (context.session[:lenses] ||= {})
+
+    # Expire old lens if version has been upgraded.
+    if (store["version"] || 1) < LENS_VERSION
+      store = context.session[:lenses] = {"version" => LENS_VERSION}
+    end
+
     store[context.controller_name] ||= {}
     self.values = (store[context.controller_name][context.action_name] ||= {})
 

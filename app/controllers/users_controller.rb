@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action -> { nav_context(:people, :directory) }
 
   def index
+    authorize User
     @users = policy_scope(User)
     respond_to do |format|
       format.html do

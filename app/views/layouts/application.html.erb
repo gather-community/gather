@@ -67,10 +67,10 @@
       </div>
     </nav>
 
-    <% if @context[:subsection] %>
+    <% if @context[:subsection] && (items = subnav_items).any? %>
       <nav id="subnav" class="hidden-xs">
         <ul class="nav nav-tabs" role="tablist">
-          <% subnav_items.each do |item| %>
+          <% items.each do |item| %>
             <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
               <%= nav_link(item, tab: true) %>
             </li>

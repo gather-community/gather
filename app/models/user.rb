@@ -34,7 +34,8 @@ class User < ActiveRecord::Base
   scope :never_logged_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }
-  scope :in_life_stage, ->(s) { s == "any" ? all : where(child: s == "child") }
+  scope :adults, -> { where(child: false) }
+  scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
   delegate :name, :full_name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household

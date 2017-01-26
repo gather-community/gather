@@ -109,8 +109,4 @@ class Household < ActiveRecord::Base
   def any_statements?
     accounts.any?{ |a| a.statements.any? }
   end
-
-  def from_grot?
-    old_id.present? || old_name.present?
-  end
 end

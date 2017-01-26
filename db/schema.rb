@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170116023741) do
+ActiveRecord::Schema.define(version: 20170126125534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -107,13 +107,12 @@ ActiveRecord::Schema.define(version: 20170116023741) do
   add_index "formulas", ["effective_on"], name: "index_formulas_on_effective_on", using: :btree
 
   create_table "households", force: :cascade do |t|
+    t.string "alternate_id"
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.string "garage_nums"
     t.string "name", limit: 50, null: false
-    t.integer "old_id"
-    t.string "old_name"
     t.integer "unit_num"
     t.datetime "updated_at", null: false
   end

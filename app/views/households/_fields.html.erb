@@ -10,8 +10,3 @@
 <%= f.input :garage_nums %>
 <%= nested_field_set(f, :vehicles) %>
 <%= nested_field_set(f, :emergency_contacts) %>
-
-<% if f.object.from_grot? && policy(f.object).administer? %>
-  <%= f.input :old_id %>
-  <%= f.input :old_name %>
-<% end %>

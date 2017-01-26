@@ -115,7 +115,7 @@ class UserPolicy < ApplicationPolicy
     # ID through here is safe.
     permitted << {household_attributes: [:id] + household_permitted}
 
-    permitted.concat([:google_email, :alternate_id]) if active_admin?
+    permitted << :google_email if active_admin?
     grantable_roles.each { |r| permitted << :"role_#{r}" }
     permitted
   end

@@ -34,7 +34,6 @@
 
         <%= f.input :email, required: true %>
         <%= f.input :google_email, disabled: !policy(@user).administer? %>
-        <%= f.input :alternate_id if policy(@user).administer? %>
 
         <%= f.input :phone, required: true do %>
           <div class="nested-fields">

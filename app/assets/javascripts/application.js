@@ -16,6 +16,7 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+//= require select2
 //= require moment
 //= require jquery-ui
 //= require d3

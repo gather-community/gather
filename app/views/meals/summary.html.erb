@@ -28,7 +28,10 @@
       <%= render("summary_signups_header") %>
       <% @signups.each do |signup| %>
         <tr>
-          <td><%= signup.household_full_name %></td>
+          <% if multi_community? %>
+            <td class="cmty"><%= signup.community_abbrv %></td>
+          <% end %>
+          <td class="hhld"><%= signup.household_name %></td>
           <% @meal.allowed_signup_types.each do |st| %>
             <td><%= signup[st] unless signup[st] == 0 %></td>
           <% end %>
@@ -36,13 +39,13 @@
         </tr>
       <% end %>
       <tr class="total">
-        <td>Total</td>
+        <td colspan="<%= multi_community? ? 2 : 1 %>">Total</td>
         <% @meal.allowed_signup_types.each do |st| %>
           <td><%= @meal.signup_totals[st] %></td>
         <% end %>
         <td><%= @meal.signup_count %></td>
       </tr>
-      <% cols = @meal.allowed_signup_types.size + 2 %>
+      <% cols = @meal.allowed_signup_types.size + (multi_community? ? 3 : 2) %>
       <tr class="late-signups-header">
         <td colspan="<%= cols %>">
           Late Signups

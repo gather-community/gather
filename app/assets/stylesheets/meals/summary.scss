@@ -48,17 +48,20 @@
         padding: 0 4px;
         line-height: 20px;
 
-        // Household name
-        &:first-child {
+        &.cmty {
+          width: 30px;
+        }
+
+        &.hhld {
           width: 150px;
         }
 
-        &.count-col {
+        &.count {
           width: 35px;
         }
       }
 
-      th.count-col {
+      th.count {
         font-weight: normal;
         font-size: 11px;
       }

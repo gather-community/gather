@@ -18,7 +18,7 @@ Mess.Views.Select2View = Backbone.View.extend({
   setup_select2: function(el) {
     var src = el.data("select2-src");
     var label_attr = el.data("select2-label-attr") || "name";
-    var force_full_width = !!el.data("select2-force-full-width");
+    var variable_width = !!el.data("select2-variable-width");
     var self = this;
 
     el.select2({
@@ -47,7 +47,7 @@ Mess.Views.Select2View = Backbone.View.extend({
         }
       },
       minimumInputLength: 1,
-      width: force_full_width ? '100%' : null
+      width: variable_width ? null : '100%'
     });
   }
 });

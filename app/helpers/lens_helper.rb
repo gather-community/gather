@@ -56,7 +56,11 @@ module LensHelper
         prompt: "All Users",
         class: "form-control",
         onchange: "this.form.submit();",
-        data: {"select2-src" => "users", "select2-prompt" => t("select2_prompts.user")}
+        data: {
+          "select2-src" => "users",
+          "select2-prompt" => t("select2_prompts.user"),
+          "select2-variable-width" => "true"
+        }
       )
     end
 

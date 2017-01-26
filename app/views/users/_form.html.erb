@@ -107,8 +107,7 @@
               label_method: :full_name,
               context: "user_form",
               disabled: !policy(@user).administer?,
-              class: "form-control",
-              force_full_width: true %>
+              class: "form-control" %>
       <% end %>
 
       <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>

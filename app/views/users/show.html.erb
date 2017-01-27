@@ -52,11 +52,13 @@
               </tr>
             <% end %>
           <% end %>
-          <%= render("households/attribs",
-                household: @user.household,
-                members: @household_members,
-                context: :user,
-                child: @user.child?) %>
+          <% @households_and_members.each do |household, members| %>
+            <%= render("households/attribs",
+                  household: household,
+                  members: members,
+                  context: :user,
+                  child: @user.child?) %>
+          <% end %>
         </table>
       </div>
     </div>

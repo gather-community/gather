@@ -40,7 +40,9 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     authorize @user
-    @household_members = showable_users_and_children_in(@user.household)
+    @households_and_members = @user.all_households.map do |h|
+      [h, showable_users_and_children_in(h)]
+    end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
   end
 

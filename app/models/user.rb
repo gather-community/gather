@@ -98,6 +98,16 @@ class User < ActiveRecord::Base
     photo_destroy.to_i == 1
   end
 
+  # Includes primary household plus any households affiliated by parentage.
+  # For the case where children live in multiple households.
+  # Alternatives for future refactors could be:
+  # 1. children have multiple households
+  # 2. children have household = nil and everything is determined by parentage. This may be better,
+  #    would just have to remove the null constraint on household_id and think through implications.
+  def all_households
+    [household].concat(guardians.map(&:household)).uniq.shuffle
+  end
+
   # Ensures provider and uid are set.
   def update_for_oauth!(auth)
     self.google_email = auth.info[:email]

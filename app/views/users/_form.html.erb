@@ -60,7 +60,7 @@
       <%= f.input :birthdate_str, as: :string %>
       <%= f.input :joined_on, as: :date_picker %>
 
-      <% if multi_community? %>
+      <% if multi_community? && @user.adult? %>
         <%= f.input :privacy_settings do %>
           <%= f.simple_fields_for :privacy_settings do |pf| %>
             <label>

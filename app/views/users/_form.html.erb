@@ -94,39 +94,47 @@
 
       <%= f.input :household_by_id, as: :hidden %>
 
-      <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
-      <%= f.input :household_id,
-            required: true,
-            wrapper_class: wrapper_class,
-            hint: @user.persisted? ? "" : "Choose an existing household for this user.
-              If one doesn't exist you must ".html_safe <<
-              link_to("create it first", new_household_path) << "." do %>
-        <%= f.input_field :household_id,
-              as: :assoc_select2,
-              label_method: :full_name,
-              context: "user_form",
-              disabled: !policy(@user).administer?,
-              class: "form-control" %>
+      <% if policy(@user).administer? %>
+        <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
+        <%= f.input :household_id,
+              required: true,
+              wrapper_class: wrapper_class,
+              hint: @user.persisted? ? "" : "Choose an existing household for this user.
+                If one doesn't exist you must ".html_safe <<
+                link_to("create it first", new_household_path) << "." do %>
+          <%= f.input_field :household_id,
+                as: :assoc_select2,
+                label_method: :full_name,
+                context: "user_form",
+                disabled: !policy(@user).administer?,
+                class: "form-control" %>
+        <% end %>
       <% end %>
 
-      <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
-        <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
-          <div class="row title">
-            <div class="col-sm-8 col-sm-offset-2">
-              <h4>Household Info</h4>
-              <p>
-                The below fields are associated with the
-                <%= @user.household_name || "user's" %> household.
-                Changing them here will change them for <em>all users in the household</em>.
-                <% if @user.persisted? && policy(@user).administer? %>
-                  <br/>You can also <%= link_to("move them to another household", "#",
-                    class: "change-household") %>.
-                <% end %>
-              </p>
+      <%# Showing these fields is problematic if the child lives in multiple households.
+          In the data model they have one primary household plus we show them in the households of
+          their guardians. But it would be difficult and is unnecessary to show both households here
+          so we don't. %>
+      <% if @user.adult? %>
+        <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
+          <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
+            <div class="row title">
+              <div class="col-sm-8 col-sm-offset-2">
+                <h4>Household Info</h4>
+                <p>
+                  The below fields are associated with the
+                  <%= @user.household_name || "user's" %> household.
+                  Changing them here will change them for <em>all users in the household</em>.
+                  <% if @user.persisted? && policy(@user).administer? %>
+                    <br/>You can also <%= link_to("move them to another household", "#",
+                      class: "change-household") %>.
+                  <% end %>
+                </p>
+              </div>
             </div>
+            <%= render("households/fields", f: hf) %>
           </div>
-          <%= render("households/fields", f: hf) %>
-        </div>
+        <% end %>
       <% end %>
 
       <%= form_actions do %>

@@ -1,7 +1,4 @@
 class ReminderJob
-
-  protected
-
   def correct_hour?
     Rails.env.development? || Time.zone.now.hour == Settings.reminder_time_of_day
   end
@@ -14,4 +11,3 @@ class ReminderJob
     ExceptionNotifier.notify_exception(exception)
   end
 end
-

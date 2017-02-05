@@ -63,7 +63,7 @@ en:
         credit_limit: "Credit Limit"
       reservation/reservation:
         resource: "Resource"
-        name: "Name"
+        name: "Event Name"
         starts_at: "Start Time"
         ends_at: "End Time"
         kind: "Type"

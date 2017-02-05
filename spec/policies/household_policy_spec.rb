@@ -227,8 +227,8 @@ describe HouseholdPolicy do
       {vehicles_attributes: [:id, :make, :model, :color, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
         :email, :location, :_destroy]}] }
-    let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name]) }
-    let(:cluster_admin_attribs) { admin_attribs << :community_id }
+    let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }
+    let(:cluster_admin_attribs) { admin_attribs }
 
     subject { HouseholdPolicy.new(user, household).permitted_attributes }
 

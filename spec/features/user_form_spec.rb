@@ -24,7 +24,7 @@ feature "user form" do
       fill_in("First Name", with: "Zoor")
       click_on("Update User")
 
-      expect_validation_success
+      expect_success
       expect_title(/Zoor/)
       expect_profile_photo(/chomsky/)
     end
@@ -53,7 +53,7 @@ feature "user form" do
       fill_in("Mobile", with: "5556667777")
       click_on("Create User")
 
-      expect_validation_success
+      expect_success
       expect_title(/Foo Barre/)
       expect_profile_photo(/cooper/)
     end
@@ -64,7 +64,7 @@ feature "user form" do
       select2("Potatoheads", from: "user_household_id")
       click_on("Update User")
 
-      expect_validation_success
+      expect_success
       expect(page).to have_css(%Q{a.household[href$="/households/#{household2.id}"]})
     end
 
@@ -91,7 +91,7 @@ feature "user form" do
       delete_from_dropzone
       click_on("Update User")
 
-      expect_validation_success
+      expect_success
       expect_profile_photo(/missing/)
     end
 

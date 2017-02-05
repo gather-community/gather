@@ -15,7 +15,7 @@ module FeatureSpecHelpers
     find(".#{into} input.datetime_picker").set(value)
   end
 
-  def expect_validation_success
+  def expect_success
     expect(page).to have_css("div.alert-success", text: /successfully/)
   end
 

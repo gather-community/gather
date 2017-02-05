@@ -5,6 +5,9 @@
   <%= f.input :community_id,
         collection: @allowed_community_changes,
         disabled: !policy(f.object).change_community? %>
+
+  <%# If we disable the above, the community_id doesn't come through on submit, but we need it. %>
+  <%= f.hidden_field :community_id unless policy(f.object).change_community? %>
 <% end %>
 <%= f.input :unit_num, disabled: !policy(f.object).administer? %>
 <%= f.input :garage_nums %>

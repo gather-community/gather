@@ -42,7 +42,7 @@ class HouseholdsController < ApplicationController
   end
 
   def create
-    @household = Household.new
+    @household = Household.new(community: current_community)
     @household.assign_attributes(household_attributes)
     authorize @household
     if @household.save

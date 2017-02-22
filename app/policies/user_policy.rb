@@ -68,7 +68,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
+    update_info? || update_photo?
+  end
+
+  def update_info?
     self? || guardian? || active_admin?
+  end
+
+  def update_photo?
+    update_info? || active_photographer?
   end
 
   def administer?

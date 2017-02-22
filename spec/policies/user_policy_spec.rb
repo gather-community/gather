@@ -158,11 +158,11 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it_behaves_like "permits action by admins and denies on all others"
+      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
     end
 
     permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
-      it_behaves_like "permits action by admins and denies on all others"
+      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
 
       it "denies action on self" do
         expect(subject).not_to permit(user, user)
@@ -193,28 +193,15 @@ describe UserPolicy do
       end
     end
 
-    permissions :edit?, :update? do
-      it_behaves_like "permits action by admins and denies on all others"
+    permissions :edit?, :update?, :update_photo? do
+      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for self (active or not) and guardians"
+      it_behaves_like "permits for photographers in community only"
+    end
 
-      it "permits action on self" do
-        expect(subject).to permit(user, user)
-      end
-
-      it "allows guardians to edit own children" do
-        expect(subject).to permit(guardian, child)
-      end
-
-      it "disallows guardians from editing other children" do
-        expect(subject).not_to permit(guardian, other_child)
-      end
-
-      it "disallows children from editing parent" do
-        expect(subject).not_to permit(child, guardian)
-      end
-
-      it "permits action on self for inactive user" do
-        expect(subject).to permit(inactive_user, inactive_user)
-      end
+    permissions :update_info? do
+      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for self (active or not) and guardians"
     end
 
     permissions :destroy? do
@@ -231,7 +218,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits action by admins and denies on all others"
+        it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
       end
     end
   end

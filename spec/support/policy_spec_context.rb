@@ -35,15 +35,20 @@ shared_context "policy objs" do
   let(:biller) { new_user_from(community, label: "biller") }
   let(:biller_in_cluster) { new_user_from(communityB, label: "biller_in_cluster") }
 
+  let(:photographer) { new_user_from(community, label: "photographer") }
+  let(:photographer_in_cluster) { new_user_from(communityB, label: "photographer_in_cluster") }
+
   before do
     allow(user).to receive(:has_role?) { false }
     allow(other_user).to receive(:has_role?) { false }
     allow(admin).to receive(:has_role?) { |r| r == :admin }
+    allow(admin_in_cluster).to receive(:has_role?) { |r| r == :admin }
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(biller).to receive(:has_role?) { |r| r == :biller }
-    allow(admin_in_cluster).to receive(:has_role?) { |r| r == :admin }
     allow(biller_in_cluster).to receive(:has_role?) { |r| r == :biller }
+    allow(photographer).to receive(:has_role?) { |r| r == :photographer }
+    allow(photographer_in_cluster).to receive(:has_role?) { |r| r == :photographer }
   end
 
   # Saves commonly used objects from above. This is not done by default
@@ -80,7 +85,7 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits action by admins and denies on all others" do
+  shared_examples_for "permits for commmunity admins and denies for other admins, users, and billers" do
     it "grants access to admins in community" do
       expect(subject).to permit(admin, record)
     end
@@ -113,6 +118,38 @@ shared_context "policy objs" do
 
     it "denies access to billers" do
       expect(subject).not_to permit(biller, record)
+    end
+  end
+
+  shared_examples_for "permits for self (active or not) and guardians" do
+    it "permits action on self" do
+      expect(subject).to permit(user, user)
+    end
+
+    it "allows guardians to edit own children" do
+      expect(subject).to permit(guardian, child)
+    end
+
+    it "disallows guardians from editing other children" do
+      expect(subject).not_to permit(guardian, other_child)
+    end
+
+    it "disallows children from editing parent" do
+      expect(subject).not_to permit(child, guardian)
+    end
+
+    it "permits action on self for inactive user" do
+      expect(subject).to permit(inactive_user, inactive_user)
+    end
+  end
+
+  shared_examples_for "permits for photographers in community only" do
+    it "permits photographers from own community" do
+      expect(subject).to permit(photographer, user)
+    end
+
+    it "denies photographers from other community" do
+      expect(subject).not_to permit(photographer_in_cluster, user)
     end
   end
 

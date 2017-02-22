@@ -105,6 +105,10 @@ class ApplicationPolicy
     active? && user.has_role?(:biller) && own_community_record?
   end
 
+  def active_photographer?
+    active? && user.has_role?(:photographer) && own_community_record?
+  end
+
   def active_admin_or_biller?
     active_admin? || active_biller?
   end

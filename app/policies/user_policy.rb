@@ -102,6 +102,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
+    return [:photo, :photo_tmp_id] if update_photo? && !update_info?
+
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.
     household_permitted = HouseholdPolicy.new(user, record.household).permitted_attributes

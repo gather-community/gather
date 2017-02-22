@@ -266,7 +266,7 @@ describe UserPolicy do
   end
 
   describe "permitted attributes" do
-    let(:user2) { double(community: community, household: double(community: community)) }
+    let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
     let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :household_by_id,
@@ -275,6 +275,7 @@ describe UserPolicy do
       {household_attributes: [:id, :name, :garage_nums].
         concat(vehicles_and_contacts_attribs)}
     ] }
+    let(:photographer_attribs) { [:photo, :photo_tmp_id] }
     let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
       :google_email, :role_admin, :role_biller, :household_by_id,
@@ -308,11 +309,19 @@ describe UserPolicy do
       it_behaves_like "basic attribs"
     end
 
+    context "photographer" do
+      let(:user) { photographer }
+
+      it "should allow photographer attribs only" do
+        expect(subject).to contain_exactly(*photographer_attribs)
+      end
+    end
+
     context "admin" do
       let(:user) { admin }
 
       it "should allow admin attribs" do
-        expect(subject).to contain_exactly(*(admin_attribs))
+        expect(subject).to contain_exactly(*admin_attribs)
       end
     end
 

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Deactivatable, Phoneable
   rolify
 
-  ROLES = %i(super_admin cluster_admin admin biller)
+  ROLES = %i(super_admin cluster_admin admin biller photographer)
   CONTACT_TYPES = %i(email text phone)
 
   # Currently, :database_authenticatable is only needed for tha password reset token features

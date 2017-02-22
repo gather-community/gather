@@ -131,7 +131,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def grantable_roles
-    (active_admin? ? [:admin, :biller] : []) +
+    (active_admin? ? [:admin, :biller, :photographer] : []) +
     (active_cluster_admin? ? [:cluster_admin] : []) +
     (active_super_admin? ? [:super_admin] : [])
   end

@@ -308,6 +308,7 @@ en:
     cluster_admin: "Cluster Admin"
     super_admin: "Super Admin"
     biller: "Biller"
+    photographer: "Photographer"
 
   phone_types:
     abbreviations:

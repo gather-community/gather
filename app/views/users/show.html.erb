@@ -1,8 +1,10 @@
 <% content_for(:title){ "#{@user.name}" } %>
 
 <% content_for(:top_buttons) do %>
-  <% if policy(@user).edit? %>
+  <% if policy(@user).update_info? %>
     <%= link_to(icon_tag("pencil") << " Edit Profile", edit_user_path(@user), class: "btn btn-primary") %>
+  <% elsif policy(@user).update_photo? %>
+    <%= link_to(icon_tag("camera") << " Edit Photo", edit_user_path(@user), class: "btn btn-primary") %>
   <% end %>
 <% end %>
 

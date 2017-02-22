@@ -1,0 +1,133 @@
+<%= horizontal_form_for(@user, width: :full) do |f| %>
+  <%= f.input :photo_tmp_id, as: :hidden %>
+  <%= f.input :photo_destroy, as: :hidden %>
+  <%= f.input :child, as: :hidden %>
+
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+
+  <% if @user.child? %>
+
+    <%= nested_field_set(f, :up_guardianships, label: false, required: true) %>
+
+  <% else %>
+
+    <%= f.input :email, required: true %>
+    <%= f.input :google_email, disabled: !policy(@user).administer? %>
+
+    <%= f.input :phone, required: true do %>
+      <div class="nested-fields">
+        <div class="row">
+          <div class="col-sm-4">
+            <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
+              input_html: { value: @user.phone(:mobile).formatted } %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
+              input_html: { value: @user.phone(:home).formatted } %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
+              input_html: { value: @user.phone(:work).formatted } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
+  <% end %>
+
+  <%= f.input :birthdate_str, as: :string %>
+  <%= f.input :joined_on, as: :date_picker %>
+
+  <% if multi_community? && @user.adult? %>
+    <%= f.input :privacy_settings do %>
+      <%= f.simple_fields_for :privacy_settings do |pf| %>
+        <label>
+          <%= pf.input_field :hide_photo_from_cluster, as: :boolean,
+            input_html: { checked: @user.privacy_settings["hide_photo_from_cluster"] } %>
+          Don't show photo to users at <%= @user.other_cluster_communities.map(&:abbrv).join(", ") %>
+        </label>
+        <div class="hint">
+          For more info on privacy settings, see the
+          <%= link_to("privacy policy", "/about/privacy-policy") %>.
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if policy(@user).administer? && @user.adult? %>
+    <%= f.input :roles do %>
+      <div class="roles">
+        <% User::ROLES.each do |role| %>
+          <% disabled = !policy(@user).grantable_roles.include?(role) %>
+          <div class="role <%= disabled ? 'disabled' : '' %>">
+            <label>
+              <%= f.input_field :"role_#{role}", as: :boolean, disabled: disabled %>
+              <%= t("roles.#{role}") %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= f.input :household_by_id, as: :hidden %>
+
+  <% if policy(@user).administer? %>
+    <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
+    <%= f.input :household_id,
+          required: true,
+          wrapper_class: wrapper_class,
+          hint: @user.persisted? ? "" : "Choose an existing household for this user.
+            If one doesn't exist you must ".html_safe <<
+            link_to("create it first", new_household_path) << "." do %>
+      <%= f.input_field :household_id,
+            as: :assoc_select2,
+            label_method: :full_name,
+            context: "user_form",
+            disabled: !policy(@user).administer?,
+            class: "form-control" %>
+    <% end %>
+  <% end %>
+
+  <%# Showing these fields is problematic if the child lives in multiple households.
+      In the data model they have one primary household plus we show them in the households of
+      their guardians. But it would be difficult and is unnecessary to show both households here
+      so we don't. %>
+  <% if @user.adult? %>
+    <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
+      <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
+        <div class="row title">
+          <div class="col-sm-8 col-sm-offset-2">
+            <h4>Household Info</h4>
+            <p>
+              The below fields are associated with the
+              <%= @user.household_name || "user's" %> household.
+              Changing them here will change them for <em>all users in the household</em>.
+              <% if @user.persisted? && policy(@user).administer? %>
+                <br/>You can also <%= link_to("move them to another household", "#",
+                  class: "change-household") %>.
+              <% end %>
+            </p>
+          </div>
+        </div>
+        <%= render("households/fields", f: hf) %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= form_actions do %>
+    <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
+      <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
+        class: "btn btn-default", method: :put,
+        data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
+    <% end %>
+    <% if policy(@user).destroy? && !@user.new_record? %>
+      <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
+        class: "btn btn-default", method: :delete,
+        data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
+    <% end %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
+<% end %>

@@ -1,6 +1,5 @@
-.dropzone {
-  $thumbnail-size: 150px;
-
+// Doing it this way to enable different thumbnail sizes based on class
+@mixin dropzone($thumbnail-size) {
   width: $thumbnail-size + 20px;
   line-height: 140%;
   margin-bottom: 20px;
@@ -11,12 +10,16 @@
     color: $gray-text;
   }
 
+  img.existing {
+    width: $thumbnail-size;
+  }
+
   .dz-preview {
     margin: 0;
     width: $thumbnail-size;
 
     .dz-success-mark, .dz-error-mark {
-      top: 47px;
+      top: $thumbnail-size / 2px - 28px;
     }
   }
 
@@ -49,7 +52,7 @@
     background-size: $thumbnail-size - 20px $thumbnail-size - 20px;
     background-repeat: no-repeat;
     text-align: center;
-    padding: 50px 10px 10px 10px;
+    padding: ($thumbnail-size / 2px - 25px) 10px 10px 10px;
     cursor: pointer;
     border: 3px dashed $light-border-color;
   }
@@ -91,4 +94,12 @@
       display: inline;
     }
   }
+}
+
+.dropzone.size-thumb {
+  @include dropzone(150px);
+}
+
+.dropzone.size-medium {
+  @include dropzone(300px);
 }

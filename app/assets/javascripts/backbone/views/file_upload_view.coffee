@@ -14,12 +14,14 @@ Mess.Views.FileUploadView = Backbone.View.extend
     @initDropzone()
 
   initDropzone: ->
+    # Should match $thumbnail-size in dropzone.scss
+    size = if @dzForm.is('.size-medium') then 300 else 150
     view = @
     @dropzone = new Dropzone @dzForm.get(0),
       maxFiles: 1
       maxFilesize: @params.maxFilesize
-      thumbnailHeight: 150 # Should match $thumbnail-size in dropzone.scss
-      thumbnailWidth: 150
+      thumbnailHeight: size
+      thumbnailWidth: size
       init: ->
         dz = this
         dz.on 'addedfile', (file) -> view.fileAdded.apply(view, [file, dz])

@@ -1,4 +1,12 @@
-<% content_for(:title){ @user == current_user ? "Profile" : "Edit User: #{@user.name}" } %>
+<% content_for(:title) do
+  if @user == current_user
+    "Profile"
+  elsif policy(@user).update_info?
+    "Edit User: #{@user.name}"
+  elsif policy(@user).update_photo?
+    "Edit Photo: #{@user.name}"
+  end
+end %>
 
 <% unless @user.active? %>
   <div class="alert alert-info">

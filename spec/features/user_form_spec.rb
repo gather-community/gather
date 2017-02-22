@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "user form" do
   let(:admin) { create(:admin) }
+  let(:photographer) { create(:photographer) }
   let(:user) { create(:user, :with_photo) }
   let!(:household) { create(:household, name: "Gingerbread") }
   let!(:household2) { create(:household, name: "Potatoheads") }
@@ -107,6 +108,23 @@ feature "user form" do
         drop_in_dropzone(fixture_file_path("article.pdf"))
         expect(page).to have_css("form.dropzone .dz-error-message", text: /Photo has incorrect type/)
       end
+    end
+  end
+
+  context "as photographer" do
+    before do
+      login_as(photographer, scope: :user)
+    end
+
+    scenario "update photo", js: true do
+      visit(user_path(user))
+      click_on("Edit Photo")
+      expect_image_upload(mode: :upload_message)
+      drop_in_dropzone(fixture_file_path("chomsky.jpg"))
+      expect_image_upload(mode: :dz_preview)
+      click_on("Save Photo")
+      expect_success
+      expect_profile_photo(/chomsky/)
     end
   end
 

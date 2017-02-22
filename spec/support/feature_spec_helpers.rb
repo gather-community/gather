@@ -24,17 +24,24 @@ module FeatureSpecHelpers
   end
 
   def expect_image_upload(mode:, path: nil)
-    if mode == :dz_preview
+    case mode
+    when :dz_preview
       expect(page).to have_css("form.dropzone img[data-dz-thumbnail]", visible: true)
       expect(page.find("form.dropzone img[data-dz-thumbnail]")["src"]).to match /base64/
       expect(page).to have_no_css("form.dropzone img.existing", visible: true)
-    else
+      expect(page).to have_css("form.dropzone a.delete", visible: true)
+      expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
+    when :existing
       expect(page).not_to have_css("form.dropzone img[data-dz-thumbnail]")
       expect(page).to have_css("form.dropzone img.existing", visible: true)
       expect(page.find("form.dropzone img.existing")["src"]).to match path
+      expect(page).to have_css("form.dropzone a.delete", visible: true)
+      expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
+    when :upload_message
+      expect(page).to have_no_css("form.dropzone img[data-dz-thumbnail]", visible: true)
+      expect(page).to have_no_css("form.dropzone img.existing", visible: true)
+      expect(page).to have_css("form.dropzone .dz-message", visible: true)
     end
-    expect(page).to have_css("form.dropzone a.delete", visible: true)
-    expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
   end
 
   def expect_no_image_upload

@@ -1,4 +1,4 @@
-Mess.Views.DirtyChecker = Backbone.View.extend
+Gather.Views.DirtyChecker = Backbone.View.extend
 
   initialize: (params) ->
     params.helpers = params.helpers || []

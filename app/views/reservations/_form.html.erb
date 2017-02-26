@@ -51,13 +51,13 @@
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.Select2View({
+    new Gather.Views.Select2View({
       el: '.reservation_reservation_sponsor_id',
       extra_data: { community_id: <%= @reservation.community_id %> }
     });
-    new Mess.Views.Select2View({
+    new Gather.Views.Select2View({
       el: '.reservation_reservation_reserver_id'
     });
-    new Mess.Views.DirtyChecker({el: '.reservation--reservation-form'});
+    new Gather.Views.DirtyChecker({el: '.reservation--reservation-form'});
   });
 <% end %>

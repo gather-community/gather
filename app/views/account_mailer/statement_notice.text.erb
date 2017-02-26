@@ -1,6 +1,6 @@
 Dear <%= @household.name %> Household,
 
-A new statement has been created in MESS for your <%= @community.name %> account.
+A new statement has been created in Gather for your <%= @community.name %> account.
 
 <% if @statement.total_due >= 0 -%>
 The amount due is <%= number_to_currency(@statement.total_due) %>.

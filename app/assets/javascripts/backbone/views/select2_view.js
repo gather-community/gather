@@ -1,4 +1,4 @@
-Mess.Views.Select2View = Backbone.View.extend({
+Gather.Views.Select2View = Backbone.View.extend({
 
   initialize: function(options) {
     var self = this;

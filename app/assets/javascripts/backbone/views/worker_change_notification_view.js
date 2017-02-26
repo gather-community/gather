@@ -1,4 +1,4 @@
-Mess.Views.WorkerChangeNotificationView = Backbone.View.extend({
+Gather.Views.WorkerChangeNotificationView = Backbone.View.extend({
   events: {
     "change": "show"
   },

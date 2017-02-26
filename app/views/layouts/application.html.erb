@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MESS: <%= strip_tags(@title) %></title>
+  <title>Gather: <%= strip_tags(@title) %></title>
   <%= render("layouts/head") %>
 
   <%= javascript_tag do %>
-    $(function() { new Mess.Views.ApplicationView(); });
+    $(function() { new Gather.Views.ApplicationView(); });
   <% end %>
 </head>
 <body>

@@ -1,4 +1,4 @@
-Mess.Views.ReservationCalendarView = Backbone.View.extend
+Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   URL_PARAMS_TO_VIEW_TYPES:
     'day': 'agendaDay'
@@ -59,18 +59,18 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
 
     # Save for create method to use.
     @selection =
-      start: start.format(Mess.TIME_FORMATS.machineDatetime)
-      end: end.format(Mess.TIME_FORMATS.machineDatetime)
+      start: start.format(Gather.TIME_FORMATS.machineDatetime)
+      end: end.format(Gather.TIME_FORMATS.machineDatetime)
 
     # Build confirmation string
     if (start.format('YYYYMMDD') == end.format('YYYYMMDD'))
-      date = start.format(Mess.TIME_FORMATS.regDate)
-      startTime = start.format(Mess.TIME_FORMATS.regTime)
-      endTime = end.format(Mess.TIME_FORMATS.regTime)
+      date = start.format(Gather.TIME_FORMATS.regDate)
+      startTime = start.format(Gather.TIME_FORMATS.regTime)
+      endTime = end.format(Gather.TIME_FORMATS.regTime)
       body.html("Reserve on <b>#{date}</b> from <b>#{startTime}</b> to <b>#{endTime}</b>?")
     else
-      startTime = start.format(Mess.TIME_FORMATS.fullDatetime)
-      endTime = end.format(Mess.TIME_FORMATS.fullDatetime)
+      startTime = start.format(Gather.TIME_FORMATS.fullDatetime)
+      endTime = end.format(Gather.TIME_FORMATS.fullDatetime)
       body.html("Reserve from <b>#{startTime}</b> to <b>#{endTime}</b>?")
 
     modal.modal('show')
@@ -83,7 +83,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     @saveSettings()
 
   onLoading: (isLoading) ->
-    Mess.loadingIndicator[if isLoading then 'show' else 'hide']()
+    Gather.loadingIndicator[if isLoading then 'show' else 'hide']()
 
   onEventChange: (event, _, revertFunc) ->
     $.ajax
@@ -96,7 +96,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
           ends_at: event.end.format()
       error: (xhr) =>
         revertFunc()
-        Mess.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
+        Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   updatePermalink: ->
     @$('#permalink').attr('href', @permalink())
@@ -122,7 +122,7 @@ Mess.Views.ReservationCalendarView = Backbone.View.extend
     @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()
 
   currentDate: ->
-    @calendar.fullCalendar('getView').intervalStart.format(Mess.TIME_FORMATS.compactDate)
+    @calendar.fullCalendar('getView').intervalStart.format(Gather.TIME_FORMATS.compactDate)
 
   hasEventInInterval: (start, end) ->
     matches = @calendar.fullCalendar 'clientEvents', (event) ->

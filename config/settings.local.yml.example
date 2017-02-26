@@ -19,7 +19,7 @@ url:
   protocol: <http or https>
 
 email:
-  from: MESS <mess@example.coop>
+  from: Gather <support@example.coop>
   webmaster: someone@example.com
 
 # To use a real production server, uncomment the below and enter SMTP settings.

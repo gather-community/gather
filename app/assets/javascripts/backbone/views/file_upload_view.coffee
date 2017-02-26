@@ -1,4 +1,4 @@
-Mess.Views.FileUploadView = Backbone.View.extend
+Gather.Views.FileUploadView = Backbone.View.extend
 
   initialize: (params) ->
     @dzForm = @$('.dropzone')

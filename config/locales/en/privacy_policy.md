@@ -86,7 +86,7 @@ Pursuant to COPPA, we declare the following:
 * We don't require a parent/guardian to disclose more information about a child than is reasonably necessary to facilitate interaction and foster community as described above.
 * Parents/guardians can review their children’s personal information, direct us to delete it, and refuse to allow any further collection or use of the child’s information.
 * We don't disclose any children's information to any third parties other than community members as listed above.
-* Parents/guardians may exercise any of the above stated rights by emailing mess@sassafras.coop.
+* Parents/guardians may exercise any of the above stated rights by emailing support@gather.coop.
 
 #### Fair Information Practices
 
@@ -100,12 +100,12 @@ We collect your email address in order to send useful notifications (e.g. meal r
 
 We do not send advertising or other unsolicited emails.
 
-If at any time you would like to unsubscribe from receiving future emails, you can email mess@sassafras.coop and we will promptly remove you from ALL correspondence.
+If at any time you would like to unsubscribe from receiving future emails, you can email support@gather.coop and we will promptly remove you from ALL correspondence.
 
 #### Contacting Us
 
 If you have any questions regarding this privacy policy, you may contact us using the information below.
 
-MESS<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>mess@sassafras.coop
+Gather<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
 
 Last Edited on 2017-01-17

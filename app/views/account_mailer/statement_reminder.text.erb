@@ -1,6 +1,6 @@
 Dear <%= @household.name %> Household,
 
-This is a reminder that payment for a MESS statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{d.to_s(:short_date)}" : "soon" %>.
+This is a reminder that payment for a Gather statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{d.to_s(:short_date)}" : "soon" %>.
 
 The amount due is <%= number_to_currency(@statement.total_due) %>. Please visit the link below to see the details:
 

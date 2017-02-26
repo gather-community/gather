@@ -56,7 +56,7 @@
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.ReservationCalendarView(<%=json(
+    new Gather.Views.ReservationCalendarView(<%=json(
       el: '#calendar-col',
       resourceId: @resource.id,
       feedUrl: reservations_path_for_resource(@resource),

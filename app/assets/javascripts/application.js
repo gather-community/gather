@@ -30,12 +30,12 @@
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink
-//= require backbone/mess
+//= require backbone/backbone
 //= require_tree .
 
 $(document).ready(function(){ $('form').preventDoubleSubmission(); });
 
-Mess.TIME_FORMATS = {
+Gather.TIME_FORMATS = {
   fullDatetime: 'ddd MMM D YYYY h:mm a',
   machineDatetime: 'YYYY-MM-DD HH:mm',
   regDate: 'ddd MMM D YYYY',

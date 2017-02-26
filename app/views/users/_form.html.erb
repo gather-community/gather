@@ -22,12 +22,12 @@
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.Select2View({el: '.user-form'});
-    var uploadView = new Mess.Views.FileUploadView(<%=json(
+    new Gather.Views.Select2View({el: '.user-form'});
+    var uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',
       maxFilesize: Settings.photos.max_size / 1.megabyte
     )%>);
-    new Mess.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
-    new Mess.Views.UserFormView({el: '.user-form'});
+    new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
+    new Gather.Views.UserFormView({el: '.user-form'});
   });
 <% end %>

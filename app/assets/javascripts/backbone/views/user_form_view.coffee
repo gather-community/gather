@@ -1,4 +1,4 @@
-Mess.Views.UserFormView = Backbone.View.extend
+Gather.Views.UserFormView = Backbone.View.extend
   events:
     'click .change-household': 'showHouseholdSelect'
     'click .show-household-fields': 'showHouseholdFields'

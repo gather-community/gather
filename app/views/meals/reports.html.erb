@@ -85,7 +85,7 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){ new Mess.Views.Meals.ReportChartsView(<%=json(
+  $(function(){ new Gather.Views.Meals.ReportChartsView(<%=json(
     el: "#charts",
     data: @report.chart_data,
     cmty: @community.abbrv,

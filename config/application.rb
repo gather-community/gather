@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Mess
+module Gather
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -29,7 +29,7 @@ module Mess
 
     config.middleware.use ExceptionNotification::Rack,
       email: {
-        email_prefix: "[MESS ERROR] ",
+        email_prefix: "[Gather ERROR] ",
         sender_address: Settings.email.from,
         exception_recipients: Settings.email.webmaster
       }

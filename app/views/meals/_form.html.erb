@@ -100,11 +100,11 @@
 
 <%= javascript_tag do %>
   $(function(){
-    new Mess.Views.Select2View({el: '.meal-form'});
+    new Gather.Views.Select2View({el: '.meal-form'});
     $("#meal_resource_ids").select2();
-    new Mess.Views.DirtyChecker({el: '.meal-form'});
+    new Gather.Views.DirtyChecker({el: '.meal-form'});
     <% if @notify_on_worker_change %>
-      new Mess.Views.WorkerChangeNotificationView({el: '#assignment-fields'});
+      new Gather.Views.WorkerChangeNotificationView({el: '#assignment-fields'});
     <% end %>
   });
 <% end %>

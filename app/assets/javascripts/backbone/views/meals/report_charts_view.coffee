@@ -1,4 +1,4 @@
-Mess.Views.Meals.ReportChartsView = Backbone.View.extend
+Gather.Views.Meals.ReportChartsView = Backbone.View.extend
 
   initialize: (options) ->
     @elStr = options.el

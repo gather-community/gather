@@ -9,12 +9,9 @@
     <%= flash_messages %>
     <div id="container">
       <br/>
-      <div id="blurb">
-        It's never been easier to organize a common meal at cohousing.<br/>
-        <strong>Let's eat together!</strong>
-      </div>
+      <div id="blurb">Life is better together.</div>
       <div id="logo">
-        <%= image_tag("logo-tagline-white.png") %>
+        <%= image_tag("logo-white.png") %>
       </div>
       <%= link_to(icon_tag("google") << " Log in with Google",
         user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary btn-login") %>

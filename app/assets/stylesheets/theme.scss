@@ -50,6 +50,7 @@ a:hover {
   color: #666;
 
   &:hover, &:active, &:focus {
+    // !important needed here to override Bootstrap (booo!)
     background-color: #ddd !important;
   }
 }
@@ -59,6 +60,7 @@ a:hover {
   background-color: $theme-accent;
 
   &:hover, &:active, &:focus {
+    // !important needed here to override Bootstrap (booo!)
     background-color: $theme-accent-intense !important;
   }
 }

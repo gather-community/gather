@@ -13,34 +13,45 @@ body.home {
     background: url(image-path("intro-bg.jpg")) no-repeat center 0px;
     text-align: center;
     height: 620px;
-  }
+    margin-bottom: 20px;
 
-  #blurb {
-    color: white;
-    line-height: 180%;
-    font-size: 24px;
-    font-weight: 200;
-    margin: 70px 20px;
-  }
-
-  #logo {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .btn-login {
-    width: 300px;
-    height: 50px;
-    padding-top: 10px;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-
-  #help-link {
-    margin-top: 10px;
-
-    a {
+    #blurb {
       color: white;
+      line-height: 180%;
+      font-size: 24px;
+      font-weight: 200;
+      margin: 70px 20px;
+    }
+
+    #logo {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .btn, a.btn {
+      color: white;
+      background: none;
+      border: 1px solid white;
+
+      &:hover, &:active, &:focus {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+      }
+    }
+
+    .btn-login {
+      width: 300px;
+      height: 50px;
+      padding-top: 10px;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    #help-link {
+      margin-top: 10px;
+
+      a {
+        color: white;
+      }
     }
   }
 

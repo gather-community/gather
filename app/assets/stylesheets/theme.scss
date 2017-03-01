@@ -5,6 +5,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: 'Montserrat Alternates', sans-serif;
+  color: $theme-main;
 
   a {
     font-size: 12px;
@@ -33,11 +34,11 @@ p.inner {
 }
 
 a, a:visited {
-  color: $theme-accent;
+  color: $link-color;
 }
 
 a:hover {
-  color: $theme-accent-intense;
+  color: $link-active-color;
 }
 
 .btn {

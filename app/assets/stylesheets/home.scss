@@ -70,9 +70,10 @@ body.home {
   }
 
 
-  @media (max-width: 550px) {
+  @media (max-width: $screen-xs-max) {
     #container {
       height: 500px;
+      background-position: -566px -126px; // Center the woman with the cart and dog
     }
 
     #blurb {

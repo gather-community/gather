@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   # Models a specification for an object's config. Made up of Fields.
   class Spec
     attr_accessor :root

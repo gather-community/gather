@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   module Fields
     # Models the definition of single field in a config.
     class Field

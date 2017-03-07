@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Configurator::Config, type: :model do
+RSpec.describe CustomFields::Config, type: :model do
   let(:spec_data) { [
     {
       "key" => "foo",

@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   module Fields
     # Models the definition of single group field, which is a field composed of sub-fields.
     class GroupField < Field
@@ -8,7 +8,7 @@ module Configurator
         super(key: key)
         self.items = items.map do |item|
           item.symbolize_keys!
-          klass = "Configurator::Fields::#{item.delete(:type).capitalize}Field"
+          klass = "CustomFields::Fields::#{item.delete(:type).capitalize}Field"
           klass.constantize.new(item)
         end
       end

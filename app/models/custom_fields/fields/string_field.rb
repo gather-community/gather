@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   module Fields
     class StringField < Field
       def type

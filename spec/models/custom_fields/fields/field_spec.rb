@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Configurator::Fields::Field, type: :model do
-  let(:field) { Configurator::Fields::StringField.new(key: "foo") }
+RSpec.describe CustomFields::Fields::Field, type: :model do
+  let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
 
   it "should symbolize string params" do
     expect(field.key).to eq :foo
@@ -16,7 +16,7 @@ RSpec.describe Configurator::Fields::Field, type: :model do
     end
 
     context "for enum field" do
-      let(:field) { Configurator::Fields::EnumField.new(key: "foo", options: %w(a b)) }
+      let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b)) }
 
       it "should return collection" do
         expect(field.input_params).to eq({collection: %w(a b)})
@@ -24,7 +24,7 @@ RSpec.describe Configurator::Fields::Field, type: :model do
     end
 
     context "for boolean field" do
-      let!(:field) { Configurator::Fields::BooleanField.new(key: "foo") }
+      let!(:field) { CustomFields::Fields::BooleanField.new(key: "foo") }
 
       it "should return as boolean" do
         expect(field.input_params).to eq({as: :boolean})
@@ -32,7 +32,7 @@ RSpec.describe Configurator::Fields::Field, type: :model do
     end
 
     context "for text field" do
-      let!(:field) { Configurator::Fields::TextField.new(key: "foo") }
+      let!(:field) { CustomFields::Fields::TextField.new(key: "foo") }
 
       it "should return empty hash" do
         expect(field.input_params).to eq({as: :text})

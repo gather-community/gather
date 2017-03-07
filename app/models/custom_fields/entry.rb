@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   # Models a concrete choice made by the user for a particular config Field.
   class Entry
     attr_accessor :field, :value

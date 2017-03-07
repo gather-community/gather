@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   # Abstract class. Models a concrete set of chosen config values for a given ConfigSpec.
   class Config
     include ActiveModel::Model

@@ -1,4 +1,4 @@
-module Configurator
+module CustomFields
   module Fields
     class IntegerField < Field
       def type

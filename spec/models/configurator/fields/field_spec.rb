@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Configurator::Field, type: :model do
-  let(:field) { described_class.new(key: "foo", type: "string") }
+RSpec.describe Configurator::Fields::Field, type: :model do
+  let(:field) { Configurator::Fields::StringField.new(key: "foo") }
 
   it "should symbolize string params" do
     expect(field.key).to eq :foo
@@ -11,12 +11,12 @@ RSpec.describe Configurator::Field, type: :model do
   describe "input_params" do
     context "for string field" do
       it "should return empty hash" do
-        expect(field.input_params).to eq({})
+        expect(field.input_params).to eq({as: :string})
       end
     end
 
     context "for enum field" do
-      let(:field) { described_class.new(key: "foo", type: "enum", options: %w(a b)) }
+      let(:field) { Configurator::Fields::EnumField.new(key: "foo", options: %w(a b)) }
 
       it "should return collection" do
         expect(field.input_params).to eq({collection: %w(a b)})
@@ -24,7 +24,7 @@ RSpec.describe Configurator::Field, type: :model do
     end
 
     context "for boolean field" do
-      let!(:field) { described_class.new(key: "foo", type: "boolean") }
+      let!(:field) { Configurator::Fields::BooleanField.new(key: "foo") }
 
       it "should return as boolean" do
         expect(field.input_params).to eq({as: :boolean})
@@ -32,7 +32,7 @@ RSpec.describe Configurator::Field, type: :model do
     end
 
     context "for text field" do
-      let!(:field) { described_class.new(key: "foo", type: "text") }
+      let!(:field) { Configurator::Fields::TextField.new(key: "foo") }
 
       it "should return empty hash" do
         expect(field.input_params).to eq({as: :text})

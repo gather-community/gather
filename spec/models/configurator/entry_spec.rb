@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Configurator::Entry, type: :model do
-  let(:field) { Configurator::Field.new(key: "foo", type: "enum", options: %w(a b), required: true) }
+  let(:field) { Configurator::Fields::EnumField.new(key: "foo", options: %w(a b), required: true) }
   let(:entry) { described_class.new(field: field, value: "b") }
 
   it "should delegate field methods" do

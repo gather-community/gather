@@ -5,7 +5,7 @@ module Configurator
 
     attr_accessor :spec, :config_data, :entries, :keys
 
-    delegate :fields, to: :spec
+    delegate :items, to: :spec
 
     # def self.model_name
     #   ActiveModel::Name.new(self, nil, name.split("::").last)
@@ -16,7 +16,7 @@ module Configurator
       raise ArgumentError.new("config_data is required") if config_data.nil?
       self.spec = Spec.new(spec_data)
       self.config_data = config_data.symbolize_keys!
-      self.entries = fields.map { |f| Entry.new(field: f, value: self.config_data[f.key]) }
+      self.entries = items.map { |i| Entry.new(field: i, value: self.config_data[i.key]) }
     end
 
     # This is so that form point to update instead of create

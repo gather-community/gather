@@ -11,10 +11,10 @@ RSpec.describe CustomFields::Spec, type: :model do
   describe "keys" do
     let(:spec) { described_class.new([
       {"key" => "fruit", "type" => "enum", "options" => %w(apple banana peach), "required" => true},
-      {"key" => "info", "type" => "group", "items" => [
+      {"key" => "info", "type" => "group", "fields" => [
         {"key" => "complete", "type" => "boolean"},
         {"key" => "comment", "type" => "string"},
-        {"key" => "tree", "type" => "group", "items" => [
+        {"key" => "tree", "type" => "group", "fields" => [
           {"key" => "species", "type" => "enum", "options" => %w(spruce pine)},
           {"key" => "height", "type" => "integer", "required" => true}
         ]},
@@ -24,13 +24,13 @@ RSpec.describe CustomFields::Spec, type: :model do
     ])}
 
     it "should create fields and sub specs" do
-      expect(spec.items[0].key).to eq :fruit
-      expect(spec.items[1].items[0].key).to eq :complete
-      expect(spec.items[1].items[1].key).to eq :comment
-      expect(spec.items[1].items[2].items[0].key).to eq :species
-      expect(spec.items[1].items[2].items[1].key).to eq :height
-      expect(spec.items[1].items[3].key).to eq :count
-      expect(spec.items[2].key).to eq :bar
+      expect(spec.fields[0].key).to eq :fruit
+      expect(spec.fields[1].fields[0].key).to eq :complete
+      expect(spec.fields[1].fields[1].key).to eq :comment
+      expect(spec.fields[1].fields[2].fields[0].key).to eq :species
+      expect(spec.fields[1].fields[2].fields[1].key).to eq :height
+      expect(spec.fields[1].fields[3].key).to eq :count
+      expect(spec.fields[2].key).to eq :bar
     end
   end
 end

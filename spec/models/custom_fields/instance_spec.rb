@@ -43,7 +43,7 @@ RSpec.describe CustomFields::Instance, type: :model do
       let(:instance_data) { nil }
 
       it "should error" do
-        expect { config }.to raise_error(ArgumentError)
+        expect { instance }.to raise_error(ArgumentError)
       end
     end
   end

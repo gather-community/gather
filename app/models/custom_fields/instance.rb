@@ -16,7 +16,7 @@ module CustomFields
     def initialize(spec_data:, instance_data:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
       self.spec = Spec.new(spec_data)
-      self.root = Entry.new(field: spec.root, value: instance_data)
+      self.root = Entries::GroupEntry.new(field: spec.root, value: instance_data)
     end
 
     # This is so that form point to update instead of create

@@ -39,8 +39,25 @@ RSpec.describe CustomFields::Instance, type: :model do
       end
     end
 
+    context "with irrelevant keys" do
+      let(:instance_data) { {fruit: "peach", info: {complete: true, comment: "hi!"}, qux: 1} }
+
+      it "should ignore the extra key but preserve the hash" do
+        expect(instance.entries.map(&:key)).to contain_exactly(:fruit, :info)
+        expect(instance_data.keys).to contain_exactly(:fruit, :info, :qux)
+      end
+    end
+
     context "with nil instance data" do
       let(:instance_data) { nil }
+
+      it "should error" do
+        expect { instance }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "with malformed instance data" do
+      let(:instance_data) { {fruit: "apple", info: "hi!"} }
 
       it "should error" do
         expect { instance }.to raise_error(ArgumentError)
@@ -103,6 +120,11 @@ RSpec.describe CustomFields::Instance, type: :model do
         expect(instance.fruit).to eq "apple"
         expect { instance.qux }.to raise_error(NoMethodError)
         expect(instance_data).to eq({fruit: "apple", info: {comment: "hi!", complete: true}})
+      end
+
+      it "should handle malformed data" do
+        expect { instance.update(2) }.to raise_error(ArgumentError)
+        expect { instance.update(fruit: "apple", info: "hi!") }.to raise_error(ArgumentError)
       end
     end
 

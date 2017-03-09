@@ -31,6 +31,7 @@ module CustomFields
       end
 
       def update(hash)
+        check_hash(hash)
         hash = hash.with_indifferent_access
         entries.each do |entry|
           entry.update(hash[entry.key]) if hash.has_key?(entry.key)

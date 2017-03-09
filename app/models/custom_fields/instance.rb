@@ -6,7 +6,7 @@ module CustomFields
     attr_accessor :spec, :root
 
     delegate :fields, to: :spec
-    delegate :entries, :[], to: :root
+    delegate :entries, :update, :[], to: :root
 
     # def self.model_name
     #   ActiveModel::Name.new(self, nil, name.split("::").last)
@@ -16,20 +16,12 @@ module CustomFields
     def initialize(spec_data:, instance_data:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
       self.spec = Spec.new(spec_data)
-      self.root = Entries::GroupEntry.new(field: spec.root, value: instance_data)
+      self.root = Entries::GroupEntry.new(field: spec.root, hash: instance_data)
     end
 
     # This is so that form point to update instead of create
     def persisted?
       true
-    end
-
-    def update(hash)
-      hash = hash.with_indifferent_access
-      # Iterate through and update the existing hash.
-      spec.keys.each do |key, value|
-        instance_data[key] = hash[key] if hash.has_key?(key)
-      end
     end
 
     def method_missing(symbol, *args)

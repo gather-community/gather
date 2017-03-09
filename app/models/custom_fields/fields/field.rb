@@ -20,6 +20,10 @@ module CustomFields
       def type
         raise NotImplementedError
       end
+
+      def root?
+        false
+      end
     end
   end
 end

@@ -17,6 +17,10 @@ module CustomFields
         :group
       end
 
+      def root?
+        key == :__root__
+      end
+
       def keys
         @keys ||= fields.map(&:key)
       end

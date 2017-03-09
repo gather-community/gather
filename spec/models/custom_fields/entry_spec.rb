@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Entry, type: :model do
+RSpec.describe CustomFields::Entries::Entry, type: :model do
   let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b), required: true) }
-  let(:entry) { described_class.new(field: field, value: "b") }
+  let(:entry) { described_class.new(field: field, hash: {foo: "b"}) }
 
   it "should delegate field methods" do
     expect(entry.key).to eq field.key

@@ -4,14 +4,17 @@ module CustomFields
     class GroupEntry < Entry
       attr_accessor :entries
 
-      def initialize(field:, value:)
-        value ||= {}
-        value.symbolize_keys!
+      def initialize(field:, hash:)
+        super(field: field, hash: hash)
         self.entries = field.fields.map do |f|
           klass = f.type == :group ? GroupEntry : Entry
-          klass.new(field: f, value: value[f.key])
+          klass.new(field: f, hash: value)
         end
-        super(field: field, value: value)
+      end
+
+      def value
+        # If this is the root GroupEntry, the value is just the hash itself
+        field.root? ? hash : super
       end
 
       def keys
@@ -25,6 +28,13 @@ module CustomFields
 
       def method_missing(symbol, *args)
         keys.include?(symbol) ? self[symbol] : super
+      end
+
+      def update(hash)
+        hash = hash.with_indifferent_access
+        entries.each do |entry|
+          entry.update(hash[entry.key]) if hash.has_key?(entry.key)
+        end
       end
 
       private

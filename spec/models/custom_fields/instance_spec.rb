@@ -75,32 +75,34 @@ RSpec.describe CustomFields::Instance, type: :model do
   describe "update" do
     context "with initial instance data" do
       it "should update entries AND original hash" do
-        instance.update(foo: "apple", bar: "junk")
-        expect(instance.foo).to eq "apple"
-        expect(instance.bar).to eq "junk"
-        expect(instance_data).to eq({bar: "junk", foo: "apple"}) # Keys are symbolized in constructor
+        instance.update(fruit: "apple", info: {complete: false, comment: "bye!"})
+        expect(instance.fruit).to eq "apple"
+        expect(instance.info.complete).to be false
+        expect(instance.info.comment).to eq "bye!"
+        expect(instance_data).to eq({fruit: "apple", info: {comment: "bye!", complete: false}})
       end
 
       it "should work with partial updates" do
-        instance.update(foo: "apple")
-        expect(instance.foo).to eq "apple"
-        expect(instance.bar).to eq "stuff"
-        expect(instance_data).to eq({bar: "stuff", foo: "apple"})
+        instance.update(fruit: "apple")
+        expect(instance.fruit).to eq "apple"
+        expect(instance.info.complete).to be true
+        expect(instance.info.comment).to eq "hi!"
+        expect(instance_data).to eq({fruit: "apple", info: {comment: "hi!", complete: true}})
       end
 
       it "should work with string keys" do
-        instance.update("foo" => "apple", "bar" => "junk")
-        expect(instance.foo).to eq "apple"
-        expect(instance.bar).to eq "junk"
-        expect(instance_data).to eq({bar: "junk", foo: "apple"})
+        instance.update("fruit" => "apple", "info" => {"complete" => false, "comment" => "bye!"})
+        expect(instance.fruit).to eq "apple"
+        expect(instance.info.complete).to be false
+        expect(instance.info.comment).to eq "bye!"
+        expect(instance_data).to eq({fruit: "apple", info: {comment: "bye!", complete: false}})
       end
 
       it "should ignore irrelevant keys" do
-        instance.update(foo: "apple", qux: "junk")
-        expect(instance.foo).to eq "apple"
-        expect(instance.bar).to eq "stuff"
+        instance.update(fruit: "apple", qux: "junk")
+        expect(instance.fruit).to eq "apple"
         expect { instance.qux }.to raise_error(NoMethodError)
-        expect(instance_data).to eq({bar: "stuff", foo: "apple"})
+        expect(instance_data).to eq({fruit: "apple", info: {comment: "hi!", complete: true}})
       end
     end
 
@@ -108,9 +110,9 @@ RSpec.describe CustomFields::Instance, type: :model do
       let(:instance_data) { {} }
 
       it "should still update original hash" do
-        instance.update(foo: "apple")
-        expect(instance_data).to eq({foo: "apple"})
-        expect(instance.foo).to eq "apple"
+        instance.update(fruit: "apple")
+        expect(instance_data).to eq({fruit: "apple"})
+        expect(instance.fruit).to eq "apple"
       end
     end
   end

@@ -8,7 +8,12 @@ RSpec.describe CustomFields::Instance, type: :model do
       {key: "comment", type: "string"}
     ]}
   ] }
-  let(:instance) { described_class.new(spec_data: spec_data, instance_data: instance_data) }
+  let(:instance) { described_class.new(
+    spec_data: spec_data,
+    instance_data: instance_data,
+    model_name: "mod",
+    attrib_name: "att"
+  ) }
   let(:instance_data) { {"fruit" => "peach", "info" => {"complete" => true, "comment" => "hi!"}} }
 
   describe "constructor" do
@@ -136,6 +141,22 @@ RSpec.describe CustomFields::Instance, type: :model do
         expect(instance_data).to eq({fruit: "apple"})
         expect(instance.fruit).to eq "apple"
       end
+    end
+  end
+
+  describe "i18n_key" do
+    let(:spec_data) { [
+      {key: "alpha", type: "string", validation: {length: {maximum: 5}}},
+      {key: "bravo", type: "group", fields: [
+        {key: "charlie", type: "string", validation: {length: {minimum: 5}}}
+      ]}
+    ] }
+
+    it "should be correct at all levels" do
+      expect(instance.entries[0].i18n_key(:errors)).to eq "custom_fields.errors.mod.att.alpha"
+      expect(instance.entries[1].i18n_key(:errors)).to eq "custom_fields.errors.mod.att.bravo._self"
+      expect(instance.entries[1].entries[0].i18n_key(:errors)).to eq(
+        "custom_fields.errors.mod.att.bravo.charlie")
     end
   end
 

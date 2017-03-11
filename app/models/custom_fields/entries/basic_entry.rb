@@ -1,0 +1,16 @@
+module CustomFields
+  module Entries
+    class BasicEntry < Entry
+      delegate :required, :options, :validation, :input_params, to: :field
+
+      # Runs all validations using validates_with on parent GroupEntry
+      def do_validation(parent)
+        validation.each do |name, options|
+          options = {} if options == true
+          validator = "ActiveModel::Validations::#{name.to_s.camelize}Validator".constantize
+          parent.validates_with(validator, options.merge(attributes: [key]))
+        end
+      end
+    end
+  end
+end

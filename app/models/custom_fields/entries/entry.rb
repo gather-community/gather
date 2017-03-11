@@ -4,7 +4,7 @@ module CustomFields
     class Entry
       attr_accessor :field, :hash
 
-      delegate :key, :type, :required, :options, :validation, :input_params, to: :field
+      delegate :key, :type, to: :field
 
       # `hash` should be a hash of data that has `field.key`
       # We do it this way so that we preserve references to the original hash.
@@ -21,6 +21,10 @@ module CustomFields
       def update(value)
         return if hash.nil?
         hash[key] = value
+      end
+
+      def do_validation(parent)
+        raise NotImplementedError
       end
 
       protected

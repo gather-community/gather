@@ -11,7 +11,7 @@ module CustomFields
       def initialize(field:, hash:)
         super(field: field, hash: hash)
         self.entries = field.fields.map do |f|
-          klass = f.type == :group ? GroupEntry : Entry
+          klass = f.type == :group ? GroupEntry : BasicEntry
           klass.new(field: f, hash: value)
         end
       end
@@ -42,6 +42,11 @@ module CustomFields
         end
       end
 
+      # Runs validations and sets error on parent GroupEntry if invalid
+      def do_validation(parent)
+        parent.errors.add(key, :invalid) unless valid?
+      end
+
       private
 
       def entries_by_key
@@ -50,17 +55,7 @@ module CustomFields
 
       # Runs the validations specified in the `validations` property of any children.
       def validate_children
-        entries.each do |entry|
-          if entry.type == :group
-            errors.add(entry.key, :invalid) unless entry.valid?
-          else
-            (entry.validation || {}).each do |name, options|
-              options = {} if options == true
-              validator = "ActiveModel::Validations::#{name.to_s.camelize}Validator".constantize
-              validates_with(validator, options.merge(attributes: [entry.key]))
-            end
-          end
-        end
+        entries.each { |e| e.do_validation(self) }
       end
     end
   end

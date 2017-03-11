@@ -2,7 +2,11 @@ module CustomFields
   module Entries
     # A set of Entrys corresponding to a GroupField in the Spec.
     class GroupEntry < Entry
+      include ActiveModel::Validations
+
       attr_accessor :entries
+
+      validate :validate_children
 
       def initialize(field:, hash:)
         super(field: field, hash: hash)
@@ -42,6 +46,21 @@ module CustomFields
 
       def entries_by_key
         @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h
+      end
+
+      # Runs the validations specified in the `validations` property of any children.
+      def validate_children
+        entries.each do |entry|
+          if entry.type == :group
+            errors.add(entry.key, :invalid) unless entry.valid?
+          else
+            (entry.validation || {}).each do |name, options|
+              options = {} if options == true
+              validator = "ActiveModel::Validations::#{name.to_s.camelize}Validator".constantize
+              validates_with(validator, options.merge(attributes: [entry.key]))
+            end
+          end
+        end
       end
     end
   end

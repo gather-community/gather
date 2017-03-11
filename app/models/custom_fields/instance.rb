@@ -6,12 +6,7 @@ module CustomFields
     attr_accessor :spec, :root
 
     delegate :fields, to: :spec
-    delegate :entries, :update, :[], to: :root
-
-    # def self.model_name
-    #   ActiveModel::Name.new(self, nil, name.split("::").last)
-    # end
-    #
+    delegate :entries, :update, :[], :valid?, :errors, to: :root
 
     def initialize(spec_data:, instance_data:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?

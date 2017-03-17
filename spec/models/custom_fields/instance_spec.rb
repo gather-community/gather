@@ -8,8 +8,9 @@ RSpec.describe CustomFields::Instance, type: :model do
       {key: "comment", type: "string"}
     ]}
   ] }
+  let(:spec) { CustomFields::Spec.new(spec_data) }
   let(:instance) { described_class.new(
-    spec_data: spec_data,
+    spec: spec,
     instance_data: instance_data,
     class_name: "mod",
     attrib_name: "att"

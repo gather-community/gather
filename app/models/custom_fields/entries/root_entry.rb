@@ -1,11 +1,11 @@
 module CustomFields
   module Entries
     class RootEntry < GroupEntry
-      attr_accessor :model_name, :attrib_name
+      attr_accessor :class_name, :attrib_name
 
-      def initialize(field:, hash:, model_name:, attrib_name:)
+      def initialize(field:, hash:, class_name:, attrib_name:)
         super(field: field, hash: hash)
-        self.model_name = model_name
+        self.class_name = class_name
         self.attrib_name = attrib_name
         self.entries = field.fields.map do |f|
           klass = f.type == :group ? GroupEntry : BasicEntry
@@ -15,7 +15,7 @@ module CustomFields
 
       # Returns an i18n_key of the given type (e.g. `errors`, `placeholders`).
       def i18n_key(type, suffix: true)
-        "custom_fields.#{type}.#{model_name}.#{attrib_name}"
+        "custom_fields.#{type}.#{class_name}.#{attrib_name}"
       end
 
       private

@@ -11,7 +11,7 @@ RSpec.describe CustomFields::Instance, type: :model do
   let(:instance) { described_class.new(
     spec_data: spec_data,
     instance_data: instance_data,
-    model_name: "mod",
+    class_name: "mod",
     attrib_name: "att"
   ) }
   let(:instance_data) { {"fruit" => "peach", "info" => {"complete" => true, "comment" => "hi!"}} }
@@ -283,6 +283,31 @@ RSpec.describe CustomFields::Instance, type: :model do
       it "should still work" do
         expect(instance.valid?).to be false
         expect(instance.errors[:alpha]).to eq ["is too long (maximum is 5 characters)"]
+      end
+    end
+
+    describe "with custom i18n'd message" do
+      let(:spec_data) { [
+        {key: "alpha", type: "string", validation: {length: {maximum: 5, message: :foo}}},
+      ] }
+      let(:instance_data) { {alpha: "xxxxxx"} }
+
+      it "should look up message in expected place" do
+        original_translate = I18n.method(:translate)
+        allow(I18n).to receive(:translate) do |key, options|
+          if key == "custom_fields.errors.mod.att.alpha"
+            expect(options[:default]).to eq %i(
+              activemodel.errors.messages.foo
+              activerecord.errors.messages.foo
+              errors.messages.foo
+            )
+            "Teh error msg"
+          else
+            original_translate.call(key, options)
+          end
+        end
+        expect(instance.valid?).to be false
+        expect(instance.errors[:alpha]).to eq ["Teh error msg"]
       end
     end
   end

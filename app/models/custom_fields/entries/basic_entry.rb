@@ -18,6 +18,10 @@ module CustomFields
           parent.validates_with(validator, options.merge(attributes: [key]))
         end
       end
+
+      def value
+        hash.nil? ? nil : hash[key]
+      end
     end
   end
 end

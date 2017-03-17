@@ -7,10 +7,6 @@ module CustomFields
         super(field: field, hash: hash)
         self.class_name = class_name
         self.attrib_name = attrib_name
-        self.entries = field.fields.map do |f|
-          klass = f.type == :group ? GroupEntry : BasicEntry
-          klass.new(field: f, hash: value, parent: self)
-        end
       end
 
       # Returns an i18n_key of the given type (e.g. `errors`, `placeholders`).

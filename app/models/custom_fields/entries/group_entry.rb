@@ -14,13 +14,12 @@ module CustomFields
         super(field: field, hash: hash, parent: parent)
         self.entries = field.fields.map do |f|
           klass = f.type == :group ? GroupEntry : BasicEntry
-          klass.new(field: f, hash: value, parent: self)
+          klass.new(field: f, hash: root? ? hash : hash[key], parent: self)
         end
       end
 
       def value
-        # If this is the root GroupEntry, the value is just the hash itself
-        field.root? ? hash : super
+        self
       end
 
       def keys
@@ -28,13 +27,11 @@ module CustomFields
       end
 
       def [](key)
-        return nil unless entry = entries_by_key[key.to_sym]
-        entry.type == :group ? entry : entry.value
+        entries_by_key[key.to_sym].try(:value)
       end
 
-      def []=(key, value)
-        return nil unless entry = entries_by_key[key.to_sym]
-        entry.update(value)
+      def []=(key, new_value)
+        entries_by_key[key.to_sym].try(:update, new_value)
       end
 
       def method_missing(symbol, *args)

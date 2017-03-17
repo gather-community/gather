@@ -16,7 +16,7 @@ module CustomFields
       end
 
       def value
-        hash.nil? ? nil : hash[key]
+        raise NotImplementedError
       end
 
       def update(value)

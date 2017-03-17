@@ -19,6 +19,11 @@ module CustomFields
         end
       end
 
+      def update(value)
+        return if hash.nil?
+        hash[key] = value
+      end
+
       def value
         hash.nil? ? nil : hash[key]
       end

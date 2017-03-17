@@ -177,7 +177,7 @@ RSpec.describe CustomFields::Instance, type: :model do
 
       it "should still update original hash" do
         instance.update(fruit: "apple")
-        expect(instance_data).to eq({fruit: "apple"})
+        expect(instance_data).to eq({fruit: "apple", info: {comment: nil, complete: nil}})
         expect(instance.fruit).to eq "apple"
       end
     end

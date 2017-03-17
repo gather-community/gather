@@ -44,11 +44,13 @@ module CustomFields
         end
       end
 
-      def update(hash)
-        check_hash(hash)
-        hash = hash.with_indifferent_access
+      def update(new_hash)
+        check_hash(new_hash)
+        new_hash = new_hash.with_indifferent_access
         entries.each do |entry|
-          entry.update(hash[entry.key]) if hash.has_key?(entry.key)
+          if new_hash.has_key?(entry.key)
+            entry.update(new_hash[entry.key])
+          end
         end
       end
 
@@ -76,6 +78,7 @@ module CustomFields
 
       # The hash we should pass to any child entries we build.
       def hash_for_child
+        hash[key] = {} if hash[key].nil?
         hash[key]
       end
 

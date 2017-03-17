@@ -13,6 +13,7 @@ module CustomFields
         self.parent = parent
         self.field = field
         self.hash = hash.try(:symbolize_keys!)
+        hash[key] = nil if !hash.key?(key) && key != :__root__
       end
 
       def value
@@ -20,8 +21,7 @@ module CustomFields
       end
 
       def update(value)
-        return if hash.nil?
-        hash[key] = value
+        raise NotImplementedError
       end
 
       def do_validation(parent)
@@ -35,7 +35,7 @@ module CustomFields
       protected
 
       def check_hash(hash)
-        raise ArgumentError.new("Malformed data: #{hash}") if hash && !hash.is_a?(Hash)
+        raise ArgumentError.new("Malformed data: #{hash}") unless hash.is_a?(Hash)
       end
     end
   end

@@ -12,18 +12,15 @@ module CustomFields
 
       def initialize(field:, hash:, parent: nil)
         super(field: field, hash: hash, parent: parent)
-        self.entries = field.fields.map do |f|
-          klass = f.type == :group ? GroupEntry : BasicEntry
-          klass.new(field: f, hash: root? ? hash : hash[key], parent: self)
-        end
-      end
-
-      def value
-        self
+        self.entries = field.fields.map { |f| build_child_entry(f) }
       end
 
       def keys
         entries_by_key.keys
+      end
+
+      def value
+        self
       end
 
       def [](key)
@@ -68,6 +65,19 @@ module CustomFields
       end
 
       private
+
+      def class_for(field)
+        field.type == :group ? GroupEntry : BasicEntry
+      end
+
+      def build_child_entry(field)
+        class_for(field).new(field: field, hash: hash_for_child, parent: self)
+      end
+
+      # The hash we should pass to any child entries we build.
+      def hash_for_child
+        hash[key]
+      end
 
       def entries_by_key
         @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h

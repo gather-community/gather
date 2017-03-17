@@ -16,13 +16,9 @@ module CustomFields
 
       private
 
-      def entries_by_key
-        @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h
-      end
-
-      # Runs the validations specified in the `validations` property of any children.
-      def validate_children
-        entries.each { |e| e.do_validation(self) }
+      # The hash we should pass to any child entries we build.
+      def hash_for_child
+        hash
       end
     end
   end

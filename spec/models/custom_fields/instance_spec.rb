@@ -70,7 +70,7 @@ RSpec.describe CustomFields::Instance, type: :model do
     end
   end
 
-  describe "accessor" do
+  describe "getters" do
     describe "method call style" do
       it "should work for valid key" do
         expect(instance.fruit).to eq "peach"
@@ -94,7 +94,45 @@ RSpec.describe CustomFields::Instance, type: :model do
     end
   end
 
-  describe "update" do
+  describe "setters" do
+    describe "method call style" do
+      it "should work for valid key" do
+        instance.fruit = "apple"
+        expect(instance.fruit).to eq "apple"
+        expect(instance.info.comment).to eq "hi!"
+      end
+
+      it "should work for group with hash" do
+        instance.info = {comment: "yo"}
+        expect(instance.info.comment).to eq "yo"
+      end
+
+      it "should raise NoMethodError for invalid key" do
+        expect { instance.baz = "foo" }.to raise_error(NoMethodError)
+      end
+    end
+
+    describe "[] style" do
+      it "should work for valid key" do
+        instance["fruit"] = "apple"
+        expect(instance["fruit"]).to eq "apple"
+        expect(instance["info"][:complete]).to be true
+      end
+
+      it "should work for group with hash" do
+        instance["info"] = {comment: "yo", complete: false}
+        expect(instance["info"][:comment]).to eq "yo"
+        expect(instance["info"][:complete]).to be false
+      end
+
+      it "should not successfully set value invalid key" do
+        instance["baz"] = "apple"
+        expect(instance["baz"]).to be_nil
+      end
+    end
+  end
+
+  describe "update via hash" do
     context "with initial instance data" do
       it "should update entries AND original hash" do
         instance.update(fruit: "apple", info: {complete: false, comment: "bye!"})

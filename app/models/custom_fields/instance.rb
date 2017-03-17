@@ -6,7 +6,7 @@ module CustomFields
     attr_accessor :spec, :root
 
     delegate :fields, to: :spec
-    delegate :entries, :update, :[], :valid?, :errors, to: :root
+    delegate :entries, :update, :[], :[]=, :valid?, :errors, to: :root
 
     def initialize(spec_data:, instance_data:, class_name:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
@@ -25,7 +25,7 @@ module CustomFields
     end
 
     def method_missing(symbol, *args)
-      if root.keys.include?(symbol)
+      if root.keys.include?(symbol.to_s.chomp("=").to_sym)
         root.send(symbol, *args)
       else
         super

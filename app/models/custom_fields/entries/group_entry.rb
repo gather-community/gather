@@ -32,8 +32,22 @@ module CustomFields
         entry.type == :group ? entry : entry.value
       end
 
+      def []=(key, value)
+        return nil unless entry = entries_by_key[key.to_sym]
+        entry.update(value)
+      end
+
       def method_missing(symbol, *args)
-        keys.include?(symbol) ? self[symbol] : super
+        key = symbol.to_s.chomp("=").to_sym
+        if keys.include?(key)
+          if symbol[-1] == "="
+            self[key] = args.first
+          else
+            self[key]
+          end
+        else
+          super
+        end
       end
 
       def update(hash)

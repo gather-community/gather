@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "custom field declaration", type: :model do
-  let(:fake) { FakeCustomFieldModel.new }
-
   describe "getters and setters" do
+    let(:fake) { FakeCustomFieldModel.new }
+
     it "should return empty instance if nothing is set" do
       expect(fake.settings.class).to eq CustomFields::Instance
       expect(fake.settings.info.complete).to be_nil
@@ -86,6 +86,33 @@ RSpec.describe "custom field declaration", type: :model do
         expect { fake.errors[:settings] }.to raise_error(NoMethodError)
         expect(fake.settings.errors[:fruit]).to eq []
       end
+    end
+  end
+
+  describe "i18n keys" do
+    let(:fake) { FakeCustomFieldModel.new }
+
+    before do
+      I18n.backend.send(:init_translations)
+      fake.settings.info.comment = "xxxxxx"
+    end
+
+    after do
+      I18n.backend = I18n::Backend::Simple.new
+    end
+
+    it "should look up main atrrib error msg in right place" do
+      I18n.backend.store_translations :en,
+        activemodel: {errors: {models: {fake_custom_field_model: {attributes: {settings: {invalid: "m1"}}}}}}
+      expect(fake.valid?).to be false
+      expect(fake.errors[:settings]).to eq ["m1"]
+    end
+
+    it "should look up field error msg in right place" do
+      I18n.backend.store_translations :en,
+        custom_fields: {errors: {fake_custom_field_model: {settings: {info: {comment: {foo: "m2"}}}}}}
+      expect(fake.valid?).to be false
+      expect(fake.settings.info.errors[:comment]).to eq ["m2"]
     end
   end
 end

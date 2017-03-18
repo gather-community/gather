@@ -5,7 +5,7 @@ class FakeCustomFieldModel
     {key: "fruit", type: "enum", options: %w(apple banana peach), required: true},
     {key: "info", type: "group", fields: [
       {key: "complete", type: "boolean"},
-      {key: "comment", type: "string"}
+      {key: "comment", type: "string", validation: {length: {maximum: 5, message: :foo}}}
     ]}
   ]
 end

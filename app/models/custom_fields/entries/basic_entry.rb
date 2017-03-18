@@ -6,9 +6,14 @@ module CustomFields
       # Runs all validations using validates_with on parent GroupEntry
       def do_validation(parent)
         validation.each do |name, options|
-          options = {} if options == true
+          if options == true
+            options = {}
+          elsif options.is_a?(Hash)
+            options = options.dup
+          end
+
           if options[:message].is_a?(Symbol)
-            options[:message] = I18n.translate(i18n_key(:errors), default: [
+            options[:message] = I18n.translate(:"#{i18n_key(:errors)}.#{options[:message]}", default: [
               :"activemodel.errors.messages.#{options[:message]}",
               :"activerecord.errors.messages.#{options[:message]}",
               :"errors.messages.#{options[:message]}"

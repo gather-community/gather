@@ -63,7 +63,7 @@ module CustomFields
       # If `suffix` is true, adds `._self` on the end,
       # for when the group itself needs a translation.
       def i18n_key(type, suffix: true)
-        super << (suffix ? "._self" : "")
+        (super.to_s << (suffix ? "._self" : "")).to_sym
       end
 
       private

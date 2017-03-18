@@ -29,7 +29,7 @@ module CustomFields
       end
 
       def i18n_key(type, suffix: true)
-        "#{parent.i18n_key(type, suffix: false)}.#{key}"
+        :"#{parent.i18n_key(type, suffix: false)}.#{key}"
       end
 
       protected

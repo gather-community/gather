@@ -12,7 +12,7 @@ RSpec.describe CustomFields::Instance, type: :model do
   let(:instance) { described_class.new(
     spec: spec,
     instance_data: instance_data,
-    class_name: "mod",
+    model_i18n_key: "mod",
     attrib_name: "att"
   ) }
   let(:instance_data) { {"fruit" => "peach", "info" => {"complete" => true, "comment" => "hi!"}} }

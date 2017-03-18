@@ -5,7 +5,7 @@ describe "custom field validation" do
   let(:instance) { CustomFields::Instance.new(
     spec: spec,
     instance_data: instance_data,
-    class_name: "mod",
+    model_i18n_key: "mod",
     attrib_name: "att"
   ) }
 
@@ -19,10 +19,10 @@ describe "custom field validation" do
     let(:instance_data) { {"fruit" => "peach", "info" => {"complete" => true, "comment" => "hi!"}} }
 
     it "should be correct at all levels" do
-      expect(instance.entries[0].i18n_key(:errors)).to eq "custom_fields.errors.mod.att.alpha"
-      expect(instance.entries[1].i18n_key(:errors)).to eq "custom_fields.errors.mod.att.bravo._self"
+      expect(instance.entries[0].i18n_key(:errors)).to eq :"custom_fields.errors.mod.att.alpha"
+      expect(instance.entries[1].i18n_key(:errors)).to eq :"custom_fields.errors.mod.att.bravo._self"
       expect(instance.entries[1].entries[0].i18n_key(:errors)).to eq(
-        "custom_fields.errors.mod.att.bravo.charlie")
+        :"custom_fields.errors.mod.att.bravo.charlie")
     end
   end
 
@@ -151,26 +151,18 @@ describe "custom field validation" do
     end
   end
 
-  describe "with custom i18n'd message" do
+  describe "with custom error message" do
     let(:spec_data) { [
       {key: "alpha", type: "string", validation: {length: {maximum: 5, message: :foo}}},
     ] }
     let(:instance_data) { {alpha: "xxxxxx"} }
 
     it "should look up message in expected place" do
-      original_translate = I18n.method(:translate)
-      allow(I18n).to receive(:translate) do |key, options|
-        if key == "custom_fields.errors.mod.att.alpha"
-          expect(options[:default]).to eq %i(
-            activemodel.errors.messages.foo
-            activerecord.errors.messages.foo
-            errors.messages.foo
-          )
-          "Teh error msg"
-        else
-          original_translate.call(key, options)
-        end
-      end
+      stub_translation(:"custom_fields.errors.mod.att.alpha.foo", "Teh error msg", expect_defaults: %i(
+        activemodel.errors.messages.foo
+        activerecord.errors.messages.foo
+        errors.messages.foo
+      ))
       expect(instance.valid?).to be false
       expect(instance.errors[:alpha]).to eq ["Teh error msg"]
     end

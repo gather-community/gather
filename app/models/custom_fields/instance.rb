@@ -8,13 +8,13 @@ module CustomFields
     delegate :fields, to: :spec
     delegate :hash, :entries, :update, :[], :[]=, :valid?, :errors, to: :root
 
-    def initialize(spec:, instance_data:, class_name:, attrib_name:)
+    def initialize(spec:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
       self.spec = spec
       self.root = Entries::RootEntry.new(
         field: spec.root,
         hash: instance_data,
-        class_name: class_name,
+        model_i18n_key: model_i18n_key,
         attrib_name: attrib_name
       )
     end

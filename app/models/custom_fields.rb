@@ -21,6 +21,8 @@ module CustomFields
         end
       end
 
+      i18n_key = respond_to?(:model_name) ? model_name.i18n_key : name.gsub(/(?<!\A)([A-Z])/, '_\1').downcase
+
       define_method(attrib_name) do
         cur_instance = instance_variable_get("@#{attrib_name}")
 
@@ -36,7 +38,7 @@ module CustomFields
           instance_variable_set("@#{attrib_name}", Instance.new(
             spec: spec,
             instance_data: respond_to?(:read_attribute) ? read_attribute(attrib_name) : {},
-            class_name: self.class.name,
+            model_i18n_key: i18n_key,
             attrib_name: attrib_name
           ))
         end
@@ -53,7 +55,7 @@ module CustomFields
           instance_variable_set("@#{attrib_name}", Instance.new(
             spec: spec,
             instance_data: hash,
-            class_name: self.class.name,
+            model_i18n_key: i18n_key,
             attrib_name: attrib_name
           ))
         end

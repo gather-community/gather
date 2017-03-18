@@ -15,6 +15,12 @@ module CustomFields
     def custom_fields(attrib_name, spec:)
       spec = Spec.new(spec)
 
+      if respond_to?(:validate)
+        validate do
+          errors.add(attrib_name, :invalid) unless send(attrib_name).valid?
+        end
+      end
+
       define_method(attrib_name) do
         cur_instance = instance_variable_get("@#{attrib_name}")
 

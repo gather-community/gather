@@ -1,5 +1,6 @@
 class FakeCustomFieldModel
-  include CustomFields
+  include CustomFields, ActiveModel::Validations
+
   custom_fields :settings, spec: [
     {key: "fruit", type: "enum", options: %w(apple banana peach), required: true},
     {key: "info", type: "group", fields: [

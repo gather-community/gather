@@ -64,4 +64,28 @@ RSpec.describe "custom field declaration", type: :model do
       expect(fake.settings.info.comment).to eq "Yo!"
     end
   end
+
+  describe "validation" do
+    context "with model that supports validation" do
+      let(:fake) { FakeCustomFieldModel.new }
+
+      it "should set :invalid error on attribute" do
+        fake.settings.fruit = %w(bread)
+        expect(fake.valid?).to be false
+        expect(fake.errors[:settings]).to eq ["is invalid"]
+        expect(fake.settings.errors[:fruit]).to eq ["is not included in the list"]
+      end
+    end
+
+    context "with model that doesn't support validation" do
+      let(:fake) { FakeCustomFieldModelNoValidation.new }
+
+      it "should not set any validation errors" do
+        fake.settings.fruit = %w(bread)
+        expect { fake.valid? }.to raise_error(NoMethodError)
+        expect { fake.errors[:settings] }.to raise_error(NoMethodError)
+        expect(fake.settings.errors[:fruit]).to eq []
+      end
+    end
+  end
 end

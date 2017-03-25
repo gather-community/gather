@@ -73,6 +73,11 @@ Rails.application.routes.draw do
 
   resources :uploads, only: [:create, :destroy]
 
+  namespace :admin do
+    get "settings/:type", to: "settings#edit", as: :settings
+    patch "settings/:type", to: "settings#update"
+  end
+
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
   get "logged-out", to: "landing#logged_out", as: :logged_out

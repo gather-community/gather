@@ -250,6 +250,7 @@ en:
       meals: "Meals"
       reservations: "Reservations"
       accounts: "Accounts"
+      admin: "Admin"
     sub:
       meals:
         meals: "Meals"

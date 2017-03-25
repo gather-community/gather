@@ -1,0 +1,9 @@
+<% content_for(:title) { "#{current_community.name} Settings" } %>
+
+<%= horizontal_form_for(@community, url: "/admin/settings/community") do |f| %>
+
+  <%= simple_fields_for(:config) do |ff| %>
+    <%= ff.input :reminder_time_of_day, @community.config.entries_by_key[:reminder_time_of_day].input_params %>
+  <% end %>
+
+<% end %>

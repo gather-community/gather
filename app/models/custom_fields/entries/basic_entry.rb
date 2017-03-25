@@ -1,7 +1,7 @@
 module CustomFields
   module Entries
     class BasicEntry < Entry
-      delegate :required, :options, :validation, :input_params, to: :field
+      delegate :required, :options, :validation, to: :field
 
       # Runs all validations using validates_with on parent GroupEntry
       def do_validation(parent)
@@ -31,6 +31,14 @@ module CustomFields
 
       def value
         hash.nil? ? nil : hash[key]
+      end
+
+      # Returns the appropriate params to pass to simple_form's f.input method
+      def input_params
+        {}.tap do |params|
+          params[:as] = field.input_type
+          params[:collection] = field.collection if field.collection
+        end
       end
     end
   end

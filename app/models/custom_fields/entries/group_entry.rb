@@ -66,6 +66,10 @@ module CustomFields
         (super.to_s << (suffix ? "._self" : "")).to_sym
       end
 
+      def entries_by_key
+        @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h
+      end
+
       private
 
       def class_for(field)
@@ -80,10 +84,6 @@ module CustomFields
       def hash_for_child
         hash[key] = {} if hash[key].nil?
         hash[key]
-      end
-
-      def entries_by_key
-        @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h
       end
 
       # Runs the validations specified in the `validations` property of any children.

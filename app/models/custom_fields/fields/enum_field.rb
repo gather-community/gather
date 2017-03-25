@@ -5,8 +5,12 @@ module CustomFields
         :enum
       end
 
-      def input_params
-        {collection: options}
+      def input_type
+        :select
+      end
+
+      def collection
+        options
       end
     end
   end

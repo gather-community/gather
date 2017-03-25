@@ -24,10 +24,6 @@ module CustomFields
       def keys
         @keys ||= fields.map(&:key)
       end
-
-      def input_params
-        raise NotImplementedError
-      end
     end
   end
 end

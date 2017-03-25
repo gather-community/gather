@@ -14,17 +14,21 @@ module CustomFields
         set_implicit_validations
       end
 
-      # Returns the appropriate params to pass to simple_form's f.input method
-      def input_params
-        {as: type} # This is the default. Can be overridden by subclasses.
-      end
-
       def type
         raise NotImplementedError
       end
 
+      def input_type
+        type
+      end
+
       def root?
         false
+      end
+
+      # The collection to pass in the input_params. Should be overridden as needed.
+      def collection
+        nil
       end
 
       private

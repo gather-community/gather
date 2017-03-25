@@ -5,7 +5,7 @@ module Meals
     def perform
       return unless correct_hour?
 
-      lead_days = Settings.reminder_lead_times.meal
+      lead_days = Settings.reminders.lead_times.meal
       raise "No lead time found in settings for meal notification" if lead_days.blank?
 
       meal_ids = Meal.served_within_days_from_now(lead_days).pluck(:id)

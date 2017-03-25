@@ -1,30 +1,33 @@
-# Reminder lead times in days.
-# Reminders sent if object is before 11:59pm on `days` days from now.
-# So 0 means anytime today, 1 means anytime today or tomorrow, etc.
-reminder_lead_times:
-  meal: 0
-  statement: 5
-  shift:
-    head_cook: 3
-    asst_cook: 2
-    table_setter: 2
-    cleaner: 2
-  cook_menu:
-    early: 10
-    late: 5
-reminder_time_of_day: 6 # 6:00am
-meal_reservation_default_length: 330 # mins
-meal_reservation_default_prep_time: 180 # mins
-default_shift_times: # Minutes relative to meal start
-  start:
-    head_cook: -195
-    asst_cook: -135
-    table_setter: -60
-    cleaner: 45
-  end:
-    head_cook: 0
-    asst_cook: 0
-    table_setter: 0
-    cleaner: 165
+meals:
+  reservations:
+    default_length: 330 # mins
+    default_prep_time: 180 # mins
+  default_shift_times: # Minutes relative to meal start
+    start:
+      head_cook: -195
+      asst_cook: -135
+      table_setter: -60
+      cleaner: 45
+    end:
+      head_cook: 0
+      asst_cook: 0
+      table_setter: 0
+      cleaner: 165
+reminders:
+  time_of_day: 6 # 6:00am
+  # Reminder lead times in days.
+  # Reminders sent if object is before 11:59pm on `days` days from now.
+  # So 0 means anytime today, 1 means anytime today or tomorrow, etc.
+  lead_times:
+    meal: 0
+    statement: 5
+    shift:
+      head_cook: 3
+      asst_cook: 2
+      table_setter: 2
+      cleaner: 2
+    cook_menu:
+      early: 10
+      late: 5
 photos:
-  max_size: <%= 8.megabytes %>
+  max_size_mb: 8

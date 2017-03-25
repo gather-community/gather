@@ -11,11 +11,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def starts_at
-    meal.served_at + Settings.default_shift_times.start[role].minutes
+    meal.served_at + Settings.meals.default_shift_times.start[role].minutes
   end
 
   def ends_at
-    meal.served_at + Settings.default_shift_times.end[role].minutes
+    meal.served_at + Settings.meals.default_shift_times.end[role].minutes
   end
 
   def title

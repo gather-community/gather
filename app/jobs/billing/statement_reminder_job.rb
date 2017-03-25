@@ -15,7 +15,7 @@ module Billing
     def remindable_statements
       return @remindable_statements if @remindable_statements
 
-      lead_days = Settings.reminder_lead_times.statement
+      lead_days = Settings.reminders.lead_times.statement
       raise "No lead time found in settings for statement notification" if lead_days.blank?
 
       @remindable_statements = Statement.due_within_days_from_now(lead_days).

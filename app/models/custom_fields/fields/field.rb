@@ -27,6 +27,10 @@ module CustomFields
         false
       end
 
+      def group?
+        false
+      end
+
       # The collection to pass in the input_params. Should be overridden as needed.
       def collection
         nil

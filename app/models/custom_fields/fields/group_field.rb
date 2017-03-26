@@ -17,6 +17,10 @@ module CustomFields
         :group
       end
 
+      def group?
+        true
+      end
+
       def root?
         key == :__root__
       end

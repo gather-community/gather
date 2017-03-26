@@ -4,7 +4,7 @@ module CustomFields
     class Entry
       attr_accessor :field, :hash, :parent
 
-      delegate :key, :type, to: :field
+      delegate :key, :type, :group?, to: :field
 
       # `hash` should be a hash of data that has `field.key`
       # We do it this way so that we preserve references to the original hash.

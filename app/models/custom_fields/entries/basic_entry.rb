@@ -42,6 +42,7 @@ module CustomFields
         {}.tap do |params|
           params[:as] = field.input_type
           params[:collection] = field.collection if field.collection
+          params.merge!(field.value_input_param { value })
         end
       end
     end

@@ -23,6 +23,10 @@ module CustomFields
         type
       end
 
+      def value_input_param
+        {input_html: {value: yield}}
+      end
+
       def root?
         false
       end

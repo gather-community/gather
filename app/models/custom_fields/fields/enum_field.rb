@@ -12,6 +12,10 @@ module CustomFields
       def collection
         options
       end
+
+      def value_input_param
+        {selected: yield}
+      end
     end
   end
 end

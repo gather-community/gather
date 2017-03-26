@@ -43,35 +43,39 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
   end
 
   describe "input_params" do
-    let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
-
     context "for string field" do
+      let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
+      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}) }
+
       it "should return empty hash" do
-        expect(entry.input_params).to eq({as: :string})
+        expect(entry.input_params).to eq({as: :string, input_html: {value: "bar"}})
       end
     end
 
     context "for enum field" do
       let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b)) }
+      let(:entry) { described_class.new(field: field, hash: {foo: "b"}) }
 
       it "should return collection" do
-        expect(entry.input_params).to eq({as: :select, collection: %w(a b)})
+        expect(entry.input_params).to eq({as: :select, collection: %w(a b), selected: "b"})
       end
     end
 
     context "for boolean field" do
-      let!(:field) { CustomFields::Fields::BooleanField.new(key: "foo") }
+      let(:field) { CustomFields::Fields::BooleanField.new(key: "foo") }
+      let(:entry) { described_class.new(field: field, hash: {foo: true}) }
 
       it "should return as boolean" do
-        expect(entry.input_params).to eq({as: :boolean})
+        expect(entry.input_params).to eq({as: :boolean, input_html: {checked: true}})
       end
     end
 
     context "for text field" do
-      let!(:field) { CustomFields::Fields::TextField.new(key: "foo") }
+      let(:field) { CustomFields::Fields::TextField.new(key: "foo") }
+      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}) }
 
       it "should return empty hash" do
-        expect(entry.input_params).to eq({as: :text})
+        expect(entry.input_params).to eq({as: :text, input_html: {value: "bar"}})
       end
     end
   end

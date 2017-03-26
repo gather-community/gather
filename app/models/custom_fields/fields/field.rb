@@ -2,15 +2,16 @@ module CustomFields
   module Fields
     # Models the definition of single field in a config.
     class Field
-      attr_accessor :key, :required, :options, :validation
+      attr_accessor :key, :required, :options, :validation, :default
 
       TYPES = %i(string text boolean enum integer group)
 
-      def initialize(key:, required: false, options: nil, validation: nil)
+      def initialize(key:, required: false, options: nil, validation: nil, default: nil)
         self.key = key.to_sym
         self.required = required
         self.options = options
         self.validation = (validation || {}).deep_symbolize_keys!
+        self.default = default
         set_implicit_validations
       end
 

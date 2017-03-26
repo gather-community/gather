@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe CustomFields::Instance, type: :model do
   let(:spec_data) { [
-    {key: "fruit", type: "enum", options: %w(apple banana peach), required: true},
+    {key: "fruit", type: "enum", options: %w(apple banana peach), required: true, default: "peach"},
     {key: "info", type: "group", fields: [
-      {key: "complete", type: "boolean"},
+      {key: "complete", type: "boolean", default: true},
       {key: "comment", type: "string"}
     ]}
   ] }
@@ -33,13 +33,13 @@ RSpec.describe CustomFields::Instance, type: :model do
     context "with empty instance data" do
       let(:instance_data) { {} }
 
-      it "should work but have nil entries" do
+      it "should work and have default values" do
         expect(instance.entries.size).to eq 2
         expect(instance.entries[0].key).to eq :fruit
-        expect(instance.entries[0].value).to be_nil
+        expect(instance.entries[0].value).to eq "peach"
         expect(instance.entries[1].key).to eq :info
         expect(instance.entries[1].entries[0].key).to eq :complete
-        expect(instance.entries[1].entries[0].value).to be_nil
+        expect(instance.entries[1].entries[0].value).to be true
         expect(instance.entries[1].entries[1].key).to eq :comment
         expect(instance.entries[1].entries[1].value).to be_nil
       end
@@ -177,7 +177,7 @@ RSpec.describe CustomFields::Instance, type: :model do
 
       it "should still update original hash" do
         instance.update(fruit: "apple")
-        expect(instance_data).to eq({fruit: "apple", info: {comment: nil, complete: nil}})
+        expect(instance_data).to eq({fruit: "apple", info: {comment: nil, complete: true}})
         expect(instance.fruit).to eq "apple"
       end
     end

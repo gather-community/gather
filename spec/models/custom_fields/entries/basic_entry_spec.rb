@@ -11,6 +11,37 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
     expect(entry.required).to be field.required
   end
 
+  describe "defaults" do
+    let(:field) { CustomFields::Fields::StringField.new(key: "foo", default: "bar") }
+
+    context "when initialized with empty hash" do
+      let(:entry) { described_class.new(field: field, hash: {}) }
+
+      it "should set key in hash to default and return default as value" do
+        expect(entry.hash).to eq({foo: "bar"})
+        expect(entry.value).to eq "bar"
+      end
+    end
+
+    context "when initialized with explicit nil value" do
+      let(:entry) { described_class.new(field: field, hash: {foo: nil}) }
+
+      it "should still use default" do
+        expect(entry.hash).to eq({foo: "bar"})
+        expect(entry.value).to eq "bar"
+      end
+    end
+
+    context "when initialized with non-nil value" do
+      let(:entry) { described_class.new(field: field, hash: {foo: "baz"}) }
+
+      it "should ignore default" do
+        expect(entry.hash).to eq({foo: "baz"})
+        expect(entry.value).to eq "baz"
+      end
+    end
+  end
+
   describe "input_params" do
     let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
 

@@ -12,7 +12,7 @@ module CustomFields
         check_hash(hash)
         self.parent = parent
         self.field = field
-        self.hash = hash.try(:symbolize_keys!)
+        self.hash = hash.symbolize_keys!
         hash[key] = nil if !hash.key?(key) && key != :__root__
       end
 

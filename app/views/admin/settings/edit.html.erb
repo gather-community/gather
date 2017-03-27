@@ -1,9 +1,8 @@
 <% content_for(:title) { "#{current_community.name} Settings" } %>
 
-<%= horizontal_form_for(@community, url: "/admin/settings/community") do |f| %>
-
-  <%= simple_fields_for(:config) do |ff| %>
-    <%= ff.input :reminder_time_of_day, @community.config.entries_by_key[:reminder_time_of_day].input_params %>
+<%= horizontal_form_for(@community, url: admin_settings_path(type: "community")) do |f| %>
+  <%= render("admin/settings/group_entry", group_entry: @community.config, f: f) %>
+  <%= form_actions do %>
+    <%= f.button :submit, "Save Settings", class: "btn-primary" %>
   <% end %>
-
 <% end %>

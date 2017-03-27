@@ -6,7 +6,8 @@ module CustomFields
     attr_accessor :spec, :root
 
     delegate :fields, to: :spec
-    delegate :hash, :entries, :entries_by_key, :update, :[], :[]=, :valid?, :errors, to: :root
+    delegate :hash, :entries, :entries_by_key, :update, :[], :[]=,
+      :valid?, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
@@ -19,9 +20,18 @@ module CustomFields
       )
     end
 
+    def key
+      attrib_name
+    end
+
     # This is so that form point to update instead of create
     def persisted?
       true
+    end
+
+    # Returns a list of permitted keys in the form expected by strong params.
+    def permitted
+      {attrib_name => spec.permitted}
     end
 
     def method_missing(symbol, *args)

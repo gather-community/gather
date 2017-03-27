@@ -3,7 +3,7 @@ module CustomFields
   class Spec
     attr_accessor :root
 
-    delegate :fields, to: :root
+    delegate :fields, :permitted, to: :root
 
     # Accepts a JSON-originating array of hashes defining the spec.
     # Converts to Field objects.

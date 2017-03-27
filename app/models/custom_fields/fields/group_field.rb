@@ -28,6 +28,11 @@ module CustomFields
       def keys
         @keys ||= fields.map(&:key)
       end
+
+      # Returns a list of permitted keys in the form expected by strong params.
+      def permitted
+        fields.map { |f| f.group? ? {f.key => f.permitted} : f.key }
+      end
     end
   end
 end

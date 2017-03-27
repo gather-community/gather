@@ -5,6 +5,10 @@ module CustomFields
         :enum
       end
 
+      def normalize(value)
+        value.try(:strip) == "" ? nil : value
+      end
+
       def input_type
         :select
       end

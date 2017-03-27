@@ -1,0 +1,10 @@
+<%= group_entry.key %>
+<%= f.simple_fields_for(group_entry.key) do |ff| %>
+  <% group_entry.entries.each do |entry| %>
+    <% if entry.group? %>
+      <%= render("admin/settings/group_entry", group_entry: entry, f: ff) %>
+    <% else %>
+      <%= ff.input entry.key, entry.input_params %>
+    <% end %>
+  <% end %>
+<% end %>

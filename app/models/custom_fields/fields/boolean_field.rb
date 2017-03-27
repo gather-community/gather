@@ -5,6 +5,18 @@ module CustomFields
         :boolean
       end
 
+      def normalize(value)
+        if value == true || value == false
+          value
+        elsif %w(1 true).include?(value.to_s)
+          true
+        elsif %w(0 false).include?(value.to_s)
+          false
+        else
+          nil
+        end
+      end
+
       def value_input_param
         {input_html: {checked: yield}}
       end

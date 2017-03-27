@@ -19,6 +19,10 @@ module CustomFields
         raise NotImplementedError
       end
 
+      def normalize(value)
+        raise NotImplementedError
+      end
+
       def input_type
         type
       end

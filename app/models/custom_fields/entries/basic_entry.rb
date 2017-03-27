@@ -30,7 +30,7 @@ module CustomFields
       end
 
       def update(value)
-        hash[key] = value
+        hash[key] = field.normalize(value)
       end
 
       def value

@@ -11,13 +11,10 @@ class Community < ActiveRecord::Base
   serialize :settings
 
   custom_fields :config, spec: [
-    {key: :test_bool, type: :boolean, default: true},
-    {key: :test_enum, type: :enum, options: %w(foo bar), default: :bar},
     {key: :meals, type: :group, fields: [
-      {key: :reimb_dropoff, type: :string},
-      {key: :payment_instructions, type: :text, required: true},
+      {key: :reimb_instructions, type: :string},
       {key: :admin_email, type: :email},
-      {key: :extra_roles, type: :string},
+      {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :default_shift_times, type: :group, fields: [
         {key: :start, type: :group, fields: [
           {key: :head_cook, type: :integer, required: true, default: -195},
@@ -36,13 +33,16 @@ class Community < ActiveRecord::Base
     {key: :reservations, type: :group, fields: [
       {key: :kinds, type: :string},
       {key: :meals, type: :group, fields: [
-        {key: :default_length, type: :integer, required: true, default: 330},
-        {key: :default_prep_time, type: :integer, required: true, default: 180},
-        {key: :reservation_kind, type: :string}
+        {key: :reservations, type: :group, fields: [
+          {key: :default_length, type: :integer, required: true, default: 330},
+          {key: :default_prep_time, type: :integer, required: true, default: 180},
+          {key: :kind, type: :string}
+        ]}
       ]}
     ]},
     {key: :billing, type: :group, fields: [
-      {key: :statement_terms, type: :integer}
+      {key: :payment_instructions, type: :text, required: true},
+      {key: :statement_terms, type: :integer, default: 30}
     ]}
   ]
 

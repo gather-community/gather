@@ -92,8 +92,6 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
-
-
     delete_confirms:
       household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
@@ -103,13 +101,60 @@ en:
       user: "Are you sure you want to deactivate the user '%{name}'?"
 
   custom_fields:
-    options:
+    labels:
       community:
         config:
-          test_enum:
-            foo: "Feu"
-            bar: "Barre"
-
+          meals:
+            _self: "Meals"
+            reimb_instructions: "Reimbursement Instructions"
+            admin_email: "Admin Email"
+            extra_roles: "Extra Roles"
+            default_shift_times:
+              _self: "Default Start Times"
+              start:
+                _self: "Start"
+                head_cook: "Head Cook"
+                asst_cook: "Assistant Cook"
+                table_setter: "Table Setter"
+                cleaner: "Cleaner"
+              end:
+                _self: "End"
+                head_cook: "Head Cook"
+                asst_cook: "Assistant Cook"
+                table_setter: "Table Setter"
+                cleaner: "Cleaner"
+          reservations:
+            kinds: "Types"
+            meals:
+              _self: "Meals"
+              reservations:
+                _self: "Reservations"
+                default_length: "Default Length"
+                default_prep_time: "Default Prep Time"
+                kind: "Type"
+          billing:
+            _self: "Billing"
+            payment_instructions: "Payment Instructions"
+            statement_terms: "Statement Terms"
+    hints:
+      community:
+        config:
+          meals:
+            reimb_instructions: "What cooks should do to get reimbursed"
+            admin_email: "Email for meals administrator(s)"
+            extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>cleaner</code>, and <code>table_setter</code>."
+            default_shift_times:
+              _self: "When shifts start and end, relative to meal serving time. In minutes."
+          reservations:
+            kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
+            meals:
+              reservations:
+                default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
+                default_prep_time: "Default meal prep time in minutes"
+                kind: "Type for reservations automatically created for meals. Should match one of the types above."
+          billing:
+            payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+            statement_terms: "Number of days after the creation date that a statement is due"
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:

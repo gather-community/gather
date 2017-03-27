@@ -58,7 +58,12 @@ module CustomFields
 
       # Translates the given type and key, returning a the pair [type, translation] if found, else nil.
       def i18n_pair(type)
-        [type, I18n.translate!(i18n_key(type.to_s.pluralize))]
+        key = i18n_key(type.to_s.pluralize)
+        result = I18n.translate!(key)
+        if type == :hint && "".respond_to?(:html_safe)
+          result = result.html_safe
+        end
+        [type, result]
       rescue I18n::MissingTranslationData
         nil
       end

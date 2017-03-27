@@ -32,23 +32,6 @@ class Community < ActiveRecord::Base
           {key: "cleaner", type: "integer", required: true, default: 165}
         ]}
       ]},
-    ]},
-    {key: "reminders", type: "group", fields: [
-      {key: "time_of_day", type: "integer", required: true, default: 6},
-      {key: "lead_times", type: "group", fields: [
-        {key: "meal", type: "integer", required: true, default: 0},
-        {key: "statement", type: "integer", required: true, default: 5},
-        {key: "shift", type: "group", fields: [
-          {key: "head_cook", type: "integer", required: true, default: 3},
-          {key: "asst_cook", type: "integer", required: true, default: 2},
-          {key: "table_setter", type: "integer", required: true, default: 2},
-          {key: "cleaner", type: "integer", required: true, default: 2}
-        ]},
-        {key: "cook_menu", type: "group", fields: [
-          {key: "early", type: "integer", required: true, default: 5},
-          {key: "late", type: "integer", required: true, default: 10}
-        ]}
-      ]}
     ]}
   ]
 

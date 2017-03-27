@@ -20,6 +20,13 @@ module CustomFields
       def value_input_param
         {selected: yield}
       end
+
+      protected
+
+      def set_implicit_validations
+        super
+        validation[:inclusion] ||= {in: options}
+      end
     end
   end
 end

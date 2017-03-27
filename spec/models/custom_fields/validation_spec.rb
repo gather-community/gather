@@ -139,6 +139,27 @@ describe "custom field validation" do
     end
   end
 
+  describe "email format" do
+    let(:spec_data) { [{key: "alpha", type: "email"}] }
+
+    context "with correct format" do
+      let(:instance_data) { {alpha: "foo@bar.com"} }
+
+      it "should not set error" do
+        expect(instance.valid?).to be true
+      end
+    end
+
+    context "with incorrect format" do
+      let(:instance_data) { {alpha: "foo@bar"} }
+
+      it "should set error" do
+        expect(instance.valid?).to be false
+        expect(instance.errors[:alpha]).to eq ["is invalid"]
+      end
+    end
+  end
+
   describe "with string keys" do
     let(:spec_data) { [
       {key: "alpha", type: "string", validation: {"length" => {"maximum" => 5}}}

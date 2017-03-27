@@ -16,7 +16,7 @@ class Community < ActiveRecord::Base
     {key: :meals, type: :group, fields: [
       {key: :reimb_dropoff, type: :string},
       {key: :payment_instructions, type: :text, required: true},
-      {key: :admin_email, type: :string},
+      {key: :admin_email, type: :email},
       {key: :extra_roles, type: :string},
       {key: :default_shift_times, type: :group, fields: [
         {key: :start, type: :group, fields: [

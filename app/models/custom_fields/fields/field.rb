@@ -46,13 +46,10 @@ module CustomFields
 
       private
 
-      # Sets presence and inclusion validations for required and options attribs
+      # Sets validations implied by the field type and params
       def set_implicit_validations
         if required && !validation[:presence]
           validation[:presence] = true
-        end
-        if type == :enum && !validation[:inclusion]
-          validation[:inclusion] = {in: options}
         end
       end
     end

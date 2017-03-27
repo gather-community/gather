@@ -24,6 +24,10 @@ module CustomFields
       attrib_name
     end
 
+    def model_name
+      @model_name ||= ActiveModel::Name.new(self.class, nil, attrib_name.to_s)
+    end
+
     # This is so that form point to update instead of create
     def persisted?
       true

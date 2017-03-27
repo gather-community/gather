@@ -15,6 +15,10 @@ module CustomFields
         self.entries = field.fields.map { |f| build_child_entry(f) }
       end
 
+      def model_name
+        @model_name ||= ActiveModel::Name.new(self.class, nil, key.to_s)
+      end
+
       def keys
         entries_by_key.keys
       end

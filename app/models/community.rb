@@ -49,9 +49,6 @@ class Community < ActiveRecord::Base
           {key: "late", type: "integer", required: true, default: 10}
         ]}
       ]}
-    ]},
-    {key: "photos", type: "group", fields: [
-      {key: "max_size_mb", type: "integer", required: true, default: 8}
     ]}
   ]
 

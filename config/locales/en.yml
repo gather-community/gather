@@ -102,6 +102,14 @@ en:
       household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
       user: "Are you sure you want to deactivate the user '%{name}'?"
 
+  custom_fields:
+    options:
+      community:
+        config:
+          test_enum:
+            foo: "Feu"
+            bar: "Barre"
+
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:

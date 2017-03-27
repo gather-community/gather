@@ -54,10 +54,46 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
 
     context "for enum field" do
       let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b)) }
-      let(:entry) { described_class.new(field: field, hash: {foo: "b"}) }
+      let(:entry) do
+        described_class.new(
+          field: field,
+          hash: {foo: "b"},
+          parent: double(i18n_key: "custom_fields.options.model_x.attrib_y")
+        )
+      end
 
-      it "should return collection" do
-        expect(entry.input_params).to eq({as: :select, collection: %w(a b), selected: "b"})
+      context "with no translations defined" do
+        it "should return collection with default labels" do
+          expect(entry.input_params).to eq({
+            as: :select,
+            collection: [["a", "a"], ["b", "b"]],
+            value_method: :first,
+            label_method: :last,
+            selected: "b"
+          })
+        end
+      end
+
+      context "with translations defined" do
+        before do
+          I18n.backend.send(:init_translations)
+          I18n.backend.store_translations :en,
+            custom_fields: {options: {model_x: {attrib_y: {foo: {a: "Alpha", b: "Bravo"}}}}}
+        end
+
+        after do
+          I18n.backend = I18n::Backend::Simple.new
+        end
+
+        it "should return collection with translated labels" do
+          expect(entry.input_params).to eq({
+            as: :select,
+            collection: [["a", "Alpha"], ["b", "Bravo"]],
+            value_method: :first,
+            label_method: :last,
+            selected: "b"
+          })
+        end
       end
     end
 

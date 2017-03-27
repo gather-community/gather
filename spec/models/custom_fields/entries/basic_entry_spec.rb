@@ -43,24 +43,55 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
   end
 
   describe "input_params" do
+    let(:root) { double() }
+
+    before do
+      allow(root).to receive(:i18n_key) { |t, *a| "custom_fields.#{t}.model_x.attrib_y" }
+    end
+
     context "for string field" do
       let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
-      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}) }
+      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
-      it "should return empty hash" do
-        expect(entry.input_params).to eq({as: :string, input_html: {value: "bar"}})
+      context "with no translations defined" do
+        it "should return empty hash with no translations" do
+          expect(entry.input_params).to eq({
+            as: :string,
+            input_html: {value: "bar"}
+          })
+        end
+      end
+
+      context "with translations defined" do
+        before do
+          I18n.backend.send(:init_translations)
+          I18n.backend.store_translations :en,
+            custom_fields: {
+              labels: {model_x: {attrib_y: {foo: "The Foo"}}},
+              hints: {model_x: {attrib_y: {foo: "Think about foos"}}},
+              placeholders: {model_x: {attrib_y: {foo: "Some foo"}}}
+            }
+        end
+
+        after do
+          I18n.backend = I18n::Backend::Simple.new
+        end
+
+        it "should use translated label, hint, placeholder" do
+          expect(entry.input_params).to eq({
+            as: :string,
+            input_html: {value: "bar"},
+            label: "The Foo",
+            hint: "Think about foos",
+            placeholder: "Some foo"
+          })
+        end
       end
     end
 
     context "for enum field" do
       let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b)) }
-      let(:entry) do
-        described_class.new(
-          field: field,
-          hash: {foo: "b"},
-          parent: double(i18n_key: "custom_fields.options.model_x.attrib_y")
-        )
-      end
+      let(:entry) { described_class.new(field: field, hash: {foo: "b"}, parent: root) }
 
       context "with no translations defined" do
         it "should return collection with default labels" do
@@ -85,7 +116,7 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
           I18n.backend = I18n::Backend::Simple.new
         end
 
-        it "should return collection with translated labels" do
+        it "should return collection with translated options" do
           expect(entry.input_params).to eq({
             as: :select,
             collection: [["a", "Alpha"], ["b", "Bravo"]],
@@ -99,7 +130,7 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
 
     context "for boolean field" do
       let(:field) { CustomFields::Fields::BooleanField.new(key: "foo") }
-      let(:entry) { described_class.new(field: field, hash: {foo: true}) }
+      let(:entry) { described_class.new(field: field, hash: {foo: true}, parent: root) }
 
       it "should return as boolean" do
         expect(entry.input_params).to eq({as: :boolean, input_html: {checked: true}})
@@ -108,7 +139,7 @@ RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
 
     context "for text field" do
       let(:field) { CustomFields::Fields::TextField.new(key: "foo") }
-      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}) }
+      let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
       it "should return empty hash" do
         expect(entry.input_params).to eq({as: :text, input_html: {value: "bar"}})

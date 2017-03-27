@@ -49,8 +49,18 @@ module CustomFields
             params[:value_method] = :first
             params[:label_method] = :last
           end
+          params.merge!(%i(label hint placeholder).map { |t| i18n_pair(t) }.compact.to_h)
           params.merge!(field.value_input_param { value })
         end
+      end
+
+      private
+
+      # Translates the given type and key, returning a the pair [type, translation] if found, else nil.
+      def i18n_pair(type)
+        [type, I18n.translate!(i18n_key(type.to_s.pluralize))]
+      rescue I18n::MissingTranslationData
+        nil
       end
     end
   end

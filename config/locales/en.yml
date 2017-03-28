@@ -112,26 +112,25 @@ en:
             default_shift_times:
               _self: "Default Start Times"
               start:
-                _self: "Start"
+                _self: "Start Times"
                 head_cook: "Head Cook"
                 asst_cook: "Assistant Cook"
                 table_setter: "Table Setter"
                 cleaner: "Cleaner"
               end:
-                _self: "End"
+                _self: "End Times"
                 head_cook: "Head Cook"
                 asst_cook: "Assistant Cook"
                 table_setter: "Table Setter"
                 cleaner: "Cleaner"
           reservations:
+            _self: "Reservations"
             kinds: "Types"
             meals:
-              _self: "Meals"
-              reservations:
-                _self: "Reservations"
-                default_length: "Default Length"
-                default_prep_time: "Default Prep Time"
-                kind: "Type"
+              _self: "Meal Reservations"
+              default_length: "Default Length"
+              default_prep_time: "Default Prep Time"
+              kind: "Automatic Type"
           billing:
             _self: "Billing"
             payment_instructions: "Payment Instructions"
@@ -140,21 +139,20 @@ en:
       community:
         config:
           meals:
-            reimb_instructions: "What cooks should do to get reimbursed"
+            reimb_instructions: "What cooks should do to get reimbursed. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
             admin_email: "Email for meals administrator(s)"
-            extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>cleaner</code>, and <code>table_setter</code>."
+            extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>cleaner</code>, and <code>table_setter</code>. Spelling must be exact."
             default_shift_times:
               _self: "When shifts start and end, relative to meal serving time. In minutes."
           reservations:
             kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
             meals:
-              reservations:
-                default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
-                default_prep_time: "Default meal prep time in minutes"
-                kind: "Type for reservations automatically created for meals. Should match one of the types above."
+              default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
+              default_prep_time: "Default meal prep time in minutes"
+              kind: "Type for reservations automatically created for meals. Should match one of the types above."
           billing:
             payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
-            statement_terms: "Number of days after the creation date that a statement is due"
+            statement_terms: "Number of days after the creation date that a statement is due. If blank, statements have no due dates."
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:

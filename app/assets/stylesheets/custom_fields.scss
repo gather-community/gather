@@ -1,0 +1,25 @@
+.custom-fields {
+  .custom-fields {
+    // Only indent the second level groups and beyond, not the root (0) or first level.
+    .custom-fields {
+      margin-left: 20px;
+    }
+  }
+
+  .form-group {
+    background-color: #f6f6f6;
+    padding: 5px;
+    margin: 0 0 10px 0;
+  }
+
+  .group-title {
+    font-weight: bold;
+    border-bottom: 1px solid $light-border-color;
+    margin-bottom: 10px;
+  }
+
+  .group-hint {
+    color: $gray-text;
+    margin: -5px 0 5px 0;
+  }
+}

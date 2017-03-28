@@ -25,7 +25,7 @@
     new Gather.Views.Select2View({el: '.user-form'});
     var uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',
-      maxFilesize: Settings.photos.max_size / 1.megabyte
+      maxFilesize: Settings.photos.max_size_mb / 1.megabyte
     )%>);
     new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
     new Gather.Views.UserFormView({el: '.user-form'});

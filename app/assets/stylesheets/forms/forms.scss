@@ -19,6 +19,10 @@ form {
     }
   }
 
+  input.numeric {
+    width: 150px;
+  }
+
   // Labels inside control area shouldn't be bold
   .form-group > div label {
     font-weight: normal;
@@ -30,11 +34,18 @@ form {
 
   .hint {
     color: $gray-text;
-    margin: 0 0 5px 0;
+    margin: 3px 0 0 0;
+    line-height: 140%;
 
     a {
       color: $gray-text;
       text-decoration: underline;
+    }
+
+    code {
+      color: $gray-text;
+      background-color: transparent;
+      padding: 0;
     }
   }
 

@@ -32,7 +32,30 @@ module CustomFields
         :"#{parent.i18n_key(type, suffix: false)}.#{key}"
       end
 
+      def label
+        translate(:label)
+      end
+
+      def label_or_key
+        label || key != :__root__ && key || nil
+      end
+
+      def hint
+        translate(:hint)
+      end
+
+      def placeholder
+        translate(:placeholder)
+      end
+
       protected
+
+      def translate(type)
+        key = i18n_key(type.to_s.pluralize)
+        result = I18n.translate!(key)
+      rescue I18n::MissingTranslationData
+        nil
+      end
 
       def check_hash(hash)
         raise ArgumentError.new("Malformed data: #{hash}") unless hash.is_a?(Hash)

@@ -7,7 +7,7 @@ module CustomFields
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :update, :[], :[]=,
-      :valid?, :errors, :input_params, :attrib_name, to: :root
+      :label, :label_or_key, :hint, :valid?, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?

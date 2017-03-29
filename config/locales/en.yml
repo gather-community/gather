@@ -135,6 +135,11 @@ en:
             _self: "Billing"
             payment_instructions: "Payment Instructions"
             statement_terms: "Statement Terms"
+            late_fee_policy:
+              _self: "Late Fee Policy"
+              fee_type: "Fee Type"
+              threshold: "Threshold"
+              amount: "Amount"
     hints:
       community:
         config:
@@ -153,6 +158,20 @@ en:
           billing:
             payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
             statement_terms: "Number of days after the creation date that a statement is due. If blank, statements have no due dates."
+            late_fee_policy:
+              fee_type: "How the fee is calculated"
+              threshold: "Minimum outstanding balance for a fee to be assessed"
+              amount: "Dollar/percent amount of the fee (e.g. enter '3' for 3% or $3.00, depending on type)"
+    options:
+      community:
+        config:
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "No late fee"
+                fixed: "Fixed"
+                percent: "Percentage"
+
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:

@@ -6,6 +6,11 @@ module CustomFields
 
       delegate :key, :type, :group?, to: :field
 
+      # Words which are not allowed as keys. Returns an array of symbols.
+      def self.reserved_keys
+        Entries::GroupEntry.instance_methods - Object.instance_methods
+      end
+
       # `hash` should be a hash of data that has `field.key`
       # We do it this way so that we preserve references to the original hash.
       def initialize(field:, hash:, parent: nil)
@@ -32,23 +37,9 @@ module CustomFields
         :"#{parent.i18n_key(type, suffix: false)}.#{key}"
       end
 
-      def label
-        translate(:label)
-      end
-
       def label_or_key
-        label || key != :__root__ && key || nil
+        translate(:label) || key != :__root__ && key || nil
       end
-
-      def hint
-        translate(:hint)
-      end
-
-      def placeholder
-        translate(:placeholder)
-      end
-
-      protected
 
       def translate(type)
         key = i18n_key(type.to_s.pluralize)
@@ -56,6 +47,8 @@ module CustomFields
       rescue I18n::MissingTranslationData
         nil
       end
+
+      protected
 
       def check_hash(hash)
         raise ArgumentError.new("Malformed data: #{hash}") unless hash.is_a?(Hash)

@@ -7,7 +7,7 @@ module CustomFields
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :update, :[], :[]=,
-      :label, :label_or_key, :hint, :valid?, :errors, :input_params, :attrib_name, to: :root
+      :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
@@ -18,6 +18,12 @@ module CustomFields
         model_i18n_key: model_i18n_key,
         attrib_name: attrib_name
       )
+
+      # Define these methods to pass through to the RootEntry. See docs in GroupEntry for why we do this.
+      spec.root.fields.each do |f|
+        define_singleton_method(f.key) { root[f.key] }
+        define_singleton_method("#{f.key}=") { |value| root[f.key] = value }
+      end
     end
 
     def key
@@ -36,14 +42,6 @@ module CustomFields
     # Returns a list of permitted keys in the form expected by strong params.
     def permitted
       {attrib_name => spec.permitted}
-    end
-
-    def method_missing(symbol, *args)
-      if root.keys.include?(symbol.to_s.chomp("=").to_sym)
-        root.send(symbol, *args)
-      else
-        super
-      end
     end
   end
 end

@@ -13,6 +13,15 @@ module CustomFields
       def initialize(field:, hash:, parent: nil)
         super(field: field, hash: hash, parent: parent)
         self.entries = field.fields.map { |f| build_child_entry(f) }
+
+        # Define methods instead of using method_missing because it's cleaner and
+        # this way we can override the many Object instance methods that we don't use here.
+        # If we use method missing we have to reserve all of those and there are plenty of useful
+        # words in there like method, display, extend, etc.
+        field.fields.each do |f|
+          define_singleton_method(f.key) { self[f.key] }
+          define_singleton_method("#{f.key}=") { |value| self[f.key] = value }
+        end
       end
 
       def model_name
@@ -33,19 +42,6 @@ module CustomFields
 
       def []=(key, new_value)
         entries_by_key[key.to_sym].try(:update, new_value)
-      end
-
-      def method_missing(symbol, *args)
-        key = symbol.to_s.chomp("=").to_sym
-        if keys.include?(key)
-          if symbol[-1] == "="
-            self[key] = args.first
-          else
-            self[key]
-          end
-        else
-          super
-        end
       end
 
       def update(new_hash)

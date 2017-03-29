@@ -62,4 +62,6 @@ module CustomFields
       end
     end
   end
+
+  class ReservedKeyError < StandardError; end
 end

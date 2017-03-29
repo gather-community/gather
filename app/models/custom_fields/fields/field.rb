@@ -7,7 +7,14 @@ module CustomFields
       TYPES = %i(string text boolean enum integer group)
 
       def initialize(key:, required: false, options: nil, validation: nil, default: nil)
-        self.key = key.to_sym
+        self.key = key = key.to_sym
+
+        # Any methods of the GroupEntry class can't be used as keys as they would
+        # interfere with its functioning.
+        if Entries::GroupEntry.reserved_keys.include?(key)
+          raise ReservedKeyError.new("`#{key}` is a reserved word, please choose a different key.")
+        end
+
         self.required = required
         self.options = options
         self.validation = (validation || {}).deep_symbolize_keys!

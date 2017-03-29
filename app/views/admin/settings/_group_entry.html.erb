@@ -2,7 +2,7 @@
   <% if title = group_entry.label_or_key %>
     <div class="group-title"><%= title %></div>
   <% end %>
-  <% if hint = group_entry.hint %>
+  <% if hint = group_entry.translate(:hint) %>
     <div class="group-hint"><%= hint %></div>
   <% end %>
   <div class="fields">

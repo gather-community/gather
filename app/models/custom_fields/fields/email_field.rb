@@ -14,7 +14,7 @@ module CustomFields
 
       def set_implicit_validations
         super
-        validation[:format] ||= {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
+        validation[:format] ||= {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true}
       end
     end
   end

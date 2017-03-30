@@ -158,6 +158,14 @@ describe "custom field validation" do
         expect(instance.errors[:alpha]).to eq ["is invalid"]
       end
     end
+
+    context "with nil value" do
+      let(:instance_data) { {alpha: nil} }
+
+      it "should not set error" do
+        expect(instance.valid?).to be true
+      end
+    end
   end
 
   describe "with string keys" do

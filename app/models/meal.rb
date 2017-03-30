@@ -105,7 +105,7 @@ class Meal < ActiveRecord::Base
 
   def extra_roles
     @extra_roles ||= ALL_EXTRA_ROLES &
-      (host_community.config.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
+      (host_community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
   end
 
   def people_in_role(role)

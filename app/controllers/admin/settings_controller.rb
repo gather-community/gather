@@ -20,7 +20,7 @@ module Admin
     private
 
     def settings_params
-      params.require(:community).permit(@community.config.permitted)
+      params.require(:community).permit(@community.settings.permitted)
     end
   end
 end

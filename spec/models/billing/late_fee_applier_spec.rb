@@ -11,7 +11,7 @@ module Billing
       end
 
       before do
-        community.config.billing.late_fee_policy.update(policy)
+        community.settings.billing.late_fee_policy.update(policy)
         community.save!
       end
 

@@ -32,7 +32,7 @@ module Billing
     private
 
     def policy
-      @policy ||= community.config.billing.late_fee_policy
+      @policy ||= community.settings.billing.late_fee_policy
     end
 
     def threshold

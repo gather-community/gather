@@ -30,7 +30,7 @@ module Reservation
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds
-      (community.config.reservations.kinds || "").split(/\s*,\s*/).presence
+      (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence
     end
 
     def has_guidelines?

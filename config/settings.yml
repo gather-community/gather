@@ -1,18 +1,3 @@
-meals:
-  reservations:
-    default_length: 330 # mins
-    default_prep_time: 180 # mins
-  default_shift_times: # Minutes relative to meal start
-    start:
-      head_cook: -195
-      asst_cook: -135
-      table_setter: -60
-      cleaner: 45
-    end:
-      head_cook: 0
-      asst_cook: 0
-      table_setter: 0
-      cleaner: 165
 reminders:
   time_of_day: 6 # 6:00am
   # Reminder lead times in days.

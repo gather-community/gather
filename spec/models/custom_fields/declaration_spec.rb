@@ -70,7 +70,7 @@ RSpec.describe "custom field declaration", type: :model do
       let(:fake) { FakeCustomFieldModel.new }
 
       it "should set :invalid error on attribute" do
-        fake.settings.fruit = %w(bread)
+        fake.settings.fruit = "bread"
         expect(fake.valid?).to be false
         expect(fake.errors[:settings]).to eq ["is invalid"]
         expect(fake.settings.errors[:fruit]).to eq ["is not included in the list"]

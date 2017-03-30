@@ -11,8 +11,8 @@ module Reservation
 
     # Creates/updates the reservation associated with the meal
     def sync
-      starts_at = meal.served_at - Settings.meals.reservations.default_prep_time.minutes
-      ends_at = starts_at + Settings.meals.reservations.default_length.minutes
+      starts_at = meal.served_at - settings.default_prep_time.minutes
+      ends_at = starts_at + settings.default_length.minutes
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
@@ -51,6 +51,12 @@ module Reservation
             "for this meal: #{errors}.")
         end
       end
+    end
+
+    private
+
+    def settings
+      @settings ||= meal.host_community.config.reservations.meals
     end
   end
 end

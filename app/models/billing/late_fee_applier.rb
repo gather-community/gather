@@ -8,7 +8,7 @@ module Billing
     end
 
     def policy?
-      policy.present?
+      policy.fee_type != "none"
     end
 
     # Returns an AR relation for accounts that would receive late fees.
@@ -32,21 +32,21 @@ module Billing
     private
 
     def policy
-      @policy ||= community.settings["late_fee_policy"]
+      @policy ||= community.settings.billing.late_fee_policy
     end
 
     def threshold
-      policy["threshold"] || 0.0999
+      policy.threshold || 0.0999
     end
 
     def amount_for(balance_due)
-      case policy["fee_type"]
+      case policy.fee_type
       when "fixed"
-        raise "Late fee policy must have fee_amount if fee_type is 'fixed'" unless policy["fee_amount"]
-        policy["fee_amount"]
+        raise "Late fee policy must have amount if fee_type is 'fixed'" unless policy.amount
+        policy.amount
       when "percent"
-        raise "Late fee policy must have fee_pct if fee_type is 'percent'" unless policy["fee_pct"]
-        (balance_due * policy["fee_pct"] / 100).round(2)
+        raise "Late fee policy must have amount if fee_type is 'percent'" unless policy.amount
+        (balance_due * policy.amount / 100).round(2)
       else
         raise "Invalid fee_type '#{policy['fee_type']}'"
       end

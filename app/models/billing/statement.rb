@@ -83,7 +83,7 @@ module Billing
     private
 
     def terms
-      community.settings[:statement_terms]
+      community.settings.billing.statement_terms
     end
   end
 

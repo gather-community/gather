@@ -28,8 +28,9 @@ module Reservation
       "#{community.abbrv} #{meal_abbrv}"
     end
 
+    # Available reservation kinds. Returns nil if none are defined.
     def kinds
-      community.settings[:reservation_kinds]
+      (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence
     end
 
     def has_guidelines?

@@ -62,11 +62,9 @@
 
   <div id="assignment-fields">
     <%= user_nested_field_set(f, :head_cook_assign, multiple: false) %>
-    <%= user_nested_field_set(f, :asst_cook_assigns) %>
-    <% if @meal.host_community.settings[:has_table_setters] %>
-      <%= user_nested_field_set(f, :table_setter_assigns) %>
+    <% @meal.extra_roles.each do |role| %>
+      <%= user_nested_field_set(f, :"#{role}_assigns") %>
     <% end %>
-    <%= user_nested_field_set(f, :cleaner_assigns) %>
   </div>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>

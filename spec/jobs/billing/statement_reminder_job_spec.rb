@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Billing::StatementReminderJob do
   describe "perform" do
-    before { Timecop.freeze(Time.zone.now.midnight + Settings.reminder_time_of_day.hours) }
+    before { Timecop.freeze(Time.zone.now.midnight + Settings.reminders.time_of_day.hours) }
     after { Timecop.return }
 
     it "should send no emails if no statements" do

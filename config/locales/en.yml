@@ -92,8 +92,6 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
-
-
     delete_confirms:
       household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
@@ -101,6 +99,76 @@ en:
     deact_confirms:
       household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
       user: "Are you sure you want to deactivate the user '%{name}'?"
+
+  custom_fields:
+    labels:
+      community:
+        config:
+          meals:
+            _self: "Meals"
+            reimb_instructions: "Reimbursement Instructions"
+            admin_email: "Admin Email"
+            extra_roles: "Extra Roles"
+            default_shift_times:
+              _self: "Default Start Times"
+              start:
+                _self: "Start Times"
+                head_cook: "Head Cook"
+                asst_cook: "Assistant Cook"
+                table_setter: "Table Setter"
+                cleaner: "Cleaner"
+              end:
+                _self: "End Times"
+                head_cook: "Head Cook"
+                asst_cook: "Assistant Cook"
+                table_setter: "Table Setter"
+                cleaner: "Cleaner"
+          reservations:
+            _self: "Reservations"
+            kinds: "Types"
+            meals:
+              _self: "Meal Reservations"
+              default_length: "Default Length"
+              default_prep_time: "Default Prep Time"
+          billing:
+            _self: "Billing"
+            payment_instructions: "Payment Instructions"
+            statement_terms: "Statement Terms"
+            late_fee_policy:
+              _self: "Late Fee Policy"
+              fee_type: "Fee Type"
+              threshold: "Threshold"
+              amount: "Amount"
+    hints:
+      community:
+        config:
+          meals:
+            reimb_instructions: "What cooks should do with meals reimbursement form and receipts. Appears on meal summary sheet for head cooks only."
+            admin_email: "Email for meals administrator(s)"
+            extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>table_setter</code>, and <code>cleaner</code>. Spelling must be exact."
+            default_shift_times:
+              _self: "When shifts start and end, relative to meal serving time. In minutes."
+          reservations:
+            kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
+            meals:
+              default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
+              default_prep_time: "Default meal prep time in minutes"
+          billing:
+            payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+            statement_terms: "Number of days after the creation date that a statement is due. If blank, statements have no due dates."
+            late_fee_policy:
+              fee_type: "How the fee is calculated"
+              threshold: "Minimum outstanding balance for a fee to be assessed"
+              amount: "Dollar/percent amount of the fee (e.g. enter '3' for 3% or $3.00, depending on type)"
+    options:
+      community:
+        config:
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "No late fee"
+                fixed: "Fixed"
+                percent: "Percentage"
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
@@ -250,6 +318,7 @@ en:
       meals: "Meals"
       reservations: "Reservations"
       accounts: "Accounts"
+      admin: "Admin"
     sub:
       meals:
         meals: "Meals"
@@ -265,10 +334,18 @@ en:
       sign_out: "Sign Out"
 
   assignment_roles:
-    head_cook: "Head Cook"
-    asst_cook: "Assistant Cook"
-    table_setter: "Table Setter"
-    cleaner: "Cleaner"
+    head_cook:
+      one: "Head Cook"
+      other: "Head Cooks"
+    asst_cook:
+      one: "Assistant Cook"
+      other: "Assistant Cooks"
+    table_setter:
+      one: "Table Setter"
+      other: "Table Setters"
+    cleaner:
+      one: "Cleaner"
+      other: "Cleaners"
 
   transaction_codes:
     meal: "Meal"

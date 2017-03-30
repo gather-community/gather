@@ -1,0 +1,19 @@
+<div class="custom-fields">
+  <% if title = group_entry.label_or_key %>
+    <div class="group-title"><%= title %></div>
+  <% end %>
+  <% if hint = group_entry.translate(:hint) %>
+    <div class="group-hint"><%= hint %></div>
+  <% end %>
+  <div class="fields">
+    <%= f.simple_fields_for(group_entry) do |ff| %>
+      <% group_entry.entries.each do |entry| %>
+        <% if entry.group? %>
+          <%= render("admin/settings/group_entry", group_entry: entry, f: ff) %>
+        <% else %>
+          <%= ff.input entry.key, entry.input_params %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

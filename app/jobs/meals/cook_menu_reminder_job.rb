@@ -15,10 +15,10 @@ module Meals
 
     def remindable_assignments
       early = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 0).
-        merge(Meal.without_menu.served_within_days_from_now(Settings.reminder_lead_times.cook_menu.early))
+        merge(Meal.without_menu.served_within_days_from_now(Settings.reminders.lead_times.cook_menu.early))
 
       late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1).
-        merge(Meal.without_menu.served_within_days_from_now(Settings.reminder_lead_times.cook_menu.late))
+        merge(Meal.without_menu.served_within_days_from_now(Settings.reminders.lead_times.cook_menu.late))
 
       (early.to_a + late.to_a).uniq
     end

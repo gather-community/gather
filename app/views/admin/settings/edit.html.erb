@@ -1,0 +1,8 @@
+<% content_for(:title) { "#{current_community.name} Settings" } %>
+
+<%= horizontal_form_for(@community, url: admin_settings_path(type: "community")) do |f| %>
+  <%= render("admin/settings/group_entry", group_entry: @community.settings, f: f) %>
+  <%= form_actions do %>
+    <%= f.button :submit, "Save Settings", class: "btn-primary" %>
+  <% end %>
+<% end %>

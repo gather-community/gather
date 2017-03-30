@@ -17,7 +17,7 @@ class NotificationMailer < ActionMailer::Base
     @assignment = assignment
     @user = assignment.user
     @meal = assignment.meal
-    @role = I18n.t("assignment_roles.#{assignment.role}")
+    @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
 
     mail(to: @user.email, subject:
@@ -31,7 +31,7 @@ class NotificationMailer < ActionMailer::Base
     @removed = removed
 
     recips = (@meal.assignments + removed).map(&:user).map(&:email)
-    recips << @meal.host_community.settings[:meals_ctte_email]
+    recips << @meal.host_community.settings.meals.admin_email
     recips << @initiator.email
 
     mail(to: recips.compact.uniq, subject: "Meal Job Assignment Change Notice")

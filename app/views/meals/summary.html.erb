@@ -142,8 +142,8 @@
           Assemble: <strong>reimbursement form</strong>, <strong>receipts</strong>,
           and <strong>late signup list</strong>.
         </li>
-        <% if dropoff_loc = @meal.host_community.settings[:meal_reimb_dropoff_loc] %>
-          <li>Place <%= dropoff_loc %>.</li>
+        <% if reimb_instr = @meal.host_community.settings.meals.reimb_instructions %>
+          <li><%= reimb_instr %>.</li>
         <% else %>
           <li>Give to your meals biller.</li>
         <% end %>

@@ -12,7 +12,7 @@ class Community < ActiveRecord::Base
 
   custom_fields :config, spec: [
     {key: :meals, type: :group, fields: [
-      {key: :reimb_instructions, type: :text},
+      {key: :reimb_instructions, type: :string},
       {key: :admin_email, type: :email},
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :default_shift_times, type: :group, fields: [

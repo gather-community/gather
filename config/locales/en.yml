@@ -144,7 +144,7 @@ en:
       community:
         config:
           meals:
-            reimb_instructions: "What cooks should do with meals reimbursement form and receipts. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+            reimb_instructions: "What cooks should do with meals reimbursement form and receipts. Appears on meal summary sheet for head cooks only."
             admin_email: "Email for meals administrator(s)"
             extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>cleaner</code>, and <code>table_setter</code>. Spelling must be exact."
             default_shift_times:

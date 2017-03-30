@@ -11,11 +11,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def starts_at
-    meal.served_at + Settings.meals.default_shift_times.start[role].minutes
+    meal.served_at + shift_time_offset(:start)
   end
 
   def ends_at
-    meal.served_at + Settings.meals.default_shift_times.end[role].minutes
+    meal.served_at + shift_time_offset(:end)
   end
 
   def title
@@ -24,5 +24,11 @@ class Assignment < ActiveRecord::Base
 
   def <=>(other)
     ROLES.index(role) <=> ROLES.index(other.role)
+  end
+
+  private
+
+  def shift_time_offset(start_or_end)
+    meal.host_community.config.meals.default_shift_times[start_or_end][role].minutes
   end
 end

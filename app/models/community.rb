@@ -39,7 +39,7 @@ class Community < ActiveRecord::Base
       ]}
     ]},
     {key: :billing, type: :group, fields: [
-      {key: :payment_instructions, type: :text, required: true},
+      {key: :payment_instructions, type: :text},
       {key: :statement_terms, type: :integer, default: 30},
       {key: :late_fee_policy, type: :group, fields: [
         {key: :fee_type, type: :enum, options: %w(none fixed percent), default: "none", required: true},

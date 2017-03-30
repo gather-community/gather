@@ -34,8 +34,7 @@ class Community < ActiveRecord::Base
       {key: :kinds, type: :string},
       {key: :meals, type: :group, fields: [
         {key: :default_length, type: :integer, required: true, default: 330},
-        {key: :default_prep_time, type: :integer, required: true, default: 180},
-        {key: :kind, type: :string}
+        {key: :default_prep_time, type: :integer, required: true, default: 180}
       ]}
     ]},
     {key: :billing, type: :group, fields: [

@@ -130,7 +130,6 @@ en:
               _self: "Meal Reservations"
               default_length: "Default Length"
               default_prep_time: "Default Prep Time"
-              kind: "Automatic Type"
           billing:
             _self: "Billing"
             payment_instructions: "Payment Instructions"
@@ -154,7 +153,6 @@ en:
             meals:
               default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
               default_prep_time: "Default meal prep time in minutes"
-              kind: "Type for reservations automatically created for meals. Should match one of the types above."
           billing:
             payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
             statement_terms: "Number of days after the creation date that a statement is due. If blank, statements have no due dates."

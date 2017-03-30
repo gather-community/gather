@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329232743) do
+ActiveRecord::Schema.define(version: 20170330001929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -62,7 +62,6 @@ ActiveRecord::Schema.define(version: 20170329232743) do
     t.jsonb "config"
     t.datetime "created_at", null: false
     t.string "name", null: false
-    t.text "settings", default: "--- {}\n"
     t.datetime "updated_at", null: false
   end
 

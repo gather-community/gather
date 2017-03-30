@@ -19,7 +19,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def title
-    I18n.t("assignment_roles.#{role}") << ": " << meal.title_or_no_title
+    I18n.t("assignment_roles.#{role}", count: 1) << ": " << meal.title_or_no_title
   end
 
   def <=>(other)

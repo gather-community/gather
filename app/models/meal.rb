@@ -5,11 +5,10 @@ class Meal < ActiveRecord::Base
   DEFAULT_CAPACITY = 64
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds
     tree_nuts pineapple bananas tofu eggplant none)
-  DEFAULT_ASST_COOKS = 2
-  DEFAULT_TABLE_SETTERS = 1
-  DEFAULT_CLEANERS = 3
+  DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}
   MENU_ITEMS = %w(entrees side kids dessert notes)
   PAYMENT_METHODS = %w(check credit)
+  ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
   serialize :allergens, JSON
 
@@ -104,15 +103,24 @@ class Meal < ActiveRecord::Base
     within_days_from_now(:served_at, days)
   end
 
+  def extra_roles
+    @extra_roles ||= ALL_EXTRA_ROLES &
+      (host_community.config.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
+  end
+
+  def people_in_role(role)
+    raise ArgumentError("Invalid role #{role}") unless ALL_EXTRA_ROLES.include?(role)
+    send("#{role.to_s.pluralize}")
+  end
+
   # Ensures there is one head_cook assignment and 2 each of the others.
   # Creates blank ones if needed.
   def ensure_assignments
     build_head_cook_assign if head_cook_assign.nil?
-    (DEFAULT_ASST_COOKS - asst_cook_assigns.size).times{ asst_cook_assigns.build }
-    if host_community.settings[:has_table_setters]
-      (DEFAULT_TABLE_SETTERS - table_setter_assigns.size).times{ table_setter_assigns.build }
+    extra_roles.each do |role|
+      collection = send("#{role}_assigns")
+      (DEFAULT_ASSIGN_COUNTS[role] - collection.size).times { collection.build }
     end
-    (DEFAULT_CLEANERS - cleaner_assigns.size).times{ cleaner_assigns.build }
   end
 
   def title_or_no_title

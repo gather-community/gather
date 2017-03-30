@@ -17,7 +17,7 @@ class NotificationMailer < ActionMailer::Base
     @assignment = assignment
     @user = assignment.user
     @meal = assignment.meal
-    @role = I18n.t("assignment_roles.#{assignment.role}")
+    @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
 
     mail(to: @user.email, subject:

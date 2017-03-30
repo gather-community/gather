@@ -8,29 +8,16 @@
     <div class="chunk">
       for <%= @meal.communities.map(&:name).join(', ') %>
     </div>
-    <div class="chunk">
-      Assistants:
-      <%= "[None]" if @meal.asst_cooks.empty? %>
-      <% @meal.asst_cooks.each do |u| %>
-        <div class="job"><%= user_link(u) %></div>
-      <% end %>
-    </div>
-    <% if @meal.host_community.settings[:has_table_setters] %>
+    <% @meal.extra_roles.each do |role| %>
+      <% people = @meal.people_in_role(role) %>
       <div class="chunk">
-        Table Setters:
-        <%= "[None]" if @meal.table_setters.empty? %>
-        <% @meal.table_setters.each do |u| %>
-          <div class="job"><%= user_link(u) %></div>
+        <%= t("assignment_roles.#{role}", count: people.size) %>
+        <%= "[None]" if people.empty? %>
+        <% people.each do |p| %>
+          <div class="job"><%= user_link(p) %></div>
         <% end %>
       </div>
     <% end %>
-    <div class="chunk">
-      Cleaners:
-      <%= "[None]" if @meal.cleaners.empty? %>
-      <% @meal.cleaners.each do |u| %>
-        <div class="job"><%= user_link(u) %></div>
-      <% end %>
-    </div>
   </div>
   <% if @meal.menu_posted? %>
     <% @meal.nonempty_menu_items.each do |item, text| %>

@@ -21,7 +21,8 @@ class NotificationMailer < ActionMailer::Base
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
 
     mail(to: @user.email, subject:
-      "Job Reminder: You are #{@role} for meal at #{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
+      "Job Reminder: You are #{@role} for a meal at #{assignment.starts_at.to_s(:datetime_no_yr)} \
+        at #{@meal.location_abbrv}")
   end
 
   def worker_change_notice(initiator, meal, added, removed)

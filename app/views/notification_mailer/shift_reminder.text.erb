@@ -1,7 +1,9 @@
 Dear <%= @user.name %>,
 
 This is a reminder that you are scheduled as <%= @role %> for <%= @meal.title ? "the meal '#{@meal.title}'" : "a meal" -%>
- by <%= @meal.head_cook_name %> on <%= @meal.served_at.to_s(:datetime_no_yr).gsub("  ", " ") %> at <%= @meal.location_name %>.
+ by <%= @meal.head_cook_name %>.
+
+Your shift is from <%= @assignment.starts_at.to_s(:datetime_no_yr).gsub("  ", " ") %> - <%= @assignment.ends_at.to_s(:regular_time) %> at <%= @meal.location_name %>.
 
 Your help is crucial! Please arrive promptly for your shift!
 

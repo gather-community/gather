@@ -30,8 +30,8 @@ class Meal < ActiveRecord::Base
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
-  has_many :reservation_resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
-  has_many :resources, class_name: "Reservation::Resource", through: :reservation_resourcings
+  has_many :resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
+  has_many :resources, class_name: "Reservation::Resource", through: :resourcings
   has_many :reservations, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }

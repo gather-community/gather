@@ -173,16 +173,26 @@ en:
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
-      month_yr: '%B %Y'
-      weekday: '%A'
-      month_day: '%b %e'
-      date_full: '%b %e %Y'
+      date_full: "%b %d %Y"
+      month_day: "%b %d"
+      month_yr: "%B %Y"
+      short_date: "%a %b %d"
+      short_date_with_yr: "%a %b %d %Y"
+      url_date: "%Y-%m-%d"
+      weekday: "%A"
   time:
     formats:
-      full_datetime: "%a %b %e %Y %l:%M%P"
+      date_wkday_no_yr: "%a %b %d"
+      datetime_no_yr: "%a %b %d %l:%M%P"
+      full_datetime: "%a %b %d %Y %l:%M%P"
+      machine_datetime_no_zone: "%Y-%m-%d %H:%M"
+      regular_time: "%l:%M%P"
+
+
+
 
   datepicker:
-    dformat: '%b %e %Y'
+    dformat: '%b %d %Y'
     pformat: 'MMM D YYYY'
   timepicker:
     dformat: '%l:%M%P'

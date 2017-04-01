@@ -19,10 +19,14 @@ class NotificationMailer < ActionMailer::Base
     @meal = assignment.meal
     @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
+    @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
+    @datetime = I18n.l(@assignment.starts_at, format: :datetime_no_yr)
+    @shift_start = I18n.l(@assignment.starts_at, format: :regular_time)
+    @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
+    @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
     mail(to: @user.email, subject:
-      "Job Reminder: You are #{@role} for a meal at #{assignment.starts_at.to_s(:datetime_no_yr)} \
-        at #{@meal.location_abbrv}")
+      "Job Reminder: You are #{@role} for a meal at #{@datetime} at #{@meal.location_abbrv}")
   end
 
   def worker_change_notice(initiator, meal, added, removed)

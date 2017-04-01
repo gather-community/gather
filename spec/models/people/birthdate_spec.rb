@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe People::Birthdate do
   describe "age and birthdate" do
@@ -29,8 +29,9 @@ describe People::Birthdate do
         expect(user.birthdate.month).to eq 2
         expect(user.birthdate.day).to eq day
         expect(user.birthdate).to eq Date.new(4, 2, day)
-        expect(user.birthdate_str).to eq "Feb #{day}"
-        expect(user.reload.birthdate_str).to eq "Feb #{day}"
+        str = "Feb #{day.to_s.rjust(2, '0')}"
+        expect(user.birthdate_str).to eq str
+        expect(user.reload.birthdate_str).to eq str
       end
 
       it "has nil age" do

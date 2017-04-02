@@ -31,7 +31,7 @@ class Community < ActiveRecord::Base
     {key: :reservations, type: :group, fields: [
       {key: :kinds, type: :string},
       {key: :meals, type: :group, fields: [
-        {key: :default_length, type: :integer, required: true, default: 330},
+        {key: :default_total_length, type: :integer, required: true, default: 330},
         {key: :default_prep_time, type: :integer, required: true, default: 180}
       ]}
     ]},

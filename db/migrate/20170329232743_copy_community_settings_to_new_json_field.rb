@@ -29,7 +29,7 @@ class CopyCommunitySettingsToNewJsonField < ActiveRecord::Migration
         reservations: {
           kinds: old_settings[:reservation_kinds].try(:join, ", "),
           meals: {
-            default_length: 330,
+            default_total_length: 330,
             default_prep_time: 180
           }
         },

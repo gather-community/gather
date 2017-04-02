@@ -128,7 +128,7 @@ en:
             kinds: "Types"
             meals:
               _self: "Meal Reservations"
-              default_length: "Default Length"
+              default_total_length: "Default Total Length"
               default_prep_time: "Default Prep Time"
           billing:
             _self: "Billing"
@@ -151,7 +151,7 @@ en:
           reservations:
             kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
             meals:
-              default_length: "Default length of meal reservations in minutes, including prep and cleanup time"
+              default_total_length: "Default total length of meal reservations in minutes, including prep and cleanup time"
               default_prep_time: "Default meal prep time in minutes"
           billing:
             payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."

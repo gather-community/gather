@@ -9,7 +9,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
   describe "sync" do
     before do
       meal.host_community.settings.reservations.meals.default_prep_time = 90
-      meal.host_community.settings.reservations.meals.default_length = 210
+      meal.host_community.settings.reservations.meals.default_total_length = 210
       handler.sync
     end
 

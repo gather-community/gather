@@ -11,22 +11,20 @@ module Reservation
 
     # Creates/updates the reservation associated with the meal
     def sync
-      starts_at = meal.served_at - settings.default_prep_time.minutes
-      ends_at = starts_at + settings.default_total_length.minutes
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
 
       meal.reservations.destroy_all
 
-      meal.resources.each do |resource|
+      meal.resourcings.each do |resourcing|
         attribs = {
-          resource: resource,
+          resource: resourcing.resource,
           reserver: meal.creator,
           name: "#{prefix} #{title}",
           kind: "_meal",
-          starts_at: starts_at,
-          ends_at: ends_at,
+          starts_at: starts_at = meal.served_at - resourcing.prep_time.minutes,
+          ends_at: starts_at + resourcing.total_length.minutes,
           guidelines_ok: "1"
         }
 

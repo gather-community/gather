@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170330020321) do
+ActiveRecord::Schema.define(version: 20170401174949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -255,7 +255,9 @@ ActiveRecord::Schema.define(version: 20170330020321) do
 
   create_table "reservation_resourcings", force: :cascade do |t|
     t.integer "meal_id", null: false
+    t.integer "prep_time", null: false
     t.integer "resource_id", null: false
+    t.integer "total_length", null: false
   end
 
   add_index "reservation_resourcings", ["meal_id", "resource_id"], name: "index_reservation_resourcings_on_meal_id_and_resource_id", unique: true, using: :btree

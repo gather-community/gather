@@ -21,7 +21,7 @@ RSpec.describe Meal, type: :model do
     let(:meal) { build(:meal, :with_menu, title: "Yummy", resources: resources) }
 
     before do
-      meal.host_community.settings.reservations.meals.default_total_length = 120 # mins
+      meal.host_community.settings.reservations.meals.default_total_time = 120 # mins
       meal.host_community.settings.reservations.meals.default_prep_time = 30 # mins
       meal.host_community.save!
     end

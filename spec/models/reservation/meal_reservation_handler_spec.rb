@@ -11,12 +11,12 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     before do
       # Set defaults to be used in first resourcing.
       community.settings.reservations.meals.default_prep_time = 90
-      community.settings.reservations.meals.default_total_length = 210
+      community.settings.reservations.meals.default_total_time = 210
       community.save!
 
       # Set custom times for second resourcing.
       meal.resourcings[1].prep_time = 60
-      meal.resourcings[1].total_length = 90
+      meal.resourcings[1].total_time = 90
       handler.sync
     end
 

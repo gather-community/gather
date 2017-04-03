@@ -24,7 +24,7 @@ module Reservation
           name: "#{prefix} #{title}",
           kind: "_meal",
           starts_at: starts_at = meal.served_at - resourcing.prep_time.minutes,
-          ends_at: starts_at + resourcing.total_length.minutes,
+          ends_at: starts_at + resourcing.total_time.minutes,
           guidelines_ok: "1"
         }
 

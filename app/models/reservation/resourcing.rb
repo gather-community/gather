@@ -6,7 +6,7 @@ module Reservation
     def resource=(r)
       association(:resource).writer(r)
       self.prep_time = r.community.settings.reservations.meals.default_prep_time
-      self.total_length = r.community.settings.reservations.meals.default_total_length
+      self.total_time = r.community.settings.reservations.meals.default_total_time
     end
   end
 end

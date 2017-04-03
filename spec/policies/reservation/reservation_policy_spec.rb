@@ -87,7 +87,7 @@ describe Reservation::ReservationPolicy do
         it_behaves_like "allow all active users"
       end
 
-      permissions :new?, :create?, :edit?, :update?, :destroy? do
+      permissions :new?, :create?, :destroy? do
         it "denies access to all" do
           expect(subject).not_to permit(user, reservation)
           expect(subject).not_to permit(other_user, reservation)
@@ -95,6 +95,14 @@ describe Reservation::ReservationPolicy do
         end
       end
 
+      permissions :edit?, :update? do
+        it "permits access to admins, meals coordinators, and meal creator, and forbids others" do
+          expect(subject).to permit(user, reservation)
+          expect(subject).to permit(admin, reservation)
+          expect(subject).to permit(meals_coordinator, reservation)
+          expect(subject).not_to permit(other_user, reservation)
+        end
+      end
     end
   end
 

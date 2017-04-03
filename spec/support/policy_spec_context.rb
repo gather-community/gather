@@ -38,6 +38,8 @@ shared_context "policy objs" do
   let(:photographer) { new_user_from(community, label: "photographer") }
   let(:photographer_in_cluster) { new_user_from(communityB, label: "photographer_in_cluster") }
 
+  let(:meals_coordinator) { new_user_from(community, label: "meals_coordinator") }
+
   before do
     allow(user).to receive(:has_role?) { false }
     allow(other_user).to receive(:has_role?) { false }
@@ -49,6 +51,7 @@ shared_context "policy objs" do
     allow(biller_in_cluster).to receive(:has_role?) { |r| r == :biller }
     allow(photographer).to receive(:has_role?) { |r| r == :photographer }
     allow(photographer_in_cluster).to receive(:has_role?) { |r| r == :photographer }
+    allow(meals_coordinator).to receive(:has_role?) { |r| r == :meals_coordinator }
   end
 
   # Saves commonly used objects from above. This is not done by default

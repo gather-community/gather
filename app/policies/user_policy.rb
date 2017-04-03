@@ -76,7 +76,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_photo?
-    update_info? || active_photographer?
+    update_info? || active_with_community_role?(:photographer)
   end
 
   def administer?

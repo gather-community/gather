@@ -18,7 +18,8 @@ module Reservation
     end
 
     def update?
-      (active_reserver? || active_admin?) && !meal?
+      active_admin? || active_reserver? ||
+        (meal? && active_with_community_role?(:meals_coordinator))
     end
 
     def choose_reserver?

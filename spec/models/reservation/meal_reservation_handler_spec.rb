@@ -7,7 +7,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     resources: resources, served_at: "2017-01-01 12:00") }
   let(:handler) { described_class.new(meal) }
 
-  describe "sync" do
+  describe "handle_meal_change" do
     before do
       # Set defaults to be used in first resourcing.
       community.settings.reservations.meals.default_prep_time = 90
@@ -17,7 +17,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       # Set custom times for second resourcing.
       meal.resourcings[1].prep_time = 60
       meal.resourcings[1].total_time = 90
-      handler.sync
+      handler.handle_meal_change
     end
 
     context "with clear calendars" do
@@ -43,7 +43,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       before do
         meal.save!
         meal.update(served_at: "2017-01-01 13:00")
-        described_class.new(meal).sync
+        described_class.new(meal).handle_meal_change
         meal.save!
       end
 
@@ -57,13 +57,13 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     end
   end
 
-  describe "validation" do
+  describe "validate_for_meal" do
     let!(:conflicting_reservation) { create(:reservation, resource: resources[0],
       starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00") }
 
     before do
-      handler.sync
-      handler.validate
+      handler.handle_meal_change
+      handler.validate_for_meal
     end
 
     it "sets base error on meal" do

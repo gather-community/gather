@@ -10,7 +10,7 @@ module Reservation
     end
 
     # Creates/updates the reservation associated with the meal
-    def sync
+    def handle_meal_change
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
@@ -33,8 +33,8 @@ module Reservation
     end
 
     # Validates the reservation and copies errors to meal.
-    # Assumes reservation has been setup already.
-    def validate
+    # Assumes handle_meal_change has been run already.
+    def validate_for_meal
       meal.reservations.each do |reservation|
         unless reservation.valid?
           errors = reservation.errors.map do |attrib, msg|

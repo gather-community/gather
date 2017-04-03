@@ -85,7 +85,7 @@ class Meal < ActiveRecord::Base
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
   validates :cost, presence: true, if: :finalized?
-  validate { reservation_handler.validate if reservations.any? }
+  validate { reservation_handler.validate_for_meal if reservations.any? }
   validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(current_user)
@@ -157,7 +157,7 @@ class Meal < ActiveRecord::Base
   end
 
   def sync_reservations
-    reservation_handler.sync
+    reservation_handler.handle_meal_change
   end
 
   # Accepts values from the community checkboxes on the form.

@@ -17,13 +17,14 @@ RSpec.describe Meal, type: :model do
   end
 
   describe "reservation interlock" do
-    let(:resources) { create_list(:resource, 2) }
-    let(:meal) { build(:meal, :with_menu, title: "Yummy", resources: resources) }
+    let(:community) { default_community }
+    let(:resources) { create_list(:resource, 2, community: community) }
+    let(:meal) { build(:meal, :with_menu, title: "Yummy", host_community: community, resources: resources) }
 
     before do
-      meal.host_community.settings.reservations.meals.default_total_time = 120 # mins
-      meal.host_community.settings.reservations.meals.default_prep_time = 30 # mins
-      meal.host_community.save!
+      community.settings.reservations.meals.default_total_time = 120 # mins
+      community.settings.reservations.meals.default_prep_time = 30 # mins
+      community.save!
     end
 
     context "on create" do
@@ -91,7 +92,8 @@ RSpec.describe Meal, type: :model do
           meal.served_at = Time.now + 2.days
           meal.sync_reservations
           meal.save
-          expect((meal.reservations(true).first.starts_at).change(:usec => 0)).to eq (meal.served_at.change(:usec => 0) - 30.minutes)
+          expect((meal.reservations(true).first.starts_at).change(:usec => 0)).to eq(
+            meal.served_at.change(:usec => 0) - 30.minutes)
         end
 
         it "should handle validation errors" do

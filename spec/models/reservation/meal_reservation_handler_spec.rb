@@ -44,17 +44,71 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     context "on update" do
       before do
         meal.save!
-        meal.update(served_at: "2017-01-01 13:00")
-        described_class.new(meal).build_reservations
-        meal.save!
       end
 
-      it "deletes and replaces previous reservations" do
-        expect(Reservation::Reservation.count).to eq 2
-        expect(meal.reservations.map(&:starts_at)).to eq [
-          Time.zone.parse("2017-01-01 11:30"),
-          Time.zone.parse("2017-01-01 12:00")
-        ]
+      context "on resource change" do
+        let(:resource2) { create(:resource) }
+
+        it "should update reservation" do
+          meal.resources = [resource2]
+          meal.build_reservations
+          meal.save!
+          expect(meal.reservations(true).first.resource).to eq resource2
+        end
+
+        it "should handle validation errors" do
+          # Create reservation that will conflict when meal resource changes
+          meal_time = meal.served_at
+          create(:reservation, resource: resource2,
+            starts_at: meal_time, ends_at: meal_time + 30.minutes)
+
+          meal.resources = [resource2]
+          meal.build_reservations
+          meal.save
+          expect_overlap_error(resource2)
+        end
+      end
+
+      context "on title change" do
+        it "should update reservation" do
+          meal.title = "Nosh time"
+          meal.build_reservations
+          meal.save!
+          expect(meal.reservations(true).first.name).to eq "Meal: Nosh time"
+        end
+      end
+
+      context "on time change" do
+        context "with no conflict" do
+          before do
+            meal.update(served_at: "2017-01-01 13:00")
+            described_class.new(meal).build_reservations
+            meal.save!
+          end
+
+          it "should delete and replace previous reservations" do
+            expect(Reservation::Reservation.count).to eq 2
+            expect(meal.reservations.map(&:starts_at)).to eq [
+              Time.zone.parse("2017-01-01 11:30"),
+              Time.zone.parse("2017-01-01 12:00")
+            ]
+          end
+        end
+
+        context "with conflict" do
+          before do
+            new_meal_time = meal.served_at + 1.day
+            create(:reservation, resource: resources[1],
+              starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
+            meal.served_at = new_meal_time
+            meal.build_reservations
+          end
+
+          it "should handle validation errors" do
+            expect(meal).not_to be_valid
+            expect_overlap_error(resources[1])
+          end
+        end
       end
     end
   end
@@ -136,5 +190,11 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       expect(rsng.prep_time).to eq 60
       expect(rsng.total_time).to eq 195
     end
+  end
+
+  def expect_overlap_error(resource)
+    expect(meal).not_to be_valid
+    expect(meal.errors[:base]).to eq ["The following error(s) occurred in making a #{resource.full_name} "\
+      "reservation for this meal: This reservation overlaps an existing one."]
   end
 end

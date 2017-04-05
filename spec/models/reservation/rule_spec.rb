@@ -3,30 +3,31 @@ require 'rails_helper'
 RSpec.describe Reservation::Rule, type: :model do
   describe "check" do
     let(:reservation) { Reservation::Reservation.new }
+
     describe "fixed_start_time" do
-      let(:rule) { Reservation::Rule.new(name: :fixed_start_time, value: Time.parse("12:00:00")) }
+      let(:rule) { Reservation::Rule.new(name: :fixed_start_time, value: Time.zone.parse("12:00:00")) }
 
       it "passes on match" do
-        reservation.starts_at = Time.parse("2016-01-01 12:00pm")
+        reservation.starts_at = Time.zone.parse("2016-01-01 12:00pm")
         expect(rule.check(reservation)).to be true
       end
 
       it "fails on no match" do
-        reservation.starts_at = Time.parse("2016-01-01 12:00am")
+        reservation.starts_at = Time.zone.parse("2016-01-01 12:00am")
         expect(rule.check(reservation)).to eq [:starts_at, "Must be 12:00pm"]
       end
     end
 
     describe "fixed_end_time" do
-      let(:rule) { Reservation::Rule.new(name: :fixed_end_time, value: Time.parse("18:00:00")) }
+      let(:rule) { Reservation::Rule.new(name: :fixed_end_time, value: Time.zone.parse("18:00:00")) }
 
       it "passes on match" do
-        reservation.ends_at = Time.parse("2016-01-01 6:00pm")
+        reservation.ends_at = Time.zone.parse("2016-01-01 6:00pm")
         expect(rule.check(reservation)).to be true
       end
 
       it "fails on no match" do
-        reservation.ends_at = Time.parse("2016-01-01 6:01pm")
+        reservation.ends_at = Time.zone.parse("2016-01-01 6:01pm")
         expect(rule.check(reservation)).to eq [:ends_at, "Must be  6:00pm"]
       end
     end
@@ -37,32 +38,32 @@ RSpec.describe Reservation::Rule, type: :model do
       after { Timecop.return }
 
       it "passes with acceptable lead days" do
-        reservation.starts_at = Time.parse("2016-01-30 6:00pm")
+        reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm")
         expect(rule.check(reservation)).to be true
       end
 
       it "passes for an event in the past" do
-        reservation.starts_at = Time.parse("2015-12-01 6:00pm")
+        reservation.starts_at = Time.zone.parse("2015-12-01 6:00pm")
         expect(rule.check(reservation)).to be true
       end
 
       it "fails for event too far in future" do
-        reservation.starts_at = Time.parse("2016-02-01 6:00pm")
+        reservation.starts_at = Time.zone.parse("2016-02-01 6:00pm")
         expect(rule.check(reservation)).to eq [:starts_at, "Can be at most 30 days in the future"]
       end
     end
 
     describe "max_length_minutes" do
       let(:rule) { Reservation::Rule.new(name: :max_length_minutes, value: 30) }
-      before { reservation.starts_at = Time.parse("2016-01-30 6:00pm") }
+      before { reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm") }
 
       it "passes with acceptable length" do
-        reservation.ends_at = Time.parse("2016-01-30 6:30pm")
+        reservation.ends_at = Time.zone.parse("2016-01-30 6:30pm")
         expect(rule.check(reservation)).to be true
       end
 
       it "fails for too long event" do
-        reservation.ends_at = Time.parse("2016-01-30 6:31pm")
+        reservation.ends_at = Time.zone.parse("2016-01-30 6:31pm")
         expect(rule.check(reservation)).to eq [:ends_at, "Can be at most 30 minutes after start time"]
       end
     end
@@ -92,19 +93,19 @@ RSpec.describe Reservation::Rule, type: :model do
 
         before do
           reservation.reserver = user1
-          reservation.starts_at = Time.parse("2016-01-30 6:00pm")
+          reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm")
         end
 
         context "with max 9 days per year" do
           let(:max_days) { 9 }
 
           it "should work for event 2 days long" do
-            reservation.ends_at = Time.parse("2016-02-01 12:00pm")
+            reservation.ends_at = Time.zone.parse("2016-02-01 12:00pm")
             expect(rule.check(reservation)).to be true
           end
 
           it "should fail for event 3 days long" do
-            reservation.ends_at = Time.parse("2016-02-01 7:30pm")
+            reservation.ends_at = Time.zone.parse("2016-02-01 7:30pm")
             expect(rule.check(reservation)).to eq [:base, "You can book at most 9 days "\
               "per year and you have already booked 7 days"]
           end
@@ -114,7 +115,7 @@ RSpec.describe Reservation::Rule, type: :model do
           let(:max_days) { 7 }
 
           it "should fail for even very short event" do
-            reservation.ends_at = Time.parse("2016-01-30 6:30pm")
+            reservation.ends_at = Time.zone.parse("2016-01-30 6:30pm")
             expect(rule.check(reservation)).to eq [:base, "You have already reached "\
               "your yearly limit of 7 days for this resource"]
           end
@@ -129,24 +130,24 @@ RSpec.describe Reservation::Rule, type: :model do
 
         before do
           reservation.reserver = user1
-          reservation.starts_at = Time.parse("2016-01-30 6:00pm")
+          reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm")
         end
 
         context "with max 110 hours per year" do
           let(:max_hours) { 110 }
 
           it "should pass with short reservation" do
-            reservation.ends_at = Time.parse("2016-01-30 7:00pm")
+            reservation.ends_at = Time.zone.parse("2016-01-30 7:00pm")
             expect(rule.check(reservation)).to be true
           end
 
           it "should pass with exactly right size reservation" do
-            reservation.ends_at = Time.parse("2016-01-30 8:30pm")
+            reservation.ends_at = Time.zone.parse("2016-01-30 8:30pm")
             expect(rule.check(reservation)).to be true
           end
 
           it "should fail with longer reservation" do
-            reservation.ends_at = Time.parse("2016-01-30 8:31pm")
+            reservation.ends_at = Time.zone.parse("2016-01-30 8:31pm")
             expect(rule.check(reservation)).to eq [:base, "You can book at most "\
               "4 days 14 hours per year and you have already booked 4 days 11 hours 30 minutes"]
           end
@@ -156,7 +157,7 @@ RSpec.describe Reservation::Rule, type: :model do
           let(:max_hours) { 107.5 }
 
           it "even a short reservation should fail" do
-            reservation.ends_at = Time.parse("2016-01-30 6:15pm")
+            reservation.ends_at = Time.zone.parse("2016-01-30 6:15pm")
             expect(rule.check(reservation)).to eq [:base, "You have already reached "\
               "your yearly limit of 4 days 11 hours 30 minutes for this resource"]
           end

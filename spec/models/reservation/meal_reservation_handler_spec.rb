@@ -51,7 +51,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
 
         it "should update reservation" do
           meal.resources = [resource2]
-          meal.build_reservations
+          handler.build_reservations
           meal.save!
           expect(meal.reservations(true).first.resource).to eq resource2
         end
@@ -63,7 +63,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
             starts_at: meal_time, ends_at: meal_time + 30.minutes)
 
           meal.resources = [resource2]
-          meal.build_reservations
+          handler.build_reservations
           meal.save
           expect_overlap_error(resource2)
         end
@@ -72,7 +72,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       context "on title change" do
         it "should update reservation" do
           meal.title = "Nosh time"
-          meal.build_reservations
+          handler.build_reservations
           meal.save!
           expect(meal.reservations(true).first.name).to eq "Meal: Nosh time"
         end
@@ -101,7 +101,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
             create(:reservation, resource: resources[1],
               starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
             meal.served_at = new_meal_time
-            meal.build_reservations
+            handler.build_reservations
           end
 
           it "should handle validation errors" do

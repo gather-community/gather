@@ -31,6 +31,9 @@ module Reservation
     validate :start_before_end
     validate :no_overlap
     validate :apply_rules
+    validate ->(r) { meal.reservation_handler.validate_reservation(r) if meal }
+
+    before_save ->(r) { meal.reservation_handler.sync_resourcings(r) if meal }
 
     normalize_attributes :kind, :note
 

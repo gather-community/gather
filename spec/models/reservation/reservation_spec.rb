@@ -75,6 +75,23 @@ RSpec.describe Reservation::Reservation, type: :model do
     end
   end
 
+  describe "meal reservation handler interactions" do
+    let(:meal) { create(:meal, resources: [create(:resource)]) }
+    let(:reservation) { meal.reservations.first }
+
+    before do
+      meal.build_reservations
+      meal.save!
+    end
+
+    it "should call validate_reservation and then sync_resourcings" do
+      reservation.starts_at += 1.minute
+      expect(meal.reservation_handler).to receive(:validate_reservation).with(reservation)
+      expect(meal.reservation_handler).to receive(:sync_resourcings).with(reservation)
+      reservation.save!
+    end
+  end
+
   def expect_no_error(method)
     reservation.send(method)
     expect(reservation.errors).to be_empty

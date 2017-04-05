@@ -14,5 +14,15 @@ RSpec.describe Meal, type: :model do
         expect(meal).to be_valid
       end
     end
+
+    describe "via meal reservation handler" do
+      let(:meal) { build(:meal, resources: [create(:resource)]) }
+
+      it "should call validate_meal on handler if reservations present" do
+        meal.build_reservations
+        expect(meal.reservation_handler).to receive(:validate_meal)
+        meal.valid?
+      end
+    end
   end
 end

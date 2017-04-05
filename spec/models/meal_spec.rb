@@ -29,7 +29,7 @@ RSpec.describe Meal, type: :model do
 
     context "on create" do
       it "should create reservations with correct attributes" do
-        meal.sync_reservations
+        meal.build_reservations
         meal.save!
         resources.each_with_index do |res, i|
           expect(meal.reservations[i].resource).to eq res
@@ -44,7 +44,7 @@ RSpec.describe Meal, type: :model do
       it "should handle reservation validation errors" do
         meal_time = meal.served_at
         create(:reservation, resource: resources[0], starts_at: meal_time, ends_at: meal_time + 30.minutes)
-        meal.sync_reservations
+        meal.build_reservations
         expect_overlap_error(resources[0])
       end
     end
@@ -53,14 +53,14 @@ RSpec.describe Meal, type: :model do
       let(:resource2) { create(:resource) }
 
       before do
-        meal.sync_reservations
+        meal.build_reservations
         meal.save!
       end
 
       context "on resource change" do
         it "should update reservation" do
           meal.resources = [resource2]
-          meal.sync_reservations
+          meal.build_reservations
           meal.save!
           expect(meal.reservations(true).first.resource).to eq resource2
         end
@@ -72,7 +72,7 @@ RSpec.describe Meal, type: :model do
             starts_at: meal_time, ends_at: meal_time + 30.minutes)
 
           meal.resources = [resource2]
-          meal.sync_reservations
+          meal.build_reservations
           meal.save
           expect_overlap_error(resource2)
         end
@@ -81,7 +81,7 @@ RSpec.describe Meal, type: :model do
       context "on title change" do
         it "should update reservation" do
           meal.title = "Nosh time"
-          meal.sync_reservations
+          meal.build_reservations
           meal.save!
           expect(meal.reservations(true).first.name).to eq "Meal: Nosh time"
         end
@@ -90,7 +90,7 @@ RSpec.describe Meal, type: :model do
       context "on time change" do
         it "should update reservation" do
           meal.served_at = Time.now + 2.days
-          meal.sync_reservations
+          meal.build_reservations
           meal.save
           expect((meal.reservations(true).first.starts_at).change(:usec => 0)).to eq(
             meal.served_at.change(:usec => 0) - 30.minutes)
@@ -103,7 +103,7 @@ RSpec.describe Meal, type: :model do
             starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
 
           meal.served_at = new_meal_time
-          meal.sync_reservations
+          meal.build_reservations
           meal.save
           expect_overlap_error(resources[1])
         end
@@ -112,7 +112,7 @@ RSpec.describe Meal, type: :model do
 
     context "on destroy" do
       before do
-        meal.sync_reservations
+        meal.build_reservations
         meal.save!
       end
 

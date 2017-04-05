@@ -88,6 +88,12 @@ en:
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
         meal:
           need_location: "You must choose at least one location"
+        reservation/reservation:
+          attributes:
+            starts_at:
+              after_meal_time: "must be at or before the meal time (%{time})"
+            ends_at:
+              before_meal_time: "must be after the meal time (%{time})"
         user:
           attributes:
             photo_content_type:
@@ -187,9 +193,6 @@ en:
       full_datetime: "%a %b %d %Y %l:%M%P"
       machine_datetime_no_zone: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
-
-
-
 
   datepicker:
     dformat: '%b %d %Y'

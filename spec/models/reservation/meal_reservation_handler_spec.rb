@@ -6,18 +6,20 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
   let(:meal) { build(:meal, :with_menu, host_community: community, title: "A very very very long title",
     resources: resources, served_at: "2017-01-01 12:00") }
   let(:handler) { described_class.new(meal) }
+  let(:handler2) { described_class.new(meal) }
 
-  describe "handle_meal_change" do
+  before do
+    community.settings.reservations.meals.default_prep_time = 90
+    community.settings.reservations.meals.default_total_time = 210
+    community.save!
+  end
+
+  describe "build_reservations" do
     before do
-      # Set defaults to be used in first resourcing.
-      community.settings.reservations.meals.default_prep_time = 90
-      community.settings.reservations.meals.default_total_time = 210
-      community.save!
-
       # Set custom times for second resourcing.
       meal.resourcings[1].prep_time = 60
       meal.resourcings[1].total_time = 90
-      handler.handle_meal_change
+      handler.build_reservations
     end
 
     context "with clear calendars" do
@@ -43,7 +45,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       before do
         meal.save!
         meal.update(served_at: "2017-01-01 13:00")
-        described_class.new(meal).handle_meal_change
+        described_class.new(meal).build_reservations
         meal.save!
       end
 
@@ -57,19 +59,82 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     end
   end
 
-  describe "validate_for_meal" do
+  describe "validate_meal" do
     let!(:conflicting_reservation) { create(:reservation, resource: resources[0],
       starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00") }
 
     before do
-      handler.handle_meal_change
-      handler.validate_for_meal
+      handler.build_reservations
+      handler.validate_meal
     end
 
     it "sets base error on meal" do
       expect(meal.errors[:base]).to eq [
         "The following error(s) occurred in making a #{resources[0].full_name} " \
           "reservation for this meal: This reservation overlaps an existing one."]
+    end
+  end
+
+  describe "validate_reservation" do
+    let(:reservation) { meal.reload.reservations[0] }
+
+    before do
+      handler.build_reservations
+      meal.save!
+    end
+
+    context "with valid change" do
+      before do
+        reservation.starts_at += 30.minutes
+        reservation.ends_at += 15.minutes
+        handler2.validate_reservation(reservation)
+      end
+
+      it "should not set error" do
+        expect(reservation.errors.any?).to be false
+      end
+    end
+
+    context "with change that moves start time after served_at" do
+      before do
+        reservation.starts_at = meal.served_at + 15.minutes
+        handler2.validate_reservation(reservation)
+      end
+
+      it "should set error" do
+        expect(reservation.errors[:starts_at]).to eq ["must be at or before the meal time (12:00pm)"]
+        expect(reservation.errors[:ends_at]).to eq []
+      end
+    end
+
+    context "with change that moves end time before served_at" do
+      before do
+        reservation.ends_at = meal.served_at - 15.minutes
+        handler2.validate_reservation(reservation)
+      end
+
+      it "should set error" do
+        expect(reservation.errors[:starts_at]).to eq []
+        expect(reservation.errors[:ends_at]).to eq ["must be after the meal time (12:00pm)"]
+      end
+    end
+  end
+
+  describe "sync_resourcings" do
+    let(:reservation) { meal.reload.reservations[0] }
+
+    before do
+      handler.build_reservations
+      meal.save!
+      reservation.starts_at += 30.minutes
+      reservation.ends_at += 15.minutes
+      handler2.sync_resourcings(reservation)
+    end
+
+    it "should change the resourcing's prep time and total time" do
+      rsng = meal.resourcings[0].reload
+      expect(rsng.prep_time).to eq 60
+      expect(rsng.total_time).to eq 195
     end
   end
 end

@@ -3,7 +3,7 @@ class CreateReservationsForMeals < ActiveRecord::Migration
     Meal.transaction do
       Meal.where("reservation_id IS NULL").find_each do |m|
         puts "Creating reservation for meal #{m.id}"
-        m.sync_reservations
+        m.build_reservations
         m.save!
       end
     end

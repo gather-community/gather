@@ -9,8 +9,9 @@ module Reservation
       self.meal = meal
     end
 
-    # Creates/updates the reservation associated with the meal
-    def handle_meal_change
+    # Builds the reservation associated with the meal. Deletes any previous reservations.
+    # Builds, not creates, because we want to see if validation passes first.
+    def build_reservations
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
@@ -33,8 +34,8 @@ module Reservation
     end
 
     # Validates the reservation and copies errors to meal.
-    # Assumes handle_meal_change has been run already.
-    def validate_for_meal
+    # Assumes build_reservations has been run already.
+    def validate_meal
       meal.reservations.each do |reservation|
         unless reservation.valid?
           errors = reservation.errors.map do |attrib, msg|
@@ -51,10 +52,34 @@ module Reservation
       end
     end
 
+    # Validates that changes to the reservation are valid with respect to the meal.
+    def validate_reservation(reservation)
+      if reservation.starts_at > meal.served_at
+        reservation.errors.add(:starts_at, :after_meal_time, time: meal_time)
+      elsif reservation.ends_at < meal.served_at
+        reservation.errors.add(:ends_at, :before_meal_time, time: meal_time)
+      end
+    end
+
+    # Updates the Resourcing associated with the reservation to reflect the new reservation times.
+    # Assumes that validate_reservation has been called already and the changes are valid.
+    def sync_resourcings(reservation)
+      resourcing = meal.resourcings.detect { |r| r.resource == reservation.resource }
+      raise ArgumentError.new("Meal is not associated with resource") if resourcing.nil?
+      resourcing.update(
+        prep_time: (meal.served_at - reservation.starts_at) / 1.minute,
+        total_time: (reservation.ends_at - reservation.starts_at) / 1.minute
+      )
+    end
+
     private
 
     def settings
       @settings ||= meal.host_community.settings.reservations.meals
+    end
+
+    def meal_time
+      I18n.l(meal.served_at, format: :regular_time)
     end
   end
 end

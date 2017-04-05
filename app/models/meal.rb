@@ -61,6 +61,7 @@ class Meal < ActiveRecord::Base
   delegate :name, to: :host_community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
+  delegate :build_reservations, to: :reservation_handler
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
@@ -85,7 +86,7 @@ class Meal < ActiveRecord::Base
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
   validates :cost, presence: true, if: :finalized?
-  validate { reservation_handler.validate_for_meal if reservations.any? }
+  validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(current_user)
@@ -154,10 +155,6 @@ class Meal < ActiveRecord::Base
 
   def reservation_handler
     @reservation_handler ||= Reservation::MealReservationHandler.new(self)
-  end
-
-  def sync_reservations
-    reservation_handler.handle_meal_change
   end
 
   # Accepts values from the community checkboxes on the form.

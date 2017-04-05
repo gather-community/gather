@@ -118,30 +118,43 @@ describe Reservation::ReservationPolicy do
   end
 
   describe "permitted_attributes" do
+    let(:admin_attribs) { basic_attribs + %i(reserver_id) }
     subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
 
     shared_examples_for "basic attribs" do
       it "should allow basic attribs" do
-        expect(subject).to contain_exactly(*%i(name kind sponsor_id starts_at ends_at guidelines_ok note))
+        expect(subject).to contain_exactly(*basic_attribs)
       end
     end
 
-    context "regular user" do
-      it_behaves_like "basic attribs"
-    end
+    shared_examples_for "each user type" do
+      context "regular user" do
+        it_behaves_like "basic attribs"
+      end
 
-    context "admin" do
-      let(:user) { admin }
+      context "admin" do
+        let(:user) { admin }
 
-      it "should allow admin-only attribs" do
-        expect(subject).to contain_exactly(*%i(name kind reserver_id
-          sponsor_id starts_at ends_at guidelines_ok note))
+        it "should allow admin-only attribs" do
+          expect(subject).to contain_exactly(*admin_attribs)
+        end
+      end
+
+      context "outside admin" do
+        let(:user) { admin_in_cluster }
+        it_behaves_like "basic attribs"
       end
     end
 
-    context "outside admin" do
-      let(:user) { admin_in_cluster }
-      it_behaves_like "basic attribs"
+    context "regular reservation" do
+      let(:basic_attribs) { %i(name kind sponsor_id starts_at ends_at guidelines_ok note) }
+      it_behaves_like "each user type"
+    end
+
+    context "meal reservation" do
+      let(:basic_attribs) { %i(starts_at ends_at note) }
+      let(:reservation) { build(:reservation, reserver: user, resource: resource, kind: "_meal") }
+      it_behaves_like "each user type"
     end
   end
 end

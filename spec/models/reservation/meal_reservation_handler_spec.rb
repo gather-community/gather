@@ -54,6 +54,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
           handler.build_reservations
           meal.save!
           expect(meal.reservations(true).first.resource).to eq resource2
+          expect(meal.reservations.size).to eq 1
         end
 
         it "should handle validation errors" do

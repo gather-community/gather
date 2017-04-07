@@ -16,21 +16,23 @@ module Reservation
       title = truncate(meal.title_or_no_title,
         length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
 
-      meal.reservations.destroy_all
+      current_reservations = []
 
       meal.resourcings.each do |resourcing|
-        attribs = {
-          resource: resourcing.resource,
+        reservation = meal.reservations.detect { |r| r.resource == resourcing.resource }
+        reservation ||= meal.reservations.build(resource: resourcing.resource)
+        reservation.assign_attributes(
           reserver: meal.creator,
           name: "#{prefix} #{title}",
           kind: "_meal",
           starts_at: starts_at = meal.served_at - resourcing.prep_time.minutes,
           ends_at: starts_at + resourcing.total_time.minutes,
           guidelines_ok: "1"
-        }
-
-        meal.reservations.build(attribs)
+        )
+        current_reservations << reservation
       end
+
+      meal.reservations.destroy(*(meal.reservations - current_reservations))
     end
 
     # Validates the reservation and copies errors to meal.

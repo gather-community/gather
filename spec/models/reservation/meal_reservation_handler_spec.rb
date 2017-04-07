@@ -71,11 +71,16 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
       end
 
       context "on title change" do
-        it "should update reservation" do
+        before do
+          meal.reservations.first.update!(note: "Foo")
+        end
+
+        it "should update reservation and preserve unaffected fields" do
           meal.title = "Nosh time"
           handler.build_reservations
           meal.save!
           expect(meal.reservations(true).first.name).to eq "Meal: Nosh time"
+          expect(meal.reservations.first.note).to eq "Foo"
         end
       end
 

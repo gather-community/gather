@@ -2,11 +2,7 @@ class ReservationSerializer < ActiveModel::Serializer
   attributes :id, :url, :title, :start, :end, :editable, :className
 
   def url
-    if object.meal && MealPolicy.new(scope, object.meal).show?
-      meal_path(object.meal)
-    else
-      reservation_path(object)
-    end
+    reservation_path(object)
   end
 
   def title

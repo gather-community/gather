@@ -10,7 +10,9 @@
     <%= @resource.full_name %>
   <% end %>
 
-  <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
+  <% unless @reservation.meal? %>
+    <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
+  <% end %>
 
   <% if policy(@reservation).choose_reserver? %>
     <%= f.input :reserver_id, as: :assoc_select2 %>
@@ -22,17 +24,20 @@
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: @reservation.fixed_end_time? ? "no-time-picker" : "" } %>
 
-  <% if @kinds.present? && @reservation.requires_kind? %>
-    <%= f.input :kind, collection: @kinds, required: true %>
-  <% end %>
+  <% unless @reservation.meal? %>
+    <% if @kinds.present? && @reservation.requires_kind? %>
+      <%= f.input :kind, collection: @kinds, required: true %>
+    <% end %>
 
-  <% if @reservation.access_level == "sponsor" %>
-    <%= f.input :sponsor_id, as: :assoc_select2, required: true %>
+    <% if @reservation.access_level == "sponsor" %>
+      <%= f.input :sponsor_id, as: :assoc_select2, required: true %>
+    <% end %>
   <% end %>
 
   <%= f.input :note %>
 
-  <% if @resource.has_guidelines? %>
+  <%# Meal reservations are only ever edited, so there is no need for this. It would always be checked. %>
+  <% if @resource.has_guidelines? && !@reservation.meal? %>
     <%= f.input :guidelines, required: true do %>
       <div id="guidelines">
         <%= safe_render_markdown(@resource.all_guidelines) %>

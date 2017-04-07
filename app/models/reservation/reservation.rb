@@ -22,7 +22,7 @@ module Reservation
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :resource
     delegate :name, :full_name, to: :resource, prefix: true
-    delegate :title, to: :meal, prefix: true
+    delegate :title_or_no_title, to: :meal, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
@@ -65,6 +65,10 @@ module Reservation
       end
 
       reservation
+    end
+
+    def displayable_kind?
+      kind.present? && !meal?
     end
 
     def seconds

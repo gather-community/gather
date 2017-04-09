@@ -116,7 +116,7 @@ en:
             admin_email: "Admin Email"
             extra_roles: "Extra Roles"
             default_shift_times:
-              _self: "Default Start Times"
+              _self: "Default Shift Times"
               start:
                 _self: "Start Times"
                 head_cook: "Head Cook"

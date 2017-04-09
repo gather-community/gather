@@ -109,7 +109,7 @@ en:
   custom_fields:
     labels:
       community:
-        config:
+        settings:
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -147,7 +147,7 @@ en:
               amount: "Amount"
     hints:
       community:
-        config:
+        settings:
           meals:
             reimb_instructions: "What cooks should do with meals reimbursement form and receipts. Appears on meal summary sheet for head cooks only."
             admin_email: "Email for meals administrator(s)"
@@ -168,7 +168,7 @@ en:
               amount: "Dollar/percent amount of the fee (e.g. enter '3' for 3% or $3.00, depending on type)"
     options:
       community:
-        config:
+        settings:
           billing:
             late_fee_policy:
               fee_type:

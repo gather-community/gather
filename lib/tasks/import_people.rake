@@ -4,40 +4,39 @@ namespace :db do
   task import_people: :environment do
     adults = []
     kids = []
+    @errors = false
 
-    CSV.foreach("tmp/ts-people/people.csv") do |row|
-      img_path = row[0].blank? ? nil : "tmp/ts-people/#{row[0]}"
-      photo = img_path ? File.open(img_path, "r") : nil
+    def print_error(msg)
+      puts msg
+      @errors = true
+      true
+    end
 
-      if row[1] == "adult"
-        name = row[4]
-        if name =~ /\A(.+?)\s*\((.+)\)\z/
-          name = $1
-          fam_members = $2.split(/,\s*/)
-        else
-          fam_members = []
-        end
+    CSV.foreach("tmp/go-people/member_directory.csv", headers: true, header_converters: :symbol) do |row|
+      photo = begin
+        File.open("tmp/go-people/#{row[:photo_path]}", "r")
+      rescue
+        nil
+      end
 
-        if name == "Mary Ann Marquardt"
-          first_name = "Mary Ann"
-          last_name = "Marquardt"
-        elsif name == "Mary Beth Wyllie"
-          first_name = "Mary Beth"
-          last_name = "Wyllie"
-        else
-          name_bits = name.split(" ")
-          first_name = name_bits.first
-          last_name = name_bits[1..-1].join(" ")
-        end
+      first_name = row[:first_name]
+      last_name = row[:last_name]
+      birthdate = row[:bday] ? Date.strptime(row[:bday], "%m/%d/%Y") : nil
 
+      if row[:adult_child] == "adult"
         # Find matching user, complain if none
-        u = User.joins(:household).where(households: {community_id: 1}, first_name: first_name, last_name: last_name).first
-        raise "Can't find #{name}" unless u
+        u = User.joins(:household).where(households: {community_id: 2}, first_name: first_name, last_name: last_name).first
+        print_error("Can't find adult #{first_name} #{last_name}") && next unless u
 
-        # Check unit number
-        raise "Wrong unit number for #{name}" unless u.household.unit_num == row[2]
+        old_unit = u.household.unit_num.to_s.sub(/^5/, "").to_i
+        new_unit = row[:unit].to_i
 
-        vehicles = (row[8] || "").split(" and ")
+        if old_unit != 0 && old_unit != new_unit
+          # Check unit number
+          print_error("Wrong unit number for #{first_name} #{last_name} (#{old_unit} vs #{new_unit})") && next
+        end
+
+        vehicles = (row[:vehicles] || "").split(" and ")
         vehicles.map! do |str|
           str = str.split(/\s*,\s*/)
           str[0] = str[0].split(" ")
@@ -45,68 +44,40 @@ namespace :db do
           {make: str[0][0], model: str[0][1..-1].join(" "), color: str[1]}
         end
 
-        birthdate = row[7] ? Date.parse(row[7].split("-").reverse.join(" ") << " 0004") : nil
-
         adults << {
           photo: photo,
           user: u,
-          name: name,
           first_name: first_name,
           last_name: last_name,
-          fam_members: fam_members,
-          garage: row[3].presence,
+          garage: row[:garage].presence,
           birthdate: birthdate,
           vehicles: vehicles
         }
+      else
+        guardians = (row[:parents] || "").split(/\s*;\s*/).map do |parent_name|
+          fn, ln = parent_name.split(" ")
+          parent = User.find_by(first_name: fn, last_name: ln)
+          print_error("Couldn't find parent '#{parent_name}'") && next unless parent
+          parent
+        end.compact
 
-      else # children
-        name = row[4]
-        name_bits = name.split(" ")
-        first_name = name_bits.first
-        last_name = name_bits[1..-1].join(" ")
-
-        birthdate = row[7] ? Date.strptime(row[7], "%m/%d/%y") : nil
+        print_error("#{first_name} #{last_name} has no guardians") && next if guardians.empty?
 
         kids << {
           photo: photo,
-          name: name,
           first_name: first_name,
           last_name: last_name,
-          unit: row[2],
+          unit: new_unit,
           birthdate: birthdate,
-          guardians: []
+          guardians: guardians,
+          household: guardians.first.household
         }
-
-      end
-    end
-
-    adults.each do |adult|
-      adult[:fam_members].each do |fm|
-        ma = adults.select { |a| a[:first_name] == fm || a[:name] == fm }
-        mk = kids.select { |a| a[:first_name] == fm || a[:name] == fm }
-        matches = ma + mk
-
-        if matches.size > 1
-          raise "Found #{matches.map { |a| a[:name] }.inspect} for #{fm.inspect}"
-        elsif matches.empty?
-          raise "Found no matches for #{fm.inspect}"
-        end
-
-        mk.each do |kid|
-          kid[:guardians] << adult[:user]
-        end
-      end
-    end
-
-    # If any children without parents, raise error.
-    kids.each do |kid|
-      if kid[:guardians].empty?
-        raise "#{kid[:name]} has no guardians"
       end
     end
 
     households = {}
 
+    # Add vehicles and garages to household
     adults.each do |adult|
       h = households[adult[:user].household] ||= {vehicles: [], garages: []}
       h[:vehicles].concat(adult[:vehicles])
@@ -118,6 +89,8 @@ namespace :db do
       h[:vehicles].uniq!
     end
 
+    raise "errors were raised" if @errors
+
     User.transaction do
       begin
         adults.each do |user|
@@ -127,12 +100,14 @@ namespace :db do
         end
         kids.each do |kid|
           if User.find_by(kid.slice(:first_name, :last_name)).nil?
-            User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo).
-              merge(household: kid[:guardians].first.household, child: true))
+            User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo, :household).
+              merge(child: true))
           end
         end
         households.each do |household, attribs|
-          household.update_attributes!(garage_nums: attribs[:garages].join(", "))
+          household.update_attributes!(
+            garage_nums: attribs[:garages].join(", ")
+          )
           attribs[:vehicles].each do |v|
             household.vehicles.find_or_create_by!(v)
           end

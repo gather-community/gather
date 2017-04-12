@@ -161,7 +161,7 @@ en:
               default_prep_time: "Default meal prep time in minutes"
           billing:
             payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
-            statement_terms: "Number of days after the creation date that a statement is due. If blank, statements have no due dates."
+            statement_terms: "Number of days after the creation date that a statement is due. If zero (0), statements have no due dates."
             late_fee_policy:
               fee_type: "How the fee is calculated"
               threshold: "Minimum outstanding balance for a fee to be assessed"

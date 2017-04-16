@@ -94,14 +94,29 @@ class ApplicationController < ActionController::Base
     Rails.logger.info("Request URL: #{request.url}")
   end
 
+  def login_url
+    root_url(login: 1)
+  end
+
   # Saves the location before loading each page so we can return to the right page after sign in.
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
-    # place to return to (for example, we don't want to return to the sign in page
-    # after signing in).
-    # Also since the apex root url is shown if authentication fails, we don't want to store that either.
-    return if devise_controller? || request.url == apex_root_url
+    # place to return to (for example, we don't want to return to the sign in page after signing in).
+    return if devise_controller? || request.fullpath == "/?login=1"
     session["user_return_to"] = request.url
+  end
+
+  # Customize the redirect URL if not logged in.
+  # The method suggested in the Devise wiki -- using a custom failure app -- caused multiple complications.
+  # For instance, it broke `store_current_location` above.
+  def authenticate_user!
+    if user_signed_in?
+      super
+    else
+      # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
+      # The same condition exists in the original implementation.
+      redirect_to login_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
+    end
   end
 
   # Currently we are only checking for calendar_token, but could add others later.

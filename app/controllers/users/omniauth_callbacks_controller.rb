@@ -11,7 +11,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       if !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
         set_flash_message(:error, :failure, kind: "Google",
           reason: "you must login with the Google ID #{by_token.google_email}")
-        redirect_to root_path
+        redirect_to login_url
 
       # If there is already a user with that google_email, log them in
       # INSTEAD of the one with the token. Shouldn't happen often.
@@ -25,7 +25,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       else
         set_flash_message(:error, :failure, kind: "Google",
           reason: "your invitation has expired")
-        redirect_to root_path
+        redirect_to login_url
       end
 
       session[:invite_token] = nil
@@ -40,7 +40,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       set_flash_message(:error, :failure, kind: "Google",
         reason: "your Google ID #{auth.info[:email]} was not found in the system")
-      redirect_to root_path
+      redirect_to login_url
 
     end
   end

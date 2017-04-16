@@ -1,4 +1,4 @@
-def switch_to_subdomain(subdomain)
+def with_subdomain(subdomain)
   apex = Settings.url.host_without_port
   hostname = subdomain ? "#{subdomain}.#{apex}" : apex
   Capybara.app_host = "http://#{hostname}"

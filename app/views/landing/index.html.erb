@@ -14,7 +14,7 @@
         <%= image_tag("logo-white.png") %>
       </div>
       <%= link_to(icon_tag("google") << " Log in with Google",
-        user_omniauth_authorize_path(:google_oauth2), class: "btn btn-primary btn-login") %>
+        user_omniauth_authorize_url(:google_oauth2), class: "btn btn-primary btn-login") %>
       <div id="help-link">
         <%= link_to(icon_tag("question-circle") << " Need help logging in?", "#",
            data: {toggle: "modal", target: "#help-modal"}) %>

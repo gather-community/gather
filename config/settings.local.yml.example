@@ -13,9 +13,10 @@ oauth:
 # Get a secret key by running 'rake secret'.
 secret_key_base: <secret key>
 
-# Replace '<hostname>' with your hostname.  Enter 'localhost' for a standard development setup.
+# Replace '<hostname>' with your hostname.  Enter 'localhost:3000' for a standard development setup.
 url:
-  host: <hostname>
+  host: <hostname>:<port_unless_80>
+  host_without_port: <hostname>
   protocol: <http or https>
 
 email:

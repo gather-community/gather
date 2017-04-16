@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_action :log_full_url
   before_action :set_default_nav_context
   before_action :store_current_location
   before_action :authenticate_user!
@@ -81,16 +82,26 @@ class ApplicationController < ActionController::Base
     UserPolicy.new(current_user, User).filter(household.users_and_children)
   end
 
+  protected
+
+  def default_url_options
+    {host: Settings.url.host}
+  end
+
   private
+
+  def log_full_url
+    Rails.logger.info("Request URL: #{request.url}")
+  end
 
   # Saves the location before loading each page so we can return to the right page after sign in.
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
     # place to return to (for example, we don't want to return to the sign in page
     # after signing in).
-    # Also since the root path is shown if authentication fails, we don't want to store that either.
-    return if devise_controller? || request.fullpath == '/'
-    store_location_for(:user, request.url)
+    # Also since the apex root url is shown if authentication fails, we don't want to store that either.
+    return if devise_controller? || request.url == apex_root_url
+    session["user_return_to"] = request.url
   end
 
   # Currently we are only checking for calendar_token, but could add others later.
@@ -104,5 +115,9 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(user)
     logged_out_path
+  end
+
+  def apex_root_url
+    "#{Settings.protocol}://#{Settings.host}"
   end
 end

@@ -95,4 +95,20 @@ module FeatureSpecHelpers
     rescue Capybara::ModalNotFound
     end
   end
+
+  def stub_omniauth(params)
+    OmniAuth.config.test_mode = true
+    params.each do |key, hash|
+      OmniAuth.config.mock_auth[key] = OmniAuth::AuthHash.new(info: hash)
+    end
+    yield
+    OmniAuth.config.test_mode = false
+  end
+
+  def expect_valid_login_link_and_click
+    # Should point to apex domain
+    expect(page).to have_css("a[href='http://#{Settings.url.host_without_port}/users/auth/google_oauth2']",
+      text: "Log in with Google")
+    click_link "Log in with Google"
+  end
 end

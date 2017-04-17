@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :log_full_url
+  before_action :set_community_from_subdomain
   before_action :set_default_nav_context
   before_action :store_current_location
   before_action :authenticate_user!
@@ -19,7 +20,26 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
 
+  protected
+
+  def default_url_options
+    {host: Settings.url.host}
+  end
+
   private
+
+  def set_community_from_subdomain
+    subdomain = request.subdomain.try(:sub, /\.?gather\z/, "")
+    community = Community.find_by(slug: subdomain)
+    render_not_found if community.nil? && subdomain.present?
+  end
+
+  def render_not_found
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/404", layout: false, status: :not_found }
+      format.any  { head :not_found }
+    end
+  end
 
   # Redirects to inactive page when user is inactive.
   def handle_unauthorized(exception)
@@ -81,14 +101,6 @@ class ApplicationController < ActionController::Base
   def showable_users_and_children_in(household)
     UserPolicy.new(current_user, User).filter(household.users_and_children)
   end
-
-  protected
-
-  def default_url_options
-    {host: Settings.url.host}
-  end
-
-  private
 
   def log_full_url
     Rails.logger.info("Request URL: #{request.url}")

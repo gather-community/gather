@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "subdomain handling" do
   let(:apex) { Settings.url.host_without_port }
+  let!(:community) { create(:community, slug: "foo") }
   let!(:user) { create(:user) }
 
   around do |example|
@@ -32,10 +33,10 @@ feature "subdomain handling" do
       end
     end
 
-    scenario "visiting invalid subdomain should ???" do
+    scenario "visiting invalid subdomain should 404" do
       with_subdomain("invalid") do
         visit root_path
-        expect(current_url).to have_subdomain(nil)
+        expect(page).to be_not_found
       end
     end
 

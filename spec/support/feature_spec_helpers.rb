@@ -111,4 +111,8 @@ module FeatureSpecHelpers
       text: "Log in with Google")
     click_link "Log in with Google"
   end
+
+  def be_not_found
+    have_content("The page you were looking for doesn't exist")
+  end
 end

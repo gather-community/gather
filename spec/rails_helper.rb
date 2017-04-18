@@ -62,4 +62,8 @@ RSpec.configure do |config|
   config.include GeneralHelpers
 
   Capybara.javascript_driver = :poltergeist
+
+  config.before type: :request do
+    host! Settings.url.host
+  end
 end

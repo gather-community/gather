@@ -2,4 +2,4 @@
 
 Rails.application.config.session_store :cookie_store,
   key: '_gather_session',
-  domain: Settings.url.host_without_port
+  domain: Settings.url.host

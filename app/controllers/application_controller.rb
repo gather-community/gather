@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def default_url_options
-    {host: Settings.url.host}
+    Settings.url.to_h.slice(:host, :port)
   end
 
   private

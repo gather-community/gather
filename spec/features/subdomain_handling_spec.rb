@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "subdomain handling" do
-  let(:apex) { Settings.url.host_without_port }
+  let(:apex) { Settings.url.host }
   let!(:community) { create(:community, slug: "foo") }
   let!(:user) { create(:user) }
 

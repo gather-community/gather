@@ -16,3 +16,5 @@ reminders:
       late: 5
 photos:
   max_size_mb: 8
+url:
+  port: 80 # Overridden where necessary

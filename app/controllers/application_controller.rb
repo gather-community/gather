@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_default_nav_context
   before_action :store_current_location
   before_action :authenticate_user!
+  before_action :ensure_subdomain
 
   # Verify that controller actions are authorized.
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
@@ -28,8 +29,27 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Redirects requests to the appropriate subdomain if one is missing, or renders 404.
+  # We can assume current_user is present because this comes after authenticate_user!
+  # Any controllers that skip authenticate_user! should also skip this before_action.
+  def ensure_subdomain
+    return if devise_controller? || subdomain.present?
+    unless current_user
+      raise "Expecting logged-in user in ensure_subdomain. Skip this before_action if appropriate."
+    end
+    if request.path == "/"
+      redirect_to URI::HTTP.build(Settings.url.to_h.merge(
+        host: "#{current_user.community.slug}.#{Settings.url.host}",
+        path: request.fullpath
+      )).to_s
+    end
+  end
+
+  def subdomain
+    @subdomain ||= request.subdomain.try(:sub, /\.?gather\z/, "")
+  end
+
   def set_community_from_subdomain
-    subdomain = request.subdomain.try(:sub, /\.?gather\z/, "")
     community = Community.find_by(slug: subdomain)
     render_not_found if community.nil? && subdomain.present?
   end
@@ -142,9 +162,5 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(user)
     logged_out_path
-  end
-
-  def apex_root_url
-    "#{Settings.protocol}://#{Settings.host}"
   end
 end

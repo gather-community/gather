@@ -1,5 +1,6 @@
 class LandingController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_before_action :ensure_subdomain
 
   def index
     skip_policy_scope

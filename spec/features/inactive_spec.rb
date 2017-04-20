@@ -3,12 +3,15 @@ require "rails_helper"
 feature "inactive user" do
   let(:user) { create(:user, :inactive) }
 
-  before do
-    login_as(user)
+  around do |example|
+    stub_omniauth(google_oauth2: {email: user.google_email}) do
+      example.run
+    end
   end
 
-  scenario "logging in as inactive", js: true do
-    visit("/")
+  scenario "visiting page as inactive", js: true do
+    visit root_path
+    expect_valid_login_link_and_click
     expect(page).to have_content("Your account is not active")
 
     # Can still view profile

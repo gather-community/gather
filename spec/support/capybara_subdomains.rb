@@ -9,4 +9,5 @@ end
 Capybara.configure do |config|
   config.always_include_port = true
   Capybara.app_host = "http://#{Settings.url.host}"
+  Capybara.server_port = Settings.url.port
 end

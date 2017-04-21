@@ -6,15 +6,18 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :log_full_url
-  before_action :set_community_from_subdomain
   before_action :set_default_nav_context
+  before_action :check_subdomain_validity
   before_action :store_current_location
   before_action :authenticate_user!
   before_action :ensure_subdomain
+  before_action :check_community_permissions
 
   # Verify that controller actions are authorized.
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
+
+  attr_accessor :current_community
 
   helper_method :home_path, :current_community, :multi_community?, :app_version,
     :showable_users_and_children_in
@@ -29,14 +32,51 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Redirects requests to the appropriate subdomain if one is missing, or renders 404.
-  # We can assume current_user is present because this comes after authenticate_user!
-  # Any controllers that skip authenticate_user! should also skip this before_action.
-  def ensure_subdomain
-    return if devise_controller? || subdomain.present?
-    unless current_user
-      raise "Expecting logged-in user in ensure_subdomain. Skip this before_action if appropriate."
+  def log_full_url
+    Rails.logger.info("Request URL: #{request.url}")
+  end
+
+  def set_default_nav_context
+    @context = {}
+  end
+
+  # Checks that the subdomain's community exists and sets current_community.
+  # Does nothing if subdomain is not present.
+  # Renders 404 if community not found.
+  def check_subdomain_validity
+    return unless subdomain.present?
+    self.current_community = Community.find_by(slug: subdomain)
+    render_error_page(:not_found) if current_community.nil?
+  end
+
+  # Saves the location before loading each page so we can return to the right page after sign in.
+  def store_current_location
+    # If we're on a devise page, we don't want to store that as the
+    # place to return to (for example, we don't want to return to the sign in page after signing in).
+    return if devise_controller? || request.fullpath == "/?login=1"
+    session["user_return_to"] = request.url
+  end
+
+  # Customize the redirect URL if not logged in.
+  # The method suggested in the Devise wiki -- using a custom failure app -- caused multiple complications.
+  # For instance, it broke `store_current_location` above.
+  def authenticate_user!
+    if user_signed_in?
+      super
+    else
+      # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
+      # The same condition exists in the original implementation.
+      redirect_to login_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
     end
+  end
+
+  # Redirects requests to the appropriate subdomain if one is needed but missing.
+  # The assumption here is that all authenticated pages that do not skip this action require a subdomain.
+  # But not all unauthenticated pages do. If no current_user is set by now and we have not redirected,
+  # this must be an unauthenticated page, so we don't need to do anything
+  # if current_user is not present or if this is a Devise controller.
+  def ensure_subdomain
+    return if devise_controller? || current_user.nil? || subdomain.present?
     if request.path == "/"
       redirect_to URI::HTTP.build(Settings.url.to_h.merge(
         host: "#{current_user.community.slug}.#{Settings.url.host}",
@@ -45,19 +85,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Checks that the subdomain's community is accessible by the user.
+  # Does nothing if user is not present or current_community is not present.
+  # Renders 403 if community not permitted.
+  def check_community_permissions
+    return unless current_user.present? && current_community.present?
+    render_error_page(:forbidden) unless policy(current_community).show?
+  end
+
   def subdomain
     @subdomain ||= request.subdomain.try(:sub, /\.?gather\z/, "")
   end
 
-  def set_community_from_subdomain
-    community = Community.find_by(slug: subdomain)
-    render_not_found if community.nil? && subdomain.present?
-  end
-
-  def render_not_found
+  def render_error_page(status)
     respond_to do |format|
-      format.html { render file: "#{Rails.root}/public/404", layout: false, status: :not_found }
-      format.any  { head :not_found }
+      code = Rack::Utils::SYMBOL_TO_STATUS_CODE[status]
+      format.html { render file: "#{Rails.root}/public/#{code}", layout: false, status: status }
+      format.any  { head status }
     end
   end
 
@@ -88,10 +132,6 @@ class ApplicationController < ActionController::Base
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
-  def current_community
-    current_user.try(:community)
-  end
-
   def default_serializer_options
     { root: false }
   end
@@ -103,10 +143,6 @@ class ApplicationController < ActionController::Base
   def multi_community?
     return @multi_community if defined?(@multi_community)
     @multi_community = Community.multiple?
-  end
-
-  def set_default_nav_context
-    @context = {}
   end
 
   def nav_context(section, subsection = nil)
@@ -122,33 +158,8 @@ class ApplicationController < ActionController::Base
     UserPolicy.new(current_user, User).filter(household.users_and_children)
   end
 
-  def log_full_url
-    Rails.logger.info("Request URL: #{request.url}")
-  end
-
   def login_url
     root_url(login: 1)
-  end
-
-  # Saves the location before loading each page so we can return to the right page after sign in.
-  def store_current_location
-    # If we're on a devise page, we don't want to store that as the
-    # place to return to (for example, we don't want to return to the sign in page after signing in).
-    return if devise_controller? || request.fullpath == "/?login=1"
-    session["user_return_to"] = request.url
-  end
-
-  # Customize the redirect URL if not logged in.
-  # The method suggested in the Devise wiki -- using a custom failure app -- caused multiple complications.
-  # For instance, it broke `store_current_location` above.
-  def authenticate_user!
-    if user_signed_in?
-      super
-    else
-      # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
-      # The same condition exists in the original implementation.
-      redirect_to login_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
-    end
   end
 
   # Currently we are only checking for calendar_token, but could add others later.

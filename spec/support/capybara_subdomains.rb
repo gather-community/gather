@@ -6,6 +6,10 @@ def with_subdomain(subdomain)
   Capybara.app_host = "http://#{apex}"
 end
 
+def with_user_home_subdomain(user, &block)
+  with_subdomain(user.community.slug, &block)
+end
+
 Capybara.configure do |config|
   config.always_include_port = true
   Capybara.app_host = "http://#{Settings.url.host}"

@@ -4,6 +4,8 @@ feature "dirty checker" do
   let(:admin) { create(:admin) }
   let!(:meal_location) { create(:resource, name: "Dining Room", meal_hostable: true) }
 
+  around { |ex| with_user_home_subdomain(admin) { ex.run } }
+
   before do
     login_as(admin, scope: :user)
   end

@@ -116,4 +116,8 @@ module FeatureSpecHelpers
   def be_not_found
     have_content("The page you were looking for doesn't exist")
   end
+
+  def have_title(title)
+    have_css("h1", text: title)
+  end
 end

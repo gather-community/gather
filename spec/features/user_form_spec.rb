@@ -7,9 +7,12 @@ feature "user form" do
   let!(:household) { create(:household, name: "Gingerbread") }
   let!(:household2) { create(:household, name: "Potatoheads") }
 
+  around { |ex| with_user_home_subdomain(actor) { ex.run } }
+
   before do
     @old_max_size = Settings.photos.max_size_mb
     Settings.photos.max_size_mb = 1
+    login_as(actor, scope: :user)
   end
 
   after do
@@ -32,9 +35,7 @@ feature "user form" do
   end
 
   context "as admin" do
-    before do
-      login_as(admin, scope: :user)
-    end
+    let(:actor) { admin }
 
     it_behaves_like "editing user"
 
@@ -112,9 +113,7 @@ feature "user form" do
   end
 
   context "as photographer" do
-    before do
-      login_as(photographer, scope: :user)
-    end
+    let(:actor) { photographer }
 
     scenario "update photo", js: true do
       visit(user_path(user))
@@ -129,9 +128,7 @@ feature "user form" do
   end
 
   context "as regular user" do
-    before do
-      login_as(user, scope: :user)
-    end
+    let(:actor) { user }
 
     it_behaves_like "editing user"
   end

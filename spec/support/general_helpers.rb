@@ -15,6 +15,13 @@ module GeneralHelpers
     end
   end
 
+  def with_subdomain(subdomain)
+    apex = Settings.url.host
+    set_host("#{subdomain}.#{apex}")
+    yield
+    set_host(apex)
+  end
+
   def with_user_home_subdomain(user, &block)
     with_subdomain(user.community.slug, &block)
   end

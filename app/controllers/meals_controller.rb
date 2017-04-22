@@ -166,6 +166,18 @@ class MealsController < ApplicationController
     {mode: params[:mode]}
   end
 
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show", "summary"
+      Meal.find_by(id: params[:id]).try(:host_community)
+    when "index", "jobs", "reports"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   def init_meal

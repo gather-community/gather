@@ -23,4 +23,16 @@ class CalendarExportsController < ApplicationController
     flash[:success] = "Token reset successfully."
     redirect_to(calendar_exports_path)
   end
+
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "index", "show"
+      current_user.community
+    else
+      nil
+    end
+  end
 end

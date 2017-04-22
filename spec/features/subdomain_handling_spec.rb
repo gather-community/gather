@@ -4,10 +4,10 @@ feature "subdomain handling" do
   let(:apex) { Settings.url.host }
   let(:cluster) { create(:cluster) }
   let(:cluster2) { create(:cluster) }
-  let!(:community) { create(:community, slug: "foo", cluster: cluster) }
-  let!(:community2) { create(:community, slug: "bar", cluster: cluster) }
-  let!(:community3) { create(:community, slug: "qux", cluster: cluster2) }
-  let(:user) { create(:user, community: community) }
+  let!(:home_cmty) { create(:community, slug: "foo", cluster: cluster) }
+  let!(:neighbor_cmty) { create(:community, slug: "bar", cluster: cluster) }
+  let!(:outside_cmty) { create(:community, slug: "qux", cluster: cluster2) }
+  let(:user) { create(:user, community: home_cmty) }
   let(:root_title) { "Directory" }
 
   around do |example|
@@ -95,12 +95,12 @@ feature "subdomain handling" do
 
         scenario "visiting root should 403" do
           visit "/"
-          expect(page).to have_content("You are not permitted")
+          expect(page).to be_forbidden
         end
 
         scenario "visiting path should 403" do
           visit "/meals"
-          expect(page).to have_content("You are not permitted")
+          expect(page).to be_forbidden
         end
       end
     end
@@ -111,33 +111,36 @@ feature "subdomain handling" do
         expect(current_url).to have_subdomain_and_path("foo", "/")
       end
 
-      scenario "visiting legacy collection route should redirect to home community route" do
+      scenario "visiting supported collection route should redirect to home community route" do
         visit "/meals"
         expect(current_url).to have_subdomain_and_path("foo", "/meals")
       end
 
-      # scenario "visiting non-legacy collection route should 404" do
-      # end
-      #
-      # context "with original community object" do
-      #   scenario "visiting legacy member route should redirect to appropriate community route" do
-      #   end
-      #
-      #   scenario "visiting non-legacy member route should 404" do
-      #   end
-      # end
-      #
-      # context "with non-existant object" do
-      #   scenario "visiting legacy member route should 404" do
-      #
-      #   end
-      # end
-      #
-      # context "with non-original community object" do
-      #   scenario "visiting legacy member route should 404" do
-      #
-      #   end
-      # end
+      scenario "visiting unsupported collection route should 404" do
+        visit "/users/invite"
+        expect(page).to be_not_found
+      end
+
+      # User can see this meal but it's not hosted by home_cmty. So the redirected subdomain
+      # should match neighbor_cmty.
+      let(:meal) { create(:meal, host_community: neighbor_cmty, communities: [home_cmty, neighbor_cmty]) }
+
+      scenario "visiting supported member route should redirect to appropriate community route" do
+        visit "/meals/#{meal.id}"
+        expect(current_url).to have_subdomain_and_path("bar", "/meals/#{meal.id}")
+      end
+
+      scenario "visiting unsupported member route should 404" do
+        visit "/meals/#{meal.id}/edit"
+        expect(page).to be_not_found
+      end
+
+      context "with non-existent object" do
+        scenario "visiting unsupported member route should 404" do
+          visit "/meals/2372944"
+          expect(page).to be_not_found
+        end
+      end
     end
   end
 end

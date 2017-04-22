@@ -130,6 +130,20 @@ class UsersController < ApplicationController
     end
   end
 
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show"
+      User.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   # Called before authorization to check and prepare household attributes.

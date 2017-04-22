@@ -117,14 +117,15 @@ module FeatureSpecHelpers
     have_content("The page you were looking for doesn't exist")
   end
 
+  def be_forbidden
+    have_content("You are not permitted")
+  end
+
   def have_title(title)
     have_css("h1", text: title)
   end
 
-  def with_subdomain(subdomain)
-    apex = Settings.url.host
-    Capybara.app_host = "http://#{subdomain}.#{apex}"
-    yield
-    Capybara.app_host = "http://#{apex}"
+  def set_host(host)
+    Capybara.app_host = "http://#{host}"
   end
 end

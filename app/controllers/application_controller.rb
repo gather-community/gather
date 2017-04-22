@@ -77,8 +77,12 @@ class ApplicationController < ActionController::Base
   # if current_user is not present or if this is a Devise controller.
   def ensure_subdomain
     return if devise_controller? || current_user.nil? || subdomain.present?
-    host = "#{current_user.community.slug}.#{Settings.url.host}"
-    redirect_to URI::HTTP.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
+    if community = community_for_route
+      host = "#{community.slug}.#{Settings.url.host}"
+      redirect_to URI::HTTP.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
+    else
+      render_error_page(:not_found)
+    end
   end
 
   # Checks that the subdomain's community is accessible by the user.
@@ -108,6 +112,14 @@ class ApplicationController < ActionController::Base
     else
       raise exception
     end
+  end
+
+  # Returns the appropriate community for the requested action in case subdomain not given.
+  # Should only return a community for routes that are likely to appear in links in the wild.
+  # Used in subdomain redirection.
+  # Should be overridden by subclasses.
+  def community_for_route
+    nil
   end
 
   def set_validation_error_notice

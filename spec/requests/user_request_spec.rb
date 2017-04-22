@@ -5,6 +5,8 @@ describe "user request" do
   let(:new_household) { create(:household) }
   let(:outside_household) { create(:household, community: create(:community)) }
 
+  around { |ex| with_user_home_subdomain(actor) { ex.run } }
+
   before do
     sign_in(actor)
   end

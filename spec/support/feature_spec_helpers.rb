@@ -120,4 +120,11 @@ module FeatureSpecHelpers
   def have_title(title)
     have_css("h1", text: title)
   end
+
+  def with_subdomain(subdomain)
+    apex = Settings.url.host
+    Capybara.app_host = "http://#{subdomain}.#{apex}"
+    yield
+    Capybara.app_host = "http://#{apex}"
+  end
 end

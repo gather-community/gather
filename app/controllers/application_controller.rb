@@ -77,12 +77,8 @@ class ApplicationController < ActionController::Base
   # if current_user is not present or if this is a Devise controller.
   def ensure_subdomain
     return if devise_controller? || current_user.nil? || subdomain.present?
-    if request.path == "/"
-      redirect_to URI::HTTP.build(Settings.url.to_h.merge(
-        host: "#{current_user.community.slug}.#{Settings.url.host}",
-        path: request.fullpath
-      )).to_s
-    end
+    host = "#{current_user.community.slug}.#{Settings.url.host}"
+    redirect_to URI::HTTP.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
   end
 
   # Checks that the subdomain's community is accessible by the user.

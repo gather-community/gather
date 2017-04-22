@@ -111,12 +111,11 @@ feature "subdomain handling" do
         expect(current_url).to have_subdomain_and_path("foo", "/")
       end
 
-      # scenario "visiting devise route should work" do
-      # end
-      #
-      # scenario "visiting legacy collection route should redirect to home community route" do
-      # end
-      #
+      scenario "visiting legacy collection route should redirect to home community route" do
+        visit "/meals"
+        expect(current_url).to have_subdomain_and_path("foo", "/meals")
+      end
+
       # scenario "visiting non-legacy collection route should 404" do
       # end
       #

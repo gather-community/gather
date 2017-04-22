@@ -58,12 +58,21 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Warden::Test::Helpers
   config.include FeatureSpecHelpers, type: :feature
+  config.include RequestSpecHelpers, type: :request
   config.include DeviseRequestSpecHelpers, type: :request
   config.include GeneralHelpers
 
-  Capybara.javascript_driver = :poltergeist
+  Capybara.configure do |config|
+    config.always_include_port = true
+    config.javascript_driver = :poltergeist
+    config.app_host = "http://#{Settings.url.host}"
+    config.server_port = Settings.url.port
+  end
 
-  config.before type: :request do
-    host! Settings.url.host
+  # We use an around block here because we are using around blocks to set
+  # subdomain and this needs to run first.
+  config.around type: :request do |example|
+    host!(Settings.url.host)
+    example.run
   end
 end

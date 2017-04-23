@@ -11,7 +11,7 @@ feature "inactive user" do
 
   scenario "visiting page as inactive", js: true do
     visit root_path
-    expect_valid_login_link_and_click
+    expect_valid_sign_in_link_and_click
     expect(page).to have_content("Your account is not active")
 
     # Can still view profile

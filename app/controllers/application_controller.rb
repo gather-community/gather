@@ -53,11 +53,11 @@ class ApplicationController < ActionController::Base
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
     # place to return to (for example, we don't want to return to the sign in page after signing in).
-    return if devise_controller? || request.fullpath == "/?login=1"
+    return if devise_controller? || request.fullpath == "/?sign-in=1"
     session["user_return_to"] = request.url
   end
 
-  # Customize the redirect URL if not logged in.
+  # Customize the redirect URL if not signed in.
   # The method suggested in the Devise wiki -- using a custom failure app -- caused multiple complications.
   # For instance, it broke `store_current_location` above.
   def authenticate_user!
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.
-      redirect_to login_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
+      redirect_to sign_in_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
     end
   end
 
@@ -166,8 +166,8 @@ class ApplicationController < ActionController::Base
     UserPolicy.new(current_user, User).filter(household.users_and_children)
   end
 
-  def login_url
-    root_url(login: 1)
+  def sign_in_url
+    root_url("sign-in": 1)
   end
 
   # Currently we are only checking for calendar_token, but could add others later.
@@ -180,6 +180,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(user)
-    logged_out_path
+    signed_out_url(host: Settings.url.host)
   end
 end

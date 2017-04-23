@@ -105,12 +105,12 @@ module FeatureSpecHelpers
     OmniAuth.config.test_mode = false
   end
 
-  def expect_valid_login_link_and_click
+  def expect_valid_sign_in_link_and_click
     # Should point to apex domain
     expect(page).to have_css("a[href='http://#{Settings.url.host}:31337/users/auth/google_oauth2']",
-      text: "Log in with Google")
+      text: "Sign in with Google")
 
-    click_link "Log in with Google"
+    click_link "Sign in with Google"
   end
 
   def be_not_found

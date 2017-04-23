@@ -22,7 +22,7 @@ class LandingController < ApplicationController
     render layout: nil, formats: :text, status: @dj ? 200 : 503
   end
 
-  def logged_out
+  def signed_out
     skip_authorization
     if user_signed_in?
       redirect_to root_path

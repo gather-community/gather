@@ -16,23 +16,23 @@ feature "subdomain handling" do
     end
   end
 
-  context "when not logged in" do
-    scenario "visiting subdomain and logging in should redirect back to that subdomain" do
+  context "when not signed in" do
+    scenario "visiting subdomain and signing in should redirect back to that subdomain" do
       with_subdomain("bar") do
         visit root_path
-        expect(page).not_to have_content("Please log in to view that page")
+        expect(page).not_to have_content("Please sign in to view that page")
         expect(current_url).to have_subdomain("bar")
-        expect_valid_login_link_and_click
+        expect_valid_sign_in_link_and_click
         expect(page).to have_content(user.name)
         expect(current_url).to have_subdomain("bar")
       end
     end
 
-    scenario "visiting subdomain with path and logging in should return you to path after log in" do
+    scenario "visiting subdomain with path and signing in should return you to path after sign in" do
       with_subdomain("bar") do
         visit meals_path
-        expect(page).to have_content("Please log in to view that page")
-        expect_valid_login_link_and_click
+        expect(page).to have_content("Please sign in to view that page")
+        expect_valid_sign_in_link_and_click
         expect(current_url).to have_subdomain_and_path("bar", "/meals")
       end
     end
@@ -44,15 +44,15 @@ feature "subdomain handling" do
       end
     end
 
-    scenario "visiting apex domain root and logging in should take you to community root" do
+    scenario "visiting apex domain root and signing in should take you to community root" do
       visit "/"
-      expect_valid_login_link_and_click
+      expect_valid_sign_in_link_and_click
       expect(page).to have_content(user.name)
       expect(current_url).to have_subdomain_and_path("foo", "/")
     end
   end
 
-  context "when logged in" do
+  context "when signed in" do
     before do
       login_as(user, scope: :user)
     end
@@ -70,6 +70,14 @@ feature "subdomain handling" do
         visit "/meals"
         expect(current_url).to have_subdomain_and_path("foo", "/meals")
         expect(page).to have_title("Meals")
+      end
+
+      scenario "signing out should redirect back to apex domain", js: true do
+        visit "/meals"
+        find(".personal-nav .dropdown-toggle").click
+        find(".personal-nav .dropdown-menu a", text: "Sign Out").click
+        expect(page).to have_content("You are now signed out")
+        expect(current_url).to have_subdomain_and_path(nil, "/signed-out")
       end
     end
 

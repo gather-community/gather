@@ -51,7 +51,7 @@ Follow these steps to setup a development environment for Gather.
   1. Run `rake db:create` to create `mess_development` and `mess_test` databases.
   1. Run `rake db:schema:load` to create the schema in both databases.
 
-1. **Create a user so you can log in**
+1. **Create a user so you can sign in**
   1. Run `rake db:fake_user_data` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.
 
 1. **Run the tests**
@@ -69,5 +69,5 @@ Follow these steps to setup a development environment for Gather.
 
 1. **Start using the system**
   1. In a browser, go to `http://localhost:3000` to start Gather.
-  1. Click "Log in with Google" to use Gather as the user you just created.
+  1. Click "Sign in with Google" to use Gather as the user you just created.
   1. Enjoy!

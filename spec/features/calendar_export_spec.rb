@@ -53,7 +53,7 @@ feature "calendar export" do
 
     scenario "bad token" do
       visit("/calendars/meals/xyzw.ics")
-      expect(page).to have_content("Please log in")
+      expect(page).to have_content("Please sign in")
     end
   end
 

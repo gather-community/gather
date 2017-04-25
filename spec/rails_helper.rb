@@ -59,7 +59,6 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include FeatureSpecHelpers, type: :feature
   config.include RequestSpecHelpers, type: :request
-  config.include DeviseRequestSpecHelpers, type: :request
   config.include GeneralHelpers
 
   Capybara.configure do |config|

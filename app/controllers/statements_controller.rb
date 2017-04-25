@@ -34,4 +34,16 @@ class StatementsController < ApplicationController
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
     render(partial: "statements/statement_rows")
   end
+
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show"
+      Billing::Statement.find_by(id: params[:id]).try(:community)
+    else
+      nil
+    end
+  end
 end

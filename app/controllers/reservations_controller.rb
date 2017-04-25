@@ -126,6 +126,20 @@ class ReservationsController < ApplicationController
     redirect_to(reservations_path_for_resource(@reservation.resource))
   end
 
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show"
+      Reservation::Reservation.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   def prep_form_vars

@@ -115,6 +115,20 @@ class HouseholdsController < ApplicationController
     redirect_to(households_path)
   end
 
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show", "accounts"
+      Household.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   def household_attributes

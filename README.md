@@ -68,6 +68,6 @@ Follow these steps to setup a development environment for Gather.
   1. Run `bin/delayed_job start`.
 
 1. **Start using the system**
-  1. In a browser, go to `http://localhost:3000` to start Gather.
+  1. In a browser, go to `http://gather.localhost.tv:3000` to start Gather.
   1. Click "Sign in with Google" to use Gather as the user you just created.
   1. Enjoy!

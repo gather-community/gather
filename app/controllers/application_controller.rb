@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
     # place to return to (for example, we don't want to return to the sign in page after signing in).
-    return if devise_controller? || request.fullpath == "/?sign-in=1"
+    return if devise_controller? || request.fullpath == "/?sign-in=1" || request.fullpath =~ %r{\A/\?token=.+}
     session["user_return_to"] = request.url
   end
 

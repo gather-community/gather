@@ -8,7 +8,6 @@ feature "subdomain handling" do
   let!(:neighbor_cmty) { create(:community, slug: "bar", cluster: cluster) }
   let!(:outside_cmty) { create(:community, slug: "qux", cluster: cluster2) }
   let(:user) { create(:user, community: home_cmty) }
-  let(:root_title) { "Directory" }
 
   around do |example|
     stub_omniauth(google_oauth2: {email: user.google_email}) do
@@ -63,7 +62,7 @@ feature "subdomain handling" do
       scenario "visiting root should work" do
         visit "/"
         expect(current_url).to have_subdomain_and_path("foo", "/")
-        expect(page).to have_title(root_title)
+        expect(page).to be_signed_in_root
       end
 
       scenario "visiting path should work" do

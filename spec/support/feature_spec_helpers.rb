@@ -105,6 +105,14 @@ module FeatureSpecHelpers
     OmniAuth.config.test_mode = false
   end
 
+  def inject_session(hash)
+    Warden.on_next_request do |proxy|
+      hash.each do |key, value|
+        proxy.raw_session[key] = value
+      end
+    end
+  end
+
   def expect_valid_sign_in_link_and_click
     # Should point to apex domain
     expect(page).to have_css("a[href='http://#{Settings.url.host}:31337/users/auth/google_oauth2']",
@@ -119,6 +127,18 @@ module FeatureSpecHelpers
 
   def be_forbidden
     have_content("You are not permitted")
+  end
+
+  def be_signed_out_root
+    have_css("div#blurb", text: "Life is better together.")
+  end
+
+  def be_signed_in_root
+    have_title("Directory")
+  end
+
+  def show_signed_in_user_name(name)
+    have_content(name)
   end
 
   def have_title(title)

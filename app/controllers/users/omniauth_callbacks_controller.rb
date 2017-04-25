@@ -7,8 +7,12 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # If invite token is present, try to find user by that.
     if (t = session[:invite_token]) && by_token = User.with_reset_password_token(t)
 
+      if !by_token.reset_password_period_valid?
+        set_flash_message(:error, :failure, kind: "Google", reason: "your invitation has expired")
+        redirect_to sign_in_url
+
       # If we find them but they are signing in with the wrong google_email, notify them.
-      if !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
+      elsif !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
         set_flash_message(:error, :failure, kind: "Google",
           reason: "you must sign in with the Google ID #{by_token.google_email}")
         redirect_to sign_in_url
@@ -18,14 +22,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       elsif by_email = User.from_omniauth(auth)
         sign_in_and_clear_token(by_email, auth)
 
-      # Else if the token is still valid, log them in and grab their google_email
-      elsif by_token.reset_password_period_valid?
+      # Else log them in and grab their google_email
+      else by_token.reset_password_period_valid?
         sign_in_and_clear_token(by_token, auth)
-
-      else
-        set_flash_message(:error, :failure, kind: "Google",
-          reason: "your invitation has expired")
-        redirect_to sign_in_url
       end
 
       session[:invite_token] = nil

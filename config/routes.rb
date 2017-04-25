@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :signups
+  resources :signups, only: [:create, :update]
 
   resources :households do
     member do

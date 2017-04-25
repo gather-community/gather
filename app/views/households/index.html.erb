@@ -35,7 +35,7 @@
           <%= household.unit_num.present? ? household.unit_num : "" %>
         </td>
         <td class="col-md-3">
-          <%= showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>
+          <%= load_showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>
         </td>
         <td class="col-md-1">
           <div class="action-icons">

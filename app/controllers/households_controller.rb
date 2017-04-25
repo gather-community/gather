@@ -31,7 +31,7 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Household.find(params[:id])
-    @members = showable_users_and_children_in(@household)
+    @members = load_showable_users_and_children_in(@household)
     authorize @household
   end
 

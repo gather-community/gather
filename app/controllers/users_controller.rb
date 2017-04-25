@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     authorize @user
     @households_and_members = @user.all_households.map do |h|
-      [h, showable_users_and_children_in(h)]
+      [h, load_showable_users_and_children_in(h)]
     end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
   end

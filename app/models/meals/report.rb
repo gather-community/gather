@@ -143,11 +143,11 @@ module Meals
         vars << range.first << range.last
       end
 
-      community_join = if include_host_community
-        "INNER JOIN communities ON meals.host_community_id = communities.id"
-      else
-        ""
-      end
+      community_join = "INNER JOIN communities ON meals.host_community_id = communities.id"
+
+      # Scope to community cluster
+      wheres << "communities.cluster_id = ?"
+      vars << community.cluster_id
 
       query("
         SELECT

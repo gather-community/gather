@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "household form" do
   around do |example|
-    with_subdomain(admin.community.slug) { example.run }
+    with_user_home_subdomain(admin) { example.run }
   end
 
   shared_examples_for "creating household" do |community_name|

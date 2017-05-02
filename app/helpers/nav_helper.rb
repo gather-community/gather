@@ -19,12 +19,12 @@ module NavHelper
       },{
         name: :accounts,
         path: lens_path_if_present("accounts"),
-        permitted: policy(Billing::Account).index?,
+        permitted: policy(Billing::Account.new(community: current_community)).index?,
         icon: "money"
       },{
         name: :admin,
         path: admin_settings_path(type: "community"),
-        permitted: policy(Community).update?,
+        permitted: policy(current_community).update?,
         icon: "gears"
       }
     ]

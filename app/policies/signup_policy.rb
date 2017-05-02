@@ -13,6 +13,12 @@ class SignupPolicy < ApplicationPolicy
     Signup::SIGNUP_TYPES + [:meal_id, :comments]
   end
 
+  protected
+
+  def allow_class_based_auth?
+    true
+  end
+
   private
 
   def invited?

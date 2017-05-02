@@ -110,21 +110,38 @@ class ApplicationPolicy
   end
 
   def own_community_record?
-    return true if not_specific_record?
-    ensure_community
-    record.community == user.community
+    !required_community || user.community == required_community
   end
 
   def own_cluster_record?
-    return true if not_specific_record?
-    ensure_community
-    record.community.cluster == user.community.cluster
+    !required_community || required_community.cluster == user.community.cluster
   end
 
-  def ensure_community
-    if record.community.nil?
-      raise CommunityNotSetError.new("community must be set on record when checking admin role")
+  # Gets the community associated with `record`.
+  # Returns nil if record is a class and allow_class_based_auth? is true.
+  # Raises CommunityNotSetError if record has no community or not specific
+  # record and allow_class_based_auth is false.
+  def required_community
+    if not_specific_record?
+      if allow_class_based_auth?
+        nil
+      else
+        raise CommunityNotSetError.new("community must be set via dummy record for this check")
+      end
+    else
+      if record.community.nil?
+        raise CommunityNotSetError.new("community must be set on record for this check")
+      end
+      record.community
     end
+  end
+
+  # If `record` is a class, (e.g authorize Billing::Account, :index?), we have no way of knowing what
+  # community the action is being requested for. This can be supplied with an optional `context` hash params
+  # to the constructor. This method determines whether that context must be supplied in order for
+  # class-based authorizations to succeed. Should be overridden for Policies where this important.
+  def allow_class_based_auth?
+    false
   end
 
   def not_specific_record?

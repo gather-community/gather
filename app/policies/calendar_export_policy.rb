@@ -11,4 +11,10 @@ class CalendarExportPolicy < ApplicationPolicy
   def reset_token?
     index?
   end
+
+  protected
+
+  def allow_class_based_auth?
+    true
+  end
 end

@@ -6,15 +6,15 @@ module Billing
       active_admin_or_biller?
     end
 
+    def apply_late_fees?
+      active_admin_or_biller?
+    end
+
     def show?
       active_admin_or_biller? || account_owner?
     end
 
     def update?
-      active_admin_or_biller?
-    end
-
-    def apply_late_fees?
       active_admin_or_biller?
     end
 

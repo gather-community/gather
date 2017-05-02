@@ -13,21 +13,7 @@ module Billing
         allow(account).to receive(:community).and_return(community)
       end
 
-      shared_examples_for :admin_or_biller do
-        it "grants access to admins" do
-          expect(subject).to permit(admin, Account)
-        end
-
-        it "grants access to biller" do
-          expect(subject).to permit(biller, Account)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Account)
-        end
-      end
-
-      shared_examples_for :admin_or_biller_with_community do
+      shared_examples_for :admin_or_biller_with_record do
         it "grants access to admins from community" do
           expect(subject).to permit(admin, account)
         end
@@ -50,11 +36,39 @@ module Billing
       end
 
       permissions :index?, :apply_late_fees? do
-        it_behaves_like :admin_or_biller
+        it "grants access to admin with correct community" do
+          expect(subject).to permit(admin, Account.new(community: community))
+        end
+
+        it "grants access to biller with correct community" do
+          expect(subject).to permit(biller, Account.new(community: community))
+        end
+
+        it "denies access to admin with wrong community" do
+          expect(subject).not_to permit(admin, Account.new(community: communityB))
+        end
+
+        it "denies access to biller with wrong community" do
+          expect(subject).not_to permit(biller, Account.new(community: communityB))
+        end
+
+        it "errors when checking role without community" do
+          expect { subject.new(admin, Account).index? }.to raise_error(
+            ApplicationPolicy::CommunityNotSetError)
+        end
+
+        it "errors when checking role without community" do
+          expect { subject.new(biller, Account).index? }.to raise_error(
+            ApplicationPolicy::CommunityNotSetError)
+        end
+
+        it "denies access to normal user" do
+          expect(subject).not_to permit(user, Account)
+        end
       end
 
       permissions :show? do
-        it_behaves_like :admin_or_biller_with_community
+        it_behaves_like :admin_or_biller_with_record
 
         it "grants access to owner of account" do
           expect(subject).to permit(account_owner, account)
@@ -76,7 +90,7 @@ module Billing
       end
 
       permissions :edit?, :update? do
-        it_behaves_like :admin_or_biller_with_community
+        it_behaves_like :admin_or_biller_with_record
       end
     end
 

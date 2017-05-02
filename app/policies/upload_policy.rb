@@ -9,4 +9,10 @@ class UploadPolicy < ApplicationPolicy
   def destroy?
     active?
   end
+
+  protected
+
+  def allow_class_based_auth?
+    true
+  end
 end

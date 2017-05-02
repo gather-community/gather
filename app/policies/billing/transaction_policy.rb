@@ -17,5 +17,11 @@ module Billing
     def permitted_attributes
       [:incurred_on, :code, :description, :amount]
     end
+
+    protected
+
+    def allow_class_based_auth?
+      true
+    end
   end
 end

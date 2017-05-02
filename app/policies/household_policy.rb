@@ -95,4 +95,10 @@ class HouseholdPolicy < ApplicationPolicy
       :email, :location, :_destroy]}
     permitted
   end
+
+  protected
+
+  def allow_class_based_auth?
+    true
+  end
 end

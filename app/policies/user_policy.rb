@@ -136,6 +136,12 @@ class UserPolicy < ApplicationPolicy
     (active_super_admin? ? [:super_admin] : [])
   end
 
+  protected
+
+  def allow_class_based_auth?
+    true
+  end
+
   private
 
   def self?

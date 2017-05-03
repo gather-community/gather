@@ -14,7 +14,7 @@ class StatementsController < ApplicationController
   end
 
   def generate
-    authorize Billing::Statement.new(account: Billing::Account.new(community: current_community))
+    authorize dummy_statement
     Delayed::Job.enqueue(Billing::StatementJob.new(current_user.community))
 
     flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
@@ -36,6 +36,10 @@ class StatementsController < ApplicationController
   end
 
   protected
+
+  def dummy_statement
+    Billing::Statement.new(account: Billing::Account.new(community: current_community))
+  end
 
   # See def'n in ApplicationController for documentation.
   def community_for_route

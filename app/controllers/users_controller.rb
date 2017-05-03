@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   include Lensable
 
+  helper_method :dummy_user
+
   before_action -> { nav_context(:people, :directory) }
 
   def index
@@ -11,12 +13,13 @@ class UsersController < ApplicationController
         prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
         load_community_from_lens_with_default
         load_communities_in_cluster
-        lens.remove_field(:life_stage) unless policy(User).index_children_for_community?(@community)
+        lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
         @users = @users.includes(household: :community)
         @users = @users.in_community(@community)
         @users = @users.matching(lens[:search]) if lens[:search].present?
         @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
-        @users = @users.active unless policy(User).administer? # Regular folks don't care about inactives
+        # Regular folks don't care about inactives
+        @users = @users.active unless policy(dummy_user).administer?
         if lens[:user_sort].present?
           @users = @users.by_active.sorted_by(lens[:user_sort])
         else
@@ -114,13 +117,13 @@ class UsersController < ApplicationController
   end
 
   def invite
-    authorize User
+    authorize dummy_user
     @users = User.adults.never_signed_in.active.by_community_and_name
   end
 
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
-    authorize User
+    authorize dummy_user
     if params[:to_invite].blank?
       flash[:error] = "You didn't select any users."
     else
@@ -212,5 +215,9 @@ class UsersController < ApplicationController
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?
     @user.household.emergency_contacts.build if @user.household.emergency_contacts.empty?
+  end
+
+  def dummy_user
+    User.new(household: Household.new(community: current_community))
   end
 end

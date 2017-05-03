@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
 
   def index
     @community = current_community
-    authorize Billing::Account.new(community: @community)
+    authorize dummy_account
     @accounts = policy_scope(Billing::Account)
     @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
@@ -53,13 +53,17 @@ class AccountsController < ApplicationController
   end
 
   def apply_late_fees
-    authorize Billing::Account.new(community: current_community)
+    authorize dummy_account
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)
   end
 
   private
+
+  def dummy_account
+    Billing::Account.new(community: current_community)
+  end
 
   # Pundit built-in helper doesn't work due to namespacing
   def account_params

@@ -139,7 +139,7 @@ class UserPolicy < ApplicationPolicy
   protected
 
   def allow_class_based_auth?
-    true
+    false
   end
 
   private

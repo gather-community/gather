@@ -6,33 +6,12 @@ module Billing
       include_context "policy objs"
 
       let(:account) { Account.new }
+      let(:record) { account }
       let(:account_owner) { User.new(household: Household.new) }
 
       before do
         allow(account).to receive(:household).and_return(account_owner.household)
         allow(account).to receive(:community).and_return(community)
-      end
-
-      shared_examples_for :admin_or_biller_with_record do
-        it "grants access to admins from community" do
-          expect(subject).to permit(admin, account)
-        end
-
-        it "grants access to billers from community" do
-          expect(subject).to permit(admin, account)
-        end
-
-        it "denies access to admins from outside community" do
-          expect(subject).not_to permit(admin_in_cluster, account)
-        end
-
-        it "denies access to billers from outside community" do
-          expect(subject).not_to permit(biller_in_cluster, account)
-        end
-
-        it "denies access to regular user" do
-          expect(subject).not_to permit(user, account)
-        end
       end
 
       permissions :index?, :apply_late_fees? do
@@ -68,7 +47,7 @@ module Billing
       end
 
       permissions :show? do
-        it_behaves_like :admin_or_biller_with_record
+        it_behaves_like "permits admins or billers with record but not regular users"
 
         it "grants access to owner of account" do
           expect(subject).to permit(account_owner, account)
@@ -90,7 +69,7 @@ module Billing
       end
 
       permissions :edit?, :update? do
-        it_behaves_like :admin_or_biller_with_record
+        it_behaves_like "permits admins or billers with record but not regular users"
       end
     end
 

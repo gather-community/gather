@@ -156,6 +156,28 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "permits admins or billers with record but not regular users" do
+    it "grants access to admins from community" do
+      expect(subject).to permit(admin, record)
+    end
+
+    it "grants access to billers from community" do
+      expect(subject).to permit(admin, record)
+    end
+
+    it "denies access to admins from outside community" do
+      expect(subject).not_to permit(admin_in_cluster, record)
+    end
+
+    it "denies access to billers from outside community" do
+      expect(subject).not_to permit(biller_in_cluster, record)
+    end
+
+    it "denies access to regular user" do
+      expect(subject).not_to permit(user, record)
+    end
+  end
+
   def new_user_from(community, attribs = {})
     build(:user, attribs.merge(
       first_name: attribs.delete(:label).capitalize.gsub("_", " "),

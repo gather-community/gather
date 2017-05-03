@@ -6,7 +6,8 @@ module Billing
     describe "permissions" do
       include_context "policy objs"
 
-      let(:transaction) { Transaction.new }
+      let(:transaction) { Transaction.new(account: Account.new(community: community)) }
+      let(:record) { transaction }
 
       permissions :index? do
         it "grants access to everyone" do
@@ -15,17 +16,7 @@ module Billing
       end
 
       permissions :new?, :create? do
-        it "grants access to admins" do
-          expect(subject).to permit(admin, Transaction)
-        end
-
-        it "grants access to billers" do
-          expect(subject).to permit(biller, Transaction)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Transaction)
-        end
+        it_behaves_like "permits admins or billers but not regular users"
       end
 
       permissions :show?, :edit?, :update?, :destroy? do

@@ -15,21 +15,11 @@ module Billing
       end
 
       permissions :index?, :generate? do
-        it "grants access to admins" do
-          expect(subject).to permit(admin, Statement)
-        end
-
-        it "grants access to biller" do
-          expect(subject).to permit(biller, Statement)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Statement)
-        end
+        it_behaves_like "permits admins or billers but not regular users"
       end
 
       permissions :show? do
-        it_behaves_like "permits admins or billers with record but not regular users"
+        it_behaves_like "permits admins or billers but not regular users"
 
         it "grants access to owner of statement" do
           expect(subject).to permit(statement_owner, statement)

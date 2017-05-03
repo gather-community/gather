@@ -14,7 +14,7 @@ class StatementsController < ApplicationController
   end
 
   def generate
-    authorize Billing::Statement
+    authorize Billing::Statement.new(account: Billing::Account.new(community: current_community))
     Delayed::Job.enqueue(Billing::StatementJob.new(current_user.community))
 
     flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."

@@ -5,6 +5,7 @@ module Billing
     describe "permissions" do
       include_context "policy objs"
 
+      let(:model) { Account }
       let(:account) { Account.new }
       let(:record) { account }
       let(:account_owner) { User.new(household: Household.new) }
@@ -15,39 +16,11 @@ module Billing
       end
 
       permissions :index?, :apply_late_fees? do
-        it "grants access to admin with correct community" do
-          expect(subject).to permit(admin, Account.new(community: community))
-        end
-
-        it "grants access to biller with correct community" do
-          expect(subject).to permit(biller, Account.new(community: community))
-        end
-
-        it "denies access to admin with wrong community" do
-          expect(subject).not_to permit(admin, Account.new(community: communityB))
-        end
-
-        it "denies access to biller with wrong community" do
-          expect(subject).not_to permit(biller, Account.new(community: communityB))
-        end
-
-        it "errors when checking role without community" do
-          expect { subject.new(admin, Account).index? }.to raise_error(
-            ApplicationPolicy::CommunityNotSetError)
-        end
-
-        it "errors when checking role without community" do
-          expect { subject.new(biller, Account).index? }.to raise_error(
-            ApplicationPolicy::CommunityNotSetError)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Account)
-        end
+        it_behaves_like "permits admins or billers but not regular users"
       end
 
       permissions :show? do
-        it_behaves_like "permits admins or billers with record but not regular users"
+        it_behaves_like "permits admins or billers but not regular users"
 
         it "grants access to owner of account" do
           expect(subject).to permit(account_owner, account)
@@ -69,7 +42,7 @@ module Billing
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or billers with record but not regular users"
+        it_behaves_like "permits admins or billers but not regular users"
       end
     end
 

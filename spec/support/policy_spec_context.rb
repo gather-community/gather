@@ -156,7 +156,7 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits admins or billers with record but not regular users" do
+  shared_examples_for "permits admins or billers but not regular users" do
     it "grants access to admins from community" do
       expect(subject).to permit(admin, record)
     end
@@ -171,6 +171,20 @@ shared_context "policy objs" do
 
     it "denies access to billers from outside community" do
       expect(subject).not_to permit(biller_in_cluster, record)
+    end
+
+    it "errors when checking admin without community" do |example|
+      example.metadata[:permissions].each do |perm|
+        expect { subject.new(admin, record.class).send(perm) }.to raise_error(
+          ApplicationPolicy::CommunityNotSetError)
+      end
+    end
+
+    it "errors when checking biller without community" do |example|
+      example.metadata[:permissions].each do |perm|
+        expect { subject.new(biller, record.class).send(perm) }.to raise_error(
+          ApplicationPolicy::CommunityNotSetError)
+      end
     end
 
     it "denies access to regular user" do

@@ -7,7 +7,6 @@ module Meals
       return unless correct_hour?
 
       Assignment::ROLES.each do |role|
-
         lead_days = Settings.reminders.lead_times.shift[role]
         raise "No lead time found in settings for #{role} shift notification" if lead_days.blank?
 

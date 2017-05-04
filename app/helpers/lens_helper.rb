@@ -36,11 +36,12 @@ module LensHelper
       communities = Community.by_name
       return "" if communities.size < 1
 
-      select_tag("community",
-        options_from_collection_for_select(communities, 'lc_abbrv', 'name', lens[:community]),
+      select_tag("",
+        options_from_collection_for_select(communities, 'slug', 'name', current_community.slug),
         prompt: field.options[:required] ? nil : "All Communities",
         class: "form-control",
-        onchange: "this.form.submit();"
+        onchange: "window.location.href = '#{build_url_with(subdomain: "' + this.value + '")}'
+          + window.location.pathname + window.location.search;"
       )
     end
 

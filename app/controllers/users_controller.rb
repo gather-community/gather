@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
-        load_community_from_lens_with_default
+        @community = current_community
         load_communities_in_cluster
         lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
         @users = @users.includes(household: :community)

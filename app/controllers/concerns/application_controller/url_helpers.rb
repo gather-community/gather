@@ -2,13 +2,18 @@ module Concerns::ApplicationController::UrlHelpers
   extend ActiveSupport::Concern
 
   included do
-    helper_method :home_path
+    helper_method :home_path, :build_url_with
   end
 
   protected
 
   def default_url_options
     Settings.url.to_h.slice(:host, :port)
+  end
+
+  def build_url_with(subdomain:, path: nil)
+    host_with_port = ["#{subdomain}.#{Settings.url.host}", Settings.url.port].join(":")
+    "#{Settings.url.protocol}://#{host_with_port}#{path}"
   end
 
   def subdomain

@@ -40,7 +40,7 @@ class ReservationsController < ApplicationController
       end
     else
       prepare_lens(community: {required: true})
-      load_community_from_lens_with_default
+      @community = current_community
 
       authorize Reservation::Reservation
 

@@ -37,9 +37,9 @@ class MealsController < ApplicationController
 
   def reports
     authorize Meal, :reports?
+    @community = current_community
     nav_context(:meals, :reports)
     prepare_lens(community: {required: true})
-    load_community_from_lens_with_default
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
   end

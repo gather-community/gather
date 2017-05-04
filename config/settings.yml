@@ -1,3 +1,5 @@
+meals:
+  close_cutoff_age: 2 # hours
 reminders:
   time_of_day: 6 # 6:00am
   # Reminder lead times in days.

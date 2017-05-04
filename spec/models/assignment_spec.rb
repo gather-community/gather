@@ -46,9 +46,9 @@ describe Assignment do
     let(:assignment) { meal.asst_cook_assigns.build }
 
     before do
-      meal.host_community.settings.meals.default_shift_times.start.asst_cook = -60
-      meal.host_community.settings.meals.default_shift_times.end.asst_cook = 5
-      meal.host_community.save!
+      meal.community.settings.meals.default_shift_times.start.asst_cook = -60
+      meal.community.settings.meals.default_shift_times.end.asst_cook = 5
+      meal.community.save!
     end
 
     it "should be correct" do

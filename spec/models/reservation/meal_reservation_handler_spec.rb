@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Reservation::MealReservationHandler, type: :model do
   let(:community) { default_community }
   let(:resources) { create_list(:resource, 2) }
-  let(:meal) { build(:meal, :with_menu, host_community: community, title: "A very very very long title",
+  let(:meal) { build(:meal, :with_menu, community: community, title: "A very very very long title",
     resources: resources, served_at: "2017-01-01 12:00") }
   let(:handler) { described_class.new(meal) }
   let(:handler2) { described_class.new(meal) }

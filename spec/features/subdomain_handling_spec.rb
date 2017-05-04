@@ -130,7 +130,7 @@ feature "subdomain handling" do
 
       # User can see this meal but it's not hosted by home_cmty. So the redirected subdomain
       # should match neighbor_cmty.
-      let(:meal) { create(:meal, host_community: neighbor_cmty, communities: [home_cmty, neighbor_cmty]) }
+      let(:meal) { create(:meal, community: neighbor_cmty, communities: [home_cmty, neighbor_cmty]) }
 
       scenario "visiting supported member route should redirect to appropriate community route" do
         visit "/meals/#{meal.id}"

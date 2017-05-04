@@ -12,7 +12,7 @@ module Meals
 
       # If there are any unfinalized meals remaining last month, don't include that month.
       prev_month_range = Date.today.prev_month.beginning_of_month..Date.today.prev_month.end_of_month
-      range_end = if Meal.where(host_community_id: community.id).where(served_at: prev_month_range).
+      range_end = if Meal.where(community_id: community.id).where(served_at: prev_month_range).
         where("status != 'finalized'").any?
         Date.today.prev_month.prev_month.end_of_month
       else
@@ -29,7 +29,7 @@ module Meals
 
     def overview
       @overview ||= breakout(
-        breakout_expr: "meals.host_community_id::integer",
+        breakout_expr: "meals.community_id::integer",
         all_communities: true,
         ignore_range: true,
         totals: true
@@ -66,7 +66,7 @@ module Meals
       @by_community ||= breakout(
         breakout_expr: "communities.name",
         all_communities: true,
-        include_host_community: true
+        include_community: true
       )
     end
 
@@ -124,7 +124,7 @@ module Meals
     end
 
     def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false,
-      include_host_community: false)
+      include_community: false)
 
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
@@ -134,7 +134,7 @@ module Meals
       wheres << "meals.status = 'finalized'"
 
       unless all_communities
-        wheres << "meals.host_community_id = ?"
+        wheres << "meals.community_id = ?"
         vars << community.id
       end
 
@@ -143,7 +143,7 @@ module Meals
         vars << range.first << range.last
       end
 
-      community_join = "INNER JOIN communities ON meals.host_community_id = communities.id"
+      community_join = "INNER JOIN communities ON meals.community_id = communities.id"
 
       # Scope to community cluster
       wheres << "communities.cluster_id = ?"

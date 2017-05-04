@@ -40,7 +40,7 @@ describe MealPolicy do
 
     permissions :edit?, :update? do
       it "grants access to anyone in host community" do
-        expect(subject).to permit(user, Meal.new(host_community: community))
+        expect(subject).to permit(user, Meal.new(community: community))
       end
 
       it "grants access to assignees even if not in host community" do
@@ -48,27 +48,27 @@ describe MealPolicy do
       end
 
       it "denies access to those in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
     end
 
     permissions :administer?, :destroy? do
       it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(host_community: community))
+        expect(subject).to permit(admin, Meal.new(community: community))
       end
 
       it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(host_community: community))
+        expect(subject).not_to permit(user, Meal.new(community: community))
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
     end
 
     permissions :set_menu?, :close?, :reopen?, :summary? do
       it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(host_community: community, communities: [community]))
+        expect(subject).to permit(admin, Meal.new(community: community, communities: [community]))
       end
 
       it "grants access to head cook" do
@@ -78,11 +78,11 @@ describe MealPolicy do
       end
 
       it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(host_community: community))
+        expect(subject).not_to permit(user, Meal.new(community: community))
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
     end
 
@@ -96,19 +96,19 @@ describe MealPolicy do
 
     permissions :finalize? do
       it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(host_community: community))
+        expect(subject).to permit(admin, Meal.new(community: community))
       end
 
       it "grants access to billers in community" do
-        expect(subject).to permit(biller, Meal.new(host_community: community))
+        expect(subject).to permit(biller, Meal.new(community: community))
       end
 
       it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(host_community: community))
+        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
 
       it "denies access to billers in other communities" do
-        expect(subject).not_to permit(biller_in_cluster, Meal.new(host_community: community))
+        expect(subject).not_to permit(biller_in_cluster, Meal.new(community: community))
       end
 
       it "denies access to regular users" do
@@ -145,7 +145,7 @@ describe MealPolicy do
 
   describe "permitted_attributes" do
     subject { MealPolicy.new(user, meal).permitted_attributes }
-    let(:meal) { Meal.new(host_community: community) }
+    let(:meal) { Meal.new(community: community) }
     let(:assign_attribs) {[{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
@@ -165,7 +165,7 @@ describe MealPolicy do
 
       it "should allow more stuff" do
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(:discount, :host_community_id)
+        expect(subject).not_to include(:discount, :community_id)
       end
     end
 
@@ -174,7 +174,7 @@ describe MealPolicy do
 
       it "should allow even more stuff" do
         expect(subject).to include(*(assign_attribs + head_cook_attribs + [:discount]))
-        expect(subject).not_to include(:host_community_id)
+        expect(subject).not_to include(:community_id)
       end
     end
 

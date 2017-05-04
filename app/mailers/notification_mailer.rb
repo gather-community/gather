@@ -36,7 +36,7 @@ class NotificationMailer < ActionMailer::Base
     @removed = removed
 
     recips = (@meal.assignments + removed).map(&:user).map(&:email)
-    recips << @meal.host_community.settings.meals.admin_email
+    recips << @meal.community.settings.meals.admin_email
     recips << @initiator.email
 
     mail(to: recips.compact.uniq, subject: "Meal Job Assignment Change Notice")

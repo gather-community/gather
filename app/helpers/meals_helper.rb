@@ -61,7 +61,7 @@ module MealsHelper
   end
 
   def signup_link(meal)
-    link_to(current_user.credit_exceeded?(meal.host_community) ? icon_tag("ban") : "Sign Up", meal_path(meal))
+    link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up", meal_path(meal))
   end
 
   def signup_count(meal)
@@ -80,7 +80,7 @@ module MealsHelper
 
   # We should disable the "own" community checkbox for most users.
   def disable_community_checkbox?(meal, community)
-    disable = meal.host_community == community && community_invited?(meal, community)
+    disable = meal.community == community && community_invited?(meal, community)
     disable ? "disabled" : nil
   end
 

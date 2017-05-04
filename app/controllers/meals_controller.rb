@@ -30,7 +30,7 @@ class MealsController < ApplicationController
     set_no_cache unless @meal.in_past?
 
     @signup = Signup.for(current_user, @meal)
-    @account = current_user.account_for(@meal.host_community)
+    @account = current_user.account_for(@meal.community)
     load_signups
     load_prev_next_meal
   end
@@ -60,7 +60,7 @@ class MealsController < ApplicationController
 
   def create
     @meal = Meal.new(
-      host_community_id: current_user.community_id,
+      community_id: current_user.community_id,
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))
@@ -170,7 +170,7 @@ class MealsController < ApplicationController
   def community_for_route
     case params[:action]
     when "show", "summary"
-      Meal.find_by(id: params[:id]).try(:host_community)
+      Meal.find_by(id: params[:id]).try(:community)
     when "index", "jobs", "reports"
       current_user.community
     else
@@ -187,7 +187,7 @@ class MealsController < ApplicationController
   def load_meals
     @meals = policy_scope(Meal)
     if lens[:time] == "finalizable"
-      @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
+      @meals = @meals.finalizable.where(community_id: current_user.community_id).oldest_first
     elsif lens[:time] == "past"
       @meals = @meals.past.newest_first
     elsif lens[:time] == "all"
@@ -208,7 +208,7 @@ class MealsController < ApplicationController
   end
 
   def load_signups
-    @signups = @meal.signups.host_community_first(@meal.host_community).sorted
+    @signups = @meal.signups.community_first(@meal.community).sorted
   end
 
   def prep_form_vars

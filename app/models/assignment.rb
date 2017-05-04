@@ -29,6 +29,6 @@ class Assignment < ActiveRecord::Base
   private
 
   def shift_time_offset(start_or_end)
-    meal.host_community.settings.meals.default_shift_times[start_or_end][role].minutes
+    meal.community.settings.meals.default_shift_times[start_or_end][role].minutes
   end
 end

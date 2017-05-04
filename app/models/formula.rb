@@ -4,7 +4,7 @@ class Formula < ActiveRecord::Base
   # Returns nil if none found.
   def self.for_meal(meal)
     where("effective_on <= ?", meal.served_at.to_date).
-      where(community_id: meal.host_community_id).
+      where(community_id: meal.community_id).
       order(effective_on: :desc).first
   end
 

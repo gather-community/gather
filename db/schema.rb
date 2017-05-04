@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170417131246) do
+ActiveRecord::Schema.define(version: 20170504014539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -135,12 +135,12 @@ ActiveRecord::Schema.define(version: 20170417131246) do
   create_table "meals", force: :cascade do |t|
     t.text "allergens", default: "[]", null: false
     t.integer "capacity", null: false
+    t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.integer "creator_id", null: false
     t.text "dessert"
     t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
     t.text "entrees"
-    t.integer "host_community_id", null: false
     t.text "kids"
     t.text "notes"
     t.datetime "served_at", null: false
@@ -441,7 +441,7 @@ ActiveRecord::Schema.define(version: 20170417131246) do
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
-  add_foreign_key "meals", "communities", column: "host_community_id"
+  add_foreign_key "meals", "communities"
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "meals_costs", "meals"
   add_foreign_key "people_emergency_contacts", "households"

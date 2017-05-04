@@ -7,13 +7,13 @@ FactoryGirl.define do
 
     served_at { Time.now + 7.days }
     capacity 64
-    host_community { default_community }
+    community { default_community }
 
     association :head_cook, factory: :user
     association :creator, factory: :user
 
     after(:build) do |meal, evaluator|
-      meal.communities += evaluator.communities.presence || [meal.host_community]
+      meal.communities += evaluator.communities.presence || [meal.community]
       meal.resources = [create(:resource)] if meal.resources.empty? && !evaluator.no_resources
     end
 

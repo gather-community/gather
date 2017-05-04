@@ -16,7 +16,7 @@ class Signup < ActiveRecord::Base
   belongs_to :meal, inverse_of: :signups
   belongs_to :household
 
-  scope :host_community_first, ->(c) do
+  scope :community_first, ->(c) do
     includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
   end
   scope :sorted, -> { joins(household: :community).order('communities.abbrv, households.name') }

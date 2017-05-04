@@ -77,7 +77,7 @@ module Reservation
     private
 
     def settings
-      @settings ||= meal.host_community.settings.reservations.meals
+      @settings ||= meal.community.settings.reservations.meals
     end
 
     def meal_time

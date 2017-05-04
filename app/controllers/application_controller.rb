@@ -13,9 +13,9 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  attr_accessor :current_community
+  attr_accessor :current_community, :current_cluster
 
-  helper_method :current_community, :multi_community?, :app_version
+  helper_method :current_community, :current_cluster, :multi_community?, :app_version
 
   protected
 
@@ -30,5 +30,9 @@ class ApplicationController < ActionController::Base
 
   def app_version
     @app_version ||= File.read(Rails.root.join("VERSION"))
+  end
+
+  def current_cluster
+    current_community.cluster
   end
 end

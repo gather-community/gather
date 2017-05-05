@@ -33,7 +33,7 @@ module LensHelper
     end
 
     def community_field(field)
-      communities = Community.by_name
+      communities = current_cluster.communities.by_name
       return "" if communities.size < 1
 
       prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")

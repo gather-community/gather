@@ -186,6 +186,9 @@ class MealsController < ApplicationController
 
   def load_meals
     @meals = policy_scope(Meal)
+    @meals = @meals.hosted_by(lens[:community] == "all" ? current_cluster.communities : current_community)
+    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
+
     if lens[:time] == "finalizable"
       @meals = @meals.finalizable.where(community_id: current_community).oldest_first
     elsif lens[:time] == "past"
@@ -202,8 +205,6 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
-    @meals = @meals.hosted_by(Community.find_by_abbrv(lens[:community])) if lens[:community].present?
     @meals = @meals.page(params[:page])
   end
 

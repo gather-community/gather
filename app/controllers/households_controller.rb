@@ -10,12 +10,8 @@ class HouseholdsController < ApplicationController
       format.html do
         prepare_lens({community: {required: true}}, :search)
         @households = @households.includes(users: :children)
-        if lens[:search].present?
-          @households = @households.matching(lens[:search])
-        end
-        if lens[:community].present?
-          @households = @households.in_community(Community.find_by_abbrv(lens[:community]))
-        end
+        @households = @households.in_community(current_community)
+        @households = @households.matching(lens[:search]) if lens[:search].present?
         @households = @households.by_active_and_name.page(params[:page])
       end
       format.json do

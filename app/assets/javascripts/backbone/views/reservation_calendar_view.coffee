@@ -7,6 +7,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   initialize: (options) ->
     @newUrl = options.newUrl
+    @baseUrl = options.baseUrl
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
     @resourceId = options.resourceId
@@ -115,8 +116,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @URL_PARAMS_TO_VIEW_TYPES[type]
 
   permalink: ->
-    base = [location.protocol, '//', location.host, location.pathname].join('')
-    "#{base}?view=#{@viewType()}&date=#{@currentDate()}"
+    @baseUrl.replace("placeholder=xxx", "view=#{@viewType()}&date=#{@currentDate()}")
 
   viewType: ->
     @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()

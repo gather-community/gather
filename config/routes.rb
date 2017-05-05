@@ -29,11 +29,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get "reservations(/:community(/:resource_id))" => "reservations#index",
-    community: /[a-z][a-z0-9]?/, as: :reservations
-  get "reservations/:community/:resource_id/new" => "reservations#new",
-    community: /[a-z][a-z0-9]?/, as: :new_reservation
-  resources :reservations, except: [:index, :new]
+  resources :reservations
 
   resources :calendar_exports, only: [:index], path: "calendars" do
     member do

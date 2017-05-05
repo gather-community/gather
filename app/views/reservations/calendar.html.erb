@@ -3,7 +3,7 @@
 <% content_for(:top_buttons) do %>
   <% if @resource && policy(@sample_reservation).create? %>
     <%= link_to(icon_tag("plus") << " Create Reservation",
-      new_reservation_path_for_resource(@resource),
+      new_reservation_path(resource_id: @resource.id),
       class: "btn btn-default") %>
     <%= calendar_exports_link %>
   <% end %>
@@ -39,14 +39,14 @@
     <small>Other Resources</small>
     <ul class="no-marker">
       <% @other_resources.each do |resource| %>
-        <li><%= link_to(resource.name, reservations_path_for_resource(resource)) %></li>
+        <li><%= link_to(resource.name, reservations_path(resource_id: resource.id)) %></li>
       <% end %>
     </ul>
     <br/>
     <small>Other Communities</small>
     <ul class="no-marker">
       <% @other_communities.each do |community| %>
-        <li><%= link_to(community.name, reservations_path_for_community(community)) %></li>
+        <li><%= link_to(community.name, url_in_community(community, path: reservations_path)) %></li>
       <% end %>
     </ul>
   </div>
@@ -59,8 +59,9 @@
     new Gather.Views.ReservationCalendarView(<%=json(
       el: '#calendar-col',
       resourceId: @resource.id,
-      feedUrl: reservations_path_for_resource(@resource),
-      newUrl: new_reservation_path_for_resource(@resource),
+      feedUrl: reservations_path(resource_id: @resource.id),
+      baseUrl: reservations_path(resource_id: @resource.id, placeholder: "xxx"),
+      newUrl: new_reservation_path(resource_id: @resource.id),
       focusDate: params[:date],
       viewType: params[:view],
       defaultViewType: @resource.default_calendar_view,

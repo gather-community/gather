@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit, RouteHelpable, Lensable
+  include Pundit, Lensable
   include Concerns::ApplicationController::RequestPreprocessing
   include Concerns::ApplicationController::Setters
   include Concerns::ApplicationController::Loaders

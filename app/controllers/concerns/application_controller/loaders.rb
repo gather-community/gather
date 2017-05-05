@@ -4,11 +4,11 @@ module Concerns::ApplicationController::Loaders
   included do
     helper_method :load_showable_users_and_children_in
   end
-  
+
   protected
 
   def load_communities_in_cluster
-    @communities = Community.by_name
+    @communities = current_cluster.communities.by_name
   end
 
   # Users and children related to the given household that the UserPolicy says we can show.

@@ -35,7 +35,7 @@
           <td>
             <% if signup = meal.signup_for(current_user.household) %>
               <% if meal.signups_editable? %>
-                <%= link_to(signup_info(signup), meal_path(meal)) %>
+                <%= link_to(signup_info(signup), meal_url(meal)) %>
               <% else %>
                 <%= signup_info(signup) %>
               <% end %>
@@ -68,7 +68,7 @@
         <% if signup = meal.signup_for(current_user.household) %>
           <div class="signed-up">
             <%= signup_info(signup) %> signed up from your household
-            <%= link_to("(Edit)", meal_path(meal)) if meal.signups_editable? %>
+            <%= link_to("(Edit)", meal_url(meal)) if meal.signups_editable? %>
           </div>
         <% elsif meal.full? %>
           <span class="weak">[Full]</span>

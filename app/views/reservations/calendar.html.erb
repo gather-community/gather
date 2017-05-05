@@ -46,7 +46,7 @@
     <small>Other Communities</small>
     <ul class="no-marker">
       <% @other_communities.each do |community| %>
-        <li><%= link_to(community.name, url_in_community(community, path: reservations_path)) %></li>
+        <li><%= link_to(community.name, url_in_community(community, reservations_path)) %></li>
       <% end %>
     </ul>
   </div>

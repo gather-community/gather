@@ -2,7 +2,7 @@ module Concerns::ApplicationController::UrlHelpers
   extend ActiveSupport::Concern
 
   included do
-    helper_method :home_path, :url_in_community
+    helper_method :home_path, :url_in_community, :url_in_home_community
   end
 
   protected
@@ -11,9 +11,13 @@ module Concerns::ApplicationController::UrlHelpers
     Settings.url.to_h.slice(:host, :port)
   end
 
-  def url_in_community(community, path: nil)
+  def url_in_community(community, path = nil)
     host_with_port = ["#{community.slug}.#{Settings.url.host}", Settings.url.port].join(":")
     "#{Settings.url.protocol}://#{host_with_port}#{path}"
+  end
+
+  def url_in_home_community(path = nil)
+    url_in_community(current_user.community, path)
   end
 
   def subdomain
@@ -37,7 +41,7 @@ module Concerns::ApplicationController::UrlHelpers
   end
 
   def redirect_to_home
-    redirect_to home_path
+    redirect_to url_in_home_community(home_path)
   end
 
   def home_path

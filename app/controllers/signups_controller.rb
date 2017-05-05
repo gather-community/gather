@@ -28,11 +28,12 @@ class SignupsController < ApplicationController
   private
 
   def redirect_after_save
+    meals_root = url_in_home_community(meals_path)
     if params[:save_and_next]
       next_meal = (id = params[:next_meal_id]).present? ? Meal.find(id) : nil
-      redirect_to(next_meal ? meal_path(next_meal) : meals_path)
+      redirect_to(next_meal ? meal_url(next_meal) : meals_root)
     else
-      policy(Meal).index? ? redirect_to(meals_path) : redirect_to_home
+      policy(Meal).index? ? redirect_to(meals_root) : redirect_to_home
     end
   end
 

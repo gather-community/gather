@@ -187,7 +187,7 @@ class MealsController < ApplicationController
   def load_meals
     @meals = policy_scope(Meal)
     if lens[:time] == "finalizable"
-      @meals = @meals.finalizable.where(community_id: current_user.community_id).oldest_first
+      @meals = @meals.finalizable.where(community_id: current_community).oldest_first
     elsif lens[:time] == "past"
       @meals = @meals.past.newest_first
     elsif lens[:time] == "all"

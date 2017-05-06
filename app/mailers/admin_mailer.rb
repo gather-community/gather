@@ -1,7 +1,4 @@
-class AdminMailer < ActionMailer::Base
-
-  default from: Settings.email.from
-
+class AdminMailer < ApplicationMailer
   # Mails an error report to the webmaster.
   def error(info)
     @info = info

@@ -53,7 +53,7 @@ module LensHelper
           window.location.href = '#{new_url}'
         }"
 
-      select_tag("", options, class: "form-control", onchange: onchange)
+      select_tag("", options, class: "form-control", onchange: onchange, id: "community")
     end
 
     def user_field(field)

@@ -19,7 +19,7 @@ feature "meals" do
   end
 
   scenario "index" do
-    visit "/meals"
+    visit "/meals?community=all"
     expect(page).not_to have_content("Flapjacks")
     expect(page).to have_css("table.index tbody tr", count: 5)
   end

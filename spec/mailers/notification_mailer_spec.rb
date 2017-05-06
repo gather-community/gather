@@ -39,7 +39,7 @@ describe NotificationMailer do
 
     it "renders the subject" do
       expect(mail.subject).to eq(
-        "Job Reminder: You are Assistant Cook for a meal at Sun Jan 01 11:00am at #{ca} CH")
+        "Job Reminder: You Are Assistant Cook for A Meal at Sun Jan 01 11:00am at #{ca} CH")
     end
 
     it "renders the correct times and URL in the body" do
@@ -82,7 +82,7 @@ describe NotificationMailer do
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Menu Reminder: Please post menu for Sun Jan 01")
+      expect(mail.subject).to eq("Menu Reminder: Please Post Menu for Sun Jan 01")
     end
 
     it "renders the correct URL in the body" do

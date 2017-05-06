@@ -21,7 +21,7 @@ class NotificationMailer < ApplicationMailer
     @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
     @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
-    subject = "Job Reminder: You are #{@role} for a meal at #{@datetime} at #{@meal.location_abbrv}"
+    subject = "Job Reminder: You Are #{@role} for A Meal at #{@datetime} at #{@meal.location_abbrv}"
     mail(to: @user.email, subject: subject)
   end
 
@@ -44,7 +44,7 @@ class NotificationMailer < ApplicationMailer
     @meal = assignment.meal
     @type = assignment.reminder_count == 0 ? :first : :second
 
-    subject = "Menu Reminder: Please post menu for #{@meal.served_at.to_s(:short_date)}"
+    subject = "Menu Reminder: Please Post Menu for #{@meal.served_at.to_s(:short_date)}"
     mail(to: @user.email, subject: subject)
   end
 

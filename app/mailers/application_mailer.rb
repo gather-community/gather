@@ -6,7 +6,7 @@ class ApplicationMailer < ActionMailer::Base
   def with_community_subdomain(community)
     config = Rails.configuration.action_mailer
     old_host = config.default_url_options[:host]
-    config.default_url_options[:host] = "#{@meal.community.slug}.#{Settings.url.host}"
+    config.default_url_options[:host] = "#{community.slug}.#{Settings.url.host}"
     yield
     config.default_url_options[:host] = old_host
   end

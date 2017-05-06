@@ -8,7 +8,7 @@ FactoryGirl.define do
     community { default_community }
 
     after(:create) do |household, evaluator|
-      if evaluator.with_members
+      if household.users.empty? && evaluator.with_members
         household.users << create(:user, household: household)
       end
     end

@@ -13,7 +13,7 @@ class AccountMailer < ApplicationMailer
 
   def mail(*args)
     with_community_subdomain(@community) do
-      super(*args)
+      super
     end
   end
 

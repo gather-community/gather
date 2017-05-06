@@ -53,7 +53,7 @@ class NotificationMailer < ApplicationMailer
   def mail(*args)
     raise "meal instance variable must be set" unless @meal
     with_community_subdomain(@meal.community) do
-      super(*args)
+      super
     end
   end
 end

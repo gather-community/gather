@@ -1,5 +1,6 @@
 class CalendarExportsController < ApplicationController
   prepend_before_action :authenticate_user_from_token!, only: :show
+  skip_before_action :ensure_subdomain, only: :show
 
   def index
     skip_policy_scope

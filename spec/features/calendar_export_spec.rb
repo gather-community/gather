@@ -3,18 +3,14 @@ require "rails_helper"
 feature "calendar export" do
   let!(:user) { create(:user, calendar_token: "xyz") }
 
-  shared_examples_for "your meals" do
+  context "with user subdomain" do
+    around { |ex| with_user_home_subdomain(user) { ex.run } }
+
     scenario "your meals" do
       visit("/calendars/meals/xyz.ics")
       expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
         "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals You're Attending")
     end
-  end
-
-  context "with user subdomain" do
-    around { |ex| with_user_home_subdomain(user) { ex.run } }
-
-    it_behaves_like "your meals"
 
     scenario "all meals" do
       visit("/calendars/all-meals/xyz.ics")
@@ -58,6 +54,12 @@ feature "calendar export" do
   end
 
   context "with apex subdomain" do
-    it_behaves_like "your meals"
+    scenario "your meals" do
+      visit("/calendars/meals/xyz.ics")
+      expect(page).to have_content("Meals You're Attending")
+
+      # We don't want to redirect when fetching ICS in case some clients don't support that.
+      expect(current_url).not_to match(user.community.slug)
+    end
   end
 end

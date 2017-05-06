@@ -1,8 +1,11 @@
 class DeviseMailer < Devise::Mailer
-  def reset_password_instructions(record, token, opts={})
-    mail = super
-    # your custom logic
-    mail.subject = "Invitation to Gather: Meals Electronic Signup System"
-    mail
+  include SubdomainSettable
+
+  def reset_password_instructions(record, token, opts = {})
+    with_community_subdomain(record.community) do
+      super.tap do |mail|
+        mail.subject = "Welcome to Gather!"
+      end
+    end
   end
 end

@@ -20,7 +20,7 @@ module Gather
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # config.autoload_paths += []
+    config.autoload_paths += ["#{Rails.root}/app/mailers/concerns"]
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

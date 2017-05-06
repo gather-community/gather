@@ -45,8 +45,7 @@ describe AccountMailer do
   end
 
   def have_correct_statement_url(statement)
-    host = "#{statement.community.slug}.#{Settings.url.host}"
-    match "http://#{host}:#{Settings.url.port}/statements/#{statement.id}"
+    contain_community_url(statement.community, "/statements/#{statement.id}")
   end
 
   def have_household_adults_as_recipients

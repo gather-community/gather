@@ -25,4 +25,8 @@ module GeneralHelpers
   def with_user_home_subdomain(user, &block)
     with_subdomain(user.community.slug, &block)
   end
+
+  def contain_community_url(community, path)
+    include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
+  end
 end

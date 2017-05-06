@@ -91,6 +91,6 @@ describe NotificationMailer do
   end
 
   def have_correct_meal_url(meal)
-    match "http://#{meal.community.slug}.#{Settings.url.host}:#{Settings.url.port}/meals/#{meal.id}"
+    contain_community_url(meal.community, "/meals/#{meal.id}")
   end
 end

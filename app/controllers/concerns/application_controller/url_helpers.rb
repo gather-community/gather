@@ -8,7 +8,10 @@ module Concerns::ApplicationController::UrlHelpers
   protected
 
   def default_url_options
-    Settings.url.to_h.slice(:host, :port)
+    Settings.url.to_h.slice(:host, :port).tap do |options|
+      # Preserve the current subdomain if present.
+      options[:host] = "#{current_community.slug}.#{options[:host]}" if current_community
+    end
   end
 
   def url_in_community(community, path = nil)
@@ -49,7 +52,7 @@ module Concerns::ApplicationController::UrlHelpers
   end
 
   def sign_in_url
-    root_url("sign-in": 1)
+    root_url(host: Settings.url.host, "sign-in": 1)
   end
 
   def after_sign_out_path_for(user)

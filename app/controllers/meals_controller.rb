@@ -16,7 +16,7 @@ class MealsController < ApplicationController
   end
 
   def jobs
-    authorize dummy_meal, :index?
+    authorize dummy_meal
     nav_context(:meals, :jobs)
     prepare_lens(:user, :time, community: {required: true})
     @user = User.find(lens[:user]) if lens[:user].present?

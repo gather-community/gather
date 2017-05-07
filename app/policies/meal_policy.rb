@@ -30,9 +30,8 @@ class MealPolicy < ApplicationPolicy
     index?
   end
 
-  # Means they can see the work shifts for the meal
   def jobs?
-    active? && (not_specific_record? || associated?)
+    index?
   end
 
   def create?

@@ -2,7 +2,7 @@ module Concerns::ApplicationController::Loaders
   extend ActiveSupport::Concern
 
   included do
-    helper_method :load_showable_users_and_children_in
+    helper_method :load_showable_users_and_children_in, :load_communities_in_cluster
   end
 
   protected

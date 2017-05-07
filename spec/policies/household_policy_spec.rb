@@ -180,12 +180,33 @@ describe HouseholdPolicy do
 
   describe "scope" do
     context "normal" do
-      let!(:user) { create(:user) }
-      let!(:household2) { create(:household) }
+      before do
+        save_policy_objects!(community, communityB, communityX,
+          user, other_user, user_in_cluster, outside_user)
+      end
 
-      it "returns all households for regular users" do
-        permitted = HouseholdPolicy::Scope.new(user, Household.all).resolve
-        expect(permitted).to contain_exactly(user.household, household2)
+      context "for regular user, admin, and cluster admin" do
+        it "returns all households in cluster" do
+          [user, admin, cluster_admin].each do |actor|
+            permitted = HouseholdPolicy::Scope.new(actor, Household.all).resolve
+            expect(permitted).to contain_exactly(*[user, other_user, user_in_cluster].map(&:household))
+          end
+        end
+      end
+
+      context "for super admin" do
+        it "returns all households" do
+          permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
+          expect(permitted).to contain_exactly(*
+            [user, other_user, user_in_cluster, outside_user].map(&:household))
+        end
+      end
+
+      context "for inactive user" do
+        it "returns nothing" do
+          permitted = HouseholdPolicy::Scope.new(inactive_user, Household.all).resolve
+          expect(permitted).to eq([])
+        end
       end
     end
 

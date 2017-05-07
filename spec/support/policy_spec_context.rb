@@ -195,7 +195,7 @@ shared_context "policy objs" do
   def new_user_from(community, attribs = {})
     build(:user, attribs.merge(
       first_name: attribs.delete(:label).capitalize.gsub("_", " "),
-      household: build(:household, community: community))
-    )
+      community: community
+    ))
   end
 end

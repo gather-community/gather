@@ -3,7 +3,13 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      active? ? scope : scope.none
+      if active_super_admin?
+        scope
+      elsif active?
+        scope.in_cluster(user.cluster)
+      else
+        scope.none
+      end
     end
 
     def administerable

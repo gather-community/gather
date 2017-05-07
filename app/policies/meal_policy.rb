@@ -128,10 +128,4 @@ class MealPolicy < ApplicationPolicy
   def head_cook?
     user == meal.head_cook
   end
-
-  protected
-
-  def allow_class_based_auth?
-    true
-  end
 end

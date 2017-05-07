@@ -2,7 +2,9 @@
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
   <%= calendar_exports_link %>
-  <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if policy(Meal).create? %>
+  <% if policy(dummy_meal).create? %>
+    <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") %>
+  <% end %>
 <% end %>
 
 <% if @meals.empty? %>

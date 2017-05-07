@@ -33,7 +33,7 @@ class SignupsController < ApplicationController
       next_meal = (id = params[:next_meal_id]).present? ? Meal.find(id) : nil
       redirect_to(next_meal ? meal_url(next_meal) : meals_root)
     else
-      policy(Meal).index? ? redirect_to(meals_root) : redirect_to_home
+      policy(Meal.new(community: community)).index? ? redirect_to(meals_root) : redirect_to_home
     end
   end
 

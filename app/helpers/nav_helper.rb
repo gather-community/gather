@@ -9,7 +9,7 @@ module NavHelper
       },{
         name: :meals,
         path: lens_path_if_present("meals"),
-        permitted: policy(Meal).index?,
+        permitted: policy(Meal.new(community: current_community)).index?,
         icon: "cutlery"
       },{
         name: :reservations,
@@ -35,7 +35,7 @@ module NavHelper
     main ||= @context[:section]
     items = case main
     when :meals
-      policy = policy(Meal)
+      policy = policy(Meal.new(community: current_community))
       [
         {
           name: :meals,

@@ -1,6 +1,8 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
+  helper_method :dummy_meal
+
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
@@ -8,13 +10,13 @@ class MealsController < ApplicationController
   def index
     prepare_lens(:search, :time, :community)
 
-    authorize Meal
+    authorize dummy_meal
     load_meals
     load_communities_in_cluster
   end
 
   def jobs
-    authorize Meal, :index?
+    authorize dummy_meal, :index?
     nav_context(:meals, :jobs)
     prepare_lens(:user, :time, community: {required: true})
     @user = User.find(lens[:user]) if lens[:user].present?
@@ -36,7 +38,7 @@ class MealsController < ApplicationController
   end
 
   def reports
-    authorize Meal, :reports?
+    authorize dummy_meal, :reports?
     @community = current_community
     nav_context(:meals, :reports)
     prepare_lens(community: {required: true})
@@ -230,5 +232,9 @@ class MealsController < ApplicationController
     if !policy(@meal).administer?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
+  end
+
+  def dummy_meal
+    Meal.new(community: current_community)
   end
 end

@@ -6,7 +6,7 @@ describe MealPolicy do
   describe "permissions" do
     permissions :index?, :reports? do
       it "grants access to everyone" do
-        expect(subject).to permit(user, Meal)
+        expect(subject).to permit(user, Meal.new(community: community))
       end
     end
 
@@ -30,11 +30,11 @@ describe MealPolicy do
 
     permissions :new?, :create? do
       it "grants access to admins" do
-        expect(subject).to permit(admin, Meal)
+        expect(subject).to permit(admin, Meal.new(community: community))
       end
 
       it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal)
+        expect(subject).not_to permit(user, Meal.new(community: community))
       end
     end
 
@@ -112,7 +112,7 @@ describe MealPolicy do
       end
 
       it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new)
+        expect(subject).not_to permit(user, Meal.new(community: community))
       end
     end
   end

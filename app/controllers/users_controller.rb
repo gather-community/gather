@@ -26,7 +26,8 @@ class UsersController < ApplicationController
           @users = @users.by_active.by_name
         end
         @users = @users.page(params[:page]).per(36)
-        @allowed_community_changes = policy(Household).allowed_community_changes
+        dummy_household = Household.new(community: current_community)
+        @allowed_community_changes = policy(dummy_household).allowed_community_changes
       end
 
       # For select2 user lookups

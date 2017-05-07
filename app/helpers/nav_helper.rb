@@ -69,7 +69,7 @@ module NavHelper
           name: :households,
           parent: :people,
           path: households_path,
-          permitted: policy(Household).index?,
+          permitted: policy(Household.new(community: current_community)).index?,
           icon: "home"
         }
       ]

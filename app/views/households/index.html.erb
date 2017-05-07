@@ -3,7 +3,7 @@
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
 
-  <% if policy(Household).create? %>
+  <% if policy(Household.new(community: current_community)).create? %>
     <%= link_to(icon_tag("plus") << " Create Household", new_household_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>

@@ -6,7 +6,7 @@ describe HouseholdPolicy do
   describe "permissions" do
     let(:record) { household }
 
-    shared_examples_for "permits action by admins and members of household" do
+    shared_examples_for "permits admins and members of household" do
       # We don't need to check cluster admins/super admins here or in every other place where
       # admin permissions are tested. We are trusting the active_admin? method which is tested elsewhere.
       it "grants access to admins" do
@@ -69,7 +69,7 @@ describe HouseholdPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like "permits action by admins and members of household"
+      it_behaves_like "permits admins and members of household"
 
       it "denies access to billers" do
         expect(subject).not_to permit(biller, user.household)
@@ -77,7 +77,7 @@ describe HouseholdPolicy do
     end
 
     permissions :accounts? do
-      it_behaves_like "permits action by admins and members of household"
+      it_behaves_like "permits admins and members of household"
 
       it "grants access to billers" do
         expect(subject).to permit(biller, user.household)
@@ -126,34 +126,37 @@ describe HouseholdPolicy do
   end
 
   describe "allowed_community_changes" do
+    # Class-based auth not allowed
+    let(:dummy_household) { Household.new(community: community) }
+
     before do
       save_policy_objects!(cluster, clusterB, community, communityB, communityX,
         user, admin, cluster_admin, super_admin)
     end
 
     it "returns empty set for regular users" do
-      expect(HouseholdPolicy.new(user, Household).allowed_community_changes.to_a).to eq []
+      expect(HouseholdPolicy.new(user, dummy_household).allowed_community_changes.to_a).to eq []
     end
 
     it "returns own community for admins" do
-      expect(HouseholdPolicy.new(admin, Household).allowed_community_changes.to_a).to(
+      expect(HouseholdPolicy.new(admin, dummy_household).allowed_community_changes.to_a).to(
         contain_exactly(community))
     end
 
     it "returns cluster communities for cluster admins" do
-      expect(HouseholdPolicy.new(cluster_admin, Household).allowed_community_changes.to_a).to(
+      expect(HouseholdPolicy.new(cluster_admin, dummy_household).allowed_community_changes.to_a).to(
         contain_exactly(community, communityB))
     end
 
     it "returns all communities for super admins" do
-      expect(HouseholdPolicy.new(super_admin, Household).allowed_community_changes.to_a).to(
+      expect(HouseholdPolicy.new(super_admin, dummy_household).allowed_community_changes.to_a).to(
         contain_exactly(community, communityB, communityX))
     end
   end
 
   describe "ensure_allowed_community_id" do
     let(:params) { {community_id: target_id} }
-    let(:policy) { described_class.new(user, Household) }
+    let(:policy) { described_class.new(user, Household.new(community: community)) }
 
     before do
       allow(policy).to receive(:allowed_community_changes).and_return([double(id: 1), double(id: 2)])

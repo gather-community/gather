@@ -30,6 +30,3 @@ script:
   - bundle exec rspec --tag ~notravis
 rvm:
   - 2.2.2 # This should match the version in .ruby-version
-branches:
-  only:
-    - develop

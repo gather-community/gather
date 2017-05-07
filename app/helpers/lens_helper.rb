@@ -58,7 +58,7 @@ module LensHelper
 
     def user_field(field)
       selected_option_tag = if lens[:user].present?
-        user = User.find(lens[:user])
+        user = policy_scope(User).find(lens[:user])
         content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""

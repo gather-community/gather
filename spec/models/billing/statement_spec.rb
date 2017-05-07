@@ -7,7 +7,7 @@ module Billing
     describe "populate!" do
       it "should populate properly if previous statement" do
         prev_stmt = nil
-        Timecop.freeze(Time.now - 7.days) do
+        Timecop.freeze(Time.zone.now - 7.days) do
           prev_stmt = create(:statement, account: account)
           create(:transaction, account: account, incurred_on: "2015-01-01",
             amount: 1.23, statement: prev_stmt)
@@ -22,7 +22,7 @@ module Billing
         statement.reload
         expect(statement.transactions.sort_by(&:id)).to eq [txn2, txn3, txn4]
         expect(statement.total_due).to eq 10.23
-        expect(statement.prev_stmt_on).to eq Date.today - 7.days
+        expect(statement.prev_stmt_on).to eq (Time.zone.now - 7.days).to_date
       end
 
       it "should populate properly if no previous statement" do

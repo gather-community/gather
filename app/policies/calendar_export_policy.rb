@@ -1,5 +1,4 @@
 class CalendarExportPolicy < ApplicationPolicy
-
   def index?
     active?
   end

@@ -13,11 +13,5 @@ module Billing
     def show?
       active_admin_or_biller? || account_owner?
     end
-
-    protected
-
-    def allow_class_based_auth?
-      false
-    end
   end
 end

@@ -46,11 +46,13 @@ module Meals
 
     def by_month_no_totals_or_gaps
       @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
-        months = by_month.keys - [:all]
-        month, max = months.min, months.max
-        while month <= max do
-          result[month] = by_month[month] || {}
-          month = month >> 1
+        if by_month
+          months = by_month.keys - [:all]
+          month, max = months.min, months.max
+          while month <= max do
+            result[month] = by_month[month] || {}
+            month = month >> 1
+          end
         end
       end
     end
@@ -88,20 +90,20 @@ module Meals
           end
         ]
         data[:diners_by_weekday] = [
-          by_weekday.each_with_index.map do |k_v, i|
+          (by_weekday || {}).each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:cost_by_weekday] = [
-          by_weekday.each_with_index.map do |k_v, i|
+          (by_weekday || {}).each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:community_rep] = communities.map do |c|
-          {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]}
+          by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]} : {}
         end
         data[:diner_types] = diner_types.map do |dt|
-          {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]}
+          by_month ? {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]} : {}
         end
       end
     end

@@ -1,6 +1,8 @@
 class People::EmergencyContact < ActiveRecord::Base
   include Phoneable
 
+  acts_as_tenant(:cluster)
+
   belongs_to :household
   normalize_attributes :name, :email, :location, :relationship
   handle_phone_types :main, :alt

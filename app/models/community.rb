@@ -1,6 +1,7 @@
 class Community < ActiveRecord::Base
   include CustomFields
 
+  acts_as_tenant(:cluster)
   resourcify
 
   belongs_to :cluster, inverse_of: :communities

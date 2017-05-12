@@ -8,10 +8,15 @@
 # - Authenticate user via session unless already authenticated.
 # - Redirect to an appropriate subdomain or 404 if subdomain missing and this filter not skipped.
 # - Ensure the current_user has access to the current_community if both set.
+# - Set the current tenant (cluster) based on the current community.
 module Concerns::ApplicationController::RequestPreprocessing
   extend ActiveSupport::Concern
 
   included do
+    # This indicates to acts_as_tenant that we're planning to set the tenant via a before_action
+    # The actual before_action (set_tenant) is called below.
+    set_current_tenant_through_filter
+
     before_action :log_full_url
     before_action :set_default_nav_context
     before_action :check_subdomain_validity
@@ -19,18 +24,21 @@ module Concerns::ApplicationController::RequestPreprocessing
     before_action :authenticate_user!
     before_action :ensure_subdomain
     before_action :check_community_permissions
+    before_action :set_tenant
 
     rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   end
-  
+
   private
 
   # Currently we are only checking for calendar_token, but could add others later.
   def authenticate_user_from_token!
-    if params[:calendar_token] && user = User.find_by_calendar_token(params[:calendar_token])
-      # We are passing store false, so the user is not
-      # actually stored in the session and a token is needed for every request.
-      sign_in user, store: false
+    ActsAsTenant.without_tenant do
+      if params[:calendar_token] && user = User.find_by_calendar_token(params[:calendar_token])
+        # We are passing store false, so the user is not
+        # actually stored in the session and a token is needed for every request.
+        sign_in user, store: false
+      end
     end
   end
 
@@ -47,7 +55,9 @@ module Concerns::ApplicationController::RequestPreprocessing
   # Renders 404 if community not found.
   def check_subdomain_validity
     return unless subdomain.present?
-    self.current_community = Community.find_by(slug: subdomain)
+    ActsAsTenant.without_tenant do
+      self.current_community = Community.find_by(slug: subdomain)
+    end
     render_error_page(:not_found) if current_community.nil?
   end
 
@@ -93,6 +103,18 @@ module Concerns::ApplicationController::RequestPreprocessing
   def check_community_permissions
     return unless current_user.present? && current_community.present?
     render_error_page(:forbidden) unless policy(current_community).show?
+  end
+
+  # Set the current tenant (cluster). If current_community is not set, does nothing.
+  # Assumes that current_community would be set by now if one is required for this route.
+  # If a tenant is not set and query is attempted on a tenant-scoped model, an error will result.
+  def set_tenant
+    return unless current_community.present?
+    set_current_tenant(current_community.cluster)
+
+    # Scoping is turned off temporarily in a rack middleware to prevent NoTenantSet errors in preprocessing.
+    # We turn it back on here.
+    ActsAsTenant.unscoped = false
   end
 
   # Redirects to inactive page when user is inactive.

@@ -10,6 +10,8 @@ class Meal < ActiveRecord::Base
   PAYMENT_METHODS = %w(check credit)
   ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
+  acts_as_tenant(:cluster)
+
   serialize :allergens, JSON
 
   belongs_to :community, class_name: "Community"

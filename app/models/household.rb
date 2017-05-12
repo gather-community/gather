@@ -1,6 +1,8 @@
 class Household < ActiveRecord::Base
   include Deactivatable
 
+  acts_as_tenant(:cluster)
+
   belongs_to :community
   has_many :accounts, ->{ joins(:community).includes(:community).order("LOWER(communities.name)") },
     inverse_of: :household, class_name: "Billing::Account"

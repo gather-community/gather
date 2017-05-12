@@ -1,6 +1,8 @@
 class Assignment < ActiveRecord::Base
   ROLES = %w(head_cook asst_cook table_setter cleaner) # In order
 
+  acts_as_tenant(:cluster)
+
   belongs_to :user
   belongs_to :meal
 

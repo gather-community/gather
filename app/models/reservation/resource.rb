@@ -1,5 +1,7 @@
 module Reservation
   class Resource < ActiveRecord::Base
+    acts_as_tenant(:cluster)
+
     self.table_name = "resources"
 
     belongs_to :community

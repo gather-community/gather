@@ -12,6 +12,8 @@ module Billing
     TYPES_BY_CODE = TYPES.index_by(&:code)
     MANUALLY_ADDABLE_TYPES = TYPES.select(&:manual?)
 
+    acts_as_tenant(:cluster)
+
     belongs_to :account
     belongs_to :statement
     belongs_to :statementable, polymorphic: true

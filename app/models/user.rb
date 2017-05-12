@@ -1,9 +1,11 @@
 class User < ActiveRecord::Base
   include Deactivatable, Phoneable
-  rolify
 
   ROLES = %i(super_admin cluster_admin admin biller photographer)
   CONTACT_TYPES = %i(email text phone)
+
+  acts_as_tenant(:cluster)
+  rolify
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]

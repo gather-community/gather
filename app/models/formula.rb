@@ -1,4 +1,5 @@
 class Formula < ActiveRecord::Base
+  acts_as_tenant(:cluster)
 
   # Finds the most recent formula associated with the given meal.
   # Returns nil if none found.

@@ -13,6 +13,8 @@ class Signup < ActiveRecord::Base
     little_kid: 0
   }
 
+  acts_as_tenant(:cluster)
+
   belongs_to :meal, inverse_of: :signups
   belongs_to :household
 

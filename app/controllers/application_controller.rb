@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized,  except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
-  attr_accessor :current_community, :current_cluster
+  attr_accessor :current_community
 
   helper_method :current_community, :current_cluster, :multi_community?, :app_version
 
@@ -33,6 +33,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_cluster
-    current_community.cluster
+    current_tenant
   end
 end

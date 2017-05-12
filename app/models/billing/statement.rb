@@ -6,6 +6,8 @@ module Billing
     DEFAULT_TERMS = 30.days
     DUE_DATE_EXPR = "COALESCE(due_on, statements.created_at + INTERVAL '1' DAY * #{DEFAULT_TERMS / 1.day})"
 
+    acts_as_tenant(:cluster)
+
     belongs_to :account, inverse_of: :statements
     has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
 

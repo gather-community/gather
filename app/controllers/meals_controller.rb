@@ -183,7 +183,7 @@ class MealsController < ApplicationController
   private
 
   def init_meal
-    @meal = Meal.new_with_defaults(current_user)
+    @meal = Meal.new_with_defaults(current_community)
   end
 
   def load_meals

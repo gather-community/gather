@@ -91,11 +91,11 @@ class Meal < ActiveRecord::Base
   validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: { message: :need_location }
 
-  def self.new_with_defaults(current_user)
+  def self.new_with_defaults(community)
     new(served_at: default_datetime,
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
-      community_id: current_user.community_id)
+      community: community)
   end
 
   def self.default_datetime

@@ -64,6 +64,10 @@ describe MealPolicy do
       it "denies access to admins in other communities" do
         expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
+
+      it "grants access to outside super admins" do
+        expect(subject).to permit(outside_super_admin, Meal.new(community: community))
+      end
     end
 
     permissions :set_menu?, :close?, :reopen?, :summary? do

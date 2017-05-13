@@ -44,7 +44,7 @@ class MealPolicy < ApplicationPolicy
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    active_admin? && host?
+    active_admin? && host? || active_super_admin?
   end
 
   def destroy?

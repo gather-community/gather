@@ -3,8 +3,8 @@ require "rails_helper"
 feature "meals" do
   let(:user) { create(:user) }
   let(:cmty) { user.community }
-  let(:friend_cmty) { create(:community, cluster: cmty.cluster) }
-  let(:other_cmty) { create(:community, cluster: create(:cluster)) }
+  let(:friend_cmty) { create(:community) }
+  let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
   let!(:own_meals) { create_list(:meal, 3, community: cmty) }
   let!(:friend_meals) { create_list(:meal, 2, community: friend_cmty,
     communities: [cmty, friend_cmty]) }

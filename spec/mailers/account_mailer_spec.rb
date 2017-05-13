@@ -8,7 +8,7 @@ describe AccountMailer do
   let(:statement) { create(:statement, account: account, total_due: 9.99) }
 
   # Make separate community in cluster to test cross-community billing
-  let(:community) { create(:community, cluster: household.community.cluster) }
+  let(:community) { create(:community) }
 
   describe "statement_notice" do
     let(:mail) { described_class.statement_notice(statement).deliver_now }

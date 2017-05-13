@@ -31,7 +31,7 @@ feature "household form" do
 
   context "as cluster admin" do
     let!(:admin) { create(:cluster_admin) }
-    let!(:other_community) { create(:community, name: "Foo", cluster: admin.cluster) }
+    let!(:other_community) { create(:community, name: "Foo") }
     it_behaves_like "creating household", "Foo"
   end
 end

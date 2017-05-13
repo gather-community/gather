@@ -1,5 +1,5 @@
 def default_cluster
-  Cluster.first || create(:cluster)
+  @default_cluster ||= Cluster.find_by(name: "Default")
 end
 
 FactoryGirl.define do

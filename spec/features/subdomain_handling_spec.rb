@@ -2,11 +2,11 @@ require "rails_helper"
 
 feature "subdomain handling" do
   let(:apex) { Settings.url.host }
-  let(:cluster) { create(:cluster) }
+  let(:cluster) { default_cluster }
   let(:cluster2) { create(:cluster) }
-  let!(:home_cmty) { create(:community, slug: "foo", cluster: cluster) }
-  let!(:neighbor_cmty) { create(:community, slug: "bar", cluster: cluster) }
-  let!(:outside_cmty) { create(:community, slug: "qux", cluster: cluster2) }
+  let!(:home_cmty) { create(:community, slug: "foo") }
+  let!(:neighbor_cmty) { create(:community, slug: "bar") }
+  let!(:outside_cmty) { with_tenant(cluster2) { create(:community, slug: "qux") } }
   let(:user) { create(:user, community: home_cmty) }
 
   around do |example|

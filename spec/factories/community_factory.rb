@@ -7,6 +7,5 @@ FactoryGirl.define do
     sequence(:name) { |n| "Community #{n}" }
     sequence(:abbrv) { |n| "C#{n%10}" }
     sequence(:slug) { |n| "community#{n}" }
-    cluster
   end
 end

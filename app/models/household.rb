@@ -20,7 +20,6 @@ class Household < ActiveRecord::Base
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 
   delegate :name, :abbrv, to: :community, prefix: true
-  delegate :cluster, to: :community
 
   validates :name, presence: true, length: { maximum: 32 },
     uniqueness: { scope: :community_id, message:

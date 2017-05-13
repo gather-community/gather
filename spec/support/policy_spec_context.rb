@@ -1,15 +1,15 @@
 shared_context "policy objs" do
   subject { described_class }
-  let(:cluster) { build(:cluster, name: "Main Cluster") }
-  let(:clusterB) { build(:cluster, name: "Other Cluster") }
-  let(:community) { build(:community, name: "Community A", cluster: cluster) }
-  let(:communityB) { build(:community, name: "Community B", cluster: cluster) }
-  let(:communityX) { build(:community, name: "Community X", cluster: clusterB) }
+  let(:cluster) { default_cluster }
+  let(:clusterB) { create(:cluster, name: "Other Cluster") }
+  let(:community) { build(:community, name: "Community A") }
+  let(:communityB) { build(:community, name: "Community B") }
+  let(:communityX) { with_tenant(clusterB) { build(:community, name: "Community X") } }
 
   let(:user) { new_user_from(community, label: "user") }
   let(:other_user) { new_user_from(community, label: "other_user") }
   let(:user_in_cluster) { new_user_from(communityB, label: "user_in_cluster") }
-  let(:outside_user) { new_user_from(communityX, label: "outside_user") }
+  let(:outside_user) { with_tenant(clusterB) { new_user_from(communityX, label: "outside_user") } }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.now, label: "inactive_user") }
 
   let(:household) { build(:household, users: [user], community: community) }
@@ -22,8 +22,8 @@ shared_context "policy objs" do
   let(:other_child) { new_user_from(community, child: true, guardians: [other_user], label: "other_child") }
   let(:child_in_cluster) { new_user_from(communityB, child: true,
     guardians: [user_in_cluster], label: "child_in_cluster") }
-  let(:outside_child) { new_user_from(communityX, child: true,
-    guardians: [outside_user], label: "outside_child") }
+  let(:outside_child) { with_tenant(clusterB) { new_user_from(communityX, child: true,
+    guardians: [outside_user], label: "outside_child") } }
   let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user],
     deactivated_at: Time.now, label: "inactive_child") }
 
@@ -60,7 +60,11 @@ shared_context "policy objs" do
     objs.each do |obj|
       # If we don't do this it doesn't save correctly.
       obj.household.community_id = obj.household.community.id if obj.is_a?(User)
-      obj.save!
+      if obj.respond_to?(:cluster)
+        with_tenant(obj.cluster) { obj.save! }
+      else
+        obj.save!
+      end
     end
   end
 

@@ -149,8 +149,11 @@ describe HouseholdPolicy do
     end
 
     it "returns all communities for super admins" do
-      expect(HouseholdPolicy.new(super_admin, dummy_household).allowed_community_changes.to_a).to(
-        contain_exactly(community, communityB, communityX))
+      # This query crosses a tenant boundary so need to do it unscoped.
+      ActsAsTenant.unscoped do
+        expect(HouseholdPolicy.new(super_admin, dummy_household).allowed_community_changes.to_a).to(
+          contain_exactly(community, communityB, communityX))
+      end
     end
   end
 
@@ -196,9 +199,11 @@ describe HouseholdPolicy do
 
       context "for super admin" do
         it "returns all households" do
-          permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
-          expect(permitted).to contain_exactly(*
-            [user, other_user, user_in_cluster, outside_user].map(&:household))
+          ActsAsTenant.unscoped do
+            permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
+            expect(permitted).to contain_exactly(*
+              [user, other_user, user_in_cluster, outside_user].map(&:household))
+          end
         end
       end
 
@@ -212,14 +217,14 @@ describe HouseholdPolicy do
 
     describe "administerable" do
       let(:scope) { HouseholdPolicy::Scope }
-      let!(:cluster) { create(:cluster, name: "Main Cluster") }
+      let!(:cluster) { default_cluster }
       let!(:clusterB) { create(:cluster, name: "Other Cluster") }
-      let!(:community) { create(:community, name: "Community A", cluster: cluster) }
-      let!(:communityB) { create(:community, name: "Community B", cluster: cluster) }
-      let!(:communityX) { create(:community, name: "Community X", cluster: clusterB) }
-      let!(:household1) { create(:household, community: community) } # Main cluster
-      let!(:household2) { create(:household, community: communityB) } # Main cluster
-      let!(:household3) { create(:household, community: communityX) } # Other cluster
+      let!(:community) { create(:community, name: "Community A") }
+      let!(:communityB) { create(:community, name: "Community B") }
+      let!(:communityX) { with_tenant(clusterB) { create(:community, name: "Community X") } }
+      let!(:household1) { create(:household, community: community) }
+      let!(:household2) { create(:household, community: communityB) }
+      let!(:household3) { with_tenant(clusterB) { create(:household, community: communityX) } }
       let(:user) { create(:user, household: household1) }
       let(:admin) { create(:admin, household: household1) }
       let(:cluster_admin) { create(:cluster_admin, household: household1) }
@@ -240,8 +245,11 @@ describe HouseholdPolicy do
       end
 
       it "returns all households for super admin" do
-        results = scope.new(super_admin, Household.all).administerable
-        expect(results).to contain_exactly(household1, household2, household3)
+        # This query crosses a tenant boundary so need to do it unscoped.
+        ActsAsTenant.unscoped do
+          results = scope.new(super_admin, Household.all).administerable
+          expect(results).to contain_exactly(household1, household2, household3)
+        end
       end
     end
   end

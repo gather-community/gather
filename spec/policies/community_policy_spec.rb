@@ -9,16 +9,8 @@ describe CommunityPolicy do
     permissions :show? do
       it_behaves_like "grants access to users in cluster"
 
-      context "for outside super admin" do
-        let(:outside_super_admin) { with_tenant(clusterB) { new_user_from(communityX, label: "OSA") } }
-
-        before do
-          allow(outside_super_admin).to receive(:has_role?) { |r| r == :super_admin }
-        end
-
-        it "grants access to superadmins from outside cluster" do
-          expect(subject).to permit(outside_super_admin, record)
-        end
+      it "grants access to superadmins from outside cluster" do
+        expect(subject).to permit(outside_super_admin, record)
       end
     end
 

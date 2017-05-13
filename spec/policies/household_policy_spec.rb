@@ -39,6 +39,10 @@ describe HouseholdPolicy do
         expect(subject).to permit(user, user_in_cluster.household)
       end
 
+      it "permits outside super admins" do
+        expect(subject).to permit(outside_super_admin, user_in_cluster.household)
+      end
+
       it "denies action on households outside cluster" do
         expect(subject).not_to permit(user, outside_user.household)
       end

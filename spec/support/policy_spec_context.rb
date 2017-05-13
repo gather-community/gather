@@ -30,6 +30,8 @@ shared_context "policy objs" do
   let(:admin) { new_user_from(community, label: "admin") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
+  let(:outside_super_admin) { with_tenant(clusterB) {
+    new_user_from(communityX, label: "outside_super_admin") } }
   let(:admin_in_cluster) { new_user_from(communityB, label: "admin_in_cluster") }
 
   let(:biller) { new_user_from(community, label: "biller") }
@@ -47,6 +49,7 @@ shared_context "policy objs" do
     allow(admin_in_cluster).to receive(:has_role?) { |r| r == :admin }
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
+    allow(outside_super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(biller).to receive(:has_role?) { |r| r == :biller }
     allow(biller_in_cluster).to receive(:has_role?) { |r| r == :biller }
     allow(photographer).to receive(:has_role?) { |r| r == :photographer }

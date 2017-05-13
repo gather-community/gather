@@ -1,6 +1,6 @@
 class CommunityPolicy < ApplicationPolicy
   def show?
-    own_cluster_record?
+    own_cluster_record? || active_super_admin?
   end
 
   def update?

@@ -75,6 +75,7 @@ RSpec.configure do |config|
     example.run
   end
 
+  # We have to set a default tenant to avoid NoTenantSet errors.
   cluster = FactoryGirl.create(:cluster, name: "Default")
   config.around do |example|
     with_tenant(cluster) do

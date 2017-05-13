@@ -3,9 +3,9 @@ require "rails_helper"
 describe "admin hierarchy" do
   let(:clusterA) { create(:cluster) }
   let(:clusterB) { create(:cluster) }
-  let(:cmtyA1) { create(:community, cluster: clusterA) }
-  let(:cmtyA2) { create(:community, cluster: clusterA) }
-  let(:cmtyB) { create(:community, cluster: clusterB) }
+  let(:cmtyA1) { with_tenant(clusterA) { create(:community) } }
+  let(:cmtyA2) { with_tenant(clusterA) { create(:community) } }
+  let(:cmtyB) { with_tenant(clusterB) { create(:community) } }
   let(:recordA) { double(community: cmtyA2) }
   let(:recordB) { double(community: cmtyB) }
   let(:recordC) { double(community: nil) }

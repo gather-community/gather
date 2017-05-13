@@ -1,6 +1,8 @@
 class Formula < ActiveRecord::Base
   acts_as_tenant(:cluster)
 
+  belongs_to(:community)
+
   # Finds the most recent formula associated with the given meal.
   # Returns nil if none found.
   def self.for_meal(meal)

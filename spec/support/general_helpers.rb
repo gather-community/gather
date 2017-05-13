@@ -26,6 +26,12 @@ module GeneralHelpers
     with_subdomain(user.community.slug, &block)
   end
 
+  def with_tenant(tenant)
+    ActsAsTenant.with_tenant(tenant) do
+      yield
+    end
+  end
+
   def contain_community_url(community, path)
     include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
   end

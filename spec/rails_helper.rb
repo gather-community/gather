@@ -74,4 +74,11 @@ RSpec.configure do |config|
     host!(Settings.url.host)
     example.run
   end
+
+  cluster = FactoryGirl.create(:cluster, name: "Default")
+  config.around do |example|
+    with_tenant(cluster) do
+      example.run
+    end
+  end
 end

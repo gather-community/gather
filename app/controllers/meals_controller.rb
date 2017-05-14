@@ -1,8 +1,6 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
-  helper_method :dummy_meal
-
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
@@ -232,9 +230,5 @@ class MealsController < ApplicationController
     if !policy(@meal).administer?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
-  end
-
-  def dummy_meal
-    Meal.new(community: current_community)
   end
 end

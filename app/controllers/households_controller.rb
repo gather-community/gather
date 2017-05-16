@@ -92,6 +92,7 @@ class HouseholdsController < ApplicationController
     if @account
       @statements = @account.statements.page(1).per(StatementsController::PER_PAGE)
       @last_statement = @account.last_statement
+      @has_activity = @account.transactions.any?
     end
   end
 

@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  include AccountShowable
 
   before_action -> { nav_context(:accounts) }
 
@@ -31,8 +32,7 @@ class AccountsController < ApplicationController
     @account = Billing::Account.find(params[:id])
     @community = @account.community
     authorize @account
-    @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
-    @last_statement = @account.last_statement
+    prep_account_vars
   end
 
   def edit

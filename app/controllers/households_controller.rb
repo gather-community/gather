@@ -1,5 +1,5 @@
 class HouseholdsController < ApplicationController
-  include Lensable
+  include Lensable, AccountShowable
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 
@@ -83,17 +83,11 @@ class HouseholdsController < ApplicationController
     authorize @household
 
     @community = params[:community] ? Community.find(params[:community]) : current_user.community
-
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
     @communities = @accounts.map(&:community)
+    @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
 
-    @account = @accounts.detect{ |a| a.community_id == @community.id } || @accounts.first
-
-    if @account
-      @statements = @account.statements.page(1).per(StatementsController::PER_PAGE)
-      @last_statement = @account.last_statement
-      @has_activity = @account.transactions.any?
-    end
+    prep_account_vars if @account
   end
 
   def activate

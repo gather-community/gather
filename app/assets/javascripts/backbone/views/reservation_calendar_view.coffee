@@ -109,7 +109,8 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     $(window).width() < 640
 
   create: ->
-    window.location.href = "#{@newUrl}?#{$.param(@selection)}"
+    # newUrl includes a QS param already so we use '&'
+    window.location.href = "#{@newUrl}&#{$.param(@selection)}"
 
   initialViewType: (linkParam, defaultType) ->
     type = @forceDay() && 'day' || linkParam || @savedSettings().viewType || defaultType || 'week'

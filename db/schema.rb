@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170517021857) do
+ActiveRecord::Schema.define(version: 20170517234710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -466,12 +466,10 @@ ActiveRecord::Schema.define(version: 20170517021857) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "users_roles", id: false, force: :cascade do |t|
-    t.integer "cluster_id", null: false
     t.integer "role_id"
     t.integer "user_id"
   end
 
-  add_index "users_roles", ["cluster_id"], name: "index_users_roles_on_cluster_id", using: :btree
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
   add_foreign_key "accounts", "clusters"
@@ -529,7 +527,6 @@ ActiveRecord::Schema.define(version: 20170517021857) do
   add_foreign_key "transactions", "statements"
   add_foreign_key "users", "clusters"
   add_foreign_key "users", "households"
-  add_foreign_key "users_roles", "clusters"
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
 end

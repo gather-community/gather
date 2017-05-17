@@ -35,9 +35,18 @@ module LensHelper
     def community_field(field)
       communities = load_communities_in_cluster
       return "" if communities.size < 1
+      field.options[:subdomain] = true unless field.options.key?(:subdomain)
 
       prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")
-      selected = lens[:community] == "all" ? nil : current_community.slug
+
+      selected = if lens[:community] == "all"
+        nil
+      elsif field.options[:subdomain]
+        current_community.slug
+      else
+        lens[:community]
+      end
+
       options = prompt << options_from_collection_for_select(communities, 'slug', 'name', selected)
 
       new_url = url_for(
@@ -45,15 +54,20 @@ module LensHelper
         params: params.except(:action, :controller).merge(field.options[:required] ? {} : {community: "this"})
       )
 
-      onchange = "
-        if (this.value == 'all') {
+      onchange = if field.options[:subdomain]
+        "if (this.value == 'all') {
           this.name = 'community';
           this.form.submit();
         } else {
           window.location.href = '#{new_url}'
         }"
+      else
+        "this.form.submit();"
+      end
 
-      select_tag("", options, class: "form-control", onchange: onchange, id: "community")
+      name = field.options[:subdomain] ? "" : "community"
+
+      select_tag(name, options, class: "form-control", onchange: onchange, id: "community")
     end
 
     def user_field(field)

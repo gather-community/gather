@@ -1,23 +1,16 @@
-<% content_for(:title){ "Accounts" } %>
+<% content_for(:title) { multi_community? ? "Your #{@community.name} Account" : "Your Account" } %>
+<% content_for(:top_buttons) do %>
+  <% if @accounts.size > 1 %>
+    <%= lens_bar %>
+  <% end %>
+<% end %>
 
 <% if @accounts.empty? %>
-
   There are not yet any charges associated with your household.
-
 <% else %>
-
   <p class="subtitle">
     <%= t(".intro", count: @accounts.size) %>
   </p>
-
-  <% if @accounts.size > 1 %>
-    <form>
-      Select Community:
-      <%= select_tag(:community,
-        options_from_collection_for_select(@communities, :id, :name, @account.community_id),
-        class: "form-control", onchange: "this.form.submit()") %>
-    </form>
-  <% end %>
 
   <%= render("accounts/details", footnotes: true) %>
 <% end %>

@@ -2,7 +2,9 @@
 module Meals
   class ClosePastMealsJob
     def perform
-      Meal.open.with_min_age(Settings.meals.close_cutoff_age.hours).each { |m| m.close! }
+      ActsAsTenant.without_tenant do
+        Meal.open.with_min_age(Settings.meals.close_cutoff_age.hours).each { |m| m.close! }
+      end
     end
   end
 end

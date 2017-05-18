@@ -1,3 +1,11 @@
 <% content_for(:title){ "Create Meal" } %>
 
-<%= render('form') %>
+<% missing = [] %>
+<% missing << "an applicable meal formula" if @meal.formula.nil? %>
+<% missing << "at least one meal-hostable resource" if @resource_options.empty? %>
+
+<% if missing.any? %>
+  Before you can create a meal, <%= missing.join(" and ") %> must exist.
+<% else %>
+  <%= render("form") %>
+<% end %>

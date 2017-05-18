@@ -38,90 +38,11 @@
       </div>
     </div>
 
-    <% if @signup.allowed? && @meal.signups_editable? %>
-      <%= link_to(icon_tag('close'), "#", title: "Clear Form",
-        onclick: "$('.signup select').val(0).trigger('change');
-          $('.signup textarea').val(''); return false") %>
-    <% end %>
-
-    <h4>
-      Signups for <%= current_user.household_full_name %>
-      <%= @meal.closed? ? icon_tag("lock") : "" %>
-    </h4>
-    <% if @account.present? && @account.credit_exceeded? && @signup.new_record? %>
-      <%= t("meals.over_limit_notice_html", community: @meal.community.name,
-        account_link: link_to("account",
-          accounts_household_path(current_user.household, community: @meal.community_id)),
-        limit: number_to_currency(@account.credit_limit)) %>
-    <% elsif @signup.new_record? && @meal.full? %>
-      You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
-    <% elsif @signup.new_record? && @meal.closed? %>
-      You have not signed up for this meal and it is now closed.
+    <% if @meal.formula.nil? %>
+      <h4>Signups Not Allowed</h4>
+      Signups are not allowed for this meal because there is no applicable cost formula.
     <% else %>
-
-      <%= horizontal_form_for(@signup, width: :full, wrapper: :equal_width_form) do |f| %>
-        <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
-        <%= f.input :meal_id, as: :hidden %>
-        <%= base_error(f, full_width: true) %>
-
-        <%= f.input :spots_left do %>
-          <%= icon_tag("exclamation-circle") if @meal.full? %>
-          <strong><%= @meal.spots_left %></strong>
-        <% end %>
-
-        <div id="col-labels">
-          <span>Meat</span>
-          <span>Veg</span>
-        </div>
-
-        <% Signup::DINER_TYPES.each do |dt| %>
-          <% next unless @meal.formula.nil? || @meal.formula.allows_diner_type?(dt) %>
-
-          <%= f.input dt, label: signup_label(dt) do %>
-            <% Signup::FOOD_TYPES.each do |ft| %>
-              <% attrib = "#{dt}_#{ft}" %>
-              <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
-                <% if @meal.signups_editable? %>
-                  <%= f.select(attrib,
-                    (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
-                    { include_blank: false }, class: "select form-control") %>
-                <% else %>
-                  <% if (n = @signup[attrib]) > 0 %>
-                    <div class="ro-signup nonzero"><%= n %> <%= ft %></div>
-                  <% else %>
-                    <div class="ro-signup"></div>
-                  <% end %>
-                <% end %>
-              <% else %>
-                <div class="blank"></div>
-              <% end %>
-            <% end %>
-          <% end %>
-
-        <% end %>
-
-        <% if @meal.signups_editable? %>
-          <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>
-        <% else %>
-          <%= f.input :comments do %>
-            <%= simple_format(@signup.comments) %>
-          <% end %>
-        <% end %>
-
-        <% if @meal.signups_editable? %>
-          <%= form_actions do %>
-            <%= f.button :submit, "Save & Go To Next Meal", name: "save_and_next", class: "btn btn-default" if @next_meal %>
-            <%= f.button :submit, "Save", class: "btn btn-primary" %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= javascript_tag do %>
-        $(function(){
-          new Gather.Views.DirtyChecker({el: '.signup-form'});
-        });
-      <% end %>
-
+      <%= render("signup_form") %>
     <% end %>
   </div>
 </div>

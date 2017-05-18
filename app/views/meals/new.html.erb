@@ -1,7 +1,7 @@
 <% content_for(:title){ "Create Meal" } %>
 
 <% missing = [] %>
-<% missing << "an applicable meal formula" if @meal.formula.nil? %>
+<% missing << "an applicable cost formula" if @meal.formula.nil? %>
 <% missing << "at least one meal-hostable resource" if @resource_options.empty? %>
 
 <% if missing.any? %>

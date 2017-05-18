@@ -3,11 +3,8 @@
 <%= render("time_cook") %>
 
 <% if @meal.formula.nil? %>
-
-  <p>Meals cannot be finalized without an applicable formula.</p>
-
+  <p>Meals cannot be finalized without an applicable cost formula.</p>
 <% else %>
-
   <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
 
   <%= horizontal_form_for(@meal, width: :full, name: "finalize",
@@ -34,11 +31,11 @@
       </tr>
       <% @meal.signups.each do |signup| %>
         <%= form.fields_for(:signups, signup) do |signup_form| %>
-          <%= render("signup_fields", f: signup_form) %>
+          <%= render("finalize_signup_fields", f: signup_form) %>
         <% end %>
       <% end %>
     </table>
-    <%= link_to_add_association '+ Add Signup', form, :signups,
+    <%= link_to_add_association '+ Add Signup', form, :signups, partial: "finalize_signup_fields",
       data: {
         "association-insertion-node" => "table.index",
         "association-insertion-method" => "append"

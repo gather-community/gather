@@ -1,6 +1,6 @@
 # Sends statements to accounts from the given community with current activity.
 module Billing
-  class StatementJob
+  class StatementJob < ApplicationJob
     attr_reader :community_id
 
     def initialize(community_id)

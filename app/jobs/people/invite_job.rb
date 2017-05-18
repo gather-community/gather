@@ -1,6 +1,6 @@
 # Sends invites to the users with the given IDs.
 module People
-  class InviteJob
+  class InviteJob < ApplicationJob
     attr_reader :user_ids
 
     def initialize(user_ids)

@@ -39,14 +39,14 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
   addDinersByWeekday: (num) ->
     data = [{values: @data.diners_by_weekday[0]}]
     chart = @barChart().forceY([0,40])
-    chart.xAxis.axisLabel('Weekday').tickFormat (d) -> data[0].values[d].l
+    chart.xAxis.axisLabel('Weekday').tickFormat (d) => @tickFormat(data, d)
     chart.yAxis.axisLabel('Avg. Diners per Meal').tickValues([10,20,30,40]).tickFormat(d3.format(',.1f'))
     @addChart(num, chart, data, "Avg. Diners per #{@cmty}Meal by Weekday")
 
   addCostByWeekday: (num) ->
     data = [{values: @data.cost_by_weekday[0]}]
     chart = @barChart().forceY([0,8])
-    chart.xAxis.axisLabel('Weekday').tickFormat (d) -> data[0].values[d].l
+    chart.xAxis.axisLabel('Weekday').tickFormat (d) => @tickFormat(data, d)
     chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
     @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Weekday")
 
@@ -88,5 +88,11 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
   setMonthXAxis: (chart, data) ->
     chart.xAxis
       .axisLabel('Month')
-      .tickFormat((d) -> data[0].values[d].l) # l = Label
+      .tickFormat((d) => @tickFormat(data, d))
       .tickValues([0,3,6,9])
+
+  tickFormat: (data, d) ->
+    if d >= 0 && d < data[0].values.length
+      data[0].values[d].l  # l = Label
+    else
+      ''

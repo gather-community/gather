@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "inactive user" do
   let(:user) { create(:user, :inactive) }
+  let!(:account) { create(:account, household: user.household) }
 
   around do |example|
     stub_omniauth(google_oauth2: {email: user.google_email}) do
@@ -22,6 +23,6 @@ feature "inactive user" do
     # Can still view accounts
     click_on(user.name)
     click_on("Accounts")
-    expect(page).to have_content("Accounts")
+    expect(page).to have_content("Your Account")
   end
 end

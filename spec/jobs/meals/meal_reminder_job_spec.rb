@@ -15,7 +15,7 @@ describe Meals::MealReminderJob do
   let!(:signup4) { create(:signup, household: user2.household, meal: meal3) }
   let!(:signup5) { create(:signup, household: user4.household, meal: meal1, notified: true) }
   let(:strlen) { "Meal Reminder: Meal X".size }
-  let(:dbl) { double(deliver_now: nil) }
+  let(:mlrdbl) { double(deliver_now: nil) }
 
   around do |example|
     Timecop.freeze(Time.zone.parse("2017-01-01 00:00") + Settings.reminders.time_of_day.hours) do
@@ -24,15 +24,15 @@ describe Meals::MealReminderJob do
   end
 
   it "sends the right number of emails" do
-    expect(NotificationMailer).to receive(:meal_reminder).exactly(4).times.and_return(dbl)
+    expect(NotificationMailer).to receive(:meal_reminder).exactly(4).times.and_return(mlrdbl)
     described_class.new.perform
   end
 
   it "sends correct emails" do
-    expect(NotificationMailer).to receive(:meal_reminder).with(user1, signup1).and_return(dbl)
-    expect(NotificationMailer).to receive(:meal_reminder).with(user1, signup2).and_return(dbl)
-    expect(NotificationMailer).to receive(:meal_reminder).with(user2, signup3).and_return(dbl)
-    expect(NotificationMailer).to receive(:meal_reminder).with(user3, signup3).and_return(dbl)
+    expect(NotificationMailer).to receive(:meal_reminder).with(user1, signup1).and_return(mlrdbl)
+    expect(NotificationMailer).to receive(:meal_reminder).with(user1, signup2).and_return(mlrdbl)
+    expect(NotificationMailer).to receive(:meal_reminder).with(user2, signup3).and_return(mlrdbl)
+    expect(NotificationMailer).to receive(:meal_reminder).with(user3, signup3).and_return(mlrdbl)
     described_class.new.perform
   end
 

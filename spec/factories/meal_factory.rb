@@ -17,6 +17,12 @@ FactoryGirl.define do
       meal.resources = [create(:resource)] if meal.resources.empty? && !evaluator.no_resources
     end
 
+    trait :with_asst do
+      after(:build) do |meal|
+        meal.asst_cooks << create(:user)
+      end
+    end
+
     trait :with_menu do
       title "Yummy food"
       entrees "Good stuff"

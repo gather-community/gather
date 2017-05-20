@@ -16,7 +16,6 @@ describe Meals::MealReminderJob do
   let!(:signup5) { create(:signup, household: user4.household, meal: meal1, notified: true) }
   let(:strlen) { "Meal Reminder: Meal X".size }
   let(:dbl) { double(deliver_now: nil) }
-  subject { mails_sent }
 
   around do |example|
     Timecop.freeze(Time.zone.parse("2017-01-01 00:00") + Settings.reminders.time_of_day.hours) do

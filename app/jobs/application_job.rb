@@ -1,9 +1,17 @@
 class ApplicationJob
   def error(job, exception)
-    ExceptionNotifier.notify_exception(exception)
+    ExceptionNotifier.notify_exception(exception, data: nil)
+  end
+
+  def max_attempts
+    1
   end
 
   protected
+
+  def error_report_data
+    nil
+  end
 
   def each_community
     Cluster.all.each do |cluster|

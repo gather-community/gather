@@ -28,15 +28,11 @@ module Billing
       end
     end
 
-    def max_attempts
-      1
-    end
-
-    def error(job, exception)
-      ExceptionNotifier.notify_exception(exception, data: {community_id: community.id})
-    end
-
     private
+
+    def error_report_data
+      {community_id: community.id}
+    end
 
     def community
       @community = ActsAsTenant.without_tenant do

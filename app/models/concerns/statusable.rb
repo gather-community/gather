@@ -47,15 +47,15 @@ module Statusable
   end
 
   def past_time?
-    Time.now > served_at
+    Time.current > served_at
   end
 
   def past_day?
-    Time.now.midnight > served_at
+    Time.current.midnight > served_at
   end
 
   def past_auto_close_time?
-    Time.now > served_at - AUTO_CLOSE_LEAD_TIME
+    Time.current > served_at - AUTO_CLOSE_LEAD_TIME
   end
 
   def close_if_past_auto_close_time!

@@ -49,7 +49,7 @@ module Billing
       self.transactions = Billing::Transaction.where(account: account).no_statement.to_a
       self.total_due = prev_balance + transactions.map(&:amount).sum
       self.prev_stmt_on = account.last_statement.try(:created_on)
-      self.due_on = terms > 0 ? (Time.zone.now + terms.days).to_date : nil
+      self.due_on = terms > 0 ? (Time.current + terms.days).to_date : nil
 
       if transactions.empty? && total_due.abs < 0.01
         raise StatementError.new("Must have line items or a total due.")

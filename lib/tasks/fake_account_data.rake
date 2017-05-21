@@ -13,11 +13,11 @@ namespace :db do
         months = rand(7)
         prev_balance = nil
         months.times do |i|
-          Timecop.freeze(Time.now - (months - i).months) do
+          Timecop.freeze(Time.current - (months - i).months) do
             # Charges
             charges = rand(8)
             charges.times do
-              Timecop.freeze(Time.now + rand(28).days) do
+              Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "meal", description: Faker::Lorem.sentence(4)[0..-2],
                   incurred_on: Date.today, amount: (rand(1000).to_f + 50) / 100)
               end
@@ -26,7 +26,7 @@ namespace :db do
             # Payment
             has_balance = !(prev_balance.nil? || prev_balance == 0)
             if has_balance && prev_balance > 0
-              Timecop.freeze(Time.now + rand(28).days) do
+              Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "payment", description: "Check ##{rand(10000) + 100}",
                   incurred_on: Date.today,
                   amount: -(rand(10) < 1 ? prev_balance - 5 + rand(10) : prev_balance))
@@ -35,7 +35,7 @@ namespace :db do
 
             # Reimbursement
             if rand(20) < 1
-              Timecop.freeze(Time.now + rand(28).days) do
+              Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "reimb", description: Faker::Lorem.sentence(4)[0..-2],
                   incurred_on: Date.today,
                   amount: -(rand(10000).to_f + 5000) / 100)
@@ -44,7 +44,7 @@ namespace :db do
 
             # Statement (don't run in last month)
             if (has_balance || charges > 0) && i < months - 1
-              Timecop.freeze(Time.now + 30.days) do
+              Timecop.freeze(Time.current + 30.days) do
                 statement = Billing::Statement.new(account: account, prev_balance: prev_balance || 0)
                 statement.populate!
                 prev_balance = statement.total_due

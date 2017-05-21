@@ -1,7 +1,7 @@
 ----------------------------
 Basic Info
 ----------------------------
-Time: <%= Time.zone.now %>
+Time: <%= Time.current %>
 <% if @info[:env] && @info[:params] %>
 Location: <%= raw @info[:env]['REQUEST_URI'] %>
 Action: <%= @info[:params][:action] %>

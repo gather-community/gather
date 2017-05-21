@@ -13,7 +13,7 @@ module Reservation
     belongs_to :resource
     belongs_to :meal
 
-    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.now - age) }
+    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
     # and sponsor_community for other uses.
@@ -52,8 +52,8 @@ module Reservation
     def self.new_with_defaults(attribs)
       reservation = new(attribs)
 
-      reservation.starts_at ||= Time.zone.now.midnight + 1.week + 17.hours
-      reservation.ends_at ||= Time.zone.now.midnight + 1.week + 18.hours
+      reservation.starts_at ||= Time.current.midnight + 1.week + 17.hours
+      reservation.ends_at ||= Time.current.midnight + 1.week + 18.hours
 
       # Set fixed start/end time
       rule_set = reservation.rule_set
@@ -96,7 +96,7 @@ module Reservation
     end
 
     def recently_created?
-      Time.now - created_at < 1.hour
+      Time.current - created_at < 1.hour
     end
 
     def guidelines_ok?

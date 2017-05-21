@@ -5,7 +5,7 @@ FactoryGirl.define do
       no_resources false
     end
 
-    served_at { Time.now + 7.days }
+    served_at { Time.current + 7.days }
     capacity 64
     community { default_community }
 

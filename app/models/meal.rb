@@ -44,10 +44,10 @@ class Meal < ActiveRecord::Base
   scope :by_community, -> { joins(:community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:community).order("communities.name DESC") }
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
-  scope :past, -> { where("served_at <= ?", Time.now.midnight) }
-  scope :future, -> { where("served_at >= ?", Time.now.midnight) }
-  scope :with_min_age, ->(age) { where("served_at <= ?", Time.now - age) }
-  scope :with_max_age, ->(age) { where("served_at >= ?", Time.now - age) }
+  scope :past, -> { where("served_at <= ?", Time.current.midnight) }
+  scope :future, -> { where("served_at >= ?", Time.current.midnight) }
+  scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
+  scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
   scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
@@ -99,7 +99,7 @@ class Meal < ActiveRecord::Base
   end
 
   def self.default_datetime
-    Time.zone.now.midnight + 7.days + Meal::DEFAULT_TIME
+    Time.current.midnight + 7.days + Meal::DEFAULT_TIME
   end
 
   def self.served_within_days_from_now(days)
@@ -199,7 +199,7 @@ class Meal < ActiveRecord::Base
   end
 
   def in_past?
-    served_at && served_at < Time.now
+    served_at && served_at < Time.current
   end
 
   def menu_posted?

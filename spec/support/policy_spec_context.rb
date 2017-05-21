@@ -10,11 +10,11 @@ shared_context "policy objs" do
   let(:other_user) { new_user_from(community, label: "other_user") }
   let(:user_in_cluster) { new_user_from(communityB, label: "user_in_cluster") }
   let(:outside_user) { with_tenant(clusterB) { new_user_from(communityX, label: "outside_user") } }
-  let(:inactive_user) { new_user_from(community, deactivated_at: Time.now, label: "inactive_user") }
+  let(:inactive_user) { new_user_from(community, deactivated_at: Time.current, label: "inactive_user") }
 
   let(:household) { build(:household, users: [user], community: community) }
   let(:inactive_household) { build(:household, users: [inactive_user],
-    deactivated_at: Time.now, community: community) }
+    deactivated_at: Time.current, community: community) }
   let(:account) { build(:account, household: build(:household, community: community)) }
 
   let(:guardian) { user }
@@ -25,7 +25,7 @@ shared_context "policy objs" do
   let(:outside_child) { with_tenant(clusterB) { new_user_from(communityX, child: true,
     guardians: [outside_user], label: "outside_child") } }
   let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user],
-    deactivated_at: Time.now, label: "inactive_child") }
+    deactivated_at: Time.current, label: "inactive_child") }
 
   let(:admin) { new_user_from(community, label: "admin") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }

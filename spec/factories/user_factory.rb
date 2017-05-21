@@ -25,7 +25,7 @@ FactoryGirl.define do
     end
 
     trait :inactive do
-      deactivated_at { Time.now - 1 }
+      deactivated_at { Time.current - 1 }
     end
 
     trait :child do

@@ -27,7 +27,7 @@ module Billing
         end
 
         context "with inactive owner" do
-          before { account_owner.deactivated_at = Time.now }
+          before { account_owner.deactivated_at = Time.current }
 
           it "still grants access" do
             expect(subject).to permit(account_owner, account)

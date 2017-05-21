@@ -14,6 +14,6 @@ class ReminderJob < ApplicationJob
   end
 
   def correct_hour?
-    Rails.env.development? || Time.zone.now.hour == Settings.reminders.time_of_day
+    Rails.env.development? || Time.current.hour == Settings.reminders.time_of_day
   end
 end

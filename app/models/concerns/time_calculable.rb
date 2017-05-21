@@ -8,7 +8,7 @@ module TimeCalculable
     # within 1 day from now means any time today or tomorrow.
     # if it's 8pm on Tuesday, within 1 day from now still means any time today or tomorrow.
     def within_days_from_now(expr, days)
-      where("#{expr} BETWEEN ? AND ?", Time.now, (Time.zone.now.to_date + days + 1).to_time)
+      where("#{expr} BETWEEN ? AND ?", Time.current, (Time.current.to_date + days + 1).to_time)
     end
   end
 end

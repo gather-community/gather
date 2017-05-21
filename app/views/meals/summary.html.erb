@@ -19,7 +19,7 @@
 
 <div id="signups" class="row">
   <div class="col-sm-12">
-    <div id="gen-time">Generated: <%= Time.zone.now.to_s(:full_datetime) %></div>
+    <div id="gen-time">Generated: <%= Time.current.to_s(:full_datetime) %></div>
     <h2>Signups</h2>
     <div id="portion-counts">
       <%= portion_counts(@meal) %>

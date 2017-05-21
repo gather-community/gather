@@ -93,7 +93,7 @@ describe MealPolicy do
     permissions :reopen? do
       it "denies access to head cook if meal in past" do
         user = create(:user)
-        meal = create(:meal, served_at: Time.now - 7.days, head_cook: user, communities: [create(:community)])
+        meal = create(:meal, served_at: Time.current - 7.days, head_cook: user, communities: [create(:community)])
         expect(subject).not_to permit(user, meal)
       end
     end
@@ -139,7 +139,7 @@ describe MealPolicy do
     end
 
     context "with inactive user" do
-      before { user.deactivated_at = Time.now }
+      before { user.deactivated_at = Time.current }
 
       it "returns meals only signed up for" do
         expect(permitted).to contain_exactly(meal3)

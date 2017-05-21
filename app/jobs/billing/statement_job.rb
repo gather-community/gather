@@ -8,7 +8,7 @@ module Billing
     end
 
     def perform
-      ActsAsTenant.with_tenant(community.cluster) do
+      with_tenant_from_community_id(community_id) do
         Account.with_activity_and_users_and_no_recent_statement(community).each do |account|
           begin
             # Run in a transaction so that if there is an issue sending the statement,
@@ -30,14 +30,12 @@ module Billing
 
     private
 
-    def error_report_data
-      {community_id: community.id}
+    def community
+      Community.find(community_id)
     end
 
-    def community
-      @community = ActsAsTenant.without_tenant do
-        Community.find(community_id)
-      end
+    def error_report_data
+      {community_id: community_id}
     end
   end
 end

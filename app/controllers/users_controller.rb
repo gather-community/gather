@@ -128,7 +128,7 @@ class UsersController < ApplicationController
     if params[:to_invite].blank?
       flash[:error] = "You didn't select any users."
     else
-      Delayed::Job.enqueue(People::InviteJob.new(params[:to_invite]))
+      Delayed::Job.enqueue(People::InviteJob.new(current_community.id, params[:to_invite]))
       flash[:success] = "Invites sent."
       redirect_to(users_path)
     end

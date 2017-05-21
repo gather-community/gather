@@ -1,22 +1,18 @@
 require 'rails_helper'
 
 describe Meals::CookMenuReminderJob do
+  include_context "jobs"
+  include_context "reminder jobs"
+
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }
-  let!(:meal1) { create(:meal, meal1_traits, head_cook: user1, served_at: Time.now + 4.days) }
-  let!(:meal2) { create(:meal, meal2_traits, head_cook: user2, served_at: Time.now + 9.days) }
-  let!(:decoy) { create(:meal, head_cook: user2, cleaners: [user1], served_at: Time.now + 13.days) }
+  let!(:meal1) { create(:meal, meal1_traits, head_cook: user1, served_at: "2017-01-05") }
+  let!(:meal2) { create(:meal, meal2_traits, head_cook: user2, served_at: "2017-01-10") }
+  let!(:decoy) { create(:meal, head_cook: user2, cleaners: [user1], served_at: "2017-01-14") }
   subject { mails_sent }
 
-  around do |example|
-    Timecop.freeze(Time.zone.now.midnight + hour.hours) do
-      example.run
-    end
-  end
-
+  # reminder jobs shared context sets correct time by default
   context "at correct hour" do
-    let(:hour) { Settings.reminders.time_of_day }
-
     context "both meals without menus" do
       let(:meal1_traits) { nil }
       let(:meal2_traits) { nil }
@@ -58,18 +54,19 @@ describe Meals::CookMenuReminderJob do
   end
 
   context "at incorrect hour" do
-    let(:hour) { Settings.reminders.time_of_day + 2 }
     let(:meal1_traits) { nil }
     let(:meal2_traits) { nil }
 
     it "should send to neither meal" do
-      expect(subject).to be_empty
+      Timecop.freeze(2.hours) do
+        expect(subject).to be_empty
+      end
     end
   end
 
   def mails_sent
     old_count = ActionMailer::Base.deliveries.size
-    Meals::CookMenuReminderJob.new.perform
+    perform_job
     ActionMailer::Base.deliveries[old_count..-1] || []
   end
 end

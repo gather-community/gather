@@ -22,4 +22,10 @@ class ApplicationJob
       end
     end
   end
+
+  # Not all jobs will need this, but this is a useful method if they do.
+  def with_tenant_from_community_id(community_id)
+    community = ActsAsTenant.without_tenant { Community.find(community_id) }
+    ActsAsTenant.with_tenant(community.cluster) { yield }
+  end
 end

@@ -1,17 +1,12 @@
 require 'rails_helper'
 
 describe Billing::StatementReminderJob do
-  let(:mlrdbl) { double(deliver_now: nil) }
-
-  around do |example|
-    Timecop.freeze(Time.zone.parse("2017-01-01 00:00") + Settings.reminders.time_of_day.hours) do
-      example.run
-    end
-  end
+  include_context "jobs"
+  include_context "reminder jobs"
 
   it "should send no emails if no statements" do
     expect(AccountMailer).not_to receive(:statement_reminder)
-    described_class.new.perform
+    perform_job
   end
 
   context "some matching statements" do
@@ -31,15 +26,15 @@ describe Billing::StatementReminderJob do
 
     it "should send two reminders the first time, then none the second time" do
       expect(AccountMailer).to receive(:statement_reminder).exactly(2).times.and_return(mlrdbl)
-      described_class.new.perform
+      perform_job
       expect(AccountMailer).not_to receive(:statement_reminder)
-      described_class.new.perform
+      perform_job
     end
 
     it "should send the right statements" do
       expect(AccountMailer).to receive(:statement_reminder).with(s1).and_return(mlrdbl)
       expect(AccountMailer).to receive(:statement_reminder).with(s2).and_return(mlrdbl)
-      described_class.new.perform
+      perform_job
     end
   end
 end

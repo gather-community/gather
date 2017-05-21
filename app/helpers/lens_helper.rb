@@ -85,7 +85,8 @@ module LensHelper
         data: {
           "select2-src" => "users",
           "select2-prompt" => t("select2_prompts.user"),
-          "select2-variable-width" => "true"
+          "select2-variable-width" => "true",
+          "select2-context" => "lens"
         }
       )
     end

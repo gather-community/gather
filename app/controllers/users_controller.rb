@@ -30,8 +30,16 @@ class UsersController < ApplicationController
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
       end
 
-      # For select2 user lookups
+      # For select2 lookups
       format.json do
+        @users = case params[:context]
+        when "lens", "res_sponsor", "reserver_this_cmty", "guardian"
+          @users.in_community(current_community).adults
+        when "reserver_any_cmty"
+          @users.adults
+        else
+          raise "invalid select2 context"
+        end
         @users = @users.matching(params[:search]).active
         @users = @users.can_be_guardian if params[:context] == "guardian"
         @users = @users.in_community(params[:community_id]) if params[:community_id]

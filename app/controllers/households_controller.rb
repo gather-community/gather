@@ -14,6 +14,8 @@ class HouseholdsController < ApplicationController
         @households = @households.matching(lens[:search]) if lens[:search].present?
         @households = @households.by_active_and_name.page(params[:page])
       end
+
+      # For select2 lookups
       format.json do
         @households = @households.active.matching(params[:search])
         @households = case params[:context]

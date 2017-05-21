@@ -1,53 +1,55 @@
-<% if @statements.any? %>
+<% if @has_activity %>
   <div class="row">
+    <% if @last_statement %>
+      <div class="col-sm-6">
+        <h4>
+          Current Statement&nbsp;
+          <%= link_to("View", statement_path(@last_statement)) %>
+        </h4>
+
+        <table class="key-value">
+          <tr>
+            <td>Statement Date</td>
+            <td>
+              <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+            </td>
+          </tr>
+          <tr>
+            <td>Payments/Credits</td>
+            <td>
+              <%= @last_statement ? currency_with_cr(@last_statement.total_credits) : "N/A" %>
+            </td>
+          </tr>
+          <tr>
+            <td>Charges</td>
+            <td>
+              <%= @last_statement ? currency_with_cr(@last_statement.total_charges) : "N/A" %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Pay This Amount</strong></td>
+            <td>
+              <strong><%= currency_with_cr(@account.balance_due) %></strong>
+              <% if footnotes && @account.balance_due >= 0.01 %>
+                <strong>*</strong>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+
+        <% if footnotes && @account.balance_due >= 0.01 %>
+          <div class="footnote">
+            <strong>*</strong> This is the amount you currently owe. It is the amount due on your last
+            statement minus any payments received since then.
+            If you have already sent payment but it is not reflected here, please disregard.
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="col-sm-6">
       <h4>
-        Current Statement&nbsp;
-        <%= link_to("View", statement_path(@last_statement)) %>
-      </h4>
-
-      <table class="key-value">
-        <tr>
-          <td>Statement Date</td>
-          <td>
-            <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
-          </td>
-        </tr>
-        <tr>
-          <td>Payments/Credits</td>
-          <td>
-            <%= @last_statement ? currency_with_cr(@last_statement.total_credits) : "N/A" %>
-          </td>
-        </tr>
-        <tr>
-          <td>Charges</td>
-          <td>
-            <%= @last_statement ? currency_with_cr(@last_statement.total_charges) : "N/A" %>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>Pay This Amount</strong></td>
-          <td>
-            <strong><%= currency_with_cr(@account.balance_due) %></strong>
-            <% if footnotes && @account.balance_due >= 0.01 %>
-              <strong>*</strong>
-            <% end %>
-          </td>
-        </tr>
-      </table>
-
-      <% if footnotes && @account.balance_due >= 0.01 %>
-        <div class="footnote">
-          <strong>*</strong> This is the amount you currently owe. It is the amount due on your last
-          statement minus any payments received since then.
-          If you have already sent payment but it is not reflected here, please disregard.
-        </div>
-      <% end %>
-    </div>
-
-    <div class="col-sm-6">
-      <h4>
-        Activity Since Current Statement&nbsp;
+        <%= @last_statement ? "Activity Since Current Statement" : "Recent Activity" %>&nbsp;
         <%= link_to("View", account_transactions_path(@account)) %>
       </h4>
 
@@ -68,7 +70,7 @@
           <td>Current Balance</td>
           <td>
             <%= currency_with_cr(@account.current_balance) %>
-            <% if footnotes && @account.current_balance >= 0.01 %>
+            <% if cr_lim_footnote = footnotes && @account.current_balance >= 0.01 && @account.credit_limit %>
               <strong>**</strong>
             <% end %>
           </td>
@@ -80,7 +82,7 @@
           </td>
         </tr>
       </table>
-      <% if footnotes && @account.current_balance >= 0.01 %>
+      <% if cr_lim_footnote %>
         <div class="footnote">
           <strong>**</strong> This balance includes charges and credits since your last statement.
             If it exceeds your credit limit, you will not be able to sign up for meals.
@@ -89,21 +91,23 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-sm-6">
-      <h4 class="inner">All Statements</h4>
+  <% if @statements.any? %>
+    <div class="row">
+      <div class="col-sm-6">
+        <h4 class="inner">All Statements</h4>
 
-      <table class="index">
-        <tr>
-          <th>Date</th>
-          <th>Activity</th>
-          <th>Total Due</th>
-        </tr>
-        <%= render("statements/statement_rows") %>
-      </table>
+        <table class="index">
+          <tr>
+            <th>Date</th>
+            <th>Activity</th>
+            <th>Total Due</th>
+          </tr>
+          <%= render("statements/statement_rows") %>
+        </table>
+      </div>
+      <div class="col-sm-6"><%= payment_instructions %></div>
     </div>
-    <div class="col-sm-6"><%= payment_instructions %></div>
-  </div>
+  <% end %>
 <% else %>
   There is no activity on this account.
 <% end %>

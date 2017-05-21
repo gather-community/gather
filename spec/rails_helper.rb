@@ -58,8 +58,28 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Warden::Test::Helpers
   config.include FeatureSpecHelpers, type: :feature
-  config.include DeviseRequestSpecHelpers, type: :request
+  config.include RequestSpecHelpers, type: :request
   config.include GeneralHelpers
 
-  Capybara.javascript_driver = :poltergeist
+  Capybara.configure do |config|
+    config.always_include_port = true
+    config.javascript_driver = :poltergeist
+    config.app_host = "http://#{Settings.url.host}"
+    config.server_port = Settings.url.port
+  end
+
+  # We use an around block here because we are using around blocks to set
+  # subdomain and this needs to run first.
+  config.around type: :request do |example|
+    host!(Settings.url.host)
+    example.run
+  end
+
+  # We have to set a default tenant to avoid NoTenantSet errors.
+  cluster = FactoryGirl.create(:cluster, name: "Default")
+  config.around do |example|
+    with_tenant(cluster) do
+      example.run
+    end
+  end
 end

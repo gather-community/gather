@@ -233,10 +233,13 @@ describe UserPolicy do
 
     context "for super admin" do
       it "returns all users" do
-        permitted = UserPolicy::Scope.new(super_admin, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
-          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster,
-          outside_user, outside_child)
+        # This query crosses a tenant boundary so need to do it unscoped.
+        ActsAsTenant.unscoped do
+          permitted = UserPolicy::Scope.new(super_admin, User.all).resolve
+          expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+            admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster,
+            outside_user, outside_child)
+        end
       end
     end
 

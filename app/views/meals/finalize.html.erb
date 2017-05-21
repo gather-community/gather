@@ -2,59 +2,63 @@
 
 <%= render("time_cook") %>
 
-<p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
+<% if @meal.formula.nil? %>
+  <p>Meals cannot be finalized without an applicable cost formula.</p>
+<% else %>
+  <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
 
-<%= horizontal_form_for(@meal, width: :full, name: "finalize",
-  url: do_finalize_meal_path(@meal), method: :put) do |form| %>
-  <table class="index">
-    <tr>
-      <th rowspan="2">Household</th>
-      <% Signup::DINER_TYPES.each do |dt| %>
-        <% if @meal.formula.nil? || @meal.formula.allows_diner_type?(dt) %>
-          <th class="diner-type" colspan="2"><%= t("signups.diner_types.#{dt}", count: 1) %></th>
-        <% end %>
-      <% end %>
-      <th></th>
-    </tr>
-    <tr>
-      <% Signup::DINER_TYPES.each do |dt| %>
-        <% Signup::FOOD_TYPES.each do |ft| %>
-          <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
-            <th class="food-type"><%= t("signups.food_types.#{ft}", count: 1) %></th>
+  <%= horizontal_form_for(@meal, width: :full, name: "finalize",
+    url: do_finalize_meal_path(@meal), method: :put) do |form| %>
+    <table class="index">
+      <tr>
+        <th rowspan="2">Household</th>
+        <% Signup::DINER_TYPES.each do |dt| %>
+          <% if @meal.formula.allows_diner_type?(dt) %>
+            <th class="diner-type" colspan="2"><%= t("signups.diner_types.#{dt}", count: 1) %></th>
           <% end %>
         <% end %>
+        <th></th>
+      </tr>
+      <tr>
+        <% Signup::DINER_TYPES.each do |dt| %>
+          <% Signup::FOOD_TYPES.each do |ft| %>
+            <% if @meal.formula.allows_signup_type?(dt, ft) %>
+              <th class="food-type"><%= t("signups.food_types.#{ft}", count: 1) %></th>
+            <% end %>
+          <% end %>
+        <% end %>
+        <th></th>
+      </tr>
+      <% @meal.signups.each do |signup| %>
+        <%= form.fields_for(:signups, signup) do |signup_form| %>
+          <%= render("finalize_signup_fields", f: signup_form) %>
+        <% end %>
       <% end %>
-      <th></th>
-    </tr>
-    <% @meal.signups.each do |signup| %>
-      <%= form.fields_for(:signups, signup) do |signup_form| %>
-        <%= render("signup_fields", f: signup_form) %>
+    </table>
+    <%= link_to_add_association '+ Add Signup', form, :signups, partial: "finalize_signup_fields",
+      data: {
+        "association-insertion-node" => "table.index",
+        "association-insertion-method" => "append"
+      } %>
+
+    <h4>Cook Reimbursement Request</h4>
+    <div id="reimb-fields">
+      <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
+        <%= mc_form.input(:ingredient_cost) %>
+        <%= mc_form.input(:pantry_cost) %>
+        <%= mc_form.input(:payment_method, collection: payment_method_options, as: :radio_buttons) %>
       <% end %>
-    <% end %>
-  </table>
-  <%= link_to_add_association '+ Add Signup', form, :signups,
-    data: {
-      "association-insertion-node" => "table.index",
-      "association-insertion-method" => "append"
-    } %>
+    </div>
 
-  <h4>Cook Reimbursement Request</h4>
-  <div id="reimb-fields">
-    <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
-      <%= mc_form.input(:ingredient_cost) %>
-      <%= mc_form.input(:pantry_cost) %>
-      <%= mc_form.input(:payment_method, collection: payment_method_options, as: :radio_buttons) %>
+    <%= form_actions do %>
+      <%= form.button :submit, "Save", class: "btn-primary" %>
     <% end %>
-  </div>
-
-  <%= form_actions do %>
-    <%= form.button :submit, "Save", class: "btn-primary" %>
   <% end %>
-<% end %>
 
-<%= javascript_tag do %>
-  $(function(){
-    new Gather.Views.Select2View({el: 'table.index'});
-    new Gather.Views.DirtyChecker({el: '.finalize-form'});
-  });
+  <%= javascript_tag do %>
+    $(function(){
+      new Gather.Views.Select2View({el: 'table.index'});
+      new Gather.Views.DirtyChecker({el: '.finalize-form'});
+    });
+  <% end %>
 <% end %>

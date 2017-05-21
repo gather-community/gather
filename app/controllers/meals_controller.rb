@@ -8,15 +8,15 @@ class MealsController < ApplicationController
   def index
     prepare_lens(:search, :time, :community)
 
-    authorize Meal
+    authorize dummy_meal
     load_meals
     load_communities_in_cluster
   end
 
   def jobs
-    authorize Meal, :index?
+    authorize dummy_meal
     nav_context(:meals, :jobs)
-    prepare_lens(:user, :time, :community)
+    prepare_lens(:user, :time, community: {required: true})
     @user = User.find(lens[:user]) if lens[:user].present?
     load_meals
     load_communities_in_cluster
@@ -30,16 +30,16 @@ class MealsController < ApplicationController
     set_no_cache unless @meal.in_past?
 
     @signup = Signup.for(current_user, @meal)
-    @account = current_user.account_for(@meal.host_community)
+    @account = current_user.account_for(@meal.community)
     load_signups
     load_prev_next_meal
   end
 
   def reports
-    authorize Meal, :reports?
+    authorize dummy_meal, :reports?
+    @community = current_community
     nav_context(:meals, :reports)
     prepare_lens(community: {required: true})
-    load_community_from_lens_with_default
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
   end
@@ -60,7 +60,7 @@ class MealsController < ApplicationController
 
   def create
     @meal = Meal.new(
-      host_community_id: current_user.community_id,
+      community_id: current_user.community_id,
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))
@@ -166,16 +166,31 @@ class MealsController < ApplicationController
     {mode: params[:mode]}
   end
 
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show", "summary"
+      Meal.find_by(id: params[:id]).try(:community)
+    when "index", "jobs", "reports"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   def init_meal
-    @meal = Meal.new_with_defaults(current_user)
+    @meal = Meal.new_with_defaults(current_community)
   end
 
   def load_meals
     @meals = policy_scope(Meal)
+    @meals = @meals.hosted_by(lens[:community] == "all" ? current_cluster.communities : current_community)
+    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
+
     if lens[:time] == "finalizable"
-      @meals = @meals.finalizable.where(host_community_id: current_user.community_id).oldest_first
+      @meals = @meals.finalizable.where(community_id: current_community).oldest_first
     elsif lens[:time] == "past"
       @meals = @meals.past.newest_first
     elsif lens[:time] == "all"
@@ -190,13 +205,11 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
-    @meals = @meals.hosted_by(Community.find_by_abbrv(lens[:community])) if lens[:community].present?
     @meals = @meals.page(params[:page])
   end
 
   def load_signups
-    @signups = @meal.signups.host_community_first(@meal.host_community).sorted
+    @signups = @meal.signups.community_first(@meal.community).sorted
   end
 
   def prep_form_vars

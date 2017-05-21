@@ -3,16 +3,33 @@ require "rails_helper"
 describe "admin hierarchy" do
   let(:clusterA) { create(:cluster) }
   let(:clusterB) { create(:cluster) }
-  let(:cmtyA1) { create(:community, cluster: clusterA) }
-  let(:cmtyA2) { create(:community, cluster: clusterA) }
-  let(:cmtyB) { create(:community, cluster: clusterB) }
+  let(:cmtyA1) { with_tenant(clusterA) { create(:community) } }
+  let(:cmtyA2) { with_tenant(clusterA) { create(:community) } }
+  let(:cmtyB) { with_tenant(clusterB) { create(:community) } }
   let(:recordA) { double(community: cmtyA2) }
   let(:recordB) { double(community: cmtyB) }
   let(:recordC) { double(community: nil) }
 
   shared_examples_for "admin for class and scope" do
-    it "should be admin for class" do
-      expect(ApplicationPolicy.new(user, Object).send(:active_admin?)).to be true
+    context "default" do
+      it "should error unless user is superadmin" do
+        unless user.has_role?(:super_admin)
+          expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }.to raise_error(
+            ApplicationPolicy::CommunityNotSetError)
+        end
+      end
+    end
+
+    context "when allowing class-based auth" do
+      let(:policy) { ApplicationPolicy.new(user, Object) }
+
+      before do
+        allow(policy).to receive(:allow_class_based_auth?).and_return(true)
+      end
+
+      it "should be admin for class" do
+        expect(policy.send(:active_admin?)).to be true
+      end
     end
 
     it "should be admin for scope" do

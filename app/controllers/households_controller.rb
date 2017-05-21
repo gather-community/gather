@@ -1,27 +1,30 @@
 class HouseholdsController < ApplicationController
-  include Lensable
+  include Lensable, AccountShowable
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 
   def index
-    authorize Household
+    authorize Household.new(community: current_community)
     @households = policy_scope(Household)
     respond_to do |format|
       format.html do
         prepare_lens({community: {required: true}}, :search)
         @households = @households.includes(users: :children)
-        if lens[:search].present?
-          @households = @households.matching(lens[:search])
-        end
-        if lens[:community].present?
-          @households = @households.in_community(Community.find_by_abbrv(lens[:community]))
-        end
+        @households = @households.in_community(current_community)
+        @households = @households.matching(lens[:search]) if lens[:search].present?
         @households = @households.by_active_and_name.page(params[:page])
       end
+
+      # For select2 lookups
       format.json do
         @households = @households.active.matching(params[:search])
-        if params[:context] == "user_form"
-          @households = HouseholdPolicy::Scope.new(current_user, @households).administerable
+        @households = case params[:context]
+        when "finalize"
+          @households # No further scoping needed for finalize
+        when "user_form"
+          HouseholdPolicy::Scope.new(current_user, @households).administerable
+        else
+          raise "invalid select2 context"
         end
         @households = @households.by_commty_and_name.page(params[:page]).per(20)
         render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
@@ -31,7 +34,7 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Household.find(params[:id])
-    @members = showable_users_and_children_in(@household)
+    @members = load_showable_users_and_children_in(@household)
     authorize @household
   end
 
@@ -86,17 +89,13 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     authorize @household
 
-    @community = params[:community] ? Community.find(params[:community]) : current_user.community
-
+    prepare_lens(community: {required: true, subdomain: false})
+    @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
     @communities = @accounts.map(&:community)
+    @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
 
-    @account = @accounts.detect{ |a| a.community_id == @community.id } || @accounts.first
-
-    if @account
-      @statements = @account.statements.page(1).per(StatementsController::PER_PAGE)
-      @last_statement = @account.last_statement
-    end
+    prep_account_vars if @account
   end
 
   def activate
@@ -115,6 +114,20 @@ class HouseholdsController < ApplicationController
     redirect_to(households_path)
   end
 
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show", "accounts"
+      Household.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
+    end
+  end
+
   private
 
   def household_attributes
@@ -124,7 +137,8 @@ class HouseholdsController < ApplicationController
   end
 
   def prepare_household_form
-    @allowed_community_changes = policy(Household).allowed_community_changes.by_name
+    dummy_household = Household.new(community: current_community)
+    @allowed_community_changes = policy(dummy_household).allowed_community_changes.by_name
     @household.vehicles.build if @household.vehicles.empty?
     @household.emergency_contacts.build if @household.emergency_contacts.empty?
   end

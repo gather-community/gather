@@ -1,6 +1,10 @@
 require "rails_helper"
 
 feature "household form" do
+  around do |example|
+    with_user_home_subdomain(admin) { example.run }
+  end
+
   shared_examples_for "creating household" do |community_name|
     before do
       login_as(admin, scope: :user)
@@ -14,6 +18,7 @@ feature "household form" do
       fill_in("Garage Number(s)", with: "7")
       click_on("Create Household")
       expect_success
+      select(community_name, from: "community")
       click_on("Pump")
       expect(page).to have_css("table.key-value", text: community_name) if community_name
     end
@@ -26,7 +31,7 @@ feature "household form" do
 
   context "as cluster admin" do
     let!(:admin) { create(:cluster_admin) }
-    let!(:other_community) { create(:community, name: "Foo", cluster: admin.cluster) }
+    let!(:other_community) { create(:community, name: "Foo") }
     it_behaves_like "creating household", "Foo"
   end
 end

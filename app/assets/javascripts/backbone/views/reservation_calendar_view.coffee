@@ -7,6 +7,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   initialize: (options) ->
     @newUrl = options.newUrl
+    @baseUrl = options.baseUrl
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
     @resourceId = options.resourceId
@@ -108,15 +109,15 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     $(window).width() < 640
 
   create: ->
-    window.location.href = "#{@newUrl}?#{$.param(@selection)}"
+    # newUrl includes a QS param already so we use '&'
+    window.location.href = "#{@newUrl}&#{$.param(@selection)}"
 
   initialViewType: (linkParam, defaultType) ->
     type = @forceDay() && 'day' || linkParam || @savedSettings().viewType || defaultType || 'week'
     @URL_PARAMS_TO_VIEW_TYPES[type]
 
   permalink: ->
-    base = [location.protocol, '//', location.host, location.pathname].join('')
-    "#{base}?view=#{@viewType()}&date=#{@currentDate()}"
+    @baseUrl.replace("placeholder=xxx", "view=#{@viewType()}&date=#{@currentDate()}")
 
   viewType: ->
     @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()

@@ -33,20 +33,46 @@ module LensHelper
     end
 
     def community_field(field)
-      communities = Community.by_name
+      communities = load_communities_in_cluster
       return "" if communities.size < 1
+      field.options[:subdomain] = true unless field.options.key?(:subdomain)
 
-      select_tag("community",
-        options_from_collection_for_select(communities, 'lc_abbrv', 'name', lens[:community]),
-        prompt: field.options[:required] ? nil : "All Communities",
-        class: "form-control",
-        onchange: "this.form.submit();"
+      prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")
+
+      selected = if lens[:community] == "all"
+        nil
+      elsif field.options[:subdomain]
+        current_community.slug
+      else
+        lens[:community]
+      end
+
+      options = prompt << options_from_collection_for_select(communities, 'slug', 'name', selected)
+
+      new_url = url_for(
+        host: "' + this.value + '.#{Settings.url.host}",
+        params: params.except(:action, :controller).merge(field.options[:required] ? {} : {community: "this"})
       )
+
+      onchange = if field.options[:subdomain]
+        "if (this.value == 'all') {
+          this.name = 'community';
+          this.form.submit();
+        } else {
+          window.location.href = '#{new_url}'
+        }"
+      else
+        "this.form.submit();"
+      end
+
+      name = field.options[:subdomain] ? "" : "community"
+
+      select_tag(name, options, class: "form-control", onchange: onchange, id: "community")
     end
 
     def user_field(field)
       selected_option_tag = if lens[:user].present?
-        user = User.find(lens[:user])
+        user = policy_scope(User).find(lens[:user])
         content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""
@@ -59,7 +85,8 @@ module LensHelper
         data: {
           "select2-src" => "users",
           "select2-prompt" => t("select2_prompts.user"),
-          "select2-variable-width" => "true"
+          "select2-variable-width" => "true",
+          "select2-context" => "lens"
         }
       )
     end

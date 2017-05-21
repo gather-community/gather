@@ -40,7 +40,7 @@ class ReservationsController < ApplicationController
       end
     else
       prepare_lens(community: {required: true})
-      load_community_from_lens_with_default
+      @community = current_community
 
       authorize Reservation::Reservation
 
@@ -123,7 +123,21 @@ class ReservationsController < ApplicationController
     authorize @reservation
     @reservation.destroy
     flash[:success] = "Reservation deleted successfully."
-    redirect_to(reservations_path_for_resource(@reservation.resource))
+    redirect_to(reservations_path(resource_id: @reservation.resource_id))
+  end
+
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show"
+      Reservation::Reservation.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
+    end
   end
 
   private
@@ -146,7 +160,7 @@ class ReservationsController < ApplicationController
   end
 
   def redirect_to_reservation_in_context(reservation)
-    redirect_to reservations_path_for_resource(reservation.resource,
+    redirect_to reservations_path(resource_id: reservation.resource_id,
       date: reservation.starts_at.to_s(:url_date))
   end
 end

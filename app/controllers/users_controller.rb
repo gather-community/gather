@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   include Lensable
 
+  helper_method :dummy_user
+
   before_action -> { nav_context(:people, :directory) }
 
   def index
@@ -9,25 +11,35 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
-        load_community_from_lens_with_default
+        @community = current_community
         load_communities_in_cluster
-        lens.remove_field(:life_stage) unless policy(User).index_children_for_community?(@community)
+        lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
         @users = @users.includes(household: :community)
         @users = @users.in_community(@community)
         @users = @users.matching(lens[:search]) if lens[:search].present?
         @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
-        @users = @users.active unless policy(User).administer? # Regular folks don't care about inactives
+        # Regular folks don't care about inactives
+        @users = @users.active unless policy(dummy_user).administer?
         if lens[:user_sort].present?
           @users = @users.by_active.sorted_by(lens[:user_sort])
         else
           @users = @users.by_active.by_name
         end
         @users = @users.page(params[:page]).per(36)
-        @allowed_community_changes = policy(Household).allowed_community_changes
+        dummy_household = Household.new(community: current_community)
+        @allowed_community_changes = policy(dummy_household).allowed_community_changes
       end
 
-      # For select2 user lookups
+      # For select2 lookups
       format.json do
+        @users = case params[:context]
+        when "lens", "res_sponsor", "reserver_this_cmty", "guardian"
+          @users.in_community(current_community).adults
+        when "reserver_any_cmty"
+          @users.adults
+        else
+          raise "invalid select2 context"
+        end
         @users = @users.matching(params[:search]).active
         @users = @users.can_be_guardian if params[:context] == "guardian"
         @users = @users.in_community(params[:community_id]) if params[:community_id]
@@ -41,7 +53,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     authorize @user
     @households_and_members = @user.all_households.map do |h|
-      [h, showable_users_and_children_in(h)]
+      [h, load_showable_users_and_children_in(h)]
     end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
   end
@@ -114,19 +126,33 @@ class UsersController < ApplicationController
   end
 
   def invite
-    authorize User
-    @users = User.adults.never_logged_in.active.by_community_and_name
+    authorize dummy_user
+    @users = User.adults.never_signed_in.active.by_name
   end
 
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
-    authorize User
+    authorize dummy_user
     if params[:to_invite].blank?
       flash[:error] = "You didn't select any users."
     else
-      Delayed::Job.enqueue(People::InviteJob.new(params[:to_invite]))
+      Delayed::Job.enqueue(People::InviteJob.new(current_community.id, params[:to_invite]))
       flash[:success] = "Invites sent."
       redirect_to(users_path)
+    end
+  end
+
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "show"
+      User.find_by(id: params[:id]).try(:community)
+    when "index"
+      current_user.community
+    else
+      nil
     end
   end
 
@@ -198,5 +224,9 @@ class UsersController < ApplicationController
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?
     @user.household.emergency_contacts.build if @user.household.emergency_contacts.empty?
+  end
+
+  def dummy_user
+    User.new(household: Household.new(community: current_community))
   end
 end

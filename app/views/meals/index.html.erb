@@ -2,7 +2,9 @@
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
   <%= calendar_exports_link %>
-  <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") if policy(Meal).create? %>
+  <% if policy(dummy_meal).create? %>
+    <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") %>
+  <% end %>
 <% end %>
 
 <% if @meals.empty? %>
@@ -11,42 +13,46 @@
   </div>
 <% else %>
   <table class="index non-mobile">
-    <tr>
-      <th class="nowrap">Date/Time</th>
-      <th>Location</th>
-      <th>Cook</th>
-      <th>Title</th>
-      <th>Going?</th>
-      <th>Signups</th>
-    </tr>
-    <% @meals.each do |meal| %>
-      <tr class="<%= signed_up_class(meal) %>">
-        <td class="nowrap"><%= meal_date_time(meal) %></td>
-        <td><%= meal.location_abbrv %></td>
-        <td><%= meal.head_cook_name %></td>
-        <td>
-          <%= meal_link(meal) %>
-          <%= icon_tag("lock") if meal.closed? %>
-          <%= icon_tag("certificate") if meal.finalized? %>
-        </td>
-        <td>
-          <% if signup = meal.signup_for(current_user.household) %>
-            <% if meal.signups_editable? %>
-              <%= link_to(signup_info(signup), meal_path(meal)) %>
-            <% else %>
-              <%= signup_info(signup) %>
-            <% end %>
-          <% elsif meal.full? %>
-            <span class="weak">[Full]</span>
-          <% elsif meal.new_signups_allowed? %>
-            <%= signup_link(meal) %>
-          <% else %>
-            No
-          <% end %>
-        </td>
-        <td><%= signup_count(meal) %></td>
+    <thead>
+      <tr>
+        <th class="nowrap">Date/Time</th>
+        <th>Location</th>
+        <th>Cook</th>
+        <th>Title</th>
+        <th>Going?</th>
+        <th>Signups</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% @meals.each do |meal| %>
+        <tr class="<%= signed_up_class(meal) %>">
+          <td class="nowrap"><%= meal_date_time(meal) %></td>
+          <td><%= meal.location_abbrv %></td>
+          <td><%= meal.head_cook_name %></td>
+          <td>
+            <%= meal_link(meal) %>
+            <%= icon_tag("lock") if meal.closed? %>
+            <%= icon_tag("certificate") if meal.finalized? %>
+          </td>
+          <td>
+            <% if signup = meal.signup_for(current_user.household) %>
+              <% if meal.signups_editable? %>
+                <%= link_to(signup_info(signup), meal_url(meal)) %>
+              <% else %>
+                <%= signup_info(signup) %>
+              <% end %>
+            <% elsif meal.full? %>
+              <span class="weak">[Full]</span>
+            <% elsif meal.new_signups_allowed? %>
+              <%= signup_link(meal) %>
+            <% else %>
+              No
+            <% end %>
+          </td>
+          <td><%= signup_count(meal) %></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 
   <div class="meals-list mobile">
@@ -64,7 +70,7 @@
         <% if signup = meal.signup_for(current_user.household) %>
           <div class="signed-up">
             <%= signup_info(signup) %> signed up from your household
-            <%= link_to("(Edit)", meal_path(meal)) if meal.signups_editable? %>
+            <%= link_to("(Edit)", meal_url(meal)) if meal.signups_editable? %>
           </div>
         <% elsif meal.full? %>
           <span class="weak">[Full]</span>

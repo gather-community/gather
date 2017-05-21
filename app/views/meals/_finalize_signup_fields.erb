@@ -9,14 +9,15 @@
         class: "form-control", data: {
           "select2-src" => "households",
           "select2-label-attr" => "full_name",
-          "select2-prompt" => t("select2_prompts.household")
+          "select2-prompt" => t("select2_prompts.household"),
+          "select2-context" => "finalize"
       }) %>
     <% end %>
   </td>
   <% Signup::DINER_TYPES.each do |dt| %>
     <% Signup::FOOD_TYPES.each do |ft| %>
       <% hide_select = f.object.persisted? && f.object.count_for(dt, ft) == 0 %>
-      <% if @meal.formula.nil? || @meal.formula.allows_signup_type?(dt, ft) %>
+      <% if @meal.formula.allows_signup_type?(dt, ft) %>
         <td class="count">
           <%= f.select("#{dt}_#{ft}",
             (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map do |i|

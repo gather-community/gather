@@ -1,13 +1,19 @@
-class ReminderJob
-  def correct_hour?
-    Rails.env.development? || Time.zone.now.hour == Settings.reminders.time_of_day
-  end
-
+class ReminderJob < ApplicationJob
   def max_attempts
     1
   end
 
-  def error(job, exception)
-    ExceptionNotifier.notify_exception(exception)
+  protected
+
+  def each_community_at_correct_hour
+    each_community do |community|
+      if correct_hour?
+        yield(community)
+      end
+    end
+  end
+
+  def correct_hour?
+    Rails.env.development? || Time.zone.now.hour == Settings.reminders.time_of_day
   end
 end

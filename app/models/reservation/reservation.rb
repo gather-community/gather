@@ -1,6 +1,9 @@
 module Reservation
   class Reservation < ActiveRecord::Base
     NAME_MAX_LENGTH = 24
+
+    acts_as_tenant(:cluster)
+
     self.table_name = "reservations"
 
     attr_accessor :guidelines_ok

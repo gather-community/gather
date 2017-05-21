@@ -1,6 +1,8 @@
 class Household < ActiveRecord::Base
   include Deactivatable
 
+  acts_as_tenant(:cluster)
+
   belongs_to :community
   has_many :accounts, ->{ joins(:community).includes(:community).order("LOWER(communities.name)") },
     inverse_of: :household, class_name: "Billing::Account"
@@ -18,7 +20,6 @@ class Household < ActiveRecord::Base
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 
   delegate :name, :abbrv, to: :community, prefix: true
-  delegate :cluster, to: :community
 
   validates :name, presence: true, length: { maximum: 32 },
     uniqueness: { scope: :community_id, message:

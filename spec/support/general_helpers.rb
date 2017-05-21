@@ -14,4 +14,25 @@ module GeneralHelpers
       end
     end
   end
+
+  def with_subdomain(subdomain)
+    apex = Settings.url.host
+    set_host("#{subdomain}.#{apex}")
+    yield
+    set_host(apex)
+  end
+
+  def with_user_home_subdomain(user, &block)
+    with_subdomain(user.community.slug, &block)
+  end
+
+  def with_tenant(tenant)
+    ActsAsTenant.with_tenant(tenant) do
+      yield
+    end
+  end
+
+  def contain_community_url(community, path)
+    include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
+  end
 end

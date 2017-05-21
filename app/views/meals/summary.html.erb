@@ -142,7 +142,7 @@
           Assemble: <strong>reimbursement form</strong>, <strong>receipts</strong>,
           and <strong>late signup list</strong>.
         </li>
-        <% if reimb_instr = @meal.host_community.settings.meals.reimb_instructions %>
+        <% if reimb_instr = @meal.community.settings.meals.reimb_instructions %>
           <li><%= reimb_instr %>.</li>
         <% else %>
           <li>Give to your meals biller.</li>

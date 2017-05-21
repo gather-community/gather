@@ -1,16 +1,12 @@
-class NotificationMailer < ActionMailer::Base
-
-  default from: Settings.email.from
-
+class NotificationMailer < ApplicationMailer
   def meal_reminder(user, signup)
     @user = user
     @signup = signup
     @meal = signup.meal
 
     title = @meal.title ? "#{@meal.title}, " : ""
-
-    mail(to: @user.email, subject:
-      "Meal Reminder: #{title}#{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}")
+    subject = "Meal Reminder: #{title}#{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}"
+    mail(to: @user.email, subject: subject)
   end
 
   def shift_reminder(assignment)
@@ -25,8 +21,8 @@ class NotificationMailer < ActionMailer::Base
     @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
     @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
-    mail(to: @user.email, subject:
-      "Job Reminder: You are #{@role} for a meal at #{@datetime} at #{@meal.location_abbrv}")
+    subject = "Job Reminder: You Are #{@role} for A Meal at #{@datetime} at #{@meal.location_abbrv}"
+    mail(to: @user.email, subject: subject)
   end
 
   def worker_change_notice(initiator, meal, added, removed)
@@ -36,7 +32,7 @@ class NotificationMailer < ActionMailer::Base
     @removed = removed
 
     recips = (@meal.assignments + removed).map(&:user).map(&:email)
-    recips << @meal.host_community.settings.meals.admin_email
+    recips << @meal.community.settings.meals.admin_email
     recips << @initiator.email
 
     mail(to: recips.compact.uniq, subject: "Meal Job Assignment Change Notice")
@@ -48,7 +44,16 @@ class NotificationMailer < ActionMailer::Base
     @meal = assignment.meal
     @type = assignment.reminder_count == 0 ? :first : :second
 
-    mail(to: @user.email, subject:
-      "Menu Reminder: Please post menu for #{@meal.served_at.to_s(:short_date)}")
+    subject = "Menu Reminder: Please Post Menu for #{@meal.served_at.to_s(:short_date)}"
+    mail(to: @user.email, subject: subject)
+  end
+
+  private
+
+  def mail(*args)
+    raise "meal instance variable must be set" unless @meal
+    with_community_subdomain(@meal.community) do
+      super
+    end
   end
 end

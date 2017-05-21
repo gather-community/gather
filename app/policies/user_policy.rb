@@ -6,9 +6,6 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      # This scope limits what the user can *ever* see. Other scopes may be applied depending on the view.
-      # For example, while a cluster admin can see all users in the cluster, the directory view
-      # only allows viewing one community at a time.
       if active_super_admin?
         scope
       elsif active_cluster_admin?

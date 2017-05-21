@@ -1,5 +1,6 @@
 class CalendarExportsController < ApplicationController
   prepend_before_action :authenticate_user_from_token!, only: :show
+  skip_before_action :ensure_subdomain, only: :show
 
   def index
     skip_policy_scope
@@ -22,5 +23,17 @@ class CalendarExportsController < ApplicationController
     current_user.reset_calendar_token!
     flash[:success] = "Token reset successfully."
     redirect_to(calendar_exports_path)
+  end
+
+  protected
+
+  # See def'n in ApplicationController for documentation.
+  def community_for_route
+    case params[:action]
+    when "index", "show"
+      current_user.community
+    else
+      nil
+    end
   end
 end

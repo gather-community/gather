@@ -5,7 +5,9 @@ module Billing
     describe "permissions" do
       include_context "policy objs"
 
+      let(:model) { Account }
       let(:account) { Account.new }
+      let(:record) { account }
       let(:account_owner) { User.new(household: Household.new) }
 
       before do
@@ -13,48 +15,12 @@ module Billing
         allow(account).to receive(:community).and_return(community)
       end
 
-      shared_examples_for :admin_or_biller do
-        it "grants access to admins" do
-          expect(subject).to permit(admin, Account)
-        end
-
-        it "grants access to biller" do
-          expect(subject).to permit(biller, Account)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Account)
-        end
-      end
-
-      shared_examples_for :admin_or_biller_with_community do
-        it "grants access to admins from community" do
-          expect(subject).to permit(admin, account)
-        end
-
-        it "grants access to billers from community" do
-          expect(subject).to permit(admin, account)
-        end
-
-        it "denies access to admins from outside community" do
-          expect(subject).not_to permit(admin_in_cluster, account)
-        end
-
-        it "denies access to billers from outside community" do
-          expect(subject).not_to permit(biller_in_cluster, account)
-        end
-
-        it "denies access to regular user" do
-          expect(subject).not_to permit(user, account)
-        end
-      end
-
       permissions :index?, :apply_late_fees? do
-        it_behaves_like :admin_or_biller
+        it_behaves_like "permits admins or billers but not regular users"
       end
 
       permissions :show? do
-        it_behaves_like :admin_or_biller_with_community
+        it_behaves_like "permits admins or billers but not regular users"
 
         it "grants access to owner of account" do
           expect(subject).to permit(account_owner, account)
@@ -76,7 +42,7 @@ module Billing
       end
 
       permissions :edit?, :update? do
-        it_behaves_like :admin_or_biller_with_community
+        it_behaves_like "permits admins or billers but not regular users"
       end
     end
 

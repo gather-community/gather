@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Meals::Report, type: :model do
-  let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
   let!(:community) { create(:community, name: "Community 1", abbrv: "C1") }
-  let!(:cid) { community.id }
+  let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
+  let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }
   let!(:report) { Meals::Report.new(community) }
 
   before { Timecop.freeze(Time.parse("2016-10-15 12:00:00")) }
@@ -18,8 +18,8 @@ RSpec.describe Meals::Report, type: :model do
 
     context "with previous month having unfinalized meals" do
       before do
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-08-15 17:00")
-        create(:meal, host_community_id: cid, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -29,8 +29,8 @@ RSpec.describe Meals::Report, type: :model do
 
     context "with previous month having all finalized meals" do
       before do
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-08-15 17:00")
-        create(:meal, :finalized, host_community_id: cid, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, :finalized, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -41,7 +41,7 @@ RSpec.describe Meals::Report, type: :model do
 
   describe "diner_types" do
     before do
-      meals = create_list(:meal, 2, :finalized, host_community_id: cid, served_at: 2.months.ago)
+      meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
       meals.each do |m|
         m.signups << build(:signup, meal: m, adult_meat: 1)
         m.signups << build(:signup, meal: m, senior_veg: 1, little_kid_meat: 1)
@@ -57,7 +57,7 @@ RSpec.describe Meals::Report, type: :model do
   describe "overview" do
     context "without finalized meals" do
       before do
-        create(:meal, host_community_id: cid)
+        create(:meal, community: community)
       end
 
       it "should return nil" do
@@ -67,10 +67,13 @@ RSpec.describe Meals::Report, type: :model do
 
     context "with finalized meals" do
       before do
-        meals = create_list(:meal, 2, :finalized, host_community_id: cid)
+        meals = create_list(:meal, 2, :finalized, community: community)
 
         # Very old meal in different community.
-        meals << create(:meal, :finalized, host_community_id: community2.id, served_at: 2.years.ago)
+        meals << create(:meal, :finalized, community: community2, served_at: 2.years.ago)
+
+        # Meal in communityX. Should not show in results.
+        meals << create(:meal, :finalized, community: communityX)
 
         meals.each do |m|
           m.signups << build(:signup, meal: m, adult_meat: 2)
@@ -79,10 +82,10 @@ RSpec.describe Meals::Report, type: :model do
         end
       end
 
-      it "should have correct data" do
-        expect(report.overview[cid]["ttl_meals"]).to eq 2
-        expect(report.overview[cid]["ttl_diners"]).to eq 6
-        expect(report.overview[cid]["ttl_cost"]).to eq 24
+      it "should have correct data from cluster" do
+        expect(report.overview[community.id]["ttl_meals"]).to eq 2
+        expect(report.overview[community.id]["ttl_diners"]).to eq 6
+        expect(report.overview[community.id]["ttl_cost"]).to eq 24
         expect(report.overview[:all]["ttl_meals"]).to eq 3
         expect(report.overview[:all]["ttl_diners"]).to eq 9
         expect(report.overview[:all]["ttl_cost"]).to eq 36
@@ -94,7 +97,7 @@ RSpec.describe Meals::Report, type: :model do
     context "without finalized meals" do
       describe "by_month" do
         before do
-          create(:meal, host_community_id: cid)
+          create(:meal, community: community)
         end
 
         it "should return nil" do
@@ -106,10 +109,10 @@ RSpec.describe Meals::Report, type: :model do
     context "with finalized meals" do
       before do
         meals, hholds = [], []
-        meals << create(:meal, :finalized, host_community_id: cid, served_at: "2016-01-01 18:00") # Fri
-        meals << create(:meal, :finalized, host_community_id: cid, served_at: "2016-02-10 18:00") # Wed
-        meals << create(:meal, :finalized, host_community_id: cid, served_at: "2016-02-12 18:00") # Fri
-        meals << create(:meal, :finalized, host_community_id: cid, served_at: "2016-04-05 18:00") # Tue
+        meals << create(:meal, :finalized, community: community, served_at: "2016-01-01 18:00") # Fri
+        meals << create(:meal, :finalized, community: community, served_at: "2016-02-10 18:00") # Wed
+        meals << create(:meal, :finalized, community: community, served_at: "2016-02-12 18:00") # Fri
+        meals << create(:meal, :finalized, community: community, served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
         counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
@@ -121,14 +124,17 @@ RSpec.describe Meals::Report, type: :model do
         end
 
         # Very old meal, should be ignored.
-        meals << create(:meal, :finalized, host_community_id: cid, served_at: 2.years.ago)
+        meals << create(:meal, :finalized, community: community, served_at: 2.years.ago)
 
-        # Meals from community 2
-        other = create_list(:meal, 2, :finalized, host_community_id: community2.id, served_at: 2.months.ago)
-        other.each do |m|
+        # Meals from community 2 and X
+        meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)
+        meals2.each do |m|
           m.signups << build(:signup, meal: m, adult_meat: 2)
           m.save!
         end
+        mealX = create(:meal, :finalized, community: communityX, served_at: 2.months.ago)
+        mealX.signups << build(:signup, meal: mealX, adult_meat: 2)
+        mealX.save!
       end
 
       describe "by_month" do
@@ -205,4 +211,3 @@ RSpec.describe Meals::Report, type: :model do
     end
   end
 end
-

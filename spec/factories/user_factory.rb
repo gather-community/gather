@@ -1,11 +1,20 @@
 FactoryGirl.define do
   factory :user do
+    transient do
+      community nil
+    end
+
     first_name "John"
-    last_name  "Doe"
-    sequence(:email){ |n| "person#{n}@example.com" }
-    sequence(:google_email){ |n| "person#{n}@gmail.com" }
+    last_name "Doe"
+    sequence(:email) { |n| "person#{n}@example.com" }
+    sequence(:google_email) { |n| "person#{n}@gmail.com" }
     mobile_phone "5555551212"
-    association :household, with_members: false # Don't want to create extra users.
+
+    household do
+      attribs = {with_members: false} # Don't want to create extra users.
+      attribs[:community] = community if community
+      build(:household, attribs)
+    end
 
     %i(admin cluster_admin super_admin biller photographer).each do |role|
       factory role do

@@ -1,3 +1,5 @@
 smtp:
   address: "localhost"
   port: 1025
+url:
+  port: 3000

@@ -12,7 +12,7 @@ module Meals
 
       # If there are any unfinalized meals remaining last month, don't include that month.
       prev_month_range = Date.today.prev_month.beginning_of_month..Date.today.prev_month.end_of_month
-      range_end = if Meal.where(host_community_id: community.id).where(served_at: prev_month_range).
+      range_end = if Meal.where(community_id: community.id).where(served_at: prev_month_range).
         where("status != 'finalized'").any?
         Date.today.prev_month.prev_month.end_of_month
       else
@@ -29,7 +29,7 @@ module Meals
 
     def overview
       @overview ||= breakout(
-        breakout_expr: "meals.host_community_id::integer",
+        breakout_expr: "meals.community_id::integer",
         all_communities: true,
         ignore_range: true,
         totals: true
@@ -46,11 +46,13 @@ module Meals
 
     def by_month_no_totals_or_gaps
       @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
-        months = by_month.keys - [:all]
-        month, max = months.min, months.max
-        while month <= max do
-          result[month] = by_month[month] || {}
-          month = month >> 1
+        if by_month
+          months = by_month.keys - [:all]
+          month, max = months.min, months.max
+          while month <= max do
+            result[month] = by_month[month] || {}
+            month = month >> 1
+          end
         end
       end
     end
@@ -66,7 +68,7 @@ module Meals
       @by_community ||= breakout(
         breakout_expr: "communities.name",
         all_communities: true,
-        include_host_community: true
+        include_community: true
       )
     end
 
@@ -88,20 +90,20 @@ module Meals
           end
         ]
         data[:diners_by_weekday] = [
-          by_weekday.each_with_index.map do |k_v, i|
+          (by_weekday || {}).each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:cost_by_weekday] = [
-          by_weekday.each_with_index.map do |k_v, i|
+          (by_weekday || {}).each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:community_rep] = communities.map do |c|
-          {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]}
+          by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]} : {}
         end
         data[:diner_types] = diner_types.map do |dt|
-          {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]}
+          by_month ? {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]} : {}
         end
       end
     end
@@ -124,7 +126,7 @@ module Meals
     end
 
     def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false,
-      include_host_community: false)
+      include_community: false)
 
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
@@ -134,7 +136,7 @@ module Meals
       wheres << "meals.status = 'finalized'"
 
       unless all_communities
-        wheres << "meals.host_community_id = ?"
+        wheres << "meals.community_id = ?"
         vars << community.id
       end
 
@@ -143,11 +145,11 @@ module Meals
         vars << range.first << range.last
       end
 
-      community_join = if include_host_community
-        "INNER JOIN communities ON meals.host_community_id = communities.id"
-      else
-        ""
-      end
+      community_join = "INNER JOIN communities ON meals.community_id = communities.id"
+
+      # Scope to community cluster
+      wheres << "communities.cluster_id = ?"
+      vars << community.cluster_id
 
       query("
         SELECT

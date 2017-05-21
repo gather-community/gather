@@ -10,9 +10,11 @@ class Meal < ActiveRecord::Base
   PAYMENT_METHODS = %w(check credit)
   ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
+  acts_as_tenant(:cluster)
+
   serialize :allergens, JSON
 
-  belongs_to :host_community, class_name: "Community"
+  belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
@@ -35,12 +37,12 @@ class Meal < ActiveRecord::Base
   has_many :reservations, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }
-  scope :hosted_by, ->(community) { where(host_community: community) }
+  scope :hosted_by, ->(community) { where(community: community) }
   scope :finalizable, -> { past.where("status != ?", "finalized") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
-  scope :by_community, -> { joins(:host_community).order("communities.name") }
-  scope :by_community_reverse, -> { joins(:host_community).order("communities.name DESC") }
+  scope :by_community, -> { joins(:community).order("communities.name") }
+  scope :by_community_reverse, -> { joins(:community).order("communities.name DESC") }
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :past, -> { where("served_at <= ?", Time.now.midnight) }
   scope :future, -> { where("served_at >= ?", Time.now.midnight) }
@@ -58,7 +60,7 @@ class Meal < ActiveRecord::Base
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
   accepts_nested_attributes_for :cost
 
-  delegate :name, to: :host_community, prefix: true
+  delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
@@ -76,7 +78,7 @@ class Meal < ActiveRecord::Base
 
   validates :creator_id, presence: true
   validates :served_at, presence: true
-  validates :host_community_id, presence: true
+  validates :community_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
@@ -89,11 +91,11 @@ class Meal < ActiveRecord::Base
   validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: { message: :need_location }
 
-  def self.new_with_defaults(current_user)
+  def self.new_with_defaults(community)
     new(served_at: default_datetime,
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
-      host_community_id: current_user.community_id)
+      community: community)
   end
 
   def self.default_datetime
@@ -106,7 +108,7 @@ class Meal < ActiveRecord::Base
 
   def extra_roles
     @extra_roles ||= ALL_EXTRA_ROLES &
-      (host_community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
+      (community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
   end
 
   def people_in_role(role)
@@ -126,10 +128,6 @@ class Meal < ActiveRecord::Base
 
   def title_or_no_title
     title || "[No Title]"
-  end
-
-  def community
-    host_community
   end
 
   def community_ids
@@ -215,19 +213,19 @@ class Meal < ActiveRecord::Base
   # Returns a relation for all meals following the current one.
   # We break ties using community name and then ID.
   def following_meals
-    self.class.joins(:host_community).
+    self.class.joins(:community).
       where("served_at > ? OR served_at = ? AND
         (communities.name > ? OR communities.name = ? AND meals.id > ?)",
-        served_at, served_at, host_community_name, host_community_name, id)
+        served_at, served_at, community_name, community_name, id)
   end
 
   # Returns a relation for all meals before the current one.
   # We break ties using community name and then ID.
   def previous_meals
-    self.class.joins(:host_community).
+    self.class.joins(:community).
       where("served_at < ? OR served_at = ? AND
         (communities.name < ? OR communities.name = ? AND meals.id < ?)",
-        served_at, served_at, host_community_name, host_community_name, id)
+        served_at, served_at, community_name, community_name, id)
   end
 
   def formula

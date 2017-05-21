@@ -20,7 +20,7 @@ module Gather
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # config.autoload_paths += []
+    config.autoload_paths += ["#{Rails.root}/app/mailers/concerns", "#{Rails.root}/lib"]
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
@@ -33,6 +33,10 @@ module Gather
         sender_address: Settings.email.from,
         exception_recipients: Settings.email.webmaster
       }
+
+    # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
+    # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
+    config.middleware.insert_before 'Warden::Manager', 'DisableTenantScoping'
 
     Devise.setup do |config|
       config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret
@@ -51,6 +55,6 @@ module Gather
       }
     end
 
-    config.action_mailer.default_url_options = { host: Settings.url.host }
+    config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port)
   end
 end

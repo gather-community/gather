@@ -3,7 +3,7 @@
 <% content_for(:top_buttons) do %>
   <%= lens_bar %>
 
-  <% if policy(User).create? %>
+  <% if policy(dummy_user).create? %>
     <%= link_to(icon_tag("plus") << " Invite Users", invite_users_path, class: "btn btn-default") %>
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

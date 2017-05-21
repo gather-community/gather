@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
-    registrations: "users/registrations",
-    sessions: "users/sessions"
+    registrations: "users/registrations"
   }
 
   resources :users do
@@ -30,11 +29,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get "reservations(/:community(/:resource_id))" => "reservations#index",
-    community: /[a-z][a-z0-9]?/, as: :reservations
-  get "reservations/:community/:resource_id/new" => "reservations#new",
-    community: /[a-z][a-z0-9]?/, as: :new_reservation
-  resources :reservations, except: [:index, :new]
+  resources :reservations
 
   resources :calendar_exports, only: [:index], path: "calendars" do
     member do
@@ -47,7 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :signups
+  resources :signups, only: [:create, :update]
 
   resources :households do
     member do
@@ -80,7 +75,7 @@ Rails.application.routes.draw do
 
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
-  get "logged-out", to: "landing#logged_out", as: :logged_out
+  get "signed-out", to: "landing#signed_out", as: :signed_out
   get "about/privacy-policy", to: "landing#privacy_policy"
 
   authenticated :user do

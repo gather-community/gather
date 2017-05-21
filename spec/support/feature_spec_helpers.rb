@@ -95,4 +95,57 @@ module FeatureSpecHelpers
     rescue Capybara::ModalNotFound
     end
   end
+
+  def stub_omniauth(params)
+    OmniAuth.config.test_mode = true
+    params.each do |key, hash|
+      OmniAuth.config.mock_auth[key] = OmniAuth::AuthHash.new(info: hash)
+    end
+    yield
+    OmniAuth.config.test_mode = false
+  end
+
+  def inject_session(hash)
+    Warden.on_next_request do |proxy|
+      hash.each do |key, value|
+        proxy.raw_session[key] = value
+      end
+    end
+  end
+
+  def expect_valid_sign_in_link_and_click
+    # Should point to apex domain
+    expect(page).to have_css("a[href='http://#{Settings.url.host}:31337/users/auth/google_oauth2']",
+      text: "Sign in with Google")
+
+    click_link "Sign in with Google"
+  end
+
+  def be_not_found
+    have_content("The page you were looking for doesn't exist")
+  end
+
+  def be_forbidden
+    have_content("You are not permitted")
+  end
+
+  def be_signed_out_root
+    have_css("div#blurb", text: "Life is better together.")
+  end
+
+  def be_signed_in_root
+    have_title("Directory")
+  end
+
+  def show_signed_in_user_name(name)
+    have_content(name)
+  end
+
+  def have_title(title)
+    have_css("h1", text: title)
+  end
+
+  def set_host(host)
+    Capybara.app_host = "http://#{host}"
+  end
 end

@@ -1,21 +1,29 @@
-class AccountMailer < ActionMailer::Base
-  default from: Settings.email.from
-
+class AccountMailer < ApplicationMailer
   def statement_notice(statement)
     load_statement_vars(statement)
-    mail(to: @household.adults.map(&:email), subject: "New Account Statement for #{@community.name}")
+    mail(to: household_adults, subject: "New Account Statement for #{@community.name}")
   end
 
   def statement_reminder(statement)
     load_statement_vars(statement)
-    mail(to: @household.adults.map(&:email), subject: "Payment Reminder for #{@community.name} Account")
+    mail(to: household_adults, subject: "Payment Reminder for #{@community.name} Account")
   end
 
   private
+
+  def mail(*args)
+    with_community_subdomain(@community) do
+      super
+    end
+  end
 
   def load_statement_vars(statement)
     @statement = statement
     @household = statement.household
     @community = statement.community
+  end
+
+  def household_adults
+    @household.adults.map(&:email)
   end
 end

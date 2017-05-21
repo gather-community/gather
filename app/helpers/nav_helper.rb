@@ -9,7 +9,7 @@ module NavHelper
       },{
         name: :meals,
         path: lens_path_if_present("meals"),
-        permitted: policy(Meal).index?,
+        permitted: policy(Meal.new(community: current_community)).index?,
         icon: "cutlery"
       },{
         name: :reservations,
@@ -19,12 +19,12 @@ module NavHelper
       },{
         name: :accounts,
         path: lens_path_if_present("accounts"),
-        permitted: policy(Billing::Account).index?,
+        permitted: policy(Billing::Account.new(community: current_community)).index?,
         icon: "money"
       },{
         name: :admin,
         path: admin_settings_path(type: "community"),
-        permitted: policy(Community).update?,
+        permitted: policy(current_community).update?,
         icon: "gears"
       }
     ]
@@ -35,7 +35,7 @@ module NavHelper
     main ||= @context[:section]
     items = case main
     when :meals
-      policy = policy(Meal)
+      policy = policy(Meal.new(community: current_community))
       [
         {
           name: :meals,
@@ -69,7 +69,7 @@ module NavHelper
           name: :households,
           parent: :people,
           path: households_path,
-          permitted: policy(Household).index?,
+          permitted: policy(Household.new(community: current_community)).index?,
           icon: "home"
         }
       ]

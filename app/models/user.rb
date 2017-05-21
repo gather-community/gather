@@ -1,9 +1,11 @@
 class User < ActiveRecord::Base
   include Deactivatable, Phoneable
-  rolify
 
   ROLES = %i(super_admin cluster_admin admin biller photographer)
   CONTACT_TYPES = %i(email text phone)
+
+  acts_as_tenant(:cluster)
+  rolify
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
@@ -31,7 +33,7 @@ class User < ActiveRecord::Base
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
   end
-  scope :never_logged_in, -> { where(sign_in_count: 0) }
+  scope :never_signed_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
@@ -41,7 +43,6 @@ class User < ActiveRecord::Base
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv, :unit_num, to: :household
   delegate :community, to: :household, allow_nil: true
-  delegate :cluster, :cluster_id, to: :community, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
 

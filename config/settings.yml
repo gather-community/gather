@@ -1,3 +1,5 @@
+meals:
+  close_cutoff_age: 2 # hours
 reminders:
   time_of_day: 6 # 6:00am
   # Reminder lead times in days.
@@ -16,3 +18,5 @@ reminders:
       late: 5
 photos:
   max_size_mb: 8
+url:
+  port: 80 # Overridden where necessary

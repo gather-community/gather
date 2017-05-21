@@ -6,6 +6,7 @@ module Billing
       include_context "policy objs"
 
       let(:statement) { Statement.new }
+      let(:record) { statement }
       let(:statement_owner) { User.new(household: Household.new) }
 
       before do
@@ -13,48 +14,12 @@ module Billing
         allow(statement).to receive(:community).and_return(community)
       end
 
-      shared_examples_for :admins_and_billers do
-        it "grants access to admins" do
-          expect(subject).to permit(admin, Statement)
-        end
-
-        it "grants access to biller" do
-          expect(subject).to permit(biller, Statement)
-        end
-
-        it "denies access to normal user" do
-          expect(subject).not_to permit(user, Statement)
-        end
-      end
-
-      shared_examples_for :admins_and_billers_with_community do
-        it "grants access to admins from community" do
-          expect(subject).to permit(admin, statement)
-        end
-
-        it "grants access to billers from community" do
-          expect(subject).to permit(admin, statement)
-        end
-
-        it "denies access to admins from outside community" do
-          expect(subject).not_to permit(admin_in_cluster, statement)
-        end
-
-        it "denies access to billers from outside community" do
-          expect(subject).not_to permit(biller_in_cluster, statement)
-        end
-
-        it "denies access to regular user" do
-          expect(subject).not_to permit(user, statement)
-        end
-      end
-
       permissions :index?, :generate? do
-        it_behaves_like :admins_and_billers
+        it_behaves_like "permits admins or billers but not regular users"
       end
 
       permissions :show? do
-        it_behaves_like :admins_and_billers_with_community
+        it_behaves_like "permits admins or billers but not regular users"
 
         it "grants access to owner of statement" do
           expect(subject).to permit(statement_owner, statement)
@@ -89,7 +54,7 @@ module Billing
       let!(:statement3) { create(:statement, account: account3) }
       let!(:statement4) { create(:statement, account: account4) }
 
-      shared_examples_for :admin_or_biller do
+      shared_examples_for "returns statements from community or household" do
         it "returns all statements from own community or household only" do
           permitted = StatementPolicy::Scope.new(user, Statement.all).resolve
           expect(permitted).to contain_exactly(statement1, statement2, statement3)
@@ -98,12 +63,12 @@ module Billing
 
       context "admin" do
         let!(:user) { create(:admin) }
-        it_behaves_like :admin_or_biller
+        it_behaves_like "returns statements from community or household"
       end
 
       context "biller" do
         let!(:user) { create(:biller) }
-        it_behaves_like :admin_or_biller
+        it_behaves_like "returns statements from community or household"
       end
 
       context "regular user" do

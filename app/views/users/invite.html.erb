@@ -1,12 +1,12 @@
-<% content_for(:title){ "Invite Users to Login" } %>
+<% content_for(:title){ "Invite Users to Sign In" } %>
 
 <% if @users.empty? %>
 
-  There are no active users that have never logged in.
+  There are no active users that have never signed in.
 
 <% else %>
 
-  The following users have never logged in. Check the ones you'd like to invite.
+  The following users have never signed in. Check the ones you'd like to invite.
 
   <%= form_tag("/users/send-invites", method: :post) do %>
     <div id="invite-list">
@@ -14,7 +14,7 @@
         <div>
           <label>
             <input type="checkbox" name="to_invite[]" value="<%= u.id %>">
-            <%= u.community_abbrv %>: <%= u.name %>
+            <%= u.name %>
           </label>
         </div>
       <% end %>

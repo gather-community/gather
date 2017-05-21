@@ -47,7 +47,7 @@ When you register with the system or update your information via the system.
 
 #### Do we use "cookies"?
 
-A cookie is used to store a secret key that proves you have logged into the system. This is how your "session" is maintained as you use the system. This is a standard and very common procedure with web applications.
+A cookie is used to store a secret key that proves you have signed into the system. This is how your "session" is maintained as you use the system. This is a standard and very common procedure with web applications.
 
 If you disable cookies you will not be able to use the system.
 
@@ -57,11 +57,11 @@ We do not use cookies to track your activity on other sites, tailor advertising,
 
 According to CalOPPA, we agree to the following:
 
-* Users can visit our site anonymously. (Though they won't be able to log in without identifying themselves).
+* Users can visit our site anonymously. (Though they won't be able to sign in without identifying themselves).
 * We will add a link to this Privacy Policy on our home page.
 * Our Privacy Policy link includes the word 'Privacy' and can easily be found on the page specified above.
 * You will be notified via email of any Privacy Policy changes.
-* You can change your personal information by logging in to your account and editing your profile and/or the profiles of your children.
+* You can change your personal information by signing in to your account and editing your profile and/or the profiles of your children.
 
 #### How does our site handle "Do Not Track" signals?
 
@@ -71,9 +71,9 @@ This does not apply in our case because we do not track users in the first place
 
 The system stores information about children (potentially under the age of 13) so that community members can view photos, unit numbers, and birthdays of their neighbor children for the purposes of facilitating interaction and fostering community.
 
-Children under 13 cannot log in to the system directly. Their information can only be entered by their parents/guardians.
+Children under 13 cannot sign in to the system directly. Their information can only be entered by their parents/guardians.
 
-Children can only log in to the system when:
+Children can only sign in to the system when:
 
 1. they are over the age of 13;
 2. their parents/guardians grant permission for them to be considered as "adults" in the system;

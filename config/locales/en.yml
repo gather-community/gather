@@ -42,7 +42,7 @@ en:
         table_setter_assigns: "Table Setters"
         cleaner_assigns: "Cleaners"
         head_cook_assign: "Head Cook"
-        host_community_id: "Host Community"
+        community_id: "Host Community"
         served_at: "Date/Time"
         ingredient_cost: "Ingredient Cost"
         pantry_cost: "Pantry Cost"

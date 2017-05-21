@@ -1,6 +1,7 @@
 class Community < ActiveRecord::Base
   include CustomFields
 
+  acts_as_tenant(:cluster)
   resourcify
 
   belongs_to :cluster, inverse_of: :communities
@@ -45,10 +46,6 @@ class Community < ActiveRecord::Base
       ]}
     ]}
   ]
-
-  def self.find_by_abbrv(abbrv)
-    where("LOWER(abbrv) = ?", abbrv.downcase).first
-  end
 
   def self.multiple?
     count > 1

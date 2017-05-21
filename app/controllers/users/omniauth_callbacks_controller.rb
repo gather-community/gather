@@ -7,25 +7,24 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # If invite token is present, try to find user by that.
     if (t = session[:invite_token]) && by_token = User.with_reset_password_token(t)
 
-      # If we find them but they are logging in with the wrong google_email, notify them.
-      if !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
+      if !by_token.reset_password_period_valid?
+        set_flash_message(:error, :failure, kind: "Google", reason: "your invitation has expired")
+        redirect_to sign_in_url
+
+      # If we find them but they are signing in with the wrong google_email, notify them.
+      elsif !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
         set_flash_message(:error, :failure, kind: "Google",
-          reason: "you must login with the Google ID #{by_token.google_email}")
-        redirect_to root_path
+          reason: "you must sign in with the Google ID #{by_token.google_email}")
+        redirect_to sign_in_url
 
       # If there is already a user with that google_email, log them in
       # INSTEAD of the one with the token. Shouldn't happen often.
       elsif by_email = User.from_omniauth(auth)
-        login_and_clear_token(by_email, auth)
+        sign_in_and_clear_token(by_email, auth)
 
-      # Else if the token is still valid, log them in and grab their google_email
-      elsif by_token.reset_password_period_valid?
-        login_and_clear_token(by_token, auth)
-
-      else
-        set_flash_message(:error, :failure, kind: "Google",
-          reason: "your invitation has expired")
-        redirect_to root_path
+      # Else log them in and grab their google_email
+      else by_token.reset_password_period_valid?
+        sign_in_and_clear_token(by_token, auth)
       end
 
       session[:invite_token] = nil
@@ -40,14 +39,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       set_flash_message(:error, :failure, kind: "Google",
         reason: "your Google ID #{auth.info[:email]} was not found in the system")
-      redirect_to root_path
+      redirect_to sign_in_url
 
     end
   end
 
   private
 
-  def login_and_clear_token(user, auth)
+  def sign_in_and_clear_token(user, auth)
     user.update_for_oauth!(auth)
     user.send(:clear_reset_password_token)
     sign_in_and_redirect user, event: :authentication

@@ -21,7 +21,7 @@ if Rails.env.development? || ENV['QUERY_TRACE']
     # :call-seq:
     # Klass.enabled?
     #
-    # yields boolean if SQL queries should be logged or not
+    # yields boolean if SQL queries should be signed or not
 
     def self.enabled?
       defined?(@trace_queries) && @trace_queries

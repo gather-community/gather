@@ -1,5 +1,4 @@
 class FixedMealCostCalculator < MealCostCalculator
-
   def type
     :fixed
   end

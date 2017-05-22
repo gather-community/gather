@@ -17,7 +17,12 @@ class ApplicationJob
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do
         cluster.communities.each do |community|
-          yield(community)
+          begin
+            Time.zone = community.settings.time_zone
+            yield(community)
+          ensure
+            Time.zone = "UTC"
+          end
         end
       end
     end

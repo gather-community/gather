@@ -25,6 +25,7 @@ module Concerns::ApplicationController::RequestPreprocessing
     before_action :ensure_subdomain
     before_action :check_community_permissions
     before_action :set_tenant
+    before_action :set_time_zone
 
     rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   end
@@ -111,6 +112,10 @@ module Concerns::ApplicationController::RequestPreprocessing
     # Scoping is turned off temporarily in a rack middleware to prevent NoTenantSet errors in preprocessing.
     # We turn it back on here.
     ActsAsTenant.unscoped = false
+  end
+
+  def set_time_zone
+    Time.zone = current_community.settings.time_zone if current_community
   end
 
   # Redirects to inactive page when user is inactive.

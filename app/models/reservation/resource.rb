@@ -15,10 +15,10 @@ module Reservation
     validates_attachment_content_type :photo, content_type: /\Aimage\/jpeg/
     validates_attachment_file_name :photo, matches: /jpe?g\Z/i
 
-    scope :meal_hostable, ->{ where("meal_abbrv IS NOT NULL") }
-    scope :by_full_name, ->{ joins(:community).order("communities.abbrv, name") }
-    scope :visible, ->{ where(hidden: false) }
-    scope :hidden, ->{ where(hidden: true) }
+    scope :meal_hostable, -> { where("meal_abbrv IS NOT NULL") }
+    scope :by_full_name, -> { joins(:community).order("communities.abbrv, name") }
+    scope :visible, -> { where(hidden: false) }
+    scope :hidden, -> { where(hidden: true) }
 
     delegate :name, to: :community, prefix: true
 

@@ -110,6 +110,7 @@ en:
     labels:
       community:
         settings:
+          time_zone: "Time Zone"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"

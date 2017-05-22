@@ -8,7 +8,7 @@ module CustomFields
         super(key: key)
         self.fields = fields.map do |field_data|
           field_data.symbolize_keys!
-          klass = "CustomFields::Fields::#{field_data.delete(:type).capitalize}Field"
+          klass = "CustomFields::Fields::#{field_data.delete(:type).to_s.classify}Field"
           klass.constantize.new(field_data)
         end
       end

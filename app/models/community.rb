@@ -10,6 +10,7 @@ class Community < ActiveRecord::Base
   scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }
 
   custom_fields :settings, spec: [
+    {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :string},
       {key: :admin_email, type: :email},

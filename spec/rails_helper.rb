@@ -76,8 +76,10 @@ RSpec.configure do |config|
   end
 
   # We have to set a default tenant to avoid NoTenantSet errors.
+  # We also reset TZ to default in case previous spec changed it.
   cluster = FactoryGirl.create(:cluster, name: "Default")
   config.around do |example|
+    Time.zone = "UTC"
     with_tenant(cluster) do
       example.run
     end

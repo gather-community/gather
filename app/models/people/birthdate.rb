@@ -37,7 +37,7 @@ module People
         year = nil
         begin
           # We pretend it's 2000 when we parse to that Feb 29 will parse properly
-          time = Timecop.freeze("2000-01-01") do
+          time = Timecop.freeze(Time.parse("2000-01-01")) do
             Time.parse(@str) { |y| year = y } # Extract year if given.
           end
           if year.nil?

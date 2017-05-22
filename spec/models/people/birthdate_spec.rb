@@ -84,13 +84,13 @@ describe People::Birthdate do
       end
 
       it "has correct age when today is before bday" do
-        Timecop.freeze("2016-2-1") do
+        Timecop.freeze(Time.zone.parse("2016-2-1")) do
           expect(user.age).to eq 15
         end
       end
 
       it "has correct age when today is after bday" do
-        Timecop.freeze("2016-9-1") do
+        Timecop.freeze(Time.zone.parse("2016-9-1")) do
           expect(user.age).to eq 16
         end
       end

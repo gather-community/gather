@@ -6,8 +6,11 @@ RSpec.describe Meals::Report, type: :model do
   let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }
   let!(:report) { Meals::Report.new(community) }
 
-  before { Timecop.freeze(Time.parse("2016-10-15 12:00:00")) }
-  after { Timecop.return }
+  around do |example|
+    Timecop.freeze(Time.zone.parse("2016-10-15 12:00:00")) do
+      example.run
+    end
+  end
 
   describe "range" do
     context "with no meals" do

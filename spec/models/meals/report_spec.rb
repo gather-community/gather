@@ -12,7 +12,7 @@ RSpec.describe Meals::Report, type: :model do
   describe "range" do
     context "with no meals" do
       it "should end on the last full month" do
-        expect(report.range).to eq Date.civil(2015, 10, 1)..Date.civil(2016, 9, 30)
+        expect(report.range).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
       end
     end
 
@@ -23,7 +23,7 @@ RSpec.describe Meals::Report, type: :model do
       end
 
       it "should end on month before previous month" do
-        expect(report.range).to eq Date.civil(2015, 9, 1)..Date.civil(2016, 8, 31)
+        expect(report.range).to eq Date.new(2015, 9, 1)..Date.new(2016, 8, 31)
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Meals::Report, type: :model do
       end
 
       it "should end on month before previous month" do
-        expect(report.range).to eq Date.civil(2015, 10, 1)..Date.civil(2016, 9, 30)
+        expect(report.range).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
       end
     end
   end
@@ -142,10 +142,10 @@ RSpec.describe Meals::Report, type: :model do
           expect(report.by_month.size).to eq 4
           expect((report.by_month.keys - [:all]).map(&:month)).to eq [1,2,4]
 
-          jan = report.by_month[Date.civil(2016,1,1)]
-          feb = report.by_month[Date.civil(2016,2,1)]
-          mar = report.by_month[Date.civil(2016,3,1)]
-          apr = report.by_month[Date.civil(2016,4,1)]
+          jan = report.by_month[Date.new(2016,1,1)]
+          feb = report.by_month[Date.new(2016,2,1)]
+          mar = report.by_month[Date.new(2016,3,1)]
+          apr = report.by_month[Date.new(2016,4,1)]
           all = report.by_month[:all]
 
           expect(jan["ttl_meals"]).to eq 1
@@ -189,7 +189,7 @@ RSpec.describe Meals::Report, type: :model do
         it "should have correct data" do
           expect(report.by_month_no_totals_or_gaps.size).to eq 4
           expect(report.by_month_no_totals_or_gaps.keys.map(&:month)).to eq [1,2,3,4]
-          expect(report.by_month_no_totals_or_gaps[Date.civil(2016,3,1)]).to eq({})
+          expect(report.by_month_no_totals_or_gaps[Date.new(2016,3,1)]).to eq({})
         end
       end
 

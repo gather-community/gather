@@ -29,7 +29,7 @@ module Reservation
           [:ends_at, "Must be #{value.to_s(:regular_time)}"]
 
       when :max_lead_days
-        reservation.starts_at.to_date - Date.today <= value ||
+        reservation.starts_at.to_date - Time.zone.today <= value ||
           [:starts_at, "Can be at most #{value} days in the future"]
 
       when :max_length_minutes

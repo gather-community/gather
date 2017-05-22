@@ -19,7 +19,7 @@ namespace :db do
             charges.times do
               Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "meal", description: Faker::Lorem.sentence(4)[0..-2],
-                  incurred_on: Date.today, amount: (rand(1000).to_f + 50) / 100)
+                  incurred_on: Time.zone.today, amount: (rand(1000).to_f + 50) / 100)
               end
             end
 
@@ -28,7 +28,7 @@ namespace :db do
             if has_balance && prev_balance > 0
               Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "payment", description: "Check ##{rand(10000) + 100}",
-                  incurred_on: Date.today,
+                  incurred_on: Time.zone.today,
                   amount: -(rand(10) < 1 ? prev_balance - 5 + rand(10) : prev_balance))
               end
             end
@@ -37,7 +37,7 @@ namespace :db do
             if rand(20) < 1
               Timecop.freeze(Time.current + rand(28).days) do
                 account.transactions.create!(code: "reimb", description: Faker::Lorem.sentence(4)[0..-2],
-                  incurred_on: Date.today,
+                  incurred_on: Time.zone.today,
                   amount: -(rand(10000).to_f + 5000) / 100)
               end
             end

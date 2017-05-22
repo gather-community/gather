@@ -11,12 +11,12 @@ module Meals
       return @range if @range
 
       # If there are any unfinalized meals remaining last month, don't include that month.
-      prev_month_range = Date.today.prev_month.beginning_of_month..Date.today.prev_month.end_of_month
+      prev_month_range = Time.zone.today.prev_month.beginning_of_month..Time.zone.today.prev_month.end_of_month
       range_end = if Meal.where(community_id: community.id).where(served_at: prev_month_range).
         where("status != 'finalized'").any?
-        Date.today.prev_month.prev_month.end_of_month
+        Time.zone.today.prev_month.prev_month.end_of_month
       else
-        Date.today.prev_month.end_of_month
+        Time.zone.today.prev_month.end_of_month
       end
 
       @range = range_end.prev_year.next_month.beginning_of_month..range_end

@@ -1,6 +1,6 @@
 module People
   class Birthdate
-    YEAR_MIN = Date.today.year - 115
+    YEAR_MIN = Time.zone.today.year - 115
     NO_YEAR = 4
 
     attr_accessor :invalid, :object
@@ -42,7 +42,7 @@ module People
           end
           if year.nil?
             year = NO_YEAR
-          elsif year < YEAR_MIN || year > Date.today.year
+          elsif year < YEAR_MIN || year > Time.zone.today.year
             raise ArgumentError
           end
           self.date = Date.new(year, time.month, time.day)
@@ -55,7 +55,7 @@ module People
 
     def age
       if full?
-        today = Date.today
+        today = Time.zone.today
         bday_this_year = Date.new(today.year, date.month, date.day)
         today.year - date.year - (bday_this_year > today ? 1 : 0)
       else

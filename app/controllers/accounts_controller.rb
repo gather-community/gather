@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
       where(code: "late_fee", accounts: { community_id: @community.id }).
       order(:incurred_on).last
 
-    @late_fee_days_ago = last_fee.nil? ? nil : (Date.today - last_fee.incurred_on).to_i
+    @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
   end
 
   def show

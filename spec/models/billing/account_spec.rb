@@ -38,7 +38,7 @@ module Billing
 
     describe "recalculate!" do
       it "should work with existing statements and line items" do
-        Timecop.travel(Date.today - 30.days) do
+        Timecop.travel(Time.zone.today - 30.days) do
           @inv1 = create(:statement, account: account, total_due: 10)
         end
         @inv2 = create(:statement, account: account, total_due: 15)

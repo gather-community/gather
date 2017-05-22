@@ -50,9 +50,9 @@ module Billing
     end
 
     describe "due_within_days_from_now" do
-      let!(:s1){ create(:statement, due_on: Date.today + 29.days) }
-      let!(:s2){ create(:statement, due_on: Date.today + 31.days) }
-      let!(:s3){ create(:statement, due_on: Date.today + 33.days) }
+      let!(:s1){ create(:statement, due_on: Time.zone.today + 29.days) }
+      let!(:s2){ create(:statement, due_on: Time.zone.today + 31.days) }
+      let!(:s3){ create(:statement, due_on: Time.zone.today + 33.days) }
       let!(:s4){ create(:statement, due_on: nil) } # 30 days by default
 
       it "should return the correct statements" do

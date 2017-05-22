@@ -46,7 +46,7 @@ class MealsController < ApplicationController
 
   def new
     authorize @meal
-    @min_date = Date.today.strftime("%Y-%m-%d")
+    @min_date = Time.zone.today.strftime("%Y-%m-%d")
     prep_form_vars
   end
 

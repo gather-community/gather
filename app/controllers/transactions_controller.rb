@@ -18,7 +18,7 @@ class TransactionsController < ApplicationController
   def new
     @account = Billing::Account.find(params[:account_id])
     authorize @account, :update?
-    @transaction = Billing::Transaction.new(incurred_on: Date.today, account: @account)
+    @transaction = Billing::Transaction.new(incurred_on: Time.zone.today, account: @account)
     authorize @transaction
   end
 

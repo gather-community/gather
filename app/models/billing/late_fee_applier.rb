@@ -21,7 +21,7 @@ module Billing
       return unless policy?
       late_accounts.each do |account|
         account.transactions.create!(
-          incurred_on: Date.today,
+          incurred_on: Time.zone.today,
           code: "late",
           description: "Late payment fee",
           amount: amount_for(account.balance_due)

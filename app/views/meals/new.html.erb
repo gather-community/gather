@@ -5,7 +5,9 @@
 <% missing << "at least one meal-hostable resource" if @resource_options.empty? %>
 
 <% if missing.any? %>
-  Before you can create a meal, <%= missing.join(" and ") %> must exist.
+  <div class="none-found">
+    Before you can create a meal, <%= missing.join(" and ") %> must exist.
+  </div>
 <% else %>
   <%= render("form") %>
 <% end %>

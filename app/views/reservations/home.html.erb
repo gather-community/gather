@@ -6,7 +6,9 @@
 <% end %>
 
 <% if @resources.empty? %>
-  No reservable resources found.
+  <div class="none-found">
+    No reservable resources found.
+  </div>
 <% else %>
   <% @resources.each do |resource| %>
     <div class="resource">

@@ -7,9 +7,9 @@
 <% end %>
 
 <% if @report.overview.nil? %>
-
-  No matching meal data found. The report starts from the last month with no unfinalized meals.
-
+  <div class="none-found">
+    No matching meal data found. The report starts from the last month with no unfinalized meals.
+  </div>
 <% else %>
 
   <% range = %w(first last).map { |m| l(@report.range.send(m), format: :month_yr) }.join(" - ") %>

@@ -38,6 +38,8 @@ module Concerns::ApplicationController::RequestPreprocessing
       # We are passing store false, so the user is not
       # actually stored in the session and a token is needed for every request.
       sign_in user, store: false
+    else
+      render_error_page(:forbidden)
     end
   end
 

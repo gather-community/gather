@@ -88,7 +88,8 @@ module Concerns::ApplicationController::RequestPreprocessing
     return if devise_controller? || current_user.nil? || subdomain.present?
     if community = community_for_route
       host = "#{community.slug}.#{Settings.url.host}"
-      redirect_to URI::HTTP.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
+      builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+      redirect_to builder.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
     else
       render_error_page(:not_found)
     end

@@ -61,9 +61,9 @@
   <% end %>
 
   <div id="assignment-fields">
-    <%= user_nested_field_set(f, :head_cook_assign, multiple: false) %>
+    <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
     <% @meal.extra_roles.each do |role| %>
-      <%= user_nested_field_set(f, :"#{role}_assigns") %>
+      <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
     <% end %>
   </div>
 

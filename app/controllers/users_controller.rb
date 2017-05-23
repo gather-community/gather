@@ -37,6 +37,8 @@ class UsersController < ApplicationController
           @users.in_community(current_community).adults
         when "reserver_any_cmty"
           @users.adults
+        when "meal_assign"
+          @users.in_community(current_community)
         else
           raise "invalid select2 context"
         end

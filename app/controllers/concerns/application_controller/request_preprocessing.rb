@@ -74,6 +74,11 @@ module Concerns::ApplicationController::RequestPreprocessing
   def authenticate_user!
     if user_signed_in?
       super
+    elsif request.format == :ics
+      # Dont redirect calendar requests to sign in because that makes no sense.
+      # Auth with token already fails hard with 403 but if someone points their calendar app at a bad URL
+      # we get errors if we redirect.
+      render_error_page(:forbidden)      
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.

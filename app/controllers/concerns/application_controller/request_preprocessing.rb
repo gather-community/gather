@@ -78,7 +78,7 @@ module Concerns::ApplicationController::RequestPreprocessing
       # Dont redirect calendar requests to sign in because that makes no sense.
       # Auth with token already fails hard with 403 but if someone points their calendar app at a bad URL
       # we get errors if we redirect.
-      render_error_page(:forbidden)      
+      render_error_page(:forbidden)
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.
@@ -95,8 +95,10 @@ module Concerns::ApplicationController::RequestPreprocessing
     return if devise_controller? || current_user.nil? || subdomain.present?
     if community = community_for_route
       host = "#{community.slug}.#{Settings.url.host}"
-      builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
-      redirect_to builder.build(Settings.url.to_h.merge(host: host, path: request.fullpath)).to_s
+      url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+      url_params = Settings.url.to_h.merge(host: host)
+      url_params[:path], url_params[:query] = request.fullpath.split("?")
+      redirect_to url_builder.build(url_params).to_s
     else
       render_error_page(:not_found)
     end

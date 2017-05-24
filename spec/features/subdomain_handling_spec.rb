@@ -114,8 +114,13 @@ feature "subdomain handling" do
 
     context "with apex domain" do
       scenario "visiting root should redirect to home community root" do
-        visit root_path
+        visit "/"
         expect(current_url).to have_subdomain_and_path("foo", "/")
+      end
+
+      scenario "visiting URL with query string should also redirect" do
+        visit "/?bar=123"
+        expect(current_url).to have_subdomain_and_path("foo", "/?bar=123")
       end
 
       scenario "visiting supported collection route should redirect to home community route" do

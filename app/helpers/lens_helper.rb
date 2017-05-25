@@ -14,9 +14,9 @@ module LensHelper
 
     def to_html
       content_tag(:form, class: "form-inline lens-bar") do
-        html = lens.fields.map { |f| send("#{f}_field", f) << " " }
+        html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
         html << clear_link unless lens.all_required?
-        html.reduce(:<<)
+        html.compact.reduce(:<<)
       end
     end
 
@@ -33,8 +33,8 @@ module LensHelper
     end
 
     def community_field(field)
+      return nil unless multi_community?
       communities = load_communities_in_cluster
-      return "" if communities.size < 1
       field.options[:subdomain] = true unless field.options.key?(:subdomain)
 
       prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")

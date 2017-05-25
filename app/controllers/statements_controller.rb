@@ -17,11 +17,13 @@ class StatementsController < ApplicationController
     authorize dummy_statement
     Delayed::Job.enqueue(Billing::StatementJob.new(current_community.id))
 
-    flash[:success] = "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
+    flash[:success] = "Statement generation started. Please try refreshing "\
+      "the page in a moment to see updated account statuses."
 
-    if (no_users = Billing::Account.with_activity_but_no_users(current_community)).any?
+    if (no_users = Billing::Account.with_activity_but_no_users(current_community)).includes(:household).any?
       flash[:alert] = "The following households have no associated users and thus "\
-        "statements were not generated for them: " << (no_users.map(&:household_full_name).join(", ")) <<
+        "statements were not generated for them: " <<
+        (no_users.map { |a| a.household.decorate.name }.join(", ")) <<
         ". Try sending statements again once the households have associated users."
     end
 

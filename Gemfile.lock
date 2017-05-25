@@ -159,6 +159,11 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    draper (2.1.0)
+      actionpack (>= 3.0)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      request_store (~> 1.0)
     dropzonejs-rails (0.7.3)
       rails (> 3.1)
     ejs (1.1.1)
@@ -421,6 +426,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise
+  draper (~> 2.1)
   dropzonejs-rails (~> 0.7)
   exception_notification
   factory_girl_rails (~> 4.0)

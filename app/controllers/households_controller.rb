@@ -131,6 +131,7 @@ class HouseholdsController < ApplicationController
   private
 
   def household_attributes
+    params[:household][:community_id] = current_community.id unless multi_community?
     permitted_attributes(@household).tap do |permitted|
       policy(@household).ensure_allowed_community_id(permitted)
     end

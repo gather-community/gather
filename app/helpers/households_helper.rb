@@ -4,7 +4,7 @@ module HouseholdsHelper
     if household.nil?
       ""
     else
-      content_tag(:option, household.full_name, value: household.id, selected: "selected")
+      content_tag(:option, household.name, value: household.id, selected: "selected")
     end
   end
 end

@@ -215,7 +215,7 @@ class MealsController < ApplicationController
   def prep_form_vars
     @meal.ensure_assignments
     load_communities_in_cluster
-    @resource_options = Reservation::Resource.meal_hostable.by_full_name
+    @resource_options = Reservation::Resource.meal_hostable.by_full_name.decorate
   end
 
   def finalize_params

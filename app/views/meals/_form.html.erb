@@ -7,7 +7,7 @@
     <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
-    <%= f.input :resource_ids, collection: @resource_options, label_method: :full_name, required: true,
+    <%= f.input :resource_ids, collection: @resource_options, required: true,
       input_html: { multiple: "multiple" } %>
 
   <% else %>

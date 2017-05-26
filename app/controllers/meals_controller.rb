@@ -30,7 +30,8 @@ class MealsController < ApplicationController
     set_no_cache unless @meal.in_past?
 
     @signup = Signup.for(current_user, @meal)
-    @account = current_user.account_for(@meal.community)
+    @household = current_user.household.decorate
+    @account = current_user.account_for(@meal.community).decorate
     load_signups
     load_prev_next_meal
   end
@@ -209,7 +210,7 @@ class MealsController < ApplicationController
   end
 
   def load_signups
-    @signups = @meal.signups.community_first(@meal.community).sorted
+    @signups = @meal.signups.community_first(@meal.community).sorted.decorate
   end
 
   def prep_form_vars

@@ -5,7 +5,7 @@
 <% end %>
 
 <h4>
-  Signups for <%= current_user.household_full_name %>
+  Signups for <%= @household.name %>
   <%= @meal.closed? ? icon_tag("lock") : "" %>
 </h4>
 <% if @account.present? && @account.credit_exceeded? && @signup.new_record? %>

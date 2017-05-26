@@ -41,3 +41,10 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
 end
+
+# Console helper.
+module Rails
+  def self.settnt
+    ActsAsTenant.current_tenant = Cluster.first
+  end
+end

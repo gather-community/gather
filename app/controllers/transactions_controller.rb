@@ -18,7 +18,7 @@ class TransactionsController < ApplicationController
   def new
     @account = Billing::Account.find(params[:account_id])
     authorize @account, :update?
-    @transaction = Billing::Transaction.new(incurred_on: Time.zone.today, account: @account)
+    @transaction = Billing::Transaction.new(incurred_on: Time.zone.today, account: @account).decorate
     authorize @transaction
   end
 
@@ -28,12 +28,13 @@ class TransactionsController < ApplicationController
     @transaction = Billing::Transaction.new(account: @account)
     authorize @transaction
     @transaction.assign_attributes(transaction_params)
+    @transaction = @transaction.decorate
     if @transaction.valid?
       # If confirmed not present, we show a confirm screen.
       if params[:confirmed] == "1"
         @transaction.save
         flash[:success] = "Transaction added successfully."
-        redirect_to accounts_path
+        return redirect_to accounts_path
       elsif params[:confirmed] == "0"
         flash.now[:notice] = "The transaction was not added. You can edit it below and try again, "\
            "or click 'Cancel' below to return to the accounts page."

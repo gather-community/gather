@@ -4,7 +4,7 @@ class StatementsController < ApplicationController
   before_action -> { nav_context(:accounts) }
 
   def show
-    @statement = Billing::Statement.find(params[:id])
+    @statement = Billing::Statement.find(params[:id]).decorate
     authorize @statement
     @charges = @statement.charges
     @credits = @statement.credits

@@ -10,7 +10,8 @@ class AccountsController < ApplicationController
     @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
       with_any_activity(@community).
-      by_household_full_name
+      by_household_full_name.
+      decorate
 
     @active_accounts = Billing::Account.with_activity(@community).count
     @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
@@ -29,14 +30,14 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Billing::Account.find(params[:id])
+    @account = Billing::Account.find(params[:id]).decorate
     @community = @account.community
     authorize @account
     prep_account_vars
   end
 
   def edit
-    @account = Billing::Account.find(params[:id])
+    @account = Billing::Account.find(params[:id]).decorate
     authorize @account
   end
 

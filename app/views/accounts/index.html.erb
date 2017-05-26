@@ -46,7 +46,7 @@
     <% @accounts.each do |account| %>
       <tr>
         <td>
-          <%= link_to(account.household_full_name.html_safe << no_user_warning(account),
+          <%= link_to(account.household_name.html_safe << no_user_warning(account),
             account_path(account)) %>
         </td>
         <td class="amount">

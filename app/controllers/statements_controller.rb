@@ -20,10 +20,12 @@ class StatementsController < ApplicationController
     flash[:success] = "Statement generation started. Please try refreshing "\
       "the page in a moment to see updated account statuses."
 
-    if (no_users = Billing::Account.with_activity_but_no_users(current_community)).includes(:household).any?
+    with_no_users = Billing::Account.includes(:household).with_activity_but_no_users(current_community)
+
+    if with_no_users.any?
       flash[:alert] = "The following households have no associated users and thus "\
         "statements were not generated for them: " <<
-        (no_users.map { |a| a.household.decorate.name }.join(", ")) <<
+        (with_no_users.map { |a| a.decorate.household_name }.join(", ")) <<
         ". Try sending statements again once the households have associated users."
     end
 

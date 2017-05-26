@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action -> { nav_context(:accounts) }
 
   def index
-    @account = Billing::Account.find(params[:account_id])
+    @account = Billing::Account.find(params[:account_id]).decorate
     authorize @account, :show?
     authorize Billing::Transaction
     @transactions = policy_scope(Billing::Transaction).includes(account: :community)

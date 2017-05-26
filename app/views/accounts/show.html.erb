@@ -1,4 +1,4 @@
-<% content_for(:title){ "Account: #{@account.household_full_name}" } %>
+<% content_for(:title){ "Account: #{@account.household_name}" } %>
 
 <% content_for(:top_buttons) do %>
   <%= link_to(icon_tag("pencil") << " Edit Account", edit_account_path(@account),

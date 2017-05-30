@@ -55,6 +55,6 @@ module Gather
       }
     end
 
-    config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port)
+    config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
   end
 end

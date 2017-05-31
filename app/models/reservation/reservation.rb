@@ -24,7 +24,7 @@ module Reservation
     delegate :name, to: :reserver_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :resource
-    delegate :name, :full_name, to: :resource, prefix: true
+    delegate :name, to: :resource, prefix: true
     delegate :title_or_no_title, to: :meal, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 

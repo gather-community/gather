@@ -1,4 +1,4 @@
-<% content_for(:title){ "Household: #{@household.display_name}" } %>
+<% content_for(:title) { "Household: #{@household.name}" } %>
 
 <% content_for(:top_buttons) do %>
   <% if policy(@household).edit? %>

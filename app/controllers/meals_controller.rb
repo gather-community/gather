@@ -217,7 +217,7 @@ class MealsController < ApplicationController
     @meal = @meal.decorate
     @meal.ensure_assignments
     load_communities_in_cluster
-    @resource_options = Reservation::Resource.meal_hostable.by_full_name.decorate
+    @resource_options = Reservation::Resource.meal_hostable.by_cmty_and_name.decorate
   end
 
   def finalize_params

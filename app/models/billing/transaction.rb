@@ -27,7 +27,7 @@ module Billing
     scope :charge, ->{ where("amount > 0") }
     scope :latest_first, ->{ order(incurred_on: :desc) }
 
-    delegate :household_id, :household_full_name, :community_id, :community, to: :account
+    delegate :household_id, :community_id, :community, to: :account
 
     before_validation do
       # Respect qty and unit price

@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
     @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
       with_any_activity(@community).
-      by_household_full_name.
+      by_cmty_and_household_name.
       decorate
 
     @active_accounts = Billing::Account.with_activity(@community).count

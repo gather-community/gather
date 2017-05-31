@@ -31,7 +31,7 @@ class MealsController < ApplicationController
 
     @signup = Signup.for(current_user, @meal)
     @household = current_user.household.decorate
-    @account = current_user.account_for(@meal.community).decorate
+    @account = current_user.account_for(@meal.community).try(:decorate)
     load_signups
     load_prev_next_meal
   end

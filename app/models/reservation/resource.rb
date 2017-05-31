@@ -26,10 +26,6 @@ module Reservation
       "#{community.abbrv} #{name}"
     end
 
-    def full_meal_abbrv
-      "#{community.abbrv} #{meal_abbrv}"
-    end
-
     # Available reservation kinds. Returns nil if none are defined.
     def kinds
       (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence

@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe NotificationMailer do
+  let!(:multiple_communities) { create_list(:community, 2) }
   let(:resource) { create(:resource, name: "Place", meal_abbrv: "CH") }
   let(:ca) { resource.community.abbrv }
   let(:meal) { create(:meal, served_at: "2017-01-01 12:00", resources: [resource]) }

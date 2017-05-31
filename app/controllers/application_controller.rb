@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include Concerns::ApplicationController::Setters
   include Concerns::ApplicationController::Loaders
   include Concerns::ApplicationController::UrlHelpers
+  include Utilities
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -18,11 +19,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_community, :current_cluster, :multi_community?, :app_version
 
   protected
-
-  def multi_community?
-    return @multi_community if defined?(@multi_community)
-    @multi_community = Community.multiple?
-  end
 
   def nav_context(section, subsection = nil)
     @context = {section: section, subsection: subsection}

@@ -3,8 +3,11 @@ module Reservation
     delegate_all
 
     def name
-      prefix = h.multi_community? ? "#{community.abbrv}: " : ""
-      "#{prefix}#{object.name}"
+      "#{cmty_prefix_no_colon}#{object.name}"
+    end
+
+    def meal_abbrv
+      "#{cmty_prefix_no_colon}#{object.meal_abbrv}"
     end
   end
 end

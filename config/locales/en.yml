@@ -344,6 +344,7 @@ en:
     personal:
       profile: "Profile"
       accounts: "Accounts"
+      account: "Account"
       calendars: "Calendars"
       sign_out: "Sign Out"
 

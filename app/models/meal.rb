@@ -143,14 +143,6 @@ class Meal < ActiveRecord::Base
     served_at + 1.hour
   end
 
-  def location_name
-    resources.first.full_name
-  end
-
-  def location_abbrv
-    resources.first.full_meal_abbrv
-  end
-
   def reservation_handler
     @reservation_handler ||= Reservation::MealReservationHandler.new(self)
   end

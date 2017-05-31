@@ -2,7 +2,7 @@
   <%= hidden_field_tag :account_id, @account.id %>
 
   <%= f.input :household_name do %>
-    <%= @transaction.household_full_name %>
+    <%= @transaction.household_name %>
   <% end %>
 
   <%= f.input :incurred_on, as: :date_picker,

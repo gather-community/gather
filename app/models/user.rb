@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   scope :adults, -> { where(child: false) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
-  delegate :name, :full_name, to: :household, prefix: true
+  delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv, :unit_num, to: :household
   delegate :community, to: :household, allow_nil: true

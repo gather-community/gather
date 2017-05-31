@@ -55,7 +55,7 @@
         Nobody, yet!
       <% else %>
         <% @signups.each do |s| %>
-          <li><%= s.household_full_name %> (<%= s.total %>)</li>
+          <li><%= s.household_name %> (<%= s.total %>)</li>
         <% end %>
       <% end %>
     </ul>
@@ -63,7 +63,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function () {
+  $(function() {
     $('[data-toggle="tooltip"]').tooltip();
   })
 <% end %>

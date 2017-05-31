@@ -59,14 +59,6 @@ class Household < ActiveRecord::Base
     users.empty?
   end
 
-  def full_name
-    "#{community.abbrv}: #{display_name}"
-  end
-
-  def display_name
-    "#{name}#{active? ? '' : ' (Inactive)'}"
-  end
-
   def garage_nums=(str)
     write_attribute(:garage_nums, str.strip.blank? ? nil : str.split(/\s*,\s*/).join(", "))
   end

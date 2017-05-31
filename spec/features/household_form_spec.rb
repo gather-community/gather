@@ -18,18 +18,18 @@ feature "household form" do
       fill_in("Garage Number(s)", with: "7")
       click_on("Create Household")
       expect_success
-      select(community_name, from: "community")
+      select(community_name, from: "community") if community_name
       click_on("Pump")
       expect(page).to have_css("table.key-value", text: community_name) if community_name
     end
   end
 
-  context "as admin" do
+  context "as admin with single community" do
     let(:admin) { create(:admin) }
     it_behaves_like "creating household"
   end
 
-  context "as cluster admin" do
+  context "as cluster admin with multiple communities" do
     let!(:admin) { create(:cluster_admin) }
     let!(:other_community) { create(:community, name: "Foo") }
     it_behaves_like "creating household", "Foo"

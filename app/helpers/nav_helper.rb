@@ -91,7 +91,8 @@ module NavHelper
         name: :accounts,
         path: accounts_household_path(current_user.household),
         permitted: policy(current_user.household).accounts?,
-        icon: "money"
+        icon: "money",
+        i18n_key: multi_community? ? :accounts : :account
       },{
         name: :calendars,
         path: calendar_exports_path,
@@ -124,7 +125,7 @@ module NavHelper
     params[:"aria-controls"] = item[:name] if tab
 
     i18n_sub_key = item[:type] == :sub ? "#{item[:parent]}." : ""
-    name = t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:name]}")
+    name = t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:i18n_key] || item[:name]}")
 
     link_to(icon_tag(item[:icon]) << " #{name}", item[:path], params)
   end

@@ -5,7 +5,7 @@
     <% if f.object.persisted? %>
       <%= f.object.household.decorate.name %>
     <% else %>
-      <%= f.select(:household_id, household_selected_option(f.object.household.decorate), {},
+      <%= f.select(:household_id, household_selected_option(f.object.household.try(:decorate)), {},
         class: "form-control", data: {
           "select2-src" => "households",
           "select2-label-attr" => "name",

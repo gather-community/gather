@@ -62,6 +62,7 @@ class MealsController < ApplicationController
   def create
     @meal = Meal.new(
       community_id: current_user.community_id,
+      community_ids: [current_user.community_id],
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))

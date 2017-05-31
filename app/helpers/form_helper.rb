@@ -1,7 +1,7 @@
 module FormHelper
   def horizontal_form_for(obj, options = {}, &block)
     cols = options.delete(:width) == :full ? 12 : 9
-    name = options.delete(:name) || Array.wrap(obj).last.class.name.underscore.dasherize.gsub("/", "--")
+    name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
     options[:html] ||= {}
     options[:html][:class] ||= ""
     options[:html][:class] << " form-horizontal col-sm-#{cols} #{name}-form"

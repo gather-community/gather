@@ -1,5 +1,5 @@
 module Reservation
-  class ResourceDecorator < Draper::Decorator
+  class ResourceDecorator < ApplicationDecorator
     delegate_all
 
     def name

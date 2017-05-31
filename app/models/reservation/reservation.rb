@@ -90,11 +90,6 @@ module Reservation
       starts_at.future?
     end
 
-    # Duck type for calendaring.
-    def location_name
-      resource_name
-    end
-
     def recently_created?
       Time.current - created_at < 1.hour
     end

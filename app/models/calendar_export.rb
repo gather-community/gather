@@ -27,6 +27,7 @@ class CalendarExport
       class_name = objects.first.class.name.underscore
 
       objects.each do |obj|
+        obj = obj.decorate
         cal.event do |e|
           e.uid = "#{UID_SIGNATURE}_#{class_name}_#{obj.id}"
           e.dtstart = obj.starts_at
@@ -80,7 +81,7 @@ class CalendarExport
   end
 
   def summary(obj)
-    case obj.class.name
+    case class_name(obj)
     when "Meal" then obj.title_or_no_title
     when "Assignment" then obj.title
     when "Reservation::Reservation" then obj.name << (obj.meal? ? "" : " (#{obj.reserver_name})")
@@ -89,7 +90,7 @@ class CalendarExport
   end
 
   def description(obj)
-    case obj.class.name
+    case class_name(obj)
     when "Meal" then "By #{obj.head_cook_name}"
     when "Assignment" then nil
     when "Reservation::Reservation" then nil
@@ -98,7 +99,7 @@ class CalendarExport
   end
 
   def url(obj)
-    case obj.class.name
+    case class_name(obj)
     when "Meal" then url_for(obj, :meal_url)
     when "Assignment" then url_for(obj.meal, :meal_url)
     when "Reservation::Reservation" then url_for(obj, :reservation_url)
@@ -107,7 +108,12 @@ class CalendarExport
   end
 
   def unknown_class(obj)
-    raise "Unrecognized object class #{obj.class.name}"
+    raise "Unrecognized object class #{class_name(obj)}"
+  end
+
+  def class_name(obj)
+    # Assumes obj is a decorator.
+    obj.object.class.name
   end
 
   def url_for(obj, url_helper_method)

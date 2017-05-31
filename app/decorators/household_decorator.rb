@@ -1,4 +1,4 @@
-class HouseholdDecorator < Draper::Decorator
+class HouseholdDecorator < ApplicationDecorator
   delegate_all
 
   def name

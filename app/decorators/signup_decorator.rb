@@ -1,4 +1,4 @@
-class SignupDecorator < Draper::Decorator
+class SignupDecorator < ApplicationDecorator
   delegate_all
 
   def household_name

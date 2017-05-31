@@ -23,7 +23,7 @@ class MealsController < ApplicationController
   end
 
   def show
-    @meal = Meal.find(params[:id])
+    @meal = Meal.find(params[:id]).decorate
     authorize @meal
 
     # Don't want the singup form to get cached
@@ -206,7 +206,7 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.page(params[:page])
+    @meals = @meals.page(params[:page]).decorate
   end
 
   def load_signups
@@ -214,6 +214,7 @@ class MealsController < ApplicationController
   end
 
   def prep_form_vars
+    @meal = @meal.decorate
     @meal.ensure_assignments
     load_communities_in_cluster
     @resource_options = Reservation::Resource.meal_hostable.by_full_name.decorate

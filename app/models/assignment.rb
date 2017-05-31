@@ -6,8 +6,6 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :meal
 
-  delegate :location_name, to: :meal
-
   def empty?
     user_id.blank?
   end

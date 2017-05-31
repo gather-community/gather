@@ -1,5 +1,5 @@
 module Billing
-  class StatementDecorator < Draper::Decorator
+  class StatementDecorator < ApplicationDecorator
     delegate_all
 
     def household_name

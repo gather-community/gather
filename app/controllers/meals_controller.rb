@@ -188,7 +188,7 @@ class MealsController < ApplicationController
 
   def load_meals
     @meals = policy_scope(Meal)
-    @meals = @meals.hosted_by(lens[:community] == "all" ? current_cluster.communities : current_community)
+    @meals = @meals.hosted_by(lens_communities)
     @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
 
     if lens[:time] == "finalizable"

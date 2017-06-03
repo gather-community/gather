@@ -39,7 +39,7 @@ module LensHelper
 
       prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")
 
-      selected = if lens[:community] == "all" || lens[:community].blank?
+      selected = if !field.options[:required] && (lens[:community] == "all" || lens[:community].blank?)
         nil
       elsif field.options[:subdomain]
         current_community.slug

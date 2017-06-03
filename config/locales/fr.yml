@@ -1,0 +1,5 @@
+fr:
+  csv:
+    headers:
+      user:
+        first_name: "Prénom"

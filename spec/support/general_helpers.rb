@@ -32,6 +32,13 @@ module GeneralHelpers
     end
   end
 
+  def with_locale(locale)
+    old_locale = I18n.locale
+    I18n.locale = locale
+    yield
+    I18n.locale = old_locale
+  end
+
   def contain_community_url(community, path)
     include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
   end

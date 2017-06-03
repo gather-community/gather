@@ -13,3 +13,9 @@ RSpec::Matchers.define :have_subdomain_and_path do |subdomain, path|
     url =~ %r{\Ahttp://#{subdomain}#{Settings.url.host}(:#{Settings.url.port})?#{Regexp.escape(path)}\z}
   end
 end
+
+RSpec::Matchers.define :match_expectation_file do |file|
+  match do |str|
+    str == File.read(Rails.root.join("spec", "expectations", file))
+  end
+end

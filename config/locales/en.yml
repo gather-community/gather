@@ -1,4 +1,8 @@
 en:
+  common:
+    "true": "True"
+    "false": "False"
+
   activerecord:
     attributes:
       user:
@@ -187,6 +191,7 @@ en:
       short_date_with_yr: "%a %b %d %Y"
       url_date: "%Y-%m-%d"
       weekday: "%A"
+      csv: "%Y-%m-%d"
   time:
     formats:
       date_wkday_no_yr: "%a %b %d"
@@ -268,6 +273,23 @@ en:
     household: "Please type a few letters of the household's name."
     guardian: "Please type a few letters of the guardian's name."
     user: "Please type a few letters of the user's name."
+
+  csv:
+    headers:
+      user:
+        first_name: "First Name"
+        last_name: "Last Name"
+        household__unit_num: "Unit Num"
+        birthdate: "Birthdate"
+        email: "Email"
+        child: "Is Child"
+        mobile_phone: "Mobile Phone"
+        home_phone: "Home Phone"
+        work_phone: "Work Phone"
+        joined_on: "Join Date"
+        preferred_contact: "Preferred Contact"
+        household__garage_nums: "Garage Nums"
+        household__vehicles__description: "Vehicles"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."

@@ -58,7 +58,13 @@ table.index {
   }
 
   .links {
-    text-align: right;
+    @media screen and (min-width: $screen-sm-min) {
+      text-align: right;
+    }
+
+    @media screen and (max-width: $screen-xs-max) {
+      margin-top: 10px;
+    }
 
     a {
       color: $gray-text;

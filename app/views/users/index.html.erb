@@ -4,14 +4,14 @@
   <%= lens_bar %>
 
   <% if policy(dummy_user).create? %>
-    <%= link_to(icon_tag("plus") << " Invite Users", invite_users_path, class: "btn btn-default") %>
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= icon_tag("plus") %> Create User <span class="caret"></span>
+        <%= icon_tag("plus") %> Add User <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
         <li><%= link_to("Create Adult", new_user_path) %></li>
         <li><%= link_to("Create Child", new_user_path(child: 1)) %></li>
+        <li><%= link_to("Invite Users", invite_users_path) %></li>
       </ul>
     </div>
   <% end %>

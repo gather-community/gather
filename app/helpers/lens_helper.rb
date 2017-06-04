@@ -1,5 +1,6 @@
 module LensHelper
   def lens_bar(options = {})
+    return unless defined?(lens) && !lens.nil?
     LensBar.new(self, lens: lens, options: options).to_html
   end
 
@@ -13,7 +14,7 @@ module LensHelper
     end
 
     def to_html
-      content_tag(:form, class: "form-inline lens-bar") do
+      content_tag(:form, class: "form-inline lens-bar #{options[:position]}") do
         html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
         html << clear_link unless lens.all_required?
         html.compact.reduce(:<<)

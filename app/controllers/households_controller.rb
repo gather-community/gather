@@ -89,9 +89,15 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     authorize @household
 
-    prepare_lens(community: {required: true, subdomain: false})
-    @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
+
+    if @accounts.size > 1
+      prepare_lens(community: {required: true, subdomain: false})
+      @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
+    else
+      @community = current_user.community
+    end
+
     @communities = @accounts.map(&:community)
     @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
 

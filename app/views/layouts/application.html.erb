@@ -96,9 +96,11 @@
       <div class="title-and-buttons">
         <h1><%= @title %></h1>
         <div class="top-buttons">
+          <%= lens_bar(position: "upper") %>
           <%= yield(:top_buttons) %>
         </div>
       </div>
+      <%= lens_bar(position: "lower") %>
 
       <%= yield %>
     </div>

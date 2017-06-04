@@ -40,7 +40,7 @@ class MealsController < ApplicationController
     authorize dummy_meal, :reports?
     @community = current_community
     nav_context(:meals, :reports)
-    prepare_lens(community: {required: true})
+    prepare_lens(community: {required: true}) if multi_community?
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
   end

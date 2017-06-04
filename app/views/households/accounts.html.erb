@@ -1,9 +1,4 @@
 <% content_for(:title) { multi_community? ? "Your #{@community.name} Account" : "Your Account" } %>
-<% content_for(:top_buttons) do %>
-  <% if @accounts.size > 1 %>
-    <%= lens_bar %>
-  <% end %>
-<% end %>
 
 <% if @accounts.empty? %>
   There are not yet any charges associated with your household.

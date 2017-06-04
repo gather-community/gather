@@ -10,56 +10,6 @@ div.title-and-buttons {
     font-size: 1.2em;
   }
 
-  // Extra classes needed for specificity.
-  .form-inline.lens-bar {
-    display: inline-block;
-    margin-bottom: 10px;
-    white-space: nowrap;
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    @media screen and (min-width: $screen-sm-min) {
-      margin-left: 10px;
-      margin-right: 10px;
-
-      .form-control, .select2.select2-container {
-        width: 150px;
-      }
-
-      select#community { width: 135px; }
-      select#time { width: 100px; }
-      select#life_stage { width: 140px; }
-      select#user_sort { width: 90px; }
-
-      a.clear {
-        color: #666;
-        display: inline-block;
-        font-size: 16px;
-
-        span {
-          display: none;
-        }
-      }
-    }
-
-    @media screen and (max-width: $screen-xs-max) {
-      display: block;
-
-      .form-control {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-      }
-
-      a.clear {
-        display: block;
-        margin-top: -5px;
-      }
-    }
-  }
-
   @media screen and (min-width: $screen-sm-min) {
     display: table;
     width: 100%;

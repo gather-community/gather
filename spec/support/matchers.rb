@@ -15,7 +15,8 @@ RSpec::Matchers.define :have_subdomain_and_path do |subdomain, path|
 end
 
 RSpec::Matchers.define :match_expectation_file do |file|
-  match do |str|
-    str == File.read(Rails.root.join("spec", "expectations", file))
+  match do |actual|
+    actual == File.read(Rails.root.join("spec", "expectations", file))
   end
+  diffable
 end

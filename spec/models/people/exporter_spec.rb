@@ -30,7 +30,7 @@ describe People::Exporter do
         email: "d@d.com", birthdate: "0004/03/10", joined_on: "2016/08/01", preferred_contact: "text",
         mobile_phone: "+17345550085", work_phone: "+17345554512") }
       let!(:child) { create(:user, :child, household: household, first_name: "Billy", last_name: "South",
-        email: "e@f.com", birthdate: "2008/11/29", joined_on: "2008/11/29", preferred_contact: "text",
+        email: "e@f.com", birthdate: nil, joined_on: "2008/11/29", preferred_contact: "text",
         mobile_phone: "+17345557737", guardians: [adult1, adult2]) }
 
       it "should return valid csv" do

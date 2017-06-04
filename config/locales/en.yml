@@ -184,14 +184,15 @@ en:
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
-      date_full: "%b %d %Y"
+      full: "%b %d %Y"
       month_day: "%b %d"
       month_yr: "%B %Y"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
       url_date: "%Y-%m-%d"
       weekday: "%A"
-      csv: "%Y-%m-%d"
+      csv_full: "%Y-%m-%d"
+      csv_month_day: "%m-%d"
   time:
     formats:
       date_wkday_no_yr: "%a %b %d"

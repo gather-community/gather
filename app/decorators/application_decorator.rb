@@ -12,4 +12,9 @@ class ApplicationDecorator < Draper::Decorator
   def cmty_prefix_no_colon
     @cmty_prefix_no_colon ||= multi_community? ? "#{community.abbrv} " : ""
   end
+
+  def l(*args)
+    return nil if args.first.nil?
+    I18n.l(*args)
+  end
 end

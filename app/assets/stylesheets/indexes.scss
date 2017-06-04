@@ -47,3 +47,21 @@ table.index {
   text-align: center;
   margin-top: 40px;
 }
+
+.index-footer {
+  // Leave the left/right margins alone for column stuff.
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .pagination {
+    margin: 0;
+  }
+
+  .links {
+    text-align: right;
+
+    a {
+      color: $gray-text;
+    }
+  }
+}

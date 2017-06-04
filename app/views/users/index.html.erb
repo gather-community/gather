@@ -3,6 +3,7 @@
 
 <% content_for(:top_buttons) do %>
   <% if policy(dummy_user).create? %>
+    <%= print_button %>
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= icon_tag("plus") %> Add User <span class="caret"></span>
@@ -74,4 +75,10 @@
       <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv)) %>
     </div>
   </div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    new Gather.Views.People.DirectoryPrintView();
+  });
 <% end %>

@@ -5,9 +5,9 @@ module People
   class Exporter
     attr_accessor :collection
 
-    COLUMNS = %w(first_name last_name household__unit_num birthdate email child
+    COLUMNS = %w(first_name last_name unit_num birthdate email child
       mobile_phone home_phone work_phone joined_on preferred_contact
-      household__garage_nums household__vehicles__description)
+      garage_nums vehicles)
 
     def initialize(collection)
       self.collection = collection.includes(household: :vehicles)
@@ -29,25 +29,8 @@ module People
     end
 
     def row_for(user)
-      expanded_columns.map do |attribs|
-        attribs.inject(user) do |value, attrib|
-          if attribs == %w(household vehicles description) && attrib == "description"
-            user.adult? ? value.map(&:to_s).join("; ") : nil
-          else
-            decorator_for(value).send(attrib)
-          end
-        end
-      end
-    end
-
-    def expanded_columns
-      @expanded_columns ||= COLUMNS.map { |c| c.split("__") }
-    end
-
-    def decorator_for(obj)
-      @decorators_by_class ||= {}
-      @decorators_by_class[obj.class] ||= "Csv::#{obj.class.name}Decorator".constantize
-      @decorators_by_class[obj.class].new(obj)
+      user = Csv::UserDecorator.new(user)
+      COLUMNS.map { |c| user.send(c) }
     end
   end
 end

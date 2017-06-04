@@ -41,4 +41,10 @@
       }
     }
   }
+
+  @media print {
+    a.long-email {
+      font-size: 90%;
+    }
+  }
 }

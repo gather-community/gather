@@ -76,7 +76,7 @@
     </nav>
 
     <% if @context[:subsection] && (items = subnav_items).any? %>
-      <nav id="subnav" class="hidden-xs">
+      <nav id="subnav" class="hidden-xs hidden-print">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>
             <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
@@ -94,8 +94,9 @@
       <%= flash_messages %>
 
       <div class="title-and-buttons">
-        <h1><%= @title %></h1>
-        <div class="top-buttons">
+        <h1 class="hidden-print"><%= @title %></h1>
+        <h1 class="print-title visible-print"><%= yield(:print_title).presence || @title %></h1>
+        <div class="top-buttons hidden-print">
           <%= lens_bar(position: "upper") %>
           <%= yield(:top_buttons) %>
         </div>
@@ -105,7 +106,7 @@
       <%= yield %>
     </div>
 
-    <div id="footer-pusher"></div>
+    <div id="footer-pusher" class="hidden-print"></div>
   </div>
   <%= render("layouts/footer") %>
 

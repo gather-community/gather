@@ -1,4 +1,5 @@
 <% content_for(:title) { "Directory" } %>
+<% content_for(:print_title) { "#{current_community.name} Directory" } %>
 
 <% content_for(:top_buttons) do %>
   <% if policy(dummy_user).create? %>
@@ -67,8 +68,9 @@
   <div class="index-footer row">
     <div class="col-sm-6">
       <%= paginate @users unless lens[:user_view] == "table" %>
+      <div class="visible-print"><%= generated_time %></div>
     </div>
-    <div class="links col-sm-6">
+    <div class="links col-sm-6 hidden-print">
       <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv)) %>
     </div>
   </div>

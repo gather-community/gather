@@ -14,7 +14,7 @@ module LensHelper
     end
 
     def to_html
-      content_tag(:form, class: "form-inline lens-bar #{options[:position]}") do
+      content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
         html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
         html << clear_link unless lens.all_required?
         html.compact.reduce(:<<)

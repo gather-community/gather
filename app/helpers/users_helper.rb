@@ -14,7 +14,7 @@ module UsersHelper
   end
 
   def email_link(email)
-    email.blank? ? "" : link_to(email, "mailto:#{email}")
+    email.blank? ? "" : link_to(email, "mailto:#{email}", class: email.size >= 28 ? "long-email" : "")
   end
 
   def user_photo_if_permitted(user, format)

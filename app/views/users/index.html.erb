@@ -1,4 +1,4 @@
-<% content_for(:title){ "Directory" } %>
+<% content_for(:title) { "Directory" } %>
 
 <% content_for(:top_buttons) do %>
   <% if policy(dummy_user).create? %>
@@ -19,47 +19,54 @@
   <div class="none-found">
     No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
   </div>
-<% elsif lens[:user_view] == "table" %>
-  <div class="index-wrapper">
-    <table class="index">
-      <tr>
-        <th>Name</th>
-        <th>Unit</th>
-        <th>Email</th>
-        <th>Mobile Phone</th>
-        <th>Home Phone</th>
-        <th>Work Phone</th>
-      </tr>
-      <% @users.each do |user| %>
-        <tr>
-          <td><%= link_to(user.name, user) %></td>
-          <td><%= user.unit_link %></td>
-          <td><%= email_link(user.email) if user.email %></td>
-          <% %i(mobile home work).each do |kind| %>
-            <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
-          <% end %>
-        </tr>
-      <% end %>
-    </table>
-  </div>
 <% else %>
-  <div class="row clearfix">
-    <% @users.each do |user| %>
-      <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
-        <div class="inner clearfix">
-          <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
-          <div class="info">
-            <div><%= link_to(user.name, user) %></div>
-            <div class="email"><%= email_link(user.email) if user.email %></div>
-            <div class="unit-phone"><%= user.unit_and_phone %></div>
+  <% if %w(table tableall).include?(lens[:user_view]) %>
+    <div class="index-wrapper">
+      <table class="index">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit</th>
+            <th>Email</th>
+            <th>Mobile Phone</th>
+            <th>Home Phone</th>
+            <th>Work Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr class="<%= user.tr_classes %>">
+              <td><%= link_to(user.name, user) %></td>
+              <td><%= user.unit_link %></td>
+              <td><%= email_link(user.email) if user.email %></td>
+              <% %i(mobile home work).each do |kind| %>
+                <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="row clearfix">
+      <% @users.each do |user| %>
+        <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
+          <div class="inner clearfix">
+            <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
+            <div class="info">
+              <div><%= link_to(user.name, user) %></div>
+              <div class="email"><%= email_link(user.email) if user.email %></div>
+              <div class="unit-phone"><%= user.unit_and_phone %></div>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="index-footer row">
     <div class="col-sm-6">
-      <%= paginate @users %>
+      <%= paginate @users unless lens[:user_view] == "table" %>
     </div>
     <div class="links col-sm-6">
       <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv)) %>

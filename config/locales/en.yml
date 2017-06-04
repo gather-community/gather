@@ -258,6 +258,7 @@ en:
         view:
           album: "Album"
           table: "Table"
+          tableall: "Table w/ Inactive"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

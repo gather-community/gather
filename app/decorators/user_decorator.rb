@@ -38,4 +38,8 @@ class UserDecorator < ApplicationDecorator
   def unit_and_phone
     [unit_link, first_phone_link].compact.reduce(&sep(" &bull; "))
   end
+
+  def tr_classes
+    active? ? "" : "inactive"
+  end
 end

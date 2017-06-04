@@ -11,7 +11,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         load_users
-        @users = @users.page(params[:page]).per(36) unless lens[:user_view] == "table"
+
+        # Pagination depends on view.
+        if lens[:user_view].blank? || lens[:user_view] == "album"
+          @users = @users.page(params[:page]).per(36)
+        elsif lens[:user_view] == "tableall"
+          @users = @users.page(params[:page]).per(100)
+        end
+
         @users = @users.decorate
         dummy_household = Household.new(community: current_community)
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
@@ -163,8 +170,11 @@ class UsersController < ApplicationController
     @users = @users.in_community(@community)
     @users = @users.matching(lens[:search]) if lens[:search].present?
     @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
-    # Regular folks don't care about inactives
-    @users = @users.active unless policy(dummy_user).administer?
+
+    # Regular folks can't see inactive users. We also never show them in the
+    # regular table view (that's what tableall is for.)
+    @users = @users.active if !policy(dummy_user).show_inactive? || lens[:user_view] == "table"
+
     if lens[:user_sort].present?
       @users = @users.by_active.sorted_by(lens[:user_sort])
     else

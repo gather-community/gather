@@ -127,6 +127,17 @@ module LensHelper
       )
     end
 
+    def user_view_field(field)
+      opts = %w(table)
+      opt_key = "simple_form.options.user.view"
+      select_tag("user_view",
+        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),
+        prompt: I18n.t("#{opt_key}.album"),
+        class: "form-control",
+        onchange: "this.form.submit();"
+      )
+    end
+
     def search_field(field)
       text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
     end

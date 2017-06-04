@@ -11,7 +11,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         load_users
-        @users = @users.page(params[:page]).per(36)
+        @users = @users.page(params[:page]).per(36) unless lens[:user_view] == "table"
+        @users = @users.decorate
         dummy_household = Household.new(community: current_community)
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
       end
@@ -154,7 +155,7 @@ class UsersController < ApplicationController
   private
 
   def load_users
-    prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
+    prepare_lens({community: {required: true}}, :life_stage, :user_sort, :user_view, :search)
     @community = current_community
     load_communities_in_cluster
     lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)

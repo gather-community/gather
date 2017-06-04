@@ -255,6 +255,9 @@ en:
         sort:
           name: "By Name"
           unit: "By Unit"
+        view:
+          album: "Album"
+          table: "Table"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

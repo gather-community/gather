@@ -17,4 +17,9 @@ class ApplicationDecorator < Draper::Decorator
     return nil if args.first.nil?
     I18n.l(*args)
   end
+
+  # Returns a Proc that inserts the given separator, to be passed to array.reduce.
+  def sep(separator)
+    ->(a, b){ a << separator.html_safe << b }
+  end
 end

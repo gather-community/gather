@@ -26,4 +26,16 @@ class UserDecorator < ApplicationDecorator
     return nil if object.preferred_contact.nil?
     I18n.t("simple_form.options.user.preferred_contact.#{object.preferred_contact}")
   end
+
+  def unit_link
+    unit_num.nil? ? nil : h.link_to("##{unit_num}", household)
+  end
+
+  def first_phone_link
+    no_phones? ? nil : h.phone_link(phones.first, kind_abbrv: true)
+  end
+
+  def unit_and_phone
+    [unit_link, first_phone_link].compact.reduce(&sep(" &bull; "))
+  end
 end

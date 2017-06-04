@@ -20,26 +20,28 @@
     No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
   </div>
 <% elsif lens[:user_view] == "table" %>
-  <table class="index">
-    <tr>
-      <th>Name</th>
-      <th>Unit #</th>
-      <th>Email</th>
-      <th>Mobile Phone</th>
-      <th>Home Phone</th>
-      <th>Work Phone</th>
-    </tr>
-    <% @users.each do |user| %>
+  <div class="index-wrapper">
+    <table class="index">
       <tr>
-        <td><%= link_to(user.name, user) %></td>
-        <td><%= user.unit_link %></td>
-        <td><%= email_link(user.email) if user.email %></td>
-        <% %i(mobile home work).each do |kind| %>
-          <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
-        <% end %>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Email</th>
+        <th>Mobile Phone</th>
+        <th>Home Phone</th>
+        <th>Work Phone</th>
       </tr>
-    <% end %>
-  </table>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to(user.name, user) %></td>
+          <td><%= user.unit_link %></td>
+          <td><%= email_link(user.email) if user.email %></td>
+          <% %i(mobile home work).each do |kind| %>
+            <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 <% else %>
   <div class="row clearfix">
     <% @users.each do |user| %>

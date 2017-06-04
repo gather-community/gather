@@ -280,7 +280,7 @@ en:
       user:
         first_name: "First Name"
         last_name: "Last Name"
-        household__unit_num: "Unit Num"
+        unit_num: "Unit Num"
         birthdate: "Birthdate"
         email: "Email"
         child: "Is Child"
@@ -289,8 +289,8 @@ en:
         work_phone: "Work Phone"
         joined_on: "Join Date"
         preferred_contact: "Preferred Contact"
-        household__garage_nums: "Garage Nums"
-        household__vehicles__description: "Vehicles"
+        garage_nums: "Garage Nums"
+        vehicles: "Vehicles"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."

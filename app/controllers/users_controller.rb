@@ -10,21 +10,7 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
-        prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
-        @community = current_community
-        load_communities_in_cluster
-        lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
-        @users = @users.includes(household: :community)
-        @users = @users.in_community(@community)
-        @users = @users.matching(lens[:search]) if lens[:search].present?
-        @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
-        # Regular folks don't care about inactives
-        @users = @users.active unless policy(dummy_user).administer?
-        if lens[:user_sort].present?
-          @users = @users.by_active.sorted_by(lens[:user_sort])
-        else
-          @users = @users.by_active.by_name
-        end
+        load_users
         @users = @users.page(params[:page]).per(36)
         dummy_household = Household.new(community: current_community)
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
@@ -47,6 +33,13 @@ class UsersController < ApplicationController
         @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
+      end
+
+      format.csv do
+        load_users
+        @users = @users.active # No inactve users in CSV
+        send_data People::Exporter.new(@users).to_csv, filename: "directory.csv",
+          disposition: "inline", type: "text/csv"
       end
     end
   end
@@ -159,6 +152,24 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def load_users
+    prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
+    @community = current_community
+    load_communities_in_cluster
+    lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
+    @users = @users.includes(household: :community)
+    @users = @users.in_community(@community)
+    @users = @users.matching(lens[:search]) if lens[:search].present?
+    @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
+    # Regular folks don't care about inactives
+    @users = @users.active unless policy(dummy_user).administer?
+    if lens[:user_sort].present?
+      @users = @users.by_active.sorted_by(lens[:user_sort])
+    else
+      @users = @users.by_active.by_name
+    end
+  end
 
   # Called before authorization to check and prepare household attributes.
   # We need to set the household separately from the other parameters because

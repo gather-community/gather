@@ -141,7 +141,7 @@ class MealsController < ApplicationController
   end
 
   def summary
-    @meal = Meal.find(params[:id])
+    @meal = Meal.find(params[:id]).decorate
     authorize @meal
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)

@@ -50,7 +50,7 @@
             <% if @user.joined_on %>
               <tr>
                 <td>Join Date</td>
-                <td><%= l(@user.joined_on, format: :date_full) %></td>
+                <td><%= l(@user.joined_on, format: :full) %></td>
               </tr>
             <% end %>
           <% end %>

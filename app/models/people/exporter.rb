@@ -33,10 +33,8 @@ module People
         attribs.inject(user) do |value, attrib|
           if attribs == %w(household vehicles description) && attrib == "description"
             user.adult? ? value.map(&:to_s).join("; ") : nil
-          elsif attribs == %w(birthdate)
-            value.birthday.str
           else
-            value.decorate.send(attrib)
+            decorator_for(value).send(attrib)
           end
         end
       end
@@ -44,6 +42,12 @@ module People
 
     def expanded_columns
       @expanded_columns ||= COLUMNS.map { |c| c.split("__") }
+    end
+
+    def decorator_for(obj)
+      @decorators_by_class ||= {}
+      @decorators_by_class[obj.class] ||= "Csv::#{obj.class.name}Decorator".constantize
+      @decorators_by_class[obj.class].new(obj)
     end
   end
 end

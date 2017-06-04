@@ -148,4 +148,8 @@ module FeatureSpecHelpers
   def set_host(host)
     Capybara.app_host = "http://#{host}"
   end
+
+  def select_lens(lens_id, value)
+    first(:css, "##{lens_id}").select(value)
+  end
 end

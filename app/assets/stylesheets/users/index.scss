@@ -1,4 +1,13 @@
+// General styles for all views.
 .users.action-index {
+  @media print {
+    .long-email {
+      font-size: 90%;
+    }
+  }
+}
+
+#directory-album {
   .user {
     margin-bottom: 15px;
 
@@ -41,10 +50,40 @@
       }
     }
   }
+}
 
-  @media print {
-    a.long-email {
-      font-size: 90%;
+#printable-directory-album {
+  tr {
+    border: none;
+  }
+
+  td.user {
+    width: 33.333%;
+    margin-right: 10px;
+    vertical-align: top;
+
+    img {
+      width: 25%;
+      float: left;
+    }
+
+    .info {
+      font-size: 11px;
+      border-top: 1px solid $light-border-color;
+      margin-left: 25%;
+      margin-right: 10px;
+      padding: 5px 0 5px 10px;
+      line-height: 1.2;
+      overflow-x: hidden;
+      white-space: nowrap;
+
+      .unit-num {
+        float: right;
+      }
+    }
+
+    &:last-of-type .info {
+      margin-right: 0;
     }
   }
 }

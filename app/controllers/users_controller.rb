@@ -59,6 +59,7 @@ class UsersController < ApplicationController
       [h, load_showable_users_and_children_in(h)]
     end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
+    @user = @user.decorate
   end
 
   def new

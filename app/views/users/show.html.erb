@@ -23,7 +23,7 @@
           <% if @user.email? %>
             <tr>
               <td>Email</td>
-              <td><%= email_link(@user.email) %></td>
+              <td><%= @user.email_link %></td>
             </tr>
           <% end %>
           <% unless @user.no_phones? %>

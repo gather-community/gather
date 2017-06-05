@@ -38,7 +38,7 @@
             <strong><%= contact.name_relationship %></strong><br/>
             <% lines = [contact.location] %>
             <% lines.concat(contact.phones.map { |p| phone_link(p) }) %>
-            <% lines << email_link(contact.email) if contact.email.present? %>
+            <% lines << link_to(contact.email, "mailto:#{contact.email}") if contact.email.present? %>
             <%= safe_join(lines, tag(:br)) %>
           </div>
         <% end %>

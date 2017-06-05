@@ -3,6 +3,11 @@
 }
 
 @media print {
+  body {
+    font-size: 13px;
+    color: black;
+  }
+
   a[href]:after {
     content: none !important;
   }

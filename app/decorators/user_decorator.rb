@@ -22,9 +22,17 @@ class UserDecorator < ApplicationDecorator
     phone(:work).formatted
   end
 
+  def phone_tags
+    phones.map { |p| h.content_tag(:div, p.formatted(kind_abbrv: true), class: "phone") }.reduce(:<<)
+  end
+
   def preferred_contact
     return nil if object.preferred_contact.nil?
     I18n.t("simple_form.options.user.preferred_contact.#{object.preferred_contact}")
+  end
+
+  def unit_num_with_hash
+    unit_num.nil? ? nil : "##{unit_num}"
   end
 
   def unit_link
@@ -41,5 +49,13 @@ class UserDecorator < ApplicationDecorator
 
   def tr_classes
     active? ? "" : "inactive"
+  end
+
+  def email_link
+    email.blank? ? "" : h.link_to(email, "mailto:#{email}", class: long_email_class)
+  end
+
+  def long_email_class
+    email.size > 25 ? "long-email" : ""
   end
 end

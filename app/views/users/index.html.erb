@@ -24,7 +24,7 @@
 <% else %>
   <% if %w(table tableall).include?(lens[:user_view]) %>
     <div class="index-wrapper">
-      <table class="index">
+      <table id="directory-table" class="index">
         <thead>
           <tr>
             <th>Name</th>
@@ -40,7 +40,7 @@
             <tr class="<%= user.tr_classes %>">
               <td><%= link_to(user.name, user) %></td>
               <td><%= user.unit_link %></td>
-              <td><%= email_link(user.email) if user.email %></td>
+              <td><%= user.email_link if user.email %></td>
               <% %i(mobile home work).each do |kind| %>
                 <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
               <% end %>
@@ -50,14 +50,14 @@
       </table>
     </div>
   <% else %>
-    <div class="row clearfix">
+    <div id="directory-album" class="row clearfix hidden-print">
       <% @users.each do |user| %>
         <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
           <div class="inner clearfix">
             <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
             <div class="info">
               <div><%= link_to(user.name, user) %></div>
-              <div class="email"><%= email_link(user.email) if user.email %></div>
+              <div class="email"><%= user.email_link if user.email %></div>
               <div class="unit-phone"><%= user.unit_and_phone %></div>
             </div>
           </div>
@@ -65,6 +65,8 @@
       <% end %>
     </div>
   <% end %>
+
+  <%# Printable album gets inserted here %>
 
   <div class="index-footer row">
     <div class="col-sm-6">

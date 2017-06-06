@@ -2,8 +2,8 @@
 <% content_for(:print_title) { "#{current_community.name} Directory" } %>
 
 <% content_for(:top_buttons) do %>
+  <%= print_button %>
   <% if policy(dummy_user).create? %>
-    <%= print_button %>
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= icon_tag("plus") %> Add User <span class="caret"></span>
@@ -67,10 +67,14 @@
   <% end %>
 
   <%# Printable album gets inserted here %>
+  <div id="printable-directory-album" class="visible-print">
+  </div>
 
   <div class="index-footer row">
     <div class="col-sm-6">
-      <%= paginate @users unless lens[:user_view] == "table" %>
+      <div class="<%= "hidden-print" unless lens[:user_view] == "tableall" %>">
+        <%= paginate @users unless lens[:user_view] == "table" %>
+      </div>
       <div class="visible-print"><%= generated_time %></div>
     </div>
     <div class="links col-sm-6 hidden-print">
@@ -80,7 +84,7 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){
-    new Gather.Views.People.DirectoryPrintView();
+  $(function() {
+    new Gather.Views.People.DirectoryPrintView({viewType: '<%= lens[:user_view] %>'});
   });
 <% end %>

@@ -29,6 +29,14 @@ feature "user index" do
       expect(page).to have_css("table.index tr td", text: user.name)
       expect(page).not_to have_content("Longgone")
     end
+
+    scenario "printing album view", js: true do
+      visit "/users"
+      expect(page).not_to have_css("#printable-directory-album table", visible: false)
+      click_print_button
+      # Should load the full directory, but hidden.
+      expect(page).to have_css("#printable-directory-album table", visible: false)
+    end
   end
 
   context "as admin" do

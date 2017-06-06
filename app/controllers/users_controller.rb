@@ -12,8 +12,12 @@ class UsersController < ApplicationController
       format.html do
         load_users
 
-        # Pagination depends on view.
-        if lens[:user_view].blank? || lens[:user_view] == "album"
+        # Pagination
+        if params[:printalbum] || lens[:user_view] == "table"
+          # We first check for the printalbum param because that overrides any lens pagination stuff.
+          # If it's set, (or if view is 'table') we're showing all active users with no pagination.
+          @users = @users.active
+        elsif lens[:user_view].blank? || lens[:user_view] == "album"
           @users = @users.page(params[:page]).per(36)
         elsif lens[:user_view] == "tableall"
           @users = @users.page(params[:page]).per(100)
@@ -22,6 +26,8 @@ class UsersController < ApplicationController
         @users = @users.decorate
         dummy_household = Household.new(community: current_community)
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
+
+        render(partial: "printable_album") if params[:printalbum]
       end
 
       # For select2 lookups
@@ -172,9 +178,8 @@ class UsersController < ApplicationController
     @users = @users.matching(lens[:search]) if lens[:search].present?
     @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
 
-    # Regular folks can't see inactive users. We also never show them in the
-    # regular table view (that's what tableall is for.)
-    @users = @users.active if !policy(dummy_user).show_inactive? || lens[:user_view] == "table"
+    # Regular folks can't see inactive users.
+    @users = @users.active unless policy(dummy_user).show_inactive?
 
     if lens[:user_sort].present?
       @users = @users.by_active.sorted_by(lens[:user_sort])

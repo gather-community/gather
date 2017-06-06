@@ -152,4 +152,8 @@ module FeatureSpecHelpers
   def select_lens(lens_id, value)
     first(:css, "##{lens_id}").select(value)
   end
+
+  def click_print_button
+    first(:css, ".btn-print").click
+  end
 end

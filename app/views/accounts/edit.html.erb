@@ -1,4 +1,4 @@
-<% content_for(:title){ "Edit Account: #{@account.household_full_name}" } %>
+<% content_for(:title){ "Edit Account: #{@account.household_name}" } %>
 
 <% if @account.household_no_users? %>
   <div class="alert alert-warning">
@@ -9,7 +9,7 @@
 <% form_url = @account.new_record? ? accounts_path : account_path(@account) %>
 <%= horizontal_form_for(@account, url: form_url) do |f| %>
 
-  <%= f.input :household_id do %><%= @account.household_full_name %><% end %>
+  <%= f.input :household_id do %><%= @account.household_name %><% end %>
   <%= f.input :community_id do %><%= @account.community_name %><% end %>
   <%= f.input :current_balance do %><%= currency_with_cr(@account.current_balance) %><% end %>
   <%= f.input :credit_limit, input_html: { value: number_with_precision(@account.credit_limit, precision: 2) } %>

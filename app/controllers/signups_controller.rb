@@ -38,7 +38,7 @@ class SignupsController < ApplicationController
   end
 
   def render_meal_show
-    @meal = @signup.meal
+    @meal = @signup.meal.decorate
     @signups = @meal.signups.includes(household: :community).sorted
     authorize @meal, :show?
     load_prev_next_meal # From MealShowable

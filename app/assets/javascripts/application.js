@@ -25,6 +25,7 @@
 //= require dropzone
 //= require prevent-double-submission
 //= require jquery.dirtyforms
+//= require jquery.waitforimages
 //= require cocoon
 //= require underscore
 //= require backbone

@@ -16,7 +16,7 @@ module Billing
       ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
     scope :with_balance_owing, ->{ where("accounts.balance_due > 0") }
 
-    delegate :name, :full_name, :no_users?, to: :household, prefix: true
+    delegate :name, :no_users?, to: :household, prefix: true
     delegate :name, :abbrv, to: :community, prefix: true
 
     validates :credit_limit, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
@@ -26,7 +26,7 @@ module Billing
       self.current_balance = balance_due + total_new_charges
     end
 
-    def self.by_household_full_name
+    def self.by_cmty_and_household_name
       joins(household: :community).order("communities.abbrv, households.name")
     end
 

@@ -1,11 +1,5 @@
 <% content_for(:title){ "Meals Report" } %>
 
-<% content_for(:top_buttons) do %>
-  <% if multi_community? %>
-    <%= lens_bar %>
-  <% end %>
-<% end %>
-
 <% if @report.overview.nil? %>
   <div class="none-found">
     No matching meal data found. The report starts from the last month with no unfinalized meals.
@@ -66,12 +60,16 @@
     </div>
   </div>
 
+  <% this_cmty_only = multi_community? ? ", #{@community.name} meals only" : "" %>
+
   <h3>By Month</h3>
-  <small><%= range %>, <%= @community.name %> meals only</small>
+  <small>
+    <%= range %><%= this_cmty_only %></small>
   <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
 
   <h3>By Weekday</h3>
-  <small><%= range %>, <%= @community.name %> meals only</small>
+  <small>
+    <%= range %><%= this_cmty_only %></small>
   <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
 
   <% if multi_community? %>

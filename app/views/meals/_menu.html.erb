@@ -5,9 +5,11 @@
     <div class="chunk">
       At <%= @meal.location_name %>
     </div>
-    <div class="chunk">
-      for <%= @meal.communities.map(&:name).join(', ') %>
-    </div>
+    <% if multi_community? %>
+      <div class="chunk">
+        for <%= @meal.communities.map(&:name).join(', ') %>
+      </div>
+    <% end %>
     <% @meal.extra_roles.each do |role| %>
       <% people = @meal.people_in_role(role) %>
       <div class="chunk">

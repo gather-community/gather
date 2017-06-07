@@ -7,7 +7,7 @@
 
   <%= f.input :resource do %>
     <%= image_tag(@resource.photo.url(:thumb)) %><br/>
-    <%= @resource.full_name %>
+    <%= @resource.name %>
   <% end %>
 
   <% unless @reservation.meal? %>

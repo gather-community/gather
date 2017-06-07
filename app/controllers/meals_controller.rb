@@ -23,14 +23,15 @@ class MealsController < ApplicationController
   end
 
   def show
-    @meal = Meal.find(params[:id])
+    @meal = Meal.find(params[:id]).decorate
     authorize @meal
 
     # Don't want the singup form to get cached
     set_no_cache unless @meal.in_past?
 
     @signup = Signup.for(current_user, @meal)
-    @account = current_user.account_for(@meal.community)
+    @household = current_user.household.decorate
+    @account = current_user.account_for(@meal.community).try(:decorate)
     load_signups
     load_prev_next_meal
   end
@@ -39,7 +40,7 @@ class MealsController < ApplicationController
     authorize dummy_meal, :reports?
     @community = current_community
     nav_context(:meals, :reports)
-    prepare_lens(community: {required: true})
+    prepare_lens(community: {required: true}) if multi_community?
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
   end
@@ -61,6 +62,7 @@ class MealsController < ApplicationController
   def create
     @meal = Meal.new(
       community_id: current_user.community_id,
+      community_ids: [current_user.community_id],
       creator: current_user
     )
     @meal.assign_attributes(permitted_attributes(@meal))
@@ -139,7 +141,7 @@ class MealsController < ApplicationController
   end
 
   def summary
-    @meal = Meal.find(params[:id])
+    @meal = Meal.find(params[:id]).decorate
     authorize @meal
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
@@ -205,17 +207,18 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.page(params[:page])
+    @meals = @meals.page(params[:page]).decorate
   end
 
   def load_signups
-    @signups = @meal.signups.community_first(@meal.community).sorted
+    @signups = @meal.signups.community_first(@meal.community).sorted.decorate
   end
 
   def prep_form_vars
+    @meal = @meal.decorate
     @meal.ensure_assignments
     load_communities_in_cluster
-    @resource_options = Reservation::Resource.meal_hostable.by_full_name
+    @resource_options = Reservation::Resource.meal_hostable.by_cmty_and_name.decorate
   end
 
   def finalize_params

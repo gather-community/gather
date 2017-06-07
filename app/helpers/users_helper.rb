@@ -13,10 +13,6 @@ module UsersHelper
     phone.blank? ? "" : link_to(phone.formatted(options), "tel:#{phone.raw}")
   end
 
-  def email_link(email)
-    email.blank? ? "" : link_to(email, "mailto:#{email}")
-  end
-
   def user_photo_if_permitted(user, format)
     image_tag(policy(user).show_photo? ? user.photo.url(format) : "missing/users/#{format}.png",
       class: "photo")

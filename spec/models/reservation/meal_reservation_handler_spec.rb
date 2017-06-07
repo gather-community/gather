@@ -129,9 +129,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
     end
 
     it "sets base error on meal" do
-      expect(meal.errors[:base]).to eq [
-        "The following error(s) occurred in making a #{resources[0].full_name} " \
-          "reservation for this meal: This reservation overlaps an existing one."]
+      expect_overlap_error(resources[0])
     end
   end
 
@@ -200,7 +198,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
 
   def expect_overlap_error(resource)
     expect(meal).not_to be_valid
-    expect(meal.errors[:base]).to eq ["The following error(s) occurred in making a #{resource.full_name} "\
+    expect(meal.errors[:base]).to eq ["The following error(s) occurred in making a #{resource.name} "\
       "reservation for this meal: This reservation overlaps an existing one."]
   end
 end

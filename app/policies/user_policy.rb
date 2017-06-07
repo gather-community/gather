@@ -29,6 +29,10 @@ class UserPolicy < ApplicationPolicy
       (active? && ((record.adult? && own_cluster_record?) || own_community_record?))
   end
 
+  def show_inactive?
+    active_admin?
+  end
+
   def show_personal_info?
     self? || active_admin? || active_in_community?
   end

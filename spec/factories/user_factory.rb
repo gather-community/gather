@@ -30,12 +30,12 @@ FactoryGirl.define do
 
     trait :child do
       transient do
-        no_guardians false
+        guardians nil
       end
       child true
 
       after(:build) do |child, evaluator|
-        child.guardians = [create(:user)] unless evaluator.no_guardians
+        child.guardians = evaluator.guardians || [create(:user)]
       end
     end
 

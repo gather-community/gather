@@ -27,13 +27,13 @@ class HouseholdsController < ApplicationController
           raise "invalid select2 context"
         end
         @households = @households.by_commty_and_name.page(params[:page]).per(20)
-        render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
+        render(json: @households.decorate, meta: { more: @households.next_page.present? }, root: "results")
       end
     end
   end
 
   def show
-    @household = Household.find(params[:id])
+    @household = Household.find(params[:id]).decorate
     @members = load_showable_users_and_children_in(@household)
     authorize @household
   end
@@ -89,9 +89,15 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     authorize @household
 
-    prepare_lens(community: {required: true, subdomain: false})
-    @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
+
+    if @accounts.size > 1
+      prepare_lens(community: {required: true, subdomain: false})
+      @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
+    else
+      @community = current_user.community
+    end
+
     @communities = @accounts.map(&:community)
     @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
 
@@ -131,6 +137,7 @@ class HouseholdsController < ApplicationController
   private
 
   def household_attributes
+    params[:household][:community_id] = current_community.id unless multi_community?
     permitted_attributes(@household).tap do |permitted|
       policy(@household).ensure_allowed_community_id(permitted)
     end
@@ -141,5 +148,6 @@ class HouseholdsController < ApplicationController
     @allowed_community_changes = policy(dummy_household).allowed_community_changes.by_name
     @household.vehicles.build if @household.vehicles.empty?
     @household.emergency_contacts.build if @household.emergency_contacts.empty?
+    @household = @household.decorate
   end
 end

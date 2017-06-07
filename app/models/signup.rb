@@ -28,7 +28,7 @@ class Signup < ActiveRecord::Base
   validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
   validate :max_signups_per_type, :dont_exceed_spots, :nonzero_signups_if_new
 
-  delegate :name, :full_name, :users, :adults, to: :household, prefix: true
+  delegate :name, :users, :adults, to: :household, prefix: true
   delegate :community_abbrv, to: :household
   delegate :communities, to: :meal
 

@@ -22,7 +22,7 @@ feature "inactive user" do
 
     # Can still view accounts
     click_on(user.name)
-    click_on("Accounts")
+    click_on("Account")
     expect(page).to have_content("Your Account")
   end
 end

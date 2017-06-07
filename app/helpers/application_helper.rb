@@ -34,4 +34,12 @@ module ApplicationHelper
   def json(obj)
     obj.to_json.html_safe
   end
+
+  def generated_time
+    content_tag(:div, "Generated: #{I18n.l(Time.current, format: :full_datetime)}", id: "gen-time")
+  end
+
+  def print_button
+    button_tag(type: "button", class: "btn btn-default btn-print") { icon_tag("print") }
+  end
 end

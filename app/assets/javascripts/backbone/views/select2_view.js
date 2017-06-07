@@ -10,7 +10,7 @@ Gather.Views.Select2View = Backbone.View.extend({
       self.setup_select2($(inserted).find("select[data-select2-src]"));
     });
 
-    this.$('select[data-select2-src]').each(function(){
+    this.$('select[data-select2-src]').each(function() {
       self.setup_select2($(this));
     });
   },

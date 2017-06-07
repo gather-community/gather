@@ -1,0 +1,71 @@
+.form-inline.lens-bar {
+  display: inline-block;
+  margin-bottom: 10px;
+  white-space: nowrap;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  // Tablet and above
+  @media screen and (min-width: $screen-sm-min) {
+    .form-control, .select2.select2-container {
+      width: 150px;
+    }
+
+    select#community { width: 155px; }
+    select#time { width: 120px; }
+    select#life_stage { width: 160px; }
+    select#user_sort { width: 110px; }
+    select#user_view { width: 90px; }
+
+    a.clear {
+      color: #666;
+      display: inline-block;
+      font-size: 16px;
+
+      span {
+        display: none;
+      }
+    }
+  }
+
+  // Desktop
+  @media screen and (min-width: $screen-md-min) {
+    margin-left: 10px;
+    margin-right: 10px;
+
+    &.lower {
+      display: none;
+    }
+  }
+
+  // Tablet
+  @media screen and (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    margin-bottom: 20px;
+
+    &.upper {
+      display: none;
+    }
+  }
+
+  // Mobile
+  @media screen and (max-width: $screen-xs-max) {
+    display: block;
+
+    &.lower {
+      display: none;
+    }
+
+    .form-control {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    a.clear {
+      display: block;
+      margin-top: -5px;
+    }
+  }
+}

@@ -3,6 +3,11 @@
 }
 
 @media print {
+  body {
+    font-size: 13px;
+    color: black;
+  }
+
   a[href]:after {
     content: none !important;
   }
@@ -21,7 +26,7 @@
     height: 50px;
   }
 
-  .action-icons, .top-buttons, footer, #footer-pusher {
+  .action-icons {
     display: none;
   }
 }

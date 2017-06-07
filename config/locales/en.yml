@@ -1,4 +1,8 @@
 en:
+  common:
+    "true": "True"
+    "false": "False"
+
   activerecord:
     attributes:
       user:
@@ -180,13 +184,15 @@ en:
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
-      date_full: "%b %d %Y"
+      full: "%b %d %Y"
       month_day: "%b %d"
       month_yr: "%B %Y"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
       url_date: "%Y-%m-%d"
       weekday: "%A"
+      csv_full: "%Y-%m-%d"
+      csv_month_day: "%m-%d"
   time:
     formats:
       date_wkday_no_yr: "%a %b %d"
@@ -249,6 +255,10 @@ en:
         sort:
           name: "By Name"
           unit: "By Unit"
+        view:
+          album: "Album"
+          table: "Table"
+          tableall: "Table w/ Inactive"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -268,6 +278,23 @@ en:
     household: "Please type a few letters of the household's name."
     guardian: "Please type a few letters of the guardian's name."
     user: "Please type a few letters of the user's name."
+
+  csv:
+    headers:
+      user:
+        first_name: "First Name"
+        last_name: "Last Name"
+        unit_num: "Unit Num"
+        birthdate: "Birthdate"
+        email: "Email"
+        child: "Is Child"
+        mobile_phone: "Mobile Phone"
+        home_phone: "Home Phone"
+        work_phone: "Work Phone"
+        joined_on: "Join Date"
+        preferred_contact: "Preferred Contact"
+        garage_nums: "Garage Nums"
+        vehicles: "Vehicles"
 
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
@@ -344,6 +371,7 @@ en:
     personal:
       profile: "Profile"
       accounts: "Accounts"
+      account: "Account"
       calendars: "Calendars"
       sign_out: "Sign Out"
 

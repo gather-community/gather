@@ -7,7 +7,7 @@
     <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
 
-    <%= f.input :resource_ids, collection: @resource_options, label_method: :full_name, required: true,
+    <%= f.input :resource_ids, collection: @resource_options, required: true,
       input_html: { multiple: "multiple" } %>
 
   <% else %>
@@ -22,32 +22,30 @@
 
   <% end %>
 
-  <% if policy(@meal).set_menu? %>
-
-    <div class="form-group text optional
-      <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
-      <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>
-      <div class="boxes col-sm-9">
-        <% @communities.each do |c| %>
-          <% checked = community_invited?(@meal, c) %>
-          <% disabled = disable_community_checkbox?(@meal, c) %>
-          <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
-          <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
-          <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
-          &nbsp;&nbsp;
+  <% if multi_community? %>
+    <% if policy(@meal).set_menu? %>
+      <div class="form-group text optional
+        <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
+        <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>
+        <div class="boxes col-sm-9">
+          <% @communities.each do |c| %>
+            <% checked = community_invited?(@meal, c) %>
+            <% disabled = disable_community_checkbox?(@meal, c) %>
+            <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
+            <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
+            <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
+            &nbsp;&nbsp;
+          <% end %>
+        </div>
+        <% if @meal.errors['invitations'].present? %>
+          <div class="error col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
         <% end %>
       </div>
-      <% if @meal.errors['invitations'].present? %>
-        <div class="error col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
+    <% else %>
+      <%= f.input :communities do %>
+        <%= @meal.communities.map(&:name).join(", ") %>
       <% end %>
-    </div>
-
-  <% else %>
-
-    <%= f.input :communities do %>
-      <%= @meal.communities.map(&:name).join(", ") %>
     <% end %>
-
   <% end %>
 
   <% if policy(@meal).set_menu? %>

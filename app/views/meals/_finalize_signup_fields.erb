@@ -3,12 +3,12 @@
 <tr class="nested-fields <%= dupe %> <%= hidden %>">
   <td>
     <% if f.object.persisted? %>
-      <%= f.object.household_full_name %>
+      <%= f.object.household.decorate.name %>
     <% else %>
-      <%= f.select(:household_id, household_selected_option(f.object.household), {},
+      <%= f.select(:household_id, household_selected_option(f.object.household.try(:decorate)), {},
         class: "form-control", data: {
           "select2-src" => "households",
-          "select2-label-attr" => "full_name",
+          "select2-label-attr" => "name",
           "select2-prompt" => t("select2_prompts.household"),
           "select2-context" => "finalize"
       }) %>

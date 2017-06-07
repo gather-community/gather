@@ -1,6 +1,7 @@
 <% content_for(:title){ @meal.title || "Untitled Meal" } %>
 
 <% content_for(:top_buttons) do %>
+  <%= print_button %>
   <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
 
   <% if @meal.closed? && current_user == @meal.head_cook %>
@@ -19,7 +20,7 @@
 
 <div id="signups" class="row">
   <div class="col-sm-12">
-    <div id="gen-time">Generated: <%= Time.current.to_s(:full_datetime) %></div>
+    <%= generated_time %>
     <h2>Signups</h2>
     <div id="portion-counts">
       <%= portion_counts(@meal) %>
@@ -67,7 +68,6 @@
     </small>
   </div>
 </div>
-
 
 <div id="groc-calc" class="row">
   <div class="col-sm-12">
@@ -151,3 +151,9 @@
     </div>
   </div>
 <% end%>
+
+<%= javascript_tag do %>
+  $(function(){
+    new Gather.Views.PrintView();
+  });
+<% end %>

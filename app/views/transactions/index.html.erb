@@ -1,5 +1,5 @@
 <% content_for(:title) do
-    suffix = @account.household == current_user.household ? "" : ": #{@account.household_full_name}"
+    suffix = @account.household == current_user.household ? "" : ": #{@account.household_name}"
     "Recent Transactions#{suffix}"
   end
 %>
@@ -14,7 +14,7 @@
   <tr>
     <td>Household</td>
     <td>
-      <%= @account.household_full_name %>
+      <%= @account.household_name %>
     </td>
   </tr>
   <tr>

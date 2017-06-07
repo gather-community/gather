@@ -10,24 +10,24 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
-        prepare_lens({community: {required: true}}, :life_stage, :user_sort, :search)
-        @community = current_community
-        load_communities_in_cluster
-        lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
-        @users = @users.includes(household: :community)
-        @users = @users.in_community(@community)
-        @users = @users.matching(lens[:search]) if lens[:search].present?
-        @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
-        # Regular folks don't care about inactives
-        @users = @users.active unless policy(dummy_user).administer?
-        if lens[:user_sort].present?
-          @users = @users.by_active.sorted_by(lens[:user_sort])
-        else
-          @users = @users.by_active.by_name
+        load_users
+
+        # Pagination
+        if params[:printalbum] || lens[:user_view] == "table"
+          # We first check for the printalbum param because that overrides any lens pagination stuff.
+          # If it's set, (or if view is 'table') we're showing all active users with no pagination.
+          @users = @users.active
+        elsif lens[:user_view].blank? || lens[:user_view] == "album"
+          @users = @users.page(params[:page]).per(36)
+        elsif lens[:user_view] == "tableall"
+          @users = @users.page(params[:page]).per(100)
         end
-        @users = @users.page(params[:page]).per(36)
+
+        @users = @users.decorate
         dummy_household = Household.new(community: current_community)
         @allowed_community_changes = policy(dummy_household).allowed_community_changes
+
+        render(partial: "printable_album") if params[:printalbum]
       end
 
       # For select2 lookups
@@ -48,6 +48,13 @@ class UsersController < ApplicationController
         @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
       end
+
+      format.csv do
+        load_users
+        @users = @users.active # No inactve users in CSV
+        send_data People::Exporter.new(@users).to_csv, filename: "directory.csv",
+          disposition: "inline", type: "text/csv"
+      end
     end
   end
 
@@ -58,6 +65,7 @@ class UsersController < ApplicationController
       [h, load_showable_users_and_children_in(h)]
     end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).past.newest_first
+    @user = @user.decorate
   end
 
   def new
@@ -160,6 +168,26 @@ class UsersController < ApplicationController
 
   private
 
+  def load_users
+    prepare_lens({community: {required: true}}, :life_stage, :user_sort, :user_view, :search)
+    @community = current_community
+    load_communities_in_cluster
+    lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
+    @users = @users.includes(household: :community)
+    @users = @users.in_community(@community)
+    @users = @users.matching(lens[:search]) if lens[:search].present?
+    @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
+
+    # Regular folks can't see inactive users.
+    @users = @users.active unless policy(dummy_user).show_inactive?
+
+    if lens[:user_sort].present?
+      @users = @users.by_active.sorted_by(lens[:user_sort])
+    else
+      @users = @users.by_active.by_name
+    end
+  end
+
   # Called before authorization to check and prepare household attributes.
   # We need to set the household separately from the other parameters because
   # the household is what determines the community, and that determines what attributes
@@ -226,6 +254,7 @@ class UsersController < ApplicationController
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?
     @user.household.emergency_contacts.build if @user.household.emergency_contacts.empty?
+    @user.household = @user.household.decorate
   end
 
   def dummy_user

@@ -1,5 +1,6 @@
 module LensHelper
   def lens_bar(options = {})
+    return unless defined?(lens) && !lens.nil?
     LensBar.new(self, lens: lens, options: options).to_html
   end
 
@@ -13,10 +14,10 @@ module LensHelper
     end
 
     def to_html
-      content_tag(:form, class: "form-inline lens-bar") do
-        html = lens.fields.map { |f| send("#{f}_field", f) << " " }
+      content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
+        html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
         html << clear_link unless lens.all_required?
-        html.reduce(:<<)
+        html.compact.reduce(:<<)
       end
     end
 
@@ -33,8 +34,8 @@ module LensHelper
     end
 
     def community_field(field)
+      return nil unless multi_community?
       communities = load_communities_in_cluster
-      return "" if communities.size < 1
       field.options[:subdomain] = true unless field.options.key?(:subdomain)
 
       prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")
@@ -121,6 +122,18 @@ module LensHelper
       select_tag("user_sort",
         options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_sort]),
         prompt: I18n.t("#{opt_key}.name"),
+        class: "form-control",
+        onchange: "this.form.submit();"
+      )
+    end
+
+    def user_view_field(field)
+      opts = %w(table)
+      opts << "tableall" if policy(dummy_user).show_inactive?
+      opt_key = "simple_form.options.user.view"
+      select_tag("user_view",
+        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),
+        prompt: I18n.t("#{opt_key}.album"),
         class: "form-control",
         onchange: "this.form.submit();"
       )

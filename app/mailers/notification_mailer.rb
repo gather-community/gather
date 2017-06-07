@@ -2,7 +2,7 @@ class NotificationMailer < ApplicationMailer
   def meal_reminder(user, signup)
     @user = user
     @signup = signup
-    @meal = signup.meal
+    @meal = signup.meal.decorate
 
     title = @meal.title ? "#{@meal.title}, " : ""
     subject = "Meal Reminder: #{title}#{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}"
@@ -12,7 +12,7 @@ class NotificationMailer < ApplicationMailer
   def shift_reminder(assignment)
     @assignment = assignment
     @user = assignment.user
-    @meal = assignment.meal
+    @meal = assignment.meal.decorate
     @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
     @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
@@ -27,7 +27,7 @@ class NotificationMailer < ApplicationMailer
 
   def worker_change_notice(initiator, meal, added, removed)
     @initiator = initiator
-    @meal = meal
+    @meal = meal.decorate
     @added = added
     @removed = removed
 
@@ -41,7 +41,7 @@ class NotificationMailer < ApplicationMailer
   def cook_menu_reminder(assignment)
     @assignment = assignment
     @user = assignment.user
-    @meal = assignment.meal
+    @meal = assignment.meal.decorate
     @type = assignment.reminder_count == 0 ? :first : :second
 
     subject = "Menu Reminder: Please Post Menu for #{@meal.served_at.to_s(:short_date)}"

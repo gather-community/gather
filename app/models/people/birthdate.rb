@@ -18,13 +18,13 @@ module People
       object.birthdate = d
     end
 
-    def str
+    def str(formats: [:month_day, :full])
       if invalid?
         @str
       elsif date.nil?
         nil
       else
-        I18n.l(date, format: date.year == NO_YEAR ? :month_day : :date_full).sub("  ", " ")
+        I18n.l(date, format: date.year == NO_YEAR ? formats[0] : formats[1]).sub("  ", " ")
       end
     end
 
@@ -68,7 +68,7 @@ module People
     end
 
     def format
-      full? ? :date_full : :month_day
+      full? ? :full : :month_day
     end
 
     def validate

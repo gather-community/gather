@@ -2,6 +2,9 @@ require "rails_helper"
 
 feature "calendar export" do
   let!(:user) { create(:user, calendar_token: "xyz") }
+  let!(:meal) { create(:meal, head_cook: user) }
+  let!(:signup) { create(:signup, meal: meal, household: user.household, adult_meat: 2) }
+  let!(:reservation) { create(:reservation, reserver: user) }
 
   context "with user subdomain" do
     around { |ex| with_user_home_subdomain(user) { ex.run } }

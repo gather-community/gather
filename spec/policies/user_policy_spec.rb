@@ -161,7 +161,7 @@ describe UserPolicy do
       it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
     end
 
-    permissions :activate?, :deactivate?, :administer?, :add_basic_role? do
+    permissions :activate?, :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
       it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
 
       it "denies action on self" do

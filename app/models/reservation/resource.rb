@@ -16,19 +16,11 @@ module Reservation
     validates_attachment_file_name :photo, matches: /jpe?g\Z/i
 
     scope :meal_hostable, -> { where("meal_abbrv IS NOT NULL") }
-    scope :by_full_name, -> { joins(:community).order("communities.abbrv, name") }
+    scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
     scope :visible, -> { where(hidden: false) }
     scope :hidden, -> { where(hidden: true) }
 
     delegate :name, to: :community, prefix: true
-
-    def full_name
-      "#{community.abbrv} #{name}"
-    end
-
-    def full_meal_abbrv
-      "#{community.abbrv} #{meal_abbrv}"
-    end
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds

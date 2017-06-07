@@ -63,6 +63,7 @@ gem "icalendar", "~> 2.0"
 gem "dropzonejs-rails", "~> 0.7"
 gem 'mailcatcher'
 gem "acts_as_tenant", "~> 0.4"
+gem "draper", "~> 2.1"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

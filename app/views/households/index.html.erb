@@ -1,8 +1,6 @@
 <% content_for(:title){ "Households" } %>
 
 <% content_for(:top_buttons) do %>
-  <%= lens_bar %>
-
   <% if policy(Household.new(community: current_community)).create? %>
     <%= link_to(icon_tag("plus") << " Create Household", new_household_path, class: "btn btn-primary") %>
   <% end %>
@@ -15,29 +13,33 @@
 <% else %>
   <table class="index">
     <tr>
-      <th class="col-md-2">Name</th>
-      <th class="col-md-1">Community</th>
-      <th class="col-md-1">Unit Number</th>
-      <th class="col-md-3">Users</th>
-      <th class="col-md-1"></th>
+      <th>Name</th>
+      <% if multi_community? %>
+        <th>Community</th>
+      <% end %>
+      <th>Unit #</th>
+      <th>Users</th>
+      <th></th>
     </tr>
     <% @households.each do |household| %>
       <tr class="<%= household.active? ? "" : "inactive" %>">
-        <td class="col-md-2">
+        <td>
           <% if policy(household).show? %>
             <%= link_to(household.name, household) %>
           <% else %>
             <%= household.name %>
           <% end %>
         </td>
-        <td class="col-md-1"><%= household.community_name %></td>
-        <td class="col-md-1">
+        <% if multi_community? %>
+          <td><%= household.community_name %></td>
+        <% end %>
+        <td>
           <%= household.unit_num.present? ? household.unit_num : "" %>
         </td>
-        <td class="col-md-3">
+        <td>
           <%= load_showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>
         </td>
-        <td class="col-md-1">
+        <td>
           <div class="action-icons">
             <% if policy(household).update? %>
               <%= link_to(icon_tag('pencil'), edit_household_path(household)) %>

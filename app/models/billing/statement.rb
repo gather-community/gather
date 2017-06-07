@@ -20,7 +20,7 @@ module Billing
     scope :is_latest, ->{ joins(:account).where("accounts.last_statement_id = statements.id") }
     scope :latest_first, ->{ order(created_at: :desc) }
 
-    delegate :community, :community_id, :household, :household_id, :household_full_name, to: :account
+    delegate :community, :community_id, :household, :household_id, to: :account
 
     paginates_per 10
 

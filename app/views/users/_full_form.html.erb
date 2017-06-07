@@ -84,7 +84,6 @@
             link_to("create it first", new_household_path) << "." do %>
       <%= f.input_field :household_id,
             as: :assoc_select2,
-            label_method: :full_name,
             context: "user_form",
             disabled: !policy(@user).administer?,
             class: "form-control" %>

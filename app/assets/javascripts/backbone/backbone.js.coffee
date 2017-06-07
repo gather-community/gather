@@ -1,4 +1,8 @@
 #= require_self
+
+# Must be loaded early due to inheritance
+#= require ./views/print_view
+
 #= require_tree ./templates
 #= require_tree ./models
 #= require_tree ./views
@@ -10,3 +14,4 @@ window.Gather =
   Routers: {}
   Views:
     Meals: {}
+    People: {}

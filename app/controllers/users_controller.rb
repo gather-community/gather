@@ -52,8 +52,7 @@ class UsersController < ApplicationController
       format.csv do
         load_users
         @users = @users.active # No inactve users in CSV
-        send_data People::Exporter.new(@users).to_csv, filename: "directory.csv",
-          disposition: "inline", type: "text/csv"
+        send_data People::Exporter.new(@users).to_csv, filename: "directory.csv", type: :csv
       end
     end
   end

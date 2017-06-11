@@ -221,7 +221,7 @@ class Meal < ActiveRecord::Base
   end
 
   def formula
-    @formula ||= Formula.for_meal(self)
+    @formula ||= Meals::Formula.for_meal(self)
   end
 
   def any_allergens?

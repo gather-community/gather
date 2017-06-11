@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522030351) do
+ActiveRecord::Schema.define(version: 20170611011115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,29 +88,6 @@ ActiveRecord::Schema.define(version: 20170522030351) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "formulas", force: :cascade do |t|
-    t.decimal "adult_meat", precision: 10, scale: 2
-    t.decimal "adult_veg", precision: 10, scale: 2
-    t.decimal "big_kid_meat", precision: 10, scale: 2
-    t.decimal "big_kid_veg", precision: 10, scale: 2
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.date "effective_on", null: false
-    t.decimal "little_kid_meat", precision: 10, scale: 2
-    t.decimal "little_kid_veg", precision: 10, scale: 2
-    t.string "meal_calc_type", null: false
-    t.string "pantry_calc_type"
-    t.decimal "pantry_fee", precision: 10, scale: 2
-    t.decimal "senior_meat", precision: 10, scale: 2
-    t.decimal "senior_veg", precision: 10, scale: 2
-    t.decimal "teen_meat", precision: 10, scale: 2
-    t.decimal "teen_veg", precision: 10, scale: 2
-  end
-
-  add_index "formulas", ["cluster_id"], name: "index_formulas_on_cluster_id", using: :btree
-  add_index "formulas", ["community_id"], name: "index_formulas_on_community_id", using: :btree
-  add_index "formulas", ["effective_on"], name: "index_formulas_on_effective_on", using: :btree
 
   create_table "households", force: :cascade do |t|
     t.string "alternate_id"
@@ -189,6 +166,29 @@ ActiveRecord::Schema.define(version: 20170522030351) do
 
   add_index "meals_costs", ["cluster_id"], name: "index_meals_costs_on_cluster_id", using: :btree
   add_index "meals_costs", ["meal_id"], name: "index_meals_costs_on_meal_id", using: :btree
+
+  create_table "meals_formulas", force: :cascade do |t|
+    t.decimal "adult_meat", precision: 10, scale: 2
+    t.decimal "adult_veg", precision: 10, scale: 2
+    t.decimal "big_kid_meat", precision: 10, scale: 2
+    t.decimal "big_kid_veg", precision: 10, scale: 2
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.date "effective_on", null: false
+    t.decimal "little_kid_meat", precision: 10, scale: 2
+    t.decimal "little_kid_veg", precision: 10, scale: 2
+    t.string "meal_calc_type", null: false
+    t.string "pantry_calc_type"
+    t.decimal "pantry_fee", precision: 10, scale: 2
+    t.decimal "senior_meat", precision: 10, scale: 2
+    t.decimal "senior_veg", precision: 10, scale: 2
+    t.decimal "teen_meat", precision: 10, scale: 2
+    t.decimal "teen_veg", precision: 10, scale: 2
+  end
+
+  add_index "meals_formulas", ["cluster_id"], name: "index_meals_formulas_on_cluster_id", using: :btree
+  add_index "meals_formulas", ["community_id"], name: "index_meals_formulas_on_community_id", using: :btree
+  add_index "meals_formulas", ["effective_on"], name: "index_meals_formulas_on_effective_on", using: :btree
 
   create_table "old_credit_balances", id: false, force: :cascade do |t|
     t.decimal "balance", precision: 5, scale: 2
@@ -480,8 +480,6 @@ ActiveRecord::Schema.define(version: 20170522030351) do
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
   add_foreign_key "communities", "clusters"
-  add_foreign_key "formulas", "clusters"
-  add_foreign_key "formulas", "communities"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
   add_foreign_key "invitations", "clusters"
@@ -492,6 +490,8 @@ ActiveRecord::Schema.define(version: 20170522030351) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "meals_costs", "clusters"
   add_foreign_key "meals_costs", "meals"
+  add_foreign_key "meals_formulas", "clusters"
+  add_foreign_key "meals_formulas", "communities"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"

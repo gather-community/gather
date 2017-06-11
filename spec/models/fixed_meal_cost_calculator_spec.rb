@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe FixedMealCostCalculator, type: :model do
 
   let(:formula) do
-    build(:formula,
+    build(:meals_formula,
       meal_calc_type: "fixed",
       pantry_calc_type: pantry_calc_type,
       pantry_fee: pantry_fee,

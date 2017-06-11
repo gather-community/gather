@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ShareMealCostCalculator, type: :model do
 
   let(:formula) do
-    build(:formula,
+    build(:meals_formula,
       meal_calc_type: "share",
       pantry_calc_type: pantry_calc_type,
       pantry_fee: pantry_fee,

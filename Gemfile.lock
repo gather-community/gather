@@ -178,7 +178,7 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faker (1.5.0)
+    faker (1.7.3)
       i18n (~> 0.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
@@ -190,7 +190,8 @@ GEM
     globalid (0.3.5)
       activesupport (>= 4.1.0)
     hashie (3.4.2)
-    i18n (0.7.0)
+    hirb (0.7.3)
+    i18n (0.8.4)
     i18n_data (0.7.0)
     icalendar (2.4.1)
     inline_svg (0.6.1)
@@ -433,6 +434,7 @@ DEPENDENCIES
   faker
   fix-db-schema-conflicts
   font-awesome-sass
+  hirb
   icalendar (~> 2.0)
   inline_svg
   jbuilder (~> 2.0)

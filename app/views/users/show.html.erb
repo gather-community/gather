@@ -47,6 +47,12 @@
                 <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
               </tr>
             <% end %>
+            <% if @user.age %>
+              <tr>
+                <td>Age</td>
+                <td><%= @user.age %></td>
+              </tr>
+            <% end %>
             <% if @user.joined_on %>
               <tr>
                 <td>Join Date</td>

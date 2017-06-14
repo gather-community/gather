@@ -44,7 +44,7 @@ end
 
 # Console helper.
 module Rails
-  def self.settnt
-    ActsAsTenant.current_tenant = Cluster.first
+  def self.tnt(tenant = nil)
+    ActsAsTenant.current_tenant = tenant || Cluster.first
   end
 end

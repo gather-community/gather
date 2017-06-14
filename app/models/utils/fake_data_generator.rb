@@ -16,7 +16,6 @@ module Utils
         create_households_and_users
         deactivate_households
 
-        # Creates 42 users, some adults, some children, with random properties.
         # Assigns randomly chosen adults to admin, photographer, and meal biller roles.
         # Creates 10 meals with assignments, menus, signups, some of them finalized.
         # Creates 5 reservable resources with lorem ipsum guidelines.
@@ -44,14 +43,15 @@ module Utils
         adults = Dir[dir].map do |path|
           age = File.basename(path, ".jpg").to_i
           next if age < 16
-          bday = Faker::Date.birthday(age, age + 1)
+          bday_format = "%b %d #{bool_prob(50) ? '%Y' : ''}"
+          bday = Faker::Date.birthday(age, age + 1).to_time.strftime(bday_format)
           first_name = Faker::Name.unisex_name
 
           build(:user,
             fake: true,
             first_name: first_name,
             last_name: bool_prob(70) ? last_name : Faker::Name.last_name,
-            birthdate: Faker::Date.birthday(age, age + 1),
+            birthdate_str: bday,
             email: "#{first_name}@#{Faker::Internet.domain_name}",
             mobile_phone: Faker::PhoneNumber.simple,
             home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,

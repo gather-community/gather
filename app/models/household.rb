@@ -4,12 +4,12 @@ class Household < ActiveRecord::Base
   acts_as_tenant(:cluster)
 
   belongs_to :community
-  has_many :accounts, ->{ joins(:community).includes(:community).order("LOWER(communities.name)") },
-    inverse_of: :household, class_name: "Billing::Account"
-  has_many :signups
-  has_many :users, ->{ by_name_adults_first }, inverse_of: :household
-  has_many :vehicles, class_name: "People::Vehicle"
-  has_many :emergency_contacts, class_name: "People::EmergencyContact"
+  has_many :accounts, -> { joins(:community).includes(:community).order("LOWER(communities.name)") },
+    inverse_of: :household, class_name: "Billing::Account", dependent: :destroy
+  has_many :signups, dependent: :destroy
+  has_many :users, -> { by_name_adults_first }, inverse_of: :household
+  has_many :vehicles, class_name: "People::Vehicle", dependent: :destroy
+  has_many :emergency_contacts, class_name: "People::EmergencyContact", dependent: :destroy
 
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("LOWER(households.name)") }

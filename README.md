@@ -52,7 +52,7 @@ Follow these steps to setup a development environment for Gather.
   1. Run `rake db:schema:load` to create the schema in both databases.
 
 1. **Create a user so you can sign in**
-  1. Run `rake db:fake_user_data` to add one community, one household, and one user (with admin privileges and your GMail address) to the mess_development database.
+  1. Run `rake fake:user_data` to add one community, one household, and one user (with admin privileges and your GMail address) to the gather_development database.
 
 1. **Run the tests**
   1. Run `bundle exec rspec`.

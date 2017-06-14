@@ -11,7 +11,8 @@ module Reservation
   class Protocol < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
-    has_many :protocolings, class_name: "Reservation::Protocoling", foreign_key: "protocol_id"
+    has_many :protocolings, class_name: "Reservation::Protocoling",
+      foreign_key: "protocol_id", dependent: :destroy
     has_many :resources, through: :protocolings
     belongs_to :community
 

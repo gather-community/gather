@@ -1,5 +1,5 @@
-namespace :db do
-  task :fake_account_data, [:household_ids] => :environment do |t, args|
+namespace :fake do
+  task :account_data, [:household_ids] => :environment do |t, args|
     raise "Please specify household_ids, separated by the | character" unless args.household_ids.present?
 
     Billing::Account.update_all("last_statement_id = NULL")

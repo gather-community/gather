@@ -1,5 +1,5 @@
-namespace :db do
-  task fake_user_data: :environment do
+namespace :fake do
+  task user_data: :environment do
     ActiveRecord::Base.transaction do
       community = Community.create!(
         name: "My Community",
@@ -21,12 +21,6 @@ namespace :db do
         mobile_phone: "17345551212"
       )
       admin.add_role(:super_admin)
-
-      Reservation::Resource.create!(
-        community: community,
-        name: "Dining Hall",
-        meal_hostable: true
-      )
     end
   end
 end

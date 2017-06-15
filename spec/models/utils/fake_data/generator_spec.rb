@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Utils::FakeDataGenerator, type: :model do
+RSpec.describe Utils::FakeData::Generator, type: :model do
   let(:community) { create(:community) }
 
   it "should run cleanly" do

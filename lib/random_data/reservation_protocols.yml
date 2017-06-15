@@ -1,0 +1,59 @@
+---
+- id: 1
+  fixed_end_time: 
+  fixed_start_time: 
+  general: true
+  kinds:
+  - Official
+  max_days_per_year: 
+  max_lead_days: 
+  max_length_minutes: 
+  max_minutes_per_year: 
+  other_communities: 
+  requires_kind: 
+- id: 2
+  fixed_end_time: 
+  fixed_start_time: 
+  general: true
+  kinds:
+  - Special
+  max_days_per_year: 
+  max_lead_days: 
+  max_length_minutes: 
+  max_minutes_per_year: 
+  other_communities: 
+  requires_kind: 
+- id: 3
+  fixed_end_time: 
+  fixed_start_time: 
+  general: true
+  kinds:
+  - Personal
+  max_days_per_year: 
+  max_lead_days: 90
+  max_length_minutes: 
+  max_minutes_per_year: 
+  other_communities: 
+  requires_kind: 
+- id: 4
+  fixed_end_time: 
+  fixed_start_time: 
+  general: true
+  kinds: 
+  max_days_per_year: 
+  max_lead_days: 
+  max_length_minutes: 
+  max_minutes_per_year: 
+  other_communities: sponsor
+  requires_kind: true
+- id: 9
+  fixed_end_time: 2000-01-01 13:00:00.000000000 Z
+  fixed_start_time: 2000-01-01 14:00:00.000000000 Z
+  general: false
+  kinds: 
+  max_days_per_year: 
+  max_lead_days: 
+  max_length_minutes: 10080
+  max_minutes_per_year: 
+  other_communities: 
+  requires_kind: 

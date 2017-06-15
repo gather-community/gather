@@ -1,0 +1,116 @@
+---
+- id: 17
+  default_calendar_view: week
+  guidelines: |-
+    # Media Room Guidelines
+
+    1. Anyone under 13 must be supervised by an adult.
+    1. Program ratings above PG 13 (R and MA) will be locked both through the TV and the cable box.
+    1. The room may be checked out for special events or TV programs. See spreadsheet or contact james.kolongowski@gmail.com.
+    1. Remotes must be in the room at all times and stored in designated place.
+    1. Media room must be picked up and set to "room neutral" after being used. Please give careful consideration of food crumbs.
+  meal_abbrv:
+  name: Media Room
+  :shared_guideline_ids:
+  - 4
+- id: 18
+  default_calendar_view: month
+  guidelines: |-
+    # Multipurpose Room Guidelines
+
+    1. Per the reservation guidelines, all guests must be hosted by an adult member of Touchstone.
+    1. Please be aware that this room, like all CH space, is a shared resource.
+    1. Hosts must write the guest's name and dates of stay on the whiteboard outside the multipurpose room door.
+    1. All guests must comply with general CH guidelines (they will be posted on the door of the room) as well as the guidelines for every room they use. We specifically call attention with guidelines for noise level/quiet hours and our fragrance free policy.
+    1. No use of candles or anything else that would pose a fire or other hazard. No smoking in the common house.
+    1. While the room will be used for other purposes besides an overnight guest space, preference will be given to guest accommodations. Scheduling conflicts will be handled person to person.
+    1. Guests may stay up to 7 days, provided that the space has not been reserved for another guest by another resident.
+    1. Hosts are responsible for their guests. They are also responsible for cleaning up the room and washing the provided linens and sheets after their guests leave and for bringing linens/sheets back to the CH.
+    1. Check out time is noon.
+    1. Keys will be left in a designated spot in the CH. If keys are lost, the TS host will be charged for making new ones.
+    1. Guests may use the Do Not Disturb sign provided to insure their privacy.
+  meal_abbrv:
+  name: Multipurpose Room
+  :shared_guideline_ids:
+  - 4
+- id: 19
+  default_calendar_view: week
+  guidelines:
+  meal_abbrv:
+  name: Office
+  :shared_guideline_ids:
+  - 4
+- id: 20
+  default_calendar_view: week
+  guidelines:
+  meal_abbrv:
+  name: Sitting Room
+  :shared_guideline_ids:
+  - 4
+- id: 21
+  default_calendar_view: week
+  guidelines:
+  meal_abbrv: CH
+  name: Dining Room
+  :shared_guideline_ids: []
+- id: 115
+  default_calendar_view: week
+  guidelines:
+  meal_abbrv: Ctyd
+  name: Courtyard
+  :shared_guideline_ids: []
+- id: 116
+  default_calendar_view: week
+  guidelines: "# Kitchen Guidelines\n\n## Overview\n\nThe common house (CH) kitchen
+    is a large investment on the part of our community and also has the potential
+    to be a dangerous area of the CH. Since our priority is the safety of all members
+    of our community, as well as our equipment, we have the following guidelines.\n
+    \nWe expect every community member and their guests to treat this equipment and
+    this facility with care and respect.\n \nParents are responsible for educating
+    their children that:\n\n* The kitchen is not a play area.\n* The food in the kitchen
+    is not for general consumption unless otherwise labeled.\n* Children may only
+    be in the kitchen if they are specifically invited in and will be supervised by
+    an adult taking responsibility.\n \n*Please leave the kitchen cleaner than you
+    found it.*\n\nAnd let’s have fun, and make and eat delicious food together!\n\n##
+    Safety Considerations\n\n* If you leave the kitchen while something is cooking
+    in the oven or on a burner, please take precautions to warn others by placing
+    a barrier in the entrances to the kitchen and leaving a note.\n* Leave pots with
+    hot stuff on back, not front burners.\n* Do not move the baking soda away from
+    the stove; it is there in case of fire.  \n* Sharp knives should never be left
+    unattended nor placed in sudsy water.\n\nIf you have to leave before completely
+    cleaning up, please leave a message about when you will return (with your phone
+    number).  \n\nPlease sign out any borrowed items and return them as soon as you
+    can.\n  \nPlease report anything odd, such as strange noises, smells, or broken
+    items, to designated repair person.\n \nThe CH refrigerator is to be used for
+    staples and community meals. Please distribute leftovers rather than store them
+    here.\n\nSee separate doc for job responsibilities for head cook, assistant cooks
+    and cleaners.\n\n## Basic Sanitation Rules\n \n1. If you might be sick, keep the
+    community healthy by going home.\n1. Wash your hands often, the old fashioned
+    way: with soap and hot water.\n1. Completely cover all cuts; no blood!\n1. When
+    tasting, please use spoons only once.\n1. Avoid cross-contamination (allergens/bacteria)
+    by using different utensils for different items.\n1. Everything that touches raw
+    meat should not be used for anything else until thoroughly washed and sanitized.
+    \n1. Use the appropriately colored cutting board for different food categories.\n1.
+    Be aware that sinks can harbor bacteria; colanders are recommended for cleaning
+    produce that will be served raw.\n1. Foods stay safe when they are thoroughly
+    chilled or thoroughly heated.  Details can be found at (link).\n\n## Staples Guidelines\n\nStaples
+    will be bought with the intention of being used for CH meals.   \n \nWhen buying
+    staples, we will take into consideration the following factors: non-GMO, organic,
+    fair trade/labor practices, dietary preference, shelf life and affordability.\n
+    \nStaples will be paid for via a surcharge on CH meals, which will be used to
+    buy new inventory.  Head cooks are expected to use the staples to rotate inventory
+    and to keep their meal costs down.\n\nTherefore, please refrain from using staples
+    for personal use. If absolutely necessary: \n \n* Replace item for item.\n* If
+    this is not possible, please generously contribute to the kitchen staples fund.\n
+    \nIf you notice that we are running low on an item, please write it on the clipboard
+    designated for this purpose.\n\nKitchen coordinator is responsible for checking
+    the list and the pantry weekly and shopping as needed. Every effort will be made
+    to replace staples as we run out.\n \nIf you need a staple item to cook for an
+    official meal and notice it is not there, please buy it for us and submit a separate
+    receipt for reimbursement.\n \nA specific list of staples will be maintained by
+    the meals committee.\n\nOther items, including bottled salad dressings, need to
+    be bought by head cooks."
+  meal_abbrv: CH
+  name: Kitchen
+  :shared_guideline_ids:
+  - 4

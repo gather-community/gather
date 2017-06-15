@@ -1,0 +1,2091 @@
+---
+- title: Asparagus and other spring greens
+  entrees: Here's hoping the Asparagus harvest is well underway at this point.
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: Chicken Noodle Casserole
+  entrees: salad
+  side: 
+  kids: same
+  dessert: fruit
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  - gluten
+  capacity: 64
+- title: Brunch
+  entrees: Quiche, Baked French Toast
+  side: 'sausages: meat and Morningstar, fruit smoothies'
+  kids: 
+  dessert: 
+  notes: ingredients organic and local where possible. Can make gluten free quiche
+    if requested.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - soy
+  capacity: 64
+- title: Waffles, Fruit & Protein
+  entrees: Waffles & Basic Breakfast Fare
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - pineapple
+  capacity: 35
+- title: Bi Bim Bap from Sea
+  entrees: Rice bowl with a variety of seasoned sea weeds and shrimp (and/or squid).
+  side: Pickles and roasted seaweed
+  kids: 
+  dessert: Fruits or icecream
+  notes: There will be also some vegetables from land. Also let me know if you can't
+    eat both shrimp and squid.
+  allergens:
+  - shellfish
+  - soy
+  - eggs
+  capacity: 36
+- title: Jjimdak
+  entrees: Boiled chicken in soy sauce with variety of vegetables (potatoes, onions,
+    carrots, mushrooms, green onions, etc) and potato noodles
+  side: Steamed rice
+  kids: Hope they eat chickens and vegetables. Will have pickles, roasted seaweed
+  dessert: Fruits
+  notes: I'll use gluten free soy sauce. Spicy version of jjimdak may not be a gluten
+    free.
+  allergens:
+  - soy
+  capacity: 32
+- title: Rotisserie Chicken
+  entrees: Chicken and salad
+  side: Salad
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: Baked salmon with fresh dill
+  entrees: Salmon
+  side: Sautéed greens, fresh veges,, pesto with pasta
+  kids: 
+  dessert: Brownies and ice cream
+  notes: Gluten free brownies and dairy free ice cream if requested.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 40
+- title: Taco Pie See receipe in notes below
+  entrees: ground taco turkey pie
+  side: salad and sautéed veggies
+  kids: 
+  dessert: something baked with cherries
+  notes: ".Lay crescent dough flat on the bottom of a square cake pan and bake according
+    to package directions.  Meanwhile, brown the ground beef in a large skillet over
+    medium high heat. Add the taco seasoning and stir together well. When dough is
+    done, remove from oven and place meat mixture on top, then layer with sour cream
+    and cheese, and then top off with the crushed nacho chips.  eturn to oven and
+    bake at 350 degrees F (175 degrees C) for 10 minutes, or until cheese has melted."
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Chicken Sonoma Salad
+  entrees: Chicken salad will be made with chicken (of course), mayo, honey, celery,
+    pecans, and red grapes.
+  side: Gluten free nut crackers
+  kids: 
+  dessert: maybe
+  notes: 
+  allergens:
+  - dairy
+  capacity: 64
+- title: spaghetti with turkey meat sauce or sauce w/o meat
+  entrees: spaghetti with turkey meat sauce.  Let me know if you would like vegetarian   sauce
+    and or gluten free pasta.
+  side: salad, zigermanns bread,
+  kids: same
+  dessert: maybe
+  notes: 
+  allergens:
+  - gluten
+  capacity: 64
+- title: Continental Breakfast
+  entrees: Fruits, Bagels, Cream Cheese and Cold Cuts
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  capacity: 64
+- title: Chicken cacciatore
+  entrees: Get Down Farms free range Chicken with organic tomato sauce
+  side: braised organic greens, salad
+  kids: Same
+  dessert: Lesli's birthday cake and Ice cream
+  notes: Gluten free and dairy free available if requested
+  allergens:
+  - dairy
+  capacity: 40
+- title: French toast, eggs, sausage & fruit
+  entrees: Eggs sausage fruit garden veggies fruit and zing French toast. Tofu scramble
+    if requested.
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Gluten Free Spagetti with meat sauce or sauce w/o meat
+  entrees: Gluten Free Spagetti with meat sauce or sauce w/o meat
+  side: Salad - greens, spinach, red pepper, mushroom, carrot, tomato.  Gluten free
+    corn bread.
+  kids: same
+  dessert: maybe
+  notes: Let me know if you do not want meat in your sauce.
+  allergens:
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Sweet Polenta & Vegan Chocolate-Oat Bars
+  entrees: "Polenta made with coconut milk\r\nVegan breakfast bars (pumpkin and banana)\r\nScrambled
+    eggs."
+  side: "Baked peaches\r\nSauteed zucchini\r\nAmazing coffee"
+  kids: Oh so much more of the same
+  dessert: 
+  notes: This meal is entirely gluten- and dairy-free (though I will have steamed
+    milk for coffee).
+  allergens:
+  - corn
+  - eggs
+  - bananas
+  capacity: 64
+- title: Summer bounty dinner
+  entrees: Kale pie from the garden-- kale, onion, garlic, feta cheese, milk and eggs
+  side: Cucumber salad, fresh tomatoes, watermelon
+  kids: Same as adults
+  dessert: Ice cream treats
+  notes: If requested, I can make one pie gluten and dairy free.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 40
+- title: Vietnamese soup and more
+  entrees: Pho ga (chicken soup)
+  side: Miso glazed squash,, mango, pineapple and banana fruit salad
+  kids: 
+  dessert: Coconut rice pudding
+  notes: 
+  allergens:
+  - gluten
+  - shellfish
+  - dairy
+  - eggs
+  - peanuts
+  - pineapple
+  - bananas
+  capacity: 36
+- title: chicken soup, rice, puff pastry with ground beef and some with spinach and
+    feta (vegetarian), salad, desert (not sure if cookies or cake).
+  entrees: chicken soup, rice, puff pastry with ground beef and some with spinach
+    and feta (vegetarian), salad, desert (not sure if cookies or cake).
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  capacity: 30
+- title: Vege chili for a cold winter day
+  entrees: Vege chili
+  side: Applesauce, green salad
+  kids: Same
+  dessert: Ice cream, brownies
+  notes: If you have food restrictions let me know and we'll make versions you can
+    eat
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - tree_nuts
+  capacity: 64
+- title: Continental Breakfast between 8:30 and 9:30 am
+  entrees: Eggs, meats, bagels and fruit to help keep simple prior to community event.
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 35
+- title: Puff Pastry with Ground Beef
+  entrees: Some with spinach and cheese as a vegetarian option. Organic bean soup.
+  side: Salad.
+  kids: 
+  dessert: Brownies
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 25
+- title: White Bean Chicken Chili
+  entrees: White bean chicken chili--A delicious tex-mex meal in a bowl!
+  side: Tortilla chips, cheese, and veggie toppings
+  kids: It should work for them
+  dessert: Fruit
+  notes: "Ingredients local and organic when possible\r\nDairy can be easily avoided"
+  allergens:
+  - corn
+  - dairy
+  capacity: 40
+- title: Lasagna, salad , bread and gingerbread
+  entrees: Gluten free vegetarian and regular xxmeat lasagna
+  side: Salad and bread
+  kids: 
+  dessert: Gingerbread and ice cream
+  notes: 
+  allergens:
+  - dairy
+  capacity: 30
+- title: Baked French Toast with fruit - gluten free and regular; scrambled eggs,
+    fruit yogurt
+  entrees: French toast with fruit -gluten free and regular; scrambled eggs, fruit
+    yogurt   Gluten free toast will be made with almond milk
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 35
+- title: Fall warming menue
+  entrees: Minestrone W/chicken and without (no gluten)
+  side: Crostini
+  kids: 
+  dessert: Appel Crisp
+  notes: 
+  allergens:
+  - none
+  capacity: 30
+- title: Corn salsa turkey patties
+  entrees: rice, and a veggie
+  side: 
+  kids: same
+  dessert: maybe
+  notes: 
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Burrito bar
+  entrees: Lots of fixins. Normal and exotic (for a burrito). Plenty of GF, processed
+    sugar free, and vegan options. If you have any dietary restrictions at all please
+    let me know. I'm happy to accommodate. Will be making something for dessert, not
+    sure yet but will be for all diners, restrictions or not.
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: chicken
+  entrees: mashed potato, corn
+  side: 
+  kids: same
+  dessert: maybe
+  notes: 
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  capacity: 64
+- title: Brisket Bourguignon
+  entrees: A Southern take on a classic French recipe. Slow roasted brisket in a Cognac
+    and red wine reduction.
+  side: Carrots, Onions, Mushrooms, and Garlic Mashed Potatoes.
+  kids: 
+  dessert: Lightly sugared berries and cream.
+  notes: Not vegan or vegetarian.
+  allergens:
+  - dairy
+  capacity: 24
+- title: Pork Tenderloin with Plum Chutney
+  entrees: Pancetta wrapped Pork Tenderloin with Herb de Provence rub.
+  side: Green beans with Basil Vinaigrette.
+  kids: 
+  dessert: Apple spice Bread Pudding
+  notes: Will try to be organic as much as possible.
+  allergens:
+  - gluten
+  capacity: 32
+- title: Summer Dinner Bohnanza
+  entrees: Sweet corn and roasted pork
+  side: roasted veggies (zucchini, potatoes, onions, peppers) and 3 bean salad (onions,
+    tomatoes, cucumbers, 3 beans, and maple syrup instead of sugar)
+  kids: fruit (peaches, blueberries, etc.)
+  dessert: Strawberry Rhubarb and Peach Pies
+  notes: Everything is local (farmers market or grown here at TS) except 2 of the
+    3 beans in the 3 bean salad!  It's all gluten free, dairy free, and vegan except
+    the pork.
+  allergens:
+  - none
+  capacity: 64
+- title: Chicken and rice casserole
+  entrees: Chicken and rice casserole
+  side: salad and green beans
+  kids: same
+  dessert: maybe
+  notes: 
+  allergens:
+  - gluten
+  capacity: 64
+- title: Japchae
+  entrees: Potato noodles stir fried vegetables and beef (or tofu for vegetarian option).
+    Vegetables include onion, carrot, bell pepper, mushroom and spinach.
+  side: Rice, roasted seaweed, pickles, etc
+  kids: No special menu for kids
+  dessert: Fruits
+  notes: This is gluten-free meal as potato noodles don't contain gluten and I will
+    use gluten-free soy sauce.
+  allergens:
+  - soy
+  - eggs
+  capacity: 40
+- title: Taco Bar
+  entrees: Beef, Chicken & Beans with a variety of fixin's.
+  side: Salad
+  kids: 
+  dessert: Fruit
+  notes: This meal can be gluten free and dairy free and vegitarian
+  allergens:
+  - corn
+  - dairy
+  capacity: 64
+- title: Brunch
+  entrees: Eggs, Sausage, Pancakes, and assorted fruits. Gluten free pancakes will
+    be available.
+  side: OJ, Tea, Coffee
+  kids: Chocolate Chip Pancakes.
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Chili
+  entrees: Mild chili, full of beans.  Beef and Veggie versions.  Served over rice.
+  side: 
+  kids: 
+  dessert: 'yes'
+  notes: local and organic when possible, dairy on the side
+  allergens:
+  - dairy
+  capacity: 64
+- title: Chili
+  entrees: Chili
+  side: cornbread and gluten free cornbread, side salad.
+  kids: same
+  dessert: yes, not sure what, maybe fruit
+  notes: Let me know if you want vegetarian chili and/or gluten free cornbread.
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  capacity: 64
+- title: Waffles, egg & cheese bake, fruit and sausage
+  entrees: Breakfast fair
+  side: 
+  kids: 
+  dessert: 
+  notes: Some accommodations can be made upon request
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Shepherd's Pie
+  entrees: beef or mushroom shepherd's pie, topped with mashed potatoes
+  side: veggies are baked right into pie
+  kids: onion-less shepherd's pie
+  dessert: yes!
+  notes: beef pie has dairy, egg, and soy-sauce, veggie pie can be made vegan, please
+    note in comments if you need dairy-free and/or vegan. gluten-free upon request
+  allergens:
+  - gluten
+  - soy
+  - dairy
+  - eggs
+  capacity: 64
+- title: Tuscan Angel Hair Pasta
+  entrees: Angel hair with Chicken, Bacon, Tomatoes, and Spinach in a light Cream
+    sauce.
+  side: Bread with dipping sauce and olives.
+  kids: 
+  dessert: An assortment of chocolates.
+  notes: Gluten free pasta will be available as well.
+  allergens:
+  - gluten
+  - dairy
+  capacity: 30
+- title: English Breakfast
+  entrees: Sausage, scrambled eggs, mushrooms, tomatoes, baked beans
+  side: Fresh fruit
+  kids: 
+  dessert: 
+  notes: Gluten free options
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Erev Rosh Hashanah Tzimmes (Note new time!)
+  entrees: Traditional Jewish sweet stew with beef, sweet potatoes, carrots, prunes
+    and honey. Will also include a chicken version and vegetarian tzimmes.
+  side: Homemade braided challah, salads TBD (based on best produce in market)
+  kids: Same - this is a favorite kids meal
+  dessert: Honey cake, apples and honey, Smitten Kitchen Mom's apple cake
+  notes: Some ingredients will be organic where possible (veg's and chicken). Probably
+    not beef. Entree is gluten free. Gluten free desert on request.
+  allergens:
+  - gluten
+  capacity: 50
+- title: Do-overs!
+  entrees: Let's start the year right by eating up all the things!  Meal will include
+    shepherd's pie and something with kidney beans and tomatoes.
+  side: veggies will be part of the main meals
+  kids: 
+  dessert: snicker-doodles and the frozen soy/dairy creams already on hand
+  notes: wheat will be easy to avoid, shepherd's pie includes dairy, egg, tamari (wheat-free
+    soy sauce) and mushroom stock
+  allergens:
+  - gluten
+  - soy
+  - dairy
+  - eggs
+  capacity: 64
+- title: Alice Waters' Vegetable soup (from the Art of Simple Food)
+  entrees: Soup chock-full of good stuff.  Butternut squash, kale, beans. You won't
+    miss the meat!
+  side: salad, bread with herbed butter
+  kids: are your kids picky? we can pull out some of the ingredients for a simplified
+    version
+  dessert: cookies or bars
+  notes: local and/or organic when possible. soup is gluten-free
+  allergens:
+  - gluten
+  - soy
+  - dairy
+  capacity: 64
+- title: celebrate the humble potato
+  entrees: Potatoes au gratin, and a non-dairy alternative;  Meatloaf (Beef & poss
+    turkey too)
+  side: "Potato & Leek Soup (or other pureed potato/___ combo--poss broccoli)\r\nMixed
+    Green Salad"
+  kids: 
+  dessert: Maybe?  Depends on fruit available and cost...
+  notes: organic and local when available. please note if you want non-dairy and/or
+    GF
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Brunch - 3 Egg Omelets to order, Please note your ingredients from Entree
+    list.
+  entrees: 'Omelet Ingredient Choices: Ham, Bacon, Spinach, Gruyere, Cheddar, Curry
+    (Hot), Mushrooms,'
+  side: Bacon, Fruit, Coffee, Tea, Toast and Jam
+  kids: Scrambled Eggs
+  dessert: 
+  notes: Please indicate which ingredients you would like in the notes. THANKS!
+  allergens:
+  - dairy
+  - eggs
+  capacity: 30
+- title: Chicken and Sausage Jambalaya Soup
+  entrees: "Soup!\r\nVegetarian--no meat option"
+  side: "GF Cornbread and honey/butter\r\nRaw veggies"
+  kids: Adult meal should work for them--only mild spice in soup
+  dessert: Fruit
+  notes: Ingredients local and organic when possible
+  allergens:
+  - corn
+  - dairy
+  - eggs
+  capacity: 40
+- title: Meat Balls with Pasta
+  entrees: Meat Balls (mix of turkey and beef) in  Red sauce with fresh tomatoes,
+    over Pasta. I might add green beans and cabbage.
+  side: Cabbage Salad
+  kids: Same as adults
+  dessert: Brownies
+  notes: Vegetarian red sauce per request. Meat balls have eggs, bread crumbs and
+    some vegetables.
+  allergens:
+  - gluten
+  - eggs
+  capacity: 25
+- title: Chicken Tacos
+  entrees: 'Make your own Chicken Tacos with the following fillings: rice, black beans,
+    chicken, salsa, cheese, lettuce, tomato''s, sour cream, baked onions, red and
+    green peppers.'
+  side: small side salad
+  kids: same
+  dessert: maybe
+  notes: 
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  capacity: 64
+- title: Divine Delish Dish!
+  entrees: Egg Casseroles!  Meat/cheese, cheese/veg, just veggie.
+  side: Fruit, maybe something else as well
+  kids: 
+  dessert: maybe apple crisp?
+  notes: All allergens can be avoided except egg.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - pineapple
+  capacity: 64
+- title: Meat Balls
+  entrees: A mix of turkey and beef meat balls cooked with green beans.
+  side: Pasta, Salad.
+  kids: 
+  dessert: Brownies
+  notes: 
+  allergens:
+  - gluten
+  - eggs
+  capacity: 30
+- title: Puff Pastry & Beans Soup
+  entrees: Puff Pastry - some with ground beef, and some with spinach, feta cheese,
+    cheddar cheese. Beans soup.
+  side: Salad.
+  kids: Same as adults.
+  dessert: Brownies.
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Moroccan feast
+  entrees: Moroccan meatloaf (lamb and beef)
+  side: White bean and beet salad, rice, spring greens salad with feta and chick peas
+  kids: Same as adults
+  dessert: "Brownies and gluten free cookies,\r\nMint tea"
+  notes: if requested, hot chick pea salad as entree for vegetarians and gluten free
+    folks
+  allergens:
+  - gluten
+  - eggs
+  capacity: 40
+- title: Fake meal for training purposes
+  entrees: testing
+  side: testing
+  kids: testing
+  dessert: testing
+  notes: testing
+  allergens:
+  - none
+  capacity: 64
+- title: Chicken Spanish asado
+  entrees: Organic chicken roasted with brown popatoes and tomatoes
+  side: Pipirrana Spanish summer salad
+  kids: kids love this meal!
+  dessert: Egg and cream free Rice pudding, also available a lactose free version
+    with coconut cream
+  notes: Pipirrana salad is common in the hot summer days! Fresh tomatoes, cucumbers,
+    onion, hard-boiled eggs and tuna
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Famous Veggie Burgers
+  entrees: "a smoky, savory, \"meaty\" veggie burger based on the famous Northstar
+    cafe recipe. Made with black beans, rice, beets, oats and other veggies with lots
+    of smoky umami spices\r\n(Vegan except for a tiny bit of egg to bind)"
+  side: "Sweet potato fries!\r\nCheese: cheddar and goat feta available\r\nI'm skipping
+    buying the dry expensive buns, and offering Zingermans bread and butter\r\nGluten
+    free skillet bread for the GF'ers\r\nLettuce and maybe tomatoes on the side\r\nOther
+    toppings as budget permits \r\nCondiments of course"
+  kids: Same as adults
+  dessert: Fruit of some sort....probably mixed berries
+  notes: Plenty of options so allergens can be avoided
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 40
+- title: Baked Salmon or tofu
+  entrees: "Baked Salmon with brown sugar glaze\r\nOr baked tofu"
+  side: Orzo With Apples, Cranberries and Herbs, Sauteed spring Veges from Robin Hills
+    Farm, crudités, Zingerman's bread
+  kids: same as adults
+  dessert: Watermelon,  cookies
+  notes: 
+  allergens:
+  - gluten
+  - almonds
+  - soy
+  capacity: 40
+- title: Canceled
+  entrees: You heard it right!!  It will be yummier than you can even imagine. And
+    guess what?  It is GF, soy , nut and corn free!!!  If you are avoiding eggs, meat
+    or dairy please note that.
+  side: Fruit
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Balsamic Chicken with Pears, oh my!
+  entrees: Balsamic Chicken with pears
+  side: "arborio rice\r\ngreen beans or other veggie like green beans"
+  kids: 
+  dessert: flan with maybe some fresh or sauteed fruit
+  notes: "I don't know if this sounds good to people; I hope so.  It's majorly delicious,
+    a tried and true recipe at my house. I can't think of an easy veggie alternative
+    that fits the context but am open to suggestions:  portobello mushrooms with pears?
+    \ Not sure.  Would be glad to make some quick mac and cheese for the kids if requested,
+    or they could have rice and green beans.  Again, let me know; I aim to please.\r\n\r\nThere
+    is no gluten in this meal."
+  allergens:
+  - corn
+  - dairy
+  capacity: 36
+- title: Pizza, applesauce, and comfort food
+  entrees: Pizza - sauce from the garden and homemade crust, with gluten free / wheat
+    free crust option.
+  side: Applesauce (sweetened with honey), veggie from farmers market
+  kids: Come on, it's pizza.  I'd say it's pretty kid friendly
+  dessert: 
+  notes: Sugar free, gluten free, vegetarian options available.  Feel free to take
+    food to eat at home!
+  allergens:
+  - none
+  capacity: 64
+- title: Chicken with Potatoes
+  entrees: Chicken and Potatoes cooked in an Oven Bag. I will add 1 onion and garlic
+    for the flavor.
+  side: Green Beans sautéed in onion and garlic., Salad.
+  kids: The same
+  dessert: Cookies and/or grapes. OR - strawberries dipped in dairy free chocolate.
+  notes: 
+  allergens:
+  - none
+  capacity: 25
+- title: Taco Burrito Bar
+  entrees: Lots of fixins including dairy, non dairy alternatives, guacamole, rice,
+    peppers, sautéed mushrooms, refrained beans, black beans, salsa, sweet potatoes,
+    black olives, onions, corn, jalapeños, salsa.
+  side: 
+  kids: 
+  dessert: Oatmeal cookies and mango
+  notes: The whole meal will be free of processed sugar, nuts (except coconut in cookies)
+    gluten, and soy. Vegetarian and dairy free choices.  Meat will be grass fed and
+    organic. Entire meal will be mostly organic.
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Tacos made with ground turkey
+  entrees: Tacos made with ground turkey. Pintos and cheese. If there is money in
+    the budget-rice and or small green salad
+  side: 
+  kids: Same
+  dessert: Maybe
+  notes: 
+  allergens:
+  - gluten
+  capacity: 64
+- title: Chicken Soup for the Soul
+  entrees: Chicken Soup with vegetables & Matzo Balls.
+  side: "Egg & Potatoe Salad, peas, carrots, pickles, mayo. \r\nWhite Beans with Tomatoes,
+    Red Peppers, red Onion, Cilantro, olive oil. \r\nBread."
+  kids: Same as adults.
+  dessert: Farewell Cake for Jo, Jer, Eloise and Lynn - following dinner. All Touchstoners
+    are invited for cake.
+  notes: No 3rd salad due to budget.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Soup and Sandwhich, made to order!
+  entrees: "An array of bread and sandwich fixins to make our own sandwich (lots of
+    cheese, spreads, relishes, meats, etc.).  We'll have the griddle on and a chef
+    to grill your sandwich if you so desire! \r\n\r\nWe'll also have a squash soup
+    perfect for early winter."
+  side: TS-made applesauce
+  kids: it's all pretty kid friendly by default (sandwiches, applesauce...) :)
+  dessert: Dark chocolate
+  notes: Some locally made (applesauce, relish), some organice.  Bread will be Zingerman's
+    bread.  I'll make sure to get allergen free ingredients based on who signs up
+    (so just note it when you sign up).
+  allergens:
+  - none
+  capacity: 64
+- title: Polenta, Bean and Veggie Curry & side of sausage
+  entrees: 'Polenta probably roasted, and sprouted beans, loaded with vegetables-
+    with an extremely mild curry (no pepper.) On the side: optional sour cream, nuts
+    or seeds, chicken sausage'
+  side: Salad bar with vinaigrette
+  kids: Kids should be fine
+  dessert: Apple crisp - GF
+  notes: "Mary King and Wendy Watson will be head cooks TS and GO joining forces)All
+    gluten free; dairy optional; Coconut sugar in the crisp/ one with no sugar - ALL
+    organic - Farm Market /maybe even tomatoes put up from our gardens!!!\r\nAllergens
+    mentioned will all be optional -name your poisons, We may be able to accommodate!"
+  allergens:
+  - corn
+  - dairy
+  - almonds
+  - tree_nuts
+  capacity: 64
+- title: Kale quiche (regular and gluten free), home fried potatoes, scrambled eggs,
+    chicken sausage and fruit
+  entrees: Kale quiche ( crust and non=crust); home fried potatoes, scrambled eggs,
+    will use lactose free milk in one quiche
+  side: chicken sausage and fruit
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 35
+- title: Baked French Toast with Apples
+  entrees: Baked French Toast, Turkey sausage, fruit and yogurt and steel oatmeal
+  side: Gluten free french toast made wIth almond milkcan be made on request
+  kids: All of the above
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 35
+- title: Slovenian comfort food
+  entrees: "Halushki (butter, cabbage, onions, egg noodles, butter, salt, pepper,
+    ricotta cheese, did I say butter?).  Even if you don't like cabbage, believe me
+    this ain't your momma's cabbage, so give it a try.\r\n\r\n​I'll also make a vegan/gf/wf/df
+    version (olive oil, cabbage, onions, rice noodles) for those who request it.​"
+  side: Steamed veggies and applesauce.
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  capacity: 64
+- title: Chicken Burritos, Sauteed Corn and Sliced Pears
+  entrees: Chicken burritos.  Sour cream and salsa on top.  (chicken, rice, beans,
+    cheese, peppers, onions, garlic ...) .  DF, GF, WF, vegan all ok - just make sure
+    to request.
+  side: Sauteed Corn and Poblanos, sliced pears
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - corn
+  - dairy
+  capacity: 64
+- title: Pancakes, omelettes, sausage, bacon, fruit
+  entrees: Breakfast for dinner!  Pancakes (homemade mix) with fruit sauce or maple
+    syrup on top, veggie + (optional) cheese omelettes, sausage and bacon.
+  side: Mixed fruit
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Coconut Squash soup
+  entrees: Coconut squash soup (squash, onions, some indian spices, coconut oil, etc.)
+    is pretty darn good in the winter time.  Does have cream in it, I can easily make
+    a non-dairy version if requested.
+  side: Parmesan Garlic bread, fruit and veggies.
+  kids: I'll keep some of the roasted squash aside from the soup and have maple syrup
+    out which might sweeten things up a bit for kids ;)
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  capacity: 64
+- title: English Breakfast
+  entrees: Baked beans, scramble eggs, bacon and sausages
+  side: Roast tomatoes and mushrooms
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Chicken Noodle, Beef Barley & Spicy Coconut Lentil Soups
+  entrees: Chicken Noodle Soup, Beef Barley Soup and Spicy Coconut Lentil Soup.
+  side: Beer Bread
+  kids: Should like the chicken noodle soup and beef barley soups.
+  dessert: 
+  notes: The Coconut Lentil soup is vegan.
+  allergens:
+  - gluten
+  capacity: 40
+- title: Egg Casserole and cinnamon rolls
+  entrees: Egg casserole with and without meat
+  side: cinnamon rolls with and without raisins
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Turkey Meatloaf
+  entrees: Turkey Meatloaf
+  side: Corn, Mashed Potatoes
+  kids: N/A
+  dessert: Maybe
+  notes: 
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Homemade Macaroni and Cheese
+  entrees: Macaroni and Cheese
+  side: Green salad with veggies
+  kids: Kid friendly
+  dessert: Brownies
+  notes: Gluten free pasta version will be available
+  allergens:
+  - dairy
+  capacity: 64
+- title: Waffles, eggs, sausage, fruit!
+  entrees: Yummy breakfast foods!
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 25
+- title: Rise and Shine Oatmeal Bar
+  entrees: Hot and hearty steel-cut Scottish oats served with a variety of toppings
+  side: Chicken sausage/Yogurt, fruit, nuts for topping
+  kids: Same menu
+  dessert: None
+  notes: All gluten free. Dairy and nuts can be avoided easily
+  allergens:
+  - dairy
+  - almonds
+  capacity: 36
+- title: Brunch 2 Eclectic Boogaloo
+  entrees: Bacon, Eggs, Waffles, Strawberries, Cream, Northern Scandinavian Coffee
+  side: 
+  kids: 
+  dessert: 
+  notes: Organic where possible.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 32
+- title: Brunch
+  entrees: Vegetarian quiche (no crust), scrambled eggs, fruit & yogurt, gluten free
+    blueberry pancakes, gluten free and regular muffins
+  side: 
+  kids: 
+  dessert: 
+  notes: Will close Friday the 16th at noon.
+  allergens:
+  - gluten
+  capacity: 64
+- title: Waffles, quiche, sausage, fruit!
+  entrees: Yummy breakfast!
+  side: 
+  kids: 
+  dessert: 
+  notes: Gf available upon request
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 20
+- title: its pesto time, take 2
+  entrees: Parsley basil pesto, optional cheese, gluten free and gluten pasta available
+  side: Ratatouille, salad
+  kids: Plain noodles
+  dessert: Brownies and ice cream
+  notes: Please indicate if need gluten free
+  allergens:
+  - none
+  capacity: 36
+- title: Pre-pumpkin carving Nourishment
+  entrees: Vegetarian Chilli
+  side: Salad
+  kids: 
+  dessert: Pumpkin pie
+  notes: gluten, eggs and dairy are in pie only. I will have gluten free brownies
+    for gluten free folks.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 44
+- title: Marinated beef - Bulgogi
+  entrees: Rice, marinated beef and tofu (for vegetarian)
+  side: Seasoned vegetables, probably radish, cucumber or spinach, with minced garlic,
+    vinegar, fish sauce, soy sauce and sesame oil.
+  kids: Not specific menu for kids
+  dessert: Fruits
+  notes: I will use gluten-free soy sauce. Maybe sesame oil is a potential allergen
+    to some people?
+  allergens:
+  - soy
+  capacity: 40
+- title: Taco Bar!
+  entrees: 'Corn tacos...Beef for the carnivores- and sprouted beans for the vegans/vegetarians.
+    Homemade taco sauce. Fixings to top: (cabbage, cheese,. etc. Brown rice n'' tomato'
+  side: "Homemade guacamole\r\nHomemade taco sauce"
+  kids: 
+  dessert: Maryann is in charge of dessert, and she's excited! Possibly eggs in dessert
+    and maybe gluten if bread pudding.
+  notes: "It will be easy to avoid gluten and, dairy, \r\nMain meal sugar free, mostly
+    organic, non gmo"
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 36
+- title: Curry and rice
+  entrees: Curry (chicken, onion, cauliflower, potato; tofu for vegetarian) and rice
+  side: Radish kimchi (fermented shrimp, garlic, hot pepper), Kale or spinach (seasoned
+    with soy source), pan-fried squash (soaked in eggs and flour)
+  kids: Mild version of curry
+  dessert: Fruits or pumpkin pie
+  notes: "I used fermented shrimp to make radish kimchi. Please be aware of this allergen.
+    Curry powder contains wheat flour. Thus it won't be gluten-free.\r\nCurry I will
+    make is a unique one as it was originated from India, but I think also influenced
+    by Japanese, but quite Korean version of curry (medium spicy, not sweet)"
+  allergens:
+  - shellfish
+  - soy
+  - eggs
+  - gluten
+  capacity: 32
+- title: Bolognese...Mmmm!
+  entrees: Bolognese and pasta
+  side: roasted vegetables, Zingerman's bread, fruit
+  kids: 
+  dessert: Surprise dessert by Ella!
+  notes: Please email me if you prefer gluten-free pasta. The bolognese is gluten
+    free. ***Meal will be closed Friday evening, as I will begin cooking Saturday
+    a.m.***
+  allergens:
+  - dairy
+  capacity: 36
+- title: Autumn Feast
+  entrees: Soup Bar --one vegetarian, one chicken based
+  side: Salad Bar
+  kids: 
+  dessert: Apple pie a la mode
+  notes: Please tell me your food restrictions so I know amts. of dairy free and gluten
+    free food to prepare.
+  allergens:
+  - gluten
+  - dairy
+  capacity: 32
+- title: Lemon Chicken and vegetarian Lentil Soup
+  entrees: Lemon chicken, vegetarian lentil soup
+  side: compost pile baked squash, salad, bread
+  kids: 
+  dessert: something sweet
+  notes: our loose compost pile produced the cute little acorn squashes
+  allergens:
+  - none
+  capacity: 64
+- title: Lentil Soup
+  entrees: Lentil Soup, Zingerman's Bread
+  side: Salad
+  kids: N/A
+  dessert: Maybe
+  notes: "Soup - lentils, tomato, garlic, bay leaf, carrots, onion, chicken broth
+    or vegetable broth.\r\nSalad - Mixed greens, cherry tomatoes, shredded carrots,
+    red pepper, maybe cucumbers."
+  allergens:
+  - gluten
+  capacity: 64
+- title: Baked Potato Bar with cheese, chili and other fixings
+  entrees: Baked Potatoes
+  side: Broccoli- steamed.  Other fixings
+  kids: 
+  dessert: Brownies or cookies
+  notes: non-rBST milk/cheeses
+  allergens:
+  - dairy
+  capacity: 64
+- title: Rice pancakes - Instead of Latkes (Really good too)
+  entrees: Rice Cakes (egg, rice, portabellas, spinach, mild curry, pepitas & other
+    good stuff)
+  side: Kale for one and fruit salad for another- with the best organic yogurt (for
+    dairy eaters)
+  kids: They'll like these, and I can make some just egg and rice also- put in notes
+    if need
+  dessert: Oh, we'll see
+  notes: "All organic and GF, no problem - all allergens mentioned avoidable\r\nIf
+    cannot eat eggs, let me know and I'll make a tofu scramble for you"
+  allergens:
+  - dairy
+  - eggs
+  - bananas
+  capacity: 40
+- title: Congee (Rice porridge) and stir-fried vegetables
+  entrees: Delicious chicken and vegetarian rice porridge with yummy toppings.
+  side: Stir fried vegetables
+  kids: Kid friendly
+  dessert: Brownies (gluten free option available, let me know.)
+  notes: Gluten free and dairy free
+  allergens:
+  - none
+  capacity: 64
+- title: Make Your Own Salad Bar
+  entrees: Mixed Greens, Spinach, Cherry Tomatoes, Cucumber, Red Pepper, Hard Boiled
+    Egg, Walnuts, Carrots, Chia Seed, Cranberries, Tofu, Sunflower Seeds.
+  side: 
+  kids: 
+  dessert: TBD
+  notes: 
+  allergens:
+  - soy
+  - dairy
+  - eggs
+  capacity: 42
+- title: Shepherd's Pie
+  entrees: Winter is coming, let's light our inner lights with warm, comforting food.
+  side: 
+  kids: 
+  dessert: 'Yes'
+  notes: Beef and Veggie options available.  Mashed potato topping will have dairy
+    added.
+  allergens:
+  - dairy
+  capacity: 64
+- title: Pancakes & Eggs
+  entrees: I'll make as many pancakes and eggs as you can eat.
+  side: Fruit, juice, etc. whatever's on sale. Coffee.
+  kids: same
+  dessert: same
+  notes: If you need other foods, please let me know before Friday at 4pm.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Brunch French toast, quiche with veggies and turkey sausage 10:00 am
+  entrees: French toast with apple topping/maple syrup;crustless quiche with veggies;
+    turkey sausage
+  side: 
+  kids: Scrambled eggs
+  dessert: 
+  notes: gluten free French toast available
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Thai chicken coconut curry with rice
+  entrees: Asian salad, chicken or tofu curry with rice, and surprise desert
+  side: 
+  kids: 
+  dessert: Peanut cookies and pineapples
+  notes: Entree Is gluten and dairy free.
+  allergens:
+  - peanuts
+  capacity: 26
+- title: Hot and Hearty Oatmeal Bar
+  entrees: 'Yep, it''s a reprise of a popular meal from last fall: Slow-cooked Scottish
+    Oats'
+  side: "Amylu's chicken sausage\r\nLots of toppings for the oatmeal: nuts, raisins,
+    apples, coconut, etc"
+  kids: "Kids eat same meal\r\nWill have small amount of softer regular style cut
+    oats available"
+  dessert: 
+  notes: Organic oatmeal and apples
+  allergens:
+  - dairy
+  - almonds
+  capacity: 40
+- title: Blueberry pancakes, sausage, eggs and fruit bowl
+  entrees: Gluten free blueberry pancakes, turkey sausage, scrambled eggs and fruit
+    bowl and yogurt
+  side: Gluten free blueberry muffins with no dairy
+  kids: Same as above
+  dessert: 
+  notes: buttermilk in pancake mix
+  allergens:
+  - dairy
+  - eggs
+  capacity: 30
+- title: Waffles, eggs, fruit
+  entrees: Yummy waffles, fruit and protien
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - pineapple
+  - bananas
+  capacity: 25
+- title: Beef Barley Soup & Spicy Carrot Ginger Soup
+  entrees: "Beef Barley Veggie Soup - beef, barley, carrots, celery, onion, zucchini,
+    mushrooms, tomatoes, garlic, and spices (mild)\r\n\r\nSpicy Carrot Ginger Soup
+    - Carrots, butternut squash, onion, garlic, ginger, spices (spicy with some kick
+    & naturally sweet)"
+  side: "Green Salad\r\nButtermilk Biscuts"
+  kids: 
+  dessert: 
+  notes: "The beef barley soup & biscuits contain gluten and the biscuits contain
+    dairy.  \r\nThe carrot ginger soup and salad are Vegan and free of all common
+    allergens."
+  allergens:
+  - gluten
+  - dairy
+  capacity: 64
+- title: Zings Bakehouse Mac 'n cheese
+  entrees: Mac n cheese
+  side: roasted root veges, salad, bread
+  kids: Same as adults
+  dessert: Brownies
+  notes: Let me know if gluten free is needed and I can make pasta and brownies gluten
+    free
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 40
+- title: Chicken Tortilla Soup (vegetarian available)
+  entrees: A hearty tomato broth-based soup which includes black beans, hominy, green
+    chilies and a variety of delicious spices.  (This is not a spicy dish!)
+  side: 'Toppings for soup: avocado, red onions, sour cream, shredded cheese, cilantro
+    and extra tortilla chips. Gluten free corn bread.'
+  kids: same as above
+  dessert: Peanut Butter Bars (gluten-free/dairy free/ egg free)
+  notes: All gluten-free.  Dairy-free possible if you chose not to add those toppings,
+  allergens:
+  - corn
+  - dairy
+  - peanuts
+  capacity: 64
+- title: YOGA AND HEALTHY DESSERT POTLUCK
+  entrees: Come join Kiya for a slow flow yoga class followed by a healthy dessert
+    potluck. Bring your own (thick or double) yoga mat and a healthy dessert or beverage.
+    Low sugar/no white sugar encouraged. Be creative!
+  side: peace and happiness
+  kids: Same as adult meal
+  dessert: 'POTLUCK:  please bring a healthy dessert or beverage to share. Low sugar/no
+    white sugar encouraged. Gluten free encouraged but not necessary. Be creative!'
+  notes: Organic and local ingredients as budget permits
+  allergens:
+  - almonds
+  capacity: 40
+- title: Baked French Toast Casserole with apples (gluten too); scrambled eggs' fruits;
+  entrees: Baked French Toast Casserole with apples; scrambled eggs; sausage; toast
+    by request ; grapefruit, clementines and bananas;
+  side: toast will also be available gluten free
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Chili
+  entrees: mild chili with and without beef, served over rice
+  side: veggies will be cooked into the chili (carrots and kale)
+  kids: 
+  dessert: 
+  notes: dairy served on the side
+  allergens:
+  - dairy
+  capacity: 64
+- title: Grilled brunch
+  entrees: Scramble eggs, sausages, grilled veggies
+  side: 
+  kids: pancakes + fruit and nut milk
+  dessert: Coconut Tapioca dessert + mango
+  notes: Taste of Nicaragua postpone for another occasion, sorry!
+  allergens:
+  - eggs
+  - bananas
+  capacity: 64
+- title: Chicken Enchiladas Suizas
+  entrees: A take on a recipe from Mexico City, Creamy Enchiladas with Chicken, Tomatoes
+    and Green Chile (mild). I will also offer a mole verde in mild and spicy versions.
+  side: Mexican Rice and Black Refried Beans
+  kids: 
+  dessert: Fried Ice Cream (if available) and/or French Vanilla.
+  notes: 
+  allergens:
+  - corn
+  - dairy
+  capacity: 30
+- title: Vegetarian baked ziti
+  entrees: Vegetarian baked ziti with mushrooms, peppers and parmesan
+  side: Salad
+  kids: Plain pasta if requested
+  dessert: Chocolate chip cookies, fruit
+  notes: Gluten free available by request
+  allergens:
+  - gluten
+  - dairy
+  capacity: 36
+- title: Vegetarian lentil soup, Beef chili- not too spicy
+  entrees: Lentil/vegetable,  Tomato-veggie, beef chili
+  side: salad with lots of toppings, bread
+  kids: 
+  dessert: lemon bars, macaroons for gluten free
+  notes: 
+  allergens:
+  - gluten
+  capacity: 64
+- title: Curried chickpea Stew by Bee and Anita
+  entrees: Curried Chickpea Stew
+  side: cabbage, rice
+  kids: 
+  dessert: brownies and icecream
+  notes: Organic, delicious Indian meal, mild and spicy versions.
+  allergens:
+  - none
+  capacity: 40
+- title: Chicken Noodle Soup & Spicy Coconut Lentil Soup
+  entrees: "Chicken Noodle Soup\r\nSpicy Coconut Lentil Soup"
+  side: "Veggie Quinoa Stir-Fry\r\nSalad\r\nBiscuits"
+  kids: 
+  dessert: 
+  notes: The lentil soup is vegan and gluten free
+  allergens:
+  - gluten
+  - eggs
+  capacity: 64
+- title: Crispy Potato Baked Chicken
+  entrees: Oven baked boneless chicken with a crispy potato flake and cheese coating.
+    This is a favorite with kids!
+  side: Salad and Zingermans bread
+  kids: They will love the entree
+  dessert: Fruit (if budget permits)
+  notes: Ingredients organic as much as budget allows or at least GMO free
+  allergens:
+  - dairy
+  capacity: 40
+- title: Breakfast Frittata.
+  entrees: Egg, sausage and vegetable casserole
+  side: Fruit, Zingermans bread
+  kids: 
+  dessert: 
+  notes: Gluten is only in the Zingermans bread if you choose to eat it. Dairy is
+    only a little goat cheese in casserole and butter if you put it on bread. . Vegetarian
+    casserole upon request by meal closing deadline. Ingredients local and organic
+    when possible and budget permits
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 40
+- title: Brunch
+  entrees: Bacon, Eggs, and Pancakes
+  side: OJ, Coffee, Tea
+  kids: Chocolate Chip Pancakes
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 30
+- title: Ivy's Birthday Brunch
+  entrees: Eggs, Sausage, Pancakes, and assorted fruits. Gluten free pancakes will
+    be available.
+  side: OJ, Tea, Coffee
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 32
+- title: Pancakes, Eggs, Sausage
+  entrees: All free of dairy, gluten, corn, soy, nuts (let me know if coconut is an
+    issue) and processed sugar.  Fruit and juice if budget allows
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: Brunch and Crosswords!!
+  entrees: Waffles, Eggs, Bacon, and assorted fruits
+  side: OJ, Coffee, Tea
+  kids: 
+  dessert: 
+  notes: Let me know if you'd like gluten free waffles :)
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 32
+- title: Chicken
+  entrees: Baked Chicken, Mashed Potatoes, Corn, Green Salad
+  side: 
+  kids: Same
+  dessert: Maybe
+  notes: Chicken Rubbed with Garlic.  Mashed Potatoes will contain Milk.
+  allergens:
+  - corn
+  - dairy
+  capacity: 64
+- title: Shepherd's Pie
+  entrees: back by popular demand, Shepherd's pie with veggies, beef or mushrooms,
+    topped with mashed potatoes
+  side: salad of some sort, bread from Zingerman's if available
+  kids: onion-free shepherd's pie
+  dessert: probably cookies, will make GF if requested
+  notes: shepherd's pie can be made egg,corn and gluten-free upon request.
+  allergens:
+  - dairy
+  - eggs
+  - gluten
+  - soy
+  - corn
+  capacity: 64
+- title: Turkey Meat Loaf, Sweet Poataoe Fries, Salad
+  entrees: Turkey Meat Loaf, Sweet Poataoe Fries, Salad
+  side: 
+  kids: Same
+  dessert: 
+  notes: Turkey Meat Loaf will contain gluten, dairy and egg.  Fries may have a spice
+    added that contains gluten.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Italian night
+  entrees: Vegetarian Lasagne
+  side: Salad, garlic bread
+  kids: plain noodles if requested in advance
+  dessert: brownies and ice cream
+  notes: Gluten free option available if requested.
+  allergens:
+  - gluten
+  - dairy
+  capacity: 40
+- title: Make your own Salad
+  entrees: Mixed Greens, Cherry Tomatoes, Red Pepper, Walnuts, Sunflower Seeds, Chia
+    Seeds, Mushrooms, Craisins (sp?), Sliced Hard Boiled Egg, Baked Tofu to go on
+    the Salad (not as a main dish).
+  side: 
+  kids: Same
+  dessert: Maybe
+  notes: Will try to buy organic depending on price, Craisians may contain gluten,
+    will use gluten free soy sauce or tamari sauce on tofu.
+  allergens:
+  - soy
+  - dairy
+  - eggs
+  capacity: 64
+- title: Spaghetti
+  entrees: Spaghetti with meat (turkey) sauce, salad, Zingerman's Bread
+  side: 
+  kids: Same
+  dessert: Maybe
+  notes: Let me know if you need gluten free pasta.  Sauce will contain gluten and
+    is not vegan or gluten free; if you do not want turkey added to your sauce, let
+    me know.  .
+  allergens:
+  - gluten
+  capacity: 64
+- title: Chicken and roasted vegtables
+  entrees: Chicken and roasted vegetables (tomatoes, potatoes, sweet potatoes, onions,
+    carrots)  Chicken and veggies cooked separate.
+  side: 
+  kids: Same
+  dessert: Birthday cake provided by Susie.  Gluten free brownies provided by Susie.  Happy
+    Birthday Susie!!!
+  notes: Seasoning on chicken and veggies may contain gluten.
+  allergens:
+  - gluten
+  capacity: 64
+- title: Baked chicken, baked potatoes, veggies and ice cream
+  entrees: Baked chicken thighs, baked potatoes, baked veggies & salad
+  side: A gluten and dairy free meal. Vegitian fried tofu available upon request.
+  kids: 
+  dessert: Ice cream
+  notes: 
+  allergens:
+  - none
+  capacity: 40
+- title: Slow Cooked BBQ Chicken Sammies
+  entrees: Slow cooked BBQ chicken, topped with coleslaw, served on a bun (Monterey
+    Jack cheese may be an additional topping). Vegetarian option of grilled BBQ veggies
+    (avocado may be an additional topping).
+  side: Baked beans and potato salad
+  kids: same
+  dessert: Gluten free Brownies
+  notes: As many organic and local products will be used as possible. .  I may offer
+    Zingerman's bread, as well if there is any left in the CH kitchen. Gluten free
+    buns available.
+  allergens:
+  - eggs
+  capacity: 64
+- title: Stir Fried Spicy Pork and Rice
+  entrees: Stir fried pork and vegetables seasoned with Korean hot pepper paste, soy
+    sauce, garlic etc, steamed rice. For non spicy version, I will use chicken instead
+    pork. For vegetarian option, tofu will be used.
+  side: Radish kimchi, pickles, sauerkraut, roasted seaweed
+  kids: Non spicy menu would work
+  dessert: Fruits
+  notes: All ingredients are gluten free.
+  allergens:
+  - soy
+  capacity: 36
+- title: Cheese, Hummus and Roasted veggie sampler
+  entrees: Cheese and hummus sampler
+  side: "Roasted and raw veggies, Zingermans bread,\r\nGF option for bread."
+  kids: Same as adult
+  dessert: If budget permits
+  notes: gluten will only be in bread
+  allergens:
+  - gluten
+  - dairy
+  capacity: 40
+- title: Tuscan Angel Hair Pasta
+  entrees: Angel hair with Chicken, Bacon, Tomatoes, and Spinach in a light Cream
+    sauce.
+  side: Bread with dipping sauce and olives.
+  kids: I'll have some separate ingredients for picky eaters.
+  dessert: An assortment of chocolates to start with.
+  notes: I will be serving a gluten free batch as well.
+  allergens:
+  - gluten
+  - dairy
+  capacity: 32
+- title: Super Fun Taco Bar
+  entrees: black beans and rice and/or ground beef tacos
+  side: all of the usual fixings
+  kids: kids can make their own tacos!
+  dessert: tbd
+  notes: organic ingredients; gluten free tortillas will be available; will be easy
+    to avoid dairy;
+  allergens:
+  - gluten
+  - dairy
+  capacity: 64
+- title: Pancakes, Eggs, Sausage
+  entrees: Contains no dairy, gluten, soy, corn, processed sugar, nuts (let me know
+    if coconut is an issue).  Juice and fruit if budget allows
+  side: 
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: Sweet & Savory French Toast
+  entrees: French toast made at least two ways.  Available vegan on request. GF eaters
+    please let me know what brand of bread you like before Friday.
+  side: Scrambled eggs, fruit, bacon.
+  kids: same
+  dessert: none
+  notes: Milk and cheese organic; meat free-range. Fruit organic among the <a href="https://www.ewg.org/foodnews/?gclid=CN6yjJibmcwCFdM2gQodPYUGDQ">Dirty
+    Dozen</a>.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Ham Dinner
+  entrees: Baked ham, mashed potato, green beans.
+  side: if in the budget - garden salad
+  kids: 
+  dessert: If enough money in budget - Pineapple upside down cake - Gluten free, contains
+    dairy and milk.
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - pineapple
+  capacity: 64
+- title: UMAMI EXPLOSION
+  entrees: GRILLED LIME-CURRY-RUBBED HANGER STEAK WITH FRESH MELON-CUCUMBER CHUTNEY
+  side: GRILLED BEEF, JÍCAMA, AND APPLE SALAD
+  kids: Something Appropriately Yummy.
+  dessert: A Special Dessert
+  notes: 
+  allergens:
+  - dairy
+  capacity: 24
+- title: Brunch - 3 Egg Omelets to order, Please note your ingredients from Entree
+    list.
+  entrees: 'Omelet Ingredient Choices: Ham, Bacon, Spinach, Gruyere, Cheddar, Curry
+    (Hot), Mushrooms,'
+  side: Bacon, Fruit, Coffee, Tea, Toast and Jam
+  kids: Scrambled Eggs
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  capacity: 20
+- title: Baked Potato Bar
+  entrees: Baked Potatoes
+  side: beans, broccoli, turkey bacon, chives from our garden!
+  kids: 
+  dessert: applesauce
+  notes: potatoes will be organic, all else org. when possible
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Cranberry Chicken with Sweet Potatoes
+  entrees: Cranberry (Get-down Farms Free-range) Chicken with Sweet Potatoes
+  side: salad, fruit
+  kids: chicken is kid-friendly
+  dessert: Brownies, ice cream
+  notes: Baked Tofu option available if requested.  I can make some sweet potatoes
+    and cranberries without chicken. also gluten free brownies. Gluten, dairy and
+    eggs only in dessert.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 45
+- title: Baked Potato Bar
+  entrees: Baked potatoes with a variety of toppings
+  side: 
+  kids: 
+  dessert: bar cookies
+  notes: organic where possible, allergens can be easily avoided
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - peanuts
+  - tree_nuts
+  capacity: 64
+- title: Latkes and fixings
+  entrees: Potato pancakes with or without onion or eggs (by request ) and some with
+    my favorite curry
+  side: veggies, salad, applesauce, sour cream, seeds
+  kids: 
+  dessert: fruit and dark chocolate
+  notes: ALL organic and non gmo, gluten free - allegans avoidable on request, and
+    be clear about preference requests (eg no onions or no eggs)
+  allergens:
+  - eggs
+  capacity: 50
+- title: Soups of the Season
+  entrees: Guinness Cheddar Soup, Pea Soup, and Open Faced Grilled Cheese Sandwiches
+  side: Simple Salad - Spinach, Red Peppers, Avocado, and Sesame Ginger Dressing (others
+    will be provided).
+  kids: 
+  dessert: Sweet and Sour Strawberry Semifreddo with Black Sesame
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  capacity: 64
+- title: organic gluten-free chili with hamburger or organic gluten-free chili with
+    organic tofu
+  entrees: organic gluten-free chili for mediators and organic gluten-free chili for
+    vegetarians. Organic green salad with an assortment of other organic veggies.  Organic
+    gluten-free cornbread made with dairy and Egg.
+  side: 
+  kids: Same
+  dessert: something organic and gluten-free may contain dairy and egg
+  notes: 
+  allergens:
+  - corn
+  - dairy
+  - eggs
+  - tofu
+  capacity: 40
+- title: Birthday Dinner - pesto & pasta (or rice)
+  entrees: Pesto Pasta or Rice, chicken &/or tofu
+  side: roasted root veggies, other items from the pantry
+  kids: 
+  dessert: cupcakes (d/g) and chocolate cashew drops (df/gf)
+  notes: flexible and accommodating. please note your dietary restrictions in the
+    comments. dinner will be simple so we can focus on dessert.
+  allergens:
+  - gluten
+  - eggs
+  - soy
+  - dairy
+  - tree_nuts
+  - tofu
+  capacity: 64
+- title: Blueberry pancakes and Spinach, Basil and Tomato Frittatas
+  entrees: Pancakes will be gluten free or regular; individual spinach and tomato
+    frittatas
+  side: Turkey sausage, fruit and yogurt
+  kids: Will make,gluten free pancakes with almond milk
+  dessert: 
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 35
+- title: Spinach Lasagna
+  entrees: Spinach lasagna, cheese lasagna for people who dislike spinach =)
+  side: Steamed broccoli
+  kids: Plain pasta with parmesan cheese
+  dessert: Chocolate chip cookies
+  notes: Email if you want gluten-free or other modifications.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: organic gluten free potato soup
+  entrees: organic potato soup made with dairy, for meat eaters organic gluten-free
+    bacon to sprinkle on top of your soup
+  side: Organic green salad and whatever other organic veggies I can find (for example
+    tomatoes peppers carrots etc.). Organic gluten-free cornbread made with dairy
+    and eggs
+  kids: same
+  dessert: something organic and gluten-free
+  notes: for vegetarians organic baked tofu
+  allergens:
+  - dairy
+  - tofu
+  - eggs
+  capacity: 40
+- title: Tequila and Lime Chicken Tacos
+  entrees: Shredded Chicken in a Chipotle Adobo Sauce and Fresh Lime. (Slightly spicy)
+  side: Refried Beans and Spanish Rice
+  kids: Plain Chicken and Cheese Quesadillas
+  dessert: A Chocolate Hazelnut Semifreddo.
+  notes: All allergens will be avoidable.
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - tree_nuts
+  capacity: 64
+- title: Tamale Take-out PLEASE READ CAREFULLY
+  entrees: Tamales from Pilars - each adult signed up signifies one tamale. Do not
+    sign up children or the calculations won't work right.  If you want to eat two
+    tamales, sign up 2 adults
+  side: curtido (a kind of sauerkraut)
+  kids: 
+  dessert: none
+  notes: "put what kind of tamale you want in the notes.  I'm only ordering tamales
+    to keep it simple.\r\nhttp://www.pilarstamales.com/cafe"
+  allergens:
+  - corn
+  capacity: 64
+- title: Chicken & Veggie Paellas
+  entrees: Rice and chicken and Rice and veggies for vegeterians
+  side: Green Salad
+  kids: 
+  dessert: Cream caramel and fruits
+  notes: 
+  allergens:
+  - eggs
+  capacity: 64
+- title: Brisket Stroganoff
+  entrees: Beef Brisket Stroganoff with Egg Noodles
+  side: Shiitake, Leek Risotto and Asparagus
+  kids: Plain Noodles and Risotto
+  dessert: TBD
+  notes: 
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - almonds
+  capacity: 64
+- title: Time for chili
+  entrees: Vegetarian chili
+  side: Cornbread, salad
+  kids: Same
+  dessert: 'Yes'
+  notes: Let me know if you need gluten free please
+  allergens:
+  - gluten
+  capacity: 45
+- title: Crepe buffet
+  entrees: A selection of crepes (basic recipe, sour dough - from my sister's Alaskan
+    starter, and GF on request). Assortment of fillings for both savory (egg, cheese,
+    veg's, herbs & more) and sweet (fruit, nutella, jam, yogurt, ricotta & more) to
+    make yourself.
+  side: 
+  kids: 
+  dessert: 
+  notes: Fillings will be self serve. Crepes include both eggs & dairy.
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Curry and rice
+  entrees: Chicken curry over rice (tofu for vegetarian option)
+  side: Radish kimchi
+  kids: Fried dumplings
+  dessert: Fruits
+  notes: Curry powders I use have flour. If you need gluten free, I'll use gluten
+    free curry powder we may have in the CH kitchen.
+  allergens:
+  - gluten
+  - tofu
+  capacity: 40
+- title: English Breakfast
+  entrees: Scramble eggs, sausages, mushrooms, bake beans
+  side: Fruit (mixed berries)
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Chicken Tikka Masala/Veggie Tikka Masala
+  entrees: "Chicken Tikka or Veggie Tikka Masala: meat or veggies simmered in a rich
+    coconut curry\r\nRice on the side"
+  side: Salad, Rice
+  kids: they will like it
+  dessert: Fruit
+  notes: "Both meat or veggie options are gluten free and dairy free!\r\n****MUST
+    SPECIFY: VEGAN OR MEAT EATER!***\r\nAs much local and organic as possible"
+  allergens:
+  - none
+  capacity: 35
+- title: TOUCHSTONE CHILI COOK-OFF! -please see notes for details
+  entrees: chili and more chili ----$5/adult
+  side: applesauce, bread and butter
+  kids: chili and more chili---- kids 6 and under free
+  dessert: probably
+  notes: "Touchstone is sponsoring a Chili Cook-off as a fundraiser to buy art/fabric
+    for it's dinning room.  Join us, cook, eat, vote!!\r\nCost:   $5/adult taster..
+    kids 6 and under, free\r\nVoting: Everyone gets one vote, kids included\r\n\r\nRules
+    for Entries:\r\n\r\n1.      Delivery your chili by 6 pm, March 19th.\r\n2.      4
+    quarts per entry.\r\n3.      Entries forms will require you to list allergens,
+    meat, and alcohol content, so be prepared.\r\n4.      Alcohol may be used if cooked
+    in (to assure alcohol has cooked off) and is declared on entry form.\r\n5.      To
+    enter a chili, you need to live in one of the cohousing communities.\r\n6.      Everyone
+    gets one vote, including kids."
+  allergens:
+  - none
+  capacity: 64
+- title: Coffeecake and casserole
+  entrees: Bacon and egg casserole with goat cheese and veggies--gluten free
+  side: Blueberry GF coffeecake
+  kids: They will love it
+  dessert: 
+  notes: "All will be gluten free \r\nOnly dairy will be goat cheddar in casserole"
+  allergens:
+  - dairy
+  - eggs
+  capacity: 35
+- title: Coconut milk fish chowder
+  entrees: Coconut milk fish chowder. Fish free vegan option available.
+  side: Fresh baked rolls
+  kids: Cut up raw carrots and broccoli
+  dessert: Fruit
+  notes: The rolls have wheat - the soup itself is gluten free.
+  allergens:
+  - gluten
+  capacity: 64
+- title: Warm stuffed Croissants & Fruits
+  entrees: Fresh & grilled veggies inside warm croissants
+  side: Fresh fruit salad & nut milks sweeten with dates
+  kids: scramble eggs & yogurt
+  dessert: 
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  - almonds
+  - tree_nuts
+  - bananas
+  capacity: 64
+- title: French Country Coq au Vin
+  entrees: Coq au Vin
+  side: Parsleyed Potatoes, Haricot Vert, Salad with French style mustard vinagrette.
+  kids: 
+  dessert: Strawberries and Cream
+  notes: 
+  allergens:
+  - dairy
+  capacity: 24
+- title: Dumpling Soup
+  entrees: Dumplings in chicken broth (also Veggie broth option)
+  side: Rice, radish kimchi and toppings (sliced seaweed, chopped green onions)
+  kids: Most of kids like dumplings
+  dessert: Fruits and brownies
+  notes: I will buy different kinds of dumplings at a Korean grocery. Pork is a default
+    meat. Please indicate if you need beef or veggie dumplings. Also note that I'll
+    add eggs in broth.
+  allergens:
+  - gluten
+  - soy
+  - eggs
+  capacity: 46
+- title: Chicken Stack-Up / Hawaiian Haystacks
+  entrees: "Chicken (or baked tofu) and your choice of:\r\n rice, chow mien noodles,
+    vegetables, pineapple chunks, coconut flakes, slivered almonds, shredded cheese,
+    and other toppings"
+  side: 
+  kids: sliced vegetables, fruit
+  dessert: Cookie bars
+  notes: 
+  allergens:
+  - gluten
+  - soy
+  - dairy
+  - peanuts
+  - almonds
+  - tree_nuts
+  - pineapple
+  - tofu
+  - eggs
+  capacity: 64
+- title: Traditional German Food
+  entrees: "Bratwursts\r\negg noodle dish \r\npotatoes casserole"
+  side: "red cooked cabbage salad\r\nsauerkraut\r\nhorseradish & sourcream"
+  kids: TBD
+  dessert: apple strudel with ice cream
+  notes: 
+  allergens:
+  - dairy
+  - eggs
+  - gluten
+  capacity: 64
+- title: Grillin' TS style
+  entrees: American grilled things with a Korean kick - I'm hoping my assistants have
+    some good ideas
+  side: lightly sauted veggies from the farmers market or TS gardens
+  kids: kids might be put to work in the garden
+  dessert: hopefully Michigan strawberries
+  notes: Organic and local as much as possible.  Easy to accommodate all diets.
+  allergens:
+  - gluten
+  - soy
+  - dairy
+  - eggs
+  capacity: 64
+- title: Homemade PIZZA!
+  entrees: Pizza with a variety of toppings....chicken, veggies, cheese, pepperoni....Both
+    regular and gluten free pizza crust served.
+  side: Salad and Fruit
+  kids: Kids like this stuff
+  dessert: Maybe....
+  notes: "PLEASE NOTE BELOW IF YOU NEED GLUTEN FREE SO I CAN PLAN--thanks!!\r\nIngredients
+    organic and local when possible"
+  allergens:
+  - dairy
+  capacity: 32
+- title: Tomato Taster
+  entrees: a sampling of local tomatoes, poultry and vegetarian options
+  side: caprese salad, veggies galore, corn-on-the-cob
+  kids: corn-off-the-cob for brace-wearers
+  dessert: tomato ice cream?
+  notes: local and organic when possible. meal can be made allergen-free (but not
+    tomato-less) tree nuts (almonds and hazelnuts) will be present
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  - eggs
+  capacity: 64
+- title: Chili and Apple Orchard Suprise!
+  entrees: Main meal will be "Chili" as I knew it growing up.  More like mild beans
+    and veggies served over rice.  Ground beef for meat-eaters.
+  side: cooked veggies based on local availablilty
+  kids: main entree is mild enough for everyone
+  dessert: We are hosting the annual Apple Dessert Potluck.  Residents from GO and
+    TS invited to go apple picking the prior weekend, and join us with what you create
+    from those gorgeous apples.
+  notes: Dairy will be available as an add-on, but none in the main entree. Desserts
+    may contain some, none, or all of the common allergens as these are being prepared
+    by various people.
+  allergens:
+  - dairy
+  capacity: 36
+- title: Sweet & Savory Crepes
+  entrees: Crepes with lots of fillings, both savory (dinner) and sweet (dessert).
+  side: Steamed vegetables
+  kids: n/a
+  dessert: more crepes!
+  notes: Eggs free range, milk local, flour organic.  If you want gluten-free crepes,
+    please let me know and I'll give it a shot.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  - bananas
+  capacity: 64
+- title: Gimbab
+  entrees: Rice, seasoned vegetables, beef, eggs or smoked salmon, rolled in dried
+    seaweed
+  side: Radish water kimchi
+  kids: Main entree should work for them
+  dessert: Fruits or ice cream
+  notes: We will have radish water kimchi we started fermentation on 11/12. Some of
+    half gallons may be sold at $10/jar after meal.
+  allergens:
+  - soy
+  - eggs
+  capacity: 36
+- title: Curry Split Pea Soup & Sandwiches
+  entrees: Curry split pea soup with chicken broth, ham & milk, and vegan curry split
+    pea soup with vegetable broth & coconut milk.
+  side: Tuna and egg salad sandwiches, or bring your own sandwich insides to put on
+    the bread.
+  kids: Same - please email me before Thursday if your kids want no-curry version
+    of the soup.
+  dessert: Homemade chocolate chip cookies, and fruit.
+  notes: Soup is gluten free; veggie soup is also dairy free. If you would like gluten-free
+    bread and sandwich fixings, or other adaptations, please email me before Thursday
+    and I am happy to oblige.
+  allergens:
+  - dairy
+  - eggs
+  capacity: 64
+- title: Crepes and Yummy Things to Put In Them
+  entrees: Crepes = egg, flour, milk. (Not actually crepes but are actually more like
+    Swedish pancakes, flat and flexible.)
+  side: Things to put in the crepes, both sweet and savory. Definitely will include
+    sugar, homemade strawberry & blueberry jam, salted caramel sauce, fresh whipped
+    cream, cheese. Probably sauteed mushrooms. Bring your own if you want something
+    in particular.
+  kids: same
+  dessert: same
+  notes: Probably not all organic, but I'll do my best within the budget.
+  allergens:
+  - gluten
+  - dairy
+  - eggs
+  capacity: 64
+- title: Meat loaf, potatoes, salad, biscuits and apple crisp
+  entrees: American fair!
+  side: Salad, biscuits, potatoes
+  kids: 
+  dessert: Apple crisp
+  notes: 
+  allergens:
+  - gluten
+  - eggs
+  capacity: 31
+- title: Bi Bim Bap
+  entrees: Steamed rice with a variety of seasoned vegetables and beef (or tofu) as
+    toppings and hot pepper paste sauce (also soy sauce for non spicy). And fried
+    eggs.
+  side: Pickles and kimchi.
+  kids: They can have more beef or tofu than vegetables.
+  dessert: Fruits
+  notes: Vegetables and meat will be seasoned with gluten free soy sauce, minced garlic,
+    sesame oil, black peppers, etc. This menu is about vegetables rather than meat.
+    Please don't expect much of meat with this meal.
+  allergens:
+  - soy
+  - eggs
+  capacity: 32
+- title: Tacos made with ground turkey
+  entrees: Tacos
+  side: Refried beans, rice
+  kids: 
+  dessert: 
+  notes: tomatoes, lettuce, mild salsa, sour cream for tacos.
+  allergens:
+  - gluten
+  - corn
+  - dairy
+  capacity: 64
+- title: Breakfast pizza (diet restriction friendly)
+  entrees: This is the best pizza crust ever made. And it has only a few ingredients,
+    the main one being yucca. It is well loved by the pickiest of eaters!  We will
+    have a pesto like sauce, with choices of meats, veggies and cheeses. Please list
+    any restrictions you have. I will be shooting for a price point somewhere in between
+    5-7$ PP.
+  side: Scrambled eggs
+  kids: 
+  dessert: 
+  notes: 
+  allergens:
+  - none
+  capacity: 64
+- title: Soup Bar!
+  entrees: "A basic meat soup \r\nA basic veggie soup\r\nPlus lots of interesting
+    toppings to make it your own delicious creation: seeds, veggies, GF pasta, cheese..."
+  side: Veggies, cheese, pasta, etc
+  kids: Kids will enjoy creating
+  dessert: Maybe....something fruity
+  notes: As much local and organic as possible
+  allergens:
+  - dairy
+  capacity: 35
+- title: Salmon en Papillote
+  entrees: Salmon baked in parchment paper; seasoned w onion & herbs
+  side: "Greens (spinach or kale) or green beans sauteed with garlic\r\nRoasted new
+    potatoes & Zingerman's bread"
+  kids: Please comment if your kids won't eat salmon & give me a suggestion; could
+    add tuna salad or hard boiled eggs
+  dessert: Yes, fruit and something baked - TBD
+  notes: All gluten free except baked desert. Vegi's will be mostly organic, Salmon,
+    probably from Costco. Please let me know if you need a vegetarian option - could
+    stir fry or bake tofu if needed.
+  allergens:
+  - none
+  capacity: 64

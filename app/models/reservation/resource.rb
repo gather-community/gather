@@ -5,9 +5,8 @@ module Reservation
     self.table_name = "resources"
 
     belongs_to :community
-    has_and_belongs_to_many :shared_guidelines,
-      class_name: "Reservation::SharedGuidelines",
-      join_table: "reservation_guideline_inclusions"
+    has_many :guideline_inclusions, class_name: "Reservation::GuidelineInclusion"
+    has_many :shared_guidelines, through: :guideline_inclusions
 
     has_attached_file :photo,
       styles: { thumb: "220x165#" },

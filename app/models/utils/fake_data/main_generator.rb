@@ -16,7 +16,8 @@ module Utils
           begin
             # create_households_and_users
             # deactivate_households
-            ResourceGenerator.new(community: community, photos: photos).generate
+            (rscgen = ResourceGenerator.new(community: community, photos: photos)).generate
+            ReservationGenerator.new(resource_map: rscgen.resource_map).generate
             # MealGenerator.new(community: community).generate
           rescue
             users.each { |u| u.photo.destroy }

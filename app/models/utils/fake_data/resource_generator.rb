@@ -1,13 +1,12 @@
 module Utils
   module FakeData
     class ResourceGenerator < Generator
-      include FactoryGirl::Syntax::Methods
-
-      attr_accessor :community, :resource_data, :photos
+      attr_accessor :community, :resource_data, :resource_map, :photos
 
       def initialize(community:, photos:)
         self.community = community
         self.photos = photos
+        self.resource_map = {}
       end
 
       def generate
@@ -26,6 +25,7 @@ module Utils
             photo: photos ? resource_photo(row["id"]) : nil
           ))
           row[:obj] = resource
+          resource_map[row["id"]] = row[:obj]
         end
       end
 

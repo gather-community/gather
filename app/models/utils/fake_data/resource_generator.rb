@@ -39,7 +39,10 @@ module Utils
       end
 
       def create_resource_protocols_and_associate
-
+        load_yaml("reservation/protocols.yml").each do |row|
+          protocol = create(:reservation_protocol, row.except("id").merge(community: community))
+          protocol.resources = resources_with_protocol_id(row["id"])
+        end
       end
 
       def resource_photo(id)
@@ -48,6 +51,12 @@ module Utils
 
       def resources_with_shared_guidelines_id(id)
         resource_data.select { |r| r[:shared_guideline_ids].include?(id) }.map { |r| r[:obj] }
+      end
+
+      def resources_with_protocol_id(id)
+        @protocoling_data = load_yaml("reservation/protocolings.yml")
+        resource_ids = @protocoling_data.select { |p| p["protocol_id"] == id }.map { |p| p["resource_id"] }
+        resource_data.select { |r| resource_ids.include?(r["id"]) }.map { |r| r[:obj] }
       end
     end
   end

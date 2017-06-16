@@ -14,11 +14,11 @@ module Utils
         Time.zone = community.settings.time_zone
         ActiveRecord::Base.transaction do
           begin
-            create_households_and_users
-            deactivate_households
+            # create_households_and_users
+            # deactivate_households
             ResourceGenerator.new(community: community, photos: photos).generate
-            MealGenerator.new(community: community).generate
-          ensure
+            # MealGenerator.new(community: community).generate
+          rescue
             users.each { |u| u.photo.destroy }
           end
         end

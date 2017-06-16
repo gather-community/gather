@@ -5,7 +5,7 @@ module Reservation
     self.table_name = "resources"
 
     belongs_to :community
-    has_many :guideline_inclusions, class_name: "Reservation::GuidelineInclusion"
+    has_many :guideline_inclusions, class_name: "Reservation::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
 
     has_attached_file :photo,

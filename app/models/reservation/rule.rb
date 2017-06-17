@@ -75,6 +75,9 @@ module Reservation
       when :requires_kind
         reservation.kind.present? || [:kind, "can't be blank"]
 
+      when :pre_warning
+        true
+
       else
         raise "Unknown rule name"
       end

@@ -4,21 +4,11 @@
   ends_at: 2016-06-03 22:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 1379
-  starts_at: 2016-07-30 20:00:00.000000000 Z
-  ends_at: 2016-07-31 03:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1381
   starts_at: 2016-07-05 18:00:00.000000000 Z
   ends_at: 2016-07-08 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1176
-  starts_at: 2016-06-22 23:30:00.000000000 Z
-  ends_at: 2016-06-23 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1177
   starts_at: 2016-06-22 23:30:00.000000000 Z
   ends_at: 2016-06-23 00:30:00.000000000 Z
@@ -34,11 +24,6 @@
   ends_at: 2016-10-11 00:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 2741
-  starts_at: 2016-12-03 21:00:00.000000000 Z
-  ends_at: 2016-12-04 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2743
   starts_at: 2016-10-29 16:00:00.000000000 Z
   ends_at: 2016-10-29 19:00:00.000000000 Z
@@ -49,11 +34,6 @@
   ends_at: 2016-12-18 18:00:00.000000000 Z
   kind: Official
   resource_id: 18
-- id: 3054
-  starts_at: 2016-12-06 00:00:00.000000000 Z
-  ends_at: 2016-12-06 01:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1966
   starts_at: 2016-09-08 23:15:00.000000000 Z
   ends_at: 2016-09-09 00:45:00.000000000 Z
@@ -89,16 +69,6 @@
   ends_at: 2016-12-11 18:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2847
-  starts_at: 2016-11-13 14:00:00.000000000 Z
-  ends_at: 2016-11-13 17:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 2786
-  starts_at: 2016-11-19 23:00:00.000000000 Z
-  ends_at: 2016-11-20 04:30:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 2925
   starts_at: 2016-11-20 19:00:00.000000000 Z
   ends_at: 2016-11-20 20:30:00.000000000 Z
@@ -169,11 +139,6 @@
   ends_at: 2017-03-05 03:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 4215
-  starts_at: 2017-03-11 16:00:00.000000000 Z
-  ends_at: 2017-03-11 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4317
   starts_at: 2017-03-15 00:00:00.000000000 Z
   ends_at: 2017-03-15 01:00:00.000000000 Z
@@ -194,46 +159,6 @@
   ends_at: 2016-08-11 00:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 856
-  starts_at: 2016-05-13 16:00:00.000000000 Z
-  ends_at: 2016-05-14 03:59:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 857
-  starts_at: 2016-05-14 12:00:00.000000000 Z
-  ends_at: 2016-05-15 03:59:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 858
-  starts_at: 2016-05-18 00:30:00.000000000 Z
-  ends_at: 2016-05-18 03:59:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 859
-  starts_at: 2016-05-18 04:00:00.000000000 Z
-  ends_at: 2016-05-18 13:15:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 860
-  starts_at: 2016-05-21 14:00:00.000000000 Z
-  ends_at: 2016-05-21 16:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 863
-  starts_at: 2016-06-05 14:00:00.000000000 Z
-  ends_at: 2016-06-05 16:30:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 865
-  starts_at: 2016-06-25 14:00:00.000000000 Z
-  ends_at: 2016-06-25 16:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 866
-  starts_at: 2016-07-09 19:00:00.000000000 Z
-  ends_at: 2016-07-10 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 867
   starts_at: 2016-05-14 12:00:00.000000000 Z
   ends_at: 2016-05-15 03:59:00.000000000 Z
@@ -299,41 +224,11 @@
   ends_at: 2016-05-12 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 886
-  starts_at: 2016-09-18 04:00:00.000000000 Z
-  ends_at: 2016-09-18 16:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 888
-  starts_at: 2016-05-13 16:00:00.000000000 Z
-  ends_at: 2016-05-15 03:59:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 889
   starts_at: 2016-05-20 18:00:00.000000000 Z
   ends_at: 2016-05-21 17:00:00.000000000 Z
   kind: Special
   resource_id: 18
-- id: 890
-  starts_at: 2016-05-20 21:00:00.000000000 Z
-  ends_at: 2016-05-21 04:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 891
-  starts_at: 2016-05-21 04:00:00.000000000 Z
-  ends_at: 2016-05-21 14:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 892
-  starts_at: 2016-05-20 21:00:00.000000000 Z
-  ends_at: 2016-05-21 04:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 893
-  starts_at: 2016-05-21 04:00:00.000000000 Z
-  ends_at: 2016-05-21 15:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 894
   starts_at: 2016-05-20 21:00:00.000000000 Z
   ends_at: 2016-05-21 04:00:00.000000000 Z
@@ -344,16 +239,6 @@
   ends_at: 2016-05-21 15:00:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 901
-  starts_at: 2016-06-05 14:00:00.000000000 Z
-  ends_at: 2016-06-05 16:30:00.000000000 Z
-  kind: Official
-  resource_id: 116
-- id: 902
-  starts_at: 2016-05-25 00:30:00.000000000 Z
-  ends_at: 2016-05-25 01:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1244
   starts_at: 2016-06-28 23:30:00.000000000 Z
   ends_at: 2016-06-29 01:00:00.000000000 Z
@@ -374,16 +259,6 @@
   ends_at: 2016-05-15 15:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 915
-  starts_at: 2016-05-15 10:00:00.000000000 Z
-  ends_at: 2016-05-15 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 916
-  starts_at: 2016-05-15 10:00:00.000000000 Z
-  ends_at: 2016-05-15 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 923
   starts_at: 2016-06-04 18:00:00.000000000 Z
   ends_at: 2016-06-05 17:00:00.000000000 Z
@@ -394,16 +269,6 @@
   ends_at: 2016-05-22 15:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 861
-  starts_at: 2016-05-28 19:30:00.000000000 Z
-  ends_at: 2016-05-29 03:29:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 862
-  starts_at: 2016-06-04 18:00:00.000000000 Z
-  ends_at: 2016-06-05 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 875
   starts_at: 2016-06-20 23:00:00.000000000 Z
   ends_at: 2016-06-21 00:30:00.000000000 Z
@@ -459,11 +324,6 @@
   ends_at: 2016-06-27 13:30:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 1262
-  starts_at: 2016-06-27 23:30:00.000000000 Z
-  ends_at: 2016-06-28 01:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 987
   starts_at: 2016-05-19 21:00:00.000000000 Z
   ends_at: 2016-05-19 23:00:00.000000000 Z
@@ -524,11 +384,6 @@
   ends_at: 2016-09-11 01:00:00.000000000 Z
   kind: Special
   resource_id: 20
-- id: 1395
-  starts_at: 2016-07-08 21:30:00.000000000 Z
-  ends_at: 2016-07-09 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1396
   starts_at: 2016-07-08 21:30:00.000000000 Z
   ends_at: 2016-07-09 01:00:00.000000000 Z
@@ -544,16 +399,6 @@
   ends_at: 2016-07-10 15:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 1410
-  starts_at: 2016-07-18 23:00:00.000000000 Z
-  ends_at: 2016-07-19 02:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 1411
-  starts_at: 2016-07-19 23:00:00.000000000 Z
-  ends_at: 2016-07-20 02:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 1397
   starts_at: 2016-07-21 23:15:00.000000000 Z
   ends_at: 2016-07-22 00:30:00.000000000 Z
@@ -564,21 +409,11 @@
   ends_at: 2016-07-16 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1423
-  starts_at: 2016-07-24 23:30:00.000000000 Z
-  ends_at: 2016-07-25 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1424
   starts_at: 2016-07-23 01:00:00.000000000 Z
   ends_at: 2016-07-23 03:59:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1026
-  starts_at: 2016-06-01 20:00:00.000000000 Z
-  ends_at: 2016-06-01 22:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 1028
   starts_at: 2016-06-28 18:00:00.000000000 Z
   ends_at: 2016-07-05 17:00:00.000000000 Z
@@ -614,51 +449,11 @@
   ends_at: 2016-06-02 03:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 2731
-  starts_at: 2016-11-09 23:45:00.000000000 Z
-  ends_at: 2016-11-10 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1670
   starts_at: 2016-09-28 18:00:00.000000000 Z
   ends_at: 2016-10-05 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2732
-  starts_at: 2016-11-16 23:45:00.000000000 Z
-  ends_at: 2016-11-17 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2733
-  starts_at: 2016-11-23 23:45:00.000000000 Z
-  ends_at: 2016-11-24 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2734
-  starts_at: 2016-12-07 23:45:00.000000000 Z
-  ends_at: 2016-12-08 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2735
-  starts_at: 2016-12-14 23:45:00.000000000 Z
-  ends_at: 2016-12-15 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2736
-  starts_at: 2016-12-21 23:45:00.000000000 Z
-  ends_at: 2016-12-22 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1078
-  starts_at: 2016-07-23 18:00:00.000000000 Z
-  ends_at: 2016-07-24 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1079
-  starts_at: 2016-07-23 18:00:00.000000000 Z
-  ends_at: 2016-07-24 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1080
   starts_at: 2016-07-23 18:00:00.000000000 Z
   ends_at: 2016-07-24 02:00:00.000000000 Z
@@ -684,11 +479,6 @@
   ends_at: 2016-06-12 19:30:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 1123
-  starts_at: 2016-06-11 19:00:00.000000000 Z
-  ends_at: 2016-06-12 19:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2509
   starts_at: 2016-10-03 01:00:00.000000000 Z
   ends_at: 2016-10-03 03:00:00.000000000 Z
@@ -699,11 +489,6 @@
   ends_at: 2016-06-09 23:30:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1128
-  starts_at: 2016-06-15 23:30:00.000000000 Z
-  ends_at: 2016-06-16 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1129
   starts_at: 2016-06-11 00:00:00.000000000 Z
   ends_at: 2016-06-11 03:00:00.000000000 Z
@@ -714,26 +499,11 @@
   ends_at: 2016-06-13 03:30:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 1120
-  starts_at: 2016-06-11 19:00:00.000000000 Z
-  ends_at: 2016-06-12 19:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1297
   starts_at: 2016-06-29 23:00:00.000000000 Z
   ends_at: 2016-06-30 01:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 1676
-  starts_at: 2016-08-17 21:00:00.000000000 Z
-  ends_at: 2016-08-18 02:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1677
-  starts_at: 2016-08-17 21:00:00.000000000 Z
-  ends_at: 2016-08-18 02:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1678
   starts_at: 2016-08-17 21:00:00.000000000 Z
   ends_at: 2016-08-18 02:30:00.000000000 Z
@@ -749,76 +519,26 @@
   ends_at: 2016-10-06 01:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 2737
-  starts_at: 2016-12-28 23:45:00.000000000 Z
-  ends_at: 2016-12-29 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1669
   starts_at: 2016-08-12 23:00:00.000000000 Z
   ends_at: 2016-08-13 07:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1697
-  starts_at: 2016-08-12 22:00:00.000000000 Z
-  ends_at: 2016-08-13 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 1698
-  starts_at: 2016-08-12 22:00:00.000000000 Z
-  ends_at: 2016-08-13 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1699
-  starts_at: 2016-08-13 12:00:00.000000000 Z
-  ends_at: 2016-08-13 16:00:00.000000000 Z
-  kind: Official
-  resource_id: 116
-- id: 1700
-  starts_at: 2016-08-14 13:00:00.000000000 Z
-  ends_at: 2016-08-14 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 3302
   starts_at: 2016-12-30 23:00:00.000000000 Z
   ends_at: 2016-12-31 00:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 2738
-  starts_at: 2017-01-04 22:45:00.000000000 Z
-  ends_at: 2017-01-05 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2739
-  starts_at: 2017-01-11 22:45:00.000000000 Z
-  ends_at: 2017-01-12 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1319
   starts_at: 2016-06-30 00:30:00.000000000 Z
   ends_at: 2016-06-30 01:30:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1322
-  starts_at: 2016-07-04 17:00:00.000000000 Z
-  ends_at: 2016-07-04 22:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 1348
   starts_at: 2016-06-30 13:30:00.000000000 Z
   ends_at: 2016-06-30 15:30:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1349
-  starts_at: 2016-07-03 12:00:00.000000000 Z
-  ends_at: 2016-07-03 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 1704
-  starts_at: 2016-08-21 16:00:00.000000000 Z
-  ends_at: 2016-08-21 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1366
   starts_at: 2016-07-04 12:30:00.000000000 Z
   ends_at: 2016-07-04 14:00:00.000000000 Z
@@ -829,21 +549,11 @@
   ends_at: 2016-08-07 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2515
-  starts_at: 2016-11-12 13:00:00.000000000 Z
-  ends_at: 2016-11-13 00:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 1455
   starts_at: 2016-07-20 18:00:00.000000000 Z
   ends_at: 2016-07-24 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2516
-  starts_at: 2016-11-12 13:00:00.000000000 Z
-  ends_at: 2016-11-13 00:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 1135
   starts_at: 2016-07-31 18:00:00.000000000 Z
   ends_at: 2016-08-01 17:00:00.000000000 Z
@@ -874,11 +584,6 @@
   ends_at: 2016-06-15 01:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 1141
-  starts_at: 2016-06-13 22:45:00.000000000 Z
-  ends_at: 2016-06-14 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1510
   starts_at: 2016-10-20 22:00:00.000000000 Z
   ends_at: 2016-10-21 04:00:00.000000000 Z
@@ -914,11 +619,6 @@
   ends_at: 2016-07-27 15:45:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 1535
-  starts_at: 2016-07-30 13:00:00.000000000 Z
-  ends_at: 2016-07-30 17:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1524
   starts_at: 2016-08-06 14:30:00.000000000 Z
   ends_at: 2016-08-06 15:45:00.000000000 Z
@@ -929,11 +629,6 @@
   ends_at: 2016-09-04 20:15:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 1370
-  starts_at: 2016-07-05 23:00:00.000000000 Z
-  ends_at: 2016-07-06 01:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1477
   starts_at: 2016-09-08 18:00:00.000000000 Z
   ends_at: 2016-09-11 17:00:00.000000000 Z
@@ -949,11 +644,6 @@
   ends_at: 2016-11-13 00:00:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 1376
-  starts_at: 2016-07-09 19:00:00.000000000 Z
-  ends_at: 2016-07-10 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1178
   starts_at: 2016-07-11 18:00:00.000000000 Z
   ends_at: 2016-07-12 17:00:00.000000000 Z
@@ -964,21 +654,6 @@
   ends_at: 2016-06-16 23:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 1481
-  starts_at: 2016-08-20 20:00:00.000000000 Z
-  ends_at: 2016-08-21 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1485
-  starts_at: 2016-07-24 13:30:00.000000000 Z
-  ends_at: 2016-07-24 16:15:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1484
-  starts_at: 2016-08-13 17:00:00.000000000 Z
-  ends_at: 2016-08-14 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 1492
   starts_at: 2016-08-13 18:00:00.000000000 Z
   ends_at: 2016-08-14 17:00:00.000000000 Z
@@ -989,16 +664,6 @@
   ends_at: 2016-08-09 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1544
-  starts_at: 2016-07-31 13:00:00.000000000 Z
-  ends_at: 2016-07-31 14:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1545
-  starts_at: 2016-07-31 13:00:00.000000000 Z
-  ends_at: 2016-07-31 14:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1547
   starts_at: 2016-08-02 18:00:00.000000000 Z
   ends_at: 2016-08-05 17:00:00.000000000 Z
@@ -1014,21 +679,6 @@
   ends_at: 2016-08-07 07:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1552
-  starts_at: 2016-08-02 23:30:00.000000000 Z
-  ends_at: 2016-08-03 00:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1553
-  starts_at: 2016-08-07 11:00:00.000000000 Z
-  ends_at: 2016-08-07 14:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1554
-  starts_at: 2016-08-07 11:00:00.000000000 Z
-  ends_at: 2016-08-07 14:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1560
   starts_at: 2016-08-04 23:00:00.000000000 Z
   ends_at: 2016-08-05 01:00:00.000000000 Z
@@ -1074,61 +724,11 @@
   ends_at: 2016-08-21 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1568
-  starts_at: 2017-01-28 14:30:00.000000000 Z
-  ends_at: 2017-01-28 17:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1570
-  starts_at: 2017-02-25 14:30:00.000000000 Z
-  ends_at: 2017-02-25 17:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1572
-  starts_at: 2017-03-25 13:30:00.000000000 Z
-  ends_at: 2017-03-25 16:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1573
-  starts_at: 2017-04-08 13:30:00.000000000 Z
-  ends_at: 2017-04-08 16:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1567
-  starts_at: 2017-01-09 23:30:00.000000000 Z
-  ends_at: 2017-01-10 01:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1569
-  starts_at: 2017-02-13 23:30:00.000000000 Z
-  ends_at: 2017-02-14 01:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1571
-  starts_at: 2017-03-13 22:30:00.000000000 Z
-  ends_at: 2017-03-14 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1574
-  starts_at: 2017-04-24 22:30:00.000000000 Z
-  ends_at: 2017-04-25 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 1733
   starts_at: 2016-08-22 18:00:00.000000000 Z
   ends_at: 2016-08-25 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1770
-  starts_at: 2016-10-01 18:30:00.000000000 Z
-  ends_at: 2016-10-02 04:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1625
-  starts_at: 2016-08-22 16:00:00.000000000 Z
-  ends_at: 2016-08-22 18:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 2533
   starts_at: 2016-10-06 23:45:00.000000000 Z
   ends_at: 2016-10-07 01:00:00.000000000 Z
@@ -1164,31 +764,16 @@
   ends_at: 2016-09-01 00:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 1769
-  starts_at: 2016-08-20 18:00:00.000000000 Z
-  ends_at: 2016-08-20 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2542
   starts_at: 2016-10-05 18:00:00.000000000 Z
   ends_at: 2016-10-06 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 1771
-  starts_at: 2016-10-01 16:30:00.000000000 Z
-  ends_at: 2016-10-02 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2545
   starts_at: 2016-10-09 16:00:00.000000000 Z
   ends_at: 2016-10-09 17:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 2740
-  starts_at: 2016-12-03 20:00:00.000000000 Z
-  ends_at: 2016-12-04 16:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2566
   starts_at: 2016-10-08 21:15:00.000000000 Z
   ends_at: 2016-10-08 21:45:00.000000000 Z
@@ -1219,26 +804,6 @@
   ends_at: 2016-10-09 02:00:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 2577
-  starts_at: 2016-10-10 01:00:00.000000000 Z
-  ends_at: 2016-10-10 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2589
-  starts_at: 2016-10-22 13:30:00.000000000 Z
-  ends_at: 2016-10-22 16:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 2590
-  starts_at: 2016-11-21 23:30:00.000000000 Z
-  ends_at: 2016-11-22 02:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 2591
-  starts_at: 2016-12-10 14:30:00.000000000 Z
-  ends_at: 2016-12-10 17:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3015
   starts_at: 2016-12-03 19:00:00.000000000 Z
   ends_at: 2016-12-04 18:00:00.000000000 Z
@@ -1249,36 +814,11 @@
   ends_at: 2016-10-20 02:30:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 2613
-  starts_at: 2016-10-15 18:00:00.000000000 Z
-  ends_at: 2016-10-16 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 2614
-  starts_at: 2016-10-15 19:00:00.000000000 Z
-  ends_at: 2016-10-16 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2607
   starts_at: 2016-10-22 01:00:00.000000000 Z
   ends_at: 2016-10-22 03:30:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 1940
-  starts_at: 2016-08-27 14:00:00.000000000 Z
-  ends_at: 2016-08-27 16:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1941
-  starts_at: 2016-08-27 21:30:00.000000000 Z
-  ends_at: 2016-08-28 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 1942
-  starts_at: 2016-08-27 21:00:00.000000000 Z
-  ends_at: 2016-08-27 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 1960
   starts_at: 2016-08-30 23:00:00.000000000 Z
   ends_at: 2016-08-31 00:00:00.000000000 Z
@@ -1309,11 +849,6 @@
   ends_at: 2016-10-17 03:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 2639
-  starts_at: 2016-10-29 20:00:00.000000000 Z
-  ends_at: 2016-10-30 03:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 1994
   starts_at: 2016-09-28 23:15:00.000000000 Z
   ends_at: 2016-09-29 00:30:00.000000000 Z
@@ -1334,16 +869,6 @@
   ends_at: 2016-11-05 17:30:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 2019
-  starts_at: 2016-12-01 00:00:00.000000000 Z
-  ends_at: 2016-12-01 02:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2020
-  starts_at: 2016-12-01 00:00:00.000000000 Z
-  ends_at: 2016-12-01 02:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2773
   starts_at: 2016-11-03 00:30:00.000000000 Z
   ends_at: 2016-11-03 03:30:00.000000000 Z
@@ -1369,11 +894,6 @@
   ends_at: 2016-11-03 00:30:00.000000000 Z
   kind: Official
   resource_id: 17
-- id: 2665
-  starts_at: 2016-11-04 22:30:00.000000000 Z
-  ends_at: 2016-11-05 03:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2106
   starts_at: 2016-10-11 18:00:00.000000000 Z
   ends_at: 2016-10-16 17:00:00.000000000 Z
@@ -1399,11 +919,6 @@
   ends_at: 2016-10-30 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2179
-  starts_at: 2016-09-16 00:45:00.000000000 Z
-  ends_at: 2016-09-16 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2217
   starts_at: 2016-09-13 18:00:00.000000000 Z
   ends_at: 2016-09-16 17:00:00.000000000 Z
@@ -1424,131 +939,46 @@
   ends_at: 2016-09-16 08:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 2250
-  starts_at: 2016-10-20 00:30:00.000000000 Z
-  ends_at: 2016-10-20 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 2251
-  starts_at: 2016-11-09 00:00:00.000000000 Z
-  ends_at: 2016-11-09 04:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2260
   starts_at: 2016-09-19 18:00:00.000000000 Z
   ends_at: 2016-09-22 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2695
-  starts_at: 2016-10-29 21:30:00.000000000 Z
-  ends_at: 2016-10-30 03:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 2696
-  starts_at: 2016-11-20 12:00:00.000000000 Z
-  ends_at: 2016-11-20 19:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 2299
-  starts_at: 2016-09-21 23:30:00.000000000 Z
-  ends_at: 2016-09-22 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 2697
-  starts_at: 2016-11-20 12:00:00.000000000 Z
-  ends_at: 2016-11-20 19:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 2305
   starts_at: 2016-10-19 23:30:00.000000000 Z
   ends_at: 2016-10-20 00:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 2310
-  starts_at: 2016-10-14 19:00:00.000000000 Z
-  ends_at: 2016-10-14 23:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2308
   starts_at: 2016-09-22 18:00:00.000000000 Z
   ends_at: 2016-09-23 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2318
-  starts_at: 2016-10-22 17:00:00.000000000 Z
-  ends_at: 2016-10-23 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2319
   starts_at: 2016-10-22 17:00:00.000000000 Z
   ends_at: 2016-10-23 03:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 2320
-  starts_at: 2016-10-22 17:00:00.000000000 Z
-  ends_at: 2016-10-23 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 2700
-  starts_at: 2016-11-01 22:00:00.000000000 Z
-  ends_at: 2016-11-02 03:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 2701
-  starts_at: 2016-11-01 22:00:00.000000000 Z
-  ends_at: 2016-11-02 03:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 2704
   starts_at: 2016-11-06 17:00:00.000000000 Z
   ends_at: 2016-11-06 23:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 2388
-  starts_at: 2016-10-14 19:00:00.000000000 Z
-  ends_at: 2016-10-14 23:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2391
   starts_at: 2016-09-28 22:00:00.000000000 Z
   ends_at: 2016-09-28 23:00:00.000000000 Z
   kind: Official
   resource_id: 17
-- id: 2437
-  starts_at: 2016-10-21 22:00:00.000000000 Z
-  ends_at: 2016-10-22 01:30:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 2438
-  starts_at: 2016-10-21 22:00:00.000000000 Z
-  ends_at: 2016-10-22 01:30:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 2705
   starts_at: 2016-11-06 17:00:00.000000000 Z
   ends_at: 2016-11-06 23:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 3384
-  starts_at: 2017-01-21 18:00:00.000000000 Z
-  ends_at: 2017-01-22 04:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3385
-  starts_at: 2017-01-21 18:00:00.000000000 Z
-  ends_at: 2017-01-22 04:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2784
   starts_at: 2016-12-01 00:15:00.000000000 Z
   ends_at: 2016-12-01 01:30:00.000000000 Z
   kind: Official
   resource_id: 17
-- id: 2787
-  starts_at: 2016-11-19 22:00:00.000000000 Z
-  ends_at: 2016-11-20 04:30:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 2825
   starts_at: 2016-11-13 01:00:00.000000000 Z
   ends_at: 2016-11-13 08:00:00.000000000 Z
@@ -1564,11 +994,6 @@
   ends_at: 2017-01-09 01:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 3395
-  starts_at: 2017-01-08 17:30:00.000000000 Z
-  ends_at: 2017-01-08 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 2891
   starts_at: 2016-11-17 21:00:00.000000000 Z
   ends_at: 2016-11-17 23:00:00.000000000 Z
@@ -1594,16 +1019,6 @@
   ends_at: 2016-11-21 01:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 3424
-  starts_at: 2017-01-14 14:00:00.000000000 Z
-  ends_at: 2017-01-14 17:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3425
-  starts_at: 2017-01-14 14:00:00.000000000 Z
-  ends_at: 2017-01-14 17:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2956
   starts_at: 2016-11-27 22:00:00.000000000 Z
   ends_at: 2016-11-30 23:00:00.000000000 Z
@@ -1629,11 +1044,6 @@
   ends_at: 2016-11-25 18:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 2979
-  starts_at: 2016-11-24 00:00:00.000000000 Z
-  ends_at: 2016-11-24 01:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 2980
   starts_at: 2016-11-28 00:00:00.000000000 Z
   ends_at: 2016-11-28 01:00:00.000000000 Z
@@ -1654,11 +1064,6 @@
   ends_at: 2016-12-07 02:30:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 3439
-  starts_at: 2017-07-17 22:30:00.000000000 Z
-  ends_at: 2017-07-18 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3456
   starts_at: 2017-09-05 22:30:00.000000000 Z
   ends_at: 2017-09-06 00:45:00.000000000 Z
@@ -1679,61 +1084,11 @@
   ends_at: 2017-12-05 01:45:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 3081
-  starts_at: 2016-12-18 13:00:00.000000000 Z
-  ends_at: 2016-12-18 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3082
-  starts_at: 2016-12-12 23:30:00.000000000 Z
-  ends_at: 2016-12-13 01:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3083
-  starts_at: 2016-12-13 23:30:00.000000000 Z
-  ends_at: 2016-12-14 01:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3104
   starts_at: 2016-12-07 01:30:00.000000000 Z
   ends_at: 2016-12-07 02:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 3105
-  starts_at: 2017-01-18 23:00:00.000000000 Z
-  ends_at: 2017-01-19 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3106
-  starts_at: 2017-01-25 23:00:00.000000000 Z
-  ends_at: 2017-01-26 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3107
-  starts_at: 2017-02-01 23:00:00.000000000 Z
-  ends_at: 2017-02-02 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3109
-  starts_at: 2017-02-08 23:00:00.000000000 Z
-  ends_at: 2017-02-09 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3108
-  starts_at: 2017-02-15 23:00:00.000000000 Z
-  ends_at: 2017-02-16 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3110
-  starts_at: 2017-02-22 23:00:00.000000000 Z
-  ends_at: 2017-02-23 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3111
-  starts_at: 2017-03-01 23:00:00.000000000 Z
-  ends_at: 2017-03-02 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 3132
   starts_at: 2016-12-12 19:00:00.000000000 Z
   ends_at: 2016-12-14 18:00:00.000000000 Z
@@ -1769,11 +1124,6 @@
   ends_at: 2017-01-22 21:00:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 1576
-  starts_at: 2017-05-20 13:30:00.000000000 Z
-  ends_at: 2017-05-20 16:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3146
   starts_at: 2017-02-28 00:00:00.000000000 Z
   ends_at: 2017-02-28 03:00:00.000000000 Z
@@ -1814,11 +1164,6 @@
   ends_at: 2016-12-16 02:00:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 3161
-  starts_at: 2016-12-17 17:30:00.000000000 Z
-  ends_at: 2016-12-17 23:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3162
   starts_at: 2016-12-14 18:00:00.000000000 Z
   ends_at: 2016-12-14 23:00:00.000000000 Z
@@ -1874,16 +1219,6 @@
   ends_at: 2016-12-15 04:59:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 3235
-  starts_at: 2017-01-01 22:00:00.000000000 Z
-  ends_at: 2017-01-02 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3440
-  starts_at: 2017-07-29 15:30:00.000000000 Z
-  ends_at: 2017-07-29 18:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3208
   starts_at: 2016-12-18 23:00:00.000000000 Z
   ends_at: 2016-12-19 01:00:00.000000000 Z
@@ -1899,96 +1234,11 @@
   ends_at: 2017-02-12 18:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 3442
-  starts_at: 2017-08-26 15:30:00.000000000 Z
-  ends_at: 2017-08-27 00:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3444
-  starts_at: 2017-09-23 15:30:00.000000000 Z
-  ends_at: 2017-09-23 18:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3218
-  starts_at: 2017-01-01 00:00:00.000000000 Z
-  ends_at: 2017-01-01 05:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
-- id: 3446
-  starts_at: 2017-10-28 15:30:00.000000000 Z
-  ends_at: 2017-10-28 18:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3441
-  starts_at: 2017-08-14 22:30:00.000000000 Z
-  ends_at: 2017-08-15 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3443
-  starts_at: 2017-09-11 22:30:00.000000000 Z
-  ends_at: 2017-09-12 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3445
-  starts_at: 2017-10-09 22:30:00.000000000 Z
-  ends_at: 2017-10-10 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1578
-  starts_at: 2017-06-24 13:30:00.000000000 Z
-  ends_at: 2017-06-24 16:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3447
-  starts_at: 2017-11-11 16:30:00.000000000 Z
-  ends_at: 2017-11-11 19:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3449
-  starts_at: 2017-12-09 16:30:00.000000000 Z
-  ends_at: 2017-12-09 19:15:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3448
-  starts_at: 2017-11-27 23:30:00.000000000 Z
-  ends_at: 2017-11-28 01:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1575
-  starts_at: 2017-05-08 22:30:00.000000000 Z
-  ends_at: 2017-05-09 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 1577
-  starts_at: 2017-06-12 22:30:00.000000000 Z
-  ends_at: 2017-06-13 00:45:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 3513
-  starts_at: 2017-01-07 23:00:00.000000000 Z
-  ends_at: 2017-01-08 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3516
-  starts_at: 2017-01-14 19:00:00.000000000 Z
-  ends_at: 2017-01-14 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3597
-  starts_at: 2017-01-15 15:00:00.000000000 Z
-  ends_at: 2017-01-15 17:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 3599
   starts_at: 2017-01-15 17:30:00.000000000 Z
   ends_at: 2017-01-15 20:30:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3598
-  starts_at: 2017-01-15 17:30:00.000000000 Z
-  ends_at: 2017-01-15 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 3617
   starts_at: 2017-01-15 00:00:00.000000000 Z
   ends_at: 2017-01-15 01:00:00.000000000 Z
@@ -2009,31 +1259,6 @@
   ends_at: 2017-01-22 04:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3632
-  starts_at: 2017-01-22 17:00:00.000000000 Z
-  ends_at: 2017-01-22 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3634
-  starts_at: 2017-01-28 18:30:00.000000000 Z
-  ends_at: 2017-01-28 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3635
-  starts_at: 2017-02-04 18:30:00.000000000 Z
-  ends_at: 2017-02-04 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3637
-  starts_at: 2017-02-04 19:00:00.000000000 Z
-  ends_at: 2017-02-04 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3636
-  starts_at: 2017-01-28 19:00:00.000000000 Z
-  ends_at: 2017-01-28 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 3638
   starts_at: 2017-01-14 15:00:00.000000000 Z
   ends_at: 2017-01-14 16:00:00.000000000 Z
@@ -2079,11 +1304,6 @@
   ends_at: 2017-01-23 23:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3665
-  starts_at: 2017-01-29 15:00:00.000000000 Z
-  ends_at: 2017-01-29 17:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 3666
   starts_at: 2017-02-21 00:00:00.000000000 Z
   ends_at: 2017-02-21 03:00:00.000000000 Z
@@ -2129,21 +1349,6 @@
   ends_at: 2017-01-21 22:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3691
-  starts_at: 2017-02-11 19:00:00.000000000 Z
-  ends_at: 2017-02-11 19:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3692
-  starts_at: 2017-02-18 19:00:00.000000000 Z
-  ends_at: 2017-02-18 22:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 3710
-  starts_at: 2017-02-09 00:30:00.000000000 Z
-  ends_at: 2017-02-09 02:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 3719
   starts_at: 2017-01-21 18:00:00.000000000 Z
   ends_at: 2017-01-21 21:00:00.000000000 Z
@@ -2184,11 +1389,6 @@
   ends_at: 2017-02-05 20:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3768
-  starts_at: 2017-02-19 16:00:00.000000000 Z
-  ends_at: 2017-02-19 19:30:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 3782
   starts_at: 2017-01-29 18:00:00.000000000 Z
   ends_at: 2017-01-29 19:15:00.000000000 Z
@@ -2209,11 +1409,6 @@
   ends_at: 2017-02-16 02:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 3868
-  starts_at: 2017-02-16 00:00:00.000000000 Z
-  ends_at: 2017-02-16 02:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 3894
   starts_at: 2017-02-11 14:30:00.000000000 Z
   ends_at: 2017-02-11 16:00:00.000000000 Z
@@ -2244,16 +1439,6 @@
   ends_at: 2017-03-19 16:30:00.000000000 Z
   kind: Official
   resource_id: 20
-- id: 3926
-  starts_at: 2017-02-25 17:30:00.000000000 Z
-  ends_at: 2017-02-25 21:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 3927
-  starts_at: 2017-02-25 17:30:00.000000000 Z
-  ends_at: 2017-02-25 21:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 3980
   starts_at: 2017-02-10 01:00:00.000000000 Z
   ends_at: 2017-02-10 05:00:00.000000000 Z
@@ -2289,31 +1474,11 @@
   ends_at: 2017-02-19 19:30:00.000000000 Z
   kind: Special
   resource_id: 19
-- id: 4006
-  starts_at: 2017-04-15 19:00:00.000000000 Z
-  ends_at: 2017-04-16 02:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 4007
-  starts_at: 2017-04-15 19:00:00.000000000 Z
-  ends_at: 2017-04-16 02:00:00.000000000 Z
-  kind: Special
-  resource_id: 21
 - id: 4022
   starts_at: 2017-02-19 16:00:00.000000000 Z
   ends_at: 2017-02-19 19:30:00.000000000 Z
   kind: Special
   resource_id: 17
-- id: 4023
-  starts_at: 2017-02-19 16:00:00.000000000 Z
-  ends_at: 2017-02-19 19:30:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 3999
-  starts_at: 2017-02-12 16:00:00.000000000 Z
-  ends_at: 2017-02-12 16:30:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 4031
   starts_at: 2017-05-12 18:00:00.000000000 Z
   ends_at: 2017-05-14 17:00:00.000000000 Z
@@ -2324,16 +1489,6 @@
   ends_at: 2017-02-26 20:15:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4056
-  starts_at: 2017-03-20 21:00:00.000000000 Z
-  ends_at: 2017-03-21 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 4057
-  starts_at: 2017-03-20 21:00:00.000000000 Z
-  ends_at: 2017-03-21 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4064
   starts_at: 2017-02-18 16:30:00.000000000 Z
   ends_at: 2017-02-18 17:30:00.000000000 Z
@@ -2374,36 +1529,11 @@
   ends_at: 2017-03-03 02:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4100
-  starts_at: 2017-02-23 00:00:00.000000000 Z
-  ends_at: 2017-02-23 01:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 4105
   starts_at: 2017-03-02 20:00:00.000000000 Z
   ends_at: 2017-03-02 23:00:00.000000000 Z
   kind: Special
   resource_id: 20
-- id: 4106
-  starts_at: 2017-03-08 23:00:00.000000000 Z
-  ends_at: 2017-03-09 00:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4107
-  starts_at: 2017-03-22 22:00:00.000000000 Z
-  ends_at: 2017-03-22 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4108
-  starts_at: 2017-03-15 22:00:00.000000000 Z
-  ends_at: 2017-03-15 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4109
-  starts_at: 2017-03-29 22:00:00.000000000 Z
-  ends_at: 2017-03-29 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4111
   starts_at: 2017-03-15 23:15:00.000000000 Z
   ends_at: 2017-03-16 00:30:00.000000000 Z
@@ -2414,21 +1544,6 @@
   ends_at: 2017-03-19 19:30:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4144
-  starts_at: 2017-03-11 20:00:00.000000000 Z
-  ends_at: 2017-03-12 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4145
-  starts_at: 2017-03-11 20:30:00.000000000 Z
-  ends_at: 2017-03-12 01:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 4183
-  starts_at: 2017-03-18 23:00:00.000000000 Z
-  ends_at: 2017-03-19 15:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4185
   starts_at: 2017-05-04 18:00:00.000000000 Z
   ends_at: 2017-05-07 17:00:00.000000000 Z
@@ -2444,16 +1559,6 @@
   ends_at: 2017-03-09 23:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 4191
-  starts_at: 2017-04-02 12:00:00.000000000 Z
-  ends_at: 2017-04-02 19:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4192
-  starts_at: 2017-04-02 12:00:00.000000000 Z
-  ends_at: 2017-04-02 19:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 4193
   starts_at: 2017-04-02 13:00:00.000000000 Z
   ends_at: 2017-04-02 18:00:00.000000000 Z
@@ -2464,11 +1569,6 @@
   ends_at: 2017-03-10 01:45:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4316
-  starts_at: 2017-04-26 22:00:00.000000000 Z
-  ends_at: 2017-04-26 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4222
   starts_at: 2017-03-12 21:00:00.000000000 Z
   ends_at: 2017-03-12 23:00:00.000000000 Z
@@ -2479,16 +1579,6 @@
   ends_at: 2017-03-13 01:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 4264
-  starts_at: 2017-03-09 15:30:00.000000000 Z
-  ends_at: 2017-03-09 20:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4314
-  starts_at: 2017-04-12 22:00:00.000000000 Z
-  ends_at: 2017-04-12 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4286
   starts_at: 2017-03-17 00:00:00.000000000 Z
   ends_at: 2017-03-17 01:00:00.000000000 Z
@@ -2499,11 +1589,6 @@
   ends_at: 2017-03-24 01:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4315
-  starts_at: 2017-04-19 22:00:00.000000000 Z
-  ends_at: 2017-04-19 23:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4266
   starts_at: 2017-03-09 19:00:00.000000000 Z
   ends_at: 2017-03-11 18:00:00.000000000 Z
@@ -2544,11 +1629,6 @@
   ends_at: 2017-04-15 17:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4341
-  starts_at: 2017-03-15 23:30:00.000000000 Z
-  ends_at: 2017-03-16 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
 - id: 4344
   starts_at: 2017-04-18 23:15:00.000000000 Z
   ends_at: 2017-04-19 00:30:00.000000000 Z
@@ -2559,31 +1639,6 @@
   ends_at: 2017-03-29 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 4352
-  starts_at: 2017-04-17 23:00:00.000000000 Z
-  ends_at: 2017-04-18 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 4353
-  starts_at: 2017-04-19 23:30:00.000000000 Z
-  ends_at: 2017-04-20 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 4354
-  starts_at: 2017-04-19 23:30:00.000000000 Z
-  ends_at: 2017-04-20 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 116
-- id: 4355
-  starts_at: 2017-04-17 23:30:00.000000000 Z
-  ends_at: 2017-04-18 00:30:00.000000000 Z
-  kind: Official
-  resource_id: 116
-- id: 4363
-  starts_at: 2017-03-26 15:00:00.000000000 Z
-  ends_at: 2017-03-26 18:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4364
   starts_at: 2017-03-19 16:00:00.000000000 Z
   ends_at: 2017-03-19 19:00:00.000000000 Z
@@ -2599,16 +1654,6 @@
   ends_at: 2017-04-15 19:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4372
-  starts_at: 2017-04-03 22:45:00.000000000 Z
-  ends_at: 2017-04-04 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 21
-- id: 4373
-  starts_at: 2017-04-03 22:45:00.000000000 Z
-  ends_at: 2017-04-04 02:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 4377
   starts_at: 2017-04-30 22:00:00.000000000 Z
   ends_at: 2017-05-01 00:00:00.000000000 Z
@@ -2654,31 +1699,11 @@
   ends_at: 2017-04-02 08:00:00.000000000 Z
   kind: Personal
   resource_id: 17
-- id: 4452
-  starts_at: 2017-04-23 16:00:00.000000000 Z
-  ends_at: 2017-04-23 18:00:00.000000000 Z
-  kind: Official
-  resource_id: 21
-- id: 4453
-  starts_at: 2017-04-23 16:00:00.000000000 Z
-  ends_at: 2017-04-23 18:00:00.000000000 Z
-  kind: Official
-  resource_id: 116
 - id: 4472
   starts_at: 2017-05-19 18:00:00.000000000 Z
   ends_at: 2017-05-21 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 4476
-  starts_at: 2017-04-11 16:30:00.000000000 Z
-  ends_at: 2017-04-11 19:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 4477
-  starts_at: 2017-04-11 16:30:00.000000000 Z
-  ends_at: 2017-04-11 19:30:00.000000000 Z
-  kind: Personal
-  resource_id: 21
 - id: 4478
   starts_at: 2017-04-11 16:30:00.000000000 Z
   ends_at: 2017-04-11 19:30:00.000000000 Z
@@ -2704,46 +1729,16 @@
   ends_at: 2017-04-26 01:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4503
-  starts_at: 2017-04-07 22:00:00.000000000 Z
-  ends_at: 2017-04-08 03:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
-- id: 4511
-  starts_at: 2017-04-02 00:00:00.000000000 Z
-  ends_at: 2017-04-02 08:00:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 4516
   starts_at: 2017-04-20 18:00:00.000000000 Z
   ends_at: 2017-04-22 17:00:00.000000000 Z
   kind: Personal
   resource_id: 18
-- id: 4517
-  starts_at: 2017-04-04 23:30:00.000000000 Z
-  ends_at: 2017-04-05 01:30:00.000000000 Z
-  kind: Personal
-  resource_id: 116
 - id: 4526
   starts_at: 2017-04-15 14:00:00.000000000 Z
   ends_at: 2017-04-15 16:00:00.000000000 Z
   kind: Personal
   resource_id: 20
-- id: 4533
-  starts_at: 2017-05-15 21:00:00.000000000 Z
-  ends_at: 2017-05-16 01:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 4534
-  starts_at: 2017-05-22 21:00:00.000000000 Z
-  ends_at: 2017-05-23 01:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
-- id: 4535
-  starts_at: 2017-06-05 21:00:00.000000000 Z
-  ends_at: 2017-06-06 01:00:00.000000000 Z
-  kind: Special
-  resource_id: 116
 - id: 4537
   starts_at: 2017-05-15 21:00:00.000000000 Z
   ends_at: 2017-05-16 01:00:00.000000000 Z

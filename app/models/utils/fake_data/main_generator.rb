@@ -10,17 +10,25 @@ module Utils
       end
 
       def generate
+        ActionMailer::Base.perform_deliveries = false
+
+        resource_gen = ResourceGenerator.new(community: community, photos: photos)
+        reservation_gen = ReservationGenerator.new(resource_map: resource_gen.resource_map)
+        statement_gen = StatementGenerator.new(community: community)
+        meal_gen = MealGenerator.new(community: community, statement_gen: statement_gen)
+
         tz = Time.zone
         Time.zone = community.settings.time_zone
         ActiveRecord::Base.transaction do
           begin
-            # create_households_and_users
-            # deactivate_households
-            (rscgen = ResourceGenerator.new(community: community, photos: photos)).generate
-            ReservationGenerator.new(resource_map: rscgen.resource_map).generate
-            # MealGenerator.new(community: community).generate
+            create_households_and_users
+            deactivate_households
+            resource_gen.generate
+            reservation_gen.generate
+            meal_gen.generate
           rescue
             users.each { |u| u.photo.destroy }
+            raise $!
           end
         end
         Time.zone = tz

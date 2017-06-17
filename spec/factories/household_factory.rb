@@ -5,7 +5,7 @@ FactoryGirl.define do
     end
 
     community { default_community }
-    name { (rand(2) + 1).times.map { Faker::Name.last_name.gsub(/-.+\z/, "") }.join("-") }
+    sequence(:name) { |n| "Household#{n}" }
 
     trait :with_vehicles do
       after(:create) do |household|

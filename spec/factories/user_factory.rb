@@ -8,6 +8,7 @@ FactoryGirl.define do
     last_name { Faker::Name.last_name }
     sequence(:email) { |n| "person#{n}@example.com" }
     sequence(:google_email) { |n| "person#{n}@gmail.com" }
+    mobile_phone "5555551212"
 
     household do
       attribs = {with_members: false} # Don't want to create extra users.

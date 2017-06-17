@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615130157) do
+ActiveRecord::Schema.define(version: 20170617195722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -272,6 +272,7 @@ ActiveRecord::Schema.define(version: 20170615130157) do
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
     t.string "other_communities"
+    t.text "pre_warning"
     t.boolean "requires_kind"
     t.datetime "updated_at", null: false
   end

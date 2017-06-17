@@ -10,7 +10,7 @@ module Utils
       end
 
       def generate
-        raise "Data present. Please run `rake fake:clear_data[#{community.id}]` first." if Meal.any?
+        raise "Data present. Please run `rake fake:clear_data[#{community.cluster_id}]` first." if Meal.any?
 
         ActionMailer::Base.perform_deliveries = false
 

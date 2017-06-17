@@ -66,6 +66,7 @@ gem 'mailcatcher'
 gem "acts_as_tenant", "~> 0.4"
 gem "draper", "~> 2.1"
 gem "factory_girl_rails", "~> 4.0"
+gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -88,7 +89,6 @@ group :development, :test do
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rbenv', '~> 2.1'
 
-  gem 'faker'
   gem "awesome_print"
   gem 'term-ansicolor'
 

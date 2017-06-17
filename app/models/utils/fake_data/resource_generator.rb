@@ -15,6 +15,10 @@ module Utils
         create_resource_protocols_and_associate
       end
 
+      def resources
+        resource_map.values
+      end
+
       private
 
       def create_resources
@@ -46,7 +50,7 @@ module Utils
       end
 
       def resource_photo(id)
-        File.open(resource_path("reservation/resources/#{id}.jpg"))
+        File.open(resource_path("photos/reservation/resources/#{id}.jpg"))
       end
 
       def resources_with_shared_guidelines_id(id)

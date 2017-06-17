@@ -5,6 +5,6 @@ namespace :fake do
     raise "Please specify cluster ID, e.g. rake fake:community_data[123]" unless args.cluster_id.present?
     ActsAsTenant.current_tenant = Cluster.find(args.cluster_id)
     community = args.community_id ? Community.find(args.community_id) : Community.first
-    Utils::FakeData::MainGenerator.new(community, photos: !ENV.key?("NO_PHOTOS")).generate
+    Utils::FakeData::MainGenerator.new(community: community, photos: !ENV.key?("NO_PHOTOS")).generate
   end
 end

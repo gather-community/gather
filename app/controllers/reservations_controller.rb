@@ -1,6 +1,8 @@
 class ReservationsController < ApplicationController
   include Lensable
 
+  decorates_assigned :reservation, :resource
+
   before_action -> { nav_context(:reservations) }
 
   def index
@@ -57,11 +59,11 @@ class ReservationsController < ApplicationController
   def show
     @reservation = Reservation::Reservation.find(params[:id])
     authorize @reservation
-    @resource = @reservation.resource.decorate
+    @resource = @reservation.resource
   end
 
   def new
-    @resource = Reservation::Resource.find_by(id: params[:resource_id]).decorate
+    @resource = Reservation::Resource.find_by(id: params[:resource_id])
     raise "Resource not found" unless @resource
 
     @reservation = Reservation::Reservation.new_with_defaults(
@@ -143,8 +145,7 @@ class ReservationsController < ApplicationController
   private
 
   def prep_form_vars
-    @resource ||= @reservation.resource.decorate
-    @reservation = @reservation.decorate
+    @resource ||= @reservation.resource
     @kinds = @resource.kinds # May be nil
   end
 

@@ -1,13 +1,13 @@
-<% content_for(:title){ "Reservation: #{@reservation.name}" } %>
+<% content_for(:title){ "Reservation: #{reservation.name}" } %>
 
 <% content_for(:top_buttons) do %>
-  <% if policy(@reservation).edit? %>
-    <%= link_to(icon_tag("pencil") << " Edit Reservation", edit_reservation_path(@reservation),
+  <% if policy(reservation).edit? %>
+    <%= link_to(icon_tag("pencil") << " Edit Reservation", edit_reservation_path(reservation),
       class: "btn btn-default") %>
   <% end %>
-  <% if policy(@reservation).destroy? %>
+  <% if policy(reservation).destroy? %>
     <%= link_to(icon_tag("trash") << " Delete Reservation",
-      reservation_path(@reservation),
+      reservation_path(reservation),
       method: :delete,
       class: "btn btn-default",
       data: { confirm: "Are you sure you want to delete this reservation?" }) %>
@@ -18,47 +18,47 @@
   <tr>
     <td>Resource</td>
     <td>
-      <%= image_tag(@resource.photo.url(:thumb)) %><br/>
-      <%= @resource.name %>
+      <%= image_tag(resource.photo.url(:thumb)) %><br/>
+      <%= resource.name %>
     </td>
   </tr>
   <tr>
     <td>Date/Time</td>
-    <td><%= @reservation.timespan %></td>
+    <td><%= reservation.timespan %></td>
   </tr>
-  <% if @reservation.meal %>
+  <% if reservation.meal %>
     <tr>
       <td>Meal</td>
       <td>
-        <% if policy(@reservation.meal).show? %>
-          <%= link_to(@reservation.meal_title_or_no_title, meal_path(@reservation.meal)) %>
+        <% if policy(reservation.meal).show? %>
+          <%= link_to(reservation.meal_title_or_no_title, meal_path(reservation.meal)) %>
         <% else %>
-          <%= @reservation.meal_title_or_no_title %>
+          <%= reservation.meal_title_or_no_title %>
         <% end %>
       </td>
     </tr>
   <% else %>
     <tr>
       <td>Reserved By</td>
-      <td><%= user_link(@reservation.reserver, show_cmty_if_foreign: true) %></td>
+      <td><%= user_link(reservation.reserver, show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
-  <% if @reservation.sponsor %>
+  <% if reservation.sponsor %>
     <tr>
       <td>Sponsor</td>
-      <td><%= user_link(@reservation.sponsor, show_cmty_if_foreign: true) %></td>
+      <td><%= user_link(reservation.sponsor, show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
-  <% if @reservation.displayable_kind? %>
+  <% if reservation.displayable_kind? %>
     <tr>
       <td>Type</td>
-      <td><%= @reservation.kind %></td>
+      <td><%= reservation.kind %></td>
     </tr>
   <% end %>
-  <% if @reservation.note %>
+  <% if reservation.note %>
     <tr>
       <td>Note</td>
-      <td><%= simple_format(@reservation.note) %></td>
+      <td><%= simple_format(reservation.note) %></td>
     </tr>
   <% end %>
 </table>

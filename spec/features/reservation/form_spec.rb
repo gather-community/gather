@@ -11,7 +11,7 @@ feature "reservation form" do
   end
 
   context "with pre_notice" do
-    let(:protocol) { create(:reservation_protocol, resources: [resource], pre_notice: "May be bed bugs!") }
+    let!(:protocol) { create(:reservation_protocol, resources: [resource], pre_notice: "May be bed bugs!") }
 
     scenario "should show warning" do
       visit new_reservation_path(resource_id: resource.id)

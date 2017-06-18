@@ -1,42 +1,42 @@
-<%= horizontal_form_for(@reservation,
-      url: @reservation.new_record? ? reservations_path : reservation_path(@reservation)) do |f| %>
+<%= horizontal_form_for(reservation,
+      url: reservation.new_record? ? reservations_path : reservation_path(reservation)) do |f| %>
 
   <%= f.hidden_field :resource_id %>
 
   <%= base_error(f) %>
 
   <%= f.input :resource do %>
-    <%= image_tag(@resource.photo.url(:thumb)) %><br/>
-    <%= @resource.name %>
+    <%= image_tag(resource.photo.url(:thumb)) %><br/>
+    <%= resource.name %>
   <% end %>
 
-  <% if @reservation.pre_notice? %>
+  <% if reservation.pre_notice? %>
     <%= f.input :pre_notice, label: "" do %>
-      <div class="alert alert-info pre-notice"><%= @reservation.pre_notice %></div>
+      <div class="alert alert-info pre-notice"><%= reservation.pre_notice %></div>
     <% end %>
   <% end %>
 
-  <% unless @reservation.meal? %>
+  <% unless reservation.meal? %>
     <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
   <% end %>
 
-  <% if policy(@reservation).choose_reserver? %>
+  <% if policy(reservation).choose_reserver? %>
     <%= f.input :reserver_id, as: :assoc_select2,
-      context: @reservation.access_level == "sponsor" ? "reserver_any_cmty" : "reserver_this_cmty"  %>
+      context: reservation.access_level == "sponsor" ? "reserver_any_cmty" : "reserver_this_cmty"  %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
-    wrapper_html: { class: @reservation.fixed_start_time? ? "no-time-picker" : "" } %>
+    wrapper_html: { class: reservation.fixed_start_time? ? "no-time-picker" : "" } %>
 
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
-    wrapper_html: { class: @reservation.fixed_end_time? ? "no-time-picker" : "" } %>
+    wrapper_html: { class: reservation.fixed_end_time? ? "no-time-picker" : "" } %>
 
-  <% unless @reservation.meal? %>
-    <% if @kinds.present? && @reservation.requires_kind? %>
+  <% unless reservation.meal? %>
+    <% if @kinds.present? && reservation.requires_kind? %>
       <%= f.input :kind, collection: @kinds, required: true %>
     <% end %>
 
-    <% if @reservation.access_level == "sponsor" %>
+    <% if reservation.access_level == "sponsor" %>
       <%= f.input :sponsor_id, as: :assoc_select2, context: "res_sponsor", required: true %>
     <% end %>
   <% end %>
@@ -44,10 +44,10 @@
   <%= f.input :note %>
 
   <%# Meal reservations are only ever edited, so there is no need for this. It would always be checked. %>
-  <% if @resource.has_guidelines? && !@reservation.meal? %>
+  <% if resource.has_guidelines? && !reservation.meal? %>
     <%= f.input :guidelines, required: true do %>
       <div id="guidelines">
-        <%= safe_render_markdown(@resource.all_guidelines) %>
+        <%= safe_render_markdown(resource.all_guidelines) %>
       </div>
       <label>
         <%= f.check_box(:guidelines_ok) %>
@@ -65,7 +65,7 @@
   $(function(){
     new Gather.Views.Select2View({
       el: '.reservation_reservation_sponsor_id',
-      extra_data: { community_id: <%= @reservation.community_id %> }
+      extra_data: { community_id: <%= reservation.community_id %> }
     });
     new Gather.Views.Select2View({
       el: '.reservation_reservation_reserver_id'

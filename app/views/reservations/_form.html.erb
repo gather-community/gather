@@ -10,6 +10,12 @@
     <%= @resource.name %>
   <% end %>
 
+  <% if @reservation.pre_notice? %>
+    <%= f.input :pre_notice, label: "" do %>
+      <div class="alert alert-info pre-notice"><%= @reservation.pre_notice %></div>
+    <% end %>
+  <% end %>
+
   <% unless @reservation.meal? %>
     <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
   <% end %>

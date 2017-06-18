@@ -272,7 +272,7 @@ ActiveRecord::Schema.define(version: 20170617195722) do
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
     t.string "other_communities"
-    t.text "pre_warning"
+    t.text "pre_notice"
     t.boolean "requires_kind"
     t.datetime "updated_at", null: false
   end

@@ -66,6 +66,14 @@ module Reservation
       rules[:fixed_end_time].try(:value)
     end
 
+    def pre_notice?
+      rules[:pre_notice].present?
+    end
+
+    def pre_notice
+      rules[:pre_notice].try(:value)
+    end
+
     def to_s
       rules.values.map(&:to_s).join("\n")
     end

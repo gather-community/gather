@@ -8,7 +8,7 @@ module Reservation
 
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
       max_length_minutes max_minutes_per_year
-      other_communities requires_kind)
+      other_communities requires_kind pre_notice)
 
     def initialize(name: nil, value: nil, protocol: nil)
       self.name = name
@@ -75,7 +75,7 @@ module Reservation
       when :requires_kind
         reservation.kind.present? || [:kind, "can't be blank"]
 
-      when :pre_warning
+      when :pre_notice
         true
 
       else

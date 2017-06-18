@@ -67,6 +67,7 @@ en:
         credit_limit: "Credit Limit"
       reservation/reservation:
         resource: "Resource"
+        pre_notice: "Notice"
         name: "Event Name"
         starts_at: "Start Time"
         ends_at: "End Time"

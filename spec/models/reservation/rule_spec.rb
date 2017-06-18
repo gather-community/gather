@@ -240,8 +240,8 @@ RSpec.describe Reservation::Rule, type: :model do
       end
     end
 
-    describe "pre_warning" do
-      let(:rule) { Reservation::Rule.new(name: :pre_warning, value: "Foo bar") }
+    describe "pre_notice" do
+      let(:rule) { Reservation::Rule.new(name: :pre_notice, value: "Foo bar") }
 
       it "should always pass" do
         expect(rule.check(reservation)).to be true

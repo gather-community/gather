@@ -144,6 +144,7 @@ class ReservationsController < ApplicationController
 
   def prep_form_vars
     @resource ||= @reservation.resource.decorate
+    @reservation = @reservation.decorate
     @kinds = @resource.kinds # May be nil
   end
 

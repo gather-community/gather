@@ -71,6 +71,12 @@ class MealPolicy < ApplicationPolicy
     host? && active_admin_or_biller?
   end
 
+  def contact?
+    @contact ||= Meals::MessagePolicy.new(user, Meals::Message.new(meal: record)).create?
+  end
+  alias_method :contact_diners?, :contact?
+  alias_method :contact_team?, :contact?
+
   def permitted_attributes
     # Anybody that can update a meal can change the assignments.
     permitted = [{

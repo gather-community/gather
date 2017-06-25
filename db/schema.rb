@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617195722) do
+ActiveRecord::Schema.define(version: 20170618170756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -189,6 +189,16 @@ ActiveRecord::Schema.define(version: 20170617195722) do
   add_index "meals_formulas", ["cluster_id"], name: "index_meals_formulas_on_cluster_id", using: :btree
   add_index "meals_formulas", ["community_id"], name: "index_meals_formulas_on_community_id", using: :btree
   add_index "meals_formulas", ["effective_on"], name: "index_meals_formulas_on_effective_on", using: :btree
+
+  create_table "meals_messages", force: :cascade do |t|
+    t.text "body", null: false
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "meal_id", null: false
+    t.string "recipients", null: false
+    t.integer "sender_id", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "old_credit_balances", id: false, force: :cascade do |t|
     t.decimal "balance", precision: 5, scale: 2

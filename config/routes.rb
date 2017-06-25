@@ -27,11 +27,13 @@ Rails.application.routes.draw do
       put :do_finalize
       get :summary
     end
+
+    resources :messages, only: [:new, :create], path: "contact"
   end
 
   resources :reservations
 
-  resources :calendar_exports, only: [:index], path: "calendars" do
+  resources :calendar_exports, only: :index, path: "calendars" do
     member do
       # This is the show action, allowing paths to include the user's calendar token,
       # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4

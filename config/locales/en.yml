@@ -311,6 +311,8 @@ en:
     reopen: "Reopen"
     summary: "Summary"
     finalize: "Finalize"
+    contact_diners: "Contact Diners"
+    contact_team: "Contact Team"
 
   calendars:
     meals: "Meals You're Attending"

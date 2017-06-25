@@ -95,18 +95,19 @@ mark {
 }
 
 .action-icons {
-  white-space: nowrap;
-
   &.action-icons-with-names {
     margin-bottom: 10px;
 
-    a:not(:first-of-type) i.fa {
-      margin-left: 10px;
+    a {
+      white-space: nowrap;
+      display: inline-block;
+      margin-right: 10px;
     }
   }
 }
 
 td .action-icons {
+  white-space: nowrap;
   text-align: right;
 
   i.fa {

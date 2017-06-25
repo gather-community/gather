@@ -3,11 +3,23 @@ module Meals
   class Message < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
-    RECIPIENTS = %w(team diners)
+    RECIPIENT_TYPES = %w(team diners)
 
     belongs_to :sender, class_name: "User"
     belongs_to :meal
 
-    validates :sender_id, :meal_id, :recipients, :body, presence: true
+    validates :body, presence: true
+
+    def recipient_count
+      @recipient_count ||= recipients.size
+    end
+
+    # Returns users or households, depending on recipient type.
+    def recipients
+      case recipient_type
+      when "team" then meal.workers
+      when "diners" then meal.households
+      end
+    end
   end
 end

@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       get :summary
     end
 
-    resources :messages, only: [:new, :create], path: "contact"
+    resources :messages, only: [:new, :create], module: "meals"
   end
 
   resources :reservations

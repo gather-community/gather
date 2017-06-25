@@ -1,0 +1,19 @@
+<% content_for(:title) { I18n.t("titles.meals/messages.#{@message.recipient_type}") } %>
+
+<%= horizontal_form_for(@message, url: meal_messages_path) do |f| %>
+  <%= f.input :meal do %>
+    <%= @meal.title_or_no_title %>
+    <div class="detail"><%= l(@meal.served_at, format: :full_datetime) %></div>
+  <% end %>
+
+  <%= f.input :recipient_type do %>
+    <%= f.hidden_field :recipient_type %>
+    <%= t("meals/messages.recipient_count.#{@message.recipient_type}", count: @message.recipient_count) %>
+  <% end %>
+
+  <%= f.input :body %>
+
+  <%= form_actions do %>
+    <%= f.button :submit, "Send Message", class: "btn-primary" %>
+  <% end %>
+<% end %>

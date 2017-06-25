@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :meals_message, class: "Meals::Message" do
     meal
     sender
-    recipients { Meals::Message::RECIPIENTS.sample }
+    recipient_type { Meals::Message::RECIPIENT_TYPES.sample }
     body "Stuff"
   end
 end

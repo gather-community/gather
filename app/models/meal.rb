@@ -116,6 +116,10 @@ class Meal < ActiveRecord::Base
     send("#{role.to_s.pluralize}")
   end
 
+  def workers
+    @workers ||= assignments.map(&:user).uniq
+  end
+
   # Ensures there is one head_cook assignment and 2 each of the others.
   # Creates blank ones if needed.
   def ensure_assignments

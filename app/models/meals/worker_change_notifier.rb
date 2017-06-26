@@ -13,7 +13,7 @@ module Meals
       added = assigns - orig_assigns
       removed = orig_assigns - assigns
       if added.any? || removed.any?
-        NotificationMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
+        MealMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
       end
     end
 

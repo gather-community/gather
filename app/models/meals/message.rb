@@ -10,6 +10,8 @@ module Meals
 
     validates :body, presence: true
 
+    delegate :name, to: :sender, prefix: true
+
     def recipient_count
       @recipient_count ||= recipients.size
     end

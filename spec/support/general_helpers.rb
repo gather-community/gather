@@ -42,4 +42,8 @@ module GeneralHelpers
   def contain_community_url(community, path)
     include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
   end
+
+  def have_correct_meal_url(meal)
+    contain_community_url(meal.community, "/meals/#{meal.id}")
+  end
 end

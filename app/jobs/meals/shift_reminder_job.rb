@@ -19,7 +19,7 @@ module Meals
 
             # Send emails
             assignments.each do |assignment|
-              NotificationMailer.shift_reminder(assignment).deliver_now
+              MealMailer.shift_reminder(assignment).deliver_now
               assignment.update_attribute(:reminder_count, 1)
             end
           end

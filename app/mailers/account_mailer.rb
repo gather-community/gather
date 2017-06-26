@@ -1,12 +1,12 @@
 class AccountMailer < ApplicationMailer
   def statement_notice(statement)
     load_statement_vars(statement)
-    mail(to: household_adults, subject: "New Account Statement for #{@community.name}")
+    mail(to: household_emails, subject: "New Account Statement for #{@community.name}")
   end
 
   def statement_reminder(statement)
     load_statement_vars(statement)
-    mail(to: household_adults, subject: "Payment Reminder for #{@community.name} Account")
+    mail(to: household_emails, subject: "Payment Reminder for #{@community.name} Account")
   end
 
   private
@@ -21,9 +21,5 @@ class AccountMailer < ApplicationMailer
     @statement = statement
     @household = statement.household
     @community = statement.community
-  end
-
-  def household_adults
-    @household.adults.map(&:email)
   end
 end

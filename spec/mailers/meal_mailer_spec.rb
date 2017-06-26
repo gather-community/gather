@@ -1,10 +1,10 @@
 require "rails_helper"
 
-describe NotificationMailer do
+describe MealMailer do
   let!(:multiple_communities) { create_list(:community, 2) }
   let(:resource) { create(:resource, name: "Place", meal_abbrv: "CH") }
   let(:ca) { resource.community.abbrv }
-  let(:meal) { create(:meal, served_at: "2017-01-01 12:00", resources: [resource]) }
+  let(:meal) { create(:meal, :with_menu, served_at: "2017-01-01 12:00", resources: [resource]) }
 
   describe "meal_reminder" do
     let(:user) { create(:user) }
@@ -16,7 +16,7 @@ describe NotificationMailer do
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Meal Reminder: Sun Jan 01 12:00pm at #{ca} CH")
+      expect(mail.subject).to eq("Meal Reminder: #{meal.title} on Sun Jan 01 12:00pm at #{ca} CH")
     end
 
     it "renders the correct name and URL in the body" do
@@ -40,7 +40,7 @@ describe NotificationMailer do
 
     it "renders the subject" do
       expect(mail.subject).to eq(
-        "Job Reminder: You Are Assistant Cook for A Meal at Sun Jan 01 11:00am at #{ca} CH")
+        "Job Reminder: Assistant Cook for Meal on Sun Jan 01 11:00am at #{ca} CH")
     end
 
     it "renders the correct times and URL in the body" do
@@ -91,7 +91,23 @@ describe NotificationMailer do
     end
   end
 
-  def have_correct_meal_url(meal)
-    contain_community_url(meal.community, "/meals/#{meal.id}")
+  describe "diner_message" do
+    let!(:sender) { create(:user) }
+    let!(:household) { create(:household) }
+    let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
+    let!(:mail) { described_class.diner_message(message, household).deliver_now }
+
+    it "sets the right recipients" do
+      expect(mail.to).to eq(household.users.map(&:email))
+    end
+
+    it "renders the subject" do
+      expect(mail.subject).to eq("Message about Meal on Sun Jan 01 12:00pm")
+    end
+
+    it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{household.name} Household,")
+      expect(mail.body.encoded).to have_correct_meal_url(meal)
+    end
   end
 end

@@ -1,12 +1,19 @@
-class NotificationMailer < ApplicationMailer
+class MealMailer < ApplicationMailer
+  # TODO: Refactor to accept a household instead of a user
+  # It should be up to the mailer system, not the job system to figure out how to send mail to a household,
+  # and whether users have opted out of a given type of mail.
+  # Mails to households should also be addressed to all the household users, not to each user separately.
+  # This is how it's done in the accounts mailer.
   def meal_reminder(user, signup)
     @user = user
     @signup = signup
     @meal = signup.meal.decorate
 
-    title = @meal.title ? "#{@meal.title}, " : ""
-    subject = "Meal Reminder: #{title}#{@meal.served_at.to_s(:datetime_no_yr)} at #{@meal.location_abbrv}"
-    mail(to: @user.email, subject: subject)
+    mail(to: @user.email, subject: default_i18n_subject(
+      title: @meal.title_or_no_title,
+      datetime: @meal.served_at_datetime_no_yr,
+      location: @meal.location_abbrv
+    ))
   end
 
   def shift_reminder(assignment)
@@ -21,8 +28,11 @@ class NotificationMailer < ApplicationMailer
     @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
     @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
-    subject = "Job Reminder: You Are #{@role} for A Meal at #{@datetime} at #{@meal.location_abbrv}"
-    mail(to: @user.email, subject: subject)
+    mail(to: @user.email, subject: default_i18n_subject(
+      role: @role,
+      datetime: @datetime,
+      location: @meal.location_abbrv
+    ))
   end
 
   def worker_change_notice(initiator, meal, added, removed)
@@ -35,7 +45,7 @@ class NotificationMailer < ApplicationMailer
     recips << @meal.community.settings.meals.admin_email
     recips << @initiator.email
 
-    mail(to: recips.compact.uniq, subject: "Meal Job Assignment Change Notice")
+    mail(to: recips.compact.uniq)
   end
 
   def cook_menu_reminder(assignment)
@@ -44,8 +54,19 @@ class NotificationMailer < ApplicationMailer
     @meal = assignment.meal.decorate
     @type = assignment.reminder_count == 0 ? :first : :second
 
-    subject = "Menu Reminder: Please Post Menu for #{@meal.served_at.to_s(:short_date)}"
-    mail(to: @user.email, subject: subject)
+    mail(to: @user.email, subject: default_i18n_subject(
+      date: @meal.served_at_short_date
+    ))
+  end
+
+  def diner_message(message, household)
+    @message = message
+    @household = household
+    @meal = @message.meal.decorate
+
+    mail(to: household_emails, subject: default_i18n_subject(
+      datetime: @meal.served_at_datetime_no_yr
+    ))
   end
 
   private
@@ -53,7 +74,7 @@ class NotificationMailer < ApplicationMailer
   def mail(*args)
     raise "meal instance variable must be set" unless @meal
     with_community_subdomain(@meal.community) do
-      super
+      super.tap { |x| puts x.body }
     end
   end
 end

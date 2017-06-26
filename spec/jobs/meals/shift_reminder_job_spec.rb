@@ -16,20 +16,20 @@ describe Meals::ShiftReminderJob do
   end
 
   it "sends the right number of emails" do
-    expect(NotificationMailer).to receive(:shift_reminder).exactly(4).times.and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).exactly(4).times.and_return(mlrdbl)
     perform_job
   end
 
   it "sends correct emails" do
     # Both should go for meal1.
-    expect(NotificationMailer).to receive(:shift_reminder).with(meal1.head_cook_assign).and_return(mlrdbl)
-    expect(NotificationMailer).to receive(:shift_reminder).with(meal1.asst_cook_assigns[0]).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal1.head_cook_assign).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal1.asst_cook_assigns[0]).and_return(mlrdbl)
 
     # Meal 2 asst_cook already sent.
-    expect(NotificationMailer).to receive(:shift_reminder).with(meal2.head_cook_assign).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal2.head_cook_assign).and_return(mlrdbl)
 
     # Meal 3 too early for asst_cook, but not head cook.
-    expect(NotificationMailer).to receive(:shift_reminder).with(meal3.head_cook_assign).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal3.head_cook_assign).and_return(mlrdbl)
 
     # Meal 4 outside window.
     perform_job

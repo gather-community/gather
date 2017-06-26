@@ -5,7 +5,7 @@ module Meals
     def perform
       each_community_at_correct_hour do |community|
         remindable_assignments(community).each do |assignment|
-          NotificationMailer.cook_menu_reminder(assignment).deliver_now
+          MealMailer.cook_menu_reminder(assignment).deliver_now
           assignment.increment!(:reminder_count)
         end
       end

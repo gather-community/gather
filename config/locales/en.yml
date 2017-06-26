@@ -205,6 +205,7 @@ en:
       full_datetime: "%a %b %d %Y %l:%M%P"
       machine_datetime_no_zone: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
+      short_date: "%a %b %d"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -455,3 +456,15 @@ en:
       team:
         one: "1 team member"
         other: "%{count} team members"
+
+  meal_mailer:
+    meal_reminder:
+      subject: "Meal Reminder: %{title} on %{datetime} at %{location}"
+    shift_reminder:
+      subject: "Job Reminder: %{role} for Meal on %{datetime} at %{location}"
+    worker_change_notice:
+      subject: "Meal Job Assignment Change Notice"
+    cook_menu_reminder:
+      subject: "Menu Reminder: Please Post Menu for %{date}"
+    diner_message:
+      subject: "Message about Meal on %{datetime}"

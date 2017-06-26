@@ -4,7 +4,7 @@ Dear <%= @user.name %>,
 ** Second Reminder **
 
 <% end -%>
-This is a reminder to post a menu for your meal at <%= @meal.served_at.to_s(:datetime_no_yr).gsub("  ", " ") %> at <%= @meal.location_name %>.
+This is a reminder to post a menu for your meal on <%= @meal.served_at_short_date %>.
 
 Please post a menu as soon as possible so that residents can plan ahead and to ensure good attendance!
 

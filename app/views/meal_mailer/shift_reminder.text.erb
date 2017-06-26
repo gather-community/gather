@@ -1,7 +1,6 @@
 Dear <%= @user.name %>,
 
-This is a reminder that you are scheduled as <%= @role %> for <%= @meal.title ? "the meal '#{@meal.title}'" : "a meal" -%>
- by <%= @meal.head_cook_name %>.
+This is a reminder that you are scheduled as <%= @role %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_short_date %>.
 
 Your shift is on <%= @date %> from <%= @shift_start %>-<%= @shift_end %> at <%= @meal.location_name %>. The meal is scheduled to be served at <%= @serve_time %>.
 
@@ -13,4 +12,4 @@ Here is some contact information for other workers for the meal:
 <%= I18n.t("assignment_roles.#{a.role}", count: 1) %>: <%= a.user.name %>, <%= a.user.email %>, <%= a.user.phone_list %>
 <% end %>
 
-See more about the meal here: <%= meal_url(@meal) %>
+<%= render("meal_link") %>

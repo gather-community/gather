@@ -1,4 +1,4 @@
-<%= @initiator.name %> just made the following change(s) to <%= @meal.title ? "the meal '#{@meal.title}'" : "a meal" -%> on <%= @meal.served_at.to_s(:datetime_no_yr).gsub("  ", " ") %> at <%= @meal.location_name %>.
+<%= @initiator.name %> just made the following change(s) to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_datetime_no_yr %> at <%= @meal.location_name %>.
 
 <% if @added.any? -%>
 <% @added.each do |a| -%>
@@ -11,6 +11,6 @@
 <% end -%>
 <% end -%>
 
-See more about the meal here: <%= meal_url(@meal) %>
+<%= render("meal_link") %>
 
 Thanks and enjoy!

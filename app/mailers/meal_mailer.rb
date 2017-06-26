@@ -69,6 +69,16 @@ class MealMailer < ApplicationMailer
     ))
   end
 
+  def team_message(message, member)
+    @message = message
+    @member = member
+    @meal = @message.meal.decorate
+
+    mail(to: member.email, subject: default_i18n_subject(
+      datetime: @meal.served_at_datetime_no_yr
+    ))
+  end
+
   private
 
   def mail(*args)

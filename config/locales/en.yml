@@ -467,4 +467,6 @@ en:
     cook_menu_reminder:
       subject: "Menu Reminder: Please Post Menu for %{date}"
     diner_message:
-      subject: "Message about Meal on %{datetime}"
+      subject: "Message to Diners about Meal on %{datetime}"
+    team_message:
+      subject: "Message to Team for Meal on %{datetime}"

@@ -95,18 +95,37 @@ describe MealMailer do
     let!(:sender) { create(:user) }
     let!(:household) { create(:household) }
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
-    let!(:mail) { described_class.diner_message(message, household).deliver_now }
+    let(:mail) { described_class.diner_message(message, household).deliver_now }
 
     it "sets the right recipients" do
-      expect(mail.to).to eq(household.users.map(&:email))
+      expect(mail.to).to match_array(household.users.map(&:email))
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Message about Meal on Sun Jan 01 12:00pm")
+      expect(mail.subject).to eq("Message to Diners about Meal on Sun Jan 01 12:00pm")
     end
 
     it "renders the correct name and URL in the body" do
       expect(mail.body.encoded).to match("Dear #{household.name} Household,")
+      expect(mail.body.encoded).to have_correct_meal_url(meal)
+    end
+  end
+
+  describe "team_message" do
+    let!(:sender) { create(:user) }
+    let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
+    let(:mail) { described_class.team_message(message, meal.head_cook).deliver_now }
+
+    it "sets the right recipients" do
+      expect(mail.to).to eq([meal.head_cook.email])
+    end
+
+    it "renders the subject" do
+      expect(mail.subject).to eq("Message to Team for Meal on Sun Jan 01 12:00pm")
+    end
+
+    it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{meal.head_cook.name},")
       expect(mail.body.encoded).to have_correct_meal_url(meal)
     end
   end

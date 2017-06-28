@@ -11,6 +11,7 @@ module Meals
     validates :body, presence: true
 
     delegate :name, to: :sender, prefix: true
+    delegate :cluster, to: :meal
 
     def recipient_count
       @recipient_count ||= recipients.size
@@ -19,8 +20,8 @@ module Meals
     # Returns users or households, depending on recipient type.
     def recipients
       case recipient_type
-      when "team" then meal.workers
-      when "diners" then meal.households
+      when "team" then meal.workers - [sender]
+      when "diners" then meal.signups.map(&:household)
       end
     end
   end

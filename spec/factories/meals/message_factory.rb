@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :meals_message, class: "Meals::Message" do
     meal
-    sender
+    association :sender, factory: :user
     recipient_type { Meals::Message::RECIPIENT_TYPES.sample }
     body "Stuff"
   end

@@ -28,7 +28,6 @@ class Meal < ActiveRecord::Base
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
   has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
-  has_many :households, through: :signups
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
@@ -60,6 +59,7 @@ class Meal < ActiveRecord::Base
     reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
   accepts_nested_attributes_for :cost
 
+  delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula

@@ -55,7 +55,7 @@
         Nobody, yet!
       <% else %>
         <% @signups.each do |s| %>
-          <li><%= s.household_name %> (<%= s.total %>)</li>
+          <li><%= s.household.decorate.name_with_prefix %> (<%= s.total %>)</li>
         <% end %>
       <% end %>
     </ul>

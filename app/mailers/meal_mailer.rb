@@ -84,7 +84,7 @@ class MealMailer < ApplicationMailer
   def mail(*args)
     raise "meal instance variable must be set" unless @meal
     with_community_subdomain(@meal.community) do
-      super.tap { |x| puts x.body }
+      super
     end
   end
 end

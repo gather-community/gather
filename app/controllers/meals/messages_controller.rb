@@ -15,6 +15,7 @@ module Meals
       @message.assign_attributes(message_params)
       authorize @message
       if @message.save
+        Delayed::Job.enqueue(MessageJob.new(@message.id))
         flash[:success] = "Message sent successfully."
         redirect_to meal_path(@meal)
       else

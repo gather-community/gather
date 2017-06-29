@@ -1,6 +1,10 @@
 class UserDecorator < ApplicationDecorator
   delegate_all
 
+  def first_name_with_inactive
+    "#{first_name}#{active? ? '' : ' (Inactive)'}"
+  end
+
   def birthdate
     return nil if object.birthdate.nil?
     I18n.l(object.birthdate, format: :full)

@@ -11,8 +11,9 @@ module Concerns::ApplicationController::Loaders
     @communities = current_cluster.communities.by_name
   end
 
-  # Users and children related to the given household that the UserPolicy says we can show.
+  # Users and children related to the given household that are active
+  # and that the UserPolicy says we can show.
   def load_showable_users_and_children_in(household)
-    UserPolicy.new(current_user, User).filter(household.users_and_children)
+    UserPolicy.new(current_user, User).filter(household.users_and_children).map(&:decorate)
   end
 end

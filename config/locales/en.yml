@@ -206,6 +206,7 @@ en:
       machine_datetime_no_zone: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
+      shorter_date: "%b %d"
 
   datepicker:
     dformat: '%b %d %Y'

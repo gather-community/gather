@@ -16,4 +16,8 @@ class MealDecorator < ApplicationDecorator
   def served_at_short_date
     I18n.l(served_at, format: :short_date).gsub("  ", " ")
   end
+
+  def served_at_shorter_date
+    I18n.l(served_at, format: :shorter_date).gsub("  ", " ")
+  end
 end

@@ -64,7 +64,7 @@ class MealMailer < ApplicationMailer
     @household = household
     @meal = @message.meal.decorate
     mail(to: household_emails, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_datetime_no_yr))
+      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
   def team_message(message, member)
@@ -72,7 +72,7 @@ class MealMailer < ApplicationMailer
     @member = member
     @meal = @message.meal.decorate
     mail(to: member.email, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_datetime_no_yr))
+      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
   private

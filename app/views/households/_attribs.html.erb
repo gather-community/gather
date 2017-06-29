@@ -7,7 +7,7 @@
     <% end %>
   </td>
   <td>
-    <%= safe_join(members.map { |u| link_to(u.first_name, u) }, ", ".html_safe) %>
+    <%= safe_join(members.map { |u| link_to(u.first_name_with_inactive, u) }, ", ".html_safe) %>
   </td>
 </tr>
 <% if policy(household).show_personal_info? %>

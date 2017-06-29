@@ -97,8 +97,9 @@ describe MealMailer do
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
     let(:mail) { described_class.diner_message(message, household).deliver_now }
 
-    it "sets the right recipients" do
+    it "sets the right recipients and reply-to" do
       expect(mail.to).to match_array(household.users.map(&:email))
+      expect(mail.reply_to).to contain_exactly(message.sender_email)
     end
 
     it "renders the subject" do
@@ -116,8 +117,9 @@ describe MealMailer do
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
     let(:mail) { described_class.team_message(message, meal.head_cook).deliver_now }
 
-    it "sets the right recipients" do
+    it "sets the right recipients and reply-to" do
       expect(mail.to).to eq([meal.head_cook.email])
+      expect(mail.reply_to).to contain_exactly(message.sender_email)
     end
 
     it "renders the subject" do

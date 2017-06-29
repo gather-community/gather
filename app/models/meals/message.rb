@@ -10,7 +10,7 @@ module Meals
 
     validates :body, presence: true
 
-    delegate :name, to: :sender, prefix: true
+    delegate :name, :email, to: :sender, prefix: true
     delegate :cluster, to: :meal
 
     def recipient_count

@@ -55,8 +55,7 @@ class Meal < ActiveRecord::Base
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :signups, allow_destroy: true,
-    reject_if: ->(attribs){ Signup.all_zero_attribs?(attribs) }
+  accepts_nested_attributes_for :signups, allow_destroy: true
   accepts_nested_attributes_for :cost
 
   delegate :cluster, to: :community

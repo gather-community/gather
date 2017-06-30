@@ -44,6 +44,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def failure
+    ExceptionNotifier.notify_exception(StandardError.new("oauth failure"), env: request.env)
+    set_flash_message(:error, :failure, kind: "Google",
+      reason: "of an unspecified error. The administrators have been notified")
+    redirect_to sign_in_url
+  end
+
   private
 
   def sign_in_and_clear_token(user, auth)

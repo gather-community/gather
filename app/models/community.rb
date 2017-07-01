@@ -1,6 +1,8 @@
 class Community < ActiveRecord::Base
   include CustomFields
 
+  SLUG_REGEX = /[a-z][a-z\-]*/
+
   acts_as_tenant(:cluster)
   resourcify
 

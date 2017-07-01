@@ -93,11 +93,14 @@ class HouseholdsController < ApplicationController
 
     if @accounts.size > 1
       prepare_lens(community: {required: true, subdomain: false})
-      @community = lens[:community] ? Community.find_by(slug: lens[:community]) : current_user.community
-    else
-      @community = current_user.community
+      @community = if lens[:community].try(:match, Community::SLUG_REGEX)
+        Community.find_by(slug: lens[:community])
+      elsif lens[:community].try(:match, /\d+/)
+        Community.find(lens[:community])
+      end
     end
 
+    @community ||= current_user.community
     @communities = @accounts.map(&:community)
     @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
 

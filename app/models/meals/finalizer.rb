@@ -12,13 +12,10 @@ module Meals
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
     # and create line items.
-    # Assumes that meal is valid and ready to be saved.
     def finalize!
       create_diner_transactions
       create_reimbursement_transaction
       copy_meal_costs
-      meal.status = "finalized"
-      meal.save!
     end
 
     private

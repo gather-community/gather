@@ -48,15 +48,16 @@ en:
         head_cook_assign: "Head Cook"
         community_id: "Host Community"
         served_at: "Date/Time"
-        ingredient_cost: "Ingredient Cost"
-        pantry_cost: "Pantry Cost"
-        payment_method: "Payment Method"
         communities: "Communities"
         resource_ids: "Location(s)"
       meals/message:
         meal: "Meal"
         body: "Message"
         recipient_type: "Recipients"
+      meals/cost:
+        ingredient_cost: "Ingredient Cost"
+        pantry_cost: "Pantry Cost"
+        payment_method: "Payment Method"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"

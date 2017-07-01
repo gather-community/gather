@@ -121,7 +121,10 @@ class MealsController < ApplicationController
         "Please correct by adding numbers for each diner type."
       render(:finalize)
     elsif @meal.valid?
+      # Run the save and signup in a transaction in case the finalize operation fails.
+      # Save the meal first so that any signups marked for deletion are deleted.
       Meal.transaction do
+        @meal.save!
         Meals::Finalizer.new(@meal).finalize!
       end
       flash[:success] = "Meal finalized successfully"

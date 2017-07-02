@@ -1,4 +1,5 @@
-# Sends notifications of outstanding statements a few days before they are due.
+# Sends notifications of outstanding statements a few days before they are due for all applicable
+# statements in system.
 module Billing
   class StatementReminderJob < ReminderJob
     def perform

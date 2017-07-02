@@ -1,6 +1,6 @@
-# Sends notifications of jobs that people have signed up for.
+# Sends notifications of jobs that people have signed up for for all applicable assignments in the system.
 # Checks the DB to see when to send.
-# Runs every hour
+# Runs every hour.
 module Meals
   class ShiftReminderJob < ReminderJob
     def perform

@@ -1,4 +1,4 @@
-# Sends notifications of meals that people have signed up for.
+# Sends notifications of meal signups for all applicable meals in the system.
 # Checks the DB to see when to send.
 module Meals
   class MealReminderJob < ReminderJob

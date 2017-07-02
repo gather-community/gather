@@ -1,4 +1,4 @@
-# Sends notifications reminding cook to enter menu.
+# Sends notifications reminding cook to enter menu for all applicable meals in system.
 # Sends an early one and then a later one if menu still not entered.
 module Meals
   class CookMenuReminderJob < ReminderJob

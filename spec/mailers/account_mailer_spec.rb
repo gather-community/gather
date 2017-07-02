@@ -1,9 +1,8 @@
 require "rails_helper"
 
 describe AccountMailer do
-  let(:adults) { create_list(:user, 2) }
-  let(:children) { create_list(:user, 2, :child) }
-  let(:household) { create(:household, users: adults + children) }
+  let(:users) { create_list(:user, 2) }
+  let(:household) { create(:household, users: users) }
   let(:account) { create(:account, household: household, community: community) }
   let(:statement) { create(:statement, account: account, total_due: 9.99) }
 
@@ -14,7 +13,7 @@ describe AccountMailer do
     let(:mail) { described_class.statement_notice(statement).deliver_now }
 
     it "sets the right recipients" do
-      expect(mail.to).to have_household_adults_as_recipients
+      expect(mail.to).to match_array(users.map(&:email))
     end
 
     it "renders the subject" do
@@ -31,7 +30,7 @@ describe AccountMailer do
     let(:mail) { described_class.statement_reminder(statement).deliver_now }
 
     it "sets the right recipients" do
-      expect(mail.to).to have_household_adults_as_recipients
+      expect(mail.to).to match_array(users.map(&:email))
     end
 
     it "renders the subject" do
@@ -46,9 +45,5 @@ describe AccountMailer do
 
   def have_correct_statement_url(statement)
     contain_community_url(statement.community, "/statements/#{statement.id}")
-  end
-
-  def have_household_adults_as_recipients
-    contain_exactly(*adults.map(&:email))
   end
 end

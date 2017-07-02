@@ -6,6 +6,7 @@ module SubdomainSettable
   protected
 
   def with_community_subdomain(community)
+    return yield if community.nil?
     config = Rails.configuration.action_mailer
     old_host = config.default_url_options[:host]
     config.default_url_options[:host] = "#{community.slug}.#{Settings.url.host}"

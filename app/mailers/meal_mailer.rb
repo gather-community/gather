@@ -9,7 +9,7 @@ class MealMailer < ApplicationMailer
     @signup = signup
     @meal = signup.meal.decorate
 
-    mail(to: @user.email, subject: default_i18n_subject(
+    mail(to: @user, subject: default_i18n_subject(
       title: @meal.title_or_no_title,
       datetime: @meal.served_at_datetime_no_yr,
       location: @meal.location_abbrv
@@ -28,7 +28,7 @@ class MealMailer < ApplicationMailer
     @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
     @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
-    mail(to: @user.email, subject: default_i18n_subject(
+    mail(to: @user, subject: default_i18n_subject(
       role: @role,
       datetime: @datetime,
       location: @meal.location_abbrv
@@ -41,9 +41,9 @@ class MealMailer < ApplicationMailer
     @added = added
     @removed = removed
 
-    recips = (@meal.assignments + removed).map(&:user).map(&:email)
+    recips = (@meal.assignments + removed).map(&:user)
     recips << @meal.community.settings.meals.admin_email
-    recips << @initiator.email
+    recips << @initiator
 
     mail(to: recips.compact.uniq)
   end
@@ -54,7 +54,7 @@ class MealMailer < ApplicationMailer
     @meal = assignment.meal.decorate
     @type = assignment.reminder_count == 0 ? :first : :second
 
-    mail(to: @user.email, subject: default_i18n_subject(
+    mail(to: @user, subject: default_i18n_subject(
       date: @meal.served_at_short_date
     ))
   end
@@ -63,7 +63,7 @@ class MealMailer < ApplicationMailer
     @message = message
     @household = household
     @meal = @message.meal.decorate
-    mail(to: household_emails, reply_to: [message.sender_email],
+    mail(to: @household, reply_to: [message.sender_email],
       subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
@@ -71,16 +71,13 @@ class MealMailer < ApplicationMailer
     @message = message
     @member = member
     @meal = @message.meal.decorate
-    mail(to: member.email, reply_to: [message.sender_email],
+    mail(to: member, reply_to: [message.sender_email],
       subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
-  private
+  protected
 
-  def mail(*args)
-    raise "meal instance variable must be set" unless @meal
-    with_community_subdomain(@meal.community) do
-      super
-    end
+  def community
+    @meal.community
   end
 end

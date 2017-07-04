@@ -1,15 +1,10 @@
 class MealMailer < ApplicationMailer
-  # TODO: Refactor to accept a household instead of a user
-  # It should be up to the mailer system, not the job system to figure out how to send mail to a household,
-  # and whether users have opted out of a given type of mail.
-  # Mails to households should also be addressed to all the household users, not to each user separately.
-  # This is how it's done in the accounts mailer.
-  def meal_reminder(user, signup)
-    @user = user
+  def meal_reminder(signup)
+    @household = signup.household
     @signup = signup
     @meal = signup.meal.decorate
 
-    mail(to: @user, subject: default_i18n_subject(
+    mail(to: @household, subject: default_i18n_subject(
       title: @meal.title_or_no_title,
       datetime: @meal.served_at_datetime_no_yr,
       location: @meal.location_abbrv

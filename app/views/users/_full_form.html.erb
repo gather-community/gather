@@ -6,37 +6,29 @@
   <%= f.input :first_name %>
   <%= f.input :last_name %>
 
-  <% if @user.child? %>
+  <%= nested_field_set(f, :up_guardianships, label: false, required: true) if @user.child? %>
 
-    <%= nested_field_set(f, :up_guardianships, label: false, required: true) %>
-
-  <% else %>
-
-    <%= f.input :email, required: true %>
-    <%= f.input :google_email, disabled: !policy(@user).administer? %>
-
-    <%= f.input :phone, required: true do %>
-      <div class="nested-fields">
-        <div class="row">
-          <div class="col-sm-4">
-            <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
-              input_html: { value: @user.phone(:mobile).formatted } %>
-          </div>
-          <div class="col-sm-4">
-            <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
-              input_html: { value: @user.phone(:home).formatted } %>
-          </div>
-          <div class="col-sm-4">
-            <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
-              input_html: { value: @user.phone(:work).formatted } %>
-          </div>
+  <%= f.input :email, required: @user.adult? %>
+  <%= f.input :google_email, disabled: !policy(@user).administer? %>
+  <%= f.input :phone, required: @user.adult? do %>
+    <div class="nested-fields">
+      <div class="row">
+        <div class="col-sm-4">
+          <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
+            input_html: { value: @user.phone(:mobile).formatted } %>
+        </div>
+        <div class="col-sm-4">
+          <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
+            input_html: { value: @user.phone(:home).formatted } %>
+        </div>
+        <div class="col-sm-4">
+          <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
+            input_html: { value: @user.phone(:work).formatted } %>
         </div>
       </div>
-    <% end %>
-
-    <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
+    </div>
   <% end %>
-
+  <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
   <%= f.input :birthdate_str, as: :string %>
   <%= f.input :joined_on, as: :date_picker %>
 

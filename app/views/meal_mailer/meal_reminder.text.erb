@@ -1,10 +1,8 @@
-Dear <%= @user.name %>,
+Dear <%= @household.name %> Household,
 
 This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_datetime_no_yr %> at <%= @meal.location_name %>.
-<% if @signup.total > 1 %>
 
-There are <%= @signup.total %> diners signed up from your household.
-<% end %>
+<%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %>
 
 <%= render("meal_link") %>
 

@@ -7,12 +7,13 @@ describe MealMailer do
   let(:meal) { create(:meal, :with_menu, served_at: "2017-01-01 12:00", resources: [resource]) }
 
   describe "meal_reminder" do
-    let(:user) { create(:user) }
-    let(:signup) { create(:signup, household: user.household, meal: meal, adult_meat: 1) }
-    let(:mail) { described_class.meal_reminder(user, signup).deliver_now }
+    let(:users) { create_list(:user, 2) }
+    let(:household) { create(:household, users: users) }
+    let(:signup) { create(:signup, household: household, meal: meal, adult_meat: 1) }
+    let(:mail) { described_class.meal_reminder(signup).deliver_now }
 
     it "sets the right recipient" do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to match_array(users.map(&:email))
     end
 
     it "renders the subject" do
@@ -20,7 +21,8 @@ describe MealMailer do
     end
 
     it "renders the correct name and URL in the body" do
-      expect(mail.body.encoded).to match("Dear #{user.name}")
+      puts mail.body.encoded
+      expect(mail.body.encoded).to match("Dear #{household.name} Household")
       expect(mail.body.encoded).to have_correct_meal_url(meal)
     end
   end

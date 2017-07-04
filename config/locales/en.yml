@@ -462,6 +462,10 @@ en:
   meal_mailer:
     meal_reminder:
       subject: "Meal Reminder: %{title} on %{datetime} at %{location}"
+      body:
+        diner_count:
+          one: "There is %{count} diner signed up from your household."
+          other: "There are %{count} diners signed up from your household."
     shift_reminder:
       subject: "Job Reminder: %{role} for Meal on %{datetime} at %{location}"
     worker_change_notice:

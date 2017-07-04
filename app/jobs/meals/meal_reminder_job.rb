@@ -14,9 +14,7 @@ module Meals
 
           # Send emails
           signups.each do |signup|
-            signup.household_adults.each do |user|
-              MealMailer.meal_reminder(user, signup).deliver_now
-            end
+            MealMailer.meal_reminder(signup).deliver_now
             signup.update_attribute(:notified, true)
           end
         end

@@ -7,12 +7,12 @@ PII, as described in US privacy law and information security, is information tha
 This document refers to different categories of information as follows. An asterisk (*) indicates required information.
 
 * Adults
-  * **Contact info**: Name \*, email address \*, unit number \*, phone number \*, preferred contact method
+  * **Contact info**: Name \*, unit number \*, email address \*, phone number \*, preferred contact method
   * **Profile photo**
   * **Personal info**: Birthdate (with or without year), Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts
   * **Account info**: Meals charges, late fees, credit limit, account balance
 * Children
-  * **Contact info**: Name \*, unit number \*
+  * **Contact info**: Name \*, unit number \*, email address, phone number, preferred contact method
   * **Profile photo**
   * **Personal info**: Birthdate (with or without year), join date
 

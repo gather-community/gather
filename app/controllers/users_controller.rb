@@ -33,11 +33,11 @@ class UsersController < ApplicationController
       # For select2 lookups
       format.json do
         @users = case params[:context]
-        when "lens", "res_sponsor", "reserver_this_cmty", "guardian"
+        when "res_sponsor", "reserver_this_cmty", "guardian"
           @users.in_community(current_community).adults
         when "reserver_any_cmty"
           @users.adults
-        when "meal_assign"
+        when "lens", "meal_assign"
           @users.in_community(current_community)
         else
           raise "invalid select2 context"

@@ -73,8 +73,4 @@ RSpec.describe Meals::Finalizer, type: :model do
       pantry_fee: 0.1
     )
   end
-
-  it "sets meal to finalized" do
-    expect(meal.status).to eq "finalized"
-  end
 end

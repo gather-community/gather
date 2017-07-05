@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   handle_phone_types :mobile, :home, :work # In order of general preference
 
   # Contact email does not have to be unique because some people share them (grrr!)
-  validates :email, format: Devise.email_regexp, if: :adult?
+  validates :email, format: Devise.email_regexp, allow_blank: true
   validates :email, presence: true, if: :adult?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }

@@ -3,4 +3,7 @@
   <%= link_to("Privacy Policy", "/about/privacy-policy") %> &bull;
   A project of <%= link_to("Sassafras Tech Collective", "http://sassafras.coop") %> &bull;
   <%= link_to("Credits", "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
+  <% if policy(current_community).update? %>
+    &bull; <%= link_to("Settings", admin_settings_path(type: "community"))  %>
+  <% end %>
 </footer>

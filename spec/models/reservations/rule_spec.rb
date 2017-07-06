@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Reservation::Rule, type: :model do
+RSpec.describe Reservations::Rule, type: :model do
   describe "check" do
-    let(:reservation) { Reservation::Reservation.new }
+    let(:reservation) { Reservations::Reservation.new }
 
     describe "fixed_start_time" do
-      let(:rule) { Reservation::Rule.new(name: :fixed_start_time, value: Time.zone.parse("12:00:00")) }
+      let(:rule) { Reservations::Rule.new(name: :fixed_start_time, value: Time.zone.parse("12:00:00")) }
 
       it "passes on match" do
         reservation.starts_at = Time.zone.parse("2016-01-01 12:00pm")
@@ -19,7 +19,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "fixed_end_time" do
-      let(:rule) { Reservation::Rule.new(name: :fixed_end_time, value: Time.zone.parse("18:00:00")) }
+      let(:rule) { Reservations::Rule.new(name: :fixed_end_time, value: Time.zone.parse("18:00:00")) }
 
       it "passes on match" do
         reservation.ends_at = Time.zone.parse("2016-01-01 6:00pm")
@@ -33,7 +33,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "max_lead_days" do
-      let(:rule) { Reservation::Rule.new(name: :max_lead_days, value: 30) }
+      let(:rule) { Reservations::Rule.new(name: :max_lead_days, value: 30) }
       before { Timecop.freeze(Time.zone.parse("2016-01-01 3:00pm")) }
       after { Timecop.return }
 
@@ -54,7 +54,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "max_length_minutes" do
-      let(:rule) { Reservation::Rule.new(name: :max_length_minutes, value: 30) }
+      let(:rule) { Reservations::Rule.new(name: :max_length_minutes, value: 30) }
       before { reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm") }
 
       it "passes with acceptable length" do
@@ -88,7 +88,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       describe "max_days_per_year" do
         let(:rule) do
-          Reservation::Rule.new(name: :max_days_per_year, value: max_days, protocol: protocol)
+          Reservations::Rule.new(name: :max_days_per_year, value: max_days, protocol: protocol)
         end
 
         before do
@@ -124,7 +124,7 @@ RSpec.describe Reservation::Rule, type: :model do
 
       describe "max_minutes_per_year" do
         let(:rule) do
-          Reservation::Rule.new(name: :max_minutes_per_year,
+          Reservations::Rule.new(name: :max_minutes_per_year,
             value: max_hours.hours / 60, protocol: protocol)
         end
 
@@ -166,7 +166,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "requires_kind" do
-      let(:rule) { Reservation::Rule.new(name: :requires_kind, value: true) }
+      let(:rule) { Reservations::Rule.new(name: :requires_kind, value: true) }
 
       it "should pass if reservation has kind" do
         reservation.kind = "personal"
@@ -185,7 +185,7 @@ RSpec.describe Reservation::Rule, type: :model do
       let(:outsider) { create(:user) }
       let(:outsider2) { create(:user) }
       let(:protocol) { create(:reservation_protocol, resources: [resource]) }
-      let(:rule) { Reservation::Rule.new(name: :other_communities, value: value, protocol: protocol) }
+      let(:rule) { Reservations::Rule.new(name: :other_communities, value: value, protocol: protocol) }
 
       shared_examples_for "insiders only" do
         it "should pass for insider" do
@@ -241,7 +241,7 @@ RSpec.describe Reservation::Rule, type: :model do
     end
 
     describe "pre_notice" do
-      let(:rule) { Reservation::Rule.new(name: :pre_notice, value: "Foo bar") }
+      let(:rule) { Reservations::Rule.new(name: :pre_notice, value: "Foo bar") }
 
       it "should always pass" do
         expect(rule.check(reservation)).to be true

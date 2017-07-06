@@ -14,7 +14,7 @@ module NavHelper
       },{
         name: :reservations,
         path: lens_path_if_present("reservations"),
-        permitted: policy(Reservation::Reservation).index?,
+        permitted: policy(Reservations::Reservation).index?,
         icon: "book"
       },{
         name: :accounts,

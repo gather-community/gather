@@ -1,6 +1,6 @@
 # Models a set of Rules governing a single reservation.
 # Represents the unification of one or more protocols.
-module Reservation
+module Reservations
   class RuleSet
     include ActiveModel::SerializerSupport
 

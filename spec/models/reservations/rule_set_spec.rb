@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Reservation::RuleSet, type: :model do
+RSpec.describe Reservations::RuleSet, type: :model do
   describe "build_for" do
     let(:resource1) { create(:resource) }
-    let(:reservation) { Reservation::Reservation.new(resource: resource1) }
-    let(:rules) { Reservation::RuleSet.build_for(reservation).rules }
+    let(:reservation) { Reservations::Reservation.new(resource: resource1) }
+    let(:rules) { Reservations::RuleSet.build_for(reservation).rules }
 
     it "should return empty hash with no rules" do
       expect(rules).to eq({})
@@ -36,7 +36,7 @@ RSpec.describe Reservation::RuleSet, type: :model do
 
         it "should error" do
           expect { rules.size }.to raise_error do |error|
-            expect(error).to be_a Reservation::ProtocolDuplicateDefinitionError
+            expect(error).to be_a Reservations::ProtocolDuplicateDefinitionError
             expect(error.protocols).to contain_exactly(p2, p3)
             expect(error.attrib).to eq :max_lead_days
           end

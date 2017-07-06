@@ -13,7 +13,7 @@ module Utils
         adults = User.adults.active.to_a
 
         data.each do |row|
-          Reservation::Reservation.create!(row.except("id", "resource_id").merge(
+          Reservations::Reservation.create!(row.except("id", "resource_id").merge(
             starts_at: translate_time(row["starts_at"]),
             ends_at: translate_time(row["ends_at"]),
             reserver: adults.sample,

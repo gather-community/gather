@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Reservation::ResourcePolicy do
+describe Reservations::ResourcePolicy do
   describe "scope" do
     let!(:resource1) { create(:resource) }
     let!(:resource2) { create(:resource) }
@@ -12,12 +12,12 @@ describe Reservation::ResourcePolicy do
     let!(:outsider) { create(:user, household: outsider_household) }
 
     it "for outsiders, returns only non-forbidden resources" do
-      permitted = Reservation::ResourcePolicy::Scope.new(outsider, Reservation::Resource.all).resolve
+      permitted = Reservations::ResourcePolicy::Scope.new(outsider, Reservations::Resource.all).resolve
       expect(permitted).to contain_exactly(resource2, resource3)
     end
 
     it "for insiders, returns all resources" do
-      permitted = Reservation::ResourcePolicy::Scope.new(insider, Reservation::Resource.all).resolve
+      permitted = Reservations::ResourcePolicy::Scope.new(insider, Reservations::Resource.all).resolve
       expect(permitted).to contain_exactly(resource1, resource2, resource3)
     end
   end

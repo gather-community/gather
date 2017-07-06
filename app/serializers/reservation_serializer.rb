@@ -20,7 +20,7 @@ class ReservationSerializer < ActiveModel::Serializer
 
   def editable
     # scope == current_user
-    Reservation::ReservationPolicy.new(scope, object).edit?
+    Reservations::ReservationPolicy.new(scope, object).edit?
   end
 
   def className

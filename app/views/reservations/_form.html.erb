@@ -17,7 +17,7 @@
   <% end %>
 
   <% unless reservation.meal? %>
-    <%= f.input :name, maxlength: Reservation::Reservation::NAME_MAX_LENGTH %>
+    <%= f.input :name, maxlength: Reservations::Reservation::NAME_MAX_LENGTH %>
   <% end %>
 
   <% if policy(reservation).choose_reserver? %>

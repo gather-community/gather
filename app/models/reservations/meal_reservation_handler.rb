@@ -1,5 +1,5 @@
 # Handles creation and updating of reservations associated with meals.
-module Reservation
+module Reservations
   class MealReservationHandler
     include ActionView::Helpers::TextHelper
 
@@ -14,7 +14,7 @@ module Reservation
     def build_reservations
       prefix = "Meal:"
       title = truncate(meal.title_or_no_title,
-        length: ::Reservation::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+        length: ::Reservations::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
 
       current_reservations = []
 

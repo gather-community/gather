@@ -6,12 +6,12 @@
 # Another sets max_minutes_per_year for a subset of resources.
 # etc.
 #
-# See Reservation::Rule::NAMES for list of rule attributes
-module Reservation
+# See Reservations::Rule::NAMES for list of rule attributes
+module Reservations
   class Protocol < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
-    has_many :protocolings, class_name: "Reservation::Protocoling",
+    has_many :protocolings, class_name: "Reservations::Protocoling",
       foreign_key: "protocol_id", dependent: :destroy
     has_many :resources, through: :protocolings
     belongs_to :community

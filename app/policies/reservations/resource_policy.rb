@@ -1,4 +1,4 @@
-module Reservation
+module Reservations
   class ResourcePolicy < ApplicationPolicy
     alias_method :resource, :record
 

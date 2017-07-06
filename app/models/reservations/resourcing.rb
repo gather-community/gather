@@ -1,4 +1,4 @@
-module Reservation
+module Reservations
   class Resourcing < ActiveRecord::Base
     acts_as_tenant(:cluster)
 

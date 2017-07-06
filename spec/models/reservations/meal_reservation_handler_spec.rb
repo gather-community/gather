@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Reservation::MealReservationHandler, type: :model do
+RSpec.describe Reservations::MealReservationHandler, type: :model do
   let(:community) { default_community }
   let(:resources) { create_list(:resource, 2) }
   let(:meal) { build(:meal, :with_menu, community: community, title: "A very very very long title",
@@ -93,7 +93,7 @@ RSpec.describe Reservation::MealReservationHandler, type: :model do
           end
 
           it "should delete and replace previous reservations" do
-            expect(Reservation::Reservation.count).to eq 2
+            expect(Reservations::Reservation.count).to eq 2
             expect(meal.reservations.map(&:starts_at)).to eq [
               Time.zone.parse("2017-01-01 11:30"),
               Time.zone.parse("2017-01-01 12:00")

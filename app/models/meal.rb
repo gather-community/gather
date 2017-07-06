@@ -31,9 +31,9 @@ class Meal < ActiveRecord::Base
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
-  has_many :resourcings, class_name: "Reservation::Resourcing", dependent: :destroy
-  has_many :resources, class_name: "Reservation::Resource", through: :resourcings
-  has_many :reservations, class_name: "Reservation::Reservation", autosave: true, dependent: :destroy
+  has_many :resourcings, class_name: "Reservations::Resourcing", dependent: :destroy
+  has_many :resources, class_name: "Reservations::Resource", through: :resourcings
+  has_many :reservations, class_name: "Reservations::Reservation", autosave: true, dependent: :destroy
 
   scope :open, -> { where(status: "open") }
   scope :hosted_by, ->(community) { where(community: community) }
@@ -147,7 +147,7 @@ class Meal < ActiveRecord::Base
   end
 
   def reservation_handler
-    @reservation_handler ||= Reservation::MealReservationHandler.new(self)
+    @reservation_handler ||= Reservations::MealReservationHandler.new(self)
   end
 
   # Accepts values from the community checkboxes on the form.

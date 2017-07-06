@@ -1,4 +1,4 @@
-module Reservation
+module Reservations
   class Reservation < ActiveRecord::Base
     NAME_MAX_LENGTH = 24
 

@@ -24,8 +24,8 @@ module Utils
         self.households = Household.all
         self.adults = User.adults.active.to_a
         self.locations = [
-          Reservation::Resource.find_by(name: "Kitchen"),
-          Reservation::Resource.find_by(name: "Dining Room")
+          Reservations::Resource.find_by(name: "Kitchen"),
+          Reservations::Resource.find_by(name: "Dining Room")
         ]
       end
 

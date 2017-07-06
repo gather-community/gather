@@ -1,6 +1,6 @@
 # Models a single reservation rule, such as max_minutes_per_year = 200.
-# Also stores a reference to the Reservation::Protocol giving rise to the rule.
-module Reservation
+# Also stores a reference to the Reservations::Protocol giving rise to the rule.
+module Reservations
   class Rule
     attr_accessor :name, :value, :protocol
 

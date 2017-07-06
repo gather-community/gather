@@ -1,4 +1,4 @@
-module Reservation
+module Reservations
   class ResourceDecorator < ApplicationDecorator
     delegate_all
 

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe Reservation::Reservation, type: :model do
+RSpec.describe Reservations::Reservation, type: :model do
   let(:resource) { create(:resource) }
   let(:resource2) { create(:resource) }
 
   describe "no_overlap" do
     let!(:existing_reservation) { create(:reservation, resource: resource,
       starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 15:00") }
-    let(:reservation) { Reservation::Reservation.new(resource: resource) }
+    let(:reservation) { Reservations::Reservation.new(resource: resource) }
 
     it "should not set error if no overlap on left" do
       reservation.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
@@ -47,7 +47,7 @@ RSpec.describe Reservation::Reservation, type: :model do
 
   describe "apply_rules" do
     context "with no protocols" do
-      let(:reservation) { Reservation::Reservation.new(resource: resource) }
+      let(:reservation) { Reservations::Reservation.new(resource: resource) }
 
       it "should not set error" do
         expect_no_error(:apply_rules)
@@ -56,7 +56,7 @@ RSpec.describe Reservation::Reservation, type: :model do
 
     context "with a protocol" do
       let!(:protocol) { create(:reservation_protocol, resources: [resource2], requires_kind: true) }
-      let(:reservation) { Reservation::Reservation.new(resource: resource2) }
+      let(:reservation) { Reservations::Reservation.new(resource: resource2) }
 
       it "should set an error if applicable" do
         reservation.send(:apply_rules)
@@ -66,7 +66,7 @@ RSpec.describe Reservation::Reservation, type: :model do
 
     context "with missing starts_at" do
       let!(:protocol) { create(:reservation_protocol, resources: [resource2], max_lead_days: 30) }
-      let(:reservation) { Reservation::Reservation.new(resource: resource2) }
+      let(:reservation) { Reservations::Reservation.new(resource: resource2) }
 
       it "should not apply rules since doing so would cause problems" do
         reservation.save

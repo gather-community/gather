@@ -2,6 +2,6 @@
 <ul>
   <% @reservation.errors.each do |attrib, error| %>
     <% attrib = "Reservation" if attrib == :base %>
-    <li><%= "#{Reservation::Reservation.human_attribute_name(attrib)}: #{error}" %></li>
+    <li><%= "#{Reservations::Reservation.human_attribute_name(attrib)}: #{error}" %></li>
   <% end %>
 </ul>

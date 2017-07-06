@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :reservation_protocol, class: "Reservation::Protocol" do
+  factory :reservation_protocol, class: "Reservations::Protocol" do
     transient do
       resources []
     end

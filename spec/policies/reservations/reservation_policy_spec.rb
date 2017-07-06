@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Reservation::ReservationPolicy do
+describe Reservations::ReservationPolicy do
   include_context "policy objs"
   let(:resource) { create(:resource, community: community) }
   let(:reservation) { build(:reservation, reserver: user, resource: resource) }
@@ -112,14 +112,14 @@ describe Reservation::ReservationPolicy do
     let(:user) { User.new }
 
     it "returns all reservations" do
-      permitted = Reservation::ReservationPolicy::Scope.new(user, Reservation::Reservation.all).resolve
+      permitted = Reservations::ReservationPolicy::Scope.new(user, Reservations::Reservation.all).resolve
       expect(permitted).to contain_exactly(reservation1, reservation2)
     end
   end
 
   describe "permitted_attributes" do
     let(:admin_attribs) { basic_attribs + %i(reserver_id) }
-    subject { Reservation::ReservationPolicy.new(user, reservation).permitted_attributes }
+    subject { Reservations::ReservationPolicy.new(user, reservation).permitted_attributes }
 
     shared_examples_for "basic attribs" do
       it "should allow basic attribs" do

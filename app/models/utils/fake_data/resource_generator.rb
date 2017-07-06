@@ -35,7 +35,7 @@ module Utils
 
       def create_shared_guidelines_and_associate
         load_yaml("reservation/shared_guidelines.yml").each do |row|
-          sg = Reservation::SharedGuidelines.create!(row.except("id").merge(community: community))
+          sg = Reservations::SharedGuidelines.create!(row.except("id").merge(community: community))
           resources_with_shared_guidelines_id(row["id"]).each do |resource|
             resource.shared_guidelines << sg
           end

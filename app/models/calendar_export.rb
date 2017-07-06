@@ -75,7 +75,7 @@ class CalendarExport
   end
 
   def base_reservations_scope
-    Reservation::ReservationPolicy::Scope.new(user, Reservation::Reservation).resolve.
+    Reservations::ReservationPolicy::Scope.new(user, Reservations::Reservation).resolve.
       includes(:resource, :reserver).
       with_max_age(MAX_EVENT_AGE)
   end
@@ -84,7 +84,7 @@ class CalendarExport
     case class_name(obj)
     when "Meal" then obj.title_or_no_title
     when "Assignment" then obj.title
-    when "Reservation::Reservation" then obj.name << (obj.meal? ? "" : " (#{obj.reserver_name})")
+    when "Reservations::Reservation" then obj.name << (obj.meal? ? "" : " (#{obj.reserver_name})")
     else unknown_class(obj)
     end
   end
@@ -93,7 +93,7 @@ class CalendarExport
     case class_name(obj)
     when "Meal" then "By #{obj.head_cook_name}"
     when "Assignment" then nil
-    when "Reservation::Reservation" then nil
+    when "Reservations::Reservation" then nil
     else unknown_class(obj)
     end
   end
@@ -102,7 +102,7 @@ class CalendarExport
     case class_name(obj)
     when "Meal" then url_for(obj, :meal_url)
     when "Assignment" then url_for(obj.meal, :meal_url)
-    when "Reservation::Reservation" then url_for(obj, :reservation_url)
+    when "Reservations::Reservation" then url_for(obj, :reservation_url)
     else unknown_class(obj)
     end
   end

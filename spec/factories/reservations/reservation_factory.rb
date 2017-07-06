@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :reservation, class: "Reservation::Reservation" do
+  factory :reservation, class: "Reservations::Reservation" do
     name "Fun times"
     resource
     association :reserver, factory: :user

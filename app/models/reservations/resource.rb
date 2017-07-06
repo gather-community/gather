@@ -1,11 +1,11 @@
-module Reservation
+module Reservations
   class Resource < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
     self.table_name = "resources"
 
     belongs_to :community
-    has_many :guideline_inclusions, class_name: "Reservation::GuidelineInclusion", dependent: :destroy
+    has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
 
     has_attached_file :photo,

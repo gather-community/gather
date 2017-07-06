@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 describe Reservations::ResourcePolicy do
+  describe "permissions" do
+    include_context "policy objs"
+
+    let(:resource) { Reservations::Resource.new(community: community) }
+    let(:record) { resource }
+
+    permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
+      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+    end
+  end
+
   describe "scope" do
     let!(:resource1) { create(:resource) }
     let!(:resource2) { create(:resource) }

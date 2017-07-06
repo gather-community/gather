@@ -21,11 +21,6 @@ module NavHelper
         path: lens_path_if_present("accounts"),
         permitted: policy(Billing::Account.new(community: current_community)).index?,
         icon: "money"
-      },{
-        name: :admin,
-        path: admin_settings_path(type: "community"),
-        permitted: policy(current_community).update?,
-        icon: "gears"
       }
     ]
     filter_and_set_active_nav_items(items, type: :main, active: @context[:section])

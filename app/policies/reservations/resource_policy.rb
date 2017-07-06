@@ -2,6 +2,26 @@ module Reservations
   class ResourcePolicy < ApplicationPolicy
     alias_method :resource, :record
 
+    def index?
+      active_admin?
+    end
+
+    def show?
+      active_admin?
+    end
+
+    def create?
+      active_admin?
+    end
+
+    def update?
+      active_admin?
+    end
+
+    def destroy?
+      active_admin?
+    end
+
     class Scope < Scope
       def resolve
         # Only show visible resources unless admin.

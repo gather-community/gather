@@ -12,6 +12,17 @@ addons:
     debug: true
     paths:
       - $(ls /home/travis/build/sassafrastech/gather/tmp/capybara/*.png | tr "\n" ":")
+  hosts:
+    - gather.localhost.tv
+    - community1.gather.localhost.tv
+    - community2.gather.localhost.tv
+    - community3.gather.localhost.tv
+    - community4.gather.localhost.tv
+    - community5.gather.localhost.tv
+    - community6.gather.localhost.tv
+    - community7.gather.localhost.tv
+    - community8.gather.localhost.tv
+    - community9.gather.localhost.tv
 services:
   - postgresql
 before_install: # Install PhantomJS 2.1.1

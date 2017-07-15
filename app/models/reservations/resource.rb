@@ -24,6 +24,16 @@ module Reservations
 
     delegate :name, to: :community, prefix: true
 
+    attr_accessor :photo_destroy
+
+    before_save do
+      photo.destroy if photo_destroy?
+    end
+
+    def photo_destroy?
+      photo_destroy.to_i == 1
+    end
+
     # Available reservation kinds. Returns nil if none are defined.
     def kinds
       (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence

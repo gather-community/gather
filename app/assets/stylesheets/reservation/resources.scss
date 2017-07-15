@@ -8,4 +8,8 @@
       min-width: 300px;
     }
   }
+
+  .dropzone {
+    @include dropzone(220px, 165px);
+  }
 }

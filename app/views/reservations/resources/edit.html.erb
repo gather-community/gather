@@ -1,0 +1,29 @@
+<% content_for(:title) { "Edit Resource: #{resource.name}" } %>
+
+<div class="row" id="resource-forms">
+  <div class="col-sm-3 col-sm-push-9">
+    <%= render("photo_dropzone", width: 220, height: 165) %>
+  </div>
+
+  <div class="col-sm-9 col-sm-pull-3">
+    <%= horizontal_form_for(resource) do |f| %>
+      <%= f.input :photo_tmp_id, as: :hidden %>
+      <%= f.input :photo_destroy, as: :hidden %>
+      <%= f.input :name %>
+
+      <%= form_actions do %>
+        <%= f.button :submit, class: "btn-primary" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  $(function(){
+    var uploadView = new Gather.Views.FileUploadView(<%=json(
+      el: '#resource-forms',
+      maxFilesize: Settings.photos.max_size_mb / 1
+    )%>);
+    new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});
+  });
+<% end %>

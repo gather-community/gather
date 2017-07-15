@@ -16,6 +16,7 @@ module Reservations
 
     scope :meal_hostable, -> { where.not(meal_abbrv: nil) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
+    scope :by_name, -> { order(:name) }
     scope :visible, -> { where(hidden: false) }
     scope :hidden, -> { where(hidden: true) }
 

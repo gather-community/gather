@@ -50,7 +50,7 @@
           <div class="collapse navbar-collapse" id="mobile-nav">
             <ul class="nav navbar-nav mobile-nav hidden visible-xs">
               <% nav_items.each do |item| %>
-                <% if (sub_items = subnav_items(item[:name])).any? %>
+                <% if (sub_items = subnav_items(item[:name])).size > 1 %>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                       aria-haspopup="true" aria-expanded="false">
@@ -75,7 +75,7 @@
       </div>
     </nav>
 
-    <% if @context[:subsection] && (items = subnav_items).any? %>
+    <% if @context[:subsection] && (items = subnav_items).size > 1 %>
       <nav id="subnav" class="hidden-xs hidden-print">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>

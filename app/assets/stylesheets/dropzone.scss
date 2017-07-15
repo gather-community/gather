@@ -47,7 +47,7 @@
   .dz-message {
     width: $thumb-width;
     height: $thumb-height;
-    background: url(image-path("missing/users/thumb.png"));
+    // background-image is set inline in the partial since it depends on the model
     background-position: center center;
     background-size: $thumb-width - 20px $thumb-height - 20px;
     background-repeat: no-repeat;

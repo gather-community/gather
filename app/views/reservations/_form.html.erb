@@ -7,7 +7,7 @@
 
   <%= f.input :resource do %>
     <%= image_tag(resource.photo.url(:thumb)) %><br/>
-    <%= resource.name %>
+    <%= resource.name_with_prefix %>
   <% end %>
 
   <% if reservation.pre_notice? %>

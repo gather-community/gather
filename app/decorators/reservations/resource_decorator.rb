@@ -2,8 +2,8 @@ module Reservations
   class ResourceDecorator < ApplicationDecorator
     delegate_all
 
-    def name
-      "#{cmty_prefix_no_colon}#{object.name}"
+    def name_with_prefix
+      "#{cmty_prefix_no_colon}#{name}"
     end
 
     def meal_abbrv

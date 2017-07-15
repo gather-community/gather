@@ -1,4 +1,4 @@
-<% content_for(:title) { "Reservations: #{@resource.name}" } %>
+<% content_for(:title) { "Reservations: #{@resource.name_with_prefix}" } %>
 
 <% content_for(:top_buttons) do %>
   <% if @resource && policy(@sample_reservation).create? %>

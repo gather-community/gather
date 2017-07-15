@@ -1,5 +1,5 @@
 class UploadsController < ApplicationController
-  UPLOADABLES = {user: [:photo]}
+  UPLOADABLES = {user: [:photo], "reservations/resource": [:photo]}
 
   def create
     authorize Upload

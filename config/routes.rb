@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   end
 
   namespace :reservations do
-    resources :resources
+    resources :resources, except: :show
   end
 
   resources :reservations

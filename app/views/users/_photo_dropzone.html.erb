@@ -2,7 +2,7 @@
 <% size = local_assigns[:size] || "thumb" %>
 <% hide_existing = local_assigns[:hide_existing] %>
 <% photo_present = !hide_existing && photo_path !~ %r{missing/users/} %>
-<%= form_tag "/uploads", id: "user-photo", class: "dropzone size-#{size}
+<%= form_tag "/uploads", id: "user-photo", data: {width: width, height: height}, class: "dropzone
     #{photo_present ? 'has-existing' : ''}
     #{@user.photo_destroy? ? 'existing-deleted' : ''}" do %>
   <%= hidden_field_tag(:model, "user") %>

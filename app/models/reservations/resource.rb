@@ -19,12 +19,18 @@ module Reservations
     scope :by_name, -> { order(:name) }
     scope :visible, -> { where(hidden: false) }
     scope :hidden, -> { where(hidden: true) }
+    scope :with_reservation_counts, -> { select("resources.*,
+      (SELECT COUNT(id) FROM reservations WHERE resource_id = resources.id) AS reservation_count") }
 
     delegate :name, to: :community, prefix: true
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds
       (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence
+    end
+
+    def reservation_count
+      attributes["reservation_count"]
     end
 
     def has_guidelines?

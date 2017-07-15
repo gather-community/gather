@@ -1,5 +1,18 @@
 <% content_for(:title) { "Resources" } %>
 
-<% resources.each do |resource| %>
-  <%= resource.name %>
-<% end %>
+<table class="index part-width">
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Reservations</th>
+  </tr>
+  <% resources.each do |resource| %>
+    <tr>
+      <td><%= image_tag(resource.photo.url(:thumb), alt: resource.name) %></td>
+      <td class="name">
+        <%= link_to(resource.name, edit_reservations_resource_path(resource.id)) %>
+      </td>
+      <td><%= number_with_delimiter(resource.reservation_count) %></td>
+    </tr>
+  <% end %>
+</table>

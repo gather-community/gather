@@ -56,7 +56,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
   setMainPhotoDestroyFlag: (bool) ->
     if @dzForm.is('.has-existing')
       @mainPhotoDestroy = bool
-      @mainForm.find('#user_photo_destroy').val(if bool then '1' else '0')
+      @mainForm.find('[id$=_photo_destroy]').val(if bool then '1' else '0')
 
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()

@@ -68,6 +68,22 @@ module NavHelper
           icon: "home"
         }
       ]
+    when :reservations
+      [
+        {
+          name: :reservations,
+          parent: :reservations,
+          path: reservations_path,
+          permitted: policy(Reservations::Reservation).index?,
+          icon: "calendar"
+        },{
+          name: :resources,
+          parent: :reservations,
+          path: reservations_resources_path,
+          permitted: policy(Reservations::Resource.new(community: current_community)).index?,
+          icon: "bed"
+        }
+      ]
     else
       []
     end

@@ -30,6 +30,10 @@ Rails.application.routes.draw do
     resources :messages, only: [:new, :create], module: "meals"
   end
 
+  namespace :reservations do
+    resources :resources
+  end
+
   resources :reservations
 
   resources :calendar_exports, only: :index, path: "calendars" do

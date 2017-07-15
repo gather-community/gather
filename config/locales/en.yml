@@ -378,6 +378,9 @@ en:
       people:
         directory: "Directory"
         households: "Households"
+      reservations:
+        reservations: "Reservations"
+        resources: "Resources"
     personal:
       profile: "Profile"
       accounts: "Accounts"

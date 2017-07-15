@@ -3,7 +3,7 @@ class ReservationsController < ApplicationController
 
   decorates_assigned :reservation, :resource
 
-  before_action -> { nav_context(:reservations) }
+  before_action -> { nav_context(:reservations, :reservations) }
 
   def index
     if params[:resource_id]

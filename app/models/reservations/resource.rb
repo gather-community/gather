@@ -1,5 +1,7 @@
 module Reservations
   class Resource < ActiveRecord::Base
+    include PhotoDestroyable
+
     acts_as_tenant(:cluster)
 
     self.table_name = "resources"
@@ -23,16 +25,6 @@ module Reservations
       (SELECT COUNT(id) FROM reservations WHERE resource_id = resources.id) AS reservation_count") }
 
     delegate :name, to: :community, prefix: true
-
-    attr_accessor :photo_destroy
-
-    before_save do
-      photo.destroy if photo_destroy?
-    end
-
-    def photo_destroy?
-      photo_destroy.to_i == 1
-    end
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds

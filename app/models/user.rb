@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  include Deactivatable, Phoneable
+  include Deactivatable, Phoneable, PhotoDestroyable
 
   ROLES = %i(super_admin cluster_admin admin biller photographer)
   CONTACT_TYPES = %i(email text phone)
@@ -46,8 +46,6 @@ class User < ActiveRecord::Base
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
 
-  attr_accessor :photo_destroy
-
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name, :preferred_contact
 
@@ -75,7 +73,6 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   before_save do
-    photo.destroy if photo_destroy?
     raise People::AdultWithGuardianError if adult? && guardians.present?
   end
 
@@ -93,10 +90,6 @@ class User < ActiveRecord::Base
   # Setter for household_by_id?
   def household_by_id=(val)
     @household_by_id = val.is_a?(String) ? val == "true" : val
-  end
-
-  def photo_destroy?
-    photo_destroy.to_i == 1
   end
 
   # Includes primary household plus any households affiliated by parentage.

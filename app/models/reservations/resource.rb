@@ -18,7 +18,7 @@ module Reservations
     validates_attachment_content_type :photo, content_type: /\Aimage\/jpeg/
     validates_attachment_file_name :photo, matches: /jpe?g\Z/i
 
-    scope :meal_hostable, -> { where.not(meal_abbrv: nil) }
+    scope :meal_hostable, -> { where.not(abbrv: nil) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
     scope :by_name, -> { order(:name) }
     scope :visible, -> { where(hidden: false) }

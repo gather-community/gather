@@ -6,8 +6,8 @@ module Reservations
       "#{cmty_prefix_no_colon}#{name}"
     end
 
-    def meal_abbrv
-      "#{cmty_prefix_no_colon}#{object.meal_abbrv}"
+    def abbrv_with_prefix
+      "#{cmty_prefix_no_colon}#{abbrv}"
     end
   end
 end

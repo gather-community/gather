@@ -14,7 +14,7 @@ module Reservations
 
     has_attached_file :photo,
       styles: { thumb: "220x165#" },
-      default_url: "missing/resources/:style.png"
+      default_url: "missing/reservations/resources/:style.png"
     validates_attachment_content_type :photo, content_type: /\Aimage\/jpeg/
     validates_attachment_file_name :photo, matches: /jpe?g\Z/i
 

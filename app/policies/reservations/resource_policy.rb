@@ -37,6 +37,14 @@ module Reservations
       active_admin?
     end
 
+    def activate?
+      active_admin?
+    end
+
+    def deactivate?
+      active_admin?
+    end
+
     def permitted_attributes
       [:default_calendar_view, :guidelines, :abbrv, :name, :meal_hostable,
         :photo, :photo_tmp_id, :photo_destroy]

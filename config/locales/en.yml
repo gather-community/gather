@@ -119,9 +119,11 @@ en:
       household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
       user: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
+      resource: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
     deact_confirms:
       household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
       user: "Are you sure you want to deactivate the user '%{name}'?"
+      resource: "Are you sure you want to deactivate the resource '%{name}?'"
 
   custom_fields:
     labels:

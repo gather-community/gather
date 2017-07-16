@@ -1,5 +1,14 @@
 <% content_for(:title) { "Edit Resource: #{resource.name_with_inactive}" } %>
 
+<% unless @resource.active? %>
+  <div class="alert alert-info">
+    This resource was marked inactive at <%= l(@resource.deactivated_at, format: :full_datetime) %>.
+    <% if policy(@resource).activate? %>
+      You can <%= link_to("reactivate it", activate_reservations_resource_path(@resource), method: :put) %>.
+    <% end %>
+  </div>
+<% end %>
+
 <div class="row" id="resource-forms">
   <div class="col-sm-3 col-sm-push-9">
     <%= render("shared/photo_dropzone", obj: resource, format: :thumb, width: 220, height: 165) %>
@@ -16,6 +25,18 @@
       <%= f.input :guidelines %>
 
       <%= form_actions do %>
+        <% if policy(@resource).deactivate? && !@resource.new_record? && @resource.active? %>
+          <%= link_to(icon_tag("times-circle") << " Deactivate Resource",
+            deactivate_reservations_resource_path(@resource),
+            class: "btn btn-default", method: :put,
+            data: { confirm: I18n.t("activerecord.deact_confirms.resource", name: resource.name) }) %>
+        <% end %>
+        <% if policy(@resource).destroy? && !@resource.new_record? %>
+          <%= link_to(icon_tag("trash") << " Delete Resource",
+            reservations_resource_path(@resource),
+            class: "btn btn-default", method: :delete,
+            data: { confirm: I18n.t("activerecord.delete_confirms.resource", name: resource.name) }) %>
+        <% end %>
         <%= f.button :submit, class: "btn-primary" %>
       <% end %>
     <% end %>

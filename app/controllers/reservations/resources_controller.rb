@@ -27,6 +27,30 @@ module Reservations
       end
     end
 
+    def destroy
+      @resource = Resource.find(params[:id])
+      authorize @resource
+      @resource.destroy
+      flash[:success] = "Resource deleted successfully."
+      redirect_to(reservations_resources_path)
+    end
+
+    def activate
+      @resource = Resource.find(params[:id])
+      authorize @resource
+      @resource.activate!
+      flash[:success] = "Resource activated successfully."
+      redirect_to(reservations_resources_path)
+    end
+
+    def deactivate
+      @resource = Resource.find(params[:id])
+      authorize @resource
+      @resource.deactivate!
+      flash[:success] = "Resource deactivated successfully."
+      redirect_to(reservations_resources_path)
+    end
+
     private
 
     def sample_resource

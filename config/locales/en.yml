@@ -83,7 +83,7 @@ en:
         name: "Name"
         guidelines: "Guidelines"
         hidden: "Hidden"
-        meal_abbrv: "Abbreviation"
+        abbrv: "Abbreviation"
         default_calendar_view: "Calendar View"
       people/emergency_contact:
         name: "Name"
@@ -251,7 +251,7 @@ en:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       reservations_resource:
         default_calendar_view: "Reservation calendar style when first loaded"
-        meal_abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
+        abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
       user:
         joined_on: "Approximate date when you joined the community"
     options:

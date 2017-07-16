@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625174646) do
+ActiveRecord::Schema.define(version: 20170716135030) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -336,13 +336,13 @@ ActiveRecord::Schema.define(version: 20170625174646) do
   add_index "reservations", ["starts_at"], name: "index_reservations_on_starts_at", using: :btree
 
   create_table "resources", force: :cascade do |t|
+    t.string "abbrv", limit: 6
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.string "default_calendar_view", default: "week", null: false
     t.text "guidelines"
     t.boolean "hidden", default: false, null: false
-    t.string "meal_abbrv", limit: 6
     t.string "name", limit: 24, null: false
     t.string "photo_content_type"
     t.string "photo_file_name"

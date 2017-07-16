@@ -2,11 +2,11 @@ class MealDecorator < ApplicationDecorator
   delegate_all
 
   def location_name
-    resources.first.decorate.name
+    resources.first.decorate.name_with_prefix
   end
 
   def location_abbrv
-    resources.first.decorate.meal_abbrv
+    resources.first.decorate.abbrv_with_prefix
   end
 
   def served_at_datetime_no_yr

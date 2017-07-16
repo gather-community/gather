@@ -9,7 +9,7 @@
     1. The room may be checked out for special events or TV programs. See spreadsheet or contact james.kolongowski@gmail.com.
     1. Remotes must be in the room at all times and stored in designated place.
     1. Media room must be picked up and set to "room neutral" after being used. Please give careful consideration of food crumbs.
-  meal_abbrv:
+  abbrv:
   name: Media Room
   :shared_guideline_ids:
   - 4
@@ -29,34 +29,34 @@
     1. Check out time is noon.
     1. Keys will be left in a designated spot in the CH. If keys are lost, the TS host will be charged for making new ones.
     1. Guests may use the Do Not Disturb sign provided to insure their privacy.
-  meal_abbrv:
+  abbrv:
   name: Multipurpose Room
   :shared_guideline_ids:
   - 4
 - id: 19
   default_calendar_view: week
   guidelines:
-  meal_abbrv:
+  abbrv:
   name: Office
   :shared_guideline_ids:
   - 4
 - id: 20
   default_calendar_view: week
   guidelines:
-  meal_abbrv:
+  abbrv:
   name: Sitting Room
   :shared_guideline_ids:
   - 4
 - id: 21
   default_calendar_view: week
   guidelines:
-  meal_abbrv: CH
+  abbrv: CH
   name: Dining Room
   :shared_guideline_ids: []
 - id: 115
   default_calendar_view: week
   guidelines:
-  meal_abbrv: Ctyd
+  abbrv: Ctyd
   name: Courtyard
   :shared_guideline_ids: []
 - id: 116
@@ -110,7 +110,7 @@
     receipt for reimbursement.\n \nA specific list of staples will be maintained by
     the meals committee.\n\nOther items, including bottled salad dressings, need to
     be bought by head cooks."
-  meal_abbrv: CH
+  abbrv: CH
   name: Kitchen
   :shared_guideline_ids:
   - 4

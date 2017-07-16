@@ -37,7 +37,7 @@ describe Reservations::ResourcePolicy do
     subject { Reservations::ResourcePolicy.new(User.new, Reservations::Resource.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :hidden, :meal_abbrv, :name,
+      expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :hidden, :abbrv, :name,
         :photo, :photo_tmp_id, :photo_destroy)
     end
   end

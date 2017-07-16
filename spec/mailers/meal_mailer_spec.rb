@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe MealMailer do
   let!(:multiple_communities) { create_list(:community, 2) }
-  let(:resource) { create(:resource, name: "Place", meal_abbrv: "CH") }
+  let(:resource) { create(:resource, name: "Place", abbrv: "CH") }
   let(:ca) { resource.community.abbrv }
   let(:meal) { create(:meal, :with_menu, served_at: "2017-01-01 12:00", resources: [resource]) }
 

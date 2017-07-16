@@ -11,6 +11,7 @@ module Reservations
     belongs_to :community
     has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
+    has_many :reservations, class_name: "Reservations::Reservation"
 
     has_attached_file :photo,
       styles: { thumb: "220x165#" },
@@ -32,7 +33,11 @@ module Reservations
     end
 
     def reservation_count
-      attributes["reservation_count"]
+      attributes["reservation_count"] || reservations.count
+    end
+
+    def has_reservations?
+      reservation_count > 0
     end
 
     def has_guidelines?

@@ -4,11 +4,19 @@ describe Reservations::ResourcePolicy do
   describe "permissions" do
     include_context "policy objs"
 
-    let(:resource) { Reservations::Resource.new(community: community) }
+    let(:resource) { build(:resource, community: community) }
     let(:record) { resource }
 
     permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do
       it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+    end
+
+    permissions :destroy? do
+      it "denies if there are existing reservations" do
+        resource.save!
+        create(:reservation, resource: resource)
+        expect(subject).not_to permit(admin, resource)
+      end
     end
   end
 

@@ -38,7 +38,7 @@ module Reservations
     end
 
     def permitted_attributes
-      [:default_calendar_view, :guidelines, :hidden, :abbrv, :name,
+      [:default_calendar_view, :guidelines, :hidden, :abbrv, :name, :meal_hostable,
         :photo, :photo_tmp_id, :photo_destroy]
     end
   end

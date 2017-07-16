@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716135030) do
+ActiveRecord::Schema.define(version: 20170716135624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 20170716135030) do
     t.string "default_calendar_view", default: "week", null: false
     t.text "guidelines"
     t.boolean "hidden", default: false, null: false
+    t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
     t.string "photo_content_type"
     t.string "photo_file_name"

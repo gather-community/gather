@@ -11,6 +11,7 @@
       <%= f.input :photo_destroy, as: :hidden %>
       <%= f.input :name %>
       <%= f.input :abbrv, maxlength: 6 %>
+      <%= f.input :meal_hostable, as: :select, include_blank: false %>
       <%= f.input :hidden %>
       <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS %>
       <%= f.input :guidelines %>

@@ -2,6 +2,8 @@ module Reservations
   class Resource < ActiveRecord::Base
     include PhotoDestroyable
 
+    DEFAULT_CALENDAR_VIEWS = %i(week month)
+
     acts_as_tenant(:cluster)
 
     self.table_name = "resources"

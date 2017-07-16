@@ -70,7 +70,7 @@ en:
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
-      reservation/reservation:
+      reservations/reservation:
         resource: "Resource"
         pre_notice: "Notice"
         name: "Event Name"
@@ -79,6 +79,12 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
+      reservations/resource:
+        name: "Name"
+        guidelines: "Guidelines"
+        hidden: "Hidden"
+        meal_abbrv: "Abbreviation"
+        default_calendar_view: "Calendar View"
       people/emergency_contact:
         name: "Name"
         relationship: "Relationship to Household"
@@ -98,7 +104,7 @@ en:
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
         meal:
           need_location: "You must choose at least one location"
-        reservation/reservation:
+        reservations/reservation:
           attributes:
             starts_at:
               after_meal_time: "must be at or before the meal time (%{time})"
@@ -225,7 +231,7 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
-      reservation_reservation:
+      reservations_reservation:
         name: "e.g. Game night"
       billing_transaction:
         description: "e.g. Check #12345"
@@ -243,6 +249,9 @@ en:
     hints:
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
+      reservations_resource:
+        default_calendar_view: "Reservation calendar style when first loaded"
+        meal_abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
       user:
         joined_on: "Approximate date when you joined the community"
     options:
@@ -267,6 +276,10 @@ en:
           album: "Album"
           table: "Table"
           tableall: "Table w/ Inactive"
+      reservations_resource:
+        default_calendar_view:
+          week: "Week"
+          month: "Month"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

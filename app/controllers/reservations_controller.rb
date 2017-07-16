@@ -1,7 +1,7 @@
 class ReservationsController < ApplicationController
   include Lensable
 
-  decorates_assigned :reservation, :resource
+  decorates_assigned :reservation, :resource, :resources
 
   before_action -> { nav_context(:reservations, :reservations) }
 

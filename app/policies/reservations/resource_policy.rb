@@ -4,8 +4,8 @@ module Reservations
 
     class Scope < Scope
       def resolve
-        # Only show visible resources unless admin.
-        scope_with_visibility = active_admin? ? scope : scope.visible
+        # Only show active resources unless admin.
+        scope_with_visibility = active_admin? ? scope : scope.active
 
         # Need to load the resources because access_level is computed by RuleSet which can't be computed
         # at database level.
@@ -38,7 +38,7 @@ module Reservations
     end
 
     def permitted_attributes
-      [:default_calendar_view, :guidelines, :hidden, :abbrv, :name, :meal_hostable,
+      [:default_calendar_view, :guidelines, :abbrv, :name, :meal_hostable,
         :photo, :photo_tmp_id, :photo_destroy]
     end
   end

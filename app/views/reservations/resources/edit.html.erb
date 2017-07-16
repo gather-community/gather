@@ -1,4 +1,4 @@
-<% content_for(:title) { "Edit Resource: #{resource.name}" } %>
+<% content_for(:title) { "Edit Resource: #{resource.name_with_inactive}" } %>
 
 <div class="row" id="resource-forms">
   <div class="col-sm-3 col-sm-push-9">
@@ -12,7 +12,6 @@
       <%= f.input :name %>
       <%= f.input :abbrv, maxlength: 6 %>
       <%= f.input :meal_hostable, as: :select, include_blank: false %>
-      <%= f.input :hidden %>
       <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS %>
       <%= f.input :guidelines %>
 

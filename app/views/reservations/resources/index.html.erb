@@ -1,5 +1,12 @@
 <% content_for(:title) { "Resources" } %>
 
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_resource).create? %>
+    <%= link_to(icon_tag("plus") << " Create Resource",
+      new_reservations_resource_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
 <table class="index part-width">
   <tr>
     <th></th>

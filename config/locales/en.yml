@@ -255,6 +255,7 @@ en:
       reservations_resource:
         default_calendar_view: "Reservation calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
+        guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"
     options:

@@ -12,4 +12,10 @@
   .dropzone {
     @include dropzone(220px, 165px);
   }
+
+  .reservations--resource-form {
+    textarea#reservations_resource_guidelines {
+      height: 200px;
+    }
+  }
 }

@@ -43,7 +43,7 @@ Follow these steps to setup a development environment for Gather.
   1. Run `bundle install` to install the required gems.
 
 1. **Set local config**
-  1. Copy `config/settings.local.yml.example` to `config/settings.local.yml.rb`.
+  1. Copy `config/settings.local.yml.example` to `config/settings.local.yml`.
   1. Edit `config/settings.local.yml` to fit your environment.
 
 1. **Create development and test databases and schemas**

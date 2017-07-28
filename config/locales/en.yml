@@ -115,6 +115,10 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
+        reservations/resource:
+          attributes:
+            photo_content_type:
+              invalid: "has incorrect type"
     delete_confirms:
       household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."

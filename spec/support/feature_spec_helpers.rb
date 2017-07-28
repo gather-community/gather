@@ -72,12 +72,14 @@ module FeatureSpecHelpers
     expect_no_image_upload
   end
 
-  def expect_profile_photo(pattern)
-    expect(page.find("img.photo")["src"]).to match(pattern)
+  def expect_no_image_and_drop_file(filename) 
+    expect_no_image_upload
+    drop_in_dropzone(fixture_file_path(filename))
+    expect_image_upload(mode: :dz_preview)
   end
 
-  def expect_title(pattern)
-    expect(page).to have_css("h1", text: pattern)
+  def expect_photo(pattern)
+    expect(page.find("img.photo")["src"]).to match(pattern)
   end
 
   def expect_confirm_on_reload

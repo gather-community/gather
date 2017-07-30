@@ -17,7 +17,7 @@ feature "finalize meal", js: true do
   end
 
   scenario "zero out row, add row, delete row" do
-    visit finalize_meal_path(meal)
+    visit new_meal_finalize_path(meal)
     all("select[id$=_adult_veg]")[0].select("")
     click_link("Add Signup")
     select2(late_add.name, from: find("select[id$=_household_id]")[:id])

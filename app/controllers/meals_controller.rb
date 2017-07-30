@@ -224,13 +224,6 @@ class MealsController < ApplicationController
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
   end
 
-  def finalize_params
-    params.require(:meal).permit(
-      signups_attributes: [:id, :household_id, :_destroy] + Signup::SIGNUP_TYPES,
-      cost_attributes: [:ingredient_cost, :pantry_cost, :payment_method]
-    )
-  end
-
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
     if !policy(@meal).administer?

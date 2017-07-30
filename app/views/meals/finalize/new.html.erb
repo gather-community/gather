@@ -1,6 +1,6 @@
-<% content_for(:title){ "Finalize Meal: #{@meal.title || "Untitled"}" } %>
+<% content_for(:title) { "Finalize Meal: #{@meal.title || "Untitled"}" } %>
 
-<%= render("time_cook") %>
+<%= render("meals/time_cook") %>
 
 <% if @meal.formula.nil? %>
   <p>Meals cannot be finalized without an applicable cost formula.</p>
@@ -8,7 +8,7 @@
   <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information. Please exercise caution as this information cannot be edited once it is submitted.</p>
 
   <%= horizontal_form_for(@meal, width: :full, name: "finalize",
-    url: do_finalize_meal_path(@meal), method: :put) do |form| %>
+    url: meal_finalize_path, method: :post) do |form| %>
     <table class="index">
       <tr>
         <th rowspan="2">Household</th>

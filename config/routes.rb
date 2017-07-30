@@ -22,12 +22,11 @@ Rails.application.routes.draw do
     member do
       put :close
       put :reopen
-      get :finalize
-      put :do_finalize
       get :summary
     end
 
-    resources :messages, only: [:new, :create], module: "meals"
+    resources :messages, only: [:new, :create], module: :meals
+    resource :finalize, only: [:new, :create], module: :meals, controller: :finalize
   end
 
   namespace :reservations do

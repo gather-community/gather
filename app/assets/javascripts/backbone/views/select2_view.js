@@ -6,7 +6,6 @@ Gather.Views.Select2View = Backbone.View.extend({
     this.options.extra_data = this.options.extra_data || {};
 
     this.$el.on('cocoon:after-insert', function(e, inserted) {
-      console.log("after insert")
       self.setup_select2($(inserted).find("select[data-select2-src]"));
     });
 

@@ -51,7 +51,7 @@ module Utils
           meal.build_cost(
             ingredient_cost: rand(10000) / 100.0 + 32,
             pantry_cost: rand(1000) / 100.0,
-            payment_method: Meal::PAYMENT_METHODS.sample
+            payment_method: Meals::Cost::PAYMENT_METHODS.sample
           )
           Meals::Finalizer.new(meal).finalize!
         end

@@ -7,7 +7,6 @@ class Meal < ActiveRecord::Base
     tree_nuts pineapple bananas tofu eggplant none)
   DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}
   MENU_ITEMS = %w(entrees side kids dessert notes)
-  PAYMENT_METHODS = %w(check credit)
   ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
   acts_as_tenant(:cluster)

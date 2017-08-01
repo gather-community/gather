@@ -268,6 +268,10 @@ en:
           past: "Past"
           finalizable: "Finalizable"
           all: "All Time"
+        cost:
+          payment_method:
+            check: "Check"
+            credit: "Balance Credit"
       user:
         preferred_contact:
           email: "Email"
@@ -456,10 +460,6 @@ en:
       intro:
         one: "You have a Gather account with one community. Each community manages its own accounts."
         other: "You have Gather accounts with %{count} communities. Each community manages its own accounts."
-
-  payment_methods:
-    check: "Check"
-    credit: "Balance Credit"
 
   roles:
     admin: "Admin"

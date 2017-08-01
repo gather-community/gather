@@ -1,0 +1,77 @@
+<% content_for(:title) { "Finalize Meal: #{@meal.title || "Untitled"}" } %>
+
+<%= render("meals/time_cook") %>
+
+<%= horizontal_form_for(@meal, width: :full, name: "finalize",
+  url: meal_finalize_path, method: :post) do |form| %>
+
+  <%= hidden_field_tag :confirmed, "1" %>
+
+  <table class="index confirm">
+    <%= render "table_header", extra_col: false %>
+    <tr class="cost">
+      <td><strong>Calculated Cost</strong></td>
+      <% Signup::DINER_TYPES.each do |dt| %>
+        <% if @meal.formula.allows_diner_type?(dt) %>
+          <% Signup::FOOD_TYPES.each do |ft| %>
+            <% signup_type = "#{dt}_#{ft}" %>
+            <td class="count"><%= number_to_currency(@calculator.price_for(signup_type)) %></td>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tr>
+    <% signups.reject(&:marked_for_destruction?).each do |signup| %>
+      <tr>
+        <td><%= signup.household_name %></td>
+        <% Signup::DINER_TYPES.each do |dt| %>
+          <% if @meal.formula.allows_diner_type?(dt) %>
+            <% Signup::FOOD_TYPES.each do |ft| %>
+              <% signup_type = "#{dt}_#{ft}" %>
+              <td class="count"><%= signup.count_or_blank(signup_type) %></td>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+
+  <h4>Cook Reimbursement Request</h4>
+  <table class="key-value">
+    <tr>
+      <td><%= @cost.class.human_attribute_name(:ingredient_cost) %></td>
+      <td><strong><%= number_to_currency(@cost.ingredient_cost) %></strong></td>
+    </tr>
+    <tr>
+      <td><%= @cost.class.human_attribute_name(:pantry_cost) %></td>
+      <td><strong><%= number_to_currency(@cost.pantry_cost) %></strong></td>
+    </tr>
+    <tr>
+      <td><%= @cost.class.human_attribute_name(:payment_method) %></td>
+      <td>
+        <strong><%= t("simple_form.options.meal.cost.payment_method.#{@cost.payment_method}") %></strong>
+      </td>
+    </tr>
+  </table>
+
+  <%# Hidden data to be resubmitted %>
+  <% signups.each do |signup| %>
+    <%= form.fields_for(:signups, signup) do |signup_form| %>
+      <%= signup_form.hidden_field(:household_id) %>
+      <%= signup_form.hidden_field(:_destroy) %>
+      <% Signup::DINER_TYPES.each do |dt| %>
+        <% if @meal.formula.allows_diner_type?(dt) %>
+          <% Signup::FOOD_TYPES.each do |ft| %>
+            <%= signup_form.hidden_field("#{dt}_#{ft}") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
+    <%= mc_form.hidden_field(:ingredient_cost) %>
+    <%= mc_form.hidden_field(:pantry_cost) %>
+    <%= mc_form.hidden_field(:payment_method) %>
+  <% end %>
+
+  <%= render("shared/confirm_buttons", form: form) %>
+<% end %>

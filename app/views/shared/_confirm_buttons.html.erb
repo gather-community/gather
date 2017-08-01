@@ -1,0 +1,5 @@
+<%= form_actions do %>
+  <%= form.button :submit, "Cancel/Modify", class: "btn-default",
+    onclick: "this.form.confirmed.value = '0'" %>
+  <%= form.button :submit, "Confirm", class: "btn-primary" %>
+<% end %>

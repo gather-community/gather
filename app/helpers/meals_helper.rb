@@ -94,10 +94,6 @@ module MealsHelper
     disable ? "disabled" : nil
   end
 
-  def payment_method_options
-    Meal::PAYMENT_METHODS.map{ |m| [I18n.t("payment_methods.#{m}"), m] }
-  end
-
   def sorted_allergens
     prefix = "activerecord.attributes.meal.allergen_"
     Meal::ALLERGENS.sort_by { |a| [a == "none" ? 1 : 0, I18n.t("#{prefix}_#{a}")] }

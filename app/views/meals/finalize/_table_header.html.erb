@@ -1,0 +1,19 @@
+<tr>
+  <th rowspan="2">Household</th>
+  <% Signup::DINER_TYPES.each do |dt| %>
+    <% if @meal.formula.allows_diner_type?(dt) %>
+      <th class="diner-type" colspan="2"><%= t("signups.diner_types.#{dt}", count: 1) %></th>
+    <% end %>
+  <% end %>
+  <% if extra_col %><th></th><% end %>
+</tr>
+<tr>
+  <% Signup::DINER_TYPES.each do |dt| %>
+    <% if @meal.formula.allows_diner_type?(dt) %>
+      <% Signup::FOOD_TYPES.each do |ft| %>
+        <th class="food-type"><%= t("signups.food_types.#{ft}", count: 1) %></th>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if extra_col %><th></th><% end %>
+</tr>

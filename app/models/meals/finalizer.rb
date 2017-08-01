@@ -1,13 +1,14 @@
 # Finalizes meals
 module Meals
   class Finalizer
-    attr_accessor :meal, :meal_cost
+    attr_accessor :meal, :meal_cost, :calculator
 
     delegate :signups, to: :meal
 
     def initialize(meal)
       self.meal = meal
       self.meal_cost = meal.cost
+      self.calculator = MealCostCalculator.build(meal)
     end
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
@@ -22,6 +23,7 @@ module Meals
 
     def create_diner_transactions
       signups.each do |signup|
+        next if signup.marked_for_destruction?
         meal.allowed_signup_types.each do |signup_type|
           next if signup[signup_type] == 0
 
@@ -59,10 +61,6 @@ module Meals
       meal.allowed_signup_types.each { |st| attribs[st] = calculator.price_for(st) }
       %i(meal_calc_type pantry_calc_type pantry_fee).each { |a| attribs[a] = calculator.send(a) }
       meal_cost.update_attributes!(attribs)
-    end
-
-    def calculator
-      @calculator ||= MealCostCalculator.build(meal)
     end
   end
 end

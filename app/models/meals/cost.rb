@@ -3,6 +3,8 @@ module Meals
   class Cost < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
+    PAYMENT_METHODS = %i(check credit)
+
     belongs_to :meal, inverse_of: :cost
 
     validates :ingredient_cost, presence: true, numericality: { greater_than_or_equal_to: 0 }

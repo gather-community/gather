@@ -4,17 +4,9 @@
     margin-bottom: 10px;
   }
 
-  p {
-    max-width: 800px;
-  }
-
   table.index {
     margin-bottom: 5px;
     width: auto;
-
-    tr {
-      height: 45px;
-    }
 
     tr.dupe {
       background-color: $error-red-bg;
@@ -24,12 +16,14 @@
       text-align: center;
     }
 
-    th:first-of-type, td:first-of-type {
-      padding-left: 10px;
-    }
-
     td:first-of-type {
       width: 200px;
+    }
+  }
+
+  table.index.new {
+    tr {
+      height: 45px;
     }
 
     td.count {
@@ -52,6 +46,23 @@
 
     td.remove {
       padding: 0 15px;
+      text-align: center;
+    }
+  }
+
+  table.index.confirm {
+    tr.cost {
+      td {
+        background-color: $highlight-color;
+      }
+
+      td.count {
+        font-weight: bold;
+      }
+    }
+
+    td.count {
+      width: 65px;
       text-align: center;
     }
   }

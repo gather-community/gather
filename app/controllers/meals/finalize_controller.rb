@@ -35,6 +35,7 @@ module Meals
 
             if params[:confirmed] == "1"
               @finalizer.finalize!
+              @meal.save!
               flash[:success] = "Meal finalized successfully"
               redirect_to(meals_path(finalizable: 1))
             else

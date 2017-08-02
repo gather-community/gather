@@ -6,13 +6,17 @@
 
   table.index {
     margin-bottom: 5px;
-    width: auto;
+    width: 100%;
 
     tr.dupe {
       background-color: $error-red-bg;
     }
 
     th.diner-type, th.food-type {
+      text-align: center;
+    }
+
+    td.count {
       text-align: center;
     }
 
@@ -27,11 +31,13 @@
     }
 
     td.count {
-      width: 65px;
-      text-align: center;
-
-      a {
+      a.expander {
         color: #e6e6e6;
+
+        // Make this as wide as the select box (approx). so that the table expands nicely.
+        display: inline-block;
+        width: 58px;
+        text-align: center;
       }
 
       select {
@@ -59,11 +65,6 @@
       td.count {
         font-weight: bold;
       }
-    }
-
-    td.count {
-      width: 65px;
-      text-align: center;
     }
   }
 

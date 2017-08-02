@@ -26,7 +26,10 @@
             { include_blank: false },
             class: "select form-control #{hide_select ? 'zero' : ''}") %>
           <% if hide_select %>
-            <a href="#" class="xyz" onclick="$(this).hide().closest('td').find('select').show(); return false"><%= icon_tag("plus") %></a>
+            <a href="#" class="expander"
+              onclick="$(this).hide().closest('td').find('select').show(); return false">
+              <%= icon_tag("plus") %>
+            </a>
           <% end %>
         </td>
       <% end %>

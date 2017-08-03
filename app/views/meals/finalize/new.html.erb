@@ -11,7 +11,7 @@
     url: meal_finalize_path, method: :post) do |form| %>
     <table class="index new">
       <%= render "table_header", extra_col: true %>
-      <% @meal.signups.each do |signup| %>
+      <% signups.each do |signup| %>
         <%= form.fields_for(:signups, signup) do |signup_form| %>
           <%= render("finalize_signup_fields", f: signup_form) %>
         <% end %>

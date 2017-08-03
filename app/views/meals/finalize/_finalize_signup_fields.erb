@@ -1,14 +1,16 @@
 <% hidden = f.object.marked_for_destruction? ? "hidden" : "" %>
 <% dupe = @dupes.include?(f.object) ? "dupe" : "" %>
+<%# household may be nil when cocoon is building the template %>
+<% household = f.object.household.try(:decorate) %>
 <tr class="nested-fields <%= dupe %> <%= hidden %>">
   <td>
     <% if f.object.persisted? %>
-      <%= f.object.household.decorate.name %>
+      <%= household.name_with_prefix %>
     <% else %>
-      <%= f.select(:household_id, household_selected_option(f.object.household.try(:decorate)), {},
+      <%= f.select(:household_id, household.try(:selected_option) || "", {},
         class: "form-control", data: {
           "select2-src" => "households",
-          "select2-label-attr" => "name",
+          "select2-label-attr" => "name_with_prefix",
           "select2-prompt" => t("select2_prompts.household"),
           "select2-context" => "finalize"
       }) %>

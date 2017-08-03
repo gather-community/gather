@@ -1,4 +1,4 @@
-class ReservationSerializer < ActiveModel::Serializer
+class ReservationSerializer < ApplicationSerializer
   attributes :id, :url, :title, :start, :end, :editable, :className
 
   def url

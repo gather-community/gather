@@ -27,7 +27,7 @@ class HouseholdsController < ApplicationController
           raise "invalid select2 context"
         end
         @households = @households.by_commty_and_name.page(params[:page]).per(20)
-        render(json: @households.decorate, meta: { more: @households.next_page.present? }, root: "results")
+        render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
       end
     end
   end

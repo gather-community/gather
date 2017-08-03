@@ -1,3 +1,4 @@
-class HouseholdSerializer < ActiveModel::Serializer
-  attributes :id, :name
+class HouseholdSerializer < ApplicationSerializer
+  attributes :id, :name, :name_with_prefix
+  delegate :name_with_prefix, to: :decorated
 end

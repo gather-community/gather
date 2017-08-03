@@ -1,4 +1,4 @@
-class ReservationRuleSetSerializer < ActiveModel::Serializer
+class ReservationRuleSetSerializer < ApplicationSerializer
   attributes :fixed_start_time, :fixed_end_time, :access_level
 
   def fixed_start_time

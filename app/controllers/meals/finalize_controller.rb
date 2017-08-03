@@ -1,14 +1,12 @@
 module Meals
   class FinalizeController < ApplicationController
-    decorates_assigned :signups
-
+    helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
 
     def new
       @meal = Meal.find(params[:meal_id])
       authorize @meal, :finalize?
       @meal.build_cost
-      @signups = @meal.signups
       @dupes = []
     end
 
@@ -19,8 +17,6 @@ module Meals
       # We assign finalized here so that the meal/signup validations don't complain about no spots left.
       @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
-      @signups = @meal.signups
-      
       if (@dupes = @meal.duplicate_signups).any?
         flash.now[:error] = "There are duplicate signups. "\
           "Please correct by adding numbers for each diner type."
@@ -55,6 +51,10 @@ module Meals
         set_validation_error_notice
         render(:new)
       end
+    end
+
+    def signups
+      @signups ||= @meal.signups.map(&:decorate)
     end
 
     private

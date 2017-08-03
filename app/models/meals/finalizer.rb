@@ -1,14 +1,13 @@
 # Finalizes meals
 module Meals
   class Finalizer
-    attr_accessor :meal, :meal_cost, :calculator
+    attr_accessor :meal, :meal_cost
 
     delegate :signups, to: :meal
 
     def initialize(meal)
       self.meal = meal
       self.meal_cost = meal.cost
-      self.calculator = MealCostCalculator.build(meal)
     end
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
@@ -17,6 +16,10 @@ module Meals
       create_diner_transactions
       create_reimbursement_transaction
       copy_meal_costs
+    end
+
+    def calculator
+      @calculator ||= MealCostCalculator.build(meal)
     end
 
     private

@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "meal signups" do
   let(:user) { create(:user) }
-  let!(:formula) { create(:meals_formula) }
+  let!(:formula) { create(:meal_formula) }
   let!(:meal) { create(:meal, served_at: Time.now + 7.days) }
 
   around do |example|

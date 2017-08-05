@@ -13,7 +13,7 @@ module Utils
 
       def generate
         load_objs
-        create(:meals_formula, community: community)
+        create(:meal_formula, community: community)
         create_meals
       end
 

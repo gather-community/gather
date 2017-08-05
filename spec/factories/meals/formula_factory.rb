@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :meals_formula, class: "Meals::Formula" do
+  factory :meal_formula, class: "Meals::Formula" do
     community { default_community }
     senior_meat 0.75
     senior_veg 0.6

@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20170805130129) do
     t.text "dessert"
     t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
     t.text "entrees"
+    t.integer "formula_id"
     t.text "kids"
     t.text "notes"
     t.datetime "served_at", null: false
@@ -198,6 +199,7 @@ ActiveRecord::Schema.define(version: 20170805130129) do
 
   add_index "meals", ["cluster_id"], name: "index_meals_on_cluster_id", using: :btree
   add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
+  add_index "meals", ["formula_id"], name: "index_meals_on_formula_id", using: :btree
   add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "old_credit_balances", id: false, force: :cascade do |t|
@@ -503,6 +505,7 @@ ActiveRecord::Schema.define(version: 20170805130129) do
   add_foreign_key "meal_formulas", "communities"
   add_foreign_key "meals", "clusters"
   add_foreign_key "meals", "communities"
+  add_foreign_key "meals", "meal_formulas", column: "formula_id"
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"

@@ -15,6 +15,7 @@ class Meal < ActiveRecord::Base
 
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
+  belongs_to :formula, class_name: "Meals::Formula"
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
@@ -220,10 +221,6 @@ class Meal < ActiveRecord::Base
       where("served_at < ? OR served_at = ? AND
         (communities.name < ? OR communities.name = ? AND meals.id < ?)",
         served_at, served_at, community_name, community_name, id)
-  end
-
-  def formula
-    @formula ||= Meals::Formula.for_meal(self)
   end
 
   def any_allergens?

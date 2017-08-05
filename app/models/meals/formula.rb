@@ -1,5 +1,7 @@
 module Meals
   class Formula < ActiveRecord::Base
+    include Deactivatable
+
     acts_as_tenant(:cluster)
 
     belongs_to(:community)

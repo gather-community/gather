@@ -9,6 +9,7 @@ FactoryGirl.define do
     capacity 64
     community { default_community }
 
+    association :formula, factory: :meals_formula
     association :head_cook, factory: :user
     association :creator, factory: :user
 

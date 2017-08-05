@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170805130915) do
+ActiveRecord::Schema.define(version: 20170805131604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20170805130915) do
     t.decimal "big_kid_veg", precision: 10, scale: 2
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
-    t.date "effective_on", null: false
+    t.datetime "created_at", null: false
     t.decimal "little_kid_meat", precision: 10, scale: 2
     t.decimal "little_kid_veg", precision: 10, scale: 2
     t.string "meal_calc_type", null: false
@@ -161,11 +161,11 @@ ActiveRecord::Schema.define(version: 20170805130915) do
     t.decimal "senior_veg", precision: 10, scale: 2
     t.decimal "teen_meat", precision: 10, scale: 2
     t.decimal "teen_veg", precision: 10, scale: 2
+    t.datetime "updated_at", null: false
   end
 
   add_index "meal_formulas", ["cluster_id"], name: "index_meal_formulas_on_cluster_id", using: :btree
   add_index "meal_formulas", ["community_id"], name: "index_meal_formulas_on_community_id", using: :btree
-  add_index "meal_formulas", ["effective_on"], name: "index_meal_formulas_on_effective_on", using: :btree
 
   create_table "meal_messages", force: :cascade do |t|
     t.text "body", null: false

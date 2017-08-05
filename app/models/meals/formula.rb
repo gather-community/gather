@@ -4,13 +4,8 @@ module Meals
 
     belongs_to(:community)
 
-    # Finds the most recent formula associated with the given meal.
-    # Returns nil if none found.
-    def self.for_meal(meal)
-      where("effective_on <= ?", meal.served_at.to_date).
-        where(community_id: meal.community_id).
-        order(effective_on: :desc).first
-    end
+    scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :newest_first, -> { order(created_at: :desc) }
 
     def allowed_diner_types
       @allowed_diner_types ||= Signup::DINER_TYPES.select{ |dt| allows_diner_type?(dt) }

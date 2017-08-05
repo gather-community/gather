@@ -12,8 +12,8 @@ RSpec.describe ShareMealCostCalculator, type: :model do
       little_kid_veg: 0
     )
   end
-  let(:meal) { build(:meal) }
-  let(:calculator) { ShareMealCostCalculator.new(meal, formula) }
+  let(:meal) { build(:meal, formula: formula) }
+  let(:calculator) { ShareMealCostCalculator.new(meal) }
 
   before do
     meal.build_cost

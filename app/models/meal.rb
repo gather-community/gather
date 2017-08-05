@@ -91,10 +91,13 @@ class Meal < ActiveRecord::Base
   validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(community)
-    new(served_at: default_datetime,
+    new(
+      served_at: default_datetime,
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
-      community: community)
+      community: community,
+      formula: Meals::Formula.for_community(community).newest_first.first
+    )
   end
 
   def self.default_datetime

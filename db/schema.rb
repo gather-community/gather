@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716154536) do
+ActiveRecord::Schema.define(version: 20170805130129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -118,30 +118,7 @@ ActiveRecord::Schema.define(version: 20170716154536) do
   add_index "invitations", ["community_id"], name: "index_invitations_on_community_id", using: :btree
   add_index "invitations", ["meal_id"], name: "index_invitations_on_meal_id", using: :btree
 
-  create_table "meals", force: :cascade do |t|
-    t.text "allergens", default: "[]", null: false
-    t.integer "capacity", null: false
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "creator_id", null: false
-    t.text "dessert"
-    t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
-    t.text "entrees"
-    t.text "kids"
-    t.text "notes"
-    t.datetime "served_at", null: false
-    t.text "side"
-    t.string "status", default: "open", null: false
-    t.string "title"
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "meals", ["cluster_id"], name: "index_meals_on_cluster_id", using: :btree
-  add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
-  add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
-
-  create_table "meals_costs", force: :cascade do |t|
+  create_table "meal_costs", force: :cascade do |t|
     t.decimal "adult_meat", precision: 10, scale: 2
     t.decimal "adult_veg", precision: 10, scale: 2
     t.decimal "big_kid_meat", precision: 10, scale: 2
@@ -164,10 +141,10 @@ ActiveRecord::Schema.define(version: 20170716154536) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "meals_costs", ["cluster_id"], name: "index_meals_costs_on_cluster_id", using: :btree
-  add_index "meals_costs", ["meal_id"], name: "index_meals_costs_on_meal_id", using: :btree
+  add_index "meal_costs", ["cluster_id"], name: "index_meal_costs_on_cluster_id", using: :btree
+  add_index "meal_costs", ["meal_id"], name: "index_meal_costs_on_meal_id", using: :btree
 
-  create_table "meals_formulas", force: :cascade do |t|
+  create_table "meal_formulas", force: :cascade do |t|
     t.decimal "adult_meat", precision: 10, scale: 2
     t.decimal "adult_veg", precision: 10, scale: 2
     t.decimal "big_kid_meat", precision: 10, scale: 2
@@ -186,11 +163,11 @@ ActiveRecord::Schema.define(version: 20170716154536) do
     t.decimal "teen_veg", precision: 10, scale: 2
   end
 
-  add_index "meals_formulas", ["cluster_id"], name: "index_meals_formulas_on_cluster_id", using: :btree
-  add_index "meals_formulas", ["community_id"], name: "index_meals_formulas_on_community_id", using: :btree
-  add_index "meals_formulas", ["effective_on"], name: "index_meals_formulas_on_effective_on", using: :btree
+  add_index "meal_formulas", ["cluster_id"], name: "index_meal_formulas_on_cluster_id", using: :btree
+  add_index "meal_formulas", ["community_id"], name: "index_meal_formulas_on_community_id", using: :btree
+  add_index "meal_formulas", ["effective_on"], name: "index_meal_formulas_on_effective_on", using: :btree
 
-  create_table "meals_messages", force: :cascade do |t|
+  create_table "meal_messages", force: :cascade do |t|
     t.text "body", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -199,6 +176,29 @@ ActiveRecord::Schema.define(version: 20170716154536) do
     t.integer "sender_id", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "meals", force: :cascade do |t|
+    t.text "allergens", default: "[]", null: false
+    t.integer "capacity", null: false
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "creator_id", null: false
+    t.text "dessert"
+    t.decimal "discount", precision: 5, scale: 2, default: 0.0, null: false
+    t.text "entrees"
+    t.text "kids"
+    t.text "notes"
+    t.datetime "served_at", null: false
+    t.text "side"
+    t.string "status", default: "open", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "meals", ["cluster_id"], name: "index_meals_on_cluster_id", using: :btree
+  add_index "meals", ["creator_id"], name: "index_meals_on_creator_id", using: :btree
+  add_index "meals", ["served_at"], name: "index_meals_on_served_at", using: :btree
 
   create_table "old_credit_balances", id: false, force: :cascade do |t|
     t.decimal "balance", precision: 5, scale: 2
@@ -497,13 +497,13 @@ ActiveRecord::Schema.define(version: 20170716154536) do
   add_foreign_key "invitations", "clusters"
   add_foreign_key "invitations", "communities"
   add_foreign_key "invitations", "meals"
+  add_foreign_key "meal_costs", "clusters"
+  add_foreign_key "meal_costs", "meals"
+  add_foreign_key "meal_formulas", "clusters"
+  add_foreign_key "meal_formulas", "communities"
   add_foreign_key "meals", "clusters"
   add_foreign_key "meals", "communities"
   add_foreign_key "meals", "users", column: "creator_id"
-  add_foreign_key "meals_costs", "clusters"
-  add_foreign_key "meals_costs", "meals"
-  add_foreign_key "meals_formulas", "clusters"
-  add_foreign_key "meals_formulas", "communities"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"

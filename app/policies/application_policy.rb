@@ -41,6 +41,9 @@ class ApplicationPolicy
     Pundit.policy_scope!(user, record.class)
   end
 
+  # Note: It is not a Policy scope's job to:
+  # - Restrict the results to the current community (controller should do that where appropriate)
+  # - Restrict the results to the current cluster (ActsAsTenant should do that)
   class Scope
     attr_reader :user, :scope
 
@@ -73,6 +76,10 @@ class ApplicationPolicy
 
     def active_admin_or_biller?
       active_admin? || active_with_role?(:biller)
+    end
+
+    def active_admin_or_meals_coordinator?
+      active_admin? || active_with_role?(:meals_coordinator)
     end
   end
 
@@ -107,6 +114,10 @@ class ApplicationPolicy
 
   def active_admin_or_biller?
     active_admin? || active_with_community_role?(:biller)
+  end
+
+  def active_admin_or_meals_coordinator?
+    active_admin? || active_with_community_role?(:meals_coordinator)
   end
 
   def own_community_record?

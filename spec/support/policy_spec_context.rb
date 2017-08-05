@@ -41,6 +41,7 @@ shared_context "policy objs" do
   let(:photographer_in_cluster) { new_user_from(communityB, label: "photographer_in_cluster") }
 
   let(:meals_coordinator) { new_user_from(community, label: "meals_coordinator") }
+  let(:meals_coordinator_in_cluster) { new_user_from(communityB, label: "meals_coordinator_in_cluster") }
 
   before do
     allow(user).to receive(:has_role?) { false }
@@ -55,6 +56,7 @@ shared_context "policy objs" do
     allow(photographer).to receive(:has_role?) { |r| r == :photographer }
     allow(photographer_in_cluster).to receive(:has_role?) { |r| r == :photographer }
     allow(meals_coordinator).to receive(:has_role?) { |r| r == :meals_coordinator }
+    allow(meals_coordinator_in_cluster).to receive(:has_role?) { |r| r == :meals_coordinator }
   end
 
   # Saves commonly used objects from above. This is not done by default
@@ -95,7 +97,7 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits for commmunity admins and denies for other admins, users, and billers" do
+  shared_examples_for "permits for commmunity admins and denies for other admins and users" do
     it "grants access to admins in community" do
       expect(subject).to permit(admin, record)
     end
@@ -106,10 +108,6 @@ shared_context "policy objs" do
 
     it "denies access to regular users" do
       expect(subject).not_to permit(user, record)
-    end
-
-    it "denies access to billers" do
-      expect(subject).not_to permit(biller, record)
     end
   end
 
@@ -153,31 +151,13 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits for photographers in community only" do
-    it "permits photographers from own community" do
-      expect(subject).to permit(photographer, user)
-    end
-
-    it "denies photographers from other community" do
-      expect(subject).not_to permit(photographer_in_cluster, user)
-    end
-  end
-
-  shared_examples_for "permits admins or billers but not regular users" do
+  shared_examples_for "permits admins but not regular users" do
     it "grants access to admins from community" do
-      expect(subject).to permit(admin, record)
-    end
-
-    it "grants access to billers from community" do
       expect(subject).to permit(admin, record)
     end
 
     it "denies access to admins from outside community" do
       expect(subject).not_to permit(admin_in_cluster, record)
-    end
-
-    it "denies access to billers from outside community" do
-      expect(subject).not_to permit(biller_in_cluster, record)
     end
 
     it "errors when checking admin without community" do |example|
@@ -187,16 +167,32 @@ shared_context "policy objs" do
       end
     end
 
-    it "errors when checking biller without community" do |example|
-      example.metadata[:permissions].each do |perm|
-        expect { subject.new(biller, record.class).send(perm) }.to raise_error(
-          ApplicationPolicy::CommunityNotSetError)
-      end
-    end
-
     it "denies access to regular user" do
       expect(subject).not_to permit(user, record)
     end
+  end
+
+  shared_examples_for "permits admins or special role but not regular users" do |role_name|
+    it_behaves_like "permits admins but not regular users"
+
+    it "grants access to role from community" do
+      expect(subject).to permit(role_member(role_name), record)
+    end
+
+    it "denies access to role from outside community" do
+      expect(subject).not_to permit(role_member("#{role_name}_in_cluster"), record)
+    end
+
+    it "errors when checking role permission without community" do |example|
+      example.metadata[:permissions].each do |perm|
+        expect { subject.new(role_member(role_name), record.class).send(perm) }.to raise_error(
+          ApplicationPolicy::CommunityNotSetError)
+      end
+    end
+  end
+
+  def role_member(role_name)
+    send(role_name)
   end
 
   def new_user_from(community, attribs = {})

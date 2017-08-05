@@ -15,7 +15,7 @@ describe CommunityPolicy do
     end
 
     permissions :update? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
     end
   end
 end

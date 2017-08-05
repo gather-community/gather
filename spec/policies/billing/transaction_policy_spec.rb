@@ -16,7 +16,7 @@ module Billing
       end
 
       permissions :new?, :create? do
-        it_behaves_like "permits admins or billers but not regular users"
+        it_behaves_like "permits admins or special role but not regular users", :biller
       end
 
       permissions :show?, :edit?, :update?, :destroy? do

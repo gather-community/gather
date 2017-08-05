@@ -16,11 +16,11 @@ module Billing
       end
 
       permissions :index?, :apply_late_fees? do
-        it_behaves_like "permits admins or billers but not regular users"
+        it_behaves_like "permits admins or special role but not regular users", :biller
       end
 
       permissions :show? do
-        it_behaves_like "permits admins or billers but not regular users"
+        it_behaves_like "permits admins or special role but not regular users", :biller
 
         it "grants access to owner of account" do
           expect(subject).to permit(account_owner, account)
@@ -42,7 +42,7 @@ module Billing
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or billers but not regular users"
+        it_behaves_like "permits admins or special role but not regular users", :biller
       end
     end
 
@@ -54,10 +54,10 @@ module Billing
       let!(:account2) { create(:account, community: community, household: user.household) }
       let!(:account3) { create(:account, community: other_community, household: user.household) }
       let!(:account4) { create(:account, community: other_community) }
+      let(:permitted) { AccountPolicy::Scope.new(user, Account.all).resolve }
 
       shared_examples_for :admin_or_biller do
         it "returns all accounts from own community or household only" do
-          permitted = AccountPolicy::Scope.new(user, Account.all).resolve
           expect(permitted).to contain_exactly(account1, account2, account3)
         end
       end
@@ -76,7 +76,6 @@ module Billing
         let!(:user) { create(:user) }
 
         it "returns all accounts from own household only" do
-          permitted = AccountPolicy::Scope.new(user, Account.all).resolve
           expect(permitted).to contain_exactly(account2, account3)
         end
       end

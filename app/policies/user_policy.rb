@@ -145,6 +145,7 @@ class UserPolicy < ApplicationPolicy
 
   # Checks if the user is a guardian of the user being tested.
   def guardian?
+    return false unless record.is_a?(User) # May be a Class in some cases
     record.guardians.include?(user)
   end
 end

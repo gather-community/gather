@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MealPolicy do
   include_context "policy objs"
 
-  let(:meal) { Meal.new(community: community, communities: [community]) }
+  let(:meal) { Meal.new(community: community, communities: [community, communityC]) }
   let(:record) { meal }
 
   describe "permissions" do
@@ -12,12 +12,10 @@ describe MealPolicy do
     end
 
     permissions :show?, :summary? do
-      it "grants access to users from invited communities" do
-        expect(subject).to permit(user, meal)
-      end
+      it_behaves_like "grants access to users in community"
 
-      it "denies access to users from uninvited communities in the cluster" do
-        expect(subject).not_to permit(user_in_cmtyB, meal)
+      it "grants access to users in other invited communities" do
+        expect(subject).to permit(user_in_cmtyC, meal)
       end
 
       it "grants access to non-invited workers" do
@@ -36,10 +34,10 @@ describe MealPolicy do
     end
 
     permissions :edit?, :update? do
-      # We let anyone do this so they can change assignments.
+      # We let anyone in host community do this so they can change assignments.
       it_behaves_like "grants access to users in community"
 
-      it "grants access to workers not in host community" do
+      it "grants access to non-invited workers" do
         meal.assignments.build(user: user_in_cmtyB)
         expect(subject).to permit(user_in_cmtyB, meal)
       end

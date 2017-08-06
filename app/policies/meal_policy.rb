@@ -38,6 +38,8 @@ class MealPolicy < ApplicationPolicy
     active_admin_or_meals_coordinator?
   end
 
+  # We let anyone from host community (or assignees from outside) do this
+  # so they can change assignments.
   def update?
     active? && (own_community_record? || assigned?)
   end

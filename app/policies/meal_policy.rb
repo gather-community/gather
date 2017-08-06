@@ -19,7 +19,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def index?
-    active?
+    active_in_cluster?
   end
 
   def show?
@@ -35,16 +35,16 @@ class MealPolicy < ApplicationPolicy
   end
 
   def create?
-    active_admin?
+    active_admin_or_meals_coordinator?
   end
 
   def update?
-    active? && (host? || assigned?)
+    active? && (own_community_record? || assigned?)
   end
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    active_admin? && host? || active_super_admin?
+    active_admin_or_meals_coordinator?
   end
 
   def destroy?
@@ -56,19 +56,19 @@ class MealPolicy < ApplicationPolicy
   end
 
   def set_menu?
-    hosting_admin_or_head_cook?
+    active_admin_or_coordinator_or_head_cook?
   end
 
   def close?
-    hosting_admin_or_head_cook?
+    active_admin_or_coordinator_or_head_cook?
   end
 
   def reopen?
-    hosting_admin_or_head_cook? && !meal.in_past?
+    active_admin_or_coordinator_or_head_cook? && !meal.in_past?
   end
 
   def finalize?
-    host? && active_admin_or_biller?
+    active_admin_or_biller?
   end
 
   def contact?
@@ -102,12 +102,8 @@ class MealPolicy < ApplicationPolicy
 
   private
 
-  def hosting_admin_or_head_cook?
-    active_admin? && host? || active? && head_cook?
-  end
-
-  def host?
-    not_specific_record? || user.community == meal.community
+  def active_admin_or_coordinator_or_head_cook?
+    active_admin_or_meals_coordinator? || active? && head_cook?
   end
 
   def active_and_associated_or_signed_up?
@@ -123,11 +119,11 @@ class MealPolicy < ApplicationPolicy
   end
 
   def assigned?
-    meal.assignments.any?{ |a| a.user == user }
+    meal.assignments.any? { |a| a.user == user }
   end
 
   def signed_up?
-    meal.signups.any?{ |s| s.household == user.household }
+    meal.signups.any? { |s| s.household == user.household }
   end
 
   def head_cook?

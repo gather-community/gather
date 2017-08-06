@@ -185,7 +185,9 @@ shared_context "policy objs" do
 
     it "errors when checking role permission without community" do |example|
       example.metadata[:permissions].each do |perm|
-        expect { subject.new(role_member(role_name), record.class).send(perm) }.to raise_error(
+        without_community = record.dup
+        without_community.community = nil
+        expect { subject.new(role_member(role_name), without_community).send(perm) }.to raise_error(
           ApplicationPolicy::CommunityNotSetError)
       end
     end

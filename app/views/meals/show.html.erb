@@ -37,13 +37,7 @@
         <% end %>
       </div>
     </div>
-
-    <% if @meal.formula.nil? %>
-      <h4>Signups Not Allowed</h4>
-      Signups are not allowed for this meal because there is no applicable cost formula.
-    <% else %>
-      <%= render("meals/signup_form") %>
-    <% end %>
+    <%= render("meals/signup_form") %>
   </div>
 </div>
 

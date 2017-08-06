@@ -29,6 +29,10 @@ Rails.application.routes.draw do
     resource :finalize, only: [:new, :create], module: :meals, controller: :finalize
   end
 
+  namespace :meals do
+    resources :formulas
+  end
+
   namespace :reservations do
     resources :resources, except: :show do
       member do

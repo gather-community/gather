@@ -1,12 +1,23 @@
 <% content_for(:title){ "Create Meal" } %>
 
 <% missing = [] %>
-<% missing << "an applicable cost formula" if @meal.formula.nil? %>
-<% missing << "at least one meal-hostable resource" if @resource_options.empty? %>
+<% if @meal.formula.nil? %>
+  <% str = "an applicable cost formula" %>
+  <% missing << (policy(@dummy_formula).create? ? link_to(str, new_meals_formula_path) : str) %>
+<% end %>
+<% if @resource_options.empty? %>
+  <% str = "at least one meal-hostable resource" %>
+  <% missing << (policy(@dummy_resource).create? ? link_to(str, new_reservations_resource_path) : str) %>
+<% end %>
 
 <% if missing.any? %>
   <div class="none-found">
-    Before you can create a meal, <%= missing.join(" and ") %> must exist.
+    Before you can create a meal, there must be
+    <% if missing.size == 1 %>
+      <%= missing.first %>.
+    <% else %>
+      <%= missing.each_with_index.map { |m, i| "#{i + 1}) ".html_safe << m }.reduce(&sep(", ")) %>.
+    <% end %>
   </div>
 <% else %>
   <%= render("form") %>

@@ -30,6 +30,22 @@ describe Meals::FormulaPolicy do
         end
       end
     end
+
+    context "if default formula" do
+      before { formula.is_default = true }
+
+      permissions :edit?, :update?, :activate? do
+        it "permits" do
+          expect(subject).to permit(admin, formula)
+        end
+      end
+
+      permissions :destroy?, :deactivate? do
+        it "forbids" do
+          expect(subject).not_to permit(admin, formula)
+        end
+      end
+    end
   end
 
   describe "scope" do

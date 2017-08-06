@@ -94,7 +94,7 @@ describe MealPolicy do
   end
 
   describe "permitted_attributes" do
-    subject { MealPolicy.new(user, meal).permitted_attributes }
+    subject { MealPolicy.new(actor, meal).permitted_attributes }
     let(:assign_attribs) {[{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
@@ -103,32 +103,45 @@ describe MealPolicy do
     }]}
     let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
 
-    context "regular user" do
-      it "should allow only assignment attribs" do
-        expect(subject).to contain_exactly(*assign_attribs)
-      end
-    end
-
-    context "head cook" do
-      before { meal.head_cook = user }
-
-      it "should allow more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(:discount, :community_id)
-      end
-    end
-
-    context "admin" do
-      let(:user) { admin }
-
+    shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
         expect(subject).to include(*(assign_attribs + head_cook_attribs + [:discount]))
         expect(subject).not_to include(:community_id)
       end
     end
 
+    context "regular user" do
+      let(:actor) { user }
+
+      it "should allow only assignment attribs" do
+        expect(subject).to contain_exactly(*assign_attribs)
+      end
+    end
+
+    context "head cook" do
+      let(:actor) { user }
+
+      it "should allow more stuff" do
+        meal.head_cook = actor
+        expect(subject).to include(*(assign_attribs + head_cook_attribs))
+        expect(subject).not_to include(:discount, :community_id, :formula_id)
+      end
+    end
+
+    context "admin" do
+      let(:actor) { admin }
+
+      it_behaves_like "admin or meals coordinator"
+    end
+
+    context "meals coordinator" do
+      let(:actor) { meals_coordinator }
+
+      it_behaves_like "admin or meals coordinator"
+    end
+
     context "outside admin" do
-      let(:user) { admin_in_cluster }
+      let(:actor) { admin_in_cluster }
 
       it "should have only basic attribs" do
         expect(subject).to contain_exactly(*assign_attribs)

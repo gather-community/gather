@@ -17,17 +17,17 @@ describe MealPolicy do
       end
 
       it "denies access to users from uninvited communities in the cluster" do
-        expect(subject).not_to permit(user_in_cluster, meal)
+        expect(subject).not_to permit(user_in_cmtyB, meal)
       end
 
       it "grants access to non-invited workers" do
-        meal.assignments.build(user: user_in_cluster)
-        expect(subject).to permit(user_in_cluster, meal)
+        meal.assignments.build(user: user_in_cmtyB)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
 
       it "grants access to non-invited but signed-up folks" do
-        meal.signups.build(household: user_in_cluster.household)
-        expect(subject).to permit(user_in_cluster, meal)
+        meal.signups.build(household: user_in_cmtyB.household)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
 
@@ -40,8 +40,8 @@ describe MealPolicy do
       it_behaves_like "grants access to users in community"
 
       it "grants access to workers not in host community" do
-        meal.assignments.build(user: user_in_cluster)
-        expect(subject).to permit(user_in_cluster, meal)
+        meal.assignments.build(user: user_in_cmtyB)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
 
@@ -141,7 +141,7 @@ describe MealPolicy do
     end
 
     context "outside admin" do
-      let(:actor) { admin_in_cluster }
+      let(:actor) { admin_in_cmtyB }
 
       it "should have only basic attribs" do
         expect(subject).to contain_exactly(*assign_attribs)

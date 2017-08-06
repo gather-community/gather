@@ -36,11 +36,11 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on households in other community in cluster" do
-        expect(subject).to permit(user, user_in_cluster.household)
+        expect(subject).to permit(user, user_in_cmtyB.household)
       end
 
       it "permits outside super admins" do
-        expect(subject).to permit(outside_super_admin, user_in_cluster.household)
+        expect(subject).to permit(outside_super_admin, user_in_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -52,7 +52,7 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on households in other community in cluster" do
-        expect(subject).not_to permit(user, user_in_cluster.household)
+        expect(subject).not_to permit(user, user_in_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -189,14 +189,14 @@ describe HouseholdPolicy do
     context "normal" do
       before do
         save_policy_objects!(community, communityB, communityX,
-          user, other_user, user_in_cluster, outside_user)
+          user, other_user, user_in_cmtyB, outside_user)
       end
 
       context "for regular user, admin, and cluster admin" do
         it "returns all households in cluster" do
           [user, admin, cluster_admin].each do |actor|
             permitted = HouseholdPolicy::Scope.new(actor, Household.all).resolve
-            expect(permitted).to contain_exactly(*[user, other_user, user_in_cluster].map(&:household))
+            expect(permitted).to contain_exactly(*[user, other_user, user_in_cmtyB].map(&:household))
           end
         end
       end
@@ -206,7 +206,7 @@ describe HouseholdPolicy do
           ActsAsTenant.unscoped do
             permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
             expect(permitted).to contain_exactly(*
-              [user, other_user, user_in_cluster, outside_user].map(&:household))
+              [user, other_user, user_in_cmtyB, outside_user].map(&:household))
           end
         end
       end

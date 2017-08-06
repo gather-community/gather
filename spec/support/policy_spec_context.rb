@@ -8,7 +8,7 @@ shared_context "policy objs" do
 
   let(:user) { new_user_from(community, label: "user") }
   let(:other_user) { new_user_from(community, label: "other_user") }
-  let(:user_in_cluster) { new_user_from(communityB, label: "user_in_cluster") }
+  let(:user_in_cmtyB) { new_user_from(communityB, label: "user_in_cmtyB") }
   let(:outside_user) { with_tenant(clusterB) { new_user_from(communityX, label: "outside_user") } }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.current, label: "inactive_user") }
 
@@ -20,8 +20,8 @@ shared_context "policy objs" do
   let(:guardian) { user }
   let(:child) { new_user_from(community, child: true, guardians: [guardian], label: "child") }
   let(:other_child) { new_user_from(community, child: true, guardians: [other_user], label: "other_child") }
-  let(:child_in_cluster) { new_user_from(communityB, child: true,
-    guardians: [user_in_cluster], label: "child_in_cluster") }
+  let(:child_in_cmtyB) { new_user_from(communityB, child: true,
+    guardians: [user_in_cmtyB], label: "child_in_cmtyB") }
   let(:outside_child) { with_tenant(clusterB) { new_user_from(communityX, child: true,
     guardians: [outside_user], label: "outside_child") } }
   let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user],
@@ -32,31 +32,31 @@ shared_context "policy objs" do
   let(:super_admin) { new_user_from(community, label: "super_admin") }
   let(:outside_super_admin) { with_tenant(clusterB) {
     new_user_from(communityX, label: "outside_super_admin") } }
-  let(:admin_in_cluster) { new_user_from(communityB, label: "admin_in_cluster") }
+  let(:admin_in_cmtyB) { new_user_from(communityB, label: "admin_in_cmtyB") }
 
   let(:biller) { new_user_from(community, label: "biller") }
-  let(:biller_in_cluster) { new_user_from(communityB, label: "biller_in_cluster") }
+  let(:biller_in_cmtyB) { new_user_from(communityB, label: "biller_in_cmtyB") }
 
   let(:photographer) { new_user_from(community, label: "photographer") }
-  let(:photographer_in_cluster) { new_user_from(communityB, label: "photographer_in_cluster") }
+  let(:photographer_in_cmtyB) { new_user_from(communityB, label: "photographer_in_cmtyB") }
 
   let(:meals_coordinator) { new_user_from(community, label: "meals_coordinator") }
-  let(:meals_coordinator_in_cluster) { new_user_from(communityB, label: "meals_coordinator_in_cluster") }
+  let(:meals_coordinator_in_cmtyB) { new_user_from(communityB, label: "meals_coordinator_in_cmtyB") }
 
   before do
     allow(user).to receive(:has_role?) { false }
     allow(other_user).to receive(:has_role?) { false }
     allow(admin).to receive(:has_role?) { |r| r == :admin }
-    allow(admin_in_cluster).to receive(:has_role?) { |r| r == :admin }
+    allow(admin_in_cmtyB).to receive(:has_role?) { |r| r == :admin }
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(outside_super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(biller).to receive(:has_role?) { |r| r == :biller }
-    allow(biller_in_cluster).to receive(:has_role?) { |r| r == :biller }
+    allow(biller_in_cmtyB).to receive(:has_role?) { |r| r == :biller }
     allow(photographer).to receive(:has_role?) { |r| r == :photographer }
-    allow(photographer_in_cluster).to receive(:has_role?) { |r| r == :photographer }
+    allow(photographer_in_cmtyB).to receive(:has_role?) { |r| r == :photographer }
     allow(meals_coordinator).to receive(:has_role?) { |r| r == :meals_coordinator }
-    allow(meals_coordinator_in_cluster).to receive(:has_role?) { |r| r == :meals_coordinator }
+    allow(meals_coordinator_in_cmtyB).to receive(:has_role?) { |r| r == :meals_coordinator }
   end
 
   # Saves commonly used objects from above. This is not done by default
@@ -79,7 +79,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to users from other communities" do
-      expect(subject).not_to permit(user_in_cluster, record)
+      expect(subject).not_to permit(user_in_cmtyB, record)
     end
   end
 
@@ -89,7 +89,7 @@ shared_context "policy objs" do
     end
 
     it "grants access to users from other communities in cluster" do
-      expect(subject).to permit(user_in_cluster, record)
+      expect(subject).to permit(user_in_cmtyB, record)
     end
 
     it "denies access to users from communities outside cluster" do
@@ -103,7 +103,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to admins in other community in cluster" do
-      expect(subject).not_to permit(admin_in_cluster, record)
+      expect(subject).not_to permit(admin_in_cmtyB, record)
     end
 
     it "denies access to regular users" do
@@ -157,7 +157,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to admins from outside community" do
-      expect(subject).not_to permit(admin_in_cluster, record)
+      expect(subject).not_to permit(admin_in_cmtyB, record)
     end
 
     it "errors when checking admin without community" do |example|
@@ -180,7 +180,7 @@ shared_context "policy objs" do
     end
 
     it "denies access to role from outside community" do
-      expect(subject).not_to permit(role_member("#{role_name}_in_cluster"), record)
+      expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
 
     it "errors when checking role permission without community" do |example|

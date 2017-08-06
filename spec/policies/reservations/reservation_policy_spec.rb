@@ -141,7 +141,7 @@ describe Reservations::ReservationPolicy do
       end
 
       context "outside admin" do
-        let(:user) { admin_in_cluster }
+        let(:user) { admin_in_cmtyB }
         it_behaves_like "basic attribs"
       end
     end

@@ -49,7 +49,7 @@ describe Meals::FormulaPolicy do
     end
 
     context "regular user in cluster" do
-      let(:actor) { user_in_cluster }
+      let(:actor) { user_in_cmtyB }
       it_behaves_like "returns active formulas only"
     end
   end

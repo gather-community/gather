@@ -22,7 +22,7 @@ module Billing
       permissions :show? do
         it_behaves_like "permits admins or special role but not regular users", :biller
 
-        it "grants access to owner of account" do
+        it "permits owner of account" do
           expect(subject).to permit(account_owner, account)
         end
 

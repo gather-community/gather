@@ -8,12 +8,12 @@ describe SignupPolicy do
     let(:signup) { build(:signup, meal: meal) }
 
     shared_examples_for "invited" do
-      it "grants access to invitees" do
+      it "permits invitees" do
         expect(subject).to permit(user, signup)
         expect(subject).to permit(user_in_cmtyC, signup)
       end
 
-      it "denies access to non-invitees, even admins" do
+      it "forbids non-invitees, even admins" do
         expect(subject).not_to permit(user_in_cmtyB, meal)
         expect(subject).not_to permit(admin_in_cmtyB, meal)
       end
@@ -22,7 +22,7 @@ describe SignupPolicy do
     permissions :create? do
       it_behaves_like "invited"
 
-      it "denies access to inactive users" do
+      it "forbids inactive users" do
         expect(subject).not_to permit(inactive_user, signup)
       end
     end
@@ -30,7 +30,7 @@ describe SignupPolicy do
     permissions :update? do
       it_behaves_like "invited"
 
-      it "grants access to inactive users" do
+      it "permits inactive users" do
         expect(subject).to permit(inactive_user, signup)
       end
     end

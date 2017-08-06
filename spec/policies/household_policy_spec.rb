@@ -9,7 +9,7 @@ describe HouseholdPolicy do
     shared_examples_for "permits admins and members of household" do
       # We don't need to check cluster admins/super admins here or in every other place where
       # admin permissions are tested. We are trusting the active_admin? method which is tested elsewhere.
-      it "grants access to admins" do
+      it "permits admins" do
         expect(subject).to permit(admin, record)
       end
 
@@ -17,7 +17,7 @@ describe HouseholdPolicy do
         expect(subject).to permit(user, user.household)
       end
 
-      it "denies access to regular users to other households" do
+      it "forbids regular users to other households" do
         expect(subject).not_to permit(user, Household.new)
       end
     end
@@ -75,7 +75,7 @@ describe HouseholdPolicy do
     permissions :edit?, :update? do
       it_behaves_like "permits admins and members of household"
 
-      it "denies access to billers" do
+      it "forbids billers" do
         expect(subject).not_to permit(biller, user.household)
       end
     end
@@ -83,22 +83,22 @@ describe HouseholdPolicy do
     permissions :accounts? do
       it_behaves_like "permits admins and members of household"
 
-      it "grants access to billers" do
+      it "permits billers" do
         expect(subject).to permit(biller, user.household)
       end
     end
 
     permissions :change_community? do
-      it_behaves_like "cluster admins only"
+      it_behaves_like "permits cluster admins only"
     end
 
     permissions :destroy? do
       shared_examples_for "full denial" do
-        it "denies access to admins" do
+        it "forbids admins" do
           expect(subject).not_to permit(admin, household)
         end
 
-        it "denies access to billers" do
+        it "forbids billers" do
           expect(subject).not_to permit(biller, household)
         end
       end

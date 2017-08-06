@@ -7,25 +7,25 @@ describe Reservations::ReservationPolicy do
 
   describe "permissions" do
     shared_examples_for "allow all active users" do
-      it "grants access to active users" do
+      it "permits active users" do
         expect(subject).to permit(user, reservation)
       end
 
-      it "denies access to inactive users" do
+      it "forbids inactive users" do
         expect(subject).not_to permit(inactive_user, reservation)
       end
     end
 
     shared_examples_for "allow reserver and admins" do
-      it "grants access to reserver" do
+      it "permits reserver" do
         expect(subject).to permit(user, reservation)
       end
 
-      it "grants access to admins" do
+      it "permits admins" do
         expect(subject).to permit(admin, reservation)
       end
 
-      it "denies access to other regular users" do
+      it "forbids other regular users" do
         expect(subject).not_to permit(other_user, reservation)
       end
     end
@@ -68,12 +68,12 @@ describe Reservations::ReservationPolicy do
               starts_at: 1.day.ago, created_at: 1.week.ago)
           end
 
-          it "denies access to non-admins" do
+          it "forbids non-admins" do
             expect(subject).not_to permit(user, reservation)
             expect(subject).not_to permit(other_user, reservation)
           end
 
-          it "grants access to admins" do
+          it "permits admins" do
             expect(subject).to permit(admin, reservation)
           end
         end
@@ -88,7 +88,7 @@ describe Reservations::ReservationPolicy do
       end
 
       permissions :new?, :create?, :destroy? do
-        it "denies access to all" do
+        it "forbids all" do
           expect(subject).not_to permit(user, reservation)
           expect(subject).not_to permit(other_user, reservation)
           expect(subject).not_to permit(admin, reservation)

@@ -8,22 +8,22 @@ describe MealPolicy do
 
   describe "permissions" do
     permissions :index?, :reports? do
-      it_behaves_like "grants access to users in cluster"
+      it_behaves_like "permits users in cluster"
     end
 
     permissions :show?, :summary? do
-      it_behaves_like "grants access to users in community"
+      it_behaves_like "permits users in community"
 
-      it "grants access to users in other invited communities" do
+      it "permits users in other invited communities" do
         expect(subject).to permit(user_in_cmtyC, meal)
       end
 
-      it "grants access to non-invited workers" do
+      it "permits non-invited workers" do
         meal.assignments.build(user: user_in_cmtyB)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
 
-      it "grants access to non-invited but signed-up folks" do
+      it "permits non-invited but signed-up folks" do
         meal.signups.build(household: user_in_cmtyB.household)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
@@ -35,9 +35,9 @@ describe MealPolicy do
 
     permissions :edit?, :update? do
       # We let anyone in host community do this so they can change assignments.
-      it_behaves_like "grants access to users in community"
+      it_behaves_like "permits users in community"
 
-      it "grants access to non-invited workers" do
+      it "permits non-invited workers" do
         meal.assignments.build(user: user_in_cmtyB)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
@@ -46,14 +46,14 @@ describe MealPolicy do
     permissions :set_menu?, :close?, :reopen? do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
 
-      it "grants access to head cook" do
+      it "permits head cook" do
         meal.head_cook = user
         expect(subject).to permit(user, meal)
       end
     end
 
     permissions :reopen? do
-      it "denies access to head cook if meal in past" do
+      it "forbids head cook if meal in past" do
         meal.served_at = Time.current - 7.days
         meal.head_cook = user
         expect(subject).not_to permit(user, meal)

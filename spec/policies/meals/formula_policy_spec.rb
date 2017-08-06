@@ -8,7 +8,7 @@ describe Meals::FormulaPolicy do
     let(:record) { formula }
 
     permissions :index?, :show? do
-      it_behaves_like "grants access to users in cluster"
+      it_behaves_like "permits users in cluster"
     end
 
     permissions :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do

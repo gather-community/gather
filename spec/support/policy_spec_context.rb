@@ -75,63 +75,63 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "grants access to users in community" do
-    it "grants access to users in community" do
+  shared_examples_for "permits users in community" do
+    it "permits users in community" do
       expect(subject).to permit(user, record)
     end
 
-    it "denies access to users from other communities" do
+    it "forbids users from other communities" do
       expect(subject).not_to permit(user_in_cmtyB, record)
     end
   end
 
-  shared_examples_for "grants access to users in cluster" do
-    it "grants access to users in community" do
+  shared_examples_for "permits users in cluster" do
+    it "permits users in community" do
       expect(subject).to permit(user, record)
     end
 
-    it "grants access to users from other communities in cluster" do
+    it "permits users from other communities in cluster" do
       expect(subject).to permit(user_in_cmtyB, record)
     end
 
-    it "denies access to users from communities outside cluster" do
+    it "forbids users from communities outside cluster" do
       expect(subject).not_to permit(outside_user, record)
     end
   end
 
   shared_examples_for "permits for commmunity admins and denies for other admins and users" do
-    it "grants access to admins in community" do
+    it "permits admins in community" do
       expect(subject).to permit(admin, record)
     end
 
-    it "denies access to admins in other community in cluster" do
+    it "forbids admins in other community in cluster" do
       expect(subject).not_to permit(admin_in_cmtyB, record)
     end
 
-    it "denies access to regular users" do
+    it "forbids regular users" do
       expect(subject).not_to permit(user, record)
     end
   end
 
-  shared_examples_for "cluster admins only" do
-    it "grants access to cluster admins" do
+  shared_examples_for "permits cluster admins only" do
+    it "permits cluster admins" do
       expect(subject).to permit(cluster_admin, record)
     end
 
-    it "denies access to admins" do
+    it "forbids admins" do
       expect(subject).not_to permit(admin, record)
     end
 
-    it "denies access to regular users" do
+    it "forbids regular users" do
       expect(subject).not_to permit(user, record)
     end
 
-    it "denies access to billers" do
+    it "forbids billers" do
       expect(subject).not_to permit(biller, record)
     end
   end
 
-  shared_examples_for "permits for self (active or not) and guardians" do
+  shared_examples_for "permits self (active or not) and guardians" do
     it "permits action on self" do
       expect(subject).to permit(user, user)
     end
@@ -174,15 +174,15 @@ shared_context "policy objs" do
       it_behaves_like "errors on permission check without community"
     end
 
-    it "grants access to admins from community" do
+    it "permits admins from community" do
       expect(subject).to permit(admin, record)
     end
 
-    it "denies access to admins from outside community" do
+    it "forbids admins from outside community" do
       expect(subject).not_to permit(admin_in_cmtyB, record)
     end
 
-    it "denies access to regular user" do
+    it "forbids regular user" do
       expect(subject).not_to permit(user, record)
     end
   end
@@ -195,11 +195,11 @@ shared_context "policy objs" do
       it_behaves_like "errors on permission check without community"
     end
 
-    it "grants access to role from community" do
+    it "permits role from community" do
       expect(subject).to permit(role_member(role_name), record)
     end
 
-    it "denies access to role from outside community" do
+    it "forbids role from outside community" do
       expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
   end

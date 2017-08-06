@@ -195,12 +195,12 @@ describe UserPolicy do
 
     permissions :edit?, :update?, :update_photo? do
       it_behaves_like "permits admins or special role but not regular users", "photographer"
-      it_behaves_like "permits for self (active or not) and guardians"
+      it_behaves_like "permits self (active or not) and guardians"
     end
 
     permissions :update_info? do
       it_behaves_like "permits for commmunity admins and denies for other admins and users"
-      it_behaves_like "permits for self (active or not) and guardians"
+      it_behaves_like "permits self (active or not) and guardians"
     end
 
     permissions :destroy? do

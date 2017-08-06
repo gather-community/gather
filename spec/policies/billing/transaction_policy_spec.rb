@@ -10,7 +10,7 @@ module Billing
       let(:record) { transaction }
 
       permissions :index? do
-        it "grants access to everyone" do
+        it "permits everyone" do
           expect(subject).to permit(user, Transaction)
         end
       end

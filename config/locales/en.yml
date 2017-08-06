@@ -467,6 +467,7 @@ en:
     super_admin: "Super Admin"
     biller: "Biller"
     photographer: "Photographer"
+    meals_coordinator: "Meals Coordinator"
 
   phone_types:
     abbreviations:

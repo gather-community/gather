@@ -14,6 +14,22 @@ describe Meals::FormulaPolicy do
     permissions :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
     end
+
+    context "with existing meals" do
+      before { allow(formula).to receive(:has_meals?).and_return(true) }
+
+      permissions :activate?, :deactivate? do
+        it "permits" do
+          expect(subject).to permit(admin, formula)
+        end
+      end
+
+      permissions :edit?, :update?, :destroy? do
+        it "forbids" do
+          expect(subject).not_to permit(admin, formula)
+        end
+      end
+    end
   end
 
   describe "scope" do

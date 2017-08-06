@@ -1,5 +1,7 @@
 module Meals
   class FormulaPolicy < ApplicationPolicy
+    alias_method :formula, :record
+
     class Scope < ApplicationPolicy::Scope
       def resolve
         if active_admin_or_meals_coordinator?
@@ -23,7 +25,7 @@ module Meals
     end
 
     def update?
-      active_admin_or_meals_coordinator?
+      !formula.has_meals? && active_admin_or_meals_coordinator?
     end
 
     def activate?
@@ -35,7 +37,7 @@ module Meals
     end
 
     def destroy?
-      active_admin_or_meals_coordinator?
+      update?
     end
   end
 end

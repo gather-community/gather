@@ -4,13 +4,18 @@ module Meals
 
     acts_as_tenant(:cluster)
 
-    belongs_to(:community)
+    belongs_to :community
+    has_many :meals, inverse_of: :formula
 
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
 
     def self.newest_for(community)
       for_community(community).newest_first.first
+    end
+
+    def has_meals?
+      meals.any?
     end
 
     def allowed_diner_types

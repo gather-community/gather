@@ -15,7 +15,7 @@ class Meal < ActiveRecord::Base
 
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
-  belongs_to :formula, class_name: "Meals::Formula"
+  belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"

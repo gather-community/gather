@@ -4,11 +4,13 @@ shared_context "policy objs" do
   let(:clusterB) { create(:cluster, name: "Other Cluster") }
   let(:community) { build(:community, name: "Community A") }
   let(:communityB) { build(:community, name: "Community B") }
+  let(:communityC) { build(:community, name: "Community C") }
   let(:communityX) { with_tenant(clusterB) { build(:community, name: "Community X") } }
 
   let(:user) { new_user_from(community, label: "user") }
   let(:other_user) { new_user_from(community, label: "other_user") }
   let(:user_in_cmtyB) { new_user_from(communityB, label: "user_in_cmtyB") }
+  let(:user_in_cmtyC) { new_user_from(communityC, label: "user_in_cmtyC") }
   let(:outside_user) { with_tenant(clusterB) { new_user_from(communityX, label: "outside_user") } }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.current, label: "inactive_user") }
 

@@ -50,6 +50,12 @@ module NavHelper
           path: reports_meals_path,
           permitted: policy.reports?,
           icon: "line-chart"
+        },{
+          name: :formulas,
+          parent: :meals,
+          path: meals_formulas_path,
+          permitted: policy(Meals::Formula.new(community: current_community)).index?,
+          icon: "calculator"
         }
       ]
     when :people

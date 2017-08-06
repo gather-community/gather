@@ -2,8 +2,13 @@ en:
   common:
     "true": "True"
     "false": "False"
+    max: "Max"
+    num_in_total: "%{count} in total"
+    default: "Default"
 
   activerecord:
+    models:
+      meal: "Meal"
     attributes:
       user:
         first_name: "First Name"
@@ -221,6 +226,7 @@ en:
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
       shorter_date: "%b %d"
+      full_date: "%b %d %Y"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -400,6 +406,7 @@ en:
         meals: "Meals"
         jobs: "Jobs"
         reports: "Reports"
+        formulas: "Formulas"
       people:
         directory: "Directory"
         households: "Households"
@@ -474,6 +481,13 @@ en:
       home: "h"
       work: "w"
       mobile: "m"
+
+  meals/formulas:
+    pantry: "Pantry"
+    calc_types:
+      fixed: "Fixed"
+      share: "Proportional"
+      percent: "Percentage"
 
   meals/messages:
     recipient_count:

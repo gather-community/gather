@@ -1,6 +1,8 @@
 class ApplicationDecorator < Draper::Decorator
   include Utilities
 
+  delegate :t, to: :h # I18n helper
+
   def self.collection_decorator_class
     PaginatingDecorator
   end

@@ -14,6 +14,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :meals do
+    resources :formulas do
+      member do
+        put :activate
+        put :deactivate
+      end
+    end
+  end
+
   resources :meals do
     collection do
       get :jobs
@@ -27,10 +36,6 @@ Rails.application.routes.draw do
 
     resources :messages, only: [:new, :create], module: :meals
     resource :finalize, only: [:new, :create], module: :meals, controller: :finalize
-  end
-
-  namespace :meals do
-    resources :formulas
   end
 
   namespace :reservations do

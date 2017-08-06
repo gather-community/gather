@@ -151,20 +151,33 @@ shared_context "policy objs" do
     end
   end
 
+  # We know that checking the permission should check the community, so if there is nil community,
+  # we should get an error!
+  shared_examples_for "errors on permission check without community" do
+    context "with nil community" do
+      before { expect(record).to receive(:community).at_least(1).and_return(nil) }
+
+      it "errors when checking role permission" do |example|
+        example.metadata[:permissions].each do |perm|
+          expect { subject.new(actor, record).send(perm) }.to raise_error(
+            ApplicationPolicy::CommunityNotSetError)
+        end
+      end
+    end
+  end
+
   shared_examples_for "permits admins but not regular users" do
+    context do
+      let(:actor) { admin }
+      it_behaves_like "errors on permission check without community"
+    end
+
     it "grants access to admins from community" do
       expect(subject).to permit(admin, record)
     end
 
     it "denies access to admins from outside community" do
       expect(subject).not_to permit(admin_in_cmtyB, record)
-    end
-
-    it "errors when checking admin without community" do |example|
-      example.metadata[:permissions].each do |perm|
-        expect { subject.new(admin, record.class).send(perm) }.to raise_error(
-          ApplicationPolicy::CommunityNotSetError)
-      end
     end
 
     it "denies access to regular user" do
@@ -175,21 +188,17 @@ shared_context "policy objs" do
   shared_examples_for "permits admins or special role but not regular users" do |role_name|
     it_behaves_like "permits admins but not regular users"
 
+    context do
+      let(:actor) { role_member(role_name) }
+      it_behaves_like "errors on permission check without community"
+    end
+
     it "grants access to role from community" do
       expect(subject).to permit(role_member(role_name), record)
     end
 
     it "denies access to role from outside community" do
       expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
-    end
-
-    it "errors when checking role permission without community" do |example|
-      example.metadata[:permissions].each do |perm|
-        without_community = record.dup
-        without_community.community = nil
-        expect { subject.new(role_member(role_name), without_community).send(perm) }.to raise_error(
-          ApplicationPolicy::CommunityNotSetError)
-      end
     end
   end
 

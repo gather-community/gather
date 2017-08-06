@@ -96,7 +96,7 @@ class Meal < ActiveRecord::Base
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
       community: community,
-      formula: Meals::Formula.for_community(community).newest_first.first
+      formula: Meals::Formula.newest_for(community)
     )
   end
 

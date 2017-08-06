@@ -9,6 +9,10 @@ module Meals
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
 
+    def self.newest_for(community)
+      for_community(community).newest_first.first
+    end
+
     def allowed_diner_types
       @allowed_diner_types ||= Signup::DINER_TYPES.select{ |dt| allows_diner_type?(dt) }
     end

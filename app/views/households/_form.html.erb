@@ -3,16 +3,8 @@
   <%= render("fields", f: f) %>
 
   <%= form_actions do %>
-    <% if policy(@household).deactivate? && !@household.new_record? && @household.active? %>
-      <%= link_to(icon_tag("times-circle") << " Deactivate Household", deactivate_household_path(@household),
-        class: "btn btn-default", method: :put,
-        data: { confirm: I18n.t("activerecord.deact_confirms.household", name: @household.name) }) %>
-    <% end %>
-    <% if policy(@household).destroy? && !@household.new_record? %>
-      <%= link_to(icon_tag("trash") << " Delete Household", household_path(@household),
-        class: "btn btn-default", method: :delete,
-        data: { confirm: I18n.t("activerecord.delete_confirms.household", name: @household.name) }) %>
-    <% end %>
+    <%= deactivate_btn(@household, name: @household.name) %>
+    <%= destroy_btn(@household, name: @household.name) %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
 

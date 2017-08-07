@@ -124,15 +124,6 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
-    delete_confirms:
-      household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
-      meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
-      user: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
-      resource: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
-    deact_confirms:
-      household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
-      user: "Are you sure you want to deactivate the user '%{name}'?"
-      resource: "Are you sure you want to deactivate the resource '%{name}?'"
 
   custom_fields:
     labels:
@@ -204,6 +195,32 @@ en:
                 none: "No late fee"
                 fixed: "Fixed"
                 percent: "Percentage"
+
+  button_labels:
+    reservations/resource:
+      deactivate: "Deactivate Resource"
+      destroy: "Delete Resource"
+    household:
+      deactivate: "Deactivate Household"
+      destroy: "Delete Household"
+    meal:
+      destroy: "Delete Meal"
+    user:
+      deactivate: "Deactivate User"
+      destroy: "Delete User"
+
+  confirmations:
+    household:
+      destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
+    meal:
+      destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
+    user:
+      destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the user '%{name}'?"
+    reservations/resource:
+      destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.

@@ -7,7 +7,7 @@ module Meals
     def index
       authorize sample_formula
       @formulas = policy_scope(Formula).where(community: current_community).
-        with_meal_counts.order(created_at: :desc, is_default: :desc)
+        with_meal_counts.deactivated_last.by_name
     end
 
     def new

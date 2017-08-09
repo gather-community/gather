@@ -22,6 +22,9 @@ module Meals
     validates :name, :meal_calc_type, :pantry_calc_type, :pantry_fee, presence: true
     validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
     validate :at_least_one_signup_type
+    validate :cant_unset_default
+
+    after_save :ensure_unique_default
 
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: ->(f) { f[st].present? }
@@ -70,6 +73,12 @@ module Meals
 
     private
 
+    def cant_unset_default
+      if is_default_changed? && is_default_was
+        errors.add(:is_default, :cant_unset)
+      end
+    end
+
     def at_least_one_signup_type
       if fixed_meal?
         if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
@@ -79,6 +88,12 @@ module Meals
         if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st] == 0 }
           errors.add(:signup_types, :at_least_one_nonzero_signup_type)
         end
+      end
+    end
+
+    def ensure_unique_default
+      if is_default?
+        self.class.for_community(community).where.not(id: id).update_all(is_default: false)
       end
     end
   end

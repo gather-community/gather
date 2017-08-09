@@ -134,6 +134,9 @@ en:
         meals/formula:
           at_least_one_signup_type: "You must specify a value for at least one signup type."
           at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
+          attributes:
+            is_default:
+              cant_unset: "You can't unset default. Set another formula to default instead."
 
   custom_fields:
     labels:

@@ -69,8 +69,14 @@ module Meals
     private
 
     def at_least_one_signup_type
-      if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
-        errors.add(:signup_types, :at_least_one_signup_type)
+      if fixed_meal?
+        if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
+          errors.add(:signup_types, :at_least_one_signup_type)
+        end
+      else
+        if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st] == 0 }
+          errors.add(:signup_types, :at_least_one_nonzero_signup_type)
+        end
       end
     end
   end

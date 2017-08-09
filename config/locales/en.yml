@@ -133,6 +133,7 @@ en:
               invalid: "has incorrect type"
         meals/formula:
           at_least_one_signup_type: "You must specify a value for at least one signup type."
+          at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
 
   custom_fields:
     labels:

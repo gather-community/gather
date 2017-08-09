@@ -2,6 +2,9 @@ module Meals
   class Formula < ActiveRecord::Base
     include Deactivatable
 
+    MEAL_CALC_TYPES = %i(fixed share)
+    PANTRY_CALC_TYPES = %i(fixed percent)
+
     acts_as_tenant(:cluster)
 
     belongs_to :community

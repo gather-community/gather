@@ -63,6 +63,13 @@ en:
         ingredient_cost: "Ingredient Cost"
         pantry_cost: "Pantry Cost"
         payment_method: "Payment Method"
+      meals/formula:
+        name: "Name"
+        meal_calc_type: "Calculation Type"
+        pantry_calc_type: "Calculation Type"
+        is_default: "Default"
+        signup_types: "Diner Types"
+        pantry_fee: "Pantry Fee"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -295,6 +302,13 @@ en:
           payment_method:
             check: "Check"
             credit: "Balance Credit"
+      meals_formula:
+        meal_calc_type:
+          fixed: "Fixed"
+          share: "Proportional"
+        pantry_calc_type:
+          fixed: "Fixed"
+          percent: "Percentage"
       user:
         preferred_contact:
           email: "Email"

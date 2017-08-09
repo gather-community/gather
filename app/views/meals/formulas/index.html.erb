@@ -6,14 +6,20 @@
       <th>Name</th>
       <th>Meals</th>
       <th>Created On</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <% formulas.each do |formula| %>
       <tr class="<%= formula.tr_classes %>">
-        <td class="name"><%= formula.name_with_default %></td>
+        <td class="name"><%= link_to(formula.name_with_default, meals_formula_path(formula)) %></td>
         <td class="meal-count"><%= formula.meal_count %></td>
         <td class="created-at"><%= formula.created_on %></td>
+        <td>
+          <% if policy(formula).edit? %>
+            <%= link_to(icon_tag("pencil"), edit_meals_formula_path(formula)) %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

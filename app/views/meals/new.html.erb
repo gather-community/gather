@@ -3,7 +3,7 @@
 <% missing = [] %>
 <% if @meal.formula.nil? %>
   <% str = "an applicable cost formula" %>
-  <% missing << (policy(@dummy_formula).create? ? link_to(str, new_meals_formula_path) : str) %>
+  <% missing << (policy(@sample_formula).create? ? link_to(str, new_meals_formula_path) : str) %>
 <% end %>
 <% if @resource_options.empty? %>
   <% str = "at least one meal-hostable resource" %>

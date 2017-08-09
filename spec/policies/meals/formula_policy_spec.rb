@@ -85,4 +85,13 @@ describe Meals::FormulaPolicy do
       it_behaves_like "returns active formulas only"
     end
   end
+
+  describe "permitted attributes" do
+    subject { Meals::FormulaPolicy.new(User.new, Meals::Formula.new).permitted_attributes }
+
+    it "should allow basic attribs" do
+      expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee,
+        *Signup::SIGNUP_TYPES.map(&:to_sym))
+    end
+  end
 end

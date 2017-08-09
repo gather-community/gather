@@ -1,5 +1,11 @@
 <% content_for(:title, "Meal Formulas") %>
 
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_formula).create? %>
+    <%= link_to(icon_tag("plus") << " Create Formula", new_meals_formula_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
 <table class="index part-width">
   <thead>
     <tr>

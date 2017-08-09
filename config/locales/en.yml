@@ -68,7 +68,7 @@ en:
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
         is_default: "Default"
-        signup_types: "Diner Types"
+        signup_types: "Signup Types"
         pantry_fee: "Pantry Fee"
       signup:
         spots_left: "Spots Left"
@@ -131,6 +131,8 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
+        meals/formula:
+          at_least_one_signup_type: "You must specify a value for at least one signup type."
 
   custom_fields:
     labels:
@@ -207,6 +209,9 @@ en:
     reservations/resource:
       deactivate: "Deactivate Resource"
       destroy: "Delete Resource"
+    meals/formula:
+      deactivate: "Deactivate Formula"
+      destroy: "Delete Formula"
     household:
       deactivate: "Deactivate Household"
       destroy: "Delete Household"

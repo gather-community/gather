@@ -41,5 +41,10 @@ module Meals
     def destroy?
       !is_default? && update?
     end
+
+    def permitted_attributes
+      [:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee] +
+        Signup::SIGNUP_TYPES.map(&:to_sym)
+    end
   end
 end

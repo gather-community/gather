@@ -1,10 +1,10 @@
 <%= horizontal_form_for(formula) do |f| %>
-  <%= f.input :name %>
+  <%= f.input :name, maxlength: 32 %>
   <%= f.input :is_default %>
 
   <h4>Meal Calculations</h4>
   <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
-  <%= f.input :signup_types do %>
+  <%= f.input :signup_types, required: true do %>
     <% Signup::SIGNUP_TYPES.each do |st| %>
       <%= f.input st, label: t("signups.types.#{st}") %>
     <% end %>

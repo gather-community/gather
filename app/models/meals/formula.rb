@@ -2,6 +2,8 @@ module Meals
   class Formula < ActiveRecord::Base
     include Deactivatable
 
+    attr_accessor :signup_types # For validation error setting only
+
     MEAL_CALC_TYPES = %i(fixed share)
     PANTRY_CALC_TYPES = %i(fixed percent)
 
@@ -14,6 +16,14 @@ module Meals
     scope :newest_first, -> { order(created_at: :desc) }
     scope :with_meal_counts, -> { select("meal_formulas.*,
       (SELECT COUNT(id) FROM meals WHERE formula_id = meal_formulas.id) AS meal_count") }
+
+    validates :name, :meal_calc_type, :pantry_calc_type, :pantry_fee, presence: true
+    validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
+    validate :at_least_one_signup_type
+
+    Signup::SIGNUP_TYPES.each do |st|
+      validates st, numericality: {greater_than_or_equal_to: 0}, if: ->(f) { f[st].present? }
+    end
 
     def self.newest_for(community)
       for_community(community).newest_first.first
@@ -54,6 +64,14 @@ module Meals
 
     def max_cost
       Signup::SIGNUP_TYPES.map { |st| self[st] }.compact.max
+    end
+
+    private
+
+    def at_least_one_signup_type
+      if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
+        errors.add(:signup_types, :at_least_one_signup_type)
+      end
     end
   end
 end

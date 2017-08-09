@@ -222,7 +222,7 @@ class MealsController < ApplicationController
     @meal.ensure_assignments
     load_communities_in_cluster
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
-    @dummy_formula = Meals::Formula.new(community: current_community)
+    @sample_formula = Meals::Formula.new(community: current_community)
     @dummy_resource = Reservations::Resource.new(community: current_community)
   end
 

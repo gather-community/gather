@@ -3,6 +3,25 @@
     width: 500px;
   }
 
+  &.action-show {
+    table.key-value {
+      margin-bottom: 20px;
+    }
+
+    div.signup-type {
+      display: table-row;
+
+      div {
+        display: table-cell;
+
+        &:first-child {
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+
+
   form {
   }
 }

@@ -35,6 +35,10 @@ module Meals
       for_community(community).newest_first.first
     end
 
+    def defined_signup_types
+      Signup::SIGNUP_TYPES.select { |st| self[st].present? }
+    end
+
     def has_meals?
       meals.any?
     end

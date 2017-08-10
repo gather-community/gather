@@ -2,10 +2,11 @@ module Meals
   class FormulaDecorator < ApplicationDecorator
     delegate_all
 
-    def name_with_default
+    def name_with_suffix
       "".html_safe.tap do |str|
         str << name
         str << " (#{t("common.default")})" if is_default?
+        str << " (#{t("common.inactive")})" if inactive?
       end
     end
 

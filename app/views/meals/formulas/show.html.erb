@@ -1,2 +1,41 @@
-<% content_for(:title, "Meal Formula: #{formula.name}") %>
-<%= render("form") %>
+<% content_for(:title, "Meal Formula: #{formula.name_with_suffix}") %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(formula).edit? %>
+    <%= link_to(icon_tag("pencil") << " Edit Formula", edit_meals_formula_path(formula),
+      class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<h4>Meal Calculations</h4>
+
+<table class="key-value">
+  <tr>
+    <td><%= t("activerecord.attributes.meals/formula.meal_calc_type") %></td>
+    <td><%= t("simple_form.options.meals_formula.meal_calc_type.#{formula.meal_calc_type}") %></td>
+  </tr>
+  <tr>
+    <td><%= t("activerecord.attributes.meals/formula.signup_types") %></td>
+    <td>
+      <% formula.defined_signup_types.each do |st| %>
+        <div class="signup-type">
+          <div><%= t("signups.types.#{st}") %></div>
+          <div><%= formula.send("#{st}_disp") %></div>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+</table>
+
+<h4>Pantry Calculations</h4>
+
+<table class="key-value">
+  <tr>
+    <td><%= t("activerecord.attributes.meals/formula.pantry_calc_type") %></td>
+    <td><%= t("simple_form.options.meals_formula.pantry_calc_type.#{formula.pantry_calc_type}") %></td>
+  </tr>
+  <tr>
+    <td><%= t("activerecord.attributes.meals/formula.pantry_fee") %></td>
+    <td><%= formula.pantry_fee_disp %></td>
+  </tr>
+</table>

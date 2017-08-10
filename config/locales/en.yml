@@ -5,6 +5,7 @@ en:
     max: "Max"
     num_in_total: "%{count} in total"
     default: "Default"
+    inactive: "Inactive"
 
   activerecord:
     models:

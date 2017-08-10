@@ -18,7 +18,7 @@
   <tbody>
     <% formulas.each do |formula| %>
       <tr class="<%= formula.tr_classes %>">
-        <td class="name"><%= link_to(formula.name_with_default, meals_formula_path(formula)) %></td>
+        <td class="name"><%= link_to(formula.name_with_suffix, meals_formula_path(formula)) %></td>
         <td class="meal-count"><%= formula.meal_count %></td>
         <td class="created-at"><%= formula.created_on %></td>
         <td>

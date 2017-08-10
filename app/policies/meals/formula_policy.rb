@@ -43,8 +43,8 @@ module Meals
     end
 
     def permitted_attributes
-      [:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee] +
-        Signup::SIGNUP_TYPES.map(&:to_sym)
+      [:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee_disp] +
+        Signup::SIGNUP_TYPES.map { |st| :"#{st}_disp" }
     end
   end
 end

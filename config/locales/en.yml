@@ -69,7 +69,7 @@ en:
         pantry_calc_type: "Calculation Type"
         is_default: "Default"
         signup_types: "Signup Types"
-        pantry_fee: "Pantry Fee"
+        pantry_fee_disp: "Pantry Fee"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"

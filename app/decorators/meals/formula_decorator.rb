@@ -20,12 +20,36 @@ module Meals
       end
     end
 
+    def pantry_fee_disp
+      if fixed_pantry?
+        h.number_to_currency(pantry_fee)
+      else
+        decimal_to_percentage(pantry_fee)
+      end
+    end
+
     def created_on
       I18n.l(created_at, format: :full_date)
     end
 
     def tr_classes
       active? ? "" : "inactive"
+    end
+
+    Signup::SIGNUP_TYPES.each do |st|
+      define_method("#{st}_disp") do
+        if fixed_meal?
+          h.number_to_currency(object[st])
+        else
+          decimal_to_percentage(object[st])
+        end
+      end
+    end
+
+    private
+
+    def decimal_to_percentage(num)
+      h.number_to_percentage(num.try(:*, 100), precision: 0)
     end
   end
 end

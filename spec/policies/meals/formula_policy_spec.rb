@@ -90,8 +90,8 @@ describe Meals::FormulaPolicy do
     subject { Meals::FormulaPolicy.new(User.new, Meals::Formula.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee,
-        *Signup::SIGNUP_TYPES.map(&:to_sym))
+      expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type,
+        :pantry_fee_disp, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
     end
   end
 end

@@ -19,16 +19,17 @@ module Meals
     scope :deactivated_last, -> { order("COALESCE(deactivated_at, '0001-01-01 00:00:00')") }
     scope :by_name, -> { order("LOWER(name)") }
 
+    normalize_attribute :name
+
     validates :name, :meal_calc_type, :pantry_calc_type, :pantry_fee, presence: true
     validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
     validate :at_least_one_signup_type
     validate :cant_unset_default
-
-    after_save :ensure_unique_default
-
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: ->(f) { f[st].present? }
     end
+
+    after_save :ensure_unique_default
 
     def self.newest_for(community)
       for_community(community).newest_first.first
@@ -60,15 +61,25 @@ module Meals
     end
 
     def fixed_meal?
-      meal_calc_type == "fixed"
+      meal_calc_type.blank? || meal_calc_type == "fixed"
     end
 
     def fixed_pantry?
-      pantry_calc_type == "fixed"
+      pantry_calc_type.blank? || pantry_calc_type == "fixed"
     end
 
     def max_cost
       Signup::SIGNUP_TYPES.map { |st| self[st] }.compact.max
+    end
+
+    def pantry_fee_disp=(str)
+      self.pantry_fee = normalize_amount(str, pct: !fixed_pantry?)
+    end
+
+    Signup::SIGNUP_TYPES.each do |st|
+      define_method("#{st}_disp=") do |str|
+        send("#{st}=", normalize_amount(str, pct: !fixed_meal?))
+      end
     end
 
     private
@@ -95,6 +106,17 @@ module Meals
       if is_default?
         self.class.for_community(community).where.not(id: id).update_all(is_default: false)
       end
+    end
+
+    def separator
+      I18n.t("number.format.separator")
+    end
+
+    # Converts a string like "$2.11" or "82%" to 2.11 or 82, respectively. If pct is true, divides by 100.
+    def normalize_amount(value, pct:)
+      value = value.try(:gsub, /[^#{separator}0-9]/, "")
+      return nil if value.blank?
+      value.to_f / (pct ? 100 : 1)
     end
   end
 end

@@ -6,17 +6,23 @@
   <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
   <%= f.input :signup_types, required: true do %>
     <% Signup::SIGNUP_TYPES.each do |st| %>
-      <%= f.input st, label: t("signups.types.#{st}") %>
+      <%= f.input "#{st}_disp", as: :string, label: t("signups.types.#{st}") %>
     <% end %>
   <% end %>
 
   <h4>Pantry Calculations</h4>
   <%= f.input :pantry_calc_type, collection: Meals::Formula::PANTRY_CALC_TYPES %>
-  <%= f.input :pantry_fee %>
+  <%= f.input :pantry_fee_disp, as: :string %>
 
   <%= form_actions do %>
     <%= deactivate_btn(formula, name: formula.name) %>
     <%= destroy_btn(formula, name: formula.name) %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.FormulaFormView({el: '.meals--formula-form'});
+  });
 <% end %>

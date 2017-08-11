@@ -62,6 +62,10 @@
           <div class="inner clearfix">
             <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
             <div class="info">
+              <% if user.preferred_contact.present? %>
+                <%= icon_tag(user.preferred_contact_icon,
+                  class: "preferred-contact", title: user.preferred_contact_tooltip) %>
+              <% end %>
               <div><%= link_to(user.name, user) %></div>
               <div class="email"><%= user.email_link if user.email %></div>
               <div class="unit-phone"><%= user.unit_and_phone %></div>

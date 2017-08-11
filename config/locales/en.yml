@@ -500,3 +500,6 @@ en:
       subject: "Message to Diners about Meal on %{datetime}"
     team_message:
       subject: "Message to Team for Meal on %{datetime}"
+
+  user:
+    preferred_contact_tooltip: "Prefers to be contacted via: %{method}"

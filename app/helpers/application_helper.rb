@@ -16,7 +16,8 @@ module ApplicationHelper
   end
 
   def icon_tag(name, options = {})
-    content_tag(:i, "", options.merge(class: "fa fa-#{name} #{options.delete(:class)}"))
+    name = "fa-#{name}" unless name =~ /\Afa-/
+    content_tag(:i, "", options.merge(class: "fa #{name} #{options.delete(:class)}"))
   end
 
   # Sets twitter-bootstrap theme as default for pagination.

@@ -62,4 +62,17 @@ class UserDecorator < ApplicationDecorator
   def long_email_class
     email.size > 25 ? "long-email" : ""
   end
+
+  def preferred_contact_icon
+    case object.preferred_contact
+    when "email" then "fa-envelope"
+    when "text" then "fa-comment"
+    when "phone" then "fa-phone"
+    else nil
+    end
+  end
+
+  def preferred_contact_tooltip
+    h.t("user.preferred_contact_tooltip", method: preferred_contact)
+  end
 end

@@ -27,6 +27,11 @@
       overflow-x: hidden;
       white-space: nowrap;
 
+      i.preferred-contact {
+        float: right;
+        color: $gray-text;
+      }
+
       a {
         color: $main-text-color;
       }

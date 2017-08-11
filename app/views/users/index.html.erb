@@ -33,6 +33,7 @@
             <th>Mobile Phone</th>
             <th>Home Phone</th>
             <th>Work Phone</th>
+            <th>Pref</th>
           </tr>
         </thead>
         <tbody>
@@ -42,7 +43,12 @@
               <td><%= user.unit_link %></td>
               <td><%= user.email_link if user.email %></td>
               <% %i(mobile home work).each do |kind| %>
-                <td><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
+                <td class="phone"><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
+              <% end %>
+              <% if user.preferred_contact.present? %>
+                <td><%= t("simple_form.options.user.preferred_contact.#{user.preferred_contact}") %></td>
+              <% else %>
+                <td></td>
               <% end %>
             </tr>
           <% end %>

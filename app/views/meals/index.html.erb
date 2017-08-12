@@ -57,11 +57,11 @@
   <div class="meals-list mobile">
     <% @meals.each do |meal| %>
       <div class="meal <%= signed_up_class(meal) %>">
-        <h5>
+        <h4 class="top">
           <%= meal_link(meal) %> by <%= meal.head_cook_name %>
           <%= icon_tag("lock") if meal.closed? %>
           <%= icon_tag("certificate") if meal.finalized? %>
-        </h5>
+        </h4>
         <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
         <div class="signup-count">
           <%= signup_count(meal) %> signed up

@@ -24,10 +24,6 @@ a.calendar-export {
         display: table-cell;
         vertical-align: top;
       }
-
-      #note {
-        width: 300px;
-      }
     }
   }
 
@@ -50,18 +46,6 @@ a.calendar-export {
       margin-left: 49px;
       color: $gray-text;
       font-size: 0.7em;
-    }
-  }
-
-  #note {
-    div {
-      background-color: #eee;
-      padding: 20px;
-
-      h5 {
-        color: $theme-main;
-        margin-top: 0;
-      }
     }
   }
 

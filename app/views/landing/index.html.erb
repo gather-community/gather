@@ -28,24 +28,29 @@
   <div id="help-modal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 class="modal-title" id="glb-error-modal-label">Help Signing In</h2>
+        </div>
         <div class="modal-body">
-          <h3>Help Signing In</h3>
-          <h4>Why Google?</h4>
+          <h2 class="top">Why Google?</h2>
           <p>Gather uses Google for sign in so that you don't have to remember yet another password. This increases security and decreases headache! Most people have a Google account. If you use Gmail or an Android phone, you have one.</p>
           <p>When you click the 'Sign in with Google' button, you will be taken to a Google page where you will be asked to authorize Gather to see your basic info. The only piece of information that Gather actually uses is your Google email address. You only have to do this step once.</p>
           <p>If you suspect you have a Google account but you don't know your username or password, <strong>do not create a new Google account</strong>. This will cause confusion later on. Use the 'Need help?' link on the Google sign in page to get access to your existing account. Contact your tech team or Gather admin if you can't figure it out.</p>
           <p>If you are certain you do not have a Google account, you can create one after you click the 'Sign in with Google' button.</p>
 
-          <h4>Invitations</h4>
+          <h2>Invitations</h2>
           <p>If you got an invitation in your email, be sure to use the link in the email to reach this page, otherwise you may not be able to sign in.</p>
           <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. If you receive an 'invitation expired' error, you will need to contact your Gather admin to get a new one.</p>
 
-          <h4>Troubleshooting</h4>
-          <p><h5>Error: "Your Google ID xxx@gmail.com was not found in the system"</h5></p>
+          <h2>Troubleshooting</h2>
+          <p><strong>Error: "Your Google ID xxx@gmail.com was not found in the system"</strong></p>
           <p>This means you tried to sign in with a Google ID that is not recognized. Please contact your Gather admin to get your Google ID added.</p>
-          <p><h5>Error: "You must sign in with the Google ID xyz@gmail.com"</h5></p>
+          <p><strong>Error: "You must sign in with the Google ID xyz@gmail.com"</strong></p>
           <p>This means your Gather admin has specified a Google ID for your account but you have attempted to sign in with a different Google ID. Please sign in with the specified Google ID, or contact the Gather admin to have your Google ID changed.</p>
-          <p><h5>Error: "Your invitation has expired"</h5></p>
+          <p><strong>Error: "Your invitation has expired"</strong></p>
           <p>Invitations expire <%= number_with_precision(Devise.reset_password_within / 1.day, precision: 0) %> days after they are sent. Contact your Gather admin to get a new one.</p>
         </div>
         <div class="modal-footer">

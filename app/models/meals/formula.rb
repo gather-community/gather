@@ -26,7 +26,7 @@ module Meals
     validate :at_least_one_signup_type
     validate :cant_unset_default
     Signup::SIGNUP_TYPES.each do |st|
-      validates st, numericality: {greater_than_or_equal_to: 0}, if: ->(f) { f[st].present? }
+      validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
     end
 
     after_save :ensure_unique_default

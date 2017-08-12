@@ -41,7 +41,7 @@
   <div class="meals-list mobile">
     <% @meals.each do |meal| %>
       <div class="meal <%= signed_up_class(meal) %>">
-        <h4><%= meal_date_time(meal) %></h4>
+        <h2><%= meal_date_time(meal) %></h2>
         <div class="title">
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
         </div>

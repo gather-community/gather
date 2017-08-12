@@ -2,10 +2,10 @@
   <div class="row">
     <% if @last_statement %>
       <div class="col-sm-6">
-        <h4>
+        <h2>
           Current Statement&nbsp;
           <%= link_to("View", statement_path(@last_statement)) %>
-        </h4>
+        </h2>
 
         <table class="key-value">
           <tr>
@@ -48,10 +48,10 @@
     <% end %>
 
     <div class="col-sm-6">
-      <h4>
+      <h2>
         <%= @last_statement ? "Activity Since Current Statement" : "Recent Activity" %>&nbsp;
         <%= link_to("View", account_transactions_path(@account)) %>
-      </h4>
+      </h2>
 
       <table class="key-value">
         <tr>
@@ -94,7 +94,7 @@
   <% if @statements.any? %>
     <div class="row">
       <div class="col-sm-6">
-        <h4 class="inner">All Statements</h4>
+        <h2 class="inner">All Statements</h2>
 
         <table class="index">
           <tr>

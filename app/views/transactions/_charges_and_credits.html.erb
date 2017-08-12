@@ -1,5 +1,5 @@
 <% if @credits.any? %>
-  <h4 class="inner">Payments/Credits</h4>
+  <h2>Payments/Credits</h2>
   <table class="index credits">
     <%= render("transactions/credit_header") %>
     <% @credits.each do |txn| %>
@@ -9,7 +9,7 @@
 <% end %>
 
 <% if @charges.any? %>
-  <h4 class="inner">Charges</h4>
+  <h2>Charges</h2>
   <table class="index charges">
     <%= render("transactions/charge_header") %>
     <% @charges.each do |txn| %>

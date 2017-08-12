@@ -2,7 +2,7 @@
   <%= f.input :name, maxlength: 32 %>
   <%= f.input :is_default %>
 
-  <h4>Meal Calculations</h4>
+  <h2>Meal Calculations</h2>
   <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
   <%= f.input :signup_types, required: true do %>
     <% Signup::SIGNUP_TYPES.each do |st| %>
@@ -10,7 +10,7 @@
     <% end %>
   <% end %>
 
-  <h4>Pantry Calculations</h4>
+  <h2>Pantry Calculations</h2>
   <%= f.input :pantry_calc_type, collection: Meals::Formula::PANTRY_CALC_TYPES %>
   <%= f.input :pantry_fee_disp, as: :string %>
 

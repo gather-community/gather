@@ -3,25 +3,6 @@ body {
   color: $main-text-color;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Montserrat Alternates', sans-serif;
-  color: $theme-main;
-
-  a {
-    font-size: 12px;
-    font-weight: normal;
-    font-family: 'Raleway';
-  }
-
-  &.inner {
-    margin-top: $large-margin;
-  }
-}
-
-h5, h6 {
-  font-weight: bold;
-}
-
 p.inner {
   margin-top: $large-margin;
 }
@@ -126,18 +107,27 @@ h1 + .action-icons {
   margin: -15px 0 10px 0;
 }
 
-.modal {
-  h3 {
-    margin-top: 0;
-  }
-
-  h4, h5 {
-    margin-bottom: 5px;
-  }
-}
-
 ul.no-marker {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+// Content to the left must also be a table-cell in a table row so that it slides under.
+.callout {
+  display: table-cell;
+
+  @media screen and (min-width: $screen-sm-min) {
+    width: 300px;
+  }
+
+  div {
+    background-color: #eee;
+    padding: 20px;
+
+    h4 {
+      color: $theme-main;
+      margin-top: 0;
+    }
+  }
 }

@@ -1,0 +1,37 @@
+h1, h2, h3, h4 {
+  color: $theme-main;
+  font-weight: bold;
+
+  &.with-subhead {
+    margin-bottom: 0px;
+  }
+
+  &.top {
+    margin-top: 0;
+  }
+}
+
+// These three have the fancy font.
+h1, h2, h3 {
+  font-family: 'Montserrat Alternates', sans-serif;
+
+  a {
+    font-size: 12px;
+    font-weight: normal;
+    font-family: 'Raleway';
+  }
+}
+
+h2, .h2 {
+  font-size: 21px;
+  margin: 20px 0 10px 0;
+}
+
+h3, .h3 {
+  font-size: 15px;
+}
+
+h4 {
+  font-size: 15px;
+  line-height: 130%;
+}

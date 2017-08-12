@@ -22,6 +22,10 @@
   }
 
   form {
+    .meals_formula_is_default {
+      margin-top: -12px;
+    }
+
     .meals_formula_signup_types {
       > div {
         @media screen and (min-width: $screen-md-min) {

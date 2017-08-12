@@ -21,7 +21,25 @@
     }
   }
 
-
   form {
+    .meals_formula_signup_types {
+      > div {
+        @media screen and (min-width: $screen-md-min) {
+          column-count: 2;
+
+          // Inner signup type control.
+          .form-group {
+            label {
+              width: 50%;
+            }
+
+            div {
+              width: 50%;
+              padding-right: 20px;
+            }
+          }
+        }
+      }
+    }
   }
 }

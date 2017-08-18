@@ -49,6 +49,11 @@ form {
     }
   }
 
+  // Paragraph-style hints for sections of forms instead of individual fields
+  p.hint {
+    margin-bottom: 16px;
+  }
+
   // Overriding error message style
   .has-error {
     .hint {

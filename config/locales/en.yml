@@ -70,7 +70,7 @@ en:
         pantry_calc_type: "Calculation Type"
         is_default: "Default"
         signup_types: "Signup Types"
-        pantry_fee_disp: "Pantry Fee"
+        pantry_fee_disp: "Pantry Fee Amount"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -302,6 +302,8 @@ en:
         guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"
+      meals_formula:
+        pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
     options:
       meal:
         time:
@@ -529,6 +531,12 @@ en:
       fixed: "Fixed"
       share: "Proportional"
       percent: "Percentage"
+    hints:
+      meal: "Meal costs can be calculated as a fixed cost or proportionally based on the ingredient cost."
+      pantry: "A pantry fee is a charge billed to each diner to cover the cost of purchasing staples for the kitchen. It can be calculated as a fixed amount or as a percentage of the diner's meal cost."
+      signup_type:
+        fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
+        share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
 
   meals/messages:
     recipient_count:

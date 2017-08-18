@@ -27,7 +27,11 @@
     }
 
     .meals_formula_signup_types {
-      > div {
+      div.signup-type-hints p {
+        display: none;
+      }
+
+      div.fields {
         @media screen and (min-width: $screen-md-min) {
           column-count: 2;
 

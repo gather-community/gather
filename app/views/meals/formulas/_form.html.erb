@@ -3,14 +3,23 @@
   <%= f.input :is_default %>
 
   <h2>Meal Calculations</h2>
+  <p class="hint"><%= t("meals/formulas.hints.meal") %></p>
   <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
   <%= f.input :signup_types, required: true do %>
-    <% Signup::SIGNUP_TYPES.each do |st| %>
-      <%= f.input "#{st}_disp", as: :string, label: t("signups.types.#{st}") %>
-    <% end %>
+    <div class="signup-type-hints">
+      <% Meals::Formula::MEAL_CALC_TYPES.each do |t| %>
+        <%= content_tag(:p, t("meals/formulas.hints.signup_type.#{t}"), class: "hint #{t}") %>
+      <% end %>
+    </div>
+    <div class="fields">
+      <% Signup::SIGNUP_TYPES.each do |st| %>
+        <%= f.input "#{st}_disp", as: :string, label: t("signups.types.#{st}") %>
+      <% end %>
+    </div>
   <% end %>
 
   <h2>Pantry Calculations</h2>
+  <p class="hint"><%= t("meals/formulas.hints.pantry") %></p>
   <%= f.input :pantry_calc_type, collection: Meals::Formula::PANTRY_CALC_TYPES %>
   <%= f.input :pantry_fee_disp, as: :string %>
 

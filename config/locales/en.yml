@@ -537,6 +537,7 @@ en:
       signup_type:
         fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
         share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
+    cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
 
   meals/messages:
     recipient_count:

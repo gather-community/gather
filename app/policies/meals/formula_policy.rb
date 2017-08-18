@@ -27,6 +27,10 @@ module Meals
     end
 
     def update?
+      active_admin_or_meals_coordinator?
+    end
+
+    def update_calcs?
       !has_meals? && active_admin_or_meals_coordinator?
     end
 
@@ -39,12 +43,16 @@ module Meals
     end
 
     def destroy?
-      !is_default? && update?
+      !is_default? && update_calcs?
     end
 
     def permitted_attributes
-      [:name, :is_default, :meal_calc_type, :pantry_calc_type, :pantry_fee_disp] +
-        Signup::SIGNUP_TYPES.map { |st| :"#{st}_disp" }
+      attrs = [:name, :is_default]
+      if update_calcs?
+        attrs << :meal_calc_type << :pantry_calc_type << :pantry_fee_disp
+        Signup::SIGNUP_TYPES.map { |st| attrs << :"#{st}_disp" }
+      end
+      attrs
     end
   end
 end

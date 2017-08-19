@@ -30,8 +30,8 @@ module Meals
 
     after_save :ensure_unique_default
 
-    def self.newest_for(community)
-      for_community(community).newest_first.first
+    def self.default_for(community)
+      for_community(community).where(is_default: true).first
     end
 
     def defined_signup_types

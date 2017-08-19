@@ -1,6 +1,4 @@
 <%= horizontal_form_for(@meal) do |f| %>
-  <%= f.hidden_field(:formula_id) %>
-
   <%= base_error(f) %>
 
   <% if policy(@meal).administer? %>
@@ -49,12 +47,20 @@
     <%= f.input :capacity do %><%= @meal.capacity %><% end %>
   <% end %>
 
+  <% if policy(@meal).administer? %>
+    <%= f.input :formula_id, collection: @formula_options %>
+  <% end %>
+
+  <h2>Workers</h2>
+
   <div id="assignment-fields">
     <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
     <% @meal.extra_roles.each do |role| %>
       <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
     <% end %>
   </div>
+
+  <h2>Menu</h2>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>
     <% if policy(@meal).set_menu? %>

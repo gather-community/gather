@@ -55,6 +55,7 @@ en:
         served_at: "Date/Time"
         communities: "Communities"
         resource_ids: "Location(s)"
+        formula: "Formula"
       meals/message:
         meal: "Meal"
         body: "Message"
@@ -332,6 +333,8 @@ en:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
     hints:
+      meal:
+        formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       reservations_resource:

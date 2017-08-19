@@ -100,10 +100,11 @@ describe MealPolicy do
       :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
     }]}
     let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
+    let(:admin_attribs) { [:formula_id] }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs))
+        expect(subject).to include(*(assign_attribs + head_cook_attribs) + admin_attribs)
         expect(subject).not_to include(:community_id)
       end
     end
@@ -122,7 +123,7 @@ describe MealPolicy do
       it "should allow more stuff" do
         meal.head_cook = actor
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(:community_id)
+        expect(subject).not_to include(*(admin_attribs + [:community_id]))
       end
     end
 

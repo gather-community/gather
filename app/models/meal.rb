@@ -76,6 +76,7 @@ class Meal < ActiveRecord::Base
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :creator_id, presence: true
+  validates :formula_id, presence: true
   validates :served_at, presence: true
   validates :community_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
@@ -96,7 +97,7 @@ class Meal < ActiveRecord::Base
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
       community: community,
-      formula: Meals::Formula.newest_for(community)
+      formula: Meals::Formula.default_for(community)
     )
   end
 

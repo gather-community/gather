@@ -29,8 +29,15 @@ describe MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :administer?, :destroy? do
+    permissions :new?, :create?, :administer?, :destroy?, :update_formula? do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+    end
+
+    permissions :update_formula? do
+      it "forbids if finalized" do
+        meal.status = "finalized"
+        expect(subject).not_to permit(admin, meal)
+      end
     end
 
     permissions :edit?, :update? do
@@ -106,6 +113,11 @@ describe MealPolicy do
       it "should allow even more stuff" do
         expect(subject).to include(*(assign_attribs + head_cook_attribs) + admin_attribs)
         expect(subject).not_to include(:community_id)
+      end
+
+      it "should not allow formula_id if meal finalized" do
+        meal.status = "finalized"
+        expect(subject).not_to include(:formula_id)
       end
     end
 

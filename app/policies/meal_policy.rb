@@ -73,6 +73,10 @@ class MealPolicy < ApplicationPolicy
     active_admin_or_biller?
   end
 
+  def update_formula?
+    !meal.finalized? && administer?
+  end
+
   def contact?
     @contact ||= Meals::MessagePolicy.new(user, Meals::Message.new(meal: record)).create?
   end
@@ -96,8 +100,10 @@ class MealPolicy < ApplicationPolicy
     end
 
     if administer?
-      permitted += [:served_at, :formula_id, resource_ids: []]
+      permitted += [:served_at, resource_ids: []]
     end
+
+    permitted << :formula_id if update_formula?
 
     permitted
   end

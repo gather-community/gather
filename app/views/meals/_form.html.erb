@@ -48,7 +48,7 @@
   <% end %>
 
   <% if policy(@meal).administer? %>
-    <%= f.input :formula_id, collection: @formula_options %>
+    <%= f.input :formula_id, collection: @formula_options, disabled: !policy(@meal).update_formula? %>
   <% end %>
 
   <h2>Workers</h2>

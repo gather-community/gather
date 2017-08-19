@@ -8,14 +8,6 @@
   end
 end %>
 
-<% unless @user.active? %>
-  <div class="alert alert-info">
-    This user was marked inactive at <%= @user.deactivated_at.to_s(:full_datetime) %>.
-    <% if policy(@user).activate? %>
-      You can <%= link_to("reactivate them", activate_user_path(@user), method: :put) %>.
-    <% end %>
-  </div>
-<% end %>
-
+<%= inactive_notice(@user) %>
 <%= render("form") %>
 <br/><br/>

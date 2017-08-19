@@ -1,12 +1,3 @@
 <% content_for(:title) { "Edit Resource: #{resource.name_with_inactive}" } %>
-
-<% unless @resource.active? %>
-  <div class="alert alert-info">
-    This resource was marked inactive at <%= l(@resource.deactivated_at, format: :full_datetime) %>.
-    <% if policy(@resource).activate? %>
-      You can <%= link_to("reactivate it", activate_reservations_resource_path(@resource), method: :put) %>.
-    <% end %>
-  </div>
-<% end %>
-
+<%= inactive_notice(@resource) %>
 <%= render("form") %>

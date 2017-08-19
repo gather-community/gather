@@ -239,6 +239,20 @@ en:
       destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
 
+  activatables:
+    user:
+      one_html: "This user was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate them"
+    household:
+      one_html: "This household was marked inactive at %{time}."
+      two_html: "You can %{link}. <strong>Note:</strong> You will need to reactivate the user(s) of the household separately."
+      three: "reactivate them"
+    reservations/resource:
+      one_html: "This resource was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+
   successes:
     household:
       activate: "Household activated successfully."

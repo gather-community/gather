@@ -238,6 +238,9 @@ en:
     reservations/resource:
       destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
+    meals/formula:
+      destroy: "Are you sure you want to delete the formula '%{name}?' This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the formula '%{name}?'"
 
   activatables:
     user:
@@ -247,9 +250,13 @@ en:
     household:
       one_html: "This household was marked inactive at %{time}."
       two_html: "You can %{link}. <strong>Note:</strong> You will need to reactivate the user(s) of the household separately."
-      three: "reactivate them"
+      three: "reactivate it"
     reservations/resource:
       one_html: "This resource was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+    meals/formula:
+      one_html: "This formula was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
 
@@ -266,6 +273,10 @@ en:
       activate: "Resource activated successfully."
       deactivate: "Resource deactivated successfully."
       destroy: "Resource deleted successfully."
+    meals/formula:
+      activate: "Formula activated successfully."
+      deactivate: "Formula deactivated successfully."
+      destroy: "Formula deleted successfully."
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.

@@ -1,2 +1,3 @@
+<% content_for(:flashes, inactive_notice(formula)) if formula.inactive? %>
 <% content_for(:title, "Edit Meal Formula: #{formula.name}") %>
 <%= render("form") %>

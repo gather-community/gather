@@ -51,6 +51,12 @@ module Meals
       end
     end
 
+    protected
+
+    def klass
+      Formula
+    end
+
     private
 
     def sample_formula

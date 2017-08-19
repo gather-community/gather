@@ -3,6 +3,7 @@ module Deactivatable
 
   included do
     scope :active, -> { where(deactivated_at: nil) }
+    scope :deactivated_last, -> { order("COALESCE(deactivated_at, '0001-01-01 00:00:00')") }
   end
 
   def activate

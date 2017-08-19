@@ -8,7 +8,7 @@ module Reservations
     def index
       authorize sample_resource
       @resources = policy_scope(Reservations::Resource).
-        with_reservation_counts.where(community: current_community).by_name
+        with_reservation_counts.where(community: current_community).deactivated_last.by_name
     end
 
     def new

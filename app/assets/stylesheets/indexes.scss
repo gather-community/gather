@@ -11,6 +11,10 @@ table.index {
   }
 
   tr.inactive {
+    img {
+      filter: grayscale(100%);
+    }
+
     td, td a {
       color: $inactive-color;
     }

@@ -13,5 +13,9 @@ module Reservations
     def abbrv_with_prefix
       "#{cmty_prefix_no_colon}#{abbrv}"
     end
+
+    def tr_classes
+      active? ? "" : "inactive"
+    end
   end
 end

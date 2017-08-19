@@ -16,7 +16,6 @@ module Meals
     scope :newest_first, -> { order(created_at: :desc) }
     scope :with_meal_counts, -> { select("meal_formulas.*,
       (SELECT COUNT(id) FROM meals WHERE formula_id = meal_formulas.id) AS meal_count") }
-    scope :deactivated_last, -> { order("COALESCE(deactivated_at, '0001-01-01 00:00:00')") }
     scope :by_name, -> { order("LOWER(name)") }
 
     normalize_attribute :name

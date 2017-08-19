@@ -103,7 +103,7 @@ describe MealPolicy do
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs + [:discount]))
+        expect(subject).to include(*(assign_attribs + head_cook_attribs))
         expect(subject).not_to include(:community_id)
       end
     end
@@ -122,7 +122,7 @@ describe MealPolicy do
       it "should allow more stuff" do
         meal.head_cook = actor
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(:discount, :community_id, :formula_id)
+        expect(subject).not_to include(:community_id)
       end
     end
 

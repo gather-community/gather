@@ -33,7 +33,6 @@ en:
         emergency_contacts: "Emergency Contacts"
         garage_nums: "Garage Number(s)"
       meal:
-        discount: "Discount %"
         allergen_gluten: "Gluten"
         allergen_shellfish: "Shellfish"
         allergen_soy: "Soy"

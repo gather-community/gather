@@ -2,7 +2,6 @@ require "rails_helper"
 
 feature "finalize meal", js: true do
   let!(:actor) { create(:admin) }
-  let!(:formula) { create(:meal_formula) }
   let!(:meal) { create(:meal, :with_menu, served_at: Time.now - 3.days) }
   let!(:signups) { create_list(:signup, 3, meal: meal, adult_veg: 1) }
   let!(:late_add) { create(:household) }

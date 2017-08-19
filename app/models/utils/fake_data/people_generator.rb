@@ -84,7 +84,7 @@ module Utils
         households.shuffle[0...3].each do |h|
           joined = h.users.map(&:joined_on).max
           Timecop.travel(joined + rand((Date.today - joined).to_i)) do
-            h.deactivate!
+            h.deactivate
           end
         end
       end

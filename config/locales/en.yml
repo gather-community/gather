@@ -239,6 +239,20 @@ en:
       destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
 
+  successes:
+    household:
+      activate: "Household activated successfully."
+      deactivate: "Household deactivated successfully."
+      destroy: "Household deleted successfully."
+    user:
+      activate: "User activated successfully."
+      deactivate: "User deactivated successfully."
+      destroy: "User deleted successfully."
+    reservations/resource:
+      activate: "Resource activated successfully."
+      deactivate: "Resource deactivated successfully."
+      destroy: "Resource deleted successfully."
+
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:

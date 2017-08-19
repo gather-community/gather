@@ -5,11 +5,11 @@ module Deactivatable
     scope :active, -> { where(deactivated_at: nil) }
   end
 
-  def activate!
+  def activate
     update_attribute(:deactivated_at, nil)
   end
 
-  def deactivate!(options = {})
+  def deactivate(options = {})
     update_attribute(:deactivated_at, Time.current)
     after_deactivate if respond_to?(:after_deactivate) && !options[:skip_callback]
   end

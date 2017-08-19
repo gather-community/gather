@@ -110,30 +110,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def destroy
-    @user = User.find(params[:id])
-    authorize @user
-    @user.destroy
-    flash[:success] = "User deleted successfully."
-    redirect_to(users_path)
-  end
-
-  def activate
-    @user = User.find(params[:id])
-    authorize @user
-    @user.activate!
-    flash[:success] = "User activated successfully."
-    redirect_to(users_path)
-  end
-
-  def deactivate
-    @user = User.find(params[:id])
-    authorize @user
-    @user.deactivate!
-    flash[:success] = "User deactivated successfully."
-    redirect_to(users_path)
-  end
-
   def invite
     authorize dummy_user
     @users = User.adults.never_signed_in.active.by_name
@@ -152,6 +128,10 @@ class UsersController < ApplicationController
   end
 
   protected
+
+  def klass
+    User
+  end
 
   # See def'n in ApplicationController for documentation.
   def community_for_route

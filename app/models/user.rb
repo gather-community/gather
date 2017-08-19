@@ -134,12 +134,12 @@ class User < ActiveRecord::Base
     assignments.any?
   end
 
-  def activate!
+  def activate
     super
     household.user_activated
   end
 
-  def deactivate!
+  def deactivate
     super
     household.user_deactivated
   end

@@ -55,7 +55,7 @@ describe Meals::FormulaPolicy do
 
     before do
       save_policy_objects!(community)
-      formulas.last.deactivate!
+      formulas.last.deactivate
     end
 
     shared_examples_for "returns all formulas" do

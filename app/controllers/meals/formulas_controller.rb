@@ -23,7 +23,7 @@ module Meals
     def edit
       @formula = Formula.find(params[:id])
       authorize @formula
-      flash.now[:notice] = I18n.t("meals/formulas.cant_edit_warning") unless policy(@formula).update_calcs?
+      flash.now[:notice] = I18n.t("meals/formulas.cant_edit_notice") unless policy(@formula).update_calcs?
     end
 
     def create

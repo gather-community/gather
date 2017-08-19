@@ -6,13 +6,16 @@ module ApplicationHelper
   end
 
   def flash_messages(opts = {})
-    flash.each do |msg_type, message|
-      concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade in") do
-        concat content_tag(:button, 'x', class: "close", data: { dismiss: 'alert' })
-        concat message
-      end)
+    flash.each do |type, messages|
+      Array.wrap(messages).each { |m| concat(flash_message(type, m)) }
     end
     nil
+  end
+
+  def flash_message(type, text)
+    content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
+      content_tag(:button, 'x', class: "close", data: {dismiss: 'alert'}) << text
+    end
   end
 
   def icon_tag(name, options = {})
@@ -45,21 +48,15 @@ module ApplicationHelper
 
   def inactive_notice(object)
     i18n_key = "activatables.#{object.model_name.i18n_key}"
-    if object.active?
-      ""
-    else
-      content_tag(:div, class: "alert alert-info") do
-        "".html_safe.tap do |html|
-          time = l(object.deactivated_at, format: :full_datetime)
-          html << t("#{i18n_key}.one_html", time: time)
-          if policy(object).activate?
-            text = t("#{i18n_key}.three")
-            path = send("activate_#{object.model_name.singular_route_key}_path")
-            link = link_to(text, path, method: :put)
-            html << " " << t("#{i18n_key}.two_html", link: link)
-          end
-        end
-      end
+    html = "".html_safe
+    time = l(object.deactivated_at, format: :full_datetime)
+    html << t("#{i18n_key}.one_html", time: time)
+    if policy(object).activate?
+      text = t("#{i18n_key}.three")
+      path = send("activate_#{object.model_name.singular_route_key}_path")
+      link = link_to(text, path, method: :put)
+      html << " " << t("#{i18n_key}.two_html", link: link)
     end
+    flash_message(:notice, html)
   end
 end

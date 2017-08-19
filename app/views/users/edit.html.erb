@@ -1,3 +1,4 @@
+<% content_for(:flashes, inactive_notice(@user)) if @user.inactive? %>
 <% content_for(:title) do
   if @user == current_user
     "Profile"
@@ -8,6 +9,5 @@
   end
 end %>
 
-<%= inactive_notice(@user) %>
 <%= render("form") %>
 <br/><br/>

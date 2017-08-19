@@ -91,7 +91,8 @@
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
 
-      <%= flash_messages %>
+      <%= flash_messages %><%# These are from the controller via the `flash` array %>
+      <%= yield(:flashes) %><%# These are from the view via `content_for` %>
 
       <div class="title-and-buttons">
         <h1 class="hidden-print"><%= @title %></h1>

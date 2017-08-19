@@ -1,4 +1,4 @@
+<% content_for(:flashes, inactive_notice(@household)) if @household.inactive? %>
 <% content_for(:title) { "Edit Household: #{@household.name}" } %>
-<%= inactive_notice(@household) %>
 <%= render("form") %>
 <br/><br/>

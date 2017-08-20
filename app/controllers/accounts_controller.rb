@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
 
   def index
     @community = current_community
-    authorize dummy_account
+    authorize sample_account
     @accounts = policy_scope(Billing::Account)
     @accounts = @accounts.where(community: @community).
       includes(:last_statement, household: [:users, :community]).
@@ -54,7 +54,7 @@ class AccountsController < ApplicationController
   end
 
   def apply_late_fees
-    authorize dummy_account
+    authorize sample_account
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)
@@ -62,7 +62,7 @@ class AccountsController < ApplicationController
 
   private
 
-  def dummy_account
+  def sample_account
     Billing::Account.new(community: current_community)
   end
 

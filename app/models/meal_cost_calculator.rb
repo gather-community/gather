@@ -3,17 +3,16 @@ class MealCostCalculator
   delegate :meal_calc_type, :pantry_calc_type, :pantry_fee, to: :formula
 
   def self.build(meal)
-    formula = Meals::Formula.for_meal(meal)
-    case formula.meal_calc_type
-    when "fixed" then FixedMealCostCalculator.new(meal, formula)
-    when "share" then ShareMealCostCalculator.new(meal, formula)
+    case meal.formula.meal_calc_type
+    when "fixed" then FixedMealCostCalculator.new(meal)
+    when "share" then ShareMealCostCalculator.new(meal)
     else raise "Unknown meal calc type"
     end
   end
 
-  def initialize(meal, formula)
+  def initialize(meal)
     self.meal = meal
-    self.formula = formula
+    self.formula = meal.formula
     self.prices = {}
   end
 

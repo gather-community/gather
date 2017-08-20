@@ -91,7 +91,7 @@
       <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
         <div class="row title">
           <div class="col-sm-8 col-sm-offset-2">
-            <h4>Household Info</h4>
+            <h2>Household Info</h2>
             <p>
               The below fields are associated with the
               <%= @user.household_name || "user's" %> household.
@@ -109,16 +109,8 @@
   <% end %>
 
   <%= form_actions do %>
-    <% if policy(@user).deactivate? && !@user.new_record? && @user.active? %>
-      <%= link_to(icon_tag("times-circle") << " Deactivate User", deactivate_user_path(@user),
-        class: "btn btn-default", method: :put,
-        data: { confirm: I18n.t("activerecord.deact_confirms.user", name: @user.name) }) %>
-    <% end %>
-    <% if policy(@user).destroy? && !@user.new_record? %>
-      <%= link_to(icon_tag("trash") << " Delete User", user_path(@user),
-        class: "btn btn-default", method: :delete,
-        data: { confirm: I18n.t("activerecord.delete_confirms.user", name: @user.name) }) %>
-    <% end %>
+    <%= deactivate_btn(@user, name: @user.name) %>
+    <%= destroy_btn(@user, name: @user.name) %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
 <% end %>

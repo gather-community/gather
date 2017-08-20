@@ -156,7 +156,7 @@ module Meals
           #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
-          AVG(meals_costs.adult_meat)::real AS avg_adult_cost,
+          AVG(meal_costs.adult_meat)::real AS avg_adult_cost,
           SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
           AVG(signup_ttls.ttl_diners)::real AS avg_diners,
           AVG(signup_ttls.ttl_veg)::real AS avg_veg,
@@ -164,7 +164,7 @@ module Meals
           #{diner_type_avg_exprs},
           #{community_avg_exprs}
         FROM meals
-          INNER JOIN meals_costs ON meals.id = meals_costs.meal_id
+          INNER JOIN meal_costs ON meals.id = meal_costs.meal_id
           #{community_join}
           INNER JOIN (
             SELECT

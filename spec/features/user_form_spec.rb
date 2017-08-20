@@ -47,7 +47,7 @@ feature "user form", js: true do
       fill_in("First Name", with: "Foo")
       fill_in("Last Name", with: "Barre")
       fill_in("Email", with: "foo@example.com")
-      select2("Ginger", from: "user_household_id")
+      select2("Ginger", from: "#user_household_id")
       fill_in("Mobile", with: "5556667777")
       click_on("Create User")
 
@@ -59,7 +59,7 @@ feature "user form", js: true do
     scenario "editing household" do
       visit(edit_user_path(user))
       click_on("move them to another household")
-      select2("Potatoheads", from: "user_household_id")
+      select2("Potatoheads", from: "#user_household_id")
       click_on("Update User")
 
       expect_success

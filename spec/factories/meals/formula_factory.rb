@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :meals_formula, class: "Meals::Formula" do
+  factory :meal_formula, class: "Meals::Formula" do
+    sequence(:name) { |n| "Formula #{n}" } 
     community { default_community }
-    effective_on "2015-01-01"
     senior_meat 0.75
     senior_veg 0.6
     adult_meat 1.0

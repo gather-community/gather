@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include Concerns::ApplicationController::Setters
   include Concerns::ApplicationController::Loaders
   include Concerns::ApplicationController::UrlHelpers
+  include Concerns::ApplicationController::Destruction
   include Utilities
 
   # Prevent CSRF attacks by raising an exception.

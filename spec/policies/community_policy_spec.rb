@@ -7,15 +7,15 @@ describe CommunityPolicy do
     let(:record) { community }
 
     permissions :show? do
-      it_behaves_like "grants access to users in cluster"
+      it_behaves_like "permits users in cluster"
 
-      it "grants access to superadmins from outside cluster" do
+      it "permits superadmins from outside cluster" do
         expect(subject).to permit(outside_super_admin, record)
       end
     end
 
     permissions :update? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
     end
   end
 end

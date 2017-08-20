@@ -1,5 +1,5 @@
 module Meals
   def self.table_name_prefix
-    'meals_'
+    'meal_'
   end
 end

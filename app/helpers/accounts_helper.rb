@@ -62,7 +62,7 @@ module AccountsHelper
 
   def payment_instructions
     if instr = @community.settings.billing.payment_instructions
-      content_tag(:h4, "How to Pay", class: "inner") << safe_render_markdown(instr)
+      content_tag(:h2, "How to Pay", class: "inner") << safe_render_markdown(instr)
     end
   end
 end

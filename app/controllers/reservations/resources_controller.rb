@@ -8,7 +8,7 @@ module Reservations
     def index
       authorize sample_resource
       @resources = policy_scope(Reservations::Resource).
-        with_reservation_counts.where(community: current_community).by_name
+        with_reservation_counts.where(community: current_community).deactivated_last.by_name
     end
 
     def new
@@ -46,28 +46,10 @@ module Reservations
       end
     end
 
-    def destroy
-      @resource = Resource.find(params[:id])
-      authorize @resource
-      @resource.destroy
-      flash[:success] = "Resource deleted successfully."
-      redirect_to(reservations_resources_path)
-    end
+    protected
 
-    def activate
-      @resource = Resource.find(params[:id])
-      authorize @resource
-      @resource.activate!
-      flash[:success] = "Resource activated successfully."
-      redirect_to(reservations_resources_path)
-    end
-
-    def deactivate
-      @resource = Resource.find(params[:id])
-      authorize @resource
-      @resource.deactivate!
-      flash[:success] = "Resource deactivated successfully."
-      redirect_to(reservations_resources_path)
+    def klass
+      Resource
     end
 
     private

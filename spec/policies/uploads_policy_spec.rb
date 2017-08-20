@@ -5,11 +5,11 @@ describe UploadPolicy do
 
   describe "permissions" do
     permissions :create?, :destroy? do
-      it "grants access to active users" do
+      it "permits active users" do
         expect(subject).to permit(user, Upload)
       end
 
-      it "denies access to regular users" do
+      it "forbids regular users" do
         expect(subject).not_to permit(inactive_user, Upload)
       end
     end

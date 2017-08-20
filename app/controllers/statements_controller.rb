@@ -14,7 +14,7 @@ class StatementsController < ApplicationController
   end
 
   def generate
-    authorize dummy_statement
+    authorize sample_statement
     Delayed::Job.enqueue(Billing::StatementJob.new(current_community.id))
 
     flash[:success] = "Statement generation started. Please try refreshing "\
@@ -41,7 +41,7 @@ class StatementsController < ApplicationController
 
   protected
 
-  def dummy_statement
+  def sample_statement
     Billing::Statement.new(account: Billing::Account.new(community: current_community))
   end
 

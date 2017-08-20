@@ -2,8 +2,14 @@ en:
   common:
     "true": "True"
     "false": "False"
+    max: "Max"
+    num_in_total: "%{count} in total"
+    default: "Default"
+    inactive: "Inactive"
 
   activerecord:
+    models:
+      meal: "Meal"
     attributes:
       user:
         first_name: "First Name"
@@ -27,7 +33,6 @@ en:
         emergency_contacts: "Emergency Contacts"
         garage_nums: "Garage Number(s)"
       meal:
-        discount: "Discount %"
         allergen_gluten: "Gluten"
         allergen_shellfish: "Shellfish"
         allergen_soy: "Soy"
@@ -50,6 +55,7 @@ en:
         served_at: "Date/Time"
         communities: "Communities"
         resource_ids: "Location(s)"
+        formula: "Formula"
       meals/message:
         meal: "Meal"
         body: "Message"
@@ -58,6 +64,13 @@ en:
         ingredient_cost: "Ingredient Cost"
         pantry_cost: "Pantry Cost"
         payment_method: "Payment Method"
+      meals/formula:
+        name: "Name"
+        meal_calc_type: "Calculation Type"
+        pantry_calc_type: "Calculation Type"
+        is_default: "Default"
+        signup_types: "Signup Types"
+        pantry_fee_disp: "Pantry Fee Amount"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -119,15 +132,12 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
-    delete_confirms:
-      household: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
-      meal: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
-      user: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
-      resource: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
-    deact_confirms:
-      household: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
-      user: "Are you sure you want to deactivate the user '%{name}'?"
-      resource: "Are you sure you want to deactivate the resource '%{name}?'"
+        meals/formula:
+          at_least_one_signup_type: "You must specify a value for at least one signup type."
+          at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
+          attributes:
+            is_default:
+              cant_unset: "You can't unset default. Set another formula to default instead."
 
   custom_fields:
     labels:
@@ -200,6 +210,74 @@ en:
                 fixed: "Fixed"
                 percent: "Percentage"
 
+  button_labels:
+    reservations/resource:
+      deactivate: "Deactivate Resource"
+      destroy: "Delete Resource"
+    meals/formula:
+      deactivate: "Deactivate Formula"
+      destroy: "Delete Formula"
+    household:
+      deactivate: "Deactivate Household"
+      destroy: "Delete Household"
+    meal:
+      destroy: "Delete Meal"
+    user:
+      deactivate: "Deactivate User"
+      destroy: "Delete User"
+
+  confirmations:
+    household:
+      destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
+    meal:
+      destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
+    user:
+      destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the user '%{name}'?"
+    reservations/resource:
+      destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
+    meals/formula:
+      destroy: "Are you sure you want to delete the formula '%{name}?' This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the formula '%{name}?'"
+
+  activatables:
+    user:
+      one_html: "This user was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate them"
+    household:
+      one_html: "This household was marked inactive at %{time}."
+      two_html: "You can %{link}. <strong>Note:</strong> You will need to reactivate the user(s) of the household separately."
+      three: "reactivate it"
+    reservations/resource:
+      one_html: "This resource was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+    meals/formula:
+      one_html: "This formula was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+
+  successes:
+    household:
+      activate: "Household activated successfully."
+      deactivate: "Household deactivated successfully."
+      destroy: "Household deleted successfully."
+    user:
+      activate: "User activated successfully."
+      deactivate: "User deactivated successfully."
+      destroy: "User deleted successfully."
+    reservations/resource:
+      activate: "Resource activated successfully."
+      deactivate: "Resource deactivated successfully."
+      destroy: "Resource deleted successfully."
+    meals/formula:
+      activate: "Formula activated successfully."
+      deactivate: "Formula deactivated successfully."
+      destroy: "Formula deleted successfully."
+
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
@@ -221,6 +299,7 @@ en:
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
       shorter_date: "%b %d"
+      full_date: "%b %d %Y"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -254,6 +333,8 @@ en:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
     hints:
+      meal:
+        formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       reservations_resource:
@@ -262,6 +343,8 @@ en:
         guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"
+      meals_formula:
+        pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
     options:
       meal:
         time:
@@ -272,6 +355,13 @@ en:
           payment_method:
             check: "Check"
             credit: "Balance Credit"
+      meals_formula:
+        meal_calc_type:
+          fixed: "Fixed"
+          share: "Proportional"
+        pantry_calc_type:
+          fixed: "Fixed"
+          percent: "Percentage"
       user:
         preferred_contact:
           email: "Email"
@@ -400,6 +490,7 @@ en:
         meals: "Meals"
         jobs: "Jobs"
         reports: "Reports"
+        formulas: "Formulas"
       people:
         directory: "Directory"
         households: "Households"
@@ -467,12 +558,27 @@ en:
     super_admin: "Super Admin"
     biller: "Biller"
     photographer: "Photographer"
+    meals_coordinator: "Meals Coordinator"
 
   phone_types:
     abbreviations:
       home: "h"
       work: "w"
       mobile: "m"
+
+  meals/formulas:
+    pantry: "Pantry"
+    calc_types:
+      fixed: "Fixed"
+      share: "Proportional"
+      percent: "Percentage"
+    hints:
+      meal: "Meal costs can be calculated as a fixed cost or proportionally based on the ingredient cost."
+      pantry: "A pantry fee is a charge billed to each diner to cover the cost of purchasing staples for the kitchen. It can be calculated as a fixed amount or as a percentage of the diner's meal cost."
+      signup_type:
+        fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
+        share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
+    cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
 
   meals/messages:
     recipient_count:

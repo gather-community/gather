@@ -2,46 +2,42 @@
 
 <%= render("meals/time_cook") %>
 
-<% if @meal.formula.nil? %>
-  <p>Meals cannot be finalized without an applicable cost formula.</p>
-<% else %>
-  <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information.</p>
+<p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information.</p>
 
-  <%= horizontal_form_for(@meal, width: :full, name: "finalize",
-    url: meal_finalize_path, method: :post) do |form| %>
-    <table class="index new">
-      <%= render "table_header", extra_col: true %>
-      <% signups.each do |signup| %>
-        <%= form.fields_for(:signups, signup) do |signup_form| %>
-          <%= render("finalize_signup_fields", f: signup_form) %>
-        <% end %>
+<%= horizontal_form_for(@meal, width: :full, name: "finalize",
+  url: meal_finalize_path, method: :post) do |form| %>
+  <table class="index new">
+    <%= render "table_header", extra_col: true %>
+    <% signups.each do |signup| %>
+      <%= form.fields_for(:signups, signup) do |signup_form| %>
+        <%= render("finalize_signup_fields", f: signup_form) %>
       <% end %>
-    </table>
-    <%= link_to_add_association '+ Add Signup', form, :signups, partial: "finalize_signup_fields",
-      data: {
-        "association-insertion-node" => "table.index",
-        "association-insertion-method" => "append"
-      } %>
-
-    <h4>Cook Reimbursement Request</h4>
-    <div id="reimb-fields">
-      <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
-        <%= mc_form.input(:ingredient_cost) %>
-        <%= mc_form.input(:pantry_cost) %>
-        <%= mc_form.input(:payment_method, collection: Meals::Cost::PAYMENT_METHODS, as: :radio_buttons) %>
-      <% end %>
-    </div>
-
-    <%= form_actions do %>
-      <%= link_to "Cancel", meals_path, class: "btn btn-default" %>
-      <%= form.button :submit, "Continue", class: "btn-primary" %>
     <% end %>
-  <% end %>
+  </table>
+  <%= link_to_add_association '+ Add Signup', form, :signups, partial: "finalize_signup_fields",
+    data: {
+      "association-insertion-node" => "table.index",
+      "association-insertion-method" => "append"
+    } %>
 
-  <%= javascript_tag do %>
-    $(function(){
-      new Gather.Views.Select2View({el: 'table.index'});
-      new Gather.Views.DirtyChecker({el: '.finalize-form'});
-    });
+  <h2>Cook Reimbursement Request</h2>
+  <div id="reimb-fields">
+    <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
+      <%= mc_form.input(:ingredient_cost) %>
+      <%= mc_form.input(:pantry_cost) %>
+      <%= mc_form.input(:payment_method, collection: Meals::Cost::PAYMENT_METHODS, as: :radio_buttons) %>
+    <% end %>
+  </div>
+
+  <%= form_actions do %>
+    <%= link_to "Cancel", meals_path, class: "btn btn-default" %>
+    <%= form.button :submit, "Continue", class: "btn-primary" %>
   <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    new Gather.Views.Select2View({el: 'table.index'});
+    new Gather.Views.DirtyChecker({el: '.finalize-form'});
+  });
 <% end %>

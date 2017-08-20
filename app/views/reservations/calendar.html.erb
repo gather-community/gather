@@ -1,4 +1,4 @@
-<% content_for(:title) { "Reservations: #{@resource.name_with_prefix}" } %>
+<% content_for(:title) { "Reservations: #{resource.name_with_prefix}" } %>
 
 <% content_for(:top_buttons) do %>
   <% if @resource && policy(@sample_reservation).create? %>
@@ -21,7 +21,7 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Create Reservation?</h4>
+            <h2 class="modal-title">Create Reservation?</h2>
           </div>
           <div class="modal-body">
           </div>

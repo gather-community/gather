@@ -18,12 +18,43 @@ module FormHelper
     end
   end
 
-  def base_error(f, full_width: false)
-    return unless f.object.errors[:base].any?
+  def deactivate_btn(object, confirm_params = {})
+    if policy(object).deactivate? && !object.new_record? && object.active?
+      action_btn(object,
+        action: :deactivate,
+        icon: "times-circle",
+        method: :put,
+        confirm_params: confirm_params
+      )
+    end
+  end
+
+  def destroy_btn(object, confirm_params = {})
+    if policy(object).destroy? && !object.new_record?
+      action_btn(object,
+        action: :destroy,
+        icon: "trash",
+        method: :delete,
+        path_prefix: "",
+        confirm_params: confirm_params
+      )
+    end
+  end
+
+  def action_btn(object, action:, icon:, method:, confirm_params:, path_prefix: nil)
+    text = icon_tag(icon) << " " << t("button_labels.#{object.model_name.i18n_key}.#{action}")
+    path_prefix ||= "#{action}_"
+    path = send("#{path_prefix}#{object.model_name.singular_route_key}_path", object)
+    confirm_msg = I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", confirm_params)
+    link_to(text, path, class: "btn btn-default", method: method, data: {confirm: confirm_msg})
+  end
+
+  def base_error(f, full_width: false, key: :base)
+    return unless f.object.errors[key].any?
     col_styles = full_width ? "col-sm-12" : "col-sm-6 col-sm-offset-2"
     # Mimics the way it works for fields
     content_tag(:div, class: "row") do
-      content_tag(:div, f.error(:base), class: "has-error base-error #{col_styles}")
+      content_tag(:div, f.error(key), class: "has-error base-error #{col_styles}")
     end
   end
 

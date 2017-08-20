@@ -61,7 +61,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
     @addChart(num, chart, data, "Avg. Diner Types at #{@cmty}Meals")
 
   addChart: (num, chart, data, title) ->
-    $('<h5>').text(title).prependTo(@$("#chart#{num}"))
+    $('<h4>').text(title).prependTo(@$("#chart#{num}"))
     chart.showLegend(false).duration(300)
     d3.select("#chart#{num} svg").datum(data).call(chart)
     nv.utils.windowResize -> chart.update() # Update the chart when window resizes.

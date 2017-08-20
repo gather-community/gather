@@ -24,7 +24,7 @@ describe UserPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on adults in other community in cluster" do
-        expect(subject).to permit(actor, user_in_cluster)
+        expect(subject).to permit(actor, user_in_cmtyB)
       end
     end
 
@@ -32,8 +32,8 @@ describe UserPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on users in other community in cluster" do
-        expect(subject).not_to permit(actor, user_in_cluster)
-        expect(subject).not_to permit(actor, child_in_cluster)
+        expect(subject).not_to permit(actor, user_in_cmtyB)
+        expect(subject).not_to permit(actor, child_in_cmtyB)
       end
 
       it "denies action on users outside cluster" do
@@ -46,7 +46,7 @@ describe UserPolicy do
       it_behaves_like "permits action on own community and cluster community adults"
 
       it "denies action on children in other community in cluster" do
-        expect(subject).not_to permit(actor, child_in_cluster)
+        expect(subject).not_to permit(actor, child_in_cmtyB)
       end
 
       it "denies action on users outside cluster" do
@@ -75,7 +75,7 @@ describe UserPolicy do
         it_behaves_like "permits action on own community and cluster community adults"
 
         it "permits action on children in other community in cluster" do
-          expect(subject).to permit(actor, child_in_cluster)
+          expect(subject).to permit(actor, child_in_cmtyB)
         end
 
         it "denies action on users outside cluster" do
@@ -89,7 +89,7 @@ describe UserPolicy do
         it_behaves_like "permits action on own community and cluster community adults"
 
         it "permits action on children in other community in cluster" do
-          expect(subject).to permit(actor, child_in_cluster)
+          expect(subject).to permit(actor, child_in_cmtyB)
         end
 
         it "permits action on users outside cluster" do
@@ -148,7 +148,7 @@ describe UserPolicy do
       context "for normal user with flag set to hide on target" do
         let(:actor) { user }
         before do
-          user_in_cluster.privacy_settings["hide_photo_from_cluster"] = true
+          user_in_cmtyB.privacy_settings["hide_photo_from_cluster"] = true
         end
         it_behaves_like "permits action on own community users but denies on all others"
       end
@@ -158,11 +158,11 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
     end
 
     permissions :activate?, :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
 
       it "denies action on self" do
         expect(subject).not_to permit(user, user)
@@ -194,14 +194,13 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update?, :update_photo? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
-      it_behaves_like "permits for self (active or not) and guardians"
-      it_behaves_like "permits for photographers in community only"
+      it_behaves_like "permits admins or special role but not regular users", "photographer"
+      it_behaves_like "permits self (active or not) and guardians"
     end
 
     permissions :update_info? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
-      it_behaves_like "permits for self (active or not) and guardians"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits self (active or not) and guardians"
     end
 
     permissions :destroy? do
@@ -218,7 +217,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+        it_behaves_like "permits for commmunity admins and denies for other admins and users"
       end
     end
   end
@@ -226,9 +225,9 @@ describe UserPolicy do
   describe "scope" do
     before do
       save_policy_objects!(cluster, clusterB, community, communityB, communityX,
-        user, other_user, inactive_user, user_in_cluster, outside_user,
+        user, other_user, inactive_user, user_in_cmtyB, outside_user,
         admin, cluster_admin, super_admin,
-        child, other_child, inactive_child, child_in_cluster, outside_child)
+        child, other_child, inactive_child, child_in_cmtyB, outside_child)
     end
 
     context "for super admin" do
@@ -236,8 +235,8 @@ describe UserPolicy do
         # This query crosses a tenant boundary so need to do it unscoped.
         ActsAsTenant.unscoped do
           permitted = UserPolicy::Scope.new(super_admin, User.all).resolve
-          expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
-            admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster,
+          expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
+            admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cmtyB,
             outside_user, outside_child)
         end
       end
@@ -246,15 +245,15 @@ describe UserPolicy do
     context "for cluster admin" do
       it "returns adults and children in cluster only" do
         permitted = UserPolicy::Scope.new(cluster_admin, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
-          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cluster)
+        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
+          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cmtyB)
       end
     end
 
     context "for admin" do
       it "returns adults in cluster and children in community" do
         permitted = UserPolicy::Scope.new(admin, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
           admin, cluster_admin, super_admin, child, inactive_child, other_child)
       end
     end
@@ -262,7 +261,7 @@ describe UserPolicy do
     context "for regular user" do
       it "returns adults in cluster and children in community" do
         permitted = UserPolicy::Scope.new(user, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cluster, inactive_user,
+        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
           admin, cluster_admin, super_admin, child, inactive_child, other_child)
       end
     end
@@ -329,7 +328,7 @@ describe UserPolicy do
     end
 
     context "admin from other community" do
-      let(:user) { admin_in_cluster }
+      let(:user) { admin_in_cmtyB }
       it_behaves_like "basic attribs"
     end
 

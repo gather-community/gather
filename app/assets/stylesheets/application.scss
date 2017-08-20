@@ -13,29 +13,7 @@
 @import "fullcalendar";
 @import "dropzone/basic";
 
-// Global
-@import "variables";
-@import "fullcalendar_overrides";
-@import "bootstrap_overrides";
-@import "theme";
-@import "pagination";
-@import "layout/*";
-@import "print";
-@import "ie_fixes";
-@import "global_loading_indicator";
-@import "mobile";
-@import "indexes";
-@import "forms/*";
-@import "tables";
-@import "dropzone";
-@import "custom_fields";
-
-// Contextual
-@import "accounts/*";
-@import "calendar_exports";
-@import "home";
-@import "signed_out";
-@import "meals/*";
-@import "reservation/*";
-@import "users/*";
-@import "households";
+// App
+@import "global/variables";
+@import "global/**/*";
+@import "local/**/*";

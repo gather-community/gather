@@ -28,7 +28,6 @@ module MealsHelper
       a << :reopen if meal.reopenable?
       a << :close if meal.closeable?
       a << :finalize if meal.finalizable?
-      a << :destroy
       a << :contact_diners
       a << :contact_team
       options[:except].each{ |x| a.delete(x) }
@@ -52,9 +51,6 @@ module MealsHelper
         links << link_to(icon_tag("certificate") << name, new_meal_finalize_path(meal), title: title)
       when :reopen
         links << link_to(icon_tag("unlock") << name, reopen_meal_path(meal), title: title, method: :put)
-      when :destroy
-        links << link_to(icon_tag("trash") << name, meal_path(meal), title: title, method: :delete,
-          data: { confirm: I18n.t("activerecord.delete_confirms.meal", title: title) })
       when :contact_diners
         links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal, r: "diners"), title: title)
       when :contact_team

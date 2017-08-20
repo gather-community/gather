@@ -5,7 +5,7 @@ require "rails_helper"
 # feature "dirty checker" do
 #   let(:admin) { create(:admin) }
 #   let!(:meal_location) { create(:resource, name: "Dining Room", abbrv: "DR") }
-#   let!(:formula) { create(:meals_formula) }
+#   let!(:formula) { create(:meal_formula) }
 #
 #   around { |ex| with_user_home_subdomain(admin) { ex.run } }
 #

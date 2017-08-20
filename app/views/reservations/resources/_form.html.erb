@@ -15,18 +15,8 @@
       <%= f.input :guidelines %>
 
       <%= form_actions do %>
-        <% if policy(@resource).deactivate? && !@resource.new_record? && @resource.active? %>
-          <%= link_to(icon_tag("times-circle") << " Deactivate Resource",
-            deactivate_reservations_resource_path(@resource),
-            class: "btn btn-default", method: :put,
-            data: { confirm: I18n.t("activerecord.deact_confirms.resource", name: resource.name) }) %>
-        <% end %>
-        <% if policy(@resource).destroy? && !@resource.new_record? %>
-          <%= link_to(icon_tag("trash") << " Delete Resource",
-            reservations_resource_path(@resource),
-            class: "btn btn-default", method: :delete,
-            data: { confirm: I18n.t("activerecord.delete_confirms.resource", name: resource.name) }) %>
-        <% end %>
+        <%= deactivate_btn(@resource, name: @resource.name) %>
+        <%= destroy_btn(@resource, name: @resource.name) %>
         <%= f.button :submit, class: "btn-primary" %>
       <% end %>
     <% end %>

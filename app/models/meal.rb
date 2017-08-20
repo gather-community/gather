@@ -15,6 +15,7 @@ class Meal < ActiveRecord::Base
 
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
+  belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
   has_many :assignments, dependent: :destroy
   has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
   has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
@@ -75,6 +76,7 @@ class Meal < ActiveRecord::Base
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
   validates :creator_id, presence: true
+  validates :formula_id, presence: true
   validates :served_at, presence: true
   validates :community_id, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0, less_than: 500 }
@@ -90,10 +92,13 @@ class Meal < ActiveRecord::Base
   validates :resources, presence: { message: :need_location }
 
   def self.new_with_defaults(community)
-    new(served_at: default_datetime,
+    new(
+      served_at: default_datetime,
       capacity: DEFAULT_CAPACITY,
       community_ids: Community.all.map(&:id),
-      community: community)
+      community: community,
+      formula: Meals::Formula.default_for(community)
+    )
   end
 
   def self.default_datetime
@@ -220,10 +225,6 @@ class Meal < ActiveRecord::Base
       where("served_at < ? OR served_at = ? AND
         (communities.name < ? OR communities.name = ? AND meals.id < ?)",
         served_at, served_at, community_name, community_name, id)
-  end
-
-  def formula
-    @formula ||= Meals::Formula.for_meal(self)
   end
 
   def any_allergens?

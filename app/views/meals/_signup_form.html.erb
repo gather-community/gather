@@ -4,10 +4,10 @@
       $('.signup textarea').val(''); return false") %>
 <% end %>
 
-<h4>
+<h2>
   Signups for <%= @household.name %>
   <%= @meal.closed? ? icon_tag("lock") : "" %>
-</h4>
+</h2>
 <% if @account.present? && @account.credit_exceeded? && @signup.new_record? %>
   <%= t("meals.over_limit_notice_html", community: @meal.community.name,
     account_link: link_to("account",

@@ -1,0 +1,51 @@
+.formulas {
+  table.index {
+    width: 500px;
+  }
+
+  table.key-value {
+    margin-bottom: 20px;
+
+    div.signup-type {
+      display: table-row;
+
+      div {
+        display: table-cell;
+
+        &:first-child {
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+
+  form {
+    .meals_formula_is_default {
+      margin-top: -12px;
+    }
+
+    .meals_formula_signup_types {
+      div.signup-type-hints p {
+        display: none;
+      }
+
+      div.fields {
+        @media screen and (min-width: $screen-md-min) {
+          column-count: 2;
+
+          // Inner signup type control.
+          .form-group {
+            label {
+              width: 50%;
+            }
+
+            div {
+              width: 50%;
+              padding-right: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

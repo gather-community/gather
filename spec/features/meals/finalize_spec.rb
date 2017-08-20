@@ -2,7 +2,6 @@ require "rails_helper"
 
 feature "finalize meal", js: true do
   let!(:actor) { create(:admin) }
-  let!(:formula) { create(:meals_formula) }
   let!(:meal) { create(:meal, :with_menu, served_at: Time.now - 3.days) }
   let!(:signups) { create_list(:signup, 3, meal: meal, adult_veg: 1) }
   let!(:late_add) { create(:household) }
@@ -20,7 +19,7 @@ feature "finalize meal", js: true do
     visit new_meal_finalize_path(meal)
     all("select[id$=_adult_veg]")[0].select("")
     click_link("Add Signup")
-    select2(late_add.name, from: find("select[id$=_household_id]")[:id])
+    select2(late_add.name, from: "select[id$=_household_id]")
     all("select[id$=_adult_veg]")[3].select("5")
     all(".fa-trash")[1].click
     fill_in("Ingredient Cost", with: "100")

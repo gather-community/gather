@@ -9,7 +9,7 @@ describe HouseholdPolicy do
     shared_examples_for "permits admins and members of household" do
       # We don't need to check cluster admins/super admins here or in every other place where
       # admin permissions are tested. We are trusting the active_admin? method which is tested elsewhere.
-      it "grants access to admins" do
+      it "permits admins" do
         expect(subject).to permit(admin, record)
       end
 
@@ -17,7 +17,7 @@ describe HouseholdPolicy do
         expect(subject).to permit(user, user.household)
       end
 
-      it "denies access to regular users to other households" do
+      it "forbids regular users to other households" do
         expect(subject).not_to permit(user, Household.new)
       end
     end
@@ -36,11 +36,11 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on households in other community in cluster" do
-        expect(subject).to permit(user, user_in_cluster.household)
+        expect(subject).to permit(user, user_in_cmtyB.household)
       end
 
       it "permits outside super admins" do
-        expect(subject).to permit(outside_super_admin, user_in_cluster.household)
+        expect(subject).to permit(outside_super_admin, user_in_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -52,7 +52,7 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on households in other community in cluster" do
-        expect(subject).not_to permit(user, user_in_cluster.household)
+        expect(subject).not_to permit(user, user_in_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -69,13 +69,13 @@ describe HouseholdPolicy do
     end
 
     permissions :new?, :create?, :activate?, :deactivate?, :administer? do
-      it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+      it_behaves_like "permits for commmunity admins and denies for other admins and users"
     end
 
     permissions :edit?, :update? do
       it_behaves_like "permits admins and members of household"
 
-      it "denies access to billers" do
+      it "forbids billers" do
         expect(subject).not_to permit(biller, user.household)
       end
     end
@@ -83,22 +83,22 @@ describe HouseholdPolicy do
     permissions :accounts? do
       it_behaves_like "permits admins and members of household"
 
-      it "grants access to billers" do
+      it "permits billers" do
         expect(subject).to permit(biller, user.household)
       end
     end
 
     permissions :change_community? do
-      it_behaves_like "cluster admins only"
+      it_behaves_like "permits cluster admins only"
     end
 
     permissions :destroy? do
       shared_examples_for "full denial" do
-        it "denies access to admins" do
+        it "forbids admins" do
           expect(subject).not_to permit(admin, household)
         end
 
-        it "denies access to billers" do
+        it "forbids billers" do
           expect(subject).not_to permit(biller, household)
         end
       end
@@ -124,14 +124,14 @@ describe HouseholdPolicy do
 
       context "without any of the above" do
         before { household.users = [] }
-        it_behaves_like "permits for commmunity admins and denies for other admins, users, and billers"
+        it_behaves_like "permits for commmunity admins and denies for other admins and users"
       end
     end
   end
 
   describe "allowed_community_changes" do
     # Class-based auth not allowed
-    let(:dummy_household) { Household.new(community: community) }
+    let(:sample_household) { Household.new(community: community) }
 
     before do
       save_policy_objects!(cluster, clusterB, community, communityB, communityX,
@@ -139,23 +139,23 @@ describe HouseholdPolicy do
     end
 
     it "returns empty set for regular users" do
-      expect(HouseholdPolicy.new(user, dummy_household).allowed_community_changes.to_a).to eq []
+      expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq []
     end
 
     it "returns own community for admins" do
-      expect(HouseholdPolicy.new(admin, dummy_household).allowed_community_changes.to_a).to(
+      expect(HouseholdPolicy.new(admin, sample_household).allowed_community_changes.to_a).to(
         contain_exactly(community))
     end
 
     it "returns cluster communities for cluster admins" do
-      expect(HouseholdPolicy.new(cluster_admin, dummy_household).allowed_community_changes.to_a).to(
+      expect(HouseholdPolicy.new(cluster_admin, sample_household).allowed_community_changes.to_a).to(
         contain_exactly(community, communityB))
     end
 
     it "returns all communities for super admins" do
       # This query crosses a tenant boundary so need to do it unscoped.
       ActsAsTenant.unscoped do
-        expect(HouseholdPolicy.new(super_admin, dummy_household).allowed_community_changes.to_a).to(
+        expect(HouseholdPolicy.new(super_admin, sample_household).allowed_community_changes.to_a).to(
           contain_exactly(community, communityB, communityX))
       end
     end
@@ -189,14 +189,14 @@ describe HouseholdPolicy do
     context "normal" do
       before do
         save_policy_objects!(community, communityB, communityX,
-          user, other_user, user_in_cluster, outside_user)
+          user, other_user, user_in_cmtyB, outside_user)
       end
 
       context "for regular user, admin, and cluster admin" do
         it "returns all households in cluster" do
           [user, admin, cluster_admin].each do |actor|
             permitted = HouseholdPolicy::Scope.new(actor, Household.all).resolve
-            expect(permitted).to contain_exactly(*[user, other_user, user_in_cluster].map(&:household))
+            expect(permitted).to contain_exactly(*[user, other_user, user_in_cmtyB].map(&:household))
           end
         end
       end
@@ -206,7 +206,7 @@ describe HouseholdPolicy do
           ActsAsTenant.unscoped do
             permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
             expect(permitted).to contain_exactly(*
-              [user, other_user, user_in_cluster, outside_user].map(&:household))
+              [user, other_user, user_in_cmtyB, outside_user].map(&:household))
           end
         end
       end

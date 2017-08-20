@@ -1,25 +1,18 @@
 <%= horizontal_form_for(@meal) do |f| %>
-
   <%= base_error(f) %>
 
   <% if policy(@meal).administer? %>
-
     <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
-
     <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
       required: true, input_html: { multiple: "multiple" } %>
-
   <% else %>
-
     <%= f.input :served_at do %>
       <%= @meal.served_at.to_formatted_s(:full_datetime) %>
     <% end %>
-
     <%= f.input :resource_ids do %>
       <%= @meal.location_name %>
     <% end %>
-
   <% end %>
 
   <% if multi_community? %>
@@ -55,8 +48,10 @@
   <% end %>
 
   <% if policy(@meal).administer? %>
-    <%= f.input :discount, min: 0, max: 100 %>
+    <%= f.input :formula_id, collection: @formula_options, disabled: !policy(@meal).update_formula? %>
   <% end %>
+
+  <h2>Workers</h2>
 
   <div id="assignment-fields">
     <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
@@ -64,6 +59,8 @@
       <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
     <% end %>
   </div>
+
+  <h2>Menu</h2>
 
   <% %w(title entrees side kids dessert notes).each do |attrib| %>
     <% if policy(@meal).set_menu? %>
@@ -90,6 +87,7 @@
   </div>
 
   <%= form_actions do %>
+    <%= destroy_btn(@meal, title: @meal.title_or_no_title) %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
 <% end %>

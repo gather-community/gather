@@ -1,3 +1,4 @@
+<% content_for(:flashes, inactive_notice(@user)) if @user.inactive? %>
 <% content_for(:title) do
   if @user == current_user
     "Profile"
@@ -7,15 +8,6 @@
     "Edit Photo: #{@user.name}"
   end
 end %>
-
-<% unless @user.active? %>
-  <div class="alert alert-info">
-    This user was marked inactive at <%= @user.deactivated_at.to_s(:full_datetime) %>.
-    <% if policy(@user).activate? %>
-      You can <%= link_to("reactivate them", activate_user_path(@user), method: :put) %>.
-    <% end %>
-  </div>
-<% end %>
 
 <%= render("form") %>
 <br/><br/>

@@ -14,6 +14,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :meals do
+    resources :formulas do
+      member do
+        put :activate
+        put :deactivate
+      end
+    end
+  end
+
   resources :meals do
     collection do
       get :jobs

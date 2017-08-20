@@ -3,121 +3,72 @@ require 'rails_helper'
 describe MealPolicy do
   include_context "policy objs"
 
+  let(:meal) { Meal.new(community: community, communities: [community, communityC]) }
+  let(:record) { meal }
+
   describe "permissions" do
     permissions :index?, :reports? do
-      it "grants access to everyone" do
-        expect(subject).to permit(user, Meal.new(community: community))
-      end
+      it_behaves_like "permits users in cluster"
     end
 
     permissions :show?, :summary? do
-      it "grants access to invitees" do
-        expect(subject).to permit(user, Meal.new(communities: [community]))
+      it_behaves_like "permits users in community"
+
+      it "permits users in other invited communities" do
+        expect(subject).to permit(user_in_cmtyC, meal)
       end
 
-      it "grants access to assignees even if not invited" do
-        expect(subject).to permit(admin_in_cluster, Meal.new(assignments: [Assignment.new(user: admin_in_cluster)]))
+      it "permits non-invited workers" do
+        meal.assignments.build(user: user_in_cmtyB)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
 
-      it "grants access to those signed up even if not invited" do
-        expect(subject).to permit(admin_in_cluster, Meal.new(signups: [Signup.new(household: admin_in_cluster.household)]))
-      end
-
-      it "denies access to plain others" do
-        expect(subject).not_to permit(user, Meal.new)
+      it "permits non-invited but signed-up folks" do
+        meal.signups.build(household: user_in_cmtyB.household)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
 
-    permissions :new?, :create? do
-      it "grants access to admins" do
-        expect(subject).to permit(admin, Meal.new(community: community))
-      end
+    permissions :new?, :create?, :administer?, :destroy?, :update_formula? do
+      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+    end
 
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(community: community))
+    permissions :update_formula? do
+      it "forbids if finalized" do
+        meal.status = "finalized"
+        expect(subject).not_to permit(admin, meal)
       end
     end
 
     permissions :edit?, :update? do
-      it "grants access to anyone in host community" do
-        expect(subject).to permit(user, Meal.new(community: community))
-      end
+      # We let anyone in host community do this so they can change assignments.
+      it_behaves_like "permits users in community"
 
-      it "grants access to assignees even if not in host community" do
-        expect(subject).to permit(admin_in_cluster, Meal.new(assignments: [Assignment.new(user: admin_in_cluster)]))
-      end
-
-      it "denies access to those in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
+      it "permits non-invited workers" do
+        meal.assignments.build(user: user_in_cmtyB)
+        expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
 
-    permissions :administer?, :destroy? do
-      it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(community: community))
-      end
+    permissions :set_menu?, :close?, :reopen? do
+      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
 
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(community: community))
-      end
-
-      it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
-      end
-
-      it "grants access to outside super admins" do
-        expect(subject).to permit(outside_super_admin, Meal.new(community: community))
-      end
-    end
-
-    permissions :set_menu?, :close?, :reopen?, :summary? do
-      it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(community: community, communities: [community]))
-      end
-
-      it "grants access to head cook" do
-        user = create(:user)
-        meal = create(:meal, head_cook: user, communities: [create(:community)])
+      it "permits head cook" do
+        meal.head_cook = user
         expect(subject).to permit(user, meal)
-      end
-
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(community: community))
-      end
-
-      it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
       end
     end
 
     permissions :reopen? do
-      it "denies access to head cook if meal in past" do
-        user = create(:user)
-        meal = create(:meal, served_at: Time.current - 7.days, head_cook: user, communities: [create(:community)])
+      it "forbids head cook if meal in past" do
+        meal.served_at = Time.current - 7.days
+        meal.head_cook = user
         expect(subject).not_to permit(user, meal)
       end
     end
 
     permissions :finalize? do
-      it "grants access to admins in community" do
-        expect(subject).to permit(admin, Meal.new(community: community))
-      end
-
-      it "grants access to billers in community" do
-        expect(subject).to permit(biller, Meal.new(community: community))
-      end
-
-      it "denies access to admins in other communities" do
-        expect(subject).not_to permit(admin_in_cluster, Meal.new(community: community))
-      end
-
-      it "denies access to billers in other communities" do
-        expect(subject).not_to permit(biller_in_cluster, Meal.new(community: community))
-      end
-
-      it "denies access to regular users" do
-        expect(subject).not_to permit(user, Meal.new(community: community))
-      end
+      it_behaves_like "permits admins or special role but not regular users", "biller"
     end
   end
 
@@ -148,8 +99,7 @@ describe MealPolicy do
   end
 
   describe "permitted_attributes" do
-    subject { MealPolicy.new(user, meal).permitted_attributes }
-    let(:meal) { Meal.new(community: community) }
+    subject { MealPolicy.new(actor, meal).permitted_attributes }
     let(:assign_attribs) {[{
       :head_cook_assign_attributes => [:id, :user_id],
       :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
@@ -157,33 +107,52 @@ describe MealPolicy do
       :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
     }]}
     let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
+    let(:admin_attribs) { [:formula_id] }
+
+    shared_examples_for "admin or meals coordinator" do
+      it "should allow even more stuff" do
+        expect(subject).to include(*(assign_attribs + head_cook_attribs) + admin_attribs)
+        expect(subject).not_to include(:community_id)
+      end
+
+      it "should not allow formula_id if meal finalized" do
+        meal.status = "finalized"
+        expect(subject).not_to include(:formula_id)
+      end
+    end
 
     context "regular user" do
+      let(:actor) { user }
+
       it "should allow only assignment attribs" do
         expect(subject).to contain_exactly(*assign_attribs)
       end
     end
 
     context "head cook" do
-      before { meal.head_cook = user }
+      let(:actor) { user }
 
       it "should allow more stuff" do
+        meal.head_cook = actor
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(:discount, :community_id)
+        expect(subject).not_to include(*(admin_attribs + [:community_id]))
       end
     end
 
-    context "hosting admin" do
-      let(:user) { admin }
+    context "admin" do
+      let(:actor) { admin }
 
-      it "should allow even more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs + [:discount]))
-        expect(subject).not_to include(:community_id)
-      end
+      it_behaves_like "admin or meals coordinator"
+    end
+
+    context "meals coordinator" do
+      let(:actor) { meals_coordinator }
+
+      it_behaves_like "admin or meals coordinator"
     end
 
     context "outside admin" do
-      let(:user) { admin_in_cluster }
+      let(:actor) { admin_in_cmtyB }
 
       it "should have only basic attribs" do
         expect(subject).to contain_exactly(*assign_attribs)

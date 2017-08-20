@@ -7,7 +7,7 @@ describe Meals::MessageJob do
     let!(:meal) { create(:meal) }
     let!(:signups) { create_list(:signup, 2, :with_nums, meal: meal) }
     let!(:hholds) { signups.map(&:household) }
-    let!(:message) { create(:meals_message, meal: meal, recipient_type: "diners") }
+    let!(:message) { create(:meal_message, meal: meal, recipient_type: "diners") }
 
     it "should send correct number of emails" do
       expect(MealMailer).to receive(:diner_message).exactly(2).times.and_return(mlrdbl)
@@ -24,7 +24,7 @@ describe Meals::MessageJob do
 
   describe "team message" do
     let!(:meal) { create(:meal, asst_cooks: [create(:user)], cleaners: [create(:user)]) }
-    let!(:message) { create(:meals_message, meal: meal, recipient_type: "team", sender: meal.head_cook) }
+    let!(:message) { create(:meal_message, meal: meal, recipient_type: "team", sender: meal.head_cook) }
 
     it "should send correct number of emails" do
       expect(MealMailer).to receive(:team_message).exactly(2).times.and_return(mlrdbl)

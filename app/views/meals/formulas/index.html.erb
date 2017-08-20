@@ -1,0 +1,32 @@
+<% content_for(:title, "Meal Formulas") %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_formula).create? %>
+    <%= link_to(icon_tag("plus") << " Create Formula", new_meals_formula_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<table class="index part-width">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Meals</th>
+      <th>Created On</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% formulas.each do |formula| %>
+      <tr class="<%= formula.tr_classes %>">
+        <td class="name"><%= link_to(formula.name_with_suffix, meals_formula_path(formula)) %></td>
+        <td class="meal-count"><%= formula.meal_count %></td>
+        <td class="created-at"><%= formula.created_on %></td>
+        <td>
+          <% if policy(formula).edit? %>
+            <%= link_to(icon_tag("pencil"), edit_meals_formula_path(formula)) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

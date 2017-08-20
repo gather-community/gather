@@ -77,14 +77,6 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  def destroy
-    @household = Household.find(params[:id])
-    authorize @household
-    @household.destroy
-    flash[:success] = "Household deleted successfully."
-    redirect_to(households_path)
-  end
-
   def accounts
     @household = Household.find(params[:id])
     authorize @household
@@ -107,23 +99,11 @@ class HouseholdsController < ApplicationController
     prep_account_vars if @account
   end
 
-  def activate
-    @household = Household.find(params[:id])
-    authorize @household
-    @household.activate!
-    flash[:success] = "Household activated successfully."
-    redirect_to(households_path)
-  end
-
-  def deactivate
-    @household = Household.find(params[:id])
-    authorize @household
-    @household.deactivate!
-    flash[:success] = "Household deactivated successfully."
-    redirect_to(households_path)
-  end
-
   protected
+
+  def klass
+    Household
+  end
 
   # See def'n in ApplicationController for documentation.
   def community_for_route
@@ -147,8 +127,8 @@ class HouseholdsController < ApplicationController
   end
 
   def prepare_household_form
-    dummy_household = Household.new(community: current_community)
-    @allowed_community_changes = policy(dummy_household).allowed_community_changes.by_name
+    sample_household = Household.new(community: current_community)
+    @allowed_community_changes = policy(sample_household).allowed_community_changes.by_name
     @household.vehicles.build if @household.vehicles.empty?
     @household.emergency_contacts.build if @household.emergency_contacts.empty?
     @household = @household.decorate

@@ -4,11 +4,16 @@ module FeatureSpecHelpers
   end
 
   # Fills in the given value into the box with given ID, then selects the first matching option.
-  # Assumes a dropdown-style select2 box. Works with a remote data source.
-  def select2(value, from:)
-    execute_script("$('##{from}').select2('open')")
-    find(".select2-search__field").set(value)
-    find(".select2-results li", text: /#{value}/).click
+  # Works with dropdown and inline style select2 boxes. Works with a remote data source.
+  def select2(value, from:, type: :dropdown)
+    if type == :dropdown
+      execute_script("$('#{from}').select2('open')")
+      find(".select2-search--dropdown .select2-search__field").set(value)
+    elsif type == :inline
+      find("#{from} .select2-search__field").click
+    end
+    # These controls are inserted at the bottom of the DOM so we can't scope them.
+    find(".select2-dropdown .select2-results li", text: /#{value}/).click
   end
 
   def enter_datetime(value, into:)
@@ -72,7 +77,7 @@ module FeatureSpecHelpers
     expect_no_image_upload
   end
 
-  def expect_no_image_and_drop_file(filename) 
+  def expect_no_image_and_drop_file(filename)
     expect_no_image_upload
     drop_in_dropzone(fixture_file_path(filename))
     expect_image_upload(mode: :dz_preview)

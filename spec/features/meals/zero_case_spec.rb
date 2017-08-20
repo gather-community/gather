@@ -1,15 +1,13 @@
 require "rails_helper"
 
 feature "meals" do
-  let(:user) { create(:user) }
-  let(:admin) { create(:admin) }
-  let(:actor) { user }
-  let(:cmty) { user.community }
+  let(:actor) { create(:user) }
+  let(:cmty) { actor.community }
   let(:friend_cmty) { create(:community) }
   let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
 
   around do |example|
-    with_user_home_subdomain(user) { example.run }
+    with_user_home_subdomain(actor) { example.run }
   end
 
   before do
@@ -36,7 +34,7 @@ feature "meals" do
     end
 
     context "with admin" do
-      let(:actor) { admin }
+      let(:actor) { create(:admin) }
 
       scenario "create" do
         visit "/meals/new"

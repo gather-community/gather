@@ -127,8 +127,8 @@ class HouseholdsController < ApplicationController
   end
 
   def prepare_household_form
-    dummy_household = Household.new(community: current_community)
-    @allowed_community_changes = policy(dummy_household).allowed_community_changes.by_name
+    sample_household = Household.new(community: current_community)
+    @allowed_community_changes = policy(sample_household).allowed_community_changes.by_name
     @household.vehicles.build if @household.vehicles.empty?
     @household.emergency_contacts.build if @household.emergency_contacts.empty?
     @household = @household.decorate

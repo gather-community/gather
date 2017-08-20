@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include Lensable
 
-  helper_method :dummy_user
+  helper_method :sample_user
 
   before_action -> { nav_context(:people, :directory) }
 
@@ -24,8 +24,8 @@ class UsersController < ApplicationController
         end
 
         @users = @users.decorate
-        dummy_household = Household.new(community: current_community)
-        @allowed_community_changes = policy(dummy_household).allowed_community_changes
+        sample_household = Household.new(community: current_community)
+        @allowed_community_changes = policy(sample_household).allowed_community_changes
 
         render(partial: "printable_album") if params[:printalbum]
       end
@@ -111,13 +111,13 @@ class UsersController < ApplicationController
   end
 
   def invite
-    authorize dummy_user
+    authorize sample_user
     @users = User.adults.never_signed_in.active.by_name
   end
 
   # Expects params[to_invite] = ["1", "5", ...]
   def send_invites
-    authorize dummy_user
+    authorize sample_user
     if params[:to_invite].blank?
       flash[:error] = "You didn't select any users."
     else
@@ -151,14 +151,14 @@ class UsersController < ApplicationController
     prepare_lens({community: {required: true}}, :life_stage, :user_sort, :user_view, :search)
     @community = current_community
     load_communities_in_cluster
-    lens.remove_field(:life_stage) unless policy(dummy_user).index_children_for_community?(@community)
+    lens.remove_field(:life_stage) unless policy(sample_user).index_children_for_community?(@community)
     @users = @users.includes(household: :community)
     @users = @users.in_community(@community)
     @users = @users.matching(lens[:search]) if lens[:search].present?
     @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
 
     # Regular folks can't see inactive users.
-    @users = @users.active unless policy(dummy_user).show_inactive?
+    @users = @users.active unless policy(sample_user).show_inactive?
 
     if lens[:user_sort].present?
       @users = @users.by_active.sorted_by(lens[:user_sort])
@@ -236,7 +236,7 @@ class UsersController < ApplicationController
     @user.household = @user.household.decorate
   end
 
-  def dummy_user
+  def sample_user
     User.new(household: Household.new(community: current_community))
   end
 end

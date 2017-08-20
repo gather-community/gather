@@ -9,7 +9,7 @@
 <% end %>
 <% if @resource_options.empty? %>
   <% str = "at least one meal-hostable resource" %>
-  <% missing << (policy(@dummy_resource).create? ? link_to(str, new_reservations_resource_path) : str) %>
+  <% missing << (policy(@sample_resource).create? ? link_to(str, new_reservations_resource_path) : str) %>
 <% end %>
 
 <% if missing.any? %>

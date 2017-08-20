@@ -3,7 +3,7 @@
   (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "") } %>
 
 <% content_for(:top_buttons) do %>
-  <% if policy(dummy_meal).index? %>
+  <% if policy(sample_meal).index? %>
     <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
   <% end %>
 <% end %>

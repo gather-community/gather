@@ -129,7 +129,7 @@ module LensHelper
 
     def user_view_field(field)
       opts = %w(table)
-      opts << "tableall" if policy(dummy_user).show_inactive?
+      opts << "tableall" if policy(sample_user).show_inactive?
       opt_key = "simple_form.options.user.view"
       select_tag("user_view",
         options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),

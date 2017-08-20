@@ -8,13 +8,13 @@ class MealsController < ApplicationController
   def index
     prepare_lens(:search, :time, :community)
 
-    authorize dummy_meal
+    authorize sample_meal
     load_meals
     load_communities_in_cluster
   end
 
   def jobs
-    authorize dummy_meal
+    authorize sample_meal
     nav_context(:meals, :jobs)
     prepare_lens(:user, :time, community: {required: true})
     @user = User.find(lens[:user]) if lens[:user].present?
@@ -37,7 +37,7 @@ class MealsController < ApplicationController
   end
 
   def reports
-    authorize dummy_meal, :reports?
+    authorize sample_meal, :reports?
     @community = current_community
     nav_context(:meals, :reports)
     prepare_lens(community: {required: true}) if multi_community?
@@ -225,7 +225,7 @@ class MealsController < ApplicationController
       active_or_selected(@meal.formula).by_name
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
     @sample_formula = Meals::Formula.new(community: current_community)
-    @dummy_resource = Reservations::Resource.new(community: current_community)
+    @sample_resource = Reservations::Resource.new(community: current_community)
   end
 
   def create_worker_change_notifier

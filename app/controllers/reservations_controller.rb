@@ -153,12 +153,12 @@ class ReservationsController < ApplicationController
   # the resource is what determines the community, and that determines what attributes
   # are permitted to be set. So we don't allow resource_id itself through permitted_attributes.
   def set_resource
-    @reservation.resource = Reservations::Resource.find(params[:reservation_reservation][:resource_id])
+    @reservation.resource = Reservations::Resource.find(params[:reservations_reservation][:resource_id])
   end
 
   # Pundit built-in helper doesn't work due to namespacing
   def reservation_params
-    params.require(:reservation_reservation).permit(policy(@reservation).permitted_attributes)
+    params.require(:reservations_reservation).permit(policy(@reservation).permitted_attributes)
   end
 
   def redirect_to_reservation_in_context(reservation)

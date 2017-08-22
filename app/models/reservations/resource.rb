@@ -19,7 +19,8 @@ module Reservations
     validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
     validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
 
-    validates :name, :abbrv, presence: true
+    validates :name, presence: true
+    validates :abbrv, presence: true, if: :meal_hostable?
 
     scope :meal_hostable, -> { where(meal_hostable: true) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }

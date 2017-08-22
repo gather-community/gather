@@ -132,6 +132,8 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
+            abbrv:
+              blank: "can't be blank if resource can host meals"
         meals/formula:
           at_least_one_signup_type: "You must specify a value for at least one signup type."
           at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
@@ -340,6 +342,7 @@ en:
       reservations_resource:
         default_calendar_view: "Reservation calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
+        meal_hostable: "If yes, this resource will show up as possible location when creating a meal."
         guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"

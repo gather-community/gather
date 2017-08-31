@@ -15,7 +15,7 @@ Below is a detailed list of features.
 
 ## Meals
 
-Gather's initial purpose was as a meals administration system. Gather communities tend do have very healthy [meals programs](assets/screenshots/meals-index.png).
+Gather's initial purpose was as a meals administration system. Gather communities tend to have very healthy [meals programs](assets/screenshots/meals-index.png).
 
 We believe this is in large part thanks to Gather and a preceding, now-retired system from which Gather drew inspiration.
 

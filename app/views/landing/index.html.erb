@@ -16,9 +16,14 @@
       <%= link_to(icon_tag("google") << " Sign in with Google",
         user_omniauth_authorize_url(:google_oauth2, host: Settings.url.host),
         class: "btn btn-primary btn-sign-in") %>
-      <div id="help-link">
-        <%= link_to(icon_tag("question-circle") << " Need help signing in?", "#",
-           data: {toggle: "modal", target: "#help-modal"}) %>
+      <div id="help-links">
+        <div>
+          <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>
+        </div>
+        <div>
+          <%= link_to(icon_tag("question-circle") << " Need help signing in?", "#",
+            data: {toggle: "modal", target: "#help-modal"}) %>
+        </div>
       </div>
     </div>
     <div id="footer-pusher"></div>

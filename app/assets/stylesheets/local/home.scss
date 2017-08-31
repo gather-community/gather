@@ -46,11 +46,16 @@ body.home {
       margin-bottom: 10px;
     }
 
-    #help-link {
-      margin-top: 10px;
+    #help-links {
+      margin-top: 5px;
 
-      a {
-        color: white;
+      > div {
+        display: inline-block;
+        margin: 10px 20px;
+
+        a {
+          color: white;
+        }
       }
     }
   }

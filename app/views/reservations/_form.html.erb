@@ -64,12 +64,12 @@
 <%= javascript_tag do %>
   $(function(){
     new Gather.Views.Select2View({
-      el: '.reservation_reservation_sponsor_id',
+      el: '.reservations_reservation_sponsor_id',
       extra_data: { community_id: <%= reservation.community_id %> }
     });
     new Gather.Views.Select2View({
-      el: '.reservation_reservation_reserver_id'
+      el: '.reservations_reservation_reserver_id'
     });
-    new Gather.Views.DirtyChecker({el: '.reservation--reservation-form'});
+    new Gather.Views.DirtyChecker({el: '.reservations--reservation-form'});
   });
 <% end %>

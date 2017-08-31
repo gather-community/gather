@@ -92,7 +92,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
       method: "POST"
       data:
         _method: "PATCH"
-        reservation_reservation:
+        reservations_reservation:
           starts_at: event.start.format()
           ends_at: event.end.format()
       error: (xhr) =>

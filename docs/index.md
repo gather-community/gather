@@ -1,3 +1,6 @@
+---
+layout: index
+---
 <img src="logo-light-bg.svg"/>
 
 Gather is a web application for managing cohousing communities. It has been in use at three Ann Arbor communities since the fall of 2015. Here are some stats:
@@ -12,46 +15,46 @@ Below is a detailed list of features.
 
 ## Meals
 
-Gather's initial purpose was as a meals administration system. Gather communities tend do have very healthy [meals programs](screenshots/meals-index.png).
+Gather's initial purpose was as a meals administration system. Gather communities tend do have very healthy [meals programs](assets/screenshots/meals-index.png).
 
 We believe this is in large part thanks to Gather and a preceding, now-retired system from which Gather drew inspiration.
 
 Meals support is robust, and includes:
 
 * A full billing system (see below)
-* Multiple [signup types](screenshots/view-meal.png) (adult, senior, teen, kid; meat/veg) with customizable cost formulas
-* [Beautiful, detailed reporting](screenshots/meals-report.png) so you can see how your meals program is working
-* Calendar exports so meals show up in your [Google Calendar](screenshots/meal-calendar-entries.png), for example
-* A pretty, printable [summary sheet](screenshots/meal-summary.png) for cooks
+* Multiple [signup types](assets/screenshots/view-meal.png) (adult, senior, teen, kid; meat/veg) with customizable cost formulas
+* [Beautiful, detailed reporting](assets/screenshots/meals-report.png) so you can see how your meals program is working
+* Calendar exports so meals show up in your [Google Calendar](assets/screenshots/meal-calendar-entries.png), for example
+* A pretty, printable [summary sheet](assets/screenshots/meal-summary.png) for cooks
 * Email reminders for workers and diners
 * Automatic integration with facility reservations (see below)
 * Ability to easily email meal attendees
 
 ## Directory
 
-* Gather is the central place for all your [member info](screenshots/directory.png)
+* Gather is the central place for all your [member info](assets/screenshots/directory.png)
 * Easy photo uploading with drag and drop
 * Contact sync to smartphones or other contact systems via CardDAV
 * Search for users by name
-* Full [user profiles](screenshots/profile-tablet.png) including birthdays, vehicles, and emergency contact info
+* Full [user profiles](assets/screenshots/profile-tablet.png) including birthdays, vehicles, and emergency contact info
 * Automated profile update reminders so things stay fresh
 * Printable version with photos and basic details
-* [Household pages](screenshots/household.png)
+* [Household pages](assets/screenshots/household.png)
 
 ## Reservations
 
-* [Book rooms](screenshots/reservations-index.png), vehicles, or other resources
-* Daily, [weekly](screenshots/reservation-calendar.png), and monthly calendar views
-* Customizable, rich-text resource [guidelines](screenshots/create-reservation.png) so users are reminded of community policies at the time of reservation
-* Fine-grained [reservation policies](screenshots/create-reservation-with-error.png) including things like event type, max. days per year, max. length, max. days in advance, etc.
-* [Exportable reservation calendars](screenshots/calendar-export.png)
+* [Book rooms](assets/screenshots/reservations-index.png), vehicles, or other resources
+* Daily, [weekly](assets/screenshots/reservation-calendar.png), and monthly calendar views
+* Customizable, rich-text resource [guidelines](assets/screenshots/create-reservation.png) so users are reminded of community policies at the time of reservation
+* Fine-grained [reservation policies](assets/screenshots/create-reservation-with-error.png) including things like event type, max. days per year, max. length, max. days in advance, etc.
+* [Exportable reservation calendars](assets/screenshots/calendar-export.png)
 
 ## Billing
 
-* Diners receive a regular [account statement](screenshots/statement.png)
-* They can view [current and past statements](screenshots/accounts.png) and get payment instructions
-* Automated [statement generation](screenshots/accounts-index.png) and emailing
-* Ability to [adjust meal signups](screenshots/finalize-meal.png) at time of finalizing to accommodate late signups
+* Diners receive a regular [account statement](assets/screenshots/statement.png)
+* They can view [current and past statements](assets/screenshots/accounts.png) and get payment instructions
+* Automated [statement generation](assets/screenshots/accounts-index.png) and emailing
+* Ability to [adjust meal signups](assets/screenshots/finalize-meal.png) at time of finalizing to accommodate late signups
 * Cooks can receive a credit in lieu of reimbursement for grocery expenses
 * Adjustable, per-user credit limits
 
@@ -62,7 +65,7 @@ Meals support is robust, and includes:
 * A single sign-in for all services -- no passwords to remember, and you only need to update your profile info in one place
 * Built with data security in mind, using industry-standard frameworks and libraries
 * Highly reliable, 99.99% uptime
-* [Responsive design](screenshots/meals-index-mobile.png) looks and works great on [smartphones](screenshots/view-meal-mobile.png), [tablets](screenshots/profile-tablet.png), laptops, and desktops
+* [Responsive design](assets/screenshots/meals-index-mobile.png) looks and works great on [smartphones](assets/screenshots/view-meal-mobile.png), [tablets](assets/screenshots/profile-tablet.png), laptops, and desktops
 * Fine grained permissions system with roles like admin, photographer, meal biller, meal coordinator, etc.
 * For nearby communities, ability to share meals, resources, and contact info, and customize what is shared and what is private
 * Fully open source

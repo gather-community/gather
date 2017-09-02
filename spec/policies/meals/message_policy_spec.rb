@@ -19,6 +19,8 @@ describe Meals::MessagePolicy do
         end
       end
 
+      # More detailed tests of these permissions in meal policy spec.
+      # This spec mostly tests connection of this policy to meal policy.
       permissions :new?, :create? do
         it "permits team members" do
           expect(subject).to permit(user, message)

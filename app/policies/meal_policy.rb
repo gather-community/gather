@@ -78,7 +78,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def contact?
-    @contact ||= Meals::MessagePolicy.new(user, Meals::Message.new(meal: record)).create?
+    active_admin_or_meals_coordinator? || assigned?
   end
   alias_method :contact_diners?, :contact?
   alias_method :contact_team?, :contact?

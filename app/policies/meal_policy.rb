@@ -65,6 +65,10 @@ class MealPolicy < ApplicationPolicy
     active_admin_or_coordinator_or_head_cook?
   end
 
+  def cancel?
+    active_admin_or_coordinator_or_head_cook?
+  end
+
   def reopen?
     active_admin_or_coordinator_or_head_cook? && !meal.in_past?
   end

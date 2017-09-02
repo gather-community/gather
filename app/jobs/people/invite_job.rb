@@ -19,9 +19,5 @@ module People
     def users
       User.find(@user_ids)
     end
-
-    def error_report_data
-      {user_ids: user_ids}
-    end
   end
 end

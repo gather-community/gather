@@ -33,9 +33,5 @@ module Billing
     def community
       Community.find(community_id)
     end
-
-    def error_report_data
-      {community_id: community_id}
-    end
   end
 end

@@ -1,6 +1,6 @@
 class ApplicationJob
   def error(job, exception)
-    ExceptionNotifier.notify_exception(exception, data: nil)
+    ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 
   def max_attempts
@@ -8,10 +8,6 @@ class ApplicationJob
   end
 
   protected
-
-  def error_report_data
-    nil
-  end
 
   def each_community
     Cluster.all.each do |cluster|

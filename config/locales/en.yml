@@ -605,10 +605,8 @@ en:
       subject: "Meal Job Assignment Change Notice"
     cook_menu_reminder:
       subject: "Menu Reminder: Please Post Menu for %{date}"
-    diner_message:
-      subject: "Message to Diners about Meal on %{datetime}"
-    team_message:
-      subject: "Message to Team for Meal on %{datetime}"
+    meal_message:
+      subject: "Message about Meal on %{datetime}"
 
   user:
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"

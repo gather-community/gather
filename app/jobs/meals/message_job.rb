@@ -10,7 +10,7 @@ module Meals
     def perform
       ActsAsTenant.with_tenant(message.cluster) do
         message.recipients.each do |recipient|
-          MealMailer.send(mailer_method, message, recipient).deliver_now
+          MealMailer.meal_message(message, recipient).deliver_now
         end
       end
     end
@@ -21,10 +21,6 @@ module Meals
       @message ||= ActsAsTenant.without_tenant do
         Message.find(message_id).tap(&:cluster)
       end
-    end
-
-    def mailer_method
-      :"#{message.recipient_type.singularize}_message"
     end
   end
 end

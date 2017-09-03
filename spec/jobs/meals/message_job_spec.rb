@@ -10,13 +10,13 @@ describe Meals::MessageJob do
     let!(:message) { create(:meal_message, meal: meal, recipient_type: "diners") }
 
     it "should send correct number of emails" do
-      expect(MealMailer).to receive(:diner_message).exactly(2).times.and_return(mlrdbl)
+      expect(MealMailer).to receive(:meal_message).exactly(2).times.and_return(mlrdbl)
       perform_job(message.id)
     end
 
     it "should send message to correct households" do
       hholds.each do |hhold|
-        expect(MealMailer).to receive(:diner_message).with(message, hhold).and_return(mlrdbl)
+        expect(MealMailer).to receive(:meal_message).with(message, hhold).and_return(mlrdbl)
       end
       perform_job(message.id)
     end
@@ -27,13 +27,13 @@ describe Meals::MessageJob do
     let!(:message) { create(:meal_message, meal: meal, recipient_type: "team", sender: meal.head_cook) }
 
     it "should send correct number of emails" do
-      expect(MealMailer).to receive(:team_message).exactly(2).times.and_return(mlrdbl)
+      expect(MealMailer).to receive(:meal_message).exactly(2).times.and_return(mlrdbl)
       perform_job(message.id)
     end
 
     it "should send message to correct households" do
       (meal.workers - [meal.head_cook]).each do |user|
-        expect(MealMailer).to receive(:team_message).with(message, user).and_return(mlrdbl)
+        expect(MealMailer).to receive(:meal_message).with(message, user).and_return(mlrdbl)
       end
       perform_job(message.id)
     end

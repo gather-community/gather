@@ -54,19 +54,11 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def diner_message(message, household)
+  def meal_message(message, recipient)
     @message = message
-    @household = household
+    @recipient = recipient
     @meal = @message.meal.decorate
-    mail(to: @household, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
-  end
-
-  def team_message(message, member)
-    @message = message
-    @member = member
-    @meal = @message.meal.decorate
-    mail(to: member, reply_to: [message.sender_email],
+    mail(to: @recipient, reply_to: [message.sender_email],
       subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 

@@ -10,7 +10,7 @@ module Meals
     def perform
       ActsAsTenant.with_tenant(message.cluster) do
         message.recipients.each do |recipient|
-          MealMailer.meal_message(message, recipient).deliver_now
+          MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now
         end
       end
     end

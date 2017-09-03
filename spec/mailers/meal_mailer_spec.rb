@@ -93,11 +93,11 @@ describe MealMailer do
     end
   end
 
-  describe "meal_message" do
+  describe "normal_message" do
     let!(:sender) { create(:user) }
     let!(:household) { create(:household) }
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
-    let(:mail) { described_class.meal_message(message, household).deliver_now }
+    let(:mail) { described_class.normal_message(message, household).deliver_now }
 
     it "sets the right recipients and reply-to" do
       expect(mail.to).to match_array(household.users.map(&:email))

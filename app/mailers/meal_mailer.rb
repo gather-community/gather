@@ -54,7 +54,7 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def meal_message(message, recipient)
+  def normal_message(message, recipient)
     @message = message
     @recipient = recipient
     @meal = @message.meal.decorate

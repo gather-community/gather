@@ -26,7 +26,7 @@ module Meals
     private
 
     def message_params
-      params.require(:meals_message).permit(:body, :recipient_type)
+      params.require(:meals_message).permit(policy(@message).permitted_attributes)
     end
   end
 end

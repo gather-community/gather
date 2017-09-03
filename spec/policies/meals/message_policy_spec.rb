@@ -40,4 +40,12 @@ describe Meals::MessagePolicy do
       end
     end
   end
+
+  describe "permitted attributes" do
+    subject { Meals::MessagePolicy.new(User.new, Meals::Message.new).permitted_attributes }
+
+    it "should allow basic attribs" do
+      expect(subject).to contain_exactly(:body, :recipient_type)
+    end
+  end
 end

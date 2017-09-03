@@ -9,5 +9,9 @@ module Meals
       return @create if defined?(@create)
       @create = MealPolicy.new(user, record.meal).send_message?
     end
+
+    def permitted_attributes
+      [:body, :recipient_type]
+    end
   end
 end

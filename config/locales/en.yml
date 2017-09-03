@@ -365,6 +365,11 @@ en:
         pantry_calc_type:
           fixed: "Fixed"
           percent: "Percentage"
+      meals_message:
+        recipient_type:
+          diners: "Diners"
+          team: "Team"
+          all: "Diners + Team"
       user:
         preferred_contact:
           email: "Email"
@@ -432,8 +437,7 @@ en:
     reopen: "Reopen"
     summary: "Summary"
     finalize: "Finalize"
-    contact_diners: "Contact Diners"
-    contact_team: "Contact Team"
+    send_message: "Send Message"
 
   calendars:
     meals: "Meals You're Attending"
@@ -508,9 +512,7 @@ en:
       sign_out: "Sign Out"
 
   titles:
-    meals/messages:
-      diners: "Contact Diners"
-      team: "Contact Meal Team"
+    meals/messages: "Send Meal Message"
 
   assignment_roles:
     head_cook:
@@ -582,15 +584,6 @@ en:
         fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
         share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
     cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
-
-  meals/messages:
-    recipient_count:
-      diners:
-        one: "1 household"
-        other: "%{count} households"
-      team:
-        one: "1 team member"
-        other: "%{count} team members"
 
   meal_mailer:
     meal_reminder:

@@ -28,8 +28,7 @@ module MealsHelper
       a << :reopen if meal.reopenable?
       a << :close if meal.closeable?
       a << :finalize if meal.finalizable?
-      a << :contact_diners
-      a << :contact_team
+      a << :send_message
       options[:except].each{ |x| a.delete(x) }
     end
 
@@ -51,10 +50,8 @@ module MealsHelper
         links << link_to(icon_tag("certificate") << name, new_meal_finalize_path(meal), title: title)
       when :reopen
         links << link_to(icon_tag("unlock") << name, reopen_meal_path(meal), title: title, method: :put)
-      when :contact_diners
-        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal, r: "diners"), title: title)
-      when :contact_team
-        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal, r: "team"), title: title)
+      when :send_message
+        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal), title: title)
       end
     end
 

@@ -3,12 +3,12 @@ module Meals
   class Message < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
-    RECIPIENT_TYPES = %w(team diners)
+    RECIPIENT_TYPES = %i(team diners all)
 
     belongs_to :sender, class_name: "User"
     belongs_to :meal
 
-    validates :body, presence: true
+    validates :recipient_type, :body, presence: true
 
     delegate :name, :email, to: :sender, prefix: true
     delegate :cluster, to: :meal

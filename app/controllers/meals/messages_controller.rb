@@ -3,9 +3,8 @@ module Meals
     before_action -> { nav_context(:meals, :meals) }
 
     def new
-      raise "invalid recipient type" unless Message::RECIPIENT_TYPES.include?(params[:r])
       @meal = Meal.find(params[:meal_id])
-      @message = Message.new(meal: @meal, recipient_type: params[:r])
+      @message = Message.new(meal: @meal)
       authorize @message
     end
 

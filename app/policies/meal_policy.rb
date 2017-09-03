@@ -81,11 +81,9 @@ class MealPolicy < ApplicationPolicy
     !meal.finalized? && administer?
   end
 
-  def contact?
+  def send_message?
     active_admin_or_meals_coordinator? || assigned?
   end
-  alias_method :contact_diners?, :contact?
-  alias_method :contact_team?, :contact?
 
   def permitted_attributes
     # Anybody that can update a meal can change the assignments.

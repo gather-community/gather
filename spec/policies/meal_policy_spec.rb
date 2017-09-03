@@ -71,7 +71,7 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", "biller"
     end
 
-    permissions :contact?, :contact_diners?, :contact_team? do
+    permissions :send_message? do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
 
       it "permits team members" do

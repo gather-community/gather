@@ -600,6 +600,8 @@ en:
       subject: "Menu Reminder: Please Post Menu for %{date}"
     normal_message:
       subject: "Message about Meal on %{datetime}"
+    cancellation_message:
+      subject: "Meal on %{datetime} CANCELLED"
 
   user:
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"

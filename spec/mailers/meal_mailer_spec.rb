@@ -113,4 +113,26 @@ describe MealMailer do
       expect(mail.body.encoded).to have_correct_meal_url(meal)
     end
   end
+
+  describe "cancellation_message" do
+    let!(:sender) { create(:user) }
+    let!(:household) { create(:household) }
+    let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
+    let(:mail) { described_class.cancellation_message(message, household).deliver_now }
+
+    it "sets the right recipients and reply-to" do
+      expect(mail.to).to match_array(household.users.map(&:email))
+      expect(mail.reply_to).to contain_exactly(message.sender_email)
+    end
+
+    it "renders the subject" do
+      expect(mail.subject).to eq("Meal on Jan 01 CANCELLED")
+    end
+
+    it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{household.name},")
+      expect(mail.body.encoded).to match(/We regret to inform you that .+ CANCELLED/)
+      expect(mail.body.encoded).to have_correct_meal_url(meal)
+    end
+  end
 end

@@ -55,14 +55,22 @@ class MealMailer < ApplicationMailer
   end
 
   def normal_message(message, recipient)
+    meal_message(message, recipient)
+  end
+
+  def cancellation_message(message, recipient)
+    meal_message(message, recipient)
+  end
+
+  protected
+
+  def meal_message(message, recipient)
     @message = message
     @recipient = recipient
     @meal = @message.meal.decorate
     mail(to: @recipient, reply_to: [message.sender_email],
       subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
-
-  protected
 
   def community
     @meal.community

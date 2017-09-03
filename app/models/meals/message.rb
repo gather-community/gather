@@ -20,9 +20,20 @@ module Meals
     # Returns users or households, depending on recipient type.
     def recipients
       case recipient_type
-      when "team" then meal.workers - [sender]
-      when "diners" then meal.signups.map(&:household)
+      when "team" then workers
+      when "diners" then households
+      when "all" then workers + households
       end
+    end
+
+    private
+
+    def workers
+      meal.workers - [sender]
+    end
+
+    def households
+      meal.signups.map(&:household)
     end
   end
 end

@@ -1,5 +1,5 @@
 class Meal < ActiveRecord::Base
-  include Statusable, TimeCalculable
+  include TimeCalculable
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
@@ -63,6 +63,8 @@ class Meal < ActiveRecord::Base
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
+  delegate :close!, :reopen!, :closed?, :finalized?, :open?, :closeable?, :reopenable?, :finalizable?,
+    :new_signups_allowed?, :signups_editable?, :full?, :in_past?, to: :status_obj
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.
@@ -107,6 +109,10 @@ class Meal < ActiveRecord::Base
 
   def self.served_within_days_from_now(days)
     within_days_from_now(:served_at, days)
+  end
+
+  def status_obj
+    @status_obj ||= Meals::Status.new(self)
   end
 
   def extra_roles
@@ -193,14 +199,6 @@ class Meal < ActiveRecord::Base
     Signup.portions_for_meal(self, food_type)
   end
 
-  def full?
-    spots_left == 0
-  end
-
-  def in_past?
-    served_at && served_at < Time.current
-  end
-
   def menu_posted?
     MENU_ITEMS.any?{ |i| self[i].present? } || any_allergens?
   end
@@ -229,10 +227,6 @@ class Meal < ActiveRecord::Base
 
   def any_allergens?
     allergens.present? && allergens != ["none"]
-  end
-
-  def close!
-    update_attribute(:status, "closed")
   end
 
   ALLERGENS.each do |allergen|

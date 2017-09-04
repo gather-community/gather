@@ -46,4 +46,8 @@ module GeneralHelpers
   def have_correct_meal_url(meal)
     contain_community_url(meal.community, "/meals/#{meal.id}")
   end
+
+  def stub_status(value)
+    allow(meal).to receive(:status).and_return(value)
+  end
 end

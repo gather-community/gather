@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MealPolicy do
   include_context "policy objs"
 
-  let(:meal) { Meal.new(community: community, communities: [community, communityC]) }
+  let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
   let(:record) { meal }
 
   describe "permissions" do
@@ -54,21 +54,67 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
 
       it "permits head cook" do
-        meal.head_cook = user
+        set_head_cook(user)
         expect(subject).to permit(user, meal)
       end
     end
 
+    permissions :close? do
+      it "denies if meal cancelled" do
+        stub_status("cancelled")
+        expect(subject).not_to permit(admin, meal)
+      end
+    end
+
     permissions :reopen? do
-      it "forbids head cook if meal in past" do
-        meal.served_at = Time.current - 7.days
-        meal.head_cook = user
-        expect(subject).not_to permit(user, meal)
+      it "permits if day prior to meal" do
+        Timecop.travel(meal.served_at - 1.day) do
+          expect(subject).to permit(admin, meal)
+        end
+      end
+
+      it "permits if after meal but same day" do
+        Timecop.travel(meal.served_at + 1.minute) do
+          expect(subject).to permit(admin, meal)
+        end
+      end
+
+      it "forbids if day after meal" do
+        Timecop.travel(meal.served_at + 1.day) do
+          expect(subject).not_to permit(admin, meal)
+        end
       end
     end
 
     permissions :finalize? do
+      before do
+        stub_status("closed")
+        meal.served_at = Time.now - 30.minutes
+      end
+
       it_behaves_like "permits admins or special role but not regular users", "biller"
+
+      it "forbids if meal already cancelled" do
+        stub_status("cancelled")
+        expect(subject).not_to permit(admin, meal)
+      end
+
+      it "forbids if meal finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
+    end
+
+    permissions :cancel? do
+      it "forbids if meal already cancelled" do
+        stub_status("cancelled")
+        expect(subject).not_to permit(admin, meal)
+      end
+
+      it "forbids if meal finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
     end
 
     permissions :send_message? do
@@ -76,6 +122,22 @@ describe MealPolicy do
 
       it "permits team members" do
         meal.assignments.build(user: user)
+        expect(subject).to permit(user, meal)
+      end
+    end
+  end
+
+  permissions :new_signups? do
+    it "permits if before meal and not closed or full" do
+      Timecop.travel(meal.served_at - 1.day) do
+        expect(subject).to permit(user, meal)
+      end
+    end
+  end
+
+  permissions :edit_signups? do
+    it "permits if before meal and not closed" do
+      Timecop.travel(meal.served_at - 1.day) do
         expect(subject).to permit(user, meal)
       end
     end
@@ -142,7 +204,7 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
-        meal.head_cook = actor
+        set_head_cook(actor)
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
         expect(subject).not_to include(*(admin_attribs + [:community_id]))
       end
@@ -167,5 +229,11 @@ describe MealPolicy do
         expect(subject).to contain_exactly(*assign_attribs)
       end
     end
+  end
+
+  def set_head_cook(user)
+    save_policy_objects!(community, user)
+    meal.save!
+    meal.head_cook = user
   end
 end

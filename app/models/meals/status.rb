@@ -18,51 +18,23 @@ module Meals
     end
 
     def close!
-      raise ArgumentError.new("invalid status for closing") unless closeable?
       set_status("closed")
     end
 
     def reopen!
-      raise ArgumentError.new("invalid status for reopening") unless reopenable?
       set_status("open")
     end
 
     def finalize!
-      raise ArgumentError.new("invalid status for finalizing") unless finalizable?
       set_status("finalized")
     end
 
     def cancel!
-      raise ArgumentError.new("invalid status for cancelling") unless cancelable?
       set_status("cancelled")
-    end
-
-    def closeable?
-      open?
-    end
-
-    def reopenable?
-      closed? && !day_in_past?
-    end
-
-    def cancelable?
-      !cancelled? && !finalized?
     end
 
     def full?
       spots_left == 0
-    end
-
-    def finalizable?
-      closed? && in_past?
-    end
-
-    def new_signups_allowed?
-      !closed? && !cancelled? && !full? && !in_past?
-    end
-
-    def signups_editable?
-      !closed? && !cancelled? && !in_past?
     end
 
     def in_past?

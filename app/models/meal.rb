@@ -65,8 +65,7 @@ class Meal < ActiveRecord::Base
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
     :closed?, :finalized?, :open?, :cancelled?,
-    :closeable?, :reopenable?, :finalizable?, :cancelable?,
-    :new_signups_allowed?, :signups_editable?, :full?, :in_past?, to: :status_obj
+    :full?, :in_past?, :day_in_past?, to: :status_obj
 
   before_validation do
     # Ensure head cook, even if blank, so we can add error to it.

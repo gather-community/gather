@@ -20,18 +20,7 @@ module MealsHelper
 
   def meal_action_icons(meal, options = {})
     options[:except] = Array.wrap(options[:except] || [])
-
-    # Build list of icons to show
-    to_show = [].tap do |a|
-      a << :edit
-      a << :summary
-      a << :reopen if meal.reopenable?
-      a << :close if meal.closeable?
-      a << :finalize if meal.finalizable?
-      a << :send_message
-      options[:except].each{ |x| a.delete(x) }
-    end
-
+    to_show = %i(edit summary reopen close finalize send_message) - options[:except]
     links = []
     title = meal.title || "Untitled"
     to_show.each do |action|

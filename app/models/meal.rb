@@ -63,7 +63,9 @@ class Meal < ActiveRecord::Base
   delegate :name, to: :head_cook, prefix: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
-  delegate :close!, :reopen!, :closed?, :finalized?, :open?, :closeable?, :reopenable?, :finalizable?,
+  delegate :close!, :reopen!, :cancel!, :finalize!,
+    :closed?, :finalized?, :open?, :cancelled?,
+    :closeable?, :reopenable?, :finalizable?, :cancelable?,
     :new_signups_allowed?, :signups_editable?, :full?, :in_past?, to: :status_obj
 
   before_validation do

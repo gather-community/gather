@@ -10,7 +10,7 @@ describe Meals::Status do
     end
 
     it "should error if meal already closed" do
-      meal.close!
+      stub_status("closed")
       expect { meal.close! }.to raise_error(ArgumentError)
     end
   end
@@ -27,6 +27,18 @@ describe Meals::Status do
     end
   end
 
+  describe "cancel!" do
+    it "should cancel the meal" do
+      meal.cancel!
+      expect(meal.reload).to be_cancelled
+    end
+
+    it "should error if meal already cancelled" do
+      stub_status("cancelled")
+      expect { meal.cancel! }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "full?" do
     it "should be true if spots left" do
       allow(meal).to receive(:spots_left).and_return(10)
@@ -36,6 +48,17 @@ describe Meals::Status do
     it "should be false if no spots left" do
       allow(meal).to receive(:spots_left).and_return(0)
       expect(meal).to be_full
+    end
+  end
+
+  describe "closeable?" do
+    it "should be true if meal open" do
+      expect(meal).to be_closeable
+    end
+
+    it "should be false if meal cancelled" do
+      stub_status("cancelled")
+      expect(meal).not_to be_closeable
     end
   end
 
@@ -61,8 +84,24 @@ describe Meals::Status do
     end
   end
 
+  describe "cancelable?" do
+    it "should be true if meal not cancelled and not finalized" do
+      expect(meal).to be_cancelable
+    end
+
+    it "should be false meal already cancelled" do
+      stub_status("cancelled")
+      expect(meal).not_to be_cancelable
+    end
+
+    it "should be false if meal finalized" do
+      stub_status("finalized")
+      expect(meal).not_to be_cancelable
+    end
+  end
+
   describe "finalizable?" do
-    before { meal.close! }
+    before { stub_status("closed") }
 
     it "should be false if day prior to meal" do
       Timecop.travel(meal.served_at - 1.day) do
@@ -92,5 +131,9 @@ describe Meals::Status do
         expect(meal).to be_new_signups_allowed
       end
     end
+  end
+
+  def stub_status(value)
+    allow(meal).to receive(:status).and_return(value)
   end
 end

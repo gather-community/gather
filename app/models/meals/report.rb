@@ -100,7 +100,7 @@ module Meals
           end
         ]
         data[:community_rep] = communities.map do |c|
-          by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.abbrv.downcase}"]} : {}
+          by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.id}"]} : {}
         end
         data[:diner_types] = diner_types.map do |dt|
           by_month ? {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]} : {}
@@ -198,15 +198,15 @@ module Meals
 
     def community_avg_exprs
       communities.map do |c|
-        "AVG(ttl_from_#{c.abbrv})::real AS avg_from_#{c.abbrv}, "\
-        "(AVG(ttl_from_#{c.abbrv}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_from_#{c.abbrv}_pct"
+        "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, "\
+        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_from_#{c.id}_pct"
       end.join(",\n")
     end
 
     def community_sum_exprs
       communities.map do |c|
         expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN #{full_signup_col_sum_expr} ELSE 0 END)"
-        "#{expr} AS ttl_from_#{c.abbrv}"
+        "#{expr} AS ttl_from_#{c.id}"
       end.join(",\n")
     end
 

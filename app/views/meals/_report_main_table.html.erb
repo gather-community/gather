@@ -56,8 +56,8 @@
         <% if multi_community? %>
           <% @communities.each do |c| %>
             <td class="cmty-rep">
-              <span title="<%= number_with_precision(cols["avg_from_#{c.abbrv.downcase}"], precision: 1) %>">
-                <%= number_to_percentage(cols["avg_from_#{c.abbrv.downcase}_pct"], precision: 0) %>
+              <span title="<%= number_with_precision(cols["avg_from_#{c.id}"], precision: 1) %>">
+                <%= number_to_percentage(cols["avg_from_#{c.id}_pct"], precision: 0) %>
               </span>
             </td>
           <% end %>

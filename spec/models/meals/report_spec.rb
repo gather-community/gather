@@ -164,10 +164,10 @@ RSpec.describe Meals::Report, type: :model do
           expect(feb["avg_veg_pct"]).to be_within(0.1).of 31.25
           expect(feb["avg_adult"]).to eq 5.5
           expect(feb["avg_adult_pct"]).to be_within(0.1).of 68.75
-          expect(feb["avg_from_c1"]).to eq 5.5
-          expect(feb["avg_from_c1_pct"]).to be_within(0.1).of 68.75
-          expect(feb["avg_from_c2"]).to eq 2.5
-          expect(feb["avg_from_c2_pct"]).to be_within(0.1).of 31.25
+          expect(feb["avg_from_#{community.id}"]).to eq 5.5
+          expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of 68.75
+          expect(feb["avg_from_#{community2.id}"]).to eq 2.5
+          expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of 31.25
 
           expect(mar).to be_nil
 

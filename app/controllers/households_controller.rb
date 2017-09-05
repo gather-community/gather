@@ -22,7 +22,7 @@ class HouseholdsController < ApplicationController
         when "finalize"
           @households # No further scoping needed for finalize
         when "user_form"
-          HouseholdPolicy::Scope.new(current_user, @households).administerable
+          HouseholdPolicy::Scope.new(current_user, @households).administerable.in_community(current_community)
         else
           raise "invalid select2 context"
         end

@@ -1,0 +1,15 @@
+<% if policy(@user).administer? %>
+  <% wrapper_class = ["form-group", ("hiding" unless @user.household_by_id?)].join(" ") %>
+  <%= f.input :household_id,
+        required: true,
+        wrapper_class: wrapper_class,
+        hint: @user.persisted? ? "" : "Choose an existing household for this user.
+          If one doesn't exist you must ".html_safe <<
+          link_to("create it first", new_household_path) << "." do %>
+    <%= f.input_field :household_id,
+          as: :assoc_select2,
+          context: "user_form",
+          disabled: !policy(@user).administer?,
+          class: "form-control" %>
+  <% end %>
+<% end %>

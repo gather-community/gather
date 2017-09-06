@@ -7,7 +7,7 @@
     <%= horizontal_form_for(resource, width: :full) do |f| %>
       <%= f.input :photo_tmp_id, as: :hidden %>
       <%= f.input :photo_destroy, as: :hidden %>
-      <%= f.input :name %>
+      <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
       <%= f.input :meal_hostable, as: :select, include_blank: false, required: true %>
       <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS,

@@ -1,10 +1,11 @@
 # Sends statements to accounts from the given community with current activity.
 module Billing
   class StatementJob < ApplicationJob
-    attr_reader :community_id
+    attr_reader :community_id, :options
 
-    def initialize(community_id)
+    def initialize(community_id, options = {})
       @community_id = community_id
+      @options = options
     end
 
     def perform
@@ -19,7 +20,7 @@ module Billing
                 prev_balance: account.last_statement.try(:total_due) || 0
               )
               statement.populate!
-              AccountMailer.statement_notice(statement).deliver_now
+              AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
             end
           rescue StatementError
             ExceptionNotifier.notify_exception($!, data: {account_id: account.id})

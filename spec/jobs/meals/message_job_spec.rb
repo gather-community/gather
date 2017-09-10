@@ -26,7 +26,7 @@ describe Meals::MessageJob do
       let!(:message) { create(:meal_message, meal: meal, recipient_type: "team", sender: meal.head_cook) }
 
       it "should send correct number of emails" do
-        expect(MealMailer).to receive(:normal_message).exactly(2).times.and_return(mlrdbl)
+        expect(MealMailer).to receive(:normal_message).exactly(3).times.and_return(mlrdbl)
         perform_job(message.id)
       end
 
@@ -40,7 +40,7 @@ describe Meals::MessageJob do
       let!(:message) { create(:meal_message, meal: meal, recipient_type: "all", sender: meal.head_cook) }
 
       it "should send correct number of emails" do
-        expect(MealMailer).to receive(:normal_message).exactly(4).times.and_return(mlrdbl)
+        expect(MealMailer).to receive(:normal_message).exactly(5).times.and_return(mlrdbl)
         perform_job(message.id)
       end
 
@@ -53,7 +53,7 @@ describe Meals::MessageJob do
   end
 
   def expect_workers
-    (meal.workers - [meal.head_cook]).each do |user|
+    meal.workers.each do |user|
       expect(MealMailer).to receive(:normal_message).with(message, user).and_return(mlrdbl)
     end
   end

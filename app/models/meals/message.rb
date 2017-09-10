@@ -33,7 +33,7 @@ module Meals
     private
 
     def workers
-      meal.workers - [sender]
+      meal.workers
     end
 
     def households

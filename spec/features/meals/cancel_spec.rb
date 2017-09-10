@@ -22,6 +22,6 @@ feature "meal messages" do
       expect(page).to have_content("Message sent successfully")
       expect(page).to have_content("This meal has been cancelled")
       Delayed::Worker.new.work_off
-    end.to change { ActionMailer::Base.deliveries.size }.by(3) # Signed up households + team
+    end.to change { ActionMailer::Base.deliveries.size }.by(4) # Signed up households + team
   end
 end

@@ -17,7 +17,7 @@ feature "meal messages" do
     scenario do
       expect do
         visit meal_path(meal)
-        click_link "Send Message"
+        click_link "Message"
         select recipient_type, from: "Recipients"
         fill_in "Message", with: "Foo bar"
         click_button "Send Message"
@@ -28,6 +28,6 @@ feature "meal messages" do
   end
 
   it_behaves_like "sends message", "Diners", 1
-  it_behaves_like "sends message", "Team", 1
-  it_behaves_like "sends message", "Diners + Team", 2
+  it_behaves_like "sends message", "Team", 2
+  it_behaves_like "sends message", "Diners + Team", 3
 end

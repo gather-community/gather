@@ -35,21 +35,19 @@ class Meal < ActiveRecord::Base
   has_many :resources, class_name: "Reservations::Resource", through: :resourcings
   has_many :reservations, class_name: "Reservations::Reservation", autosave: true, dependent: :destroy
 
-  scope :open, -> { where(status: "open") }
   scope :hosted_by, ->(community) { where(community: community) }
-  scope :finalizable, -> { past.where("status != ?", "finalized") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:community).order("communities.name DESC") }
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
-  scope :past, -> { where("served_at <= ?", Time.current.midnight) }
-  scope :future, -> { where("served_at >= ?", Time.current.midnight) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
   scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
+
+  Meals::Status.define_scopes(self)
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true

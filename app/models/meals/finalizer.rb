@@ -47,7 +47,7 @@ module Meals
     end
 
     def create_reimbursement_transaction
-      if meal_cost.payment_method == "credit" && meal_cost.total_cost > 0
+      if meal_cost.payment_method == "credit" && meal_cost.total_cost > 0 && meal.head_cook.present?
         Billing::Transaction.create!(
           account: Billing::Account.for(meal.head_cook.household_id, meal.community_id),
           code: "reimb",

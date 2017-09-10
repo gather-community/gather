@@ -58,17 +58,12 @@ class Meal < ActiveRecord::Base
 
   delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
-  delegate :name, to: :head_cook, prefix: true
+  delegate :name, to: :head_cook, prefix: true, allow_nil: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
     :closed?, :finalized?, :open?, :cancelled?,
     :full?, :in_past?, :day_in_past?, to: :status_obj
-
-  before_validation do
-    # Ensure head cook, even if blank, so we can add error to it.
-    build_head_cook_assign if head_cook_assign.blank?
-  end
 
   after_validation do
     errors[:resources].each { |m| errors.add(:resource_ids, m) }
@@ -84,7 +79,6 @@ class Meal < ActiveRecord::Base
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  validate :head_cook_presence
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
@@ -272,13 +266,6 @@ class Meal < ActiveRecord::Base
   def at_least_one_community
     if invitations.reject(&:blank?).empty?
       errors.add(:invitations, "you must invite at least one community")
-    end
-  end
-
-  def head_cook_presence
-    if head_cook_assign.user_id.blank?
-      head_cook_assign.errors.add(:user_id, "can't be blank")
-      add_dummy_base_error
     end
   end
 

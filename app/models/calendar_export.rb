@@ -91,7 +91,7 @@ class CalendarExport
 
   def description(obj)
     case class_name(obj)
-    when "Meal" then "By #{obj.head_cook_name}"
+    when "Meal" then obj.head_cook.present? ? "By #{obj.head_cook_name}" : nil
     when "Assignment" then nil
     when "Reservations::Reservation" then nil
     else unknown_class(obj)

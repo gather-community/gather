@@ -59,7 +59,10 @@
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes %>">
         <h4 class="top">
-          <%= meal_link(meal) %> by <%= meal.head_cook_name %>
+          <%= meal_link(meal) %>
+          <% if meal.head_cook.present? %>
+            by <%= meal.head_cook_name %>
+          <% end %>
           <%= icon_tag("lock") if meal.closed? %>
           <%= icon_tag("certificate") if meal.finalized? %>
           <%= icon_tag("ban") if meal.cancelled? %>

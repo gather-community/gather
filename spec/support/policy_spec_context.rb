@@ -168,7 +168,7 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits admins but not regular users" do
+  shared_examples_for "permits admins from community" do
     context do
       let(:actor) { admin }
       it_behaves_like "errors on permission check without community"
@@ -181,6 +181,10 @@ shared_context "policy objs" do
     it "forbids admins from outside community" do
       expect(subject).not_to permit(admin_in_cmtyB, record)
     end
+  end
+
+  shared_examples_for "permits admins but not regular users" do
+    it_behaves_like "permits admins from community"
 
     it "forbids regular user" do
       expect(subject).not_to permit(user, record)

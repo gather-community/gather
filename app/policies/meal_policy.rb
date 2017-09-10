@@ -41,7 +41,7 @@ class MealPolicy < ApplicationPolicy
   # We let anyone from host community (or assignees from outside) do this
   # so they can change assignments.
   def update?
-    active? && (own_community_record? || assigned?)
+    active_admin_or_meals_coordinator? || (active? && (own_community_record? || assigned?))
   end
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)

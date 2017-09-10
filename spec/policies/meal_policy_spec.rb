@@ -42,6 +42,7 @@ describe MealPolicy do
 
     permissions :edit?, :update? do
       # We let anyone in host community do this so they can change assignments.
+      it_behaves_like "permits admins from community"
       it_behaves_like "permits users in community"
 
       it "permits non-invited workers" do

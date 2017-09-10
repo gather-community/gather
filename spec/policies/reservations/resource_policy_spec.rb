@@ -8,7 +8,7 @@ describe Reservations::ResourcePolicy do
     let(:record) { resource }
 
     permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
     end
 
     permissions :destroy? do

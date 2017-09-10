@@ -99,17 +99,43 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits for commmunity admins and denies for other admins and users" do
-    it "permits admins in community" do
+  shared_examples_for "permits admins from community" do
+    context do
+      let(:actor) { admin }
+      it_behaves_like "errors on permission check without community"
+    end
+
+    it "permits admins from community" do
       expect(subject).to permit(admin, record)
     end
 
-    it "forbids admins in other community in cluster" do
+    it "forbids admins from outside community" do
       expect(subject).not_to permit(admin_in_cmtyB, record)
     end
+  end
 
-    it "forbids regular users" do
+  shared_examples_for "permits admins but not regular users" do
+    it_behaves_like "permits admins from community"
+
+    it "forbids regular user" do
       expect(subject).not_to permit(user, record)
+    end
+  end
+
+  shared_examples_for "permits admins or special role but not regular users" do |role_name|
+    it_behaves_like "permits admins but not regular users"
+
+    context do
+      let(:actor) { role_member(role_name) }
+      it_behaves_like "errors on permission check without community"
+    end
+
+    it "permits role from community" do
+      expect(subject).to permit(role_member(role_name), record)
+    end
+
+    it "forbids role from outside community" do
+      expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
   end
 
@@ -165,46 +191,6 @@ shared_context "policy objs" do
             ApplicationPolicy::CommunityNotSetError)
         end
       end
-    end
-  end
-
-  shared_examples_for "permits admins from community" do
-    context do
-      let(:actor) { admin }
-      it_behaves_like "errors on permission check without community"
-    end
-
-    it "permits admins from community" do
-      expect(subject).to permit(admin, record)
-    end
-
-    it "forbids admins from outside community" do
-      expect(subject).not_to permit(admin_in_cmtyB, record)
-    end
-  end
-
-  shared_examples_for "permits admins but not regular users" do
-    it_behaves_like "permits admins from community"
-
-    it "forbids regular user" do
-      expect(subject).not_to permit(user, record)
-    end
-  end
-
-  shared_examples_for "permits admins or special role but not regular users" do |role_name|
-    it_behaves_like "permits admins but not regular users"
-
-    context do
-      let(:actor) { role_member(role_name) }
-      it_behaves_like "errors on permission check without community"
-    end
-
-    it "permits role from community" do
-      expect(subject).to permit(role_member(role_name), record)
-    end
-
-    it "forbids role from outside community" do
-      expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
   end
 

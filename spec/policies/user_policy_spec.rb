@@ -158,11 +158,11 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
     end
 
     permissions :activate?, :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
 
       it "denies action on self" do
         expect(subject).not_to permit(user, user)
@@ -199,7 +199,7 @@ describe UserPolicy do
     end
 
     permissions :update_info? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
       it_behaves_like "permits self (active or not) and guardians"
     end
 
@@ -217,7 +217,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits for commmunity admins and denies for other admins and users"
+        it_behaves_like "permits admins but not regular users"
       end
     end
   end

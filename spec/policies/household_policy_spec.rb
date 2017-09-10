@@ -69,7 +69,7 @@ describe HouseholdPolicy do
     end
 
     permissions :new?, :create?, :activate?, :deactivate?, :administer? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
     end
 
     permissions :edit?, :update? do
@@ -124,7 +124,7 @@ describe HouseholdPolicy do
 
       context "without any of the above" do
         before { household.users = [] }
-        it_behaves_like "permits for commmunity admins and denies for other admins and users"
+        it_behaves_like "permits admins but not regular users"
       end
     end
   end

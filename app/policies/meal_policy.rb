@@ -62,26 +62,36 @@ class MealPolicy < ApplicationPolicy
   end
 
   def close?
-    active_admin_or_coordinator_or_head_cook?
+    active_admin_or_coordinator_or_head_cook? && meal.open?
+  end
+
+  def cancel?
+    active_admin_or_coordinator_or_head_cook? && !meal.cancelled? && !meal.finalized?
   end
 
   def reopen?
-    active_admin_or_coordinator_or_head_cook? && !meal.in_past?
+    active_admin_or_coordinator_or_head_cook? && !meal.day_in_past?
   end
 
   def finalize?
-    active_admin_or_biller?
+    active_admin_or_biller? && meal.closed? && meal.in_past?
   end
 
   def update_formula?
     !meal.finalized? && administer?
   end
 
-  def contact?
-    @contact ||= Meals::MessagePolicy.new(user, Meals::Message.new(meal: record)).create?
+  def send_message?
+    active_admin_or_meals_coordinator? || assigned?
   end
-  alias_method :contact_diners?, :contact?
-  alias_method :contact_team?, :contact?
+
+  def new_signups?
+    !meal.closed? && !meal.cancelled? && !meal.full? && !meal.in_past?
+  end
+
+  def edit_signups?
+    !meal.closed? && !meal.cancelled? && !meal.in_past?
+  end
 
   def permitted_attributes
     # Anybody that can update a meal can change the assignments.

@@ -126,8 +126,14 @@ RSpec.describe Meals::Report, type: :model do
           m.save!
         end
 
+        # Cancelled meal, should be ignored.
+        m = create(:meal, :cancelled, community: community, served_at: "2016-04-12 18:00")
+        m.signups << build(:signup, meal: m, adult_meat: 2, household: hholds[0])
+        m.signups << build(:signup, meal: m, senior_veg: 2, household: hholds[1])
+        m.save!
+
         # Very old meal, should be ignored.
-        meals << create(:meal, :finalized, community: community, served_at: 2.years.ago)
+        create(:meal, :finalized, community: community, served_at: 2.years.ago)
 
         # Meals from community 2 and X
         meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)

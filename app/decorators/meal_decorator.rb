@@ -1,6 +1,16 @@
 class MealDecorator < ApplicationDecorator
   delegate_all
 
+  def css_classes
+    if cancelled?
+      "cancelled"
+    elsif signup_for(h.current_user.household).present?
+      "signed-up"
+    else
+      ""
+    end
+  end
+
   def location_name
     resources.first.decorate.name_with_prefix
   end

@@ -19,6 +19,8 @@ describe Meals::MessagePolicy do
         end
       end
 
+      # More detailed tests of these permissions in meal policy spec.
+      # This spec mostly tests connection of this policy to meal policy.
       permissions :new?, :create? do
         it "permits team members" do
           expect(subject).to permit(user, message)
@@ -36,6 +38,14 @@ describe Meals::MessagePolicy do
       it "raises error" do
         expect { Meals::MessagePolicy.new(user, message).new? }.to raise_error(ArgumentError)
       end
+    end
+  end
+
+  describe "permitted attributes" do
+    subject { Meals::MessagePolicy.new(User.new, Meals::Message.new).permitted_attributes }
+
+    it "should allow basic attribs" do
+      expect(subject).to contain_exactly(:kind, :body, :recipient_type)
     end
   end
 end

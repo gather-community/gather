@@ -1,6 +1,8 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
+  decorates_assigned :meals
+
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
@@ -28,6 +30,8 @@ class MealsController < ApplicationController
 
     # Don't want the singup form to get cached
     set_no_cache unless @meal.in_past?
+
+    flash.now[:error] = I18n.t("meals.cancelled_notice") if @meal.cancelled?
 
     @signup = Signup.for(current_user, @meal)
     @household = current_user.household.decorate
@@ -210,7 +214,7 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.page(params[:page]).decorate
+    @meals = @meals.page(params[:page])
   end
 
   def load_signups

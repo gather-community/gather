@@ -24,6 +24,17 @@
     background-color: $highlight-color;
   }
 
+  tr.cancelled, div.meals-list div.meal.cancelled {
+    background-color: $fainter-gray;
+    color: $gray-text;
+    text-decoration: line-through;
+
+    * {
+      text-decoration: line-through;
+      color: $gray-text;
+    }
+  }
+
   table a.user-link {
     display: block;
   }

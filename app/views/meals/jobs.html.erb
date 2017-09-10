@@ -4,9 +4,9 @@
   <%= calendar_exports_link %>
 <% end %>
 
-<% table_setter_present = @meals.any? { |m| m.table_setters.any? } %>
+<% table_setter_present = meals.any? { |m| m.table_setters.any? } %>
 
-<% if @meals.empty? %>
+<% if meals.empty? %>
   <div class="none-found">
     No jobs found<% @user ? "for #{@user.name}" : "" %>.
   </div>
@@ -23,8 +23,8 @@
       <% end %>
       <th>Cleaners</th>
     </tr>
-    <% @meals.each do |meal| %>
-      <tr class="<%= signed_up_class(meal) %>">
+    <% meals.each do |meal| %>
+      <tr class="<%= meal.css_classes %>">
         <td class="nowrap"><%= meal_date_time(meal, with_break: true) %></td>
         <td><%= meal.location_abbrv %></td>
         <td><%= meal_link(meal) %></td>
@@ -39,8 +39,8 @@
   </table>
 
   <div class="meals-list mobile">
-    <% @meals.each do |meal| %>
-      <div class="meal <%= signed_up_class(meal) %>">
+    <% meals.each do |meal| %>
+      <div class="meal <%= meal.css_classes %>">
         <h2><%= meal_date_time(meal) %></h2>
         <div class="title">
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
@@ -63,7 +63,7 @@
     <% end %>
   </div>
 
-  <%= paginate @meals %>
+  <%= paginate meals %>
 <% end %>
 
 <%= javascript_tag do %>

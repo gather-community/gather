@@ -21,6 +21,7 @@ describe AccountMailer do
     end
 
     it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{household.name} Household,")
       expect(mail.body.encoded).to include("The amount due is $9.99.")
       expect(mail.body.encoded).to have_correct_statement_url(statement)
     end
@@ -38,6 +39,7 @@ describe AccountMailer do
     end
 
     it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{household.name} Household,")
       expect(mail.body.encoded).to include("The amount due is $9.99.")
       expect(mail.body.encoded).to have_correct_statement_url(statement)
     end

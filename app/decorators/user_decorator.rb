@@ -1,6 +1,10 @@
 class UserDecorator < ApplicationDecorator
   delegate_all
 
+  def greeting
+    I18n.t("users.greeting", name: name)
+  end
+
   def first_name_with_inactive
     "#{first_name}#{active? ? '' : ' (Inactive)'}"
   end
@@ -73,6 +77,6 @@ class UserDecorator < ApplicationDecorator
   end
 
   def preferred_contact_tooltip
-    h.t("user.preferred_contact_tooltip", method: preferred_contact)
+    h.t("users.preferred_contact_tooltip", method: preferred_contact)
   end
 end

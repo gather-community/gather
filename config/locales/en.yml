@@ -555,6 +555,7 @@ en:
         other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
 
   households:
+    greeting: "Dear %{name} Household,"
     accounts:
       intro:
         one: "You have a Gather account with one community. Each community manages its own accounts."
@@ -609,5 +610,6 @@ en:
     cancellation_message:
       subject: "Meal on %{datetime} CANCELLED"
 
-  user:
+  users:
+    greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"

@@ -1,4 +1,4 @@
-Dear <%= @household.name %> Household,
+<%= @household.greeting %>
 
 This is a reminder that payment for a Gather statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{d.to_s(:short_date)}" : "soon" %>.
 

@@ -590,7 +590,6 @@ en:
 
   meals/messages:
     cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."
-    cancel_success: "Message sent and meal cancelled successfuly."
 
   meal_mailer:
     meal_reminder:

@@ -19,12 +19,8 @@ module Meals
       @message.assign_attributes(message_params)
       authorize @message
       if @message.save
-        if @message.cancellation?
-          @meal.cancel!
-          flash[:success] = I18n.t("meals/messages.cancel_success")
-        else
-          flash[:success] = "Message sent successfully."
-        end
+        @meal.cancel! if @message.cancellation?
+        flash[:success] = "Message sent successfully."
         Delayed::Job.enqueue(MessageJob.new(@message.id))
         redirect_to meal_path(@meal)
       else

@@ -19,9 +19,16 @@ describe Meals::Status do
   end
 
   describe "cancel!" do
-    it "should cancel the meal" do
+    before do
+      meal.build_reservations
+      meal.save!
+    end
+
+    it "should cancel the meal and delete reservations" do
+      expect(meal.reservations.count).to be > 0
       meal.cancel!
       expect(meal.reload).to be_cancelled
+      expect(meal.reservations.count).to eq 0
     end
   end
 

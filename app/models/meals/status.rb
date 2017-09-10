@@ -31,6 +31,7 @@ module Meals
 
     def cancel!
       set_status("cancelled")
+      meal.reservations.destroy_all
     end
 
     def full?

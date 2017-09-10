@@ -5,13 +5,12 @@ default: &default
 
 development:
   <<: *default
-  database: mess_development
+  database: gather_development
 
 test:
   <<: *default
-  database: mess_test
+  database: gather_test
 
 production:
   <<: *default
-  database: mess_production
-
+  database: gather_production

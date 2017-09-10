@@ -10,7 +10,7 @@ module Meals
     def self.define_scopes(c)
       c.scope :open, -> { c.where(status: "open") }
       c.scope :not_cancelled, -> { c.where.not(status: "cancelled") }
-      c.scope :finalizable, -> { c.past.where.not(status: "finalized") }
+      c.scope :finalizable, -> { c.past.where.not(status: ["finalized", "cancelled"]) }
       c.scope :past, -> { c.where("served_at <= ?", Time.current.midnight) }
       c.scope :future, -> { c.where("served_at >= ?", Time.current.midnight) }
     end

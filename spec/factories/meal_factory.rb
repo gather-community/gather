@@ -38,5 +38,10 @@ FactoryGirl.define do
         meal.cost = build(:meal_cost)
       end
     end
+
+    trait :cancelled do
+      with_menu
+      status "cancelled"
+    end
   end
 end

@@ -280,7 +280,8 @@ describe UserPolicy do
     let(:photographer_attribs) { [:photo, :photo_tmp_id] }
     let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :google_email, :role_admin, :role_biller, :role_photographer, :household_by_id,
+      :google_email, :role_admin, :role_biller, :role_photographer,
+      :role_meals_coordinator, :household_by_id,
       {privacy_settings: [:hide_photo_from_cluster]},
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
       {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].
@@ -288,7 +289,8 @@ describe UserPolicy do
     ] }
     let(:cluster_admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer, :household_by_id,
+      :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
+      :role_meals_coordinator, :household_by_id,
       {privacy_settings: [:hide_photo_from_cluster]},
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
       {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].

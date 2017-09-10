@@ -48,7 +48,7 @@ class AccountsController < ApplicationController
       flash[:success] = "Account updated successfully."
       redirect_to(accounts_path)
     else
-      set_validation_error_notice
+      set_validation_error_notice(@account)
       render(:edit)
     end
   end

@@ -52,7 +52,7 @@ class HouseholdsController < ApplicationController
       flash[:success] = "Household created successfully."
       redirect_to households_path
     else
-      set_validation_error_notice
+      set_validation_error_notice(@household)
       prepare_household_form
       render :new
     end
@@ -71,7 +71,7 @@ class HouseholdsController < ApplicationController
       flash[:success] = "Household updated successfully."
       redirect_to households_path
     else
-      set_validation_error_notice
+      set_validation_error_notice(@household)
       prepare_household_form
       render :edit
     end

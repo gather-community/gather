@@ -3,8 +3,9 @@ module Concerns::ApplicationController::Setters
 
   protected
 
-  def set_validation_error_notice
+  def set_validation_error_notice(object)
     flash.now[:error] = "Please correct the errors below."
+    @full_validation_errors = object.errors.full_messages.join(", ")
   end
 
   def set_no_cache

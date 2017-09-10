@@ -72,7 +72,7 @@ class MealsController < ApplicationController
       flash[:success] = "Meal created successfully."
       redirect_to meals_path
     else
-      set_validation_error_notice
+      set_validation_error_notice(@meal)
       prep_form_vars
       render :new
     end
@@ -88,7 +88,7 @@ class MealsController < ApplicationController
       @worker_change_notifier.try(:check_and_send!)
       redirect_to meals_path
     else
-      set_validation_error_notice
+      set_validation_error_notice(@meal)
       prep_form_vars
       render :edit
     end
@@ -130,7 +130,7 @@ class MealsController < ApplicationController
       flash[:success] = "Meal finalized successfully"
       redirect_to(meals_path(finalizable: 1))
     else
-      set_validation_error_notice
+      set_validation_error_notice(@meal)
       render(:finalize)
     end
   end

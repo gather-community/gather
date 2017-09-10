@@ -93,7 +93,7 @@ class ReservationsController < ApplicationController
       redirect_to_reservation_in_context(@reservation)
     else
       prep_form_vars
-      set_validation_error_notice
+      set_validation_error_notice(@reservation)
       render :new
     end
   end
@@ -114,7 +114,7 @@ class ReservationsController < ApplicationController
         redirect_to_reservation_in_context(@reservation)
       else
         prep_form_vars
-        set_validation_error_notice
+        set_validation_error_notice(@reservation)
         render :edit
       end
     end

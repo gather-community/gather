@@ -43,7 +43,7 @@ class TransactionsController < ApplicationController
         render :confirm
       end
     else
-      set_validation_error_notice
+      set_validation_error_notice(@transaction)
       render :new
     end
   end

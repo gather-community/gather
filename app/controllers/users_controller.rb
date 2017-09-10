@@ -83,7 +83,7 @@ class UsersController < ApplicationController
       flash[:success] = "User created successfully."
       redirect_to user_path(@user)
     else
-      set_validation_error_notice
+      set_validation_error_notice(@user)
       prepare_user_form
       render :new
     end
@@ -104,7 +104,7 @@ class UsersController < ApplicationController
       flash[:success] = "User updated successfully."
       redirect_to user_path(@user)
     else
-      set_validation_error_notice
+      set_validation_error_notice(@user)
       prepare_user_form
       render :edit
     end
@@ -199,7 +199,7 @@ class UsersController < ApplicationController
         @user.validate
         skip_authorization
         set_blank_household
-        set_validation_error_notice
+        set_validation_error_notice(@user)
         render @user.new_record? ? :new : :edit
         return false
       end

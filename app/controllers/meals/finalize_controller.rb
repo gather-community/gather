@@ -48,7 +48,7 @@ module Meals
           end
         end
       else
-        set_validation_error_notice
+        set_validation_error_notice(@meal)
         render(:new)
       end
     end

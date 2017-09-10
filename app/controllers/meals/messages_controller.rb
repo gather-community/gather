@@ -19,7 +19,7 @@ module Meals
         flash[:success] = "Message sent successfully."
         redirect_to meal_path(@meal)
       else
-        set_validation_error_notice
+        set_validation_error_notice(@message)
         render :new
       end
     end

@@ -38,7 +38,7 @@ module Meals
         flash[:success] = "Formula created successfully."
         redirect_to meals_formulas_path
       else
-        set_validation_error_notice
+        set_validation_error_notice(@formula)
         render :new
       end
     end
@@ -50,7 +50,7 @@ module Meals
         flash[:success] = "Formula updated successfully."
         redirect_to meals_formulas_path
       else
-        set_validation_error_notice
+        set_validation_error_notice(@formula)
         render :edit
       end
     end

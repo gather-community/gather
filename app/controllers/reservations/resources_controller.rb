@@ -29,7 +29,7 @@ module Reservations
         flash[:success] = "Resource created successfully."
         redirect_to reservations_resources_path
       else
-        set_validation_error_notice
+        set_validation_error_notice(@resource)
         render :new
       end
     end
@@ -41,7 +41,7 @@ module Reservations
         flash[:success] = "Resource updated successfully."
         redirect_to reservations_resources_path
       else
-        set_validation_error_notice
+        set_validation_error_notice(@resource)
         render :edit
       end
     end

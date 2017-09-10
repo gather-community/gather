@@ -12,7 +12,7 @@ module Admin
         flash[:success] = "Settings updated successfully."
         redirect_to admin_settings_path(type: params[:type])
       else
-        set_validation_error_notice
+        set_validation_error_notice(@community)
         render :edit
       end
     end

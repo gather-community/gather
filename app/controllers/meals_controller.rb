@@ -29,6 +29,8 @@ class MealsController < ApplicationController
     # Don't want the singup form to get cached
     set_no_cache unless @meal.in_past?
 
+    flash.now[:error] = I18n.t("meals.cancelled_notice") if @meal.cancelled?
+
     @signup = Signup.for(current_user, @meal)
     @household = current_user.household.decorate
     @account = current_user.account_for(@meal.community).try(:decorate)

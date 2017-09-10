@@ -6,7 +6,7 @@
   <% end %>
 <% end %>
 
-<% if @meals.empty? %>
+<% if meals.empty? %>
   <div class="none-found">
     No meals found.
   </div>
@@ -23,14 +23,15 @@
       </tr>
     </thead>
     <tbody>
-      <% @meals.each do |meal| %>
-        <tr class="<%= signed_up_class(meal) %>">
+      <% meals.each do |meal| %>
+        <tr class="<%= meal.css_classes %>">
           <td class="nowrap"><%= meal_date_time(meal) %></td>
           <td><%= meal.location_abbrv %></td>
           <td><%= meal.head_cook_name %></td>
           <td>
             <%= meal_link(meal) %>
             <%= icon_tag("lock") if meal.closed? %>
+            <%= icon_tag("ban") if meal.cancelled? %>
             <%= icon_tag("certificate") if meal.finalized? %>
           </td>
           <td>
@@ -55,12 +56,13 @@
   </table>
 
   <div class="meals-list mobile">
-    <% @meals.each do |meal| %>
-      <div class="meal <%= signed_up_class(meal) %>">
+    <% meals.each do |meal| %>
+      <div class="meal <%= meal.css_classes %>">
         <h4 class="top">
           <%= meal_link(meal) %> by <%= meal.head_cook_name %>
           <%= icon_tag("lock") if meal.closed? %>
           <%= icon_tag("certificate") if meal.finalized? %>
+          <%= icon_tag("ban") if meal.cancelled? %>
         </h4>
         <small class="time-place"><%= meal_date_time(meal) %> at <%= meal.location_abbrv %></small>
         <div class="signup-count">
@@ -80,5 +82,5 @@
     <% end %>
   </div>
 
-  <%= paginate @meals %>
+  <%= paginate meals %>
 <% end %>

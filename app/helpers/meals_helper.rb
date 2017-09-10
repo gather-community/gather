@@ -7,10 +7,6 @@ module MealsHelper
     url_in_community(meal.community, meal_path(meal))
   end
 
-  def signed_up_class(meal)
-    meal.signup_for(current_user.household).present? ? "signed-up" : ""
-  end
-
   def meal_date_time(meal, with_break: false)
     date_fmt = params[:time] == "all" ? :short_date_with_yr : :short_date
     spacer = with_break ? tag(:br) : " "

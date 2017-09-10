@@ -1,6 +1,8 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
+  decorates_assigned :meals
+
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
@@ -212,7 +214,7 @@ class MealsController < ApplicationController
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
-    @meals = @meals.page(params[:page]).decorate
+    @meals = @meals.page(params[:page])
   end
 
   def load_signups

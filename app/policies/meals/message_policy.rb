@@ -11,7 +11,7 @@ module Meals
     end
 
     def permitted_attributes
-      [:body, :recipient_type]
+      [:kind, :body, :recipient_type]
     end
   end
 end

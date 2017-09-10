@@ -20,7 +20,7 @@ module MealsHelper
 
   def meal_action_icons(meal, options = {})
     options[:except] = Array.wrap(options[:except] || [])
-    to_show = %i(edit summary reopen close finalize send_message) - options[:except]
+    to_show = %i(edit summary reopen close finalize cancel send_message) - options[:except]
     links = []
     title = meal.title || "Untitled"
     to_show.each do |action|
@@ -37,6 +37,9 @@ module MealsHelper
         links << link_to(icon_tag("lock") << name, close_meal_path(meal), title: title, method: :put)
       when :finalize
         links << link_to(icon_tag("certificate") << name, new_meal_finalize_path(meal), title: title)
+      when :cancel
+        links << link_to(icon_tag("ban") << name,
+          new_meal_message_path(meal, cancel: 1), title: title)
       when :reopen
         links << link_to(icon_tag("unlock") << name, reopen_meal_path(meal), title: title, method: :put)
       when :send_message

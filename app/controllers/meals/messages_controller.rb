@@ -5,6 +5,11 @@ module Meals
     def new
       @meal = Meal.find(params[:meal_id])
       @message = Message.new(meal: @meal)
+      if params[:cancel]
+        @message.kind = "cancellation"
+        @message.recipient_type = "all"
+      end
+      show_cancel_notice
       authorize @message
     end
 
@@ -14,16 +19,26 @@ module Meals
       @message.assign_attributes(message_params)
       authorize @message
       if @message.save
+        if @message.cancellation?
+          @meal.cancel!
+          flash[:success] = I18n.t("meals/messages.cancel_success")
+        else
+          flash[:success] = "Message sent successfully."
+        end
         Delayed::Job.enqueue(MessageJob.new(@message.id))
-        flash[:success] = "Message sent successfully."
         redirect_to meal_path(@meal)
       else
+        show_cancel_notice
         set_validation_error_notice
         render :new
       end
     end
 
     private
+
+    def show_cancel_notice
+      flash.now[:alert] = I18n.t("meals/messages.cancel_notice")
+    end
 
     def message_params
       params.require(:meals_message).permit(policy(@message).permitted_attributes)

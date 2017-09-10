@@ -26,6 +26,10 @@ module Meals
       end
     end
 
+    def cancellation?
+      kind == "cancellation"
+    end
+
     private
 
     def workers

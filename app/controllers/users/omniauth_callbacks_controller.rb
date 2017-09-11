@@ -2,6 +2,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :skip_authorization
 
   def google_oauth2
+    Rails.logger.info("Entering google_oauth2 method")
+    Rails.logger.info("Expected oauth state is #{session["omniauth.state"]}")
+
     auth = request.env["omniauth.auth"]
 
     # If invite token is present, try to find user by that.
@@ -31,20 +34,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     # if no invite, try to find by google_email
     elsif by_email = User.from_omniauth(auth)
-
       by_email.update_for_oauth!(auth)
       sign_in_and_redirect by_email, event: :authentication
-
     else
-
       set_flash_message(:error, :failure, kind: "Google",
         reason: "your Google ID #{auth.info[:email]} was not found in the system")
       redirect_to sign_in_url
-
     end
   end
 
   def failure
+    Rails.logger.info("OAuth failed. See error email for more details.")
     ExceptionNotifier.notify_exception(StandardError.new("oauth failure"), env: request.env)
     set_flash_message(:error, :failure, kind: "Google",
       reason: "of an unspecified error. The administrators have been notified")

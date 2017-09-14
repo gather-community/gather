@@ -41,9 +41,11 @@
           <% attrib = "#{dt}_#{ft}" %>
           <% if @meal.formula.allows_signup_type?(dt, ft) %>
             <% if policy(@meal).edit_signups? %>
+              <%# We blur on change so that people don't accidentally change their selection with
+                  the scroll wheel %>
               <%= f.select(attrib,
                 (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
-                { include_blank: false }, class: "select form-control") %>
+                {include_blank: false}, class: "select form-control", onchange: "this.blur()") %>
             <% else %>
               <% if (n = @signup[attrib]) > 0 %>
                 <div class="ro-signup nonzero"><%= n %> <%= ft %></div>

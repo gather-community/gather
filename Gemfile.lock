@@ -88,6 +88,7 @@ GEM
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
+    browser (2.5.1)
     builder (3.2.2)
     byebug (5.0.0)
       columnize (= 0.9.0)
@@ -412,6 +413,7 @@ DEPENDENCIES
   awesome_print
   bootstrap-kaminari-views
   bootstrap-sass (~> 3.3.5)
+  browser
   byebug
   capistrano-bundler (~> 1.1.2)
   capistrano-passenger (~> 0.2)

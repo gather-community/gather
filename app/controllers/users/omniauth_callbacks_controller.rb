@@ -45,7 +45,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def failure
-    ExceptionNotifier.notify_exception(StandardError.new("oauth failure"), env: request.env)
+    unless browser.bot?
+      ExceptionNotifier.notify_exception(StandardError.new("oauth failure"), env: request.env)
+    end
     set_flash_message(:error, :failure, kind: "Google",
       reason: "of an unspecified error. The administrators have been notified")
     redirect_to sign_in_url

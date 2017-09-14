@@ -46,6 +46,7 @@ class User < ActiveRecord::Base
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
+  delegate :subdomain, to: :community
 
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name, :preferred_contact

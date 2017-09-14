@@ -59,6 +59,10 @@ class Community < ActiveRecord::Base
     self
   end
 
+  def subdomain
+    slug
+  end
+
   def lc_abbrv
     abbrv.downcase
   end

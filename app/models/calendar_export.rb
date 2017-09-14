@@ -117,7 +117,8 @@ class CalendarExport
   end
 
   def url_for(obj, url_helper_method)
+    host = "#{user.subdomain}.#{Settings.url.host}"
     Rails.application.routes.url_helpers.send(url_helper_method, obj,
-      Settings.url.to_h.slice(:host, :port, :protocol))
+      Settings.url.to_h.slice(:port, :protocol).merge(host: host))
   end
 end

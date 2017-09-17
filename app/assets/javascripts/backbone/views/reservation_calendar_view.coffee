@@ -12,11 +12,12 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @ruleSet = options.ruleSet
     @resourceId = options.resourceId
     @storageKey = "calendar#{@resourceId}Settings"
+    @savedSettings = @loadSettings()
 
     @calendar.fullCalendar
       events: options.feedUrl
       defaultView: @initialViewType(options.viewType, options.defaultViewType)
-      defaultDate: options.focusDate || @savedSettings().currentDate
+      defaultDate: options.focusDate || @savedSettings.currentDate
       height: 700
       allDaySlot: false
       eventOverlap: false
@@ -113,7 +114,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     window.location.href = "#{@newUrl}&#{$.param(@selection)}"
 
   initialViewType: (linkParam, defaultType) ->
-    type = @forceDay() && 'day' || linkParam || @savedSettings().viewType || defaultType || 'week'
+    type = @forceDay() && 'day' || linkParam || @savedSettings.viewType || defaultType || 'week'
     @URL_PARAMS_TO_VIEW_TYPES[type]
 
   permalink: ->
@@ -163,7 +164,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
     nearest
 
-  savedSettings: ->
+  loadSettings: ->
     settings = JSON.parse(window.localStorage.getItem(@storageKey) || '{}')
 
     # currentDate setting expires after one hour

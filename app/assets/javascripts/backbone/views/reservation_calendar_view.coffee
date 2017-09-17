@@ -11,14 +11,15 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
     @resourceId = options.resourceId
-    @storageKey = "calendar#{@resourceId}Settings"
     @savedSettings = @loadSettings()
+    @showAppropriateEarlyLink()
 
     @calendar.fullCalendar
       events: options.feedUrl
       defaultView: @initialViewType(options.viewType, options.defaultViewType)
       defaultDate: options.focusDate || @savedSettings.currentDate
-      height: 700
+      height: 'auto'
+      minTime: @minTime()
       allDaySlot: false
       eventOverlap: false
       selectable: @ruleSet.access_level != "read_only"
@@ -37,6 +38,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   events:
     'click .modal .btn-primary': 'create'
+    'click .early': 'showHideEarly'
 
   onSelect: (start, end, _, view) ->
     modal = @$('#create-confirm-modal')
@@ -117,6 +119,9 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     type = @forceDay() && 'day' || linkParam || @savedSettings.viewType || defaultType || 'week'
     @URL_PARAMS_TO_VIEW_TYPES[type]
 
+  minTime: ->
+    if @savedSettings.earlyMorning then '00:00:00' else '06:00:00'
+
   permalink: ->
     @baseUrl.replace("placeholder=xxx", "view=#{@viewType()}&date=#{@currentDate()}")
 
@@ -164,19 +169,33 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
     nearest
 
-  loadSettings: ->
-    settings = JSON.parse(window.localStorage.getItem(@storageKey) || '{}')
+  # Toggles the earlyMorning setting and re-renders.
+  showHideEarly: (e) ->
+    e.preventDefault()
+    @savedSettings.earlyMorning = !@savedSettings.earlyMorning
+    @showAppropriateEarlyLink()
+    @calendar.fullCalendar('option', 'minTime', @minTime())
 
-    # currentDate setting expires after one hour
+  showAppropriateEarlyLink: ->
+    @$('#hide-early')[if @savedSettings.earlyMorning then 'show' else 'hide']()
+    @$('#show-early')[if @savedSettings.earlyMorning then 'hide' else 'show']()
+
+  storageKey: ->
+    "calendar#{@resourceId}Settings"
+
+  loadSettings: ->
+    settings = JSON.parse(window.localStorage.getItem(@storageKey()) || '{}')
+    @expireCurrentDateSettingAfterOneHour(settings)
+    settings
+
+  expireCurrentDateSettingAfterOneHour: (settings) ->
     if settings.savedAt
       settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds()
       delete settings.currentDate if settingsAge > 3600
 
-    settings
-
   saveSettings: ->
-    window.localStorage.setItem(@storageKey, JSON.stringify(
-      viewType: @viewType()
-      currentDate: @currentDate()
-      savedAt: new Date()
-    ))
+    @savedSettings.savedAt = new Date()
+    @savedSettings.viewType = @viewType()
+    @savedSettings.currentDate = @currentDate()
+
+    window.localStorage.setItem(@storageKey(), JSON.stringify(@savedSettings))

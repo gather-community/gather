@@ -1,7 +1,7 @@
 module Utils
   module FakeData
     class MealGenerator < Generator
-      attr_accessor :community, :data, :statement_gen, :locations, :creator, :households, :adults
+      attr_accessor :community, :data, :formula, :statement_gen, :locations, :creator, :households, :adults
 
       MONTHS = 5
 
@@ -13,7 +13,7 @@ module Utils
 
       def generate
         load_objs
-        create(:meal_formula, community: community)
+        self.formula = create(:meal_formula, community: community)
         create_meals
       end
 
@@ -65,6 +65,7 @@ module Utils
           staff = adults.shuffle
 
           meal = build(:meal, datum.merge(
+            formula: formula,
             resources: locations,
             community: community,
             head_cook: staff[0],

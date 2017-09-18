@@ -1,4 +1,4 @@
-class Users::SessionsController < Devise::OmniauthCallbacksController
+class Users::SessionsController < Devise::SessionsController
   def new
     redirect_to "/"
   end

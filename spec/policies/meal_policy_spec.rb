@@ -51,7 +51,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :set_menu?, :close?, :reopen?, :cancel? do
+    permissions :set_menu?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
 
       it "permits head cook" do
@@ -60,7 +60,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :close? do
+    permissions :close?, :reopen? do
       it "denies if meal cancelled" do
         stub_status("cancelled")
         expect(subject).not_to permit(admin, meal)
@@ -68,6 +68,10 @@ describe MealPolicy do
     end
 
     permissions :reopen? do
+      before { meal.close! }
+
+      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+
       it "permits if day prior to meal" do
         Timecop.travel(meal.served_at - 1.day) do
           expect(subject).to permit(admin, meal)
@@ -78,6 +82,11 @@ describe MealPolicy do
         Timecop.travel(meal.served_at + 1.minute) do
           expect(subject).to permit(admin, meal)
         end
+      end
+
+      it "forbids if meal open" do
+        meal.reopen!
+        expect(subject).not_to permit(admin, meal)
       end
 
       it "forbids if day after meal" do

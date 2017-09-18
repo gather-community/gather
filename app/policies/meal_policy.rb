@@ -70,7 +70,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def reopen?
-    active_admin_or_coordinator_or_head_cook? && !meal.day_in_past?
+    active_admin_or_coordinator_or_head_cook? && meal.closed? && !meal.day_in_past?
   end
 
   def finalize?

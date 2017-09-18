@@ -1,5 +1,5 @@
 class HouseholdsController < ApplicationController
-  include Lensable, AccountShowable
+  include Lensable, AccountShowable, Destructible
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 

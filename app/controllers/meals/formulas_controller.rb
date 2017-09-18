@@ -1,5 +1,7 @@
 module Meals
   class FormulasController < ApplicationController
+    include Destructible
+    
     before_action -> { nav_context(:meals, :formulas) }
     decorates_assigned :formulas, :formula
     helper_method :sample_formula

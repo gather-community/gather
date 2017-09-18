@@ -1,5 +1,7 @@
 module Reservations
   class ResourcesController < ApplicationController
+    include Destructible
+    
     decorates_assigned :resource, :resources
     helper_method :sample_resource
 

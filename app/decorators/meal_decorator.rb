@@ -19,6 +19,10 @@ class MealDecorator < ApplicationDecorator
     resources.first.decorate.abbrv_with_prefix
   end
 
+  def served_at_datetime
+    I18n.l(served_at, format: :full_datetime).gsub("  ", " ")
+  end
+
   def served_at_datetime_no_yr
     I18n.l(served_at, format: :datetime_no_yr).gsub("  ", " ")
   end

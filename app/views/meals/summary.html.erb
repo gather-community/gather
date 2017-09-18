@@ -109,6 +109,16 @@
     <h2>Cook Reimbursement Form</h2>
     <table id="reimb-form">
       <tr>
+        <td>Meal:</td>
+        <td>
+          <%= @meal.title_or_no_title %><br/>
+          <% if @meal.head_cook %>
+            By <%= @meal.head_cook_name %><br/>
+          <% end %>
+          <%= @meal.served_at_datetime %> at <%= @meal.location_name %>
+        </td>
+      </tr>
+      <tr>
         <td>Date of grocery purchase:</td>
         <td></td>
       </tr>

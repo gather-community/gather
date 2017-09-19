@@ -1,8 +1,8 @@
 namespace :db do
-  ARGS = [:cluster_name, :slug, :google_id, :first_name, :last_name]
+  ARGS = [:cluster_name, :slug, :google_id, :first_name, :last_name, :populate]
   task :new_cluster, ARGS => :environment do |t, args|
     unless ARGS.all? { |k| args.send(k).present? }
-      abort("Usage: rake db:new_cluster[<cluster_name>,<slug>,<admin google ID>,<first_name>,<last_name>]")
+      abort("Usage: rake db:new_cluster[<cluster_name>,<slug>,<admin google ID>,<first_name>,<last_name>,<populate (y or n)>]")
     end
     ActiveRecord::Base.transaction do
       cluster = Cluster.create!(name: args.cluster_name)
@@ -21,7 +21,9 @@ namespace :db do
           mobile_phone: "5555551212"
         )
         admin.add_role(:admin)
-        Utils::FakeData::MainGenerator.new(community: cmty, photos: true).generate
+        if args.populate.downcase == 'y'
+          Utils::FakeData::MainGenerator.new(community: cmty, photos: true).generate
+        end
       end
     end
   end

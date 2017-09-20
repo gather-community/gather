@@ -6,4 +6,9 @@
   <% if current_user && current_community && policy(current_community).update? %>
     &bull; <%= link_to("Settings", admin_settings_path(type: "community"))  %>
   <% end %>
+
+  <%# For test purposes only. Security risk otherwise. %>
+  <% if Rails.env.test? %>
+    <div id="url"><%= request.url %></div>
+  <% end %>
 </footer>

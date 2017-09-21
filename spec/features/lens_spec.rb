@@ -31,6 +31,10 @@ feature "lenses", js: true do
     scenario "user view" do
       expect_plain_dropdown(id: "user_view", default_opt: "Album", opt2: ["Table", "table"])
     end
+
+    scenario "search" do
+      expect_search
+    end
   end
 
   def expect_plain_dropdown(id:, default_opt:, opt2:)
@@ -45,18 +49,9 @@ feature "lenses", js: true do
     expect(page).to have_echoed_url(%r{(&|\?)#{id}=#{opt2[1]}(&|\z)})
     expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
 
-    # Click away, check the rewritten link, and come back.
-    find(".dropdown a", text: user.name).click
-    click_link("Profile")
-    expect(page).to have_content(user.name)
-    expect(page).to have_css(".main-nav a[href^='/users?#{id}=#{opt2[1]}']")
-    find(".main-nav a", text: nav_link).click
-    expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
-
-    # Direct path visit
-    visit(path)
-    expect(page).to have_echoed_url(%r{/users\z})
-    expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
+    expect_rewritten_link_and_session(key: id, value: opt2[1]) do
+      expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
+    end
   end
 
   def expect_community_dropdown
@@ -65,5 +60,32 @@ feature "lenses", js: true do
     first(".lens-bar #community").select("Community 2")
     expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 2"
+  end
+
+  def expect_search
+    visit(path)
+    expect(first(".lens-bar #search").text).to eq ""
+    first(".lens-bar #search").set("foo")
+    first(".lens-bar #search").native.send_keys(:return)
+    expect(page).to have_echoed_url(%r{(&|\?)search=foo(&|\z)})
+    expect(first(".lens-bar #search").value).to eq "foo"
+    expect_rewritten_link_and_session(key: "search", value: "foo") do
+      expect(first(".lens-bar #search").value).to eq "foo"
+    end
+  end
+
+  def expect_rewritten_link_and_session(key:, value:)
+    # Click away, check the rewritten link, and come back.
+    find(".dropdown a", text: user.name).click
+    click_link("Profile")
+    expect(page).to have_content(user.name)
+    expect(page).to have_css(".main-nav a[href^='#{path}?#{key}=#{value}']")
+    find(".main-nav a", text: nav_link).click
+    yield
+
+    # Direct path visit
+    visit(path)
+    expect(page).to have_echoed_url(%r{#{path}\z})
+    yield
   end
 end

@@ -63,6 +63,21 @@ feature "lenses", js: true do
     end
   end
 
+  describe "my accounts lens" do
+    let(:path) { accounts_household_path(user.household) }
+
+    before do
+      [community1, community2, community3].each do |c|
+        create(:account, community: c, household: user.household)
+      end
+    end
+
+    scenario "community" do
+      # This kind of community drop-down does not change the subdomain.
+      expect_community_dropdown(subdomain: false)
+    end
+  end
+
   def expect_plain_dropdown(id:, default_opt:, opt2:)
     visit(path)
 
@@ -72,14 +87,14 @@ feature "lenses", js: true do
     # Select the secondary option, wait for page to load, and test.
     lens_field(id).select(opt2[0])
     expect(page).to have_echoed_url(%r{(&|\?)#{id}=#{opt2[1]}(&|\z)})
-    expect(lens_selected_op tion(id).text).to eq opt2[0]
+    expect(lens_selected_option(id).text).to eq opt2[0]
 
     expect_rewritten_link_and_session(key: id, value: opt2[1]) do
       expect(lens_selected_option(id).text).to eq opt2[0]
     end
   end
 
-  def expect_community_dropdown(all_option: false)
+  def expect_community_dropdown(all_option: false, subdomain: true)
     visit(path)
     if all_option
       expect_unselected_option(".lens-bar #community", "All Communities")
@@ -87,7 +102,11 @@ feature "lenses", js: true do
       expect(lens_selected_option("community").text).to eq "Community 3"
     end
     lens_field("community").select("Community 2")
-    expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
+    if subdomain
+      expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
+    else
+      expect(page).to have_echoed_url(%r{(&|\?)community=community2(&|\z)})
+    end
     expect(lens_selected_option("community").text).to eq "Community 2"
     if all_option
       expect(page).to have_echoed_url(%r{(&|\?)community=this(&|\z)})

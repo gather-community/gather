@@ -128,6 +128,11 @@ module FeatureSpecHelpers
     click_link "Sign in with Google"
   end
 
+  def expect_unselected_option(selector, text)
+    expect(page).not_to have_css("#{selector} option[selected]")
+    expect(first("#{selector} option")).to have_content(text)
+  end
+
   def be_not_found
     have_content("The page you were looking for doesn't exist")
   end

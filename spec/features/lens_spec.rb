@@ -37,12 +37,28 @@ feature "lenses", js: true do
     end
   end
 
+  describe "meals lens" do
+    let(:path) { meals_path }
+    let(:nav_link) { "Meals"}
+
+    scenario "community" do
+      expect_community_dropdown(all_option: true)
+    end
+
+    scenario "time" do
+      expect_plain_dropdown(id: "time", default_opt: "Upcoming", opt2: ["Past", "past"])
+    end
+
+    scenario "search" do
+      expect_search
+    end
+  end
+
   def expect_plain_dropdown(id:, default_opt:, opt2:)
     visit(path)
 
     # Initially, nothing should be selected, so the default option should be showing.
-    expect(page).not_to have_css(".lens-bar ##{id} option[selected]")
-    expect(first(".lens-bar ##{id} option")).to have_content(default_opt)
+    expect_unselected_option(".lens-bar ##{id}", default_opt)
 
     # Select the secondary option, wait for page to load, and test.
     first(".lens-bar ##{id}").select(opt2[0])
@@ -54,12 +70,24 @@ feature "lenses", js: true do
     end
   end
 
-  def expect_community_dropdown
+  def expect_community_dropdown(all_option: false)
     visit(path)
-    expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 3"
+    if all_option
+      expect_unselected_option(".lens-bar #community", "All Communities")
+    else
+      expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 3"
+    end
     first(".lens-bar #community").select("Community 2")
     expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 2"
+    if all_option
+      expect(page).to have_echoed_url(%r{(&|\?)community=this(&|\z)})
+      first(".lens-bar a.clear").click
+      expect(page).to have_echoed_url(%r{(&|\?)community=(&|\z)})
+      expect_unselected_option(".lens-bar #community", "All Communities")
+    else
+      expect(page).not_to have_css(".lens-bar a.clear")
+    end
   end
 
   def expect_search

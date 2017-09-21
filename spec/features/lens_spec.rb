@@ -61,12 +61,12 @@ feature "lenses", js: true do
     expect_unselected_option(".lens-bar ##{id}", default_opt)
 
     # Select the secondary option, wait for page to load, and test.
-    first(".lens-bar ##{id}").select(opt2[0])
+    lens_field(id).select(opt2[0])
     expect(page).to have_echoed_url(%r{(&|\?)#{id}=#{opt2[1]}(&|\z)})
-    expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
+    expect(lens_selected_option(id).text).to eq opt2[0]
 
     expect_rewritten_link_and_session(key: id, value: opt2[1]) do
-      expect(first(".lens-bar ##{id}").find("option[selected]").text).to eq opt2[0]
+      expect(lens_selected_option(id).text).to eq opt2[0]
     end
   end
 
@@ -75,11 +75,11 @@ feature "lenses", js: true do
     if all_option
       expect_unselected_option(".lens-bar #community", "All Communities")
     else
-      expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 3"
+      expect(lens_selected_option("community").text).to eq "Community 3"
     end
-    first(".lens-bar #community").select("Community 2")
+    lens_field("community").select("Community 2")
     expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
-    expect(first(".lens-bar #community").find("option[selected]").text).to eq "Community 2"
+    expect(lens_selected_option("community").text).to eq "Community 2"
     if all_option
       expect(page).to have_echoed_url(%r{(&|\?)community=this(&|\z)})
       first(".lens-bar a.clear").click
@@ -92,13 +92,13 @@ feature "lenses", js: true do
 
   def expect_search
     visit(path)
-    expect(first(".lens-bar #search").text).to eq ""
-    first(".lens-bar #search").set("foo")
-    first(".lens-bar #search").native.send_keys(:return)
+    expect(lens_field("search").text).to eq ""
+    lens_field("search").set("foo")
+    lens_field("search").native.send_keys(:return)
     expect(page).to have_echoed_url(%r{(&|\?)search=foo(&|\z)})
-    expect(first(".lens-bar #search").value).to eq "foo"
+    expect(lens_field("search").value).to eq "foo"
     expect_rewritten_link_and_session(key: "search", value: "foo") do
-      expect(first(".lens-bar #search").value).to eq "foo"
+      expect(lens_field("search").value).to eq "foo"
     end
   end
 
@@ -115,5 +115,13 @@ feature "lenses", js: true do
     visit(path)
     expect(page).to have_echoed_url(%r{#{path}\z})
     yield
+  end
+
+  def lens_selected_option(id)
+    lens_field(id).find("option[selected]")
+  end
+
+  def lens_field(id)
+    first(".lens-bar ##{id}")
   end
 end

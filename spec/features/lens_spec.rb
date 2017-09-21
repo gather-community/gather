@@ -54,6 +54,15 @@ feature "lenses", js: true do
     end
   end
 
+  describe "reservation lens" do
+    let(:path) { reservations_path }
+    let(:nav_link) { "Reservations"}
+
+    scenario "community" do
+      expect_community_dropdown
+    end
+  end
+
   def expect_plain_dropdown(id:, default_opt:, opt2:)
     visit(path)
 
@@ -63,7 +72,7 @@ feature "lenses", js: true do
     # Select the secondary option, wait for page to load, and test.
     lens_field(id).select(opt2[0])
     expect(page).to have_echoed_url(%r{(&|\?)#{id}=#{opt2[1]}(&|\z)})
-    expect(lens_selected_option(id).text).to eq opt2[0]
+    expect(lens_selected_op tion(id).text).to eq opt2[0]
 
     expect_rewritten_link_and_session(key: id, value: opt2[1]) do
       expect(lens_selected_option(id).text).to eq opt2[0]

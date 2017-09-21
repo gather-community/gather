@@ -110,11 +110,20 @@ feature "lenses", js: true do
     expect(lens_selected_option("community").text).to eq "Community 2"
     if all_option
       expect(page).to have_echoed_url(%r{(&|\?)community=this(&|\z)})
+
+      # Clear button should work for all option mode only
       first(".lens-bar a.clear").click
       expect(page).to have_echoed_url(%r{(&|\?)community=(&|\z)})
       expect_unselected_option(".lens-bar #community", "All Communities")
     else
       expect(page).not_to have_css(".lens-bar a.clear")
+    end
+
+    # Direct path visit should maintain value in subdomain mode only.
+    unless subdomain
+      visit(path)
+      expect(page).to have_echoed_url(%r{#{path}\z})
+      expect(lens_selected_option("community").text).to eq "Community 2"
     end
   end
 

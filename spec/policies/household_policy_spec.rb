@@ -260,7 +260,7 @@ describe HouseholdPolicy do
 
   describe "permitted attributes" do
     let(:basic_attribs) { [:name, :garage_nums,
-      {vehicles_attributes: [:id, :make, :model, :color, :_destroy]},
+      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
         :email, :location, :_destroy]}] }
     let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }

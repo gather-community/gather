@@ -259,7 +259,7 @@ describe HouseholdPolicy do
   end
 
   describe "permitted attributes" do
-    let(:basic_attribs) { [:name, :garage_nums,
+    let(:basic_attribs) { [:name, :garage_nums, :keyholders,
       {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
         :email, :location, :_destroy]}] }

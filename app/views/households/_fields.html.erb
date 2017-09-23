@@ -11,5 +11,6 @@
 <% end %>
 <%= f.input :unit_num, disabled: !policy(f.object).administer? %>
 <%= f.input :garage_nums %>
+<%= f.input :keyholders %>
 <%= nested_field_set(f, :vehicles) %>
 <%= nested_field_set(f, :emergency_contacts) %>

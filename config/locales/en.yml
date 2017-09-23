@@ -31,6 +31,7 @@ en:
         community_id: "Community"
         unit_num: "Unit Number"
         vehicles: "Vehicles"
+        keyholders: "Extra Unit Keyholders"
         emergency_contacts: "Emergency Contacts"
         garage_nums: "Garage Number(s)"
       meal:

@@ -71,7 +71,7 @@ module Utils
           members = adults + kids
           self.users.concat(members)
 
-          create(:household, :with_vehicles, :with_emerg_contacts,
+          create(:household, :with_vehicles, :with_emerg_contacts, :with_pets,
             name: adults.map(&:last_name).uniq.join("-"),
             community: community,
             unit_num: i + 1,

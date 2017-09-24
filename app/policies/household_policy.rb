@@ -101,6 +101,8 @@ class HouseholdPolicy < ApplicationPolicy
     permitted << {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]}
     permitted << {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
       :email, :location, :_destroy]}
+    permitted << {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers,
+      :health_issues, :_destroy]}
     permitted
   end
 end

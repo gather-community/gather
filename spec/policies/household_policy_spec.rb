@@ -262,7 +262,9 @@ describe HouseholdPolicy do
     let(:basic_attribs) { [:name, :garage_nums, :keyholders,
       {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]}] }
+        :email, :location, :_destroy]},
+      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
+    ] }
     let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }
     let(:cluster_admin_attribs) { admin_attribs }
 

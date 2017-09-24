@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170923153154) do
+ActiveRecord::Schema.define(version: 20170923155733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -242,6 +242,22 @@ ActiveRecord::Schema.define(version: 20170923153154) do
   add_index "people_guardianships", ["child_id"], name: "index_people_guardianships_on_child_id", using: :btree
   add_index "people_guardianships", ["cluster_id"], name: "index_people_guardianships_on_cluster_id", using: :btree
   add_index "people_guardianships", ["guardian_id"], name: "index_people_guardianships_on_guardian_id", using: :btree
+
+  create_table "people_pets", force: :cascade do |t|
+    t.string "caregivers"
+    t.integer "cluster_id", null: false
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.text "health_issues"
+    t.integer "household_id", null: false
+    t.string "name"
+    t.string "species"
+    t.datetime "updated_at", null: false
+    t.string "vet"
+  end
+
+  add_index "people_pets", ["cluster_id"], name: "index_people_pets_on_cluster_id", using: :btree
+  add_index "people_pets", ["household_id"], name: "index_people_pets_on_household_id", using: :btree
 
   create_table "people_vehicles", force: :cascade do |t|
     t.integer "cluster_id", null: false
@@ -518,6 +534,8 @@ ActiveRecord::Schema.define(version: 20170923153154) do
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"
+  add_foreign_key "people_pets", "clusters"
+  add_foreign_key "people_pets", "households"
   add_foreign_key "people_vehicles", "clusters"
   add_foreign_key "people_vehicles", "households"
   add_foreign_key "reservation_guideline_inclusions", "clusters"

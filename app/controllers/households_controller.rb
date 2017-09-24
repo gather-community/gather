@@ -131,6 +131,7 @@ class HouseholdsController < ApplicationController
     @allowed_community_changes = policy(sample_household).allowed_community_changes.by_name
     @household.vehicles.build if @household.vehicles.empty?
     @household.emergency_contacts.build if @household.emergency_contacts.empty?
+    @household.pets.build if @household.pets.empty?
     @household = @household.decorate
   end
 end

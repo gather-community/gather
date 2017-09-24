@@ -234,6 +234,7 @@ class UsersController < ApplicationController
     @user.build_household if @user.household.nil?
     @user.household.vehicles.build if @user.household.vehicles.empty?
     @user.household.emergency_contacts.build if @user.household.emergency_contacts.empty?
+    @user.household.pets.build if @user.household.pets.empty?
     @user.household = @user.household.decorate
   end
 

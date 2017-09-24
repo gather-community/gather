@@ -113,6 +113,13 @@ en:
         model: "Model"
         color: "Color"
         plate: "License Plate"
+      people/pet:
+        name: "Name"
+        species: "Species"
+        color: "Color"
+        vet: "Veterinarian Info"
+        caregivers: "Caregiver Info"
+        health_issues: "Health Issues"
     errors:
       models:
         signup:
@@ -405,6 +412,7 @@ en:
       asst_cook_assigns: "Add Assistant Cook"
       cleaner_assigns: "Add Cleaner"
       table_setter_assigns: "Add Table Setter"
+      pets: "Add Pet"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."

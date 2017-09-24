@@ -34,6 +34,12 @@ class Household < ActiveRecord::Base
 
   normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
 
+  def build_blank_associations
+    vehicles.build if vehicles.empty?
+    emergency_contacts.build if emergency_contacts.empty?
+    pets.build if pets.empty?
+  end
+
   # Returns users (including children) directly in the household PLUS any children associated by parentage,
   # even if they aren't directly in the household via the foreign key.
   def users_and_children

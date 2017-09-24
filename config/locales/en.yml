@@ -26,6 +26,10 @@ en:
         joined_on: "Join Date"
         up_guardianships: "Parents/Guardians"
         privacy_settings: "Privacy Settings"
+        school: "School"
+        allergies: "Allergies"
+        doctor: "Doctor Info"
+        medical: "Medical Info"
       household:
         name: "Household Name"
         community_id: "Community"

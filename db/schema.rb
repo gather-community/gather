@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170923155733) do
+ActiveRecord::Schema.define(version: 20170924204318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -458,6 +458,7 @@ ActiveRecord::Schema.define(version: 20170923155733) do
   add_index "transactions", ["statementable_id", "statementable_type"], name: "index_transactions_on_statementable_id_and_statementable_type", using: :btree
 
   create_table "users", force: :cascade do |t|
+    t.string "allergies"
     t.string "alternate_id"
     t.date "birthdate"
     t.string "calendar_token"
@@ -467,6 +468,7 @@ ActiveRecord::Schema.define(version: 20170923155733) do
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
     t.datetime "deactivated_at"
+    t.string "doctor"
     t.string "email"
     t.string "encrypted_password", default: "", null: false
     t.boolean "fake", default: false
@@ -478,6 +480,7 @@ ActiveRecord::Schema.define(version: 20170923155733) do
     t.string "last_name", null: false
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
+    t.text "medical"
     t.string "mobile_phone"
     t.string "photo_content_type"
     t.string "photo_file_name"
@@ -490,6 +493,7 @@ ActiveRecord::Schema.define(version: 20170923155733) do
     t.string "remember_token"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "school"
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
     t.datetime "updated_at", null: false

@@ -115,7 +115,7 @@ en:
         plate: "License Plate"
       people/pet:
         name: "Name"
-        species: "Species"
+        species: "Species/Breed"
         color: "Color"
         vet: "Veterinarian Info"
         caregivers: "Caregiver Info"

@@ -10,6 +10,10 @@ table {
 }
 
 table.key-value {
+  &.key-value-full {
+    width: 100%;
+  }
+
   td:first-of-type {
     width: 250px;
     color: #999;
@@ -19,16 +23,27 @@ table.key-value {
   }
 
   td:last-of-type {
-    width: 250px;
-
     p:last-of-type {
       margin-bottom: 0;
     }
   }
 
-  &.wide {
+  &.key-value-narrow {
+    td:last-of-type {
+      width: 250px;
+    }
+  }
+
+  &.key-value-wide {
     td:last-of-type {
       width: 400px;
     }
+  }
+
+  span.inner-label {
+    display: inline-block;
+    font-size: 12px;
+    color: $gray-text;
+    margin-right: 10px;
   }
 }

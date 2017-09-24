@@ -9,7 +9,7 @@
 <% end %>
 
 <div class="row">
-  <div class="col-md-9 col-sm-12">
+  <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-4">
         <%= user_photo_if_permitted(@user, :medium) %>
@@ -18,7 +18,7 @@
         <% end %>
       </div>
       <div class="col-sm-8">
-        <table class="key-value">
+        <table class="key-value key-value-full">
           <%= render("households/unit_community", household: @user.household) %>
           <% if @user.email? %>
             <tr>

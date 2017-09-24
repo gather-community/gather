@@ -13,4 +13,37 @@ class HouseholdDecorator < ApplicationDecorator
   def selected_option
     h.content_tag(:option, name_with_prefix, value: id, selected: "selected")
   end
+
+  def emergency_contacts_html
+    return "[None]" if emergency_contacts.empty?
+    emergency_contacts.map do |contact|
+      h.content_tag(:div, class: "emergency-contact") do
+        lines = [contact.name_relationship, contact.location]
+        lines.concat(contact.phones.map { |p| h.phone_link(p) })
+        lines << h.link_to(contact.email, "mailto:#{contact.email}") if contact.email.present?
+        h.safe_join(lines, h.tag(:br))
+      end
+    end.reduce(:<<)
+  end
+
+  def pets_html
+    return "[None]" if pets.empty?
+    pets.map do |pet|
+      h.content_tag(:div, class: "pet") do
+        lines = []
+        lines << "#{pet.name} (#{pet.color} #{pet.species})"
+        if pet.vet.present?
+          lines << (h.content_tag(:span, "Vet", class: "inner-label") << pet.vet)
+        end
+        if pet.caregivers.present?
+          lines << (h.content_tag(:span, "Caregivers", class: "inner-label") << pet.caregivers)
+        end
+        if pet.health_issues.present?
+          lines << (h.content_tag(:span, "Health Issues", class: "inner-label") <<
+            h.simple_format(pet.health_issues))
+        end
+        h.safe_join(lines, h.tag(:br))
+      end
+    end.reduce(:<<)
+  end
 end

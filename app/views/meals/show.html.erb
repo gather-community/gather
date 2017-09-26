@@ -1,6 +1,9 @@
-<% content_for(:title){ h(@meal.title || "Untitled Meal") <<
-  (@meal.closed? ? " ".html_safe << icon_tag("lock") : "") <<
-  (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "") } %>
+<% content_for(:title) do
+  h(@meal.title || "Untitled Meal") <<
+    (@meal.cancelled? ? " ".html_safe << icon_tag("ban") : "") <<
+    (@meal.closed? ? " ".html_safe << icon_tag("lock") : "") <<
+    (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "")
+end %>
 
 <% content_for(:top_buttons) do %>
   <% if policy(sample_meal).index? %>

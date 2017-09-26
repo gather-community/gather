@@ -3,12 +3,12 @@ module Meals
   class Message < ActiveRecord::Base
     acts_as_tenant(:cluster)
 
-    RECIPIENT_TYPES = %w(team diners)
+    RECIPIENT_TYPES = %i(team diners all)
 
     belongs_to :sender, class_name: "User"
     belongs_to :meal
 
-    validates :body, presence: true
+    validates :recipient_type, :body, presence: true
 
     delegate :name, :email, to: :sender, prefix: true
     delegate :cluster, to: :meal
@@ -20,9 +20,24 @@ module Meals
     # Returns users or households, depending on recipient type.
     def recipients
       case recipient_type
-      when "team" then meal.workers - [sender]
-      when "diners" then meal.signups.map(&:household)
+      when "team" then workers
+      when "diners" then households
+      when "all" then workers + households
       end
+    end
+
+    def cancellation?
+      kind == "cancellation"
+    end
+
+    private
+
+    def workers
+      meal.workers
+    end
+
+    def households
+      meal.signups.map(&:household)
     end
   end
 end

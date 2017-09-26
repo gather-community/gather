@@ -10,25 +10,46 @@ table {
 }
 
 table.key-value {
+  &.key-value-full {
+    width: 100%;
+  }
+
   td:first-of-type {
-    width: 250px;
     color: #999;
     padding-left: 15px;
     padding-right: 15px;
     vertical-align: top;
   }
 
-  td:last-of-type {
-    width: 250px;
-
-    p:last-of-type {
-      margin-bottom: 0;
+  // For xs screens, default table behavior is best.
+  @media screen and (min-width: $screen-sm-min) {
+    td:first-of-type {
+      width: 250px;
     }
-  }
 
-  &.wide {
     td:last-of-type {
-      width: 400px;
+      p:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    &.key-value-narrow {
+      td:last-of-type {
+        width: 250px;
+      }
+    }
+
+    &.key-value-wide {
+      td:last-of-type {
+        width: 400px;
+      }
+    }
+
+    span.inner-label {
+      display: inline-block;
+      font-size: 12px;
+      color: $gray-text;
+      margin-right: 10px;
     }
   }
 }

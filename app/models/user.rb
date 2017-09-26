@@ -1,14 +1,15 @@
 class User < ActiveRecord::Base
   include Deactivatable, Phoneable, PhotoDestroyable
 
-  ROLES = %i(super_admin cluster_admin admin biller photographer)
+  ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator)
   CONTACT_TYPES = %i(email text phone)
 
   acts_as_tenant(:cluster)
   rolify
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
-  devise :omniauthable, :trackable, :recoverable, :database_authenticatable, omniauth_providers: [:google_oauth2]
+  devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
+    omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id
@@ -45,6 +46,7 @@ class User < ActiveRecord::Base
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
+  delegate :subdomain, to: :community
 
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name, :preferred_contact
@@ -71,6 +73,11 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
+
+  # This is needed for remembering users across sessions because users don't always have passwords.
+  before_create do
+    self.remember_token ||= Devise.friendly_token
+  end
 
   before_save do
     raise People::AdultWithGuardianError if adult? && guardians.present?
@@ -108,6 +115,11 @@ class User < ActiveRecord::Base
     self.provider = 'google_oauth2'
     self.uid = auth.uid
     save(validate: false)
+  end
+
+  # We assume that people always want to stay logged in!
+  def remember_me
+    true
   end
 
   def name

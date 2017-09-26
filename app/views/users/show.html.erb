@@ -9,7 +9,7 @@
 <% end %>
 
 <div class="row">
-  <div class="col-md-9 col-sm-12">
+  <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-4">
         <%= user_photo_if_permitted(@user, :medium) %>
@@ -18,7 +18,7 @@
         <% end %>
       </div>
       <div class="col-sm-8">
-        <table class="key-value">
+        <table class="key-value key-value-full">
           <%= render("households/unit_community", household: @user.household) %>
           <% if @user.email? %>
             <tr>
@@ -47,17 +47,13 @@
                 <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
               </tr>
             <% end %>
-            <% if @user.age %>
-              <tr>
-                <td>Age</td>
-                <td><%= @user.age %></td>
-              </tr>
-            <% end %>
-            <% if @user.joined_on %>
-              <tr>
-                <td>Join Date</td>
-                <td><%= @user.joined_on %></td>
-              </tr>
+            <% %i(age joined_on school allergies doctor medical).each do |attr| %>
+              <% if @user[attr].present? %>
+                <tr>
+                  <td><%= User.human_attribute_name(attr) %></td>
+                  <td><%= @user[attr] %></td>
+                </tr>
+              <% end %>
             <% end %>
           <% end %>
           <% @households_and_members.each do |household, members| %>

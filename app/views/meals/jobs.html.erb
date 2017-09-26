@@ -4,9 +4,9 @@
   <%= calendar_exports_link %>
 <% end %>
 
-<% table_setter_present = @meals.any? { |m| m.table_setters.any? } %>
+<% table_setter_present = meals.any? { |m| m.table_setters.any? } %>
 
-<% if @meals.empty? %>
+<% if meals.empty? %>
   <div class="none-found">
     No jobs found<% @user ? "for #{@user.name}" : "" %>.
   </div>
@@ -23,30 +23,38 @@
       <% end %>
       <th>Cleaners</th>
     </tr>
-    <% @meals.each do |meal| %>
-      <tr class="<%= signed_up_class(meal) %>">
+    <% meals.each do |meal| %>
+      <tr class="<%= meal.css_classes %>">
         <td class="nowrap"><%= meal_date_time(meal, with_break: true) %></td>
         <td><%= meal.location_abbrv %></td>
         <td><%= meal_link(meal) %></td>
-        <td class="nowrap"><%= user_link(meal.head_cook, highlight: lens[:user]) %></td>
-        <td class="nowrap"><%= meal.asst_cooks.map{ |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
+        <td class="nowrap">
+          <% if meal.head_cook.present? %>
+            <%= user_link(meal.head_cook, highlight: lens[:user]) %>
+          <% end %>
+        </td>
+        <td class="nowrap"><%= meal.asst_cooks.map { |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
         <% if table_setter_present %>
-          <td class="nowrap"><%= meal.table_setters.map{ |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
+          <td class="nowrap"><%= meal.table_setters.map { |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
         <% end %>
-        <td class="nowrap"><%= meal.cleaners.map{ |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
+        <td class="nowrap"><%= meal.cleaners.map { |c| user_link(c, highlight: lens[:user]) }.reduce(:<<) %></td>
       </tr>
     <% end %>
   </table>
 
   <div class="meals-list mobile">
-    <% @meals.each do |meal| %>
-      <div class="meal <%= signed_up_class(meal) %>">
+    <% meals.each do |meal| %>
+      <div class="meal <%= meal.css_classes %>">
         <h2><%= meal_date_time(meal) %></h2>
         <div class="title">
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
         </div>
         <div class="jobs">
-          <div class="job"><%= user_link(meal.head_cook, highlight: lens[:user]) %> (Head)</div>
+          <% if meal.head_cook.present? %>
+            <div class="job">
+              <%= user_link(meal.head_cook, highlight: lens[:user]) %> (Head)
+            </div>
+          <% end %>
           <% meal.asst_cooks.each do |u| %>
             <div class="job"><%= user_link(u, highlight: lens[:user]) %> (Asst)</div>
           <% end %>
@@ -63,7 +71,7 @@
     <% end %>
   </div>
 
-  <%= paginate @meals %>
+  <%= paginate meals %>
 <% end %>
 
 <%= javascript_tag do %>

@@ -128,6 +128,11 @@ module FeatureSpecHelpers
     click_link "Sign in with Google"
   end
 
+  def expect_unselected_option(selector, text)
+    expect(page).not_to have_css("#{selector} option[selected]")
+    expect(first("#{selector} option")).to have_content(text)
+  end
+
   def be_not_found
     have_content("The page you were looking for doesn't exist")
   end
@@ -150,6 +155,13 @@ module FeatureSpecHelpers
 
   def have_title(title)
     have_css("h1", text: title)
+  end
+
+  # Compares the page URL, which is echoed in the footer in test mode only, with the given pattern.
+  # Especially useful in cases where you want to wait for the page to load,
+  # and there are no other distinguishing things to look for.
+  def have_echoed_url(pattern)
+    have_css("#url", text: pattern)
   end
 
   def set_host(host)

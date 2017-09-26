@@ -42,7 +42,7 @@ module LensHelper
 
       selected = if !field.options[:required] && (lens[:community] == "all" || lens[:community].blank?)
         nil
-      elsif field.options[:subdomain]
+      elsif field.options[:subdomain] || lens[:community].blank?
         current_community.slug
       else
         lens[:community]

@@ -13,7 +13,8 @@ module CalendarExportsHelper
     content_tag(:div) do
       url = calendar_export_url(type.gsub("_", "-"),
         calendar_token: current_user.calendar_token,
-        format: :ics
+        format: :ics,
+        protocol: :webcal
       )
 
       link_to(icon_tag("calendar"), url) << " " <<

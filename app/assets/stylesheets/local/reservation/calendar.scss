@@ -1,8 +1,15 @@
 #calendar-col {
-  #permalink {
+  footer {
     margin-bottom: 30px;
-    color: $gray-text;
-    font-size: 11px;
+
+    a {
+      color: $gray-text;
+      font-size: 11px;
+    }
+
+    a.early {
+      display: none;
+    }
   }
 
   #calendar {

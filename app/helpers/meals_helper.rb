@@ -7,10 +7,6 @@ module MealsHelper
     url_in_community(meal.community, meal_path(meal))
   end
 
-  def signed_up_class(meal)
-    meal.signup_for(current_user.household).present? ? "signed-up" : ""
-  end
-
   def meal_date_time(meal, with_break: false)
     date_fmt = params[:time] == "all" ? :short_date_with_yr : :short_date
     spacer = with_break ? tag(:br) : " "
@@ -20,19 +16,7 @@ module MealsHelper
 
   def meal_action_icons(meal, options = {})
     options[:except] = Array.wrap(options[:except] || [])
-
-    # Build list of icons to show
-    to_show = [].tap do |a|
-      a << :edit
-      a << :summary
-      a << :reopen if meal.reopenable?
-      a << :close if meal.closeable?
-      a << :finalize if meal.finalizable?
-      a << :contact_diners
-      a << :contact_team
-      options[:except].each{ |x| a.delete(x) }
-    end
-
+    to_show = %i(edit summary reopen close finalize cancel send_message) - options[:except]
     links = []
     title = meal.title || "Untitled"
     to_show.each do |action|
@@ -49,12 +33,13 @@ module MealsHelper
         links << link_to(icon_tag("lock") << name, close_meal_path(meal), title: title, method: :put)
       when :finalize
         links << link_to(icon_tag("certificate") << name, new_meal_finalize_path(meal), title: title)
+      when :cancel
+        links << link_to(icon_tag("ban") << name,
+          new_meal_message_path(meal, cancel: 1), title: title)
       when :reopen
         links << link_to(icon_tag("unlock") << name, reopen_meal_path(meal), title: title, method: :put)
-      when :contact_diners
-        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal, r: "diners"), title: title)
-      when :contact_team
-        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal, r: "team"), title: title)
+      when :send_message
+        links << link_to(icon_tag("envelope") << name, new_meal_message_path(meal), title: title)
       end
     end
 

@@ -95,12 +95,14 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    permitted = [:name, :garage_nums]
+    permitted = [:name, :garage_nums, :keyholders]
     permitted.concat([:unit_num, :old_id, :old_name]) if administer?
     permitted << :community_id if administer?
-    permitted << {vehicles_attributes: [:id, :make, :model, :color, :_destroy]}
+    permitted << {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]}
     permitted << {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
       :email, :location, :_destroy]}
+    permitted << {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers,
+      :health_issues, :_destroy]}
     permitted
   end
 end

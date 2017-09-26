@@ -10,11 +10,11 @@ html, body {
   margin: 0 auto $neg-footer-height 0; // the bottom margin is the negative value of the footer's height
 }
 
-footer, #footer-pusher {
+#main-footer, #footer-pusher {
   height: $footer-height; // footer-pusher must be the same height as footer
 }
 
-footer {
+#main-footer {
   font-size: 12px;
   color: $gray-text;
   text-align: center;

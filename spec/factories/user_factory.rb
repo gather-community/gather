@@ -6,8 +6,8 @@ FactoryGirl.define do
 
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    sequence(:email) { |n| "person#{n}@example.com" }
-    sequence(:google_email) { |n| "person#{n}@gmail.com" }
+    email { "person#{rand(1000000..9999999)}@example.com" }
+    google_email { "person#{rand(1000000..9999999)}@gmail.com" }
     mobile_phone "5555551212"
 
     household do

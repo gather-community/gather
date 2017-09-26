@@ -22,6 +22,7 @@ module Concerns::ApplicationController::RequestPreprocessing
     before_action :check_subdomain_validity
     before_action :store_current_location
     before_action :authenticate_user!
+    before_action :prepare_exception_notifier
     before_action :ensure_subdomain
     before_action :check_community_permissions
     before_action :set_tenant
@@ -84,6 +85,26 @@ module Concerns::ApplicationController::RequestPreprocessing
       # The same condition exists in the original implementation.
       redirect_to sign_in_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
     end
+  end
+
+  def prepare_exception_notifier
+    data = {
+      community: {
+        id: current_community.try(:id),
+        name: current_community.try(:name)
+      }
+    }
+
+    if user_signed_in?
+      data[:user] = {
+        id: current_user.id,
+        name: current_user.name,
+        email: current_user.email,
+        google_email: current_user.google_email
+      }
+    end
+
+    request.env["exception_notifier.exception_data"] = data
   end
 
   # Redirects requests to the appropriate subdomain if one is needed but missing.

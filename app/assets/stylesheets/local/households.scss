@@ -20,11 +20,18 @@
 
 // Shared styles for user and household shared attribs.
 .users.action-show, .households.action-show {
-  .emergency-contact {
-    margin-bottom: 10px;
+  .emergency-contact, .pet {
+    border-bottom: $light-border;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    &:first-of-type {
+      padding-top: 0;
+    }
 
     &:last-of-type {
-      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
     }
   }
 }

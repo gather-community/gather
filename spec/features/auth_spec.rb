@@ -1,9 +1,14 @@
 require "rails_helper"
 
-feature "subdomain handling" do
+feature "authentication" do
   let!(:user) { create(:user, google_email: existing_google_id) }
   let(:oauth_google_id) { "foo@gmail.com" }
   let(:existing_google_id) { nil }
+
+  scenario "default sign-in route redirects to landing page" do
+    visit "/users/sign_in"
+    expect(page).to have_content("Life is better together")
+  end
 
   context "with oauth stubbed" do
     around do |example|

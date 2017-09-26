@@ -104,53 +104,61 @@
   </div>
 </div>
 
-<% if current_user == @meal.head_cook %>
-  <div class="row">
-    <div class="col-sm-12">
-      <h2>Cook Reimbursement Form</h2>
-      <table id="reimb-form">
-        <tr>
-          <td>Date of grocery purchase:</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Amount spent for ingredients:</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>Amount spent on pantry/staple items:</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>Total amount to be reimbursed:</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>Reimbursement method:</td>
-          <td>
-            <%= icon_tag("square-o") %> Account credit<br/>
-            <%= icon_tag("square-o") %> Check payable to <span class="payable-to"></span>
-          </td>
-        </tr>
-      </table>
-      Cooks, to obtain reimbursement, please:
-      <ol>
-        <li>Print and fill out the above form.</li>
-        <li>Write your name and meal date on all receipts.</li>
-        <li>Circle any staple items you purchased.</li>
-        <li>
-          Assemble: <strong>reimbursement form</strong>, <strong>receipts</strong>,
-          and <strong>late signup list</strong>.
-        </li>
-        <% if reimb_instr = @meal.community.settings.meals.reimb_instructions %>
-          <li><%= reimb_instr %>.</li>
-        <% else %>
-          <li>Give to your meals biller.</li>
-        <% end %>
-      </ol>
-    </div>
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Cook Reimbursement Form</h2>
+    <table id="reimb-form">
+      <tr>
+        <td>Meal:</td>
+        <td>
+          <%= @meal.title_or_no_title %><br/>
+          <% if @meal.head_cook %>
+            By <%= @meal.head_cook_name %><br/>
+          <% end %>
+          <%= @meal.served_at_datetime %> at <%= @meal.location_name %>
+        </td>
+      </tr>
+      <tr>
+        <td>Date of grocery purchase:</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Amount spent for ingredients:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Amount spent on pantry/staple items:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Total amount to be reimbursed:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Reimbursement method:</td>
+        <td>
+          <%= icon_tag("square-o") %> Account credit<br/>
+          <%= icon_tag("square-o") %> Check payable to <span class="payable-to"></span>
+        </td>
+      </tr>
+    </table>
+    Cooks, to obtain reimbursement, please:
+    <ol>
+      <li>Print and fill out the above form.</li>
+      <li>Write your name and meal date on all receipts.</li>
+      <li>Circle any staple items you purchased.</li>
+      <li>
+        Assemble: <strong>reimbursement form</strong>, <strong>receipts</strong>,
+        and <strong>late signup list</strong>.
+      </li>
+      <% if reimb_instr = @meal.community.settings.meals.reimb_instructions %>
+        <li><%= reimb_instr %>.</li>
+      <% else %>
+        <li>Give to your meals biller.</li>
+      <% end %>
+    </ol>
   </div>
-<% end%>
+</div>
 
 <%= javascript_tag do %>
   $(function(){

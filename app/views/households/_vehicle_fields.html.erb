@@ -1,11 +1,16 @@
 <div class="row">
-  <div class="col-sm-4">
+  <div class="col-sm-6">
     <%= f.input :make %>
   </div>
-  <div class="col-sm-4">
+  <div class="col-sm-6">
     <%= f.input :model %>
   </div>
-  <div class="col-sm-4">
+</div>
+<div class="row">
+  <div class="col-sm-6">
     <%= f.input :color %>
+  </div>
+  <div class="col-sm-6">
+    <%= f.input :plate, maxlength: 10 %>
   </div>
 </div>

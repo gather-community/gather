@@ -114,7 +114,7 @@ class UserPolicy < ApplicationPolicy
 
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on,
-      :preferred_contact, :household_by_id]
+      :school, :allergies, :doctor, :medical, :preferred_contact, :household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
     permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
 
@@ -132,7 +132,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def grantable_roles
-    (active_admin? ? [:admin, :biller, :photographer] : []) +
+    (active_admin? ? [:admin, :biller, :photographer, :meals_coordinator] : []) +
     (active_cluster_admin? ? [:cluster_admin] : []) +
     (active_super_admin? ? [:super_admin] : [])
   end

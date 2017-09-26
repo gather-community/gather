@@ -1,4 +1,4 @@
-module Concerns::ApplicationController::Destruction
+module Destructible
   extend ActiveSupport::Concern
 
   def destroy

@@ -89,16 +89,6 @@ class Signup < ActiveRecord::Base
     SIGNUP_TYPES.all? { |t| self[t] == 0 }
   end
 
-  def allowed?
-    # If the signup has already been saved, then it was allowed.
-    # Otherwise we ask meal if new signups are allowed.
-    !new_record? || meal.new_signups_allowed?
-  end
-
-  def not_allowed?
-    !allowed?
-  end
-
   private
 
   def max_signups_per_type

@@ -1,5 +1,5 @@
 class Meal < ActiveRecord::Base
-  include Statusable, TimeCalculable
+  include TimeCalculable
 
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
@@ -35,21 +35,19 @@ class Meal < ActiveRecord::Base
   has_many :resources, class_name: "Reservations::Resource", through: :resourcings
   has_many :reservations, class_name: "Reservations::Reservation", autosave: true, dependent: :destroy
 
-  scope :open, -> { where(status: "open") }
   scope :hosted_by, ->(community) { where(community: community) }
-  scope :finalizable, -> { past.where("status != ?", "finalized") }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
   scope :by_community, -> { joins(:community).order("communities.name") }
   scope :by_community_reverse, -> { joins(:community).order("communities.name DESC") }
   scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
-  scope :past, -> { where("served_at <= ?", Time.current.midnight) }
-  scope :future, -> { where("served_at >= ?", Time.current.midnight) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
   scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
+
+  Meals::Status.define_scopes(self)
 
   accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
@@ -60,14 +58,12 @@ class Meal < ActiveRecord::Base
 
   delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
-  delegate :name, to: :head_cook, prefix: true
+  delegate :name, to: :head_cook, prefix: true, allow_nil: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
-
-  before_validation do
-    # Ensure head cook, even if blank, so we can add error to it.
-    build_head_cook_assign if head_cook_assign.blank?
-  end
+  delegate :close!, :reopen!, :cancel!, :finalize!,
+    :closed?, :finalized?, :open?, :cancelled?,
+    :full?, :in_past?, :day_in_past?, to: :status_obj
 
   after_validation do
     errors[:resources].each { |m| errors.add(:resource_ids, m) }
@@ -83,7 +79,6 @@ class Meal < ActiveRecord::Base
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  validate :head_cook_presence
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
@@ -107,6 +102,10 @@ class Meal < ActiveRecord::Base
 
   def self.served_within_days_from_now(days)
     within_days_from_now(:served_at, days)
+  end
+
+  def status_obj
+    @status_obj ||= Meals::Status.new(self)
   end
 
   def extra_roles
@@ -193,14 +192,6 @@ class Meal < ActiveRecord::Base
     Signup.portions_for_meal(self, food_type)
   end
 
-  def full?
-    spots_left == 0
-  end
-
-  def in_past?
-    served_at && served_at < Time.current
-  end
-
   def menu_posted?
     MENU_ITEMS.any?{ |i| self[i].present? } || any_allergens?
   end
@@ -229,10 +220,6 @@ class Meal < ActiveRecord::Base
 
   def any_allergens?
     allergens.present? && allergens != ["none"]
-  end
-
-  def close!
-    update_attribute(:status, "closed")
   end
 
   ALLERGENS.each do |allergen|
@@ -279,13 +266,6 @@ class Meal < ActiveRecord::Base
   def at_least_one_community
     if invitations.reject(&:blank?).empty?
       errors.add(:invitations, "you must invite at least one community")
-    end
-  end
-
-  def head_cook_presence
-    if head_cook_assign.user_id.blank?
-      head_cook_assign.errors.add(:user_id, "can't be blank")
-      add_dummy_base_error
     end
   end
 

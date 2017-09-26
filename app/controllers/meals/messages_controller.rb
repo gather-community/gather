@@ -3,9 +3,13 @@ module Meals
     before_action -> { nav_context(:meals, :meals) }
 
     def new
-      raise "invalid recipient type" unless Message::RECIPIENT_TYPES.include?(params[:r])
       @meal = Meal.find(params[:meal_id])
-      @message = Message.new(meal: @meal, recipient_type: params[:r])
+      @message = Message.new(meal: @meal)
+      if params[:cancel]
+        @message.kind = "cancellation"
+        @message.recipient_type = "all"
+      end
+      show_cancel_notice
       authorize @message
     end
 
@@ -15,10 +19,12 @@ module Meals
       @message.assign_attributes(message_params)
       authorize @message
       if @message.save
-        Delayed::Job.enqueue(MessageJob.new(@message.id))
+        @meal.cancel! if @message.cancellation?
         flash[:success] = "Message sent successfully."
+        Delayed::Job.enqueue(MessageJob.new(@message.id))
         redirect_to meal_path(@meal)
       else
+        show_cancel_notice
         set_validation_error_notice(@message)
         render :new
       end
@@ -26,8 +32,12 @@ module Meals
 
     private
 
+    def show_cancel_notice
+      flash.now[:alert] = I18n.t("meals/messages.cancel_notice")
+    end
+
     def message_params
-      params.require(:meals_message).permit(:body, :recipient_type)
+      params.require(:meals_message).permit(policy(@message).permitted_attributes)
     end
   end
 end

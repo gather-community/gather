@@ -1,6 +1,6 @@
 class MealMailer < ApplicationMailer
   def meal_reminder(signup)
-    @household = signup.household
+    @household = signup.household.decorate
     @signup = signup
     @meal = signup.meal.decorate
 
@@ -13,7 +13,7 @@ class MealMailer < ApplicationMailer
 
   def shift_reminder(assignment)
     @assignment = assignment
-    @user = assignment.user
+    @user = assignment.user.decorate
     @meal = assignment.meal.decorate
     @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
@@ -45,7 +45,7 @@ class MealMailer < ApplicationMailer
 
   def cook_menu_reminder(assignment)
     @assignment = assignment
-    @user = assignment.user
+    @user = assignment.user.decorate
     @meal = assignment.meal.decorate
     @type = assignment.reminder_count == 0 ? :first : :second
 
@@ -54,23 +54,23 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def diner_message(message, household)
-    @message = message
-    @household = household
-    @meal = @message.meal.decorate
-    mail(to: @household, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+  def normal_message(message, recipient)
+    meal_message(message, recipient)
   end
 
-  def team_message(message, member)
-    @message = message
-    @member = member
-    @meal = @message.meal.decorate
-    mail(to: member, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+  def cancellation_message(message, recipient)
+    meal_message(message, recipient)
   end
 
   protected
+
+  def meal_message(message, recipient)
+    @message = message
+    @recipient = recipient.decorate
+    @meal = @message.meal.decorate
+    mail(to: @recipient, reply_to: [message.sender_email],
+      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+  end
 
   def community
     @meal.community

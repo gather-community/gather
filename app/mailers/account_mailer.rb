@@ -15,7 +15,7 @@ class AccountMailer < ApplicationMailer
 
   def load_statement_vars(statement)
     @statement = statement
-    @household = statement.household
+    @household = statement.household.decorate
     @community = statement.community
   end
 end

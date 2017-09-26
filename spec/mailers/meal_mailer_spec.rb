@@ -21,7 +21,6 @@ describe MealMailer do
     end
 
     it "renders the correct name and URL in the body" do
-      puts mail.body.encoded
       expect(mail.body.encoded).to match("Dear #{household.name} Household")
       expect(mail.body.encoded).to have_correct_meal_url(meal)
     end
@@ -93,11 +92,32 @@ describe MealMailer do
     end
   end
 
-  describe "diner_message" do
+  describe "normal_message" do
+    let!(:sender) { create(:user) }
+    let!(:user) { create(:user) }
+    let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
+    let(:mail) { described_class.normal_message(message, user).deliver_now }
+
+    it "sets the right recipients and reply-to" do
+      expect(mail.to).to match_array(user.email)
+      expect(mail.reply_to).to contain_exactly(message.sender_email)
+    end
+
+    it "renders the subject" do
+      expect(mail.subject).to eq("Message about Meal on Jan 01")
+    end
+
+    it "renders the correct name and URL in the body" do
+      expect(mail.body.encoded).to match("Dear #{user.name},")
+      expect(mail.body.encoded).to have_correct_meal_url(meal)
+    end
+  end
+
+  describe "cancellation_message" do
     let!(:sender) { create(:user) }
     let!(:household) { create(:household) }
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
-    let(:mail) { described_class.diner_message(message, household).deliver_now }
+    let(:mail) { described_class.cancellation_message(message, household).deliver_now }
 
     it "sets the right recipients and reply-to" do
       expect(mail.to).to match_array(household.users.map(&:email))
@@ -105,31 +125,12 @@ describe MealMailer do
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Message to Diners about Meal on Jan 01")
+      expect(mail.subject).to eq("Meal on Jan 01 CANCELLED")
     end
 
     it "renders the correct name and URL in the body" do
       expect(mail.body.encoded).to match("Dear #{household.name} Household,")
-      expect(mail.body.encoded).to have_correct_meal_url(meal)
-    end
-  end
-
-  describe "team_message" do
-    let!(:sender) { create(:user) }
-    let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
-    let(:mail) { described_class.team_message(message, meal.head_cook).deliver_now }
-
-    it "sets the right recipients and reply-to" do
-      expect(mail.to).to eq([meal.head_cook.email])
-      expect(mail.reply_to).to contain_exactly(message.sender_email)
-    end
-
-    it "renders the subject" do
-      expect(mail.subject).to eq("Message to Team for Meal on Jan 01")
-    end
-
-    it "renders the correct name and URL in the body" do
-      expect(mail.body.encoded).to match("Dear #{meal.head_cook.name},")
+      expect(mail.body.encoded).to match(/We regret to inform you that .+ CANCELLED/)
       expect(mail.body.encoded).to have_correct_meal_url(meal)
     end
   end

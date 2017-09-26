@@ -9,13 +9,19 @@ FactoryGirl.define do
 
     trait :with_vehicles do
       after(:create) do |household|
-        household.vehicles = create_list(:vehicle, rand(0..2))
+        household.vehicles = create_list(:vehicle, rand(0..2), household: household)
       end
     end
 
     trait :with_emerg_contacts do
       after(:create) do |household|
-        household.emergency_contacts = create_list(:emergency_contact, rand(0..2))
+        household.emergency_contacts = create_list(:emergency_contact, rand(0..2), household: household)
+      end
+    end
+
+    trait :with_pets do
+      after(:create) do |household|
+        household.pets = create_list(:pet, rand(0..2), household: household)
       end
     end
 

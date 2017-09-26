@@ -31,20 +31,14 @@
   <% end %>
   <tr>
     <td>Emergency Contacts</td>
-    <td>
-      <% if (contacts = household.emergency_contacts).any? %>
-        <% contacts.each do |contact| %>
-          <div class="emergency-contact">
-            <strong><%= contact.name_relationship %></strong><br/>
-            <% lines = [contact.location] %>
-            <% lines.concat(contact.phones.map { |p| phone_link(p) }) %>
-            <% lines << link_to(contact.email, "mailto:#{contact.email}") if contact.email.present? %>
-            <%= safe_join(lines, tag(:br)) %>
-          </div>
-        <% end %>
-      <% else %>
-        [None]
-      <% end %>
-    </td>
+    <td><%= household.emergency_contacts_html %></td>
+  </tr>
+  <tr>
+    <td>Pets</td>
+    <td><%= household.pets_html %></td>
+  </tr>
+  <tr>
+    <td>Extra Unit Keyholders</td>
+    <td><%= household.keyholders %></td>
   </tr>
 <% end %>

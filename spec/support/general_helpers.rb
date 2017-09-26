@@ -1,6 +1,10 @@
 module GeneralHelpers
   def fixture_file_path(name)
-    "#{Rails.root}/spec/fixtures/#{name}"
+    Rails.root.join("spec", "fixtures", name)
+  end
+
+  def expectation_file(name)
+    File.read(Rails.root.join("spec", "expectations", name))
   end
 
   def stub_translation(key, msg, expect_defaults: nil)
@@ -45,5 +49,9 @@ module GeneralHelpers
 
   def have_correct_meal_url(meal)
     contain_community_url(meal.community, "/meals/#{meal.id}")
+  end
+
+  def stub_status(value)
+    allow(meal).to receive(:status).and_return(value)
   end
 end

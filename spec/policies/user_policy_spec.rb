@@ -158,11 +158,11 @@ describe UserPolicy do
     end
 
     permissions :new?, :create?, :invite?, :send_invites? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
     end
 
     permissions :activate?, :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
 
       it "denies action on self" do
         expect(subject).not_to permit(user, user)
@@ -199,7 +199,7 @@ describe UserPolicy do
     end
 
     permissions :update_info? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
       it_behaves_like "permits self (active or not) and guardians"
     end
 
@@ -217,7 +217,7 @@ describe UserPolicy do
 
       context "without assignment" do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits for commmunity admins and denies for other admins and users"
+        it_behaves_like "permits admins but not regular users"
       end
     end
   end
@@ -269,46 +269,45 @@ describe UserPolicy do
 
   describe "permitted attributes" do
     let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
-    let(:basic_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
+    let(:base_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :household_by_id,
+      :allergies, :doctor, :medical, :school, :household_by_id,
       {privacy_settings: [:hide_photo_from_cluster]},
-      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :garage_nums].
-        concat(vehicles_and_contacts_attribs)}
+      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
+    ] }
+    let(:normal_user_attribs) { base_attribs + [
+      {household_attributes: [:id, :name, :garage_nums, :keyholders].
+        concat(nested_hhold_attribs)}
     ] }
     let(:photographer_attribs) { [:photo, :photo_tmp_id] }
-    let(:admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :google_email, :role_admin, :role_biller, :role_photographer, :household_by_id,
-      {privacy_settings: [:hide_photo_from_cluster]},
-      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].
-        concat(vehicles_and_contacts_attribs)}
+    let(:admin_attribs) { base_attribs + [
+      :google_email, :role_admin, :role_biller, :role_photographer,
+      :role_meals_coordinator,
+      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
+        concat(nested_hhold_attribs)}
     ] }
-    let(:cluster_admin_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer, :household_by_id,
-      {privacy_settings: [:hide_photo_from_cluster]},
-      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]},
-      {household_attributes: [:id, :name, :garage_nums, :unit_num, :old_id, :old_name].
-        concat(vehicles_and_contacts_attribs)}
+    let(:cluster_admin_attribs) { base_attribs + [
+      :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
+      :role_meals_coordinator,
+      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
+        concat(nested_hhold_attribs)}
     ] }
-    let(:vehicles_and_contacts_attribs) { [
-      {vehicles_attributes: [:id, :make, :model, :color, :_destroy]},
+    let(:nested_hhold_attribs) { [
+      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]}
+        :email, :location, :_destroy]},
+      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
     ] }
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
-    shared_examples_for "basic attribs" do
-      it "should allow basic attribs" do
-        expect(subject).to contain_exactly(*basic_attribs)
+    shared_examples_for "normal user" do
+      it "should allow normal user attribs" do
+        expect(subject).to contain_exactly(*normal_user_attribs)
       end
     end
 
-    context "regular user" do
-      it_behaves_like "basic attribs"
+    context "normal user" do
+      it_behaves_like "normal user"
     end
 
     context "photographer" do
@@ -329,7 +328,7 @@ describe UserPolicy do
 
     context "admin from other community" do
       let(:user) { admin_in_cmtyB }
-      it_behaves_like "basic attribs"
+      it_behaves_like "normal user"
     end
 
     context "cluster admin" do

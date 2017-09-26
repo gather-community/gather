@@ -91,7 +91,7 @@ class CalendarExport
 
   def description(obj)
     case class_name(obj)
-    when "Meal" then "By #{obj.head_cook_name}"
+    when "Meal" then obj.head_cook.present? ? "By #{obj.head_cook_name}" : nil
     when "Assignment" then nil
     when "Reservations::Reservation" then nil
     else unknown_class(obj)
@@ -117,7 +117,8 @@ class CalendarExport
   end
 
   def url_for(obj, url_helper_method)
+    host = "#{user.subdomain}.#{Settings.url.host}"
     Rails.application.routes.url_helpers.send(url_helper_method, obj,
-      Settings.url.to_h.slice(:host, :port, :protocol))
+      Settings.url.to_h.slice(:port, :protocol).merge(host: host))
   end
 end

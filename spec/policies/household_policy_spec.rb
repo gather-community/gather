@@ -69,7 +69,7 @@ describe HouseholdPolicy do
     end
 
     permissions :new?, :create?, :activate?, :deactivate?, :administer? do
-      it_behaves_like "permits for commmunity admins and denies for other admins and users"
+      it_behaves_like "permits admins but not regular users"
     end
 
     permissions :edit?, :update? do
@@ -124,7 +124,7 @@ describe HouseholdPolicy do
 
       context "without any of the above" do
         before { household.users = [] }
-        it_behaves_like "permits for commmunity admins and denies for other admins and users"
+        it_behaves_like "permits admins but not regular users"
       end
     end
   end
@@ -259,10 +259,12 @@ describe HouseholdPolicy do
   end
 
   describe "permitted attributes" do
-    let(:basic_attribs) { [:name, :garage_nums,
-      {vehicles_attributes: [:id, :make, :model, :color, :_destroy]},
+    let(:basic_attribs) { [:name, :garage_nums, :keyholders,
+      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
       {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]}] }
+        :email, :location, :_destroy]},
+      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
+    ] }
     let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }
     let(:cluster_admin_attribs) { admin_attribs }
 

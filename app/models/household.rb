@@ -10,6 +10,7 @@ class Household < ActiveRecord::Base
   has_many :users, -> { by_name_adults_first }, inverse_of: :household
   has_many :vehicles, class_name: "People::Vehicle", dependent: :destroy
   has_many :emergency_contacts, class_name: "People::EmergencyContact", dependent: :destroy
+  has_many :pets, class_name: "People::Pet", dependent: :destroy
 
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { order("LOWER(households.name)") }
@@ -29,8 +30,15 @@ class Household < ActiveRecord::Base
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
 
   normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
+
+  def build_blank_associations
+    vehicles.build if vehicles.empty?
+    emergency_contacts.build if emergency_contacts.empty?
+    pets.build if pets.empty?
+  end
 
   # Returns users (including children) directly in the household PLUS any children associated by parentage,
   # even if they aren't directly in the household via the foreign key.

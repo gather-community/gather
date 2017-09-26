@@ -13,6 +13,9 @@ feature "calendar export" do
       visit("/calendars/meals/xyz.ics")
       expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
         "CALSCALE:GREGORIAN METHOD:PUBLISH X-WR-CALNAME:Meals You're Attending")
+
+      # Ensure correct subdomain (not https b/c test mode)
+      expect(page).to have_content("URL:http://#{user.subdomain}.#{Settings.url.host}")
     end
 
     scenario "all meals" do

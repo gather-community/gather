@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170819111452) do
+ActiveRecord::Schema.define(version: 20170924204318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.string "garage_nums"
+    t.string "keyholders"
     t.string "name", limit: 50, null: false
     t.integer "unit_num"
     t.datetime "updated_at", null: false
@@ -175,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.text "body", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.string "kind", default: "normal", null: false
     t.integer "meal_id", null: false
     t.string "recipient_type", null: false
     t.integer "sender_id", null: false
@@ -241,6 +243,22 @@ ActiveRecord::Schema.define(version: 20170819111452) do
   add_index "people_guardianships", ["cluster_id"], name: "index_people_guardianships_on_cluster_id", using: :btree
   add_index "people_guardianships", ["guardian_id"], name: "index_people_guardianships_on_guardian_id", using: :btree
 
+  create_table "people_pets", force: :cascade do |t|
+    t.string "caregivers"
+    t.integer "cluster_id", null: false
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.text "health_issues"
+    t.integer "household_id", null: false
+    t.string "name"
+    t.string "species"
+    t.datetime "updated_at", null: false
+    t.string "vet"
+  end
+
+  add_index "people_pets", ["cluster_id"], name: "index_people_pets_on_cluster_id", using: :btree
+  add_index "people_pets", ["household_id"], name: "index_people_pets_on_household_id", using: :btree
+
   create_table "people_vehicles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.string "color"
@@ -248,6 +266,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.integer "household_id"
     t.string "make"
     t.string "model"
+    t.string "plate", limit: 10
     t.datetime "updated_at", null: false
   end
 
@@ -439,6 +458,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
   add_index "transactions", ["statementable_id", "statementable_type"], name: "index_transactions_on_statementable_id_and_statementable_type", using: :btree
 
   create_table "users", force: :cascade do |t|
+    t.string "allergies"
     t.string "alternate_id"
     t.date "birthdate"
     t.string "calendar_token"
@@ -448,6 +468,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
     t.datetime "deactivated_at"
+    t.string "doctor"
     t.string "email"
     t.string "encrypted_password", default: "", null: false
     t.boolean "fake", default: false
@@ -459,6 +480,7 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.string "last_name", null: false
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
+    t.text "medical"
     t.string "mobile_phone"
     t.string "photo_content_type"
     t.string "photo_file_name"
@@ -467,8 +489,11 @@ ActiveRecord::Schema.define(version: 20170819111452) do
     t.string "preferred_contact"
     t.jsonb "privacy_settings", default: {}, null: false
     t.string "provider"
+    t.datetime "remember_created_at"
+    t.string "remember_token"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "school"
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
     t.datetime "updated_at", null: false
@@ -513,6 +538,8 @@ ActiveRecord::Schema.define(version: 20170819111452) do
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"
+  add_foreign_key "people_pets", "clusters"
+  add_foreign_key "people_pets", "households"
   add_foreign_key "people_vehicles", "clusters"
   add_foreign_key "people_vehicles", "households"
   add_foreign_key "reservation_guideline_inclusions", "clusters"

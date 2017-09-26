@@ -1,4 +1,4 @@
 First Name,Last Name,Unit Num,Birthdate,Email,Is Child,Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles
 Billy,South,20,,e@f.com,True,(734) 555-7737,,,2008-11-29,Text,"4, 9",
-Jenn,Blount,20,03-10,d@d.com,False,(734) 555-0085,,(734) 555-4512,2016-08-01,Text,"4, 9",Blue Ford F-150; Red GMC Jimmy
-Ron,South,20,1980-07-20,a@b.com,False,(734) 555-6376,(734) 555-1981,,2016-03-12,Email,"4, 9",Blue Ford F-150; Red GMC Jimmy
+Jenn,Blount,20,03-10,d@d.com,False,(734) 555-0085,,(734) 555-4512,2016-08-01,Text,"4, 9",Blue Ford F-150 (XYZ123); Red GMC Jimmy (XYZ456)
+Ron,South,20,1980-07-20,a@b.com,False,(734) 555-6376,(734) 555-1981,,2016-03-12,Email,"4, 9",Blue Ford F-150 (XYZ123); Red GMC Jimmy (XYZ456)

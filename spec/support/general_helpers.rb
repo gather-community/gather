@@ -1,6 +1,10 @@
 module GeneralHelpers
   def fixture_file_path(name)
-    "#{Rails.root}/spec/fixtures/#{name}"
+    Rails.root.join("spec", "fixtures", name)
+  end
+
+  def expectation_file(name)
+    File.read(Rails.root.join("spec", "expectations", name))
   end
 
   def stub_translation(key, msg, expect_defaults: nil)

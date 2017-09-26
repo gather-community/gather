@@ -21,8 +21,10 @@ describe People::Exporter do
 
     context "with users" do
       let!(:household) { create(:household, with_members: false, unit_num: "20", garage_nums: "4,9") }
-      let!(:vehicle1) { create(:vehicle, household: household, color: "Blue", make: "Ford", model: "F-150") }
-      let!(:vehicle2) { create(:vehicle, household: household, color: "Red", make: "GMC", model: "Jimmy") }
+      let!(:vehicle1) { create(:vehicle, household: household, color: "Blue", make: "Ford",
+        model: "F-150", plate: "XYZ123") }
+      let!(:vehicle2) { create(:vehicle, household: household, color: "Red", make: "GMC",
+        model: "Jimmy", plate: "XYZ456") }
       let!(:adult1) { create(:user, household: household, first_name: "Ron", last_name: "South",
         email: "a@b.com", birthdate: "1980/07/20", joined_on: "2016/03/12", preferred_contact: "email",
         mobile_phone: "+17345556376", home_phone: "+17345551981") }
@@ -34,7 +36,7 @@ describe People::Exporter do
         mobile_phone: "+17345557737", guardians: [adult1, adult2]) }
 
       it "should return valid csv" do
-        expect(exporter.to_csv).to match_expectation_file("users.csv")
+        expect(exporter.to_csv).to eq expectation_file("users.csv")
       end
     end
   end

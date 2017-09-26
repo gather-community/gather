@@ -44,10 +44,12 @@ feature "household form" do
     shared_examples_for "updates household" do
       scenario js: true do
         visit(edit_household_path(user.household))
-        fill_in("Name *", with: "Lori", exact: true)
-        fill_in("Relationship to Household", with: "Mom")
-        fill_in("Main Phone", with: "7776665555")
-        fill_in("Location", with: "Placey Place")
+        within(".household_emergency_contacts") do
+          fill_in("Name *", with: "Lori", exact: true)
+          fill_in("Relationship to Household", with: "Mom")
+          fill_in("Main Phone", with: "7776665555")
+          fill_in("Location", with: "Placey Place")
+        end
         click_button("Update Household")
         expect(page).to have_content("updated successfully")
       end

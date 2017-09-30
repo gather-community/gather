@@ -2,73 +2,187 @@ nav.navbar {
   border: none;
   background-color: $theme-main;
   margin-bottom: 0;
+  width: 100%;
+  border-radius: 0;
+}
 
-  .navbar-toggle .icon-bar {
-    background-color: #fff;
+ul.nav {
+  a:hover, a:focus, .active a:hover, .active a:focus {
+    color: #fff;
+    background-color: transparent;
   }
 
-  a.navbar-brand {
-    height: 85px;
-    padding: 10px 30px 0 20px;
-
-    img {
-      height: 54px;
-    }
+  li i {
+    width: 24px;
+    display: inline-block;
+    text-align: center;
   }
+}
 
-  ul.navbar-nav {
-    a, .active a {
-      color: #ddd;
-      font-size: 15px;
-      padding: 7px 15px;
-    }
+@media screen and (min-width: $screen-sm-min) {
+  nav.navbar {
+    border: none;
+    background-color: $theme-main;
+    margin-bottom: 0;
+    width: 100%;
 
-    a:hover, a:focus, .active a:hover, .active a:focus {
-      color: #fff;
-    }
+    table.nav-wrapper {
+      width: 100%;
 
-    &.main-nav {
-      margin-top: 25px;
+      tr {
+        border: none;
 
-      .active a {
-        background-color: $theme-main-lighter;
+        td {
+          padding: 0;
+        }
       }
     }
 
-    &.personal-nav .dropdown-menu {
-      a, .active a {
+    .navbar-toggle .icon-bar {
+      background-color: #fff;
+    }
+
+    td.logo {
+      width: 1px;
+
+      a {
+        height: 85px;
+        padding: 10px 30px 0 20px;
+        display: block;
+
+        img {
+          height: 54px;
+        }
+      }
+    }
+
+    td.personal-nav {
+      text-align: right;
+      height: 1px;
+
+      // Get rid of annoying flashing on menu close.
+      .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+        background-color: transparent;
+        border: none;
+      }
+
+      ul.nav {
+        display: inline-block;
+
+        a {
+          padding: 7px 15px;
+        }
+
+        a, .active a {
+          color: #ddd;
+          font-size: 15px;
+        }
+
+        a.dropdown-toggle {
+          padding-bottom: 0; // Make this compact
+          padding-right: 20px;
+        }
+
+        ul.dropdown-menu {
+          li:hover {
+            background-color: #e5e5e5;
+          }
+
+          a, .active a {
+            color: $main-text-color;
+          }
+        }
+      }
+    }
+
+    td.main-nav {
+      vertical-align: top;
+
+      ul.nav {
+        a {
+          padding: 7px 15px;
+        }
+
+        a, .active a {
+          color: #ddd;
+          font-size: 15px;
+        }
+
+        a:hover {
+          color: white;
+        }
+
+        li {
+          display: inline-block;
+        }
+
+        .active a {
+          background-color: $theme-main-lighter;
+        }
+      }
+    }
+  }
+
+  nav.subnav {
+    padding: 10px 20px 0 20px;
+    font-size: 13px;
+
+    .nav > li {
+      a {
+        padding: 5px 15px;
+        color: $gray-text;
+
+        i {
+          margin-right: 5px;
+        }
+      }
+
+      &.active a {
         color: $main-text-color;
       }
-    }
-
-    &.mobile-nav .open .dropdown-menu a {
-      color: #ddd;
-    }
-
-    li i {
-      width: 20px;
-      display: inline-block;
-      text-align: center;
     }
   }
 }
 
-nav#subnav {
-  padding: 10px 20px 0 20px;
-  font-size: 13px;
+@media screen and (max-width: $screen-xs-max) {
+  nav.navbar.navbar-default {
+    border: none;
+    background-color: $theme-main;
+    margin-bottom: 0;
+    width: 100%;
 
-  .nav > li {
-    a {
-      padding: 5px 15px;
-      color: $gray-text;
-
-      i {
-        margin-right: 5px;
+    a.logo {
+      img {
+        height: 75px;
+        padding: 10px;
       }
     }
 
-    &.active a {
-      color: $main-text-color;
+    ul.navbar-nav {
+      a {
+        padding: 15px 15px;
+        font-size: 17px;
+      }
+
+      .dropdown-menu a {
+        padding-left: 45px;
+      }
+
+      a,
+      .active a,
+      .open .dropdown-menu > li > a,
+      .open .dropdown-menu > li > a:hover,
+      .open .dropdown-menu > li > a:focus {
+        color: #ddd;
+      }
+    }
+
+    .navbar-toggle {
+      margin: 10px;
+
+      .icon-bar {
+        background-color: #fff;
+      }
     }
   }
 }

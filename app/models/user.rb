@@ -12,8 +12,10 @@ class User < ActiveRecord::Base
     omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
-  has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id
-  has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id
+  has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
+    dependent: :destroy
+  has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
+    dependent: :destroy
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :assignments
@@ -81,6 +83,10 @@ class User < ActiveRecord::Base
 
   before_save do
     raise People::AdultWithGuardianError if adult? && guardians.present?
+  end
+
+  before_destroy do
+    photo.destroy
   end
 
   def self.from_omniauth(auth)

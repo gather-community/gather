@@ -11,7 +11,7 @@ module Reservations
     belongs_to :community
     has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
-    has_many :reservations, class_name: "Reservations::Reservation"
+    has_many :reservations, class_name: "Reservations::Reservation", dependent: :destroy
 
     has_attached_file :photo,
       styles: { thumb: "220x165#" },
@@ -29,6 +29,10 @@ module Reservations
       (SELECT COUNT(id) FROM reservations WHERE resource_id = resources.id) AS reservation_count") }
 
     delegate :name, to: :community, prefix: true
+
+    before_destroy do
+      photo.destroy
+    end
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds

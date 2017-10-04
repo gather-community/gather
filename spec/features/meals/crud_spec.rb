@@ -57,7 +57,7 @@ feature "meal crud", js: true do
       expect(page).not_to have_content("Create Meal")
 
       # Update to add menu
-      find("tr", text: actor.name).find("a", text: "[No Title]").click
+      find("table.index tr", text: actor.name).find("a", text: "[No Title]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu

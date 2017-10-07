@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170924204318) do
+ActiveRecord::Schema.define(version: 20171007132700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -513,6 +513,33 @@ ActiveRecord::Schema.define(version: 20170924204318) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
+
+  create_table "wiki_page_versions", force: :cascade do |t|
+    t.string "comment"
+    t.text "content"
+    t.integer "number"
+    t.integer "page_id", null: false
+    t.string "path"
+    t.string "title"
+    t.datetime "updated_at"
+    t.integer "updator_id"
+  end
+
+  add_index "wiki_page_versions", ["page_id"], name: "index_wiki_page_versions_on_page_id", using: :btree
+  add_index "wiki_page_versions", ["updator_id"], name: "index_wiki_page_versions_on_updator_id", using: :btree
+
+  create_table "wiki_pages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at"
+    t.integer "creator_id"
+    t.string "path"
+    t.string "title"
+    t.datetime "updated_at"
+    t.integer "updator_id"
+  end
+
+  add_index "wiki_pages", ["creator_id"], name: "index_wiki_pages_on_creator_id", using: :btree
+  add_index "wiki_pages", ["path"], name: "index_wiki_pages_on_path", unique: true, using: :btree
 
   add_foreign_key "accounts", "clusters"
   add_foreign_key "accounts", "communities"

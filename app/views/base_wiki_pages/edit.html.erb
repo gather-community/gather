@@ -1,3 +1,5 @@
+<% content_for(:title) { "Edit Wiki Page: #{@page.title}" } %>
+
 <%= wiki_page_style %>
 
 <h1><%=wt 'Editing wiki page' %></h1>
@@ -31,4 +33,3 @@
 <% end %>
 
 <%= wiki_page_attachments(@page) %>
-

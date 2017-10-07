@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  wiki_root '/wiki'
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions"
@@ -84,6 +83,10 @@ Rails.application.routes.draw do
       post :generate
       get :more
     end
+  end
+
+  scope module: "wiki" do
+    wiki_root "/wiki", controller: "pages"
   end
 
   resources :uploads, only: [:create, :destroy]

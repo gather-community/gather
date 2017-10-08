@@ -4,6 +4,7 @@ module Wiki
 
     before_action :set_community, only: [:show, :new, :update]
     before_action :authorization, except: :all
+    before_action -> { nav_context(:wiki) }
 
     def all
       authorize sample_page

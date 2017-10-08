@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171008145626) do
+ActiveRecord::Schema.define(version: 20171008151423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -532,6 +532,7 @@ ActiveRecord::Schema.define(version: 20171008145626) do
 
   create_table "wiki_pages", force: :cascade do |t|
     t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
     t.text "content"
     t.datetime "created_at"
     t.integer "creator_id"
@@ -542,6 +543,7 @@ ActiveRecord::Schema.define(version: 20171008145626) do
   end
 
   add_index "wiki_pages", ["cluster_id"], name: "index_wiki_pages_on_cluster_id", using: :btree
+  add_index "wiki_pages", ["community_id"], name: "index_wiki_pages_on_community_id", using: :btree
   add_index "wiki_pages", ["creator_id"], name: "index_wiki_pages_on_creator_id", using: :btree
   add_index "wiki_pages", ["path"], name: "index_wiki_pages_on_path", unique: true, using: :btree
 
@@ -607,4 +609,5 @@ ActiveRecord::Schema.define(version: 20171008145626) do
   add_foreign_key "users_roles", "users"
   add_foreign_key "wiki_page_versions", "clusters"
   add_foreign_key "wiki_pages", "clusters"
+  add_foreign_key "wiki_pages", "communities"
 end

@@ -19,6 +19,7 @@ module Utils
         reservation_gen = ReservationGenerator.new(resource_map: resource_gen.resource_map)
         statement_gen = StatementGenerator.new(community: community)
         meal_gen = MealGenerator.new(community: community, statement_gen: statement_gen)
+        wiki_gen = WikiGenerator.new(community: community)
 
         ActiveRecord::Base.transaction do
           in_community_timezone do
@@ -27,6 +28,7 @@ module Utils
               resource_gen.generate
               reservation_gen.generate
               meal_gen.generate
+              wiki_gen.generate
             rescue
               people_gen.users.each { |u| u.photo.destroy }
               resource_gen.resources.each { |r| r.photo.destroy }

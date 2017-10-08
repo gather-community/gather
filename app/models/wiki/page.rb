@@ -8,5 +8,6 @@ module Wiki
     belongs_to :updator, class_name: "User"
 
     scope :in_community, ->(c) { where(community_id: c.id) }
+    scope :by_title, -> { order("LOWER(title)") }
   end
 end

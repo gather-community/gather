@@ -125,7 +125,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def active_and_associated_or_signed_up?
-    active? && associated? || signed_up?
+    active? && associated? || signed_up? || active_admin?
   end
 
   def associated?

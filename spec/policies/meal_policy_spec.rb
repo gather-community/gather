@@ -12,7 +12,7 @@ describe MealPolicy do
     end
 
     permissions :show?, :summary? do
-      it_behaves_like "permits users in community"
+      it_behaves_like "permits users in community only"
 
       it "permits users in other invited communities" do
         expect(subject).to permit(user_in_cmtyC, meal)
@@ -43,7 +43,7 @@ describe MealPolicy do
     permissions :edit?, :update? do
       # We let anyone in host community do this so they can change assignments.
       it_behaves_like "permits admins from community"
-      it_behaves_like "permits users in community"
+      it_behaves_like "permits users in community only"
 
       it "permits non-invited workers" do
         meal.assignments.build(user: user_in_cmtyB)

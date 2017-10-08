@@ -88,11 +88,11 @@ class ApplicationPolicy
   delegate :active?, to: :user
 
   def active_in_community?
-    active? && own_community_record?
+    active? && own_community_record? || active_admin?
   end
 
   def active_in_cluster?
-    active? && own_cluster_record?
+    active? && own_cluster_record? || active_admin?
   end
 
   def active_admin?

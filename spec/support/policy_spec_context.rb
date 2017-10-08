@@ -32,6 +32,7 @@ shared_context "policy objs" do
   let(:admin) { new_user_from(community, label: "admin") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
+  let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
   let(:outside_super_admin) { with_tenant(clusterB) {
     new_user_from(communityX, label: "outside_super_admin") } }
   let(:admin_in_cmtyB) { new_user_from(communityB, label: "admin_in_cmtyB") }
@@ -52,6 +53,7 @@ shared_context "policy objs" do
     allow(admin_in_cmtyB).to receive(:has_role?) { |r| r == :admin }
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
+    allow(outside_cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(outside_super_admin).to receive(:has_role?) { |r| r == :super_admin }
     allow(biller).to receive(:has_role?) { |r| r == :biller }
     allow(biller_in_cmtyB).to receive(:has_role?) { |r| r == :biller }
@@ -75,10 +77,26 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "permits cluster and super admins" do
+    it "permits cluster admins from cluster" do
+      expect(subject).to permit(outside_cluster_admin, record)
+    end
+
+    it "permits outside super admins" do
+      expect(subject).to permit(outside_super_admin, record)
+    end
+  end
+
   shared_examples_for "permits users in community" do
+    it_behaves_like "permits cluster and super admins"
+
     it "permits users in community" do
       expect(subject).to permit(user, record)
     end
+  end
+
+  shared_examples_for "permits users in community only" do
+    it_behaves_like "permits users in community"
 
     it "forbids users from other communities" do
       expect(subject).not_to permit(user_in_cmtyB, record)
@@ -86,9 +104,7 @@ shared_context "policy objs" do
   end
 
   shared_examples_for "permits users in cluster" do
-    it "permits users in community" do
-      expect(subject).to permit(user, record)
-    end
+    it_behaves_like "permits users in community"
 
     it "permits users from other communities in cluster" do
       expect(subject).to permit(user_in_cmtyB, record)
@@ -104,6 +120,7 @@ shared_context "policy objs" do
       let(:actor) { admin }
       it_behaves_like "errors on permission check without community"
     end
+    it_behaves_like "permits cluster and super admins"
 
     it "permits admins from community" do
       expect(subject).to permit(admin, record)
@@ -142,6 +159,7 @@ shared_context "policy objs" do
   shared_examples_for "permits cluster admins only" do
     it "permits cluster admins" do
       expect(subject).to permit(cluster_admin, record)
+      expect(subject).to permit(outside_cluster_admin, record)
     end
 
     it "forbids admins" do

@@ -2,8 +2,8 @@ module Wiki
   class PagesController < ApplicationController
     acts_as_wiki_pages_controller
 
+    before_action :set_community, only: [:show, :new, :update]
     before_action :authorization, except: :all
-    before_action :set_community, only: :update
 
     def all
       authorize sample_page

@@ -4,5 +4,7 @@ module Wiki
     acts_as_wiki_page
 
     belongs_to :community
+    belongs_to :creator, class_name: "User"
+    belongs_to :updator, class_name: "User"
   end
 end

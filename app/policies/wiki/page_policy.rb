@@ -2,6 +2,16 @@ module Wiki
   class PagePolicy < ApplicationPolicy
     alias_method :page, :record
 
+    class Scope < Scope
+      def resolve
+        if active_cluster_admin?
+          scope
+        elsif active?
+          scope.in_community(user.community)
+        end
+      end
+    end
+
     def all?
       active_in_community?
     end

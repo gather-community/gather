@@ -16,6 +16,7 @@ class Community < ActiveRecord::Base
     inverse_of: :community, dependent: :destroy
   has_many :resources, class_name: "Reservations::Resource", inverse_of: :community, dependent: :destroy
   has_many :households, inverse_of: :community, dependent: :destroy
+  has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order("name") }
   scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }

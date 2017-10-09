@@ -17,7 +17,7 @@ RSpec.describe Utils::FakeData::MainGenerator, type: :model do
 
     cluster.reload.destroy
 
-    Cluster::CLUSTER_BASED_MODELS.each do |klass|
+    Cluster.cluster_based_models.each do |klass|
       expect(klass.count).to eq(0), "Expected to find no #{klass.name}s"
     end
 

@@ -10,5 +10,7 @@ module Wiki
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { order("LOWER(title)") }
+
+    validates :title, presence: true
   end
 end

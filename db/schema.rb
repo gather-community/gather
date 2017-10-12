@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171008151423) do
+ActiveRecord::Schema.define(version: 20171012131934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -518,7 +518,7 @@ ActiveRecord::Schema.define(version: 20171008151423) do
     t.integer "cluster_id", null: false
     t.string "comment"
     t.text "content"
-    t.integer "number"
+    t.integer "number", null: false
     t.integer "page_id", null: false
     t.string "path"
     t.string "title"
@@ -535,9 +535,9 @@ ActiveRecord::Schema.define(version: 20171008151423) do
     t.integer "community_id", null: false
     t.text "content"
     t.datetime "created_at"
-    t.integer "creator_id"
+    t.integer "creator_id", null: false
     t.string "path"
-    t.string "title"
+    t.string "title", null: false
     t.datetime "updated_at"
     t.integer "updator_id"
   end
@@ -608,6 +608,10 @@ ActiveRecord::Schema.define(version: 20171008151423) do
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
   add_foreign_key "wiki_page_versions", "clusters"
+  add_foreign_key "wiki_page_versions", "users", column: "updator_id"
+  add_foreign_key "wiki_page_versions", "wiki_pages", column: "page_id"
   add_foreign_key "wiki_pages", "clusters"
   add_foreign_key "wiki_pages", "communities"
+  add_foreign_key "wiki_pages", "users", column: "creator_id"
+  add_foreign_key "wiki_pages", "users", column: "updator_id"
 end

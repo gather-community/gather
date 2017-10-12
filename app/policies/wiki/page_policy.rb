@@ -1,4 +1,4 @@
-module Wiki
+ module Wiki
   class PagePolicy < ApplicationPolicy
     alias_method :page, :record
 
@@ -33,7 +33,7 @@ module Wiki
     end
 
     def destroy?
-      active_in_community?
+      active_admin? || user == page.creator
     end
 
     def history?

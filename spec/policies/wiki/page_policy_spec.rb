@@ -7,8 +7,22 @@ describe Wiki::PagePolicy do
     let(:page) { build(:wiki_page, community: community, creator: user) }
     let(:record) { page }
 
-    permissions :all?, :show?, :new?, :edit?, :update?, :destroy?, :history?, :compare? do
+    permissions :all?, :show?, :new?, :edit?, :update?, :history?, :compare? do
       it_behaves_like "permits users in community only"
+    end
+
+    permissions :destroy? do
+      it "permits admins" do
+        expect(subject).to permit(admin, page)
+      end
+
+      it "permits creator" do
+        expect(subject).to permit(user, page)
+      end
+
+      it "denies other users in community" do
+        expect(subject).not_to permit(other_user, page)
+      end
     end
   end
 

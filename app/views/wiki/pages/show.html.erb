@@ -1,12 +1,6 @@
-<% content_for(:title) { "Wiki: #{@page.title}" } %>
-
-<%= wiki_page_style %>
-
-<h1><%=h @page.title %></h1>
-
-<%= wiki_page_info %>
-<%= wiki_page_actions %>
-
-<div class="wiki_content">
-  <%=wiki_content @page.content %>
+<% content_for(:title, page.title) %>
+<% content_for(:top_buttons, page.action_links) %>
+<div class="wiki-content">
+  <%= wiki_content(page.content) %>
 </div>
+<%= page.revision_info %>

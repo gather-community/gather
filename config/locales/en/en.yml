@@ -254,13 +254,15 @@ en:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'?"
     reservations/resource:
-      destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
-      deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
+      destroy: "Are you sure you want to delete the resource '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the resource '%{name}'?"
     reservations/reservation:
       destroy: "Are you sure you want to delete this reservation? This action cannot be undone."
     meals/formula:
-      destroy: "Are you sure you want to delete the formula '%{name}?' This action cannot be undone."
-      deactivate: "Are you sure you want to deactivate the formula '%{name}?'"
+      destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
+    wiki/page:
+      destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
 
   activatables:
     user:
@@ -301,6 +303,7 @@ en:
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
+      default: "%b %d %Y"
       full: "%b %d %Y"
       month_day: "%b %d"
       month_yr: "%B %Y"
@@ -312,6 +315,7 @@ en:
       csv_month_day: "%m-%d"
   time:
     formats:
+      default: "%a %b %d %Y %l:%M%P"
       date_wkday_no_yr: "%a %b %d"
       datetime_no_yr: "%a %b %d %l:%M%P"
       full_datetime: "%a %b %d %Y %l:%M%P"
@@ -466,6 +470,8 @@ en:
     user:
       update_info: "Edit Profile"
       update_photo: "Edit Photo"
+    wiki/page:
+      history: "History"
 
   calendars:
     meals: "Meals You're Attending"

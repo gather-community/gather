@@ -79,4 +79,20 @@ class UserDecorator < ApplicationDecorator
   def preferred_contact_tooltip
     h.t("users.preferred_contact_tooltip", method: preferred_contact)
   end
+
+  def show_action_link_set
+    ActionLinkSet.new(
+      ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
+      ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object))
+    )
+  end
+
+  def edit_action_link_set
+    ActionLinkSet.new(
+      ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_user_path(object),
+        method: :put, confirm: {name: name}),
+      ActionLink.new(object, :destroy, icon: "trash", path: h.user_path(object), method: :delete,
+        confirm: {name: name})
+    )
+  end
 end

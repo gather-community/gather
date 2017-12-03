@@ -1,57 +1,50 @@
-<% content_for(:title){ "#{@user.name}" } %>
-
-<% content_for(:top_buttons) do %>
-  <% if policy(@user).update_info? %>
-    <%= link_to(icon_tag("pencil") << " Edit Profile", edit_user_path(@user), class: "btn btn-primary") %>
-  <% elsif policy(@user).update_photo? %>
-    <%= link_to(icon_tag("camera") << " Edit Photo", edit_user_path(@user), class: "btn btn-primary") %>
-  <% end %>
-<% end %>
+<% content_for(:title, user.name) %>
+<% content_for(:top_buttons, user.action_links) %>
 
 <div class="row">
   <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-4">
-        <%= user_photo_if_permitted(@user, :medium) %>
-        <% @user.roles.each do |role| %>
+        <%= user_photo_if_permitted(user, :medium) %>
+        <% user.roles.each do |role| %>
           <div class="role"><%= icon_tag("star-o") %> <%= t("roles.#{role.name}") %></div>
         <% end %>
       </div>
       <div class="col-sm-8">
         <table class="key-value key-value-full">
-          <%= render("households/unit_community", household: @user.household) %>
-          <% if @user.email? %>
+          <%= render("households/unit_community", household: user.household) %>
+          <% if user.email? %>
             <tr>
               <td>Email</td>
-              <td><%= @user.email_link %></td>
+              <td><%= user.email_link %></td>
             </tr>
           <% end %>
-          <% unless @user.no_phones? %>
+          <% unless user.no_phones? %>
             <tr>
               <td>Phone</td>
               <td class="phones">
-                <%= safe_join(@user.phones.map{ |p| phone_link(p, kind_abbrv: true) }, tag(:br)) %>
+                <%= safe_join(user.phones.map{ |p| phone_link(p, kind_abbrv: true) }, tag(:br)) %>
               </td>
             </tr>
           <% end %>
-          <% if @user.preferred_contact %>
+          <% if user.preferred_contact %>
             <tr>
               <td>Preferred Contact Method</td>
-              <td><%= t("simple_form.options.user.preferred_contact.#{@user.preferred_contact}") %></td>
+              <td><%= t("simple_form.options.user.preferred_contact.#{user.preferred_contact}") %></td>
             </tr>
           <% end %>
-          <% if policy(@user).show_personal_info? %>
-            <% if @user.birthdate %>
+          <% if policy(user).show_personal_info? %>
+            <% if user.birthdate %>
               <tr>
                 <td>Birthday</td>
-                <td><%= l(@user.birthday.date, format: @user.birthday.format) %></td>
+                <td><%= l(user.birthday.date, format: user.birthday.format) %></td>
               </tr>
             <% end %>
             <% %i(age joined_on school allergies doctor medical).each do |attr| %>
-              <% if @user[attr].present? %>
+              <% if user[attr].present? %>
                 <tr>
                   <td><%= User.human_attribute_name(attr) %></td>
-                  <td><%= @user[attr] %></td>
+                  <td><%= user[attr] %></td>
                 </tr>
               <% end %>
             <% end %>
@@ -61,7 +54,7 @@
                   household: household,
                   members: members,
                   context: :user,
-                  child: @user.child?) %>
+                  child: user.child?) %>
           <% end %>
         </table>
       </div>

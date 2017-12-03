@@ -11,5 +11,18 @@ module Reservations
     def location_name
       resource.decorate.name
     end
+
+    def show_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_reservation_path(object))
+      )
+    end
+
+    def edit_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :destroy, icon: "trash", path: h.reservation_path(object),
+          method: :delete, confirm: {name: name})
+      )
+    end
   end
 end

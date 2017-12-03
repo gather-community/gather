@@ -35,11 +35,11 @@ module Meals
     end
 
     def activate?
-      active_admin_or_meals_coordinator?
+      formula.inactive? && active_admin_or_meals_coordinator?
     end
 
     def deactivate?
-      !is_default? && active_admin_or_meals_coordinator?
+      !is_default? && formula.active? && active_admin_or_meals_coordinator?
     end
 
     def destroy?

@@ -47,6 +47,21 @@ module Meals
       end
     end
 
+    def show_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meals_formula_path(object))
+      )
+    end
+
+    def edit_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_meals_formula_path(object), 
+          method: :put, confirm: {name: name}),
+        ActionLink.new(object, :destroy, icon: "trash", path: h.meals_formula_path(object),
+          method: :delete, confirm: {name: name})
+      )
+    end
+
     private
 
     def decimal_to_percentage(num)

@@ -3,6 +3,8 @@ class HouseholdsController < ApplicationController
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 
+  decorates_assigned :household
+
   def index
     authorize Household.new(community: current_community)
     @households = policy_scope(Household)
@@ -33,7 +35,7 @@ class HouseholdsController < ApplicationController
   end
 
   def show
-    @household = Household.find(params[:id]).decorate
+    @household = Household.find(params[:id])
     @members = load_showable_users_and_children_in(@household)
     authorize @household
   end
@@ -130,6 +132,5 @@ class HouseholdsController < ApplicationController
     sample_household = Household.new(community: current_community)
     @allowed_community_changes = policy(sample_household).allowed_community_changes.by_name
     @household.build_blank_associations
-    @household = @household.decorate
   end
 end

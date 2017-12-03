@@ -74,39 +74,6 @@ mark {
   line-height: 90%;
 }
 
-.action-icons {
-  &.action-icons-with-names {
-    margin-bottom: 10px;
-
-    a {
-      white-space: nowrap;
-      display: inline-block;
-      margin-right: 10px;
-    }
-  }
-}
-
-td .action-icons {
-  white-space: nowrap;
-  text-align: right;
-
-  i.fa {
-    font-size: 16px;
-
-    &.fa-file-text {
-      font-size: 15px;
-    }
-  }
-
-  a:not(:first-of-type) i.fa {
-    margin-left: 5px;
-  }
-}
-
-h1 + .action-icons {
-  margin: -15px 0 10px 0;
-}
-
 ul.no-marker {
   list-style-type: none;
   padding: 0;

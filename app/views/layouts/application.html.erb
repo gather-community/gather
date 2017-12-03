@@ -94,6 +94,7 @@
     </nav>
 
     <div id="content" class="<%= controller.controller_name.dasherize %>
+      <%= controller.controller_path.gsub("/", "--").dasherize %>
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
 

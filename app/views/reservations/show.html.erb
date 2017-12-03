@@ -1,18 +1,5 @@
 <% content_for(:title){ "Reservation: #{reservation.name}" } %>
-
-<% content_for(:top_buttons) do %>
-  <% if policy(reservation).edit? %>
-    <%= link_to(icon_tag("pencil") << " Edit Reservation", edit_reservation_path(reservation),
-      class: "btn btn-default") %>
-  <% end %>
-  <% if policy(reservation).destroy? %>
-    <%= link_to(icon_tag("trash") << " Delete Reservation",
-      reservation_path(reservation),
-      method: :delete,
-      class: "btn btn-default",
-      data: { confirm: "Are you sure you want to delete this reservation?" }) %>
-  <% end %>
-<% end %>
+<% content_for(:top_buttons, reservation.action_links) %>
 
 <table class="key-value key-value-wide">
   <tr>

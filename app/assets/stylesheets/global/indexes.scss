@@ -36,8 +36,22 @@ table.index {
     }
   }
 
-  .action-icons {
+  .action-links {
     padding-right: 3px;
+    white-space: nowrap;
+    text-align: right;
+
+    i.fa {
+      font-size: 16px;
+
+      &.fa-file-text {
+        font-size: 15px;
+      }
+    }
+
+    a:not(:first-of-type) i.fa {
+      margin-left: 5px;
+    }
   }
 
   i.fa { // Icons

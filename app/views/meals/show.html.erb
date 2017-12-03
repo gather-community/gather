@@ -5,15 +5,10 @@
     (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "")
 end %>
 
-<% content_for(:top_buttons) do %>
-  <% if policy(sample_meal).index? %>
-    <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
-  <% end %>
-<% end %>
+<% content_for(:top_buttons, @meal.action_links) %>
 
 <div class="row">
   <div class="col-sm-8">
-    <%= meal_action_icons(@meal, show_name: true) %>
     <%= render("meals/menu") %>
   </div>
 

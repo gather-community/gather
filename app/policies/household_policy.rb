@@ -46,11 +46,11 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def activate?
-    active_admin?
+    household.inactive? && active_admin?
   end
 
   def deactivate?
-    active_admin?
+    household.active? && active_admin?
   end
 
   def administer?

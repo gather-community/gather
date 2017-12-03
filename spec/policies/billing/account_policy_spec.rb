@@ -15,7 +15,7 @@ module Billing
         allow(account).to receive(:community).and_return(community)
       end
 
-      permissions :index?, :apply_late_fees? do
+      permissions :index?, :apply_late_fees, :add_txn? do
         it_behaves_like "permits admins or special role but not regular users", :biller
       end
 

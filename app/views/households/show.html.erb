@@ -1,11 +1,5 @@
-<% content_for(:title) { "Household: #{@household.name}" } %>
-
-<% content_for(:top_buttons) do %>
-  <% if policy(@household).edit? %>
-    <%= link_to(icon_tag("pencil") << " Edit Household",
-      edit_household_path(@household), class: "btn btn-primary") %>
-  <% end %>
-<% end %>
+<% content_for(:title) { "Household: #{household.name}" } %>
+<% content_for(:top_buttons, household.action_links) %>
 
 <div class="row">
   <div class="col-sm-12">
@@ -15,9 +9,9 @@
       </div>
       <div class="col-sm-8">
         <table class="key-value key-value-full">
-          <%= render("households/unit_community", household: @household) %>
+          <%= render("households/unit_community", household: household) %>
           <%= render("households/attribs",
-                household: @household,
+                household: household,
                 members: @members,
                 context: :household) %>
         </table>

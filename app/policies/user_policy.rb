@@ -53,11 +53,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def activate?
-    active_admin?
+    record.inactive? && active_admin?
   end
 
   def deactivate?
-    active_admin?
+    record.active? && active_admin?
   end
 
   def invite?

@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
-  include Lensable
+  include Lensable, Destructible
 
   helper_method :sample_user
 
   before_action -> { nav_context(:people, :directory) }
 
-  decorates_assigned :household
+  decorates_assigned :household, :user
 
   def index
     authorize User
@@ -67,7 +67,6 @@ class UsersController < ApplicationController
     end.to_h
     @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).
       past.not_cancelled.newest_first
-    @user = @user.decorate
   end
 
   def new

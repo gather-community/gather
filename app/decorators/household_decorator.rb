@@ -46,4 +46,19 @@ class HouseholdDecorator < ApplicationDecorator
       end
     end.reduce(:<<)
   end
+
+  def show_action_link_set
+    ActionLinkSet.new(
+      ActionLink.new(object, :edit, icon: "pencil", path: h.edit_household_path(object))
+    )
+  end
+
+  def edit_action_link_set
+    ActionLinkSet.new(
+      ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_household_path(object),
+        method: :put, confirm: {name: name}),
+      ActionLink.new(object, :destroy, icon: "trash", path: h.household_path(object), method: :delete,
+        confirm: {name: name})
+    )
+  end
 end

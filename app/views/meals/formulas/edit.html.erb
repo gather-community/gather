@@ -1,3 +1,4 @@
 <% content_for(:flashes, inactive_notice(formula)) if formula.inactive? %>
 <% content_for(:title, "Edit Meal Formula: #{formula.name}") %>
+<% content_for(:top_buttons, formula.action_links(:edit)) %>
 <%= render("form") %>

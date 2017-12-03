@@ -38,11 +38,11 @@ module Reservations
     end
 
     def activate?
-      active_admin?
+      resource.inactive? && active_admin?
     end
 
     def deactivate?
-      active_admin?
+      resource.active? && active_admin?
     end
 
     def permitted_attributes

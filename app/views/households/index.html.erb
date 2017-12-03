@@ -39,17 +39,6 @@
         <td>
           <%= load_showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>
         </td>
-        <td>
-          <div class="action-icons">
-            <% if policy(household).update? %>
-              <%= link_to(icon_tag('pencil'), edit_household_path(household)) %>
-            <% end %>
-            <% if policy(household).deactivate? && household.active? %>
-              <%= link_to(icon_tag('times-circle'), deactivate_household_path(household), method: :put,
-                data: { confirm: I18n.t("activerecord.deact_confirms.household", name: household.name) }) %>
-            <% end %>
-          </div>
-        </td>
       </tr>
     <% end %>
   </table>

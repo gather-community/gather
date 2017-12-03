@@ -227,6 +227,8 @@ en:
                 percent: "Percentage"
 
   button_labels:
+    reservations/reservation:
+      destroy: "Delete Reservation"
     reservations/resource:
       deactivate: "Deactivate Resource"
       destroy: "Delete Resource"
@@ -254,6 +256,8 @@ en:
     reservations/resource:
       destroy: "Are you sure you want to delete the resource '%{name}?' This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the resource '%{name}?'"
+    reservations/reservation:
+      destroy: "Are you sure you want to delete this reservation? This action cannot be undone."
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}?' This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}?'"
@@ -447,14 +451,21 @@ en:
     cancelled_notice: "This meal has been cancelled."
 
   action_names:
-    edit: "Edit"
-    destroy: "Delete"
-    close: "Close"
-    reopen: "Reopen"
-    summary: "Summary"
-    finalize: "Finalize"
-    cancel: "Cancel"
-    send_message: "Message"
+    common:
+      edit: "Edit"
+      deactivate: "Deactivate"
+      destroy: "Delete"
+      close: "Close"
+      reopen: "Reopen"
+      summary: "Summary"
+      finalize: "Finalize"
+      cancel: "Cancel"
+      send_message: "Message"
+    billing/account:
+      add_txn: "Add Transaction"
+    user:
+      update_info: "Edit Profile"
+      update_photo: "Edit Photo"
 
   calendars:
     meals: "Meals You're Attending"

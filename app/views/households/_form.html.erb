@@ -1,10 +1,8 @@
-<%= horizontal_form_for(@household) do |f| %>
+<%= horizontal_form_for(household) do |f| %>
 
   <%= render("fields", f: f) %>
 
   <%= form_actions do %>
-    <%= deactivate_btn(@household, name: @household.name) %>
-    <%= destroy_btn(@household, name: @household.name) %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
 

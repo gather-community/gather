@@ -22,6 +22,10 @@ class ApplicationDecorator < Draper::Decorator
 
   # Returns a Proc that inserts the given separator, to be passed to array.reduce.
   def sep(separator)
-    ->(a, b){ a << separator.html_safe << b }
+    ->(a, b) { a << separator.html_safe << b }
+  end
+
+  def action_links(action = :show, **options)
+    send("#{action}_action_link_set").render(**options)
   end
 end

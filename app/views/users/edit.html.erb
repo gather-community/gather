@@ -1,13 +1,14 @@
-<% content_for(:flashes, inactive_notice(@user)) if @user.inactive? %>
+<% content_for(:flashes, inactive_notice(user)) if user.inactive? %>
 <% content_for(:title) do
   if @user == current_user
     "Profile"
   elsif policy(@user).update_info?
-    "Edit User: #{@user.name}"
+    "Edit User: #{user.name}"
   elsif policy(@user).update_photo?
-    "Edit Photo: #{@user.name}"
+    "Edit Photo: #{user.name}"
   end
 end %>
+<% content_for(:top_buttons, user.action_links(:edit)) %>
 
 <%= render("form") %>
 <br/><br/>

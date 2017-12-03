@@ -2,15 +2,7 @@
 
 <% content_for(:top_buttons) do %>
   <%= print_button %>
-  <%= link_to(icon_tag("reply") << " Back to Meal Listing", meals_path, class: "btn btn-default") %>
-
-  <% if @meal.closed? && current_user == @meal.head_cook %>
-    <%= link_to(icon_tag("print") << " Print", "#", class: "btn btn-primary",
-      onclick: "window.print(); return false;") %>
-  <% end %>
 <% end %>
-
-<%= meal_action_icons(@meal, show_name: true, except: :summary) %>
 
 <div class="row">
   <div class="col-sm-12">

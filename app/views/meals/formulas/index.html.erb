@@ -21,11 +21,6 @@
         <td class="name"><%= link_to(formula.name_with_suffix, meals_formula_path(formula)) %></td>
         <td class="meal-count"><%= formula.meal_count %></td>
         <td class="created-at"><%= formula.created_on %></td>
-        <td>
-          <% if policy(formula).edit? %>
-            <%= link_to(icon_tag("pencil"), edit_meals_formula_path(formula)) %>
-          <% end %>
-        </td>
       </tr>
     <% end %>
   </tbody>

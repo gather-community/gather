@@ -6,8 +6,31 @@ div.title-and-buttons {
     margin-bottom: 20px;
   }
 
-  .top-buttons i {
+  div.top-buttons i {
     font-size: 1.2em;
+  }
+
+  div.top-buttons div.action-links {
+    margin-bottom: -10px;
+
+    @media screen and (min-width: $screen-sm-min) {
+      text-align: right;
+    }
+
+    i {
+      margin-right: 4px;
+    }
+
+    a {
+      white-space: nowrap;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 10px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
   }
 
   @media screen and (min-width: $screen-sm-min) {

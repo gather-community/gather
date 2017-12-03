@@ -15,8 +15,6 @@
       <%= f.input :guidelines %>
 
       <%= form_actions do %>
-        <%= deactivate_btn(@resource, name: @resource.name) %>
-        <%= destroy_btn(@resource, name: @resource.name) %>
         <%= f.button :submit, class: "btn-primary" %>
       <% end %>
     <% end %>

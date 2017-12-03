@@ -1,11 +1,5 @@
 <% content_for(:title, "Meal Formula: #{formula.name_with_suffix}") %>
-
-<% content_for(:top_buttons) do %>
-  <% if policy(formula).edit? %>
-    <%= link_to(icon_tag("pencil") << " Edit Formula", edit_meals_formula_path(formula),
-      class: "btn btn-primary") %>
-  <% end %>
-<% end %>
+<% content_for(:top_buttons, formula.action_links) %>
 
 <h2>Meal Calculations</h2>
 

@@ -124,6 +124,10 @@ en:
         vet: "Veterinarian Info"
         caregivers: "Caregiver Info"
         health_issues: "Health Issues"
+      wiki/page:
+        title: "Title"
+        content: "Content"
+        comment: "Comment"
     errors:
       models:
         signup:
@@ -356,6 +360,8 @@ en:
         emergency_contacts:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
+      wiki_page:
+        comment: "A comment about this change."
     hints:
       meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
@@ -370,6 +376,8 @@ en:
         joined_on: "Approximate date when you joined the community"
       meals_formula:
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
+      wiki_page:
+        content: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
     options:
       meal:
         time:

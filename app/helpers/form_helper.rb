@@ -1,10 +1,11 @@
 module FormHelper
   def horizontal_form_for(obj, options = {}, &block)
+    width = options[:width] || :normal
     cols = options.delete(:width) == :full ? 12 : 9
     name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
     options[:html] ||= {}
     options[:html][:class] ||= ""
-    options[:html][:class] << " form-horizontal col-sm-#{cols} #{name}-form"
+    options[:html][:class] << " form-horizontal col-sm-#{cols} #{name}-form width-#{width}"
     content_tag(:div, class: "row") do
       simple_form_for(obj, options, &block)
     end

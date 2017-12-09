@@ -88,7 +88,7 @@ module Wiki
     private
 
     def permitted_page_params
-      params.require(:page).permit(:title, :content, :comment)
+      params.require(:wiki_page).permit(:title, :content, :comment)
     end
 
     # Retrieves wiki_page_class for this controller

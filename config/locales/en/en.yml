@@ -464,6 +464,7 @@ en:
 
   action_names:
     common:
+      new: "Add"
       edit: "Edit"
       deactivate: "Deactivate"
       destroy: "Delete"

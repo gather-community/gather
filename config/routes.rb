@@ -87,8 +87,13 @@ Rails.application.routes.draw do
 
   scope module: "wiki" do
     wiki_root "/wiki", controller: "pages"
+
     # irwi show path helper not working, tried debugging, replacing with this for now
-    get("/wiki/(*path)", controller: "pages", action: "show", as: "wiki")
+    get "/wiki/(*path)", controller: "pages", action: "show", as: "wiki"
+
+    # Adding these for better Rails default compliance
+    patch "/wiki/(*path)", controller: "pages", action: "update"
+    post "/wiki/(*path)", controller: "pages", action: "update", as: "wiki_pages"
   end
 
   resources :uploads, only: [:create, :destroy]

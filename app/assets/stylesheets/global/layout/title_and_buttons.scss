@@ -22,9 +22,16 @@ div.title-and-buttons {
     }
 
     a {
+      @media screen and (min-width: $screen-sm-min) {
+        margin-left: 10px;
+      }
+
+      @media screen and (max-width: $screen-xs-max) {
+        margin-right: 10px;
+      }
+
       white-space: nowrap;
       display: inline-block;
-      margin-right: 10px;
       margin-bottom: 10px;
 
       &:last-of-type {

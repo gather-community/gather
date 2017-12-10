@@ -1,0 +1,22 @@
+<% if params[:preview] %>
+  <div class="wiki-content">
+    <%= wiki_content(page.content) %>
+  </div>
+<% end %>
+
+<%= horizontal_form_for(page) do |f| %>
+  <%= f.hidden_field :previous_version_number, value: f.object.last_version_number %>
+  <%= hidden_field_tag :path, page.path %>
+
+  <%= f.input :title %>
+  <%= f.input :content %>
+  <%= f.input :comment %>
+
+  <%= form_actions do %>
+    <%= f.button :submit, "Cancel", name: "cancel", class: "btn-default" %>
+    <%= f.button :submit, "Preview", name: "preview", class: "btn-default" %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
+<% end %>
+
+<%= wiki_page_attachments(page) %>

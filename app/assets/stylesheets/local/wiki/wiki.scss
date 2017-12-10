@@ -32,27 +32,9 @@
     text-align: right;
   }
 
-  .wiki_page_actions {
-    text-align: right;
-    width: 100%;
-    padding: 0px;
-  }
-
-  .wiki_page_actions li {
-    display: inline;
-    margin: 0px;
-    padding: 0px;
-  }
-
-  .wiki_history {
-    width: 100%;
-  }
-
-  .wiki_history_header td {
-    border-bottom: 2px dashed black;
-  }
-
-  .wiki--page-form #wiki_page_content {
-    height: 500px;
+  .wiki--page-form {
+    #wiki_page_content {
+      height: 500px;
+    }
   }
 }

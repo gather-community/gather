@@ -1,13 +1,7 @@
-<% content_for(:title) { "Wiki Page List" } %>
-
-<%= wiki_page_style -%>
-
-<h1><%=wt 'All pages' %></h1>
+<% content_for(:title, "Wiki Page List") %>
 
 <ul>
-  <%= wiki_paginate @pages do -%>
-    <% @pages.each do |page| -%>
-      <li><%= link_to page.title, wiki_page_path( page ) %></li>
-    <% end -%>
-  <% end -%>
+  <% pages.each do |page| %>
+    <li><%= link_to(page.title, wiki_page_path(page)) %></li>
+  <% end %>
 </ul>

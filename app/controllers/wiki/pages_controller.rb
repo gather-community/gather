@@ -9,7 +9,7 @@ module Wiki
     before_action -> { nav_context(:wiki) }
     before_action :setup_current_user # Setup @current_user instance variable before each action
 
-    decorates_assigned :page
+    decorates_assigned :page, :pages
 
     def self.page_class
       @page_class ||= Irwi.config.page_class

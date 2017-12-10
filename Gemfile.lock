@@ -17,6 +17,7 @@ GIT
       mime-types
       mimemagic (~> 0.3.0)
 
+
 GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails
   revision: 36d21cec5da7f5b214925804f60e63c61c747023

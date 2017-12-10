@@ -1,6 +1,25 @@
 #content.wiki--pages {
   table.index.versions {
     margin-bottom: 10px;
+
+    td {
+      vertical-align: top;
+    }
+
+    td.radios {
+      div.number {
+        display: inline-block;
+        width: 30px;
+      }
+
+      input {
+        margin-right: 10px;
+      }
+    }
+
+    td.radios, td.timestamp, td.updater {
+      white-space: nowrap;
+    }
   }
 
   .wiki-content {

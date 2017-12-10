@@ -1,31 +1,31 @@
 <% if with_form %>
-  <form action="<%=wiki_page_compare_path(@page)%>" method="get">
+  <%= form_tag(wiki_page_compare_path(action: @page), method: :get) %>
 <% end %>
 
 <table class="index versions">
   <tr>
-    <td>Version</td>
-    <td>Date</td>
-    <td>Author</td>
-    <td>Comment</td>
+    <th>Version</th>
+    <th>Date</th>
+    <th>Author</th>
+    <th>Comment</th>
   </tr>
   <% versions.each do |v| %>
     <tr>
-      <td>
-        <%= v.number %>
+      <td class="radios">
+        <div class="number"><%= v.number %></div>
         <% if with_form %>
           <input type="radio" name="old" value="<%=v.number%>" <%= 'checked="true" ' if v == versions[-1] %>/>
           <input type="radio" name="new" value="<%=v.number%>" <%= 'checked="true" ' if v == versions[-2] %>/>
         <% end %>
       </td>
-      <td><%= l(v.updated_at, format: :full_datetime) %></td>
-      <td><%= wiki_user(v.updator) %></td>
+      <td class="timestamp"><%= l(v.updated_at, format: :full_datetime) %></td>
+      <td class="updater"><%= wiki_user(v.updator) %></td>
       <td><%= v.comment %></td>
     </tr>
   <% end %>
 </table>
 
 <% if with_form %>
-    <%= submit_tag("Compare Selected", class: "btn btn-default") %>
+    <%= submit_tag("Compare Selected", name: nil, class: "btn btn-primary") %>
   </form>
 <% end %>

@@ -17,6 +17,16 @@ div.title-and-buttons {
       text-align: right;
     }
 
+    .action-link-group {
+      @media screen and (max-width: $screen-xs-max) {
+        display: inline-block;
+      }
+
+      @media screen and (min-width: $screen-sm-min) {
+        white-space: nowrap;
+      }
+    }
+
     i {
       margin-right: 4px;
     }
@@ -33,10 +43,6 @@ div.title-and-buttons {
       white-space: nowrap;
       display: inline-block;
       margin-bottom: 10px;
-
-      &:last-of-type {
-        margin-right: 0;
-      }
     }
   }
 

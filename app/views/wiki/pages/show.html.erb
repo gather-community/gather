@@ -1,6 +1,4 @@
 <% content_for(:title, page.title) %>
 <% content_for(:top_buttons, page.action_links) %>
-<div class="wiki-content">
-  <%= wiki_content(page.content) %>
-</div>
+<%= page.formatted_content %>
 <%= page.revision_info %>

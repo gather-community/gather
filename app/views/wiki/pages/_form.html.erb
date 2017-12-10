@@ -1,7 +1,5 @@
 <% if params[:preview] %>
-  <div class="wiki-content">
-    <%= wiki_content(page.content) %>
-  </div>
+  <%= page.formatted_content %>
 <% end %>
 
 <%= horizontal_form_for(page) do |f| %>

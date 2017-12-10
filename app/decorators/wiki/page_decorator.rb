@@ -2,6 +2,12 @@ module Wiki
   class PageDecorator < ApplicationDecorator
     delegate_all
 
+    def formatted_content
+      h.content_tag(:div, class: "wiki-content") do
+        h.sanitize(h.auto_link(Irwi.config.formatter.format(linkify(h.wiki_show_attachments(content))).html_safe))
+      end
+    end
+
     def revision_info
       h.content_tag(:div, class: "wiki-page-revision-info") do
         h.t("wiki.revision_info", time: h.l(updated_at), user: updator.decorate.name_with_inactive)
@@ -21,28 +27,24 @@ module Wiki
       h.sanitize(Diffy::Diff.new(old_ver.content, new_ver.content).to_s(:html))
     end
 
-    protected
+    def history(versions)
+      h.render "wiki_page_history", page: self, versions: versions, with_form: versions.size > 1
+    end
 
-    # def action_link_icon(action)
-    #   case action
-    #   when :all then "list"
-    #   when :show then "file-o"
-    #   when :new then "plus"
-    #   when :edit then "pencil"
-    #   when :history then "clock"
-    #   when :destroy then "trash"
-    #   end
-    # end
+    private
 
-    # def action_link_path(action)
-    #   case action
-    #   when :all then wiki_all_path
-    #   when :show then wiki_page_path(object)
-    #   when :new then new_wiki_page_path
-    #   when :edit then edit_wiki_page_path(object)
-    #   when :history then history_wiki_page_path(object)
-    #   when :destroy then wiki_page_path(object)
-    #   end
-    # end
+    def linkify(str)
+      str.gsub /\[\[
+                  (?:([^\[\]\|]+)\|)?
+                  ([^\[\]]+)
+                 \]\]
+                 (\w+)?/xu do |m|
+        text = "#$2#$3"
+        title, anchor = if $1 then $1.split('#', 2) else $2 end
+        page = Wiki::Page.find_by(title: title) || Wiki::Page.new(path: CGI::escape(title))
+        h.link_to(title, h.wiki_page_path(page) + (anchor ? "##{anchor}" : ""),
+          class: page.new_record? ? "not-found" : nil)
+      end.html_safe
+    end
   end
 end

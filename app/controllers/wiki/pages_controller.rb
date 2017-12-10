@@ -9,7 +9,7 @@ module Wiki
     before_action -> { nav_context(:wiki) }
     before_action :setup_current_user # Setup @current_user instance variable before each action
 
-    decorates_assigned :page, :pages
+    decorates_assigned :page, :pages, :versions
 
     def self.page_class
       @page_class ||= Irwi.config.page_class
@@ -26,19 +26,19 @@ module Wiki
 
     def show
       authorize @page
-      render_template(@page.new_record? ? 'no' : 'show')
+      render_not_found if @page.new_record?
     end
 
     def history
       authorize @page
       @versions = Irwi.config.paginator.paginate(@page.versions, page: params[:page])
-      render_template(@page.new_record? ? 'no' : 'history')
+      render_not_found if @page.new_record?
     end
 
     def compare
       authorize @page
       if @page.new_record?
-        render_template("no")
+        render_not_found
       else
         new_num = params[:new].to_i || @page.last_version_number # Last version number
         old_num = params[:old].to_i || 1 # First version number
@@ -49,19 +49,15 @@ module Wiki
         @versions = Irwi.config.paginator.paginate(versions, page: params[:page])
         @new_version = @versions.first.number == new_num ? @versions.first : versions.first
         @old_version = @versions.last.number == old_num ? @versions.last : versions.last
-
-        render_template("compare")
       end
     end
 
     def new
       authorize @page
-      render_template("new")
     end
 
     def edit
       authorize @page
-      render_template("edit")
     end
 
     def update
@@ -73,14 +69,14 @@ module Wiki
       if !params[:preview] && (params[:cancel] || @page.save)
         redirect_to url_for(action: :show, path: @page.path.split('/'))
       else
-        render_template("edit")
+        render :edit
       end
     end
 
     def destroy
       authorize @page
       @page.destroy
-      redirect_to url_for( action: :show )
+      redirect_to url_for(action: :show)
     end
 
     private
@@ -94,9 +90,9 @@ module Wiki
       self.class.page_class
     end
 
-    # Renders user-specified or default template
-    def render_template(template)
-      render template, status: (case template when 'no' then 404 when 'not_allowed' then 403 else 200 end)
+    def render_not_found
+      @path = params[:path]
+      render "not_found", status: 404
     end
 
     # Initialize @current_user instance variable

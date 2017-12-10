@@ -1,4 +1,8 @@
 #content.wiki--pages {
+  a.not-found {
+    color: $error-red;
+  }
+
   table.index.versions {
     margin-bottom: 10px;
 

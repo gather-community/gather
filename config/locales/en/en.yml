@@ -7,6 +7,7 @@ en:
     default: "Default"
     inactive: "Inactive"
     cancelled: "Cancelled"
+    unknown: "Unknown"
 
   activerecord:
     models:

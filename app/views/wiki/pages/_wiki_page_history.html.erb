@@ -1,5 +1,5 @@
 <% if with_form %>
-  <%= form_tag(wiki_page_compare_path(@page), method: :get) %>
+  <%= form_tag(wiki_page_compare_path(page), method: :get) %>
 <% end %>
 
 <table class="index versions">
@@ -19,7 +19,7 @@
         <% end %>
       </td>
       <td class="timestamp"><%= l(v.updated_at, format: :full_datetime) %></td>
-      <td class="updater"><%= wiki_user(v.updator) %></td>
+      <td class="updater"><%= v.updator_name %></td>
       <td><%= v.comment %></td>
     </tr>
   <% end %>

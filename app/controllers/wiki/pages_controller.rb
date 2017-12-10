@@ -45,12 +45,10 @@ module Wiki
 
         old_num, new_num = new_num, old_num if new_num < old_num # Swapping them if last < first
 
-        versions = @page.versions.between( old_num, new_num ) # Loading all versions between first and last
-
-        @versions = Irwi.config.paginator.paginate( versions, page: params[:page] ) # Paginating them
-
-        @new_version = @versions.first.number == new_num ? @versions.first : versions.first # Loading next version
-        @old_version = @versions.last.number == old_num ? @versions.last : versions.last # Loading previous version
+        versions = @page.versions.between(old_num, new_num)
+        @versions = Irwi.config.paginator.paginate(versions, page: params[:page])
+        @new_version = @versions.first.number == new_num ? @versions.first : versions.first
+        @old_version = @versions.last.number == old_num ? @versions.last : versions.last
 
         render_template("compare")
       end
@@ -98,7 +96,7 @@ module Wiki
 
     # Renders user-specified or default template
     def render_template(template)
-      render "#{template_dir template}/#{template}", status: (case template when 'no' then 404 when 'not_allowed' then 403 else 200 end)
+      render template, status: (case template when 'no' then 404 when 'not_allowed' then 403 else 200 end)
     end
 
     # Initialize @current_user instance variable

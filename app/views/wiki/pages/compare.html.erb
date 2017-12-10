@@ -1,19 +1,9 @@
-<% content_for(:title) { "Wiki Compare: #{@page.title}" } %>
+<% content_for(:title, "Wiki Compare: #{page.title}") %>
 
-<%= wiki_page_style %>
+<h2>Differences Between Versions <%= @old_version.number %> and <%= @new_version.number %></h2>
+<%= page.diff(@old_version, @new_version) %>
 
-<h1><%=wt '%{page_title} - Comparing versions %{old_version} and %{new_version}', :page_title => h( @page.title ), :old_version => @old_version.number, :new_version => @new_version.number %></h1>
-
-<%= link_to "Back to history", history_wiki_page_path(@page.path) %><br />
-
-<%=wt 'Changes list:' %>
-
-<%= wiki_paginate @versions do%>
-  <%= wiki_page_history @page, @versions %>
+<h2>Versions Between <%= @old_version.number %> and <%= @new_version.number %></h2>
+<%= wiki_paginate @versions do %>
+  <%= wiki_page_history page, @versions %>
 <% end %>
-
-<%=wt 'Changes in content:' %>
-
-<div class="wiki_diff">
-  <%= wiki_diff @old_version.content, @new_version.content %>
-</div>

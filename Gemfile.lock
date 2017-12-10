@@ -17,7 +17,6 @@ GIT
       mime-types
       mimemagic (~> 0.3.0)
 
-
 GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
@@ -160,6 +159,7 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.3)
+    diffy (3.2.0)
     draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -437,6 +437,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record
   devise
+  diffy (~> 3.2)
   draper (~> 2.1)
   dropzonejs-rails (~> 0.7)
   exception_notification

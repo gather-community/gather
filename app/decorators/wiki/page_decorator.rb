@@ -17,6 +17,10 @@ module Wiki
       )
     end
 
+    def diff(old_ver, new_ver)
+      h.sanitize(Diffy::Diff.new(old_ver.content, new_ver.content).to_s(:html))
+    end
+
     protected
 
     # def action_link_icon(action)

@@ -1,0 +1,65 @@
+#content.wiki--pages {
+  .diff {
+    overflow: auto;
+
+    ul {
+      overflow: auto;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: table;
+      width: 100%;
+    }
+
+    del {
+      display: block;
+      text-decoration: none;
+      white-space: pre-wrap;
+
+      strong {
+        font-weight: normal;
+        background: #fcc;
+      }
+    }
+
+    ins {
+      display: block;
+      text-decoration: none;
+      white-space: pre-wrap;
+
+      strong {
+        font-weight: normal;
+        background: #9f9;
+      }
+    }
+
+    li {
+      padding: 0;
+      display: table-row;
+      margin: 0;
+      height: 1em;
+
+      &.ins {
+        background: #dfd;
+        color: #080;
+      }
+
+      &.del {
+        background: #fee;
+        color: #b00;
+      }
+
+      &.diff-comment {
+        display: none;
+      }
+
+      &.diff-block-info {
+        background: none repeat scroll 0 0 #808080;
+      }
+    }
+
+    span {
+      white-space: pre-wrap;
+    }
+  }
+}

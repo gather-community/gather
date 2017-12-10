@@ -4,7 +4,7 @@ module Wiki
 
     def formatted_content
       h.content_tag(:div, class: "wiki-content") do
-        h.sanitize(h.auto_link(Irwi.config.formatter.format(linkify(h.wiki_show_attachments(content))).html_safe))
+        h.sanitize(render_markdown(linkify(h.wiki_show_attachments(content)).html_safe))
       end
     end
 
@@ -45,6 +45,18 @@ module Wiki
         h.link_to(title, h.wiki_page_path(page) + (anchor ? "##{anchor}" : ""),
           class: page.new_record? ? "not-found" : nil)
       end.html_safe
+    end
+
+    def render_markdown(str)
+      renderer.render(str)
+    end
+
+    def renderer
+      @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+        autolink: true,
+        space_after_headers: true,
+        tables: true
+      )
     end
   end
 end

@@ -140,11 +140,6 @@ module NavHelper
           parent: :wiki,
           path: "/wiki/all",
           permitted: policy(Wiki::Page.new(community: current_community)).all?
-        },{
-          name: :new,
-          parent: :wiki,
-          path: wiki_page_new_path,
-          permitted: policy(Wiki::Page.new(community: current_community)).new?
         }
       ]
     else

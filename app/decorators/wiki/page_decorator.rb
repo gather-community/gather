@@ -28,7 +28,7 @@ module Wiki
     end
 
     def history(versions)
-      h.render "wiki_page_history", page: self, versions: versions, with_form: versions.size > 1
+      h.render "history_table", page: self, versions: versions, with_form: versions.size > 1
     end
 
     private

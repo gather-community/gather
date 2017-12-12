@@ -4,6 +4,4 @@
 <%= page.diff(@old_version, @new_version) %>
 
 <h2>Versions Between <%= @old_version.number %> and <%= @new_version.number %></h2>
-<%= wiki_paginate versions do %>
-  <%= page.history(versions) %>
-<% end %>
+<%= page.history(versions) %>

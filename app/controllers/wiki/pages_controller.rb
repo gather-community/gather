@@ -31,7 +31,7 @@ module Wiki
 
     def history
       authorize @page
-      @versions = Irwi.config.paginator.paginate(@page.versions, page: params[:page])
+      @versions = @page.versions
       render_not_found if @page.new_record?
     end
 

@@ -32,10 +32,6 @@ module WikiPagesHelper
     end
   end
 
-  def wiki_paginate(collection, &block)
-    Irwi.config.paginator.paginated_section(self, collection, &block)
-  end
-
   def wiki_page_attachments(page = @page)
     return unless Irwi::config.page_attachment_class_name
 

@@ -27,5 +27,6 @@
 
 <% if with_form %>
     <%= submit_tag("Compare Selected", name: nil, class: "btn btn-primary") %>
+    <%= link_to("Return to Page", wiki_page_path(page), class: "btn btn-default") %>
   </form>
 <% end %>

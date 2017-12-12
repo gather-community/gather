@@ -131,6 +131,28 @@ module NavHelper
     filter_and_set_active_nav_items(items, type: :personal)
   end
 
+  def footer_items
+    items = case @context[:section]
+    when :wiki
+      [
+        {
+          name: :all,
+          parent: :wiki,
+          path: "/wiki/all",
+          permitted: policy(Wiki::Page.new(community: current_community)).all?
+        },{
+          name: :new,
+          parent: :wiki,
+          path: wiki_page_new_path,
+          permitted: policy(Wiki::Page.new(community: current_community)).new?
+        }
+      ]
+    else
+      []
+    end
+    filter_and_set_active_nav_items(items, type: :footer)
+  end
+
   def filter_and_set_active_nav_items(items, type:, active: nil)
     items.select! { |i| i[:permitted] }
     items.each do |i|
@@ -146,10 +168,12 @@ module NavHelper
     params[:role] = "tab" if tab
     params[:"aria-controls"] = item[:name] if tab
 
-    i18n_sub_key = item[:type] == :sub ? "#{item[:parent]}." : ""
+    i18n_sub_key = item[:parent] ? "#{item[:parent]}." : ""
     name = t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:i18n_key] || item[:name]}")
 
-    link_to(icon_tag(item[:icon]) << " #{name}", item[:path], params)
+    icon = item[:icon] ? icon_tag(item[:icon]) << " " : ""
+
+    link_to(icon << " #{name}", item[:path], params)
   end
 
   def lens_path_if_present(controller)

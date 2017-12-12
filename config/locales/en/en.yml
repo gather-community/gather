@@ -555,6 +555,10 @@ en:
       account: "Account"
       calendars: "Calendars"
       sign_out: "Sign Out"
+    footer:
+      wiki:
+        all: "All Pages"
+        new: "New Page"
 
   titles:
     meals/messages: "Send Meal Message"

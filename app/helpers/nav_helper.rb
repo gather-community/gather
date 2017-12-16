@@ -18,7 +18,7 @@ module NavHelper
         icon: "book"
       },{
         name: :wiki,
-        path: wiki_path,
+        path: "/wiki",
         permitted: policy(Wiki::Page.new(community: current_community)).show?,
         icon: "info-circle"
       },{

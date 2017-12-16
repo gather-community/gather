@@ -3,30 +3,64 @@ module Wiki
     include Irwi::Extensions::Controllers::WikiPageAttachments
     include Irwi::Support::TemplateFinder
 
-    before_action :setup_page,
-      only: [:show, :history, :compare, :new, :edit, :update, :destroy, :add_attachment]
-    before_action :set_community, only: [:show, :new, :update]
+    before_action :find_page, only: [:history, :compare, :edit, :update, :destroy]
     before_action -> { nav_context(:wiki) }
-    before_action :setup_current_user # Setup @current_user instance variable before each action
 
     decorates_assigned :page, :pages, :versions
 
-    def self.page_class
-      @page_class ||= Irwi.config.page_class
+    def index
+      skip_policy_scope
+      redirect_to home_path
     end
 
-    def self.set_page_class(arg)
-      @page_class = arg
+    def show
+      @page = Page.find_by(slug: params[:slug])
+      if @page.nil?
+        if params[:slug] == Page.reserved_slug(:home)
+          @page = Page.create_home_page(community: current_community, creator: current_user)
+        else
+          raise ActiveRecord::RecordNotFound
+        end
+      end
+      authorize @page
+    end
+
+    def new
+      if params[:title]
+        flash.now[:notice] = t("wiki.not_found_create", title: params[:title])
+      end
+      @page = Page.new(title: params[:title], community: current_community)
+      authorize @page
+    end
+
+    def edit
+      authorize @page
+    end
+
+    def create
+      @page = Page.new(community: current_community)
+      authorize @page
+      @page.assign_attributes(page_params)
+      @page.creator = @page.updator = current_user
+      redirect_on_success_or_rerender_on_error_or_preview(:new)
+    end
+
+    def update
+      authorize @page
+      @page.attributes = page_params
+      @page.updator = current_user
+      redirect_on_success_or_rerender_on_error_or_preview(:edit)
+    end
+
+    def destroy
+      authorize @page
+      @page.destroy
+      redirect_to home_path
     end
 
     def all
       authorize sample_page
       @pages = policy_scope(Page).in_community(current_community).by_title
-    end
-
-    def show
-      authorize @page
-      render_not_found if @page.new_record?
     end
 
     def history
@@ -52,65 +86,31 @@ module Wiki
       end
     end
 
-    def new
-      authorize @page
-    end
-
-    def edit
-      authorize @page
-    end
-
-    def update
-      authorize @page
-      @page.attributes = permitted_page_params
-      @page.updator = current_user
-      @page.creator = current_user if @page.new_record?
-
-      if !params[:preview] && (params[:cancel] || @page.save)
-        redirect_to url_for(action: :show, path: @page.path.split('/'))
-      else
-        render :edit
-      end
-    end
-
-    def destroy
-      authorize @page
-      @page.destroy
-      redirect_to url_for(action: :show)
-    end
-
     private
 
-    def permitted_page_params
-      params.require(:wiki_page).permit(:title, :content, :comment)
+    def home_path
+      wiki_page_path(slug: Page.reserved_slug(:home))
     end
 
-    # Retrieves wiki_page_class for this controller
-    def page_class
-      self.class.page_class
+    # Pundit built-in helper doesn't work due to namespacing
+    def page_params
+      params.require(:wiki_page).permit(policy(@page).permitted_attributes)
     end
 
-    def render_not_found
-      @path = params[:path]
-      render "not_found", status: 404
-    end
-
-    # Initialize @current_user instance variable
-    def setup_current_user
-      @current_user = respond_to?( :current_user, true ) ? current_user : nil # Find user by current_user method or return nil
-    end
-
-    # Initialize @page instance variable
-    def setup_page
-      @page = page_class.find_by_path_or_new(params[:path] || '') # Find existing page by path or create new
+    def find_page
+      @page = Page.find_by!(slug: params[:slug])
     end
 
     def sample_page
       Page.new(community: current_community)
     end
 
-    def set_community
-      @page.community = current_community
+    def redirect_on_success_or_rerender_on_error_or_preview(action)
+      if !params[:preview] && (params[:cancel] || @page.save)
+        redirect_to wiki_page_path(@page)
+      else
+        render action
+      end
     end
   end
 end

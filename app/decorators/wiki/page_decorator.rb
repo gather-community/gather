@@ -16,8 +16,8 @@ module Wiki
 
     def show_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :edit, icon: "pencil", path: h.wiki_page_edit_path(object)),
-        ActionLink.new(object, :history, icon: "clock-o", path: h.wiki_page_history_path(object)),
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_wiki_page_path(object)),
+        ActionLink.new(object, :history, icon: "clock-o", path: h.history_wiki_page_path(object)),
         ActionLink.new(object, :destroy, icon: "trash", path: h.wiki_page_path(object),
           method: :delete, confirm: {title: title})
       )
@@ -41,9 +41,20 @@ module Wiki
                  (\w+)?/xu do |m|
         text = "#$2#$3"
         title, anchor = if $1 then $1.split('#', 2) else $2 end
-        page = Wiki::Page.find_by(title: title) || Wiki::Page.new(path: CGI::escape(title))
-        h.link_to(title, h.wiki_page_path(page) + (anchor ? "##{anchor}" : ""),
-          class: page.new_record? ? "not-found" : nil)
+        link_class = nil
+        if page = Page.find_by(title: title)
+          path = h.wiki_page_path(page) + (anchor ? "##{anchor}" : "")
+        else
+          link_class = "not-found"
+          if h.policy(sample_page).create?
+            path = h.new_wiki_page_path(title: title)
+          else
+            # We know this link will lead to a 404, but since the user doesn't have permissions
+            # to create a page, this is the most consistent UX.
+            path = h.wiki_page_path(slug: Page.reserved_slug(:notfound))
+          end
+        end
+        h.link_to(title, path, class: link_class)
       end.html_safe
     end
 
@@ -57,6 +68,10 @@ module Wiki
         space_after_headers: true,
         tables: true
       )
+    end
+
+    def sample_page
+      Page.new(community: h.current_community)
     end
   end
 end

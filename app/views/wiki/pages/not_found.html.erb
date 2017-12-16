@@ -1,3 +1,4 @@
 <% content_for(:title, "Wiki: Not Found") %>
 
-There is no wiki page named "<%= @path %>". Do you want to <%= link_to("create it", wiki_page_new_path) %>?
+There is no wiki page named "<%= @title %>". Do you want to
+<%= link_to("create it", new_wiki_page_path(slug: @slug)) %>?

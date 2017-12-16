@@ -16,6 +16,10 @@
       active_in_community?
     end
 
+    def index?
+      active_in_community?
+    end
+
     def show?
       active_in_community?
     end
@@ -25,6 +29,10 @@
     end
 
     def edit?
+      active_in_community?
+    end
+
+    def create?
       active_in_community?
     end
 
@@ -42,6 +50,10 @@
 
     def compare?
       active_in_community?
+    end
+
+    def permitted_attributes
+      [:title, :content, :comment]
     end
   end
 end

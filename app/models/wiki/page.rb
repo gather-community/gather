@@ -14,14 +14,36 @@ module Wiki
 
     validates :title, presence: true
 
+    before_save :set_slug
     after_save :create_new_version
 
-    def self.find_by_path_or_new(path)
-      find_by(path: path) || new(path: path, title: CGI.unescape(path))
+    def self.title_to_slug(title)
+      # Uses babosa gem
+      title.to_slug.normalize.to_s
+    end
+
+    def self.reserved_slug(type)
+      type.to_s
+    end
+
+    def self.create_home_page(community:, creator:)
+      create(
+        community: community,
+        creator: creator,
+        updator: creator,
+        content: I18n.t("wiki.home_page.content"),
+        home: true,
+        title: I18n.t("wiki.home_page.title"),
+        slug: reserved_slug(:home)
+      )
     end
 
     def last_version_number
       versions.maximum(:number) || 0
+    end
+
+    def to_param
+      slug
     end
 
     private
@@ -33,6 +55,18 @@ module Wiki
       v.comment = comment
       v.number = n + 1
       v.save!
+    end
+
+    def set_slug
+      self.slug = home? ? reserved_slug(:home) : title_to_slug(title)
+    end
+
+    def reserved_slug(type)
+      self.class.reserved_slug(type)
+    end
+
+    def title_to_slug(title)
+      self.class.title_to_slug(title)
     end
   end
 end

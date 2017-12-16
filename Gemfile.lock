@@ -79,6 +79,7 @@ GEM
       execjs
       json
     awesome_print (1.6.1)
+    babosa (1.0.2)
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -419,6 +420,7 @@ DEPENDENCIES
   acts_as_tenant (~> 0.4)
   attribute_normalizer
   awesome_print
+  babosa (~> 1.0)
   bootstrap-kaminari-views
   bootstrap-sass (~> 3.3.5)
   browser

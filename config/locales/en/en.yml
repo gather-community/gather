@@ -659,3 +659,9 @@ en:
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+
+  wiki:
+    home_page:
+      title: "Wiki Home Page"
+      content: "This is your **wiki home page**!\n\nYou can include a link to another wiki page like [[Favorite Cheeses]].\n\nYou can also link to [external web sites](http://timeanddate.com).\n\nYou can use Markdown formatting when editing wiki pages. [Learn more about Markdown here](https://guides.github.com/features/mastering-markdown/)."
+    not_found_create: "There is no wiki page named '%{title}'. You can create it below!"

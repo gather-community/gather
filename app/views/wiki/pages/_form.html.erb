@@ -3,8 +3,6 @@
 <% end %>
 
 <%= horizontal_form_for(page) do |f| %>
-  <%= hidden_field_tag :path, page.path %>
-
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>

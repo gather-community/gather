@@ -7,7 +7,7 @@ describe Wiki::PagePolicy do
     let(:page) { build(:wiki_page, community: community, creator: user) }
     let(:record) { page }
 
-    permissions :all?, :show?, :new?, :edit?, :update?, :history?, :compare? do
+    permissions :index?, :all?, :show?, :new?, :edit?, :create?, :update?, :history?, :compare? do
       it_behaves_like "permits users in community only"
     end
 

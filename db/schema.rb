@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212141818) do
+ActiveRecord::Schema.define(version: 20171215004015) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -537,7 +537,8 @@ ActiveRecord::Schema.define(version: 20171212141818) do
     t.text "content"
     t.datetime "created_at"
     t.integer "creator_id", null: false
-    t.string "path"
+    t.boolean "home", default: false, null: false
+    t.string "slug"
     t.string "title", null: false
     t.datetime "updated_at"
     t.integer "updator_id"
@@ -546,7 +547,7 @@ ActiveRecord::Schema.define(version: 20171212141818) do
   add_index "wiki_pages", ["cluster_id"], name: "index_wiki_pages_on_cluster_id", using: :btree
   add_index "wiki_pages", ["community_id"], name: "index_wiki_pages_on_community_id", using: :btree
   add_index "wiki_pages", ["creator_id"], name: "index_wiki_pages_on_creator_id", using: :btree
-  add_index "wiki_pages", ["path"], name: "index_wiki_pages_on_path", unique: true, using: :btree
+  add_index "wiki_pages", ["slug"], name: "index_wiki_pages_on_slug", unique: true, using: :btree
 
   add_foreign_key "accounts", "clusters"
   add_foreign_key "accounts", "communities"

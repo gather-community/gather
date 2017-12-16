@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171215004015) do
+ActiveRecord::Schema.define(version: 20171216131616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -520,9 +520,8 @@ ActiveRecord::Schema.define(version: 20171215004015) do
     t.text "content"
     t.integer "number", null: false
     t.integer "page_id", null: false
-    t.string "path"
-    t.string "title"
-    t.datetime "updated_at"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
     t.integer "updator_id", null: false
   end
 
@@ -535,19 +534,21 @@ ActiveRecord::Schema.define(version: 20171215004015) do
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.text "content"
-    t.datetime "created_at"
+    t.datetime "created_at", null: false
     t.integer "creator_id", null: false
     t.boolean "home", default: false, null: false
-    t.string "slug"
+    t.string "slug", null: false
     t.string "title", null: false
-    t.datetime "updated_at"
-    t.integer "updator_id"
+    t.datetime "updated_at", null: false
+    t.integer "updator_id", null: false
   end
 
   add_index "wiki_pages", ["cluster_id"], name: "index_wiki_pages_on_cluster_id", using: :btree
+  add_index "wiki_pages", ["community_id", "slug"], name: "index_wiki_pages_on_community_id_and_slug", unique: true, using: :btree
+  add_index "wiki_pages", ["community_id", "title"], name: "index_wiki_pages_on_community_id_and_title", unique: true, using: :btree
   add_index "wiki_pages", ["community_id"], name: "index_wiki_pages_on_community_id", using: :btree
   add_index "wiki_pages", ["creator_id"], name: "index_wiki_pages_on_creator_id", using: :btree
-  add_index "wiki_pages", ["slug"], name: "index_wiki_pages_on_slug", unique: true, using: :btree
+  add_index "wiki_pages", ["updator_id"], name: "index_wiki_pages_on_updator_id", using: :btree
 
   add_foreign_key "accounts", "clusters"
   add_foreign_key "accounts", "communities"

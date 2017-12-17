@@ -1,3 +1,4 @@
 en:
   wiki:
     revision_info: "Page revised on %{time} by %{user}"
+    preview_notice: "This is a preview. To save or further edit the page, use the form below."

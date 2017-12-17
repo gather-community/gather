@@ -157,6 +157,10 @@ module FeatureSpecHelpers
     have_css("h1", text: title)
   end
 
+  def have_alert(text)
+    have_css(".alert", text: text)
+  end
+
   # Compares the page URL, which is echoed in the footer in test mode only, with the given pattern.
   # Especially useful in cases where you want to wait for the page to load,
   # and there are no other distinguishing things to look for.

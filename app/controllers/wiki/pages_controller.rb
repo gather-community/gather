@@ -55,6 +55,7 @@ module Wiki
     def destroy
       authorize @page
       @page.destroy
+      flash[:success] = "Page deleted successfully."
       redirect_to home_path
     end
 
@@ -106,7 +107,10 @@ module Wiki
     end
 
     def redirect_on_success_or_rerender_on_error_or_preview(action)
-      if !params[:preview] && (params[:cancel] || @page.save)
+      if params[:preview]
+        flash.now[:notice] = t("wiki.preview_notice")
+        render action
+      elsif params[:cancel] || @page.save
         redirect_to wiki_page_path(@page)
       else
         render action

@@ -138,8 +138,13 @@ module NavHelper
         {
           name: :all,
           parent: :wiki,
-          path: "/wiki/all",
+          path: all_wiki_pages_path,
           permitted: policy(Wiki::Page.new(community: current_community)).all?
+        },{
+          name: :new,
+          parent: :wiki,
+          path: new_wiki_page_path,
+          permitted: policy(Wiki::Page.new(community: current_community)).create?
         }
       ]
     else

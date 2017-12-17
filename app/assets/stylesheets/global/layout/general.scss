@@ -1,12 +1,20 @@
 @media screen {
-  #content, .nav-wrapper, .subnav, #main-footer {
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  #content, .nav-wrapper, .subnav, #local-footer, #global-footer {
     max-width: $content-max-width;
     margin: 0 auto;
+    width: 100%;
   }
 
   #content {
     padding: 20px;
     line-height: $content-line-height;
+    flex: 1;
   }
 }
 

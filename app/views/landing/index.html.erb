@@ -5,28 +5,25 @@
   <%= render("layouts/head") %>
 </head>
 <body class="home">
-  <div id="main-wrapper">
-    <%= flash_messages %>
-    <div id="container">
-      <br/>
-      <div id="blurb">Life is better together.</div>
-      <div id="logo">
-        <%= image_tag("logo-white.png") %>
+  <%= flash_messages %>
+  <div id="container">
+    <br/>
+    <div id="blurb">Life is better together.</div>
+    <div id="logo">
+      <%= image_tag("logo-white.png") %>
+    </div>
+    <%= link_to(icon_tag("google") << " Sign in with Google",
+      user_omniauth_authorize_url(:google_oauth2, host: Settings.url.host),
+      class: "btn btn-primary btn-sign-in") %>
+    <div id="help-links">
+      <div>
+        <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>
       </div>
-      <%= link_to(icon_tag("google") << " Sign in with Google",
-        user_omniauth_authorize_url(:google_oauth2, host: Settings.url.host),
-        class: "btn btn-primary btn-sign-in") %>
-      <div id="help-links">
-        <div>
-          <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>
-        </div>
-        <div>
-          <%= link_to(icon_tag("question-circle") << " Need help signing in?", "#",
-            data: {toggle: "modal", target: "#help-modal"}) %>
-        </div>
+      <div>
+        <%= link_to(icon_tag("question-circle") << " Need help signing in?", "#",
+          data: {toggle: "modal", target: "#help-modal"}) %>
       </div>
     </div>
-    <div id="footer-pusher"></div>
   </div>
   <%= render("layouts/footer") %>
 

@@ -561,8 +561,8 @@ en:
       sign_out: "Sign Out"
     footer:
       wiki:
-        all: "All Pages"
-        new: "New Page"
+        all: "Wiki Page Listing"
+        new: "New Wiki Page"
 
   titles:
     meals/messages: "Send Meal Message"

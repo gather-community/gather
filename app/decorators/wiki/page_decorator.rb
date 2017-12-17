@@ -9,7 +9,7 @@ module Wiki
     end
 
     def revision_info
-      h.content_tag(:div, class: "wiki-page-revision-info") do
+      h.content_tag(:span, class: "wiki-page-revision-info") do
         h.t("wiki.revision_info", time: h.l(updated_at), user: updator.decorate.name_with_inactive)
       end
     end

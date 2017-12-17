@@ -106,7 +106,8 @@ form {
   }
 }
 
-#main-wrapper {
+// Including #content for specificity
+#content {
   .select2-container .select2-selection {
     border: 1px solid #ccc !important;
   }

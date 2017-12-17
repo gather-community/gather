@@ -159,6 +159,10 @@ en:
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
+        wiki/page:
+          attributes:
+            title:
+              reserved_slug: "This title is a special reserved word or phrase. Please choose another."
 
   custom_fields:
     labels:

@@ -2,6 +2,8 @@ module Wiki
   class Page < ActiveRecord::Base
     acts_as_tenant :cluster
 
+    RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze
+
     attr_accessor :comment
 
     belongs_to :community
@@ -12,9 +14,10 @@ module Wiki
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { order("LOWER(title)") }
 
-    validates :title, presence: true
+    validates :title, presence: true, uniqueness: {scope: :community}
+    validate :slug_not_reserved
 
-    before_save :set_slug
+    before_validation :set_slug
     after_save :create_new_version
 
     def self.title_to_slug(title)
@@ -58,15 +61,34 @@ module Wiki
     end
 
     def set_slug
-      self.slug = home? ? reserved_slug(:home) : title_to_slug(title)
+      self.slug = home? ? reserved_slug(:home) : title_to_slug_without_dupes
     end
 
     def reserved_slug(type)
       self.class.reserved_slug(type)
     end
 
+    # Gets the page's slug and avoids using one that is already taken.
+    def title_to_slug_without_dupes
+      base = title_to_slug(title)
+      suffix = nil
+      while self.class.in_community(community).where(slug: candidate = "#{base}#{suffix}").exists?
+        suffix = (suffix || 1) + 1
+      end
+      candidate
+    end
+
     def title_to_slug(title)
       self.class.title_to_slug(title)
+    end
+
+    def slug_not_reserved
+      # We use title_to_slug and not title_to_slug_without_dupes here so that a page title of
+      # 'Home' will raise a validation error.
+      naive_slug = title_to_slug(title)
+      if RESERVED_SLUGS.include?(naive_slug)
+        errors.add(:title, :reserved_slug)
+      end
     end
   end
 end

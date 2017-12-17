@@ -4,6 +4,6 @@ class Cluster < ActiveRecord::Base
 
   def self.cluster_based_models
     Rails.application.eager_load! if Rails.env.development?
-    ActiveRecord::Base.descendants.select{|c| c.column_names.include?("cluster_id")}
+    ActiveRecord::Base.descendants.select { |c| c.column_names.include?("cluster_id") }
   end
 end

@@ -1,8 +1,5 @@
 module Wiki
   class PagesController < ApplicationController
-    include Irwi::Extensions::Controllers::WikiPageAttachments
-    include Irwi::Support::TemplateFinder
-
     before_action :find_page, only: [:history, :compare, :edit, :update, :destroy]
     before_action -> { nav_context(:wiki) }
 
@@ -80,8 +77,7 @@ module Wiki
 
         old_num, new_num = new_num, old_num if new_num < old_num # Swapping them if last < first
 
-        versions = @page.versions.between(old_num, new_num)
-        @versions = Irwi.config.paginator.paginate(versions, page: params[:page])
+        @versions = @page.versions.between(old_num, new_num)
         @new_version = @versions.first.number == new_num ? @versions.first : versions.first
         @old_version = @versions.last.number == old_num ? @versions.last : versions.last
       end

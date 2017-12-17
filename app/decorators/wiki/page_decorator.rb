@@ -4,7 +4,7 @@ module Wiki
 
     def formatted_content
       h.content_tag(:div, class: "wiki-content") do
-        h.sanitize(render_markdown(linkify(h.wiki_show_attachments(content)).html_safe))
+        h.sanitize(render_markdown(linkify(content).html_safe))
       end
     end
 

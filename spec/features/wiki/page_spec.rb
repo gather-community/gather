@@ -2,6 +2,8 @@ require "rails_helper"
 
 feature "pages", js: true do
   let(:actor) { create(:user) }
+  let(:other_community) { create(:community, cluster: actor.cluster) }
+  let!(:decoy_page) { create(:wiki_page, community: other_community, title: "Another Page") }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -49,16 +51,16 @@ feature "pages", js: true do
     expect(page).to have_content("Version two")
 
     click_on("New Wiki Page")
-    fill_in("Title", with: "Yet Another Page")
+    fill_in("Title", with: "Boring Page")
     fill_in("Content", with: "apple **banana** cherry")
     click_on("Create Page")
     expect(page).to have_content("apple banana cherry")
 
     click_on("Wiki Page Listing")
-    expect(page).to have_css("li", text: "Another Page")
-    expect(page).to have_css("li", text: "Yet Another Page")
+    expect(page).to have_css("li", text: "Another Page", count: 1) # Ensure no decoy
+    expect(page).to have_css("li", text: "Boring Page")
 
-    click_on("Yet Another Page")
+    click_on("Boring Page")
     accept_confirm { click_on("Delete") }
     expect(page).to have_alert("Page deleted successfully.")
     expect(page).to have_content("Here is a link to Another Page")

@@ -51,14 +51,14 @@ feature "resources", js: true do
 
   scenario "deactivate/activate/delete" do
     visit(edit_reservations_resource_path(resources.first))
-    accept_confirm { click_on("Deactivate Resource") }
+    accept_confirm { click_on("Deactivate") }
     expect_success
     click_on("#{resources.first.name} (Inactive)")
     click_on("reactivate it")
     expect_success
     expect(page).not_to have_content("#{resources.first.name} (Inactive)")
     click_on(resources.first.name)
-    accept_confirm { click_on("Delete Resource") }
+    accept_confirm { click_on("Delete") }
     expect_success
     expect(page).not_to have_content(resources.first.name)
   end

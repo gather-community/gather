@@ -99,6 +99,18 @@ describe UserPolicy do
       end
     end
 
+    shared_examples_for "permits admins except self and guardians" do
+      it_behaves_like "permits admins but not regular users"
+
+      it "denies action on self" do
+        expect(subject).not_to permit(user, user)
+      end
+
+      it "denies action on guardians for own children" do
+        expect(subject).not_to permit(guardian, child)
+      end
+    end
+
     permissions :index? do
       it "permits action on active users" do
         expect(subject).to permit(user, User)
@@ -161,16 +173,13 @@ describe UserPolicy do
       it_behaves_like "permits admins but not regular users"
     end
 
-    permissions :activate?, :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
-      it_behaves_like "permits admins but not regular users"
+    permissions :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
+      it_behaves_like "permits admins except self and guardians"
+    end
 
-      it "denies action on self" do
-        expect(subject).not_to permit(user, user)
-      end
-
-      it "denies action on guardians for own children" do
-        expect(subject).not_to permit(guardian, child)
-      end
+    permissions :activate? do
+      before { record.deactivate }
+      it_behaves_like "permits admins except self and guardians"
     end
 
     permissions :cluster_adminify? do

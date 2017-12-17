@@ -12,15 +12,28 @@ describe Meals::FormulaPolicy do
       it_behaves_like "permits users in cluster"
     end
 
-    permissions :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do
+    permissions :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do
+      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+    end
+
+    permissions :activate? do
+      before { record.deactivate }
       it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
     end
 
     context "with existing meals" do
       before { allow(formula).to receive(:has_meals?).and_return(true) }
 
-      permissions :activate?, :deactivate?, :edit?, :update? do
+      permissions :deactivate?, :edit?, :update? do
         it "permits" do
+          expect(subject).to permit(admin, formula)
+        end
+      end
+
+      permissions :activate? do
+        before { record.deactivate }
+
+        it "permits if formula is inactive" do
           expect(subject).to permit(admin, formula)
         end
       end
@@ -35,8 +48,16 @@ describe Meals::FormulaPolicy do
     context "if default formula" do
       before { formula.is_default = true }
 
-      permissions :edit?, :update?, :activate? do
+      permissions :edit?, :update? do
         it "permits" do
+          expect(subject).to permit(admin, formula)
+        end
+      end
+
+      permissions :activate? do
+        before { record.deactivate }
+
+        it "permits if formula is inactive" do
           expect(subject).to permit(admin, formula)
         end
       end

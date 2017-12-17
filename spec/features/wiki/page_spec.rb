@@ -62,7 +62,7 @@ feature "pages", js: true do
 
     click_on("Boring Page")
     accept_confirm { click_on("Delete") }
-    expect(page).to have_alert("Page deleted successfully.")
+    expect_success
     expect(page).to have_content("Here is a link to Another Page")
   end
 end

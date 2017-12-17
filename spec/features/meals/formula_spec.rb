@@ -18,7 +18,7 @@ feature "formulas", js: true do
 
   scenario "create, show, and update" do
     visit(meals_formulas_path)
-    click_link("Create Formula")
+    click_link("Create")
     fill_in("Name", with: "Free Meal")
     check("Default")
     find("#meals_formula_meal_calc_type").select("Fixed")
@@ -32,7 +32,7 @@ feature "formulas", js: true do
 
     click_link("Free Meal")
     expect(page).to have_content("$2.00")
-    click_on("Edit Formula")
+    click_on("Edit")
     fill_in("Teen (Meat)", with: "2.99")
     click_on("Update Formula")
     expect_success
@@ -43,16 +43,16 @@ feature "formulas", js: true do
 
   scenario "deactivate/activate/delete" do
     visit(edit_meals_formula_path(formulas.first))
-    accept_confirm { click_on("Deactivate Formula") }
+    accept_confirm { click_on("Deactivate") }
     expect_success
     click_link("#{formulas.first.name} (Inactive)")
-    click_link("Edit Formula")
+    click_link("Edit")
     click_link("reactivate it")
     expect_success
     expect(page).not_to have_content("#{formulas.first.name} (Inactive)")
     click_link(formulas.first.name)
-    click_link("Edit Formula")
-    accept_confirm { click_on("Delete Formula") }
+    click_link("Edit")
+    accept_confirm { click_on("Delete") }
     expect_success
     expect(page).not_to have_content(formulas.first.name)
   end

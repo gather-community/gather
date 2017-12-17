@@ -7,7 +7,12 @@ describe Reservations::ResourcePolicy do
     let(:resource) { build(:resource, community: community) }
     let(:record) { resource }
 
-    permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :activate?, :deactivate? do
+    permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do
+      it_behaves_like "permits admins but not regular users"
+    end
+
+    permissions :activate? do
+      before { record.deactivate }
       it_behaves_like "permits admins but not regular users"
     end
 

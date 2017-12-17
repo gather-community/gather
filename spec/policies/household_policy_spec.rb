@@ -68,7 +68,12 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community users but denies on all others"
     end
 
-    permissions :new?, :create?, :activate?, :deactivate?, :administer? do
+    permissions :new?, :create?, :deactivate?, :administer? do
+      it_behaves_like "permits admins but not regular users"
+    end
+
+    permissions :activate? do
+      before { record.deactivate }
       it_behaves_like "permits admins but not regular users"
     end
 

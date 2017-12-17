@@ -43,7 +43,7 @@ feature "meal crud", js: true do
       # Delete
       find("a", text: "Southern Beans").click
       click_link("Edit")
-      click_on("Delete Meal")
+      click_on("Delete")
       expect_success
       expect(page).not_to have_content("Southern Beans and Rice")
     end
@@ -121,6 +121,7 @@ feature "meal crud", js: true do
     click_link("Summary")
     expect(page).to have_content("This meal will require")
     expect(page).to have_content("Southern Beans and Rice")
+    page.driver.go_back
 
     # Close/reopen
     click_link("Close")

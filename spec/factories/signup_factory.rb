@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :signup do
     household
     meal

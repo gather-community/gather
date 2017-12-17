@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :reservation_protocol, class: "Reservations::Protocol" do
     transient do
       resources []

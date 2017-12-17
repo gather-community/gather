@@ -1,7 +1,7 @@
 module Utils
   module FakeData
     class Generator
-      include FactoryGirl::Syntax::Methods
+      include FactoryBot::Syntax::Methods
 
       protected
 

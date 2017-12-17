@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :transaction, class: "Billing::Transaction" do
     incurred_on "2015-10-18"
     code "othchg"

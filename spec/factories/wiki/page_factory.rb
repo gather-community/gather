@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :wiki_page, class: "Wiki::Page" do
     community { default_community }
     content { Faker::Lorem.paragraph(2) }

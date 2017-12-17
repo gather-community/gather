@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :account, class: "Billing::Account" do
     household
     community { default_community }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :meal_message, class: "Meals::Message" do
     meal
     association :sender, factory: :user

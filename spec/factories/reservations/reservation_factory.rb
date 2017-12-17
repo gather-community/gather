@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :reservation, class: "Reservations::Reservation" do
     name "Fun times"
     resource

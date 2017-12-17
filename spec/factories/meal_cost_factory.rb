@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :meal_cost, class: "Meals::Cost" do
     ingredient_cost 10.00
     pantry_cost 2.00

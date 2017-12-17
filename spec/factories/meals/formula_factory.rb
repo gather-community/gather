@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     sequence(:name) { |n| "Formula #{n}" } 
     community { default_community }

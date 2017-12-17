@@ -55,7 +55,7 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
   config.include FeatureSpecHelpers, type: :feature
   config.include RequestSpecHelpers, type: :request
@@ -77,7 +77,7 @@ RSpec.configure do |config|
 
   # We have to set a default tenant to avoid NoTenantSet errors.
   # We also reset TZ to default in case previous spec changed it.
-  cluster = FactoryGirl.create(:cluster, name: "Default")
+  cluster = FactoryBot.create(:cluster, name: "Default")
   config.around do |example|
     Time.zone = "UTC"
     with_tenant(cluster) do

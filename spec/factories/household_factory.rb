@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :household do
     transient do
       with_members true
@@ -25,7 +25,7 @@ FactoryGirl.define do
       end
     end
 
-    # NOTE: Don't try to assign FactoryGirl created users directly to households as they already
+    # NOTE: Don't try to assign FactoryBot created users directly to households as they already
     # have households and it doesn't work. Instead, create households first and then assign them to users.
     after(:create) do |household, evaluator|
       if household.users.empty? && evaluator.with_members

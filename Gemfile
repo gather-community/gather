@@ -59,5 +59,4 @@ group :development, :test do
   gem "selenium-webdriver", "~> 2.0"
   gem "spring", "~> 1.3"
   gem "term-ansicolor", "~> 1.3"
-  gem "web-console", "~> 2.0"
 end

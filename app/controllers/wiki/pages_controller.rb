@@ -14,7 +14,7 @@ module Wiki
     end
 
     def show
-      @page = Page.find_by(slug: params[:slug])
+      @page = Page.find_by(community: current_community, slug: params[:slug])
       if @page.nil?
         if params[:slug] == Page.reserved_slug(:home)
           @page = Page.create_home_page(community: current_community, creator: current_user)
@@ -98,7 +98,7 @@ module Wiki
     end
 
     def find_page
-      @page = Page.find_by!(slug: params[:slug])
+      @page = Page.find_by!(community: current_community, slug: params[:slug])
     end
 
     def sample_page

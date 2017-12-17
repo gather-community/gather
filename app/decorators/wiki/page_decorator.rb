@@ -42,7 +42,7 @@ module Wiki
         text = "#$2#$3"
         title, anchor = if $1 then $1.split('#', 2) else $2 end
         link_class = nil
-        if page = Page.find_by(title: title)
+        if page = Page.find_by(community: community, title: title)
           path = h.wiki_page_path(page) + (anchor ? "##{anchor}" : "")
         else
           link_class = "not-found"
@@ -71,7 +71,7 @@ module Wiki
     end
 
     def sample_page
-      Page.new(community: h.current_community)
+      Page.new(community: community)
     end
   end
 end

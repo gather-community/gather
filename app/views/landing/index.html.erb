@@ -12,7 +12,7 @@
       <%= image_tag("logo-white.png") %>
     </div>
     <%= link_to(icon_tag("google") << " Sign in with Google",
-      user_omniauth_authorize_url(:google_oauth2, host: Settings.url.host),
+      user_google_oauth2_omniauth_authorize_url(host: Settings.url.host),
       class: "btn btn-primary btn-sign-in") %>
     <div id="help-links">
       <div>

@@ -8,7 +8,7 @@
 #
 # See Reservations::Rule::NAMES for list of rule attributes
 module Reservations
-  class Protocol < ActiveRecord::Base
+  class Protocol < ApplicationRecord
     acts_as_tenant(:cluster)
 
     has_many :protocolings, class_name: "Reservations::Protocoling",

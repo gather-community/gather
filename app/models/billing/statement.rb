@@ -1,5 +1,5 @@
 module Billing
-  class Statement < ActiveRecord::Base
+  class Statement < ApplicationRecord
     include TimeCalculable
     # Used to compute an assumed due date when community has no due date policy.
     # Used when e.g. determining when to send payment reminders.

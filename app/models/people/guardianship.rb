@@ -1,5 +1,5 @@
 module People
-  class Guardianship < ActiveRecord::Base
+  class Guardianship < ApplicationRecord
     acts_as_tenant(:cluster)
 
     belongs_to :guardian, class_name: "User"

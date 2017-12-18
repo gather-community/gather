@@ -1,4 +1,4 @@
-class Community < ActiveRecord::Base
+class Community < ApplicationRecord
   include CustomFields
 
   SLUG_REGEX = /[a-z][a-z\-]*/

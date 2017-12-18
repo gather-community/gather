@@ -1,4 +1,4 @@
-class Meal < ActiveRecord::Base
+class Meal < ApplicationRecord
   include TimeCalculable
 
   DEFAULT_TIME = 18.hours + 15.minutes

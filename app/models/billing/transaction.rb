@@ -1,5 +1,5 @@
 module Billing
-  class Transaction < ActiveRecord::Base
+  class Transaction < ApplicationRecord
     TYPES = [
       OpenStruct.new(code: "meal", charge?: true),
       OpenStruct.new(code: "oldbal", charge?: true, credit?: true),

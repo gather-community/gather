@@ -1,5 +1,5 @@
 # A group of related communities.
-class Cluster < ActiveRecord::Base
+class Cluster < ApplicationRecord
   has_many :communities, inverse_of: :cluster, dependent: :destroy
 
   def self.cluster_based_models

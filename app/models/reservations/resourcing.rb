@@ -1,5 +1,5 @@
 module Reservations
-  class Resourcing < ActiveRecord::Base
+  class Resourcing < ApplicationRecord
     acts_as_tenant(:cluster)
 
     belongs_to :meal

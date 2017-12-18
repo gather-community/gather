@@ -1,5 +1,5 @@
 module People
-  class Pet < ActiveRecord::Base
+  class Pet < ApplicationRecord
     acts_as_tenant(:cluster)
 
     belongs_to :household, inverse_of: :pets

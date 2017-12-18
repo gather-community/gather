@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Deactivatable, Phoneable, PhotoDestroyable
 
   ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator)

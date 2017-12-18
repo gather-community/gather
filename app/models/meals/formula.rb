@@ -1,5 +1,5 @@
 module Meals
-  class Formula < ActiveRecord::Base
+  class Formula < ApplicationRecord
     include Deactivatable
 
     attr_accessor :signup_types # For validation error setting only

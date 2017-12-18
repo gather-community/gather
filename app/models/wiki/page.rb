@@ -1,5 +1,5 @@
 module Wiki
-  class Page < ActiveRecord::Base
+  class Page < ApplicationRecord
     acts_as_tenant :cluster
 
     RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze

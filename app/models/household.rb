@@ -1,4 +1,4 @@
-class Household < ActiveRecord::Base
+class Household < ApplicationRecord
   include Deactivatable
 
   acts_as_tenant(:cluster)

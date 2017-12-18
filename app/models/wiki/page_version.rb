@@ -1,5 +1,5 @@
 module Wiki
-  class PageVersion < ActiveRecord::Base
+  class PageVersion < ApplicationRecord
     acts_as_tenant :cluster
 
     belongs_to :page, class_name: "Wiki::Page"

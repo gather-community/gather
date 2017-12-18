@@ -1,5 +1,5 @@
 module Reservations
-  class Resource < ActiveRecord::Base
+  class Resource < ApplicationRecord
     include PhotoDestroyable, Deactivatable
 
     DEFAULT_CALENDAR_VIEWS = %i(week month)

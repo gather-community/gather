@@ -1,4 +1,4 @@
-class Signup < ActiveRecord::Base
+class Signup < ApplicationRecord
   MAX_PEOPLE_PER_TYPE = 10
   MAX_COMMENT_LENGTH = 500
   DINER_TYPES = %w(adult senior teen big_kid little_kid)

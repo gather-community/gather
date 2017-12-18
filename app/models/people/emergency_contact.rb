@@ -1,5 +1,5 @@
 module People
-  class EmergencyContact < ActiveRecord::Base
+  class EmergencyContact < ApplicationRecord
     include Phoneable
 
     acts_as_tenant(:cluster)

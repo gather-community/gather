@@ -1,4 +1,4 @@
-class CreditLimit < ActiveRecord::Base
+class CreditLimit < ApplicationRecord
 end
 
 class AddCreditLimitToAccounts < ActiveRecord::Migration

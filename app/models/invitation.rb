@@ -1,5 +1,5 @@
 # Join model for Meals and Communities
-class Invitation < ActiveRecord::Base
+class Invitation < ApplicationRecord
   acts_as_tenant(:cluster)
 
   belongs_to :meal

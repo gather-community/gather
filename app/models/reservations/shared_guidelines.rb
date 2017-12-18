@@ -1,5 +1,5 @@
 module Reservations
-  class SharedGuidelines < ActiveRecord::Base
+  class SharedGuidelines < ApplicationRecord
     acts_as_tenant :cluster
     belongs_to :community
     has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion",

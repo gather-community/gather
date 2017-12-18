@@ -1,4 +1,4 @@
-class Assignment < ActiveRecord::Base
+class Assignment < ApplicationRecord
   ROLES = %w(head_cook asst_cook table_setter cleaner) # In order
 
   acts_as_tenant(:cluster)

@@ -1,5 +1,5 @@
 module Reservations
-  class Reservation < ActiveRecord::Base
+  class Reservation < ApplicationRecord
     NAME_MAX_LENGTH = 24
 
     acts_as_tenant(:cluster)

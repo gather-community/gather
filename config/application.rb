@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require_relative '../lib/disable_tenant_scoping'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -34,7 +35,7 @@ module Gather
 
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
-    config.middleware.insert_before 'Warden::Manager', 'DisableTenantScoping'
+    config.middleware.insert_before Warden::Manager, DisableTenantScoping
 
     Devise.setup do |config|
       config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret

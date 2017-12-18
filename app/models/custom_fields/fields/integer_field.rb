@@ -6,7 +6,7 @@ module CustomFields
       end
 
       def normalize(value)
-        if value.is_a?(Fixnum)
+        if value.is_a?(Integer)
           value
         elsif value.nil? || value.is_a?(String) && value.strip == ""
           nil

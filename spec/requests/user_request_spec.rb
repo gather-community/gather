@@ -26,7 +26,7 @@ describe "user request" do
 
     context "creating normally" do
       it "should succeed" do
-        post users_path, user: basic_params
+        post users_path, params: {user: basic_params}
         expect_successful_create_or_update
       end
     end
@@ -34,7 +34,7 @@ describe "user request" do
     context "creating with outside household" do
       it "should error" do
         expect do
-          post users_path, user: basic_params.merge(household_id: outside_household.id)
+          post users_path, params: {user: basic_params.merge(household_id: outside_household.id)}
         end.to raise_error(Pundit::NotAuthorizedError)
       end
     end
@@ -45,7 +45,7 @@ describe "user request" do
 
     context "trying to change to authorized household" do
       it "should succeed" do
-        patch user_path(user), {user: {household_by_id: "true", household_id: new_household.id}}
+        patch user_path(user), params: {user: {household_by_id: "true", household_id: new_household.id}}
         expect_successful_create_or_update
       end
     end
@@ -55,7 +55,7 @@ describe "user request" do
 
       context "changing non-restricted attrib" do
         it "should succeed" do
-          patch user_path(user), {user: {
+          patch user_path(user), params: {user: {
             household_by_id: "true",
             household_id: user.household_id,
             first_name: "Jorpo"
@@ -68,7 +68,7 @@ describe "user request" do
       context "trying to change household" do
         it "should error" do
           expect do
-            patch user_path(user), {user: {household_by_id: "true", household_id: new_household.id}}
+            patch user_path(user), params: {user: {household_by_id: "true", household_id: new_household.id}}
           end.to raise_error(Pundit::NotAuthorizedError)
         end
       end
@@ -77,14 +77,14 @@ describe "user request" do
     context "trying to change to unauthorized household" do
       it "should error" do
         expect do
-          patch user_path(user), {user: {household_by_id: "true", household_id: outside_household.id}}
+          patch user_path(user), params: {user: {household_by_id: "true", household_id: outside_household.id}}
         end.to raise_error(Pundit::NotAuthorizedError)
       end
     end
 
     context "trying to change household via nested attributes" do
       it "should not change household" do
-        patch user_path(user), {user: {
+        patch user_path(user), params: {user: {
           household_by_id: "false",
           household_attributes: {
             id: new_household.id

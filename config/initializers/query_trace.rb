@@ -1,10 +1,7 @@
 if Rails.env.development? || ENV['QUERY_TRACE']
-  require 'term/ansicolor'
-
   # yeilds a stacktrace for each SQL query
   # put this file in config/initializers
   class QueryTrace < ActiveSupport::LogSubscriber
-    include Term::ANSIColor
     attr_accessor :trace_queries
 
     def sql(event)  #:nodoc:
@@ -13,8 +10,8 @@ if Rails.env.development? || ENV['QUERY_TRACE']
       first_line = stack.shift
       return unless first_line
 
-      msg = prefix + bold + cyan + "#{first_line}\n" + reset
-      msg += cyan + stack.join("\n") + reset
+      msg = prefix + "#{first_line}\n"
+      msg += stack.join("\n")
       debug msg
     end
 
@@ -68,7 +65,7 @@ if Rails.env.development? || ENV['QUERY_TRACE']
   protected
 
     def prefix  #:nodoc:
-      bold(magenta('Called from: ')) + reset
+      'Called from: '
     end
   end
 

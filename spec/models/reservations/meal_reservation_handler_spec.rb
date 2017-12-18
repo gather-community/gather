@@ -53,7 +53,7 @@ RSpec.describe Reservations::MealReservationHandler, type: :model do
           meal.resources = [resource2]
           handler.build_reservations
           meal.save!
-          expect(meal.reservations(true).first.resource).to eq resource2
+          expect(meal.reservations.reload.first.resource).to eq resource2
           expect(meal.reservations.size).to eq 1
         end
 
@@ -79,7 +79,7 @@ RSpec.describe Reservations::MealReservationHandler, type: :model do
           meal.title = "Nosh time"
           handler.build_reservations
           meal.save!
-          expect(meal.reservations(true).first.name).to eq "Meal: Nosh time"
+          expect(meal.reservations.reload.first.name).to eq "Meal: Nosh time"
           expect(meal.reservations.first.note).to eq "Foo"
         end
       end

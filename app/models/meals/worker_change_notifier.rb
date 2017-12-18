@@ -24,7 +24,7 @@ module Meals
     end
 
     def get_assigns
-      meal.assignments(true).map{ |a| AssociationProxy.new(a) }
+      meal.assignments.reload.map { |a| AssociationProxy.new(a) }
     end
   end
 

@@ -9,7 +9,7 @@ module Meals
         @message.kind = "cancellation"
         @message.recipient_type = "all"
       end
-      show_cancel_notice
+      show_cancel_notice_if_appropriate
       authorize @message
     end
 
@@ -24,7 +24,7 @@ module Meals
         Delayed::Job.enqueue(MessageJob.new(@message.id))
         redirect_to meal_path(@meal)
       else
-        show_cancel_notice
+        show_cancel_notice_if_appropriate
         set_validation_error_notice(@message)
         render :new
       end
@@ -32,8 +32,8 @@ module Meals
 
     private
 
-    def show_cancel_notice
-      flash.now[:alert] = I18n.t("meals/messages.cancel_notice")
+    def show_cancel_notice_if_appropriate
+      flash.now[:alert] = I18n.t("meals/messages.cancel_notice") if @message.cancellation?
     end
 
     def message_params

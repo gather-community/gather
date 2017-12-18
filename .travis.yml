@@ -39,5 +39,3 @@ script:
   - bundle exec rake db:schema:load
   - bundle exec rake db:test:prepare
   - bundle exec rspec --tag ~notravis
-rvm:
-  - 2.2.2 # This should match the version in .ruby-version

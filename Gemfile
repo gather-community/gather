@@ -58,5 +58,4 @@ group :development, :test do
   gem "rspec-rails", "~> 3.0"
   gem "selenium-webdriver", "~> 2.0"
   gem "spring", "~> 1.3"
-  gem "term-ansicolor", "~> 1.3"
 end

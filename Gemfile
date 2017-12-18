@@ -13,7 +13,7 @@ gem "config", "~> 1.4"
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails", branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
-gem "devise", "~> 3.5.1"
+gem "devise", "~> 4.2"
 gem "diffy", "~> 3.2"
 gem "draper", "~> 2.1"
 gem "dropzonejs-rails", "~> 0.7"

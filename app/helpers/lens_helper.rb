@@ -5,12 +5,15 @@ module LensHelper
   end
 
   class LensBar
-    attr_accessor :template, :lens, :options
+    attr_accessor :route_params, :template, :lens, :options
 
     def initialize(template, lens:, options:)
       self.template = template
       self.lens = lens
       self.options = options
+
+      # This is ok because params are never used in Lens to do mass assignments.
+      self.route_params = params.dup.permit!
     end
 
     def to_html
@@ -52,7 +55,8 @@ module LensHelper
 
       new_url = url_for(
         host: "' + this.value + '.#{Settings.url.host}",
-        params: params.except(:action, :controller).merge(field.options[:required] ? {} : {community: "this"})
+        route_params: route_params.except(:action, :controller).
+          merge(field.options[:required] ? {} : {community: "this"})
       )
 
       onchange = if field.options[:subdomain]
@@ -95,7 +99,7 @@ module LensHelper
     # Could end up with collisions here in future. Should refactor to scope this better.
     def time_field(field)
       opts = %w(past finalizable all)
-      opts.delete("finalizable") if params[:action] == "jobs"
+      opts.delete("finalizable") if route_params[:action] == "jobs"
       opt_key = "simple_form.options.meal.time"
       select_tag("time",
         options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:time]),

@@ -9,7 +9,7 @@ class UploadsController < ApplicationController
         render plain: errors.join(", "), status: 422
       else
         object.send(params[:attribute]).save_tmp
-        render nothing: true
+        head :ok
       end
     end
   end
@@ -18,7 +18,7 @@ class UploadsController < ApplicationController
     authorize Upload
     object = build_tmp_object
     object.send(params[:attribute]).destroy
-    render nothing: true
+    head :ok
   end
 
   private

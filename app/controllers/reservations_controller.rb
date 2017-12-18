@@ -104,7 +104,7 @@ class ReservationsController < ApplicationController
 
     if request.xhr?
       if @reservation.update_attributes(reservation_params.merge(guidelines_ok: "1"))
-        render nothing: true
+        head :ok
       else
         render partial: "update_error_messages", status: 422
       end

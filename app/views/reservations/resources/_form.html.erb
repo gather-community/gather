@@ -9,9 +9,9 @@
       <%= f.input :photo_destroy, as: :hidden %>
       <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
-      <%= f.input :meal_hostable, as: :select, include_blank: false, required: true %>
+      <%= f.input :meal_hostable, as: :select, required: true %>
       <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS,
-        include_blank: false, required: true %>
+        required: true %>
       <%= f.input :guidelines %>
 
       <%= form_actions do %>

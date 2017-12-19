@@ -55,7 +55,7 @@ module LensHelper
 
       new_url = url_for(
         host: "' + this.value + '.#{Settings.url.host}",
-        route_params: route_params.except(:action, :controller).
+        params: route_params.except(:action, :controller).
           merge(field.options[:required] ? {} : {community: "this"})
       )
 

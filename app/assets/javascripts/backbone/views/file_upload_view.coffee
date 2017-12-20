@@ -61,6 +61,9 @@ Gather.Views.FileUploadView = Backbone.View.extend
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()
 
+  isUploading: ->
+    @dropzone.getUploadingFiles().length > 0 || @dropzone.getQueuedFiles().length > 0;
+
   # Part of a ducktype defined by the jquery.dirtyForms plugin.
   # The file upload is dirty if any files have been dragged,
   # or if the existing file has been marked for deletion.

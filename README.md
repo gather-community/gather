@@ -20,6 +20,8 @@ To install the software below we recommend the following package managers:
 1. PostgreSQL v9.2+ (database)
 1. ImageMagick
 1. Set up a Gather OAuth client, if you don't have one, on Google Developers.
+1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
+    1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
 
 ## Development Setup Guide
 Follow these steps to setup a development environment for Gather.

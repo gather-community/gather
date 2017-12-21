@@ -41,17 +41,29 @@ module CustomFields
       end
 
       def []=(key, new_value)
-        entries_by_key[key.to_sym].try(:update, new_value)
+        entries_by_key[key.to_sym].try(:update, new_value, notify: true)
       end
 
-      def update(new_hash)
+      # The notify parameter tells us if we should notify the parent on update.
+      # Updates happen recursively and we don't want to notify parents for every single node that
+      # gets updated, just the topmost node that is being updated. That's why we pass notify: false`
+      # to child updates.
+      # notify is also false by default here because update may be used in other internal cases.
+      # We just want to notify the parent in specific cases where the user is setting values via the []=
+      # accessor or the dynamic assignment methods. This is accomplished by passing true above in []=.
+      def update(new_hash, notify: false)
         check_hash(new_hash)
         new_hash = new_hash.with_indifferent_access
         entries.each do |entry|
           if new_hash.has_key?(entry.key)
-            entry.update(new_hash[entry.key])
+            entry.update(new_hash[entry.key], notify: false)
           end
         end
+        notify_of_update if notify
+      end
+
+      def notify_of_update
+        parent.notify_of_update
       end
 
       # Runs validations and sets error on parent GroupEntry if invalid

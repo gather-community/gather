@@ -1,5 +1,6 @@
-class FakeCustomFieldActiveRecordModel
+class FakeCustomFieldActiveRecordModel < ActiveRecord::Base
   include CustomFields
+
   custom_fields :settings, spec: [
     {key: "fruit", type: "enum", options: %w(apple banana peach), required: true},
     {key: "info", type: "group", fields: [
@@ -8,15 +9,13 @@ class FakeCustomFieldActiveRecordModel
     ]}
   ]
 
-  # Stub AR read/write methods
-
-  def read_attribute(symbol)
-    @__attribs__ ||= {}
-    @__attribs__[symbol]
+  def self.create_table
+    ActiveRecord::Base.connection.create_table(table_name, force: true) do |t|
+      t.column :settings, :jsonb
+    end
   end
 
-  def write_attribute(symbol, value)
-    @__attribs__ ||= {}
-    @__attribs__[symbol] = value
+  def self.drop_table
+    ActiveRecord::Base.connection.drop_table(table_name)
   end
 end

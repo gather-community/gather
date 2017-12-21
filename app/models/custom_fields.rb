@@ -36,6 +36,7 @@ module CustomFields
         # If no instance exists in inst var, create an empty one.
         if cur_instance.nil?
           instance_variable_set("@#{attrib_name}", Instance.new(
+            host: self,
             spec: spec,
             instance_data: respond_to?(:read_attribute) ? read_attribute(attrib_name) : {},
             model_i18n_key: i18n_key,
@@ -51,13 +52,14 @@ module CustomFields
         if cur_instance.is_a?(Instance)
           cur_instance.update(hash)
         else
-          write_attribute(attrib_name, hash) if respond_to?(:write_attribute)
-          instance_variable_set("@#{attrib_name}", Instance.new(
+          cur_instance = Instance.new(
+            host: self,
             spec: spec,
             instance_data: hash,
             model_i18n_key: i18n_key,
             attrib_name: attrib_name
-          ))
+          )
+          instance_variable_set("@#{attrib_name}", cur_instance)
         end
       end
     end

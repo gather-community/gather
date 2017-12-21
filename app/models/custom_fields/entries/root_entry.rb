@@ -3,8 +3,8 @@ module CustomFields
     class RootEntry < GroupEntry
       attr_accessor :model_i18n_key, :attrib_name
 
-      def initialize(field:, hash:, model_i18n_key:, attrib_name:)
-        super(field: field, hash: hash)
+      def initialize(field:, hash:, model_i18n_key:, attrib_name:, parent:)
+        super(field: field, hash: hash, parent: parent)
         self.model_i18n_key = model_i18n_key
         self.attrib_name = attrib_name
       end

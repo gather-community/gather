@@ -29,8 +29,16 @@ module CustomFields
         end
       end
 
-      def update(value)
+      # Should never need to be called directly by the user.
+      # Called via the [] method on the parent GroupEntry or the define_method methods.
+      # The notify parameter tells us if we should notify the parent on update.
+      # Updates happen recursively and we don't want to notify parents for every single node that
+      # gets updated, just the topmost node that is being updated.
+      # notify is false by default here because update may be used in other internal cases.
+      # We just want to notify the parent when we are explicitly told to.
+      def update(value, notify: false)
         hash[key] = field.normalize(value)
+        parent.notify_of_update if notify
       end
 
       def value

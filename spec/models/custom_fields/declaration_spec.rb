@@ -39,10 +39,20 @@ RSpec.describe "custom field declaration", type: :model do
   describe "for ActiveRecord model" do
     let(:fake) { FakeCustomFieldActiveRecordModel.new }
 
+    around do |example|
+      FakeCustomFieldActiveRecordModel.create_table
+      example.run
+      FakeCustomFieldActiveRecordModel.drop_table
+    end
+
     it "should properly store and allow updates to values if none exist to begin with" do
       fake.settings = {"fruit" => "apple", info: {complete: true}}
       fake.settings.info.comment = "Yo!"
-      expect(fake.read_attribute(:settings)).to eq({fruit: "apple", info: {complete: true, comment: "Yo!"}})
+      expect(fake.read_attribute(:settings)).to eq(
+        {"fruit" => "apple", "info" => {"complete" => true, "comment" => "Yo!"}}
+      )
+      fake.save!
+
     end
 
     it "should respect and allow updates to initial values if they exist" do
@@ -51,7 +61,9 @@ RSpec.describe "custom field declaration", type: :model do
       expect(fake.settings.info.complete).to be false
       expect(fake.settings.info.comment).to be_nil
       fake.settings.info.comment = "Yo!"
-      expect(fake.read_attribute(:settings)).to eq({fruit: "banana", info: {complete: false, comment: "Yo!"}})
+      expect(fake.read_attribute(:settings)).to eq(
+        {"fruit" => "banana", "info" => {"complete" => false, "comment" => "Yo!"}}
+      )
     end
 
     it "should handle nil initial value" do

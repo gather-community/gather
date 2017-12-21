@@ -3,6 +3,7 @@ require "rails_helper"
 describe "custom field validation" do
   let(:spec) { CustomFields::Spec.new(spec_data) }
   let(:instance) { CustomFields::Instance.new(
+    host: Object.new,
     spec: spec,
     instance_data: instance_data,
     model_i18n_key: "mod",

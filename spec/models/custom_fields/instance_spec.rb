@@ -10,6 +10,7 @@ RSpec.describe CustomFields::Instance, type: :model do
   ] }
   let(:spec) { CustomFields::Spec.new(spec_data) }
   let(:instance) { described_class.new(
+    host: Object.new,
     spec: spec,
     instance_data: instance_data,
     model_i18n_key: "mod",

@@ -25,7 +25,7 @@ module CustomFields
         raise NotImplementedError
       end
 
-      def update(value)
+      def update(value, notify: false)
         raise NotImplementedError
       end
 

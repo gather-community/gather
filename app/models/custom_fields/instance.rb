@@ -3,16 +3,18 @@ module CustomFields
   class Instance
     include ActiveModel::Model
 
-    attr_accessor :spec, :root
+    attr_accessor :spec, :root, :host
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :update, :[], :[]=,
       :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
 
-    def initialize(spec:, instance_data:, model_i18n_key:, attrib_name:)
+    def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError.new("instance_data is required") if instance_data.nil?
       self.spec = spec
+      self.host = host
       self.root = Entries::RootEntry.new(
+        parent: self,
         field: spec.root,
         hash: instance_data,
         model_i18n_key: model_i18n_key,
@@ -24,6 +26,8 @@ module CustomFields
         define_singleton_method(f.key) { root[f.key] }
         define_singleton_method("#{f.key}=") { |value| root[f.key] = value }
       end
+
+      notify_of_update
     end
 
     def key
@@ -32,6 +36,15 @@ module CustomFields
 
     def model_name
       @model_name ||= ActiveModel::Name.new(self.class, nil, attrib_name.to_s)
+    end
+
+    # If we are on a regular PORO, updates to the hash happen automatically because the reference is
+    # passed down. If we are on an AR model though, we need to explicitly call write_attribute when
+    # the hash is updated b/c AR seems to store a copy of the hash, not the referenced one.
+    def notify_of_update
+      if host.respond_to?(:write_attribute)
+        host.write_attribute(attrib_name, hash)
+      end
     end
 
     # This is so that form point to update instead of create

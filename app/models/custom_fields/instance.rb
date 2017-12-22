@@ -6,7 +6,7 @@ module CustomFields
     attr_accessor :spec, :root, :host
 
     delegate :fields, to: :spec
-    delegate :hash, :entries, :entries_by_key, :update, :[], :[]=,
+    delegate :hash, :entries, :entries_by_key, :[], :[]=,
       :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
@@ -36,6 +36,14 @@ module CustomFields
 
     def model_name
       @model_name ||= ActiveModel::Name.new(self.class, nil, attrib_name.to_s)
+    end
+
+    # Updates the full hash (as with submitted hash of params).
+    def update(new_hash)
+      # We set notify to true because we need to treat this update just like all the others initiated by user.
+      # This will cause the notify_of_update to run and write out the new hash value to the attribute,
+      # if applicable.
+      root.update(new_hash, notify: true)
     end
 
     # If we are on a regular PORO, updates to the hash happen automatically because the reference is

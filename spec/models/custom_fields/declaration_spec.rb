@@ -52,7 +52,10 @@ RSpec.describe "custom field declaration", type: :model do
         {"fruit" => "apple", "info" => {"complete" => true, "comment" => "Yo!"}}
       )
       fake.save!
-
+      reloaded = FakeCustomFieldActiveRecordModel.find(fake.id)
+      expect(reloaded.settings.fruit).to eq "apple"
+      expect(reloaded.settings.info.complete).to be true
+      expect(reloaded.settings.info.comment).to eq "Yo!"
     end
 
     it "should respect and allow updates to initial values if they exist" do
@@ -64,6 +67,28 @@ RSpec.describe "custom field declaration", type: :model do
       expect(fake.read_attribute(:settings)).to eq(
         {"fruit" => "banana", "info" => {"complete" => false, "comment" => "Yo!"}}
       )
+    end
+
+    it "should properly save piecemeal updates" do
+      fake.settings = {"fruit" => "apple", info: {complete: true}}
+      fake.save!
+      fake.settings.fruit = "peach"
+      fake.settings.info.comment = "Yo!"
+      fake.save!
+      reloaded = FakeCustomFieldActiveRecordModel.find(fake.id)
+      expect(reloaded.settings.fruit).to eq "peach"
+      expect(reloaded.settings.info.complete).to be true
+      expect(reloaded.settings.info.comment).to eq "Yo!"
+    end
+
+    it "should properly save full updates" do
+      fake.settings = {"fruit" => "apple", info: {complete: true}}
+      fake.save!
+      fake.settings = {"fruit" => "apple", info: {complete: false}}
+      fake.save!
+      reloaded = FakeCustomFieldActiveRecordModel.find(fake.id)
+      expect(reloaded.settings.fruit).to eq "apple"
+      expect(reloaded.settings.info.complete).to be false
     end
 
     it "should handle nil initial value" do

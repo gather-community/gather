@@ -62,6 +62,13 @@ module CustomFields
           instance_variable_set("@#{attrib_name}", cur_instance)
         end
       end
+
+      # reload uses attributes= which bypasses our setters above.
+      # So we need to intercept and run update manually.
+      define_method("reload") do |options = nil|
+        super(options)
+        send("#{attrib_name}=", read_attribute(attrib_name))
+      end
     end
   end
 

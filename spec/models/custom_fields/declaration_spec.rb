@@ -100,6 +100,21 @@ RSpec.describe "custom field declaration", type: :model do
       expect(fake.settings.fruit).to eq "peach"
       expect(fake.settings.info.comment).to eq "Yo!"
     end
+
+    it "reload should reload custom fields" do
+      fake.settings = {"fruit" => "apple"}
+      fake.foo = "alpha"
+      fake.save!
+
+      fake2 = FakeCustomFieldActiveRecordModel.find(fake.id)
+      fake2.settings.fruit = "peach"
+      fake2.foo = "bravo"
+      fake2.save!
+
+      fake.reload
+      expect(fake.foo).to eq "bravo"
+      expect(fake.settings.fruit).to eq "peach"
+    end
   end
 
   describe "validation" do

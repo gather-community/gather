@@ -177,8 +177,8 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @calendar.fullCalendar('option', 'minTime', @minTime())
 
   showAppropriateEarlyLink: ->
-    @$('#hide-early')[if @savedSettings.earlyMorning then 'show' else 'hide']()
-    @$('#show-early')[if @savedSettings.earlyMorning then 'hide' else 'show']()
+    @$('#hide-early').css(display: if @savedSettings.earlyMorning then 'inline' else 'none')
+    @$('#show-early').css(display: if @savedSettings.earlyMorning then 'none' else 'inline')
 
   storageKey: ->
     "calendar#{@resourceId}Settings"

@@ -5,7 +5,11 @@
   <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-4 photos <%= @members.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
-        <% @members.each do |user| %><%= user_photo_if_permitted(user, :medium) %><% end %>
+        <% if @members.any? %>
+          <% @members.each do |user| %><%= user_photo_if_permitted(user, :medium) %><% end %>
+        <% else %>
+          <%= image_tag("missing/users/medium.png", class: "photo") %>
+        <% end %>
       </div>
       <div class="col-sm-8">
         <table class="key-value key-value-full">

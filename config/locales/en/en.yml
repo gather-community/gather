@@ -320,6 +320,7 @@ en:
       short_date_with_yr: "%a %b %d %Y"
       url_date: "%Y-%m-%d"
       weekday: "%A"
+      filename: "%Y-%m-%d"
       csv_full: "%Y-%m-%d"
       csv_month_day: "%m-%d"
   time:

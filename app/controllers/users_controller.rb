@@ -114,7 +114,7 @@ class UsersController < ApplicationController
 
   def invite
     authorize sample_user
-    @users = User.adults.never_signed_in.active.by_name
+    @users = User.in_community(current_community).adults.never_signed_in.active.by_name
   end
 
   # Expects params[to_invite] = ["1", "5", ...]

@@ -3,12 +3,14 @@ module Meals
   class MessageJob < ReminderJob
     attr_reader :message_id
 
+    delegate :community, to: :message
+
     def initialize(message_id)
       @message_id = message_id
     end
 
     def perform
-      ActsAsTenant.with_tenant(message.cluster) do
+      with_community(community) do
         message.recipients.each do |recipient|
           MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now
         end

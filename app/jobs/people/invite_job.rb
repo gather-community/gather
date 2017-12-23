@@ -9,7 +9,7 @@ module People
     end
 
     def perform
-      with_tenant_from_community_id(community_id) do
+      with_community(community) do
         User.find(user_ids).each(&:send_reset_password_instructions)
       end
     end

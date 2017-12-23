@@ -13,20 +13,30 @@ class ApplicationJob
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do
         cluster.communities.each do |community|
-          begin
-            Time.zone = community.settings.time_zone
-            yield(community)
-          ensure
-            Time.zone = "UTC"
-          end
+          with_community_timezone(community) { yield(community) }
         end
       end
     end
   end
 
-  # Not all jobs will need this, but this is a useful method if they do.
-  def with_tenant_from_community_id(community_id)
-    community = ActsAsTenant.without_tenant { Community.find(community_id) }
-    ActsAsTenant.with_tenant(community.cluster) { yield }
+  # Sets tenant and timezone for the given community.
+  def with_community(community)
+    ActsAsTenant.with_tenant(community.cluster) do
+      with_community_timezone(community) { yield }
+    end
+  end
+
+  def with_community_timezone(community)
+    begin
+      Time.zone = community.settings.time_zone
+      yield
+    ensure
+      Time.zone = "UTC"
+    end
+  end
+
+  # Assumes there is a community_id instance variable on the object.
+  def community
+    ActsAsTenant.without_tenant { Community.find(community_id) }
   end
 end

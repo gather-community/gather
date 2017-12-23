@@ -9,7 +9,7 @@ module Billing
     end
 
     def perform
-      with_tenant_from_community_id(community_id) do
+      with_community(community) do
         Account.with_activity_and_users_and_no_recent_statement(community).each do |account|
           begin
             # Run in a transaction so that if there is an issue sending the statement,
@@ -27,12 +27,6 @@ module Billing
           end
         end
       end
-    end
-
-    private
-
-    def community
-      Community.find(community_id)
     end
   end
 end

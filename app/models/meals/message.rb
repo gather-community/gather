@@ -11,7 +11,7 @@ module Meals
     validates :recipient_type, :body, presence: true
 
     delegate :name, :email, to: :sender, prefix: true
-    delegate :cluster, to: :meal
+    delegate :community, :community_id, :cluster, to: :meal
 
     def recipient_count
       @recipient_count ||= recipients.size

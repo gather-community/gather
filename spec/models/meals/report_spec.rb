@@ -57,17 +57,37 @@ RSpec.describe Meals::Report, type: :model do
     end
   end
 
-  describe "overview" do
+  describe "#empty?" do
     context "without finalized meals" do
       before do
         create(:meal, community: community)
       end
 
-      it "should return nil" do
-        expect(report.overview).to be_nil
+      it "should be empty" do
+        expect(report).to be_empty
       end
     end
 
+    context "with only finalized meals not in range" do
+      before do
+        meals = create_list(:meal, 2, :finalized, community: community, served_at: 1.day.ago)
+        meals.each do |m|
+          m.signups << build(:signup, meal: m, adult_meat: 2)
+          m.signups << build(:signup, meal: m, adult_veg: 1)
+          m.save!
+        end
+
+        # The report range won't include these meals because one is unfinalized and they're on the same day.
+        create(:meal, community: community, served_at: 1.day.ago)
+      end
+
+      it "should be empty" do
+        expect(report).to be_empty
+      end
+    end
+  end
+
+  describe "overview" do
     context "with finalized meals" do
       before do
         meals = create_list(:meal, 2, :finalized, community: community)

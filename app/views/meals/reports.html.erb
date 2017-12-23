@@ -1,6 +1,6 @@
 <% content_for(:title){ "Meals Report" } %>
 
-<% if @report.overview.nil? %>
+<% if @report.empty? %>
   <div class="none-found">
     No matching meal data found. The report starts from the last month with no unfinalized meals.
   </div>
@@ -80,13 +80,13 @@
   <% end %>
 
   <div class="footnote">All reports include finalized meals only.</div>
-<% end %>
 
-<%= javascript_tag do %>
-  $(function(){ new Gather.Views.Meals.ReportChartsView(<%=json(
-    el: "#charts",
-    data: @report.chart_data,
-    cmty: @community.abbrv,
-    multiCommunity: multi_community?
-  )%>); });
+  <%= javascript_tag do %>
+    $(function(){ new Gather.Views.Meals.ReportChartsView(<%=json(
+      el: "#charts",
+      data: @report.chart_data,
+      cmty: @community.abbrv,
+      multiCommunity: multi_community?
+      )%>); });
+  <% end %>
 <% end %>

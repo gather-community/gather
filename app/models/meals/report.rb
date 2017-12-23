@@ -27,6 +27,11 @@ module Meals
       by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"] > 0 } : []
     end
 
+    def empty?
+      # We don't check overview because that ignores the range.
+      by_month.nil?
+    end
+
     def overview
       @overview ||= breakout(
         breakout_expr: "meals.community_id::integer",

@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     collection do
       put :apply_late_fees
     end
-    resources :transactions
+    resources :transactions, only: [:index, :new, :create]
   end
 
   resources :statements, only: [:show] do

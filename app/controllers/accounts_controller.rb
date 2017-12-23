@@ -13,6 +13,7 @@ class AccountsController < ApplicationController
       by_cmty_and_household_name.
       decorate
 
+    @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
     @active_accounts = Billing::Account.with_activity(@community).count
     @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
     @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count

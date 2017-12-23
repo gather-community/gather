@@ -48,6 +48,8 @@ class TransactionsController < ApplicationController
     end
   end
 
+  private
+
   # Pundit built-in helper doesn't work due to namespacing
   def transaction_params
     params.require(:billing_transaction).permit(policy(@transaction).permitted_attributes)

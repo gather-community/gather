@@ -47,7 +47,6 @@ module Billing
     end
 
     describe "scope" do
-
       let!(:community) { create(:community) }
       let!(:other_community) { create(:community) }
       let!(:account1) { create(:account, community: community) }

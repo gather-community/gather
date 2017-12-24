@@ -48,6 +48,10 @@ class UserPolicy < ApplicationPolicy
     active_admin?
   end
 
+  def impersonate?
+    active_admin?
+  end
+
   def destroy?
     active_admin? && !record.any_assignments?
   end

@@ -60,7 +60,9 @@
       <% @users.each do |user| %>
         <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
           <div class="inner clearfix">
-            <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
+            <div class="photo-wrapper">
+              <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
+            </div>
             <div class="info">
               <% if user.preferred_contact.present? %>
                 <%= icon_tag(user.preferred_contact_icon,

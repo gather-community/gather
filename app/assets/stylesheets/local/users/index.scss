@@ -15,9 +15,18 @@
       background-color: $fainter-gray;
     }
 
-    img {
+    // This trick prevents the layout from collapsing while the images are loading.
+    .photo-wrapper {
       width: 25%;
       float: left;
+      height: 0;
+      padding-bottom: 25%;
+      position: relative;
+
+      img {
+        width: 100%;
+        position: absolute;
+      }
     }
 
     .info {

@@ -169,12 +169,26 @@ describe UserPolicy do
       it_behaves_like "inactive users"
     end
 
-    permissions :new?, :create?, :invite?, :impersonate?, :send_invites? do
+    permissions :new?, :create?, :invite?, :send_invites? do
       it_behaves_like "permits admins but not regular users"
     end
 
     permissions :deactivate?, :show_inactive?, :administer?, :add_basic_role? do
       it_behaves_like "permits admins except self and guardians"
+    end
+
+    permissions :impersonate? do
+      it_behaves_like "permits admins but not regular users"
+
+      it "denies on self" do
+        expect(subject).not_to permit(admin, admin)
+      end
+
+      it "denies on other admins" do
+        expect(subject).not_to permit(admin, admin2)
+        expect(subject).not_to permit(admin, cluster_admin)
+        expect(subject).not_to permit(admin, super_admin)
+      end
     end
 
     permissions :activate? do

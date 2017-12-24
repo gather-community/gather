@@ -139,12 +139,14 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits admins or special role but not regular users" do |role_name|
-    it_behaves_like "permits admins but not regular users"
-
+  shared_examples_for "permits special role but not regular users" do |role_name|
     context do
       let(:actor) { role_member(role_name) }
       it_behaves_like "errors on permission check without community"
+    end
+
+    it "forbids regular user" do
+      expect(subject).not_to permit(user, record)
     end
 
     it "permits role from community" do
@@ -154,6 +156,11 @@ shared_context "policy objs" do
     it "forbids role from outside community" do
       expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
+  end
+
+  shared_examples_for "permits admins or special role but not regular users" do |role_name|
+    it_behaves_like "permits admins but not regular users"
+    it_behaves_like "permits special role but not regular users", role_name
   end
 
   shared_examples_for "permits cluster admins only" do

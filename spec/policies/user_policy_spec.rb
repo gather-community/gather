@@ -202,9 +202,17 @@ describe UserPolicy do
       end
     end
 
-    permissions :edit?, :update?, :update_photo? do
+    permissions :edit?, :update? do
       it_behaves_like "permits admins or special role but not regular users", "photographer"
       it_behaves_like "permits self (active or not) and guardians"
+    end
+
+    permissions :update_photo? do
+      it_behaves_like "permits special role but not regular users", "photographer"
+
+      it "denies admins" do # Admins can do regular edit instead.
+        expect(subject).not_to permit(admin, user)
+      end
     end
 
     permissions :update_info? do

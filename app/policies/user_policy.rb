@@ -80,8 +80,9 @@ class UserPolicy < ApplicationPolicy
     self? || guardian? || active_admin?
   end
 
+  # Only needed for folks who otherwise couldn't edit this user (i.e. not self, guardians, or admins).
   def update_photo?
-    update_info? || active_with_community_role?(:photographer)
+    !update_info? && active_with_community_role?(:photographer)
   end
 
   def administer?

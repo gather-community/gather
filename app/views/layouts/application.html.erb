@@ -5,91 +5,93 @@
   <%= render("layouts/head") %>
 </head>
 <body>
-  <%# DESKTOP/TABLET NAVS %>
-  <nav class="navbar navbar-default hidden-xs">
-    <table class="nav-wrapper">
-      <tr>
-        <td class="logo" rowspan="2">
-          <%= link_to(image_tag("logo-white.png"), home_path) %>
-        </td>
-        <td class="personal-nav">
-          <% if user_signed_in? %>
-            <ul class="nav">
+  <div id="navs" class="hidden-print">
+    <%# DESKTOP/TABLET NAVS %>
+    <nav class="navbar navbar-default hidden-xs">
+      <table class="nav-wrapper">
+        <tr>
+          <td class="logo" rowspan="2">
+            <%= link_to(image_tag("logo-white.png"), home_path) %>
+          </td>
+          <td class="personal-nav">
+            <% if user_signed_in? %>
+              <ul class="nav">
+                <%= render("layouts/personal_dropdown") %>
+              </ul>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td class="main-nav">
+            <% if user_signed_in? %>
+              <ul class="nav">
+                <% nav_items.each do |item| %>
+                  <li class="<%= item[:active] ? 'active' : '' %>">
+                    <%= link_to(t("nav_links.main.#{item[:name]}"),
+                      item[:path], class: "icon-bar") %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+    </nav>
+    <% if @context[:subsection] && (items = subnav_items).size > 1 %>
+      <nav class="subnav hidden-xs">
+        <ul class="nav nav-tabs" role="tablist">
+          <% items.each do |item| %>
+            <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
+              <%= nav_link(item, tab: true) %>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+    <% end %>
+
+    <%# MOBILE NAVS %>
+    <nav class="navbar navbar-default hidden visible-xs">
+      <div class="container-fluid" class="nav-wrapper">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+            data-target="#mobile-nav" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to(image_tag("logo-white.png"), home_path, class: "logo") %>
+        </div>
+
+        <% if user_signed_in? %>
+          <div class="collapse navbar-collapse" id="mobile-nav">
+            <ul class="nav navbar-nav mobile-nav">
+              <% nav_items.each do |item| %>
+                <% if (sub_items = subnav_items(item[:name])).size > 1 %>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                      aria-haspopup="true" aria-expanded="false">
+                      <%= icon_tag(item[:icon]) %>
+                      <%= t("nav_links.main.#{item[:name]}") %>
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <% sub_items.each do |sub_item| %>
+                        <li><%= nav_link(sub_item) %></li>
+                      <% end %>
+                    </ul>
+                  </li>
+                <% else %>
+                  <li><%= nav_link(item) %></li>
+                <% end %>
+              <% end %>
               <%= render("layouts/personal_dropdown") %>
             </ul>
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td class="main-nav">
-          <% if user_signed_in? %>
-            <ul class="nav">
-              <% nav_items.each do |item| %>
-                <li class="<%= item[:active] ? 'active' : '' %>">
-                  <%= link_to(t("nav_links.main.#{item[:name]}"),
-                    item[:path], class: "icon-bar") %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
-        </td>
-      </tr>
-    </table>
-  </nav>
-  <% if @context[:subsection] && (items = subnav_items).size > 1 %>
-    <nav class="subnav hidden-print hidden-xs">
-      <ul class="nav nav-tabs" role="tablist">
-        <% items.each do |item| %>
-          <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
-            <%= nav_link(item, tab: true) %>
-          </li>
+          </div>
         <% end %>
-      </ul>
-    </nav>
-  <% end %>
-
-  <%# MOBILE NAVS %>
-  <nav class="navbar navbar-default hidden visible-xs">
-    <div class="container-fluid" class="nav-wrapper">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-          data-target="#mobile-nav" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <%= link_to(image_tag("logo-white.png"), home_path, class: "logo") %>
       </div>
-
-      <% if user_signed_in? %>
-        <div class="collapse navbar-collapse" id="mobile-nav">
-          <ul class="nav navbar-nav mobile-nav">
-            <% nav_items.each do |item| %>
-              <% if (sub_items = subnav_items(item[:name])).size > 1 %>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                    aria-haspopup="true" aria-expanded="false">
-                    <%= icon_tag(item[:icon]) %>
-                    <%= t("nav_links.main.#{item[:name]}") %>
-                    <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <% sub_items.each do |sub_item| %>
-                      <li><%= nav_link(sub_item) %></li>
-                    <% end %>
-                  </ul>
-                </li>
-              <% else %>
-                <li><%= nav_link(item) %></li>
-              <% end %>
-            <% end %>
-            <%= render("layouts/personal_dropdown") %>
-          </ul>
-        </div>
-      <% end %>
-    </div>
-  </nav>
+    </nav>
+  </div>
 
   <div id="content" class="<%= controller.controller_name.dasherize %>
     <%= controller.controller_path.gsub("/", "--").dasherize %>

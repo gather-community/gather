@@ -95,20 +95,6 @@ describe "user request" do
     end
   end
 
-  describe "export" do
-    let(:actor) { user }
-    let!(:users) { create_list(:user, 4) }
-
-    it "should work" do
-      Timecop.freeze("2017-04-15 12:00pm") do
-        get users_path(format: :csv)
-        filename = "#{user.community.slug}-directory-2017-04-15.csv"
-        expect(response.headers["Content-Disposition"]).to eq %Q{attachment; filename="#{filename}"}
-        expect(response.body).to match /#{users[0].first_name}/
-      end
-    end
-  end
-
   def expect_successful_create_or_update
     expect(response).to be_redirect
     expect(flash[:success]).to be_present

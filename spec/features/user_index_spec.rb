@@ -15,10 +15,15 @@ feature "user index" do
     let(:actor) { user }
 
     scenario "download csv" do
-      visit "/users"
-      expect(page).to have_css("a", text: "Download as CSV")
-      click_on("Download as CSV")
-      expect(page.response_headers['Content-Disposition']).to include("filename=\"directory.csv\"")
+      users = create_list(:user, 4)
+      Timecop.freeze("2017-04-15 12:00pm") do
+        visit "/users"
+        expect(page).to have_css("a", text: "Download as CSV")
+        click_on("Download as CSV")
+        filename = "#{user.community.slug}-directory-2017-04-15.csv"
+        expect(page.response_headers["Content-Disposition"]).to eq %Q{attachment; filename="#{filename}"}
+        expect(page).to have_content(/#{users[0].first_name}/)
+      end
     end
 
     scenario "table view", js: true do

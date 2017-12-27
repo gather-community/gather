@@ -29,4 +29,32 @@ describe Wiki::Page do
       end
     end
   end
+
+  describe "saving versions" do
+    let!(:page) { create(:wiki_page) }
+
+    context "with content change" do
+      it "saves new version" do
+        expect { page.update!(content: "Some new content") }.to change { Wiki::PageVersion.count }.by(1)
+      end
+    end
+
+    context "with comment" do
+      it "saves new version" do
+        expect { page.update!(comment: "Some comment") }.to change { Wiki::PageVersion.count }.by(1)
+      end
+    end
+
+    context "with title change" do
+      it "saves new version" do
+        expect { page.update!(title: "New title") }.to change { Wiki::PageVersion.count }.by(1)
+      end
+    end
+
+    context "without title, content, or comment change" do
+      it "doesn't save new version" do
+        expect { page.update!(editable_by: "wikiist") }.to change { Wiki::PageVersion.count }.by(0)
+      end
+    end
+  end
 end

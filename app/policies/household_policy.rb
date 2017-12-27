@@ -87,7 +87,7 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def accounts?
-    active_admin_or_biller? || household == user.household
+    active_admin_or?(:biller) || household == user.household
   end
 
   def destroy?

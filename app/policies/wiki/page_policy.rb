@@ -53,7 +53,9 @@
     end
 
     def permitted_attributes
-      [:title, :content, :comment]
+      permitted = [:title, :content, :comment]
+      permitted << :editable_by if active_admin_or?(:wikiist)
+      permitted
     end
   end
 end

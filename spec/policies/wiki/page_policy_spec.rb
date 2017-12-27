@@ -77,4 +77,40 @@ describe Wiki::PagePolicy do
       it { is_expected.to contain_exactly(page1, page2, page3) }
     end
   end
+
+  describe "permitted attributes" do
+    subject { Wiki::PagePolicy.new(actor, Wiki::Page.new(community: community)).permitted_attributes }
+
+    shared_examples_for "regular user" do
+      it "should allow setting editable_by" do
+        expect(subject).to contain_exactly(:title, :content, :comment)
+      end
+    end
+
+    shared_examples_for "wikiist and above" do
+      it "should allow setting editable_by" do
+        expect(subject).to contain_exactly(:title, :content, :comment, :editable_by)
+      end
+    end
+
+    context "for regular users" do
+      let(:actor) { user }
+      it_behaves_like "regular user"
+    end
+
+    context "for outside wikiist" do
+      let(:actor) { wikiist_in_cmtyB }
+      it_behaves_like "regular user"
+    end
+
+    context "for wikiists" do
+      let(:actor) { wikiist }
+      it_behaves_like "wikiist and above"
+    end
+
+    context "for admins" do
+      let(:actor) { admin }
+      it_behaves_like "wikiist and above"
+    end
+  end
 end

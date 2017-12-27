@@ -1,4 +1,4 @@
-class CreateMealCosts < ActiveRecord::Migration
+class CreateMealCosts < ActiveRecord::Migration[4.2]
   def change
     create_table :meal_costs do |t|
       t.references :meal, index: true, foreign_key: true, null: false

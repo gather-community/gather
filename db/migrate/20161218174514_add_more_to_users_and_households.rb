@@ -1,4 +1,4 @@
-class AddMoreToUsersAndHouseholds < ActiveRecord::Migration
+class AddMoreToUsersAndHouseholds < ActiveRecord::Migration[4.2]
   def change
     add_column :households, :vehicles, :text
     add_column :households, :emergency_contacts, :text

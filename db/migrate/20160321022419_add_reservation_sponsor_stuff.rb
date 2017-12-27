@@ -1,4 +1,4 @@
-class AddReservationSponsorStuff < ActiveRecord::Migration
+class AddReservationSponsorStuff < ActiveRecord::Migration[4.2]
   def change
     rename_column :reservations, :user_id, :reserver_id
     add_column :reservations, :sponsor_id, :integer

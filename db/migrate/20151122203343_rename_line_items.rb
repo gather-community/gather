@@ -1,4 +1,4 @@
-class RenameLineItems < ActiveRecord::Migration
+class RenameLineItems < ActiveRecord::Migration[4.2]
   def change
     rename_table :line_items, :transactions
   end

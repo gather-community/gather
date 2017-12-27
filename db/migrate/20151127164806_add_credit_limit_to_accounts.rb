@@ -1,7 +1,7 @@
 class CreditLimit < ApplicationRecord
 end
 
-class AddCreditLimitToAccounts < ActiveRecord::Migration
+class AddCreditLimitToAccounts < ActiveRecord::Migration[4.2]
   def up
     add_column :accounts, :credit_limit, :decimal, precision: 10, scale: 2
     CreditLimit.all.each do |cl|

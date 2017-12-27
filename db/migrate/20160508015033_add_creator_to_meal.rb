@@ -1,4 +1,4 @@
-class AddCreatorToMeal < ActiveRecord::Migration
+class AddCreatorToMeal < ActiveRecord::Migration[4.2]
   def up
     add_reference :meals, :creator, index: true
     add_foreign_key :meals, :users, column: "creator_id"

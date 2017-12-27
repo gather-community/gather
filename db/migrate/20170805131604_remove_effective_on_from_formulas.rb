@@ -1,4 +1,4 @@
-class RemoveEffectiveOnFromFormulas < ActiveRecord::Migration
+class RemoveEffectiveOnFromFormulas < ActiveRecord::Migration[4.2]
   def change
     add_column :meal_formulas, :created_at, :datetime
     add_column :meal_formulas, :updated_at, :datetime

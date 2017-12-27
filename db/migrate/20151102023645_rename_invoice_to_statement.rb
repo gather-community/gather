@@ -1,4 +1,4 @@
-class RenameInvoiceToStatement < ActiveRecord::Migration
+class RenameInvoiceToStatement < ActiveRecord::Migration[4.2]
   def change
     rename_table :invoices, :statements
     rename_column :accounts, :due_last_invoice, :due_last_statement

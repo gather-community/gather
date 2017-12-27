@@ -1,4 +1,4 @@
-class CreatePeopleEmergencyContacts < ActiveRecord::Migration
+class CreatePeopleEmergencyContacts < ActiveRecord::Migration[4.2]
   def change
     create_table :people_emergency_contacts do |t|
       t.references :household, index: true, foreign_key: true

@@ -1,4 +1,4 @@
-class TransferRolesToRoleTable < ActiveRecord::Migration
+class TransferRolesToRoleTable < ActiveRecord::Migration[4.2]
   def up
     ActiveRecord::Base.transaction do
       role_ids = {

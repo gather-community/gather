@@ -1,4 +1,4 @@
-class RenameWikiPagesPathToSlug < ActiveRecord::Migration
+class RenameWikiPagesPathToSlug < ActiveRecord::Migration[4.2]
   def change
     rename_column :wiki_pages, :path, :slug
   end

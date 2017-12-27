@@ -1,4 +1,4 @@
-class AddChildFields < ActiveRecord::Migration
+class AddChildFields < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :child, :boolean, null: false, default: false
     add_column :users, :guardian_id, :integer, index: true

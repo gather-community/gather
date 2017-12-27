@@ -1,4 +1,4 @@
-class ChangeAllDecimalToScale2 < ActiveRecord::Migration
+class ChangeAllDecimalToScale2 < ActiveRecord::Migration[4.2]
   def up
     change_column :accounts, :balance_due, :decimal, precision: 10, scale: 2
     change_column :accounts, :current_balance, :decimal, precision: 10, scale: 2

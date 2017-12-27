@@ -1,4 +1,4 @@
-class RenameMealsSubTables < ActiveRecord::Migration
+class RenameMealsSubTables < ActiveRecord::Migration[4.2]
   def change
     rename_table :meals_formulas, :meal_formulas
     rename_table :meals_costs, :meal_costs

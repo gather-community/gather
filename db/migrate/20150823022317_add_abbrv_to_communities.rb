@@ -1,4 +1,4 @@
-class AddAbbrvToCommunities < ActiveRecord::Migration
+class AddAbbrvToCommunities < ActiveRecord::Migration[4.2]
   def change
     unless column_exists?(:communities, :abbrv)
       add_column :communities, :abbrv, :string

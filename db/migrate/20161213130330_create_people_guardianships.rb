@@ -1,4 +1,4 @@
-class CreatePeopleGuardianships < ActiveRecord::Migration
+class CreatePeopleGuardianships < ActiveRecord::Migration[4.2]
   def change
     create_table :people_guardianships do |t|
       t.integer :child_id

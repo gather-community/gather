@@ -1,4 +1,4 @@
-class CreateReservationsForMeals < ActiveRecord::Migration
+class CreateReservationsForMeals < ActiveRecord::Migration[4.2]
   def up
     Meal.transaction do
       Meal.where("reservation_id IS NULL").find_each do |m|

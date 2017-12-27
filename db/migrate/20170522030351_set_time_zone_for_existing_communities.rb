@@ -1,4 +1,4 @@
-class SetTimeZoneForExistingCommunities < ActiveRecord::Migration
+class SetTimeZoneForExistingCommunities < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do
       Community.all.each do |c|

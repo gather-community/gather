@@ -1,4 +1,4 @@
-class AddNotifiedToAssignments < ActiveRecord::Migration
+class AddNotifiedToAssignments < ActiveRecord::Migration[4.2]
   def change
     add_column :assignments, :notified, :boolean, null: false, default: false
     add_index :assignments, :notified

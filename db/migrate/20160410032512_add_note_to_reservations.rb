@@ -1,4 +1,4 @@
-class AddNoteToReservations < ActiveRecord::Migration
+class AddNoteToReservations < ActiveRecord::Migration[4.2]
   def change
     add_column :reservations, :note, :text
   end

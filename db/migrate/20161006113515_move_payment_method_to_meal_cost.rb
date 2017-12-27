@@ -3,7 +3,7 @@ class Meals::Cost < ApplicationRecord
   belongs_to :meal, inverse_of: :cost
 end
 
-class MovePaymentMethodToMealCost < ActiveRecord::Migration
+class MovePaymentMethodToMealCost < ActiveRecord::Migration[4.2]
   def up
     transaction do
       add_column :meal_costs, :payment_method, :string

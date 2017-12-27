@@ -1,4 +1,4 @@
-class CreateSignups < ActiveRecord::Migration
+class CreateSignups < ActiveRecord::Migration[4.2]
   def change
     create_table :signups do |t|
       t.references :meal, null: false, index: true, foreign_key: true

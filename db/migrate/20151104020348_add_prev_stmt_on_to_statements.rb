@@ -1,4 +1,4 @@
-class AddPrevStmtOnToStatements < ActiveRecord::Migration
+class AddPrevStmtOnToStatements < ActiveRecord::Migration[4.2]
   def change
     add_column :statements, :prev_stmt_on, :date
   end

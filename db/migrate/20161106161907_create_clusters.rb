@@ -1,4 +1,4 @@
-class CreateClusters < ActiveRecord::Migration
+class CreateClusters < ActiveRecord::Migration[4.2]
   def change
     create_table :clusters do |t|
       t.string :name, null: false, index: true

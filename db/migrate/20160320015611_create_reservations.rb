@@ -1,4 +1,4 @@
-class CreateReservations < ActiveRecord::Migration
+class CreateReservations < ActiveRecord::Migration[4.2]
   def change
     create_table :reservations do |t|
       t.string :name, limit: 24, null: false

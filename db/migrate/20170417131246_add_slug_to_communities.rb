@@ -1,4 +1,4 @@
-class AddSlugToCommunities < ActiveRecord::Migration
+class AddSlugToCommunities < ActiveRecord::Migration[4.2]
   def up
     add_column :communities, :slug, :string, unique: true
     ActsAsTenant.without_tenant do

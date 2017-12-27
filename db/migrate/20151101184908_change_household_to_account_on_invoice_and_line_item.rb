@@ -1,4 +1,4 @@
-class ChangeHouseholdToAccountOnInvoiceAndLineItem < ActiveRecord::Migration
+class ChangeHouseholdToAccountOnInvoiceAndLineItem < ActiveRecord::Migration[4.2]
   def change
     remove_foreign_key "invoices", "households"
     remove_foreign_key "line_items", "households"

@@ -1,4 +1,4 @@
-class AddUserFields < ActiveRecord::Migration
+class AddUserFields < ActiveRecord::Migration[4.2]
   def change
     rename_column :users, :email, :google_email
     add_column :users, :email, :string, null: false

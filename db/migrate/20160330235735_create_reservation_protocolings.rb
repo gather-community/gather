@@ -1,4 +1,4 @@
-class CreateReservationProtocolings < ActiveRecord::Migration
+class CreateReservationProtocolings < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_protocolings do |t|
       t.integer :resource_id, null: false

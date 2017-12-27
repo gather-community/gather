@@ -1,4 +1,4 @@
-class CreateReservationGuidelineInclusions < ActiveRecord::Migration
+class CreateReservationGuidelineInclusions < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_guideline_inclusions do |t|
       t.references :resource, null: false, foreign_key: true

@@ -1,4 +1,4 @@
-class CreateReservationSharedGuidelines < ActiveRecord::Migration
+class CreateReservationSharedGuidelines < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_shared_guidelines do |t|
       t.references :community, null: false, index: true, foreign_key: true

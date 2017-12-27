@@ -1,4 +1,4 @@
-class AddHostCommunityIdToMeals < ActiveRecord::Migration
+class AddHostCommunityIdToMeals < ActiveRecord::Migration[4.2]
   def change
     add_column :meals, :community_id, :integer, index: true
     add_foreign_key :meals, :communities, column: :community_id

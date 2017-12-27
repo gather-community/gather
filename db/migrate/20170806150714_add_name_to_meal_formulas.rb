@@ -1,4 +1,4 @@
-class AddNameToMealFormulas < ActiveRecord::Migration
+class AddNameToMealFormulas < ActiveRecord::Migration[4.2]
   def change
     add_column :meal_formulas, :name, :string
     execute("UPDATE meal_formulas SET name = 'Standard'")

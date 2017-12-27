@@ -1,4 +1,4 @@
-class CreateMealsMessages < ActiveRecord::Migration
+class CreateMealsMessages < ActiveRecord::Migration[4.2]
   def change
     create_table :meals_messages do |t|
       t.integer :sender_id, null: false

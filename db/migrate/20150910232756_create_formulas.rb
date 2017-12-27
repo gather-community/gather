@@ -1,4 +1,4 @@
-class CreateFormulas < ActiveRecord::Migration
+class CreateFormulas < ActiveRecord::Migration[4.2]
   def change
     create_table :formulas do |t|
       t.references :community, foreign_key: true, index: true, null: false

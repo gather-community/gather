@@ -1,4 +1,4 @@
-class ChangeOldIdToInteger < ActiveRecord::Migration
+class ChangeOldIdToInteger < ActiveRecord::Migration[4.2]
   def change
     change_column :households, :old_id, :integer
   end

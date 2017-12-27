@@ -1,4 +1,4 @@
-class FixWikiIndices < ActiveRecord::Migration
+class FixWikiIndices < ActiveRecord::Migration[4.2]
   def change
     add_index :wiki_pages, :updator_id
     remove_index :wiki_pages, :slug

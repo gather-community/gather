@@ -1,4 +1,4 @@
-class CreateReservationProtocols < ActiveRecord::Migration
+class CreateReservationProtocols < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_protocols do |t|
       t.references :resource, index: true, foreign_key: true

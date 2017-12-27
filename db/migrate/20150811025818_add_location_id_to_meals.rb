@@ -1,4 +1,4 @@
-class AddLocationIdToMeals < ActiveRecord::Migration
+class AddLocationIdToMeals < ActiveRecord::Migration[4.2]
   def change
     add_reference :meals, :location, index: true, foreign_key: true
     loc = Location.first

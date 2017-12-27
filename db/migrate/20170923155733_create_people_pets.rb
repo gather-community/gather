@@ -1,4 +1,4 @@
-class CreatePeoplePets < ActiveRecord::Migration
+class CreatePeoplePets < ActiveRecord::Migration[4.2]
   def change
     create_table :people_pets do |t|
       t.references :cluster, index: true, foreign_key: true, null: false

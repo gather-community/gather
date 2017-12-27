@@ -1,4 +1,4 @@
-class RenameCommunitiesConfigToSettings < ActiveRecord::Migration
+class RenameCommunitiesConfigToSettings < ActiveRecord::Migration[4.2]
   def change
     rename_column :communities, :config, :settings
   end

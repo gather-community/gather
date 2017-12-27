@@ -1,4 +1,4 @@
-class AddWikiTableConstraints < ActiveRecord::Migration
+class AddWikiTableConstraints < ActiveRecord::Migration[4.2]
   def change
     change_column_null :wiki_pages, :creator_id, false
     change_column_null :wiki_pages, :title, false

@@ -1,4 +1,4 @@
-class AddPrepTimeAndTotalLengthToReservationResourcings < ActiveRecord::Migration
+class AddPrepTimeAndTotalLengthToReservationResourcings < ActiveRecord::Migration[4.2]
   def change
     add_column :reservation_resourcings, :prep_time, :integer
     add_column :reservation_resourcings, :total_length, :integer

@@ -1,4 +1,4 @@
-class SetFormulasForMeals < ActiveRecord::Migration
+class SetFormulasForMeals < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do
       Meal.all.find_each do |meal|

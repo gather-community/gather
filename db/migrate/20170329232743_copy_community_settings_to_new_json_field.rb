@@ -2,7 +2,7 @@ class Community < ApplicationRecord
   serialize :settings
 end
 
-class CopyCommunitySettingsToNewJsonField < ActiveRecord::Migration
+class CopyCommunitySettingsToNewJsonField < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do
       Community.all.each do |community|

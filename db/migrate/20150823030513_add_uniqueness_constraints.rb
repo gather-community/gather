@@ -1,4 +1,4 @@
-class AddUniquenessConstraints < ActiveRecord::Migration
+class AddUniquenessConstraints < ActiveRecord::Migration[4.2]
   def change
     add_index :assignments, [:meal_id, :role, :user_id], unique: true
     add_index :communities, :abbrv, unique: true

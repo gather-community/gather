@@ -1,4 +1,4 @@
-class CreateReservationResourcings < ActiveRecord::Migration
+class CreateReservationResourcings < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_resourcings do |t|
       t.references :meal, foreign_key: true, null: false

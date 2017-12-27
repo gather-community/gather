@@ -1,4 +1,4 @@
-class ChangeHouseholdStructure < ActiveRecord::Migration
+class ChangeHouseholdStructure < ActiveRecord::Migration[4.2]
   NAMES = %w(Buckland Edmunds Payne Rutherford Gibson Brown Rees Walsh Powell)
 
   def up

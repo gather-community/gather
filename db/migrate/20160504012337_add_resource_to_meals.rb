@@ -1,4 +1,4 @@
-class AddResourceToMeals < ActiveRecord::Migration
+class AddResourceToMeals < ActiveRecord::Migration[4.2]
   ID_MAP = {
     1 => 5,
     2 => 11,

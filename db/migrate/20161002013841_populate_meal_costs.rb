@@ -3,7 +3,7 @@ class Meals::Cost < ApplicationRecord
   belongs_to :meal, inverse_of: :cost
 end
 
-class PopulateMealCosts < ActiveRecord::Migration
+class PopulateMealCosts < ActiveRecord::Migration[4.2]
   def up
     transaction do
       Meal.where(status: "finalized").find_each do |meal|

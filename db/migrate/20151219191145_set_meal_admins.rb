@@ -1,4 +1,4 @@
-class SetMealAdmins < ActiveRecord::Migration
+class SetMealAdmins < ActiveRecord::Migration[4.2]
   def up
     Community.all.each do |c|
       case c.name

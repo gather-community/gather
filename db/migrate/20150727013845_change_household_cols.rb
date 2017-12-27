@@ -1,4 +1,4 @@
-class ChangeHouseholdCols < ActiveRecord::Migration
+class ChangeHouseholdCols < ActiveRecord::Migration[4.2]
   def change
     rename_column :households, :name, :suffix
     change_column :households, :suffix, :string, null: true

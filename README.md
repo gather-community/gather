@@ -6,22 +6,27 @@ Gather is a Ruby on Rails application with some client-side JavaScript for dynam
 
 Ruby on Rails applications are best developed and run on Linux, Unix, or Mac OS. Development is also possible, though not recommended, on Windows. See the [Rails download page](http://rubyonrails.org/download/) for more information.
 
-## Package Managers
+## System dependencies
 
 To install the software below we recommend the following package managers:
 
 - Mac OS X: [Homebrew](http://brew.sh/)
 - Linux/Unix: bundled package manager (e.g. apt-get, yum)
 
-## System dependencies
-1. Ruby v2.2.x (see [.ruby-version file](.ruby-version) for exact version, [rbenv](https://github.com/sstephenson/rbenv) is recommended for Ruby version management)
+For all environments:
+
+1. Ruby (see [.ruby-version file](.ruby-version) for exact version, [rbenv](https://github.com/sstephenson/rbenv) is recommended for Ruby version management)
 1. [Bundler](http://bundler.io/)
     1. Once Ruby is installed, run `gem install bundler` to install.
 1. PostgreSQL v9.2+ (database)
-1. ImageMagick
-1. Set up a Gather OAuth client, if you don't have one, on Google Developers.
+1. ImageMagick v6.8+
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
+1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).
+
+For development environments:
+
+1. PhantomJS v2.1+
 
 ## Development Setup Guide
 Follow these steps to setup a development environment for Gather.

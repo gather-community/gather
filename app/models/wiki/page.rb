@@ -3,6 +3,7 @@ module Wiki
     acts_as_tenant :cluster
 
     RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze
+    EDITABLE_BY_OPTIONS = %i(everyone wikiist)
 
     attr_accessor :comment
 

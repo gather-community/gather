@@ -6,6 +6,13 @@
 </head>
 <body>
   <div id="navs" class="hidden-print">
+    <% if impersonated_user %>
+      <div id="impersonation-notice" class="hidden-print">
+        You are impersonating <%= impersonated_user.name %>. Any actions you take will appear to have
+        been taken by them.
+        <%= link_to("Stop Impersonating", unimpersonate_user_path(impersonated_user), method: :post) %>
+      </div>
+    <% end %>
     <%# DESKTOP/TABLET NAVS %>
     <nav class="navbar navbar-default hidden-xs">
       <table class="nav-wrapper">

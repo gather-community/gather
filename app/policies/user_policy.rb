@@ -49,7 +49,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    active_admin? && !self? && !target_is_admin?
+    active_admin? && !self? && !target_is_admin? && record.adult?
   end
 
   def destroy?

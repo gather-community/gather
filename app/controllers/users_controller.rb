@@ -130,6 +130,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def impersonate
+    @user = User.find(params[:id])
+    authorize @user
+    session[:impersonating_id] = @user.id
+    redirect_to root_path
+  end
+
+  def unimpersonate
+    @user = User.find(params[:id])
+    skip_authorization
+    session.delete(:impersonating_id)
+    redirect_to user_path(@user)
+  end
+
   protected
 
   def klass

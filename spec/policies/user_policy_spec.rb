@@ -189,6 +189,10 @@ describe UserPolicy do
         expect(subject).not_to permit(admin, cluster_admin)
         expect(subject).not_to permit(admin, super_admin)
       end
+
+      it "denies on children" do
+        expect(subject).not_to permit(admin, child)
+      end
     end
 
     permissions :activate? do

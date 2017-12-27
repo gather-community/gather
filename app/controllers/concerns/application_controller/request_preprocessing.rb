@@ -27,6 +27,7 @@ module Concerns::ApplicationController::RequestPreprocessing
     before_action :check_community_permissions
     before_action :set_tenant
     before_action :set_time_zone
+    before_action :handle_impersonation
 
     rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   end
@@ -97,10 +98,11 @@ module Concerns::ApplicationController::RequestPreprocessing
 
     if user_signed_in?
       data[:user] = {
-        id: current_user.id,
-        name: current_user.name,
-        email: current_user.email,
-        google_email: current_user.google_email
+        id: real_current_user.id,
+        name: real_current_user.name,
+        email: real_current_user.email,
+        google_email: real_current_user.google_email,
+        impersonating_id: session[:impersonating_id]
       }
     end
 
@@ -147,6 +149,13 @@ module Concerns::ApplicationController::RequestPreprocessing
 
   def set_time_zone
     Time.zone = current_community.settings.time_zone if current_community
+  end
+
+  def handle_impersonation
+    if session[:impersonating_id] && user = User.find_by(id: session[:impersonating_id])
+      @real_current_user = current_user
+      @current_user = @impersonated_user = user
+    end
   end
 
   # Redirects to inactive page when user is inactive.

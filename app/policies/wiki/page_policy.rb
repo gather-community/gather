@@ -25,11 +25,11 @@
     end
 
     def new?
-      active_in_community?
+      create?
     end
 
     def edit?
-      active_in_community?
+      update?
     end
 
     def create?
@@ -37,11 +37,11 @@
     end
 
     def update?
-      active_in_community?
+      active_admin_or?(:wikiist) || (active_in_community? && page.editable_by == "everyone")
     end
 
     def destroy?
-      active_admin? || user == page.creator
+      active_admin_or?(:wikiist) || user == page.creator
     end
 
     def history?

@@ -11,6 +11,32 @@ describe Wiki::PagePolicy do
       it_behaves_like "permits users in community only"
     end
 
+    permissions :update? do
+      context "with restricted page" do
+        before { page.editable_by = "wikiist" }
+
+        it "permits admins" do
+          expect(subject).to permit(admin, page)
+        end
+
+        it "permits wikiist" do
+          expect(subject).to permit(wikiist, page)
+        end
+
+        it "denies wikiist from other community" do
+          expect(subject).not_to permit(wikiist_in_cmtyB, page)
+        end
+
+        it "denies creator" do
+          expect(subject).not_to permit(user, page)
+        end
+
+        it "denies regular user" do
+          expect(subject).not_to permit(other_user, page)
+        end
+      end
+    end
+
     permissions :destroy? do
       it "permits admins" do
         expect(subject).to permit(admin, page)
@@ -18,6 +44,10 @@ describe Wiki::PagePolicy do
 
       it "permits creator" do
         expect(subject).to permit(user, page)
+      end
+
+      it "permits wikiist" do
+        expect(subject).to permit(wikiist, page)
       end
 
       it "denies other users in community" do

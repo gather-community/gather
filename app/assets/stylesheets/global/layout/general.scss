@@ -18,6 +18,19 @@
   }
 }
 
+#impersonation-notice {
+  padding: 10px;
+  background-color: $error-red;
+  color: white;
+  // font-weight: bold;
+  text-align: center;
+
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+}
+
 p.subtitle {
   margin-top: -10px;
 }

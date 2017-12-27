@@ -177,6 +177,24 @@ describe UserPolicy do
       it_behaves_like "permits admins except self and guardians"
     end
 
+    permissions :impersonate? do
+      it_behaves_like "permits admins but not regular users"
+
+      it "denies on self" do
+        expect(subject).not_to permit(admin, admin)
+      end
+
+      it "denies on other admins" do
+        expect(subject).not_to permit(admin, admin2)
+        expect(subject).not_to permit(admin, cluster_admin)
+        expect(subject).not_to permit(admin, super_admin)
+      end
+
+      it "denies on children" do
+        expect(subject).not_to permit(admin, child)
+      end
+    end
+
     permissions :activate? do
       before { record.deactivate }
       it_behaves_like "permits admins except self and guardians"
@@ -202,9 +220,17 @@ describe UserPolicy do
       end
     end
 
-    permissions :edit?, :update?, :update_photo? do
+    permissions :edit?, :update? do
       it_behaves_like "permits admins or special role but not regular users", "photographer"
       it_behaves_like "permits self (active or not) and guardians"
+    end
+
+    permissions :update_photo? do
+      it_behaves_like "permits special role but not regular users", "photographer"
+
+      it "denies admins" do # Admins can do regular edit instead.
+        expect(subject).not_to permit(admin, user)
+      end
     end
 
     permissions :update_info? do

@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     member do
       put :activate
       put :deactivate
+      post :impersonate
+      post :unimpersonate
     end
   end
 

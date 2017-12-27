@@ -48,6 +48,10 @@ class UserPolicy < ApplicationPolicy
     active_admin?
   end
 
+  def impersonate?
+    active_admin? && !self? && !target_is_admin? && record.adult?
+  end
+
   def destroy?
     active_admin? && !record.any_assignments?
   end
@@ -76,8 +80,9 @@ class UserPolicy < ApplicationPolicy
     self? || guardian? || active_admin?
   end
 
+  # Only needed for folks who otherwise couldn't edit this user (i.e. not self, guardians, or admins).
   def update_photo?
-    update_info? || active_with_community_role?(:photographer)
+    !update_info? && active_with_community_role?(:photographer)
   end
 
   def administer?
@@ -147,5 +152,9 @@ class UserPolicy < ApplicationPolicy
   def guardian?
     return false unless record.is_a?(User) # May be a Class in some cases
     record.guardians.include?(user)
+  end
+
+  def target_is_admin?
+    record.has_role?(:admin) || record.has_role?(:cluster_admin) || record.has_role?(:super_admin)
   end
 end

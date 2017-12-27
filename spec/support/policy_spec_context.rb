@@ -30,6 +30,7 @@ shared_context "policy objs" do
     deactivated_at: Time.current, label: "inactive_child") }
 
   let(:admin) { new_user_from(community, label: "admin") }
+  let(:admin2) { new_user_from(community, label: "admin2") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
   let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
@@ -50,6 +51,7 @@ shared_context "policy objs" do
     allow(user).to receive(:has_role?) { false }
     allow(other_user).to receive(:has_role?) { false }
     allow(admin).to receive(:has_role?) { |r| r == :admin }
+    allow(admin2).to receive(:has_role?) { |r| r == :admin }
     allow(admin_in_cmtyB).to receive(:has_role?) { |r| r == :admin }
     allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
     allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
@@ -139,12 +141,14 @@ shared_context "policy objs" do
     end
   end
 
-  shared_examples_for "permits admins or special role but not regular users" do |role_name|
-    it_behaves_like "permits admins but not regular users"
-
+  shared_examples_for "permits special role but not regular users" do |role_name|
     context do
       let(:actor) { role_member(role_name) }
       it_behaves_like "errors on permission check without community"
+    end
+
+    it "forbids regular user" do
+      expect(subject).not_to permit(user, record)
     end
 
     it "permits role from community" do
@@ -154,6 +158,11 @@ shared_context "policy objs" do
     it "forbids role from outside community" do
       expect(subject).not_to permit(role_member("#{role_name}_in_cmtyB"), record)
     end
+  end
+
+  shared_examples_for "permits admins or special role but not regular users" do |role_name|
+    it_behaves_like "permits admins but not regular users"
+    it_behaves_like "permits special role but not regular users", role_name
   end
 
   shared_examples_for "permits cluster admins only" do

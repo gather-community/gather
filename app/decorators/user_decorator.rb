@@ -87,7 +87,9 @@ class UserDecorator < ApplicationDecorator
   def show_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
-      ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object))
+      ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object)),
+      ActionLink.new(object, :impersonate, icon: "user-circle-o", path: h.impersonate_user_path(object),
+        method: :post)
     )
   end
 

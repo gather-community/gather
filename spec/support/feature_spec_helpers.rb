@@ -16,6 +16,15 @@ module FeatureSpecHelpers
     find(".select2-dropdown .select2-results li", text: /#{value}/).click
   end
 
+  def click_on_personal_nav(item)
+    find(".personal-nav .dropdown-toggle").click
+    find(".personal-nav .dropdown-menu a", text: item).click
+  end
+
+  def have_signed_in_user(user)
+    have_css(".personal-nav a", text: user.name)
+  end
+
   def enter_datetime(value, into:)
     find(".#{into} input.datetime_picker").set(value)
   end

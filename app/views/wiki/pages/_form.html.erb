@@ -6,6 +6,9 @@
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>
+  <% if policy(page).permitted_attributes.include?(:editable_by) %>
+    <%= f.input :editable_by, collection: Wiki::Page::EDITABLE_BY_OPTIONS, include_blank: false %>
+  <% end %>
 
   <%= form_actions do %>
     <%= f.button :submit, "Cancel", name: "cancel", class: "btn-default" %>

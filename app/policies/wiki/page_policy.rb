@@ -25,11 +25,11 @@
     end
 
     def new?
-      active_in_community?
+      create?
     end
 
     def edit?
-      active_in_community?
+      update?
     end
 
     def create?
@@ -37,11 +37,11 @@
     end
 
     def update?
-      active_in_community?
+      active_admin_or?(:wikiist) || (active_in_community? && page.editable_by == "everyone")
     end
 
     def destroy?
-      active_admin? || user == page.creator
+      active_admin_or?(:wikiist) || user == page.creator
     end
 
     def history?
@@ -53,7 +53,9 @@
     end
 
     def permitted_attributes
-      [:title, :content, :comment]
+      permitted = [:title, :content, :comment]
+      permitted << :editable_by if active_admin_or?(:wikiist)
+      permitted
     end
   end
 end

@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   include Deactivatable, Phoneable, PhotoDestroyable
 
-  ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator)
+  ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist)
   CONTACT_TYPES = %i(email text phone)
 
   acts_as_tenant(:cluster)

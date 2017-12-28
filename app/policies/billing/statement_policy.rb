@@ -3,15 +3,15 @@ module Billing
     alias_method :statement, :record
 
     def index?
-      active_admin_or_biller?
+      active_admin_or?(:biller)
     end
 
     def generate?
-      active_admin_or_biller?
+      active_admin_or?(:biller)
     end
 
     def show?
-      active_admin_or_biller? || account_owner?
+      active_admin_or?(:biller) || account_owner?
     end
   end
 end

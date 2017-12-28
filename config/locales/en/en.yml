@@ -129,6 +129,7 @@ en:
         title: "Title"
         content: "Content"
         comment: "Comment"
+        editable_by: "Editable By"
     errors:
       models:
         signup:
@@ -426,6 +427,10 @@ en:
         default_calendar_view:
           week: "Week"
           month: "Month"
+      wiki_page:
+        editable_by:
+          everyone: "Everyone"
+          wikiist: "Wikiists & Admins Only"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -619,6 +624,7 @@ en:
     biller: "Biller"
     photographer: "Photographer"
     meals_coordinator: "Meals Coordinator"
+    wikiist: "Wikiist"
 
   phone_types:
     abbreviations:

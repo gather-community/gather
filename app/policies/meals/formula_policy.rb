@@ -6,7 +6,7 @@ module Meals
 
     class Scope < ApplicationPolicy::Scope
       def resolve
-        if active_admin_or_meals_coordinator?
+        if active_admin_or?(:meals_coordinator)
           scope
         else
           scope.active
@@ -23,23 +23,23 @@ module Meals
     end
 
     def create?
-      active_admin_or_meals_coordinator?
+      active_admin_or?(:meals_coordinator)
     end
 
     def update?
-      active_admin_or_meals_coordinator?
+      active_admin_or?(:meals_coordinator)
     end
 
     def update_calcs?
-      !has_meals? && active_admin_or_meals_coordinator?
+      !has_meals? && active_admin_or?(:meals_coordinator)
     end
 
     def activate?
-      formula.inactive? && active_admin_or_meals_coordinator?
+      formula.inactive? && active_admin_or?(:meals_coordinator)
     end
 
     def deactivate?
-      !is_default? && formula.active? && active_admin_or_meals_coordinator?
+      !is_default? && formula.active? && active_admin_or?(:meals_coordinator)
     end
 
     def destroy?

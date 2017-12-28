@@ -35,18 +35,18 @@ class MealPolicy < ApplicationPolicy
   end
 
   def create?
-    active_admin_or_meals_coordinator?
+    active_admin_or?(:meals_coordinator)
   end
 
   # We let anyone from host community (or assignees from outside) do this
   # so they can change assignments.
   def update?
-    active_admin_or_meals_coordinator? || (active? && (own_community_record? || assigned?))
+    active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
   end
 
   # Means they can peform the fundamental tasks (set date, communities, etc.)
   def administer?
-    active_admin_or_meals_coordinator?
+    active_admin_or?(:meals_coordinator)
   end
 
   def destroy?
@@ -74,7 +74,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    active_admin_or_biller? && meal.closed? && meal.in_past?
+    active_admin_or?(:biller) && meal.closed? && meal.in_past?
   end
 
   def update_formula?
@@ -82,7 +82,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def send_message?
-    active_admin_or_meals_coordinator? || assigned?
+    active_admin_or?(:meals_coordinator) || assigned?
   end
 
   def new_signups?
@@ -121,7 +121,7 @@ class MealPolicy < ApplicationPolicy
   private
 
   def active_admin_or_coordinator_or_head_cook?
-    active_admin_or_meals_coordinator? || active? && head_cook?
+    active_admin_or?(:meals_coordinator) || active? && head_cook?
   end
 
   def active_and_associated_or_signed_up?

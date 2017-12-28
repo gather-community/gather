@@ -3,6 +3,7 @@ module Wiki
     acts_as_tenant :cluster
 
     RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze
+    EDITABLE_BY_OPTIONS = %i(everyone wikiist)
 
     attr_accessor :comment
 
@@ -52,6 +53,7 @@ module Wiki
     private
 
     def create_new_version
+      return unless saved_change_to_title? || saved_change_to_content? || comment.present?
       n = last_version_number
       v = versions.build
       v.attributes = attributes.slice(*(v.attribute_names - ['id']))

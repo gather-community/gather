@@ -28,6 +28,10 @@
 
   .wiki-content {
     min-height: 400px;
+
+    &.preview {
+      margin-bottom: 40px;
+    }
   }
 
   .wiki-page-revision-info {

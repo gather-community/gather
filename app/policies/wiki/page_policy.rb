@@ -54,7 +54,7 @@
 
     def permitted_attributes
       permitted = [:title, :content, :comment]
-      permitted << :editable_by if active_admin_or?(:wikiist)
+      permitted.push(:editable_by, :data_source) if active_admin_or?(:wikiist)
       permitted
     end
   end

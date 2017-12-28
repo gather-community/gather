@@ -3,7 +3,9 @@ module Wiki
     delegate_all
 
     def formatted_content
-      h.content_tag(:div, class: "wiki-content") do
+      classes = ["wiki-content"]
+      classes << "preview" if h.params[:preview]
+      h.content_tag(:div, class: classes.join(" ")) do
         h.sanitize(render_markdown(linkify(content).html_safe))
       end
     end

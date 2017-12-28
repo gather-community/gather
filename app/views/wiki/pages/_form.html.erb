@@ -6,8 +6,11 @@
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>
-  <% if policy(page).permitted_attributes.include?(:editable_by) %>
+  <% if policy(page).attribute_permitted?(:editable_by) %>
     <%= f.input :editable_by, collection: Wiki::Page::EDITABLE_BY_OPTIONS, include_blank: false %>
+  <% end %>
+  <% if policy(page).attribute_permitted?(:data_source) %>
+    <%= f.input :data_source, as: :string %>
   <% end %>
 
   <%= form_actions do %>

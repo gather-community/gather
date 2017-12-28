@@ -89,7 +89,7 @@ describe Wiki::PagePolicy do
 
     shared_examples_for "wikiist and above" do
       it "should allow setting editable_by" do
-        expect(subject).to contain_exactly(:title, :content, :comment, :editable_by)
+        expect(subject).to contain_exactly(:title, :content, :comment, :editable_by, :data_source)
       end
     end
 

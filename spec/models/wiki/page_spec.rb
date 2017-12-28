@@ -54,6 +54,7 @@ describe Wiki::Page do
     context "without title, content, or comment change" do
       it "doesn't save new version" do
         expect { page.update!(editable_by: "wikiist") }.to change { Wiki::PageVersion.count }.by(0)
+        expect { page.update!(data_source: "http://foo.com") }.to change { Wiki::PageVersion.count }.by(0)
       end
     end
   end

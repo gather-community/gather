@@ -37,6 +37,10 @@ class ApplicationPolicy
     false
   end
 
+  def attribute_permitted?(attrib)
+    permitted_attributes.include?(attrib)
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end

@@ -130,6 +130,7 @@ en:
         content: "Content"
         comment: "Comment"
         editable_by: "Editable By"
+        data_source: "Data Source"
     errors:
       models:
         signup:
@@ -385,6 +386,7 @@ en:
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
       wiki_page:
         content: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+        data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
     options:
       meal:
         time:

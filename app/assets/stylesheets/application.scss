@@ -14,6 +14,8 @@
 @import "dropzone/basic";
 
 // App
+@import "global/bootstrap_overrides";
+@import "global/bootstrap_variables";
 @import "global/variables";
 @import "global/**/*";
 @import "local/**/*";

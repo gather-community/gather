@@ -1,0 +1,33 @@
+// Bootstrap layout stuff for forms
+form.gather-form {
+  // .form-group > is added here so that we don't affect nested fields.
+  &.narrower-label-layout {
+    .form-group > .control-label {
+      @include make-sm-column(3);
+    }
+
+    .form-group > .control-wrapper {
+      @include make-sm-column(9);
+    }
+
+    .form-group.boolean > .control-wrapper {
+      @include make-sm-column-offset(3);
+      @include make-sm-column(9);
+    }
+  }
+
+  &.equal-width-layout {
+    .form-group > .control-label {
+      @include make-sm-column(6);
+    }
+
+    .form-group > .control-wrapper {
+      @include make-sm-column(6);
+    }
+
+    .form-group.boolean > .control-wrapper {
+      @include make-sm-column-offset(6);
+      @include make-sm-column(6);
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<%= horizontal_form_for(reservation,
+<%= gather_form_for(reservation,
       url: reservation.new_record? ? reservations_path : reservation_path(reservation)) do |f| %>
 
   <%= f.hidden_field :resource_id %>

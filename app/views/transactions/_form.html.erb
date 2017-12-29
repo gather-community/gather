@@ -1,4 +1,4 @@
-<%= horizontal_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
+<%= gather_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
   <%= hidden_field_tag :account_id, @account.id %>
 
   <%= f.input :household_name do %>

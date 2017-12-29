@@ -2,7 +2,7 @@
   <%= page.formatted_content %>
 <% end %>
 
-<%= horizontal_form_for(page) do |f| %>
+<%= gather_form_for(page) do |f| %>
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>

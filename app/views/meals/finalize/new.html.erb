@@ -4,7 +4,7 @@
 
 <p>Please adjust meal signups as necessary below (e.g. to account for late signups), and enter cook reimbursement information.</p>
 
-<%= horizontal_form_for(@meal, width: :full, name: "finalize",
+<%= gather_form_for(@meal, width: :full, name: "finalize",
   url: meal_finalize_path, method: :post) do |form| %>
   <table class="index new">
     <%= render "table_header", extra_col: true %>

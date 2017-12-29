@@ -1,4 +1,4 @@
-<%= horizontal_form_for(formula) do |f| %>
+<%= gather_form_for(formula) do |f| %>
   <%= f.input :name, maxlength: 32 %>
   <%= f.input :is_default, disabled: @force_default %>
   <%= f.hidden_field :is_default if @force_default %>

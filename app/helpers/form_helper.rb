@@ -1,11 +1,32 @@
 module FormHelper
-  def horizontal_form_for(obj, options = {}, &block)
+  # Gather forms are setup with a nested grid.
+  # Outer Grid:
+  #   - The form defaults to 9 columns in the outer grid, leaving 3 for e.g.
+  #     an image upload widget or info box.
+  #   - Setting width: :full makes it 12 columns.
+  # Inner Grid:
+  #   - The inner grid is for the label and field (together called the "control").
+  #   - The inner grid defaults to 3 columns for the label and 9 for the field (layout: :narrower_label).
+  #   - The :equal_width layout has 6 columns for both label and field.
+  #   - Layouts are achieved using CSS in the global/forms/bootstrap.scss file.
+  def gather_form_for(obj, options = {}, &block)
     width = options[:width] || :normal
     cols = options.delete(:width) == :full ? 12 : 9
     name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
+    layout = options.delete(:layout) || :narrower_label
+
     options[:html] ||= {}
-    options[:html][:class] ||= ""
-    options[:html][:class] << " form-horizontal col-sm-#{cols} #{name}-form width-#{width}"
+
+    classes = options[:html][:class].present? ? [options[:html][:class]] : []
+    classes << "gather-form"
+    classes << "form-horizontal" # Used by Bootstrap
+    classes << (layout.to_s.gsub("_", "-") << "-layout") # Layout
+    classes << "col-sm-#{cols}" # Columns for outer grid
+    classes << "#{name}-form" # Object class name
+
+    options[:html][:class] = classes.join(" ")
+
+    # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
       simple_form_for(obj, options, &block)
     end

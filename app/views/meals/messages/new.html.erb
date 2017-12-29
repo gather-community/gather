@@ -1,6 +1,6 @@
 <% content_for(:title) { I18n.t("titles.meals/messages") } %>
 
-<%= horizontal_form_for(@message, url: meal_messages_path) do |f| %>
+<%= gather_form_for(@message, url: meal_messages_path) do |f| %>
   <%= f.hidden_field :kind %>
   <%= f.hidden_field :recipient_type %><%# In case disabled below %>
 

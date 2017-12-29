@@ -4,7 +4,7 @@
   </div>
 
   <div class="col-sm-9 col-sm-pull-3">
-    <%= horizontal_form_for(resource, width: :full) do |f| %>
+    <%= gather_form_for(resource, width: :full) do |f| %>
       <%= f.input :photo_tmp_id, as: :hidden %>
       <%= f.input :photo_destroy, as: :hidden %>
       <%= f.input :name, maxlength: 24 %>

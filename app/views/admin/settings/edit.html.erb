@@ -1,6 +1,6 @@
 <% content_for(:title) { "Settings" } %>
 
-<%= horizontal_form_for(@community, url: admin_settings_path(type: "community")) do |f| %>
+<%= gather_form_for(@community, url: admin_settings_path(type: "community")) do |f| %>
   <%= render("admin/settings/group_entry", group_entry: @community.settings, f: f) %>
   <%= form_actions do %>
     <%= f.button :submit, "Save Settings", class: "btn-primary" %>

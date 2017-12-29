@@ -4,10 +4,17 @@ SimpleForm.setup do |config|
   config.button_class = "btn btn-default"
   config.boolean_label_class = nil
 
-  horiz_label_cols = 3
-  horiz_control_cols = 9
+  def hint_and_error(b)
+    b.use :hint,  wrap_with: {class: "hint"}
+    b.use :error, wrap_with: {class: "error"}
+  end
 
-  config.wrappers :nested_fields, error_class: "has-error" do |b|
+  def build_wrapper(config, name, attribs = {}, &block)
+    base_attribs = {class: "form-group", error_class: "has-error"}
+    config.wrappers(name, base_attribs.merge(attribs), &block)
+  end
+
+  build_wrapper config, :horizontal_default do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
@@ -16,89 +23,66 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.use :label, class: "control-label"
-    b.use :error, wrap_with: { tag: "span", class: "error" }
-    b.use :input, class: "form-control"
-    b.use :hint,  wrap_with: { tag: "div", class: "hint" }
-  end
-
-  config.wrappers :horizontal_form, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.use :placeholder
-    b.optional :maxlength
-    b.optional :pattern
-    b.optional :min_max
-    b.optional :readonly
-    b.use :label, class: "col-sm-#{horiz_label_cols} control-label"
-
-    b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
+    b.wrapper class: "control-wrapper" do |ba|
       ba.use :input, class: "form-control"
-      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
-      ba.use :error, wrap_with: { tag: "div", class: "error" }
+      hint_and_error(ba)
     end
   end
 
-  config.wrappers :equal_width_form, tag: "div", class: "form-group", error_class: "has-error" do |b|
-    b.use :html5
-    b.use :placeholder
-    b.optional :maxlength
-    b.optional :pattern
-    b.optional :min_max
-    b.optional :readonly
-    b.use :label, class: "col-sm-6 control-label"
-
-    b.wrapper tag: "div", class: "col-sm-6" do |ba|
-      ba.use :input, class: "form-control"
-      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
-      ba.use :error, wrap_with: { tag: "div", class: "error" }
-    end
-  end
-
-  config.wrappers :horizontal_file_input, tag: "div", class: "form-group", error_class: "has-error" do |b|
+  build_wrapper config, :horizontal_file_input do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
     b.optional :readonly
-    b.use :label, class: "col-sm-#{horiz_label_cols} control-label"
 
-    b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
+    b.use :label, class: "control-label"
+    b.wrapper class: "control-wrapper" do |ba|
       ba.use :input
-      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
-      ba.use :error, wrap_with: { tag: "div", class: "error" }
+      hint_and_error(ba)
     end
   end
 
-  config.wrappers :horizontal_boolean, tag: "div", class: "form-group", error_class: "has-error" do |b|
+  build_wrapper config, :horizontal_boolean do |b|
     b.use :html5
     b.optional :readonly
 
-    b.wrapper tag: "div", class: "col-sm-offset-#{horiz_label_cols} col-sm-#{horiz_control_cols}" do |wr|
-      wr.wrapper tag: "div", class: "checkbox" do |ba|
-        ba.use :label_input, class: "col-sm-#{horiz_control_cols}"
+    b.wrapper class: "control-wrapper" do |wr|
+      wr.wrapper class: "checkbox" do |ba|
+        ba.use :label_input
       end
-
-      wr.use :hint,  wrap_with: { tag: "div", class: "hint" }
-      wr.use :error, wrap_with: { tag: "div", class: "error" }
+      wr.use :hint,  wrap_with: {class: "hint"}
+      wr.use :error, wrap_with: {class: "error"}
     end
   end
 
-  config.wrappers :horizontal_radio_and_checkboxes, tag: "div", class: "form-group", error_class: "has-error" do |b|
+  build_wrapper config, :horizontal_radio_and_checkboxes do |b|
     b.use :html5
     b.optional :readonly
 
-    b.use :label, class: "col-sm-#{horiz_label_cols} control-label"
-
-    b.wrapper tag: "div", class: "col-sm-#{horiz_control_cols}" do |ba|
+    b.use :label, class: "control-label"
+    b.wrapper class: "control-wrapper" do |ba|
       ba.use :input
-      ba.use :hint,  wrap_with: { tag: "div", class: "hint" }
-      ba.use :error, wrap_with: { tag: "div", class: "error" }
+      hint_and_error(ba)
     end
   end
 
-  # Wrappers for forms and inputs using the Bootstrap toolkit.
-  # Check the Bootstrap docs (http://getbootstrap.com)
-  # to learn about the different styles for forms and inputs,
-  # buttons and other elements.
-  config.default_wrapper = :horizontal_form
+  # We set class to nil here because the default (form-group) does stuff we don't want it to, e.g. some
+  # column layout stuff.
+  build_wrapper config, :nested_fields, class: nil do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+
+    b.use :label, class: "control-label"
+    b.use :error, wrap_with: {tag: "span", class: "error"}
+    b.use :input, class: "form-control"
+    b.use :hint,  wrap_with: {class: "hint"}
+  end
+
+  config.default_wrapper = :horizontal_default
   config.wrapper_mappings = {
     check_boxes: :horizontal_radio_and_checkboxes,
     radio_buttons: :horizontal_radio_and_checkboxes,

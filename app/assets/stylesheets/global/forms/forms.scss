@@ -101,7 +101,7 @@ form {
 
 // Overriding default label top padding
 @media (min-width: $screen-sm-min) {
-  .form-horizontal .control-label {
+  .gather-form .control-label {
     padding-top: 0;
   }
 }

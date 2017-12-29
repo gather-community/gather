@@ -1,3 +1,7 @@
 .nav-tabs li.active[role="presentation"] a[role="tab"] {
   cursor: pointer;
+
+  &:active, &:hover {
+    border-bottom: 1px solid white;
+  }
 }

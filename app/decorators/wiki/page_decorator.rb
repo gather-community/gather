@@ -6,7 +6,7 @@ module Wiki
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
       h.content_tag(:div, class: classes.join(" ")) do
-        h.sanitize(render_markdown(linkify(content).html_safe))
+        h.sanitize(render_markdown(render_mustache(linkify(content).html_safe)))
       end
     end
 
@@ -60,11 +60,19 @@ module Wiki
       end.html_safe
     end
 
-    def render_markdown(str)
-      renderer.render(str)
+    def render_mustache(str)
+      if data_source
+        Mustache.render(str, fetch_data)
+      else
+        str
+      end
     end
 
-    def renderer
+    def render_markdown(str)
+      markdown_renderer.render(str)
+    end
+
+    def markdown_renderer
       @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML,
         autolink: true,
         space_after_headers: true,

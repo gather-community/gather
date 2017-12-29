@@ -1,3 +1,5 @@
+require 'open-uri'
+
 module Wiki
   class Page < ApplicationRecord
     acts_as_tenant :cluster
@@ -48,6 +50,12 @@ module Wiki
 
     def to_param
       slug
+    end
+
+    def fetch_data
+      if data_source.present?
+        JSON.parse(open(data_source, &:read))
+      end
     end
 
     private

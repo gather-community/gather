@@ -7,6 +7,12 @@ describe Wiki::Page do
       expect(page.slug).to eq "an-excellent-page"
     end
 
+    it "stays correct on update" do
+      page = create(:wiki_page, title: "An Excellent Page")
+      page.update!(content: "Some new content")
+      expect(page.slug).to eq "an-excellent-page"
+    end
+
     it "gets set properly for home page" do
       page = create(:wiki_page, title: "An Excéllent Page", home: true)
       expect(page.slug).to eq "home"

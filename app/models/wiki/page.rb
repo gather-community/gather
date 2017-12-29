@@ -74,10 +74,14 @@ module Wiki
     def title_to_slug_without_dupes
       base = title_to_slug(title)
       suffix = nil
-      while self.class.in_community(community).where(slug: candidate = "#{base}#{suffix}").exists?
+      while other_page_exists_with_slug?(candidate = "#{base}#{suffix}")
         suffix = (suffix || 1) + 1
       end
       candidate
+    end
+
+    def other_page_exists_with_slug?(other_slug)
+      self.class.in_community(community).where(slug: other_slug).where.not(id: id).exists?
     end
 
     def title_to_slug(title)

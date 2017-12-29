@@ -42,6 +42,8 @@
 
   .wiki--page-form {
     #wiki_page_content {
+      font-family: $font-family-monospace;
+      font-size: 12px;
       height: 500px;
     }
   }

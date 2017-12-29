@@ -6,14 +6,15 @@ module FormHelper
   #   - Setting width: :full makes it 12 columns.
   # Inner Grid:
   #   - The inner grid is for the label and field (together called the "control").
-  #   - The inner grid defaults to 3 columns for the label and 9 for the field (layout: :narrower_label).
-  #   - The :equal_width layout has 6 columns for both label and field.
+  #   - The inner grid defaults to 3 columns for the label and 9 for the field (layout: :narrow_label).
+  #   - The :narrower_label layout is 2/10.
+  #   - The :equal_width layout is 6/6.
   #   - Layouts are achieved using CSS in the global/forms/bootstrap.scss file.
   def gather_form_for(obj, options = {}, &block)
     width = options[:width] || :normal
     cols = options.delete(:width) == :full ? 12 : 9
     name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
-    layout = options.delete(:layout) || :narrower_label
+    layout = options.delete(:layout) || :narrow_label
 
     options[:html] ||= {}
 

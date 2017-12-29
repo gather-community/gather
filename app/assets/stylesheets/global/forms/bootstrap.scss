@@ -1,7 +1,7 @@
 // Bootstrap layout stuff for forms
 form.gather-form {
   // .form-group > is added here so that we don't affect nested fields.
-  &.narrower-label-layout {
+  &.narrow-label-layout {
     .form-group > .control-label {
       @include make-sm-column(3);
     }
@@ -13,6 +13,21 @@ form.gather-form {
     .form-group.boolean > .control-wrapper {
       @include make-sm-column-offset(3);
       @include make-sm-column(9);
+    }
+  }
+
+  &.narrower-label-layout {
+    .form-group > .control-label {
+      @include make-sm-column(2);
+    }
+
+    .form-group > .control-wrapper {
+      @include make-sm-column(10);
+    }
+
+    .form-group.boolean > .control-wrapper {
+      @include make-sm-column-offset(2);
+      @include make-sm-column(10);
     }
   }
 

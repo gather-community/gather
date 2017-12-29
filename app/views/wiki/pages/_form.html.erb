@@ -2,7 +2,7 @@
   <%= page.formatted_content %>
 <% end %>
 
-<%= gather_form_for(page) do |f| %>
+<%= gather_form_for(page, width: :full, layout: :narrower_label) do |f| %>
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>

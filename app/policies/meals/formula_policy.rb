@@ -49,7 +49,7 @@ module Meals
     def permitted_attributes
       attrs = [:name, :is_default]
       if update_calcs?
-        attrs << :meal_calc_type << :pantry_calc_type << :pantry_fee_disp
+        attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_disp, :pantry_reimbursement)
         Signup::SIGNUP_TYPES.map { |st| attrs << :"#{st}_disp" }
       end
       attrs

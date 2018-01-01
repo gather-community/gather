@@ -75,9 +75,10 @@ en:
         name: "Name"
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
-        is_default: "Default"
+        is_default: "Default Formula?"
         signup_types: "Signup Types"
         pantry_fee_disp: "Pantry Fee Amount"
+        pantry_reimbursement: "Allow Pantry Reimbursement?"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -388,7 +389,9 @@ en:
       user:
         joined_on: "Approximate date when you joined the community"
       meals_formula:
+        is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
+        pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
       wiki_page:
         content: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."

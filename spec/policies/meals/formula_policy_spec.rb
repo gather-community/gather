@@ -114,7 +114,7 @@ describe Meals::FormulaPolicy do
     context "with no meals" do
       it "should allow all attribs" do
         expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type,
-          :pantry_fee_disp, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
+          :pantry_fee_disp, :pantry_reimbursement, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
       end
     end
 

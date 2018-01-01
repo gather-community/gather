@@ -107,6 +107,7 @@ module Wiki
       if page[:cancel]
         redirect_to wiki_page_path(@page)
       elsif @page.invalid?
+        params.delete(:preview)
         render action
       elsif params[:preview]
         flash.now[:notice] = t("wiki.preview_notice")
@@ -125,6 +126,7 @@ module Wiki
      if page.data_fetch_error?
        flash.now[:error] = I18n.t("activerecord.errors.models.wiki/page.data_fetch.main",
          error: page.data_fetch_error)
+       params.delete(:preview)
      end
     end
   end

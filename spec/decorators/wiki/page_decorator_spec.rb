@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Wiki::PageDecorator do
   describe "data fetch" do
     let(:content) { "foo" }
-    let(:data_source) { "http://foo.com" }
+    let(:data_source) { "http://example.com" }
     let(:attribs) { {content: content, data_source: data_source} }
     let(:page) { create(:wiki_page, attribs) }
     let(:decorator) { page.decorate }
@@ -94,6 +94,26 @@ describe Wiki::PageDecorator do
 
       def expect_empty_formatted_content
         expect(decorator.formatted_content).to eq('<div class="wiki-content"></div>')
+      end
+    end
+  end
+
+  describe "#template_error" do
+    let(:decorator) { create(:wiki_page, content: content).decorate }
+
+    context "with valid template" do
+      let(:content) { "{{#people}}{{name}}{{/people}}" }
+
+      it "returns nil" do
+        expect(decorator.template_error).to be_nil
+      end
+    end
+
+    context "with invalid template" do
+      let(:content) { "{{1&na.me}}" }
+
+      it "returns error" do
+        expect(decorator.template_error).to eq "Template Error: Unclosed tag, Line 1"
       end
     end
   end

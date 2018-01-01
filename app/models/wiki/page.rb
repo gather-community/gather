@@ -19,6 +19,7 @@ module Wiki
 
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved
+    validate :template_error
 
     before_validation :set_slug
     after_save :create_new_version
@@ -96,6 +97,12 @@ module Wiki
       naive_slug = title_to_slug(title)
       if RESERVED_SLUGS.include?(naive_slug)
         errors.add(:title, :reserved_slug)
+      end
+    end
+
+    def template_error
+      if data_source.present? && error = decorate.template_error
+        errors.add(:content, error)
       end
     end
   end

@@ -1,6 +1,40 @@
 require "rails_helper"
 
 describe Wiki::Page do
+  describe "validation" do
+    describe "template errors" do
+      let(:error) { nil }
+      let(:page) { build(:wiki_page, data_source: data_source) }
+
+      before do
+        allow(page).to receive(:decorate).and_return(double(template_error: error))
+      end
+
+      context "with no data source" do
+        let(:data_source) { nil }
+
+        it { expect(page).to be_valid }
+      end
+
+      context "with data source" do
+        let(:data_source) { "http://example.com" }
+
+        context "with no template error" do
+          it { expect(page).to be_valid }
+        end
+
+        context "with template error" do
+          let(:error) { "Template Error: Big bad error" }
+
+          it "sets error" do
+            expect(page).not_to be_valid
+            expect(page.errors[:content].join).to eq "Template Error: Big bad error"
+          end
+        end
+      end
+    end
+  end
+
   describe "slug" do
     it "gets set automatically" do
       page = create(:wiki_page, title: "An Excéllent Page")

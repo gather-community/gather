@@ -14,6 +14,18 @@ module Wiki
       end
     end
 
+    # Tests Mustache syntax and returns any error encountered.
+    def template_error
+      begin
+        # An empty hash should not trigger syntax errors. It just results in empty content.
+        # A syntax error is only caused by invalid syntax!
+        Mustache.render(content, {})
+        nil
+      rescue Mustache::Parser::SyntaxError
+        format_mustache_error($!)
+      end
+    end
+
     def revision_info
       h.content_tag(:span, class: "wiki-page-revision-info") do
         h.t("wiki.revision_info", time: h.l(updated_at), user: updator.decorate.name_with_inactive)
@@ -84,18 +96,22 @@ module Wiki
           self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_json")
           ""
         rescue Mustache::Parser::SyntaxError
-          details = if m = $!.to_s.match(/\A.+Line \d+/m)
-            m[0]
-          else
-            $!.to_s.gsub(/\s*\^\s*\z/m, "")
-          end
-          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
-            details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
+          self.data_fetch_error = format_mustache_error($!)
           ""
         end
       else
         str
       end
+    end
+
+    def format_mustache_error(error)
+      details = if m = error.to_s.match(/\A.+Line \d+/m)
+        m[0]
+      else
+        error.to_s.gsub(/\s*\^\s*\z/m, "")
+      end
+      I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
+        details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
     end
 
     def render_markdown(str)

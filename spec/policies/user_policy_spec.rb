@@ -257,6 +257,36 @@ describe UserPolicy do
     end
   end
 
+  describe "#grantable_roles" do
+    let(:roles) { described_class.new(actor, other_user).grantable_roles }
+    let(:base_roles) { %i(biller photographer meals_coordinator wikiist) }
+
+    context "for super admin" do
+      let(:actor) { super_admin }
+      it { expect(roles).to match_array(%i(super_admin cluster_admin admin) + base_roles) }
+    end
+
+    context "for cluster admin" do
+      let(:actor) { cluster_admin }
+      it { expect(roles).to match_array(%i(cluster_admin admin) + base_roles) }
+    end
+
+    context "for admin" do
+      let(:actor) { admin }
+      it { expect(roles).to match_array(%i(admin) + base_roles) }
+    end
+
+    context "for user with base role" do
+      let(:actor) { biller }
+      it { expect(roles).to be_empty }
+    end
+
+    context "for user with no role" do
+      let(:actor) { user }
+      it { expect(roles).to be_empty }
+    end
+  end
+
   describe "scope" do
     before do
       save_policy_objects!(cluster, clusterB, community, communityB, communityX,

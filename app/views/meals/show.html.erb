@@ -1,8 +1,9 @@
-<% content_for(:title) do
-  h(@meal.title || "Untitled Meal") <<
-    (@meal.cancelled? ? " ".html_safe << icon_tag("ban") : "") <<
-    (@meal.closed? ? " ".html_safe << icon_tag("lock") : "") <<
-    (@meal.finalized? ? " ".html_safe << icon_tag("certificate") : "")
+<% content_for(:title, @meal.title || "Untitled Meal") %>
+<% content_for(:title_icons) do
+  "".html_safe <<
+    (@meal.cancelled? ? icon_tag("ban") : "") <<
+    (@meal.closed? ? icon_tag("lock") : "") <<
+    (@meal.finalized? ? icon_tag("certificate") : "")
 end %>
 
 <% content_for(:top_buttons, @meal.action_links) %>

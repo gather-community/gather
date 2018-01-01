@@ -80,9 +80,9 @@ describe Wiki::PageDecorator do
       end
 
       context "with template syntax error" do
-        let(:content) { "{{1&na.me}}" }
-
         before do
+          # Have to do it this way to sidestep validation errors.
+          page.update_column(:content, "{{1&na.me}}")
           expect(Kernel).to receive(:open).and_return("{}")
         end
 

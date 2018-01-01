@@ -16,7 +16,7 @@ FactoryBot.define do
       build(:household, attribs)
     end
 
-    %i(admin cluster_admin super_admin biller photographer meals_coordinator).each do |role|
+    User::ROLES.each do |role|
       factory role do
         after(:create) do |user|
           user.add_role(role)

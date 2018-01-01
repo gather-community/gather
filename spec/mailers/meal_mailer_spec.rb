@@ -56,14 +56,11 @@ describe MealMailer do
     let(:added) { create_list(:assignment, 2, meal: meal, role: "asst_cook") }
     let(:removed) { build_list(:assignment, 2, meal: meal, role: "asst_cook") }
     let(:mail) { described_class.worker_change_notice(initiator, meal, added, removed).deliver_now }
-
-    before do
-      meal.community.settings.meals.admin_email = "ma@foo.com"
-      meal.community.save!
-    end
+    let!(:meal_coords) { create_list(:meals_coordinator, 2) }
+    let!(:decoy_user) { create(:user) }
 
     it "sets the right recipients" do
-      recips = ((added + removed).map(&:user) << initiator << meal.head_cook).map(&:email) + ["ma@foo.com"]
+      recips = ((added + removed).map(&:user).push(initiator, meal.head_cook, *meal_coords)).map(&:email)
       expect(mail.to).to contain_exactly(*recips)
     end
 

@@ -42,6 +42,11 @@ class User < ApplicationRecord
   scope :adults, -> { where(child: false) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
+  ROLES.each do |role|
+    # Using these scopes instead of with_role helps avoid invalid role mistakes.
+    scope :"with_#{role}_role", -> { with_role(role) }
+  end
+
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :vehicles, to: :household
@@ -170,6 +175,10 @@ class User < ApplicationRecord
     update_attribute(:calendar_token, generate_token)
   end
 
+  # All roles are currently global.
+  # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense
+  # if someone can be a meals_coordinator in multiple communities, which they can't.
+  # Community scoping is already represented by the user's community or cluster affiliation.
   ROLES.each do |role|
     define_method("role_#{role}") do
       has_role?(role)

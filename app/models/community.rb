@@ -25,7 +25,6 @@ class Community < ApplicationRecord
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :string},
-      {key: :admin_email, type: :email},
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :default_shift_times, type: :group, fields: [
         {key: :start, type: :group, fields: [

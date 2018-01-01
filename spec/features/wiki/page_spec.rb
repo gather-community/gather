@@ -65,4 +65,30 @@ feature "pages", js: true do
     expect_success
     expect(page).to have_content("Here is a link to Another Page")
   end
+
+  context "with data source", :vcr do
+    let(:actor) { create(:admin) }
+
+    before do
+      visit("/wiki")
+      click_on("New Wiki Page")
+      fill_in("Title", with: "A Page")
+      fill_in("Content", with: "The Description: {{description}}")
+      fill_in("Data Source", with: "http://json-schema.org/example/geo.json")
+      click_on("Create Page")
+    end
+
+    context "with valid data" do
+      scenario do
+        expect(page).to have_content("The Description: A geographical coordinate")
+      end
+    end
+
+    context "with invalid data" do
+      scenario do
+        expect(page).to have_alert("There was a problem fetching data for this page (Invalid JSON)")
+        expect(page).not_to have_content("The Description:")
+      end
+    end
+  end
 end

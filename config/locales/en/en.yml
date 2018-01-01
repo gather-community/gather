@@ -162,6 +162,11 @@ en:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
         wiki/page:
+          data_fetch:
+            main: "There was a problem fetching data for this page (%{error})"
+            socket_error: "Couldn't connect to server"
+            invalid_json: "Invalid JSON"
+            template_error: "Template Error: %{details}"
           attributes:
             title:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."

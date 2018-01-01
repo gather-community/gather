@@ -20,6 +20,7 @@ module Wiki
         end
       end
       authorize @page
+      pre_render_content_and_set_error_flash_if_necessary
     end
 
     def new
@@ -105,12 +106,23 @@ module Wiki
     def redirect_on_success_or_rerender_on_error_or_preview(action)
       if params[:preview]
         flash.now[:notice] = t("wiki.preview_notice")
+        pre_render_content_and_set_error_flash_if_necessary
         render action
       elsif params[:cancel] || @page.save
         redirect_to wiki_page_path(@page)
       else
         render action
       end
+    end
+
+    def pre_render_content_and_set_error_flash_if_necessary
+     # Force the decorator to render to trigger any data fetch errors.
+     page.formatted_content
+
+     if page.data_fetch_error?
+       flash.now[:error] = I18n.t("activerecord.errors.models.wiki/page.data_fetch.main",
+         error: page.data_fetch_error)
+     end
     end
   end
 end

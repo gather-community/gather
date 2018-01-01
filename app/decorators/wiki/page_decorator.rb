@@ -2,11 +2,15 @@ module Wiki
   class PageDecorator < ApplicationDecorator
     delegate_all
 
+    attr_accessor :data_fetch_error
+
+    # Sets data_fetch_error on first run if there is a problem fetching data
     def formatted_content
+      return @formatted_content if defined?(@formatted_content)
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
-      h.content_tag(:div, class: classes.join(" ")) do
-        h.sanitize(render_markdown(render_mustache(linkify(content).html_safe)))
+      @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
+        h.sanitize(render_markdown(process_data(linkify(content).html_safe)))
       end
     end
 
@@ -31,6 +35,10 @@ module Wiki
 
     def history(versions)
       h.render "history_table", page: self, versions: versions, with_form: versions.size > 1
+    end
+
+    def data_fetch_error?
+      data_fetch_error.present?
     end
 
     private
@@ -60,9 +68,31 @@ module Wiki
       end.html_safe
     end
 
-    def render_mustache(str)
-      if data_source
-        Mustache.render(str, fetch_data)
+    # Processes mustache syntax in given string combined with data from data_source.
+    # Sets data_fetch_error if any errors encountered.
+    def process_data(str)
+      if data_source.present?
+        begin
+          Mustache.render(str, JSON.parse(Kernel.open(data_source, &:read)))
+        rescue SocketError
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.socket_error")
+          ""
+        rescue OpenURI::HTTPError
+          self.data_fetch_error = $!.to_s
+          ""
+        rescue JSON::ParserError
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_json")
+          ""
+        rescue Mustache::Parser::SyntaxError
+          details = if m = $!.to_s.match(/\A.+Line \d+/m)
+            m[0]
+          else
+            $!.to_s.gsub(/\s*\^\s*\z/m, "")
+          end
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
+            details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
+          ""
+        end
       else
         str
       end

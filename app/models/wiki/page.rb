@@ -52,12 +52,6 @@ module Wiki
       slug
     end
 
-    def fetch_data
-      if data_source.present?
-        JSON.parse(open(data_source, &:read))
-      end
-    end
-
     private
 
     def create_new_version

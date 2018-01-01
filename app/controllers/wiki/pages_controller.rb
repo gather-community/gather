@@ -104,14 +104,17 @@ module Wiki
     end
 
     def redirect_on_success_or_rerender_on_error_or_preview(action)
-      if params[:preview]
+      if page[:cancel]
+        redirect_to wiki_page_path(@page)
+      elsif @page.invalid?
+        render action
+      elsif params[:preview]
         flash.now[:notice] = t("wiki.preview_notice")
         pre_render_content_and_set_error_flash_if_necessary
         render action
-      elsif params[:cancel] || @page.save
-        redirect_to wiki_page_path(@page)
       else
-        render action
+        @page.save
+        redirect_to wiki_page_path(@page)
       end
     end
 

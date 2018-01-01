@@ -66,6 +66,16 @@ feature "pages", js: true do
     expect(page).to have_content("Here is a link to Another Page")
   end
 
+  scenario "validation error" do
+    visit("/wiki/new")
+
+    # Should not render preview
+    fill_in("Content", with: "**bold text**")
+    click_on("Preview")
+    expect(page).to have_css(".wiki_page_title .error", text: "Can't be blank")
+    expect(page).not_to have_css("b", text: "bold text")
+  end
+
   context "with data source", :vcr do
     let(:actor) { create(:admin) }
 
@@ -78,17 +88,13 @@ feature "pages", js: true do
       click_on("Create Page")
     end
 
-    context "with valid data" do
-      scenario do
-        expect(page).to have_content("The Description: A geographical coordinate")
-      end
+    scenario "with valid data" do
+      expect(page).to have_content("The Description: A geographical coordinate")
     end
 
-    context "with invalid data" do
-      scenario do
-        expect(page).to have_alert("There was a problem fetching data for this page (Invalid JSON)")
-        expect(page).not_to have_content("The Description:")
-      end
+    scenario "with invalid data" do
+      expect(page).to have_alert("There was a problem fetching data for this page (Invalid JSON)")
+      expect(page).not_to have_content("The Description:")
     end
   end
 end

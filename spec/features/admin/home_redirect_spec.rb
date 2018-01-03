@@ -11,12 +11,12 @@ feature "home redirect" do
 
   scenario "changes default landing page to meals" do
     visit "/"
-    expect(page).to have_content("Directory")
+    expect(page).to have_title("Directory")
     visit "/admin/settings/community"
-    select("Meals", from: "Default Landing Page")
+    select("Meals", from: "Default landing page")
     click_on("Save Settings")
     expect(page).to have_content("Settings updated successfully.")
     visit "/"
-    expect(page).to have_content("Meals")
+    expect(page).to have_title("Meals")
   end
 end

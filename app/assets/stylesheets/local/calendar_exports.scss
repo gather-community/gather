@@ -15,18 +15,6 @@ a.calendar-export {
 }
 
 .calendar-exports.action-index {
-  #links-and-note {
-    @media screen and (min-width: $screen-sm-min) {
-      display: table;
-      width: 100%;
-
-      > div {
-        display: table-cell;
-        vertical-align: top;
-      }
-    }
-  }
-
   #links {
     margin-bottom: 20px;
 
@@ -49,11 +37,7 @@ a.calendar-export {
     }
   }
 
-  #instructions {
-    margin-top: 30px;
-
-    ol {
-      padding-left: 14px;
-    }
+  ol {
+    padding-left: 14px;
   }
 }

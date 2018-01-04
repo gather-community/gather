@@ -7,6 +7,19 @@ module GeneralHelpers
     File.read(Rails.root.join("spec", "expectations", name))
   end
 
+  # `substitutions` should be a hash of arrays.
+  # For each hash pair, e.g. `grp: groups_ids`, the method substitutes
+  # e.g. `*grp8*` in the file with `groups_ids[7]`.
+  def prepare_expectation(filename, substitutions)
+    expectation_file(filename).tap do |contents|
+      substitutions.each do |key, values|
+        values.each_with_index do |value, i|
+          contents.gsub!("*#{key}#{i + 1}*", value.to_s)
+        end
+      end
+    end
+  end
+
   def stub_translation(key, msg, expect_defaults: nil)
     original_translate = I18n.method(:translate)
     allow(I18n).to receive(:translate) do |key_arg, options|

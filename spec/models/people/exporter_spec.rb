@@ -6,14 +6,14 @@ describe People::Exporter do
   describe "to_csv" do
     context "with no users" do
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq("First Name,Last Name,Unit Num,Birthdate,Email,Is Child,"\
+        expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Birthdate,Email,Is Child,"\
           "Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles\n")
       end
 
       context "with other locale" do
         it "should use locale specific headers" do
           with_locale(:fr) do
-            expect(exporter.to_csv).to match(/\APrénom,/)
+            expect(exporter.to_csv).to match(/,Prénom,/)
           end
         end
       end
@@ -36,7 +36,7 @@ describe People::Exporter do
         mobile_phone: "+17345557737", guardians: [adult1, adult2]) }
 
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq expectation_file("users.csv")
+        expect(exporter.to_csv).to eq prepare_expectation("users.csv", id: [child, adult2, adult1].map(&:id))
       end
     end
   end

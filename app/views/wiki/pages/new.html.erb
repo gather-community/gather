@@ -1,2 +1,2 @@
-<% content_for(:title, "New Wiki Page") %>
+<% content_for(:title, preview? ? page.title : "New Wiki Page") %>
 <%= render("form") %>

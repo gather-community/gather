@@ -14,7 +14,11 @@ module CalendarExportsHelper
       url = calendar_export_url(type.gsub("_", "-"),
         calendar_token: current_user.calendar_token,
         format: :ics,
-        protocol: :webcal
+        protocol: :webcal,
+
+        # If we don't set this to nil then it will be included in the
+        # webcal link which some clients don't like.
+        port: nil
       )
 
       link_to(icon_tag("calendar"), url) << " " <<

@@ -4,6 +4,7 @@ module Wiki
     before_action -> { nav_context(:wiki) }
 
     decorates_assigned :page, :pages, :versions
+    helper_method :preview?
 
     def index
       skip_policy_scope
@@ -82,6 +83,10 @@ module Wiki
         @new_version = @versions.first.number == new_num ? @versions.first : versions.first
         @old_version = @versions.last.number == old_num ? @versions.last : versions.last
       end
+    end
+
+    def preview?
+      params[:preview].present?
     end
 
     private

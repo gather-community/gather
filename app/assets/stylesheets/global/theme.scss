@@ -80,21 +80,16 @@ ul.no-marker {
   margin: 0;
 }
 
-// Content to the left must also be a table-cell in a table row so that it slides under.
 .callout {
-  display: table-cell;
+  background-color: #eee;
+  padding: 20px;
 
-  @media screen and (min-width: $screen-sm-min) {
-    width: 300px;
+  h1, h2, h3, h4 {
+    color: $theme-main;
+    margin-top: 0;
   }
 
-  div {
-    background-color: #eee;
-    padding: 20px;
-
-    h4 {
-      color: $theme-main;
-      margin-top: 0;
-    }
+  ul:last-of-type {
+    margin-bottom: 0;
   }
 }

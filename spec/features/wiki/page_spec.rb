@@ -22,11 +22,14 @@ feature "pages", js: true do
     click_on("Another Page")
     expect(page).to have_content("There is no wiki page named 'Another Page'")
 
-    fill_in("Content", with: "Version one")
-    click_on("Preview")
+    # Showing preview should not save page.
+    expect do
+      fill_in("Content", with: "Version one")
+      click_on("Preview")
+      expect(page).to have_content("This is a preview")
+      expect(page).to have_css(".wiki-content", text: "Version one")
+    end.to change { Wiki::Page.count }.by(0)
 
-    expect(page).to have_content("This is a preview")
-    expect(page).to have_css(".wiki-content", text: "Version one")
     click_on("Create Page")
 
     expect(page).not_to have_content("This is a preview")
@@ -64,6 +67,18 @@ feature "pages", js: true do
     accept_confirm { click_on("Delete") }
     expect_success
     expect(page).to have_content("Here is a link to Another Page")
+  end
+
+  scenario "previewing edit should not save changes" do
+    visit("/wiki")
+    expect(page).to have_content("This is your wiki home page!")
+    click_on("Edit")
+    fill_in("Content", with: "New content")
+    click_on("Preview")
+    expect(page).to have_content("This is a preview")
+    click_on("Cancel")
+    visit("/wiki")
+    expect(page).not_to have_content("New content")
   end
 
   scenario "validation error" do

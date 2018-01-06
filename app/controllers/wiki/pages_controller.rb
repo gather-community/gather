@@ -46,8 +46,7 @@ module Wiki
 
     def update
       authorize @page
-      @page.attributes = page_params
-      @page.updator = current_user
+      @page.assign_attributes(page_params.merge(updator: current_user))
       redirect_on_success_or_rerender_on_error_or_preview(:edit)
     end
 
@@ -109,7 +108,7 @@ module Wiki
     end
 
     def redirect_on_success_or_rerender_on_error_or_preview(action)
-      if page[:cancel]
+      if params[:cancel]
         redirect_to wiki_page_path(@page)
       elsif @page.invalid?
         params.delete(:preview)

@@ -9,12 +9,12 @@ This document refers to different categories of information as follows. An aster
 * Adults
   * **Contact info**: Name \*, unit number \*, email address \*, phone number \*, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts
+  * **Personal info**: Birthdate (with or without year), Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts, allergies, doctor info, medical conditions, names of people with keys to unit, pet information
   * **Account info**: Meals charges, late fees, credit limit, account balance
 * Children
   * **Contact info**: Name \*, unit number \*, email address, phone number, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), join date
+  * **Personal info**: Birthdate (with or without year), join date, school name, allergies, doctor info, medical conditions
 
 #### When do we collect information?
 
@@ -24,7 +24,8 @@ When you register with the system or update your information via the system.
 
   * To personalize your experience.
   * To foster community by allowing people to recognize and contact each other easily.
-  * To allow emergency contact information to be found when needed.
+  * To allow emergency information (emergency contacts, doctor and medical info, people with keys to unit, school info) to be found when needed.
+  * To facilitate caring for each others pets during absences.
   * To send useful, community-related notifications.
 
 #### What information is shared with third parties, and who are the third parties?

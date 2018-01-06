@@ -41,6 +41,7 @@ module FormHelper
     end
   end
 
+  # TODO: Refactor this in favor of f.error :base
   def base_error(f, full_width: false, key: :base)
     return unless f.object.errors[key].any?
     col_styles = full_width ? "col-sm-12" : "col-sm-6 col-sm-offset-2"

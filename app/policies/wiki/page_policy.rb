@@ -41,7 +41,7 @@
     end
 
     def destroy?
-      active_admin_or?(:wikiist) || user == page.creator
+      !page.sample? && (active_admin_or?(:wikiist) || user == page.creator)
     end
 
     def history?

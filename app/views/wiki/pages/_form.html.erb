@@ -3,6 +3,11 @@
 <% end %>
 
 <%= gather_form_for(page, width: :full, layout: :narrower_label) do |f| %>
+  <% if page.errors[:base] %>
+    <%= base_error(f, full_width: true) %>
+  <% else %>
+    <%= f.error_notification %>
+  <% end %>
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>

@@ -33,6 +33,16 @@ describe Wiki::Page do
         end
       end
     end
+
+    describe "updating sample page" do
+      let(:page) { create(:wiki_page, role: "sample") }
+
+      it "is not allowed" do
+        page.title = "Something New"
+        expect(page).not_to be_valid
+        expect(page.errors[:base].join).to match "not editable"
+      end
+    end
   end
 
   describe "slug" do

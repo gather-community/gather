@@ -20,6 +20,7 @@ module Wiki
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved
     validate :template_error
+    validate :sample_not_editable
 
     before_validation :set_slug
     after_save :create_new_version
@@ -115,6 +116,12 @@ module Wiki
     def template_error
       if data_source.present? && error = decorate.template_error
         errors.add(:content, error)
+      end
+    end
+
+    def sample_not_editable
+      if sample? && persisted?
+        errors.add(:base, :sample_not_editable)
       end
     end
   end

@@ -53,6 +53,11 @@ describe Wiki::PagePolicy do
       it "denies other users in community" do
         expect(subject).not_to permit(other_user, page)
       end
+
+      it "denies removal of sample page" do
+        page.role = "sample"
+        expect(subject).not_to permit(admin, page)
+      end
     end
   end
 

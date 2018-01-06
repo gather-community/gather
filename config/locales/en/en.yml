@@ -392,7 +392,7 @@ en:
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
         pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
       wiki_page:
-        content: "See the <a href='sample-page'>Sample Page</a> for tips on how to create wiki content."
+        content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
     options:
       meal:

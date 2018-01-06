@@ -1,4 +1,5 @@
-.link-list {
+// Layout where content flows from one column to the next like a newspaper.
+.flowing-columns {
   @media screen and (max-width: $screen-xs-max) {
     column-count: 1;
   }

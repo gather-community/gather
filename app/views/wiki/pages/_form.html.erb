@@ -23,4 +23,10 @@
     <%= f.button :submit, "Preview", name: "preview", class: "btn-default" %>
     <%= f.button :submit, class: "btn-primary" %>
   <% end %>
+
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.DirtyChecker({el: '.wiki--page-form'});
+    });
+  <% end %>
 <% end %>

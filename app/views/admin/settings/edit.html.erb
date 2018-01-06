@@ -5,4 +5,10 @@
   <%= form_actions do %>
     <%= f.button :submit, "Save Settings", class: "btn-primary" %>
   <% end %>
+
+  <%= javascript_tag do %>
+    $(function(){
+      new Gather.Views.DirtyChecker({el: '.community-form'});
+    });
+  <% end %>
 <% end %>

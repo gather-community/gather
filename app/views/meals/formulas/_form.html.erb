@@ -35,5 +35,6 @@
 <%= javascript_tag do %>
   $(function() {
     new Gather.Views.FormulaFormView({el: '.meals--formula-form'});
+    new Gather.Views.DirtyChecker({el: '.meals--formula-form'});
   });
 <% end %>

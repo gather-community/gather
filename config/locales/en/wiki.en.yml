@@ -1,4 +1,8 @@
 en:
   wiki:
-    revision_info: "Page revised on %{time} by %{user}"
+    not_found_create: "There is no wiki page named '%{title}'. You can create it below!"
     preview_notice: "This is a preview. To save or further edit the page, use the form below."
+    revision_info: "Page revised on %{time} by %{user}"
+    special_pages:
+      home: "Wiki Home Page"
+      sample: "Sample Page"

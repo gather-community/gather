@@ -391,7 +391,7 @@ en:
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
         pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
       wiki_page:
-        content: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+        content: "See the <a href='sample-page'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
     options:
       meal:
@@ -679,9 +679,3 @@ en:
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
-
-  wiki:
-    home_page:
-      title: "Wiki Home Page"
-      content: "This is your **wiki home page**!\n\nYou can include a link to another wiki page like [[Favorite Cheeses]].\n\nYou can also link to [external web sites](http://timeanddate.com).\n\nYou can use Markdown formatting when editing wiki pages. [Learn more about Markdown here](https://guides.github.com/features/mastering-markdown/)."
-    not_found_create: "There is no wiki page named '%{title}'. You can create it below!"

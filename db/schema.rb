@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180101170717) do
+ActiveRecord::Schema.define(version: 20180106185212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -512,7 +512,7 @@ ActiveRecord::Schema.define(version: 20180101170717) do
     t.integer "creator_id", null: false
     t.text "data_source"
     t.string "editable_by", default: "everyone", null: false
-    t.boolean "home", default: false, null: false
+    t.string "role"
     t.string "slug", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false

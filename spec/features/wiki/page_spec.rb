@@ -13,6 +13,10 @@ feature "pages", js: true do
 
   scenario "happy path" do
     visit("/wiki")
+    click_on("Sample Page")
+    expect(page).to have_content("Basic Formatting")
+
+    click_main_nav("Wiki")
     expect(page).to have_content("This is your wiki home page!")
 
     click_link("Edit")

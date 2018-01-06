@@ -4,7 +4,7 @@ module Wiki
   class Page < ApplicationRecord
     acts_as_tenant :cluster
 
-    RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze
+    RESERVED_SLUGS = Set.new(%w(new all home sample notfound)).freeze
     EDITABLE_BY_OPTIONS = %i(everyone wikiist)
 
     attr_accessor :comment
@@ -29,20 +29,32 @@ module Wiki
       title.to_slug.normalize.to_s
     end
 
-    def self.reserved_slug(type)
-      type.to_s
+    def self.reserved_slug(role)
+      role.to_s
     end
 
-    def self.create_home_page(community:, creator:)
-      create(
+    def self.create_special_page(role, community:, creator:)
+      create!(
         community: community,
         creator: creator,
         updator: creator,
-        content: I18n.t("wiki.home_page.content"),
-        home: true,
-        title: I18n.t("wiki.home_page.title"),
-        slug: reserved_slug(:home)
+        content: File.read(Rails.root.join("config/locales/en/wiki_pages/#{role}.md")),
+        role: role,
+        title: I18n.t("wiki.special_pages.#{role}"),
+        slug: reserved_slug(role)
       )
+    end
+
+    def special?
+      role.present?
+    end
+
+    def home?
+      role == "home"
+    end
+
+    def sample?
+      role == "sample"
     end
 
     def last_version_number
@@ -66,7 +78,7 @@ module Wiki
     end
 
     def set_slug
-      self.slug = home? ? reserved_slug(:home) : title_to_slug_without_dupes
+      self.slug = special? ? reserved_slug(role) : title_to_slug_without_dupes
     end
 
     def reserved_slug(type)
@@ -95,7 +107,7 @@ module Wiki
       # We use title_to_slug and not title_to_slug_without_dupes here so that a page title of
       # 'Home' will raise a validation error.
       naive_slug = title_to_slug(title)
-      if RESERVED_SLUGS.include?(naive_slug)
+      if RESERVED_SLUGS.include?(naive_slug) && role != naive_slug
         errors.add(:title, :reserved_slug)
       end
     end

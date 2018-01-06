@@ -16,6 +16,10 @@ module FeatureSpecHelpers
     find(".select2-dropdown .select2-results li", text: /#{value}/).click
   end
 
+  def click_main_nav(name)
+    find(".main-nav a", text: name).click
+  end
+
   def click_on_personal_nav(item)
     find(".personal-nav .dropdown-toggle").click
     find(".personal-nav .dropdown-menu a", text: item).click

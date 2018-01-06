@@ -47,9 +47,11 @@ describe Wiki::Page do
       expect(page.slug).to eq "an-excellent-page"
     end
 
-    it "gets set properly for home page" do
-      page = create(:wiki_page, title: "An Excéllent Page", home: true)
+    it "gets set properly for home and sample pages" do
+      page = create(:wiki_page, title: "An Excéllent Page", role: "home")
       expect(page.slug).to eq "home"
+      page = create(:wiki_page, title: "A Sample Page", role: "sample")
+      expect(page.slug).to eq "sample"
     end
 
     it "avoids duplicates" do

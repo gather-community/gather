@@ -15,7 +15,8 @@ module Wiki
       @page = Page.find_by(community: current_community, slug: params[:slug])
       if @page.nil?
         if params[:slug] == Page.reserved_slug(:home)
-          @page = Page.create_home_page(community: current_community, creator: current_user)
+          @page = Page.create_special_page(:home, community: current_community, creator: current_user)
+          Page.create_special_page(:sample, community: current_community, creator: current_user)
         else
           raise ActiveRecord::RecordNotFound
         end

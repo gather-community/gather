@@ -1,7 +1,4 @@
 set :deploy_to, -> { "/u/apps/gather" }
-set :default_env, {
-  pgoptions: "'-c statement_timeout=0'"
-}
 role :app, %w{deploy@34.195.234.136}
 role :web, %w{deploy@34.195.234.136}
 role :db,  %w{deploy@34.195.234.136}

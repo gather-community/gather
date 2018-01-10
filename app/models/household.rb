@@ -112,4 +112,29 @@ class Household < ApplicationRecord
   def any_statements?
     accounts.any?{ |a| a.statements.any? }
   end
+# Return the unit number and the suffix (if any), separated with a dash.
+  def unit_num
+    if unit_suffix.blank?()
+      super
+    else
+      "#{super}-#{unit_suffix}"
+    end
+  end
+  def unit_num=(value)
+    # separate unit number and suffix.  Format is either separated with a
+    # non-alphanumeric character, or an alpha suffix with no separator.
+    unit_data = value.match(/\A(\d+)\W?(\w*)/)
+# if we don't match the regex, store it and let the validator do the complaining
+    if unit_data.blank?() 
+      super(value)
+    else
+      super(unit_data[1])
+# if we have no suffic, store nil
+      if unit_data[2].blank?()
+        self.unit_suffix = nil
+      else
+        self.unit_suffix = unit_data[2]
+      end
+    end
+  end
 end

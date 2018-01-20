@@ -14,5 +14,7 @@ class CreateWorkPeriods < ActiveRecord::Migration[5.1]
     add_index :work_periods, :community_id
     add_index :work_periods, :cluster_id
     add_index :work_periods, [:starts_on, :ends_on]
+    add_foreign_key :work_periods, :communities
+    add_foreign_key :work_periods, :clusters
   end
 end

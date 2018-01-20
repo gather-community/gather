@@ -573,6 +573,8 @@ ActiveRecord::Schema.define(version: 20180120211348) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
+  add_foreign_key "people_groups", "clusters"
+  add_foreign_key "people_groups", "communities"
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_pets", "clusters"
   add_foreign_key "people_pets", "households"
@@ -617,4 +619,6 @@ ActiveRecord::Schema.define(version: 20180120211348) do
   add_foreign_key "wiki_pages", "communities"
   add_foreign_key "wiki_pages", "users", column: "creator_id"
   add_foreign_key "wiki_pages", "users", column: "updator_id"
+  add_foreign_key "work_periods", "clusters"
+  add_foreign_key "work_periods", "communities"
 end

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180106185212) do
+ActiveRecord::Schema.define(version: 20180120210748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -523,6 +523,20 @@ ActiveRecord::Schema.define(version: 20180106185212) do
     t.index ["community_id"], name: "index_wiki_pages_on_community_id"
     t.index ["creator_id"], name: "index_wiki_pages_on_creator_id"
     t.index ["updator_id"], name: "index_wiki_pages_on_updator_id"
+  end
+
+  create_table "work_periods", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.date "ends_on", null: false
+    t.string "name", null: false
+    t.string "phase", default: "draft", null: false
+    t.date "starts_on", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
+    t.index ["community_id"], name: "index_work_periods_on_community_id"
+    t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
   add_foreign_key "accounts", "clusters"

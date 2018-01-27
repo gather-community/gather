@@ -5,7 +5,6 @@ FactoryBot.define do
     hours 2
     association :requester, factory: :people_group
     description { Faker::Lorem.paragraph }
-    community
-    cluster
+    community { default_community }
   end
 end

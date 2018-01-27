@@ -221,7 +221,7 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like "permits admins or special role but not regular users", "photographer"
+      it_behaves_like "permits admins or special role but not regular users", :photographer
       it_behaves_like "permits self (active or not) and guardians"
     end
 

@@ -8,10 +8,10 @@
     <%= f.input_field :ends_at, as: :datetime_picker, class: "form-control",
           data: {date_options: {minDate: shift.min_time, maxDate: shift.max_time}} %>
   </td>
-  <td class="hours">
-  </td>
   <td>
     <%= f.input_field :slots, class: "form-control shift-slots" %>
+  </td>
+  <td class="hours">
   </td>
   <td class="delete">
     <%= f.hidden_field :id %>

@@ -132,6 +132,14 @@ en:
         comment: "Comment"
         editable_by: "Editable By"
         data_source: "Data Source"
+      work/job:
+        description: "Description"
+        hours: "Hours"
+        period_id: "Period"
+        requester_id: "Requester"
+        slot_type: "Slot Type"
+        times: "Times"
+        title: "Title"
     errors:
       models:
         signup:
@@ -394,6 +402,10 @@ en:
       wiki_page:
         content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
+      work_job:
+        hours: "Estimated number of hours the job will take. Decimals allowed."
+        slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
+        description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
     options:
       meal:
         time:
@@ -440,6 +452,15 @@ en:
         editable_by:
           everyone: "Everyone"
           wikiist: "Wikiists & Admins Only"
+      work_job:
+        slot_type:
+          fixed: "This is a regular job with a fixed number of slots"
+          full_single: "This job is for the full community (single shift)"
+          full_multiple: "This job is for the full community (multiple shifts)"
+        times:
+          date_time: "This job has a set date and time"
+          date_only: "This job is for a certain date range"
+          full_period: "This job is for the whole work period"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

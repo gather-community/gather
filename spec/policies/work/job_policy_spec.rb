@@ -44,7 +44,7 @@ describe Work::JobPolicy do
     subject { Work::JobPolicy.new(actor, Work::Job.new(community: community)).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i(description hours period_id requester_id shift_type times title))
+      expect(subject).to match_array(%i(description hours period_id requester_id slot_type times title))
     end
   end
 end

@@ -1,0 +1,17 @@
+<% if @periods.empty? %>
+  <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
+<% else %>
+  <%= gather_form_for(job) do |f| %>
+    <%= f.input :period_id, collection: @periods, include_blank: false %>
+    <%= f.input :title %>
+    <%= f.input :hours %>
+    <%= f.input :requester_id, collection: @requesters %>
+    <%= f.input :times, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
+    <%= f.input :slot_type, collection: Work::Job::SLOT_TYPE_OPTIONS, include_blank: false %>
+    <%= f.input :description %>
+
+    <%= form_actions do %>
+      <%= f.button :submit, class: "btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>

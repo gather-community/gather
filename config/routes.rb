@@ -97,6 +97,11 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :work do
+    resources :jobs
+    resources :periods
+  end
+
   resources :uploads, only: [:create, :destroy]
 
   namespace :admin do

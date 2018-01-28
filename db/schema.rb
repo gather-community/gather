@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180128043855) do
+ActiveRecord::Schema.define(version: 20180128134958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -569,6 +569,17 @@ ActiveRecord::Schema.define(version: 20180128043855) do
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
+  create_table "work_shifts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.integer "job_id", null: false
+    t.integer "slots", null: false
+    t.datetime "starts_at"
+    t.datetime "updated_at", null: false
+    t.index ["job_id", "starts_at", "ends_at"], name: "index_work_shifts_on_job_id_and_starts_at_and_ends_at", unique: true
+    t.index ["job_id"], name: "index_work_shifts_on_job_id"
+  end
+
   add_foreign_key "accounts", "clusters"
   add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
@@ -644,4 +655,5 @@ ActiveRecord::Schema.define(version: 20180128043855) do
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_shifts", "work_jobs", column: "job_id"
 end

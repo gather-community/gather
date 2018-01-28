@@ -8,6 +8,7 @@ module Work
     belongs_to :community
     belongs_to :period, class_name: "Work::Period"
     belongs_to :requester, class_name: "People::Group"
+    has_many :shifts, class_name: "Work::Shift", inverse_of: :job
 
     scope :for_community, ->(c) { where(community_id: c.id) }
 
@@ -17,5 +18,9 @@ module Work
     validates :times, presence: true
     validates :slot_type, presence: true
     validates :description, presence: true
+
+    def full_period?
+      times == "full_period"
+    end
   end
 end

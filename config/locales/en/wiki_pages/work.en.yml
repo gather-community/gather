@@ -1,4 +1,10 @@
 en:
-  work:
+  work/jobs:
     no_periods_html: "There are no active work periods. Please %{link} before attempting to create jobs."
     create_one: "create one"
+    shifts: "Shifts"
+    shift_col_headers:
+      start_time: "Start Time"
+      end_time: "End Time"
+      hours: "Hours"
+      slots: "Slots"

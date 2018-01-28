@@ -6,6 +6,16 @@
   }
 
   #shift-table {
-    display: none;
+    margin-bottom: 5px;
+  }
+
+  #shift-rows {
+    .shift-slots {
+      width: 75px;
+    }
+
+    .delete {
+      text-align: right;
+    }
   }
 }

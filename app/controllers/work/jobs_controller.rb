@@ -9,6 +9,7 @@ module Work
     def new
       prep_form_vars
       @job = Job.new(community: current_community, period: @period)
+      @job.shifts.build
       authorize @job
     end
 

@@ -41,7 +41,8 @@ module Work
     end
 
     def permitted_attributes
-      %i(description hours period_id requester_id slot_type times title)
+      %i(description hours period_id requester_id slot_type times title) <<
+        {shifts_attributes: %i(starts_at ends_at slots)}
     end
   end
 end

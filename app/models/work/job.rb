@@ -19,6 +19,10 @@ module Work
     validates :slot_type, presence: true
     validates :description, presence: true
 
+    accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
+
+    delegate :starts_on, :ends_on, to: :period, prefix: true
+
     def full_period?
       times == "full_period"
     end

@@ -22,7 +22,15 @@
           <th></th>
         </tr>
       </thead>
+      <tbody id="shift-rows">
+        <%= f.simple_fields_for(:shifts) do |shift_form| %>
+          <%= render("shift_fields", f: shift_form) %>
+        <% end %>
+      </tbody>
     </table>
+    <%= link_to_add_association(t("cocoon.add_links.shifts"), f, :shifts,
+      "data-association-insertion-node": "#shift-rows",
+      "data-association-insertion-method": "append") %>
 
     <%= form_actions do %>
       <%= f.button :submit, class: "btn-primary" %>

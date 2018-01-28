@@ -478,6 +478,7 @@ en:
       cleaner_assigns: "Add Cleaner"
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
+      shifts: "Add Shift"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."

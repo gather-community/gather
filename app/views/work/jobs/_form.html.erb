@@ -1,4 +1,4 @@
-<% if @periods.empty? %>
+<% if @job.new_record? && @periods.empty? %>
   <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
 <% else %>
   <%= gather_form_for(job) do |f| %>

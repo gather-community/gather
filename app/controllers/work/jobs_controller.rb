@@ -10,6 +10,12 @@ module Work
       authorize @job
     end
 
+    def edit
+      @job = Job.find(params[:id])
+      authorize @job
+      prep_form_vars
+    end
+
     def create
       @job = Job.new(community: current_community)
       @job.assign_attributes(job_params)
@@ -21,6 +27,19 @@ module Work
         set_validation_error_notice(@job)
         prep_form_vars
         render :new
+      end
+    end
+
+    def update
+      @job = Job.find(params[:id])
+      authorize @job
+      if @job.update_attributes(job_params)
+        flash[:success] = "Job updated successfully."
+        redirect_to work_jobs_path
+      else
+        set_validation_error_notice(@job)
+        prep_form_vars
+        render :edit
       end
     end
 

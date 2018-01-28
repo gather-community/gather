@@ -1,5 +1,7 @@
 module Work
   class JobsController < ApplicationController
+    include Destructible
+
     before_action -> { nav_context(:work, :jobs) }
 
     decorates_assigned :job
@@ -41,6 +43,12 @@ module Work
         prep_form_vars
         render :edit
       end
+    end
+
+    protected
+
+    def klass
+      Job
     end
 
     private

@@ -267,6 +267,8 @@ en:
     user:
       deactivate: "Deactivate User"
       destroy: "Delete User"
+    work/job:
+      destroy: "Delete Job"
 
   confirmations:
     household:
@@ -287,6 +289,8 @@ en:
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
+    work/job:
+      destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
 
   activatables:
     user:

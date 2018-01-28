@@ -37,3 +37,10 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Work.JobFormView({el: '.work--job-form'});
+    new Gather.Views.DirtyChecker({el: '.work--job-form'});
+  });
+<% end %>

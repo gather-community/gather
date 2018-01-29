@@ -26,5 +26,13 @@ module Work
     def full_period?
       time_type == "full_period"
     end
+
+    def full_community?
+      slot_type != "normal"
+    end
+
+    def shifts_have_times?
+      time_type == "date_time"
+    end
   end
 end

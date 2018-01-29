@@ -1,10 +1,13 @@
 class Work::Shift < ApplicationRecord
   belongs_to :job, class_name: "Work::Job", inverse_of: :shifts
 
-  validates :starts_at, :ends_at, presence: true, unless: :job_full_period?
-
-  delegate :full_period?, to: :job, prefix: true
+  delegate :full_period?, :full_community?, :shifts_have_times?, to: :job, prefix: true
   delegate :period_starts_on, :period_ends_on, to: :job
+
+  before_validation :normalize
+
+  validates :starts_at, :ends_at, presence: true, unless: :job_full_period?
+  validates :slots, numericality: {greater_than: 0}
 
   def min_time
     period_starts_on.midnight
@@ -12,5 +15,16 @@ class Work::Shift < ApplicationRecord
 
   def max_time
     (period_ends_on + 1).midnight
+  end
+
+  private
+
+  def normalize
+    self.slots = 1e6 if job_full_community?
+
+    unless job_shifts_have_times?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight
+    end
   end
 end

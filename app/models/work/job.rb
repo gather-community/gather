@@ -12,6 +12,8 @@ module Work
 
     scope :for_community, ->(c) { where(community_id: c.id) }
 
+    normalize_attributes :title, :description
+
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}
     validates :hours, presence: true, numericality: {greater_than: 0}

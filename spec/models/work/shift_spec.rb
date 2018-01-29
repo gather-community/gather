@@ -20,7 +20,7 @@ describe Work::Shift do
         end
       end
 
-      context "normal job" do
+      context "fixed slot job" do
         before do
           expect(shift).to receive(:job_full_community?).and_return(false)
           shift.save!
@@ -62,6 +62,27 @@ describe Work::Shift do
 
       def tp(str)
         Time.zone.parse(str)
+      end
+    end
+  end
+
+  describe "validation" do
+    describe "start must be before end" do
+      it "is valid when start before end" do
+        shift = build(:work_shift, starts_at: "2018-01-01 12:30", ends_at: "2018-01-02 14:30")
+        expect(shift).to be_valid
+      end
+
+      it "adds error when times equal" do
+        shift = build(:work_shift, starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 12:30")
+        expect(shift).not_to be_valid
+        expect(shift.errors[:ends_at].join).to match /must be after start time/
+      end
+
+      it "adds error when start after end" do
+        shift = build(:work_shift, starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 12:30")
+        expect(shift).not_to be_valid
+        expect(shift.errors[:ends_at].join).to match /must be after start time/
       end
     end
   end

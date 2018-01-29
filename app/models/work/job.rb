@@ -30,7 +30,7 @@ module Work
     end
 
     def full_community?
-      slot_type != "normal"
+      slot_type != "fixed"
     end
 
     def shifts_have_times?

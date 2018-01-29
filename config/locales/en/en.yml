@@ -180,6 +180,10 @@ en:
           attributes:
             title:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
+        work/shift:
+          attributes:
+            ends_at:
+              not_after_start: "must be after start time"
 
   custom_fields:
     labels:

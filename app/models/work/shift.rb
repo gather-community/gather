@@ -7,7 +7,8 @@ class Work::Shift < ApplicationRecord
   before_validation :normalize
 
   validates :starts_at, :ends_at, presence: true, unless: :job_full_period?
-  validates :slots, numericality: {greater_than: 0}
+  validates :slots, presence: true, numericality: {greater_than: 0}
+  validate :start_before_end
 
   def min_time
     period_starts_on.midnight
@@ -26,5 +27,9 @@ class Work::Shift < ApplicationRecord
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight
     end
+  end
+
+  def start_before_end
+    errors.add(:ends_at, :not_after_start) unless ends_at > starts_at
   end
 end

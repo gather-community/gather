@@ -1,15 +1,18 @@
 <% shift = f.object %>
 <tr class="nested-fields">
-  <td class="starts-at">
+  <td class="starts-at <%= shift.errors[:starts_at].any? ? 'has-error' : '' %>">
     <%= f.input_field :starts_at, as: :datetime_picker, class: "form-control",
           data: {date_options: {minDate: shift.min_time, maxDate: shift.max_time}} %>
+    <%= f.error :starts_at %>
   </td>
-  <td class="ends-at">
+  <td class="ends-at <%= shift.errors[:ends_at].any? ? 'has-error' : '' %>">
     <%= f.input_field :ends_at, as: :datetime_picker, class: "form-control",
           data: {date_options: {minDate: shift.min_time, maxDate: shift.max_time}} %>
+    <%= f.error :ends_at %>
   </td>
-  <td>
+  <td class="<%= shift.errors[:slots].any? ? 'has-error' : '' %>">
     <%= f.input_field :slots, class: "form-control shift-slots" %>
+    <%= f.error :slots %>
   </td>
   <td class="hours">
   </td>

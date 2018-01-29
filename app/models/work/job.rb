@@ -15,7 +15,7 @@ module Work
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}
     validates :hours, presence: true, numericality: {greater_than: 0}
-    validates :times, presence: true
+    validates :time_type, presence: true
     validates :slot_type, presence: true
     validates :description, presence: true
 
@@ -24,7 +24,7 @@ module Work
     delegate :starts_on, :ends_on, to: :period, prefix: true
 
     def full_period?
-      times == "full_period"
+      time_type == "full_period"
     end
   end
 end

@@ -6,7 +6,7 @@
     <%= f.input :title %>
     <%= f.input :hours %>
     <%= f.input :requester_id, collection: @requesters %>
-    <%= f.input :times, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
+    <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
     <%= f.input :slot_type, collection: Work::Job::SLOT_TYPE_OPTIONS, include_blank: false %>
     <%= f.input :description %>
 

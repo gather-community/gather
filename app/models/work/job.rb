@@ -29,12 +29,28 @@ module Work
       time_type == "full_period"
     end
 
+    def shifts_have_times?
+      time_type == "date_time"
+    end
+
     def full_community?
       slot_type != "fixed"
     end
 
-    def shifts_have_times?
-      time_type == "date_time"
+    def full_community?
+      slot_type != "fixed"
+    end
+
+    def fixed_slot?
+      slot_type == "fixed"
+    end
+
+    def full_single_slot?
+      slot_type == "full_single"
+    end
+
+    def full_multiple_slot?
+      slot_type == "full_multiple"
     end
   end
 end

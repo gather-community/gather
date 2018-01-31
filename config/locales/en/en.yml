@@ -182,6 +182,9 @@ en:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
         work/shift:
           attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Shift must last for %{hours} hours"
+              elapsed_doesnt_evenly_divide_job: "Shift length must evenly divide %{hours} hours"
             ends_at:
               not_after_start: "must be after start time"
 

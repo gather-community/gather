@@ -3,6 +3,7 @@
   <%= calendar_exports_link %>
   <% if policy(sample_meal).create? %>
     <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") %>
+    <%= link_to 'Import Meal', new_meals_import_path %>
   <% end %>
 <% end %>
 

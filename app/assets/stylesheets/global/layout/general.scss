@@ -1,4 +1,8 @@
 @media screen {
+  html, body {
+    height: 100%; // Needed for sticky footer with flexbox to work on IE11.
+  }
+
   body {
     display: flex;
     min-height: 100vh;
@@ -14,7 +18,7 @@
   #content {
     padding: 20px;
     line-height: $content-line-height;
-    flex: 1;
+    flex-grow: 1; // flex: 1 was not working on IE11 as of 1/19/18
   }
 }
 

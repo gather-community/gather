@@ -14,7 +14,7 @@ body.home {
     text-align: center;
     height: 620px;
     margin-bottom: 20px;
-    flex: 1;
+    flex-grow: 1; // flex: 1 was not working on IE11 as of 1/19/18
 
     #blurb {
       color: white;

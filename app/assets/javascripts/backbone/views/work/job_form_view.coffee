@@ -7,16 +7,20 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     'cocoon:after-insert': 'shiftInserted'
     'change #work_job_time_type': 'formatFields'
 
+  shiftInserted: (event, inserted) ->
+    @initDatePickers(inserted)
+    @formatFields()
+
   formatFields: ->
     dateFormat = I18n.t('datepicker.pformat')
     timeFormat = I18n.t('timepicker.pformat')
-    time_type = @$('#work_job_time_type').val()
-    switch time_type
-      when 'date_time' then @setPickerFormat("#{dateFormat} #{timeFormat}")
-      when 'date_only', 'full_period' then @setPickerFormat(dateFormat)
+    timeType = @$('#work_job_time_type').val()
 
-  shiftInserted: (event, inserted) ->
-    @initDatePickers(inserted)
+    @togglePickers(timeType != 'full_period')
+
+    switch timeType
+      when 'date_time' then @setPickerFormat("#{dateFormat} #{timeFormat}")
+      when 'date_only' then @setPickerFormat(dateFormat)
 
   initDatePickers: (inserted) ->
     @$(inserted).find('.datetimepicker').datetimepicker()
@@ -27,3 +31,7 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
 
   shiftDatePickers: ->
     @$('#shift-table .datetimepicker')
+
+  togglePickers: (show) ->
+    @shiftDatePickers().toggle(show)
+    @$('.period-date').toggle(!show)

@@ -7,6 +7,9 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     'cocoon:after-insert': 'shiftInserted'
     'change #work_job_time_type': 'formatFields'
     'change #work_job_slot_type': 'formatFields'
+    'change #work_job_hours': 'computeHours'
+    'change #work_job_hours_per_shift': 'computeHours'
+    'dp.change .input-group.datetimepicker': 'computeHours'
 
   shiftInserted: (event, inserted) ->
     @initDatePickers(inserted)
@@ -15,15 +18,14 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
   formatFields: ->
     dateFormat = I18n.t('datepicker.pformat')
     timeFormat = I18n.t('timepicker.pformat')
-    timeType = @$('#work_job_time_type').val()
-    slotType = @$('#work_job_slot_type').val()
 
-    @toggleHoursPerShift(timeType == 'date_only' && slotType == 'full_multiple')
-    @togglePickers(timeType != 'full_period')
-    @toggleUnlimitedSlots(slotType != 'fixed')
+    @toggleHoursPerShift(@timeType() == 'date_only' && @slotType() == 'full_multiple')
+    @togglePickers(@timeType() != 'full_period')
+    @toggleUnlimitedSlots(@slotType() != 'fixed')
+    @computeHours()
 
-    # Set picker format depending on timeType
-    switch timeType
+    # Set picker format depending on @timeType()
+    switch @timeType()
       when 'date_time' then @setPickerFormat("#{dateFormat} #{timeFormat}")
       when 'date_only' then @setPickerFormat(dateFormat)
 
@@ -51,3 +53,37 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
       @$('.shift-slots').map ->
         if parseInt($(this).val()) >= 1000000
           $(this).val('')
+
+  computeHours: ->
+    @$('#shift-rows tr.nested-fields').each (_, row) =>
+      @$(row).find('.hours').html(@computeHoursForRow(@$(row)))
+
+  computeHoursForRow: (row) ->
+    # date_time jobs always have hours computed from start/end times
+    if @timeType() == 'date_time'
+      start = row.find('.starts-at .datetimepicker').data("DateTimePicker").date()
+      stop = row.find('.ends-at .datetimepicker').data("DateTimePicker").date()
+      if start && stop
+        Math.round(moment.duration(stop.diff(start)).asHours() * 10) / 10
+      else
+        ""
+
+    # date_only full_multiple jobs have a special hours per shift box, so we pull from there
+    else if @timeType() == 'date_only' && @slotType() == 'full_multiple'
+      @$('#work_job_hours_per_shift').val()
+
+    # All other timeType/slotType combos pull straight from job.hours
+    else
+      @$('#work_job_hours').val()
+
+  timeType: ->
+    @$('#work_job_time_type').val()
+
+  slotType: ->
+    @$('#work_job_slot_type').val()
+
+  hours: ->
+    @$('#work_job_hours').val()
+
+  hoursPerShift: ->
+    @$('#work_job_hours_per_shift').val()

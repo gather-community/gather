@@ -19,11 +19,11 @@ class Work::Shift < ApplicationRecord
     (period_ends_on + 1).midnight
   end
 
-  private
-
   def elapsed_time
     @elapsed_time ||= ends_at - starts_at
   end
+
+  private
 
   def normalize
     self.slots = 1e6 if job_full_community?

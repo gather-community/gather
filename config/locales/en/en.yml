@@ -180,6 +180,14 @@ en:
           attributes:
             title:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
+        work/job:
+          attributes:
+            shifts:
+              more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
+              more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
+              no_shifts: "You must add at least one shift."
+              duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
+              different_length_shifts: "All shfits must be the same length."
         work/shift:
           attributes:
             starts_at:

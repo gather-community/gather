@@ -14,15 +14,19 @@ module Work
 
     normalize_attributes :title, :description
 
+    before_validation :normalize
+
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}
     validates :hours, presence: true, numericality: {greater_than: 0}
     validates :time_type, presence: true
     validates :slot_type, presence: true
+    validates :hours_per_shift, presence: true, if: :date_only_full_multiple?
     validates :description, presence: true
     validate :valid_shift_count
     validate :no_duplicate_start_end_times
     validate :shifts_same_length_for_date_time_full_multiple
+    validate :hours_per_shift_evenly_divides_hours
 
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
 
@@ -32,12 +36,12 @@ module Work
       time_type == "full_period"
     end
 
-    def shifts_have_times?
-      time_type == "date_time"
+    def date_only?
+      time_type == "date_only"
     end
 
-    def full_community?
-      slot_type != "fixed"
+    def shifts_have_times?
+      time_type == "date_time"
     end
 
     def full_community?
@@ -56,7 +60,15 @@ module Work
       slot_type == "full_multiple"
     end
 
+    def date_only_full_multiple?
+      date_only? && full_multiple_slot?
+    end
+
     private
+
+    def normalize
+      self.hours_per_shift = nil unless date_only_full_multiple?
+    end
 
     def shift_count
       @shift_count ||= shifts.reject(&:marked_for_destruction?).size
@@ -81,6 +93,12 @@ module Work
     def shifts_same_length_for_date_time_full_multiple
       if shifts_have_times? && full_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
         errors.add(:shifts, :different_length_shifts)
+      end
+    end
+
+    def hours_per_shift_evenly_divides_hours
+      if hours_per_shift.present? && hours % hours_per_shift != 0
+        errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
       end
     end
   end

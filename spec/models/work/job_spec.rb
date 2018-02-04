@@ -53,5 +53,63 @@ describe Work::Job do
         expect(job.errors[:shifts].join).to eq "All shfits must be the same length."
       end
     end
+
+    describe "hours_per_shift must be given for full_multiple date_only" do
+      it "is valid when given" do
+        job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
+          hours_per_shift: 2, hours: 4,
+          shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1},
+            {starts_at: "2018-02-01", ends_at: "2018-02-28", slots: 1}
+          ])
+        expect(job).to be_valid
+      end
+
+      it "is valid when not given but not date_only type" do
+        job = build(:work_job, time_type: "full_period", slot_type: "full_multiple",
+          hours_per_shift: nil, hours: 4, shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1}
+          ])
+        expect(job).to be_valid
+      end
+
+      it "is invalid when not given" do
+        job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
+          hours_per_shift: nil, hours: 4,
+          shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1},
+            {starts_at: "2018-02-01", ends_at: "2018-02-28", slots: 1}
+          ])
+        expect(job).not_to be_valid
+        expect(job.errors[:hours_per_shift].join).to eq "can't be blank"
+      end
+    end
+
+    describe "hours_per_shift must evenly divide hours" do
+      it "is valid when not given" do
+        job = build(:work_job, time_type: "full_period", slot_type: "full_multiple",
+          hours_per_shift: nil, hours: 4, shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1}
+          ])
+        expect(job).to be_valid
+      end
+
+      it "is valid when evenly divides" do
+        job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
+          hours_per_shift: 2, hours: 4, shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1}
+          ])
+        expect(job).to be_valid
+      end
+
+      it "is invalid when doesn't evenly divide" do
+        job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
+          hours_per_shift: 3, hours: 4, shifts_attributes: [
+            {starts_at: "2018-01-01", ends_at: "2018-01-31", slots: 1}
+          ])
+        expect(job).not_to be_valid
+        expect(job.errors[:hours_per_shift].join).to eq "Must equal or evenly divide 4.0 hours"
+      end
+    end
   end
 end

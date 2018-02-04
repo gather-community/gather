@@ -135,6 +135,7 @@ en:
       work/job:
         description: "Description"
         hours: "Hours"
+        hours_per_shift: "Hours per Shift"
         period_id: "Period"
         requester_id: "Requester"
         slot_type: "Slot Type"
@@ -182,6 +183,8 @@ en:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
         work/job:
           attributes:
+            hours_per_shift:
+              uneven_divisor: "Must equal or evenly divide %{hours} hours"
             shifts:
               more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
               more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
@@ -192,7 +195,7 @@ en:
           attributes:
             starts_at:
               elapsed_doesnt_equal_job: "Shift must last for %{hours} hours"
-              elapsed_doesnt_evenly_divide_job: "Shift length must evenly divide %{hours} hours"
+              elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
             ends_at:
               not_after_start: "must be after start time"
 
@@ -424,6 +427,7 @@ en:
       work_job:
         hours: "Estimated number of hours the job will take. Decimals allowed."
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
+        hours_per_shift: "The amount of hours credit each shift is worth."
         description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
     options:
       meal:

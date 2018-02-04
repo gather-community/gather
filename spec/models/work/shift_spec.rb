@@ -1,19 +1,19 @@
 require "rails_helper"
 
 describe Work::Shift do
-  let(:job) { create(:work_job, hours: 2) }
+  let(:job) { build(:work_job, hours: 2) }
 
   describe "normalization" do
+    let(:shift) { build(:work_shift, submitted.merge(job: job)) }
+
     # Get the normalized values for the submitted keys.
     subject { submitted.keys.map { |k| [k, shift.send(k)] }.to_h }
 
     describe "slots" do
-      let(:shift) { build(:work_shift, submitted.merge(job: job)) }
-
       context "full community job" do
         before do
           allow(shift).to receive(:job_full_community?).and_return(true)
-          shift.save!
+          shift.send(:normalize)
         end
 
         context "changes slots to 1m" do
@@ -25,7 +25,7 @@ describe Work::Shift do
       context "fixed slot job" do
         before do
           allow(shift).to receive(:job_full_community?).and_return(false)
-          shift.save!
+          shift.send(:normalize)
         end
 
         context "leaves slots value unchanged" do
@@ -36,12 +36,10 @@ describe Work::Shift do
     end
 
     describe "start and end times" do
-      let(:shift) { build(:work_shift, submitted) }
-
       context "job with date_time type" do
         before do
           allow(shift).to receive(:job_shifts_have_times?).and_return(true)
-          shift.save!
+          shift.send(:normalize)
         end
 
         context "leaves times unchanged" do
@@ -53,7 +51,7 @@ describe Work::Shift do
       context "job with date_only type" do
         before do
           allow(shift).to receive(:job_shifts_have_times?).and_return(false)
-          shift.save!
+          shift.send(:normalize)
         end
 
         context "sets times to midnight" do
@@ -145,7 +143,7 @@ describe Work::Shift do
           it "is invalid if elapsed time doesn't evenly divide job hours" do
             shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 11:30")
             expect(shift).not_to be_valid
-            expect(shift.errors[:starts_at].join).to eq "Shift length must evenly divide 1.5 hours"
+            expect(shift.errors[:starts_at].join).to eq "Shift length must equal or evenly divide 1.5 hours"
           end
         end
       end

@@ -4,11 +4,9 @@
       height: 140px;
     }
 
-    .form-group.work_job_hours_per_shift {
-      display: none;
-    }
-
-    .period-date {
+    .form-group.work_job_hours_per_shift,
+    .period-date,
+    .unlimited {
       display: none;
     }
   }

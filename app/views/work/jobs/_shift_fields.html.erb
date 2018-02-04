@@ -14,6 +14,7 @@
   </td>
   <td class="<%= shift.errors[:slots].any? ? 'has-error' : '' %>">
     <%= f.input_field :slots, class: "form-control shift-slots" %>
+    <div class="unlimited"><%= t("work/jobs.unlimited") %></div>
     <%= f.error :slots %>
   </td>
   <td class="hours">

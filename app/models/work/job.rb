@@ -40,7 +40,7 @@ module Work
       time_type == "date_only"
     end
 
-    def shifts_have_times?
+    def date_time?
       time_type == "date_time"
     end
 
@@ -91,7 +91,7 @@ module Work
     end
 
     def shifts_same_length_for_date_time_full_multiple
-      if shifts_have_times? && full_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
+      if date_time? && full_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
         errors.add(:shifts, :different_length_shifts)
       end
     end

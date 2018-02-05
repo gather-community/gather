@@ -3,6 +3,9 @@ require "rails_helper"
 describe Work::Shift do
   let(:job) { build(:work_job, hours: 2) }
 
+  # This ensures that times aren't UTC even when there is a non-UTC timezone.
+  before { Time.zone = "Saskatchewan" }
+
   describe "normalization" do
     let(:shift) { build(:work_shift, submitted.merge(job: job)) }
 
@@ -38,7 +41,7 @@ describe Work::Shift do
     describe "start and end times" do
       context "job with date_time type" do
         before do
-          allow(shift).to receive(:job_shifts_have_times?).and_return(true)
+          allow(shift).to receive(:job_date_time?).and_return(true)
           shift.send(:normalize)
         end
 
@@ -48,15 +51,30 @@ describe Work::Shift do
         end
       end
 
+      context "full period job" do
+        before do
+          allow(shift).to receive(:job_date_time?).and_return(false)
+          allow(shift).to receive(:job_full_period?).and_return(true)
+          allow(shift).to receive(:period_starts_on).and_return(Date.parse("2018-01-01"))
+          allow(shift).to receive(:period_ends_on).and_return(Date.parse("2018-02-28"))
+          shift.send(:normalize)
+        end
+
+        context "sets times to period start/end" do
+          let(:submitted) { {starts_at: "", ends_at: ""} }
+          it { is_expected.to eq(starts_at: tp("2018-01-01 00:00"), ends_at: tp("2018-02-28 23:59")) }
+        end
+      end
+
       context "job with date_only type" do
         before do
-          allow(shift).to receive(:job_shifts_have_times?).and_return(false)
+          allow(shift).to receive(:job_date_only?).and_return(true)
           shift.send(:normalize)
         end
 
         context "sets times to midnight" do
           let(:submitted) { {starts_at: "2018-01-01 12:30", ends_at: "2018-01-02 14:30"} }
-          it { is_expected.to eq(starts_at: tp("2018-01-01 00:00"), ends_at: tp("2018-01-02 00:00")) }
+          it { is_expected.to eq(starts_at: tp("2018-01-01 00:00"), ends_at: tp("2018-01-02 23:59")) }
         end
       end
 
@@ -105,7 +123,7 @@ describe Work::Shift do
       end
 
       context "without date_time time_type" do
-        before { allow(shift).to receive(:job_shifts_have_times?).and_return(false) }
+        before { allow(shift).to receive(:job_date_time?).and_return(false) }
 
         it "is valid with any elapsed time" do
           shift.assign_attributes(starts_at: "2018-01-01", ends_at: "2018-01-04")
@@ -114,7 +132,7 @@ describe Work::Shift do
       end
 
       context "with date_time time_type" do
-        before { allow(shift).to receive(:job_shifts_have_times?).and_return(true) }
+        before { allow(shift).to receive(:job_date_time?).and_return(true) }
         before { allow(shift).to receive(:job_slot_type).and_return(slot_type) }
 
         context "with fixed slot_type" do

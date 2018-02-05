@@ -10,6 +10,7 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     'change #work_job_hours': 'computeHours'
     'change #work_job_hours_per_shift': 'computeHours'
     'dp.change .input-group.datetimepicker': 'computeHours'
+    'dp.change .starts-at .input-group.datetimepicker': 'setEndsAtDefault'
 
   shiftInserted: (event, inserted) ->
     @initDatePickers(inserted)
@@ -75,6 +76,14 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     # All other timeType/slotType combos pull straight from job.hours
     else
       @$('#work_job_hours').val()
+
+  setEndsAtDefault: (event) ->
+    startPicker = @$(event.currentTarget).closest('.input-group.datetimepicker')
+    start = startPicker.data("DateTimePicker").date()
+    if (start)
+      console.log 'setting default to ' + start
+      endPicker = @$(event.currentTarget).closest('tr').find('.ends-at .input-group.datetimepicker')
+      endPicker.data("DateTimePicker").defaultDate(start)
 
   timeType: ->
     @$('#work_job_time_type').val()

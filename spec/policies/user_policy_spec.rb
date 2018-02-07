@@ -259,7 +259,7 @@ describe UserPolicy do
 
   describe "#grantable_roles" do
     let(:roles) { described_class.new(actor, other_user).grantable_roles }
-    let(:base_roles) { %i(biller photographer meals_coordinator wikiist) }
+    let(:base_roles) { %i(biller photographer meals_coordinator wikiist work_coordinator) }
 
     context "for super admin" do
       let(:actor) { super_admin }
@@ -347,13 +347,13 @@ describe UserPolicy do
     let(:photographer_attribs) { [:photo, :photo_tmp_id] }
     let(:admin_attribs) { base_attribs + [
       :google_email, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator, :role_wikiist,
+      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
       {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
         concat(nested_hhold_attribs)}
     ] }
     let(:cluster_admin_attribs) { base_attribs + [
       :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator, :role_wikiist,
+      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
       {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
         concat(nested_hhold_attribs)}
     ] }

@@ -7,7 +7,7 @@ module Work
         if active_cluster_admin?
           scope
         else
-          scope.in_community(user.community)
+          scope.for_community(user.community)
         end
       end
     end

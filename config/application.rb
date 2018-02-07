@@ -55,6 +55,7 @@ module Gather
 
     config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
 
-    I18n.available_locales = %w(en)
+    # Currently, fr is only available for testing purposes.
+    I18n.available_locales = %i(en fr)
   end
 end

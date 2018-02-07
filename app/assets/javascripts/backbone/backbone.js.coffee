@@ -15,3 +15,4 @@ window.Gather =
   Views:
     Meals: {}
     People: {}
+    Work: {}

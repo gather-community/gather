@@ -82,7 +82,7 @@
   <div class="footnote">All reports include finalized meals only.</div>
 
   <%= javascript_tag do %>
-    $(function(){ new Gather.Views.Meals.ReportChartsView(<%=json(
+    $(function() { new Gather.Views.Meals.ReportChartsView(<%=json(
       el: "#charts",
       data: @report.chart_data,
       cmty: @community.abbrv,

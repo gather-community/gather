@@ -1,0 +1,27 @@
+.work--jobs {
+  form {
+    #work_job_description {
+      height: 140px;
+    }
+
+    .form-group.work_job_hours_per_shift,
+    .period-date,
+    .unlimited {
+      display: none;
+    }
+  }
+
+  #shift-table {
+    margin-bottom: 5px;
+  }
+
+  #shift-rows {
+    .shift-slots {
+      width: 75px;
+    }
+
+    .delete {
+      text-align: right;
+    }
+  }
+}

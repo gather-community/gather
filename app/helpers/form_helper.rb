@@ -51,10 +51,12 @@ module FormHelper
     end
   end
 
-  # Renders a set of nested fields handled by cocoon. Assumes all model stuff is in place.
+  # Renders a set of nested fields handled by cocoon. Assumes:
+  # - Partial at parentmodels/_childmodel_fields.html.erb
+  # - Parent model has accepts_nested_attributes_for :childmodels
   def nested_field_set(f, assoc, options = {})
     wrapper_partial = "shared/nested_fields_wrapper"
-    options[:inner_partial] ||= "#{f.object.class.model_name.route_key}/#{assoc.to_s.singularize}_fields"
+    options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
     options[:multiple] = true unless options.has_key?(:multiple)
 
     wrapper_classes = ["nested-fields"]

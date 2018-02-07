@@ -22,7 +22,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#resource-forms',
       maxFilesize: Settings.photos.max_size_mb / 1

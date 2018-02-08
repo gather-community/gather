@@ -12,7 +12,7 @@ module Work
     end
 
     def slot_type_icon
-      full_group? ? icon_tag("users") : ""
+      full_group? ? h.icon_tag("users") : ""
     end
   end
 end

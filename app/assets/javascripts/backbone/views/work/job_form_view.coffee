@@ -81,7 +81,6 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     startPicker = @$(event.currentTarget).closest('.input-group.datetimepicker')
     start = startPicker.data("DateTimePicker").date()
     if (start)
-      console.log 'setting default to ' + start
       endPicker = @$(event.currentTarget).closest('tr').find('.ends-at .input-group.datetimepicker')
       endPicker.data("DateTimePicker").defaultDate(start)
 

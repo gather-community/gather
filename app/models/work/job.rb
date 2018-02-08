@@ -8,7 +8,7 @@ module Work
     belongs_to :community
     belongs_to :period, class_name: "Work::Period"
     belongs_to :requester, class_name: "People::Group"
-    has_many :shifts, class_name: "Work::Shift", inverse_of: :job
+    has_many :shifts, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
 
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { order("LOWER(title)") }

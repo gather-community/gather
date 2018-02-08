@@ -345,6 +345,8 @@ en:
       activate: "Formula activated successfully."
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
+    work/job:
+      destroy: "Job deleted successfully."
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.

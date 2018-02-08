@@ -3,8 +3,15 @@ module Work
     include Destructible
 
     before_action -> { nav_context(:work, :jobs) }
+    decorates_assigned :job, :jobs
+    helper_method :sample_job
 
-    decorates_assigned :job
+    def index
+      @period = Period.for_community(current_community).active.first # This will change to use lens.
+      authorize sample_job
+      @jobs = policy_scope(Job).for_community(current_community).
+        in_period(@period).includes(:shifts).by_title
+    end
 
     def new
       prep_form_vars

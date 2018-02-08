@@ -1,4 +1,19 @@
 .work--jobs {
+
+  &.action-index {
+    td.title {
+      min-width: 300px;
+    }
+
+    td.requester {
+      min-width: 200px;
+    }
+
+    td.hours, td.slots {
+      width: 50px;
+    }
+  }
+
   form {
     #work_job_description {
       height: 140px;

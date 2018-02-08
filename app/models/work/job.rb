@@ -11,6 +11,8 @@ module Work
     has_many :shifts, class_name: "Work::Shift", inverse_of: :job
 
     scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :by_title, -> { order("LOWER(title)") }
+    scope :in_period, ->(p) { where(period_id: p.id) }
 
     normalize_attributes :title, :description
 
@@ -52,6 +54,10 @@ module Work
       slot_type == "fixed"
     end
 
+    def full_group?
+      slot_type != "fixed"
+    end
+
     def full_single_slot?
       slot_type == "full_single"
     end
@@ -62,6 +68,10 @@ module Work
 
     def date_only_full_multiple?
       date_only? && full_multiple_slot?
+    end
+
+    def slot_count
+      shifts.sum(&:slots)
     end
 
     private

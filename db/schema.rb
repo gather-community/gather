@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180204144848) do
+ActiveRecord::Schema.define(version: 20180208003035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -545,7 +545,7 @@ ActiveRecord::Schema.define(version: 20180204144848) do
     t.decimal "hours_per_shift", precision: 6, scale: 2
     t.integer "period_id", null: false
     t.integer "requester_id"
-    t.string "slot_type", limit: 32, default: "normal", null: false
+    t.string "slot_type", limit: 32, default: "fixed", null: false
     t.string "time_type", limit: 32, default: "date_time", null: false
     t.string "title", limit: 128, null: false
     t.datetime "updated_at", null: false

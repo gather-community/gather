@@ -368,7 +368,7 @@ en:
       date_wkday_no_yr: "%a %b %d"
       datetime_no_yr: "%a %b %d %l:%M%P"
       full_datetime: "%a %b %d %Y %l:%M%P"
-      machine_datetime_no_zone: "%Y-%m-%d %H:%M"
+      machine_readable: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
       shorter_date: "%b %d"

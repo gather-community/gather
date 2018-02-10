@@ -55,6 +55,8 @@ module Gather
 
     config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
 
+    config.active_record.time_zone_aware_types = [:datetime]
+
     # Currently, fr is only available for testing purposes.
     I18n.available_locales = %i(en fr)
   end

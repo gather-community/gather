@@ -28,4 +28,32 @@ RSpec.describe Reservations::Protocol, type: :model do
       expect(Reservations::Protocol.matching(resource3)).to eq []
     end
   end
+
+  describe "time column behavior" do
+    let(:resource1) { create(:resource) }
+
+    before { Time.zone = "Saskatchewan" }
+
+    context "with time already stored in database" do
+      let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
+
+      before do
+        # Deliberately doing this via SQL so we know the actual value stored in the DB.
+        ActiveRecord::Base.connection.execute(
+          "UPDATE reservation_protocols SET fixed_start_time = '2000-01-01 13:00'")
+      end
+
+      it "does not apply timezone on retrieval" do
+        expect(p1.reload.fixed_start_time.hour).to eq 13
+      end
+    end
+
+    context "with time provided at creation" do
+      let!(:p1) { create(:reservation_protocol, resources: [resource1], fixed_start_time: "13:00") }
+
+      it "returns correct time" do
+        expect(p1.reload.fixed_start_time.hour).to eq 13
+      end
+    end
+  end
 end

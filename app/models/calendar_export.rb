@@ -1,5 +1,7 @@
-# Generates ICS files for various calendars in the system.
 require 'icalendar'
+require 'icalendar/tzinfo'
+
+# Generates ICS files for various calendars in the system.
 class CalendarExport
   class CalendarTypeError < StandardError; end
 
@@ -7,7 +9,7 @@ class CalendarExport
   CALENDAR_TYPES = %w(meals community_meals all_meals shifts reservations your_reservations)
   UID_SIGNATURE = "91a772a5ae4a"
 
-  attr_accessor :type, :user
+  attr_accessor :type, :user, :cal
 
   def initialize(type, user)
     self.type = type
@@ -20,18 +22,18 @@ class CalendarExport
   end
 
   def generate
-    cal = Icalendar::Calendar.new
-    cal.timezone { |t| t.tzid = Time.zone.tzinfo.name }
+    self.cal = Icalendar::Calendar.new
+    set_timezone
 
-    if objects.present?
+    if objects.any?
       class_name = objects.first.class.name.underscore
 
       objects.each do |obj|
         obj = obj.decorate
         cal.event do |e|
           e.uid = "#{UID_SIGNATURE}_#{class_name}_#{obj.id}"
-          e.dtstart = obj.starts_at
-          e.dtend = obj.ends_at
+          e.dtstart = Icalendar::Values::DateTime.new(obj.starts_at, tzid: tzid)
+          e.dtend = Icalendar::Values::DateTime.new(obj.ends_at, tzid: tzid)
           e.location = obj.location_name
           e.summary = summary(obj)
           e.description = description(obj)
@@ -47,6 +49,7 @@ class CalendarExport
 
   private
 
+  # Gets the objects for the calendar sorted oldest first.
   def objects
     @objects ||= case type
     when "meals"
@@ -56,7 +59,7 @@ class CalendarExport
     when "all_meals"
       base_meals_scope.to_a
     when "shifts"
-      user.assignments.includes(:meal).to_a
+      user.assignments.includes(:meal).oldest_first.to_a
     when "reservations"
       base_reservations_scope.where(resources: {community_id: user.community_id}).to_a
     when "your_reservations"
@@ -77,7 +80,7 @@ class CalendarExport
   def base_reservations_scope
     Reservations::ReservationPolicy::Scope.new(user, Reservations::Reservation).resolve.
       includes(:resource, :reserver).
-      with_max_age(MAX_EVENT_AGE)
+      with_max_age(MAX_EVENT_AGE).oldest_first
   end
 
   def summary(obj)
@@ -120,5 +123,19 @@ class CalendarExport
     host = "#{user.subdomain}.#{Settings.url.host}"
     Rails.application.routes.url_helpers.send(url_helper_method, obj,
       Settings.url.to_h.slice(:port, :protocol).merge(host: host))
+  end
+
+  # Sets up the calendar's timzeone blocks at the top of the file.
+  # This is kind of a weird incantation taken from the gem docs.
+  # Version 2 of the gem is supposed to have better timezone support, if it ever comes out.
+  def set_timezone
+    tz = TZInfo::Timezone.get(tzid)
+    first_time = objects.any? ? objects.first.starts_at : Time.current
+    cal.add_timezone(tz.ical_timezone(first_time))
+  end
+
+  # Current timezone ID in tzinfo format.
+  def tzid
+    Time.zone.tzinfo.name
   end
 end

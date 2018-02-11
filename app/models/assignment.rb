@@ -3,6 +3,8 @@ class Assignment < ApplicationRecord
 
   acts_as_tenant(:cluster)
 
+  scope :oldest_first, -> { joins(:meal).order("meals.served_at") }
+
   belongs_to :user
   belongs_to :meal
 

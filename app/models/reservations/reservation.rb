@@ -14,6 +14,7 @@ module Reservations
     belongs_to :meal
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
+    scope :oldest_first, -> { order(:starts_at, :ends_at) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
     # and sponsor_community for other uses.

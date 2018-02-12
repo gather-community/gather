@@ -88,7 +88,7 @@ module Reservations
     end
 
     def future?
-      starts_at.future?
+      starts_at.try(:future?)
     end
 
     def recently_created?

@@ -78,3 +78,9 @@ Follow these steps to setup a development environment for Gather.
     1. In a browser, go to `http://gather.localhost.tv:3000` to start Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
+    
+## Acknowledgements
+
+This project is happily tested with BrowserStack!
+[![Tested with BrowserStack](https://www.browserstack.com/images/layout/browserstack-logo-600x315.png)](https://www.browserstack.com)
+

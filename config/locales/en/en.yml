@@ -373,6 +373,7 @@ en:
       short_date: "%a %b %d"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
+      url_date: "%Y-%m-%d"
 
   datepicker:
     dformat: '%b %d %Y'

@@ -18,7 +18,7 @@ body.landing {
     flex-grow: 8; // flex: x was not working on IE11 as of 1/19/18
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 
     #blurb {

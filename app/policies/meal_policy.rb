@@ -77,6 +77,10 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:biller) && meal.closed? && meal.in_past?
   end
 
+  def import?
+    active_admin_or?(:biller)
+  end
+
   def update_formula?
     !meal.finalized? && administer?
   end

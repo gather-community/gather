@@ -1,21 +1,33 @@
 module Meals
   class ImportController < ApplicationController
+    before_action :init_meal, except: :create
     def new
-      authorize current_user, :import_meal?
+      authorize @meal, :import?
     end
 
     def create
-      authorize current_user, :import_meal?
+      @meal = Meal.new(
+        community_id: current_user.community_id,
+        community_ids: [current_user.community_id],
+        creator: current_user
+      )
+      authorize @meal, :import?
     end
 
     def download_meal_csv
-      authorize current_user, :import_meal?
+      authorize @meal, :import?
       path = "#{Rails.root}/app/assets/csv/sample_meal.csv"
       send_file(
         path,
         filename: "Sample_Meal_CSV.csv",
         type: "text/csv"
       )
+    end
+
+    private
+
+    def init_meal
+      @meal = Meal.new_with_defaults(current_community)
     end
   end
 end

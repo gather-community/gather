@@ -26,6 +26,11 @@
   a few sentences explaining how to download the example file and what to do with it.
 </p>
 
-<!--going to add a sample csv file-->
+<%= gather_form_for @meal, url: meals_import_path, multipart: true do |f| %>
+  <%= base_error(f) %>
+
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>
 
 

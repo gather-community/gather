@@ -1,24 +1,29 @@
-<% content_for(:title) { 'Import Meal' } %>
+<% content_for(:title, "Import Meal") %>
 
 <h2>How To Import a CSV File</h2>
-<p>
-  You create a CSV file with the following as headers:
-  <ul>
-    <li>Date/Time (required, any parseable datetime string)</li>
-    <li>Location(s) (required, semicolon separated, location full name)</li>
-    <li>Capacity (optional, integer)</li>
-    <li>Formula (optional, formula name)</li>
-    <li>Head Cook (optional, person full name, email, or alternate ID (prefixed with "alt:"))</li>
-    <li>Extra roles (optional, One column for each extra role, optional, semicolon separated, people full names)</li>
-  </ul>
-</p>
+<!--<p>-->
+  <!--You create a CSV file with the following as headers:-->
+  <!--<ul>-->
+    <!--<li>Date/Time (required, any parseable datetime string)</li>-->
+    <!--<li>Location(s) (required, semicolon separated, location full name)</li>-->
+    <!--<li>Capacity (optional, integer)</li>-->
+    <!--<li>Formula (optional, formula name)</li>-->
+    <!--<li>Head Cook (optional, person full name, email, or alternate ID (prefixed with "alt:"))</li>-->
+    <!--<li>Extra roles (optional, One column for each extra role, optional, semicolon separated, people full names)</li>-->
+  <!--</ul>-->
+
+
+<!--</p>-->
+
+<!--<p>-->
+  <!--Date/Time and Locations are required so the fields can not be empty but the others are optional.-->
+<!--</p>-->
 
 <p>
-  Date/Time and Locations are required so the fields can not be empty but the others are optional.
-</p>
+  Click <b><%= link_to "here", meals_import_download_meal_csv_url(format: :csv) %></b> to download a sample CSV file. Ypu can create a new file just like this or edit this one.
+  The sample is currently filled with the required fields so please do not delete any column.
 
-<p>
-  Click <b><%= link_to 'here', '#', target: '_blank' %></b> is a sample CSV file
+  a few sentences explaining how to download the example file and what to do with it.
 </p>
 
 <!--going to add a sample csv file-->

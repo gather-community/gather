@@ -142,6 +142,10 @@ class UserPolicy < ApplicationPolicy
     (active_super_admin? ? [:super_admin] : [])
   end
 
+  def import_meal?
+    active_admin_or?(:biller)
+  end
+
   private
 
   def self?

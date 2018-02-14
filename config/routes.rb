@@ -24,6 +24,9 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
+    resource :import, only: [:new, :create], controller: :import
+    get "import/download_meal_csv"
+
   end
 
   resources :meals do
@@ -39,10 +42,6 @@ Rails.application.routes.draw do
 
     resources :messages, only: [:new, :create], module: :meals
     resource :finalize, only: [:new, :create], module: :meals, controller: :finalize
-  end
-
-  namespace :meals do
-    resource :import, only: [:new, :create], controller: :import
   end
 
   namespace :reservations do

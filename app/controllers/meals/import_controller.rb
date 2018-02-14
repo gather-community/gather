@@ -16,9 +16,8 @@ module Meals
 
     def download_meal_csv
       authorize @meal, :import?
-      path = "#{Rails.root}/app/assets/csv/sample_meal.csv"
       send_file(
-        path,
+        "#{Rails.root}/app/assets/csv/sample_meal.csv",
         filename: "Sample_Meal_CSV.csv",
         type: "text/csv"
       )

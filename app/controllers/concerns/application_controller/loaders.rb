@@ -8,7 +8,7 @@ module Concerns::ApplicationController::Loaders
   protected
 
   def lens_communities
-    if lens[:community] == "all" || lens[:community].blank?
+    if lenses[:community] == "all" || lenses[:community].blank?
       current_cluster.communities
     else
       current_community

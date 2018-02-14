@@ -1,11 +1,11 @@
-# Handles generating HTML for the lens bars on pages.
+# Handles generating HTML for the set bars on pages.
 module Lens
   class Bar
-    attr_accessor :route_params, :context, :lens, :options
+    attr_accessor :route_params, :context, :set, :options
 
-    def initialize(context:, lens:, options:)
+    def initialize(context:, set:, options:)
       self.context = context
-      self.lens = lens
+      self.set = set
       self.options = options
 
       # This is ok because params are never used in Lens to do mass assignments.
@@ -14,8 +14,8 @@ module Lens
 
     def to_s
       h.content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
-        html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
-        html << clear_link unless lens.all_required?
+        html = set.lenses.map { |f| send("#{f}_field", f).try(:<<, " ") }
+        html << clear_link unless set.all_required?
         html.compact.reduce(:<<)
       end
     end
@@ -27,11 +27,11 @@ module Lens
     end
 
     def clear_link
-      if lens.optional_fields_blank?
+      if set.optional_lenses_blank?
         ""
       else
         h.link_to(h.icon_tag("times-circle") << " " << h.content_tag(:span, "Clear Filter"),
-          context.request.path << "?" << lens.query_string_to_clear,
+          context.request.path << "?" << set.query_string_to_clear,
           class: "clear")
       end
     end
@@ -47,12 +47,12 @@ module Lens
         h.content_tag(:option, "All Communities", value: "all")
       end
 
-      selected = if !field.options[:required] && (lens[:community] == "all" || lens[:community].blank?)
+      selected = if !field.options[:required] && (set[:community] == "all" || set[:community].blank?)
         nil
-      elsif field.options[:subdomain] || lens[:community].blank?
+      elsif field.options[:subdomain] || set[:community].blank?
         context.current_community.slug
       else
-        lens[:community]
+        set[:community]
       end
 
       options = prompt << h.options_from_collection_for_select(communities, 'slug', 'name', selected)
@@ -80,8 +80,8 @@ module Lens
     end
 
     def user_field(field)
-      selected_option_tag = if lens[:user].present?
-        user = context.policy_scope(User).find(lens[:user])
+      selected_option_tag = if set[:user].present?
+        user = context.policy_scope(User).find(set[:user])
         h.content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""
@@ -106,7 +106,7 @@ module Lens
       opts.delete("finalizable") if route_params[:action] == "jobs"
       opt_key = "simple_form.options.meal.time"
       h.select_tag("time",
-        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:time]),
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, set[:time]),
         prompt: "Upcoming",
         class: "form-control",
         onchange: "this.form.submit();"
@@ -117,7 +117,7 @@ module Lens
       opts = %w(adult child)
       opt_key = "simple_form.options.user.life_stage"
       h.select_tag("life_stage",
-        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:life_stage]),
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, set[:life_stage]),
         prompt: I18n.t("#{opt_key}.any"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -128,7 +128,7 @@ module Lens
       opts = %w(unit)
       opt_key = "simple_form.options.user.sort"
       h.select_tag("user_sort",
-        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_sort]),
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, set[:user_sort]),
         prompt: I18n.t("#{opt_key}.name"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -140,7 +140,7 @@ module Lens
       opts << "tableall" if context.policy(h.sample_user).show_inactive?
       opt_key = "simple_form.options.user.view"
       h.select_tag("user_view",
-        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, set[:user_view]),
         prompt: I18n.t("#{opt_key}.album"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -148,7 +148,7 @@ module Lens
     end
 
     def search_field(field)
-      h.text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
+      h.text_field_tag("search", set[:search], placeholder: "Search...", class: "form-control")
     end
   end
 end

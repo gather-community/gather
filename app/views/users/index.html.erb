@@ -22,7 +22,7 @@
     No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
   </div>
 <% else %>
-  <% if %w(table tableall).include?(lens[:user_view]) %>
+  <% if %w(table tableall).include?(lenses[:user_view]) %>
     <div class="index-wrapper">
       <table id="directory-table" class="index">
         <thead>
@@ -84,8 +84,8 @@
 
   <div class="index-footer row">
     <div class="col-sm-6">
-      <div class="<%= "hidden-print" unless lens[:user_view] == "tableall" %>">
-        <%= paginate @users unless lens[:user_view] == "table" %>
+      <div class="<%= "hidden-print" unless lenses[:user_view] == "tableall" %>">
+        <%= paginate @users unless lenses[:user_view] == "table" %>
       </div>
       <div class="visible-print"><%= generated_time %></div>
     </div>
@@ -97,6 +97,6 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.People.DirectoryPrintView({viewType: '<%= lens[:user_view] %>'});
+    new Gather.Views.People.DirectoryPrintView({viewType: '<%= lenses[:user_view] %>'});
   });
 <% end %>

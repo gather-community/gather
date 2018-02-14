@@ -1,23 +1,19 @@
-module LensHelper
-  def lens_bar(options = {})
-    return unless defined?(lens) && !lens.nil?
-    LensBar.new(self, lens: lens, options: options).to_html
-  end
+# Handles generating HTML for the lens bars on pages.
+module Lens
+  class Bar
+    attr_accessor :route_params, :context, :lens, :options
 
-  class LensBar
-    attr_accessor :route_params, :template, :lens, :options
-
-    def initialize(template, lens:, options:)
-      self.template = template
+    def initialize(context:, lens:, options:)
+      self.context = context
       self.lens = lens
       self.options = options
 
       # This is ok because params are never used in Lens to do mass assignments.
-      self.route_params = params.dup.permit!
+      self.route_params = context.params.dup.permit!
     end
 
-    def to_html
-      content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
+    def to_s
+      h.content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
         html = lens.fields.map { |f| send("#{f}_field", f).try(:<<, " ") }
         html << clear_link unless lens.all_required?
         html.compact.reduce(:<<)
@@ -26,34 +22,42 @@ module LensHelper
 
     private
 
+    def h
+      context.view_context
+    end
+
     def clear_link
       if lens.optional_fields_blank?
         ""
       else
-        link_to(icon_tag("times-circle") << " " << content_tag(:span, "Clear Filter"),
-          request.path << "?" << lens.query_string_to_clear,
+        h.link_to(h.icon_tag("times-circle") << " " << h.content_tag(:span, "Clear Filter"),
+          context.request.path << "?" << lens.query_string_to_clear,
           class: "clear")
       end
     end
 
     def community_field(field)
-      return nil unless multi_community?
-      communities = load_communities_in_cluster
+      return nil unless context.multi_community?
+      communities = h.load_communities_in_cluster
       field.options[:subdomain] = true unless field.options.key?(:subdomain)
 
-      prompt = field.options[:required] ? "".html_safe : content_tag(:option, "All Communities", value: "all")
+      prompt = if field.options[:required]
+        "".html_safe
+      else
+        h.content_tag(:option, "All Communities", value: "all")
+      end
 
       selected = if !field.options[:required] && (lens[:community] == "all" || lens[:community].blank?)
         nil
       elsif field.options[:subdomain] || lens[:community].blank?
-        current_community.slug
+        context.current_community.slug
       else
         lens[:community]
       end
 
-      options = prompt << options_from_collection_for_select(communities, 'slug', 'name', selected)
+      options = prompt << h.options_from_collection_for_select(communities, 'slug', 'name', selected)
 
-      new_url = url_for(
+      new_url = h.url_for(
         host: "' + this.value + '.#{Settings.url.host}",
         params: route_params.except(:action, :controller).
           merge(field.options[:required] ? {} : {community: "this"})
@@ -72,18 +76,18 @@ module LensHelper
 
       name = field.options[:subdomain] ? "" : "community"
 
-      select_tag(name, options, class: "form-control", onchange: onchange, id: "community")
+      h.select_tag(name, options, class: "form-control", onchange: onchange, id: "community")
     end
 
     def user_field(field)
       selected_option_tag = if lens[:user].present?
-        user = policy_scope(User).find(lens[:user])
-        content_tag(:option, user.name, value: user.id, selected: "selected")
+        user = context.policy_scope(User).find(lens[:user])
+        h.content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""
       end
 
-      select_tag("user", selected_option_tag,
+      h.select_tag("user", selected_option_tag,
         prompt: "All Users",
         class: "form-control",
         onchange: "this.form.submit();",
@@ -101,8 +105,8 @@ module LensHelper
       opts = %w(past finalizable all)
       opts.delete("finalizable") if route_params[:action] == "jobs"
       opt_key = "simple_form.options.meal.time"
-      select_tag("time",
-        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:time]),
+      h.select_tag("time",
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:time]),
         prompt: "Upcoming",
         class: "form-control",
         onchange: "this.form.submit();"
@@ -112,8 +116,8 @@ module LensHelper
     def life_stage_field(field)
       opts = %w(adult child)
       opt_key = "simple_form.options.user.life_stage"
-      select_tag("life_stage",
-        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:life_stage]),
+      h.select_tag("life_stage",
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:life_stage]),
         prompt: I18n.t("#{opt_key}.any"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -123,8 +127,8 @@ module LensHelper
     def user_sort_field(field)
       opts = %w(unit)
       opt_key = "simple_form.options.user.sort"
-      select_tag("user_sort",
-        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_sort]),
+      h.select_tag("user_sort",
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_sort]),
         prompt: I18n.t("#{opt_key}.name"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -133,10 +137,10 @@ module LensHelper
 
     def user_view_field(field)
       opts = %w(table)
-      opts << "tableall" if policy(sample_user).show_inactive?
+      opts << "tableall" if context.policy(h.sample_user).show_inactive?
       opt_key = "simple_form.options.user.view"
-      select_tag("user_view",
-        options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),
+      h.select_tag("user_view",
+        h.options_for_select(opts.map { |o| [I18n.t("#{opt_key}.#{o}"), o] }, lens[:user_view]),
         prompt: I18n.t("#{opt_key}.album"),
         class: "form-control",
         onchange: "this.form.submit();"
@@ -144,11 +148,7 @@ module LensHelper
     end
 
     def search_field(field)
-      text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
-    end
-
-    def method_missing(*args, &block)
-      @template.send(*args, &block)
+      h.text_field_tag("search", lens[:search], placeholder: "Search...", class: "form-control")
     end
   end
 end

@@ -8,7 +8,7 @@ module Lensable
   end
 
   def prepare_lens(*fields)
-    @lens = Lens.new(context: self, fields: fields, params: params)
+    @lens = Lens::Lens.new(context: self, fields: fields, params: params)
   end
 
   def lens_communities

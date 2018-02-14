@@ -177,6 +177,6 @@ module NavHelper
   end
 
   def lens_path_if_present(controller)
-    Lens.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
+    Lens::Lens.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
   end
 end

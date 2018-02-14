@@ -17,9 +17,8 @@ module Gather
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'UTC'
 
-    config.i18n.load_path += Dir["#{Rails.root.to_s}/config/locales/**/*.{rb,yml}"]
-
-    config.autoload_paths += ["#{Rails.root}/app/mailers/concerns", "#{Rails.root}/lib"]
+    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
+    config.autoload_paths += [Rails.root.join("app/mailers/concerns"), Rails.root.join("lib")]
 
     config.active_job.queue_adapter = :delayed_job
 

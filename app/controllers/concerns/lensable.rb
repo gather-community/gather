@@ -10,12 +10,4 @@ module Lensable
   def prepare_lens(*fields)
     @lens = Lens::Lens.new(context: self, fields: fields, params: params)
   end
-
-  def lens_communities
-    if lens[:community] == "all" || lens[:community].blank?
-      current_cluster.communities
-    else
-      current_community
-    end
-  end
 end

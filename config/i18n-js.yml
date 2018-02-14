@@ -1,0 +1,8 @@
+# Configures what translations get sent to JS.
+# Only those needed should be included to keep download size small.
+translations:
+  - file: "app/assets/javascripts/i18n/translations.js"
+    only: [
+      "*.datepicker.*",
+      "*.timepicker.*"
+    ]

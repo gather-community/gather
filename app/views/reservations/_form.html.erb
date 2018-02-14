@@ -1,4 +1,4 @@
-<%= horizontal_form_for(reservation,
+<%= gather_form_for(reservation,
       url: reservation.new_record? ? reservations_path : reservation_path(reservation)) do |f| %>
 
   <%= f.hidden_field :resource_id %>
@@ -62,7 +62,7 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.Select2View({
       el: '.reservations_reservation_sponsor_id',
       extra_data: { community_id: <%= reservation.community_id %> }

@@ -18,7 +18,7 @@
 <% elsif @signup.new_record? && @meal.closed? %>
   You have not signed up for this meal and it is now closed.
 <% else %>
-  <%= horizontal_form_for(@signup, width: :full, wrapper: :equal_width_form) do |f| %>
+  <%= gather_form_for(@signup, width: :full, layout: :equal_width) do |f| %>
     <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
     <%= f.input :meal_id, as: :hidden %>
     <%= base_error(f, full_width: true) %>
@@ -78,7 +78,7 @@
   <% end %>
 
   <%= javascript_tag do %>
-    $(function(){
+    $(function() {
       new Gather.Views.DirtyChecker({el: '.signup-form'});
     });
   <% end %>

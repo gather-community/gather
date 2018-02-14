@@ -208,8 +208,8 @@ class MealsController < ApplicationController
       @meals = @meals.future.oldest_first
     end
     @meals = @meals.includes(:signups)
-    if params[:search]
-      @meals = @meals.joins(:head_cook).
+    if params[:search].present?
+      @meals = @meals.eager_load(:head_cook).
         where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end

@@ -1,4 +1,4 @@
-Gather.Views.FormulaFormView = Backbone.View.extend
+Gather.Views.Meals.FormulaFormView = Backbone.View.extend
 
   initialize: (options) ->
     @updateMeal()

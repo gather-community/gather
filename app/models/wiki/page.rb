@@ -1,8 +1,11 @@
+require 'open-uri'
+
 module Wiki
   class Page < ApplicationRecord
     acts_as_tenant :cluster
 
-    RESERVED_SLUGS = Set.new(%w(new all home notfound)).freeze
+    RESERVED_SLUGS = Set.new(%w(new all home sample notfound)).freeze
+    EDITABLE_BY_OPTIONS = %i(everyone wikiist)
 
     attr_accessor :comment
 
@@ -16,6 +19,8 @@ module Wiki
 
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved
+    validate :template_error
+    validate :sample_not_editable
 
     before_validation :set_slug
     after_save :create_new_version
@@ -25,20 +30,32 @@ module Wiki
       title.to_slug.normalize.to_s
     end
 
-    def self.reserved_slug(type)
-      type.to_s
+    def self.reserved_slug(role)
+      role.to_s
     end
 
-    def self.create_home_page(community:, creator:)
-      create(
+    def self.create_special_page(role, community:, creator:)
+      create!(
         community: community,
         creator: creator,
         updator: creator,
-        content: I18n.t("wiki.home_page.content"),
-        home: true,
-        title: I18n.t("wiki.home_page.title"),
-        slug: reserved_slug(:home)
+        content: File.read(Rails.root.join("config/locales/en/wiki_pages/#{role}.md")),
+        role: role,
+        title: I18n.t("wiki.special_pages.#{role}"),
+        slug: reserved_slug(role)
       )
+    end
+
+    def special?
+      role.present?
+    end
+
+    def home?
+      role == "home"
+    end
+
+    def sample?
+      role == "sample"
     end
 
     def last_version_number
@@ -52,6 +69,7 @@ module Wiki
     private
 
     def create_new_version
+      return unless saved_change_to_title? || saved_change_to_content? || comment.present?
       n = last_version_number
       v = versions.build
       v.attributes = attributes.slice(*(v.attribute_names - ['id']))
@@ -61,7 +79,7 @@ module Wiki
     end
 
     def set_slug
-      self.slug = home? ? reserved_slug(:home) : title_to_slug_without_dupes
+      self.slug = special? ? reserved_slug(role) : title_to_slug_without_dupes
     end
 
     def reserved_slug(type)
@@ -72,10 +90,14 @@ module Wiki
     def title_to_slug_without_dupes
       base = title_to_slug(title)
       suffix = nil
-      while self.class.in_community(community).where(slug: candidate = "#{base}#{suffix}").exists?
+      while other_page_exists_with_slug?(candidate = "#{base}#{suffix}")
         suffix = (suffix || 1) + 1
       end
       candidate
+    end
+
+    def other_page_exists_with_slug?(other_slug)
+      self.class.in_community(community).where(slug: other_slug).where.not(id: id).exists?
     end
 
     def title_to_slug(title)
@@ -86,8 +108,20 @@ module Wiki
       # We use title_to_slug and not title_to_slug_without_dupes here so that a page title of
       # 'Home' will raise a validation error.
       naive_slug = title_to_slug(title)
-      if RESERVED_SLUGS.include?(naive_slug)
+      if RESERVED_SLUGS.include?(naive_slug) && role != naive_slug
         errors.add(:title, :reserved_slug)
+      end
+    end
+
+    def template_error
+      if data_source.present? && error = decorate.template_error
+        errors.add(:content, error)
+      end
+    end
+
+    def sample_not_editable
+      if sample? && persisted?
+        errors.add(:base, :sample_not_editable)
       end
     end
   end

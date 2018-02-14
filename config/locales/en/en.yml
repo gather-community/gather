@@ -75,9 +75,10 @@ en:
         name: "Name"
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
-        is_default: "Default"
+        is_default: "Default Formula?"
         signup_types: "Signup Types"
         pantry_fee_disp: "Pantry Fee Amount"
+        pantry_reimbursement: "Allow Pantry Reimbursement?"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -129,6 +130,17 @@ en:
         title: "Title"
         content: "Content"
         comment: "Comment"
+        editable_by: "Editable By"
+        data_source: "Data Source"
+      work/job:
+        description: "Description"
+        hours: "Hours"
+        hours_per_shift: "Hours per Shift"
+        period_id: "Period"
+        requester_id: "Requester"
+        slot_type: "Slot Type"
+        time_type: "Times"
+        title: "Title"
     errors:
       models:
         signup:
@@ -160,9 +172,32 @@ en:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
         wiki/page:
+          sample_not_editable: "The sample page is not editable so that it remains intact as a reference for other users. If you would like to experiment, try creating a new page using the 'New Wiki Page' link below."
+          data_fetch:
+            main: "There was a problem fetching data for this page (%{error})"
+            socket_error: "Couldn't connect to server"
+            invalid_json: "Invalid JSON"
+            template_error: "Template Error: %{details}"
           attributes:
             title:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Must equal or evenly divide %{hours} hours"
+            shifts:
+              more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
+              more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
+              no_shifts: "You must add at least one shift."
+              duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
+              different_length_shifts: "All shfits must be the same length."
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Shift must last for %{hours} hours"
+              elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
+            ends_at:
+              not_after_start: "must be after start time"
 
   custom_fields:
     labels:
@@ -172,7 +207,6 @@ en:
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
-            admin_email: "Admin Email"
             extra_roles: "Extra Roles"
             default_shift_times:
               _self: "Default Shift Times"
@@ -209,7 +243,6 @@ en:
         settings:
           meals:
             reimb_instructions: "What cooks should do with meals reimbursement form and receipts. Appears on meal summary sheet for head cooks only."
-            admin_email: "Email for meals administrator(s)"
             extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>table_setter</code>, and <code>cleaner</code>. Spelling must be exact."
             default_shift_times:
               _self: "When shifts start and end, relative to meal serving time. In minutes."
@@ -252,6 +285,8 @@ en:
     user:
       deactivate: "Deactivate User"
       destroy: "Delete User"
+    work/job:
+      destroy: "Delete Job"
 
   confirmations:
     household:
@@ -272,6 +307,8 @@ en:
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
+    work/job:
+      destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
 
   activatables:
     user:
@@ -308,6 +345,8 @@ en:
       activate: "Formula activated successfully."
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
+    work/job:
+      destroy: "Job deleted successfully."
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
@@ -329,11 +368,12 @@ en:
       date_wkday_no_yr: "%a %b %d"
       datetime_no_yr: "%a %b %d %l:%M%P"
       full_datetime: "%a %b %d %Y %l:%M%P"
-      machine_datetime_no_zone: "%Y-%m-%d %H:%M"
+      machine_readable: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
+      url_date: "%Y-%m-%d"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -381,9 +421,17 @@ en:
       user:
         joined_on: "Approximate date when you joined the community"
       meals_formula:
+        is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
+        pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
       wiki_page:
-        content: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+        content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
+        data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
+      work_job:
+        hours: "Estimated number of hours the job will take. Decimals allowed."
+        slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
+        hours_per_shift: "The amount of hours credit each shift is worth."
+        description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
     options:
       meal:
         time:
@@ -426,6 +474,19 @@ en:
         default_calendar_view:
           week: "Week"
           month: "Month"
+      wiki_page:
+        editable_by:
+          everyone: "Everyone"
+          wikiist: "Wikiists & Admins Only"
+      work_job:
+        slot_type:
+          fixed: "This is a regular job with a fixed number of slots"
+          full_single: "This job is for the full community (single shift)"
+          full_multiple: "This job is for the full community (multiple shifts)"
+        time_type:
+          date_time: "This job has a set date and time"
+          date_only: "This job is for a certain date or date range"
+          full_period: "This job is for the whole work period"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -439,6 +500,7 @@ en:
       cleaner_assigns: "Add Cleaner"
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
+      shifts: "Add Shift"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."
@@ -450,6 +512,7 @@ en:
   csv:
     headers:
       user:
+        id: "ID"
         first_name: "First Name"
         last_name: "Last Name"
         unit_num: "Unit Num"
@@ -619,6 +682,8 @@ en:
     biller: "Biller"
     photographer: "Photographer"
     meals_coordinator: "Meals Coordinator"
+    wikiist: "Wikiist"
+    work_coordinator: "Work Coordinator"
 
   phone_types:
     abbreviations:
@@ -664,9 +729,3 @@ en:
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
-
-  wiki:
-    home_page:
-      title: "Wiki Home Page"
-      content: "This is your **wiki home page**!\n\nYou can include a link to another wiki page like [[Favorite Cheeses]].\n\nYou can also link to [external web sites](http://timeanddate.com).\n\nYou can use Markdown formatting when editing wiki pages. [Learn more about Markdown here](https://guides.github.com/features/mastering-markdown/)."
-    not_found_create: "There is no wiki page named '%{title}'. You can create it below!"

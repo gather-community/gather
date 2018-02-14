@@ -1,4 +1,4 @@
-<% content_for(:title){ "Jobs" } %>
+<% content_for(:title){ "Meal Jobs" } %>
 
 <% content_for(:top_buttons) do %>
   <%= calendar_exports_link %>
@@ -75,5 +75,5 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){ new Gather.Views.Select2View({el: '.lens-bar'}); });
+  $(function() { new Gather.Views.Select2View({el: '.lens-bar'}); });
 <% end %>

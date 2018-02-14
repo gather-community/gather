@@ -37,8 +37,8 @@ class MealMailer < ApplicationMailer
     @removed = removed
 
     recips = (@meal.assignments + removed).map(&:user)
-    recips << @meal.community.settings.meals.admin_email
     recips << @initiator
+    recips.concat(User.with_meals_coordinator_role.in_community(@meal.community))
 
     mail(to: recips.compact.uniq)
   end

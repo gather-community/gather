@@ -5,7 +5,7 @@ module People
   class Exporter
     attr_accessor :collection
 
-    COLUMNS = %w(first_name last_name unit_num birthdate email child
+    COLUMNS = %w(id first_name last_name unit_num birthdate email child
       mobile_phone home_phone work_phone joined_on preferred_contact
       garage_nums vehicles)
 

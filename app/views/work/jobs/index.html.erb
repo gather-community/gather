@@ -1,0 +1,37 @@
+<% content_for(:title, "Jobs") %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_job).create? %>
+    <%= link_to(icon_tag("plus") << " Create Job", new_work_job_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if jobs.empty? %>
+  <div class="none-found">
+    No jobs found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Requester</th>
+        <th>Hours</th>
+        <th>Slots</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% jobs.each do |job| %>
+        <tr>
+          <td class="title">
+            <%= link_to(job.title, edit_work_job_path(job)) %>
+            <%= job.slot_type_icon %>
+          </td>
+          <td class="requester"><%= job.requester_name %></td>
+          <td class="hours"><%= job.hours %></td>
+          <td class="slots"><%= job.slot_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

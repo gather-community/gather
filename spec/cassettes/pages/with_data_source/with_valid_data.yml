@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://json-schema.org/example/geo.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Sat, 30 Dec 2017 17:50:22 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Last-Modified:
+      - Tue, 05 Dec 2017 18:41:57 GMT
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Expires:
+      - Sat, 30 Dec 2017 18:00:22 GMT
+      Cache-Control:
+      - max-age=600
+      X-Github-Request-Id:
+      - 3407:209B3:37411D9:502CBA1:5A47D1DE
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+            "id": "http://json-schema.org/geo",
+            "$schema": "http://json-schema.org/draft-06/schema#",
+            "description": "A geographical coordinate",
+            "type": "object",
+            "properties": {
+                "latitude": { "type": "number" },
+                "longitude": { "type": "number" }
+            }
+        }
+    http_version: 
+  recorded_at: Sat, 30 Dec 2017 17:50:24 GMT
+recorded_with: VCR 4.0.0

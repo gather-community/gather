@@ -1,7 +1,5 @@
+# This method of time conversion is deprecated. I18n.l is preferred.
 Time::DATE_FORMATS[:full_datetime] = "%a %b %d %Y %l:%M%P"
 Time::DATE_FORMATS[:machine_datetime_no_zone] = "%Y-%m-%d %H:%M"
-Time::DATE_FORMATS[:datetime_no_yr] = "%a %b %d %l:%M%P"
 Time::DATE_FORMATS[:short_date] = "%a %b %d"
-Time::DATE_FORMATS[:short_date_with_yr] = "%a %b %d %Y"
 Time::DATE_FORMATS[:regular_time] = "%l:%M%P"
-Time::DATE_FORMATS[:url_date] = "%Y-%m-%d"

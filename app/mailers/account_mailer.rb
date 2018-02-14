@@ -3,15 +3,23 @@ class AccountMailer < ApplicationMailer
 
   def statement_notice(statement)
     load_statement_vars(statement)
-    mail(to: @household, subject: "New Account Statement for #{community.name}")
+    statement_mail(subject: "New Account Statement for #{community.name}")
   end
 
   def statement_reminder(statement)
     load_statement_vars(statement)
-    mail(to: @household, subject: "Payment Reminder for #{community.name} Account")
+    statement_mail(subject: "Payment Reminder for #{community.name} Account")
   end
 
   private
+
+  def statement_mail(params)
+    mail(params.merge(to: @household, reply_to: biller_emails))
+  end
+
+  def biller_emails
+    User.with_biller_role.in_community(@statement.community).pluck(:email).compact
+  end
 
   def load_statement_vars(statement)
     @statement = statement

@@ -1,7 +1,7 @@
 <% content_for(:title, "Calendars") %>
 
-<div id="links-and-note">
-  <div id="links">
+<div class="row">
+  <div id="links" class="col-sm-9">
     <p>You can view Gather calendars in your favorite calendar app:</p>
 
     <%= calendar_link("meals") %>
@@ -12,62 +12,65 @@
     <%= calendar_link("your_reservations") %>
   </div>
 
-  <div class="callout">
-    <div>
-      <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
-      Calendar links are tailored and unique to you, so don't share them. If you want to tell
-      someone about this fun feature, send them the
-      <%= link_to("link to this page", calendar_exports_path) %>,
-      not an individual calendar.
-    </div>
+  <div class="callout col-sm-3">
+    <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
+    Calendar links are tailored and unique to you, so don't share them. If you want to tell
+    someone about this fun feature, send them the
+    <%= link_to("link to this page", calendar_exports_path) %>,
+    not an individual calendar.
   </div>
 </div>
 
-<div id="instructions">
-  <h2>Instructions</h2>
-
-  <h3><%= icon_tag("google") %> Google Calendar</h3>
-
-  <div class="row">
-    <div class="col-sm-6">
-      <h4>Method 1</h4>
-      If you are signed in to your Google account, try simply clicking the link of the calendar you
-      want to import. Google Calendar should open on its own and ask you to import.
-    </div>
-    <div class="col-sm-6">
-      <h4>Method 2</h4>
-      <ol>
-        <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
-        <li>On the left of the Google Calendar screen, click the small down arrow next to 'Other Calendars'.</li>
-        <li>Click 'Add by URL'.</li>
-        <li>Paste the URL you copied above.</li>
-        <li>Click 'Add Calendar'.</li>
-        <li>The events should appear on your calendar after a few seconds.</li>
-      </ol>
-    </div>
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Instructions</h2>
+    <h3><%= icon_tag("google") %> Google Calendar</h3>
   </div>
+</div>
 
-  <h3><%= icon_tag("apple") %> Apple Calendar</h3>
+<div class="row">
+  <div class="col-sm-6">
+    <h4>Method 1</h4>
+    If you are signed in to your Google account, try simply clicking the link of the calendar you
+    want to import. Google Calendar should open on its own and ask you to import.
+  </div>
+  <div class="col-sm-6">
+    <h4>Method 2</h4>
+    <ol>
+      <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
+      <li>On the left of the Google Calendar screen, click the small down arrow next to 'Other Calendars'.</li>
+      <li>Click 'Add by URL'.</li>
+      <li>Paste the URL you copied above.</li>
+      <li>Click 'Add Calendar'.</li>
+      <li>The events should appear on your calendar after a few seconds.</li>
+    </ol>
+  </div>
+</div>
 
-  <div class="row">
-    <div class="col-sm-6">
-      <h4>Method 1</h4>
-      Try simply clicking the link of the calendar you want to import. If your browser is set to handle
-      webcal links with Apple Calendar, it may just work!
-    </div>
-    <div class="col-sm-6">
-      <h4>Method 2</h4>
-      <ol>
-        <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
-        <li>Open Apple Calendar.</li>
-        <li>Click the 'File' menu.</li>
-        <li>Click 'Subscribe' or 'New Calendar Subscription'.</li>
-        <li>Paste the URL you copied above.</li>
-        <li>Click OK/Subscribe.</li>
-        <li>Set subscription options if prompted. Recommended auto-refresh interval is 'every hour'.</li>
-        <li>The events should now appear on your calendar.</li>
-      </ol>
-    </div>
+<div class="row">
+  <div class="col-sm-12">
+    <h3><%= icon_tag("apple") %> Apple Calendar</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h4>Method 1</h4>
+    Try simply clicking the link of the calendar you want to import. If your browser is set to handle
+    webcal links with Apple Calendar, it may just work!
+  </div>
+  <div class="col-sm-6">
+    <h4>Method 2</h4>
+    <ol>
+      <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
+      <li>Open Apple Calendar.</li>
+      <li>Click the 'File' menu.</li>
+      <li>Click 'Subscribe' or 'New Calendar Subscription'.</li>
+      <li>Paste the URL you copied above.</li>
+      <li>Click OK/Subscribe.</li>
+      <li>Set subscription options if prompted. Recommended auto-refresh interval is 'every hour'.</li>
+      <li>The events should now appear on your calendar.</li>
+    </ol>
   </div>
 </div>
 

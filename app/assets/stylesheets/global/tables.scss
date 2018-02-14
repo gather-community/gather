@@ -2,9 +2,19 @@ table {
   tr {
     border-bottom: $light-border;
 
-    td {
+    td, th {
+      vertical-align: top;
       padding-top: 5px;
       padding-bottom: 5px;
+      padding-right: 10px;
+
+      &.nowrap {
+        white-space: nowrap;
+      }
+
+      &:first-of-type {
+        padding-left: 10px;
+      }
     }
   }
 }

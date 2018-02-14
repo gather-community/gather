@@ -1,6 +1,6 @@
 <% content_for(:title){ "Confirm Transaction" } %>
 
-<%= horizontal_form_for([@account, @transaction], width: :full,
+<%= gather_form_for([@account, @transaction], width: :full,
   url: account_transactions_path(@account)) do |form| %>
 
   <%= hidden_field_tag :account_id, @account.id %>

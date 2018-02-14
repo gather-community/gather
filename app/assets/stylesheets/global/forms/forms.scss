@@ -60,22 +60,22 @@ form {
       margin-bottom: 0;
     }
 
-    .error {
-      color: $error-red;
-      display: block;
-      background-color: $error-red-bg;
-      padding: 0 5px;
-      border: 1px solid $error-red-border;
-      margin-top: 5px;
-      margin-bottom: 5px;
-
-      &:first-letter {
-        text-transform: uppercase;
-      }
-    }
-
     &.base-error {
       padding-bottom: 15px;
+    }
+  }
+
+  .error {
+    color: $error-red;
+    display: block;
+    background-color: $error-red-bg;
+    padding: 0 5px;
+    border: 1px solid $error-red-border;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    &:first-letter {
+      text-transform: uppercase;
     }
   }
 
@@ -101,7 +101,7 @@ form {
 
 // Overriding default label top padding
 @media (min-width: $screen-sm-min) {
-  .form-horizontal .control-label {
+  .gather-form .control-label {
     padding-top: 0;
   }
 }

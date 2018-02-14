@@ -32,6 +32,8 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require backbone/backbone
+//= require i18n
+//= require i18n/translations
 //= require_tree .
 
 $(document).ready(function(){ $('form').preventDoubleSubmission(); });

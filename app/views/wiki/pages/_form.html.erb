@@ -1,15 +1,32 @@
-<% if params[:preview] %>
+<% if preview? %>
   <%= page.formatted_content %>
 <% end %>
 
-<%= horizontal_form_for(page) do |f| %>
+<%= gather_form_for(page, width: :full, layout: :narrower_label) do |f| %>
+  <% if page.errors[:base] %>
+    <%= base_error(f, full_width: true) %>
+  <% else %>
+    <%= f.error_notification %>
+  <% end %>
   <%= f.input :title %>
   <%= f.input :content %>
   <%= f.input :comment %>
+  <% if policy(page).attribute_permitted?(:editable_by) %>
+    <%= f.input :editable_by, collection: Wiki::Page::EDITABLE_BY_OPTIONS, include_blank: false %>
+  <% end %>
+  <% if policy(page).attribute_permitted?(:data_source) %>
+    <%= f.input :data_source, as: :string %>
+  <% end %>
 
   <%= form_actions do %>
     <%= f.button :submit, "Cancel", name: "cancel", class: "btn-default" %>
     <%= f.button :submit, "Preview", name: "preview", class: "btn-default" %>
     <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.DirtyChecker({el: '.wiki--page-form'});
+    });
   <% end %>
 <% end %>

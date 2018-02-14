@@ -109,8 +109,11 @@
     <%= yield(:flashes) %><%# These are from the view via `content_for` %>
 
     <div class="title-and-buttons">
-      <h1 class="hidden-print"><%= @title %></h1>
-      <h1 class="print-title visible-print"><%= yield(:print_title).presence || @title %></h1>
+      <% title_icons = yield(:title_icons) %>
+      <h1 class="hidden-print"><%= @title %> <%= title_icons %></h1>
+      <h1 class="print-title visible-print">
+        <%= yield(:print_title).presence || @title %> <%= title_icons %>
+      </h1>
       <div class="top-buttons hidden-print">
         <%= lens_bar(position: "upper") %>
         <%= yield(:top_buttons) %>

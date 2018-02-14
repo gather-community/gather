@@ -6,7 +6,7 @@
       def resolve
         if active_cluster_admin?
           scope
-        elsif active?
+        else
           scope.in_community(user.community)
         end
       end
@@ -25,11 +25,11 @@
     end
 
     def new?
-      active_in_community?
+      create?
     end
 
     def edit?
-      active_in_community?
+      update?
     end
 
     def create?
@@ -37,11 +37,11 @@
     end
 
     def update?
-      active_in_community?
+      active_admin_or?(:wikiist) || (active_in_community? && page.editable_by == "everyone")
     end
 
     def destroy?
-      active_admin? || user == page.creator
+      !page.sample? && (active_admin_or?(:wikiist) || user == page.creator)
     end
 
     def history?
@@ -53,7 +53,9 @@
     end
 
     def permitted_attributes
-      [:title, :content, :comment]
+      permitted = [:title, :content, :comment]
+      permitted.push(:editable_by, :data_source) if active_admin_or?(:wikiist)
+      permitted
     end
   end
 end

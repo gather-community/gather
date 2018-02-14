@@ -7,7 +7,7 @@
 <% end %>
 
 <% form_url = @account.new_record? ? accounts_path : account_path(@account) %>
-<%= horizontal_form_for(@account, url: form_url) do |f| %>
+<%= gather_form_for(@account, url: form_url) do |f| %>
 
   <%= f.input :household_id do %><%= @account.household_name %><% end %>
   <%= f.input :community_id do %><%= @account.community_name %><% end %>
@@ -20,7 +20,7 @@
   <% end %>
 
   <%= javascript_tag do %>
-    $(function(){
+    $(function() {
       new Gather.Views.DirtyChecker({el: '.billing--account-form'});
     });
   <% end %>

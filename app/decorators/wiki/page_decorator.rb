@@ -2,9 +2,27 @@ module Wiki
   class PageDecorator < ApplicationDecorator
     delegate_all
 
+    attr_accessor :data_fetch_error
+
+    # Sets data_fetch_error on first run if there is a problem fetching data
     def formatted_content
-      h.content_tag(:div, class: "wiki-content") do
-        h.sanitize(render_markdown(linkify(content).html_safe))
+      return @formatted_content if defined?(@formatted_content)
+      classes = ["wiki-content"]
+      classes << "preview" if h.params[:preview]
+      @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
+        h.sanitize(render_markdown(process_data(linkify(content).html_safe)))
+      end
+    end
+
+    # Tests Mustache syntax and returns any error encountered.
+    def template_error
+      begin
+        # An empty hash should not trigger syntax errors. It just results in empty content.
+        # A syntax error is only caused by invalid syntax!
+        Mustache.render(content, {})
+        nil
+      rescue Mustache::Parser::SyntaxError
+        format_mustache_error($!)
       end
     end
 
@@ -29,6 +47,10 @@ module Wiki
 
     def history(versions)
       h.render "history_table", page: self, versions: versions, with_form: versions.size > 1
+    end
+
+    def data_fetch_error?
+      data_fetch_error.present?
     end
 
     private
@@ -58,11 +80,45 @@ module Wiki
       end.html_safe
     end
 
-    def render_markdown(str)
-      renderer.render(str)
+    # Processes mustache syntax in given string combined with data from data_source.
+    # Sets data_fetch_error if any errors encountered.
+    def process_data(str)
+      if data_source.present?
+        begin
+          Mustache.render(str, JSON.parse(Kernel.open(data_source, &:read)))
+        rescue SocketError
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.socket_error")
+          ""
+        rescue OpenURI::HTTPError
+          self.data_fetch_error = $!.to_s
+          ""
+        rescue JSON::ParserError
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_json")
+          ""
+        rescue Mustache::Parser::SyntaxError
+          self.data_fetch_error = format_mustache_error($!)
+          ""
+        end
+      else
+        str
+      end
     end
 
-    def renderer
+    def format_mustache_error(error)
+      details = if m = error.to_s.match(/\A.+Line \d+/m)
+        m[0]
+      else
+        error.to_s.gsub(/\s*\^\s*\z/m, "")
+      end
+      I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
+        details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
+    end
+
+    def render_markdown(str)
+      markdown_renderer.render(str)
+    end
+
+    def markdown_renderer
       @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML,
         autolink: true,
         space_after_headers: true,

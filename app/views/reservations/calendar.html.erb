@@ -63,7 +63,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.ReservationCalendarView(<%=json(
       el: '#calendar-col',
       resourceId: @resource.id,

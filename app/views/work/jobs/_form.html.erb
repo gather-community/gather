@@ -1,0 +1,49 @@
+<% if @job.new_record? && @periods.empty? %>
+  <%= t("work/jobs.no_periods_html", link: link_to(t("work/jobs.create_one"), work_periods_path)) %>
+<% else %>
+  <%= gather_form_for(job) do |f| %>
+    <%= f.input :period_id, collection: @periods, include_blank: false %>
+    <%= f.input :title %>
+    <%= f.input :hours %>
+    <%= f.input :requester_id, collection: @requesters %>
+    <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
+    <%= f.input :slot_type, collection: Work::Job::SLOT_TYPE_OPTIONS, include_blank: false %>
+    <%= f.input :hours_per_shift, required: true %>
+    <%= f.input :description %>
+
+    <h2>Shifts</h2>
+
+    <%= f.error :shifts %>
+
+    <table class="index" id="shift-table">
+      <thead>
+        <tr>
+          <th><%= t("work/jobs.shift_col_headers.start_time") %></th>
+          <th><%= t("work/jobs.shift_col_headers.end_time") %></th>
+          <th><%= t("work/jobs.shift_col_headers.slots") %></th>
+          <th><%= t("work/jobs.shift_col_headers.hours") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="shift-rows">
+        <%= f.simple_fields_for(:shifts) do |shift_form| %>
+          <%= render("shift_fields", f: shift_form) %>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to_add_association(t("cocoon.add_links.shifts"), f, :shifts,
+      "data-association-insertion-node": "#shift-rows",
+      "data-association-insertion-method": "append") %>
+
+    <%= form_actions do %>
+      <%= f.button :submit, class: "btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Work.JobFormView({el: '.work--job-form'});
+    new Gather.Views.DirtyChecker({el: '.work--job-form'});
+  });
+<% end %>

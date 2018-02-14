@@ -2,4 +2,5 @@ fr:
   csv:
     headers:
       user:
+        id: "ID"
         first_name: "Prénom"

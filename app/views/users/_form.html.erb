@@ -11,7 +11,7 @@
     <div class="col-sm-12">
       <%= render("shared/photo_dropzone",
         obj: @user, format: :medium, width: 300, height: 300, hide_existing: true) %>
-      <%= horizontal_form_for(@user, width: :full) do |f| %>
+      <%= gather_form_for(@user, width: :full) do |f| %>
         <%= f.input :photo_tmp_id, as: :hidden %>
         <%= f.input :photo_destroy, as: :hidden %>
         <%= f.input :household_by_id, as: :hidden %>
@@ -22,7 +22,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.Select2View({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',

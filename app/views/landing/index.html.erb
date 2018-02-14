@@ -4,16 +4,14 @@
   <title>Gather</title>
   <%= render("layouts/head") %>
 </head>
-<body class="home">
+<body class="landing">
   <%= flash_messages %>
-  <div id="container">
+  <div id="main">
     <div id="blurb">Life is better together.</div>
-    <div id="logo">
-      <%= image_tag("logo-white.png") %>
-    </div>
+    <%= image_tag("logo-white.png", id: "logo") %>
     <%= link_to(icon_tag("google") << " Sign in with Google",
       user_google_oauth2_omniauth_authorize_url(host: Settings.url.host),
-      class: "btn btn-primary btn-sign-in") %>
+      id: "sign-in-btn", class: "btn btn-primary") %>
     <div id="help-links">
       <div>
         <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>

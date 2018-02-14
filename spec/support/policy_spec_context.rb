@@ -47,6 +47,12 @@ shared_context "policy objs" do
   let(:meals_coordinator) { new_user_from(community, label: "meals_coordinator") }
   let(:meals_coordinator_in_cmtyB) { new_user_from(communityB, label: "meals_coordinator_in_cmtyB") }
 
+  let(:work_coordinator) { new_user_from(community, label: "work_coordinator") }
+  let(:work_coordinator_in_cmtyB) { new_user_from(communityB, label: "work_coordinator_in_cmtyB") }
+
+  let(:wikiist) { new_user_from(community, label: "wikiist") }
+  let(:wikiist_in_cmtyB) { new_user_from(communityB, label: "wikiist_in_cmtyB") }
+
   before do
     allow(user).to receive(:has_role?) { false }
     allow(other_user).to receive(:has_role?) { false }
@@ -63,6 +69,10 @@ shared_context "policy objs" do
     allow(photographer_in_cmtyB).to receive(:has_role?) { |r| r == :photographer }
     allow(meals_coordinator).to receive(:has_role?) { |r| r == :meals_coordinator }
     allow(meals_coordinator_in_cmtyB).to receive(:has_role?) { |r| r == :meals_coordinator }
+    allow(work_coordinator).to receive(:has_role?) { |r| r == :work_coordinator }
+    allow(work_coordinator_in_cmtyB).to receive(:has_role?) { |r| r == :work_coordinator }
+    allow(wikiist).to receive(:has_role?) { |r| r == :wikiist }
+    allow(wikiist_in_cmtyB).to receive(:has_role?) { |r| r == :wikiist }
   end
 
   # Saves commonly used objects from above. This is not done by default

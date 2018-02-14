@@ -221,7 +221,7 @@ describe UserPolicy do
     end
 
     permissions :edit?, :update? do
-      it_behaves_like "permits admins or special role but not regular users", "photographer"
+      it_behaves_like "permits admins or special role but not regular users", :photographer
       it_behaves_like "permits self (active or not) and guardians"
     end
 
@@ -254,6 +254,36 @@ describe UserPolicy do
         before { allow(user).to receive(:any_assignments?).and_return(false) }
         it_behaves_like "permits admins but not regular users"
       end
+    end
+  end
+
+  describe "#grantable_roles" do
+    let(:roles) { described_class.new(actor, other_user).grantable_roles }
+    let(:base_roles) { %i(biller photographer meals_coordinator wikiist work_coordinator) }
+
+    context "for super admin" do
+      let(:actor) { super_admin }
+      it { expect(roles).to match_array(%i(super_admin cluster_admin admin) + base_roles) }
+    end
+
+    context "for cluster admin" do
+      let(:actor) { cluster_admin }
+      it { expect(roles).to match_array(%i(cluster_admin admin) + base_roles) }
+    end
+
+    context "for admin" do
+      let(:actor) { admin }
+      it { expect(roles).to match_array(%i(admin) + base_roles) }
+    end
+
+    context "for user with base role" do
+      let(:actor) { biller }
+      it { expect(roles).to be_empty }
+    end
+
+    context "for user with no role" do
+      let(:actor) { user }
+      it { expect(roles).to be_empty }
     end
   end
 
@@ -317,13 +347,13 @@ describe UserPolicy do
     let(:photographer_attribs) { [:photo, :photo_tmp_id] }
     let(:admin_attribs) { base_attribs + [
       :google_email, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator,
+      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
       {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
         concat(nested_hhold_attribs)}
     ] }
     let(:cluster_admin_attribs) { base_attribs + [
       :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator,
+      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
       {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
         concat(nested_hhold_attribs)}
     ] }

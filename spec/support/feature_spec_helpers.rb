@@ -16,6 +16,23 @@ module FeatureSpecHelpers
     find(".select2-dropdown .select2-results li", text: /#{value}/).click
   end
 
+  def pick_datetime(selector, day:, hour:, next_click: "body")
+    find("#{selector} .input-group-btn button").click
+    within(".bootstrap-datetimepicker-widget") do
+      find(".datepicker-days td", text: day).click
+      find("[data-action=togglePicker]").click
+      sleep 0.25 # If we don't sleep here, the click doesn't seem to register properly.
+      find("[data-action=showHours]").click
+      sleep 0.25
+      find(".timepicker-hours td", text: hour.to_s.rjust(2, "0")).click
+    end
+    find(next_click).click # Get out of the picker.
+  end
+
+  def click_main_nav(name)
+    find(".main-nav a", text: name).click
+  end
+
   def click_on_personal_nav(item)
     find(".personal-nav .dropdown-toggle").click
     find(".personal-nav .dropdown-menu a", text: item).click

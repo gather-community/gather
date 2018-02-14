@@ -34,6 +34,8 @@ module Gather
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
     config.middleware.insert_before Warden::Manager, DisableTenantScoping
 
+    config.middleware.use I18n::JS::Middleware
+
     Devise.setup do |config|
       config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret
     end
@@ -52,5 +54,10 @@ module Gather
     end
 
     config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
+
+    config.active_record.time_zone_aware_types = [:datetime]
+
+    # Currently, fr is only available for testing purposes.
+    I18n.available_locales = %i(en fr)
   end
 end

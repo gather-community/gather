@@ -1,4 +1,4 @@
-<%= horizontal_form_for(household) do |f| %>
+<%= gather_form_for(household) do |f| %>
 
   <%= render("fields", f: f) %>
 
@@ -7,7 +7,7 @@
   <% end %>
 
   <%= javascript_tag do %>
-    $(function(){
+    $(function() {
       new Gather.Views.DirtyChecker({el: '.household-form'});
     });
   <% end %>

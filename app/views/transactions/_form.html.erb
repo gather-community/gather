@@ -1,4 +1,4 @@
-<%= horizontal_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
+<%= gather_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
   <%= hidden_field_tag :account_id, @account.id %>
 
   <%= f.input :household_name do %>
@@ -18,7 +18,7 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.DirtyChecker({el: '.billing--transaction-form'});
   });
 <% end %>

@@ -4,6 +4,7 @@ module Wiki
     before_action -> { nav_context(:wiki) }
 
     decorates_assigned :page, :pages, :versions
+    helper_method :preview?
 
     def index
       skip_policy_scope
@@ -14,12 +15,14 @@ module Wiki
       @page = Page.find_by(community: current_community, slug: params[:slug])
       if @page.nil?
         if params[:slug] == Page.reserved_slug(:home)
-          @page = Page.create_home_page(community: current_community, creator: current_user)
+          @page = Page.create_special_page(:home, community: current_community, creator: current_user)
+          Page.create_special_page(:sample, community: current_community, creator: current_user)
         else
           raise ActiveRecord::RecordNotFound
         end
       end
       authorize @page
+      pre_render_content_and_set_error_flash_if_necessary
     end
 
     def new
@@ -44,8 +47,7 @@ module Wiki
 
     def update
       authorize @page
-      @page.attributes = page_params
-      @page.updator = current_user
+      @page.assign_attributes(page_params.merge(updator: current_user))
       redirect_on_success_or_rerender_on_error_or_preview(:edit)
     end
 
@@ -83,6 +85,10 @@ module Wiki
       end
     end
 
+    def preview?
+      params[:preview].present?
+    end
+
     private
 
     def home_path
@@ -103,14 +109,30 @@ module Wiki
     end
 
     def redirect_on_success_or_rerender_on_error_or_preview(action)
-      if params[:preview]
-        flash.now[:notice] = t("wiki.preview_notice")
-        render action
-      elsif params[:cancel] || @page.save
+      if params[:cancel]
         redirect_to wiki_page_path(@page)
-      else
+      elsif @page.invalid?
+        params.delete(:preview)
         render action
+      elsif params[:preview]
+        flash.now[:notice] = t("wiki.preview_notice")
+        pre_render_content_and_set_error_flash_if_necessary
+        render action
+      else
+        @page.save
+        redirect_to wiki_page_path(@page)
       end
+    end
+
+    def pre_render_content_and_set_error_flash_if_necessary
+     # Force the decorator to render to trigger any data fetch errors.
+     page.formatted_content
+
+     if page.data_fetch_error?
+       flash.now[:error] = I18n.t("activerecord.errors.models.wiki/page.data_fetch.main",
+         error: page.data_fetch_error)
+       params.delete(:preview)
+     end
     end
   end
 end

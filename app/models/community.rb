@@ -26,7 +26,6 @@ class Community < ApplicationRecord
     {key: :default_landing_page, type: :enum, options: %w(Meals Directory Reservations Wiki), default: "Directory", required: true},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :string},
-      {key: :admin_email, type: :email},
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :default_shift_times, type: :group, fields: [
         {key: :start, type: :group, fields: [

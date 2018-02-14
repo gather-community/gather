@@ -1,7 +1,8 @@
-<%= horizontal_form_for(formula) do |f| %>
+<%= gather_form_for(formula) do |f| %>
   <%= f.input :name, maxlength: 32 %>
   <%= f.input :is_default, disabled: @force_default %>
   <%= f.hidden_field :is_default if @force_default %>
+  <%= f.input :pantry_reimbursement %>
 
   <% if policy(formula).update_calcs? %>
     <h2>Meal Calculations</h2>
@@ -33,6 +34,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.FormulaFormView({el: '.meals--formula-form'});
+    new Gather.Views.Meals.FormulaFormView({el: '.meals--formula-form'});
+    new Gather.Views.DirtyChecker({el: '.meals--formula-form'});
   });
 <% end %>

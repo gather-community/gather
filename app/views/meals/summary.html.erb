@@ -118,14 +118,16 @@
         <td>Amount spent for ingredients:</td>
         <td>$</td>
       </tr>
-      <tr>
-        <td>Amount spent on pantry/staple items:</td>
-        <td>$</td>
-      </tr>
-      <tr>
-        <td>Total amount to be reimbursed:</td>
-        <td>$</td>
-      </tr>
+      <% if @meal.formula.pantry_reimbursement? %>
+        <tr>
+          <td>Amount spent on pantry/staple items:</td>
+          <td>$</td>
+        </tr>
+        <tr>
+          <td>Total amount to be reimbursed:</td>
+          <td>$</td>
+        </tr>
+      <% end %>
       <tr>
         <td>Reimbursement method:</td>
         <td>
@@ -153,7 +155,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.PrintView();
   });
 <% end %>

@@ -13,6 +13,10 @@ feature "pages", js: true do
 
   scenario "happy path" do
     visit("/wiki")
+    click_on("Sample Page")
+    expect(page).to have_content("Basic Formatting")
+
+    click_main_nav("Wiki")
     expect(page).to have_content("This is your wiki home page!")
 
     click_link("Edit")
@@ -22,11 +26,14 @@ feature "pages", js: true do
     click_on("Another Page")
     expect(page).to have_content("There is no wiki page named 'Another Page'")
 
-    fill_in("Content", with: "Version one")
-    click_on("Preview")
+    # Showing preview should not save page.
+    expect do
+      fill_in("Content", with: "Version one")
+      click_on("Preview")
+      expect(page).to have_content("This is a preview")
+      expect(page).to have_css(".wiki-content", text: "Version one")
+    end.to change { Wiki::Page.count }.by(0)
 
-    expect(page).to have_content("This is a preview")
-    expect(page).to have_css(".wiki-content", text: "Version one")
     click_on("Create Page")
 
     expect(page).not_to have_content("This is a preview")
@@ -64,5 +71,49 @@ feature "pages", js: true do
     accept_confirm { click_on("Delete") }
     expect_success
     expect(page).to have_content("Here is a link to Another Page")
+  end
+
+  scenario "previewing edit should not save changes" do
+    visit("/wiki")
+    expect(page).to have_content("This is your wiki home page!")
+    click_on("Edit")
+    fill_in("Content", with: "New content")
+    click_on("Preview")
+    expect(page).to have_content("This is a preview")
+    click_on("Cancel")
+    visit("/wiki")
+    expect(page).not_to have_content("New content")
+  end
+
+  scenario "validation error" do
+    visit("/wiki/new")
+
+    # Should not render preview
+    fill_in("Content", with: "**bold text**")
+    click_on("Preview")
+    expect(page).to have_css(".wiki_page_title .error", text: "Can't be blank")
+    expect(page).not_to have_css("b", text: "bold text")
+  end
+
+  context "with data source", :vcr do
+    let(:actor) { create(:admin) }
+
+    before do
+      visit("/wiki")
+      click_on("New Wiki Page")
+      fill_in("Title", with: "A Page")
+      fill_in("Content", with: "The Description: {{description}}")
+      fill_in("Data Source", with: "http://json-schema.org/example/geo.json")
+      click_on("Create Page")
+    end
+
+    scenario "with valid data" do
+      expect(page).to have_content("The Description: A geographical coordinate")
+    end
+
+    scenario "with invalid data" do
+      expect(page).to have_alert("There was a problem fetching data for this page (Invalid JSON)")
+      expect(page).not_to have_content("The Description:")
+    end
   end
 end

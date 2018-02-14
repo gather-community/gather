@@ -13,12 +13,12 @@ describe Meals::FormulaPolicy do
     end
 
     permissions :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
     permissions :activate? do
       before { record.deactivate }
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
     context "with existing meals" do
@@ -114,7 +114,7 @@ describe Meals::FormulaPolicy do
     context "with no meals" do
       it "should allow all attribs" do
         expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type,
-          :pantry_fee_disp, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
+          :pantry_fee_disp, :pantry_reimbursement, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
       end
     end
 

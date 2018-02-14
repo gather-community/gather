@@ -1,4 +1,4 @@
-<%= horizontal_form_for(@user, width: :full) do |f| %>
+<%= gather_form_for(@user, width: :full) do |f| %>
   <%= f.input :photo_tmp_id, as: :hidden %>
   <%= f.input :photo_destroy, as: :hidden %>
   <%= f.input :child, as: :hidden %>

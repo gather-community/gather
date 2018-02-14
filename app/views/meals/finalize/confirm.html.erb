@@ -2,7 +2,7 @@
 
 <%= render("meals/time_cook") %>
 
-<%= horizontal_form_for(@meal, width: :full, name: "finalize",
+<%= gather_form_for(@meal, width: :full, name: "finalize",
   url: meal_finalize_path, method: :post) do |form| %>
 
   <%= hidden_field_tag :confirmed, "1" %>

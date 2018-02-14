@@ -37,6 +37,10 @@ class ApplicationPolicy
     false
   end
 
+  def attribute_permitted?(attrib)
+    permitted_attributes.include?(attrib)
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end
@@ -70,16 +74,8 @@ class ApplicationPolicy
       active? && %i(admin cluster_admin super_admin).any? { |r| user.has_role?(r) }
     end
 
-    def active_with_role?(role)
-      active? && user.has_role?(role)
-    end
-
-    def active_admin_or_biller?
-      active_admin? || active_with_role?(:biller)
-    end
-
-    def active_admin_or_meals_coordinator?
-      active_admin? || active_with_role?(:meals_coordinator)
+    def active_admin_or?(role)
+      active_admin? || (active? && user.has_role?(role))
     end
   end
 
@@ -112,12 +108,8 @@ class ApplicationPolicy
     active? && user.has_role?(role) && own_community_record?
   end
 
-  def active_admin_or_biller?
-    active_admin? || active_with_community_role?(:biller)
-  end
-
-  def active_admin_or_meals_coordinator?
-    active_admin? || active_with_community_role?(:meals_coordinator)
+  def active_admin_or?(role)
+    active_admin? || active_with_community_role?(role)
   end
 
   def own_community_record?

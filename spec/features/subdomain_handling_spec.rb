@@ -47,7 +47,7 @@ feature "subdomain handling" do
       visit "/"
       expect_valid_sign_in_link_and_click
       expect(page).to have_content(user.name)
-      expect(current_url).to have_subdomain_and_path("foo", "/")
+      expect(current_url).to have_subdomain_and_path("foo", "/users")
     end
   end
 
@@ -61,7 +61,7 @@ feature "subdomain handling" do
 
       scenario "visiting root should work" do
         visit "/"
-        expect(current_url).to have_subdomain_and_path("foo", "/")
+        expect(current_url).to have_subdomain_and_path("foo", "/users")
         expect(page).to be_signed_in_root
       end
 
@@ -85,7 +85,7 @@ feature "subdomain handling" do
 
         scenario "visiting root should work" do
           visit "/"
-          expect(current_url).to have_subdomain_and_path("bar", "/")
+          expect(current_url).to have_subdomain_and_path("bar", "/users")
           expect(page).to have_title("Directory")
         end
 
@@ -114,12 +114,12 @@ feature "subdomain handling" do
     context "with apex domain" do
       scenario "visiting root should redirect to home community root" do
         visit "/"
-        expect(current_url).to have_subdomain_and_path("foo", "/")
+        expect(current_url).to have_subdomain_and_path("foo", "/users")
       end
 
       scenario "visiting URL with query string should also redirect" do
         visit "/?bar=123"
-        expect(current_url).to have_subdomain_and_path("foo", "/?bar=123")
+        expect(current_url).to have_subdomain_and_path("foo", "/users")
       end
 
       scenario "visiting supported collection route should redirect to home community route" do

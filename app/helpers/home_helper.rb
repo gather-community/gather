@@ -1,6 +1,6 @@
 module HomeHelper
   def redirect_to_home_page(current_community)
-    redirect_to users_path unless current_community
+    return redirect_to users_path if current_community.nil?
 
     case current_community.settings.default_landing_page
     when "Meals"

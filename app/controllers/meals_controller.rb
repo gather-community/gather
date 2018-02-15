@@ -18,7 +18,7 @@ class MealsController < ApplicationController
   def jobs
     authorize sample_meal
     nav_context(:meals, :jobs)
-    prepare_lenses(:people_user, :"meals/time", community: {required: true})
+    prepare_lenses(:"people/user", :"meals/time", community: {required: true})
     @user = User.find(lenses[:user]) if lenses[:user].present?
     load_meals
     load_communities_in_cluster

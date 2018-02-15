@@ -1,16 +1,15 @@
 module People
   class ViewLens < ApplicationLens
-    OPTIONS = %w(table)
-    I18N_KEY = "simple_form.options.user.view"
-
     param_name :view
 
     def render
-      OPTIONS << "tableall" if context.policy(h.sample_user).show_inactive?
-      opt_key = "simple_form.options.user.view"
+      options = %w(table)
+      i18n_key = "simple_form.options.user.view"
+
+      options << "tableall" if context.policy(h.sample_user).show_inactive?
       h.select_tag(param_name,
-        h.options_for_select(OPTIONS.map { |o| [I18n.t("#{I18N_KEY}.#{o}"), o] }, value),
-        prompt: I18n.t("#{I18N_KEY}.album"),
+        h.options_for_select(options.map { |o| [I18n.t("#{i18n_key}.#{o}"), o] }, value),
+        prompt: I18n.t("#{i18n_key}.album"),
         class: "form-control",
         onchange: "this.form.submit();",
         "data-param-name": param_name

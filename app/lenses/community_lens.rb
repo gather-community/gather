@@ -41,6 +41,7 @@ class CommunityLens < ApplicationLens
 
     name = options[:subdomain] ? "" : "community"
 
-    h.select_tag(name, option_tags, class: "form-control", onchange: onchange, id: "community")
+    h.select_tag(name, option_tags, class: "form-control",
+      onchange: onchange, id: "community", "data-param-name": param_name)
   end
 end

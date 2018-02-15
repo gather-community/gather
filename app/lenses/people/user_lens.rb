@@ -15,10 +15,11 @@ module People
         class: "form-control",
         onchange: "this.form.submit();",
         data: {
-          "select2-src" => "users",
-          "select2-prompt" => t("select2_prompts.user"),
-          "select2-variable-width" => "true",
-          "select2-context" => "lens"
+          "select2-src": "users",
+          "select2-prompt": t("select2_prompts.user"),
+          "select2-variable-width": "true",
+          "select2-context": "lens",
+          "param-name": param_name
         }
       )
     end

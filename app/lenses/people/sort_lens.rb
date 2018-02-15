@@ -10,7 +10,8 @@ module People
         h.options_for_select(OPTIONS.map { |o| [I18n.t("#{I18N_KEY}.#{o}"), o] }, value),
         prompt: I18n.t("#{I18N_KEY}.name"),
         class: "form-control",
-        onchange: "this.form.submit();"
+        onchange: "this.form.submit();",
+        "data-param-name": param_name
       )
     end
   end

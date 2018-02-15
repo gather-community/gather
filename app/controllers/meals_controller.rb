@@ -8,7 +8,7 @@ class MealsController < ApplicationController
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
 
   def index
-    prepare_lenses(:search, :time, :community)
+    prepare_lenses(:search, :meals_time, :community)
 
     authorize sample_meal
     load_meals
@@ -18,7 +18,7 @@ class MealsController < ApplicationController
   def jobs
     authorize sample_meal
     nav_context(:meals, :jobs)
-    prepare_lenses(:user, :time, community: {required: true})
+    prepare_lenses(:people_user, :meals_time, community: {required: true})
     @user = User.find(lenses[:user]) if lenses[:user].present?
     load_meals
     load_communities_in_cluster

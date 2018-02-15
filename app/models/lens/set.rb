@@ -110,7 +110,14 @@ module Lens
     end
 
     def add_lens(name, options)
-      lenses << ::Lens::Lens.new(name: name.to_sym, options: options)
+      klass = class_for_lens_name(name)
+      lenses << klass.new(name: name.to_sym, options: options, context: context, set: self)
+    end
+
+    def class_for_lens_name(name)
+      words = name.to_s.split("_").map(&:capitalize) << "Lens"
+      words.insert(1, "::") if words.size > 2
+      words.join.constantize
     end
   end
 end

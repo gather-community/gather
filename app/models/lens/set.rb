@@ -3,7 +3,7 @@ module Lens
   class Set
     attr_accessor :lenses, :params, :context
 
-    LENS_VERSION = 3
+    LENS_VERSION = 4
 
     # Gets the last explicit path for the given controller and action.
     # `context` - The calling view.
@@ -25,8 +25,8 @@ module Lens
       # Copy lens params from the params hash, overriding params stored in the session.
       # Also set value on each lens.
       lenses.each do |l|
-        substore[l.name.to_s] = params[l.param_name] if params.key?(l.param_name)
-        l.value = substore[l.name.to_s]
+        substore[l.param_name.to_s] = params[l.param_name] if params.key?(l.param_name)
+        l.value = substore[l.param_name.to_s]
       end
 
       save_or_clear_path(params)
@@ -37,27 +37,19 @@ module Lens
     end
 
     def blank?
-      lenses.none? { |l| self[l].present? }
-    end
-
-    def optional_lenses_blank?
-      optional_lenses.none? { |l| self[l].present? }
-    end
-
-    def all_required?
-      lenses.all?(&:required?)
+      lenses.all?(&:blank?)
     end
 
     def optional_lenses
       lenses.reject(&:required?)
     end
 
-    def remove_lens(name)
-      lenses.reject! { |l| l.name == name }
+    def remove_lens(full_name)
+      lenses.reject! { |l| l.full_name == full_name }
     end
 
     def query_string_to_clear
-      optional_lenses.map { |l| "#{l.to_s}=" }.join("&")
+      optional_lenses.map { |l| "#{l.param_name}=" }.join("&")
     end
 
     def [](key)
@@ -96,18 +88,11 @@ module Lens
     end
 
     def build_lens(name, options)
-      klass = class_for_lens_name(name)
+      klass = (name.to_s.classify << "Lens").constantize
       lenses << klass.new(
-        name: name.to_sym,
         options: options,
         context: context
       )
-    end
-
-    def class_for_lens_name(name)
-      words = name.to_s.split("_").map(&:capitalize) << "Lens"
-      words.insert(1, "::") if words.size > 2
-      words.join.constantize
     end
 
     def store

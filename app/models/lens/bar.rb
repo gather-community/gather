@@ -12,7 +12,7 @@ module Lens
     def to_s
       h.content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
         html = set.lenses.map(&:render)
-        html << clear_link unless set.all_required?
+        html << clear_link
         html.compact.reduce(&h.sep(" "))
       end
     end
@@ -24,7 +24,7 @@ module Lens
     end
 
     def clear_link
-      if set.optional_lenses_blank?
+      if set.optional_lenses.all?(&:blank?)
         ""
       else
         h.link_to(h.icon_tag("times-circle") << " " << h.content_tag(:span, "Clear Filter"),

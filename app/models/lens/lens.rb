@@ -1,18 +1,37 @@
 module Lens
   class Lens
-    attr_reader :name, :options, :context
+    attr_reader :options, :context
 
     # value doesn't get set on initialize, but slightly after
     attr_accessor :value
 
-    def initialize(name:, options:, context:)
-      @name = name
+    def self.param_name(name = nil)
+      if name
+        class_variable_set('@@param_name', name)
+      else
+        class_variable_get('@@param_name') || full_name
+      end
+    end
+
+    def self.full_name
+      self.name.underscore.gsub(/_lens\z/, "")
+    end
+
+    def initialize(options:, context:)
       @options = options
       @context = context
     end
 
-    def to_s
-      name.to_s
+    def full_name
+      self.class.full_name
+    end
+
+    def blank?
+      value.blank?
+    end
+
+    def param_name
+      self.class.param_name
     end
 
     def required?

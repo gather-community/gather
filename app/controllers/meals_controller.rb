@@ -8,7 +8,7 @@ class MealsController < ApplicationController
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
 
   def index
-    prepare_lenses(:search, :meals_time, :community)
+    prepare_lenses(:search, :"meals/time", :community)
 
     authorize sample_meal
     load_meals
@@ -18,8 +18,8 @@ class MealsController < ApplicationController
   def jobs
     authorize sample_meal
     nav_context(:meals, :jobs)
-    prepare_lenses(:people_user, :meals_time, community: {required: true})
-    @user = User.find(lenses[:people_user]) if lenses[:people_user].present?
+    prepare_lenses(:people_user, :"meals/time", community: {required: true})
+    @user = User.find(lenses[:user]) if lenses[:user].present?
     load_meals
     load_communities_in_cluster
   end
@@ -196,7 +196,7 @@ class MealsController < ApplicationController
   def load_meals
     @meals = policy_scope(Meal)
     @meals = @meals.hosted_by(lens_communities)
-    @meals = @meals.worked_by(lenses[:people_user]) if lenses[:people_user].present?
+    @meals = @meals.worked_by(lenses[:user]) if lenses[:user].present?
 
     if lenses[:meals_time] == "finalizable"
       @meals = @meals.finalizable.where(community_id: current_community).oldest_first

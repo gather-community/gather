@@ -1,5 +1,7 @@
 class SearchLens < ApplicationLens
+  param_name :search
+
   def render
-    h.text_field_tag("search", set[:search], placeholder: "Search...", class: "form-control")
+    h.text_field_tag(param_name, value, placeholder: "Search...", class: "form-control")
   end
 end

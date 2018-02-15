@@ -1,4 +1,6 @@
 class CommunityLens < ApplicationLens
+  param_name :community
+
   def render
     return nil unless context.multi_community?
     communities = h.load_communities_in_cluster
@@ -10,12 +12,12 @@ class CommunityLens < ApplicationLens
       h.content_tag(:option, "All Communities", value: "all")
     end
 
-    selected = if !options[:required] && (set[:community] == "all" || set[:community].blank?)
+    selected = if !options[:required] && (value == "all" || value.blank?)
       nil
-    elsif options[:subdomain] || set[:community].blank?
+    elsif options[:subdomain] || value.blank?
       context.current_community.slug
     else
-      set[:community]
+      value
     end
 
     option_tags = prompt << h.options_from_collection_for_select(communities, 'slug', 'name', selected)

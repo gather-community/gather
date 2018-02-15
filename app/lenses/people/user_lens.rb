@@ -1,14 +1,16 @@
 module People
   class UserLens < ApplicationLens
+    param_name :user
+
     def render
-      selected_option_tag = if set[:user].present?
-        user = context.policy_scope(User).find(set[:user])
+      selected_option_tag = if value.present?
+        user = context.policy_scope(User).find(value)
         h.content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""
       end
 
-      h.select_tag("user", selected_option_tag,
+      h.select_tag(param_name, selected_option_tag,
         prompt: "All Users",
         class: "form-control",
         onchange: "this.form.submit();",

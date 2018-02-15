@@ -1,9 +1,9 @@
 # Models a set of parameters and parameter values that scope an index view.
 module Lens
   class Set
-    attr_accessor :lenses, :params, :values, :context
+    attr_accessor :lenses, :params, :context
 
-    LENS_VERSION = 2
+    LENS_VERSION = 3
 
     # Gets the last explicit path for the given controller and action.
     # `context` - The calling view.
@@ -18,32 +18,18 @@ module Lens
     def initialize(context:, lens_names:, params:)
       self.context = context
       self.lenses ||= []
-      add_lenses(lens_names)
-      lenses = self.lenses
+      build_lenses(lens_names)
 
-      store = (context.session[:lenses] ||= {})
+      expire_store_on_version_upgrade
 
-      # Expire old set if version has been upgraded.
-      if (store["version"] || 1) < LENS_VERSION
-        store = context.session[:lenses] = {"version" => LENS_VERSION}
-      end
-
-      store[context.controller_name] ||= {}
-      self.values = (store[context.controller_name][context.action_name] ||= {})
-
-      # Copy lens params from the params hash.
+      # Copy lens params from the params hash, overriding params stored in the session.
+      # Also set value on each lens.
       lenses.each do |l|
-        self[l.name] = params[l.name] if params.has_key?(l.name)
+        substore[l.name.to_s] = params[l.param_name] if params.key?(l.param_name)
+        l.value = substore[l.name.to_s]
       end
 
-      # Save the path if params explictly given, but clear path if all params are blank.
-      if (params.keys & lenses.map(&:to_s)).present?
-        if params.slice(*lenses.map(&:name)).values.all?(&:blank?)
-          delete(:_path)
-        else
-          self[:_path] = context.request.fullpath.gsub(/(&\w+=\z|\w+=&)/, "")
-        end
-      end
+      save_or_clear_path(params)
     end
 
     def bar(options = {})
@@ -76,30 +62,30 @@ module Lens
 
     def [](key)
       # Convert to string because the session hash uses strings.
-      values[key.to_s]
+      substore[key.to_s]
     end
 
     def []=(key, value)
-      values[key.to_s] = value
+      substore[key.to_s] = value
     end
 
     def delete(key)
-      self.values.delete(key.to_s)
+      substore.delete(key.to_s)
     end
 
     private
 
-    def add_lenses(names)
+    def build_lenses(names)
       if names.is_a?(Hash)
         names.each do |k, v|
-          add_lens(k, v)
+          build_lens(k, v)
         end
       elsif names.is_a?(Array)
         names.each do |l|
           if l.is_a?(Symbol)
-            add_lens(l, {})
+            build_lens(l, {})
           elsif l.is_a?(Hash)
-            add_lenses(l)
+            build_lenses(l)
           else
             raise "Invalid lens value #{l.inspect}"
           end
@@ -109,15 +95,48 @@ module Lens
       end
     end
 
-    def add_lens(name, options)
+    def build_lens(name, options)
       klass = class_for_lens_name(name)
-      lenses << klass.new(name: name.to_sym, options: options, context: context, set: self)
+      lenses << klass.new(
+        name: name.to_sym,
+        options: options,
+        context: context
+      )
     end
 
     def class_for_lens_name(name)
       words = name.to_s.split("_").map(&:capitalize) << "Lens"
       words.insert(1, "::") if words.size > 2
       words.join.constantize
+    end
+
+    def store
+      @store ||= (context.session[:lenses] ||= {})
+    end
+
+    # Returns (and inits if necessary) the portion of the store for the
+    # current controller and action.
+    def substore
+      return @substore if defined?(@substore)
+      store[context.controller_name] ||= {}
+      @substore = (store[context.controller_name][context.action_name] ||= {})
+    end
+
+    def expire_store_on_version_upgrade
+      if (store["version"] || 1) < LENS_VERSION
+        @store = context.session[:lenses] = {"version" => LENS_VERSION}
+      end
+    end
+
+    # Save the path if params explictly given, but clear path if all params are blank.
+    def save_or_clear_path(params)
+      if (params.keys.map(&:to_sym) & lenses.map(&:param_name)).present?
+        if params.slice(*lenses.map(&:param_name)).values.all?(&:blank?)
+          delete(:_path)
+        else
+          self[:_path] = context.request.fullpath.gsub(/(&\w+=\z|\w+=&)/, "")
+        end
+      end
     end
   end
 end

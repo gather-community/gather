@@ -1,12 +1,14 @@
 module Lens
   class Lens
-    attr_reader :name, :options, :context, :set
+    attr_reader :name, :options, :context
 
-    def initialize(name:, options:, context:, set:)
+    # value doesn't get set on initialize, but slightly after
+    attr_accessor :value
+
+    def initialize(name:, options:, context:)
       @name = name
       @options = options
       @context = context
-      @set = set
     end
 
     def to_s

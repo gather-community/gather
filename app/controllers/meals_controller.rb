@@ -11,16 +11,16 @@ class MealsController < ApplicationController
     prepare_lenses(:search, :"meals/time", :community)
 
     authorize sample_meal
-    load_meals
+    load_meals(:index)
     load_communities_in_cluster
   end
 
   def jobs
     authorize sample_meal
     nav_context(:meals, :jobs)
-    prepare_lenses(:"people/user", :"meals/time", community: {required: true})
+    prepare_lenses(:"people/user", :"meals/time")
     @user = User.find(lenses[:user].value) if lenses[:user].present?
-    load_meals
+    load_meals(:jobs)
     load_communities_in_cluster
   end
 
@@ -193,9 +193,9 @@ class MealsController < ApplicationController
     @meal = Meal.new_with_defaults(current_community)
   end
 
-  def load_meals
+  def load_meals(context)
     @meals = policy_scope(Meal)
-    @meals = @meals.hosted_by(lens_communities)
+    @meals = @meals.hosted_by(context == :index ? lens_communities : current_community)
     @meals = @meals.worked_by(lenses[:user].value) if lenses[:user].present?
 
     if lenses[:time].finalizable?

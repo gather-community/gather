@@ -19,16 +19,9 @@ module Lens
       self.context = context
       self.lenses ||= []
       build_lenses(lens_names)
-
       expire_store_on_version_upgrade
-
-      # Copy lens params from the params hash, overriding params stored in the session.
-      # Also set value on each lens.
-      lenses.each do |l|
-        substore[l.param_name.to_s] = params[l.param_name] if params.key?(l.param_name)
-        l.value = substore[l.param_name.to_s]
-      end
-
+      copy_request_params(params)
+      set_lens_value_attribs
       save_or_clear_path(params)
     end
 
@@ -52,17 +45,8 @@ module Lens
       optional_lenses.map { |l| "#{l.param_name}=" }.join("&")
     end
 
-    def [](key)
-      # Convert to string because the session hash uses strings.
-      substore[key.to_s]
-    end
-
-    def []=(key, value)
-      substore[key.to_s] = value
-    end
-
-    def delete(key)
-      substore.delete(key.to_s)
+    def [](param_name)
+      lenses_by_param_name[param_name.to_sym]
     end
 
     private
@@ -113,15 +97,33 @@ module Lens
       end
     end
 
+    # Copy lens params from the params hash, overriding params stored in the session.
+    def copy_request_params(params)
+      lenses.each do |l|
+        substore[l.param_name.to_s] = params[l.param_name] if params.key?(l.param_name)
+      end
+    end
+
+    # Copy (freshly updated) session values to value attribs on lens objects.
+    def set_lens_value_attribs
+      lenses.each do |l|
+        l.value = substore[l.param_name.to_s]
+      end
+    end
+
     # Save the path if params explictly given, but clear path if all params are blank.
     def save_or_clear_path(params)
       if (params.keys.map(&:to_sym) & lenses.map(&:param_name)).present?
         if params.slice(*lenses.map(&:param_name)).values.all?(&:blank?)
-          delete(:_path)
+          substore.delete("_path")
         else
-          self[:_path] = context.request.fullpath.gsub(/(&\w+=\z|\w+=&)/, "")
+          substore["_path"] = context.request.fullpath.gsub(/(&\w+=\z|\w+=&)/, "")
         end
       end
+    end
+
+    def lenses_by_param_name
+      @lenses_by_param_name ||= lenses.index_by(&:param_name)
     end
   end
 end

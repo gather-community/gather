@@ -1,6 +1,7 @@
 module People
   class ViewLens < ApplicationLens
     param_name :view
+    define_option_checker_methods :table, :tableall, :album
 
     def render
       options = %w(table)
@@ -14,6 +15,10 @@ module People
         onchange: "this.form.submit();",
         "data-param-name": param_name
       )
+    end
+
+    def any_table?
+      table? || tableall?
     end
   end
 end

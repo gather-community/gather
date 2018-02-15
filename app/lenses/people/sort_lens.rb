@@ -1,6 +1,7 @@
 module People
   class SortLens < ApplicationLens
     param_name :sort
+    define_option_checker_methods :unit, :name
 
     def render
       options = %w(unit)

@@ -13,7 +13,7 @@ class HouseholdsController < ApplicationController
         prepare_lenses({community: {required: true}}, :search)
         @households = @households.includes(users: :children)
         @households = @households.in_community(current_community)
-        @households = @households.matching(lenses[:search]) if lenses[:search].present?
+        @households = @households.matching(lenses[:search].value) if lenses[:search].present?
         @households = @households.by_active_and_name.page(params[:page])
       end
 
@@ -87,10 +87,10 @@ class HouseholdsController < ApplicationController
 
     if @accounts.size > 1
       prepare_lenses(community: {required: true, subdomain: false})
-      @community = if lenses[:community].try(:match, Community::SLUG_REGEX)
-        Community.find_by(slug: lenses[:community])
-      elsif lenses[:community].try(:match, /\d+/)
-        Community.find(lenses[:community])
+      @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
+        Community.find_by(slug: lenses[:community].value)
+      elsif lenses[:community].value.try(:match, /\d+/)
+        Community.find(lenses[:community].value)
       end
     end
 

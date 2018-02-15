@@ -1,6 +1,7 @@
 module Meals
   class TimeLens < ApplicationLens
     param_name :time
+    define_option_checker_methods :past, :finalizable, :all
 
     def render
       options = %w(past finalizable all)

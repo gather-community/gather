@@ -1,6 +1,7 @@
 module People
   class LifeStageLens < ApplicationLens
     param_name :lifestage
+    define_option_checker_methods :any, :adult, :child
 
     def render
       options = %w(adult child)

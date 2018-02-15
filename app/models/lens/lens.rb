@@ -5,11 +5,21 @@ module Lens
     # value doesn't get set on initialize, but slightly after
     attr_accessor :value
 
+    delegate :blank?, :present?, to: :value
+
     def self.param_name(name = nil)
       if name
         class_variable_set('@@param_name', name)
       else
         class_variable_get('@@param_name') || full_name
+      end
+    end
+
+    def self.define_option_checker_methods(*options)
+      options.each do |option|
+        define_method(:"#{option}?") do
+          value == option.to_s
+        end
       end
     end
 
@@ -24,10 +34,6 @@ module Lens
 
     def full_name
       self.class.full_name
-    end
-
-    def blank?
-      value.blank?
     end
 
     def param_name

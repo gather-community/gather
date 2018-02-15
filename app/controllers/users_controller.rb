@@ -15,13 +15,13 @@ class UsersController < ApplicationController
         load_users
 
         # Pagination
-        if params[:printalbum] || lenses[:view] == "table"
+        if params[:printalbum] || lenses[:view].table?
           # We first check for the printalbum param because that overrides any lens pagination stuff.
           # If it's set, (or if view is 'table') we're showing all active users with no pagination.
           @users = @users.active
-        elsif lenses[:view].blank? || lenses[:view] == "album"
+        elsif lenses[:view].blank? || lenses[:view].album?
           @users = @users.page(params[:page]).per(36)
-        elsif lenses[:view] == "tableall"
+        elsif lenses[:view].tableall?
           @users = @users.page(params[:page]).per(100)
         end
 
@@ -172,14 +172,14 @@ class UsersController < ApplicationController
     lenses.remove_lens(:"people/life_stage") unless policy(sample_user).index_children_for_community?(@community)
     @users = @users.includes(household: :community)
     @users = @users.in_community(@community)
-    @users = @users.matching(lenses[:search]) if lenses[:search].present?
-    @users = @users.in_life_stage(lenses[:lifestage]) if lenses[:lifestage].present?
+    @users = @users.matching(lenses[:search].value) if lenses[:search].present?
+    @users = @users.in_life_stage(lenses[:lifestage].value) if lenses[:lifestage].present?
 
     # Regular folks can't see inactive users.
     @users = @users.active unless policy(sample_user).show_inactive?
 
     if lenses[:sort].present?
-      @users = @users.by_active.sorted_by(lenses[:sort])
+      @users = @users.by_active.sorted_by(lenses[:sort].value)
     else
       @users = @users.by_active.by_name
     end

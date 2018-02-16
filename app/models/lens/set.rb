@@ -21,6 +21,7 @@ module Lens
       build_lenses(lens_names)
       expire_store_on_version_upgrade
       copy_request_params(params)
+      apply_defaults
       set_lens_value_attribs
       save_or_clear_path(params)
     end
@@ -101,6 +102,12 @@ module Lens
     def copy_request_params(params)
       lenses.each do |l|
         substore[l.param_name.to_s] = params[l.param_name] if params.key?(l.param_name)
+      end
+    end
+
+    def apply_defaults
+      lenses.each do |l|
+        substore[l.param_name.to_s] = l.options[:default] if substore[l.param_name.to_s].blank?
       end
     end
 

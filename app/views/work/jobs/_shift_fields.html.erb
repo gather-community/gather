@@ -3,13 +3,13 @@
   <td class="starts-at <%= shift.errors[:starts_at].any? ? 'has-error' : '' %>">
     <%= f.input_field :starts_at, as: :datetime_picker, class: "form-control",
           data: {date_options: {minDate: shift.min_time, maxDate: shift.max_time}} %>
-    <div class="period-date"><%= l(@period.starts_on) %></div>
+    <div class="period-date"><%= l(@job.period_starts_on) %></div>
     <%= f.error :starts_at %>
   </td>
   <td class="ends-at <%= shift.errors[:ends_at].any? ? 'has-error' : '' %>">
     <%= f.input_field :ends_at, as: :datetime_picker, class: "form-control",
           data: {date_options: {minDate: shift.min_time, maxDate: shift.max_time}} %>
-    <div class="period-date"><%= l(@period.ends_on) %></div>
+    <div class="period-date"><%= l(@job.period_ends_on) %></div>
     <%= f.error :ends_at %>
   </td>
   <td class="<%= shift.errors[:slots].any? ? 'has-error' : '' %>">

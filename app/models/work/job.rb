@@ -32,7 +32,7 @@ module Work
 
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
 
-    delegate :starts_on, :ends_on, to: :period, prefix: true
+    delegate :starts_on, :ends_on, :name, to: :period, prefix: true
 
     def full_period?
       time_type == "full_period"

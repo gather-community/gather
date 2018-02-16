@@ -13,4 +13,11 @@ module Concerns::ApplicationController::Setters
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
+
+  def render_not_found
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public/404"), layout: false, status: :not_found }
+      format.any { head :not_found }
+    end
+  end
 end

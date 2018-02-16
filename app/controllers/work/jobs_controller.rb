@@ -9,23 +9,24 @@ module Work
     def index
       authorize sample_job
       @periods = Period.for_community(current_community).latest_first
-      prepare_lenses("work/period": {periods: @periods, required: true, default: @periods.last.try(:id)})
+      prepare_lenses("work/period": {periods: @periods, required: true, default: @periods.first.try(:id)})
       @period = Period.find(lenses[:period].value)
       @jobs = policy_scope(Job).for_community(current_community).
         in_period(@period).includes(:shifts).by_title
     end
 
     def new
-      prepare_vars
-      @job = Job.new(community: current_community, period: @period)
+      return render_not_found unless params[:period].present?
+      @job = Job.new(community: current_community, period_id: params[:period])
       @job.shifts.build
       authorize @job
+      prep_form_vars
     end
 
     def edit
-      prepare_vars
       @job = Job.find(params[:id])
       authorize @job
+      prep_form_vars
     end
 
     def create
@@ -67,9 +68,7 @@ module Work
       Job.new(community: current_community)
     end
 
-    def prepare_vars
-      @periods = Period.for_community(current_community).active
-      @period = @periods.first # This will change to use lens.
+    def prep_form_vars
       @requesters = People::Group.for_community(current_community).by_name
     end
 

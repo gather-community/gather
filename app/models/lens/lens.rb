@@ -6,6 +6,7 @@ module Lens
     attr_accessor :value
 
     delegate :blank?, :present?, to: :value
+    alias_method :active?, :present?
 
     def self.param_name(name = nil)
       if name

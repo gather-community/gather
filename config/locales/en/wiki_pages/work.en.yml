@@ -9,3 +9,5 @@ en:
       end_time: "End Time"
       hours: "Hours"
       slots: "# of Slots"
+    no_result_clear_filter_link_html: "You can try %{link}."
+    clearing_the_filter: "clearing the filters"

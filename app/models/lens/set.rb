@@ -39,16 +39,34 @@ module Lens
       lenses.reject(&:required?)
     end
 
+    def optional_lenses_active?
+      optional_lenses.any?(&:active?)
+    end
+
+    def [](param_name)
+      lenses_by_param_name[param_name.to_sym]
+    end
+
     def remove_lens(full_name)
       lenses.reject! { |l| l.full_name == full_name }
+    end
+
+    def path_to_clear
+      context.request.path << "?" << query_string_to_clear
     end
 
     def query_string_to_clear
       optional_lenses.map { |l| "#{l.param_name}=" }.join("&")
     end
 
-    def [](param_name)
-      lenses_by_param_name[param_name.to_sym]
+    # If there are optional filters set, return some text and a link indicating they can clear them.
+    def no_result_clear_filter_link
+      if optional_lenses_active?
+        link = view.link_to(I18n.t("work/jobs.clearing_the_filter"), path_to_clear)
+        view.t("work/jobs.no_result_clear_filter_link_html", link: link)
+      else
+        ""
+      end
     end
 
     private
@@ -132,6 +150,10 @@ module Lens
 
     def lenses_by_param_name
       @lenses_by_param_name ||= lenses.index_by(&:param_name)
+    end
+
+    def view
+      context.view_context
     end
   end
 end

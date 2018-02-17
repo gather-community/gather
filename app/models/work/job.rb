@@ -13,6 +13,7 @@ module Work
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { order("LOWER(title)") }
     scope :in_period, ->(p) { where(period_id: p.id) }
+    scope :from_requester, ->(r) { where(requester: r) }
 
     normalize_attributes :title, :description
 

@@ -9,10 +9,18 @@ module Work
     def index
       authorize sample_job
       @periods = Period.for_community(current_community).latest_first
-      prepare_lenses("work/period": {periods: @periods, required: true, default: @periods.first.try(:id)})
-      @period = Period.find(lenses[:period].value)
-      @jobs = policy_scope(Job).for_community(current_community).
-        in_period(@period).includes(:shifts).by_title
+      prepare_lenses(
+        :"work/requester",
+        "work/period": {periods: @periods, required: true, default: @periods.first.try(:id)}
+      )
+      @period = Period.find_by(id: lenses[:period].value) # May be nil
+      @jobs = policy_scope(Job).for_community(current_community)
+      @jobs = @jobs.in_period(@period).includes(:shifts).by_title
+      if params[:requester] == "none"
+        @jobs = @jobs.from_requester(nil)
+      elsif params[:requester].present?
+        @jobs = @jobs.from_requester(params[:requester])
+      end
     end
 
     def new

@@ -18,6 +18,7 @@ module Lens
     def initialize(context:, lens_names:, params:)
       self.context = context
       self.lenses ||= []
+      context.session.delete(:lenses) if params[:clearlenses]
       build_lenses(lens_names)
       expire_store_on_version_upgrade
       copy_request_params(params)

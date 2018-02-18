@@ -1,7 +1,8 @@
 # Models a set of parameters and parameter values that scope an index view.
 module Lens
   class Set
-    attr_accessor :lenses, :params, :context
+    attr_accessor :lenses, :params, :context, :visible
+    alias_method :visible?, :visible
 
     LENS_VERSION = 4
 
@@ -18,6 +19,7 @@ module Lens
     def initialize(context:, lens_names:, params:)
       self.context = context
       self.lenses ||= []
+      self.visible = true
       context.session.delete(:lenses) if params[:clearlenses]
       build_lenses(lens_names)
       expire_store_on_version_upgrade
@@ -33,6 +35,10 @@ module Lens
 
     def blank?
       lenses.all?(&:blank?)
+    end
+
+    def hide!
+      self.visible = false
     end
 
     def optional_lenses

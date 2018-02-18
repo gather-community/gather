@@ -15,11 +15,15 @@ module Work
       )
       @period = Period.find_by(id: lenses[:period].value) # May be nil
       @jobs = policy_scope(Job).for_community(current_community)
-      @jobs = @jobs.in_period(@period).includes(:shifts).by_title
-      if params[:requester] == "none"
-        @jobs = @jobs.from_requester(nil)
-      elsif params[:requester].present?
-        @jobs = @jobs.from_requester(params[:requester])
+      if @period.nil?
+        lenses.hide!
+      else
+        @jobs = @jobs.in_period(@period).includes(:shifts).by_title
+        if params[:requester] == "none"
+          @jobs = @jobs.from_requester(nil)
+        elsif params[:requester].present?
+          @jobs = @jobs.from_requester(params[:requester])
+        end
       end
     end
 

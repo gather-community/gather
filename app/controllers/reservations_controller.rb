@@ -41,7 +41,7 @@ class ReservationsController < ApplicationController
         render("calendar")
       end
     else
-      prepare_lens(community: {required: true})
+      prepare_lenses(community: {required: true})
       @community = current_community
 
       authorize Reservations::Reservation

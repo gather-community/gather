@@ -8,7 +8,7 @@
 
 <% if meals.empty? %>
   <div class="none-found">
-    No meals found.
+    No meals found. <%= lenses.no_result_clear_filter_link %>
   </div>
 <% else %>
   <table class="index non-mobile">

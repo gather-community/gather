@@ -21,15 +21,15 @@ feature "lenses", js: true do
     end
 
     scenario "life stage" do
-      expect_plain_dropdown(id: "life_stage", default_opt: "Adults + Children", opt2: ["Adults", "adult"])
+      expect_plain_dropdown(id: "lifestage", default_opt: "Adults + Children", opt2: ["Adults", "adult"])
     end
 
     scenario "user sort" do
-      expect_plain_dropdown(id: "user_sort", default_opt: "By Name", opt2: ["By Unit", "unit"])
+      expect_plain_dropdown(id: "sort", default_opt: "By Name", opt2: ["By Unit", "unit"])
     end
 
     scenario "user view" do
-      expect_plain_dropdown(id: "user_view", default_opt: "Album", opt2: ["Table", "table"])
+      expect_plain_dropdown(id: "view", default_opt: "Album", opt2: ["Table", "table"])
     end
 
     scenario "search" do

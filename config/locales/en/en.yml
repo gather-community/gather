@@ -487,6 +487,9 @@ en:
           date_time: "This job has a set date and time"
           date_only: "This job is for a certain date or date range"
           full_period: "This job is for the whole work period"
+        requester:
+          any: "Any Requester"
+          none: "No Requester"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

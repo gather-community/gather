@@ -9,6 +9,6 @@ module Work
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
-    scope :by_date, -> { order(:starts_on, :ends_on) }
+    scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
   end
 end

@@ -8,19 +8,19 @@ class MealsController < ApplicationController
   before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
 
   def index
-    prepare_lens(:search, :time, :community)
+    prepare_lenses(:search, :"meals/time", :community)
 
     authorize sample_meal
-    load_meals
+    load_meals(:index)
     load_communities_in_cluster
   end
 
   def jobs
     authorize sample_meal
     nav_context(:meals, :jobs)
-    prepare_lens(:user, :time, community: {required: true})
-    @user = User.find(lens[:user]) if lens[:user].present?
-    load_meals
+    prepare_lenses(:"people/user", :"meals/time")
+    @user = User.find(lenses[:user].value) if lenses[:user].present?
+    load_meals(:jobs)
     load_communities_in_cluster
   end
 
@@ -44,7 +44,7 @@ class MealsController < ApplicationController
     authorize sample_meal, :reports?
     @community = current_community
     nav_context(:meals, :reports)
-    prepare_lens(community: {required: true}) if multi_community?
+    prepare_lenses(community: {required: true}) if multi_community?
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
   end
@@ -193,16 +193,16 @@ class MealsController < ApplicationController
     @meal = Meal.new_with_defaults(current_community)
   end
 
-  def load_meals
+  def load_meals(context)
     @meals = policy_scope(Meal)
-    @meals = @meals.hosted_by(lens_communities)
-    @meals = @meals.worked_by(lens[:user]) if lens[:user].present?
+    @meals = @meals.hosted_by(context == :index ? lens_communities : current_community)
+    @meals = @meals.worked_by(lenses[:user].value) if lenses[:user].present?
 
-    if lens[:time] == "finalizable"
+    if lenses[:time].finalizable?
       @meals = @meals.finalizable.where(community_id: current_community).oldest_first
-    elsif lens[:time] == "past"
+    elsif lenses[:time].past?
       @meals = @meals.past.newest_first
-    elsif lens[:time] == "all"
+    elsif lenses[:time].all?
       @meals = @meals.oldest_first
     else
       @meals = @meals.future.oldest_first

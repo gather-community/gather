@@ -7,17 +7,32 @@ module Work
     helper_method :sample_job
 
     def index
-      @period = Period.for_community(current_community).active.first # This will change to use lens.
       authorize sample_job
-      @jobs = policy_scope(Job).for_community(current_community).
-        in_period(@period).includes(:shifts).by_title
+      @periods = Period.for_community(current_community).latest_first
+      prepare_lenses(
+        :"work/requester",
+        "work/period": {periods: @periods, required: true, default: @periods.first.try(:id)}
+      )
+      @period = Period.find_by(id: lenses[:period].value) # May be nil
+      @jobs = policy_scope(Job).for_community(current_community)
+      if @period.nil?
+        lenses.hide!
+      else
+        @jobs = @jobs.in_period(@period).includes(:shifts).by_title
+        if params[:requester] == "none"
+          @jobs = @jobs.from_requester(nil)
+        elsif params[:requester].present?
+          @jobs = @jobs.from_requester(params[:requester])
+        end
+      end
     end
 
     def new
-      prep_form_vars
-      @job = Job.new(community: current_community, period: @period)
+      return render_not_found unless params[:period].present?
+      @job = Job.new(community: current_community, period_id: params[:period])
       @job.shifts.build
       authorize @job
+      prep_form_vars
     end
 
     def edit
@@ -66,8 +81,6 @@ module Work
     end
 
     def prep_form_vars
-      @periods = Period.for_community(current_community).active
-      @period = @periods.first # This will change to use lens.
       @requesters = People::Group.for_community(current_community).by_name
     end
 

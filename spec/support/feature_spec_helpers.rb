@@ -215,8 +215,8 @@ module FeatureSpecHelpers
     Capybara.app_host = "http://#{host}"
   end
 
-  def select_lens(lens_id, value)
-    first(:css, "##{lens_id}").select(value)
+  def select_lens(lens_param_name, value)
+    first(:css, "[data-param-name=#{lens_param_name}]").select(value)
   end
 
   def click_print_button

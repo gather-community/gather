@@ -27,10 +27,9 @@ feature "user index" do
     end
 
     scenario "table view", js: true do
-      inactive
-
+      inactive.save!
       visit "/users"
-      select_lens(:user_view, "Table")
+      select_lens(:view, "Table")
       expect(page).to have_css("table.index tr td", text: user.name)
       expect(page).not_to have_content("Longgone")
     end
@@ -48,10 +47,9 @@ feature "user index" do
     let(:actor) { admin }
 
     scenario "table with inactive view", js: true do
-      inactive
-
+      inactive.save!
       visit "/users"
-      select_lens(:user_view, "Table w/ Inactive")
+      select_lens(:view, "Table w/ Inactive")
       expect(page).to have_css("table.index tr td", text: user.name)
       expect(page).to have_content("Longgone")
     end

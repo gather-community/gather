@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180210191418) do
+ActiveRecord::Schema.define(version: 20180220022600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -570,6 +570,18 @@ ActiveRecord::Schema.define(version: 20180210191418) do
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
+  create_table "work_shares", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "period_id", null: false
+    t.decimal "portion", precision: 4, scale: 3, default: "1.0", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["period_id", "user_id"], name: "index_work_shares_on_period_id_and_user_id", unique: true
+    t.index ["period_id"], name: "index_work_shares_on_period_id"
+    t.index ["user_id"], name: "index_work_shares_on_user_id"
+  end
+
   create_table "work_shifts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "ends_at"
@@ -656,5 +668,8 @@ ActiveRecord::Schema.define(version: 20180210191418) do
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_shares", "clusters"
+  add_foreign_key "work_shares", "users"
+  add_foreign_key "work_shares", "work_periods", column: "period_id"
   add_foreign_key "work_shifts", "work_jobs", column: "job_id"
 end

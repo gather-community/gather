@@ -620,6 +620,9 @@ en:
       reservations:
         reservations: "Reservations"
         resources: "Resources"
+      work:
+        jobs: "Jobs"
+        shares: "Shares"
     personal:
       profile: "Profile"
       accounts: "Accounts"

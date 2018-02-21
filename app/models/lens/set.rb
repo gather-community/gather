@@ -68,8 +68,8 @@ module Lens
     # If there are optional filters set, return some text and a link indicating they can clear them.
     def no_result_clear_filter_link
       if optional_lenses_active?
-        link = view.link_to(I18n.t("work/jobs.clearing_the_filter"), path_to_clear)
-        view.t("work/jobs.no_result_clear_filter_link_html", link: link)
+        link = view.link_to(I18n.t("common.clearing_the_filter"), path_to_clear)
+        view.t("common.no_result_clear_filter_link_html", link: link)
       else
         ""
       end

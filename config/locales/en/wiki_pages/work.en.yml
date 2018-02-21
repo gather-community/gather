@@ -1,7 +1,8 @@
 en:
+  work:
+    no_periods_html: "There are no active work periods. Please %{link}."
+    create_one: "create one first"
   work/jobs:
-    no_periods_html: "There are no active work periods. Please %{link} before attempting to create jobs."
-    create_one: "create one"
     shifts: "Shifts"
     unlimited: "Unlimited"
     shift_col_headers:
@@ -9,5 +10,3 @@ en:
       end_time: "End Time"
       hours: "Hours"
       slots: "# of Slots"
-    no_result_clear_filter_link_html: "You can try %{link}."
-    clearing_the_filter: "clearing the filters"

@@ -8,11 +8,7 @@ describe Work::SharePolicy do
   let(:record) { share }
 
   describe "permissions" do
-    permissions :index?, :show? do
-      it_behaves_like "permits users in community only"
-    end
-
-    permissions :new?, :edit?, :create?, :update?, :destroy? do
+    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
   end
@@ -30,7 +26,7 @@ describe Work::SharePolicy do
     end
 
     context "for regular users" do
-      let(:actor) { user }
+      let(:actor) { work_coordinator }
       it { is_expected.to contain_exactly(share1, share2) }
     end
 

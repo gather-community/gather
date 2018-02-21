@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   namespace :work do
     resources :jobs
     resources :periods
+    resources :shares, only: [:index, :update]
   end
 
   resources :uploads, only: [:create, :destroy]

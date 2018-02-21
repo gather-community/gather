@@ -8,11 +8,7 @@ module Work
 
     def index
       authorize sample_job
-      @periods = Period.for_community(current_community).latest_first
-      prepare_lenses(
-        :"work/requester",
-        "work/period": {periods: @periods, required: true, default: @periods.first.try(:id)}
-      )
+      prepare_lenses(:"work/requester", :"work/period")
       @period = Period.find_by(id: lenses[:period].value) # May be nil
       @jobs = policy_scope(Job).for_community(current_community)
       if @period.nil?

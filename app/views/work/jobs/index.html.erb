@@ -7,7 +7,9 @@
 <% end %>
 
 <% if @period.nil? %>
-  <%= t("work/jobs.no_periods_html", link: link_to(t("work/jobs.create_one"), work_periods_path)) %>
+  <div class="none-found">
+    <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
+  </div>
 <% elsif jobs.empty? %>
   <div class="none-found">
     No jobs found. <%= lenses.no_result_clear_filter_link %>

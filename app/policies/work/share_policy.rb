@@ -13,31 +13,31 @@ module Work
     end
 
     def index?
-      active_in_community?
-    end
-
-    def show?
-      active_in_community?
-    end
-
-    def new?
       active_admin_or?(:work_coordinator)
     end
 
+    def show?
+      index?
+    end
+
+    def new?
+      index?
+    end
+
     def edit?
-      new?
+      index?
     end
 
     def create?
-      new?
+      index?
     end
 
     def update?
-      new?
+      index?
     end
 
     def destroy?
-      new?
+      index?
     end
 
     def permitted_attributes

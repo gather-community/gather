@@ -8,6 +8,6 @@ module Lensable
   end
 
   def prepare_lenses(*lens_names)
-    @lenses = Lens::Set.new(context: self, lens_names: lens_names, params: params)
+    @lenses = Lens::Set.new(context: self, lens_names: lens_names, route_params: params)
   end
 end

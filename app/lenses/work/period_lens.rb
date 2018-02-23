@@ -19,5 +19,10 @@ module Work
         "data-param-name": param_name
       )
     end
+
+    # Gets the period object to which the lens points. May be nil.
+    def object
+      Period.find_by(id: value)
+    end
   end
 end

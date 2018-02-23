@@ -9,7 +9,7 @@
 # See Reservations::Rule::NAMES for list of rule attributes
 module Reservations
   class Protocol < ApplicationRecord
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     has_many :protocolings, class_name: "Reservations::Protocoling",
       foreign_key: "protocol_id", dependent: :destroy

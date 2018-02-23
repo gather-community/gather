@@ -4,7 +4,7 @@ class User < ApplicationRecord
   ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist work_coordinator)
   CONTACT_TYPES = %i(email text phone)
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
   rolify
 
   # Currently, :database_authenticatable is only needed for tha password reset token features

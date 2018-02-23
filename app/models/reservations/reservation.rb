@@ -2,7 +2,7 @@ module Reservations
   class Reservation < ApplicationRecord
     NAME_MAX_LENGTH = 24
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     self.table_name = "reservations"
 

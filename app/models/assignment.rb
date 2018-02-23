@@ -1,7 +1,7 @@
 class Assignment < ApplicationRecord
   ROLES = %w(head_cook asst_cook table_setter cleaner) # In order
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
 
   scope :oldest_first, -> { joins(:meal).order("meals.served_at") }
 

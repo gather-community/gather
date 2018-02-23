@@ -3,7 +3,7 @@ class Community < ApplicationRecord
 
   SLUG_REGEX = /[a-z][a-z\-]*/
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
   resourcify
 
   # The order of these matters for destruction.

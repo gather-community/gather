@@ -7,7 +7,7 @@ module Meals
     MEAL_CALC_TYPES = %i(fixed share)
     PANTRY_CALC_TYPES = %i(fixed percent)
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     belongs_to :community
     has_many :meals, inverse_of: :formula

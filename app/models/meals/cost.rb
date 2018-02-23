@@ -1,7 +1,7 @@
 # Saves the calculated cost of a meal for future analysis.
 module Meals
   class Cost < ApplicationRecord
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     PAYMENT_METHODS = %i(check credit)
 

@@ -1,6 +1,6 @@
 module People
   class Vehicle < ApplicationRecord
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     belongs_to :household, inverse_of: :vehicles
 

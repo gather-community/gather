@@ -12,6 +12,6 @@ module Work
     scope :active, -> { where.not(phase: "archived") }
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
 
-    accepts_nested_attributes_for :shares
+    accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
   end
 end

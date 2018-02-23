@@ -9,7 +9,7 @@ module Work
     def index
       authorize sample_job
       prepare_lenses(:"work/requester", :"work/period")
-      @period = Period.find_by(id: lenses[:period].value) # May be nil
+      @period = lenses[:period].object
       @jobs = policy_scope(Job).for_community(current_community)
       if @period.nil?
         lenses.hide!

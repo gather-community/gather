@@ -10,3 +10,8 @@ en:
       end_time: "End Time"
       hours: "Hours"
       slots: "# of Slots"
+  work/shifts:
+    portion_options:
+      none: "No Share"
+      half: "Half Share"
+      full: "Full Share"

@@ -5,8 +5,12 @@ class UserDecorator < ApplicationDecorator
     I18n.t("users.greeting", name: name)
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   def name_with_inactive
-    "#{first_name} #{last_name}#{active? ? '' : ' (Inactive)'}"
+    "#{full_name}#{active? ? '' : ' (Inactive)'}"
   end
 
   def first_name_with_inactive

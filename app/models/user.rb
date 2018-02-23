@@ -137,6 +137,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
   end
 
+  def kind
+    child? ? "child" : "adult"
+  end
+
   def birthday
     birthdate_wrapper
   end

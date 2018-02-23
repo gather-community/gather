@@ -1,9 +1,29 @@
-<% content_for(:title, "Shares") %>
+<% content_for(:title, "Work Shares") %>
 
 <% if @period.nil? %>
   <div class="none-found">
     <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
   </div>
 <% else %>
-  Shares
+  <%= form_for(@period, url: work_shares_path, method: :post) do |f| %>
+    <% %w(adult child).each do |kind| %>
+      <h2><%= t("common.#{kind.pluralize}") %></h2>
+      <% @users_by_kind[kind].each do |user| %>
+        <% share = @shares_by_user[user] %>
+        <%= f.simple_fields_for(:shares_attributes, index: user.id) do |share_fields| %>
+          <div class="work-share-selector">
+            <%= link_to(user.full_name, user_path(user)) %>
+            <%= share_fields.hidden_field(:id) %>
+            <%= share_fields.hidden_field(:user_id) %>
+            <%= share_fields.select(:portion, Work::ShareDecorator.select_options,
+              {prompt: share.new_record? ? "Not Set" : nil}, class: "form-control") %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= form_actions do %>
+      <%= f.button :submit, class: "btn-primary" %>
+    <% end %>
+  <% end %>
 <% end %>

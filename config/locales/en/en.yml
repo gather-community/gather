@@ -381,6 +381,7 @@ en:
       machine_readable: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
+      short_date_with_yr: "%a %b %d %Y"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"

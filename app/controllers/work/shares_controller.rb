@@ -15,7 +15,7 @@ module Work
         users = users.reject { |c| c.age.try(:<, Share::MIN_AGE) }
         @users_by_kind = users.group_by(&:kind)
 
-        shares = policy_scope(Share).where(period: @period)
+        shares = policy_scope(Share).for_period(@period)
         @shares_by_user = shares.index_by(&:user_id)
         users.each { |u| @shares_by_user[u.id] ||= Share.new(user: u, period: @period, portion: nil) }
       end

@@ -1,0 +1,42 @@
+.work-share-section {
+  column-gap: 30px;
+
+  @media screen and (max-width: $screen-xs-max) {
+    column-count: 1;
+  }
+
+  @media screen and (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    column-count: 2;
+  }
+
+  @media screen and (min-width: $screen-md-min) {
+    column-count: 3;
+  }
+}
+
+.work-share-selector {
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
+    margin-right: 15px;
+    overflow-x: hidden;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 50%;
+  }
+
+  select {
+    width: 50%;
+  }
+}
+
+.work--share-form .form-actions {
+  margin-top: 10px;
+}

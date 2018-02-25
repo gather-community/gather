@@ -12,6 +12,7 @@ en:
     clearing_the_filter: "clearing the filters"
     adults: "Adults"
     children: "Children"
+    save: "Save"
 
   activerecord:
     models:

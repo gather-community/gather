@@ -10,8 +10,10 @@ en:
       end_time: "End Time"
       hours: "Hours"
       slots: "# of Slots"
-  work/shifts:
+  work/shares:
     portion_options:
       none: "No Share"
       half: "Half Share"
       full: "Full Share"
+      not_set: "[Not Set]"
+    intro: "How should the community's work be divided? Most people should get a full share, but in some cases exceptions are needed. A half share means the person will do half as many hours as a person with a full share, etc."

@@ -19,11 +19,11 @@ feature "home redirect" do
       expect(page).to have_title(new_default)
     end
   end
-end
 
-def change_default_home(new_default)
+  def change_default_home(new_default)
     visit "/admin/settings/community"
     select(new_default, from: "Default Landing Page")
     click_on("Save Settings")
     expect(page).to have_content("Settings updated successfully.")
+  end
 end

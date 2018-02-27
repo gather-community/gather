@@ -24,7 +24,7 @@ feature "home redirect" do
   end
 
   context "with user logged in" do
-    let!(:home_cmty) { create(:community, slug: "foo") }
+    let(:home_cmty) { create(:community) }
     let(:actor) { create(:user, community: home_cmty) }
 
     before do

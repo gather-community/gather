@@ -8,6 +8,11 @@ en:
     inactive: "Inactive"
     cancelled: "Cancelled"
     unknown: "Unknown"
+    no_result_clear_filter_link_html: "You can try %{link}."
+    clearing_the_filter: "clearing the filters"
+    adults: "Adults"
+    children: "Children"
+    save: "Save"
 
   activerecord:
     models:
@@ -621,6 +626,9 @@ en:
       reservations:
         reservations: "Reservations"
         resources: "Resources"
+      work:
+        jobs: "Jobs"
+        shares: "Shares"
     personal:
       profile: "Profile"
       accounts: "Accounts"

@@ -95,6 +95,22 @@ module NavHelper
           icon: "bed"
         }
       ]
+    when :work
+      [
+        {
+          name: :jobs,
+          parent: :work,
+          path: work_jobs_path,
+          permitted: policy(Work::Job.new(community: current_community)).index?,
+          icon: "cogs"
+        },{
+          name: :shares,
+          parent: :work,
+          path: work_shares_path,
+          permitted: policy(Work::Share.new(period: Work::Period.new(community: current_community))).index?,
+          icon: "pie-chart"
+        }
+      ]
     else
       []
     end

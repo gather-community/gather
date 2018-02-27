@@ -9,7 +9,7 @@ class Meal < ApplicationRecord
   MENU_ITEMS = %w(entrees side kids dessert notes)
   ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
 
   serialize :allergens, JSON
 

@@ -1,7 +1,7 @@
 module Meals
   # A message sent to meal team or diners.
   class Message < ApplicationRecord
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     RECIPIENT_TYPES = %i(team diners all)
 

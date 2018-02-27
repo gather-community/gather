@@ -13,7 +13,7 @@ class Signup < ApplicationRecord
     little_kid: 0
   }
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
 
   belongs_to :meal, inverse_of: :signups
   belongs_to :household

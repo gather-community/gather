@@ -4,7 +4,7 @@ module Reservations
 
     DEFAULT_CALENDAR_VIEWS = %i(week month)
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     self.table_name = "resources"
 

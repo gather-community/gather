@@ -39,7 +39,7 @@ describe Work::JobPolicy do
   end
 
   describe "permitted attributes" do
-    let(:actor) { user }
+    let(:actor) { work_coordinator }
 
     subject { Work::JobPolicy.new(actor, Work::Job.new(community: community)).permitted_attributes }
 

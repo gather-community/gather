@@ -1,9 +1,6 @@
 module Lens
   class Lens
-    attr_reader :options, :context
-
-    # value doesn't get set on initialize, but slightly after
-    attr_accessor :value
+    attr_accessor :options, :context, :store, :route_params
 
     delegate :blank?, :present?, to: :value
     alias_method :active?, :present?
@@ -28,9 +25,12 @@ module Lens
       self.name.underscore.gsub(/_lens\z/, "")
     end
 
-    def initialize(options:, context:)
-      @options = options
-      @context = context
+    def initialize(options:, context:, stores:, route_params:)
+      self.options = options
+      self.context = context
+      self.route_params = route_params
+      self.store = options[:global] ? stores[:global] : stores[:action]
+      self.value = route_param_given? ? route_param : (value || options[:default])
     end
 
     def full_name
@@ -45,15 +45,36 @@ module Lens
       !!options[:required]
     end
 
-    protected
-
-    def route_params
-      # permit! is ok because params are never used in Lens to do mass assignments.
-      @route_params ||= context.params.dup.permit!
+    def global?
+      !!options[:global]
     end
+
+    def value
+      store[param_name.to_s].presence
+    end
+
+    protected
 
     def h
       context.view_context
+    end
+
+    def value=(val)
+      if val.nil?
+        store.delete(param_name.to_s)
+      else
+        store[param_name.to_s] = val
+      end
+    end
+
+    private
+
+    def route_param
+      route_params[param_name].presence
+    end
+
+    def route_param_given?
+      route_params.key?(param_name)
     end
   end
 end

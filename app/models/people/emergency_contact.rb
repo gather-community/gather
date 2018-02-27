@@ -2,7 +2,7 @@ module People
   class EmergencyContact < ApplicationRecord
     include Phoneable
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     belongs_to :household
     normalize_attributes :name, :email, :location, :relationship

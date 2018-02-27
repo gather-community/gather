@@ -204,6 +204,7 @@ en:
       community:
         settings:
           time_zone: "Time Zone"
+          default_landing_page: "Default Landing Page"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -261,6 +262,11 @@ en:
     options:
       community:
         settings:
+          default_landing_page:
+            meals: "Meals"
+            directory: "Directory"
+            reservations: "Reservations"
+            wiki: "Wiki"
           billing:
             late_fee_policy:
               fee_type:

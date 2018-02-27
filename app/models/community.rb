@@ -23,6 +23,7 @@ class Community < ApplicationRecord
 
   custom_fields :settings, spec: [
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
+    {key: :default_landing_page, type: :enum, options: %w(meals directory reservations wiki), default: "directory", required: true},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :string},
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},

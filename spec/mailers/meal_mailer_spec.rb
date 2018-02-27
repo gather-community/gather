@@ -6,9 +6,11 @@ describe MealMailer do
   let(:ca) { resource.community.abbrv }
   let(:meal) { create(:meal, :with_menu, served_at: "2017-01-01 12:00", resources: [resource]) }
 
-  describe "meal_reminder" do
+  # This tests fake user handling for mails with a household recipient.
+  describe "meal_reminder with fake user" do
     let(:users) { create_list(:user, 2) }
-    let(:household) { create(:household, users: users) }
+    let(:fake_user) { create(:user, fake: true) }
+    let(:household) { create(:household, users: users + [fake_user]) }
     let(:signup) { create(:signup, household: household, meal: meal, adult_meat: 1) }
     let(:mail) { described_class.meal_reminder(signup).deliver_now }
 
@@ -91,22 +93,34 @@ describe MealMailer do
 
   describe "normal_message" do
     let!(:sender) { create(:user) }
-    let!(:user) { create(:user) }
     let!(:message) { Meals::Message.new(meal: meal, sender: sender, body: "Yo Peeps,\n\nStuff\n\nThx") }
     let(:mail) { described_class.normal_message(message, user).deliver_now }
 
-    it "sets the right recipients and reply-to" do
-      expect(mail.to).to match_array(user.email)
-      expect(mail.reply_to).to contain_exactly(message.sender_email)
+    context "with normal user" do
+      let(:user) { create(:user) }
+
+      it "sets the right recipients and reply-to" do
+        expect(mail.to).to match_array(user.email)
+        expect(mail.reply_to).to contain_exactly(message.sender_email)
+      end
+
+      it "renders the subject" do
+        expect(mail.subject).to eq("Message about Meal on Jan 01")
+      end
+
+      it "renders the correct name and URL in the body" do
+        expect(mail.body.encoded).to match("Dear #{user.name},")
+        expect(mail.body.encoded).to have_correct_meal_url(meal)
+      end
     end
 
-    it "renders the subject" do
-      expect(mail.subject).to eq("Message about Meal on Jan 01")
-    end
+    # This tests fake user handling for mails with a single User recipient.
+    context "with fake user" do
+      let(:user) { create(:user, fake: true) }
 
-    it "renders the correct name and URL in the body" do
-      expect(mail.body.encoded).to match("Dear #{user.name},")
-      expect(mail.body.encoded).to have_correct_meal_url(meal)
+      it "returns nil" do
+        expect(mail).to be_nil
+      end
     end
   end
 

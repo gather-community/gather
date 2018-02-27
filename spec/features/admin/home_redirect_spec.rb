@@ -1,16 +1,15 @@
 require "rails_helper"
 
 feature "home redirect" do
-  let(:actor) { create(:admin) }
-  let!(:home_cmty) { create(:community, slug: "foo") }
-  let(:user) { create(:user, community: home_cmty) }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
+  before do
+    login_as(actor, scope: :user)
+  end
+
   context "with admin logged in" do
-    before do
-      login_as(actor, scope: :user)
-    end
+    let(:actor) { create(:admin) }
 
     scenario "admin changes default home and visits root url" do
       visit "/"
@@ -25,16 +24,17 @@ feature "home redirect" do
   end
 
   context "with user logged in" do
+    let!(:home_cmty) { create(:community, slug: "foo") }
+    let(:actor) { create(:user, community: home_cmty) }
+
     before do
-      login_as(user, scope: :user)
+      actor.community.settings.default_landing_page = "meals"
+      actor.community.save!
     end
 
-    scenario "user visits root with various default home page settings set" do
-      user.community().settings.default_landing_page = "Meals"
-      # default_landing_page gets set properly here, but once we get to the home controller, it's back to the default
-      # not sure if there is a before action or something that is overriding it?
+    scenario "user visits root with meals default home page set" do
       visit "/"
-      #expect(page).to have_title("Meals")
+      expect(page).to have_title("Meals")
     end
   end
 

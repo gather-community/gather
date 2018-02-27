@@ -10,7 +10,8 @@ class HomeController < ApplicationController
     when "directory" then redirect_to users_path
     when "reservations" then redirect_to reservations_path
     when "wiki" then redirect_to wiki_pages_path
-    else redirect_to users_path end
+    else redirect_to users_path
+    end
   end
 
   def inactive

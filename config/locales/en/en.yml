@@ -496,6 +496,13 @@ en:
         requester:
           any: "Any Requester"
           none: "No Requester"
+      work_period:
+        phase:
+          archived: "Archived"
+          draft: "Draft"
+          open: "Open"
+          pending: "Pending"
+          published: "Published"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -629,6 +636,7 @@ en:
       work:
         jobs: "Jobs"
         shares: "Shares"
+        periods: "Periods"
     personal:
       profile: "Profile"
       accounts: "Accounts"

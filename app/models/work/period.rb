@@ -1,6 +1,6 @@
 module Work
   class Period < ApplicationRecord
-    PHASE_OPTIONS = %i(draft open published archived)
+    PHASE_OPTIONS = %i(draft open pending published archived)
 
     acts_as_tenant :cluster
 

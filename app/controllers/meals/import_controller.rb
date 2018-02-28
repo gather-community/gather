@@ -1,6 +1,7 @@
 module Meals
   class ImportController < ApplicationController
     before_action :init_meal, except: :create
+
     def new
       authorize @meal, :import?
     end
@@ -11,6 +12,10 @@ module Meals
         community_ids: [current_user.community_id],
         creator: current_user
       )
+
+      importer = Meals::Importer.new(@meal)
+      importer.import(params[:file])
+
       authorize @meal, :import?
     end
 

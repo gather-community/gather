@@ -6,8 +6,6 @@
   <% end %>
 <% end %>
 
-<%= session[:lenses] %>
-
 <% if @period.nil? %>
   <div class="none-found">
     <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>

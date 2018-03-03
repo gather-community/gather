@@ -1,5 +1,6 @@
 .work-share-section {
   column-gap: 30px;
+  margin-bottom: 10px;
 
   @media screen and (max-width: $screen-xs-max) {
     column-count: 1;

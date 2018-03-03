@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180220022600) do
+ActiveRecord::Schema.define(version: 20180303010833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -566,6 +566,7 @@ ActiveRecord::Schema.define(version: 20180220022600) do
     t.date "starts_on", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
+    t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end

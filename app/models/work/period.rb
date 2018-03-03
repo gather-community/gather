@@ -13,6 +13,7 @@ module Work
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
 
     validates :name, :starts_on, :ends_on, presence: true
+    validates :name, uniqueness: {scope: :community_id}
     validate :start_before_end
 
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }

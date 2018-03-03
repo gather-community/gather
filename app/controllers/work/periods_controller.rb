@@ -62,24 +62,10 @@ module Work
     end
 
     def prep_form_vars
-      build_users_by_kind_table
-      build_and_populate_shares_by_user_table
-    end
-
-    def users
-      @users ||= policy_scope(User).active.by_name.in_community(current_community).decorate.tap do |users|
-        users.reject! { |c| c.age.try(:<, Share::MIN_AGE) }
-      end
-    end
-
-    def build_users_by_kind_table
-      @users_by_kind = users.group_by(&:kind)
-    end
-
-    def build_and_populate_shares_by_user_table
-      shares = policy_scope(Share).for_period(@period)
-      @shares_by_user = shares.index_by(&:user_id)
-      users.each { |u| @shares_by_user[u.id] ||= Share.new(user: u, period: @period, portion: nil) }
+      @share_builder = PeriodShareBuilder.new(@period)
+      @share_builder.build
+      @users_by_kind = UserDecorator.decorate_collection(@share_builder.users).group_by(&:kind)
+      @shares_by_user = @period.shares.index_by(&:user_id)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

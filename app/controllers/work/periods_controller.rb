@@ -10,6 +10,26 @@ module Work
       @periods = policy_scope(Period).for_community(current_community).latest_first.page(params[:page])
     end
 
+    def new
+      @period = Period.new_with_defaults(current_community)
+      authorize @period
+      prep_form_vars
+    end
+
+    def create
+      @period = Period.new(community: current_community)
+      @period.assign_attributes(period_params)
+      authorize @period
+      if @period.save
+        flash[:success] = "Period created successfully."
+        redirect_to work_periods_path
+      else
+        set_validation_error_notice(@period)
+        prep_form_vars
+        render :new
+      end
+    end
+
     protected
 
     def klass

@@ -13,5 +13,14 @@ module Work
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
 
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
+
+    def self.new_with_defaults(community)
+      new(
+        community: community,
+        phase: "draft",
+        starts_on: (Date.today + 1.month).beginning_of_month,
+        ends_on: (Date.today + 1.month).end_of_month
+      )
+    end
   end
 end

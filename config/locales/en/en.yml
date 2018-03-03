@@ -131,12 +131,6 @@ en:
         vet: "Veterinarian Info"
         caregivers: "Caregiver Info"
         health_issues: "Health Issues"
-      wiki/page:
-        title: "Title"
-        content: "Content"
-        comment: "Comment"
-        editable_by: "Editable By"
-        data_source: "Data Source"
       work/job:
         description: "Description"
         hours: "Hours"
@@ -146,6 +140,17 @@ en:
         slot_type: "Slot Type"
         time_type: "Times"
         title: "Title"
+      work/period:
+        name: "Name"
+        phase: "Phase"
+        starts_on: "Starts On"
+        ends_on: "Ends On"
+      wiki/page:
+        title: "Title"
+        content: "Content"
+        comment: "Comment"
+        editable_by: "Editable By"
+        data_source: "Data Source"
     errors:
       models:
         signup:
@@ -418,6 +423,8 @@ en:
         emergency_contacts:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
+      work_period:
+        name: "e.g. Summer 1969"
       wiki_page:
         comment: "A comment about this change."
     hints:

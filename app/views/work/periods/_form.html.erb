@@ -1,0 +1,16 @@
+<%= gather_form_for(period) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :phase, collection: Work::Period::PHASE_OPTIONS, include_blank: false %>
+  <%= f.input :starts_on, as: :date_picker %>
+  <%= f.input :ends_on, as: :date_picker %>
+
+  <%= form_actions do %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
+
+  <%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.work--period-form'});
+  });
+  <% end %>
+<% end %>

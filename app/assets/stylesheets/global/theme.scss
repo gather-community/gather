@@ -59,6 +59,10 @@ mark {
   border: none;
   border-radius: 0;
 
+  &.in-text {
+    margin-bottom: 10px;
+  }
+
   a {
     text-decoration: underline;
   }

@@ -9,6 +9,9 @@
   </div>
 
   <h2>Shares</h2>
+  <% unless @period.draft? %>
+    <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
+  <% end %>
   <p class="intro"><%= t("work/shares.intro") %></p>
 
   <% %w(adult child).each do |kind| %>

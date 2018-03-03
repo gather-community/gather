@@ -27,6 +27,12 @@ module Work
       )
     end
 
+    PHASE_OPTIONS.each do |p|
+      define_method :"#{p}?" do
+        phase.to_sym == p
+      end
+    end
+
     private
 
     def start_before_end

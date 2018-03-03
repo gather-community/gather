@@ -201,6 +201,10 @@ en:
               no_shifts: "You must add at least one shift."
               duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
               different_length_shifts: "All shfits must be the same length."
+        work/period:
+          attributes:
+            ends_on:
+              not_after_start: "must be after start date"
         work/shift:
           attributes:
             starts_at:

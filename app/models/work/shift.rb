@@ -1,9 +1,10 @@
 class Work::Shift < ApplicationRecord
   belongs_to :job, class_name: "Work::Job", inverse_of: :shifts
+  has_many :assignments, class_name: "Work::Assignment", inverse_of: :shift, dependent: :destroy
 
   delegate :hours, :slot_type, :date_time?, :date_only?, :full_period?,
     :full_community?, to: :job, prefix: true
-  delegate :period_starts_on, :period_ends_on, to: :job
+  delegate :community, :period_starts_on, :period_ends_on, to: :job
 
   before_validation :normalize
 

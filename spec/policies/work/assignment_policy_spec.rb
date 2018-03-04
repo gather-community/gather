@@ -5,7 +5,8 @@ describe Work::AssignmentPolicy do
 
   let(:period) { build(:work_period, community: community) }
   let(:job) { build(:work_job, period: period) }
-  let(:assignment) { build(:work_assignment, job: job, user: actor) }
+  let(:shift) { build(:work_shift, job: job) }
+  let(:assignment) { build(:work_assignment, shift: shift, user: actor) }
   let(:record) { assignment }
   let(:actor) { user }
 
@@ -34,9 +35,11 @@ describe Work::AssignmentPolicy do
     let(:periodB) { create(:work_period, community: communityB) }
     let(:job) { create(:work_job, period: period) }
     let(:jobB) { create(:work_job, period: periodB) }
-    let(:assignment1) { create(:work_assignment, job: job, user: user) }
-    let(:assignment2) { create(:work_assignment, job: job, user: other_user) }
-    let(:assignment3) { create(:work_assignment, job: jobB, user: user_in_cmtyB) }
+    let(:shift) { job.shifts.first }
+    let(:shiftB) { jobB.shifts.first }
+    let(:assignment1) { create(:work_assignment, shift: shift, user: user) }
+    let(:assignment2) { create(:work_assignment, shift: shift, user: other_user) }
+    let(:assignment3) { create(:work_assignment, shift: shiftB, user: user_in_cmtyB) }
     subject { Work::AssignmentPolicy::Scope.new(actor, Work::Assignment.all).resolve }
 
     before do
@@ -57,7 +60,7 @@ describe Work::AssignmentPolicy do
   end
 
   describe "permitted attributes" do
-    subject { Work::AssignmentPolicy.new(actor, Work::Assignment.new(job: job)).permitted_attributes }
+    subject { Work::AssignmentPolicy.new(actor, Work::Assignment.new(shift: shift)).permitted_attributes }
 
     context "for regular user" do
       let(:actor) { user }

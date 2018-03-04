@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180304140637) do
+ActiveRecord::Schema.define(version: 20180304150128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -539,11 +539,11 @@ ActiveRecord::Schema.define(version: 20180304140637) do
   create_table "work_assignments", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.integer "job_id", null: false
+    t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["cluster_id"], name: "index_work_assignments_on_cluster_id"
-    t.index ["job_id"], name: "index_work_assignments_on_job_id"
+    t.index ["shift_id"], name: "index_work_assignments_on_shift_id"
     t.index ["user_id"], name: "index_work_assignments_on_user_id"
   end
 
@@ -673,7 +673,7 @@ ActiveRecord::Schema.define(version: 20180304140637) do
   add_foreign_key "wiki_pages", "users", column: "updator_id"
   add_foreign_key "work_assignments", "clusters"
   add_foreign_key "work_assignments", "users"
-  add_foreign_key "work_assignments", "work_jobs", column: "job_id"
+  add_foreign_key "work_assignments", "work_shifts", column: "shift_id"
   add_foreign_key "work_jobs", "clusters"
   add_foreign_key "work_jobs", "people_groups", column: "requester_id"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"

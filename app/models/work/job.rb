@@ -5,12 +5,11 @@ module Work
 
     acts_as_tenant :cluster
 
-    belongs_to :community
     belongs_to :period, class_name: "Work::Period"
     belongs_to :requester, class_name: "People::Group"
     has_many :shifts, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
 
-    scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
     scope :by_title, -> { order("LOWER(title)") }
     scope :in_period, ->(p) { where(period_id: p.id) }
     scope :from_requester, ->(r) { where(requester: r) }
@@ -33,6 +32,7 @@ module Work
 
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
 
+    delegate :community, to: :period
     delegate :starts_on, :ends_on, :name, to: :period, prefix: true
 
     def full_period?

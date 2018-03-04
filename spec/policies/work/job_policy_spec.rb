@@ -3,7 +3,8 @@ require "rails_helper"
 describe Work::JobPolicy do
   include_context "policy objs"
 
-  let(:job) { build(:work_job, community: community) }
+  let(:period) { build(:work_period, community: community) }
+  let(:job) { build(:work_job, period: period) }
   let(:record) { job }
 
   describe "permissions" do
@@ -17,9 +18,11 @@ describe Work::JobPolicy do
   end
 
   describe "scope" do
-    let!(:job1) { create(:work_job, community: community) }
-    let!(:job2) { create(:work_job, community: community) }
-    let!(:job3) { create(:work_job, community: communityB) }
+    let!(:period) { create(:work_period, community: community) }
+    let!(:periodB) { create(:work_period, community: communityB) }
+    let!(:job1) { create(:work_job, period: period) }
+    let!(:job2) { create(:work_job, period: period) }
+    let!(:job3) { create(:work_job, period: periodB) }
     subject { Work::JobPolicy::Scope.new(actor, Work::Job.all).resolve }
 
     before do
@@ -41,7 +44,7 @@ describe Work::JobPolicy do
   describe "permitted attributes" do
     let(:actor) { work_coordinator }
 
-    subject { Work::JobPolicy.new(actor, Work::Job.new(community: community)).permitted_attributes }
+    subject { Work::JobPolicy.new(actor, Work::Job.new(period: period)).permitted_attributes }
 
     it do
       expect(subject).to match_array(%i(description hours period_id requester_id slot_type hours_per_shift

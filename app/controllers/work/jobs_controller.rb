@@ -25,7 +25,7 @@ module Work
 
     def new
       return render_not_found unless params[:period].present?
-      @job = Job.new(community: current_community, period_id: params[:period])
+      @job = Job.new(period_id: params[:period])
       @job.shifts.build
       authorize @job
       prep_form_vars
@@ -38,7 +38,7 @@ module Work
     end
 
     def create
-      @job = Job.new(community: current_community)
+      @job = Job.new
       @job.assign_attributes(job_params)
       authorize @job
       if @job.save
@@ -73,7 +73,7 @@ module Work
     private
 
     def sample_job
-      Job.new(community: current_community)
+      Job.new(period: @period || Period.new(community: current_community))
     end
 
     def prep_form_vars

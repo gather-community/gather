@@ -96,18 +96,19 @@ module NavHelper
         }
       ]
     when :work
+      sample_period = Work::Period.new(community: current_community)
       [
         {
           name: :jobs,
           parent: :work,
           path: work_jobs_path,
-          permitted: policy(Work::Job.new(community: current_community)).index?,
+          permitted: policy(Work::Job.new(period: sample_period)).index?,
           icon: "cogs"
         },{
           name: :periods,
           parent: :work,
           path: work_periods_path,
-          permitted: policy(Work::Period.new(community: current_community)).index?,
+          permitted: policy(sample_period).index?,
           icon: "hourglass-half"
         }
       ]

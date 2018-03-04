@@ -4,7 +4,6 @@ FactoryBot.define do
     title { Faker::Job.title }
     hours 2
     description { Faker::Lorem.paragraph }
-    community { default_community }
 
     before(:create) do |job|
       if job.shifts.empty?

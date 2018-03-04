@@ -329,6 +329,8 @@ en:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
     work/job:
       destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
+    work/period:
+      destroy: "Are you sure you want to delete the period '%{name}'? This action cannot be undone."
 
   activatables:
     user:
@@ -367,6 +369,8 @@ en:
       destroy: "Formula deleted successfully."
     work/job:
       destroy: "Job deleted successfully."
+    work/period:
+      destroy: "Period deleted successfully."
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.

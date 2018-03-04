@@ -37,7 +37,7 @@ module Work
     end
 
     def destroy?
-      index?
+      index? && !period.has_jobs?
     end
 
     def permitted_attributes

@@ -1,5 +1,7 @@
 module Work
   class PeriodsController < ApplicationController
+    include Destructible
+
     before_action -> { nav_context(:work, :periods) }
 
     decorates_assigned :period, :periods

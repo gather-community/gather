@@ -5,7 +5,8 @@ module Work
     acts_as_tenant :cluster
 
     belongs_to :community
-    has_many :shares, inverse_of: :period
+    has_many :shares, inverse_of: :period, dependent: :destroy
+    has_many :jobs, inverse_of: :period
 
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }
@@ -31,6 +32,10 @@ module Work
       define_method :"#{p}?" do
         phase.to_sym == p
       end
+    end
+
+    def has_jobs?
+      jobs.any?
     end
 
     private

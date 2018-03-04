@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180303010833) do
+ActiveRecord::Schema.define(version: 20180304042344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -536,6 +536,17 @@ ActiveRecord::Schema.define(version: 20180303010833) do
     t.index ["updator_id"], name: "index_wiki_pages_on_updator_id"
   end
 
+  create_table "work_assignments", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "job_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["cluster_id"], name: "index_work_assignments_on_cluster_id"
+    t.index ["job_id"], name: "index_work_assignments_on_job_id"
+    t.index ["user_id"], name: "index_work_assignments_on_user_id"
+  end
+
   create_table "work_jobs", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -663,6 +674,9 @@ ActiveRecord::Schema.define(version: 20180303010833) do
   add_foreign_key "wiki_pages", "communities"
   add_foreign_key "wiki_pages", "users", column: "creator_id"
   add_foreign_key "wiki_pages", "users", column: "updator_id"
+  add_foreign_key "work_assignments", "clusters"
+  add_foreign_key "work_assignments", "users"
+  add_foreign_key "work_assignments", "work_jobs", column: "job_id"
   add_foreign_key "work_jobs", "clusters"
   add_foreign_key "work_jobs", "communities"
   add_foreign_key "work_jobs", "people_groups", column: "requester_id"

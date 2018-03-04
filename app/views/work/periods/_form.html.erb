@@ -1,6 +1,6 @@
-<%= gather_form_for(period, width: :full) do |f| %>
+<%= gather_form_for(period, width: (:full unless period.archived?)) do |f| %>
   <div class="row">
-    <div class="col-sm-9">
+    <div class="<%= period.archived? ? "col-sm-12" : "col-sm-9" %>">
       <%= f.input :name %>
       <%= f.input :phase, collection: Work::Period::PHASE_OPTIONS, include_blank: false %>
       <%= f.input :starts_on, as: :date_picker %>
@@ -8,28 +8,30 @@
     </div>
   </div>
 
-  <h2>Shares</h2>
-  <% unless @period.draft? %>
-    <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
-  <% end %>
-  <p class="intro"><%= t("work/shares.intro") %></p>
+  <% unless period.archived? %>
+    <h2>Shares</h2>
+    <% unless period.draft? %>
+      <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
+    <% end %>
+    <p class="intro"><%= t("work/shares.intro") %></p>
 
-  <% %w(adult child).each do |kind| %>
-    <h3><%= t("common.#{kind.pluralize}") %></h3>
-    <div class="work-share-section">
-      <% @users_by_kind[kind].each do |user| %>
-        <% share = @shares_by_user[user.id].decorate %>
-        <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
-          <div class="work-share-selector">
-            <%= share_fields.hidden_field :id %>
-            <%= share_fields.hidden_field :user_id %>
-            <label><%= link_to user.full_name, user_path(user) %></label>
-            <%= share_fields.select(:portion, share.select_options,
-              {include_blank: share.new_record?}, class: "form-control") %>
-          </div>
+    <% %w(adult child).each do |kind| %>
+      <h3><%= t("common.#{kind.pluralize}") %></h3>
+      <div class="work-share-section">
+        <% @users_by_kind[kind].each do |user| %>
+          <% share = @shares_by_user[user.id].decorate %>
+          <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
+            <div class="work-share-selector">
+              <%= share_fields.hidden_field :id %>
+              <%= share_fields.hidden_field :user_id %>
+              <label><%= link_to user.full_name, user_path(user) %></label>
+              <%= share_fields.select(:portion, share.select_options,
+                {include_blank: share.new_record?}, class: "form-control") %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   <% end %>
 
   <%= form_actions do %>

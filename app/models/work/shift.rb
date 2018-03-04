@@ -21,6 +21,20 @@ class Work::Shift < ApplicationRecord
     (period_ends_on + 1).midnight
   end
 
+  def hours
+    if job.date_only_full_multiple?
+      job.hours_per_shift
+    elsif job.full_multiple_slot?
+      elapsed_time / 1.hour
+    else
+      job_hours
+    end
+  end
+
+  def all_slots_taken?
+    assignments.size >= slots
+  end
+
   def elapsed_time
     @elapsed_time ||= ends_at - starts_at
   end

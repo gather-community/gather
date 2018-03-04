@@ -399,6 +399,7 @@ en:
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
+      time_only: "%l:%M%P"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -655,8 +656,8 @@ en:
         reservations: "Reservations"
         resources: "Resources"
       work:
+        assignments: "Assignments"
         jobs: "Jobs"
-        shares: "Shares"
         periods: "Periods"
     personal:
       profile: "Profile"

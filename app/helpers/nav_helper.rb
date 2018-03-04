@@ -97,13 +97,21 @@ module NavHelper
       ]
     when :work
       sample_period = Work::Period.new(community: current_community)
+      sample_job = Work::Job.new(period: sample_period)
+      sample_shift = Work::Shift.new(job: sample_job)
       [
         {
+          name: :assignments,
+          parent: :work,
+          path: work_assignments_path,
+          permitted: policy(Work::Assignment.new(shift: sample_shift)).index?,
+          icon: "hand-paper-o"
+        },{
           name: :jobs,
           parent: :work,
           path: work_jobs_path,
           permitted: policy(Work::Job.new(period: sample_period)).index?,
-          icon: "cogs"
+          icon: "wrench"
         },{
           name: :periods,
           parent: :work,

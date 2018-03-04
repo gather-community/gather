@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
+    resources :assignments
     resources :jobs
     resources :periods, except: :show
   end

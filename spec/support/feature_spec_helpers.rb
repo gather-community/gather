@@ -43,7 +43,13 @@ module FeatureSpecHelpers
   end
 
   def enter_datetime(value, into:)
+    value = I18n.l(Time.parse(value), format: :full_datetime)
     find(".#{into} input.datetime_picker").set(value)
+  end
+
+  def enter_date(value, into:)
+    value = I18n.l(Date.parse(value), format: :full)
+    find(".#{into} input.date_picker").set(value)
   end
 
   def expect_success

@@ -15,18 +15,20 @@
     <% end %>
     <p class="intro"><%= t("work/shares.intro") %></p>
 
-    <% %w(adult child).each do |kind| %>
-      <h3><%= t("common.#{kind.pluralize}") %></h3>
+    <% @users_by_kind.each do |kind, users| %>
+      <% if @users_by_kind.size > 1 %>
+        <h3><%= t("common.#{kind.pluralize}") %></h3>
+      <% end %>
       <div class="work-share-section">
-        <% @users_by_kind[kind].each do |user| %>
+        <% users.each do |user| %>
           <% share = @shares_by_user[user.id].decorate %>
           <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
             <div class="work-share-selector">
               <%= share_fields.hidden_field :id %>
               <%= share_fields.hidden_field :user_id %>
-              <label><%= link_to user.full_name, user_path(user) %></label>
-              <%= share_fields.select(:portion, share.select_options,
-                {include_blank: share.new_record?}, class: "form-control") %>
+              <%= share_fields.label :portion, link_to(user.full_name, user_path(user)) %>
+              <%= share_fields.select :portion, share.select_options,
+                {include_blank: share.new_record?}, class: "form-control" %>
             </div>
           <% end %>
         <% end %>

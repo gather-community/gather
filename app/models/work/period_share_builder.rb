@@ -15,7 +15,7 @@ module Work
     end
 
     def users
-      @users ||= User.active.by_name.in_community(period.community).to_a.tap do |users|
+      @users ||= User.active.by_name_adults_first.in_community(period.community).to_a.tap do |users|
         users.reject! { |c| c.age.try(:<, Settings.work.min_age) }
       end
     end

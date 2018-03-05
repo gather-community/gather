@@ -21,7 +21,7 @@
             <tr>
               <td><%= link_to(job.title, job) %></td>
               <td class="shift-times"><%= shift.times %></td>
-              <td class="hours"><%= shift.hours %></td>
+              <td class="hours"><%= shift.hours_formatted %></td>
               <td class="owner">
                 <% if assignment.user %>
                   <%= assignment.user.decorate.name_with_inactive %>

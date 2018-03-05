@@ -22,6 +22,11 @@ module Work
       h.l(ends_at, format: time_format).strip
     end
 
+    def hours_formatted
+      # Convert to integer if no fractional part so that .0 doesn't show.
+      (hours - hours.to_i < 0.0001) ? hours.to_i : hours
+    end
+
     private
 
     def time_format

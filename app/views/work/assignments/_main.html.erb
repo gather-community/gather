@@ -1,0 +1,45 @@
+<% cache @cache_key do %>
+  <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
+  <% @build_blank_assignments.call %>
+  <div class="assignments-main">
+    <% if jobs.empty? %>
+      <div class="none-found">
+        No jobs found. <%= lenses.no_result_clear_filter_link %>
+      </div>
+    <% else %>
+      <table class="index part-width">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date/Time</th>
+            <th>Hours</th>
+            <th>Owner</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% jobs.each do |job| %>
+            <% job.shifts.each do |shift| %>
+              <% shift = shift.decorate %>
+              <% shift.assignments.each do |assignment| %>
+                <tr>
+                  <td><%= link_to(job.title, job) %></td>
+                  <td class="shift-times"><%= shift.times %></td>
+                  <td class="hours"><%= shift.hours_formatted %></td>
+                  <td class="owner">
+                    <% if assignment.user %>
+                      <%= assignment.user.decorate.name_with_inactive %>
+                    <% else %>
+                      Sign up!
+                    <% end %>
+                  </td>
+                  <td></td>
+                </tr>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+<% end %>

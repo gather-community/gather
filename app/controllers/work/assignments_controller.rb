@@ -11,7 +11,14 @@ module Work
       @jobs = policy_scope(Job).for_community(current_community).in_period(@period).
         includes(shifts: {assignments: :user}).by_title
       @cache_key = [@period.cache_key, @jobs.cache_key, lenses.cache_key].join("|")
-      build_blank_assignments unless Rails.cache.exist?(@cache_key)
+
+      # We pass this method to the view as an ivar so it can stay private but still get called from
+      # within the cached block.
+      @build_blank_assignments = method(:build_blank_assignments)
+
+      if request.xhr?
+        render partial: "main"
+      end
     end
 
     protected

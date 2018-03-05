@@ -1,4 +1,7 @@
 <% content_for(:title, "Job Assignments") %>
-<% cache @cache_key do %>
-  <%= render "table" %>
+<%= render "main" %>
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Work.AssignmentsView({el: '#content'});
+  });
 <% end %>

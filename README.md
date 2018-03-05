@@ -78,6 +78,16 @@ Follow these steps to setup a development environment for Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
 
+## Caching
+
+Caching is off by default in development mode since it can lead to confusing issues where changes to views don't show up.
+
+If you are testing some caching behavior you can enable it temporarily by doing:
+
+```
+CACHE=1 rails server
+```
+
 ## Linters
 Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer.
 

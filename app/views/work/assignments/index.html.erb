@@ -11,7 +11,7 @@
         <th>Title</th>
         <th>Date/Time</th>
         <th>Hours</th>
-        <th>Assignee</th>
+        <th>Owner</th>
         <th></th>
       </tr>
     </thead>
@@ -23,8 +23,8 @@
             <tr>
               <td><%= job.title %></td>
               <td class="shift-times"><%= shift.times %></td>
-              <td><%= shift.hours %></td>
-              <td>
+              <td class="hours"><%= shift.hours %></td>
+              <td class="owner">
                 <% if assignment.user %>
                   <%= assignment.user.decorate.name_with_inactive %>
                 <% else %>

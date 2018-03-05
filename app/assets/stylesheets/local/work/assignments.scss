@@ -1,7 +1,11 @@
 .work--assignments {
   &.action-index {
-    td.shift-times {
+    td.shift-times, td.hours {
       white-space: nowrap;
+    }
+
+    td.owner {
+      min-width: 150px;
     }
   }
 }

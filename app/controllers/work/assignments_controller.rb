@@ -8,9 +8,10 @@ module Work
       authorize sample_assignment
       prepare_lenses(:"work/requester", :"work/period")
       @period = lenses[:period].object
-      @jobs = policy_scope(Job).for_community(current_community).
-        in_period(@period).includes(shifts: :assignments).by_title.to_a
-      build_blank_assignments
+      @jobs = policy_scope(Job).for_community(current_community).in_period(@period).
+        includes(shifts: {assignments: :user}).by_title
+      @cache_key = [@period.cache_key, @jobs.cache_key, lenses.cache_key].join("|")
+      build_blank_assignments unless Rails.cache.exist?(@cache_key)
     end
 
     protected

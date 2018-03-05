@@ -60,8 +60,12 @@ module Lens
       context.request.path << "?" << query_string_to_clear
     end
 
+    def cache_key
+      lenses.map { |l| [l.param_name, l.value] }.to_h.to_query
+    end
+
     def query_string_to_clear
-      optional_lenses.map { |l| "#{l.param_name}=" }.join("&")
+      optional_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
     end
 
     # If there are optional filters set, return some text and a link indicating they can clear them.

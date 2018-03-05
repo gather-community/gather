@@ -1,0 +1,39 @@
+<% if jobs.empty? %>
+  <div class="none-found">
+    No jobs found. <%= lenses.no_result_clear_filter_link %>
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date/Time</th>
+        <th>Hours</th>
+        <th>Owner</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% jobs.each do |job| %>
+        <% job.shifts.each do |shift| %>
+          <% shift = shift.decorate %>
+          <% shift.assignments.each do |assignment| %>
+            <tr>
+              <td><%= job.title %></td>
+              <td class="shift-times"><%= shift.times %></td>
+              <td class="hours"><%= shift.hours %></td>
+              <td class="owner">
+                <% if assignment.user %>
+                  <%= assignment.user.decorate.name_with_inactive %>
+                <% else %>
+                  Sign up!
+                <% end %>
+              </td>
+              <td></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

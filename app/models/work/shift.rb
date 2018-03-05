@@ -1,5 +1,7 @@
 class Work::Shift < ApplicationRecord
-  belongs_to :job, class_name: "Work::Job", inverse_of: :shifts
+  # We set touch: true so that shift changes will update the job updated_at stamp, which
+  # we use in a cache key.
+  belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
   has_many :assignments, class_name: "Work::Assignment", inverse_of: :shift, dependent: :destroy
 
   delegate :hours, :slot_type, :date_time?, :date_only?, :full_period?,

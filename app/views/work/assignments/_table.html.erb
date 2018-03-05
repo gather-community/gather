@@ -19,7 +19,7 @@
           <% shift = shift.decorate %>
           <% shift.assignments.each do |assignment| %>
             <tr>
-              <td><%= job.title %></td>
+              <td><%= link_to(job.title, job) %></td>
               <td class="shift-times"><%= shift.times %></td>
               <td class="hours"><%= shift.hours %></td>
               <td class="owner">

@@ -18,6 +18,8 @@ module Work
 
       if request.xhr?
         render partial: "main"
+      elsif @period.draft? || @period.archived?
+        flash.now[:notice] = t("work.notices.#{@period.phase}")
       end
     end
 

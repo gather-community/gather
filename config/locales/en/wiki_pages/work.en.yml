@@ -2,6 +2,9 @@ en:
   work:
     no_periods_html: "There are no active work periods. Please %{link}."
     create_one: "create one first"
+    notices:
+      draft: "This period is in the draft phase so workers can't sign up for jobs yet."
+      archived: "This period is archived so no edits are permitted."
   work/jobs:
     shifts: "Shifts"
     unlimited: "Unlimited"

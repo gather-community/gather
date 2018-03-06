@@ -23,8 +23,7 @@ module Work
     end
 
     def hours_formatted
-      # Convert to integer if no fractional part so that .0 doesn't show.
-      (hours - hours.to_i < 0.0001) ? hours.to_i : hours
+      to_int_if_no_fractional_part(hours)
     end
 
     private

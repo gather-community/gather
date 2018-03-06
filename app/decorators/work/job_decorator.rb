@@ -14,5 +14,9 @@ module Work
     def slot_type_icon
       full_group? ? h.icon_tag("users") : ""
     end
+
+    def hours_formatted
+      to_int_if_no_fractional_part(hours)
+    end
   end
 end

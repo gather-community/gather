@@ -28,4 +28,9 @@ class ApplicationDecorator < Draper::Decorator
   def action_links(action = :show, **options)
     send("#{action}_action_link_set").render(**options)
   end
+
+  def to_int_if_no_fractional_part(num)
+    # Convert to integer if no fractional part so that .0 doesn't show.
+    (num - num.to_i < 0.0001) ? num.to_i : num
+  end
 end

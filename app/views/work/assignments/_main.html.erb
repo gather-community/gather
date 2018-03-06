@@ -1,45 +1,52 @@
 <% cache @cache_key do %>
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
   <% @build_blank_assignments.call %>
-  <div class="assignments-main">
+  <div class="assignments-main row clearfix">
     <% if jobs.empty? %>
-      <div class="none-found">
+      <div class="col-sm-12 none-found">
         No jobs found. <%= lenses.no_result_clear_filter_link %>
       </div>
     <% else %>
-      <table class="index part-width">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Date/Time</th>
-            <th>Hours</th>
-            <th>Owner</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% jobs.each do |job| %>
-            <% job.shifts.each do |shift| %>
-              <% shift = shift.decorate %>
-              <% shift.assignments.each do |assignment| %>
-                <tr>
-                  <td><%= link_to(job.title, job) %></td>
-                  <td class="shift-times"><%= shift.times %></td>
-                  <td class="hours"><%= shift.hours_formatted %></td>
-                  <td class="owner">
-                    <% if assignment.user %>
-                      <%= assignment.user.decorate.name_with_inactive %>
-                    <% else %>
-                      Sign up!
-                    <% end %>
-                  </td>
-                  <td></td>
-                </tr>
-              <% end %>
-            <% end %>
+      <% jobs.each do |job| %>
+        <% job.shifts.each do |shift| %>
+          <% shift = shift.decorate %>
+          <% shift.assignments.each do |assignment| %>
+            <div class="assignment-card col-sm-6 col-md-4 col-lg-3 clearfix">
+              <div class="inner">
+                <table>
+                  <tr>
+                    <td rowspan="2">
+                      <div class="main-info">
+                        <%= link_to(job.title, job, class: "title") %>
+                        <div class="shift-times"><%= shift.times %></div>
+                        <div class="owner-name">
+                          <% if assignment.user %>
+                            <%= assignment.user.decorate.name_with_inactive %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hours">
+                      <div title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
+                        <%= shift.hours_formatted %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="photo-cell">
+                      <% if assignment.user %>
+                        <%= user_photo_if_permitted(assignment.user, :thumb) %>
+                      <% else %>
+                        <a href="#" class="signup">Sign Up!</a>
+                      <% end %>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
           <% end %>
-        </tbody>
-      </table>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 <% end %>

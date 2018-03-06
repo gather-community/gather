@@ -1,11 +1,81 @@
-.work--assignments {
-  &.action-index {
-    td.shift-times, td.hours {
-      white-space: nowrap;
-    }
+.assignment-card {
+  margin-bottom: 20px;
 
-    td.owner {
-      min-width: 150px;
+  .inner {
+    background-color: $fainter-gray;
+    padding: 10px;
+    height: 95px;
+    overflow-y: auto;
+  }
+
+  table {
+    width: 100%;
+
+    tr {
+      border: none;
+
+      td {
+        padding: 0;
+        padding-left: 0;
+        line-height: 17px;
+      }
+
+      td.photo-cell, td.hours {
+        text-align: right;
+      }
+
+      // Hours + photo = 75px + 20px padding = 95px block height
+      td.hours {
+        height: 25px;
+      }
+
+      td.photo-cell {
+        height: 50px;
+        vertical-align: bottom;
+      }
     }
+  }
+
+  .title {
+    font-size: 15px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .shift-times {
+    margin-bottom: 4px;
+  }
+
+  .hours {
+    float: right;
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 10px;
+  }
+
+  .owner-name {
+    font-weight: bold;
+  }
+
+  .signup {
+    color: $theme-accent;
+    font-weight: bold;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  .photo, .photo-placeholder {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+  }
+
+  .photo-placeholder {
+    color: white;
+    background-color: $theme-accent;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 10px;
   }
 }

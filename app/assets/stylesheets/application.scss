@@ -1,3 +1,5 @@
+@import "global/bootstrap_variables";
+
 // Vendor
 @import "select2";
 @import "bootstrap-sprockets";
@@ -15,7 +17,6 @@
 
 // App
 @import "global/bootstrap_overrides";
-@import "global/bootstrap_variables";
 @import "global/variables";
 @import "global/**/*";
 @import "local/**/*";

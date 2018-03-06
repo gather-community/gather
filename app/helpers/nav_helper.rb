@@ -105,7 +105,7 @@ module NavHelper
           parent: :work,
           path: work_assignments_path,
           permitted: policy(Work::Assignment.new(shift: sample_shift)).index?,
-          icon: "hand-paper-o"
+          icon: "briefcase"
         },{
           name: :jobs,
           parent: :work,

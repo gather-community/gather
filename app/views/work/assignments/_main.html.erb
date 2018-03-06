@@ -22,6 +22,7 @@
                         <div class="owner-name">
                           <% if assignment.user %>
                             <%= assignment.user.decorate.name_with_inactive %>
+                            &nbsp;<%= icon_tag("thumb-tack") if assignment.preassigned? %>
                           <% end %>
                         </div>
                       </div>

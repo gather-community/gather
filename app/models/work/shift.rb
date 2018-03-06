@@ -8,6 +8,8 @@ class Work::Shift < ApplicationRecord
     :full_community?, to: :job, prefix: true
   delegate :community, :period_starts_on, :period_ends_on, to: :job
 
+  scope :by_time, -> { order(:starts_at, :ends_at) }
+
   before_validation :normalize
 
   validates :starts_at, :ends_at, presence: true, unless: :job_full_period?

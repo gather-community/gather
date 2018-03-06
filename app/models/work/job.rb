@@ -7,7 +7,7 @@ module Work
 
     belongs_to :period, class_name: "Work::Period"
     belongs_to :requester, class_name: "People::Group"
-    has_many :shifts, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
+    has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
     has_many :assignments, class_name: "Work::Assignment", inverse_of: :job, dependent: :destroy
 
     scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }

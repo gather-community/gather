@@ -7,4 +7,4 @@ Gather.Views.Work.AssignmentsView = Backbone.View.extend
     $.ajax
       url: window.location.href
       cache: false
-      success: (html) => @$(".assignments-main").html(html)
+      success: (html) => @$(".assignments-main").replaceWith(html)

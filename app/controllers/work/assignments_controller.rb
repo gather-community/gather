@@ -41,7 +41,7 @@ module Work
     def build_blank_assignments
       @jobs.each do |job|
         job.shifts.each do |shift|
-          shift.assignments.build unless shift.all_slots_taken?
+          shift.unfilled_slots.times { shift.assignments.build }
         end
       end
     end

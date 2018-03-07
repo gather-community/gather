@@ -16,6 +16,19 @@ module FeatureSpecHelpers
     find(".select2-dropdown .select2-results li", text: /#{value}/).click
   end
 
+  def pick_datetime(selector, day:, hour:, next_click: "body")
+    find("#{selector} .input-group-btn button").click
+    within(".bootstrap-datetimepicker-widget") do
+      find(".datepicker-days td", text: day).click
+      find("[data-action=togglePicker]").click
+      sleep 0.25 # If we don't sleep here, the click doesn't seem to register properly.
+      find("[data-action=showHours]").click
+      sleep 0.25
+      find(".timepicker-hours td", text: hour.to_s.rjust(2, "0")).click
+    end
+    find(next_click).click # Get out of the picker.
+  end
+
   def click_main_nav(name)
     find(".main-nav a", text: name).click
   end
@@ -30,7 +43,13 @@ module FeatureSpecHelpers
   end
 
   def enter_datetime(value, into:)
+    value = I18n.l(Time.parse(value), format: :full_datetime)
     find(".#{into} input.datetime_picker").set(value)
+  end
+
+  def enter_date(value, into:)
+    value = I18n.l(Date.parse(value), format: :full)
+    find(".#{into} input.date_picker").set(value)
   end
 
   def expect_success
@@ -202,8 +221,8 @@ module FeatureSpecHelpers
     Capybara.app_host = "http://#{host}"
   end
 
-  def select_lens(lens_id, value)
-    first(:css, "##{lens_id}").select(value)
+  def select_lens(lens_param_name, value)
+    first(:css, "[data-param-name=#{lens_param_name}]").select(value)
   end
 
   def click_print_button

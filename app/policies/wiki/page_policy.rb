@@ -6,7 +6,7 @@
       def resolve
         if active_cluster_admin?
           scope
-        elsif active?
+        else
           scope.in_community(user.community)
         end
       end

@@ -1,6 +1,7 @@
 <% if Rails.env.production? && Settings.google_analytics_tag && request.headers["DNT"] != "1" %>
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Settings.google_analytics_tag %>"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Settings.google_analytics_tag %>">
+  </script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -21,13 +22,15 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<%= stylesheet_link_tag    'application', media: 'all' %>
-<%= javascript_include_tag 'application' %>
+<%= stylesheet_link_tag "application", media: "all" %>
+<%= javascript_include_tag "application" %>
 <%= csrf_meta_tags %>
 
 <%# CDN stuff %>
-<link href="//fonts.googleapis.com/css?family=Montserrat+Alternates:700" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet" type="text/css">
+<%= css = %w[
+  //fonts.googleapis.com/css?family=Montserrat+Alternates:700
+  //fonts.googleapis.com/css?family=Raleway:400,600
+].map { |url| stylesheet_link_tag(url) }.reduce(:<<) %>
 
 <%= javascript_tag do %>
   $(function() { new Gather.Views.ApplicationView(); });

@@ -1,12 +1,11 @@
 <% content_for(:title) { "Directory" } %>
 <% content_for(:print_title) { "#{current_community.name} Directory" } %>
-
 <% content_for(:top_buttons) do %>
   <%= print_button %>
   <% if policy(sample_user).create? %>
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= icon_tag("plus") %> Add User <span class="caret"></span>
+        <%= icon_tag("plus") %></span>
       </button>
       <ul class="dropdown-menu">
         <li><%= link_to("Create Adult", new_user_path) %></li>
@@ -19,10 +18,10 @@
 
 <% if @users.empty? %>
   <div class="none-found">
-    No users found<%= params[:search].blank? ? "" : " matching '#{params[:search]}'" %>.
+    No users found. <%= lenses.no_result_clear_filter_link %>.
   </div>
 <% else %>
-  <% if %w(table tableall).include?(lens[:user_view]) %>
+  <% if lenses[:view].any_table? %>
     <div class="index-wrapper">
       <table id="directory-table" class="index">
         <thead>
@@ -84,8 +83,8 @@
 
   <div class="index-footer row">
     <div class="col-sm-6">
-      <div class="<%= "hidden-print" unless lens[:user_view] == "tableall" %>">
-        <%= paginate @users unless lens[:user_view] == "table" %>
+      <div class="<%= "hidden-print" unless lenses[:view].tableall? %>">
+        <%= paginate @users unless lenses[:view].table? %>
       </div>
       <div class="visible-print"><%= generated_time %></div>
     </div>
@@ -97,6 +96,6 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.People.DirectoryPrintView({viewType: '<%= lens[:user_view] %>'});
+    new Gather.Views.People.DirectoryPrintView({viewType: '<%= lenses[:view].value %>'});
   });
 <% end %>

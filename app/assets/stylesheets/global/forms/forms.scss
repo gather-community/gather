@@ -60,22 +60,22 @@ form {
       margin-bottom: 0;
     }
 
-    .error {
-      color: $error-red;
-      display: block;
-      background-color: $error-red-bg;
-      padding: 0 5px;
-      border: 1px solid $error-red-border;
-      margin-top: 5px;
-      margin-bottom: 5px;
-
-      &:first-letter {
-        text-transform: uppercase;
-      }
-    }
-
     &.base-error {
       padding-bottom: 15px;
+    }
+  }
+
+  .error {
+    color: $error-red;
+    display: block;
+    background-color: $error-red-bg;
+    padding: 0 5px;
+    border: 1px solid $error-red-border;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    &:first-letter {
+      text-transform: uppercase;
     }
   }
 
@@ -89,6 +89,7 @@ form {
 
   .form-actions .btn {
     margin-left: 10px;
+    min-width: 75px;
   }
 
   // Allow hiding the time picker switch with special class.

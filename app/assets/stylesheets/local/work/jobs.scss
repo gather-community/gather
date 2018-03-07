@@ -1,0 +1,47 @@
+.work--jobs {
+
+  &.action-index {
+    td.title {
+      min-width: 300px;
+
+      i {
+        color: $gray-text;
+        margin-left: 5px;
+      }
+    }
+
+    td.requester {
+      min-width: 200px;
+    }
+
+    td.hours, td.slots {
+      width: 50px;
+    }
+  }
+
+  form {
+    #work_job_description {
+      height: 140px;
+    }
+
+    .form-group.work_job_hours_per_shift,
+    .period-date,
+    .unlimited {
+      display: none;
+    }
+  }
+
+  #shift-table {
+    margin-bottom: 5px;
+  }
+
+  #shift-rows {
+    .shift-slots {
+      width: 75px;
+    }
+
+    .delete {
+      text-align: right;
+    }
+  }
+}

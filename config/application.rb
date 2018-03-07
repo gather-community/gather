@@ -17,9 +17,8 @@ module Gather
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'UTC'
 
-    config.i18n.load_path += Dir["#{Rails.root.to_s}/config/locales/**/*.{rb,yml}"]
-
-    config.autoload_paths += ["#{Rails.root}/app/mailers/concerns", "#{Rails.root}/lib"]
+    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
+    config.autoload_paths += [Rails.root.join("app/mailers/concerns"), Rails.root.join("lib")]
 
     config.active_job.queue_adapter = :delayed_job
 
@@ -33,6 +32,8 @@ module Gather
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
     config.middleware.insert_before Warden::Manager, DisableTenantScoping
+
+    config.middleware.use I18n::JS::Middleware
 
     Devise.setup do |config|
       config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret
@@ -52,5 +53,10 @@ module Gather
     end
 
     config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
+
+    config.active_record.time_zone_aware_types = [:datetime]
+
+    # Currently, fr is only available for testing purposes.
+    I18n.available_locales = %i(en fr)
   end
 end

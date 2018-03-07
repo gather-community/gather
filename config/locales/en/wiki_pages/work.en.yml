@@ -1,0 +1,19 @@
+en:
+  work:
+    no_periods_html: "There are no active work periods. Please %{link}."
+    create_one: "create one first"
+  work/jobs:
+    shifts: "Shifts"
+    unlimited: "Unlimited"
+    shift_col_headers:
+      start_time: "Start Time"
+      end_time: "End Time"
+      hours: "Hours"
+      slots: "# of Slots"
+  work/shares:
+    portion_options:
+      none: "No Share"
+      half: "Half Share"
+      full: "Full Share"
+    intro: "How should the community's work be divided? Most people should get a full share, but in some cases exceptions are needed. A half share means the person will do half as many hours as a person with a full share, etc."
+    change_warning: "This period is not in the draft phase and changing shares will affect work quota calcuations. Proceed with caution!"

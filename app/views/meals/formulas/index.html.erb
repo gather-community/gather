@@ -6,22 +6,28 @@
   <% end %>
 <% end %>
 
-<table class="index part-width">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Meals</th>
-      <th>Created On</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% formulas.each do |formula| %>
-      <tr class="<%= formula.tr_classes %>">
-        <td class="name"><%= link_to(formula.name_with_suffix, meals_formula_path(formula)) %></td>
-        <td class="meal-count"><%= formula.meal_count %></td>
-        <td class="created-at"><%= formula.created_on %></td>
+<% if formulas.empty? %>
+  <div class="none-found">
+    No formulas found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Meals</th>
+        <th>Created On</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% formulas.each do |formula| %>
+        <tr class="<%= formula.tr_classes %>">
+          <td class="name"><%= link_to(formula.name_with_suffix, meals_formula_path(formula)) %></td>
+          <td class="meal-count"><%= formula.meal_count %></td>
+          <td class="created-at"><%= formula.created_on %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -2,7 +2,7 @@ module Reservations
   class Reservation < ApplicationRecord
     NAME_MAX_LENGTH = 24
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     self.table_name = "reservations"
 
@@ -14,6 +14,7 @@ module Reservations
     belongs_to :meal
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
+    scope :oldest_first, -> { order(:starts_at, :ends_at) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
     # and sponsor_community for other uses.
@@ -87,7 +88,7 @@ module Reservations
     end
 
     def future?
-      starts_at.future?
+      starts_at.try(:future?)
     end
 
     def recently_created?

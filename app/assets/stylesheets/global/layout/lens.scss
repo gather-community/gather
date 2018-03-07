@@ -13,11 +13,11 @@
       width: 150px;
     }
 
-    select#community { width: 155px; }
-    select#time { width: 120px; }
-    select#life_stage { width: 160px; }
-    select#user_sort { width: 110px; }
-    select#user_view { width: 90px; }
+    select[data-param-name=community] { width: 155px; }
+    select[data-param-name=time] { width: 120px; }
+    select[data-param-name=lifestage] { width: 160px; }
+    select[data-param-name=sort] { width: 110px; }
+    select[data-param-name=view] { width: 90px; }
 
     a.clear {
       color: #666;

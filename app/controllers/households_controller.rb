@@ -10,10 +10,10 @@ class HouseholdsController < ApplicationController
     @households = policy_scope(Household)
     respond_to do |format|
       format.html do
-        prepare_lens({community: {required: true}}, :search)
+        prepare_lenses({community: {required: true}}, :search)
         @households = @households.includes(users: :children)
         @households = @households.in_community(current_community)
-        @households = @households.matching(lens[:search]) if lens[:search].present?
+        @households = @households.matching(lenses[:search].value) if lenses[:search].present?
         @households = @households.by_active_and_name.page(params[:page])
       end
 
@@ -86,11 +86,11 @@ class HouseholdsController < ApplicationController
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
 
     if @accounts.size > 1
-      prepare_lens(community: {required: true, subdomain: false})
-      @community = if lens[:community].try(:match, Community::SLUG_REGEX)
-        Community.find_by(slug: lens[:community])
-      elsif lens[:community].try(:match, /\d+/)
-        Community.find(lens[:community])
+      prepare_lenses(community: {required: true, subdomain: false})
+      @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
+        Community.find_by(slug: lenses[:community].value)
+      elsif lenses[:community].value.try(:match, /\d+/)
+        Community.find(lenses[:community].value)
       end
     end
 

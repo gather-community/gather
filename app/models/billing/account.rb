@@ -2,7 +2,7 @@ module Billing
   class Account < ApplicationRecord
     RECENT_STATEMENT_WINDOW = 24.hours
 
-    acts_as_tenant(:cluster)
+    acts_as_tenant :cluster
 
     belongs_to :household, inverse_of: :accounts
     belongs_to :community

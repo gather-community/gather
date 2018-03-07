@@ -30,7 +30,7 @@ describe MealPolicy do
     end
 
     permissions :new?, :create?, :administer?, :destroy?, :update_formula? do
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
     permissions :update_formula? do
@@ -52,7 +52,7 @@ describe MealPolicy do
     end
 
     permissions :set_menu?, :close?, :cancel? do
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
         set_head_cook(user)
@@ -70,7 +70,7 @@ describe MealPolicy do
     permissions :reopen? do
       before { meal.close! }
 
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits if day prior to meal" do
         Timecop.travel(meal.served_at - 1.day) do
@@ -102,7 +102,7 @@ describe MealPolicy do
         meal.served_at = Time.now - 30.minutes
       end
 
-      it_behaves_like "permits admins or special role but not regular users", "biller"
+      it_behaves_like "permits admins or special role but not regular users", :biller
 
       it "forbids if meal already cancelled" do
         stub_status("cancelled")
@@ -128,7 +128,7 @@ describe MealPolicy do
     end
 
     permissions :send_message? do
-      it_behaves_like "permits admins or special role but not regular users", "meals_coordinator"
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits team members" do
         meal.assignments.build(user: user)

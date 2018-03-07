@@ -1,0 +1,36 @@
+<% content_for(:title, "Work Periods") %>
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_period).create? %>
+    <%= link_to(icon_tag("plus") << " Create Period",
+      new_work_period_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if periods.empty? %>
+  <div class="none-found">
+    No periods found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Phase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% periods.each do |period| %>
+        <tr>
+          <td class="name"><%= link_to(period.name, edit_work_period_path(period)) %></td>
+          <td class="start-date"><%= l(period.starts_on) %></td>
+          <td class="end-date"><%= l(period.ends_on) %></td>
+          <td class="phase"><%= t("simple_form.options.work_period.phase.#{period.phase}") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate periods %>
+<% end %>

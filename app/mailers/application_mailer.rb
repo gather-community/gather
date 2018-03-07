@@ -11,6 +11,8 @@ class ApplicationMailer < ActionMailer::Base
   # and whether users have opted out of a given type of mail.
   # Mails to households should be addressed to all the household users, not to each user separately.
   #
+  # Also filters out fake users so that emails are not sent to their fake addresses.
+  #
   # If self.community returns a non-nil value, sets the appropriate subdomain.
   def mail(params)
     params[:to] = resolve_recipients(params[:to])
@@ -29,9 +31,9 @@ class ApplicationMailer < ActionMailer::Base
   def resolve_recipients(recipients)
     Array.wrap(recipients).map do |recipient|
       if recipient.is_a?(User)
-        recipient.email
+        recipient.fake? ? nil : recipient.email
       elsif recipient.is_a?(Household)
-        recipient.users.map(&:email)
+        recipient.users.reject(&:fake?).map(&:email)
       else
         recipient
       end

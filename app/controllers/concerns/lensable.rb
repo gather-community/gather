@@ -3,19 +3,11 @@ module Lensable
   extend ActiveSupport::Concern
 
   included do
-    attr_reader :lens
-    helper_method :lens
+    attr_reader :lenses
+    helper_method :lenses
   end
 
-  def prepare_lens(*fields)
-    @lens = Lens.new(context: self, fields: fields, params: params)
-  end
-
-  def lens_communities
-    if lens[:community] == "all" || lens[:community].blank?
-      current_cluster.communities
-    else
-      current_community
-    end
+  def prepare_lenses(*lens_names)
+    @lenses = Lens::Set.new(context: self, lens_names: lens_names, route_params: params)
   end
 end

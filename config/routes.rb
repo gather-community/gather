@@ -100,6 +100,11 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :work do
+    resources :jobs
+    resources :periods, except: :show
+  end
+
   resources :uploads, only: [:create, :destroy]
 
   namespace :admin do
@@ -113,7 +118,7 @@ Rails.application.routes.draw do
   get "about/privacy-policy", to: "landing#privacy_policy"
 
   authenticated :user do
-    root to: "users#index", as: :authenticated_root
+    root to: "home#index", as: :authenticated_root
   end
 
   root to: "landing#index"

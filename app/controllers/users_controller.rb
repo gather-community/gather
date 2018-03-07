@@ -15,13 +15,13 @@ class UsersController < ApplicationController
         load_users
 
         # Pagination
-        if params[:printalbum] || lens[:user_view] == "table"
+        if params[:printalbum] || lenses[:view].table?
           # We first check for the printalbum param because that overrides any lens pagination stuff.
           # If it's set, (or if view is 'table') we're showing all active users with no pagination.
           @users = @users.active
-        elsif lens[:user_view].blank? || lens[:user_view] == "album"
+        elsif lenses[:view].blank? || lenses[:view].album?
           @users = @users.page(params[:page]).per(36)
-        elsif lens[:user_view] == "tableall"
+        elsif lenses[:view].tableall?
           @users = @users.page(params[:page]).per(100)
         end
 
@@ -165,20 +165,21 @@ class UsersController < ApplicationController
   private
 
   def load_users
-    prepare_lens({community: {required: true}}, :life_stage, :user_sort, :user_view, :search)
+    prepare_lenses({community: {required: true}}, :"people/life_stage", :"people/sort",
+      :"people/view", :search)
     @community = current_community
     load_communities_in_cluster
-    lens.remove_field(:life_stage) unless policy(sample_user).index_children_for_community?(@community)
+    lenses.remove_lens(:"people/life_stage") unless policy(sample_user).index_children_for_community?(@community)
     @users = @users.includes(household: :community)
     @users = @users.in_community(@community)
-    @users = @users.matching(lens[:search]) if lens[:search].present?
-    @users = @users.in_life_stage(lens[:life_stage]) if lens[:life_stage].present?
+    @users = @users.matching(lenses[:search].value) if lenses[:search].present?
+    @users = @users.in_life_stage(lenses[:lifestage].value) if lenses[:lifestage].present?
 
     # Regular folks can't see inactive users.
     @users = @users.active unless policy(sample_user).show_inactive?
 
-    if lens[:user_sort].present?
-      @users = @users.by_active.sorted_by(lens[:user_sort])
+    if lenses[:sort].present?
+      @users = @users.by_active.sorted_by(lenses[:sort].value)
     else
       @users = @users.by_active.by_name
     end

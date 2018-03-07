@@ -1,7 +1,7 @@
 class Household < ApplicationRecord
   include Deactivatable
 
-  acts_as_tenant(:cluster)
+  acts_as_tenant :cluster
 
   belongs_to :community
   has_many :accounts, -> { joins(:community).includes(:community).order("LOWER(communities.name)") },

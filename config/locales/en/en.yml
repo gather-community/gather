@@ -8,6 +8,11 @@ en:
     inactive: "Inactive"
     cancelled: "Cancelled"
     unknown: "Unknown"
+    no_result_clear_filter_link_html: "You can try %{link}."
+    clearing_the_filter: "clearing the filters"
+    adults: "Adults"
+    children: "Children"
+    save: "Save"
 
   activerecord:
     models:
@@ -126,6 +131,20 @@ en:
         vet: "Veterinarian Info"
         caregivers: "Caregiver Info"
         health_issues: "Health Issues"
+      work/job:
+        description: "Description"
+        hours: "Hours"
+        hours_per_shift: "Hours per Shift"
+        period_id: "Period"
+        requester_id: "Requester"
+        slot_type: "Slot Type"
+        time_type: "Times"
+        title: "Title"
+      work/period:
+        name: "Name"
+        phase: "Phase"
+        starts_on: "Starts On"
+        ends_on: "Ends On"
       wiki/page:
         title: "Title"
         content: "Content"
@@ -172,12 +191,34 @@ en:
           attributes:
             title:
               reserved_slug: "This title is a special reserved word or phrase. Please choose another."
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Must equal or evenly divide %{hours} hours"
+            shifts:
+              more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
+              more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
+              no_shifts: "You must add at least one shift."
+              duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
+              different_length_shifts: "All shfits must be the same length."
+        work/period:
+          attributes:
+            ends_on:
+              not_after_start: "must be after start date"
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Shift must last for %{hours} hours"
+              elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
+            ends_at:
+              not_after_start: "must be after start time"
 
   custom_fields:
     labels:
       community:
         settings:
           time_zone: "Time Zone"
+          default_landing_page: "Default Landing Page"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -235,6 +276,11 @@ en:
     options:
       community:
         settings:
+          default_landing_page:
+            meals: "Meals"
+            directory: "Directory"
+            reservations: "Reservations"
+            wiki: "Wiki"
           billing:
             late_fee_policy:
               fee_type:
@@ -259,6 +305,8 @@ en:
     user:
       deactivate: "Deactivate User"
       destroy: "Delete User"
+    work/job:
+      destroy: "Delete Job"
 
   confirmations:
     household:
@@ -279,6 +327,10 @@ en:
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
+    work/job:
+      destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
+    work/period:
+      destroy: "Are you sure you want to delete the period '%{name}'? This action cannot be undone."
 
   activatables:
     user:
@@ -315,6 +367,10 @@ en:
       activate: "Formula activated successfully."
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
+    work/job:
+      destroy: "Job deleted successfully."
+    work/period:
+      destroy: "Period deleted successfully."
 
   date:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
@@ -336,11 +392,13 @@ en:
       date_wkday_no_yr: "%a %b %d"
       datetime_no_yr: "%a %b %d %l:%M%P"
       full_datetime: "%a %b %d %Y %l:%M%P"
-      machine_datetime_no_zone: "%Y-%m-%d %H:%M"
+      machine_readable: "%Y-%m-%d %H:%M"
       regular_time: "%l:%M%P"
       short_date: "%a %b %d"
+      short_date_with_yr: "%a %b %d %Y"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
+      url_date: "%Y-%m-%d"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -373,6 +431,8 @@ en:
         emergency_contacts:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
+      work_period:
+        name: "e.g. Summer 1969"
       wiki_page:
         comment: "A comment about this change."
     hints:
@@ -394,6 +454,11 @@ en:
       wiki_page:
         content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
+      work_job:
+        hours: "Estimated number of hours the job will take. Decimals allowed."
+        slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
+        hours_per_shift: "The amount of hours credit each shift is worth."
+        description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
     options:
       meal:
         time:
@@ -440,6 +505,25 @@ en:
         editable_by:
           everyone: "Everyone"
           wikiist: "Wikiists & Admins Only"
+      work_job:
+        slot_type:
+          fixed: "This is a regular job with a fixed number of slots"
+          full_single: "This job is for the full community (single shift)"
+          full_multiple: "This job is for the full community (multiple shifts)"
+        time_type:
+          date_time: "This job has a set date and time"
+          date_only: "This job is for a certain date or date range"
+          full_period: "This job is for the whole work period"
+        requester:
+          any: "Any Requester"
+          none: "No Requester"
+      work_period:
+        phase:
+          archived: "Archived"
+          draft: "Draft"
+          open: "Open"
+          pending: "Pending"
+          published: "Published"
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -453,6 +537,7 @@ en:
       cleaner_assigns: "Add Cleaner"
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
+      shifts: "Add Shift"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."
@@ -569,6 +654,10 @@ en:
       reservations:
         reservations: "Reservations"
         resources: "Resources"
+      work:
+        jobs: "Jobs"
+        shares: "Shares"
+        periods: "Periods"
     personal:
       profile: "Profile"
       accounts: "Accounts"
@@ -635,6 +724,7 @@ en:
     photographer: "Photographer"
     meals_coordinator: "Meals Coordinator"
     wikiist: "Wikiist"
+    work_coordinator: "Work Coordinator"
 
   phone_types:
     abbreviations:

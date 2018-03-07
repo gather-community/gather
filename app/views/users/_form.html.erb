@@ -22,7 +22,7 @@
 </div>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.Select2View({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',

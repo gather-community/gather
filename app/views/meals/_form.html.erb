@@ -92,7 +92,7 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(function(){
+  $(function() {
     new Gather.Views.Select2View({el: '.meal-form'});
     $("#meal_resource_ids").select2();
     new Gather.Views.DirtyChecker({el: '.meal-form'});

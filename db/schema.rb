@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180106185212) do
+ActiveRecord::Schema.define(version: 20180303010833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -222,6 +222,17 @@ ActiveRecord::Schema.define(version: 20180106185212) do
     t.index ["household_id"], name: "index_people_emergency_contacts_on_household_id"
   end
 
+  create_table "people_groups", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "community_id", "name"], name: "index_people_groups_on_cluster_id_and_community_id_and_name", unique: true
+    t.index ["cluster_id"], name: "index_people_groups_on_cluster_id"
+    t.index ["community_id"], name: "index_people_groups_on_community_id"
+  end
+
   create_table "people_guardianships", id: :serial, force: :cascade do |t|
     t.integer "child_id"
     t.integer "cluster_id", null: false
@@ -323,7 +334,7 @@ ActiveRecord::Schema.define(version: 20180106185212) do
   create_table "reservations", id: :serial, force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "ends_at"
+    t.datetime "ends_at", null: false
     t.string "kind"
     t.integer "meal_id"
     t.string "name", limit: 24, null: false
@@ -331,7 +342,7 @@ ActiveRecord::Schema.define(version: 20180106185212) do
     t.integer "reserver_id", null: false
     t.integer "resource_id", null: false
     t.integer "sponsor_id"
-    t.datetime "starts_at"
+    t.datetime "starts_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_reservations_on_cluster_id"
     t.index ["meal_id"], name: "index_reservations_on_meal_id"
@@ -525,6 +536,64 @@ ActiveRecord::Schema.define(version: 20180106185212) do
     t.index ["updator_id"], name: "index_wiki_pages_on_updator_id"
   end
 
+  create_table "work_jobs", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description", null: false
+    t.decimal "hours", precision: 6, scale: 2, null: false
+    t.decimal "hours_per_shift", precision: 6, scale: 2
+    t.integer "period_id", null: false
+    t.integer "requester_id"
+    t.string "slot_type", limit: 32, default: "fixed", null: false
+    t.string "time_type", limit: 32, default: "date_time", null: false
+    t.string "title", limit: 128, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "community_id", "period_id", "title"], name: "index_work_jobs_title_unique", unique: true
+    t.index ["cluster_id"], name: "index_work_jobs_on_cluster_id"
+    t.index ["community_id"], name: "index_work_jobs_on_community_id"
+    t.index ["period_id"], name: "index_work_jobs_on_period_id"
+    t.index ["requester_id"], name: "index_work_jobs_on_requester_id"
+  end
+
+  create_table "work_periods", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.date "ends_on", null: false
+    t.string "name", null: false
+    t.string "phase", default: "draft", null: false
+    t.date "starts_on", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
+    t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
+    t.index ["community_id"], name: "index_work_periods_on_community_id"
+    t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
+  end
+
+  create_table "work_shares", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "period_id", null: false
+    t.decimal "portion", precision: 4, scale: 3, default: "1.0", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["period_id", "user_id"], name: "index_work_shares_on_period_id_and_user_id", unique: true
+    t.index ["period_id"], name: "index_work_shares_on_period_id"
+    t.index ["user_id"], name: "index_work_shares_on_user_id"
+  end
+
+  create_table "work_shifts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.integer "job_id", null: false
+    t.integer "slots", null: false
+    t.datetime "starts_at"
+    t.datetime "updated_at", null: false
+    t.index ["job_id", "starts_at", "ends_at"], name: "index_work_shifts_on_job_id_and_starts_at_and_ends_at", unique: true
+    t.index ["job_id"], name: "index_work_shifts_on_job_id"
+  end
+
   add_foreign_key "accounts", "clusters"
   add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
@@ -548,6 +617,8 @@ ActiveRecord::Schema.define(version: 20180106185212) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
+  add_foreign_key "people_groups", "clusters"
+  add_foreign_key "people_groups", "communities"
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_pets", "clusters"
   add_foreign_key "people_pets", "households"
@@ -592,4 +663,14 @@ ActiveRecord::Schema.define(version: 20180106185212) do
   add_foreign_key "wiki_pages", "communities"
   add_foreign_key "wiki_pages", "users", column: "creator_id"
   add_foreign_key "wiki_pages", "users", column: "updator_id"
+  add_foreign_key "work_jobs", "clusters"
+  add_foreign_key "work_jobs", "communities"
+  add_foreign_key "work_jobs", "people_groups", column: "requester_id"
+  add_foreign_key "work_jobs", "work_periods", column: "period_id"
+  add_foreign_key "work_periods", "clusters"
+  add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_shares", "clusters"
+  add_foreign_key "work_shares", "users"
+  add_foreign_key "work_shares", "work_periods", column: "period_id"
+  add_foreign_key "work_shifts", "work_jobs", column: "job_id"
 end

@@ -95,6 +95,22 @@ module NavHelper
           icon: "bed"
         }
       ]
+    when :work
+      [
+        {
+          name: :jobs,
+          parent: :work,
+          path: work_jobs_path,
+          permitted: policy(Work::Job.new(community: current_community)).index?,
+          icon: "cogs"
+        },{
+          name: :periods,
+          parent: :work,
+          path: work_periods_path,
+          permitted: policy(Work::Period.new(community: current_community)).index?,
+          icon: "hourglass-half"
+        }
+      ]
     else
       []
     end
@@ -177,6 +193,6 @@ module NavHelper
   end
 
   def lens_path_if_present(controller)
-    Lens.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
+    Lens::Set.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
   end
 end

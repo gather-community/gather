@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Work
+  # Models a single signup for a single shift.
   class Assignment < ApplicationRecord
     acts_as_tenant :cluster
 

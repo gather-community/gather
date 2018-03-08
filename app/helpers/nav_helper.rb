@@ -201,9 +201,9 @@ module NavHelper
     i18n_sub_key = item[:parent] ? "#{item[:parent]}." : ""
     name = t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:i18n_key] || item[:name]}")
 
-    icon = item[:icon] ? icon_tag(item[:icon]) << " " : ""
+    icon = item[:icon] ? icon_tag(item[:icon]).dup << " " : ""
 
-    link_to(icon << " #{name}", item[:path], params)
+    link_to(icon.dup << " #{name}", item[:path], params)
   end
 
   def lens_path_if_present(controller)

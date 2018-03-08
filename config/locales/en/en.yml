@@ -528,8 +528,8 @@ en:
           published: "Published"
       work_shift:
         lens:
-          all: "All"
-          open: "Open"
+          all: "All Jobs"
+          open: "Open Jobs"
           me: "My Jobs"
           myhh: "My Household"
 

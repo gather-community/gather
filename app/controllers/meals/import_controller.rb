@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class ImportController < ApplicationController
     before_action :init_meal, except: :create
@@ -15,7 +17,7 @@ module Meals
     def download_meal_csv
       authorize @meal, :import?
       send_file(
-        "#{Rails.root}/app/assets/csv/sample_meal.csv",
+        Rails.root.join("app", "assets", "csv", "sample_meal.csv"),
         filename: "Sample_Meal.csv",
         type: "text/csv"
       )

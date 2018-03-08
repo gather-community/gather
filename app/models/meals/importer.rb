@@ -1,4 +1,6 @@
-require 'csv'
+# frozen_string_literal: true
+
+require "csv"
 
 module Meals
   # Imports meals
@@ -20,4 +22,3 @@ module Meals
     end
   end
 end
-

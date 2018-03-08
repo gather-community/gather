@@ -1,18 +1,19 @@
 en:
   common:
-    "true": "True"
-    "false": "False"
-    max: "Max"
-    num_in_total: "%{count} in total"
-    default: "Default"
-    inactive: "Inactive"
-    cancelled: "Cancelled"
-    unknown: "Unknown"
-    no_result_clear_filter_link_html: "You can try %{link}."
-    clearing_the_filter: "clearing the filters"
     adults: "Adults"
+    cancelled: "Cancelled"
     children: "Children"
+    clearing_the_filter: "clearing the filters"
+    default: "Default"
+    "false": "False"
+    inactive: "Inactive"
+    max: "Max"
+    no_result_clear_filter_link_html: "You can try %{link}."
+    num_in_total: "%{count} in total"
     save: "Save"
+    "true": "True"
+    unknown: "Unknown"
+    unlimited: "Unlimited"
 
   activerecord:
     models:

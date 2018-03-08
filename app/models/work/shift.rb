@@ -3,6 +3,8 @@
 module Work
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
+    UNLIMITED_SLOT_COUNT = 1e6
+
     # We set touch: true so that shift changes will update the job updated_at stamp, which
     # we use in a cache key.
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
@@ -51,7 +53,7 @@ module Work
     private
 
     def normalize
-      self.slots = 1e6 if job_full_community?
+      self.slots = UNLIMITED_SLOT_COUNT if job_full_community?
 
       if job_full_period?
         self.starts_at = period_starts_on.in_time_zone

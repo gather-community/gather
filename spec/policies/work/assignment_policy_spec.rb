@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Work::AssignmentPolicy do
@@ -64,12 +66,12 @@ describe Work::AssignmentPolicy do
 
     context "for regular user" do
       let(:actor) { user }
-      it { is_expected.to match_array(%i(job_id)) }
+      it { is_expected.to match_array(%i[job_id]) }
     end
 
     context "for work coordinator" do
       let(:actor) { work_coordinator }
-      it { is_expected.to match_array(%i(user_id job_id)) }
+      it { is_expected.to match_array(%i[user_id job_id]) }
     end
   end
 end

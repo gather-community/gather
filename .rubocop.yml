@@ -49,6 +49,10 @@ Metrics/AbcSize:
 Style/AsciiComments:
   Enabled: false
 
+Style/Documentation:
+  Exclude:
+    - "app/policies/**/*"
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 

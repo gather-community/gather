@@ -100,7 +100,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :assignments, path: :signups
+    resources :shifts, path: :signups
     resources :jobs
     resources :periods, except: :show
   end

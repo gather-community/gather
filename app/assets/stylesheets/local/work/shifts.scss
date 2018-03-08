@@ -1,7 +1,8 @@
-.assignment-card {
+.shift-card {
   margin-bottom: 20px;
   background-color: $fainter-gray;
   padding: 10px;
+  cursor: pointer;
 
   &.taken {
     background-color: $theme-accent-lightest;

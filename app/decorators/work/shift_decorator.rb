@@ -27,7 +27,7 @@ module Work
     end
 
     def photos
-      imgs = assignments[0...4].map { |a| h.user_photo_if_permitted(a.user, :thumb) }
+      imgs = assignments[0...4].map { |a| a.user.decorate.photo_if_permitted(:thumb) }
       imgs.insert(imgs.size - 2, h.tag(:br)) if imgs.size > 2
       imgs.reduce(:<<)
     end

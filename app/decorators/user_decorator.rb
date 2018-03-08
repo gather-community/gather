@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserDecorator < ApplicationDecorator
   delegate_all
 
@@ -80,7 +82,6 @@ class UserDecorator < ApplicationDecorator
     when "email" then "fa-envelope"
     when "text" then "fa-comment"
     when "phone" then "fa-phone"
-    else nil
     end
   end
 
@@ -88,21 +89,26 @@ class UserDecorator < ApplicationDecorator
     h.t("users.preferred_contact_tooltip", method: preferred_contact)
   end
 
+  def photo_if_permitted(format)
+    h.image_tag(h.policy(object).show_photo? ? photo.url(format) : "missing/users/#{format}.png",
+      class: "photo")
+  end
+
   def show_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
       ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object)),
       ActionLink.new(object, :impersonate, icon: "user-circle-o", path: h.impersonate_user_path(object),
-        method: :post)
+                                           method: :post)
     )
   end
 
   def edit_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_user_path(object),
-        method: :put, confirm: {name: name}),
+                                          method: :put, confirm: {name: name}),
       ActionLink.new(object, :destroy, icon: "trash", path: h.user_path(object), method: :delete,
-        confirm: {name: name})
+                                       confirm: {name: name})
     )
   end
 end

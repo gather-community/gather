@@ -52,6 +52,7 @@ Style/AsciiComments:
 Style/Documentation:
   Exclude:
     - "app/policies/**/*"
+    - "app/decorators/**/*"
 
 Style/EmptyMethod:
   EnforcedStyle: expanded

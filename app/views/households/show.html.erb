@@ -4,9 +4,9 @@
 <div class="row">
   <div class="col-sm-12">
     <div class="row">
-      <div class="col-sm-4 photos <%= @members.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
-        <% if @members.any? %>
-          <% @members.each do |user| %><%= user_photo_if_permitted(user, :medium) %><% end %>
+      <div class="col-sm-4 photos <%= members.size <= 2 ? 'two-or-less' : 'three-or-more' %>">
+        <% if members.any? %>
+          <% members.each do |user| %><%= user.photo_if_permitted(:medium) %><% end %>
         <% else %>
           <%= image_tag("missing/users/medium.png", class: "photo") %>
         <% end %>
@@ -16,7 +16,7 @@
           <%= render("households/unit_community", household: household) %>
           <%= render("households/attribs",
                 household: household,
-                members: @members,
+                members: members,
                 context: :household) %>
         </table>
       </div>

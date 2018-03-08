@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   before_action -> { nav_context(:people, :directory) }
 
-  decorates_assigned :household, :user
+  decorates_assigned :household, :user, :users
 
   def index
     authorize User

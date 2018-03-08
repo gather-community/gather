@@ -20,6 +20,11 @@ module NavHelper
         permitted: policy(Reservations::Reservation).index?,
         icon: "book"
       }, {
+        name: :work,
+        path: work_shifts_path,
+        permitted: policy(Work::Period.new(community: current_community)).index?,
+        icon: "info-circle"
+      }, {
         name: :wiki,
         path: "/wiki",
         permitted: policy(Wiki::Page.new(community: current_community)).show?,

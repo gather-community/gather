@@ -60,6 +60,7 @@ RSpec.configure do |config|
   config.include FeatureSpecHelpers, type: :feature
   config.include RequestSpecHelpers, type: :request
   config.include GeneralHelpers
+  config.include ActionDispatch::TestProcess
 
   VCR.configure do |c|
     c.cassette_library_dir = 'spec/cassettes'

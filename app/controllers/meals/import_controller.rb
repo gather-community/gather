@@ -7,23 +7,16 @@ module Meals
     end
 
     def create
-      @meal = Meal.new(
-        community_id: current_user.community_id,
-        community_ids: [current_user.community_id],
-        creator: current_user
-      )
-
-      importer = Meals::Importer.new(@meal)
+      authorize Meal, :import?
+      importer = Meals::Importer.new
       importer.import(params[:file])
-
-      authorize @meal, :import?
     end
 
     def download_meal_csv
       authorize @meal, :import?
       send_file(
         "#{Rails.root}/app/assets/csv/sample_meal.csv",
-        filename: "Sample_Meal_CSV.csv",
+        filename: "Sample_Meal.csv",
         type: "text/csv"
       )
     end

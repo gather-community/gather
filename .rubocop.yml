@@ -37,6 +37,7 @@ Metrics/BlockLength:
   Enabled: true
   Exclude:
     - spec/**/*
+    - config/routes.rb
 
 Metrics/LineLength:
   Enabled: true

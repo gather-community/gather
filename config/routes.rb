@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
@@ -37,8 +39,8 @@ Rails.application.routes.draw do
       get :summary
     end
 
-    resources :messages, only: [:new, :create], module: :meals
-    resource :finalize, only: [:new, :create], module: :meals, controller: :finalize
+    resources :messages, only: %i[new create], module: :meals
+    resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
 
   namespace :reservations do
@@ -63,7 +65,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :signups, only: [:create, :update]
+  resources :signups, only: %i[create update]
 
   resources :households do
     member do
@@ -73,11 +75,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :accounts, only: [:index, :show, :edit, :update] do
+  resources :accounts, only: %i[index show edit update] do
     collection do
       put :apply_late_fees
     end
-    resources :transactions, only: [:index, :new, :create]
+    resources :transactions, only: %i[index new create]
   end
 
   resources :statements, only: [:show] do
@@ -98,12 +100,12 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :assignments
+    resources :assignments, path: :signups
     resources :jobs
     resources :periods, except: :show
   end
 
-  resources :uploads, only: [:create, :destroy]
+  resources :uploads, only: %i[create destroy]
 
   namespace :admin do
     get "settings/:type", to: "settings#edit", as: :settings

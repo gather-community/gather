@@ -101,11 +101,11 @@ module NavHelper
       sample_shift = Work::Shift.new(job: sample_job)
       [
         {
-          name: :assignments,
+          name: :signups,
           parent: :work,
           path: work_assignments_path,
           permitted: policy(Work::Assignment.new(shift: sample_shift)).index?,
-          icon: "briefcase"
+          icon: "check"
         },{
           name: :jobs,
           parent: :work,

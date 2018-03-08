@@ -26,6 +26,12 @@ module Work
       to_int_if_no_fractional_part(hours)
     end
 
+    def photos
+      imgs = assignments[0...4].map { |a| h.user_photo_if_permitted(a.user, :thumb) }
+      imgs.insert(imgs.size - 2, h.tag(:br)) if imgs.size > 2
+      imgs.reduce(:<<)
+    end
+
     private
 
     def time_format

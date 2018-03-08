@@ -35,8 +35,8 @@ class Work::Shift < ApplicationRecord
     end
   end
 
-  def unfilled_slots
-    job_full_community? ? 1 : [slots - assignments.size, 0].max
+  def taken?
+    assignments.size >= slots
   end
 
   def elapsed_time

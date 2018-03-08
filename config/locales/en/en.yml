@@ -656,7 +656,7 @@ en:
         reservations: "Reservations"
         resources: "Resources"
       work:
-        assignments: "Assignments"
+        signups: "Signups"
         jobs: "Jobs"
         periods: "Periods"
     personal:

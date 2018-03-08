@@ -6,6 +6,7 @@ en:
       draft: "This period is in the draft phase so workers can't sign up for jobs yet."
       archived: "This period is archived so no edits are permitted."
     num_hours: "%{num} hours"
+    preassigned: "This slot was pre-assigned."
   work/jobs:
     shifts: "Shifts"
     unlimited: "Unlimited"

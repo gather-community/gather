@@ -1,7 +1,6 @@
 <% cache @cache_key do %>
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
-  <% @build_blank_assignments.call %>
-  <div class="assignments-main row clearfix">
+  <div class="assignments-main flowing-columns">
     <% if jobs.empty? %>
       <div class="col-sm-12 none-found">
         No jobs found. <%= lenses.no_result_clear_filter_link %>
@@ -10,42 +9,47 @@
       <% jobs.each do |job| %>
         <% job.shifts.each do |shift| %>
           <% shift = shift.decorate %>
-          <% shift.assignments.each do |assignment| %>
-            <div class="assignment-card col-sm-6 col-md-4 col-lg-3 clearfix">
-              <div class="inner">
-                <table>
-                  <tr>
-                    <td rowspan="2">
-                      <div class="main-info">
-                        <%= link_to(job.title, job, class: "title") %>
-                        <div class="shift-times"><%= shift.times %></div>
-                        <div class="owner-name">
-                          <% if assignment.user %>
-                            <%= assignment.user.decorate.name_with_inactive %>
-                            &nbsp;<%= icon_tag("thumb-tack") if assignment.preassigned? %>
-                          <% end %>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="hours">
-                      <div title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
-                        <%= shift.hours_formatted %>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="photo-cell">
-                      <% if assignment.user %>
-                        <%= user_photo_if_permitted(assignment.user, :thumb) %>
-                      <% else %>
-                        <a href="#" class="signup">Sign Up!</a>
+          <div class="assignment-card section <%= "taken" if shift.taken? %>">
+            <table>
+              <tr>
+                <td>
+                  <%= link_to(job.title, job, class: "title") %>
+              </td>
+                <td>
+                  <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
+                    <%= shift.hours_formatted %>h
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="shift-times"><%= shift.times %></div>
+                </td>
+                <td class="photo-cell" rowspan="2">
+                  <div class="photos <%= "single" if shift.assignments.size == 1 %>">
+                    <% if shift.taken? %>
+                      <%= shift.photos %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="owners-cell">
+                  <% shift.assignments.each do |assignment| %>
+                    <div class="owner-name">
+                      <%= assignment.user.decorate.name_with_inactive %>
+                      <% if assignment.preassigned? %>
+                        &nbsp;<%= icon_tag("thumb-tack", title: I18n.t("work.preassigned")) %>
                       <% end %>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          <% end %>
+                    </div>
+                  <% end %>
+                  <% unless shift.taken? %>
+                    <a href="#" class="signup-link">Sign Up!</a>
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          </div>
         <% end %>
       <% end %>
     <% end %>

@@ -10,10 +10,7 @@
 #directory-album {
   .user {
     margin-bottom: 20px;
-
-    .inner {
-      background-color: $fainter-gray;
-    }
+    background-color: $fainter-gray;
 
     // This trick prevents the layout from collapsing while the images are loading.
     .photo-wrapper {

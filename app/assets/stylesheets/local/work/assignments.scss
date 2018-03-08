@@ -1,11 +1,10 @@
 .assignment-card {
   margin-bottom: 20px;
+  background-color: $fainter-gray;
+  padding: 10px;
 
-  .inner {
-    background-color: $fainter-gray;
-    padding: 10px;
-    height: 95px;
-    overflow-y: auto;
+  &.taken {
+    background-color: $theme-accent-lightest;
   }
 
   table {
@@ -17,65 +16,78 @@
       td {
         padding: 0;
         padding-left: 0;
-        line-height: 17px;
-      }
-
-      td.photo-cell, td.hours {
-        text-align: right;
-      }
-
-      // Hours + photo = 75px + 20px padding = 95px block height
-      td.hours {
-        height: 25px;
-      }
-
-      td.photo-cell {
-        height: 50px;
-        vertical-align: bottom;
+        line-height: 18px;
       }
     }
+  }
+
+  .photos, .hours {
+    text-align: right;
   }
 
   .title {
     font-size: 15px;
     font-weight: bold;
     display: block;
-    margin-bottom: 4px;
-  }
-
-  .shift-times {
-    margin-bottom: 4px;
   }
 
   .hours {
     float: right;
     font-weight: bold;
-    font-size: 20px;
-    padding-bottom: 10px;
+    font-size: 15px;
+  }
+
+  .owners-cell {
+    vertical-align: bottom;
+  }
+
+  .shift-times {
+    margin-bottom: 4px;
+    font-weight: bold;
   }
 
   .owner-name {
-    font-weight: bold;
+    line-height: 20px;
+
+    .fa-circle-o {
+      font-size: 11px;
+      vertical-align: middle;
+    }
   }
 
-  .signup {
+  .signup-link {
     color: $theme-accent;
     font-weight: bold;
-    font-size: 15px;
     white-space: nowrap;
   }
 
-  .photo, .photo-placeholder {
+  .photo-cell {
+    vertical-align: bottom;
+    text-align: right;
+
+    // We don't want the height of cards to change too much so we reserve some space
+    // for people's names.
+    height: 50px;
+  }
+
+  .photos {
+    display: inline-block;
+
+    img {
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+    }
+
+    &.single img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .photo {
     width: 50px;
     height: 50px;
     display: inline-block;
-  }
-
-  .photo-placeholder {
-    color: white;
-    background-color: $theme-accent;
-    text-align: center;
-    vertical-align: middle;
-    padding-top: 10px;
   }
 }

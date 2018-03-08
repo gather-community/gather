@@ -1,4 +1,4 @@
-Gather.Views.Work.AssignmentsView = Backbone.View.extend
+Gather.Views.Work.ShiftsView = Backbone.View.extend
 
   initialize: (options) ->
     @refreshInterval = setInterval(@refresh.bind(this), 5000)
@@ -7,4 +7,4 @@ Gather.Views.Work.AssignmentsView = Backbone.View.extend
     $.ajax
       url: window.location.href
       cache: false
-      success: (html) => @$(".assignments-main").replaceWith(html)
+      success: (html) => @$(".shifts-main").replaceWith(html)

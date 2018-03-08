@@ -1,20 +1,19 @@
 <% cache @cache_key do %>
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
-  <div class="shifts-main flowing-columns">
-    <% if jobs.empty? %>
+  <div class="shifts-main">
+    <% if shifts.empty? %>
       <div class="col-sm-12 none-found">
         No jobs found. <%= lenses.no_result_clear_filter_link %>
       </div>
     <% else %>
-      <% jobs.each do |job| %>
-        <% job.shifts.each do |shift| %>
-          <% shift = shift.decorate %>
+      <div class="flowing-columns">
+        <% shifts.each do |shift| %>
           <div class="shift-card section <%= "taken" if shift.taken? %>"
             onclick="window.location.href='<%= work_shift_path(shift) %>'">
             <table>
               <tr>
                 <td>
-                  <%= link_to(job.title, shift, class: "title") %>
+                  <%= link_to(shift.job_title, shift, class: "title") %>
               </td>
                 <td>
                   <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
@@ -52,7 +51,7 @@
             </table>
           </div>
         <% end %>
-      <% end %>
+      </div>
     <% end %>
   </div>
 <% end %>

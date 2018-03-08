@@ -526,6 +526,13 @@ en:
           open: "Open"
           pending: "Pending"
           published: "Published"
+      work_shift:
+        lens:
+          all: "All"
+          open: "Open"
+          me: "My Jobs"
+          myhh: "My Household"
+
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

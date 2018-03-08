@@ -33,6 +33,9 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Metrics/AbcSize:
+  Max: 28
+
 Metrics/BlockLength:
   Enabled: true
   Exclude:
@@ -43,8 +46,9 @@ Metrics/LineLength:
   Enabled: true
   Max: 110
 
-Metrics/AbcSize:
-  Max: 20
+Metrics/MethodLength:
+  Enabled: true
+  Max: 12
 
 Style/AsciiComments:
   Enabled: false

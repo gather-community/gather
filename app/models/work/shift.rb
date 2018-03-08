@@ -10,12 +10,34 @@ module Work
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
     has_many :assignments, class_name: "Work::Assignment", inverse_of: :shift, dependent: :destroy
 
-    delegate :hours, :slot_type, :date_time?, :date_only?, :full_period?,
+    delegate :title, :hours, :slot_type, :date_time?, :date_only?, :full_period?,
       :full_community?, to: :job, prefix: true
     delegate :community, :period_starts_on, :period_ends_on, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
+    scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
+    scope :by_job_title, -> { joins(:job).order("LOWER(work_jobs.title)") }
+    scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
+    scope :open, lambda {
+      where("(SELECT COUNT(*) FROM work_assignments
+        WHERE work_assignments.shift_id = work_shifts.id) < slots")
+    }
+    scope :with_user, lambda { |users|
+      where("EXISTS (SELECT id FROM work_assignments
+        WHERE work_assignments.shift_id = work_shifts.id AND work_assignments.user_id IN (?))",
+        Array.wrap(users).map(&:id))
+    }
+    scope :matching, lambda { |search|
+      joins(:job, "LEFT OUTER JOIN people_groups ON people_groups.id = work_jobs.requester_id")
+        .where("
+          work_jobs.title ILIKE ?
+            OR people_groups.name ILIKE ?
+            OR EXISTS (SELECT id FROM users WHERE id IN (
+              SELECT user_id FROM work_assignments
+                WHERE shift_id = work_shifts.id AND (first_name ILIKE ? OR last_name ILIKE ?)))",
+          *(["%#{search}%"] * 4))
+    }
 
     before_validation :normalize
 

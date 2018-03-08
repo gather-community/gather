@@ -58,7 +58,9 @@
 
   .signup-link {
     color: $theme-accent;
+    display: inline-block;
     font-weight: bold;
+    margin-top: 10px;
     white-space: nowrap;
   }
 

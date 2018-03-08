@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# Powers the import page
 
 module Meals
   class ImportController < ApplicationController

@@ -24,7 +24,7 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
-    resource :import, only: %i(new create), controller: :import
+    resource :import, only: %i{new create}, controller: :import
     get "import/download_meal_csv"
   end
 

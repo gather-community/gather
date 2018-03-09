@@ -35,10 +35,8 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  config.use_transactional_fixtures = true
+  # We manage this with DatabaseCleaner.
+  config.use_transactional_fixtures = false
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -80,16 +78,5 @@ RSpec.configure do |config|
   config.around type: :request do |example|
     host!(Settings.url.host)
     example.run
-  end
-
-  # We have to set a default tenant to avoid NoTenantSet errors.
-  # We also reset TZ to default in case previous spec changed it.
-  Cluster.delete_all
-  cluster = FactoryBot.create(:cluster, name: "Default")
-  config.around do |example|
-    Time.zone = "UTC"
-    with_tenant(cluster) do
-      example.run
-    end
   end
 end

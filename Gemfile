@@ -54,6 +54,7 @@ group :development, :test do
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara-screenshot", "~> 1.0"
   gem "capybara", "~> 2.0"
+  gem "database_cleaner", "~> 1.6"
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "poltergeist", "~> 1.0"
   gem "rspec-rails", "~> 3.0"

@@ -5,6 +5,8 @@ module Work
   class Shift < ApplicationRecord
     UNLIMITED_SLOT_COUNT = 1e6
 
+    acts_as_tenant :cluster
+
     # We set touch: true so that shift changes will update the job updated_at stamp, which
     # we use in a cache key.
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true

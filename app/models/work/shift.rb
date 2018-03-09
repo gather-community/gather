@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Work
+  class SlotsExceededError < StandardError; end
+  class AlreadySignedUpError < StandardError; end
+
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
     UNLIMITED_SLOT_COUNT = 1e6
@@ -74,7 +77,26 @@ module Work
       @elapsed_time ||= ends_at - starts_at
     end
 
+    # Creates an assignment for the given user.
+    # Ensures max slots are not exceeded by competing writes.
+    # Raises a Work::SlotsExceededError if no slots left.
+    # Raises a Work::AlreadySignedUpError if no that user already signed up for this shift.
+    def signup_user(user_id)
+      repeatable_read_transaction_with_retries do
+        if current_assignments_count >= slots
+          raise Work::SlotsExceededError
+        else
+          assignments.create!(user_id: user_id)
+        end
+      end
+    end
+
     private
+
+    # Re-retrieves assignments_count so that we have the most recent data.
+    def current_assignments_count
+      reload.assignments_count
+    end
 
     def normalize
       self.slots = UNLIMITED_SLOT_COUNT if job_full_community?

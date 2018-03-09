@@ -1,12 +1,11 @@
 require "rails_helper"
 
 describe Work::Shift do
-  let(:job) { build(:work_job, hours: 2) }
-
   # This ensures that times aren't UTC even when there is a non-UTC timezone.
   before { Time.zone = "Saskatchewan" }
 
   describe "normalization" do
+    let(:job) { build(:work_job, hours: 2) }
     let(:shift) { build(:work_shift, submitted.merge(job: job)) }
 
     # Get the normalized values for the submitted keys.
@@ -85,6 +84,8 @@ describe Work::Shift do
   end
 
   describe "validation" do
+    let(:job) { build(:work_job, hours: 2) }
+
     describe "start must be before end" do
       it "is valid when start before end" do
         shift = build(:work_shift, job: job, starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 14:30")
@@ -164,6 +165,58 @@ describe Work::Shift do
             expect(shift.errors[:starts_at].join).to eq "Shift length must equal or evenly divide 1.5 hours"
           end
         end
+      end
+    end
+  end
+
+  # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
+  # inside nested transactions.
+  describe ".signup_user", database_cleaner: :truncate do
+    let(:job) { create(:work_job, shift_slots: 2) }
+    let(:shift) { job.shifts.first }
+    let!(:user1) { create(:user) }
+    let!(:user2) { create(:user) }
+    let!(:user3) { create(:user) }
+    let!(:assignment1) { create(:work_assignment, shift: shift, user: user1) }
+
+    context "with available slots" do
+      context "normal conditions" do
+        it "creates assignment and updates counter cache" do
+          shift.signup_user(user2.id)
+          expect(shift.reload.assignments.count).to eq 2
+          expect(shift.assignments_count).to eq 2
+        end
+      end
+
+      context "with two competing requests" do
+        before do
+          # We insert a new assignment via second database connection immediately AFTER the main
+          # connection (Shift model) retrieves the current assignment count but BEFORE it adds its own
+          # assignment to the DB.
+          allow(shift).to receive(:current_assignments_count) do
+            count = shift.reload.assignments_count
+            db = ApplicationRecord.establish_connection.connection
+            db.execute("INSERT INTO work_assignments (user_id, shift_id, cluster_id, created_at, updated_at)
+              VALUES (#{user2.id}, #{shift.id}, #{shift.cluster_id}, NOW(), NOW())")
+            db.execute("UPDATE work_shifts SET assignments_count = COALESCE(assignments_count, 0) + 1
+              WHERE id = #{shift.id}")
+            count
+          end
+        end
+
+        # This spec won't pass (i.e. both assignments will be inserted, thus exceeding the limit)
+        # unless we use isolation: :repeatable_read on the transaction in the method.
+        it "raises error for second request" do
+          expect { shift.signup_user(user3.id) }.to raise_error(Work::SlotsExceededError)
+        end
+      end
+    end
+
+    context "without available slots" do
+      let!(:assignment2) { create(:work_assignment, shift: shift, user: user2) }
+
+      it "raises error" do
+        expect { shift.signup_user(user2.id) }.to raise_error(Work::SlotsExceededError)
       end
     end
   end

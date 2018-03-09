@@ -15,7 +15,7 @@ module Work
       @cache_key = [@period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
 
       if request.xhr?
-        render partial: "main"
+        render partial: "shifts"
       elsif @period.draft? || @period.archived?
         flash.now[:notice] = t("work.notices.#{@period.phase}")
       end

@@ -15,11 +15,14 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each) do
+  # We use around hooks here because they are used for setting tenant and subdomain, and they run
+  # before `before` hooks, and these need to run before those.
+  config.around(:each) do |example|
     DatabaseCleaner.strategy = :transaction
+    example.run
   end
 
-  config.before(:each, type: :feature) do
+  config.around(:each, type: :feature) do |example|
     # :rack_test driver's Rack app under test shares database connection
     # with the specs, so continue to use transaction strategy for speed.
     driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
@@ -30,14 +33,17 @@ RSpec.configure do |config|
       # specs, so use truncation strategy.
       DatabaseCleaner.strategy = :truncation
     end
+    example.run
   end
 
-  config.before(:each, database_cleaner: :truncate) do
+  config.around(:each, database_cleaner: :truncate) do |example|
     DatabaseCleaner.strategy = :truncation
+    example.run
   end
 
-  config.before(:each) do
+  config.around(:each) do |example|
     DatabaseCleaner.start
+    example.run
   end
 
   config.append_after(:each) do

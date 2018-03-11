@@ -196,16 +196,14 @@ describe Work::Shift do
 
       context "with two competing requests" do
         before do
+          inserted = false
           # We insert a new assignment via second database connection immediately AFTER the main
           # connection (Shift model) retrieves the current assignment count but BEFORE it adds its own
           # assignment to the DB.
           allow(shift).to receive(:current_assignments_count) do
             count = shift.reload.assignments_count
-            db = ApplicationRecord.establish_connection.connection
-            db.execute("INSERT INTO work_assignments (user_id, shift_id, cluster_id, created_at, updated_at)
-              VALUES (#{user2.id}, #{shift.id}, #{shift.cluster_id}, NOW(), NOW())")
-            db.execute("UPDATE work_shifts SET assignments_count = COALESCE(assignments_count, 0) + 1
-              WHERE id = #{shift.id}")
+            insert_assignment_via_second_db_connection unless inserted
+            inserted = true
             count
           end
         end
@@ -214,6 +212,14 @@ describe Work::Shift do
         # unless we use isolation: :repeatable_read on the transaction in the method.
         it "raises error for second request" do
           expect { shift.signup_user(user3) }.to raise_error(Work::SlotsExceededError)
+        end
+
+        def insert_assignment_via_second_db_connection
+          db = ApplicationRecord.establish_connection.connection
+          db.execute("INSERT INTO work_assignments (user_id, shift_id, cluster_id, created_at, updated_at)
+            VALUES (#{user2.id}, #{shift.id}, #{shift.cluster_id}, NOW(), NOW())")
+          db.execute("UPDATE work_shifts SET assignments_count = COALESCE(assignments_count, 0) + 1
+            WHERE id = #{shift.id}")
         end
       end
     end

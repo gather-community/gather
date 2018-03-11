@@ -4,7 +4,7 @@ module Work
   # Controls job signup pages.
   class ShiftsController < ApplicationController
     before_action -> { nav_context(:work, :signups) }
-    decorates_assigned :shifts
+    decorates_assigned :shifts, :shift
     helper_method :sample_shift
 
     def index
@@ -12,13 +12,28 @@ module Work
       prepare_lenses(:search, :"work/shift", :"work/period")
       @period = lenses[:period].object
       scope_shifts
-      @cache_key = [@period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
+      @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
 
       if request.xhr?
         render partial: "shifts"
       elsif @period.draft? || @period.archived?
         flash.now[:notice] = t("work.notices.#{@period.phase}")
       end
+    end
+
+    # Called from AJAX on signup link click.
+    # If there are no slots left, shift card will include error message.
+    def signup
+      @shift = Shift.find(params[:id])
+      authorize @shift
+      begin
+        @shift.signup_user(current_user)
+      rescue SlotsExceededError
+        @error = t("work/shifts.slots_exceeded")
+      rescue AlreadySignedUpError
+        @error = t("work/shifts.already_signed_up")
+      end
+      render partial: "shift", locals: {shift: shift}
     end
 
     protected
@@ -36,7 +51,7 @@ module Work
 
     def scope_shifts
       @shifts = policy_scope(Shift).for_community(current_community).in_period(@period)
-        .includes(:job, assignments: :user).by_job_title
+        .includes(:job, assignments: :user).by_job_title.by_date
 
       case lenses[:shift].value
       when "open"

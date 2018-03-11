@@ -1,0 +1,16 @@
+<% cache @cache_key do %>
+  <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
+  <div class="shifts-main">
+    <% if shifts.empty? %>
+      <div class="col-sm-12 none-found">
+        No jobs found. <%= lenses.no_result_clear_filter_link %>
+      </div>
+    <% else %>
+      <div class="flowing-columns">
+        <% shifts.each do |shift| %>
+          <%= render "shift", shift: shift %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -182,7 +182,7 @@ describe Work::Shift do
     context "with available slots" do
       context "normal conditions" do
         it "creates assignment and updates counter cache" do
-          shift.signup_user(user2.id)
+          shift.signup_user(user2)
           expect(shift.reload.assignments.count).to eq 2
           expect(shift.assignments_count).to eq 2
         end
@@ -190,7 +190,7 @@ describe Work::Shift do
 
       context "if user already signed up" do
         it "raises error" do
-          expect { shift.signup_user(user1.id) }.to raise_error(Work::AlreadySignedUpError)
+          expect { shift.signup_user(user1) }.to raise_error(Work::AlreadySignedUpError)
         end
       end
 
@@ -213,7 +213,7 @@ describe Work::Shift do
         # This spec won't pass (i.e. both assignments will be inserted, thus exceeding the limit)
         # unless we use isolation: :repeatable_read on the transaction in the method.
         it "raises error for second request" do
-          expect { shift.signup_user(user3.id) }.to raise_error(Work::SlotsExceededError)
+          expect { shift.signup_user(user3) }.to raise_error(Work::SlotsExceededError)
         end
       end
     end
@@ -222,7 +222,7 @@ describe Work::Shift do
       let!(:assignment2) { create(:work_assignment, shift: shift, user: user2) }
 
       it "raises error" do
-        expect { shift.signup_user(user2.id) }.to raise_error(Work::SlotsExceededError)
+        expect { shift.signup_user(user2) }.to raise_error(Work::SlotsExceededError)
       end
     end
   end

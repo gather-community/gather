@@ -100,7 +100,11 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :shifts, path: :signups
+    resources :shifts, path: :signups do
+      member do
+        post :signup
+      end
+    end
     resources :jobs
     resources :periods, except: :show
   end

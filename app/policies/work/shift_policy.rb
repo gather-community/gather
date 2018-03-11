@@ -19,7 +19,11 @@ module Work
     end
 
     def show?
-      active_in_community?
+      index?
+    end
+
+    def signup?
+      index?
     end
 
     def new?

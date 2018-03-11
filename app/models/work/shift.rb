@@ -23,6 +23,7 @@ module Work
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :by_job_title, -> { joins(:job).order("LOWER(work_jobs.title)") }
+    scope :by_date, -> { order(:starts_at, :ends_at) }
     scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
     scope :open, lambda {
       where("(SELECT COUNT(*) FROM work_assignments
@@ -81,12 +82,16 @@ module Work
     # Ensures max slots are not exceeded by competing writes.
     # Raises a Work::SlotsExceededError if no slots left.
     # Raises a Work::AlreadySignedUpError if no that user already signed up for this shift.
-    def signup_user(user_id)
+    def signup_user(user)
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
-        raise Work::AlreadySignedUpError if assignments.where(user_id: user_id).any?
-        assignments.create!(user_id: user_id)
+        raise Work::AlreadySignedUpError if user_signed_up?(user)
+        assignments.create!(user_id: user.id)
       end
+    end
+
+    def user_signed_up?(user)
+      assignments.any? { |a| a.user_id == user.id }
     end
 
     private

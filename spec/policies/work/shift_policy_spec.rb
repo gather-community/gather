@@ -12,7 +12,7 @@ describe Work::ShiftPolicy do
   let(:actor) { user }
 
   describe "permissions" do
-    permissions :index?, :show? do
+    permissions :index?, :show?, :signup? do
       it_behaves_like "permits users in community only"
     end
 

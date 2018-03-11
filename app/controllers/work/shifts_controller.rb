@@ -39,7 +39,29 @@ module Work
       rescue AlreadySignedUpError
         @error = t("work/shifts.already_signed_up")
       end
-      render partial: "shift", locals: {shift: shift}
+
+      if request.xhr?
+        render partial: "shift", locals: {shift: shift}
+      else
+        if @error
+          flash[:error] = @error
+        else
+          flash[:success] = "You signed up successfully. Hooray!"
+        end
+        redirect_to(work_shift_path(@shift))
+      end
+    end
+
+    def unsignup
+      @shift = Shift.find(params[:id])
+      authorize @shift
+      begin
+        @shift.unsignup_user(current_user)
+        flash[:success] = "Your signup was removed successfully."
+      rescue NotSignedUpError
+        flash[:error] = t("work/shifts.not_signed_up")
+      end
+      redirect_to(work_shift_path(@shift))
     end
 
     protected

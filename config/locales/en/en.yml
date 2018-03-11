@@ -332,6 +332,8 @@ en:
       destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
     work/period:
       destroy: "Are you sure you want to delete the period '%{name}'? This action cannot be undone."
+    work/shift:
+      unsignup: "Are you sure you want to remove your name from this job?"
 
   activatables:
     user:
@@ -596,6 +598,9 @@ en:
       update_photo: "Edit Photo"
     wiki/page:
       history: "History"
+    work/shift:
+      signup: "Sign Up"
+      unsignup: "Remove Signup"
 
   calendars:
     meals: "Meals You're Attending"

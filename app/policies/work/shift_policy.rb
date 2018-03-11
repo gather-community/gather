@@ -26,6 +26,10 @@ module Work
       index?
     end
 
+    def unsignup?
+      index?
+    end
+
     def new?
       active_admin_or?(:work_coordinator)
     end

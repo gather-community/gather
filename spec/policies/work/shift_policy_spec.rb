@@ -5,14 +5,15 @@ require "rails_helper"
 describe Work::ShiftPolicy do
   include_context "policy objs"
 
-  let(:period) { build(:work_period, community: community) }
+  let(:phase) { "open" }
+  let(:period) { build(:work_period, community: community, phase: phase) }
   let(:job) { build(:work_job, period: period) }
   let(:shift) { build(:work_shift, job: job) }
   let(:record) { shift }
   let(:actor) { user }
 
   describe "permissions" do
-    permissions :index?, :show?, :signup? do
+    permissions :index?, :show?, :signup?, :unsignup? do
       it_behaves_like "permits users in community only"
     end
 

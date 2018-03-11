@@ -3,6 +3,7 @@
 module Work
   class SlotsExceededError < StandardError; end
   class AlreadySignedUpError < StandardError; end
+  class NotSignedUpError < StandardError; end
 
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
@@ -92,6 +93,12 @@ module Work
         raise Work::AlreadySignedUpError if user_signed_up?(user)
         assignments.create!(user_id: user.id)
       end
+    end
+
+    def unsignup_user(user)
+      assignment = assignments.detect { |a| a.user_id == user.id }
+      raise Work::NotSignedUpError unless assignment
+      assignment.destroy
     end
 
     def user_signed_up?(user)

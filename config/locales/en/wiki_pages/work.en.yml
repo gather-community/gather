@@ -24,7 +24,8 @@ en:
     change_warning: "This period is not in the draft phase and changing shares will affect work quota calcuations. Proceed with caution!"
   work/shifts:
     slots_exceeded: "Sorry, looks like someone beat you to it!"
-    already_signed_up: "Sorry, you've already signed up for this shift."
+    already_signed_up: "You've already signed up for this shift."
+    not_signed_up: "You have not signed up for this shift."
     empty_slots:
       one: "%{count} empty slot"
       other: "%{count} empty slots"

@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     resources :shifts, path: :signups, only: %i[index show] do
       member do
         post :signup
+        delete :unsignup
       end
     end
     resources :jobs

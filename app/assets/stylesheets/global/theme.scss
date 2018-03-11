@@ -15,7 +15,9 @@ p.inner {
 }
 
 a, a:visited {
-  color: $link-color;
+  &:not(.btn) {
+    color: $link-color;
+  }
 }
 
 a:hover {

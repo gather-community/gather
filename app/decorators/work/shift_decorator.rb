@@ -77,10 +77,10 @@ module Work
       signup_link =
         if user_signed_up?(h.current_user)
           ActionLink.new(object, :unsignup, icon: "times", path: h.unsignup_work_shift_path(object),
-                                            method: :delete, confirm: true)
+                                            btn_class: :danger, method: :delete, confirm: true)
         else
           ActionLink.new(object, :signup, icon: "bolt", path: h.signup_work_shift_path(object),
-                                          primary: true, method: :post)
+                                          btn_class: :primary, method: :post)
         end
       ActionLinkSet.new(signup_link)
     end

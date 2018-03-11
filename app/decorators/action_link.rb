@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 
 class ActionLink < ApplicationDecorator
-  attr_accessor :object, :action, :icon, :method, :path, :confirm, :primary
-  alias primary? primary
+  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class
 
-  def initialize(object, action, icon:, path:, primary: false, method: :get, confirm: false)
+  def initialize(object, action, icon:, path:, btn_class: :default, method: :get, confirm: false)
     self.object = object
     self.action = action
     self.icon = icon
     self.path = path
     self.method = method
     self.confirm = confirm
-    self.primary = primary
+    self.btn_class = btn_class
   end
 
   def render
     return @rendered if defined?(@rendered)
     @rendered =
       if h.policy(object).send("#{action}?")
-        css_class = primary? ? "btn-primary" : "btn-default"
-        params = {title: name, method: method, class: "btn #{css_class}"}
+        params = {title: name, method: method, class: "btn btn-#{btn_class}"}
         params[:data] = {confirm: confirm_msg} if confirm_msg
         h.link_to(icon_tag << name_tag, path, params)
       end

@@ -1,9 +1,11 @@
 Gather.Views.Work.ShiftsView = Backbone.View.extend
 
   initialize: (options) ->
+    @options = options
     @resetRefreshInterval()
 
   resetRefreshInterval: ->
+    return unless @options.autorefresh
     clearInterval(@refreshInterval) if @refreshInterval
     @refreshInterval = setInterval(@refresh.bind(this), 5000)
 

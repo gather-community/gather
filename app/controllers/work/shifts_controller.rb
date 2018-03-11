@@ -13,6 +13,7 @@ module Work
       @period = lenses[:period].object
       scope_shifts
       @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
+      @autorefresh = @period.draft? || @period.open?
 
       if request.xhr?
         render partial: "shifts"
@@ -50,19 +51,31 @@ module Work
     end
 
     def scope_shifts
-      @shifts = policy_scope(Shift).for_community(current_community).in_period(@period)
-        .includes(:job, assignments: :user).by_job_title.by_date
+      @shifts = policy_scope(Shift)
+        .for_community(current_community)
+        .in_period(@period)
+        .includes(:job, assignments: :user)
+        .by_job_title
+        .by_date
+      apply_shift_lens
+      apply_search_lens
+    end
 
-      case lenses[:shift].value
-      when "open"
-        @shifts = @shifts.open
-      when "me"
-        @shifts = @shifts.with_user(current_user)
-      when "myhh"
-        @shifts = @shifts.with_user(current_user.household.users)
-      end
+    def apply_shift_lens
+      @shifts =
+        case lenses[:shift].value
+        when "open"
+          @shifts.open
+        when "me"
+          @shifts.with_user(current_user)
+        when "myhh"
+          @shifts.with_user(current_user.household.users)
+        else
+          lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
+        end
+    end
 
-      @shifts = @shifts.from_requester(lenses[:shift].requester_id) if lenses[:shift].requester_id
+    def apply_search_lens
       @shifts = @shifts.matching(lenses[:search].value) if lenses[:search].present?
     end
   end

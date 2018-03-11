@@ -2,6 +2,6 @@
 <%= render "shifts" %>
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Work.ShiftsView({el: '#content'});
+    new Gather.Views.Work.ShiftsView({el: '#content', autorefresh: <%= @autorefresh.to_json %>});
   });
 <% end %>

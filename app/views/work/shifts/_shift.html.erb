@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <%= link_to(shift.job_title, shift, class: "title") %>
+        <%= shift.link_with_icon %>
     </td>
       <td>
         <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">

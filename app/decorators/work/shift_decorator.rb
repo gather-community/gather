@@ -4,6 +4,22 @@ module Work
   class ShiftDecorator < ApplicationDecorator
     delegate_all
 
+    def job_title_with_icon
+      str = "".html_safe << job_title
+      str << " " << full_community_icon if job_full_community?
+      str
+    end
+
+    def link_with_icon
+      link = h.link_to(job_title, object, class: "title")
+      link << " " << full_community_icon if job_full_community?
+      link
+    end
+
+    def full_community_icon
+      h.icon_tag("users", title: t("work/jobs.full_community"))
+    end
+
     def times
       if starts_at.to_date == ends_at.to_date
         if job_date_time?

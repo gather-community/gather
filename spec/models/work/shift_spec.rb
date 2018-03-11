@@ -188,6 +188,12 @@ describe Work::Shift do
         end
       end
 
+      context "if user already signed up" do
+        it "raises error" do
+          expect { shift.signup_user(user1.id) }.to raise_error(Work::AlreadySignedUpError)
+        end
+      end
+
       context "with two competing requests" do
         before do
           # We insert a new assignment via second database connection immediately AFTER the main

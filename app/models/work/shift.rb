@@ -83,11 +83,9 @@ module Work
     # Raises a Work::AlreadySignedUpError if no that user already signed up for this shift.
     def signup_user(user_id)
       repeatable_read_transaction_with_retries do
-        if current_assignments_count >= slots
-          raise Work::SlotsExceededError
-        else
-          assignments.create!(user_id: user_id)
-        end
+        raise Work::SlotsExceededError if current_assignments_count >= slots
+        raise Work::AlreadySignedUpError if assignments.where(user_id: user_id).any?
+        assignments.create!(user_id: user_id)
       end
     end
 

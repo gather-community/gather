@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309162447) do
+ActiveRecord::Schema.define(version: 20180311122643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -543,6 +543,7 @@ ActiveRecord::Schema.define(version: 20180309162447) do
     t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["cluster_id", "shift_id", "user_id"], name: "index_work_assignments_on_cluster_id_and_shift_id_and_user_id", unique: true
     t.index ["cluster_id"], name: "index_work_assignments_on_cluster_id"
     t.index ["shift_id"], name: "index_work_assignments_on_shift_id"
     t.index ["user_id"], name: "index_work_assignments_on_user_id"

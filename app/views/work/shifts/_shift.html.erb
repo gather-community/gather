@@ -32,7 +32,7 @@
             <% end %>
           </div>
         <% end %>
-        <% unless shift.taken? # || shift.user_signed_up?(current_user) %>
+        <% unless shift.taken? || shift.user_signed_up?(current_user) %>
           <a href="#" class="signup-link"><%= icon_tag("bolt") %> Sign Up!</a>
         <% end %>
       </td>

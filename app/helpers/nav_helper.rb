@@ -121,7 +121,7 @@ module NavHelper
             parent: :work,
             path: work_periods_path,
             permitted: policy(sample_period).index?,
-            icon: "hourglass-half"
+            icon: "folder-open"
           }
         ]
       else

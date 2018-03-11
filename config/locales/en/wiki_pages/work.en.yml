@@ -25,3 +25,6 @@ en:
   work/shifts:
     slots_exceeded: "Sorry, looks like someone beat you to it!"
     already_signed_up: "Sorry, you've already signed up for this shift."
+    empty_slots:
+      one: "%{count} empty slot"
+      other: "%{count} empty slots"

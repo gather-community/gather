@@ -22,6 +22,11 @@ module Work
       end
     end
 
+    def show
+      @shift = Shift.find(params[:id])
+      authorize @shift
+    end
+
     # Called from AJAX on signup link click.
     # If there are no slots left, shift card will include error message.
     def signup

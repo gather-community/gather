@@ -100,7 +100,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :shifts, path: :signups do
+    resources :shifts, path: :signups, only: %i[index show] do
       member do
         post :signup
       end

@@ -1,0 +1,14 @@
+<% content_for(:title, shift.job_title) %>
+
+<h2><%= shift.times %></h2>
+
+<dl class="shift-info icon-list bigger">
+  <dt><%= icon_tag("clock-o") %></dt><dd><%= shift.hours_formatted %>h</dd><br/>
+  <dt><%= icon_tag("folder-open") %></dt><dd><%= shift.period_name %></dd><br/>
+  <% if shift.requester_name %>
+    <dt><%= icon_tag("home") %></dt><dd><%= shift.requester_name %></dd><br/>
+  <% end %>
+  <dt><%= icon_tag("user") %></dt><dd><%= shift.assginees_with_empty_slots %></dd><br/>
+</dl>
+
+<%= safe_render_markdown(shift.job_description) %>

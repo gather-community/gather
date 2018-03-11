@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Work
   class ShiftDecorator < ApplicationDecorator
     delegate_all
@@ -30,6 +32,23 @@ module Work
       imgs = assignments[0...4].map { |a| a.user.decorate.photo_if_permitted(:thumb) }
       imgs.insert(imgs.size - 2, h.tag(:br)) if imgs.size > 2
       imgs.reduce(:<<)
+    end
+
+    def requester_name
+      job_requester.try(:name)
+    end
+
+    def assginees_with_empty_slots
+      [assignee_names.presence, empty_slot_count].compact.reduce(&sep(", "))
+    end
+
+    def assignee_names
+      links = assignments.by_user_name.map { |a| h.link_to(a.user.decorate.name_with_inactive, a.user) }
+      links.reduce(&sep(", "))
+    end
+
+    def empty_slot_count
+      empty_slots.positive? ? t("work/shifts.empty_slots", count: empty_slots) : nil
     end
 
     private

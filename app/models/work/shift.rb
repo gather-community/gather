@@ -15,9 +15,9 @@ module Work
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
     has_many :assignments, class_name: "Work::Assignment", inverse_of: :shift, dependent: :destroy
 
-    delegate :title, :hours, :slot_type, :date_time?, :date_only?, :full_period?,
-      :full_community?, to: :job, prefix: true
-    delegate :community, :period_starts_on, :period_ends_on, to: :job
+    delegate :title, :hours, :requester, :description, :slot_type, :date_time?, :date_only?,
+      :full_period?, :full_community?, to: :job, prefix: true
+    delegate :community, :period_name, :period_starts_on, :period_ends_on, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
@@ -71,7 +71,11 @@ module Work
     end
 
     def taken?
-      assignments.size >= slots
+      assignments_count >= slots
+    end
+
+    def empty_slots
+      [slots - assignments_count, 0].max
     end
 
     def elapsed_time

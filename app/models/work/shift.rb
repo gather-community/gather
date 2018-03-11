@@ -18,7 +18,7 @@ module Work
 
     delegate :title, :hours, :requester, :description, :slot_type, :date_time?, :date_only?,
       :full_period?, :full_community?, to: :job, prefix: true
-    delegate :community, :period_name, :period_starts_on, :period_ends_on, to: :job
+    delegate :community, :period_name, :period_draft?, :period_starts_on, :period_ends_on, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
@@ -91,18 +91,22 @@ module Work
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
         raise Work::AlreadySignedUpError if user_signed_up?(user)
-        assignments.create!(user_id: user.id)
+        assignments.create!(user_id: user.id, preassigned: period_draft?)
       end
     end
 
     def unsignup_user(user)
-      assignment = assignments.detect { |a| a.user_id == user.id }
+      assignment = assignment_for_user(user)
       raise Work::NotSignedUpError unless assignment
       assignment.destroy
     end
 
     def user_signed_up?(user)
-      assignments.any? { |a| a.user_id == user.id }
+      assignment_for_user(user).present?
+    end
+
+    def assignment_for_user(user)
+      assignments.detect { |a| a.user_id == user.id }
     end
 
     private

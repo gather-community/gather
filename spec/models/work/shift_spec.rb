@@ -171,8 +171,10 @@ describe Work::Shift do
 
   # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
   # inside nested transactions.
-  describe ".signup_user", database_cleaner: :truncate do
-    let(:job) { create(:work_job, shift_slots: 2) }
+  describe "#signup_user", database_cleaner: :truncate do
+    let(:phase) { "open" }
+    let(:period) { create(:work_period, phase: phase) }
+    let(:job) { create(:work_job, shift_slots: 2, period: period) }
     let(:shift) { job.shifts.first }
     let!(:user1) { create(:user) }
     let!(:user2) { create(:user) }
@@ -229,6 +231,26 @@ describe Work::Shift do
 
       it "raises error" do
         expect { shift.signup_user(user2) }.to raise_error(Work::SlotsExceededError)
+      end
+    end
+
+    describe "preassigned attribute" do
+      context "with period in draft phase" do
+        let(:phase) { "draft" }
+
+        it "sets to true" do
+          shift.signup_user(user2)
+          expect(shift.assignment_for_user(user2)).to be_preassigned
+        end
+      end
+
+      context "with period in open phase" do
+        let(:phase) { "open" }
+
+        it "sets to false" do
+          shift.signup_user(user2)
+          expect(shift.assignment_for_user(user2)).not_to be_preassigned
+        end
       end
     end
   end

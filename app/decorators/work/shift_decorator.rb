@@ -39,23 +39,29 @@ module Work
     end
 
     def assginees_with_empty_slots
-      [assignee_names.presence, empty_slot_count].compact.reduce(&sep(", "))
+      str = [assignee_names.presence, empty_slot_count].compact.reduce(&sep(", "))
+      str.presence || t("common.none")
     end
 
     def assignee_names
-      links = assignments.by_user_name.map { |a| h.link_to(a.user.decorate.name_with_inactive, a.user) }
+      links = assignments.by_user_name.map do |a|
+        name = a.user.decorate.name_with_inactive
+        link = h.link_to(name, a.user)
+        link << " " << h.icon_tag("thumb-tack") if a.preassigned?
+      end
       links.reduce(&sep(", "))
     end
 
     def empty_slot_count
-      empty_slots.positive? ? t("work/shifts.empty_slots", count: empty_slots) : nil
+      return nil if empty_slots.zero? || job_full_community?
+      t("work/shifts.empty_slots", count: empty_slots)
     end
 
     def show_action_link_set
       signup_link =
         if user_signed_up?(h.current_user)
           ActionLink.new(object, :unsignup, icon: "times", path: h.unsignup_work_shift_path(object),
-                                          method: :delete, confirm: true)
+                                            method: :delete, confirm: true)
         else
           ActionLink.new(object, :signup, icon: "bolt", path: h.signup_work_shift_path(object),
                                           primary: true, method: :post)

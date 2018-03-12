@@ -86,7 +86,7 @@ module Work
     end
 
     def valid_shift_count
-      if shift_count == 0
+      if shift_count.zero?
         errors.add(:shifts, :no_shifts)
       elsif shift_count > 1 && full_single_slot?
         errors.add(:shifts, :more_than_one_shift_for_full_single)

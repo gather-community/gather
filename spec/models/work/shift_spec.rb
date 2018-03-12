@@ -254,4 +254,36 @@ describe Work::Shift do
       end
     end
   end
+
+  describe "#hours" do
+    subject { job.shifts.first.hours }
+
+    context "with regular job" do
+      let(:job) { create(:work_job, hours: 3.2) }
+      it { is_expected.to eq 3.2 }
+    end
+
+    context "with date-only full single job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_single")
+      end
+      it { is_expected.to eq 3.2 }
+    end
+
+    context "with date-only full multiple job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_multiple",
+                          hours_per_shift: 1.6)
+      end
+      it { is_expected.to eq 1.6 }
+    end
+
+    context "with date-time full multiple job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_time", slot_type: "full_multiple",
+                          shift_hours: [0.8, 0.8])
+      end
+      it { is_expected.to eq 0.8 }
+    end
+  end
 end

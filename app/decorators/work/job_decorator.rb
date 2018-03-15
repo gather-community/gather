@@ -21,8 +21,8 @@ module Work
       to_int_if_no_fractional_part(hours)
     end
 
-    def slot_count_formatted
-      slot_count >= Shift::UNLIMITED_SLOT_COUNT ? h.t("common.unlimited") : slot_count
+    def total_slots_formatted
+      total_slots >= Shift::UNLIMITED_SLOTS ? h.t("common.unlimited") : total_slots
     end
   end
 end

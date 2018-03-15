@@ -55,7 +55,7 @@ module Work
     end
 
     def assginees_with_empty_slots
-      str = [assignee_names.presence, empty_slot_count].compact.reduce(&sep(", "))
+      str = [assignee_names.presence, empty_total_slots].compact.reduce(&sep(", "))
       str.presence || t("common.none")
     end
 
@@ -68,7 +68,7 @@ module Work
       links.reduce(&sep(", "))
     end
 
-    def empty_slot_count
+    def empty_total_slots
       return nil if empty_slots.zero? || job_full_community?
       t("work/shifts.empty_slots", count: empty_slots)
     end

@@ -13,6 +13,7 @@ module Work
     scope :by_title, -> { order("LOWER(title)") }
     scope :in_period, ->(p) { where(period_id: p.id) }
     scope :from_requester, ->(r) { where(requester: r) }
+    scope :fixed_slot, -> { where(slot_type: "fixed") }
 
     normalize_attributes :title, :description
 
@@ -71,8 +72,13 @@ module Work
       date_only? && full_multiple_slot?
     end
 
-    def slot_count
+    def total_slots
       shifts.sum(&:slots)
+    end
+
+    # Should be used with eager loading.
+    def assignments
+      shifts.flat_map(&:assignments)
     end
 
     private

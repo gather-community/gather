@@ -7,7 +7,7 @@ module Work
 
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
-    UNLIMITED_SLOT_COUNT = 1e6
+    UNLIMITED_SLOTS = 1e6
 
     acts_as_tenant :cluster
 
@@ -117,7 +117,7 @@ module Work
     end
 
     def normalize
-      self.slots = UNLIMITED_SLOT_COUNT if job_full_community?
+      self.slots = UNLIMITED_SLOTS if job_full_community?
 
       if job_full_period?
         self.starts_at = period_starts_on.in_time_zone

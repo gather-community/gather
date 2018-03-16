@@ -599,6 +599,7 @@ en:
     wiki/page:
       history: "History"
     work/shift:
+      edit_job: "Edit Job"
       signup: "Sign Up"
       unsignup: "Remove Signup"
 

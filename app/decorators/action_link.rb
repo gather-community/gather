@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class ActionLink < ApplicationDecorator
-  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class
+  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class, :permitted
 
-  def initialize(object, action, icon:, path:, btn_class: :default, method: :get, confirm: false)
+  def initialize(object, action, icon:, path:, btn_class: :default,
+                                 method: :get, permitted: nil, confirm: false)
     self.object = object
     self.action = action
     self.icon = icon
@@ -11,12 +12,13 @@ class ActionLink < ApplicationDecorator
     self.method = method
     self.confirm = confirm
     self.btn_class = btn_class
+    self.permitted = permitted
   end
 
   def render
     return @rendered if defined?(@rendered)
     @rendered =
-      if h.policy(object).send("#{action}?")
+      if permitted || permitted.nil? && h.policy(object).send("#{action}?")
         params = {title: name, method: method, class: "btn btn-#{btn_class}"}
         params[:data] = {confirm: confirm_msg} if confirm_msg
         h.link_to(icon_tag << name_tag, path, params)

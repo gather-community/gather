@@ -64,8 +64,9 @@ module Work
         name = a.user.decorate.name_with_inactive
         link = h.link_to(name, a.user)
         link << " " << h.icon_tag("thumb-tack") if a.preassigned?
+        link
       end
-      links.reduce(&sep(", "))
+      links.compact.reduce(&sep(", "))
     end
 
     def empty_total_slots
@@ -74,7 +75,9 @@ module Work
     end
 
     def show_action_link_set
-      signup_link =
+      links = [ActionLink.new(object, :edit_job, icon: "pencil", path: h.edit_work_job_path(job),
+                                                 permitted: h.policy(job).edit?)]
+      links <<
         if user_signed_up?(h.current_user)
           ActionLink.new(object, :unsignup, icon: "times", path: h.unsignup_work_shift_path(object),
                                             btn_class: :danger, method: :delete, confirm: true)
@@ -82,7 +85,7 @@ module Work
           ActionLink.new(object, :signup, icon: "bolt", path: h.signup_work_shift_path(object),
                                           btn_class: :primary, method: :post)
         end
-      ActionLinkSet.new(signup_link)
+      ActionLinkSet.new(*links)
     end
 
     private

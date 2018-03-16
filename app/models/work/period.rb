@@ -1,6 +1,7 @@
 module Work
   class Period < ApplicationRecord
-    PHASE_OPTIONS = %i(draft open pending published archived)
+    PHASE_OPTIONS = %i[draft open pending published archived]
+    QUOTA_TYPE_OPTIONS = %i[none by_person by_household]
 
     acts_as_tenant :cluster
 
@@ -31,6 +32,12 @@ module Work
     PHASE_OPTIONS.each do |p|
       define_method :"#{p}?" do
         phase.to_sym == p
+      end
+    end
+
+    QUOTA_TYPE_OPTIONS.each do |qt|
+      define_method :"quota_#{qt}?" do
+        quota_type.to_sym == qt
       end
     end
 

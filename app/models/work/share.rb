@@ -9,5 +9,6 @@ module Work
     scope :for_period, ->(p) { joins(:user).where(period_id: p.id, "users.deactivated_at": nil) }
 
     delegate :community, to: :period
+    delegate :household_id, to: :user
   end
 end

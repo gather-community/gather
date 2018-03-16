@@ -16,7 +16,7 @@ module Work
     # If there are a lot of preassigned hours, some users/households may have more than the final quota,
     # which is OK.
     def calculate
-      return 0 if total_portions.zero?
+      return 0 if period.quota_none? || total_portions.zero?
       setup_vars
       sorted_levels.each_with_index do |level, i|
         break if i == sorted_levels.size - 1 || hours_to_distribute <= 0
@@ -56,10 +56,12 @@ module Work
     def portions_by_level
       return @portions_by_level if @portions_by_level
       @portions_by_level = Hash.new(0)
-      shares.each do |share|
-        next if share.portion.zero?
-        level = (preassigned_by_user[share.user_id] || 0) / share.portion
-        @portions_by_level[level] += share.portion
+      grouped_shares.each do |shares|
+        portions = shares.sum(&:portion)
+        next if portions.zero?
+        preassigned = shares.sum { |s| preassigned_by_user[s.user_id] || 0 }
+        level = preassigned / portions
+        @portions_by_level[level] += portions
       end
       @portions_by_level
     end
@@ -76,9 +78,20 @@ module Work
       end
     end
 
+    # Arranges shares into groups depending on the period's quota_type setting.
+    def grouped_shares
+      @grouped_shares ||=
+        if period.quota_by_household?
+          shares.group_by(&:household_id).values
+        else
+          shares.map { |s| [s] }
+        end
+    end
+
     # Gets period shares via the for_period method that excludes inactive users.
+    # Eager loads user only if we are grouping by household, since we need to get household_id in that case.
     def shares
-      @shares ||= Share.for_period(period).to_a
+      @shares ||= Share.for_period(period).includes(period.quota_by_household? ? :user : nil).to_a
     end
 
     # Gets fixed slot jobs only and eager loads

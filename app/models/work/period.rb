@@ -14,6 +14,8 @@ module Work
     scope :active, -> { where.not(phase: "archived") }
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
 
+    before_validation :normalize
+
     validates :name, :starts_on, :ends_on, presence: true
     validates :name, uniqueness: {scope: :community_id}
     validate :start_before_end
@@ -46,6 +48,10 @@ module Work
     end
 
     private
+
+    def normalize
+      shares.destroy_all if quota_none?
+    end
 
     def start_before_end
       errors.add(:ends_on, :not_after_start) unless ends_on > starts_on

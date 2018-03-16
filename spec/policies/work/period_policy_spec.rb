@@ -39,7 +39,7 @@ describe Work::PeriodPolicy do
     subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[starts_on ends_on name phase] <<
+      expect(subject).to match_array(%i[starts_on ends_on name phase quota_type] <<
         {shares_attributes: %i[id user_id portion]})
     end
   end

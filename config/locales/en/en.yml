@@ -146,6 +146,7 @@ en:
         phase: "Phase"
         starts_on: "Starts On"
         ends_on: "Ends On"
+        quota_type: "Quota"
       wiki/page:
         title: "Title"
         content: "Content"
@@ -463,6 +464,8 @@ en:
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
         hours_per_shift: "The amount of hours credit each shift is worth."
         description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+      work_period:
+        quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:
       meal:
         time:
@@ -528,6 +531,10 @@ en:
           open: "Open"
           pending: "Pending"
           published: "Published"
+        quota_type:
+          none: "None"
+          by_person: "By Person"
+          by_household: "By Household"
       work_shift:
         lens:
           all: "All Jobs"

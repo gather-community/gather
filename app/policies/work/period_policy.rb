@@ -41,7 +41,7 @@ module Work
     end
 
     def permitted_attributes
-      %i[starts_on ends_on name phase] << {shares_attributes: %i[id user_id portion]}
+      %i[starts_on ends_on name phase quota_type] << {shares_attributes: %i[id user_id portion]}
     end
   end
 end

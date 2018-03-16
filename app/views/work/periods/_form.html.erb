@@ -1,40 +1,43 @@
 <%= gather_form_for(period, width: (:full unless period.archived?)) do |f| %>
   <div class="row">
-    <div class="<%= period.archived? ? "col-sm-12" : "col-sm-9" %>">
+    <div class="form-fields">
       <%= f.input :name %>
       <%= f.input :phase, collection: Work::Period::PHASE_OPTIONS, include_blank: false %>
       <%= f.input :starts_on, as: :date_picker %>
       <%= f.input :ends_on, as: :date_picker %>
+      <%= f.input :quota_type, collection: Work::Period::QUOTA_TYPE_OPTIONS, include_blank: false %>
     </div>
   </div>
 
-  <% unless period.archived? %>
-    <h2>Shares</h2>
-    <% unless period.draft? %>
-      <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
-    <% end %>
-    <p class="intro"><%= t("work/shares.intro") %></p>
-
-    <% @users_by_kind.each do |kind, users| %>
-      <% if @users_by_kind.size > 1 %>
-        <h3><%= t("common.#{kind.pluralize}") %></h3>
+  <div class="shares">
+    <% unless period.archived? %>
+      <h2>Shares</h2>
+      <% unless period.draft? %>
+        <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
       <% end %>
-      <div class="work-share-section">
-        <% users.each do |user| %>
-          <% share = @shares_by_user[user.id].decorate %>
-          <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
-            <div class="work-share-selector">
-              <%= share_fields.hidden_field :id %>
-              <%= share_fields.hidden_field :user_id %>
-              <%= share_fields.label :portion, link_to(user.full_name, user_path(user)) %>
-              <%= share_fields.select :portion, share.select_options,
-                {include_blank: share.new_record?}, class: "form-control" %>
-            </div>
-          <% end %>
+      <p class="intro"><%= t("work/shares.intro") %></p>
+
+      <% @users_by_kind.each do |kind, users| %>
+        <% if @users_by_kind.size > 1 %>
+          <h3><%= t("common.#{kind.pluralize}") %></h3>
         <% end %>
-      </div>
+        <div class="work-share-section">
+          <% users.each do |user| %>
+            <% share = @shares_by_user[user.id].decorate %>
+            <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
+              <div class="work-share-selector">
+                <%= share_fields.hidden_field :id %>
+                <%= share_fields.hidden_field :user_id %>
+                <%= share_fields.label :portion, link_to(user.full_name, user_path(user)) %>
+                <%= share_fields.select :portion, share.select_options,
+                  {include_blank: share.portion.nil?}, class: "form-control" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 
   <%= form_actions do %>
     <%= f.button :submit, class: "btn-primary" %>
@@ -43,6 +46,7 @@
   <%= javascript_tag do %>
   $(function() {
     new Gather.Views.DirtyChecker({el: '.work--period-form'});
+    new Gather.Views.Work.PeriodsView({el: '.work--period-form'});
   });
   <% end %>
 <% end %>

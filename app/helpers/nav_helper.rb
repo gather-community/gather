@@ -108,7 +108,7 @@ module NavHelper
             name: :signups,
             parent: :work,
             path: work_shifts_path,
-            permitted: policy(Work::Assignment.new(shift: sample_shift)).index?,
+            permitted: policy(sample_shift).index?,
             icon: "check"
           }, {
             name: :jobs,

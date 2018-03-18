@@ -78,7 +78,7 @@ module Work
     def preassigned_by_user
       @preassigned_by_user ||= assignments.select(&:preassigned?).group_by(&:user_id).tap do |hash|
         hash.each do |user, assignments|
-          hash[user] = assignments.sum(&:hours)
+          hash[user] = assignments.sum(&:shift_hours)
         end
       end
     end

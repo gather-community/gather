@@ -16,9 +16,7 @@
       </td>
       <td class="photo-cell" rowspan="2">
         <div class="photos <%= "single" if shift.assignments.size == 1 %>">
-          <% if shift.taken? %>
-            <%= shift.photos %>
-          <% end %>
+          <%= shift.photos %>
         </div>
       </td>
     </tr>

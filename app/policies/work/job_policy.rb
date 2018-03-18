@@ -21,7 +21,7 @@ module Work
     end
 
     def new?
-      active_admin_or?(:work_coordinator)
+      !job.period_archived? && active_admin_or?(:work_coordinator)
     end
 
     def edit?

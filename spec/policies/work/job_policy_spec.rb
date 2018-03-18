@@ -3,7 +3,8 @@ require "rails_helper"
 describe Work::JobPolicy do
   include_context "policy objs"
 
-  let(:period) { build(:work_period, community: community) }
+  let(:phase) { "open" }
+  let(:period) { build(:work_period, community: community, phase: phase) }
   let(:job) { build(:work_job, period: period) }
   let(:record) { job }
 
@@ -13,7 +14,14 @@ describe Work::JobPolicy do
     end
 
     permissions :new?, :edit?, :create?, :update?, :destroy? do
-      it_behaves_like "permits admins or special role but not regular users", :work_coordinator
+      context "most phases" do
+        it_behaves_like "permits admins or special role but not regular users", :work_coordinator
+      end
+
+      context "archived phase" do
+        let(:phase) { "archived" }
+        it_behaves_like "forbids all"
+      end
     end
   end
 

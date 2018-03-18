@@ -22,7 +22,7 @@ module Work
       @period = Period.find(params[:id])
       authorize @period
       prep_form_vars
-      flash.now[:alert] = t("work/shares.change_warning") unless period.draft?
+      flash.now[:alert] = t("work/shares.change_warning") unless period.draft? || period.archived?
     end
 
     def create

@@ -18,7 +18,9 @@ module Work
 
     delegate :title, :hours, :requester, :description, :slot_type, :date_time?, :date_only?,
       :full_period?, :full_community?, to: :job, prefix: true
-    delegate :community, :period, :period_name, :period_draft?, :period_starts_on, :period_ends_on, to: :job
+    delegate :community, :period, :period_name,
+      :period_draft?, :period_open?, :period_pending?, :period_published?, :period_archived?,
+      :period_starts_on, :period_ends_on, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }

@@ -35,7 +35,8 @@ module Work
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
 
     delegate :community, to: :period
-    delegate :starts_on, :ends_on, :name, :draft?, to: :period, prefix: true
+    delegate :starts_on, :ends_on, :name, :draft?, :open?, :pending?, :published?, :archived?,
+      to: :period, prefix: true
 
     def full_period?
       time_type == "full_period"

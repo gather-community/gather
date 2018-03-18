@@ -30,7 +30,7 @@
             <% end %>
           </div>
         <% end %>
-        <% unless shift.taken? || shift.user_signed_up?(current_user) %>
+        <% if policy(shift).signup? %>
           <a href="#" class="signup-link"><%= icon_tag("bolt") %> Sign Up!</a>
         <% end %>
       </td>

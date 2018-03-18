@@ -12,9 +12,36 @@ describe Work::ShiftPolicy do
   let(:record) { shift }
   let(:actor) { user }
 
+  shared_examples_for "permits users only in some phases" do |permitted|
+    Work::Period::PHASE_OPTIONS.each do |p|
+      describe "for phase #{p}" do
+        let(:phase) { p.to_s }
+        it_behaves_like permitted.include?(p) ? "permits users in community only" : "forbids all"
+      end
+    end
+  end
+
   describe "permissions" do
-    permissions :index?, :show?, :signup?, :unsignup? do
+    permissions :index?, :show? do
       it_behaves_like "permits users in community only"
+    end
+
+    permissions :signup? do
+      it_behaves_like "permits users only in some phases", %i[open published]
+
+      context "when already signed up" do
+        before { allow(shift).to receive(:user_signed_up?).and_return(true) }
+        it { is_expected.not_to permit(user, record) }
+      end
+
+      context "when shift is full" do
+        before { allow(shift).to receive(:taken?).and_return(true) }
+        it { is_expected.not_to permit(user, record) }
+      end
+    end
+
+    permissions :unsignup? do
+      it_behaves_like "permits users only in some phases", %i[open]
     end
 
     permissions :new?, :edit?, :create?, :update?, :destroy? do

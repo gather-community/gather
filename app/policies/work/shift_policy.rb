@@ -23,11 +23,12 @@ module Work
     end
 
     def signup?
-      index?
+      index? && (shift.period_open? || shift.period_published?) &&
+        !shift.user_signed_up?(user) && !shift.taken?
     end
 
     def unsignup?
-      index?
+      shift.period_open? && index?
     end
 
     def new?

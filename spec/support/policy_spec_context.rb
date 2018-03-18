@@ -216,6 +216,12 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "forbids all" do
+    it "doesn't permit super admins" do
+      expect(subject).not_to permit(super_admin, record)
+    end
+  end
+
   # We know that checking the permission should check the community, so if there is nil community,
   # we should get an error!
   shared_examples_for "errors on permission check without community" do

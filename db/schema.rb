@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316132629) do
+ActiveRecord::Schema.define(version: 20180316211606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -573,6 +573,7 @@ ActiveRecord::Schema.define(version: 20180316132629) do
     t.date "ends_on", null: false
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
+    t.decimal "quota", precision: 10, scale: 2, default: "0.0", null: false
     t.string "quota_type", default: "none", null: false
     t.date "starts_on", null: false
     t.datetime "updated_at", null: false

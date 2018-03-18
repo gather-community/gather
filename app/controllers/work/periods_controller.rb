@@ -29,6 +29,7 @@ module Work
       @period.assign_attributes(period_params)
       authorize @period
       if @period.save
+        QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period created successfully."
         redirect_to work_periods_path
       else
@@ -42,6 +43,7 @@ module Work
       @period = Period.find(params[:id])
       authorize @period
       if @period.update_attributes(period_params)
+        QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period updated successfully."
         redirect_to work_periods_path
       else

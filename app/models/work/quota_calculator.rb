@@ -9,6 +9,11 @@ module Work
       self.period = period
     end
 
+    # Recalculates the quota if the changes to the given trigger object necessitate it.
+    def recalculate_and_save
+      period.update_attributes!(quota: calculate)
+    end
+
     # Distributes the hours that are not preassigned to the users/households in the community.
     # Accounts for shares. Works by making a list of discrete, share-adjusted levels of preassigned hours,
     # and then distributing hours to iteratively bring the users/households up to each level, until

@@ -43,6 +43,7 @@ module Work
       authorize @job
       if @job.save
         flash[:success] = "Job created successfully."
+        QuotaCalculator.new(@job.period).recalculate_and_save
         redirect_to work_jobs_path
       else
         set_validation_error_notice(@job)
@@ -55,6 +56,7 @@ module Work
       @job = Job.find(params[:id])
       authorize @job
       if @job.update_attributes(job_params)
+        QuotaCalculator.new(@job.period).recalculate_and_save
         flash[:success] = "Job updated successfully."
         redirect_to work_jobs_path
       else

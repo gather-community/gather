@@ -14,15 +14,28 @@ module Work
     def to_s
       return "" if !period.open? || period.quota_none? || share.zero?
       h.content_tag(:div, class: "shifts-topline") do
-        needs.empty? ? h.t("work.topline.done") : not_done.html_safe
+        (needs.empty? ? done : not_done).html_safe
       end
     end
 
     private
 
+    def done
+      chunks = buckets.map do |bucket|
+        subkey = bucket == :regular ? "#{quota_type}.count" : "job_phrase.count"
+        title = bucket == :regular ? nil : bucket.title
+        h.t("work.topline.#{subkey}", count: hours[bucket], title: title)
+      end
+      h.t("work.topline.done") << " " << join_chunks(chunks)
+    end
+
     def not_done
       chunks = [chunk_for_need(needs[0], first: true)]
       needs[1..-1].each { |need| chunks << chunk_for_need(need) }
+      join_chunks(chunks)
+    end
+
+    def join_chunks(chunks)
       left = chunks.size > 2 ? chunks[0..-2].join(", ") << "," : chunks[0]
       right = chunks.size > 1 ? chunks[-1] : nil
       [left, right].compact.join(" and ") << "."
@@ -41,8 +54,8 @@ module Work
       buckets.each do |bucket|
         next unless hours[bucket] < quotas[bucket]
         @needs << {
-          kind: bucket == :general ? :general : :job,
-          job: bucket == :general ? nil : bucket,
+          kind: bucket == :regular ? :regular : :job,
+          job: bucket == :regular ? nil : bucket,
           quota: round(quotas[bucket]),
           count: round(quotas[bucket] - hours[bucket])
         }
@@ -59,12 +72,12 @@ module Work
     end
 
     def quota_for(bucket)
-      (bucket == :general ? period.quota : bucket.hours) * share
+      (bucket == :regular ? period.quota : bucket.hours) * share
     end
 
     def assigned_hours_for(bucket)
       scope = Assignment.where(user: users).includes(shift: :job)
-      if bucket == :general
+      if bucket == :regular
         scope.merge(Job.fixed_slot).sum("work_jobs.hours")
       else
         # For full community jobs, shift hours are different from job hours, so SQL sum won't work.
@@ -81,7 +94,7 @@ module Work
     end
 
     def buckets
-      @buckets ||= [:general] + Job.full_community.in_period(period)
+      @buckets ||= [:regular] + Job.full_community.in_period(period)
     end
 
     def round(num)

@@ -11,10 +11,10 @@ en:
       done: "Hooray, you've met your target!"
       by_household:
         count:
-          one: "Your household has %{count} hour."
-          other: "Your household has %{count} hours."
+          one: "Your household has %{count} hour"
+          other: "Your household has %{count} hours"
         more_needed:
-          general:
+          regular:
             one: "Your household needs <b>%{count} more hour</b> to get to %{quota}"
             other: "Your household needs <b>%{count} more hours</b> to get to %{quota}"
           job:
@@ -22,18 +22,22 @@ en:
             other: "Your household needs <b>%{count} more %{title} hours</b> to get to %{quota}"
       by_person:
         count:
-          one: "You have %{count} hour."
-          other: "You have %{count} hours."
+          one: "You have %{count} hour"
+          other: "You have %{count} hours"
         more_needed:
-          general:
+          regular:
             one: "You need <b>%{count} more hour</b> to get to %{quota}"
             other: "You need <b>%{count} more hours</b> to get to %{quota}"
           job:
             one: "You need <b>%{count} more %{title} hour</b> to get to %{quota}"
             other: "You need <b>%{count} more %{title} hours</b> to get to %{quota}"
       job_phrase:
-        one: "<b>%{count} more %{title} hour</b> to get to %{quota}"
-        other: "<b>%{count} more %{title} hours</b> to get to %{quota}"
+        count:
+          one: "%{count} %{title} hour"
+          other: "%{count} %{title} hours"
+        more_needed:
+          one: "<b>%{count} more %{title} hour</b> to get to %{quota}"
+          other: "<b>%{count} more %{title} hours</b> to get to %{quota}"
 
   work/jobs:
     shifts: "Shifts"

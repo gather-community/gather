@@ -24,7 +24,7 @@ module Work
       chunks = buckets.map do |bucket|
         subkey = bucket == :regular ? "#{quota_type}.count" : "job_phrase.count"
         title = bucket == :regular ? nil : bucket.title
-        h.t("work.topline.#{subkey}", count: hours[bucket], title: title)
+        h.t("work.topline.#{subkey}", count: round(hours[bucket]), title: title)
       end
       h.t("work.topline.done") << " " << join_chunks(chunks)
     end
@@ -42,7 +42,7 @@ module Work
     end
 
     def chunk_for_need(need, first: false)
-      subkey = first ? "#{quota_type}.more_needed.#{need[:kind]}" : "job_phrase"
+      subkey = first ? "#{quota_type}.more_needed.#{need[:kind]}" : "job_phrase.more_needed"
       params = need.slice(:count, :quota)
       params[:title] = need[:job].title if need[:job]
       h.t("work.topline.#{subkey}", params)

@@ -2,8 +2,7 @@
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
   <div class="shifts-main">
     <div class="shifts-topline">
-      Your household needs <strong>15 more general hours</strong> to get to 60 and
-      <strong>3 more Work Day hours</strong> to get to 12.
+      <%= Work::ToplineBuilder.new(@period).to_s.html_safe %>
     </div>
     <% if shifts.empty? %>
       <div class="col-sm-12 none-found">

@@ -11,6 +11,7 @@ module Work
     scope :for_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
     scope :by_user_name, -> { joins(:user).merge(User.by_name) }
 
-    delegate :hours, :community, to: :shift
+    delegate :community, to: :shift
+    delegate :hours, to: :shift, prefix: true
   end
 end

@@ -61,6 +61,7 @@ module Work
       (period_ends_on + 1).midnight
     end
 
+    # Shift hours can be different than job hours (specifically for full community jobs).
     def hours
       if job.date_only_full_multiple?
         job.hours_per_shift

@@ -48,7 +48,7 @@ module Work
         else
           flash[:success] = "You signed up successfully. Hooray!"
         end
-        redirect_to(work_shift_path(@shift))
+        redirect_to(work_shifts_path)
       end
     end
 
@@ -61,7 +61,7 @@ module Work
       rescue NotSignedUpError
         flash[:error] = t("work/shifts.not_signed_up")
       end
-      redirect_to(work_shift_path(@shift))
+      redirect_to(work_shifts_path)
     end
 
     protected

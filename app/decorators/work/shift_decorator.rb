@@ -4,6 +4,10 @@ module Work
   class ShiftDecorator < ApplicationDecorator
     delegate_all
 
+    def mine?
+      user_signed_up?(h.current_user)
+    end
+
     def job_title_with_icon
       str = "".html_safe << job_title
       str << " " << full_community_icon if job_full_community?

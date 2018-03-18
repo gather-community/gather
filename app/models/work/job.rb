@@ -11,9 +11,10 @@ module Work
 
     scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
     scope :by_title, -> { order("LOWER(title)") }
-    scope :in_period, ->(p) { where(period_id: p.id) }
+    scope :in_period, ->(p) { where(period: p) }
     scope :from_requester, ->(r) { where(requester: r) }
     scope :fixed_slot, -> { where(slot_type: "fixed") }
+    scope :full_community, -> { where(slot_type: %w[full_single full_multiple]) }
 
     normalize_attributes :title, :description
 

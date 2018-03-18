@@ -12,18 +12,21 @@ module Work
     end
 
     def to_s
-      if needs.empty?
-        h.t("work.topline.done")
-      else
-        chunks = [chunk_for_need(needs[0], first: true)]
-        needs[1..-1].each { |need| chunks << chunk_for_need(need) }
-        left = chunks.size > 2 ? chunks[0..-2].join(", ") << "," : chunks[0]
-        right = chunks.size > 1 ? chunks[-1] : nil
-        [left, right].compact.join(" and ") << "."
+      return "" if !period.open? || period.quota_none? || share.zero?
+      h.content_tag(:div, class: "shifts-topline") do
+        needs.empty? ? h.t("work.topline.done") : not_done.html_safe
       end
     end
 
     private
+
+    def not_done
+      chunks = [chunk_for_need(needs[0], first: true)]
+      needs[1..-1].each { |need| chunks << chunk_for_need(need) }
+      left = chunks.size > 2 ? chunks[0..-2].join(", ") << "," : chunks[0]
+      right = chunks.size > 1 ? chunks[-1] : nil
+      [left, right].compact.join(" and ") << "."
+    end
 
     def chunk_for_need(need, first: false)
       subkey = first ? "#{quota_type}.more_needed.#{need[:kind]}" : "job_phrase"

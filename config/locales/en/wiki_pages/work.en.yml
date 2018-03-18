@@ -50,7 +50,7 @@ en:
       half: "Half Share"
       full: "Full Share"
     intro: "How should the community's work be divided? Most people should get a full share, but in some cases exceptions are needed. A half share means the person will do half as many hours as a person with a full share, etc."
-    change_warning: "This period is not in the draft phase and changing shares will affect work quota calcuations. Proceed with caution!"
+    change_warning: "This period is not in the draft phase. Changing shares or quota type will affect quota calcuations. Proceed with caution!"
   work/shifts:
     slots_exceeded: "Sorry, looks like someone beat you to it!"
     already_signed_up: "You've already signed up for this shift."

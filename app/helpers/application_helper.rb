@@ -1,5 +1,10 @@
 module ApplicationHelper
-  FLASH_TYPE_TO_CSS = { success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info" }
+  FLASH_TYPE_TO_CSS = {
+    success: "alert-success",
+    error: "alert-danger",
+    alert: "alert-warning",
+    notice: "alert-info"
+  }.freeze
 
   def bootstrap_class_for(flash_type)
     FLASH_TYPE_TO_CSS[flash_type.to_sym] || flash_type.to_s

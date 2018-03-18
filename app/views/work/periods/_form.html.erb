@@ -12,9 +12,6 @@
   <div class="shares">
     <% unless period.archived? %>
       <h2>Shares</h2>
-      <% unless period.draft? %>
-        <div class="alert alert-warning in-text"><%= t("work/shares.change_warning") %></div>
-      <% end %>
       <p class="intro"><%= t("work/shares.intro") %></p>
 
       <% @users_by_kind.each do |kind, users| %>

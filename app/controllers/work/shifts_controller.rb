@@ -41,7 +41,10 @@ module Work
       end
 
       if request.xhr?
-        render partial: "shift", locals: {shift: shift}
+        render json: {
+          shift: render_to_string(partial: "shift", locals: {shift: shift}),
+          topline: ToplineBuilder.new(shift.period).to_s
+        }
       else
         if @error
           flash[:error] = @error

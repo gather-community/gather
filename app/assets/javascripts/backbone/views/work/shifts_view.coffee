@@ -24,6 +24,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
     $.ajax
       method: "post"
       url: "/work/signups/#{card.data("id")}/signup"
-      success: (html) =>
+      success: (response) =>
         @resetRefreshInterval()
-        card.replaceWith(html)
+        card.replaceWith(response.shift)
+        @$(".shifts-topline").replaceWith(response.topline)

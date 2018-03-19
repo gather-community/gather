@@ -4,7 +4,7 @@ en:
     create_one: "create one first"
     notices:
       draft: "This period is in the draft phase so workers can't sign up for jobs yet."
-      archived: "This period is archived so no edits are permitted."
+      archived: "This period is archived so no signups are permitted."
     num_hours: "%{num} hours"
     preassigned: "This slot was pre-assigned."
     topline:

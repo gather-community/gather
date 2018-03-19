@@ -18,19 +18,16 @@
   <table class="index part-width">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Requester</th>
-        <th>Hours</th>
-        <th>Slots</th>
+        <th><%= Work::Job.human_attribute_name(:title) %></th>
+        <th><%= Work::Job.human_attribute_name(:requester) %></th>
+        <th><%= Work::Job.human_attribute_name(:hours) %></th>
+        <th><%= Work::Job.human_attribute_name(:slots) %></th>
       </tr>
     </thead>
     <tbody>
       <% jobs.each do |job| %>
         <tr>
-          <td class="title">
-            <%= link_to(job.title, edit_work_job_path(job)) %>
-            <%= job.slot_type_icon %>
-          </td>
+          <td class="title"><%= job.link_with_icon %></td>
           <td class="requester"><%= job.requester_name %></td>
           <td class="hours"><%= job.hours_formatted %></td>
           <td class="slots"><%= job.total_slots_formatted %></td>

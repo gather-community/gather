@@ -23,6 +23,11 @@ module Work
       end
     end
 
+    def show
+      @job = Job.find(params[:id])
+      authorize @job
+    end
+
     def new
       return render_not_found unless params[:period].present?
       @job = Job.new(period_id: params[:period])

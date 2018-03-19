@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Work
-  class ShiftDecorator < ApplicationDecorator
+  class ShiftDecorator < WorkDecorator
     delegate_all
 
     def mine?
@@ -18,10 +18,6 @@ module Work
       link = h.link_to(job_title, object, class: "title")
       link << " " << full_community_icon if job_full_community?
       link
-    end
-
-    def full_community_icon
-      h.icon_tag("users", title: t("work/jobs.full_community"))
     end
 
     def times

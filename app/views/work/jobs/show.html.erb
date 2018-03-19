@@ -1,0 +1,38 @@
+<% content_for(:title, job.title_with_icon) %>
+<% content_for(:top_buttons, job.action_links) %>
+
+<table class="key-value">
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:title) %></td>
+    <td><%= job.title %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:hours) %></td>
+    <td>
+      <%= job.hours_formatted %> hours
+      <% "(#{job.hours_per_shift} per shift)" if job.hours_per_shift %>
+    </td>
+  </tr>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:requester) %></td>
+    <td><%= job.requester_name %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:time_type) %></td>
+    <td><%= t("simple_form.options.work_job.time_type.#{job.time_type}") %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:slot_type) %></td>
+    <td><%= t("simple_form.options.work_job.slot_type.#{job.slot_type}") %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:shifts) %></td>
+    <td>
+      <% job.shifts.each do |shift| %>
+        <%= shift.decorate.times %><%= ", #{shift.slots} slots" unless job.full_community? %><br/>
+      <% end %>
+    </td>
+  </tr>
+</table>
+<br/>
+<%= safe_render_markdown(job.description) %>

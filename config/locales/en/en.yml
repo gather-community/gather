@@ -138,6 +138,7 @@ en:
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
         requester_id: "Requester"
+        shifts: "Shifts"
         slot_type: "Slot Type"
         time_type: "Times"
         title: "Title"
@@ -605,6 +606,8 @@ en:
       update_photo: "Edit Photo"
     wiki/page:
       history: "History"
+    work/job:
+      edit: "Edit Job"
     work/shift:
       edit_job: "Edit Job"
       signup: "Sign Up"

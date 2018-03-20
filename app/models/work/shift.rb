@@ -128,7 +128,12 @@ module Work
     end
 
     def normalize
-      self.slots = UNLIMITED_SLOTS if job_full_community?
+      if job_full_community?
+        self.slots = UNLIMITED_SLOTS
+      else
+        # Remove any extra assignments beyond the permitted slots.
+        assignments.delete(*assignments.reject(&:marked_for_destruction)[slots..-1])
+      end
 
       if job_full_period?
         self.starts_at = period_starts_on.in_time_zone

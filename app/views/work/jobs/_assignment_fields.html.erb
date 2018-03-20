@@ -1,2 +1,2 @@
 <%= f.hidden_field :id %>
-<%= f.input_field :user_id %>
+<%= render "shared/user_select", f: f, options: {context: "work_assign"} %>

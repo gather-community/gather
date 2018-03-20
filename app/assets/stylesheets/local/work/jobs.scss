@@ -51,6 +51,10 @@
     .assignments {
       min-width: 150px;
 
+      .add-link {
+        display: none; // Shown by JS
+      }
+
       .assignment-fields {
         line-height: 100%;
       }

@@ -55,6 +55,14 @@ module Work
     validate :start_before_end
     validate :elapsed_hours_must_equal_job_hours
 
+    accepts_nested_attributes_for :assignments, allow_destroy: true
+
+    # Make it so assignments with no user ID are destroyed.
+    def assignments_attributes=(attribs)
+      attribs.each_value { |a| a[:_destroy] = 1 if a[:user_id].blank? }
+      super(attribs)
+    end
+
     def min_time
       period_starts_on.midnight
     end
@@ -94,7 +102,7 @@ module Work
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
         raise Work::AlreadySignedUpError if user_signed_up?(user)
-        assignments.create!(user_id: user.id, preassigned: period_draft?)
+        assignments.create!(user_id: user.id)
       end
     end
 

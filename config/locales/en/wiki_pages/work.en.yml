@@ -43,11 +43,6 @@ en:
     shifts: "Shifts"
     unlimited: "Unlimited"
     full_community: "This is a full community job."
-    shift_col_headers:
-      start_time: "Start Time"
-      end_time: "End Time"
-      hours: "Hours"
-      slots: "# of Slots"
   work/shares:
     portion_options:
       none: "No Share"

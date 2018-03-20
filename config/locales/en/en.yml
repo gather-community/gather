@@ -148,6 +148,12 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
+      work/shift:
+        start_time: "Start Time"
+        end_time: "End Time"
+        hours: "Hours"
+        slots: "# of Slots"
+        assignees: "Assignees"
       wiki/page:
         title: "Title"
         content: "Content"
@@ -559,6 +565,7 @@ en:
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
       shifts: "Add Shift"
+      assignments: "Add Assignee"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."

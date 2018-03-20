@@ -19,6 +19,12 @@
   </td>
   <td class="hours">
   </td>
+  <td class="assignees">
+    <%= f.simple_fields_for(:assignments) do |assignee_form| %>
+      <%= render("assignment_fields", f: assignee_form) %>
+    <% end %>
+    <%= link_to_add_association(t("cocoon.add_links.assignments"), f, :assignments) %>
+  </td>
   <td class="delete">
     <%= f.hidden_field :id %>
     <%= link_to_remove_association(icon_tag("trash"), f) %>

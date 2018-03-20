@@ -55,8 +55,11 @@ describe Work::JobPolicy do
     subject { Work::JobPolicy.new(actor, Work::Job.new(period: period)).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i(description hours period_id requester_id slot_type hours_per_shift
-        time_type title) << {shifts_attributes: %i(starts_at ends_at slots id _destroy)})
+      expect(subject).to match_array(
+        %i[description hours period_id requester_id slot_type hours_per_shift time_type title] <<
+          {shifts_attributes: %i[starts_at ends_at slots id _destroy] <<
+            {assignments_attributes: %i[id user_id]}}
+      )
     end
   end
 end

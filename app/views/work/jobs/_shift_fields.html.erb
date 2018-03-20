@@ -12,8 +12,8 @@
     <div class="period-date"><%= l(@job.period_ends_on) %></div>
     <%= f.error :ends_at %>
   </td>
-  <td class="<%= shift.errors[:slots].any? ? 'has-error' : '' %>">
-    <%= f.input_field :slots, class: "form-control shift-slots" %>
+  <td class="shift-slots <%= shift.errors[:slots].any? ? 'has-error' : '' %>">
+    <%= f.input_field :slots, class: "form-control" %>
     <div class="unlimited"><%= t("work/jobs.unlimited") %></div>
     <%= f.error :slots %>
   </td>

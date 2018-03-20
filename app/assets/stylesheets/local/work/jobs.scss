@@ -36,15 +36,28 @@
   }
 
   #shift-rows {
+    .starts-at, .ends-at {
+      width: 230px;
+    }
+
     .shift-slots {
       width: 75px;
+
+      input {
+        width: 100%;
+      }
     }
 
     .assignments {
       min-width: 150px;
 
+      // User select2
       .form-group {
         margin-bottom: 3px;
+
+        .control-wrapper {
+          width: 100%;
+        }
       }
     }
 

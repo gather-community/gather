@@ -17,13 +17,16 @@
     <div class="unlimited"><%= t("work/jobs.unlimited") %></div>
     <%= f.error :slots %>
   </td>
-  <td class="hours">
-  </td>
-  <td class="assignees">
-    <%= f.simple_fields_for(:assignments) do |assignee_form| %>
-      <%= render("assignment_fields", f: assignee_form) %>
+  <td class="assignments">
+    <%= f.simple_fields_for(:assignments) do |assignment_form| %>
+      <%= render("assignment_fields", f: assignment_form) %>
     <% end %>
-    <%= link_to_add_association(t("cocoon.add_links.assignments"), f, :assignments) %>
+    <%# New rows are inserted before this element. %>
+    <div class="add-link">
+      <%= link_to_add_association(t("cocoon.add_links.assignments"), f, :assignments) %>
+    </div>
+  </td>
+  <td class="hours">
   </td>
   <td class="delete">
     <%= f.hidden_field :id %>

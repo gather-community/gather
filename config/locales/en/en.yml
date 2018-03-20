@@ -153,7 +153,7 @@ en:
         end_time: "End Time"
         hours: "Hours"
         slots: "# of Slots"
-        assignees: "Assignees"
+        workers: "Workers"
       wiki/page:
         title: "Title"
         content: "Content"
@@ -565,7 +565,7 @@ en:
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
       shifts: "Add Shift"
-      assignments: "Add Assignee"
+      assignments: "Add Worker"
 
   select2_prompts:
     reserver: "Please type a few letters of the reserver's name."

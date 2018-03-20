@@ -55,11 +55,11 @@ module Work
     end
 
     def assginees_with_empty_slots
-      str = [assignee_names.presence, empty_total_slots].compact.reduce(&sep(", "))
+      str = [worker_names.presence, empty_total_slots].compact.reduce(&sep(", "))
       str.presence || t("common.none")
     end
 
-    def assignee_names
+    def worker_names
       links = assignments.by_user_name.map do |a|
         name = a.user.decorate.name_with_inactive
         link = h.link_to(name, a.user)

@@ -40,8 +40,12 @@
       width: 75px;
     }
 
-    .assignees {
+    .assignments {
       min-width: 150px;
+
+      .form-group {
+        margin-bottom: 3px;
+      }
     }
 
     .delete {

@@ -29,7 +29,7 @@ module Work
     end
 
     def new
-      return render_not_found unless params[:period].present?
+      return render_not_found if params[:period].blank?
       @job = Job.new(period_id: params[:period])
       @job.shifts.build
       authorize @job
@@ -37,7 +37,7 @@ module Work
     end
 
     def edit
-      @job = Job.find(params[:id])
+      @job = Job.includes(shifts: :assignments).find(params[:id])
       authorize @job
       prep_form_vars
     end
@@ -58,7 +58,7 @@ module Work
     end
 
     def update
-      @job = Job.find(params[:id])
+      @job = Job.includes(shifts: :assignments).find(params[:id])
       authorize @job
       if @job.update_attributes(job_params)
         QuotaCalculator.new(@job.period).recalculate_and_save

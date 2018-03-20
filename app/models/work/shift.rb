@@ -83,7 +83,7 @@ module Work
     end
 
     def elapsed_time
-      @elapsed_time ||= ends_at - starts_at
+      @elapsed_time ||= starts_at.nil? || ends_at.nil? ? nil : ends_at - starts_at
     end
 
     # Creates an assignment for the given user.
@@ -132,11 +132,12 @@ module Work
     end
 
     def start_before_end
-      errors.add(:ends_at, :not_after_start) unless ends_at > starts_at
+      return unless starts_at.present? && ends_at.present? && ends_at <= starts_at
+      errors.add(:ends_at, :not_after_start)
     end
 
     def elapsed_hours_must_equal_job_hours
-      return unless job_date_time?
+      return unless job_date_time? && job_hours.present?
       if job_slot_type == "full_multiple"
         unless (job_hours.hours % elapsed_time).zero?
           errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)

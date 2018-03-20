@@ -453,6 +453,8 @@ en:
         guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"
+        email: "The email address at which you'd prefer to be contacted."
+        google_email: "The email address tied to the Google account used for sign-in."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."

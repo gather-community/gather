@@ -51,13 +51,27 @@
     .assignments {
       min-width: 150px;
 
+      .assignment-fields {
+        line-height: 100%;
+      }
+
       // User select2
       .form-group {
+        display: inline-block;
+
+        // Space for thumbtack icon
         margin-bottom: 3px;
+        width: calc(100% - 10px);
 
         .control-wrapper {
           width: 100%;
         }
+      }
+
+      .fa-thumb-tack {
+        vertical-align: top;
+        margin-top: 5px;
+
       }
     }
 

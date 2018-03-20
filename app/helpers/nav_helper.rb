@@ -15,15 +15,15 @@ module NavHelper
         permitted: policy(Meal.new(community: current_community)).index?,
         icon: "cutlery"
       }, {
-        name: :reservations,
-        path: lens_path_if_present("reservations"),
-        permitted: policy(Reservations::Reservation).index?,
-        icon: "book"
-      }, {
         name: :work,
         path: work_shifts_path,
         permitted: policy(Work::Period.new(community: current_community)).index?,
         icon: "info-circle"
+      }, {
+        name: :reservations,
+        path: lens_path_if_present("reservations"),
+        permitted: policy(Reservations::Reservation).index?,
+        icon: "book"
       }, {
         name: :wiki,
         path: "/wiki",

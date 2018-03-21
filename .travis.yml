@@ -6,6 +6,10 @@ cache:
     - "travis_phantomjs"
 bundler_args: --without development doc
 sudo: false
+branches:
+  except:
+  - /^deploy-.*$/ # These are always just reset --hard's to other branches
+  - /^v[\d\.]+$/ # No need to test version tags as they are tested as part of their branch
 addons:
   postgresql: "9.4"
   artifacts:

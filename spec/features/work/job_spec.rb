@@ -28,15 +28,15 @@ feature "jobs", js: true do
     select(groups.first.name, from: "Requester")
     fill_in("Description", with: "Paints things nicely")
     within(all("#shift-rows tr")[0]) do
-      pick_datetime(".starts-at", day: 15, hour: 4, next_click: "input.shift-slots")
-      pick_datetime(".ends-at", day: 15, hour: 6, next_click: "input.shift-slots")
-      find(".shift-slots").set(2)
+      pick_datetime(".starts-at", day: 15, hour: 4, next_click: ".shift-slots input")
+      pick_datetime(".ends-at", day: 15, hour: 6, next_click: ".shift-slots input")
+      find(".shift-slots input").set(2)
     end
     click_on("Add Shift")
     within(all("#shift-rows tr")[1]) do
-      pick_datetime(".starts-at", day: 15, hour: 5, next_click: "input.shift-slots")
-      pick_datetime(".ends-at", day: 15, hour: 7, next_click: "input.shift-slots")
-      find(".shift-slots").set(4)
+      pick_datetime(".starts-at", day: 15, hour: 5, next_click: ".shift-slots input")
+      pick_datetime(".ends-at", day: 15, hour: 7, next_click: ".shift-slots input")
+      find(".shift-slots input").set(4)
     end
     click_on("Create Job")
 
@@ -50,9 +50,9 @@ feature "jobs", js: true do
     all("#shift-rows tr")[1].find("a.remove_fields").click
     click_on("Add Shift")
     within(all("#shift-rows tr")[1]) do
-      pick_datetime(".starts-at", day: 15, hour: 9, next_click: "input.shift-slots")
-      pick_datetime(".ends-at", day: 15, hour: 11, next_click: "input.shift-slots")
-      find(".shift-slots").set(6)
+      pick_datetime(".starts-at", day: 15, hour: 9, next_click: ".shift-slots input")
+      pick_datetime(".ends-at", day: 15, hour: 11, next_click: ".shift-slots input")
+      find(".shift-slots input").set(6)
     end
     click_on("Update Job")
 

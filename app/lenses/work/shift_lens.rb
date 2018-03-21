@@ -27,7 +27,7 @@ module Work
     end
 
     def main_options
-      options = %w[open me myhh]
+      options = %w[open me myhh notpre]
       h.options_for_select(options.map { |o| [I18n.t("#{i18n_key}.#{o}"), o] }, value)
     end
 

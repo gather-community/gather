@@ -100,6 +100,8 @@ module Work
           @shifts.with_user(current_user)
         when "myhh"
           @shifts.with_user(current_user.household.users)
+        when "notpre"
+          @shifts.with_non_preassigned_or_empty_slots
         else
           lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
         end

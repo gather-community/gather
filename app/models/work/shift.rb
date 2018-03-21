@@ -47,6 +47,10 @@ module Work
                 WHERE shift_id = work_shifts.id AND (first_name ILIKE ? OR last_name ILIKE ?)))",
           *(["%#{search}%"] * 4))
     }
+    scope :with_non_preassigned_or_empty_slots, lambda {
+      where("(SELECT COUNT(id) FROM work_assignments
+        WHERE work_assignments.shift_id = work_shifts.id AND work_assignments.preassigned = 't') < slots")
+    }
 
     before_validation :normalize
 

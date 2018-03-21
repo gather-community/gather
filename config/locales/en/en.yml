@@ -550,6 +550,7 @@ en:
           open: "Open Jobs"
           me: "My Jobs"
           myhh: "My Household"
+          notpre: "Not Preassigned"
 
     prompts:
       user:

@@ -3,6 +3,9 @@
 # Defines nav menus and related helper methods.
 module NavHelper
   def nav_items
+    sample_period = Work::Period.new(community: current_community)
+    sample_job = Work::Job.new(period: sample_period)
+    sample_shift = Work::Shift.new(job: sample_job)
     items = [
       {
         name: :people,
@@ -17,7 +20,7 @@ module NavHelper
       }, {
         name: :work,
         path: work_shifts_path,
-        permitted: policy(Work::Period.new(community: current_community)).index?,
+        permitted: policy(sample_shift).index?,
         icon: "info-circle"
       }, {
         name: :reservations,

@@ -79,7 +79,6 @@ Follow these steps to setup a development environment for Gather.
     1. Enjoy!
 
 ## Caching
-
 Caching is off by default in development mode since it can lead to confusing issues where changes to views don't show up.
 
 If you are testing some caching behavior you can enable it temporarily by doing:
@@ -126,5 +125,8 @@ The latter should be run before opening a pull request.
 As part of an effort to clean up old code, you should try to resolve any linter errors in files you touch, unless there are an overwhelming number of them. At bare minimum, the _lines_ you touch should not have any lint.
 
 ### Tools
-
 Most code editors have plugins for linting. They will identify and let you click directly into problematic lines. You are encouraged to try one out!
+
+## Acknowledgements
+This project is happily tested with BrowserStack!
+[![Tested with BrowserStack](https://www.browserstack.com/images/layout/browserstack-logo-600x315.png)](https://www.browserstack.com)

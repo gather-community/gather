@@ -567,12 +567,19 @@ en:
       shifts: "Add Shift"
       assignments: "Add Worker"
 
-  select2_prompts:
-    reserver: "Please type a few letters of the reserver's name."
-    sponsor: "Please type a few letters of the sponsor's name."
-    household: "Please type a few letters of the household's name."
-    guardian: "Please type a few letters of the guardian's name."
-    user: "Please type a few letters of the user's name."
+  select2:
+    prompts:
+      reserver: "Please type a few letters of the reserver's name."
+      sponsor: "Please type a few letters of the sponsor's name."
+      household: "Please type a few letters of the household's name."
+      guardian: "Please type a few letters of the guardian's name."
+      user: "Please type a few letters of the user's name."
+    placeholders:
+      reserver: "Choose Reserver ..."
+      sponsor: "Choose Sponsor ..."
+      household: "Choose Household ..."
+      guardian: "Choose Guardian ..."
+      user: "Choose User ..."
 
   csv:
     headers:

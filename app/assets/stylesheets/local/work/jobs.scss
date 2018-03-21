@@ -53,6 +53,10 @@
 
       .add-link {
         display: none; // Shown by JS
+
+        a {
+          color: $gray-text;
+        }
       }
 
       .assignment-fields {

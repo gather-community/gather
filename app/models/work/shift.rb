@@ -132,7 +132,7 @@ module Work
         self.slots = UNLIMITED_SLOTS
       else
         # Remove any extra assignments beyond the permitted slots.
-        assignments.delete(*assignments.reject(&:marked_for_destruction)[slots..-1])
+        assignments.delete(*assignments.reject(&:marked_for_destruction?)[slots..-1])
       end
 
       if job_full_period?

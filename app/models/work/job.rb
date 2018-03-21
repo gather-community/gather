@@ -2,6 +2,9 @@ module Work
   class Job < ApplicationRecord
     TIMES_OPTIONS = %i(date_time date_only full_period)
     SLOT_TYPE_OPTIONS = %i(fixed full_single full_multiple)
+    WITH_PREASSIGN_SQL = "EXISTS (SELECT ws.id FROM work_shifts ws
+      INNER JOIN work_assignments wa ON wa.shift_id = ws.id
+      WHERE ws.job_id = work_jobs.id AND wa.preassigned = 't')".freeze
 
     acts_as_tenant :cluster
 
@@ -15,6 +18,8 @@ module Work
     scope :from_requester, ->(r) { where(requester: r) }
     scope :fixed_slot, -> { where(slot_type: "fixed") }
     scope :full_community, -> { where(slot_type: %w[full_single full_multiple]) }
+    scope :with_preassignments, -> { where(WITH_PREASSIGN_SQL) }
+    scope :with_no_preassignments, -> { where("NOT #{WITH_PREASSIGN_SQL}") }
 
     normalize_attributes :title, :description
 

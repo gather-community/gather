@@ -8,17 +8,23 @@ module Work
 
     def index
       authorize sample_job
-      prepare_lenses(:"work/requester", :"work/period")
+      prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
       @period = lenses[:period].object
       @jobs = policy_scope(Job).for_community(current_community)
       if @period.nil?
         lenses.hide!
       else
         @jobs = @jobs.in_period(@period).includes(shifts: :assignments).by_title
-        if params[:requester] == "none"
+        if lenses[:requester] == "none"
           @jobs = @jobs.from_requester(nil)
-        elsif params[:requester].present?
+        elsif lenses[:requester].present?
           @jobs = @jobs.from_requester(params[:requester])
+        end
+
+        if lenses[:pre].yes?
+          @jobs = @jobs.with_preassignments
+        elsif lenses[:pre].no?
+          @jobs = @jobs.with_no_preassignments
         end
       end
     end

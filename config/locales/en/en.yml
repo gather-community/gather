@@ -533,6 +533,10 @@ en:
         requester:
           any: "Any Requester"
           none: "No Requester"
+        preassigned:
+          any: "All Jobs"
+          y: "Preassigned"
+          n: "Not Preassigned"
       work_period:
         phase:
           archived: "Archived"

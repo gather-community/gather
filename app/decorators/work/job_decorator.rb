@@ -19,19 +19,23 @@ module Work
       )
     end
 
-    def link_with_icon
+    def link_with_icons
       h.link_to(title, h.policy(object).edit? ? h.edit_work_job_path(object) : h.work_job_path(object)) <<
-        " " << slot_type_icon
+        icons
+    end
+
+    def icons
+      i = []
+      i << (safe_str << " " << h.icon_tag("users")) if full_group?
+      i << (safe_str << " " << h.icon_tag("thumb-tack")) if preassignments?
+      i.reduce(&:<<)
+
     end
 
     def title_with_icon
       str = "".html_safe << title
       str << " " << full_community_icon if full_community?
       str
-    end
-
-    def slot_type_icon
-      full_group? ? h.icon_tag("users") : ""
     end
 
     def hours_formatted

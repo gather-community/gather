@@ -27,7 +27,7 @@
     <tbody>
       <% jobs.each do |job| %>
         <tr>
-          <td class="title"><%= job.link_with_icon %></td>
+          <td class="title"><%= job.link_with_icons %></td>
           <td class="requester"><%= job.requester_name %></td>
           <td class="hours"><%= job.hours_formatted %></td>
           <td class="slots"><%= job.total_slots_formatted %></td>

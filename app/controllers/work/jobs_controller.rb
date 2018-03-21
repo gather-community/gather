@@ -14,7 +14,7 @@ module Work
       if @period.nil?
         lenses.hide!
       else
-        @jobs = @jobs.in_period(@period).includes(:shifts).by_title
+        @jobs = @jobs.in_period(@period).includes(shifts: :assignments).by_title
         if params[:requester] == "none"
           @jobs = @jobs.from_requester(nil)
         elsif params[:requester].present?

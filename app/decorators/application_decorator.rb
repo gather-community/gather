@@ -33,4 +33,8 @@ class ApplicationDecorator < Draper::Decorator
     # Convert to integer if no fractional part so that .0 doesn't show.
     (num - num.to_i < 0.0001) ? num.to_i : num
   end
+
+  def safe_str
+    "".html_safe
+  end
 end

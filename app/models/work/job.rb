@@ -74,6 +74,10 @@ module Work
       date_only? && full_multiple_slot?
     end
 
+    def preassignments?
+      shifts.any?(&:preassignments?)
+    end
+
     def total_slots
       shifts.sum(&:slots)
     end

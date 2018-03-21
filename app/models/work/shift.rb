@@ -86,6 +86,10 @@ module Work
       assignments_count >= slots
     end
 
+    def preassignments?
+      assignments.any?(&:preassigned?)
+    end
+
     def empty_slots
       [slots - assignments_count, 0].max
     end

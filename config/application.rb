@@ -56,6 +56,8 @@ module Gather
 
     config.active_record.time_zone_aware_types = [:datetime]
 
+    config.cache_store = :redis_store, "redis://localhost:6379/0/cache", { expires_in: 90.minutes }
+
     # Currently, fr is only available for testing purposes.
     I18n.available_locales = %i(en fr)
   end

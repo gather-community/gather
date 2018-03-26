@@ -71,7 +71,7 @@ module Work
 
     def empty_total_slots
       return nil if empty_slots.zero? || job_full_community?
-      t("work/shifts.empty_slots", count: empty_slots)
+      t("work/shift.slots_open", count: empty_slots)
     end
 
     def show_action_link_set

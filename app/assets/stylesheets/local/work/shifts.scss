@@ -53,10 +53,10 @@
 
   .owners-cell {
     vertical-align: bottom;
+    padding-top: 10px;
   }
 
   .shift-times {
-    margin-bottom: 4px;
     font-weight: bold;
   }
 
@@ -67,6 +67,10 @@
       font-size: 11px;
       vertical-align: middle;
     }
+  }
+
+  .open-slots {
+    color: $gray-text;
   }
 
   .signup-link {

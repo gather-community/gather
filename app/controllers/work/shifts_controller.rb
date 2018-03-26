@@ -38,9 +38,9 @@ module Work
       begin
         @shift.signup_user(current_user)
       rescue SlotsExceededError
-        @error = t("work/shifts.slots_exceeded")
+        @error = t("work/shift.slots_exceeded")
       rescue AlreadySignedUpError
-        @error = t("work/shifts.already_signed_up")
+        @error = t("work/shift.already_signed_up")
       end
 
       if request.xhr?
@@ -65,7 +65,7 @@ module Work
         @shift.unsignup_user(current_user)
         flash[:success] = "Your signup was removed successfully."
       rescue NotSignedUpError
-        flash[:error] = t("work/shifts.not_signed_up")
+        flash[:error] = t("work/shift.not_signed_up")
       end
       redirect_to(work_shifts_path)
     end

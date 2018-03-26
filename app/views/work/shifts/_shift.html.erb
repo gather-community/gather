@@ -30,6 +30,11 @@
             <% end %>
           </div>
         <% end %>
+        <% if !shift.job_full_community? && shift.empty_slots > 0 %>
+          <div class="open-slots">
+            <%= t("work/shift.slots_open", count: shift.empty_slots) %>
+          </div>
+        <% end %>
         <% if policy(shift).signup? %>
           <a href="#" class="signup-link"><%= icon_tag("bolt") %> Sign Up!</a>
         <% end %>

@@ -96,7 +96,7 @@ module Work
     end
 
     def empty_slots
-      [slots - assignments_count, 0].max
+      @empty_slots ||= job_full_community? ? UNLIMITED_SLOTS : [slots - assignments_count, 0].max
     end
 
     def elapsed_time

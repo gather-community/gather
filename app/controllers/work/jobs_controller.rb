@@ -14,18 +14,7 @@ module Work
       if @period.nil?
         lenses.hide!
       else
-        @jobs = @jobs.in_period(@period).includes(shifts: :assignments).by_title
-        if lenses[:requester] == "none"
-          @jobs = @jobs.from_requester(nil)
-        elsif lenses[:requester].present?
-          @jobs = @jobs.from_requester(params[:requester])
-        end
-
-        if lenses[:pre].yes?
-          @jobs = @jobs.with_preassignments
-        elsif lenses[:pre].no?
-          @jobs = @jobs.with_no_preassignments
-        end
+        scope_jobs
       end
     end
 
@@ -84,6 +73,21 @@ module Work
     end
 
     private
+
+    def scope_jobs
+      @jobs = @jobs.in_period(@period).includes(shifts: :assignments).by_title
+      if lenses[:requester] == "none"
+        @jobs = @jobs.from_requester(nil)
+      elsif lenses[:requester].present?
+        @jobs = @jobs.from_requester(lenses[:requester].value)
+      end
+
+      if lenses[:pre].yes?
+        @jobs = @jobs.with_preassignments
+      elsif lenses[:pre].no?
+        @jobs = @jobs.with_no_preassignments
+      end
+    end
 
     def sample_job
       Job.new(period: @period || Period.new(community: current_community))

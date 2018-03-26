@@ -105,7 +105,7 @@ describe Work::Shift do
       end
     end
 
-    context "elapsed hours must equal or evenly divide job hours for date_time jobs" do
+    describe "elapsed hours must equal or evenly divide job hours for date_time jobs" do
       let(:shift) { build(:work_shift, job: job) }
 
       before { allow(shift).to receive(:job_hours).and_return(1.5) }
@@ -163,6 +163,33 @@ describe Work::Shift do
             shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 11:30")
             expect(shift).not_to be_valid
             expect(shift.errors[:starts_at].join).to eq "Shift length must equal or evenly divide 1.5 hours"
+          end
+        end
+      end
+
+      describe "no double assignments" do
+        let(:shift) do
+          build(:work_shift, job: job,
+                             starts_at: "2018-01-01 12:30",
+                             ends_at: "2018-01-01 14:00",
+                             assignments_attributes: assignments_attributes)
+        end
+        let(:users) { create_list(:user, 2) }
+
+        context "with assignments ok" do
+          let(:assignments_attributes) { {0 => {user_id: users[0]}, 1 => {user_id: users[1]}} }
+
+          it "should be valid" do
+            expect(shift).to be_valid
+          end
+        end
+
+        context "with double assignments" do
+          let(:assignments_attributes) { {0 => {user_id: users[0]}, 1 => {user_id: users[0]}} }
+
+          it "should be invalid" do
+            expect(shift).not_to be_valid
+            expect(shift.errors[:assignments].join).to eq "Duplicate assignees not allowed"
           end
         end
       end

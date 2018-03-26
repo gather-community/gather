@@ -221,6 +221,8 @@ en:
               elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
             ends_at:
               not_after_start: "must be after start time"
+            assignments:
+              no_double_assignments: "Duplicate assignees not allowed"
 
   custom_fields:
     labels:

@@ -58,6 +58,7 @@ module Work
     validates :slots, presence: true, numericality: {greater_than: 0}
     validate :start_before_end
     validate :elapsed_hours_must_equal_job_hours
+    validate :no_double_assignments
 
     accepts_nested_attributes_for :assignments, allow_destroy: true
 
@@ -168,6 +169,12 @@ module Work
           errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
         end
       end
+    end
+
+    def no_double_assignments
+      user_ids = assignments.map(&:user_id)
+      return if user_ids.size == user_ids.uniq.size
+      errors.add(:assignments, :no_double_assignments)
     end
   end
 end

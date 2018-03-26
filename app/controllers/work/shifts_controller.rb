@@ -5,12 +5,15 @@ module Work
   class ShiftsController < ApplicationController
     before_action -> { nav_context(:work, :signups) }
     decorates_assigned :shifts, :shift
-    helper_method :sample_shift
+    helper_method :sample_shift, :sample_period
 
     def index
       authorize sample_shift
       prepare_lenses(:search, :"work/shift", :"work/period")
       @period = lenses[:period].object
+      @shifts = policy_scope(Shift)
+      return unless @period
+
       scope_shifts
       @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
       @autorefresh = @period.draft? || @period.open?
@@ -76,12 +79,16 @@ module Work
     private
 
     def sample_shift
-      period = @period || Period.new(community: current_community)
+      period = @period || sample_period
       Shift.new(job: Job.new(period: period))
     end
 
+    def sample_period
+      Period.new(community: current_community)
+    end
+
     def scope_shifts
-      @shifts = policy_scope(Shift)
+      @shifts = @shifts
         .for_community(current_community)
         .in_period(@period)
         .includes(:job, assignments: :user)

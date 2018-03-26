@@ -21,7 +21,7 @@ module NavHelper
         name: :work,
         path: work_shifts_path,
         permitted: policy(sample_shift).index?,
-        icon: "info-circle"
+        icon: "wrench"
       }, {
         name: :reservations,
         path: lens_path_if_present("reservations"),

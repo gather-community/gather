@@ -4,7 +4,7 @@
     <%= Work::ToplineBuilder.new(@period) %>
     <% if shifts.empty? %>
       <div class="col-sm-12 none-found">
-        No jobs found. <%= lenses.no_result_clear_filter_link %>
+        <%= t("work/jobs.none_found") %> <%= lenses.no_result_clear_filter_link %>
       </div>
     <% else %>
       <div class="flowing-columns">

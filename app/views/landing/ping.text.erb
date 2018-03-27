@@ -1,4 +1,6 @@
-<% content_for(:title){ "Ping" } -%>
+<% content_for(:title, "Ping") -%>
 Gather
 App is running.
-Delayed Job is <%= @dj ? "" : "NOT " %>running.
+Delayed Job is <%= @status.delayed_job_up? ? "" : "NOT " %>running.
+Redis is <%= @status.redis_up? ? "" : "NOT " %>running.
+Everything is <%= @status.ok? ? "" : "NOT " %>OK.

@@ -95,6 +95,10 @@ module Work
       assignments.any?(&:preassigned?)
     end
 
+    def starts_and_ends_on_month_boundaries?
+      starts_at_date.beginning_of_month == starts_at_date && ends_at_date.end_of_month == ends_at_date
+    end
+
     def empty_slots
       @empty_slots ||= job_full_community? ? UNLIMITED_SLOTS : [slots - assignments_count, 0].max
     end
@@ -175,6 +179,14 @@ module Work
       user_ids = assignments.map(&:user_id)
       return if user_ids.size == user_ids.uniq.size
       errors.add(:assignments, :no_double_assignments)
+    end
+
+    def starts_at_date
+      @starts_at_date ||= starts_at.to_date
+    end
+
+    def ends_at_date
+      @ends_at_date ||= ends_at.to_date
     end
   end
 end

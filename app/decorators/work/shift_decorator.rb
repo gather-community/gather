@@ -27,6 +27,8 @@ module Work
         else
           starts_at_formatted
         end
+      elsif !job_date_time? && starts_and_ends_on_month_boundaries?
+        [h.l(starts_at, format: "%B"), h.l(ends_at, format: "%B")].uniq.join("–")
       else
         "#{starts_at_formatted}–#{ends_at_formatted}"
       end

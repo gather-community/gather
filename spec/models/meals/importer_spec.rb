@@ -3,14 +3,15 @@ include ActionView::Helpers
 
 describe Meals::Importer, type: :model do
   describe "import" do
-    let(:current_community) { create(:community) }
+    let!(:current_community) { create(:community) }
 
     before do
       Meal.new_with_defaults(current_community)
+      pp current_community, 'spec'
     end
 
     it "creates users with varying amounts of info" do
-      mi = create_meal_batch("meals/varying_info.csv")
+      mi = create_meal_batch("varying_info.csv")
       expect(mi).to be_succeeded
 
       assert_meal_attribs(mi.meals[0],
@@ -122,18 +123,13 @@ describe Meals::Importer, type: :model do
       expect(meal).to have_attributes(attribs)
     end
 
-    def ffmm(file)
-      # File.dirname(__FILE__) + file
-      attach_file file
+    def fixture(name)
+      File.open File.expand_path("../../../fixtures/files/meals/#{name}", __FILE__)
     end
 
     def create_meal_batch(file)
-      # meal_file = fixture_file_upload(file, "text/csv")
-      meal_file = ffmm(file)
-      pp meal_file
-      pp meal_file.class
       mi = Meals::Importer.new
-      mi.import(meal_file)
+      mi.import(fixture(file), current_community)
       mi
     end
   end

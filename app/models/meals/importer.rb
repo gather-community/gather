@@ -9,9 +9,12 @@ module Meals
       @meals = []
     end
 
-    def import(file)
+    def import(file, community)
+      pp file
+      pp community
       CSV.foreach(file.path) do |rows|
-        meal = Meal.new_with_defaults(current_community)
+        pp current_community, 'importer'
+        meal = Meal.new_with_defaults(community)
         meal.create!(rows.to_hash)
 
         @meals.concat(meal)

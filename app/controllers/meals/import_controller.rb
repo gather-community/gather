@@ -11,7 +11,7 @@ module Meals
     def create
       authorize Meal, :import?
       importer = Meals::Importer.new
-      importer.import(params[:file])
+      importer.import(params[:file], current_community)
     end
 
     def download_meal_csv
@@ -19,7 +19,8 @@ module Meals
       send_file(
         Rails.root.join("app", "assets", "csv", "sample_meal.csv"),
         filename: "Sample_Meal.csv",
-        type: "text/csv"
+        type: "text/csv",
+        disposition: "attachment"
       )
     end
 

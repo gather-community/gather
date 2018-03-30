@@ -694,7 +694,7 @@ en:
       meals:
         meals: "Meals"
         jobs: "Jobs"
-        reports: "Reports"
+        report: "Report"
         formulas: "Formulas"
       people:
         directory: "Directory"

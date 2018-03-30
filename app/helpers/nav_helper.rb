@@ -57,10 +57,10 @@ module NavHelper
             permitted: policy.jobs?,
             icon: "briefcase"
           }, {
-            name: :reports,
+            name: :report,
             parent: :meals,
-            path: reports_meals_path,
-            permitted: policy.reports?,
+            path: report_meals_path,
+            permitted: policy.report?,
             icon: "line-chart"
           }, {
             name: :formulas,

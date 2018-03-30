@@ -26,7 +26,7 @@ class MealPolicy < ApplicationPolicy
     active_and_associated_or_signed_up?
   end
 
-  def reports?
+  def report?
     index?
   end
 

@@ -7,7 +7,7 @@ describe MealPolicy do
   let(:record) { meal }
 
   describe "permissions" do
-    permissions :index?, :reports? do
+    permissions :index?, :report? do
       it_behaves_like "permits users in cluster"
     end
 

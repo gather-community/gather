@@ -31,7 +31,8 @@ Rails.application.routes.draw do
   resources :meals do
     collection do
       get :jobs
-      get :reports
+      get :report
+      get :reports # Legacy
     end
     member do
       put :close
@@ -108,6 +109,7 @@ Rails.application.routes.draw do
     end
     resources :jobs
     resources :periods, except: :show
+    resource :report, only: :show
   end
 
   resources :uploads, only: %i[create destroy]

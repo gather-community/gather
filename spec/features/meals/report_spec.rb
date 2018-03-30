@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "meal reports", js: true do
+feature "meal report", js: true do
   let(:user) { create(:user) }
   let(:community) { user.community }
 
@@ -14,7 +14,7 @@ feature "meal reports", js: true do
 
   context "with no data" do
     scenario "it shows no data message" do
-      visit reports_meals_path
+      visit report_meals_path
       expect(page).to have_content("Meals Report")
       expect(page).to have_content("No matching meal data found")
     end
@@ -33,7 +33,7 @@ feature "meal reports", js: true do
     scenario "it works", ignore_js_errors: true do
       # There is a weird NVD3 error that I don't have time to debug as things work fine.
       ignore_js_errors do
-        visit reports_meals_path
+        visit report_meals_path
         expect(page).to have_content("Meals Report")
         expect(page).to have_content("By Month")
 

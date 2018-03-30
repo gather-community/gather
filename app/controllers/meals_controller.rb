@@ -5,7 +5,7 @@ class MealsController < ApplicationController
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
-  before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :reports]
+  before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :report]
 
   def index
     prepare_lenses(:search, :"meals/time", :community)
@@ -41,9 +41,13 @@ class MealsController < ApplicationController
   end
 
   def reports
-    authorize sample_meal, :reports?
+    redirect_to report_meals_path
+  end
+
+  def report
+    authorize sample_meal, :report?
     @community = current_community
-    nav_context(:meals, :reports)
+    nav_context(:meals, :report)
     prepare_lenses(community: {required: true}) if multi_community?
     @report = Meals::Report.new(@community)
     @communities = Community.by_name_with_first(@community).to_a
@@ -180,10 +184,8 @@ class MealsController < ApplicationController
     case params[:action]
     when "show", "summary"
       Meal.find_by(id: params[:id]).try(:community)
-    when "index", "jobs", "reports"
+    when "index", "jobs", "report", "reports"
       current_user.community
-    else
-      nil
     end
   end
 

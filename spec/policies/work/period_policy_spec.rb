@@ -10,6 +10,10 @@ describe Work::PeriodPolicy do
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
+
+    permissions :report? do
+      it_behaves_like "permits users in community only"
+    end
   end
 
   describe "scope" do

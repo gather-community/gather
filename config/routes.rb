@@ -109,7 +109,7 @@ Rails.application.routes.draw do
     end
     resources :jobs
     resources :periods, except: :show
-    resource :report, only: :show
+    get "report", to: "periods#report", as: :report
   end
 
   resources :uploads, only: %i[create destroy]

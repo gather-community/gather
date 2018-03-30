@@ -114,6 +114,12 @@ module NavHelper
             permitted: policy(sample_shift).index?,
             icon: "check"
           }, {
+            name: :report,
+            parent: :work,
+            path: work_report_path,
+            permitted: policy(sample_period).report?,
+            icon: "line-chart"
+          }, {
             name: :jobs,
             parent: :work,
             path: work_jobs_path,

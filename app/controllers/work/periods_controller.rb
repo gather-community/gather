@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 module Work
+# Controls CRUD for periods, plus the work report.
   class PeriodsController < WorkController
     include Destructible
 
-    before_action -> { nav_context(:work, :periods) }
+    before_action -> { nav_context(:work, :periods) }, except: :report
+    before_action -> { nav_context(:work, :report) }, only: :report
 
     decorates_assigned :period, :periods
 
@@ -51,6 +55,12 @@ module Work
         prep_form_vars
         render :edit
       end
+    end
+
+    def report
+      prepare_lenses(:"work/period")
+      @period = lenses[:period].object
+      authorize @period
     end
 
     protected

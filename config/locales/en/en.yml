@@ -704,6 +704,7 @@ en:
         resources: "Resources"
       work:
         signups: "Signups"
+        report: "Report"
         jobs: "Jobs"
         periods: "Periods"
     personal:

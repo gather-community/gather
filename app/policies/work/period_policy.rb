@@ -40,6 +40,10 @@ module Work
       index? && !period.has_jobs?
     end
 
+    def report?
+      active_in_community?
+    end
+
     def permitted_attributes
       %i[starts_on ends_on name phase quota_type] << {shares_attributes: %i[id user_id portion]}
     end

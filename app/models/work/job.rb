@@ -26,7 +26,7 @@ module Work
     before_validation :normalize
 
     validates :period, presence: true
-    validates :title, presence: true, length: {maximum: 128}
+    validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}
     validates :hours, presence: true, numericality: {greater_than: 0}
     validates :time_type, presence: true
     validates :slot_type, presence: true

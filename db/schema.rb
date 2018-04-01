@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316211606) do
+ActiveRecord::Schema.define(version: 20180401204134) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -562,6 +562,7 @@ ActiveRecord::Schema.define(version: 20180316211606) do
     t.string "title", limit: 128, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_work_jobs_on_cluster_id"
+    t.index ["period_id", "title"], name: "index_work_jobs_on_period_id_and_title", unique: true
     t.index ["period_id"], name: "index_work_jobs_on_period_id"
     t.index ["requester_id"], name: "index_work_jobs_on_requester_id"
   end

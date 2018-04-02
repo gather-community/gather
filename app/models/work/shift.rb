@@ -177,7 +177,7 @@ module Work
     end
 
     def no_double_assignments
-      user_ids = assignments.map(&:user_id)
+      user_ids = assignments.reject(&:marked_for_destruction?).map(&:user_id)
       return if user_ids.size == user_ids.uniq.size
       errors.add(:assignments, :no_double_assignments)
     end

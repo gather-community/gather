@@ -177,7 +177,7 @@ describe Work::Shift do
         let(:users) { create_list(:user, 2) }
 
         context "with assignments ok" do
-          let(:assignments_attributes) { {0 => {user_id: users[0]}, 1 => {user_id: users[1]}} }
+          let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[1].id}} }
 
           it "should be valid" do
             expect(shift).to be_valid
@@ -185,7 +185,7 @@ describe Work::Shift do
         end
 
         context "with double assignments" do
-          let(:assignments_attributes) { {0 => {user_id: users[0]}, 1 => {user_id: users[0]}} }
+          let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[0].id}} }
 
           it "should be invalid" do
             expect(shift).not_to be_valid

@@ -1,4 +1,4 @@
-<% content_for(:title){ "Create #{@user.child? ? 'Child' : 'User'}" } %>
+<% content_for(:title, "Create #{@user.child? ? 'Child' : 'User'}") %>
 
 <%= render("form") %>
 <br/><br/>

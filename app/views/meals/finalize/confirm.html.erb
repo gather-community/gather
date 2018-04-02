@@ -1,4 +1,4 @@
-<% content_for(:title) { "Finalize Meal: #{@meal.title || "Untitled"}" } %>
+<% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
 
 <%= render("meals/time_cook") %>
 

@@ -1,4 +1,4 @@
-<% content_for(:title){ "Edit Account: #{@account.household_name}" } %>
+<% content_for(:title, "Edit Account: #{@account.household_name}") %>
 
 <% if @account.household_no_users? %>
   <div class="alert alert-warning">

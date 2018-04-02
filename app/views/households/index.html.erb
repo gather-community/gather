@@ -1,4 +1,4 @@
-<% content_for(:title){ "Households" } %>
+<% content_for(:title, "Households") %>
 
 <% content_for(:top_buttons) do %>
   <% if policy(Household.new(community: current_community)).create? %>

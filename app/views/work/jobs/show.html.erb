@@ -28,8 +28,9 @@
   <tr>
     <td><%= Work::Job.human_attribute_name(:shifts) %></td>
     <td>
-      <% job.shifts.each do |shift| %>
-        <%= shift.decorate.times %><%= ", #{shift.slots} slots" unless job.full_community? %><br/>
+      <% job.shifts.decorate.each do |shift| %>
+        <strong><%= shift.times %></strong>
+        <ul><%= shift.assginees_with_empty_slots(style: :li) %></ul>
       <% end %>
     </td>
   </tr>

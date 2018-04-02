@@ -56,19 +56,21 @@ module Work
       job_requester.try(:name)
     end
 
-    def assginees_with_empty_slots
-      str = [worker_names.presence, empty_total_slots].compact.reduce(&sep(", "))
-      str.presence || t("common.none")
+    def assginees_with_empty_slots(style:)
+      blobs = (worker_names << empty_total_slots).compact
+      blobs = [t("work.no_signups")] if blobs.empty?
+      blobs.map! { |b| h.content_tag(:li, b) } if style == :li
+      separator = style == :comma_sep ? ", " : ""
+      blobs.reduce(&sep(separator))
     end
 
     def worker_names
-      links = assignments.by_user_name.map do |a|
-        name = a.user.decorate.name_with_inactive
+      assignments.by_user_name.map do |a|
+        name = a.user.decorate.full_name(show_inactive: true)
         link = h.link_to(name, a.user)
         link << " " << h.icon_tag("thumb-tack") if a.preassigned?
         link
       end
-      links.compact.reduce(&sep(", "))
     end
 
     def empty_total_slots

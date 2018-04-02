@@ -14,7 +14,8 @@ module Work
     # We set touch: true so that shift changes will update the job updated_at stamp, which
     # we use in a cache key.
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
-    has_many :assignments, class_name: "Work::Assignment", inverse_of: :shift, dependent: :destroy
+    has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
+                                                inverse_of: :shift, dependent: :destroy
 
     delegate :title, :hours, :requester, :description, :slot_type, :date_time?, :date_only?,
       :full_period?, :full_community?, to: :job, prefix: true

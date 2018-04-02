@@ -1,5 +1,4 @@
 .work--jobs {
-
   &.action-index {
     td.title {
       min-width: 300px;
@@ -84,6 +83,12 @@
 
     .delete {
       text-align: right;
+    }
+  }
+
+  &.action-show {
+    .key-value ul {
+      margin-bottom: 0;
     }
   }
 }

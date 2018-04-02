@@ -9,7 +9,9 @@ module Work
     belongs_to :user
 
     scope :for_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
-    scope :by_user_name, -> { joins(:user).merge(User.by_name) }
+
+    # Can't merge the order by name scope due to an error/bug with ActsAsTenant
+    scope :by_user_name, -> { joins(:user).order(User::NAME_ORDER) }
 
     delegate :community, :period_draft?, to: :shift
     delegate :hours, to: :shift, prefix: true

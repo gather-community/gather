@@ -1,14 +1,14 @@
 module Work
   class Job < ApplicationRecord
-    TIMES_OPTIONS = %i(date_time date_only full_period)
-    SLOT_TYPE_OPTIONS = %i(fixed full_single full_multiple)
+    TIMES_OPTIONS = %i[date_time date_only full_period].freeze
+    SLOT_TYPE_OPTIONS = %i[fixed full_single full_multiple].freeze
     WITH_PREASSIGN_SQL = "EXISTS (SELECT ws.id FROM work_shifts ws
       INNER JOIN work_assignments wa ON wa.shift_id = ws.id
       WHERE ws.job_id = work_jobs.id AND wa.preassigned = 't')".freeze
 
     acts_as_tenant :cluster
 
-    belongs_to :period, class_name: "Work::Period"
+    belongs_to :period, class_name: "Work::Period", inverse_of: :jobs
     belongs_to :requester, class_name: "People::Group"
     has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
 

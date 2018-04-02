@@ -19,7 +19,7 @@ module Work
     end
 
     def show
-      @job = Job.find(params[:id])
+      @job = Job.includes(shifts: :assignments).find(params[:id])
       authorize @job
     end
 

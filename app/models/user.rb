@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist work_coordinator)
   CONTACT_TYPES = %i(email text phone)
+  NAME_ORDER = "LOWER(first_name), LOWER(last_name)".freeze
 
   acts_as_tenant :cluster
   rolify
@@ -25,12 +26,12 @@ class User < ApplicationRecord
     where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :in_cluster, ->(id) { joins(household: :community).where("communities.cluster_id = ?", id) }
-  scope :by_name, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_name, -> { order(NAME_ORDER) }
   scope :by_unit, -> { joins(:household).order("households.unit_num") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> {
-    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, LOWER(first_name), LOWER(last_name)") }
+    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table

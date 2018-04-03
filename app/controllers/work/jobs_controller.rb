@@ -1,5 +1,5 @@
 module Work
-  class JobsController < ApplicationController
+  class JobsController < WorkController
     include Destructible
 
     before_action -> { nav_context(:work, :jobs) }

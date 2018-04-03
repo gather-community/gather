@@ -2,10 +2,10 @@
 
 module Work
   # Controls job signup pages.
-  class ShiftsController < ApplicationController
+  class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
     decorates_assigned :shifts, :shift
-    helper_method :sample_shift, :sample_period
+    helper_method :sample_shift
 
     def index
       authorize sample_shift
@@ -84,10 +84,6 @@ module Work
     def sample_shift
       period = @period || sample_period
       Shift.new(job: Job.new(period: period))
-    end
-
-    def sample_period
-      Period.new(community: current_community)
     end
 
     def scope_shifts

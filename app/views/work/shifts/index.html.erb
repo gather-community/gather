@@ -1,12 +1,6 @@
 <% content_for(:title, "Job Signups") %>
 <% if @period.nil? %>
-  <div class="none-found">
-    <% if policy(sample_period).create? %>
-      <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
-    <% else %>
-      <%= t("work/jobs.none_found") %>
-    <% end %>
-  </div>
+  <%= render("work/shared/no_period_notice") %>
 <% else %>
   <%= render "shifts" %>
 <% end %>

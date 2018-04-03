@@ -1,11 +1,10 @@
 module Work
-  class PeriodsController < ApplicationController
+  class PeriodsController < WorkController
     include Destructible
 
     before_action -> { nav_context(:work, :periods) }
 
     decorates_assigned :period, :periods
-    helper_method :sample_period
 
     def index
       authorize sample_period
@@ -61,10 +60,6 @@ module Work
     end
 
     private
-
-    def sample_period
-      Period.new(community: current_community)
-    end
 
     def prep_form_vars
       @share_builder = PeriodShareBuilder.new(@period)

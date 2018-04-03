@@ -1,6 +1,7 @@
 en:
   work:
     no_periods_html: "There are no active work periods. Please %{link}."
+    not_setup: "It looks like your community hasn't set up Gather's work share system.\nTalk to your Gather Administrator for more info."
     no_signups: "No Signups"
     create_one: "create one first"
     notices:

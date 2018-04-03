@@ -12,16 +12,19 @@ module Work
       prepare_lenses(:search, :"work/shift", :"work/period")
       @period = lenses[:period].object
       @shifts = policy_scope(Shift)
-      return unless @period
 
-      scope_shifts
-      @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
-      @autorefresh = @period.draft? || @period.open?
+      if @period.nil?
+        lenses.hide!
+      else
+        scope_shifts
+        @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
+        @autorefresh = @period.draft? || @period.open?
 
-      if request.xhr?
-        render partial: "shifts"
-      elsif @period.draft? || @period.archived?
-        flash.now[:notice] = t("work.notices.#{@period.phase}")
+        if request.xhr?
+          render partial: "shifts"
+        elsif @period.draft? || @period.archived?
+          flash.now[:notice] = t("work.notices.#{@period.phase}")
+        end
       end
     end
 

@@ -1,1 +1,28 @@
 <% content_for(:title, "Work Report") %>
+
+<div class="report">
+  <div class="overview row">
+    <div class="set col-sm-6 col-sm-offset-3">
+      <div class="title">Overview</div>
+      <table class="numbers">
+        <tr class="numbers">
+          <td><%= work_report.fixed_slot_hours_rounded %></td>
+          <td><%= work_report.fixed_slots_rounded %></td>
+          <td><%= work_report.total_portions_rounded %></td>
+          <% unless period.quota_none? %>
+            <td><%= work_report.quota_rounded %></td>
+          <% end %>
+        </tr>
+        <tr class="captions">
+          <td>Total Hours</td>
+          <td>Jobs</td>
+          <td>People</td>
+          <% unless period.quota_none? %>
+            <td>Quota</td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div style="text-align: center">More report details coming soon.</div>
+</div>

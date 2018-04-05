@@ -41,6 +41,7 @@ class MealsController < ApplicationController
   end
 
   def reports
+    skip_authorization
     redirect_to report_meals_path
   end
 

@@ -9,6 +9,7 @@ module Work
     before_action -> { nav_context(:work, :report) }, only: :report
 
     decorates_assigned :period, :periods
+    helper_method :work_report
 
     def index
       authorize sample_period
@@ -61,6 +62,7 @@ module Work
       prepare_lenses(:"work/period")
       @period = lenses[:period].object
       authorize @period
+      @work_report = Report.new(period: @period, user: current_user)
     end
 
     protected
@@ -70,6 +72,10 @@ module Work
     end
 
     private
+
+    def work_report
+      @work_report_decorated ||= ReportDecorator.new(@work_report)
+    end
 
     def prep_form_vars
       @share_builder = PeriodShareBuilder.new(@period)

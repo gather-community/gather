@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :work_period, class: "Work::Period" do
     name { Faker::Lorem.word.capitalize }
-    starts_on "2018-01-20"
-    ends_on "2018-02-20"
+    starts_on "2018-01-01"
+    ends_on "2018-03-31"
     community { default_community }
   end
 end

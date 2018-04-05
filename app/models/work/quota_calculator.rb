@@ -3,6 +3,8 @@
 module Work
   # Calculates how many hours each person (or share) are implied by the current set of jobs for a period.
   class QuotaCalculator
+    include Calculable
+
     attr_accessor :period, :hours_to_distribute, :portions_equalized, :quota
 
     def initialize(period)
@@ -35,7 +37,7 @@ module Work
 
     # Sets up variables for the computation.
     def setup_vars
-      self.hours_to_distribute = total_unassigned
+      self.hours_to_distribute = fixed_slot_unassigned_hours
       self.portions_equalized = 0.0
       self.quota = sorted_levels[0]
     end
@@ -75,14 +77,6 @@ module Work
       @sorted_levels ||= portions_by_level.keys.sort
     end
 
-    def preassigned_by_user
-      @preassigned_by_user ||= assignments.select(&:preassigned?).group_by(&:user_id).tap do |hash|
-        hash.each do |user, assignments|
-          hash[user] = assignments.sum(&:shift_hours)
-        end
-      end
-    end
-
     # Arranges shares into groups depending on the period's quota_type setting.
     def grouped_shares
       @grouped_shares ||=
@@ -91,37 +85,6 @@ module Work
         else
           shares.map { |s| [s] }
         end
-    end
-
-    # Gets period shares via the for_period method that excludes inactive users.
-    # Eager loads user only if we are grouping by household, since we need to get household_id in that case.
-    def shares
-      @shares ||= Share.for_period(period).includes(period.quota_by_household? ? :user : nil).to_a
-    end
-
-    # Gets fixed slot jobs only and eager loads
-    def jobs
-      @jobs ||= period.jobs.includes(shifts: :assignments).fixed_slot.to_a
-    end
-
-    def assignments
-      @assignments ||= jobs.flat_map(&:assignments)
-    end
-
-    def total_portions
-      @total_portions ||= shares.sum(&:portion)
-    end
-
-    def total_hours
-      @total_hours ||= jobs.sum { |j| j.total_slots * j.hours }
-    end
-
-    def total_preassigned
-      @total_preassigned ||= preassigned_by_user.values.sum
-    end
-
-    def total_unassigned
-      @total_unassigned ||= total_hours - total_preassigned
     end
   end
 end

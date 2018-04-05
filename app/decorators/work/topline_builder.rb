@@ -2,7 +2,7 @@
 
 module Work
   # Builds the topline string for the shifts page.
-  class ToplineBuilder < ApplicationDecorator
+  class ToplineBuilder < WorkDecorator
     attr_accessor :period
 
     delegate :quota_type, to: :period
@@ -24,7 +24,7 @@ module Work
       chunks = buckets.map do |bucket|
         subkey = bucket == :regular ? "#{quota_type}.count" : "job_phrase.count"
         title = bucket == :regular ? nil : bucket.title
-        h.t("work.topline.#{subkey}", count: round(hours[bucket]), title: title)
+        h.t("work.topline.#{subkey}", count: round_next_half(hours[bucket]), title: title)
       end
       h.t("work.topline.done") << " " << join_chunks(chunks)
     end
@@ -56,8 +56,8 @@ module Work
         @needs << {
           kind: bucket == :regular ? :regular : :job,
           job: bucket == :regular ? nil : bucket,
-          quota: round(quotas[bucket]),
-          count: round(quotas[bucket] - hours[bucket])
+          quota: round_next_half(quotas[bucket]),
+          count: round_next_half(quotas[bucket] - hours[bucket])
         }
       end
       @needs
@@ -95,10 +95,6 @@ module Work
 
     def buckets
       @buckets ||= [:regular] + Job.full_community.in_period(period)
-    end
-
-    def round(num)
-      to_int_if_no_fractional_part((num * 2).ceil.to_f / 2)
     end
   end
 end

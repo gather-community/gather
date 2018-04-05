@@ -3,10 +3,17 @@
 module Work
   # Assembles statistics on a work period.
   class Report
-    attr_accessor :period
+    include Calculable
 
-    def initialize(period:)
+    attr_accessor :period, :user
+
+    def initialize(period:, user:)
       self.period = period
+      self.user = user
+    end
+
+    def fixed_slots
+      @fixed_slots ||= fixed_slot_jobs.sum(&:total_slots)
     end
   end
 end

@@ -1,88 +1,5 @@
-.meals.action-report {
-  .overview {
-    text-align: center;
-    margin-bottom: 20px;
-
-    .set {
-      background-color: $faint-gray;
-      margin-bottom: 20px;
-    }
-
-    .title {
-      font-size: 15px;
-    }
-
-    .numbers {
-      > div {
-        display: inline-block;
-        width: 60px;
-
-        &.cost {
-          width: 90px;
-        }
-      }
-
-      .number {
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      .caption {
-        font-size: 13px;
-      }
-    }
-  }
-
-  small {
-    font-size: 12px;
-    color: $gray-text;
-    display: block;
-  }
-
-  #charts {
-    h4 {
-      text-align: center;
-    }
-
-    svg {
-      height: 250px;
-    }
-  }
-
+.meals .report {
   table.stats {
-    margin-top: 10px;
-
-    tr.surheader {
-      th {
-        text-align: center;
-      }
-    }
-
-    tr.totals {
-      td {
-        font-weight: bold;
-      }
-    }
-
-    th {
-      font-size: 11px;
-    }
-
-    th, td {
-      padding: 2px 5px;
-      width: 6.25%;
-      white-space: nowrap;
-
-      &:first-of-type {
-        text-align: left;
-        width: 12.5%;
-      }
-    }
-
-    td {
-      text-align: right;
-    }
-
     th, td {
       &.totals, &.diner-types {
         background-color: $faint-gray;
@@ -100,10 +17,5 @@
         }
       }
     }
-  }
-
-  .footnote {
-    margin-top: 40px;
-    text-align: center;
   }
 }

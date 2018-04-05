@@ -3,12 +3,12 @@
 module Work
   # Calculates how many hours each person (or share) are implied by the current set of jobs for a period.
   class QuotaCalculator
-    include Calculable
-
-    attr_accessor :period, :hours_to_distribute, :portions_equalized, :quota
+    attr_accessor :period, :report, :hours_to_distribute, :portions_equalized, :quota
+    delegate :shares, :total_portions, :fixed_slot_unassigned_hours, :preassigned_by_user, to: :report
 
     def initialize(period)
       self.period = period
+      self.report = Report.new(period: period)
     end
 
     # Recalculates the quota if the changes to the given trigger object necessitate it.

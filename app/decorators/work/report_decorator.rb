@@ -17,7 +17,7 @@ module Work
     end
 
     def quota_rounded
-      round_next_half(period.quota)
+      round_next_half(quota)
     end
   end
 end

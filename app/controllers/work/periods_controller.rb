@@ -61,8 +61,13 @@ module Work
     def report
       prepare_lenses(:"work/period")
       @period = lenses[:period].object
-      authorize @period
-      @work_report = Report.new(period: @period, user: current_user)
+      if @period.nil?
+        authorize sample_period
+        lenses.hide!
+      else
+        authorize @period
+        @work_report = Report.new(period: @period, user: current_user)
+      end
     end
 
     protected

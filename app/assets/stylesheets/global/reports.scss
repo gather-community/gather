@@ -38,26 +38,6 @@
         font-size: 13px;
       }
     }
-
-    div.numbers {
-      > div {
-        display: inline-block;
-        width: 60px;
-
-        &.cost {
-          width: 90px;
-        }
-      }
-
-      .number {
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      .caption {
-        font-size: 13px;
-      }
-    }
   }
 
   small {

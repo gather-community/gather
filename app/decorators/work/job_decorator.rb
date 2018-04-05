@@ -26,7 +26,7 @@ module Work
 
     def icons
       i = []
-      i << (safe_str << " " << h.icon_tag("users")) if full_group?
+      i << (safe_str << " " << h.icon_tag("users")) if full_community?
       i << (safe_str << " " << h.icon_tag("thumb-tack")) if preassignments?
       i.reduce(&:<<)
 

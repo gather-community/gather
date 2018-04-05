@@ -79,9 +79,9 @@ module Work
 
     # Shift hours can be different than job hours (specifically for full community jobs).
     def hours
-      if job.date_only_full_multiple?
+      if job.date_only_full_community_multiple_slot?
         job.hours_per_shift
-      elsif job.full_multiple_slot?
+      elsif job.full_community_multiple_slot?
         elapsed_time / 1.hour
       else
         job_hours
@@ -144,9 +144,9 @@ module Work
     def normalize
       if job_full_community?
         self.slots = UNLIMITED_SLOTS
-      else
+      elsif slots.present?
         # Remove any extra assignments beyond the permitted slots.
-        assignments.delete(*assignments.reject(&:marked_for_destruction?)[slots..-1]) if slots.present?
+        assignments.delete(*assignments.reject(&:marked_for_destruction?)[slots..-1])
       end
 
       if job_full_period?

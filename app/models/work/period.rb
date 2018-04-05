@@ -43,7 +43,7 @@ module Work
       end
     end
 
-    def has_jobs?
+    def jobs?
       jobs.any?
     end
 

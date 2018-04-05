@@ -30,7 +30,7 @@ module Work
     validates :hours, presence: true, numericality: {greater_than: 0}
     validates :time_type, presence: true
     validates :slot_type, presence: true
-    validates :hours_per_shift, presence: true, if: :date_only_full_multiple?
+    validates :hours_per_shift, presence: true, if: :date_only_full_community_multiple_slot?
     validates :description, presence: true
     validate :valid_shift_count
     validate :no_duplicate_start_end_times
@@ -63,20 +63,16 @@ module Work
       slot_type == "fixed"
     end
 
-    def full_group?
-      slot_type != "fixed"
-    end
-
-    def full_single_slot?
+    def full_community_single_slot?
       slot_type == "full_single"
     end
 
-    def full_multiple_slot?
+    def full_community_multiple_slot?
       slot_type == "full_multiple"
     end
 
-    def date_only_full_multiple?
-      date_only? && full_multiple_slot?
+    def date_only_full_community_multiple_slot?
+      date_only? && full_community_multiple_slot?
     end
 
     def preassignments?
@@ -95,7 +91,7 @@ module Work
     private
 
     def normalize
-      self.hours_per_shift = nil unless date_only_full_multiple?
+      self.hours_per_shift = nil unless date_only_full_community_multiple_slot?
     end
 
     def shift_count
@@ -105,7 +101,7 @@ module Work
     def valid_shift_count
       if shift_count.zero?
         errors.add(:shifts, :no_shifts)
-      elsif shift_count > 1 && full_single_slot?
+      elsif shift_count > 1 && full_community_single_slot?
         errors.add(:shifts, :more_than_one_shift_for_full_single)
       elsif shift_count > 1 && full_period?
         errors.add(:shifts, :more_than_one_shift_for_full_period)
@@ -113,21 +109,18 @@ module Work
     end
 
     def no_duplicate_start_end_times
-      if shifts.map { |s| [s.starts_at, s.ends_at] }.uniq.size < shifts.size
-        errors.add(:shifts, :duplicate_start_end_times)
-      end
+      return unless shifts.map { |s| [s.starts_at, s.ends_at] }.uniq.size < shifts.size
+      errors.add(:shifts, :duplicate_start_end_times)
     end
 
     def shifts_same_length_for_date_time_full_multiple
-      if date_time? && full_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
-        errors.add(:shifts, :different_length_shifts)
-      end
+      return unless date_time? && full_community_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
+      errors.add(:shifts, :different_length_shifts)
     end
 
     def hours_per_shift_evenly_divides_hours
-      if hours_per_shift.present? && hours % hours_per_shift != 0
-        errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
-      end
+      return unless hours_per_shift.present? && hours % hours_per_shift != 0
+      errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
     end
   end
 end

@@ -37,7 +37,7 @@ module Work
     end
 
     def destroy?
-      index? && !period.has_jobs?
+      index? && !period.jobs?
     end
 
     def report?

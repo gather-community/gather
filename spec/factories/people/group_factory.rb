@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :people_group, class: 'People::Group' do
-    name { Faker::Lorem.word.capitalize }
+  factory :people_group, class: "People::Group" do
+    sequence(:name) { |n| "Group #{n}" }
     community { default_community }
   end
 end

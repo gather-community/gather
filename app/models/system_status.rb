@@ -10,7 +10,8 @@ class SystemStatus
     return @delayed_job_up if defined?(@delayed_job_up)
     @delayed_job_up =
       begin
-        Process.kill(0, delayed_job_pid) && true
+        pid = delayed_job_pid
+        pid.present? && Process.kill(0, pid) && true
       rescue Errno::ESRCH
         false
       end

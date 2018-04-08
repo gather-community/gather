@@ -90,7 +90,7 @@ module Work
       @shifts = @shifts
         .for_community(current_community)
         .in_period(@period)
-        .includes(:job, assignments: :user)
+        .includes(job: {period: :community}, assignments: :user)
         .by_job_title
         .by_date
       apply_shift_lens

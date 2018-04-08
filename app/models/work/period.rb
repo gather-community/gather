@@ -5,9 +5,9 @@ module Work
 
     acts_as_tenant :cluster
 
-    belongs_to :community
+    belongs_to :community, inverse_of: :jobs
     has_many :shares, inverse_of: :period, dependent: :destroy
-    has_many :jobs, inverse_of: :period
+    has_many :jobs, inverse_of: :period, dependent: :destroy
 
     scope :for_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }

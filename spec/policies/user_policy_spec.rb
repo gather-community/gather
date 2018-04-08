@@ -203,6 +203,7 @@ describe UserPolicy do
     permissions :cluster_adminify? do
       it "permits action on cluster admin and above" do
         expect(subject).to permit(cluster_admin, user)
+        expect(subject).to permit(super_admin, user)
       end
 
       it "denies action on regular admins" do

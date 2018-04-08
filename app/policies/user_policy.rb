@@ -95,11 +95,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def cluster_adminify?
-    active? && user.has_role?(:cluster_admin)
+    active_cluster_admin?
   end
 
   def super_adminify?
-    active? && user.has_role?(:super_admin)
+    active_super_admin?
   end
 
   # Returns all user records from the given set that are showable for the current user.
@@ -155,6 +155,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def target_is_admin?
-    record.has_role?(:admin) || record.has_role?(:cluster_admin) || record.has_role?(:super_admin)
+    record.global_role?(:admin) || record.global_role?(:cluster_admin) || record.global_role?(:super_admin)
   end
 end

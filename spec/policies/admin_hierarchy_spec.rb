@@ -13,7 +13,7 @@ describe "admin hierarchy" do
   shared_examples_for "admin for class and scope" do
     context "default" do
       it "should error unless user is superadmin" do
-        unless user.has_role?(:super_admin)
+        unless user.global_role?(:super_admin)
           expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }.to raise_error(
             ApplicationPolicy::CommunityNotSetError)
         end

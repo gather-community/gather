@@ -22,6 +22,10 @@
     background-color: $theme-accent-lightest;
   }
 
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   table {
     width: 100%;
 

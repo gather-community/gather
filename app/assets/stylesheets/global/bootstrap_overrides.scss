@@ -5,3 +5,8 @@
     border-bottom: 1px solid white;
   }
 }
+
+// Need to add the :not(.btn) here to get higher specificty to beat a rule in theme.scss.
+.pagination > .active > a:not(.btn) {
+  color: $pagination-active-color;
+}

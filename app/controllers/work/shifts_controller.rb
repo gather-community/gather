@@ -17,7 +17,8 @@ module Work
         lenses.hide!
       else
         scope_shifts
-        @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key].join("|")
+        @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
+          lenses.cache_key, params[:page] || 1].join("|")
         @autorefresh = @period.draft? || @period.open?
 
         if request.xhr?
@@ -93,6 +94,8 @@ module Work
         .includes(job: {period: :community}, assignments: :user)
         .by_job_title
         .by_date
+        .page(params[:page])
+        .per(50)
       apply_shift_lens
       apply_search_lens
     end

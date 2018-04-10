@@ -84,7 +84,14 @@ module NavHelper
             path: households_path,
             permitted: policy(Household.new(community: current_community)).index?,
             icon: "home"
+          }, {
+            name: :roles,
+            parent: :people,
+            path: roles_path,
+            permitted: policy(Household.new(community: current_community)).index?,
+            icon: "wrench"
           }
+
         ]
       when :reservations
         [

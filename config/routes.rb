@@ -77,6 +77,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :roles, only: :index
+
   resources :accounts, only: %i[index show edit update] do
     collection do
       put :apply_late_fees

@@ -1,6 +1,7 @@
 <% content_for(:title, "Ping") -%>
 Gather
 App is running.
+Database is <%= @status.database_up? ? "" : "NOT " %>running.
 Delayed Job is <%= @status.delayed_job_up? ? "" : "NOT " %>running.
 Redis is <%= @status.redis_up? ? "" : "NOT " %>running.
 Backups are <%= @status.backups_recent? ? "" : "NOT " %>recent.

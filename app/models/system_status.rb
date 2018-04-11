@@ -5,7 +5,16 @@ class SystemStatus
   BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
 
   def ok?
-    delayed_job_up? && redis_up? && backups_recent?
+    database_up? && delayed_job_up? && redis_up? && backups_recent?
+  end
+
+  def database_up?
+    return @database_up if defined?(@database_up)
+    @database_up = begin
+      Cluster.count && true
+    rescue ActiveRecord::StatementInvalid
+      false
+    end
   end
 
   def delayed_job_up?

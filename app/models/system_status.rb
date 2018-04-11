@@ -42,7 +42,9 @@ class SystemStatus
     return @backups_recent if defined?(@backups_recent)
     return (@backups_recent = false) unless File.exist?(BACKUP_TIMES_FILE)
     @backups_recent = File.read(BACKUP_TIMES_FILE).strip.split("\n").all? do |stamp|
-      Time.current - Time.zone.parse(stamp) <= 24.hours
+      # The timestamp fetch operation runs an hour after the backup operation so we
+      # do 26 hours instead of 24 to allow a little leeway.
+      Time.current - Time.zone.parse(stamp) <= 26.hours
     end
   end
 

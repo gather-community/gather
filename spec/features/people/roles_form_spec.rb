@@ -1,23 +1,30 @@
 require "rails_helper"
 
 feature "roles index" do
-  let(:user) { create(:user) }
 
-  around { |ex| with_user_home_subdomain(user) { ex.run } }
+  around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
   before do
     login_as(actor, scope: :user)
   end
 
   context "as user" do
-    let(:actor) { user }
+    let(:actor) { create(:user) }
 
     scenario "visit roles list page" do
-      users = create_list(:user, 4)
+      coordinators = create_list(:work_coordinator, 4)
+      admins = create_list(:admin, 4)
+
       visit "/roles"
-      #expect(page).to have_css("a", text: "Download as CSV")
-      #expect(page).to have_css("table.index tr td", text: user.name)
-      #click_on("Download as CSV")
+      expect(page).to have_css("h3", text: "Work coordinator")
+      expect(page).to have_css("h3", text: "Admin")
+      coordinators.each do |user|
+        expect(page).to have_css("a", text: user.name)
+      end
+
+      admins.each do |user|
+        expect(page).to have_css("a", text: user.name)
+      end
     end
   end
 end

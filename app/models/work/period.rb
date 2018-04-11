@@ -5,7 +5,7 @@ module Work
 
     acts_as_tenant :cluster
 
-    belongs_to :community, inverse_of: :jobs
+    belongs_to :community, inverse_of: :work_periods
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :destroy
 

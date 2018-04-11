@@ -3,4 +3,5 @@ Gather
 App is running.
 Delayed Job is <%= @status.delayed_job_up? ? "" : "NOT " %>running.
 Redis is <%= @status.redis_up? ? "" : "NOT " %>running.
+Backups are <%= @status.backups_recent? ? "" : "NOT " %>recent.
 Everything is <%= @status.ok? ? "" : "NOT " %>OK.

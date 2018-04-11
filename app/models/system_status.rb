@@ -2,8 +2,10 @@
 
 # Checks system status for use in the ping page.
 class SystemStatus
+  BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
+
   def ok?
-    delayed_job_up? && redis_up?
+    delayed_job_up? && redis_up? && backups_recent?
   end
 
   def delayed_job_up?
@@ -25,6 +27,14 @@ class SystemStatus
       rescue Redis::CannotConnectError
         false
       end
+  end
+
+  def backups_recent?
+    return @backups_recent if defined?(@backups_recent)
+    return (@backups_recent = false) unless File.exist?(BACKUP_TIMES_FILE)
+    @backups_recent = File.read(BACKUP_TIMES_FILE).strip.split("\n").all? do |stamp|
+      Time.current - Time.zone.parse(stamp) <= 24.hours
+    end
   end
 
   private

@@ -7,6 +7,8 @@ module Work
 
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
+    include ShiftSearchConfig
+
     UNLIMITED_SLOTS = 1e6
 
     acts_as_tenant :cluster

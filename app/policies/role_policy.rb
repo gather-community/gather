@@ -2,7 +2,7 @@ class RolePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if active?
-        Role.all 
+        Role.all
       else
         scope.none
       end

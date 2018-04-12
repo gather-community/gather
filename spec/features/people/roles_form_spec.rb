@@ -1,7 +1,6 @@
 require "rails_helper"
 
 feature "roles index" do
-
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
   before do

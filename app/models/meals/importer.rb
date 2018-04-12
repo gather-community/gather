@@ -6,19 +6,17 @@ module Meals
     attr_reader :meals
 
     def initialize
-      @meals = []
+      # @meals = []
     end
 
     def import(file, community)
-      pp file
-      pp community
-      CSV.foreach(file.path) do |rows|
-        pp current_community, 'importer'
-        meal = Meal.new_with_defaults(community)
-        meal.create!(rows.to_hash)
+      CSV.foreach(file.path, headers: true) do |rows|
+        pp rows.to_hash
+        # meal = Meal.new_with_defaults(community)
+        Meal.create!(rows.to_hash)
 
-        @meals.concat(meal)
-        @meals
+        # @meals.concat(meal)
+        # @meals
       end
     end
   end

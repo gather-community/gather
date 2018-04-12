@@ -7,7 +7,6 @@ describe Meals::Importer, type: :model do
 
     before do
       Meal.new_with_defaults(current_community)
-      pp current_community, 'spec'
     end
 
     it "creates users with varying amounts of info" do

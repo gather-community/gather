@@ -101,4 +101,23 @@ describe User do
       expect(create(:user).photo(:medium)).to eq "missing/users/medium.png"
     end
   end
+
+  describe "#any_assignments?" do
+    let(:user) { create(:user) }
+    subject { user.any_assignments? }
+
+    context "with nothing" do
+      it { is_expected.to be false }
+    end
+
+    context "with meal assignment" do
+      before { user.assignments.create!(role: "cleaner", meal: create(:meal)) }
+      it { is_expected.to be true }
+    end
+
+    context "with work assignment" do
+      before { user.work_assignments.create!(shift: create(:work_shift)) }
+      it { is_expected.to be true }
+    end
+  end
 end

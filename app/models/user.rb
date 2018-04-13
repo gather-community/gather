@@ -20,6 +20,7 @@ class User < ApplicationRecord
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :assignments
+  has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
   scope :all_in_community_or_adult_in_cluster, ->(c) { joins(household: :community).
@@ -152,7 +153,7 @@ class User < ApplicationRecord
   end
 
   def any_assignments?
-    assignments.any?
+    assignments.any? || work_assignments.any?
   end
 
   def activate

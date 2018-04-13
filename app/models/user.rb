@@ -83,17 +83,10 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   # This is needed for remembering users across sessions because users don't always have passwords.
-  before_create do
-    self.remember_token ||= Devise.friendly_token
-  end
-
-  before_save do
-    raise People::AdultWithGuardianError if adult? && guardians.present?
-  end
-
-  before_destroy do
-    photo.destroy
-  end
+  before_create { self.remember_token ||= Devise.friendly_token }
+  before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
+  before_destroy { photo.destroy }
+  after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first

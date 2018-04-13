@@ -7,6 +7,7 @@ module Work
 
     included do
       include Elasticsearch::Model
+      include Elasticsearch::Model::Callbacks
 
       settings index: {
         number_of_shards: 1,
@@ -28,7 +29,7 @@ module Work
     end
 
     def as_indexed_json(_options = {})
-      ShiftSearchSerializer.new(self)
+      ShiftSearchSerializer.new(self).as_json
     end
   end
 end

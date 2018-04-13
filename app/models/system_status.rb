@@ -3,9 +3,18 @@
 # Checks system status for use in the ping page.
 class SystemStatus
   BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
+  SERVICES = %i[app database delayed_job redis elasticsearch backups].freeze
 
   def ok?
-    database_up? && delayed_job_up? && redis_up? && backups_recent?
+    statuses.values.all?
+  end
+
+  def statuses
+    @statuses ||= SERVICES.map { |s| [s, send("#{s}_up?")] }.to_h
+  end
+
+  def app_up?
+    true
   end
 
   def database_up?
@@ -28,6 +37,16 @@ class SystemStatus
       end
   end
 
+  def elasticsearch_up?
+    return @elasticsearch_up if defined?(@elasticsearch_up)
+    @elasticsearch_up =
+      begin
+        Work::Shift.search("foo").results.size && true
+      rescue Faraday::ConnectionFailed
+        false
+      end
+  end
+
   def redis_up?
     return @redis_up if defined?(@redis_up)
     @redis_up =
@@ -38,10 +57,10 @@ class SystemStatus
       end
   end
 
-  def backups_recent?
-    return @backups_recent if defined?(@backups_recent)
-    return (@backups_recent = false) unless File.exist?(BACKUP_TIMES_FILE)
-    @backups_recent = File.read(BACKUP_TIMES_FILE).strip.split("\n").all? do |stamp|
+  def backups_up?
+    return @backups_up if defined?(@backups_up)
+    return (@backups_up = false) unless File.exist?(BACKUP_TIMES_FILE)
+    @backups_up = File.read(BACKUP_TIMES_FILE).strip.split("\n").all? do |stamp|
       # The timestamp fetch operation runs an hour after the backup operation so we
       # do 26 hours instead of 24 to allow a little leeway.
       Time.current - Time.zone.parse(stamp) <= 26.hours

@@ -212,6 +212,7 @@ GEM
       activesupport (> 3)
       elasticsearch (~> 5)
       hashie
+    elasticsearch-rails (5.0.2)
     elasticsearch-transport (5.0.4)
       faraday
       multi_json
@@ -487,7 +488,8 @@ DEPENDENCIES
   diffy (~> 3.2)
   draper (~> 3.0)
   dropzonejs-rails (~> 0.7)
-  elasticsearch-model
+  elasticsearch-model (~> 5.0)
+  elasticsearch-rails (~> 5.0)
   exception_notification (~> 4.1)
   factory_bot_rails (~> 4.0)
   faker (~> 1.7)

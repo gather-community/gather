@@ -18,7 +18,7 @@ module Work
       else
         scope_shifts
         @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
-          lenses.cache_key, params[:page] || 1].join("|")
+                      lenses.cache_key, params[:page] || 1].join("|")
         @autorefresh = @period.draft? || @period.open?
 
         if request.xhr?
@@ -103,21 +103,17 @@ module Work
     def apply_shift_lens
       @shifts =
         case lenses[:shift].value
-        when "open"
-          @shifts.open
-        when "me"
-          @shifts.with_user(current_user)
-        when "myhh"
-          @shifts.with_user(current_user.household.users)
-        when "notpre"
-          @shifts.with_non_preassigned_or_empty_slots
-        else
-          lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
+        when "open" then @shifts.open
+        when "me" then @shifts.with_user(current_user)
+        when "myhh" then @shifts.with_user(current_user.household.users)
+        when "notpre" then @shifts.with_non_preassigned_or_empty_slots
+        else lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
         end
     end
 
     def apply_search_lens
-      @shifts = @shifts.matching(lenses[:search].value) if lenses[:search].present?
+      return if lenses[:search].blank?
+      @shifts = @shifts.merge(Work::Shift.search(lenses[:search].value).records.records)
     end
   end
 end

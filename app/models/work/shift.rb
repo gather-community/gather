@@ -40,16 +40,6 @@ module Work
         WHERE work_assignments.shift_id = work_shifts.id AND work_assignments.user_id IN (?))",
         Array.wrap(users).map(&:id))
     }
-    scope :matching, lambda { |search|
-      joins(:job, "LEFT OUTER JOIN people_groups ON people_groups.id = work_jobs.requester_id")
-        .where("
-          work_jobs.title ILIKE ?
-            OR people_groups.name ILIKE ?
-            OR EXISTS (SELECT id FROM users WHERE id IN (
-              SELECT user_id FROM work_assignments
-                WHERE shift_id = work_shifts.id AND (first_name ILIKE ? OR last_name ILIKE ?)))",
-          *(["%#{search}%"] * 4))
-    }
     scope :with_non_preassigned_or_empty_slots, lambda {
       where("(SELECT COUNT(id) FROM work_assignments
         WHERE work_assignments.shift_id = work_shifts.id AND work_assignments.preassigned = 't') < slots")

@@ -19,6 +19,7 @@ For both production and development environments:
     1. Once Ruby is installed, run `gem install bundler` to install.
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
+1. Elasticsearch 6.2+ (search engine)
 1. ImageMagick v6.8+ (image manipulation)
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
@@ -45,7 +46,7 @@ Follow these steps to setup a development environment for Gather.
     1. Run `bundle install` to install the required gems.
 1. Set local config
     1. Copy `config/settings.local.yml.example` to `config/settings.local.yml`.
-    1. Edit `config/settings.local.yml` to fit your environment.
+    1. Edit `config/settings.local.yml` to fit your environment. Be sure to read all the comments within that file for guidance.
 1. Create development and test databases and schemas
     1. Copy `config/database.yml.example` to `config/database.yml`.
     1. Run `rake db:create` to create `gather_development` and `gather_test` databases.

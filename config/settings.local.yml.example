@@ -44,3 +44,11 @@ email:
 #   authentication: :plain
 #   user_name: "user"
 #   password: "xxx"
+
+# These options are passed directly to the Elasticsearch::Client initializer.
+# See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
+# The default settings should work in most cases.
+elasticsearch:
+  host: localhost
+  port: 9200
+  log: true

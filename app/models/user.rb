@@ -19,7 +19,7 @@ class User < ApplicationRecord
     dependent: :destroy
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
-  has_many :assignments
+  has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
@@ -153,7 +153,7 @@ class User < ApplicationRecord
   end
 
   def any_assignments?
-    assignments.any? || work_assignments.any?
+    meal_assignments.any? || work_assignments.any?
   end
 
   def activate

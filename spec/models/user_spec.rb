@@ -111,7 +111,7 @@ describe User do
     end
 
     context "with meal assignment" do
-      before { user.assignments.create!(role: "cleaner", meal: create(:meal)) }
+      before { user.meal_assignments.create!(role: "cleaner", meal: create(:meal)) }
       it { is_expected.to be true }
     end
 

@@ -5,8 +5,8 @@ class Assignment < ApplicationRecord
 
   scope :oldest_first, -> { joins(:meal).order("meals.served_at") }
 
-  belongs_to :user
-  belongs_to :meal
+  belongs_to :user, inverse_of: :meal_assignments
+  belongs_to :meal, inverse_of: :assignments
 
   def empty?
     user_id.blank?

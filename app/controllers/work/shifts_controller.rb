@@ -113,7 +113,21 @@ module Work
 
     def apply_search_lens
       return if lenses[:search].blank?
-      @shifts = @shifts.merge(Work::Shift.search(lenses[:search].value).records.records)
+      search = Work::Shift.search(
+        query: {
+          multi_match: {
+            query: lenses[:search].value,
+            type: :cross_fields,
+            operator: :and
+          }
+        },
+        # We set size to 10k because we don't need to worry about restricting the result set here.
+        # It's restricted for us by the other scoping stuff.
+        # TODO: This is a big problem because it doesn't scale. We need to change the above lens application
+        # stuff to use the search fields, at least for period and community
+        size: 10_000
+      )
+      @shifts = @shifts.merge(search.records.records)
     end
   end
 end

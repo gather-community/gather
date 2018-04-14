@@ -78,12 +78,15 @@
   }
 
   .signup-link {
-    color: $theme-accent;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
+    height: 20px;
     margin-top: 10px;
-    white-space: nowrap;
+
+    a {
+      color: $theme-accent;
+      font-size: 16px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
   }
 
   .signup-error {

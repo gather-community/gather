@@ -20,6 +20,8 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
 
   handleSignupClick: (event) ->
     card = @$(event.target).closest(".shift-card")
+    card.find(".signup-link a").hide()
+    card.find(".signup-link .loading-indicator").show()
     event.preventDefault()
     $.ajax
       method: "post"

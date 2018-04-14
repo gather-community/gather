@@ -66,4 +66,8 @@ module ApplicationHelper
     end
     flash_message(:notice, html)
   end
+
+  def inline_loading_indicator
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none")
+  end
 end

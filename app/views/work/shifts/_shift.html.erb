@@ -36,7 +36,10 @@
           </div>
         <% end %>
         <% if policy(shift).signup? %>
-          <a href="#" class="signup-link"><%= icon_tag("bolt") %> Sign Up!</a>
+          <div class="signup-link">
+            <a href="#"><%= icon_tag("bolt") %> Sign Up!</a>
+            <%= inline_loading_indicator %>
+          </div>
         <% end %>
       </td>
     </tr>

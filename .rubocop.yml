@@ -64,6 +64,9 @@ Style/Documentation:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 

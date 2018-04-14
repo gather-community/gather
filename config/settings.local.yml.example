@@ -51,4 +51,3 @@ email:
 elasticsearch:
   host: localhost
   port: 9200
-  log: true

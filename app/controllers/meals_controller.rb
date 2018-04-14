@@ -40,11 +40,6 @@ class MealsController < ApplicationController
     load_prev_next_meal
   end
 
-  def reports
-    skip_authorization
-    redirect_to report_meals_path
-  end
-
   def report
     authorize sample_meal, :report?
     @community = current_community

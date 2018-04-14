@@ -28,11 +28,12 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/meals/reports", to: redirect("/meals/report") # Legacy path
+
   resources :meals do
     collection do
       get :jobs
       get :report
-      get :reports # Legacy
     end
     member do
       put :close
@@ -110,6 +111,7 @@ Rails.application.routes.draw do
     resources :jobs
     resources :periods, except: :show
     get "report", to: "periods#report", as: :report
+    get "/", to: redirect("/work/signups")
   end
 
   resources :uploads, only: %i[create destroy]

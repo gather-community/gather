@@ -1,3 +1,4 @@
+@import "global/variables";
 @import "global/bootstrap_variables";
 
 // Vendor
@@ -17,6 +18,5 @@
 
 // App
 @import "global/bootstrap_overrides";
-@import "global/variables";
 @import "global/**/*";
 @import "local/**/*";

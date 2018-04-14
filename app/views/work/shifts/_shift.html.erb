@@ -1,0 +1,51 @@
+<div class="shift-card section <%= "mine" if shift.mine? %>" data-id="<%= shift.id %>">
+  <table>
+    <tr>
+      <td>
+        <%= shift.link_with_icon %>
+      </td>
+      <td>
+        <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
+          <%= shift.hours_formatted %>h
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="shift-times"><%= shift.times %></div>
+      </td>
+      <td class="photo-cell" rowspan="2">
+        <div class="photos <%= "single" if shift.assignments.size == 1 %>">
+          <%= shift.photos %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="owners-cell">
+        <% shift.assignments.each do |assignment| %>
+          <div class="owner-name">
+            <%= assignment.user.decorate.name_with_inactive %>
+            <% if assignment.preassigned? %>
+              &nbsp;<%= icon_tag("thumb-tack", title: I18n.t("work.preassigned")) %>
+            <% end %>
+          </div>
+        <% end %>
+        <% if !shift.job_full_community? && shift.empty_slots > 0 %>
+          <div class="open-slots">
+            <%= t("work/shift.slots_open", count: shift.empty_slots) %>
+          </div>
+        <% end %>
+        <% if policy(shift).signup? %>
+          <a href="#" class="signup-link"><%= icon_tag("bolt") %> Sign Up!</a>
+        <% end %>
+      </td>
+    </tr>
+    <% if @error %>
+      <tr>
+        <td colspan="2">
+          <div class="signup-error alert alert-danger"><%= @error %></div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

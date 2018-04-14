@@ -66,6 +66,10 @@ Style/EmptyMethod:
 
 Style/MethodCallWithArgsParentheses:
   Enabled: true
+  IgnoredMethods:
+    - []
+    - to
+    - not_to
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

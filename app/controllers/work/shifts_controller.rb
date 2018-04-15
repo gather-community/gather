@@ -5,7 +5,7 @@ module Work
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
     decorates_assigned :shifts, :shift
-    helper_method :sample_shift
+    helper_method :sample_shift, :topline
 
     def index
       authorize sample_shift
@@ -20,6 +20,7 @@ module Work
         @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
                       lenses.cache_key, params[:page] || 1].join("|")
         @autorefresh = !params[:norefresh] && (@period.draft? || @period.open?)
+        @topline = Topline.new(period: @period, user: current_user)
 
         if request.xhr?
           render partial: "shifts"
@@ -48,9 +49,10 @@ module Work
       end
 
       if request.xhr?
+        @topline = Topline.new(period: shift.period, user: current_user)
         render json: {
           shift: render_to_string(partial: "shift", locals: {shift: shift}),
-          topline: ToplineBuilder.new(shift.period).to_s
+          topline: render_to_string(partial: "topline")
         }
       else
         if @error
@@ -128,6 +130,11 @@ module Work
         size: 10_000
       )
       @shifts = @shifts.merge(search.records.records)
+    end
+
+    def topline
+      # Draper inferral is not working here for some reason.
+      ToplineDecorator.new(@topline)
     end
   end
 end

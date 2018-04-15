@@ -1,7 +1,7 @@
 <% cache @cache_key do %>
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
   <div class="shifts-main">
-    <%= Work::ToplineBuilder.new(@period) %>
+    <%= render("topline") %>
     <% if shifts.empty? %>
       <div class="col-sm-12 none-found">
         <%= t("work/jobs.none_found") %> <%= lenses.no_result_clear_filter_link %>

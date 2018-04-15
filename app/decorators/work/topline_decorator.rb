@@ -7,14 +7,16 @@ module Work
 
     # Takes a summary data structure like and converts to nice string.
     # See spec for data structure examples.
-    def str
+    def to_s
+      return @to_s if defined?(@to_s)
+      return (@to_s = nil) if summary.nil?
       sentences = %i[self household].map do |who|
         next unless summary[who]
         chunks = summary[who].map { |i| chunk_for_item(i) }
         h.t("work.topline.#{who}") << " " << join_chunks(chunks)
       end
       sentences << (summary[:done] ? h.t("work.topline.done") : nil)
-      sentences.compact.join(" ").html_safe
+      @to_s = sentences.compact.join(" ").html_safe
     end
 
     private

@@ -13,19 +13,20 @@ module Work
     end
 
     def summary
-      return nil if !period.open? || period.quota_none? || share_for(:self).zero?
-      result = {}
-      result[:self] = obligations_for(:self)
+      return @summary if defined?(@summary)
+      return (@summary = nil) if !period.open? || period.quota_none? || share_for(:self).zero?
+      @summary = {}
+      @summary[:self] = obligations_for(:self)
       if period.quota_by_person?
-        result[:done] = all_ok?(result[:self])
+        @summary[:done] = all_ok?(@summary[:self])
       else
-        result[:household] = obligations_for(:household)
-        result[:done] = all_ok?(result[:household])
+        @summary[:household] = obligations_for(:household)
+        @summary[:done] = all_ok?(@summary[:household])
 
         # If household is all set, this overrides all self obligations to be ok.
-        result[:self].each { |o| o[:ok] = true } if result[:done]
+        @summary[:self].each { |o| o[:ok] = true } if @summary[:done]
       end
-      result
+      @summary
     end
 
     private

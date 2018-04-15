@@ -11,6 +11,19 @@
   margin-top: 10px;
   text-align: center;
   font-size: 18px;
+
+  i, b {
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  i {
+    color: $theme-accent;
+  }
+
+  b {
+    color: $error-red;
+  }
 }
 
 .shift-card {

@@ -5,7 +5,7 @@ require "rails_helper"
 describe Work::ToplineDecorator do
   let(:builder) { described_class.new(double(summary: summary)) }
   let(:regular) { OpenStruct.new(title: "regular") }
-  subject { builder.str }
+  subject { builder.to_s }
 
   context "by_user quota" do
     context "no full community jobs" do
@@ -26,7 +26,7 @@ describe Work::ToplineDecorator do
       context "complete" do
         let(:summary) { {self: [{bucket: regular, got: 29, ttl: 28.43, ok: true}], done: true} }
         it do
-          is_expected.to eq "You have signed up for <i>29/28.5</i> hours. You're all set!"
+          is_expected.to eq "You have signed up for <i>29/28.5</i> hours. <i>You&#39;re all set!</i>"
         end
       end
     end
@@ -66,7 +66,7 @@ describe Work::ToplineDecorator do
         end
         it do
           is_expected.to eq "You have signed up for <i>28.5/28.5</i> regular hours "\
-            "and <i>6/6</i> Foo Bar hours. You're all set!"
+            "and <i>6/6</i> Foo Bar hours. <i>You&#39;re all set!</i>"
         end
       end
     end
@@ -135,7 +135,7 @@ describe Work::ToplineDecorator do
       it do
         is_expected.to eq "You have signed up for <i>25/28.5</i> regular hours "\
           "and <i>6/6</i> Foo Bar hours. Your household has <i>58/57</i> regular hours "\
-          "and <i>12/12</i> Foo Bar hours. You're all set!"
+          "and <i>12/12</i> Foo Bar hours. <i>You&#39;re all set!</i>"
       end
     end
   end

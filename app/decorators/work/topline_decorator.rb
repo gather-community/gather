@@ -15,7 +15,7 @@ module Work
         chunks = summary[who].map { |i| chunk_for_item(i) }
         h.t("work.topline.#{who}") << " " << join_chunks(chunks)
       end
-      sentences << (summary[:done] ? h.t("work.topline.done") : nil)
+      sentences << (summary[:done] ? h.content_tag(:i, h.t("work.topline.done")) : nil)
       @to_s = sentences.compact.join(" ").html_safe
     end
 

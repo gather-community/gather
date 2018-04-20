@@ -14,6 +14,8 @@
           "select2-prompt" => t("select2.prompts.household"),
           "select2-context" => "finalize"
       }) %>
+      <%= f.error :household_id %>
+      <%= f.error :base %>
     <% end %>
   </td>
   <% Signup::DINER_TYPES.each do |dt| %>

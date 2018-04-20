@@ -21,10 +21,11 @@ class Signup < ApplicationRecord
   scope :community_first, ->(c) do
     includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
   end
-  scope :sorted, -> { joins(household: :community).order('communities.abbrv, households.name') }
+  scope :sorted, -> { joins(household: :community).order("communities.abbrv, households.name") }
 
   normalize_attributes :comments
 
+  validates :household_id, presence: true
   validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
   validate :max_signups_per_type, :dont_exceed_spots, :nonzero_signups_if_new
 

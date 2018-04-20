@@ -56,9 +56,10 @@ module Reservations
 
     # Validates that changes to the reservation are valid with respect to the meal.
     def validate_reservation(reservation)
-      if reservation.starts_at > meal.served_at
+      return if meal.served_at.nil?
+      if reservation.starts_at.try(:>, meal.served_at)
         reservation.errors.add(:starts_at, :after_meal_time, time: meal_time)
-      elsif reservation.ends_at < meal.served_at
+      elsif reservation.ends_at.try(:<, meal.served_at)
         reservation.errors.add(:ends_at, :before_meal_time, time: meal_time)
       end
     end

@@ -176,6 +176,27 @@ RSpec.describe Reservations::MealReservationHandler, type: :model do
         expect(reservation.errors[:ends_at]).to eq ["must be after the meal time (12:00pm)"]
       end
     end
+
+    context "with reservation with nil starts_at" do
+      it "should not error" do
+        reservation.starts_at = nil
+        handler2.validate_reservation(reservation)
+      end
+    end
+
+    context "with reservation with nil ends_at" do
+      it "should not error" do
+        reservation.ends_at = nil
+        handler2.validate_reservation(reservation)
+      end
+    end
+
+    context "with meal with nil served_at" do
+      it "should not error" do
+        meal.served_at = nil
+        handler2.validate_reservation(reservation)
+      end
+    end
   end
 
   describe "sync_resourcings" do

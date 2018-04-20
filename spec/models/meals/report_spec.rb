@@ -14,10 +14,10 @@ RSpec.describe Meals::Report, type: :model do
     end
   end
 
-  describe "range" do
+  describe "default_range" do
     context "with no meals" do
       it "should end on the last full month" do
-        expect(report.range).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
+        expect(report.send(:default_range)).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Meals::Report, type: :model do
       end
 
       it "should end on month before previous month" do
-        expect(report.range).to eq Date.new(2015, 9, 1)..Date.new(2016, 8, 31)
+        expect(report.send(:default_range)).to eq Date.new(2015, 9, 1)..Date.new(2016, 8, 31)
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe Meals::Report, type: :model do
       end
 
       it "should end on month before previous month" do
-        expect(report.range).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
+        expect(report.send(:default_range)).to eq Date.new(2015, 10, 1)..Date.new(2016, 9, 30)
       end
     end
   end

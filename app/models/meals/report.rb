@@ -3,26 +3,12 @@
 module Meals
   # Calculates a bunch of statistics about the meals system.
   class Report
-    attr_reader :type_map, :community
+    attr_accessor :type_map, :community, :range
     SUNDAY = Date.parse("Sunday")
 
-    def initialize(community)
-      @community = community
-    end
-
-    def range
-      return @range if @range
-
-      # If there are any finalizable meals remaining last month, don't include that month.
-      prev_month_range = Time.zone.today.prev_month.beginning_of_month..
-        Time.zone.today.prev_month.end_of_month
-      range_end = if Meal.hosted_by(community).where(served_at: prev_month_range).finalizable.any?
-                    Time.zone.today.prev_month.prev_month.end_of_month
-                  else
-                    Time.zone.today.prev_month.end_of_month
-                  end
-
-      @range = range_end.prev_year.next_month.beginning_of_month..range_end
+    def initialize(community, range = nil)
+      self.community = community
+      self.range = range || default_range
     end
 
     # Returns all diner types that appear in range-constrained results.
@@ -116,6 +102,18 @@ module Meals
     end
 
     private
+
+    def default_range
+      # If there are any finalizable meals remaining last month, don't include that month.
+      prev_month_range = Time.zone.today.prev_month.beginning_of_month..
+        Time.zone.today.prev_month.end_of_month
+      range_end = if Meal.hosted_by(community).where(served_at: prev_month_range).finalizable.any?
+                    Time.zone.today.prev_month.prev_month.end_of_month
+                  else
+                    Time.zone.today.prev_month.end_of_month
+                  end
+      range_end.prev_year.next_month.beginning_of_month..range_end
+    end
 
     def breakout(key_func: nil, totals: false, **sql_options)
       key_func = ->(row) { row["breakout_expr"] } if key_func.nil?

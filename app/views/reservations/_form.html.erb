@@ -44,7 +44,7 @@
   <%= f.input :note %>
 
   <%# Meal reservations are only ever edited, so there is no need for this. It would always be checked. %>
-  <% if resource.has_guidelines? && !reservation.meal? %>
+  <% if resource.guidelines? && !reservation.meal? %>
     <%= f.input :guidelines, required: true do %>
       <div id="guidelines">
         <%= safe_render_markdown(resource.all_guidelines) %>

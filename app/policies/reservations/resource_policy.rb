@@ -34,7 +34,7 @@ module Reservations
     end
 
     def destroy?
-      !resource.has_reservations? && active_admin?
+      !resource.reservations? && active_admin?
     end
 
     def activate?

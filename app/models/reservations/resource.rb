@@ -1,8 +1,12 @@
-module Reservations
-  class Resource < ApplicationRecord
-    include PhotoDestroyable, Deactivatable
+# frozen_string_literal: true
 
-    DEFAULT_CALENDAR_VIEWS = %i(week month)
+module Reservations
+  # Something that can be reserved.
+  class Resource < ApplicationRecord
+    include Deactivatable
+    include PhotoDestroyable
+
+    DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
 
     acts_as_tenant :cluster
 
@@ -14,19 +18,21 @@ module Reservations
     has_many :reservations, class_name: "Reservations::Reservation", dependent: :destroy
 
     has_attached_file :photo,
-      styles: { thumb: "220x165#" },
+      styles: {thumb: "220x165#"},
       default_url: "missing/reservations/resources/:style.png"
-    validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
+    validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
     validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
 
-    validates :name, presence: true
+    validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?
 
     scope :meal_hostable, -> { where(meal_hostable: true) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
     scope :by_name, -> { order(:name) }
-    scope :with_reservation_counts, -> { select("resources.*,
-      (SELECT COUNT(id) FROM reservations WHERE resource_id = resources.id) AS reservation_count") }
+    scope :with_reservation_counts, lambda {
+      select("resources.*, (SELECT COUNT(id) FROM reservations
+        WHERE resource_id = resources.id) AS reservation_count")
+    }
 
     delegate :name, to: :community, prefix: true
 
@@ -43,11 +49,11 @@ module Reservations
       attributes["reservation_count"] || reservations.count
     end
 
-    def has_reservations?
-      reservation_count > 0
+    def reservations?
+      reservation_count.positive?
     end
 
-    def has_guidelines?
+    def guidelines?
       all_guidelines.present?
     end
 
@@ -56,7 +62,7 @@ module Reservations
     def all_guidelines
       return @all_guidelines if @all_guidelines
 
-      own = guidelines.blank? ? nil : guidelines
+      own = guidelines.presence
       shared = shared_guidelines.map(&:body)
       all = ([own] + shared).compact.map(&:strip)
       @all_guidelines = all.join("\n\n---\n\n")

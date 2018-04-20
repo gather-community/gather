@@ -6,7 +6,7 @@ module Meals
     attr_accessor :type_map, :community, :range
     SUNDAY = Date.parse("Sunday")
 
-    def initialize(community, range = nil)
+    def initialize(community, range: nil)
       self.community = community
       self.range = range || default_range
     end

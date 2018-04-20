@@ -6,7 +6,8 @@ RSpec.describe Meals::Report, type: :model do
   let!(:community) { create(:community, name: "Community 1", abbrv: "C1") }
   let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
   let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }
-  let!(:report) { Meals::Report.new(community) }
+  let(:range) { nil }
+  let!(:report) { Meals::Report.new(community, range: range) }
 
   around do |example|
     Timecop.freeze(Time.zone.parse("2016-10-15 12:00:00")) do
@@ -92,7 +93,9 @@ RSpec.describe Meals::Report, type: :model do
   describe "overview" do
     context "with finalized meals" do
       before do
-        meals = create_list(:meal, 2, :finalized, community: community)
+        meals = []
+        meals << create(:meal, :finalized, community: community, served_at: 1.month.ago)
+        meals << create(:meal, :finalized, community: community, served_at: 6.months.ago)
 
         # Very old meal in different community.
         meals << create(:meal, :finalized, community: community2, served_at: 2.years.ago)
@@ -214,6 +217,14 @@ RSpec.describe Meals::Report, type: :model do
           expect(all["avg_veg_pct"]).to be_within(0.1).of 22.58
           expect(all["avg_adult"]).to eq 6
           expect(all["avg_adult_pct"]).to be_within(0.1).of 77.4
+        end
+
+        context "with explicit range" do
+          let(:range) { (Date.new(2016, 1, 1))..(Date.new(2016, 3, 1)) }
+
+          it "should have correct data from specific range" do
+            expect(report.by_month[:all]["ttl_meals"]).to eq 3
+          end
         end
       end
 

@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Meals::Report, type: :model do
   let!(:community) { create(:community, name: "Community 1", abbrv: "C1") }
@@ -53,7 +55,7 @@ RSpec.describe Meals::Report, type: :model do
     end
 
     it "should return all diner types in results" do
-      expect(report.diner_types).to eq %w(adult senior little_kid)
+      expect(report.diner_types).to eq %w[adult senior little_kid]
     end
   end
 
@@ -131,7 +133,8 @@ RSpec.describe Meals::Report, type: :model do
 
     context "with finalized meals" do
       before do
-        meals, hholds = [], []
+        meals = []
+        hholds = []
         meals << create(:meal, :finalized, community: community, served_at: "2016-01-01 18:00") # Fri
         meals << create(:meal, :finalized, community: community, served_at: "2016-02-10 18:00") # Wed
         meals << create(:meal, :finalized, community: community, served_at: "2016-02-12 18:00") # Fri
@@ -157,9 +160,9 @@ RSpec.describe Meals::Report, type: :model do
 
         # Meals from community 2 and X
         meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)
-        meals2.each do |m|
-          m.signups << build(:signup, meal: m, adult_meat: 2)
-          m.save!
+        meals2.each do |meal|
+          meal.signups << build(:signup, meal: meal, adult_meat: 2)
+          meal.save!
         end
         mealX = create(:meal, :finalized, community: communityX, served_at: 2.months.ago)
         mealX.signups << build(:signup, meal: mealX, adult_meat: 2)
@@ -169,12 +172,12 @@ RSpec.describe Meals::Report, type: :model do
       describe "by_month" do
         it "should have correct data" do
           expect(report.by_month.size).to eq 4
-          expect((report.by_month.keys - [:all]).map(&:month)).to eq [1,2,4]
+          expect((report.by_month.keys - [:all]).map(&:month)).to eq [1, 2, 4]
 
-          jan = report.by_month[Date.new(2016,1,1)]
-          feb = report.by_month[Date.new(2016,2,1)]
-          mar = report.by_month[Date.new(2016,3,1)]
-          apr = report.by_month[Date.new(2016,4,1)]
+          jan = report.by_month[Date.new(2016, 1, 1)]
+          feb = report.by_month[Date.new(2016, 2, 1)]
+          mar = report.by_month[Date.new(2016, 3, 1)]
+          apr = report.by_month[Date.new(2016, 4, 1)]
           all = report.by_month[:all]
 
           expect(jan["ttl_meals"]).to eq 1
@@ -217,8 +220,8 @@ RSpec.describe Meals::Report, type: :model do
       describe "by_month_no_totals_or_gaps" do
         it "should have correct data" do
           expect(report.by_month_no_totals_or_gaps.size).to eq 4
-          expect(report.by_month_no_totals_or_gaps.keys.map(&:month)).to eq [1,2,3,4]
-          expect(report.by_month_no_totals_or_gaps[Date.new(2016,3,1)]).to eq({})
+          expect(report.by_month_no_totals_or_gaps.keys.map(&:month)).to eq [1, 2, 3, 4]
+          expect(report.by_month_no_totals_or_gaps[Date.new(2016, 3, 1)]).to eq({})
         end
       end
 
@@ -226,7 +229,7 @@ RSpec.describe Meals::Report, type: :model do
       describe "by_weekday" do
         it "should have correct data" do
           expect(report.by_weekday.size).to eq 3
-          expect(report.by_weekday.keys.map { |k| k.strftime("%a") }).to eq %w(Tue Wed Fri)
+          expect(report.by_weekday.keys.map { |k| k.strftime("%a") }).to eq %w[Tue Wed Fri]
         end
       end
 

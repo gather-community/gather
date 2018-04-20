@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Meals
+  # Calculates a bunch of statistics about the meals system.
   class Report
     attr_reader :type_map, :community
     SUNDAY = Date.parse("Sunday")
@@ -14,17 +17,17 @@ module Meals
       prev_month_range = Time.zone.today.prev_month.beginning_of_month..
         Time.zone.today.prev_month.end_of_month
       range_end = if Meal.hosted_by(community).where(served_at: prev_month_range).finalizable.any?
-        Time.zone.today.prev_month.prev_month.end_of_month
-      else
-        Time.zone.today.prev_month.end_of_month
-      end
+                    Time.zone.today.prev_month.prev_month.end_of_month
+                  else
+                    Time.zone.today.prev_month.end_of_month
+                  end
 
       @range = range_end.prev_year.next_month.beginning_of_month..range_end
     end
 
     # Returns all diner types that appear in range-constrained results.
     def diner_types
-      by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"] > 0 } : []
+      by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"].positive? } : []
     end
 
     def empty?
@@ -53,8 +56,8 @@ module Meals
       @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
         if by_month
           months = by_month.keys - [:all]
-          month, max = months.min, months.max
-          while month <= max do
+          month, max = months.minmax
+          while month <= max
             result[month] = by_month[month] || {}
             month = month >> 1
           end
@@ -72,8 +75,7 @@ module Meals
     def by_community
       @by_community ||= breakout(
         breakout_expr: "communities.name",
-        all_communities: true,
-        include_community: true
+        all_communities: true
       )
     end
 
@@ -122,21 +124,19 @@ module Meals
       result = meals_query(sql_options).index_by(&key_func)
 
       # Get totals.
-      if totals
-        result[:all] = meals_query(sql_options.except(:breakout_expr)).first
-      end
+      result[:all] = meals_query(sql_options.except(:breakout_expr)).first if totals
 
       # Return nil if no results.
-      result.except(:all).reject { |k, v| v == {} }.empty? ? nil : result
+      result.except(:all).reject { |_k, v| v == {} }.empty? ? nil : result
     end
 
-    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false,
-      include_community: false)
+    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
 
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
 
-      wheres, vars = [], []
+      wheres = []
+      vars = []
 
       wheres << "meals.status = 'finalized'"
 
@@ -222,7 +222,7 @@ module Meals
     def signup_col_sum_expr(tbl = "signups", prefix: "", diner_types: nil, food_types: nil)
       diner_types ||= Signup::DINER_TYPES
       food_types ||= Signup::FOOD_TYPES
-      types = diner_types.map{ |dt| food_types.map{ |ft| "#{prefix}#{dt}_#{ft}" } }.flatten
+      types = diner_types.map { |dt| food_types.map { |ft| "#{prefix}#{dt}_#{ft}" } }.flatten
       types.map { |c| "#{tbl}.#{c}" }.join("+")
     end
 

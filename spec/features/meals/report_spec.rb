@@ -22,7 +22,8 @@ feature "meal report", js: true do
 
   context "with data" do
     before do
-      meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
+      meals = create_list(:meal, 2, :finalized, community: community,
+                                                served_at: Time.zone.today.beginning_of_year)
       meals.each do |m|
         m.signups << build(:signup, meal: m, adult_meat: 2)
         m.signups << build(:signup, meal: m, adult_veg: 1)
@@ -40,6 +41,10 @@ feature "meal report", js: true do
         # This hopefully will test that charts are getting rendered
         # and thus catch any regressions.
         expect(page).to have_css("svg.nvd3-svg")
+
+        select_lens(:dates, "This Year")
+        year = Time.zone.today.year
+        expect(page).to have_content("January #{year}-December #{year}")
       end
     end
   end

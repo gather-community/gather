@@ -44,8 +44,7 @@ class MealsController < ApplicationController
     authorize sample_meal, :report?
     @community = current_community
     nav_context(:meals, :report)
-    first_meal_date = Meal.minimum(:served_at).to_date
-    prepare_lenses(date_range: {min_date: first_meal_date}, community: {required: true}) if multi_community?
+    prepare_lenses(*report_lenses)
     @report = Meals::Report.new(@community, range: lenses[:dates].range)
     @communities = Community.by_name_with_first(@community).to_a
   end
@@ -236,5 +235,13 @@ class MealsController < ApplicationController
     if !policy(@meal).administer?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
+  end
+
+  def report_lenses
+    first_meal_date = Meal.minimum(:served_at).to_date
+    result = []
+    result << {date_range: {min_date: first_meal_date}}
+    result << {community: {required: true}} if multi_community?
+    result
   end
 end

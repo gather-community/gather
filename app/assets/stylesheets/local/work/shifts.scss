@@ -59,7 +59,7 @@
 
   .title {
     font-size: 15px;
-    font-weight: bold;
+    font-weight: $medium-bold;
   }
 
   .hours {
@@ -74,7 +74,7 @@
   }
 
   .shift-times {
-    font-weight: bold;
+    font-weight: $medium-bold;
   }
 
   .owner-name {

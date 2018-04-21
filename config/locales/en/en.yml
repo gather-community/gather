@@ -819,3 +819,9 @@ en:
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+
+  date_range_lens:
+    past_12: "Past 12 Months"
+    this_year: "This Year"
+    this_quarter: "This Quarter"
+    all_time: "All Time"

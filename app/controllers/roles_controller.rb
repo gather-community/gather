@@ -2,8 +2,10 @@ class RolesController < ApplicationController
   before_action -> { nav_context(:people, :roles) }
 
   def index
-    authorize Role
-    @roles = policy_scope(Role)
-    @roles = @roles.sort_by { |x| User::ROLES.index(x) } # this doesn't seem to work
+    authorize User
+    @users_by_role = Hash.new { |h, k| h[k] = [] }
+    policy_scope(User).in_community(current_community).includes(:roles).active.by_name.each do |u|
+      u.roles.each { |r| @users_by_role[r.name.to_sym] << u }
+    end
   end
 end

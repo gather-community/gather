@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 feature "roles index" do
@@ -15,7 +16,7 @@ feature "roles index" do
       admins = create_list(:admin, 4)
 
       visit "/roles"
-      expect(page).to have_css("h3", text: "Work coordinator")
+      expect(page).to have_css("h3", text: "Work Coordinator")
       expect(page).to have_css("h3", text: "Admin")
       coordinators.each do |user|
         expect(page).to have_css("a", text: user.name)

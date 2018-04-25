@@ -89,7 +89,7 @@ module NavHelper
             parent: :people,
             path: roles_path,
             permitted: policy(User).index?,
-            icon: "wrench"
+            icon: "fa-users"
           }
         ]
       when :reservations

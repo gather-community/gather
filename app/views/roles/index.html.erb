@@ -1,30 +1,16 @@
 <% content_for(:title, "Roles") %>
 
-<% if @roles.empty? %>
-  <div class="none-found">
-    No roles found.
-  </div>
-<% else %>
-  <% @roles.each do |role| %>
-    <h3><%= role.name.humanize %></h3>
-    <div id="directory-album" class="flowing-columns-max-4 hidden-print">
-      <% role.users.each do |user| %>
-        <% user = user.decorate %>
-        <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
-          <div class="photo-wrapper">
-            <%= link_to(user.photo_if_permitted(:thumb), user) %>
-          </div>
-          <div class="info">
-            <% if user.preferred_contact.present? %>
-              <%= icon_tag(user.preferred_contact_icon,
-                class: "preferred-contact", title: user.preferred_contact_tooltip) %>
-            <% end %>
-            <div><%= link_to(user.name, user) %></div>
-            <div class="email"><%= user.email_link if user.email %></div>
-            <div class="unit-phone"><%= user.unit_and_phone %></div>
-          </div>
+<% User::ROLES.each do |role| %>
+  <h3><%= t(role) %></h3>
+  <% users = @users_by_role[role] %>
+  <div class="flowing-columns-max-4">
+    <% users.each do |user| %>
+      <% user = user.decorate %>
+      <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
+        <div class="info">
+          <div><%= link_to(user.name, user) %></div>
         </div>
-      <% end %>
-    </div>
-  <% end %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Controller for roles actions. Currently just for displaying who's in what role.
 class RolesController < ApplicationController
   before_action -> { nav_context(:people, :roles) }
 

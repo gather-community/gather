@@ -1,7 +1,7 @@
 <% content_for(:title, "Roles") %>
 
 <div class="flowing-columns-max-4 role-lists">
-  <% User::ROLES.each do |role| %>
+  <% @roles.each do |role| %>
     <div class="role-list">
       <h3><%= t("roles.#{role}") %></h3>
       <% if @users_by_role[role].empty? %>

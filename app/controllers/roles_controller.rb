@@ -8,7 +8,11 @@ class RolesController < ApplicationController
     authorize User
     @users_by_role = Hash.new { |h, k| h[k] = [] }
     policy_scope(User).in_community(current_community).includes(:roles).active.by_name.each do |u|
-      u.roles.each { |r| @users_by_role[r.name.to_sym] << u }
+      role_names = u.roles.map { |r| r.name.to_sym }
+      # The user doesn't care about the distinction between different admin types.
+      role_names = role_names.map { |r| User::ADMIN_ROLES.include?(r) ? :admin : r }.uniq
+      role_names.each { |r| @users_by_role[r] << u }
     end
+    @roles = (User::ROLES - User::ADMIN_ROLES).insert(0, :admin)
   end
 end

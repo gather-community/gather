@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include Deactivatable, Phoneable, PhotoDestroyable
 
   ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist work_coordinator)
+  ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i(email text phone)
   NAME_ORDER = "LOWER(first_name), LOWER(last_name)".freeze
 

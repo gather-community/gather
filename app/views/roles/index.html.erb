@@ -1,16 +1,18 @@
 <% content_for(:title, "Roles") %>
 
-<% User::ROLES.each do |role| %>
-  <h3><%= t(role) %></h3>
-  <% users = @users_by_role[role] %>
-  <div class="flowing-columns-max-4">
-    <% users.each do |user| %>
-      <% user = user.decorate %>
-      <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
-        <div class="info">
-          <div><%= link_to(user.name, user) %></div>
-        </div>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<div class="flowing-columns-max-4 role-lists">
+  <% User::ROLES.each do |role| %>
+    <div class="role-list">
+      <h3><%= t("roles.#{role}") %></h3>
+      <% if @users_by_role[role].empty? %>
+        [<%= t("common.none") %>]
+      <% else %>
+        <ul>
+          <% @users_by_role[role].each do |user| %>
+            <li><%= user.decorate.link %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+</div>

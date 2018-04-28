@@ -9,6 +9,7 @@ en:
     inactive: "Inactive"
     max: "Max"
     no_result_clear_filter_link_html: "You can try %{link}."
+    none: "None"
     num_in_total: "%{count} in total"
     save: "Save"
     "true": "True"
@@ -699,6 +700,7 @@ en:
       people:
         directory: "Directory"
         households: "Households"
+        roles: "Roles"
       reservations:
         reservations: "Reservations"
         resources: "Resources"

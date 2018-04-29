@@ -56,7 +56,7 @@ group :development, :test do
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara-screenshot", "~> 1.0"
-  gem "capybara", "~> 2.0"
+  gem "capybara", git: "https://github.com/smoyth/capybara", branch: "2.18_stable"
   gem "database_cleaner", "~> 1.6"
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "poltergeist", "~> 1.0"

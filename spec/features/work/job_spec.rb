@@ -4,6 +4,7 @@ feature "jobs", js: true do
   let(:actor) { create(:work_coordinator) }
   let(:period) { create(:work_period) }
   let!(:groups) { create_list(:people_group, 2) }
+  let!(:users) { create_list(:user, 3) }
   let!(:jobs) do
     [create(:work_job, period: period), create(:work_job, period: period, slot_type: "full_single")]
   end
@@ -30,16 +31,28 @@ feature "jobs", js: true do
     fill_in("Hours", with: "2")
     select(groups.first.name, from: "Requester")
     fill_in("Description", with: "Paints things nicely")
+
+    # Add first shift
     within(all("#shift-rows tr")[0]) do
       pick_datetime(".starts-at", day: 15, hour: 4, next_click: ".shift-slots input")
       pick_datetime(".ends-at", day: 15, hour: 6, next_click: ".shift-slots input")
       find(".shift-slots input").set(2)
     end
+
+    # Add a second shift
     click_on("Add Shift")
     within(all("#shift-rows tr")[1]) do
       pick_datetime(".starts-at", day: 15, hour: 5, next_click: ".shift-slots input")
       pick_datetime(".ends-at", day: 15, hour: 7, next_click: ".shift-slots input")
       find(".shift-slots input").set(4)
+
+      # Add three workers but delete one.
+      click_on("Add Worker")
+      select2(users[0].name, from: all("select.assoc_select2")[0])
+      click_on("Add Worker")
+      select2(users[1].name, from: all("select.assoc_select2")[1])
+      select2(:clear, from: all("select.assoc_select2")[1])
+      select2(users[2].name, from: all("select.assoc_select2")[1])
     end
     click_on("Create Job")
 
@@ -50,6 +63,14 @@ feature "jobs", js: true do
     end
     click_link("AAA Painter")
 
+    # Check for workers added earlier
+    within(all("#shift-rows tr")[1]) do
+      expect(page).to have_content(users[0].name)
+      expect(page).not_to have_content(users[1].name)
+      expect(page).to have_content(users[2].name)
+    end
+
+    # Remove previous shift and add a new one.
     all("#shift-rows tr")[1].find("a.remove_fields").click
     click_on("Add Shift")
     within(all("#shift-rows tr")[1]) do

@@ -7,7 +7,8 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
   resetRefreshInterval: ->
     return unless @options.autorefresh
     clearInterval(@refreshInterval) if @refreshInterval
-    @refreshInterval = setInterval(@refresh.bind(this), 5000)
+    delay = if window._rails_env == "test" then 1000 else 5000
+    @refreshInterval = setInterval(@refresh.bind(this), delay)
 
   events:
     "click .signup-link": "handleSignupClick"

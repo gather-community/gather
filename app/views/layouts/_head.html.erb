@@ -34,4 +34,5 @@
 
 <%= javascript_tag do %>
   $(function() { new Gather.Views.ApplicationView(); });
+  window._rails_env = "<%= Rails.env %>";
 <% end %>

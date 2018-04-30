@@ -247,6 +247,10 @@ module FeatureSpecHelpers
     first(:css, "[data-param-name=#{lens_param_name}]").select(value)
   end
 
+  def clear_lenses
+    find(".lens-bar a.clear").click
+  end
+
   def click_print_button
     first(:css, ".btn-print").click
   end

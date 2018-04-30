@@ -15,14 +15,6 @@ feature "signups", js: true do
     login_as(actor, scope: :user)
   end
 
-  # TODO
-  # click signup
-    # rerenders topline (use ENV vars to force raise, make 'with_env' helper and use in `around`)
-    # already signed up
-    # slots exceeded
-  # unsignup (view, assert some stuff, click unsignup)
-  # Autorefresh (topline, jobs)
-
   it_behaves_like "handles no periods"
 
   context "with period but no shifts" do
@@ -44,7 +36,7 @@ feature "signups", js: true do
       ]
     end
     let!(:group) { create(:people_group, name: "Pants") }
-    let(:jobs) do
+    let!(:jobs) do
       [
         create(:work_job, period: periods[0], title: "Knembler", shift_count: 1, shift_slots: 1),
         create(:work_job, period: periods[0], title: "Fruct Coordinator", shift_count: 2, requester: group),
@@ -54,45 +46,96 @@ feature "signups", js: true do
       ]
     end
 
-    before do
-      periods[0].update!(phase: "draft")
-      jobs[0].shifts[0].assignments.create(user: users[0]) # preassigned
-      periods[0].update!(phase: "open")
-      jobs[1].shifts[1].assignments.create(user: actor)
-      jobs[2].shifts[0].assignments.create(user: actor)
+    describe "filters and search", search: Work::Shift do
+      before do
+        periods[0].update!(phase: "draft")
+        jobs[0].shifts[0].assignments.create(user: users[0]) # preassigned
+        periods[0].update!(phase: "open")
+        jobs[1].shifts[1].assignments.create(user: actor)
+        jobs[2].shifts[0].assignments.create(user: actor)
+      end
+
+      scenario do
+        visit(index_path)
+
+        select_lens(:shift, "All Jobs")
+        expect_jobs(*jobs[0..3])
+
+        find(".lens-bar.upper [name=search]").set("fruct")
+        find(".lens-bar.upper [name=search]").native.send_keys(:return)
+        expect_jobs(jobs[1])
+
+        clear_lenses
+        expect_jobs(*jobs[0..3])
+
+        select_lens(:shift, "Open Jobs")
+        expect_jobs(*jobs[1..3])
+
+        select_lens(:shift, "My Jobs")
+        expect_jobs(*jobs[1..2])
+
+        select_lens(:shift, "My Household")
+        expect_jobs(*jobs[0..2])
+
+        select_lens(:shift, "Not Preassigned")
+        expect_jobs(*jobs[1..3])
+
+        select_lens(:shift, "Pants")
+        expect_jobs(jobs[1], jobs[3])
+
+        select_lens(:shift, "All Jobs")
+        select_lens(:period, periods[1].name)
+        expect_jobs(jobs[4])
+      end
     end
 
-    scenario "filters and search", search: Work::Shift do
-      visit(index_path)
+    describe "signup, show, unsignup, autorefresh", database_cleaner: :truncate do
+      before do
+        periods[0].update!(phase: "open")
+      end
 
-      select_lens(:shift, "All Jobs")
-      expect_jobs(*jobs[0..3])
+      # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
+      # inside nested transactions.
+      scenario do
+        visit(index_path)
 
-      find(".lens-bar.upper [name=search]").set("fruct")
-      find(".lens-bar.upper [name=search]").native.send_keys(:return)
-      expect_jobs(jobs[1])
+        within(".shift-card[data-id='#{jobs[0].shifts[0].id}']") do
+          expect(page).not_to have_content(actor.name)
+          click_on("Sign Up!")
+          expect(page).to have_content(actor.name)
+        end
 
-      clear_lenses
-      expect_jobs(*jobs[0..3])
+        within(".shift-card[data-id='#{jobs[1].shifts[0].id}']") do
+          with_env("STUB_SIGNUP_ERROR" => "Work::SlotsExceededError") do
+            click_on("Sign Up!")
+            expect(page).to have_content("someone beat you to it")
+          end
+        end
 
-      select_lens(:shift, "Open Jobs")
-      expect_jobs(*jobs[1..3])
+        within(".shift-card[data-id='#{jobs[1].shifts[1].id}']") do
+          with_env("STUB_SIGNUP_ERROR" => "Work::AlreadySignedUpError") do
+            click_on("Sign Up!")
+            expect(page).to have_content("already signed up for")
+          end
+        end
 
-      select_lens(:shift, "My Jobs")
-      expect_jobs(*jobs[1..2])
+        click_on("Knembler")
+        expect(page).to have_content(jobs[0].description)
+        accept_confirm { click_on("Remove Signup") }
 
-      select_lens(:shift, "My Household")
-      expect_jobs(*jobs[0..2])
+        within(".shift-card[data-id='#{jobs[0].shifts[0].id}']") do
+          expect(page).not_to have_content(actor.name)
+          click_on("Sign Up!")
+          expect(page).to have_content(actor.name)
+        end
 
-      select_lens(:shift, "Not Preassigned")
-      expect_jobs(*jobs[1..3])
-
-      select_lens(:shift, "Pants")
-      expect_jobs(jobs[1], jobs[3])
-
-      select_lens(:shift, "All Jobs")
-      select_lens(:period, periods[1].name)
-      expect_jobs(jobs[4])
+        # Test autorefresh by simulating someone else having signed up.
+        within(".shift-card[data-id='#{jobs[2].shifts[0].id}']") do
+          expect(page).not_to have_content(users[0].name)
+          jobs[2].shifts[0].signup_user(users[0])
+          expect(page).to have_content(users[0].name)
+        end
+      end
     end
   end
 

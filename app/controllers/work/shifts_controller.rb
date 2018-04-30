@@ -42,6 +42,7 @@ module Work
       authorize @shift
       begin
         @shift.signup_user(current_user)
+        raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
       rescue SlotsExceededError
         @error = t("work/shift.slots_exceeded")
       rescue AlreadySignedUpError

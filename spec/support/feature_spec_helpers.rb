@@ -254,4 +254,11 @@ module FeatureSpecHelpers
   def click_print_button
     first(:css, ".btn-print").click
   end
+
+  def with_env(vars)
+    vars.each_pair { |k, v| ENV[k] = v }
+    yield
+  ensure
+    vars.each_pair { |k, _| ENV.delete(k) }
+  end
 end

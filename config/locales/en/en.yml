@@ -818,6 +818,10 @@ en:
     cancellation_message:
       subject: "Meal on %{datetime} CANCELLED"
 
+  work_mailer:
+    shift_reminder:
+      subject: "Job Reminder: %{title} for %{times}"
+
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"

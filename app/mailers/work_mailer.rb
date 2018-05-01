@@ -11,7 +11,7 @@ class WorkMailer < ApplicationMailer
   end
 
   protected
-  
+
   def community
     @shift.community
   end

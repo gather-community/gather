@@ -6,7 +6,7 @@ module Work
     attr_accessor :period, :user
 
     # Quota is pre-calculated and stored on the period.
-    delegate :quota, to: :period
+    delegate :quota, :quota_by_user?, :quota_by_household?, :quota_none?, to: :period
 
     def initialize(period:, user: nil)
       self.period = period
@@ -18,26 +18,52 @@ module Work
     end
 
     # Returns a hash of user_ids to preassigned hours.
-    def preassigned_by_user
-      @preassigned_by_user ||= fixed_slot_assignments.select(&:preassigned?).group_by(&:user_id).tap do |hash|
-        hash.each do |user_id, assignments|
-          hash[user_id] = assignments.sum(&:shift_hours)
+    def by_user
+      @by_user ||= assignments.group_by(&:user_id).tap do |hash|
+        hash.each do |user_id, assigns|
+          hash[user_id] = {}
+          hash[user_id][:preassigned] = assigns.select(&:preassigned?).sum(&:shift_hours)
+          hash[user_id][:fixed_slot] = assigns.select(&:fixed_slot?).sum(&:shift_hours)
+          assigns.each do |assign|
+            next unless assign.full_community?
+            hash[user_id][assign.job] ||= 0
+            hash[user_id][assign.job] += assign.shift_hours
+          end
+          hash[user_id][:total] = assigns.sum(&:shift_hours)
         end
       end
     end
 
     # Gets period shares via the for_period method that excludes inactive users.
-    # Eager loads user only if we are grouping by household, since we need to get household_id in that case.
     def shares
-      @shares ||= Share.for_period(period).includes(period.quota_by_household? ? :user : nil).to_a
+      @shares ||= Share.for_period(period).includes(:period, user: :household)
+    end
+
+    def shares_by_user
+      @shares_by_user ||= shares.index_by(&:user_id)
+    end
+
+    def users
+      # Exclude users with no share AND no hours
+      @users ||=
+        if period.quota_none?
+          assignments.map(&:user).uniq.sort_by { |u| u.name.downcase }
+        else
+          shares.by_user_name.reject { |s| s.zero? && (by_user[s.user_id] || 0).zero? }.map(&:user)
+        end
+    end
+
+    def households
+      # Exclude users with no share AND no hours
+      @households ||= users.map(&:household).uniq.sort_by { |h| h.name.downcase }
     end
 
     def total_portions
-      @total_portions ||= shares.sum(&:portion)
+      @total_portions ||= shares.to_a.sum(&:portion)
     end
 
     def all_jobs
-      @all_jobs ||= period.jobs.includes(shifts: :assignments).to_a
+      @all_jobs ||= period.jobs.includes(shifts: {assignments: :user}).to_a
     end
 
     def fixed_slot_jobs
@@ -48,8 +74,8 @@ module Work
       @full_community_jobs ||= all_jobs.select(&:full_community?)
     end
 
-    def fixed_slot_assignments
-      @fixed_slot_assignments ||= fixed_slot_jobs.flat_map(&:assignments)
+    def assignments
+      @assignments ||= all_jobs.flat_map(&:assignments)
     end
 
     def fixed_slot_hours
@@ -57,7 +83,7 @@ module Work
     end
 
     def fixed_slot_preassigned_hours
-      @fixed_slot_preassigned_hours ||= preassigned_by_user.values.sum
+      @fixed_slot_preassigned_hours ||= by_user.values.sum { |h| h[:preassigned] }
     end
 
     def fixed_slot_unassigned_hours

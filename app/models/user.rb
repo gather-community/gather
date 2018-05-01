@@ -106,6 +106,11 @@ class User < ApplicationRecord
     @household_by_id = val.is_a?(String) ? val == "true" : val
   end
 
+  # Duck type.
+  def users
+    [self]
+  end
+
   # Includes primary household plus any households affiliated by parentage.
   # For the case where children live in multiple households.
   # Alternatives for future refactors could be:

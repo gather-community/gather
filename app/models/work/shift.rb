@@ -19,11 +19,10 @@ module Work
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
 
-    delegate :title, :hours, :requester, :description, :slot_type, :date_time?, :date_only?,
-      :full_period?, :full_community?, to: :job, prefix: true
-    delegate :community, :period, :period_name,
+    delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
+    delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
       :period_draft?, :period_open?, :period_pending?, :period_published?, :period_archived?,
-      :period_starts_on, :period_ends_on, to: :job
+      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
@@ -47,7 +46,7 @@ module Work
 
     before_validation :normalize
 
-    validates :starts_at, :ends_at, presence: true, unless: :job_full_period?
+    validates :starts_at, :ends_at, presence: true, unless: :full_period?
     validates :slots, presence: true, numericality: {greater_than: 0}
     validate :start_before_end
     validate :elapsed_hours_must_equal_job_hours
@@ -93,7 +92,7 @@ module Work
     end
 
     def empty_slots
-      @empty_slots ||= job_full_community? ? UNLIMITED_SLOTS : [slots - assignments_count, 0].max
+      @empty_slots ||= full_community? ? UNLIMITED_SLOTS : [slots - assignments_count, 0].max
     end
 
     def elapsed_time
@@ -134,14 +133,14 @@ module Work
     end
 
     def normalize
-      if job_full_community?
+      if full_community?
         self.slots = UNLIMITED_SLOTS
       elsif slots.present?
         # Remove any extra assignments beyond the permitted slots.
         assignments.delete(*assignments.reject(&:marked_for_destruction?)[slots..-1])
       end
 
-      if job_full_period?
+      if full_period?
         self.starts_at = period_starts_on.in_time_zone
         self.ends_at = period_ends_on.in_time_zone + 1.day - 1.minute
       elsif job_date_only?
@@ -157,7 +156,7 @@ module Work
 
     def elapsed_hours_must_equal_job_hours
       return unless job_date_time? && job_hours.present?
-      if job_slot_type == "full_multiple"
+      if slot_type == "full_multiple"
         unless (job_hours.hours % elapsed_time).zero?
           errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
         end

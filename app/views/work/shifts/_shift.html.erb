@@ -30,7 +30,7 @@
             <% end %>
           </div>
         <% end %>
-        <% if !shift.job_full_community? && shift.empty_slots > 0 %>
+        <% if !shift.full_community? && shift.empty_slots > 0 %>
           <div class="open-slots">
             <%= t("work/shift.slots_open", count: shift.empty_slots) %>
           </div>

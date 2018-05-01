@@ -13,7 +13,7 @@ module Work
     # Can't merge the order by name scope due to an error/bug with ActsAsTenant
     scope :by_user_name, -> { joins(:user).order(User::NAME_ORDER) }
 
-    delegate :community, :period_draft?, to: :shift
+    delegate :job, :community, :period_draft?, :fixed_slot?, :full_community?, to: :shift
     delegate :hours, to: :shift, prefix: true
 
     before_save do

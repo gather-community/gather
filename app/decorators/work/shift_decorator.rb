@@ -10,13 +10,13 @@ module Work
 
     def job_title_with_icon
       str = "".html_safe << job_title
-      str << " " << full_community_icon if job_full_community?
+      str << " " << full_community_icon if full_community?
       str
     end
 
     def link_with_icon
       link = h.link_to(job_title, object, class: "title")
-      link << " " << full_community_icon if job_full_community?
+      link << " " << full_community_icon if full_community?
       link
     end
 
@@ -74,7 +74,7 @@ module Work
     end
 
     def empty_total_slots
-      return nil if empty_slots.zero? || job_full_community?
+      return nil if empty_slots.zero? || full_community?
       t("work/shift.slots_open", count: empty_slots)
     end
 

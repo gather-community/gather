@@ -1,7 +1,6 @@
 .report {
   .overview {
     text-align: center;
-    margin-bottom: 20px;
 
     .set {
       background-color: $faint-gray;
@@ -56,8 +55,14 @@
     }
   }
 
+  .stats-table-wrapper {
+    // Just in case the table gets super wide.
+    overflow-x: auto;
+  }
+
   table.stats {
     margin-top: 10px;
+    width: 100%;
 
     tr.surheader {
       th {
@@ -71,8 +76,17 @@
       }
     }
 
+    tr.highlight td {
+      background-color: $highlight-color;
+    }
+
     th {
       font-size: 11px;
+      text-align: center;
+
+      i.fa {
+        font-size: 13px;
+      }
     }
 
     th, td {

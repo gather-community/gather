@@ -14,7 +14,7 @@ describe Work::Shift do
     describe "slots" do
       context "full community job" do
         before do
-          allow(shift).to receive(:job_full_community?).and_return(true)
+          allow(shift).to receive(:full_community?).and_return(true)
           shift.send(:normalize)
         end
 
@@ -26,7 +26,7 @@ describe Work::Shift do
 
       context "fixed slot job" do
         before do
-          allow(shift).to receive(:job_full_community?).and_return(false)
+          allow(shift).to receive(:full_community?).and_return(false)
           shift.send(:normalize)
         end
 
@@ -53,7 +53,7 @@ describe Work::Shift do
       context "full period job" do
         before do
           allow(shift).to receive(:job_date_time?).and_return(false)
-          allow(shift).to receive(:job_full_period?).and_return(true)
+          allow(shift).to receive(:full_period?).and_return(true)
           allow(shift).to receive(:period_starts_on).and_return(Date.parse("2018-01-01"))
           allow(shift).to receive(:period_ends_on).and_return(Date.parse("2018-02-28"))
           shift.send(:normalize)
@@ -134,7 +134,7 @@ describe Work::Shift do
 
       context "with date_time time_type" do
         before { allow(shift).to receive(:job_date_time?).and_return(true) }
-        before { allow(shift).to receive(:job_slot_type).and_return(slot_type) }
+        before { allow(shift).to receive(:slot_type).and_return(slot_type) }
 
         context "with fixed slot_type" do
           let(:slot_type) { "fixed" }

@@ -57,4 +57,9 @@ shared_context "work" do
       jobs[2].shifts[0].assignments.create(user: actor)
     end
   end
+
+  def expect_jobs(*visible)
+    visible.each { |j| expect(page).to have_content(j.title) }
+    (jobs - visible).each { |j| expect(page).not_to have_content(j.title) }
+  end
 end

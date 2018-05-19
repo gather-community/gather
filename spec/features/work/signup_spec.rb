@@ -115,9 +115,4 @@ feature "signups", js: true do
       end
     end
   end
-
-  def expect_jobs(*visible)
-    visible.each { |j| expect(page).to have_content(j.title) }
-    (jobs - visible).each { |j| expect(page).not_to have_content(j.title) }
-  end
 end

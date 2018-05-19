@@ -26,20 +26,30 @@ feature "jobs", js: true do
   end
 
   context "with period and jobs" do
-    let(:period) { create(:work_period) }
-    let!(:groups) { create_list(:people_group, 2) }
-    let!(:users) { create_list(:user, 3) }
-    let!(:jobs) do
-      [create(:work_job, period: period), create(:work_job, period: period, slot_type: "full_single")]
-    end
+    include_context "with jobs"
+    include_context "with assignments"
 
     scenario "index" do
       visit(work_jobs_path)
       expect(page).to have_title("Jobs")
-      expect(page).to have_css("table.index tr", count: 3) # Header plus two rows
+      expect_jobs(*jobs[0..3])
+
+      select_lens(:requester, group.name)
+      expect_jobs(jobs[1], jobs[3])
+
+      clear_lenses
+      select_lens(:pre, "Preassigned")
+      expect_jobs(jobs[0])
+
+      select_lens(:pre, "Not Preassigned")
+      expect_jobs(*jobs[1..3])
+
+      clear_lenses
+      select_lens(:period, periods[1].name)
+      expect_jobs(jobs[4])
     end
 
-    # NOTE: THIS SPEC IS NOT WORKING ON TRAVIS DUE TO PICK_DATETIME METHOD.
+    # TODO: THIS SPEC IS NOT WORKING ON TRAVIS DUE TO PICK_DATETIME METHOD.
     # SWITCHING TO CHROME HEADLESS MAY FIX IT, AND WE NEED TO DO THAT ANYWAY.
     # FOR NOW, SKIPPING IT. BUT THIS SHOULD GET FIXED.
     scenario "create, show, and update", :notravis do
@@ -47,7 +57,7 @@ feature "jobs", js: true do
       click_link("Create")
       fill_in("Title", with: "AAA Painter")
       fill_in("Hours", with: "2")
-      select(groups.first.name, from: "Requester")
+      select(group.name, from: "Requester")
       fill_in("Description", with: "Paints things nicely")
 
       # Add first shift

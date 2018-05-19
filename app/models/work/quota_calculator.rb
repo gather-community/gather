@@ -13,7 +13,7 @@ module Work
 
     # Recalculates the quota if the changes to the given trigger object necessitate it.
     def recalculate_and_save
-      period.update_attributes!(quota: calculate)
+      period.update!(quota: calculate)
     end
 
     # Distributes the hours that are not preassigned to the users/households in the community.

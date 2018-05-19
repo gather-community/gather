@@ -26,34 +26,11 @@ feature "signups", js: true do
     end
   end
 
-  context "with shifts" do
-    let!(:periods) { create_list(:work_period, 2) }
-    let!(:users) do
-      [
-        create(:user, first_name: "Jane", last_name: "Picard", household: actor.household),
-        create(:user, first_name: "Churl", last_name: "Rox"),
-        create(:user, :child, first_name: "Kid", last_name: "Knelt")
-      ]
-    end
-    let!(:group) { create(:people_group, name: "Pants") }
-    let!(:jobs) do
-      [
-        create(:work_job, period: periods[0], title: "Knembler", shift_count: 1, shift_slots: 1),
-        create(:work_job, period: periods[0], title: "Fruct Coordinator", shift_count: 2, requester: group),
-        create(:work_job, period: periods[0], title: "Whippersnapper", shift_count: 2),
-        create(:work_job, period: periods[0], title: "Krusketarian", shift_count: 1, requester: group),
-        create(:work_job, period: periods[1], title: "Plooge")
-      ]
-    end
+  context "with jobs" do
+    include_context "with jobs"
 
     describe "filters and search", search: Work::Shift do
-      before do
-        periods[0].update!(phase: "draft")
-        jobs[0].shifts[0].assignments.create(user: users[0]) # preassigned
-        periods[0].update!(phase: "open")
-        jobs[1].shifts[1].assignments.create(user: actor)
-        jobs[2].shifts[0].assignments.create(user: actor)
-      end
+      include_context "with assignments"
 
       scenario do
         visit(index_path)

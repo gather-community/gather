@@ -13,6 +13,7 @@ module Work
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
+    scope :oldest_first, -> { order(:starts_on, :ends_on) }
 
     before_validation :normalize
 
@@ -45,6 +46,14 @@ module Work
 
     def jobs?
       jobs.any?
+    end
+
+    def current?
+      Time.zone.today >= starts_on && Time.zone.today <= ends_on
+    end
+
+    def future?
+      Time.zone.today < starts_on
     end
 
     private

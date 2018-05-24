@@ -15,8 +15,8 @@ module FeatureSpecHelpers
       raise "Element must have a unique ID attribute so jQuery can grab it" if select_el[:id].blank?
       css = "##{select_el[:id]}"
     else
-      select_el = find(css)
       css = from
+      select_el = find(css)
     end
 
     # Get the span element inserted right after the select by select2.
@@ -31,7 +31,7 @@ module FeatureSpecHelpers
           execute_script("$('#{css}').select2('open')")
           find(".select2-search--dropdown .select2-search__field").set(value)
         elsif type == :inline
-          span.find(".select2-search__field").click
+          span_el.find(".select2-search__field").click
         end
         find(".select2-dropdown .select2-results li", text: /#{value}/).click
       end

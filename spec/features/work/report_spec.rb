@@ -6,7 +6,7 @@ feature "report", js: true do
   include_context "work"
 
   let(:actor) { create(:user, first_name: "Donnell", last_name: "Corkery") }
-  let(:report_path) { work_report_path(period: periods[0].id) }
+  let(:page_path) { work_report_path(period: periods[0].try(:id)) }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -17,10 +17,10 @@ feature "report", js: true do
   it_behaves_like "handles no periods"
 
   context "with period but no jobs" do
-    let!(:period) { create(:work_period) }
+    let!(:periods) { [create(:work_period)] }
 
     scenario "index" do
-      visit(report_path)
+      visit(page_path)
       expect(page).to have_content("0 0 0 Total Hours Jobs People")
     end
   end
@@ -36,8 +36,7 @@ feature "report", js: true do
     end
 
     scenario "index" do
-      visit(report_path)
-      screenshot_and_open_image
+      visit(page_path)
       expect(page).to have_content("32 16 4 8 Total Hours Jobs People Quota")
       expect(page).to have_content("Donnell Corkery 6.0 75% 2.0")
       expect(page).to have_content("Churl Rox 0.0 0%")

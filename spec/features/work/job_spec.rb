@@ -6,7 +6,7 @@ feature "jobs", js: true do
   include_context "work"
 
   let(:actor) { create(:work_coordinator) }
-  let(:index_path) { work_jobs_path }
+  let(:page_path) { work_jobs_path }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -20,7 +20,7 @@ feature "jobs", js: true do
     let!(:period) { create(:work_period) }
 
     scenario "index" do
-      visit(index_path)
+      visit(page_path)
       expect(page).to have_content("No jobs found")
     end
   end

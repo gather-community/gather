@@ -6,8 +6,7 @@ feature "signups", js: true do
   include_context "work"
 
   let(:actor) { create(:user) }
-
-  let(:index_path) { work_shifts_path }
+  let(:page_path) { work_shifts_path }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -21,7 +20,7 @@ feature "signups", js: true do
     let!(:period) { create(:work_period) }
 
     scenario "index" do
-      visit(index_path)
+      visit(page_path)
       expect(page).to have_content("No jobs found")
     end
   end
@@ -33,7 +32,7 @@ feature "signups", js: true do
       include_context "with assignments"
 
       scenario do
-        visit(index_path)
+        visit(page_path)
 
         select_lens(:shift, "All Jobs")
         expect_jobs(*jobs[0..3])
@@ -74,7 +73,7 @@ feature "signups", js: true do
       # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
       # inside nested transactions.
       scenario do
-        visit(index_path)
+        visit(page_path)
 
         within(".shift-card[data-id='#{jobs[0].shifts[0].id}']") do
           expect(page).not_to have_content(actor.name)

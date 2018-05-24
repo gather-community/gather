@@ -1,11 +1,13 @@
 shared_context "work" do
   shared_examples "handles no periods" do
     context "with no period" do
+      let(:periods) { [] }
+      
       context "as coordinator" do
         let(:actor) { create(:work_coordinator) }
 
         scenario "index" do
-          visit(index_path)
+          visit(page_path)
           expect(page).to have_content("There are no active work periods. Please create one first.")
         end
       end
@@ -14,7 +16,7 @@ shared_context "work" do
         let(:actor) { create(:user) }
 
         scenario "index" do
-          visit(index_path)
+          visit(page_path)
           expect(page).to have_content("It looks like your community")
         end
       end

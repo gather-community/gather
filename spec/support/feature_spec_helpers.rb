@@ -247,6 +247,11 @@ module FeatureSpecHelpers
     first(:css, "[data-param-name=#{lens_param_name}]").select(value)
   end
 
+  def enter_lens(lens_param_name, value)
+    page.execute_script("$('.lens-bar.lower [name=#{lens_param_name}]').val('#{value}');")
+    page.execute_script("$('.lens-bar.lower').submit()")
+  end
+
   def clear_lenses
     find(".lens-bar a.clear").click
   end

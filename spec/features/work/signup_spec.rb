@@ -37,8 +37,7 @@ feature "signups", js: true do
         select_lens(:shift, "All Jobs")
         expect_jobs(*jobs[0..3])
 
-        find(".lens-bar.upper [name=search]").set("fruct")
-        find(".lens-bar.upper [name=search]").native.send_keys(:return)
+        enter_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
         clear_lenses

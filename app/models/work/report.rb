@@ -17,7 +17,6 @@ module Work
       @fixed_slots ||= fixed_slot_jobs.sum(&:total_slots)
     end
 
-    # Returns a hash of user_ids to preassigned hours.
     def by_user
       @by_user ||= assignments.group_by(&:user_id).tap do |hash|
         hash.each do |user_id, assigns|
@@ -34,13 +33,13 @@ module Work
       end
     end
 
+    def shares_by_user
+      @shares_by_user ||= shares.index_by(&:user_id)
+    end
+
     # Gets period shares via the for_period method that excludes inactive users.
     def shares
       @shares ||= Share.for_period(period).includes(:period, user: :household)
-    end
-
-    def shares_by_user
-      @shares_by_user ||= shares.index_by(&:user_id)
     end
 
     def users
@@ -49,7 +48,7 @@ module Work
         if period.quota_none?
           assignments.map(&:user).uniq.sort_by { |u| u.name.downcase }
         else
-          shares.by_user_name.reject { |s| s.zero? && (by_user[s.user_id] || 0).zero? }.map(&:user)
+          shares.by_user_name.reject { |s| s.zero? && (by_user.dig(s.user_id, :total) || 0).zero? }.map(&:user)
         end
     end
 
@@ -62,32 +61,34 @@ module Work
       @total_portions ||= shares.to_a.sum(&:portion)
     end
 
-    def all_jobs
-      @all_jobs ||= period.jobs.includes(shifts: {assignments: :user}).to_a
-    end
-
-    def fixed_slot_jobs
-      @fixed_slot_jobs ||= all_jobs.select(&:fixed_slot?)
-    end
-
     def full_community_jobs
       @full_community_jobs ||= all_jobs.select(&:full_community?)
     end
 
-    def assignments
-      @assignments ||= all_jobs.flat_map(&:assignments)
+    def fixed_slot_non_preassigned_hours
+      @fixed_slot_non_preassigned_hours ||= fixed_slot_hours - fixed_slot_preassigned_hours
     end
 
     def fixed_slot_hours
       @fixed_slot_hours ||= fixed_slot_jobs.sum { |j| j.total_slots * j.hours }
     end
 
-    def fixed_slot_preassigned_hours
-      @fixed_slot_preassigned_hours ||= by_user.values.sum { |h| h[:preassigned] }
+    private
+
+    def all_jobs
+      @all_jobs ||= period.jobs.includes(shifts: {assignments: :user}).to_a
     end
 
-    def fixed_slot_unassigned_hours
-      @fixed_slot_unassigned_hours ||= fixed_slot_hours - fixed_slot_preassigned_hours
+    def assignments
+      @assignments ||= all_jobs.flat_map(&:assignments)
+    end
+
+    def fixed_slot_jobs
+      @fixed_slot_jobs ||= all_jobs.select(&:fixed_slot?)
+    end
+
+    def fixed_slot_preassigned_hours
+      @fixed_slot_preassigned_hours ||= by_user.values.sum { |h| h[:preassigned] }
     end
   end
 end

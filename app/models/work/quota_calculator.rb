@@ -4,7 +4,7 @@ module Work
   # Calculates how many hours each person (or share) are implied by the current set of jobs for a period.
   class QuotaCalculator
     attr_accessor :period, :report, :hours_to_distribute, :portions_equalized, :quota
-    delegate :shares, :total_portions, :fixed_slot_unassigned_hours, :by_user, to: :report
+    delegate :shares, :total_portions, :fixed_slot_non_preassigned_hours, :by_user, to: :report
 
     def initialize(period)
       self.period = period
@@ -37,7 +37,7 @@ module Work
 
     # Sets up variables for the computation.
     def setup_vars
-      self.hours_to_distribute = fixed_slot_unassigned_hours
+      self.hours_to_distribute = fixed_slot_non_preassigned_hours
       self.portions_equalized = 0.0
       self.quota = sorted_levels[0]
     end

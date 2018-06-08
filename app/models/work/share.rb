@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Work
+  # A share describes what portion of the full workload a particular user is responsible for.
   class Share < ApplicationRecord
     acts_as_tenant :cluster
 
@@ -12,13 +15,10 @@ module Work
 
     delegate :community, to: :period
     delegate :household_id, to: :user
+    delegate :zero?, to: :portion
 
     def adjusted_quota
       period.quota.nil? ? nil : period.quota * portion
-    end
-
-    def zero?
-      portion.zero?
     end
   end
 end

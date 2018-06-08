@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180401204134) do
+ActiveRecord::Schema.define(version: 20180608123347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -584,6 +584,17 @@ ActiveRecord::Schema.define(version: 20180401204134) do
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
+  create_table "work_reminders", force: :cascade do |t|
+    t.datetime "abs_time"
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.integer "job_id", null: false
+    t.integer "rel_time"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "job_id"], name: "index_work_reminders_on_cluster_id_and_job_id"
+  end
+
   create_table "work_shares", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -687,6 +698,8 @@ ActiveRecord::Schema.define(version: 20180401204134) do
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_reminders", "clusters"
+  add_foreign_key "work_reminders", "work_jobs", column: "job_id"
   add_foreign_key "work_shares", "clusters"
   add_foreign_key "work_shares", "users"
   add_foreign_key "work_shares", "work_periods", column: "period_id"

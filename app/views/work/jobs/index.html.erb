@@ -1,15 +1,13 @@
 <% content_for(:title, "Jobs") %>
 <% content_for(:top_buttons) do %>
-  <% if policy(sample_job).create? && @period %>
+  <% if @period && policy(sample_job).create? %>
     <%= link_to(icon_tag("plus") << " Create Job",
       new_work_job_path(period: @period.id), class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
 <% if @period.nil? %>
-  <div class="none-found">
-    <%= t("work.no_periods_html", link: link_to(t("work.create_one"), work_periods_path)) %>
-  </div>
+  <%= render("work/shared/no_period_notice") %>
 <% elsif jobs.empty? %>
   <div class="none-found">
     No jobs found. <%= lenses.no_result_clear_filter_link %>
@@ -18,22 +16,19 @@
   <table class="index part-width">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Requester</th>
-        <th>Hours</th>
-        <th>Slots</th>
+        <th><%= Work::Job.human_attribute_name(:title) %></th>
+        <th><%= Work::Job.human_attribute_name(:requester) %></th>
+        <th><%= Work::Job.human_attribute_name(:hours) %></th>
+        <th><%= Work::Job.human_attribute_name(:slots) %></th>
       </tr>
     </thead>
     <tbody>
       <% jobs.each do |job| %>
         <tr>
-          <td class="title">
-            <%= link_to(job.title, edit_work_job_path(job)) %>
-            <%= job.slot_type_icon %>
-          </td>
+          <td class="title"><%= job.link_with_icons %></td>
           <td class="requester"><%= job.requester_name %></td>
-          <td class="hours"><%= job.hours %></td>
-          <td class="slots"><%= job.slot_count %></td>
+          <td class="hours"><%= job.hours_formatted %></td>
+          <td class="slots"><%= job.total_slots_formatted %></td>
         </tr>
       <% end %>
     </tbody>

@@ -1,4 +1,4 @@
-<% content_for(:title){ @meal.title || "Untitled Meal" } %>
+<% content_for(:title, @meal.title || "Untitled Meal") %>
 
 <% content_for(:top_buttons) do %>
   <%= print_button %>

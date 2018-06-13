@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 module Work
-  class PeriodsController < ApplicationController
+# Controls CRUD for periods, plus the work report.
+  class PeriodsController < WorkController
     include Destructible
 
-    before_action -> { nav_context(:work, :periods) }
+    before_action -> { nav_context(:work, :periods) }, except: :report
+    before_action -> { nav_context(:work, :report) }, only: :report
 
     decorates_assigned :period, :periods
-    helper_method :sample_period
+    helper_method :work_report
 
     def index
       authorize sample_period
@@ -22,6 +26,7 @@ module Work
       @period = Period.find(params[:id])
       authorize @period
       prep_form_vars
+      flash.now[:alert] = t("work/shares.change_warning") unless period.draft? || period.archived?
     end
 
     def create
@@ -29,6 +34,7 @@ module Work
       @period.assign_attributes(period_params)
       authorize @period
       if @period.save
+        QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period created successfully."
         redirect_to work_periods_path
       else
@@ -42,12 +48,25 @@ module Work
       @period = Period.find(params[:id])
       authorize @period
       if @period.update_attributes(period_params)
+        QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period updated successfully."
         redirect_to work_periods_path
       else
         set_validation_error_notice(@period)
         prep_form_vars
         render :edit
+      end
+    end
+
+    def report
+      prepare_lenses(:"work/period")
+      @period = lenses[:period].object
+      if @period.nil?
+        authorize sample_period
+        lenses.hide!
+      else
+        authorize @period
+        @work_report = Report.new(period: @period, user: current_user)
       end
     end
 
@@ -59,8 +78,8 @@ module Work
 
     private
 
-    def sample_period
-      Period.new(community: current_community)
+    def work_report
+      @work_report_decorated ||= ReportDecorator.new(@work_report)
     end
 
     def prep_form_vars

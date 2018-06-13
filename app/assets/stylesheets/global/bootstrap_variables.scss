@@ -16,11 +16,11 @@
 // $gray-light:             lighten($gray-base, 46.7%) // #777
 // $gray-lighter:           lighten($gray-base, 93.5%) // #eee
 
-// $brand-primary:         darken(#428bca, 6.5%) // #337ab7
+$brand-primary:            $theme-main;
 // $brand-success:         #5cb85c
 // $brand-info:            #5bc0de
 // $brand-warning:         #f0ad4e
-// $brand-danger:          #d9534f
+$brand-danger:             #d9534f;
 
 
 //== Scaffolding
@@ -30,12 +30,12 @@
 //** Background color for `<body>`.
 // $body-bg:               #fff
 //** Global text color on `<body>`.
-// $text-color:            $gray-dark
+$text-color:               $main-text-color;
 
 //** Global textual link color.
-// $link-color:            $brand-primary
+$link-color:               $link-color;
 //** Link hover color set via `darken()` function.
-// $link-hover-color:      darken($link-color, 15%)
+$link-hover-color:         $link-active-color;
 //** Link hover decoration.
 // $link-hover-decoration: underline
 
@@ -44,7 +44,7 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-// $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif
+$font-family-sans-serif:     Ubuntu, sans-serif;
 // $font-family-serif:       Georgia, "Times New Roman", Times, serif
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 // $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace
@@ -150,13 +150,13 @@
 
 // $btn-font-weight:                normal
 
-// $btn-default-color:              #333
-// $btn-default-bg:                 #fff
-// $btn-default-border:             #ccc
+$btn-default-color:                 #666;
+$btn-default-bg:                    $faint-gray;
+$btn-default-border:                $faint-gray;
 
-// $btn-primary-color:              #fff
-// $btn-primary-bg:                 $brand-primary
-// $btn-primary-border:             darken($btn-primary-bg, 5%)
+$btn-primary-color:                 #fff;
+$btn-primary-bg:                    $theme-accent;
+$btn-primary-border:                $theme-accent;
 
 // $btn-success-color:              #fff
 // $btn-success-bg:                 $brand-success
@@ -170,16 +170,16 @@
 // $btn-warning-bg:                 $brand-warning
 // $btn-warning-border:             darken($btn-warning-bg, 5%)
 
-// $btn-danger-color:               #fff
-// $btn-danger-bg:                  $brand-danger
-// $btn-danger-border:              darken($btn-danger-bg, 5%)
+$btn-danger-color:                  #fff;
+$btn-danger-bg:                     $brand-danger;
+$btn-danger-border:                 $brand-danger;
 
 // $btn-link-disabled-color:        $gray-light
 
 // Allows for customizing button radius independently from global border radius
-// $btn-border-radius-base:         $border-radius-base
-// $btn-border-radius-large:        $border-radius-large
-// $btn-border-radius-small:        $border-radius-small
+$btn-border-radius-base:            0;
+$btn-border-radius-large:           0;
+$btn-border-radius-small:           0;
 
 
 //== Forms
@@ -330,7 +330,7 @@
 //** Number of columns in the grid.
 // $grid-columns:              12
 //** Padding between columns. Gets divided in half for the left and right.
-// $grid-gutter-width:         30px
+$grid-gutter-width:         20px;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 // $grid-float-breakpoint:     $screen-sm-min
@@ -502,21 +502,21 @@
 //
 //## Define colors for form feedback states and, by default, alerts.
 
-// $state-success-text:             #3c763d
-// $state-success-bg:               #dff0d8
-// $state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%)
+$state-success-text:                #3c763d;
+$state-success-bg:                  #dff0d8;
+$state-success-border:              #dff0d8;
 
-// $state-info-text:                #31708f
-// $state-info-bg:                  #d9edf7
-// $state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%)
+$state-info-text:                   #31708f;
+$state-info-bg:                     #d9edf7;
+$state-info-border:                 #d9edf7;
 
-// $state-warning-text:             #8a6d3b
-// $state-warning-bg:               #fcf8e3
-// $state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%)
+$state-warning-text:                #8a6d3b;
+$state-warning-bg:                  #fcf8e3;
+$state-warning-border:              #fcf8e3;
 
-// $state-danger-text:              #a94442
-// $state-danger-bg:                #f2dede
-// $state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%)
+$state-danger-text:                 #a94442;
+$state-danger-bg:                   #f2dede;
+$state-danger-border:               #f2dede;
 
 
 //== Tooltips
@@ -627,7 +627,7 @@
 //## Define alert colors, border radius, and padding.
 
 // $alert-padding:               15px
-// $alert-border-radius:         $border-radius-base
+$alert-border-radius:            0;
 // $alert-link-font-weight:      bold
 
 // $alert-success-bg:            $state-success-bg

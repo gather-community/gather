@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Controls landing, ping, privacy policy, and other assorted pages.
 class LandingController < ApplicationController
   skip_before_action :authenticate_user!
 
@@ -5,7 +8,7 @@ class LandingController < ApplicationController
     skip_policy_scope
 
     # Store invite token if provided
-    session[:invite_token] = params[:token] if params.has_key?(:token)
+    session[:invite_token] = params[:token] if params.key?(:token)
 
     render(layout: false)
   end
@@ -13,13 +16,8 @@ class LandingController < ApplicationController
   # Used by uptime checker
   def ping
     skip_authorization
-    if dj_pid = (File.read(File.join(Rails.root, "tmp/pids/delayed_job.pid")).to_i rescue nil)
-      @dj = (Process.kill(0, dj_pid) && true rescue false)
-    else
-      @dj = false
-    end
-
-    render layout: nil, formats: :text, status: @dj ? 200 : 503
+    @status = SystemStatus.new
+    render layout: nil, formats: :text, status: @status.ok? ? 200 : 503
   end
 
   def signed_out

@@ -10,16 +10,19 @@ $placeholder-color: #999;
 $light-border: 1px solid $light-border-color;
 $theme-main: #3a3e5d;
 $theme-main-lighter: lighten($theme-main, 10%);
-$theme-main-lightest: lighten($theme-main, 70%);
+$theme-main-lightest: lighten($theme-main, 62%);
 $theme-accent: #64944a;
+$theme-accent-lightest: lighten($theme-accent, 45%);
 $theme-accent-light: lighten($theme-accent, 20%);
 $theme-accent-intense: saturate($theme-accent, 20%);
 $link-color: #2b6db3;
 $link-active-color: $theme-accent-intense;
 $highlight-color: #F4E4F5;
+$highlight-color2: #fcf8e3;
 $error-red: #a94442;
 $error-red-bg: #f2dede;
 $error-red-border: #ebccd1;
+$medium-bold: 500;
 
 // Metrics
 $large-margin: 20px;

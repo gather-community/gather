@@ -54,25 +54,25 @@ shared_context "policy objs" do
   let(:wikiist_in_cmtyB) { new_user_from(communityB, label: "wikiist_in_cmtyB") }
 
   before do
-    allow(user).to receive(:has_role?) { false }
-    allow(other_user).to receive(:has_role?) { false }
-    allow(admin).to receive(:has_role?) { |r| r == :admin }
-    allow(admin2).to receive(:has_role?) { |r| r == :admin }
-    allow(admin_in_cmtyB).to receive(:has_role?) { |r| r == :admin }
-    allow(cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
-    allow(super_admin).to receive(:has_role?) { |r| r == :super_admin }
-    allow(outside_cluster_admin).to receive(:has_role?) { |r| r == :cluster_admin }
-    allow(outside_super_admin).to receive(:has_role?) { |r| r == :super_admin }
-    allow(biller).to receive(:has_role?) { |r| r == :biller }
-    allow(biller_in_cmtyB).to receive(:has_role?) { |r| r == :biller }
-    allow(photographer).to receive(:has_role?) { |r| r == :photographer }
-    allow(photographer_in_cmtyB).to receive(:has_role?) { |r| r == :photographer }
-    allow(meals_coordinator).to receive(:has_role?) { |r| r == :meals_coordinator }
-    allow(meals_coordinator_in_cmtyB).to receive(:has_role?) { |r| r == :meals_coordinator }
-    allow(work_coordinator).to receive(:has_role?) { |r| r == :work_coordinator }
-    allow(work_coordinator_in_cmtyB).to receive(:has_role?) { |r| r == :work_coordinator }
-    allow(wikiist).to receive(:has_role?) { |r| r == :wikiist }
-    allow(wikiist_in_cmtyB).to receive(:has_role?) { |r| r == :wikiist }
+    allow(user).to receive(:global_role?) { false }
+    allow(other_user).to receive(:global_role?) { false }
+    allow(admin).to receive(:global_role?) { |r| r == :admin }
+    allow(admin2).to receive(:global_role?) { |r| r == :admin }
+    allow(admin_in_cmtyB).to receive(:global_role?) { |r| r == :admin }
+    allow(cluster_admin).to receive(:global_role?) { |r| r == :cluster_admin }
+    allow(super_admin).to receive(:global_role?) { |r| r == :super_admin }
+    allow(outside_cluster_admin).to receive(:global_role?) { |r| r == :cluster_admin }
+    allow(outside_super_admin).to receive(:global_role?) { |r| r == :super_admin }
+    allow(biller).to receive(:global_role?) { |r| r == :biller }
+    allow(biller_in_cmtyB).to receive(:global_role?) { |r| r == :biller }
+    allow(photographer).to receive(:global_role?) { |r| r == :photographer }
+    allow(photographer_in_cmtyB).to receive(:global_role?) { |r| r == :photographer }
+    allow(meals_coordinator).to receive(:global_role?) { |r| r == :meals_coordinator }
+    allow(meals_coordinator_in_cmtyB).to receive(:global_role?) { |r| r == :meals_coordinator }
+    allow(work_coordinator).to receive(:global_role?) { |r| r == :work_coordinator }
+    allow(work_coordinator_in_cmtyB).to receive(:global_role?) { |r| r == :work_coordinator }
+    allow(wikiist).to receive(:global_role?) { |r| r == :wikiist }
+    allow(wikiist_in_cmtyB).to receive(:global_role?) { |r| r == :wikiist }
   end
 
   # Saves commonly used objects from above. This is not done by default
@@ -213,6 +213,12 @@ shared_context "policy objs" do
 
     it "permits action on self for inactive user" do
       expect(subject).to permit(inactive_user, inactive_user)
+    end
+  end
+
+  shared_examples_for "forbids all" do
+    it "doesn't permit super admins" do
+      expect(subject).not_to permit(super_admin, record)
     end
   end
 

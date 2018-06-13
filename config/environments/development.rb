@@ -9,9 +9,11 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports and disable caching.
+  # Show full error reports.
   config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+
+  # Change to true when testing caching.
+  config.action_controller.perform_caching = ENV["CACHE"].present?
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true

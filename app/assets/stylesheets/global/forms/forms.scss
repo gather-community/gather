@@ -1,4 +1,23 @@
 form {
+  &.normal-width {
+    @include make-sm-column(9);
+
+    // .form-fields is used to demarcate the normal fields in a form that may have a full width component
+    // beneath, e.g. the period form. The fields should be full-width if the form is not
+    // full-width, and vice versa.
+    .form-fields {
+      @include make-sm-column(12);
+    }
+  }
+
+  &.full-width {
+    @include make-sm-column(12);
+
+    .form-fields {
+      @include make-sm-column(9);
+    }
+  }
+
   .links {
     margin-top: -5px;
     margin-bottom: 10px;
@@ -85,6 +104,11 @@ form {
 
   .select2-container .select2-selection--single {
     height: 33px;
+  }
+
+  .select2-selection__clear {
+    font-size: 22px;
+    color: $gray-text;
   }
 
   .form-actions .btn {

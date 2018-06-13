@@ -1,6 +1,5 @@
 body {
-  font-family: 'Raleway', sans-serif;
-  color: $main-text-color;
+  font-weight: 300;
 }
 
 p.inner {
@@ -14,39 +13,6 @@ p.inner {
   line-height: 1.4;
 }
 
-a, a:visited {
-  color: $link-color;
-}
-
-a:hover {
-  color: $link-active-color;
-}
-
-.btn {
-  border-radius: 0;
-  border: none;
-}
-
-.btn-default, a.btn-default {
-  background-color: $faint-gray;
-  color: #666;
-
-  &:hover, &:active, &:focus {
-    // !important needed here to override Bootstrap (booo!)
-    background-color: #ddd !important;
-  }
-}
-
-.btn-primary, a.btn-primary {
-  color: white;
-  background-color: $theme-accent;
-
-  &:hover, &:active, &:focus {
-    // !important needed here to override Bootstrap (booo!)
-    background-color: $theme-accent-intense !important;
-  }
-}
-
 .datetimepicker .input-group-btn > .btn-default {
   border: 1px solid $btn-default-border;
 }
@@ -56,9 +22,6 @@ mark {
 }
 
 .alert {
-  border: none;
-  border-radius: 0;
-
   &.in-text {
     margin-bottom: 10px;
   }

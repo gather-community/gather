@@ -11,8 +11,7 @@ module FormHelper
   #   - The :equal_width layout is 6/6.
   #   - Layouts are achieved using CSS in the global/forms/bootstrap.scss file.
   def gather_form_for(obj, options = {}, &block)
-    width = options[:width] || :normal
-    cols = options.delete(:width) == :full ? 12 : 9
+    width = options.delete(:width) || :normal
     name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
     layout = options.delete(:layout) || :narrow_label
 
@@ -22,7 +21,7 @@ module FormHelper
     classes << "gather-form"
     classes << "form-horizontal" # Used by Bootstrap
     classes << (layout.to_s.gsub("_", "-") << "-layout") # Layout
-    classes << "col-sm-#{cols}" # Columns for outer grid
+    classes << (width == :full ? "full-width" : "normal-width")
     classes << "#{name}-form" # Object class name
 
     options[:html][:class] = classes.join(" ")

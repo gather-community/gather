@@ -1,7 +1,12 @@
-require File.expand_path('../boot', __FILE__)
+# frozen_string_literal: true
 
-require 'rails/all'
-require_relative '../lib/disable_tenant_scoping'
+require File.expand_path("../boot", __FILE__)
+
+require "rails/all"
+require_relative "../lib/disable_tenant_scoping"
+
+# Adds search info to log file.
+require "elasticsearch/rails/instrumentation"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -15,10 +20,14 @@ module Gather
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'UTC'
+    config.time_zone = "UTC"
 
-    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
-    config.autoload_paths += [Rails.root.join("app/mailers/concerns"), Rails.root.join("lib")]
+    config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}")]
+    config.autoload_paths += [
+      Rails.root.join("app", "mailers", "concerns"),
+      Rails.root.join("app", "search_configs"),
+      Rails.root.join("lib")
+    ]
 
     config.active_job.queue_adapter = :delayed_job
 
@@ -56,7 +65,9 @@ module Gather
 
     config.active_record.time_zone_aware_types = [:datetime]
 
+    config.cache_store = :redis_store, "redis://localhost:6379/0/cache", {expires_in: 90.minutes}
+
     # Currently, fr is only available for testing purposes.
-    I18n.available_locales = %i(en fr)
+    I18n.available_locales = %i[en fr]
   end
 end

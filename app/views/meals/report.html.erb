@@ -1,0 +1,94 @@
+<% content_for(:title, "Meals Report") %>
+
+<% range = %w(first last).map { |m| l(@report.range.send(m), format: :month_yr) }.join(" - ") %>
+
+<% if @report.empty? %>
+  <div class="none-found">
+    No matching meal data found for <%= range %>. The report includes finalized meals only.
+  </div>
+<% else %>
+  <div class="report">
+    <div class="overview row">
+      <div class="set col-sm-4 <%= multi_community? ? "col-sm-offset-1" : "col-sm-offset-4" %>">
+        <div class="title"><%= multi_community? ? "#{@community.name} " : "" %>All-Time</div>
+        <table class="numbers">
+          <tr class="numbers">
+            <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_meals"]) %></td>
+            <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_diners"]) %></td>
+            <td><%= number_to_currency(@report.overview[@community.id]["ttl_cost"]) %></td>
+          </tr>
+          <tr class="captions">
+            <td>Meals</td>
+            <td>Diners</td>
+            <td>Cost</td>
+          </tr>
+        </table>
+      </div>
+      <% if multi_community? %>
+        <div class="set col-sm-4 col-sm-offset-2">
+          <div class="title">Overall All-Time</div>
+          <table class="numbers">
+            <tr class="numbers">
+              <td><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></td>
+              <td><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></td>
+              <td><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></td>
+            </tr>
+            <tr class="captions">
+              <td>Meals</td>
+              <td>Diners</td>
+              <td>Cost</td>
+            </tr>
+          </table>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+      <h2><%= range %></h2>
+
+      <div id="charts">
+        <div class="row">
+          <div id="chart1" class="col-sm-4"><svg></svg></div>
+          <div id="chart2" class="col-sm-4"><svg></svg></div>
+          <div id="chart3" class="col-sm-4"><svg></svg></div>
+        </div>
+        <div class="row">
+          <div id="chart4" class="col-sm-4"><svg></svg></div>
+          <div id="chart5" class="col-sm-4"><svg></svg></div>
+          <div id="chart6" class="col-sm-4"><svg></svg></div>
+        </div>
+      </div>
+
+      <% this_cmty_only = multi_community? ? ", #{@community.name} meals only" : "" %>
+
+      <h2 class="with-subhead">By Month</h2>
+      <small>
+        <%= range %><%= this_cmty_only %></small>
+      <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
+
+      <h2 class="with-subhead">By Weekday</h2>
+      <small>
+        <%= range %><%= this_cmty_only %></small>
+      <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
+
+      <% if multi_community? %>
+        <h2 class="with-subhead">By Community</h2>
+        <small><%= range %></small>
+        <%= render("report_main_table", name: "by-community", data: @report.by_community,
+          highlight: @community.name) %>
+      <% end %>
+
+      <div class="footnote">All statistics include finalized meals only.</div>
+    </div>
+  </div>
+
+  <%= javascript_tag do %>
+    $(function() { new Gather.Views.Meals.ReportChartsView(<%=json(
+      el: "#charts",
+      data: @report.chart_data,
+      cmty: @community.abbrv,
+      multiCommunity: multi_community?
+      )%>); });
+  <% end %>
+<% end %>

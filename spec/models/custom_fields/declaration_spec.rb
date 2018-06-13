@@ -39,10 +39,8 @@ RSpec.describe "custom field declaration", type: :model do
   describe "for ActiveRecord model" do
     let(:fake) { FakeCustomFieldActiveRecordModel.new }
 
-    around do |example|
+    before do
       FakeCustomFieldActiveRecordModel.create_table
-      example.run
-      FakeCustomFieldActiveRecordModel.drop_table
     end
 
     it "should properly store and allow updates to values if none exist to begin with" do

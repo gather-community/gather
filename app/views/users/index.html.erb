@@ -1,4 +1,4 @@
-<% content_for(:title) { "Directory" } %>
+<% content_for(:title, "Directory") %>
 <% content_for(:print_title) { "#{current_community.name} Directory" } %>
 <% content_for(:top_buttons) do %>
   <%= print_button %>
@@ -16,7 +16,7 @@
   <% end %>
 <% end %>
 
-<% if @users.empty? %>
+<% if users.empty? %>
   <div class="none-found">
     No users found. <%= lenses.no_result_clear_filter_link %>.
   </div>
@@ -36,7 +36,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @users.each do |user| %>
+          <% users.each do |user| %>
             <tr class="<%= user.tr_classes %>">
               <td><%= link_to(user.name, user) %></td>
               <td><%= user.unit_link %></td>
@@ -55,22 +55,20 @@
       </table>
     </div>
   <% else %>
-    <div id="directory-album" class="row clearfix hidden-print">
-      <% @users.each do |user| %>
-        <div class="col-sm-6 col-md-4 clearfix user <%= user.active? ? "" : "inactive" %>">
-          <div class="inner clearfix">
-            <div class="photo-wrapper">
-              <%= link_to(user_photo_if_permitted(user, :thumb), user) %>
-            </div>
-            <div class="info">
-              <% if user.preferred_contact.present? %>
-                <%= icon_tag(user.preferred_contact_icon,
-                  class: "preferred-contact", title: user.preferred_contact_tooltip) %>
-              <% end %>
-              <div><%= link_to(user.name, user) %></div>
-              <div class="email"><%= user.email_link if user.email %></div>
-              <div class="unit-phone"><%= user.unit_and_phone %></div>
-            </div>
+    <div id="directory-album" class="flowing-columns-max-3 hidden-print">
+      <% users.each do |user| %>
+        <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
+          <div class="photo-wrapper">
+            <%= link_to(user.photo_if_permitted(:thumb), user) %>
+          </div>
+          <div class="info">
+            <% if user.preferred_contact.present? %>
+              <%= icon_tag(user.preferred_contact_icon,
+                class: "preferred-contact", title: user.preferred_contact_tooltip) %>
+            <% end %>
+            <div><%= link_to(user.name, user) %></div>
+            <div class="email"><%= user.email_link if user.email %></div>
+            <div class="unit-phone"><%= user.unit_and_phone %></div>
           </div>
         </div>
       <% end %>

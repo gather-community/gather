@@ -1,0 +1,11 @@
+<% content_for(:title, "Job Signups") %>
+<% if @period.nil? %>
+  <%= render("work/shared/no_period_notice") %>
+<% else %>
+  <%= render "shifts" %>
+<% end %>
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Work.ShiftsView({el: '#content', autorefresh: <%= @autorefresh.to_json %>});
+  });
+<% end %>

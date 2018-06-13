@@ -44,17 +44,24 @@ feature "periods", js: true do
     visit(work_periods_path)
     click_on("Create Period")
 
-    expect(page).to have_select("Jane Picard", selected: "Full Share")
-    expect(page).to have_select("Churl Rox", selected: "Full Share")
-    expect(page).to have_select("Kid Knelt", selected: "No Share")
-    fill_in("Name", with: "Qux")
+    # Fill in basic attribs
     select("Open", from: "Phase")
     enter_date("2018-01-01", into: "work_period_starts_on")
     enter_date("2018-02-01", into: "work_period_ends_on")
+    fill_in("Name", with: "Qux")
+
+    # Set quota attrib and choose share values
+    expect(page).not_to have_select("Jane Picard")
+    select("By Household", from: "Quota")
+    expect(page).to have_select("Jane Picard", selected: "Full Share")
+    expect(page).to have_select("Churl Rox", selected: "Full Share")
+    expect(page).to have_select("Kid Knelt", selected: "No Share")
     select("Full Share", from: "Jane Picard")
     select("Half Share", from: "Churl Rox")
+
     click_on("Create Period")
 
+    # Simulate user creation after period is created.
     create(:user, first_name: "Blep", last_name: "Cruller")
 
     click_on("Qux")

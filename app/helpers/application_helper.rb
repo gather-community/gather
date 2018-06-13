@@ -1,5 +1,10 @@
 module ApplicationHelper
-  FLASH_TYPE_TO_CSS = { success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info" }
+  FLASH_TYPE_TO_CSS = {
+    success: "alert-success",
+    error: "alert-danger",
+    alert: "alert-warning",
+    notice: "alert-info"
+  }.freeze
 
   def bootstrap_class_for(flash_type)
     FLASH_TYPE_TO_CSS[flash_type.to_sym] || flash_type.to_s
@@ -60,5 +65,9 @@ module ApplicationHelper
       html << " " << t("#{i18n_key}.two_html", link: link)
     end
     flash_message(:notice, html)
+  end
+
+  def inline_loading_indicator
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none")
   end
 end

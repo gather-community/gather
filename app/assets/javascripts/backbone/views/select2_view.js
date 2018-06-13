@@ -16,6 +16,8 @@ Gather.Views.Select2View = Backbone.View.extend({
 
   setup_select2: function(el) {
     var src = el.data("select2-src");
+    var placeholder = el.data("select2-placeholder");
+    var allowClear = el.data("select2-allow-clear");
     var label_attr = el.data("select2-label-attr") || "name";
     var variable_width = !!el.data("select2-variable-width");
     var self = this;
@@ -40,12 +42,14 @@ Gather.Views.Select2View = Backbone.View.extend({
         },
         cache: true
       },
+      allowClear: allowClear,
       language: {
         inputTooShort: function() {
           return el.data("select2-prompt");
         }
       },
       minimumInputLength: 1,
+      placeholder: placeholder,
       width: variable_width ? null : '100%'
     });
   }

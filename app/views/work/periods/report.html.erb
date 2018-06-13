@@ -1,0 +1,109 @@
+<% content_for(:title, "Work Report") %>
+
+<% if @period.nil? %>
+  <%= render("work/shared/no_period_notice") %>
+<% else %>
+  <div class="report">
+    <div class="overview row">
+      <div class="set col-sm-6 col-sm-offset-3">
+        <div class="title">Overview</div>
+        <table class="numbers">
+          <tr class="numbers">
+            <td><%= work_report.fixed_slot_hours_rounded %></td>
+            <td><%= work_report.fixed_slots_rounded %></td>
+            <td><%= work_report.total_portions_rounded %></td>
+            <% unless period.quota_none? %>
+              <td><%= work_report.quota_rounded %></td>
+            <% end %>
+          </tr>
+          <tr class="captions">
+            <td>Total Hours</td>
+            <td>Jobs</td>
+            <td>People</td>
+            <% unless period.quota_none? %>
+              <td>Quota</td>
+            <% end %>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="stats-table-wrapper col-sm-6">
+        <h2><%= icon_tag("user") %> By Person</h2>
+        <table class="stats">
+          <thead>
+            <tr class="surheader">
+              <th></th>
+              <th colspan="2">Regular</th>
+              <% work_report.full_community_jobs.each do |fcjob| %>
+                <th colspan="2"><%= fcjob.title %></th>
+              <% end %>
+              <th><%= icon_tag("thumb-tack") %></th>
+            </tr>
+            <tr class="header">
+              <th>Name</th>
+              <% (work_report.full_community_jobs.size + 1).times do %>
+                <th><%= icon_tag("clock-o") %></th>
+                <th>%</th>
+              <% end %>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% work_report.users.each do |user| %>
+              <tr class="<%= user == current_user ? "highlight" : "" %>">
+                <td><%= user.name %></td>
+                <td><%= work_report.regular_hours_for(user) %></td>
+                <td><%= work_report.regular_pct_for(user) %></td>
+                <% work_report.full_community_jobs.each_with_index do |fcjob, i| %>
+                  <td><%= work_report.fc_job_hours_for(fcjob, user) %></td>
+                  <td><%= work_report.fc_job_pct_for(fcjob, user) %></td>
+                <% end %>
+                <td><%= work_report.preassigned_hours_for(user) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% if work_report.quota_by_household? %>
+        <div class="stats-table-wrapper col-sm-6">
+          <h2><%= icon_tag("home") %> By Household</h2>
+          <table class="stats">
+            <thead>
+              <tr class="surheader">
+                <th></th>
+                <th colspan="2">Regular</th>
+                <% work_report.full_community_jobs.each do |fcjob| %>
+                  <th colspan="2"><%= fcjob.title %></th>
+                <% end %>
+                <th><%= icon_tag("thumb-tack") %></th>
+              </tr>
+              <tr class="header">
+                <th>Name</th>
+                <% (work_report.full_community_jobs.size + 1).times do %>
+                  <th><%= icon_tag("clock-o") %></th>
+                  <th>%</th>
+                <% end %>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% work_report.households.each do |hhold| %>
+                <tr class="<%= hhold == current_user.household ? "highlight" : "" %>">
+                  <td><%= hhold.name %></td>
+                  <td><%= work_report.regular_hours_for(hhold) %></td>
+                  <td><%= work_report.regular_pct_for(hhold) %></td>
+                  <% work_report.full_community_jobs.each do |fcjob| %>
+                    <td><%= work_report.fc_job_hours_for(fcjob, hhold) %></td>
+                    <td><%= work_report.fc_job_pct_for(fcjob, hhold) %></td>
+                  <% end %>
+                  <td><%= work_report.preassigned_hours_for(hhold) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

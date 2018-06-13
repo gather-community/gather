@@ -1,4 +1,4 @@
-<% content_for(:title) { I18n.t("titles.meals/messages") } %>
+<% content_for(:title, I18n.t("titles.meals/messages")) %>
 
 <%= gather_form_for(@message, url: meal_messages_path) do |f| %>
   <%= f.hidden_field :kind %>

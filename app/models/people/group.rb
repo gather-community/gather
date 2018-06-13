@@ -5,4 +5,6 @@ class People::Group < ApplicationRecord
 
   scope :for_community, ->(c) { where(community_id: c.id) }
   scope :by_name, -> { order("LOWER(name)") }
+
+  after_update { Work::ShiftIndexUpdater.new(self).update }
 end

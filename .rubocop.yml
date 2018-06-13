@@ -33,26 +33,43 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Metrics/AbcSize:
+  Max: 28
+
 Metrics/BlockLength:
   Enabled: true
   Exclude:
     - spec/**/*
+    - config/routes.rb
 
 Metrics/LineLength:
   Enabled: true
   Max: 110
 
-Metrics/AbcSize:
-  Max: 20
+Metrics/MethodLength:
+  Enabled: true
+  Max: 12
+
+Rails/SkipsModelValidations:
+  Enabled: false
 
 Style/AsciiComments:
   Enabled: false
 
+Style/Documentation:
+  Exclude:
+    - "app/policies/**/*"
+    - "app/decorators/**/*"
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  IgnoredMethods:
+    - []
+    - to
+    - not_to
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

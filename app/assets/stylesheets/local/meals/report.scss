@@ -1,0 +1,21 @@
+.meals .report {
+  table.stats {
+    th, td {
+      &.totals, &.diner-types {
+        background-color: $faint-gray;
+      }
+    }
+
+    &.multi-community {
+      th, td {
+        &.cmty-rep {
+          background-color: $faint-gray;
+        }
+
+        &.diner-types {
+          background-color: inherit;
+        }
+      }
+    }
+  }
+}

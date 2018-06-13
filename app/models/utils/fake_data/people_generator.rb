@@ -50,6 +50,9 @@ module Utils
             )
           end.compact
 
+          adults.first.add_role(:work_coordinator) if i < 6
+          adults.first.add_role(:admin) if i >= 6 && i < 8
+
           kids = Dir[dir].map do |path|
             age = File.basename(path, ".jpg").to_i
             next if age >= 16

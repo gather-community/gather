@@ -1,9 +1,9 @@
 <table>
-  <% @users.each_slice(3) do |row| %>
+  <% users.each_slice(3) do |row| %>
     <tr>
       <% row.each do |user| %>
         <td class="user">
-          <%= user_photo_if_permitted(user, :medium) %>
+          <%= user.photo_if_permitted(:medium) %>
           <div class="info">
             <div>
               <div class="unit-num"><%= user.unit_num_with_hash %></div>

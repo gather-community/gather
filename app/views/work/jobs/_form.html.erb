@@ -18,10 +18,11 @@
   <table class="index" id="shift-table">
     <thead>
       <tr>
-        <th><%= t("work/jobs.shift_col_headers.start_time") %></th>
-        <th><%= t("work/jobs.shift_col_headers.end_time") %></th>
-        <th><%= t("work/jobs.shift_col_headers.slots") %></th>
-        <th><%= t("work/jobs.shift_col_headers.hours") %></th>
+        <th><%= Work::Shift.human_attribute_name(:start_time) %></th>
+        <th><%= Work::Shift.human_attribute_name(:end_time) %></th>
+        <th><%= Work::Shift.human_attribute_name(:slots) %></th>
+        <th><%= Work::Shift.human_attribute_name(:workers) %></th>
+        <th><%= Work::Shift.human_attribute_name(:hours) %></th>
         <th></th>
       </tr>
     </thead>
@@ -44,5 +45,6 @@
   $(function() {
     new Gather.Views.Work.JobFormView({el: '.work--job-form'});
     new Gather.Views.DirtyChecker({el: '.work--job-form'});
+    new Gather.Views.Select2View({el: '.work--job-form'});
   });
 <% end %>

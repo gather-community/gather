@@ -1,12 +1,11 @@
 require "rails_helper"
 
 describe Work::Shift do
-  let(:job) { build(:work_job, hours: 2) }
-
   # This ensures that times aren't UTC even when there is a non-UTC timezone.
   before { Time.zone = "Saskatchewan" }
 
   describe "normalization" do
+    let(:job) { build(:work_job, hours: 2) }
     let(:shift) { build(:work_shift, submitted.merge(job: job)) }
 
     # Get the normalized values for the submitted keys.
@@ -15,7 +14,7 @@ describe Work::Shift do
     describe "slots" do
       context "full community job" do
         before do
-          allow(shift).to receive(:job_full_community?).and_return(true)
+          allow(shift).to receive(:full_community?).and_return(true)
           shift.send(:normalize)
         end
 
@@ -27,7 +26,7 @@ describe Work::Shift do
 
       context "fixed slot job" do
         before do
-          allow(shift).to receive(:job_full_community?).and_return(false)
+          allow(shift).to receive(:full_community?).and_return(false)
           shift.send(:normalize)
         end
 
@@ -54,7 +53,7 @@ describe Work::Shift do
       context "full period job" do
         before do
           allow(shift).to receive(:job_date_time?).and_return(false)
-          allow(shift).to receive(:job_full_period?).and_return(true)
+          allow(shift).to receive(:full_period?).and_return(true)
           allow(shift).to receive(:period_starts_on).and_return(Date.parse("2018-01-01"))
           allow(shift).to receive(:period_ends_on).and_return(Date.parse("2018-02-28"))
           shift.send(:normalize)
@@ -85,6 +84,8 @@ describe Work::Shift do
   end
 
   describe "validation" do
+    let(:job) { build(:work_job, hours: 2) }
+
     describe "start must be before end" do
       it "is valid when start before end" do
         shift = build(:work_shift, job: job, starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 14:30")
@@ -104,7 +105,7 @@ describe Work::Shift do
       end
     end
 
-    context "elapsed hours must equal or evenly divide job hours for date_time jobs" do
+    describe "elapsed hours must equal or evenly divide job hours for date_time jobs" do
       let(:shift) { build(:work_shift, job: job) }
 
       before { allow(shift).to receive(:job_hours).and_return(1.5) }
@@ -133,7 +134,7 @@ describe Work::Shift do
 
       context "with date_time time_type" do
         before { allow(shift).to receive(:job_date_time?).and_return(true) }
-        before { allow(shift).to receive(:job_slot_type).and_return(slot_type) }
+        before { allow(shift).to receive(:slot_type).and_return(slot_type) }
 
         context "with fixed slot_type" do
           let(:slot_type) { "fixed" }
@@ -165,6 +166,151 @@ describe Work::Shift do
           end
         end
       end
+
+      describe "no double assignments" do
+        let(:shift) do
+          build(:work_shift, job: job,
+                             starts_at: "2018-01-01 12:30",
+                             ends_at: "2018-01-01 14:00",
+                             assignments_attributes: assignments_attributes)
+        end
+        let(:users) { create_list(:user, 2) }
+
+        context "with assignments ok" do
+          let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[1].id}} }
+
+          it "should be valid" do
+            expect(shift).to be_valid
+          end
+        end
+
+        context "with double assignments" do
+          let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[0].id}} }
+
+          it "should be invalid" do
+            expect(shift).not_to be_valid
+            expect(shift.errors[:assignments].join).to eq "Duplicate assignees not allowed"
+          end
+        end
+      end
+    end
+  end
+
+  # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
+  # inside nested transactions.
+  describe "#signup_user", database_cleaner: :truncate do
+    let(:phase) { "open" }
+    let(:period) { create(:work_period, phase: phase) }
+    let(:job) { create(:work_job, shift_slots: 2, period: period) }
+    let(:shift) { job.shifts.first }
+    let!(:user1) { create(:user) }
+    let!(:user2) { create(:user) }
+    let!(:user3) { create(:user) }
+    let!(:assignment1) { create(:work_assignment, shift: shift, user: user1) }
+
+    context "with available slots" do
+      context "normal conditions" do
+        it "creates assignment and updates counter cache" do
+          shift.signup_user(user2)
+          expect(shift.reload.assignments.count).to eq 2
+          expect(shift.assignments_count).to eq 2
+        end
+      end
+
+      context "if user already signed up" do
+        it "raises error" do
+          expect { shift.signup_user(user1) }.to raise_error(Work::AlreadySignedUpError)
+        end
+      end
+
+      context "with two competing requests" do
+        before do
+          inserted = false
+          # We insert a new assignment via second database connection immediately AFTER the main
+          # connection (Shift model) retrieves the current assignment count but BEFORE it adds its own
+          # assignment to the DB.
+          allow(shift).to receive(:current_assignments_count) do
+            count = shift.reload.assignments_count
+            insert_assignment_via_second_db_connection unless inserted
+            inserted = true
+            count
+          end
+        end
+
+        # This spec won't pass (i.e. both assignments will be inserted, thus exceeding the limit)
+        # unless we use isolation: :repeatable_read on the transaction in the method.
+        it "raises error for second request" do
+          expect { shift.signup_user(user3) }.to raise_error(Work::SlotsExceededError)
+        end
+
+        def insert_assignment_via_second_db_connection
+          db = ApplicationRecord.establish_connection.connection
+          db.execute("INSERT INTO work_assignments (user_id, shift_id, cluster_id, created_at, updated_at)
+            VALUES (#{user2.id}, #{shift.id}, #{shift.cluster_id}, NOW(), NOW())")
+          db.execute("UPDATE work_shifts SET assignments_count = COALESCE(assignments_count, 0) + 1
+            WHERE id = #{shift.id}")
+        end
+      end
+    end
+
+    context "without available slots" do
+      let!(:assignment2) { create(:work_assignment, shift: shift, user: user2) }
+
+      it "raises error" do
+        expect { shift.signup_user(user2) }.to raise_error(Work::SlotsExceededError)
+      end
+    end
+
+    describe "preassigned attribute" do
+      context "with period in draft phase" do
+        let(:phase) { "draft" }
+
+        it "sets to true" do
+          shift.signup_user(user2)
+          expect(shift.assignment_for_user(user2)).to be_preassigned
+        end
+      end
+
+      context "with period in open phase" do
+        let(:phase) { "open" }
+
+        it "sets to false" do
+          shift.signup_user(user2)
+          expect(shift.assignment_for_user(user2)).not_to be_preassigned
+        end
+      end
+    end
+  end
+
+  describe "#hours" do
+    subject { job.shifts.first.hours }
+
+    context "with regular job" do
+      let(:job) { create(:work_job, hours: 3.2) }
+      it { is_expected.to eq 3.2 }
+    end
+
+    context "with date-only full single job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_single")
+      end
+      it { is_expected.to eq 3.2 }
+    end
+
+    context "with date-only full multiple job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_multiple",
+                          hours_per_shift: 1.6)
+      end
+      it { is_expected.to eq 1.6 }
+    end
+
+    context "with date-time full multiple job" do
+      let(:job) do
+        create(:work_job, hours: 3.2, time_type: "date_time", slot_type: "full_multiple",
+                          shift_hours: [0.8, 0.8])
+      end
+      it { is_expected.to eq 0.8 }
     end
   end
 end

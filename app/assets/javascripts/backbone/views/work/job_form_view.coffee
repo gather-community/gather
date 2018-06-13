@@ -3,12 +3,18 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
   initialize: (options) ->
     @formatFields()
 
+    # Force reevaluation of all slot counts
+    @$(".shift-slots input").trigger("change")
+
   events:
     'cocoon:after-insert': 'shiftInserted'
     'change #work_job_time_type': 'formatFields'
     'change #work_job_slot_type': 'formatFields'
     'change #work_job_hours': 'computeHours'
     'change #work_job_hours_per_shift': 'computeHours'
+    'keyup .shift-slots input': 'handleSlotOrWorkerCountChange'
+    'change .shift-slots input': 'handleSlotOrWorkerCountChange'
+    'cocoon:after-insert .assignments': 'handleSlotOrWorkerCountChange'
     'dp.change .input-group.datetimepicker': 'computeHours'
     'dp.change .starts-at .input-group.datetimepicker': 'setEndsAtDefault'
 
@@ -83,6 +89,16 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     if (start)
       endPicker = @$(event.currentTarget).closest('tr').find('.ends-at .input-group.datetimepicker')
       endPicker.data("DateTimePicker").defaultDate(start)
+
+  # Toggles add link based on how many slots and workers there are.
+  # Can originate from link click or keyup on slots input.
+  handleSlotOrWorkerCountChange: (event) ->
+    row = @$(event.target).closest(".nested-fields")
+    slotsInput = row.find(".shift-slots input")
+    assignments = row.find(".assignments")
+    workerCount = assignments.find(".work_job_shifts_assignments_user_id").length
+    slotCount = if slotsInput.val() then parseInt(slotsInput.val()) else 1
+    assignments.find(".add-link").toggle(workerCount < slotCount)
 
   timeType: ->
     @$('#work_job_time_type').val()

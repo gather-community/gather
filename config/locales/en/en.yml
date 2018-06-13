@@ -1,18 +1,20 @@
 en:
   common:
-    "true": "True"
-    "false": "False"
-    max: "Max"
-    num_in_total: "%{count} in total"
-    default: "Default"
-    inactive: "Inactive"
-    cancelled: "Cancelled"
-    unknown: "Unknown"
-    no_result_clear_filter_link_html: "You can try %{link}."
-    clearing_the_filter: "clearing the filters"
     adults: "Adults"
+    cancelled: "Cancelled"
     children: "Children"
+    clearing_the_filter: "clearing the filters"
+    default: "Default"
+    "false": "False"
+    inactive: "Inactive"
+    max: "Max"
+    no_result_clear_filter_link_html: "You can try %{link}."
+    none: "None"
+    num_in_total: "%{count} in total"
     save: "Save"
+    "true": "True"
+    unknown: "Unknown"
+    unlimited: "Unlimited"
 
   activerecord:
     models:
@@ -137,6 +139,7 @@ en:
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
         requester_id: "Requester"
+        shifts: "Shifts"
         slot_type: "Slot Type"
         time_type: "Times"
         title: "Title"
@@ -145,6 +148,13 @@ en:
         phase: "Phase"
         starts_on: "Starts On"
         ends_on: "Ends On"
+        quota_type: "Quota"
+      work/shift:
+        start_time: "Start Time"
+        end_time: "End Time"
+        hours: "Hours"
+        slots: "# of Slots"
+        workers: "Workers"
       wiki/page:
         title: "Title"
         content: "Content"
@@ -212,6 +222,8 @@ en:
               elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
             ends_at:
               not_after_start: "must be after start time"
+            assignments:
+              no_double_assignments: "Duplicate assignees not allowed"
 
   custom_fields:
     labels:
@@ -331,6 +343,8 @@ en:
       destroy: "Are you sure you want to delete the job '%{title}'? This action cannot be undone."
     work/period:
       destroy: "Are you sure you want to delete the period '%{name}'? This action cannot be undone."
+    work/shift:
+      unsignup: "Are you sure you want to remove your name from this job?"
 
   activatables:
     user:
@@ -399,6 +413,7 @@ en:
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
+      time_only: "%l:%M%P"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -447,6 +462,8 @@ en:
         guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       user:
         joined_on: "Approximate date when you joined the community"
+        email: "The email address at which you'd prefer to be contacted."
+        google_email: "The email address tied to the Google account used for sign-in."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
@@ -459,6 +476,8 @@ en:
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
         hours_per_shift: "The amount of hours credit each shift is worth."
         description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+      work_period:
+        quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:
       meal:
         time:
@@ -517,6 +536,10 @@ en:
         requester:
           any: "Any Requester"
           none: "No Requester"
+        preassigned:
+          any: "All Jobs"
+          y: "Preassigned"
+          n: "Not Preassigned"
       work_period:
         phase:
           archived: "Archived"
@@ -524,6 +547,18 @@ en:
           open: "Open"
           pending: "Pending"
           published: "Published"
+        quota_type:
+          none: "None"
+          by_person: "By Person"
+          by_household: "By Household"
+      work_shift:
+        lens:
+          all: "All Jobs"
+          open: "Open Jobs"
+          me: "My Jobs"
+          myhh: "My Household"
+          notpre: "Not Preassigned"
+
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"
@@ -538,13 +573,21 @@ en:
       table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
       shifts: "Add Shift"
+      assignments: "Add Worker"
 
-  select2_prompts:
-    reserver: "Please type a few letters of the reserver's name."
-    sponsor: "Please type a few letters of the sponsor's name."
-    household: "Please type a few letters of the household's name."
-    guardian: "Please type a few letters of the guardian's name."
-    user: "Please type a few letters of the user's name."
+  select2:
+    prompts:
+      reserver: "Please type a few letters of the reserver's name."
+      sponsor: "Please type a few letters of the sponsor's name."
+      household: "Please type a few letters of the household's name."
+      guardian: "Please type a few letters of the guardian's name."
+      user: "Please type a few letters of the user's name."
+    placeholders:
+      reserver: "Choose Reserver ..."
+      sponsor: "Choose Sponsor ..."
+      household: "Choose Household ..."
+      guardian: "Choose Guardian ..."
+      user: "Choose User ..."
 
   csv:
     headers:
@@ -587,6 +630,12 @@ en:
       update_photo: "Edit Photo"
     wiki/page:
       history: "History"
+    work/job:
+      edit: "Edit Job"
+    work/shift:
+      edit_job: "Edit Job"
+      signup: "Sign Up"
+      unsignup: "Remove Signup"
 
   calendars:
     meals: "Meals You're Attending"
@@ -640,23 +689,25 @@ en:
       meals: "Meals"
       reservations: "Reservations"
       wiki: "Wiki"
-      accounts: "Accounts"
+      work: "Work"
       admin: "Admin"
     sub:
       meals:
         meals: "Meals"
         jobs: "Jobs"
-        reports: "Reports"
+        report: "Report"
         formulas: "Formulas"
       people:
         directory: "Directory"
         households: "Households"
+        roles: "Roles"
       reservations:
         reservations: "Reservations"
         resources: "Resources"
       work:
+        signups: "Signups"
+        report: "Report"
         jobs: "Jobs"
-        shares: "Shares"
         periods: "Periods"
     personal:
       profile: "Profile"
@@ -767,6 +818,16 @@ en:
     cancellation_message:
       subject: "Meal on %{datetime} CANCELLED"
 
+  work_mailer:
+    shift_reminder:
+      subject: "Job Reminder: %{title} for %{times}"
+
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+
+  date_range_lens:
+    past_12: "Past 12 Months"
+    this_year: "This Year"
+    this_quarter: "This Quarter"
+    all_time: "All Time"

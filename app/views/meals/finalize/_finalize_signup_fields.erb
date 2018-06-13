@@ -11,9 +11,11 @@
         class: "form-control", data: {
           "select2-src" => "households",
           "select2-label-attr" => "name_with_prefix",
-          "select2-prompt" => t("select2_prompts.household"),
+          "select2-prompt" => t("select2.prompts.household"),
           "select2-context" => "finalize"
       }) %>
+      <%= f.error :household_id %>
+      <%= f.error :base %>
     <% end %>
   </td>
   <% Signup::DINER_TYPES.each do |dt| %>

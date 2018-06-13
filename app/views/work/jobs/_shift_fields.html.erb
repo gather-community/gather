@@ -12,10 +12,20 @@
     <div class="period-date"><%= l(@job.period_ends_on) %></div>
     <%= f.error :ends_at %>
   </td>
-  <td class="<%= shift.errors[:slots].any? ? 'has-error' : '' %>">
-    <%= f.input_field :slots, class: "form-control shift-slots" %>
+  <td class="shift-slots <%= shift.errors[:slots].any? ? 'has-error' : '' %>">
+    <%= f.input_field :slots, class: "form-control" %>
     <div class="unlimited"><%= t("work/jobs.unlimited") %></div>
     <%= f.error :slots %>
+  </td>
+  <td class="assignments">
+    <%= f.simple_fields_for(:assignments) do |assignment_form| %>
+      <%= render("assignment_fields", f: assignment_form) %>
+    <% end %>
+    <%# New rows are inserted before this element. %>
+    <div class="add-link">
+      <%= link_to_add_association(t("cocoon.add_links.assignments"), f, :assignments) %>
+    </div>
+    <%= f.error :assignments %>
   </td>
   <td class="hours">
   </td>

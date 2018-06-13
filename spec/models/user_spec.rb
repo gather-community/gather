@@ -28,17 +28,39 @@ describe User do
   describe "roles" do
     let(:user) { create(:user) }
 
-    it "should read and write properly" do
-      user.role_biller = true
-      expect(user.role_biller).to be true
-      expect(user.has_role?(:biller)).to be true
+    describe "getter/setters" do
+      it "should read and write properly" do
+        user.role_biller = true
+        expect(user.role_biller).to be true
+        expect(user.has_role?(:biller)).to be true
+      end
+
+      it "should work via update_attributes" do
+        user.update_attributes!(role_admin: true)
+        expect(user.reload.has_role?(:admin)).to be true
+        user.update_attributes!(role_admin: false)
+        expect(user.reload.has_role?(:admin)).to be false
+      end
     end
 
-    it "should work via update_attributes" do
-      user.update_attributes!(role_admin: true)
-      expect(user.reload.has_role?(:admin)).to be true
-      user.update_attributes!(role_admin: false)
-      expect(user.reload.has_role?(:admin)).to be false
+    describe "#global_role?" do
+      let(:meal) { create(:meal) }
+
+      it "gets global role" do
+        user.add_role(:foo)
+        expect(user.global_role?(:foo)).to be true
+      end
+
+      it "doesn't get scoped role" do
+        user.add_role(:foo, meal)
+        expect(user.global_role?(:foo)).to be false
+      end
+
+      it "doesn't get global role set after first call" do
+        user.global_role?(:foo)
+        user.add_role(:foo)
+        expect(user.global_role?(:foo)).to be false
+      end
     end
   end
 
@@ -77,6 +99,25 @@ describe User do
 
     it "should return missing image when no photo" do
       expect(create(:user).photo(:medium)).to eq "missing/users/medium.png"
+    end
+  end
+
+  describe "#any_assignments?" do
+    let(:user) { create(:user) }
+    subject { user.any_assignments? }
+
+    context "with nothing" do
+      it { is_expected.to be false }
+    end
+
+    context "with meal assignment" do
+      before { user.meal_assignments.create!(role: "cleaner", meal: create(:meal)) }
+      it { is_expected.to be true }
+    end
+
+    context "with work assignment" do
+      before { user.work_assignments.create!(shift: create(:work_shift)) }
+      it { is_expected.to be true }
     end
   end
 end

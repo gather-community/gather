@@ -113,7 +113,7 @@ describe HouseholdPolicy do
       end
 
       context "with assignment" do
-        before { household.users.first.assignments.build }
+        before { household.users.first.meal_assignments.build }
         it_behaves_like "full denial"
       end
 

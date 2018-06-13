@@ -11,12 +11,13 @@ class Community < ApplicationRecord
   has_many :meals, inverse_of: :community, dependent: :destroy
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
   has_many :reservation_protocols, class_name: "Reservations::Protocol",
-    inverse_of: :community, dependent: :destroy
+                                   inverse_of: :community, dependent: :destroy
   has_many :reservation_shared_guidelines, class_name: "Reservations::SharedGuidelines",
-    inverse_of: :community, dependent: :destroy
+                                           inverse_of: :community, dependent: :destroy
   has_many :resources, class_name: "Reservations::Resource", inverse_of: :community, dependent: :destroy
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
+  has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order("name") }
   scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }

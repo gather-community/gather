@@ -12,9 +12,4 @@ module UsersHelper
   def phone_link(phone, options = {})
     phone.blank? ? "" : link_to(phone.formatted(options), "tel:#{phone.raw}")
   end
-
-  def user_photo_if_permitted(user, format)
-    image_tag(policy(user).show_photo? ? user.photo.url(format) : "missing/users/#{format}.png",
-      class: "photo")
-  end
 end

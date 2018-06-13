@@ -1,5 +1,7 @@
 // Layout where content flows from one column to the next like a newspaper.
-.flowing-columns {
+@mixin flowing-columns {
+  column-gap: 20px;
+
   @media screen and (max-width: $screen-xs-max) {
     column-count: 1;
   }
@@ -8,15 +10,9 @@
     column-count: 2;
   }
 
-  @media screen and (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-    column-count: 3;
-  }
-
-  @media screen and (min-width: $screen-lg-min) {
-    column-count: 4;
-  }
-
   .section {
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
     break-inside: avoid;
 
     &:first-of-type {
@@ -28,5 +24,25 @@
 
   .callout {
     margin-top: 20px;
+  }
+}
+
+.flowing-columns-max-3 {
+  @include flowing-columns;
+
+  @media screen and (min-width: $screen-md-min) {
+    column-count: 3;
+  }
+}
+
+.flowing-columns, .flowing-columns-max-4 {
+  @include flowing-columns;
+
+  @media screen and (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    column-count: 3;
+  }
+
+  @media screen and (min-width: $screen-lg-min) {
+    column-count: 4;
   }
 }

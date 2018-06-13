@@ -1,7 +1,6 @@
-.meals.action-reports {
+.report {
   .overview {
     text-align: center;
-    margin-bottom: 20px;
 
     .set {
       background-color: $faint-gray;
@@ -12,22 +11,29 @@
       font-size: 15px;
     }
 
-    .numbers {
-      > div {
-        display: inline-block;
-        width: 60px;
+    table.numbers {
+      margin: auto;
 
-        &.cost {
-          width: 90px;
+      tr {
+        border: none;
+      }
+
+      td {
+        padding-bottom: 0;
+        padding-right: 20px;
+        padding-top: 0;
+
+        &:first-of-type {
+          padding-left: 20px;
         }
       }
 
-      .number {
+      .numbers td {
         font-size: 16px;
         font-weight: bold;
       }
 
-      .caption {
+      .captions td {
         font-size: 13px;
       }
     }
@@ -49,8 +55,14 @@
     }
   }
 
+  .stats-table-wrapper {
+    // Just in case the table gets super wide.
+    overflow-x: auto;
+  }
+
   table.stats {
     margin-top: 10px;
+    width: 100%;
 
     tr.surheader {
       th {
@@ -64,8 +76,17 @@
       }
     }
 
+    tr.highlight td {
+      background-color: $highlight-color;
+    }
+
     th {
       font-size: 11px;
+      text-align: center;
+
+      i.fa {
+        font-size: 13px;
+      }
     }
 
     th, td {
@@ -81,24 +102,6 @@
 
     td {
       text-align: right;
-    }
-
-    th, td {
-      &.totals, &.diner-types {
-        background-color: $faint-gray;
-      }
-    }
-
-    &.multi-community {
-      th, td {
-        &.cmty-rep {
-          background-color: $faint-gray;
-        }
-
-        &.diner-types {
-          background-color: inherit;
-        }
-      }
     }
   }
 

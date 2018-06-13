@@ -1,19 +1,41 @@
+# frozen_string_literal: true
+
 module FeatureSpecHelpers
   def reload_page
     page.evaluate_script("window.location.reload()")
   end
 
-  # Fills in the given value into the box with given ID, then selects the first matching option.
+  # Fills in the given value into the given select (a Node::Element or CSS selector),
+  # then selects the first matching option.
+  # If a Node::Element object is provided, it must have a unique ID.
   # Works with dropdown and inline style select2 boxes. Works with a remote data source.
   def select2(value, from:, type: :dropdown)
-    if type == :dropdown
-      execute_script("$('#{from}').select2('open')")
-      find(".select2-search--dropdown .select2-search__field").set(value)
-    elsif type == :inline
-      find("#{from} .select2-search__field").click
+    if from.is_a?(Capybara::Node::Element)
+      select_el = from
+      raise "Element must have a unique ID attribute so jQuery can grab it" if select_el[:id].blank?
+      css = "##{select_el[:id]}"
+    else
+      css = from
+      select_el = find(css)
     end
-    # These controls are inserted at the bottom of the DOM so we can't scope them.
-    find(".select2-dropdown .select2-results li", text: /#{value}/).click
+
+    # Get the span element inserted right after the select by select2.
+    span_el = select_el.find(:xpath, "following-sibling::span")
+
+    if value == :clear
+      span_el.find(".select2-selection__clear").click
+    else
+      # Several of the elements selected below are inserted at the bottom of the DOM so we can't scope them.
+      without do
+        if type == :dropdown
+          execute_script("$('#{css}').select2('open')")
+          find(".select2-search--dropdown .select2-search__field").set(value)
+        elsif type == :inline
+          span_el.find(".select2-search__field").click
+        end
+        find(".select2-dropdown .select2-results li", text: /#{value}/).click
+      end
+    end
   end
 
   def pick_datetime(selector, day:, hour:, next_click: "body")
@@ -225,7 +247,23 @@ module FeatureSpecHelpers
     first(:css, "[data-param-name=#{lens_param_name}]").select(value)
   end
 
+  def enter_lens(lens_param_name, value)
+    page.execute_script("$('.lens-bar.lower [name=#{lens_param_name}]').val('#{value}');")
+    page.execute_script("$('.lens-bar.lower').submit()")
+  end
+
+  def clear_lenses
+    find(".lens-bar a.clear").click
+  end
+
   def click_print_button
     first(:css, ".btn-print").click
+  end
+
+  def with_env(vars)
+    vars.each_pair { |k, v| ENV[k] = v }
+    yield
+  ensure
+    vars.each_pair { |k, _| ENV.delete(k) }
   end
 end

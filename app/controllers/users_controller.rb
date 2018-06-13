@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   before_action -> { nav_context(:people, :directory) }
 
-  decorates_assigned :household, :user
+  decorates_assigned :household, :user, :users
 
   def index
     authorize User
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
           @users.in_community(current_community).adults
         when "reserver_any_cmty"
           @users.adults
-        when "lens", "meal_assign"
+        when "lens", "meal_assign", "work_assign"
           @users.in_community(current_community)
         else
           raise "invalid select2 context"

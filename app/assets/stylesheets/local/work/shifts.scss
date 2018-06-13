@@ -1,0 +1,148 @@
+.shifts-topline {
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+  position: sticky;
+  top: 0px;
+  margin-bottom: 20px;
+  background-color: $highlight-color2;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 18px;
+
+  i, b {
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  i {
+    color: $theme-accent;
+  }
+
+  b {
+    color: $error-red;
+  }
+}
+
+.shift-card {
+  margin-bottom: 20px;
+  background-color: $fainter-gray;
+  padding: 10px;
+
+  &.mine {
+    background-color: $theme-accent-lightest;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  table {
+    width: 100%;
+
+    tr {
+      border: none;
+
+      td {
+        padding: 0;
+        padding-left: 0;
+        line-height: 18px;
+      }
+    }
+  }
+
+  .photos, .hours {
+    text-align: right;
+  }
+
+  .title {
+    font-size: 15px;
+    font-weight: $medium-bold;
+  }
+
+  .hours {
+    float: right;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .owners-cell {
+    vertical-align: bottom;
+    padding-top: 10px;
+  }
+
+  .shift-times {
+    font-weight: $medium-bold;
+  }
+
+  .owner-name {
+    line-height: 20px;
+
+    .fa-circle-o {
+      font-size: 11px;
+      vertical-align: middle;
+    }
+  }
+
+  .open-slots {
+    color: $gray-text;
+  }
+
+  .signup-link {
+    height: 20px;
+    margin-top: 10px;
+
+    a {
+      color: $theme-accent;
+      font-size: 16px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  }
+
+  .signup-error {
+    margin: 5px 0 0 0;
+    padding: 2px;
+  }
+
+  .photo-cell {
+    vertical-align: bottom;
+    text-align: right;
+
+    // We don't want the height of cards to change too much so we reserve some space
+    // for people's names.
+    height: 50px;
+    width: 60px;
+  }
+
+  .photos {
+    display: inline-block;
+
+    img {
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+    }
+
+    &.single img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .photo {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+  }
+}
+
+.shift-info {
+  margin-bottom: 20px;
+
+  .fa-thumb-tack {
+    font-size: 13px;
+  }
+}

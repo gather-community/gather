@@ -2,7 +2,9 @@ class User < ApplicationRecord
   include Deactivatable, Phoneable, PhotoDestroyable
 
   ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist work_coordinator)
+  ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i(email text phone)
+  NAME_ORDER = "LOWER(first_name), LOWER(last_name)".freeze
 
   acts_as_tenant :cluster
   rolify
@@ -18,19 +20,20 @@ class User < ApplicationRecord
     dependent: :destroy
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
-  has_many :assignments
+  has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
+  has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
   scope :all_in_community_or_adult_in_cluster, ->(c) { joins(household: :community).
     where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :in_cluster, ->(id) { joins(household: :community).where("communities.cluster_id = ?", id) }
-  scope :by_name, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_name, -> { order(NAME_ORDER) }
   scope :by_unit, -> { joins(:household).order("households.unit_num") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> {
-    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, LOWER(first_name), LOWER(last_name)") }
+    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table
@@ -82,17 +85,10 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   # This is needed for remembering users across sessions because users don't always have passwords.
-  before_create do
-    self.remember_token ||= Devise.friendly_token
-  end
-
-  before_save do
-    raise People::AdultWithGuardianError if adult? && guardians.present?
-  end
-
-  before_destroy do
-    photo.destroy
-  end
+  before_create { self.remember_token ||= Devise.friendly_token }
+  before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
+  before_destroy { photo.destroy }
+  after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)
     where(google_email: auth.info[:email]).first
@@ -108,6 +104,11 @@ class User < ApplicationRecord
   # Setter for household_by_id?
   def household_by_id=(val)
     @household_by_id = val.is_a?(String) ? val == "true" : val
+  end
+
+  # Duck type.
+  def users
+    [self]
   end
 
   # Includes primary household plus any households affiliated by parentage.
@@ -158,7 +159,7 @@ class User < ApplicationRecord
   end
 
   def any_assignments?
-    assignments.any?
+    meal_assignments.any? || work_assignments.any?
   end
 
   def activate
@@ -181,8 +182,9 @@ class User < ApplicationRecord
 
   # All roles are currently global.
   # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense
-  # if someone can be a meals_coordinator in multiple communities, which they can't.
+  # if someone can e.g. be a meals_coordinator in multiple communities, which they can't.
   # Community scoping is already represented by the user's community or cluster affiliation.
+  # The below methods are used to populate and receive params for the check boxes in the user form.
   ROLES.each do |role|
     define_method("role_#{role}") do
       has_role?(role)
@@ -191,6 +193,13 @@ class User < ApplicationRecord
     define_method("role_#{role}=") do |bool|
       bool == true || bool == "1" ? add_role(role) : remove_role(role)
     end
+  end
+
+  # Efficiently does role lookups for global roles (those without associated resources) by caching
+  # the user's roles. The has_role? method provided by Rolify does not do any caching which results in
+  # a ton of unnecessary DB requests on some pages.
+  def global_role?(role)
+    global_roles[role].present?
   end
 
   def adult?
@@ -221,5 +230,10 @@ class User < ApplicationRecord
     unless household_id.present? || household.present? && !household.marked_for_destruction?
       errors.add(:household_id, :blank)
     end
+  end
+
+  # Returns a hash of global roles (those with no associated resource) indexed by name.
+  def global_roles
+    @global_roles ||= roles.where(resource_id: nil).to_a.index_by(&:name).with_indifferent_access
   end
 end

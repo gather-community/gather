@@ -10,6 +10,10 @@ describe Work::PeriodPolicy do
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
+
+    permissions :report? do
+      it_behaves_like "permits users in community only"
+    end
   end
 
   describe "scope" do
@@ -39,7 +43,7 @@ describe Work::PeriodPolicy do
     subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[starts_on ends_on name phase] <<
+      expect(subject).to match_array(%i[starts_on ends_on name phase quota_type] <<
         {shares_attributes: %i[id user_id portion]})
     end
   end

@@ -1,1 +1,1 @@
-<%= f.input :user_id, as: :assoc_select2, context: options[:context], label: false %>
+<%= f.input :user_id, options.merge(as: :assoc_select2, label: false) %>

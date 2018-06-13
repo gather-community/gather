@@ -1,4 +1,5 @@
-<% content_for(:title){ "Ping" } -%>
+<% content_for(:title, "Ping") -%>
 Gather
-App is running.
-Delayed Job is <%= @dj ? "" : "NOT " %>running.
+<% @status.statuses.each do |service, up| %>
+<%= "#{service}:".to_s.rjust(20) %> <%= up ? "UP" : "DOWN" %>
+<% end %>

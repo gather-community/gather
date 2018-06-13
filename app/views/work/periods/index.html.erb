@@ -7,9 +7,7 @@
 <% end %>
 
 <% if periods.empty? %>
-  <div class="none-found">
-    No periods found.
-  </div>
+  <%= render("work/shared/no_period_notice") %>
 <% else %>
   <table class="index part-width">
     <thead>

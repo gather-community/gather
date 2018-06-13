@@ -59,7 +59,7 @@ class CalendarExport
     when "all_meals"
       base_meals_scope.to_a
     when "shifts"
-      user.assignments.includes(:meal).oldest_first.to_a
+      user.meal_assignments.includes(:meal).oldest_first.to_a
     when "reservations"
       base_reservations_scope.where(resources: {community_id: user.community_id}).to_a
     when "your_reservations"

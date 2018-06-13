@@ -24,9 +24,11 @@ module Work
 
     def initial_portion_for(user)
       # For new periods, we want to set a sensible default.
-      # For existing periods, only new users will usually not have shares.
+      # For existing periods with quota_type none, we want to have shares pre-built in case
+      # the user wants to change the quota type to non-none. They will get discarded if not used.
+      # For existing periods with quota_type not none, only new users will usually not have shares.
       # We don't want to assume they should get a portion.
-      if @period.new_record?
+      if @period.new_record? || @period.quota_none?
         user.child? ? 0 : 1
       else
         nil

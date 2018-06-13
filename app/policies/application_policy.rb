@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
+# Parent policy for all policies.
 class ApplicationPolicy
   class CommunityNotSetError < StandardError; end
 
   attr_reader :user, :record
 
   def initialize(user, record)
-    raise Pundit::NotAuthorizedError, "must be signed in" unless user.present?
+    raise Pundit::NotAuthorizedError, "must be signed in" if user.blank?
     @user = user
     @record = record
   end
@@ -14,7 +17,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
@@ -63,19 +66,19 @@ class ApplicationPolicy
     end
 
     def active_super_admin?
-      active? && user.has_role?(:super_admin)
+      active? && user.global_role?(:super_admin)
     end
 
     def active_cluster_admin?
-      active? && user.has_role?(:cluster_admin) || active_super_admin?
+      active? && user.global_role?(:cluster_admin) || active_super_admin?
     end
 
     def active_admin?
-      active? && %i(admin cluster_admin super_admin).any? { |r| user.has_role?(r) }
+      active? && %i[admin cluster_admin super_admin].any? { |r| user.global_role?(r) }
     end
 
     def active_admin_or?(role)
-      active_admin? || (active? && user.has_role?(role))
+      active_admin? || (active? && user.global_role?(role))
     end
   end
 
@@ -92,20 +95,20 @@ class ApplicationPolicy
   end
 
   def active_admin?
-    active? && user.has_role?(:admin) && own_community_record? ||
+    active? && user.global_role?(:admin) && own_community_record? ||
       active_cluster_admin? || active_super_admin?
   end
 
   def active_cluster_admin?
-    active? && user.has_role?(:cluster_admin) && own_cluster_record? || active_super_admin?
+    active? && user.global_role?(:cluster_admin) && own_cluster_record? || active_super_admin?
   end
 
   def active_super_admin?
-    active? && user.has_role?(:super_admin)
+    active? && user.global_role?(:super_admin)
   end
 
   def active_with_community_role?(role)
-    active? && user.has_role?(role) && own_community_record?
+    active? && user.global_role?(role) && own_community_record?
   end
 
   def active_admin_or?(role)
@@ -126,16 +129,11 @@ class ApplicationPolicy
   # record and allow_class_based_auth is false.
   def required_community
     if not_specific_record?
-      if allow_class_based_auth?
-        nil
-      else
-        raise CommunityNotSetError.new("community must be set via dummy record for this check")
-      end
+      return nil if allow_class_based_auth?
+      raise CommunityNotSetError, "community must be set via dummy record for this check"
     else
-      if record.community.nil?
-        raise CommunityNotSetError.new("community must be set on record for this check")
-      end
-      record.community
+      return record.community if record.community.present?
+      raise CommunityNotSetError, "community must be set on record for this check"
     end
   end
 

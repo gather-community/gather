@@ -1,4 +1,4 @@
-<% content_for(:title){ "Confirm Transaction" } %>
+<% content_for(:title, "Confirm Transaction") %>
 
 <%= gather_form_for([@account, @transaction], width: :full,
   url: account_transactions_path(@account)) do |form| %>

@@ -33,6 +33,7 @@ For development environments:
 Follow these steps to setup a development environment for Gather.
 
 1. Install all above dependencies
+    1. **Note:** For Elasticsearch, we recommend setting the maximum heap size to 200m unless you have lots of memory on your development machine. To do so, edit the `jvm.options` file. [See here for instructions](https://stackoverflow.com/a/40333263/2066866).
 1. Retrieve project files using Git
         git clone https://github.com/sassafrastech/gather.git
         cd gather

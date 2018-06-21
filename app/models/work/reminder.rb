@@ -27,6 +27,12 @@ module Work
 
     def normalize
       self.rel_time = nil if abs_time.present? && rel_time.present?
+
+      if rel_time.present? && time_unit != "hours"
+        self.time_unit = "days"
+      elsif abs_time.present?
+        self.time_unit = nil
+      end
     end
   end
 end

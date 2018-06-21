@@ -7,7 +7,7 @@ class CreateWorkReminders < ActiveRecord::Migration[5.1]
       t.integer :job_id, null: false
       t.integer :rel_time
       t.datetime :abs_time
-      t.string :description
+      t.string :note
 
       t.timestamps
     end

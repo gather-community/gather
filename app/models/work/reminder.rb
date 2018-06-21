@@ -8,6 +8,12 @@ module Work
 
     before_validation :normalize
 
+    normalize_attributes :note
+
+    def note?
+      note.present?
+    end
+
     private
 
     def normalize

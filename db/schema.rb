@@ -588,8 +588,8 @@ ActiveRecord::Schema.define(version: 20180608142654) do
     t.datetime "abs_time"
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.string "description"
     t.integer "job_id", null: false
+    t.string "note"
     t.integer "rel_time"
     t.datetime "updated_at", null: false
     t.index ["cluster_id", "job_id"], name: "index_work_reminders_on_cluster_id_and_job_id"

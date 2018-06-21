@@ -820,7 +820,7 @@ en:
 
   work_mailer:
     shift_reminder:
-      subject: "Job Reminder: %{title} for %{times}"
+      subject: "Job Reminder: %{title}%{note}%{times}"
 
   users:
     greeting: "Dear %{name},"

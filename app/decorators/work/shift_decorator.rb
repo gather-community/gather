@@ -20,6 +20,10 @@ module Work
       link
     end
 
+    # Returns formatted times. Examples:
+    # Sun Jul 08 4:15pm–6:15pm
+    # Wed May 02–Wed May 30
+    # May–August
     def times
       if starts_at.to_date == ends_at.to_date
         if job_date_time?
@@ -35,11 +39,11 @@ module Work
     end
 
     def starts_at_formatted
-      h.l(starts_at, format: time_format).strip
+      h.l(starts_at, format: time_format).strip.gsub(/\s\s+/, " ")
     end
 
     def ends_at_formatted
-      h.l(ends_at, format: time_format).strip
+      h.l(ends_at, format: time_format).strip.gsub(/\s\s+/, " ")
     end
 
     def hours_formatted

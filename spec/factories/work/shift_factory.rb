@@ -12,9 +12,7 @@ FactoryBot.define do
       Time.zone.parse("2018-01-01 #{time}") + n.days
     end
     sequence(:ends_at) do |n|
-      time = date_only ? "" : "9:00"
-      day = date_only ? n + 1 : n
-      Time.zone.parse("2018-01-01 #{time}") + day.days + hours.hours
+      starts_at + (date_only ? 1.day : hours.hours)
     end
     slots 3
     association :job, factory: :work_job

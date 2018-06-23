@@ -36,4 +36,16 @@ describe Work::Reminder do
       it { is_expected.to eq(abs_time: nil, rel_time: -180, time_unit: "hours") }
     end
   end
+
+  describe "ReminderDelivery creation" do
+    let(:job) { create(:work_job, shift_count: 2) }
+    subject(:deliveries) { Work::ReminderDelivery.all.to_a }
+
+    it "creates deliveries on creation" do
+      reminder = Work::Reminder.create!(job: job, abs_time: "2018-01-01 12:00")
+      expect(deliveries.size).to eq(2)
+      expect(deliveries.map(&:shift)).to match_array(job.shifts)
+      expect(deliveries.map(&:reminder)).to match_array([reminder] * 2)
+    end
+  end
 end

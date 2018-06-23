@@ -36,20 +36,4 @@ describe Work::Reminder do
       it { is_expected.to eq(abs_time: nil, rel_time: -180, time_unit: "hours") }
     end
   end
-
-  describe "#deliver_at" do
-    subject(:deliver_at) { reminder.deliver_at(relative_to: Time.zone.parse("2018-01-01 9:00")) }
-
-    context "with abs_time" do
-      let(:reminder) { create(:work_reminder, abs_time: tomorrow, rel_time: nil) }
-
-      it { is_expected.to eq(tomorrow) }
-    end
-
-    context "with rel_time" do
-      let(:reminder) { create(:work_reminder, rel_time: -180, abs_time: nil) }
-
-      it { is_expected.to eq(Time.zone.parse("2018-01-01 6:00")) }
-    end
-  end
 end

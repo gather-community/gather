@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180621204452) do
+ActiveRecord::Schema.define(version: 20180623000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -587,10 +587,11 @@ ActiveRecord::Schema.define(version: 20180621204452) do
   create_table "work_reminder_deliveries", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "deliver_at", null: false
     t.integer "reminder_id", null: false
     t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["cluster_id", "reminder_id", "shift_id"], name: "index_work_reminder_deliveries_on_fks", unique: true
+    t.index ["deliver_at"], name: "index_work_reminder_deliveries_on_deliver_at"
   end
 
   create_table "work_reminders", force: :cascade do |t|

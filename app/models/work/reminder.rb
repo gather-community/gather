@@ -19,8 +19,8 @@ module Work
       abs_time.present?
     end
 
-    def deliver_at(relative_to:)
-      abs_time? ? abs_time : relative_to + rel_time.minutes
+    def rel_days?
+      rel_time.present? && time_unit == "days"
     end
 
     private

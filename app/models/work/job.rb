@@ -27,6 +27,9 @@ module Work
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
 
+    # Need to use after_commit here because after_update doesn't run on touch.
+    after_commit { reminders.each(&:create_or_update_deliveries) }
+
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}
     validates :hours, presence: true, numericality: {greater_than: 0}

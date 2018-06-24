@@ -18,6 +18,8 @@ module Work
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
+    has_many :reminder_deliveries, class_name: "Work::ReminderDelivery", inverse_of: :shift,
+                                   dependent: :destroy
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,

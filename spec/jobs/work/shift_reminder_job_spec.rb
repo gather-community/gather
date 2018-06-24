@@ -5,6 +5,9 @@ require "rails_helper"
 describe Work::ShiftReminderJob do
   include_context "jobs"
 
+  let(:time) { "2018-01-01 9:01" }
+  let(:time_offset) { 0 }
+
   # Create periods and users in two clusters.
   let(:clusterA) { create(:cluster) }
   let(:clusterB) { create(:cluster) }
@@ -13,65 +16,93 @@ describe Work::ShiftReminderJob do
   let(:userA1) { create(:user, community: cmtyA) }
   let(:userA2) { create(:user, community: cmtyA) }
   let(:userB1) { create(:user, community: cmtyB) }
-  let(:period1) { create(:work_period, community: cmtyA) }
-  let(:period2) { create(:work_period, community: cmtyB) }
-
-  # Both jobs have one shift only.
-  let(:jobA) { create(:work_job, period: period1, shift_times: ["2018-01-01 11:00"], shift_slots: 3) }
-  let(:jobB1) { create(:work_job, period: period2, shift_times: ["2018-01-01 12:00"], shift_slots: 1) }
-  let(:jobB2) { create(:work_job, period: period2, shift_times: ["2018-01-01 13:00"], shift_slots: 1) }
-
-  # Assign users to all slots for both jobs.
-  let!(:assignA1) { jobA.shifts.first.assignments.create!(user: userA1) }
-  let!(:assignA2) { jobA.shifts.first.assignments.create!(user: userA2) }
-  let!(:assignB1) { jobB1.shifts.first.assignments.create!(user: userB1) }
-  let!(:assignB2) { jobB2.shifts.first.assignments.create!(user: userB1) }
-
-  # rel_time is in minutes, relative to shift_times above
-  let!(:reminderA1) { create(:work_reminder, job: jobA, rel_time: -120, abs_time: nil) }
-  let!(:reminderA2) { create(:work_reminder, job: jobA, abs_time: "2018-01-01 9:00", rel_time: nil) }
-  let!(:reminderB1) { create(:work_reminder, job: jobB1, rel_time: -180, abs_time: nil) }
-  let!(:reminderB2) { create(:work_reminder, job: jobB1, rel_time: 60, abs_time: nil) }
-  let!(:reminderB3) { create(:work_reminder, job: jobB2, rel_time: -240, abs_time: nil) }
+  let(:periodA) { create(:work_period, community: cmtyA) }
+  let(:periodB) { create(:work_period, community: cmtyB) }
 
   # Set the time to a known value.
   around do |example|
-    Timecop.freeze(time) do
+    Timecop.freeze(Time.zone.parse(time) + time_offset) do
       example.run
     end
   end
 
-  before do
-    # Mark reminderA1 as already sent for jobA's only shift.
-    # So only reminderA2 will get delivered for jobA.
-    Work::ReminderDelivery.create!(reminder: reminderA1, shift: jobA.shifts.first)
-  end
-
-  context "with three matching reminders in different clusters, one already sent" do
-    let(:time) { "2018-01-01 9:01" }
-
-    it "should send the right number of emails" do
-      expect(WorkMailer).to receive(:shift_reminder).exactly(4).times.and_return(mlrdbl)
+  shared_examples_for "sends correct number of emails" do |num|
+    it do
+      expect(WorkMailer).to receive(:shift_reminder).exactly(num).times.and_return(mlrdbl)
       perform_job
     end
+  end
+
+  context "with multiple matching reminders in different clusters" do
+    let(:jobA) { create(:work_job, period: periodA, shift_times: ["2018-01-01 11:30"], shift_slots: 3) }
+    let(:jobB1) { create(:work_job, period: periodB, shift_times: ["2018-01-02 12:00"], shift_slots: 1) }
+    let(:jobB2) { create(:work_job, period: periodB, shift_times: ["2018-01-03 12:00"], shift_slots: 1) }
+    let!(:assignA1) { jobA.shifts.first.assignments.create!(user: userA1) }
+    let!(:assignA2) { jobA.shifts.first.assignments.create!(user: userA2) }
+    let!(:assignB1) { jobB1.shifts.first.assignments.create!(user: userB1) }
+    let!(:assignB2) { jobB2.shifts.first.assignments.create!(user: userB1) }
+    let!(:reminderA1) { create(:work_reminder, job: jobA, abs_time: "2018-01-01 9:00") }
+    let!(:reminderB1) { create(:work_reminder, job: jobB1, abs_time: "2018-01-01 9:00") }
+    let!(:reminderB2) { create(:work_reminder, job: jobB2, abs_time: "2018-01-01 9:00") }
+    let!(:decoy) { create(:work_reminder, job: jobB1, abs_time: "2018-01-01 10:00") }
+
+    context "slightly earlier" do
+      let(:time_offset) { -2.minutes }
+
+      it "should send nothing" do
+        expect(WorkMailer).not_to receive(:shift_reminder)
+        perform_job
+      end
+    end
+
+    context "at appointed time" do
+      it_behaves_like "sends correct number of emails", 4
+
+      it "should send the right emails" do
+        expect_delivery_to_pairs(
+          [assignA1, reminderA1],
+          [assignA2, reminderA1],
+          [assignB1, reminderB1],
+          [assignB2, reminderB2]
+        )
+      end
+    end
+  end
+
+  context "with one reminder already sent" do
+    let(:job1) { create(:work_job, period: periodB, shift_times: ["2018-01-02 12:00"], shift_slots: 1) }
+    let(:job2) do
+      create(:work_job, period: periodB, shift_times: ["2018-01-03 12:00", "2018-01-03 13:00"],
+                        shift_count: 2, shift_slots: 1)
+    end
+    let!(:assign1) { job1.shifts.first.assignments.create!(user: userB1) }
+    let!(:assign2) { job2.shifts.first.assignments.create!(user: userB1) }
+    let!(:assign3) { job2.shifts.last.assignments.create!(user: userB1) }
+    let!(:reminder1) { create(:work_reminder, job: job1, abs_time: "2018-01-01 9:00") }
+    let!(:reminder2) { create(:work_reminder, job: job2, abs_time: "2018-01-01 9:00") }
+
+    before do
+      job2.shifts.first.reminder_deliveries.first.update!(delivered: true)
+    end
+
+    it_behaves_like "sends correct number of emails", 2
 
     it "should send the right emails" do
-      expect(WorkMailer).to receive(:shift_reminder).with(assignA1, reminderA2).and_return(mlrdbl)
-      expect(WorkMailer).to receive(:shift_reminder).with(assignA2, reminderA2).and_return(mlrdbl)
-      expect(WorkMailer).to receive(:shift_reminder).with(assignB1, reminderB1).and_return(mlrdbl)
-      expect(WorkMailer).to receive(:shift_reminder).with(assignB2, reminderB3).and_return(mlrdbl)
-      perform_job
-      expect(WorkMailer).not_to receive(:shift_reminder)
-      perform_job
+      expect_delivery_to_pairs(
+        [assign1, reminder1],
+        [assign3, reminder2]
+      )
     end
   end
 
-  context "with no matching reminders" do
-    let(:time) { "2018-01-01 8:00" }
-
-    it "should send no emails" do
-      expect(WorkMailer).not_to receive(:shift_reminder)
-      perform_job
+  def expect_delivery_to_pairs(*pairs)
+    pairs.each do |pair|
+      expect(WorkMailer).to receive(:shift_reminder).with(*pair).and_return(mlrdbl)
     end
+    perform_job
+
+    # Run job a second time, ensure nothing goes out.
+    expect(WorkMailer).not_to receive(:shift_reminder)
+    perform_job
   end
 end

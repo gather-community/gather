@@ -9,6 +9,7 @@ module Work
     belongs_to :shift, class_name: "Work::Shift"
 
     delegate :job, :abs_time, :rel_time, :abs_time?, :rel_days?, to: :reminder
+    delegate :community, :assignments, to: :shift
 
     before_save :compute_deliver_at
 

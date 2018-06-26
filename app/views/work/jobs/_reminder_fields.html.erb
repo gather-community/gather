@@ -1,0 +1,12 @@
+<%= f.input(:abs_rel, collection: Work::Reminder::ABS_REL_OPTIONS, include_blank: false) %>
+<div class="abs-time">
+  <%= f.input(:abs_time, as: :datetime_picker, required: true) %>
+</div>
+<div class="rel-time">
+  <%= f.input(:time_magnitude, as: :numeric, required: true) %>
+  <%= f.input(:time_unit, collection: Work::Reminder::TIME_UNIT_OPTIONS,
+                          include_blank: false, label: false) %>
+  <%= f.input(:before_after, collection: Work::Reminder::BEFORE_AFTER_OPTIONS,
+                             include_blank: false, label: false) %>
+</div>
+<%= f.input(:note) %>

@@ -5,11 +5,33 @@ require "rails_helper"
 describe Work::Reminder do
   let(:tomorrow) { Time.current.tomorrow }
 
+  describe "magnitude/sign" do
+    let(:reminder) { build(:work_reminder, submitted) }
+    subject(:rel_time) { reminder.rel_time }
+
+    before { reminder.valid? } # Trigger the callback.
+
+    context "when both provided, before" do
+      let(:submitted) { {time_magnitude: 4, before_after: "before", rel_time: -6} }
+      it { is_expected.to eq(-4) }
+    end
+
+    context "when both provided, after" do
+      let(:submitted) { {time_magnitude: 4, before_after: "after", rel_time: -6} }
+      it { is_expected.to eq(4) }
+    end
+
+    context "when not provided" do
+      let(:submitted) { {time_magnitude: nil, before_after: nil, rel_time: -6} }
+      it { is_expected.to eq(-6) }
+    end
+  end
+
   describe "normalization" do
     let(:reminder) { build(:work_reminder, submitted) }
     subject(:normalized) { submitted.keys.map { |k| [k, reminder.send(k)] }.to_h }
 
-    before { reminder.valid? }
+    before { reminder.valid? } # Trigger the callback.
 
     context "with both absolute and relative times" do
       let(:submitted) { {abs_time: tomorrow, rel_time: -180, time_unit: "hours"} }

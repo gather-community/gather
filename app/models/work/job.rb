@@ -43,6 +43,7 @@ module Work
     validate :hours_per_shift_evenly_divides_hours
 
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
 
     delegate :community, to: :period
     delegate :starts_on, :ends_on, :name, :draft?, :open?, :pending?, :published?, :archived?,

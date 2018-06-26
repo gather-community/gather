@@ -6,7 +6,8 @@
 }
 
 .nested-fields {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  display: flex;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -45,14 +46,13 @@
   }
 
   &.multiple .fields-col {
-    margin-right: 20px;
+    width: 100%;
   }
 
   .remove-link-col {
     width: 20px;
     padding-top: 25px;
     padding-left: 5px;
-    float: right;
   }
 
   &.no-label .remove-link-col {

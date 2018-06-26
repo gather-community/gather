@@ -138,6 +138,7 @@ en:
         hours: "Hours"
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
+        reminders: "Reminders"
         requester_id: "Requester"
         shifts: "Shifts"
         slot_type: "Slot Type"
@@ -149,6 +150,11 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
+      work/reminder:
+        abs_rel: "Type"
+        abs_time: "Time"
+        time_magnitude: "Time"
+        note: "Note"
       work/shift:
         start_time: "Start Time"
         end_time: "End Time"
@@ -446,6 +452,9 @@ en:
         emergency_contacts:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
+      work_job:
+        reminders:
+          note: "e.g. Sharpen the saw (optional)"
       work_period:
         name: "e.g. Summer 1969"
       wiki_page:
@@ -533,6 +542,16 @@ en:
           date_time: "This job has a set date and time"
           date_only: "This job is for a certain date or date range"
           full_period: "This job is for the whole work period"
+        reminders:
+          abs_rel:
+            relative: "Relative Time"
+            absolute: "Exact Time"
+          time_unit:
+            hours: "Hours"
+            days: "Days"
+          before_after:
+            before: "Before"
+            after: "After"
         requester:
           any: "Any Requester"
           none: "No Requester"
@@ -574,6 +593,7 @@ en:
       pets: "Add Pet"
       shifts: "Add Shift"
       assignments: "Add Worker"
+      reminders: "Add Reminder"
 
   select2:
     prompts:

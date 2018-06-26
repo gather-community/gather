@@ -29,12 +29,13 @@ module Work
       return render_not_found if params[:period].blank?
       @job = Job.new(period_id: params[:period])
       @job.shifts.build
+      @job.reminders.build(rel_time: -1, time_unit: "days")
       authorize @job
       prep_form_vars
     end
 
     def edit
-      @job = Job.includes(shifts: :assignments).find(params[:id])
+      @job = Job.includes(:reminders, shifts: :assignments).find(params[:id])
       authorize @job
       prep_form_vars
     end

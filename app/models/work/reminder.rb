@@ -9,7 +9,7 @@ module Work
 
     acts_as_tenant :cluster
 
-    attr_accessor :time_magnitude, :before_after
+    attr_writer :time_magnitude, :before_after
 
     belongs_to :job, class_name: "Work::Job", inverse_of: :reminders
     has_many :deliveries, class_name: "Work::ReminderDelivery", inverse_of: :reminder, dependent: :destroy
@@ -36,6 +36,14 @@ module Work
       abs_time? ? "absolute" : "relative"
     end
 
+    def time_magnitude
+      rel_time&.abs
+    end
+
+    def before_after
+      rel_time&.positive? ? "after" : "before"
+    end
+
     def create_or_update_deliveries
       job.shifts.each do |shift|
         if (delivery = deliveries.find_by(shift: shift))
@@ -50,7 +58,7 @@ module Work
 
     # Combines, if present, the time_magnitude and before_after ephemeral attribs into rel_time.
     def process_magnitude_sign
-      self.rel_time = (before_after == "before" ? -1 : 1) * time_magnitude if time_magnitude.present?
+      self.rel_time = (@before_after == "before" ? -1 : 1) * @time_magnitude if @time_magnitude.present?
     end
 
     def normalize

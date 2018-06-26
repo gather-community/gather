@@ -25,6 +25,11 @@ describe Work::Reminder do
       let(:submitted) { {time_magnitude: nil, before_after: nil, rel_time: -6} }
       it { is_expected.to eq(-6) }
     end
+
+    context "with string magnitude" do
+      let(:submitted) { {time_magnitude: "4.5", before_after: "after", rel_time: -6} }
+      it { is_expected.to eq(4.5) }
+    end
   end
 
   describe "normalization" do
@@ -33,29 +38,34 @@ describe Work::Reminder do
 
     before { reminder.valid? } # Trigger the callback.
 
-    context "with both absolute and relative times" do
-      let(:submitted) { {abs_time: tomorrow, rel_time: -180, time_unit: "hours"} }
-      it { is_expected.to eq(abs_time: tomorrow, rel_time: nil, time_unit: nil) }
+    context "with both absolute and relative times, absolute chosen" do
+      let(:submitted) { {abs_rel: "absolute", abs_time: tomorrow, rel_time: -180, time_unit: "hours"} }
+      it { is_expected.to eq(abs_rel: "absolute", abs_time: tomorrow, rel_time: nil, time_unit: nil) }
     end
 
-    context "with absolute only" do
-      let(:submitted) { {abs_time: tomorrow, rel_time: nil, time_unit: "hours"} }
-      it { is_expected.to eq(abs_time: tomorrow, rel_time: nil, time_unit: nil) }
+    context "with both absolute and relative times, relative chosen" do
+      let(:submitted) { {abs_rel: "relative", abs_time: tomorrow, rel_time: -180, time_unit: "hours"} }
+      it { is_expected.to eq(abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "hours") }
     end
 
-    context "with relative only, no unit" do
-      let(:submitted) { {abs_time: nil, rel_time: -180, time_unit: nil} }
-      it { is_expected.to eq(abs_time: nil, rel_time: -180, time_unit: "days") }
+    context "with absolute only, relative chosen" do
+      let(:submitted) { {abs_rel: "relative", abs_time: nil, rel_time: nil, time_unit: "hours"} }
+      it { is_expected.to eq(abs_rel: "relative", abs_time: nil, rel_time: nil, time_unit: "hours") }
+    end
+
+    context "with relative only, no unit, relative chosen" do
+      let(:submitted) { {abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: nil} }
+      it { is_expected.to eq(abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "days") }
     end
 
     context "with unrecognized unit" do
-      let(:submitted) { {abs_time: nil, rel_time: -180, time_unit: "foo"} }
-      it { is_expected.to eq(abs_time: nil, rel_time: -180, time_unit: "days") }
+      let(:submitted) { {abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "foo"} }
+      it { is_expected.to eq(abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "days") }
     end
 
     context "with hours unit" do
-      let(:submitted) { {abs_time: nil, rel_time: -180, time_unit: "hours"} }
-      it { is_expected.to eq(abs_time: nil, rel_time: -180, time_unit: "hours") }
+      let(:submitted) { {abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "hours"} }
+      it { is_expected.to eq(abs_rel: "relative", abs_time: nil, rel_time: -180, time_unit: "hours") }
     end
   end
 

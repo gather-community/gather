@@ -18,6 +18,9 @@ module Work
     before_validation :normalize
     after_create :create_or_update_deliveries
 
+    validates :time_magnitude, presence: true, if: :rel_time?
+    validates :abs_time, presence: true, if: :abs_time?
+
     normalize_attributes :note
 
     def note?
@@ -25,15 +28,15 @@ module Work
     end
 
     def abs_time?
-      abs_time.present?
+      abs_rel == "absolute"
+    end
+
+    def rel_time?
+      abs_rel == "relative"
     end
 
     def rel_days?
       rel_time.present? && time_unit == "days"
-    end
-
-    def abs_rel
-      abs_time? ? "absolute" : "relative"
     end
 
     def time_magnitude
@@ -58,16 +61,16 @@ module Work
 
     # Combines, if present, the time_magnitude and before_after ephemeral attribs into rel_time.
     def process_magnitude_sign
-      self.rel_time = (@before_after == "before" ? -1 : 1) * @time_magnitude if @time_magnitude.present?
+      self.rel_time = (@before_after == "before" ? -1 : 1) * @time_magnitude.to_f if @time_magnitude.present?
     end
 
     def normalize
-      self.rel_time = nil if abs_time.present? && rel_time.present?
-
-      if rel_time.present? && time_unit != "hours"
-        self.time_unit = "days"
-      elsif abs_time.present?
+      if abs_time?
+        self.rel_time = nil
         self.time_unit = nil
+      else
+        self.abs_time = nil
+        self.time_unit = "days" if time_unit != "hours"
       end
     end
   end

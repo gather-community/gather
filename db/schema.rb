@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180626012314) do
+ActiveRecord::Schema.define(version: 20180626123911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -597,6 +597,7 @@ ActiveRecord::Schema.define(version: 20180626012314) do
   end
 
   create_table "work_reminders", force: :cascade do |t|
+    t.string "abs_rel", null: false
     t.datetime "abs_time"
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false

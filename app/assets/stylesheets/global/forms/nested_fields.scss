@@ -1,7 +1,7 @@
 .nested-field-set {
+  // This link shouldn't have top margin so it's level with the label when there are no records.
   a.add_fields {
     display: inline-block;
-    margin-top: 5px;
   }
 
   .nested-fields {
@@ -9,7 +9,7 @@
     display: flex;
 
     &:last-of-type {
-      margin-bottom: 0;
+      margin-bottom: 5px;
     }
 
     // We don't need padding for these columns. They look fine butting up against each other.

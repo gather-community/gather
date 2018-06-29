@@ -29,28 +29,6 @@
     }
   }
 
-  .work_job_reminders .nested-fields {
-    .rel-time {
-      display: flex;
-
-      > div {
-        width: 33.33%;
-
-        input, select {
-          width: 100%;
-        }
-      }
-
-      .work_job_reminders_time_unit, .work_job_reminders_before_after {
-        display: flex;
-
-        select {
-          align-self: flex-end;
-        }
-      }
-    }
-  }
-
   #shift-table {
     margin-bottom: 5px;
   }

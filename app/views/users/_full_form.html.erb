@@ -16,18 +16,14 @@
   <%= f.input :google_email, disabled: !policy(@user).administer? %>
   <%= f.input :phone, required: @user.adult? do %>
     <div class="nested-fields">
-      <div class="row">
-        <div class="col-sm-4">
+      <div class="fields-col">
+        <div class="field-row">
           <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,
-            input_html: { value: @user.phone(:mobile).formatted } %>
-        </div>
-        <div class="col-sm-4">
+                                     input_html: {value: @user.phone(:mobile).formatted} %>
           <%= f.input :home_phone, as: :tel, wrapper: :nested_fields,
-            input_html: { value: @user.phone(:home).formatted } %>
-        </div>
-        <div class="col-sm-4">
+                                     input_html: {value: @user.phone(:home).formatted} %>
           <%= f.input :work_phone, as: :tel, wrapper: :nested_fields,
-            input_html: { value: @user.phone(:work).formatted } %>
+                                     input_html: {value: @user.phone(:work).formatted} %>
         </div>
       </div>
     </div>

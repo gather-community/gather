@@ -68,7 +68,7 @@ SimpleForm.setup do |config|
 
   # We set class to nil here because the default (form-group) does stuff we don't want it to, e.g. some
   # column layout stuff.
-  build_wrapper config, :nested_fields, class: nil do |b|
+  build_wrapper config, :nested_fields, class: "control-wrapper" do |b|
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
@@ -76,8 +76,10 @@ SimpleForm.setup do |config|
     b.optional :min_max
     b.optional :readonly
 
-    b.use :label, class: "control-label"
-    b.use :error, wrap_with: {tag: "span", class: "error"}
+    b.wrapper class: "label-and-error" do |ba|
+      ba.use :label
+      ba.use :error, wrap_with: {tag: "span", class: "error"}
+    end
     b.use :input, class: "form-control"
     b.use :hint,  wrap_with: {class: "hint"}
   end

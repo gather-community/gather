@@ -95,5 +95,24 @@ describe People::Birthdate do
         end
       end
     end
+
+    context "with full birthdate of feb 29 " do
+      let(:user) { create(:user, birthdate_str: "1996-2-29") }
+
+      it "calculates age correctly in leap year" do
+        Timecop.freeze(Time.zone.parse("2016-2-28")) do
+          expect(user.age).to eq(19)
+        end
+        Timecop.freeze(Time.zone.parse("2016-2-29")) do
+          expect(user.age).to eq(20)
+        end
+      end
+
+      it "calculates age correctly in non-leap year" do
+        Timecop.freeze(Time.zone.parse("2017-2-28")) do
+          expect(user.age).to eq(21)
+        end
+      end
+    end
   end
 end

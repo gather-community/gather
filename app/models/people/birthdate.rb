@@ -55,8 +55,6 @@ module People
 
     def age
       if full?
-        today = Time.zone.today
-        bday_this_year = Date.new(today.year, date.month, date.day)
         today.year - date.year - (bday_this_year > today ? 1 : 0)
       else
         nil
@@ -73,6 +71,24 @@ module People
 
     def validate
       object.errors.add(:birthdate_str, :invalid) if invalid?
+    end
+
+    private
+
+    def today
+      Time.zone.today
+    end
+
+    def bday_this_year
+      year = today.year
+      month = date.month
+      day =
+        if date.month == 2 && date.day == 29
+          (year % 400 == 0 || year % 4 == 0 && year % 100 != 0) ? 29 : 28
+        else
+          date.month
+        end
+      Date.new(year, month, day)
     end
   end
 end

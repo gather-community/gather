@@ -153,7 +153,7 @@ en:
       work/reminder:
         abs_rel: "Type"
         abs_time: "Time"
-        time_magnitude: "Time"
+        rel_magnitude: "Time"
         note: "Note"
       work/shift:
         start_time: "Start Time"
@@ -546,12 +546,11 @@ en:
           abs_rel:
             relative: "Relative Time"
             absolute: "Exact Time"
-          time_unit:
-            hours: "Hours"
-            days: "Days"
-          before_after:
-            before: "Before"
-            after: "After"
+          rel_unit_sign:
+            days_before: "Days Before"
+            days_after: "Days After"
+            hours_before: "Hours Before"
+            hours_after: "Hours After"
         requester:
           any: "Any Requester"
           none: "No Requester"

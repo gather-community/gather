@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe Work::ShiftReminderJob do
   include_context "jobs"
+  include_context "reminders"
 
   let(:time) { "2018-01-01 9:01" }
   let(:time_offset) { 0 }
@@ -41,10 +42,10 @@ describe Work::ShiftReminderJob do
     let!(:assignA2) { jobA.shifts.first.assignments.create!(user: userA2) }
     let!(:assignB1) { jobB1.shifts.first.assignments.create!(user: userB1) }
     let!(:assignB2) { jobB2.shifts.first.assignments.create!(user: userB1) }
-    let!(:reminderA1) { create(:work_reminder, job: jobA, abs_time: "2018-01-01 9:00") }
-    let!(:reminderB1) { create(:work_reminder, job: jobB1, abs_time: "2018-01-01 9:00") }
-    let!(:reminderB2) { create(:work_reminder, job: jobB2, abs_time: "2018-01-01 9:00") }
-    let!(:decoy) { create(:work_reminder, job: jobB1, abs_time: "2018-01-01 10:00") }
+    let!(:reminderA1) { create_reminder(jobA, "2018-01-01 9:00") }
+    let!(:reminderB1) { create_reminder(jobB1, "2018-01-01 9:00") }
+    let!(:reminderB2) { create_reminder(jobB2, "2018-01-01 9:00") }
+    let!(:decoy) { create_reminder(jobB1, "2018-01-01 10:00") }
 
     context "slightly earlier" do
       let(:time_offset) { -2.minutes }
@@ -78,8 +79,8 @@ describe Work::ShiftReminderJob do
     let!(:assign1) { job1.shifts.first.assignments.create!(user: userB1) }
     let!(:assign2) { job2.shifts.first.assignments.create!(user: userB1) }
     let!(:assign3) { job2.shifts.last.assignments.create!(user: userB1) }
-    let!(:reminder1) { create(:work_reminder, job: job1, abs_time: "2018-01-01 9:00") }
-    let!(:reminder2) { create(:work_reminder, job: job2, abs_time: "2018-01-01 9:00") }
+    let!(:reminder1) { create_reminder(job1, "2018-01-01 9:00") }
+    let!(:reminder2) { create_reminder(job2, "2018-01-01 9:00") }
 
     before do
       job2.shifts.first.reminder_deliveries.first.update!(delivered: true)

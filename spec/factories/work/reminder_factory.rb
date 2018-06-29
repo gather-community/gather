@@ -6,7 +6,10 @@ FactoryBot.define do
     note "Do stuff"
 
     after(:build) do |reminder|
-      reminder.abs_time = "2018-01-01 12:00" if reminder.abs_time.blank? && reminder.rel_time.blank?
+      if reminder.abs_rel.blank?
+        reminder.abs_rel = "absolute"
+        reminder.abs_time = "2018-01-01 12:00"
+      end
     end
   end
 end

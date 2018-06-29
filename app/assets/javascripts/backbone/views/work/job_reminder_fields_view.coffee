@@ -18,5 +18,6 @@ Gather.Views.Work.JobReminderFieldsView = Backbone.View.extend
 
   toggleFields: (row) ->
     isAbsTime = row.find("select[id$=_abs_rel]").val() == "absolute"
-    row.find(".abs-time").toggle(isAbsTime)
-    row.find(".rel-time").toggle(!isAbsTime)
+    row.find(".work_job_reminders_abs_time").toggle(isAbsTime)
+    row.find(".work_job_reminders_rel_magnitude").toggle(!isAbsTime)
+    row.find(".work_job_reminders_rel_unit_sign").toggle(!isAbsTime)

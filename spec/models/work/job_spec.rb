@@ -115,7 +115,7 @@ describe Work::Job do
 
   describe "reminder delivery maintenance" do
     let(:job) { create(:work_job, shift_count: 2, hours: 2) }
-    let!(:reminder) { create(:work_reminder, job: job, rel_time: 1, time_unit: "hours") }
+    let!(:reminder) { create(:work_reminder, job: job, rel_magnitude: 1, rel_unit_sign: "hours_after") }
     subject(:deliveries) { Work::ReminderDelivery.all.to_a }
 
     before do

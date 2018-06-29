@@ -29,7 +29,7 @@ module Work
       return render_not_found if params[:period].blank?
       @job = Job.new(period_id: params[:period])
       @job.shifts.build
-      @job.reminders.build(rel_time: -1, time_unit: "days")
+      @job.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
       authorize @job
       prep_form_vars
     end

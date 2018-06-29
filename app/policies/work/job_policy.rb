@@ -44,7 +44,7 @@ module Work
       %i[description hours period_id requester_id slot_type time_type hours_per_shift title] <<
         {shifts_attributes: %i[starts_at ends_at slots id _destroy] <<
           {assignments_attributes: %i[id user_id]}} <<
-        {reminders_attributes: %i[abs_rel abs_time time_magnitude time_unit before_after note id _destroy]}
+        {reminders_attributes: %i[abs_rel abs_time rel_magnitude rel_unit_sign note id _destroy]}
     end
   end
 end

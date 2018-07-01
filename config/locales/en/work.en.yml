@@ -37,3 +37,18 @@ en:
     slots_open:
       one: "%{count} slot open"
       other: "%{count} slots open"
+  work/reminder:
+    absolute: "At %{time}"
+    relative:
+      days_before:
+        one: "%{count} day before"
+        other: "%{count} days before"
+      days_after:
+        one: "%{count} day after"
+        other: "%{count} days after"
+      hours_before:
+        one: "%{count} hour before"
+        other: "%{count} hours before"
+      hours_after:
+        one: "%{count} hour after"
+        other: "%{count} hours after"

@@ -31,6 +31,11 @@ table.key-value {
     vertical-align: top;
   }
 
+  ul {
+    // The default of 40px is too much in this context.
+    padding-left: 25px;
+  }
+
   // For xs screens, default table behavior is best.
   @media screen and (min-width: $screen-sm-min) {
     td:first-of-type {

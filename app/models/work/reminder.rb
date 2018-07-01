@@ -11,6 +11,9 @@ module Work
     belongs_to :job, class_name: "Work::Job", inverse_of: :reminders
     has_many :deliveries, class_name: "Work::ReminderDelivery", inverse_of: :reminder, dependent: :destroy
 
+    # Used for consistency in display and specs.
+    scope :canonical_order, -> { order(:abs_rel, :abs_time, :rel_unit_sign, :rel_magnitude, :note) }
+
     before_validation :normalize
     after_create :create_or_update_deliveries
 

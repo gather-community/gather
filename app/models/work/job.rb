@@ -11,7 +11,8 @@ module Work
     belongs_to :period, class_name: "Work::Period", inverse_of: :jobs
     belongs_to :requester, class_name: "People::Group"
     has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
-    has_many :reminders, class_name: "Work::Reminder", inverse_of: :job, dependent: :destroy
+    has_many :reminders, -> { canonical_order }, class_name: "Work::Reminder", inverse_of: :job,
+                                                 dependent: :destroy
 
     scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
     scope :by_title, -> { order("LOWER(title)") }

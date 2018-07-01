@@ -60,6 +60,20 @@ feature "jobs", js: true do
       select(group.name, from: "Requester")
       fill_in("Description", with: "Paints things nicely")
 
+      # Add reminders
+      within(all(".work_job_reminders .nested-fields")[0]) do
+        find(".work_job_reminders_rel_magnitude input").set("2.3")
+        find(".work_job_reminders_rel_unit_sign select").select("Days Before")
+        fill_in("Note", with: "Clean the lint trap")
+      end
+      click_on("Add Reminder")
+      within(all(".work_job_reminders .nested-fields")[1]) do
+        find(".work_job_reminders_abs_rel select").select("Exact Time")
+        pick_datetime(".work_job_reminders_abs_time", day: 15, hour: 4,
+                                                      next_click: ".work_job_reminders_note input")
+        fill_in("Note", with: "Go to town")
+      end
+
       # Add first shift
       within(all("#shift-rows tr")[0]) do
         pick_datetime(".starts-at", day: 15, hour: 4, next_click: ".shift-slots input")
@@ -91,6 +105,16 @@ feature "jobs", js: true do
       end
       click_link("AAA Painter")
 
+      # Check for reminders, edit one, remove one.
+      within(all(".work_job_reminders .nested-fields")[0]) do
+        expect(page).to have_selector("input[value='Go to town']")
+        find("a.remove_fields").click
+      end
+      within(all(".work_job_reminders .nested-fields")[0]) do
+        expect(page).to have_selector("input[value='Clean the lint trap']")
+        find(".work_job_reminders_rel_magnitude input").set("3.5")
+      end
+
       # Check for workers added earlier
       within(all("#shift-rows tr")[1]) do
         expect(page).to have_content(users[0].name)
@@ -112,6 +136,12 @@ feature "jobs", js: true do
       within(all("table.index tr")[1]) do
         expect(page).to have_css("td.slots", text: 8)
       end
+      click_link("AAA Painter")
+
+      # Check for correct reminders.
+      expect(page).not_to have_selector("input[value='Go to town']")
+      expect(page).to have_selector("input[value='Clean the lint trap']")
+      expect(all(".work_job_reminders .nested-fields").size).to eq(1)
     end
 
     scenario "delete" do
@@ -119,6 +149,29 @@ feature "jobs", js: true do
       accept_confirm { click_on("Delete") }
       expect_success
       expect(page).not_to have_content(jobs.first.title)
+    end
+
+    context "as regular user" do
+      include_context "reminders"
+
+      let(:actor) { create(:user) }
+      let(:one_week_hence) { Time.zone.now + 7.days }
+      let!(:job) { create(:work_job, period: periods[0], shift_count: 2) }
+      let!(:reminder1) { create_reminder(job, one_week_hence) }
+      let!(:reminder2) { create_reminder(job, 1, "days_before", note: "Sharpen the knife") }
+      let!(:assignments1) { create_list(:work_assignment, 3, shift: job.shifts[0]) }
+      let!(:assignments2) { create_list(:work_assignment, 3, shift: job.shifts[1]) }
+
+      scenario "show" do
+        visit(work_jobs_path)
+        click_on(job.title)
+        expect(page).to have_content(job.title)
+        expect(page).to have_content("At #{I18n.l(one_week_hence)}")
+        expect(page).to have_content(/1 day before: Sharpen the knife/)
+        (assignments1 + assignments2).map(&:user).each do |user|
+          expect(page).to have_content(user.name)
+        end
+      end
     end
   end
 end

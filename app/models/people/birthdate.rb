@@ -82,13 +82,12 @@ module People
     def bday_this_year
       year = today.year
       month = date.month
-      day =
-        if date.month == 2 && date.day == 29
-          (year % 400 == 0 || year % 4 == 0 && year % 100 != 0) ? 29 : 28
-        else
-          date.month
-        end
+      day = date.month == 2 && date.day == 29 && !leap?(today.year) ? 28 : date.day
       Date.new(year, month, day)
+    end
+
+    def leap?(year)
+      year % 400 == 0 || year % 4 == 0 && year % 100 != 0
     end
   end
 end

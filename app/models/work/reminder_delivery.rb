@@ -5,8 +5,8 @@ module Work
   class ReminderDelivery < ApplicationRecord
     acts_as_tenant :cluster
 
-    belongs_to :reminder, class_name: "Work::Reminder"
-    belongs_to :shift, class_name: "Work::Shift"
+    belongs_to :reminder, class_name: "Work::Reminder", inverse_of: :deliveries
+    belongs_to :shift, class_name: "Work::Shift", inverse_of: :reminder_deliveries
 
     delegate :job, :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
     delegate :community, :assignments, to: :shift

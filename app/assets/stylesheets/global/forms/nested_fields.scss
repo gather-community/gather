@@ -6,6 +6,26 @@
 }
 
 .nested-fields {
+  label, span.error {
+    font-size: 90%;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  label {
+    color: $gray-text;
+    margin-right: 5px;
+  }
+
+  span.error {
+    padding: 0 3px;
+    line-height: 1.2;
+  }
+}
+
+// This is the style where the nested fields are within the control area of an attribute in the main form.
+// The other predominant style is when the nested fields are in rows in a table.
+.nested-fields.subfields {
   display: flex;
   margin-bottom: 20px;
 
@@ -40,22 +60,6 @@
         width: 100%;
       }
     }
-  }
-
-  label, span.error {
-    font-size: 90%;
-    display: inline-block;
-    margin-bottom: 0;
-  }
-
-  label {
-    color: $gray-text;
-    margin-right: 5px;
-  }
-
-  span.error {
-    padding: 0 3px;
-    line-height: 1.2;
   }
 
   .remove-link-col {

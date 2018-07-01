@@ -15,7 +15,7 @@
   <%= f.input :email, required: @user.adult? %>
   <%= f.input :google_email, disabled: !policy(@user).administer? %>
   <%= f.input :phone, required: @user.adult? do %>
-    <div class="nested-fields">
+    <div class="nested-fields subfields">
       <div class="fields-col">
         <div class="field-row">
           <%= f.input :mobile_phone, as: :tel, wrapper: :nested_fields,

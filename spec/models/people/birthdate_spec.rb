@@ -96,7 +96,7 @@ describe People::Birthdate do
       end
     end
 
-    context "with full birthdate of feb 29 " do
+    context "with full birthdate of feb 29" do
       let(:user) { create(:user, birthdate_str: "1996-2-29") }
 
       it "calculates age correctly in leap year" do

@@ -159,6 +159,13 @@ describe Work::Shift do
             expect(shift).to be_valid
           end
 
+          it "is invalid if elapsed time is zero" do
+            # This is nonsensical but will be caught by other validations.
+            # We check it here to make sure no div by zero error.
+            shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 10:30")
+            expect(shift).not_to be_valid
+          end
+
           it "is invalid if elapsed time doesn't evenly divide job hours" do
             shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 11:30")
             expect(shift).not_to be_valid

@@ -4,11 +4,7 @@
 
     class Scope < Scope
       def resolve
-        if active_cluster_admin?
-          scope
-        else
-          scope.in_community(user.community)
-        end
+        community_only_unless_cluster_admin
       end
     end
 

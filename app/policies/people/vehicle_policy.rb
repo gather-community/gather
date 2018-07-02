@@ -6,7 +6,7 @@ module People
 
     class Scope < Scope
       def resolve
-        community_only_unless_cluster_admin
+        active_cluster_admin? ? scope : scope.for_community(user.community).active
       end
     end
 

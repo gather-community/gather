@@ -6,6 +6,7 @@ module People
 
     scope :for_community, ->(c) { joins(:household).where(households: {community_id: c.id}) }
     scope :by_make_model, -> { order("LOWER(make)", "LOWER(model)", "LOWER(color)", "LOWER(plate)") }
+    scope :active, -> { joins(:household).merge(Household.active) }
 
     normalize_attributes :make, :model, :color, :plate
 

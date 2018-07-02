@@ -84,7 +84,7 @@ class ApplicationPolicy
     protected
 
     def community_only_unless_cluster_admin
-      active_cluster_admin? ? scope : scope.for_community(user.community)
+      active_cluster_admin? ? scope : scope.in_community(user.community)
     end
   end
 

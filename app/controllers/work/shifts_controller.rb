@@ -92,7 +92,7 @@ module Work
 
     def scope_shifts
       @shifts = @shifts
-        .for_community(current_community)
+        .in_community(current_community)
         .in_period(@period)
         .includes(job: {period: :community}, assignments: :user)
         .by_job_title

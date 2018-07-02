@@ -14,7 +14,7 @@ module Work
     has_many :reminders, -> { canonical_order }, class_name: "Work::Reminder", inverse_of: :job,
                                                  dependent: :destroy
 
-    scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
     scope :by_title, -> { order("LOWER(title)") }
     scope :in_period, ->(p) { where(period: p) }
     scope :from_requester, ->(r) { where(requester: r) }

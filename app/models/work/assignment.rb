@@ -8,7 +8,7 @@ module Work
     belongs_to :shift, inverse_of: :assignments, counter_cache: true, touch: true
     belongs_to :user
 
-    scope :for_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
 
     # Can't merge the order by name scope due to an error/bug with ActsAsTenant
     scope :by_user_name, -> { joins(:user).order(User::NAME_ORDER) }

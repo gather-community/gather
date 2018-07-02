@@ -9,7 +9,7 @@ module Work
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :destroy
 
-    scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :in_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }

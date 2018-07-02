@@ -12,7 +12,7 @@ module Meals
     belongs_to :community
     has_many :meals, inverse_of: :formula
 
-    scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
     scope :with_meal_counts, -> { select("meal_formulas.*,
       (SELECT COUNT(id) FROM meals WHERE formula_id = meal_formulas.id) AS meal_count") }
@@ -31,7 +31,7 @@ module Meals
     after_save :ensure_unique_default
 
     def self.default_for(community)
-      for_community(community).where(is_default: true).first
+      in_community(community).where(is_default: true).first
     end
 
     def defined_signup_types
@@ -107,7 +107,7 @@ module Meals
 
     def ensure_unique_default
       if is_default?
-        self.class.for_community(community).where.not(id: id).update_all(is_default: false)
+        self.class.in_community(community).where.not(id: id).update_all(is_default: false)
       end
     end
 

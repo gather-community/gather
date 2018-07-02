@@ -6,7 +6,7 @@ module People
 
     class Scope < Scope
       def resolve
-        active_cluster_admin? ? scope : scope.for_community(user.community).active
+        active_cluster_admin? ? scope : scope.in_community(user.community).active
       end
     end
 

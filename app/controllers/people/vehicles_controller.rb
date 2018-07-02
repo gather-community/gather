@@ -8,7 +8,7 @@ module People
 
     def index
       authorize(sample_vehicle)
-      @vehicles = policy_scope(Vehicle).for_community(current_community).by_make_model.active
+      @vehicles = policy_scope(Vehicle).in_community(current_community).by_make_model.active
     end
 
     private

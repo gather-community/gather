@@ -4,7 +4,7 @@ module People
 
     belongs_to :household, inverse_of: :vehicles
 
-    scope :for_community, ->(c) { joins(:household).where(households: {community_id: c.id}) }
+    scope :in_community, ->(c) { joins(:household).where(households: {community_id: c.id}) }
     scope :by_make_model, -> { order("LOWER(make)", "LOWER(model)", "LOWER(color)", "LOWER(plate)") }
     scope :active, -> { joins(:household).merge(Household.active) }
 

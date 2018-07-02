@@ -11,7 +11,7 @@ module Billing
     belongs_to :account, inverse_of: :statements
     has_many :transactions, ->{ order(:incurred_on) }, dependent: :nullify
 
-    scope :for_community, ->(c){ joins(:account).where("accounts.community_id = ?", c.id) }
+    scope :in_community, ->(c){ joins(:account).where("accounts.community_id = ?", c.id) }
     scope :for_household, ->(h){ joins(:account).where("accounts.household_id = ?", h.id) }
     scope :for_community_or_household,
       ->(c,h){ joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }

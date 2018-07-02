@@ -24,12 +24,12 @@ describe People::VehiclePolicy do
     subject { People::VehiclePolicy::Scope.new(actor, People::Vehicle.all).resolve }
 
     before do
-      save_policy_objects!(community, communityB, user, user_in_cmtyB, vehicle1, vehicle2, vehicle3)
+      save_policy_objects!(community, communityB, user, user_in_cmtyB)
     end
 
     context "for regular users" do
       let(:actor) { user }
-      it { pp People::Vehicle.all.to_a; pp user; pp user.household; is_expected.to contain_exactly(vehicle1, vehicle2) }
+      it { is_expected.to contain_exactly(vehicle1, vehicle2) }
     end
 
     # TODO: refactor to abstract this kind of check into policy spec context file

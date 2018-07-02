@@ -5,6 +5,7 @@ module People
     belongs_to :household, inverse_of: :vehicles
 
     scope :for_community, ->(c) { joins(:household).where(households: {community_id: c.id}) }
+    scope :by_make_model, -> { order("LOWER(make)", "LOWER(model)", "LOWER(color)", "LOWER(plate)") }
 
     normalize_attributes :make, :model, :color, :plate
 
@@ -13,6 +14,7 @@ module People
     validates :make, :model, :color, presence: true
 
     delegate :community, to: :household
+    delegate :name, to: :household, prefix: true
 
     def to_s
       "#{color} #{make} #{model}".tap do |str|

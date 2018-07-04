@@ -121,8 +121,8 @@ describe Meals::FormulaPolicy do
     context "with existing meals" do
       before { allow(formula).to receive(:has_meals?).and_return(true) }
 
-      it "should allow restricted attribs" do
-        expect(subject).to contain_exactly(:name, :is_default)
+      it "should not allow restricted attribs" do
+        expect(subject).to contain_exactly(:name, :is_default, :pantry_reimbursement)
       end
     end
   end

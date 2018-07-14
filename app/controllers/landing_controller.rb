@@ -30,7 +30,9 @@ class LandingController < ApplicationController
     end
   end
 
-  def privacy_policy
+  def public_static
     skip_authorization
+    render_not_found unless %w[privacy-policy markdown].include?(params[:page])
+    render(params[:page].tr("-", "_"))
   end
 end

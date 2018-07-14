@@ -1,0 +1,28 @@
+.markdown-demo {  
+  .row {
+    max-width: 900px;
+  }
+
+  .html, .markdown {
+    @include make-sm-column(6);
+  }
+
+  pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    word-break: keep-all;
+  }
+
+  .html {
+    h1 {
+      margin-top: 0;
+    }
+
+    h2, h3 {
+      margin-top: 5px;
+    }
+  }
+}

@@ -126,7 +126,7 @@ Rails.application.routes.draw do
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
   get "signed-out", to: "landing#signed_out", as: :signed_out
-  get "about/privacy-policy", to: "landing#privacy_policy"
+  get "about/:page", to: "landing#public_static"
 
   authenticated :user do
     root to: "home#index", as: :authenticated_root

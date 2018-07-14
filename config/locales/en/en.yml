@@ -460,7 +460,7 @@ en:
       wiki_page:
         comment: "A comment about this change."
     hints:
-      markdown_suffix_html: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+      markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>Markdown formatting</a>."
       meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
       billing_account:

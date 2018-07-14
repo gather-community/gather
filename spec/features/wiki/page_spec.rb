@@ -14,7 +14,7 @@ feature "pages", js: true do
   scenario "happy path" do
     visit("/wiki")
     click_on("Sample Page")
-    expect(page).to have_content("Basic Formatting")
+    expect(page).to have_content("This is a sample wiki page.")
 
     click_main_nav("Wiki")
     expect(page).to have_content("This is your wiki home page!")

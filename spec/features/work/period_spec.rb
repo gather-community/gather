@@ -57,7 +57,7 @@ feature "periods", js: true do
     expect(page).to have_select("Churl Rox", selected: "Full Share")
     expect(page).to have_select("Kid Knelt", selected: "No Share")
     select("Full Share", from: "Jane Picard")
-    select("Half Share", from: "Churl Rox")
+    select("½ Share", from: "Churl Rox")
 
     click_on("Create Period")
 
@@ -65,13 +65,13 @@ feature "periods", js: true do
     create(:user, first_name: "Blep", last_name: "Cruller")
 
     click_on("Qux")
-    expect(page).to have_select("Churl Rox", selected: "Half Share")
+    expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
-    select("Half Share", from: "Blep Cruller")
+    select("½ Share", from: "Blep Cruller")
     click_on("Update Period")
 
     click_on("Qux")
-    expect(page).to have_select("Blep Cruller", selected: "Half Share")
+    expect(page).to have_select("Blep Cruller", selected: "½ Share")
   end
 
   scenario "destroy" do

@@ -41,7 +41,7 @@
     <% end %>
   <% end %>
 
-  <%= f.input :note %>
+  <%= f.input :note, as: :markdown %>
 
   <%# Meal reservations are only ever edited, so there is no need for this. It would always be checked. %>
   <% if resource.guidelines? && !reservation.meal? %>

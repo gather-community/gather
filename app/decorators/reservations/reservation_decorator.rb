@@ -12,6 +12,10 @@ module Reservations
       resource.decorate.name
     end
 
+    def rendered_note
+      h.safe_render_markdown(note)
+    end
+
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_reservation_path(object))

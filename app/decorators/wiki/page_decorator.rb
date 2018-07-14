@@ -10,7 +10,7 @@ module Wiki
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
       @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
-        h.sanitize(render_markdown(process_data(linkify(content).html_safe)))
+        h.safe_render_markdown(process_data(linkify(content)))
       end
     end
 
@@ -112,18 +112,6 @@ module Wiki
       end
       I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
         details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
-    end
-
-    def render_markdown(str)
-      markdown_renderer.render(str)
-    end
-
-    def markdown_renderer
-      @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML,
-        autolink: true,
-        space_after_headers: true,
-        tables: true
-      )
     end
 
     def sample_page

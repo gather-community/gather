@@ -62,9 +62,10 @@
 
   <h2>Menu</h2>
 
-  <% %w(title entrees side kids dessert notes).each do |attrib| %>
+  <%= f.input :title %>
+  <% %w(entrees side kids dessert notes).each do |attrib| %>
     <% if policy(@meal).set_menu? %>
-      <%= f.input attrib %>
+      <%= f.input attrib, as: :markdown %>
     <% else %>
       <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
     <% end %>

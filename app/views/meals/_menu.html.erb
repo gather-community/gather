@@ -25,7 +25,7 @@
     <% @meal.nonempty_menu_items.each do |item, text| %>
       <hr/>
       <div class="menu-label smaller"><%= item %></div>
-      <section><%= simple_format(text) %></section>
+      <section><%= safe_render_markdown(text) %></section>
     <% end %>
     <hr/>
     <div class="menu-label smaller">allergens</div>

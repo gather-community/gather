@@ -9,7 +9,7 @@
   <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
   <%= f.input :slot_type, collection: Work::Job::SLOT_TYPE_OPTIONS, include_blank: false %>
   <%= f.input :hours_per_shift, required: true %>
-  <%= f.input :description %>
+  <%= f.input :description, as: :markdown %>
   <%= nested_field_set(f, :reminders) %>
 
   <div id="shifts">

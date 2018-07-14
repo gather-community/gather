@@ -3,6 +3,9 @@
 module Work
   # Sends notifications of job shifts.
   class ShiftReminderJob < ReminderJob
+    # In case the job hasn't run for awhile, how old is too old to deliver?
+    EXPIRY_TIME = 3.hours
+
     def perform
       ActsAsTenant.without_tenant do
         scheduled_deliveries_by_community.each do |community, deliveries|
@@ -23,6 +26,7 @@ module Work
     def scheduled_deliveries_by_community
       ReminderDelivery
         .where("deliver_at <= ?", Time.zone.now)
+        .where("deliver_at >= ?", Time.zone.now - EXPIRY_TIME)
         .where(delivered: false)
         .includes(shift: {job: {period: :community}})
         .group_by(&:community)

@@ -70,7 +70,7 @@ describe Work::ShiftReminderJob do
     end
   end
 
-  context "with one reminder already sent" do
+  context "with one reminder already sent and one too far in past" do
     let(:job1) { create(:work_job, period: periodB, shift_times: ["2018-01-02 12:00"], shift_slots: 1) }
     let(:job2) do
       create(:work_job, period: periodB, shift_times: ["2018-01-03 12:00", "2018-01-03 13:00"],
@@ -81,15 +81,18 @@ describe Work::ShiftReminderJob do
     let!(:assign3) { job2.shifts.last.assignments.create!(user: userB1) }
     let!(:reminder1) { create_reminder(job1, "2018-01-01 9:00") }
     let!(:reminder2) { create_reminder(job2, "2018-01-01 9:00") }
+    let!(:reminder3) { create_reminder(job1, "2018-01-01 8:30") }
+    let!(:reminder4) { create_reminder(job1, "2018-01-01 5:00") } # Too early
 
     before do
-      job2.shifts.first.reminder_deliveries.first.update!(delivered: true)
+      job2.shifts.first.reminder_deliveries.index_by(&:reminder)[reminder2].update!(delivered: true)
     end
 
-    it_behaves_like "sends correct number of emails", 2
+    it_behaves_like "sends correct number of emails", 3
 
     it "should send the right emails" do
       expect_delivery_to_pairs(
+        [assign1, reminder3],
         [assign1, reminder1],
         [assign3, reminder2]
       )

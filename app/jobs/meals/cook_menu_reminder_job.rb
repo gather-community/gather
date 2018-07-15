@@ -18,11 +18,11 @@ module Meals
     def remindable_assignments(community)
       early = Assignment.joins(:meal)
         .where(role: "head_cook", reminder_count: 0)
-        .merge(Meal.without_menu.hosted_by(community)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
           .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.early))
 
       late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1)
-        .merge(Meal.without_menu.hosted_by(community)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
           .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.late))
 
       (early.to_a + late.to_a).uniq

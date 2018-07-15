@@ -4,6 +4,14 @@ This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_ti
 
 <%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %>
 
-<%= render("meal_link") %>
+<% if @assigns.any? -%>
+The meal staff is:
+
+<% @assigns.each do |a| -%>
+- <%= I18n.t("assignment_roles.#{a.role}", count: 1) %>: <%= a.user.name %>
+<% end -%>
+<% end %>
+
+<%= render("meal_link") -%>
 
 Bon appetit!

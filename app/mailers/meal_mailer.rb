@@ -3,6 +3,7 @@ class MealMailer < ApplicationMailer
     @household = signup.household.decorate
     @signup = signup
     @meal = signup.meal.decorate
+    @assigns = @meal.assignments.sort
 
     mail(to: @household, subject: default_i18n_subject(
       title: @meal.title_or_no_title,

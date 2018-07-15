@@ -15,12 +15,12 @@ class UsersController < ApplicationController
         load_users
 
         # Pagination
-        if params[:printalbum] || lenses[:view].table?
+        if params[:printalbum] || lenses[:view].active_only?
           # We first check for the printalbum param because that overrides any lens pagination stuff.
-          # If it's set, (or if view is 'table') we're showing all active users with no pagination.
+          # If it's set or if we're only showing active users, we're doing no pagination.
           @users = @users.active
-        elsif lenses[:view].blank? || lenses[:view].album?
-          @users = @users.page(params[:page]).per(36)
+        elsif lenses[:view].albumall?
+          @users = @users.page(params[:page]).per(96)
         elsif lenses[:view].tableall?
           @users = @users.page(params[:page]).per(100)
         end

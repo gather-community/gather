@@ -524,6 +524,7 @@ en:
         view:
           album: "Album"
           table: "Table"
+          albumall: "Album w/ Inactive"
           tableall: "Table w/ Inactive"
       reservations_resource:
         default_calendar_view:

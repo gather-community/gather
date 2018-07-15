@@ -851,3 +851,9 @@ en:
     this_year: "This Year"
     this_quarter: "This Quarter"
     all_time: "All Time"
+
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} diner from your household"
+        other: "%{count} diners from your household"

@@ -37,7 +37,6 @@ class CalendarExport
           e.location = obj.location_name
           e.summary = summary(obj)
           e.description = description(obj)
-          e.url = url(obj)
         end
       end
     end
@@ -93,12 +92,32 @@ class CalendarExport
   end
 
   def description(obj)
-    case class_name(obj)
-    when "Meal" then obj.head_cook.present? ? "By #{obj.head_cook_name}" : nil
-    when "Assignment" then nil
-    when "Reservations::Reservation" then nil
-    else unknown_class(obj)
-    end
+    text = case class_name(obj)
+           when "Meal" then meal_description(obj)
+           when "Assignment" then nil
+           when "Reservations::Reservation" then nil
+           else unknown_class(obj)
+           end
+
+    # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
+    # so we include it at the end of the description instead.
+    "#{text}\n#{url(obj)}"
+  end
+
+  # TODO: this needs to move to own meal calendar item builder class
+  def meal_description(meal)
+    cook = meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil
+    diner_count = if (signup = user_signups_by_meal_id[meal.id])
+                    I18n.t("calendar_exports.meals.diner_count", count: signup.total)
+                  end
+    [cook, diner_count].compact.join("\n")
+  end
+
+  def user_signups_by_meal_id
+    @user_signups_by_meal_id ||= Signup
+      .includes(:meal)
+      .where(household: user.household, meal: objects)
+      .index_by(&:meal_id)
   end
 
   def url(obj)

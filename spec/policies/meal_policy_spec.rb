@@ -34,15 +34,6 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
-    permissions :update_formula? do
-      it_behaves_like "permits admins or special role but not regular users", :biller
-
-      it "forbids if finalized" do
-        meal.status = "finalized"
-        expect(subject).not_to permit(admin, meal)
-      end
-    end
-
     permissions :edit?, :update?, :update_workers? do
       # We let anyone in host community do this so they can change assignments.
       it_behaves_like "permits admins from community"
@@ -54,17 +45,31 @@ describe MealPolicy do
       end
     end
 
-    permissions :update_menu?, :close?, :cancel? do
+    permissions :update_formula?, :update_signups?, :update_expenses? do
+      it_behaves_like "permits admins or special role but not regular users", :biller
+
+      it "forbids if finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
+    end
+
+    permissions :update_menu?, :update_signups?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
         head_cook(user)
         expect(subject).to permit(user, meal)
       end
+
+      it "forbids if finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
     end
 
     permissions :close?, :reopen? do
-      it "denies if meal cancelled" do
+      it "forbids if meal cancelled" do
         stub_status("cancelled")
         expect(subject).not_to permit(admin, meal)
       end
@@ -207,7 +212,7 @@ describe MealPolicy do
       end
 
       it "should not allow formula_id if meal finalized" do
-        meal.status = "finalized"
+        stub_status("finalized")
         expect(subject).not_to include(:formula_id)
       end
     end

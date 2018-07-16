@@ -56,15 +56,15 @@ class MealPolicy < ApplicationPolicy
   end
 
   def close?
-    active_admin_or_coordinator_or_head_cook? && meal.open?
+    admin_coord_or_head_cook? && meal.open?
   end
 
   def cancel?
-    active_admin_or_coordinator_or_head_cook? && !meal.cancelled? && !meal.finalized?
+    admin_coord_or_head_cook? && !meal.cancelled? && !meal.finalized?
   end
 
   def reopen?
-    active_admin_or_coordinator_or_head_cook? && meal.closed? && !meal.day_in_past?
+    admin_coord_or_head_cook? && meal.closed? && !meal.day_in_past?
   end
 
   def finalize?
@@ -80,11 +80,20 @@ class MealPolicy < ApplicationPolicy
   end
 
   def update_menu?
-    active_admin_or_coordinator_or_head_cook?
+    !meal.finalized? && admin_coord_or_head_cook?
   end
 
   def update_workers?
     active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
+  end
+
+  # Whether someone can edit signups for _anyone_, not just themselves.
+  def update_signups?
+    not_finalized_and_admin_coord_head_cook_or_biller?
+  end
+
+  def update_expenses?
+    not_finalized_and_admin_coord_head_cook_or_biller?
   end
 
   def send_message?
@@ -107,12 +116,16 @@ class MealPolicy < ApplicationPolicy
 
   private
 
-  def active_admin_or_coordinator_or_head_cook?
-    active_admin_or?(:meals_coordinator) || active? && head_cook?
+  def admin_coord_or_head_cook?
+    active_admin_or?(:meals_coordinator) || head_cook?
   end
 
   def active_and_associated_or_signed_up?
     active? && associated? || signed_up? || active_admin?
+  end
+
+  def not_finalized_and_admin_coord_head_cook_or_biller?
+    !meal.finalized? && (active_admin_or?(:meals_coordinator, :biller) || head_cook?)
   end
 
   def associated?
@@ -132,7 +145,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def head_cook?
-    user == meal.head_cook
+    active? && user == meal.head_cook
   end
 
   def menu_attribs

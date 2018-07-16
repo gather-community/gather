@@ -1,7 +1,7 @@
 <%= gather_form_for(@meal) do |f| %>
   <%= base_error(f) %>
 
-  <% if policy(@meal).administer? %>
+  <% if policy(@meal).update_general? %>
     <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
     <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
@@ -47,7 +47,7 @@
     <%= f.input :capacity do %><%= @meal.capacity %><% end %>
   <% end %>
 
-  <% if policy(@meal).administer? %>
+  <% if policy(@meal).update_general? %>
     <%= f.input :formula_id, collection: @formula_options, disabled: !policy(@meal).update_formula? %>
   <% end %>
 

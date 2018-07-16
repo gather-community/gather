@@ -30,7 +30,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :administer?, :destroy?, :update_formula? do
+    permissions :new?, :create?, :destroy?, :update_general?, :update_formula? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 

@@ -59,7 +59,7 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @min_date = nil
-    @notify_on_worker_change = !policy(@meal).administer?
+    @notify_on_worker_change = !policy(@meal).update_general?
     prep_form_vars
   end
 
@@ -232,7 +232,7 @@ class MealsController < ApplicationController
 
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
-    if !policy(@meal).administer?
+    unless policy(@meal).update_general?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
   end

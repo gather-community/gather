@@ -49,13 +49,8 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
   end
 
-  # Means they can peform the fundamental tasks (set date, communities, etc.)
-  def administer?
-    active_admin_or?(:meals_coordinator)
-  end
-
   def destroy?
-    administer?
+    active_admin_or?(:meals_coordinator)
   end
 
   def summary?
@@ -78,12 +73,17 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:biller) && meal.closed? && meal.in_past?
   end
 
+  # Means they can peform the fundamental tasks (set date, communities, etc.)
+  def update_general?
+    active_admin_or?(:meals_coordinator)
+  end
+
   def update_menu?
     active_admin_or_coordinator_or_head_cook?
   end
 
   def update_formula?
-    !meal.finalized? && administer?
+    !meal.finalized? && update_general?
   end
 
   def send_message?
@@ -99,7 +99,7 @@ class MealPolicy < ApplicationPolicy
       cleaner_assigns_attributes: %i[id user_id _destroy]
     }]
     permitted.concat(menu_attribs) if update_menu?
-    permitted.concat([:served_at, resource_ids: []]) if administer?
+    permitted.concat([:served_at, resource_ids: []]) if update_general?
     permitted << :formula_id if update_formula?
     permitted
   end

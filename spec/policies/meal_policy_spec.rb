@@ -35,6 +35,8 @@ describe MealPolicy do
     end
 
     permissions :update_formula? do
+      it_behaves_like "permits admins or special role but not regular users", :biller
+
       it "forbids if finalized" do
         meal.status = "finalized"
         expect(subject).not_to permit(admin, meal)
@@ -56,7 +58,7 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
-        set_head_cook(user)
+        head_cook(user)
         expect(subject).to permit(user, meal)
       end
     end
@@ -222,7 +224,7 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
-        set_head_cook(actor)
+        head_cook(actor)
         expect(subject).to include(*(assign_attribs + head_cook_attribs))
         expect(subject).not_to include(*(admin_attribs + [:community_id]))
       end
@@ -249,7 +251,7 @@ describe MealPolicy do
     end
   end
 
-  def set_head_cook(user)
+  def head_cook(user)
     save_policy_objects!(community, user)
     meal.save!
     meal.head_cook = user

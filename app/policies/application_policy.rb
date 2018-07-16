@@ -85,8 +85,8 @@ class ApplicationPolicy
     active? && user.global_role?(role) && own_community_record?
   end
 
-  def active_admin_or?(role)
-    active_admin? || active_with_community_role?(role)
+  def active_admin_or?(*roles)
+    active_admin? || roles.any? { |role| active_with_community_role?(role) }
   end
 
   def own_community_record?

@@ -73,17 +73,16 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:biller) && meal.closed? && meal.in_past?
   end
 
-  # Means they can peform the fundamental tasks (set date, communities, etc.)
   def update_general?
     active_admin_or?(:meals_coordinator)
   end
 
-  def update_menu?
-    active_admin_or_coordinator_or_head_cook?
+  def update_formula?
+    !meal.finalized? && active_admin_or?(:meals_coordinator, :biller)
   end
 
-  def update_formula?
-    !meal.finalized? && update_general?
+  def update_menu?
+    active_admin_or_coordinator_or_head_cook?
   end
 
   def send_message?

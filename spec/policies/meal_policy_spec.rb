@@ -52,7 +52,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :set_menu?, :close?, :cancel? do
+    permissions :update_menu?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do

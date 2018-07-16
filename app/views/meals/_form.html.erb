@@ -16,7 +16,7 @@
   <% end %>
 
   <% if multi_community? %>
-    <% if policy(@meal).set_menu? %>
+    <% if policy(@meal).update_menu? %>
       <div class="form-group text optional
         <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
         <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>
@@ -41,7 +41,7 @@
     <% end %>
   <% end %>
 
-  <% if policy(@meal).set_menu? %>
+  <% if policy(@meal).update_menu? %>
     <%= f.input :capacity, min: 1 %>
   <% else %>
     <%= f.input :capacity do %><%= @meal.capacity %><% end %>
@@ -64,7 +64,7 @@
 
   <%= f.input :title %>
   <% %w(entrees side kids dessert notes).each do |attrib| %>
-    <% if policy(@meal).set_menu? %>
+    <% if policy(@meal).update_menu? %>
       <%= f.input attrib, as: :markdown %>
     <% else %>
       <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
@@ -77,7 +77,7 @@
     <div class="boxes col-sm-9">
       <% sorted_allergens.each do |allergen| %>
         <div>
-          <%= f.check_box("allergen_#{allergen}", disabled: !policy(@meal).set_menu?) %>
+          <%= f.check_box("allergen_#{allergen}", disabled: !policy(@meal).update_menu?) %>
           <%= f.label("allergen_#{allergen}")%>
         </div>
       <% end %>

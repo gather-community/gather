@@ -14,7 +14,7 @@ class MealPolicy < ApplicationPolicy
     def resolve
       if active_cluster_admin?
         scope
-      elsif active?
+      elsif user.active?
         scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
           user.id, user.community_id, user.household_id)
       else
@@ -62,10 +62,6 @@ class MealPolicy < ApplicationPolicy
     active_and_associated_or_signed_up?
   end
 
-  def set_menu?
-    active_admin_or_coordinator_or_head_cook?
-  end
-
   def close?
     active_admin_or_coordinator_or_head_cook? && meal.open?
   end
@@ -80,6 +76,10 @@ class MealPolicy < ApplicationPolicy
 
   def finalize?
     active_admin_or?(:biller) && meal.closed? && meal.in_past?
+  end
+
+  def update_menu?
+    active_admin_or_coordinator_or_head_cook?
   end
 
   def update_formula?
@@ -98,14 +98,8 @@ class MealPolicy < ApplicationPolicy
       table_setter_assigns_attributes: %i[id user_id _destroy],
       cleaner_assigns_attributes: %i[id user_id _destroy]
     }]
-
-    if set_menu?
-      allergens = Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
-      permitted += allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-                                {community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
-    end
-
-    permitted += [:served_at, resource_ids: []] if administer?
+    permitted.concat(menu_attribs) if update_menu?
+    permitted.concat([:served_at, resource_ids: []]) if administer?
     permitted << :formula_id if update_formula?
     permitted
   end
@@ -138,5 +132,11 @@ class MealPolicy < ApplicationPolicy
 
   def head_cook?
     user == meal.head_cook
+  end
+
+  def menu_attribs
+    Meal::ALLERGENS.map { |a| :"allergen_#{a}" } +
+      [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
+       {community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
   end
 end

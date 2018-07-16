@@ -90,14 +90,6 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator) || assigned?
   end
 
-  def new_signups?
-    !meal.closed? && !meal.cancelled? && !meal.full? && !meal.in_past?
-  end
-
-  def edit_signups?
-    !meal.closed? && !meal.cancelled? && !meal.in_past?
-  end
-
   def permitted_attributes
     # Anybody that can update a meal can change the assignments.
     permitted = [{

@@ -3,12 +3,14 @@
 class SignupPolicy < ApplicationPolicy
   alias signup record
 
+  delegate :meal, to: :signup
+
   def create?
-    active? && invited?
+    active? && invited? && meal.open? && !meal.cancelled? && !meal.full? && !meal.in_past?
   end
 
   def update?
-    invited?
+    invited? && meal.open? && !meal.in_past?
   end
 
   def permitted_attributes

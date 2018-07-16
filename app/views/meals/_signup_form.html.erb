@@ -1,4 +1,4 @@
-<% if @signup.new_record? && policy(@meal).new_signups? || policy(@meal).edit_signups? %>
+<% if @signup.new_record? && policy(@signup).create? || policy(@signup).update? %>
   <%= link_to(icon_tag('close'), "#", title: "Clear Form",
     onclick: "$('.signup select').val(0).trigger('change');
       $('.signup textarea').val(''); return false") %>
@@ -40,7 +40,7 @@
         <% Signup::FOOD_TYPES.each do |ft| %>
           <% attrib = "#{dt}_#{ft}" %>
           <% if @meal.formula.allows_signup_type?(dt, ft) %>
-            <% if policy(@meal).edit_signups? %>
+            <% if policy(@signup).update? %>
               <%# We blur on change so that people don't accidentally change their selection with
                   the scroll wheel %>
               <%= f.select(attrib,
@@ -61,7 +61,7 @@
 
     <% end %>
 
-    <% if policy(@meal).edit_signups? %>
+    <% if policy(@signup).update? %>
       <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>
     <% else %>
       <%= f.input :comments do %>
@@ -69,7 +69,7 @@
       <% end %>
     <% end %>
 
-    <% if policy(@meal).edit_signups? %>
+    <% if policy(@signup).update? %>
       <%= form_actions do %>
         <%= f.button :submit, "Save & Go To Next Meal", name: "save_and_next", class: "btn btn-default" if @next_meal %>
         <%= f.button :submit, "Save", class: "btn btn-primary" %>

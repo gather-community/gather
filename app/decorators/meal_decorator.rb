@@ -11,6 +11,11 @@ class MealDecorator < ApplicationDecorator
     end
   end
 
+  # Returns a non-persisted SignupPolicy with this meal. Used for policy checks.
+  def sample_signup
+    @sample_signup ||= Signup.new(meal: meal)
+  end
+
   def location_name
     resources.first.decorate.name_with_prefix
   end

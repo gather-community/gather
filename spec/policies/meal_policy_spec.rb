@@ -136,22 +136,6 @@ describe MealPolicy do
         expect(subject).to permit(user, meal)
       end
     end
-
-    permissions :new_signups? do
-      it "permits if before meal and not closed or full" do
-        Timecop.travel(meal.served_at - 1.day) do
-          expect(subject).to permit(user, meal)
-        end
-      end
-    end
-
-    permissions :edit_signups? do
-      it "permits if before meal and not closed" do
-        Timecop.travel(meal.served_at - 1.day) do
-          expect(subject).to permit(user, meal)
-        end
-      end
-    end
   end
 
   describe "scope" do

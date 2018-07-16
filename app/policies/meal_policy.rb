@@ -43,10 +43,8 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator)
   end
 
-  # We let anyone from host community (or assignees from outside) do this
-  # so they can change assignments.
   def update?
-    active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
+    update_general? || update_formula? || update_menu? || update_workers?
   end
 
   def destroy?
@@ -83,6 +81,10 @@ class MealPolicy < ApplicationPolicy
 
   def update_menu?
     active_admin_or_coordinator_or_head_cook?
+  end
+
+  def update_workers?
+    active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
   end
 
   def send_message?

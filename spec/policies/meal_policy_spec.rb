@@ -192,8 +192,16 @@ describe MealPolicy do
 
   describe "permitted_attributes" do
     include_context "policy permissions"
+    subject { MealPolicy.new(actor, meal).permitted_attributes }
     let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
-    let(:assign_attribs) do
+    let(:persisted) { true }
+    let(:general_attribs) { [:served_at, :formula_id, resource_ids: []] }
+    let(:menu_attribs) do
+      (%i[title capacity entrees side kids dessert notes] +
+        Meal::ALLERGENS.map { |a| :"allergen_#{a}" }) <<
+        {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}
+    end
+    let(:worker_attribs) do
       [{
         head_cook_assign_attributes: %i[id user_id],
         asst_cook_assigns_attributes: %i[id user_id _destroy],
@@ -203,12 +211,10 @@ describe MealPolicy do
     end
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
-    subject { MealPolicy.new(actor, meal).permitted_attributes }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs) + admin_attribs)
-        expect(subject).not_to include(:community_id)
+        expect(subject).to match_array(general_attribs + menu_attribs + worker_attribs)
       end
 
       it "should not allow formula_id if meal finalized" do
@@ -221,7 +227,7 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow only assignment attribs" do
-        expect(subject).to contain_exactly(*assign_attribs)
+        expect(subject).to match_array(worker_attribs)
       end
     end
 
@@ -230,8 +236,15 @@ describe MealPolicy do
 
       it "should allow more stuff" do
         head_cook(actor)
-        expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(*(admin_attribs + [:community_id]))
+        expect(subject).to match_array(menu_attribs + worker_attribs)
+      end
+    end
+
+    context "biller" do
+      let(:actor) { biller }
+
+      it "should allow edit formula" do
+        expect(subject).to match_array(worker_attribs << :formula_id)
       end
     end
 
@@ -250,8 +263,8 @@ describe MealPolicy do
     context "outside admin" do
       let(:actor) { admin_in_cmtyB }
 
-      it "should have only basic attribs" do
-        expect(subject).to contain_exactly(*assign_attribs)
+      it "should have nothing" do
+        expect(subject).to be_empty
       end
     end
   end

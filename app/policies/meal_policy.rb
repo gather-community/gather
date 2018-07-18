@@ -101,16 +101,11 @@ class MealPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    # Anybody that can update a meal can change the assignments.
-    permitted = [{
-      head_cook_assign_attributes: %i[id user_id],
-      asst_cook_assigns_attributes: %i[id user_id _destroy],
-      table_setter_assigns_attributes: %i[id user_id _destroy],
-      cleaner_assigns_attributes: %i[id user_id _destroy]
-    }]
-    permitted.concat(menu_attribs) if update_menu?
-    permitted.concat([:served_at, resource_ids: []]) if update_general?
-    permitted << :formula_id if update_formula?
+    permitted = []
+    permitted.concat(worker_attribs) if change_workers?
+    permitted.concat(menu_attribs) if change_menu?
+    permitted.concat([:served_at, resource_ids: []]) if change_general?
+    permitted << :formula_id if change_formula?
     permitted
   end
 
@@ -152,5 +147,14 @@ class MealPolicy < ApplicationPolicy
     Meal::ALLERGENS.map { |a| :"allergen_#{a}" } +
       [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
        {community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
+  end
+
+  def worker_attribs
+    [{
+      head_cook_assign_attributes: %i[id user_id],
+      asst_cook_assigns_attributes: %i[id user_id _destroy],
+      table_setter_assigns_attributes: %i[id user_id _destroy],
+      cleaner_assigns_attributes: %i[id user_id _destroy]
+    }]
   end
 end

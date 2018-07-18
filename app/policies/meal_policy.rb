@@ -91,6 +91,10 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
   end
 
+  def change_workers_without_notification?
+    active_admin_or?(:meals_coordinator)
+  end
+
   # Whether someone can edit signups for _anyone_, not just themselves.
   def update_signups?
     not_finalized_and_admin_coord_head_cook_or_biller?

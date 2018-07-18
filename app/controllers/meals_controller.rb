@@ -59,7 +59,7 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @min_date = nil
-    @notify_on_worker_change = !policy(@meal).update_general?
+    @notify_on_worker_change = !policy(@meal).change_workers_without_notification?
     prep_form_vars
   end
 

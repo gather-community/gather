@@ -30,7 +30,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :destroy?, :update_general?, :update_formula? do
+    permissions :new?, :create?, :destroy?, :change_date_loc_invites?, :change_formula? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
@@ -54,7 +54,9 @@ describe MealPolicy do
       end
     end
 
-    permissions :update_menu?, :update_signups?, :close?, :cancel? do
+<<<<    permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
+      let(:persisted) { true }
+
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
@@ -195,11 +197,12 @@ describe MealPolicy do
     subject { MealPolicy.new(actor, meal).permitted_attributes }
     let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
     let(:persisted) { true }
-    let(:general_attribs) { [:served_at, :formula_id, resource_ids: []] }
+    let(:date_loc_invite_attribs) do
+      [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
+    end
     let(:menu_attribs) do
-      (%i[title capacity entrees side kids dessert notes] +
-        Meal::ALLERGENS.map { |a| :"allergen_#{a}" }) <<
-        {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}
+      %i[title entrees side kids dessert notes] +
+        Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
     end
     let(:worker_attribs) do
       [{
@@ -214,12 +217,14 @@ describe MealPolicy do
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
-        expect(subject).to match_array(general_attribs + menu_attribs + worker_attribs)
+        expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
+          %i[capacity formula_id])
       end
 
-      it "should not allow formula_id if meal finalized" do
+      it "should not allow formula_id, capacity if meal finalized" do
         stub_status("finalized")
         expect(subject).not_to include(:formula_id)
+        expect(subject).not_to include(:capacity)
       end
     end
 
@@ -236,7 +241,7 @@ describe MealPolicy do
 
       it "should allow more stuff" do
         head_cook(actor)
-        expect(subject).to match_array(menu_attribs + worker_attribs)
+        expect(subject).to match_array(menu_attribs + worker_attribs + [:capacity])
       end
     end
 

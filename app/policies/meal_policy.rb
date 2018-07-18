@@ -44,7 +44,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def update?
-    update_general? || update_formula? || update_menu? || update_workers?
+    change_date_loc_invites? || change_formula? || change_menu? || change_workers?
   end
 
   def destroy?
@@ -71,7 +71,7 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:biller) && meal.closed? && meal.in_past?
   end
 
-  def update_general?
+  def change_date_loc_invites?
     active_admin_or?(:meals_coordinator)
   end
 
@@ -79,7 +79,11 @@ class MealPolicy < ApplicationPolicy
     !meal.finalized? && active_admin_or?(:meals_coordinator, :biller)
   end
 
-  def update_menu?
+  def change_capacity?
+    !meal.finalized? && admin_coord_or_head_cook?
+  end
+
+  def change_menu?
     !meal.finalized? && admin_coord_or_head_cook?
   end
 
@@ -104,8 +108,9 @@ class MealPolicy < ApplicationPolicy
     permitted = []
     permitted.concat(worker_attribs) if change_workers?
     permitted.concat(menu_attribs) if change_menu?
-    permitted.concat([:served_at, resource_ids: []]) if change_general?
+    permitted.concat(date_loc_invite_attribs) if change_date_loc_invites?
     permitted << :formula_id if change_formula?
+    permitted << :capacity if change_capacity?
     permitted
   end
 
@@ -143,10 +148,12 @@ class MealPolicy < ApplicationPolicy
     active? && user == meal.head_cook
   end
 
+  def date_loc_invite_attribs
+    [:served_at, {community_boxes: [Community.all.map(&:id).map(&:to_s)]}, {resource_ids: []}]
+  end
+
   def menu_attribs
-    Meal::ALLERGENS.map { |a| :"allergen_#{a}" } +
-      [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-       {community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
+    Meal::ALLERGENS.map { |a| :"allergen_#{a}" } + %i[title entrees side kids dessert notes]
   end
 
   def worker_attribs

@@ -32,16 +32,6 @@ module MealsHelper
       t("signups.diner_types.#{type}", count: 1)
   end
 
-  def community_invited?(meal, community)
-    meal.community_ids.include?(community.id)
-  end
-
-  # We should disable the "own" community checkbox for most users.
-  def disable_community_checkbox?(meal, community)
-    disable = meal.community == community && community_invited?(meal, community)
-    disable ? "disabled" : nil
-  end
-
   def sorted_allergens
     prefix = "activerecord.attributes.meal.allergen_"
     Meal::ALLERGENS.sort_by { |a| [a == "none" ? 1 : 0, I18n.t("#{prefix}_#{a}")] }

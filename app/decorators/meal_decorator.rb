@@ -40,6 +40,12 @@ class MealDecorator < ApplicationDecorator
     I18n.l(served_at, format: :shorter_date).gsub("  ", " ")
   end
 
+  # We should disable the "own" community checkbox for most users.
+  def disable_community_checkbox?(community)
+    disable = (object.community == community && community_invited?(community))
+    disable ? "disabled" : nil
+  end
+
   def show_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),

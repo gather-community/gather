@@ -139,6 +139,10 @@ class Meal < ApplicationRecord
     invitations.map(&:community_id)
   end
 
+  def community_invited?(community)
+    community_ids.include?(community.id)
+  end
+
   # Duck type for calendaring.
   def starts_at
     served_at

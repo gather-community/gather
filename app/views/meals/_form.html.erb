@@ -1,61 +1,61 @@
-<%= gather_form_for(@meal) do |f| %>
+<%= gather_form_for(meal) do |f| %>
   <%= base_error(f) %>
 
-  <% if policy(@meal).update_general? %>
+  <% if policy(meal).change_date_loc_invites? %>
     <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
       input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
     <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
       required: true, input_html: { multiple: "multiple" } %>
   <% else %>
     <%= f.input :served_at do %>
-      <%= @meal.served_at.to_formatted_s(:full_datetime) %>
+      <%= meal.served_at_datetime %>
     <% end %>
     <%= f.input :resource_ids do %>
-      <%= @meal.location_name %>
+      <%= meal.location_name %>
     <% end %>
   <% end %>
 
   <% if multi_community? %>
-    <% if policy(@meal).update_menu? %>
+    <% if policy(meal).change_menu? %>
       <div class="form-group text optional
-        <%= @meal.errors['invitations'].present? ? "has-error" : "" %>">
+        <%= meal.errors['invitations'].present? ? "has-error" : "" %>">
         <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>
         <div class="boxes col-sm-9">
           <% @communities.each do |c| %>
-            <% checked = community_invited?(@meal, c) %>
-            <% disabled = disable_community_checkbox?(@meal, c) %>
+            <% checked = meal.community_invited?(c) %>
+            <% disabled = meal.disable_community_checkbox?(c) %>
             <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
             <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
             <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
             &nbsp;&nbsp;
           <% end %>
         </div>
-        <% if @meal.errors['invitations'].present? %>
-          <div class="error col-sm-6 col-sm-offset-2"><%= @meal.errors['invitations'].join %></div>
+        <% if meal.errors["invitations"].present? %>
+          <div class="error col-sm-6 col-sm-offset-2"><%= meal.errors["invitations"].join %></div>
         <% end %>
       </div>
     <% else %>
       <%= f.input :communities do %>
-        <%= @meal.communities.map(&:name).join(", ") %>
+        <%= meal.communities.map(&:name).join(", ") %>
       <% end %>
     <% end %>
   <% end %>
 
-  <% if policy(@meal).update_menu? %>
+  <% if policy(meal).change_menu? %>
     <%= f.input :capacity, min: 1 %>
   <% else %>
-    <%= f.input :capacity do %><%= @meal.capacity %><% end %>
+    <%= f.input :capacity do %><%= meal.capacity %><% end %>
   <% end %>
 
-  <% if policy(@meal).update_general? %>
-    <%= f.input :formula_id, collection: @formula_options, disabled: !policy(@meal).update_formula? %>
+  <% if policy(meal).change_date_loc_invites? %>
+    <%= f.input :formula_id, collection: @formula_options, disabled: !policy(meal).change_formula? %>
   <% end %>
 
   <h2>Workers</h2>
 
   <div id="assignment-fields">
     <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
-    <% @meal.extra_roles.each do |role| %>
+    <% meal.extra_roles.each do |role| %>
       <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
     <% end %>
   </div>
@@ -64,7 +64,7 @@
 
   <%= f.input :title %>
   <% %w(entrees side kids dessert notes).each do |attrib| %>
-    <% if policy(@meal).update_menu? %>
+    <% if policy(meal).change_menu? %>
       <%= f.input attrib, as: :markdown %>
     <% else %>
       <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
@@ -72,18 +72,18 @@
   <% end %>
 
   <div class="form-group text optional meal_allergens
-    <%= @meal.errors['allergens'].present? ? "has-error" : "" %>">
+    <%= meal.errors["allergens"].present? ? "has-error" : "" %>">
     <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
     <div class="boxes col-sm-9">
       <% sorted_allergens.each do |allergen| %>
         <div>
-          <%= f.check_box("allergen_#{allergen}", disabled: !policy(@meal).update_menu?) %>
+          <%= f.check_box("allergen_#{allergen}", disabled: !policy(meal).change_menu?) %>
           <%= f.label("allergen_#{allergen}")%>
         </div>
       <% end %>
     </div>
-    <% if @meal.errors['allergens'].present? %>
-      <div class="error col-sm-9 col-sm-offset-3"><%= @meal.errors['allergens'].join %></div>
+    <% if meal.errors["allergens"].present? %>
+      <div class="error col-sm-9 col-sm-offset-3"><%= meal.errors["allergens"].join %></div>
     <% end %>
   </div>
 

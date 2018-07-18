@@ -1,7 +1,7 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
-  decorates_assigned :meals
+  decorates_assigned :meal, :meals
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update

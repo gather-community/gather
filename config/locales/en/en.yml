@@ -6,6 +6,9 @@ en:
     cancelled: "Cancelled"
     children: "Children"
     clearing_the_filter: "clearing the filters"
+    community_count:
+      one: "%{count} Community"
+      other: "%{count} Communities"
     default: "Default"
     "false": "False"
     inactive: "Inactive"
@@ -455,3 +458,15 @@ en:
       diner_count:
         one: "%{count} diner from your household"
         other: "%{count} diners from your household"
+
+  meal_form_summarizer:
+    allows: "Allows %{people}"
+    allows_with_cmtys:
+      one: "Allows %{people} from %{count} community"
+      other: "Allows %{people} from %{count} communities"
+    no_workers: "No workers"
+    no_menu: "No menu posted"
+    with_items: "with %{items}"
+    and_allergen_count:
+      one: "and %{count} allergen"
+      other: "and %{count} allergens"

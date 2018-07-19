@@ -54,6 +54,12 @@ en:
         communities: "Communities"
         resource_ids: "Location(s)"
         formula: "Formula"
+        title: "Title"
+        entrees: "Entrees"
+        side: "Side"
+        kids: "Kids"
+        dessert: "Dessert"
+        notes: "Notes"
       meals/message:
         meal: "Meal"
         body: "Message"

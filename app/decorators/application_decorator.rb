@@ -25,6 +25,10 @@ class ApplicationDecorator < Draper::Decorator
     ->(a, b) { a << separator.html_safe << b }
   end
 
+  def nbsp(count = 1)
+    ("&nbsp" * count).html_safe
+  end
+
   def action_links(action = :show, **options)
     send("#{action}_action_link_set").render(**options)
   end

@@ -3,6 +3,27 @@ en:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
     cancelled_notice: "This meal has been cancelled."
     menu_posted_at: "Menu posted on %{time}."
+    form:
+      sections:
+        label:
+          general: "General"
+          workers: "Workers"
+          menu: "Menu"
+        edit:
+          general: "Edit General"
+          workers: "Edit Workers"
+          menu: "Edit Menu"
+      summaries:
+        allows: "Allows %{people}"
+        allows_with_cmtys:
+          one: "Allows %{people} from %{count} community"
+          other: "Allows %{people} from %{count} communities"
+        no_workers: "No workers"
+        no_menu: "No menu posted"
+        with_items: "with %{items}"
+        and_allergen_count:
+          one: "and %{count} allergen"
+          other: "and %{count} allergens"
   meals/formulas:
     pantry: "Pantry"
     calc_types:
@@ -16,6 +37,5 @@ en:
         fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
         share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
     cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
-
   meals/messages:
     cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."

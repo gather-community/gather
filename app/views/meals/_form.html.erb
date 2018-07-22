@@ -1,10 +1,7 @@
 <%= gather_form_for(meal) do |f| %>
   <%= base_error(f) %>
 
-  <section id="general">
-    <h2 class="top">General</h2>
-    <%= meal.form_section_summary(:general) %>
-
+  <%= meal.form_section(:general) do %>
     <div class="fields">
       <% if policy(meal).change_date_loc_invites? %>
         <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
@@ -54,24 +51,18 @@
 
       <%= f.input :formula_id, collection: @formula_options, disabled: !policy(meal).change_formula? %>
     </div>
-  </section>
+  <% end %>
 
-  <section id="workers">
-    <h2>Workers</h2>
-    <%= meal.form_section_summary(:workers) %>
-
+  <%= meal.form_section(:workers) do %>
     <div id="assignment-fields">
       <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
       <% meal.extra_roles.each do |role| %>
         <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
       <% end %>
     </div>
-  </section>
+  <% end %>
 
-  <section id="menu">
-    <h2>Menu</h2>
-    <%= meal.form_section_summary(:menu) %>
-
+  <%= meal.form_section(:menu) do %>
     <%= f.input :title %>
     <% %w(entrees side kids dessert notes).each do |attrib| %>
       <% if policy(meal).change_menu? %>
@@ -96,7 +87,7 @@
         <div class="error col-sm-9 col-sm-offset-3"><%= meal.errors[:allergens].join %></div>
       <% end %>
     </div>
-  </section>
+  <% end %>
 
   <%= form_actions do %>
     <%= f.button :submit, class: "btn-primary" %>

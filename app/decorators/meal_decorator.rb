@@ -4,22 +4,7 @@ class MealDecorator < ApplicationDecorator
   delegate_all
 
   def form_section(section, &block)
-    header = h.content_tag(:h2, t("meals.form.sections.label.#{section}"),
-      class: ("top" if section == :general))
-    summary = form_section_summary(section)
-    fields = h.content_tag(:div, class: "fields", "data-toggle-off": persisted? ? section : nil) do
-      h.capture(&block)
-    end
-    h.content_tag(:section, id: section) do
-      header << summary << fields
-    end
-  end
-
-  def form_section_summary(section)
-    return nil if new_record?
-    text = form_section_summarizer.summary(section)
-    link = h.link_to(t("meals.form.sections.edit.#{section}"), "#", "data-toggle": section)
-    h.content_tag(:p, text << nbsp(2) << link, class: "summary", "data-toggle-on": section)
+    Meals::FormSection.new(self, section, &block).html
   end
 
   def css_classes

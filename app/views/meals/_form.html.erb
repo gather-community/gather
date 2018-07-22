@@ -64,7 +64,7 @@
 
   <%= meal.form_section(:menu) do %>
     <%= f.input :title %>
-    <% %w(entrees side kids dessert notes).each do |attrib| %>
+    <% Meal::MENU_ITEMS.each do |attrib| %>
       <% if policy(meal).change_menu? %>
         <%= f.input attrib, as: :markdown %>
       <% else %>

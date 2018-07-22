@@ -1,19 +1,45 @@
 # frozen_string_literal: true
 
 module Meals
-  # Makes textual summaries of each section of a form. Meal can be assumed to be persisted.
-  class FormSectionSummarizer < ApplicationDecorator
-    attr_accessor :meal
-
-    def initialize(meal)
+  # Models a single section of the meal form.
+  class FormSection < ApplicationDecorator
+    def initialize(meal, section, &block)
       self.meal = meal
+      self.section = section
+      self.block = block
     end
 
-    def summary(section)
-      send("#{section}_summary")
+    def html
+      h.content_tag(:section, id: section) { header << summary << fields }
     end
 
     private
+
+    attr_accessor :meal, :section, :block
+
+    def header
+      h.content_tag(:h2, t("meals.form.sections.label.#{section}"), class: ("top" if section == :general))
+    end
+
+    def summary
+      return nil unless collapse?
+      text = send("#{section}_summary")
+      link = h.link_to(t("meals.form.sections.edit.#{section}"), "#", "data-toggle": section)
+      h.content_tag(:p, text << nbsp(2) << link, class: "summary", "data-toggle-on": section)
+    end
+
+    def fields
+      attribs = {class: "fields", "data-toggle-off": collapse? ? section : nil}
+      h.content_tag(:div, block_content, attribs)
+    end
+
+    def collapse?
+      meal.persisted? && !block_content.match?(/\bhas-error\b/)
+    end
+
+    def block_content
+      @block_content ||= h.capture(&block)
+    end
 
     def general_summary
       str = safe_str << "#{meal.served_at_datetime}, #{meal.location_name}, #{meal.formula_name}, "
@@ -36,7 +62,7 @@ module Meals
         items = items.map { |i| Meal.human_attribute_name(i).downcase }.join(", ")
         items = items.empty? ? nil : t("meals.form.summaries.with_items", items: items)
         allergens = t("meals.form.summaries.and_allergen_count", count: meal.allergens.without("none").size)
-        h.safe_join([meal.title, items, allergens].compact, (", "))
+        h.safe_join([meal.title, items, allergens].compact, ", ")
       else
         safe_str << t("meals.form.summaries.no_menu")
       end

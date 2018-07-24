@@ -49,7 +49,11 @@
         <%= f.input :capacity do %><%= meal.capacity %><% end %>
       <% end %>
 
-      <%= f.input :formula_id, collection: @formula_options, disabled: !policy(meal).change_formula? %>
+      <% if policy(meal).change_formula? %>
+        <%= f.input :formula_id, collection: @formula_options %>
+      <% else %>
+        <%= f.input :formula_id do %><%= meal.formula_name %><% end %>
+      <% end %>
     </div>
   <% end %>
 
@@ -63,10 +67,9 @@
   <% end %>
 
   <%= meal.form_section(:menu) do %>
-    <%= f.input :title %>
-    <% Meal::MENU_ITEMS.each do |attrib| %>
+    <% ([:title] + Meal::MENU_ITEMS).each do |attrib| %>
       <% if policy(meal).change_menu? %>
-        <%= f.input attrib, as: :markdown %>
+        <%= f.input attrib, as: (:markdown unless attrib == :title) %>
       <% else %>
         <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
       <% end %>
@@ -99,7 +102,7 @@
     new Gather.Views.Select2View({el: ".meal-form"});
     $("#meal_resource_ids").select2();
     new Gather.Views.DirtyChecker({el: '.meal-form'});
-    <% unless policy(@meal).change_workers_without_notification? %>
+    <% unless policy(meal).change_workers_without_notification? %>
       new Gather.Views.WorkerChangeNotificationView({el: '#assignment-fields'});
     <% end %>
   });

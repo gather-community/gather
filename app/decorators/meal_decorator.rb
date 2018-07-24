@@ -52,6 +52,10 @@ class MealDecorator < ApplicationDecorator
     disable ? "disabled" : nil
   end
 
+  def cost
+    @cost ||= meal.cost.decorate
+  end
+
   def show_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),

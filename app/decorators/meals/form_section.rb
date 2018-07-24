@@ -67,5 +67,16 @@ module Meals
         safe_str << t("meals.form.summaries.no_menu")
       end
     end
+
+    def expenses_summary
+      cost = meal.cost
+      base_key = "meals.form.summaries.expenses"
+      return safe_str << t("#{base_key}.none") if cost.blank?
+      chunks = []
+      chunks << t("#{base_key}.ingredients", cost: cost.currency(:ingredient))
+      chunks << t("#{base_key}.pantry", cost: cost.currency(:pantry)) if cost.pantry_cost.present?
+      chunks << t("#{base_key}.payment", method: cost.t_payment_method) if cost.payment_method.present?
+      h.safe_join(chunks, ", ")
+    end
   end
 end

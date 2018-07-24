@@ -9,21 +9,30 @@ en:
           general: "General"
           workers: "Workers"
           menu: "Menu"
+          signups: "Signups"
+          expenses: "Expenses"
         edit:
           general: "Edit General"
           workers: "Edit Workers"
           menu: "Edit Menu"
+          signups: "Edit Signups"
+          expenses: "Edit Expenses"
       summaries:
-        allows: "Allows %{people}"
+        allows: "allows %{people}"
         allows_with_cmtys:
-          one: "Allows %{people} from %{count} community"
-          other: "Allows %{people} from %{count} communities"
-        no_workers: "No workers"
+          one: "allows %{people} from %{count} community"
+          other: "allows %{people} from %{count} communities"
+        no_workers: "No workers entered"
         no_menu: "No menu posted"
         with_items: "with %{items}"
         and_allergen_count:
           one: "and %{count} allergen"
           other: "and %{count} allergens"
+        expenses:
+          ingredients: "%{cost} ingredients"
+          pantry: "%{cost} pantry"
+          payment: "payment via %{method}"
+          none: "No expense information entered"
   meals/formulas:
     pantry: "Pantry"
     calc_types:

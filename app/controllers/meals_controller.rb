@@ -58,6 +58,7 @@ class MealsController < ApplicationController
   def edit
     @meal = Meal.find(params[:id])
     authorize @meal
+    @meal.build_cost if @meal.cost.nil?
     @min_date = nil
     prep_form_vars
   end

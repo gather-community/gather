@@ -55,7 +55,7 @@ describe MealPolicy do
       end
     end
 
-<<<<    permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
+    permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
       let(:persisted) { true }
 
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
@@ -202,8 +202,7 @@ describe MealPolicy do
       [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
     end
     let(:menu_attribs) do
-      %i[title entrees side kids dessert notes] +
-        Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
+      %i[title entrees side kids dessert notes] + Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
     end
     let(:worker_attribs) do
       [{
@@ -215,11 +214,12 @@ describe MealPolicy do
     end
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
+    let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
         expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
-          %i[capacity formula_id])
+          expense_attribs + %i[capacity formula_id])
       end
 
       it "should not allow formula_id, capacity if meal finalized" do
@@ -242,7 +242,7 @@ describe MealPolicy do
 
       it "should allow more stuff" do
         head_cook(actor)
-        expect(subject).to match_array(menu_attribs + worker_attribs + [:capacity])
+        expect(subject).to match_array(menu_attribs + worker_attribs + expense_attribs + [:capacity])
       end
     end
 
@@ -250,7 +250,7 @@ describe MealPolicy do
       let(:actor) { biller }
 
       it "should allow edit formula" do
-        expect(subject).to match_array(worker_attribs << :formula_id)
+        expect(subject).to match_array((worker_attribs + expense_attribs) << :formula_id)
       end
     end
 

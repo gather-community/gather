@@ -113,6 +113,7 @@ class MealPolicy < ApplicationPolicy
     permitted.concat(worker_attribs) if change_workers?
     permitted.concat(menu_attribs) if change_menu?
     permitted.concat(date_loc_invite_attribs) if change_date_loc_invites?
+    permitted.concat(expense_attribs) if change_expenses?
     permitted << :formula_id if change_formula?
     permitted << :capacity if change_capacity?
     permitted
@@ -167,5 +168,9 @@ class MealPolicy < ApplicationPolicy
       table_setter_assigns_attributes: %i[id user_id _destroy],
       cleaner_assigns_attributes: %i[id user_id _destroy]
     }]
+  end
+
+  def expense_attribs
+    [cost_attributes: %i[ingredient_cost pantry_cost payment_method]]
   end
 end

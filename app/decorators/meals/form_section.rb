@@ -78,5 +78,14 @@ module Meals
       chunks << t("#{base_key}.payment", method: cost.t_payment_method) if cost.payment_method.present?
       h.safe_join(chunks, ", ")
     end
+
+    def signups_summary
+      if meal.signups.any?
+        safe_str << t("meals.form.summaries.signups.diners", count: meal.signup_count) << " " <<
+          t("meals.form.summaries.signups.from_households", count: meal.signups.size)
+      else
+        safe_str << t("meals.form.summaries.no_signups")
+      end
+    end
   end
 end

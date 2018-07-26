@@ -24,6 +24,7 @@ en:
           other: "allows %{people} from %{count} communities"
         no_workers: "No workers entered"
         no_menu: "No menu posted"
+        no_signups: "No households have signed up"
         with_items: "with %{items}"
         and_allergen_count:
           one: "and %{count} allergen"
@@ -33,6 +34,13 @@ en:
           pantry: "%{cost} pantry"
           payment: "payment via %{method}"
           none: "No expense information entered"
+        signups:
+          diners:
+            one: "%{count} diner"
+            other: "%{count} diners"
+          from_households:
+            one: "from %{count} household"
+            other: "from %{count} households"
   meals/formulas:
     pantry: "Pantry"
     calc_types:

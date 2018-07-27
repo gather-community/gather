@@ -20,7 +20,7 @@ module FormHelper
     classes = options[:html][:class].present? ? [options[:html][:class]] : []
     classes << "gather-form"
     classes << "form-horizontal" # Used by Bootstrap
-    classes << (layout.to_s.gsub("_", "-") << "-layout") # Layout
+    classes << (layout.to_s.tr("_", "-") << "-layout") # Layout
     classes << (width == :full ? "full-width" : "normal-width")
     classes << "#{name}-form" # Object class name
 

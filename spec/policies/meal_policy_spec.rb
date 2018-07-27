@@ -212,14 +212,18 @@ describe MealPolicy do
         cleaner_assigns_attributes: %i[id user_id _destroy]
       }]
     end
+<<<<<<< HEAD
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
+=======
+    let(:signup_attribs) { [signups_attributes: [:id, diners_attributes: %i[id kind _destroy]]] }
+>>>>>>> 7335: Add permitted params for signups and test
     let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
         expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
-          expense_attribs + %i[capacity formula_id])
+          signup_attribs + expense_attribs + %i[capacity formula_id])
       end
 
       it "should not allow formula_id, capacity if meal finalized" do
@@ -241,8 +245,13 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
+<<<<<<< HEAD
         head_cook(actor)
         expect(subject).to match_array(menu_attribs + worker_attribs + expense_attribs + [:capacity])
+=======
+        expect(subject).to match_array(menu_attribs + worker_attribs +
+          signup_attribs + expense_attribs + [:capacity])
+>>>>>>> 7335: Add permitted params for signups and test
       end
     end
 
@@ -250,7 +259,7 @@ describe MealPolicy do
       let(:actor) { biller }
 
       it "should allow edit formula" do
-        expect(subject).to match_array((worker_attribs + expense_attribs) << :formula_id)
+        expect(subject).to match_array((worker_attribs + signup_attribs + expense_attribs) << :formula_id)
       end
     end
 

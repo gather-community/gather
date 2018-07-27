@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
+# Models information about one household's attendance at a meal.
 class Signup < ApplicationRecord
   MAX_PEOPLE_PER_TYPE = 10
   MAX_COMMENT_LENGTH = 500
-  DINER_TYPES = %w(adult senior teen big_kid little_kid)
-  FOOD_TYPES = %w(meat veg)
+  DINER_TYPES = %w[adult senior teen big_kid little_kid].freeze
+  FOOD_TYPES = %w[meat veg].freeze
   SIGNUP_TYPES = DINER_TYPES.map { |dt| FOOD_TYPES.map { |ft| "#{dt}_#{ft}" } }.flatten
   VEG_SIGNUP_TYPES = DINER_TYPES.map { |dt| "#{dt}_veg" }
   PORTION_FACTORS = {
@@ -11,16 +14,16 @@ class Signup < ApplicationRecord
     teen: 0.75,
     big_kid: 0.5,
     little_kid: 0
-  }
+  }.freeze
 
   acts_as_tenant :cluster
 
   belongs_to :meal, inverse_of: :signups
   belongs_to :household
 
-  scope :community_first, ->(c) do
+  scope :community_first, lambda { |c|
     includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
-  end
+  }
   scope :sorted, -> { joins(household: :community).order("communities.abbrv, households.name") }
 
   normalize_attributes :comments
@@ -74,11 +77,11 @@ class Signup < ApplicationRecord
   end
 
   def total
-    @total ||= SIGNUP_TYPES.inject(0) { |sum, t| sum += (send(t) || 0) }
+    @total ||= SIGNUP_TYPES.inject(0) { |sum, t| sum + (send(t) || 0) }
   end
 
   def total_was
-    SIGNUP_TYPES.inject(0) { |sum, t| sum += (send("#{t}_was") || 0) }
+    SIGNUP_TYPES.inject(0) { |sum, t| sum + (send("#{t}_was") || 0) }
   end
 
   # The diff in the current total minus the total before the current update
@@ -87,7 +90,22 @@ class Signup < ApplicationRecord
   end
 
   def all_zero?
-    SIGNUP_TYPES.all? { |t| self[t] == 0 }
+    SIGNUP_TYPES.all? { |t| self[t].zero? }
+  end
+
+  # This will eventually be an association.
+  def diners
+    SIGNUP_TYPES.flat_map { |st| Array.new(self[st]) { Meals::Diner.new(kind: st) } }
+  end
+
+  # This will eventually be a nested attributes method.
+  def diners_attributes=(attrib_sets)
+    SIGNUP_TYPES.each { |st| self[st] = 0 }
+    attrib_sets = attrib_sets.values if attrib_sets.is_a?(Hash)
+    attrib_sets.each do |attribs|
+      next if [1, "1", true, "true"].include?(attribs["_destroy"])
+      self[attribs["kind"]] += 1 if SIGNUP_TYPES.include?(attribs["kind"])
+    end
   end
 
   private
@@ -99,14 +117,11 @@ class Signup < ApplicationRecord
   end
 
   def dont_exceed_spots
-    if !meal.finalized? && total_change > meal.spots_left
-      errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
-    end
+    return unless !meal.finalized? && total_change > meal.spots_left
+    errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
   end
 
   def nonzero_signups_if_new
-    if new_record? && all_zero?
-      errors.add(:base, "You must sign up at least one person")
-    end
+    errors.add(:base, "You must sign up at least one person") if new_record? && all_zero?
   end
 end

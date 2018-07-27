@@ -62,7 +62,7 @@ module FormHelper
     wrapper_classes << "no-label" if options[:label] == false
     wrapper_classes << "multiple" if options[:multiple]
 
-    f.input(assoc, options.slice(:required)) do
+    f.input(assoc, options.slice(:required, :label)) do
       content_tag(:div, class: "nested-field-set") do
         f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
           render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)

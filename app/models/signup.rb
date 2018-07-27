@@ -77,7 +77,7 @@ class Signup < ApplicationRecord
   end
 
   def total
-    @total ||= SIGNUP_TYPES.inject(0) { |sum, t| sum + (send(t) || 0) }
+    @total ||= SIGNUP_TYPES.sum { |t| self[t] || 0 }
   end
 
   def total_was
@@ -106,6 +106,10 @@ class Signup < ApplicationRecord
       next if [1, "1", true, "true"].include?(attribs["_destroy"])
       self[attribs["kind"]] += 1 if SIGNUP_TYPES.include?(attribs["kind"])
     end
+  end
+
+  def build_diner
+    Meals::Diner.new
   end
 
   private

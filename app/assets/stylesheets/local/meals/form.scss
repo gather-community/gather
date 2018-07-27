@@ -1,0 +1,9 @@
+form.meal-form #signups .form-group.meal_signups_diners {
+  margin-bottom: 0;
+
+  // The enclosing form is a narrow-width form meaning the control area is 9 (75%) columns wide.
+  // We need to override that since there is no label for a signup diner.
+  .control-wrapper {
+    width: 100%;
+  }
+}

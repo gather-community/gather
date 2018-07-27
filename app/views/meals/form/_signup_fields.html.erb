@@ -1,0 +1,29 @@
+<tr class="signup-fields">
+  <% signup = f.object %>
+  <% household = signup.household&.decorate %>
+  <td>
+    <% if signup.persisted? %>
+      <%= household.name_with_prefix %>
+    <% else %>
+      <%= f.error :household_id %>
+      <%= f.select(:household_id, household&.selected_option || "", {}, class: "form-control", data: {
+          "select2-src" => "households",
+          "select2-label-attr" => "name_with_prefix",
+          "select2-prompt" => t("select2.prompts.household"),
+          "select2-context" => "finalize"
+      }) %>
+    <% end %>
+  </td>
+  <td>
+    <%= f.error :base %>
+    <% if signup.persisted? %>
+      <div data-toggle-on="<%= signup.id %>">
+        <%= t("meals.form.summaries.signups.diners", count: signup.total) %> &nbsp;
+        <%= link_to(t("common.edit"), "#", "data-toggle": signup.id) %>
+      </div>
+    <% end %>
+    <div <% if signup.persisted? %>data-toggle-off="<%= signup.id %>"<% end %>>
+      <%= nested_field_set(f, :diners, inner_partial: "meals/form/diner_fields", label: false) %>
+    </div>
+  </td>
+</tr>

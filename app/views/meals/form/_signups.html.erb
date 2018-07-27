@@ -1,22 +1,14 @@
 <%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
 <% if policy(meal).change_signups? %>
   <%= meal.form_section(:signups) do %>
-    <table class="key-value key-value-narrow">
+    <table id="signup-table" class="key-value key-value-narrow">
       <%= f.simple_fields_for(:signups) do |signup_form| %>
-        <% signup = signup_form.object %>
-        <tr>
-          <td><%= signup.household_name %></td>
-          <td>
-            <div data-toggle-on="<%= signup.id %>">
-              <%= t("meals.form.summaries.signups.diners", count: signup.total) %> &nbsp;
-              <%= link_to(t("common.edit"), "#", "data-toggle": signup.id) %>
-            </div>
-            <div data-toggle-off="<%= signup.id %>">
-              <%= nested_field_set(signup_form, :diners, inner_partial: "meals/form/diner_fields", label: false) %>
-            </div>
-          </td>
-        </tr>
+        <%= render("meals/form/signup_fields", f: signup_form) %>
       <% end %>
     </table>
+    <%= link_to_add_association(t("cocoon.add_links.signups"), f, :signups,
+      partial: "meals/form/signup_fields",
+      "data-association-insertion-node": "#signup-table",
+      "data-association-insertion-method": "append") %>
   <% end %>
 <% end %>

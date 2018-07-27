@@ -30,7 +30,9 @@ class Signup < ApplicationRecord
 
   validates :household_id, presence: true
   validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
-  validate :max_signups_per_type, :dont_exceed_spots, :nonzero_signups_if_new
+  validate :max_signups_per_type
+  validate :dont_exceed_spots
+  validate :nonzero_signups_if_new
 
   delegate :name, :users, :adults, to: :household, prefix: true
   delegate :community_abbrv, to: :household
@@ -91,7 +93,13 @@ class Signup < ApplicationRecord
 
   # This will eventually be an association.
   def diners
-    SIGNUP_TYPES.flat_map { |t| Array.new(self[t]) { Meals::Diner.new(id: rand(100_000_000), kind: t) } }
+    SIGNUP_TYPES.flat_map do |t|
+      # To mimic real association behavior, instantiate one Diner with fake ID for each of the persisted
+      # diner count, plus one Diner with no ID for any newly added ones.
+      # If there are more in the persisted (*_was) count than the current count, instantiate all with ID.
+      Array.new([self[t], send("#{t}_was")].min) { Meals::Diner.new(id: rand(100_000_000), kind: t) } +
+        Array.new([self[t] - send("#{t}_was"), 0].max) { Meals::Diner.new(id: nil, kind: t) }
+    end
   end
 
   # This will eventually be a nested attributes method.

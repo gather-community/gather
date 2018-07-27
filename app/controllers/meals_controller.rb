@@ -58,7 +58,6 @@ class MealsController < ApplicationController
   def edit
     @meal = Meal.find(params[:id])
     authorize @meal
-    @meal.build_cost if @meal.cost.nil?
     @min_date = nil
     prep_form_vars
   end
@@ -220,7 +219,7 @@ class MealsController < ApplicationController
   end
 
   def prep_form_vars
-    @meal = @meal.decorate
+    @meal.build_cost if @meal.cost.nil?
     @meal.ensure_assignments
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community).

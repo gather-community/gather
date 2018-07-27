@@ -10,6 +10,7 @@ en:
       one: "%{count} Community"
       other: "%{count} Communities"
     default: "Default"
+    edit: "Edit"
     "false": "False"
     inactive: "Inactive"
     max: "Max"
@@ -26,6 +27,234 @@ en:
       "at": "at %{t}"
       "until": "until %{t}"
 
+<<<<<<< HEAD
+=======
+  activerecord:
+    models:
+      meal: "Meal"
+    attributes:
+      user:
+        first_name: "First Name"
+        last_name: "Last Name"
+        email: "Email Address"
+        google_email: "Google ID"
+        phone: "Phone"
+        mobile_phone: "Mobile"
+        home_phone: "Home"
+        work_phone: "Work"
+        birthdate_str: "Birthdate"
+        preferred_contact: "Preferred Contact"
+        joined_on: "Join Date"
+        job_choosing_proxy_id: "Job Choosing Proxy"
+        up_guardianships: "Parents/Guardians"
+        privacy_settings: "Privacy Settings"
+        school: "School"
+        allergies: "Allergies"
+        doctor: "Doctor Info"
+        medical: "Medical Info"
+      household:
+        name: "Household Name"
+        community_id: "Community"
+        unit_num: "Unit Number"
+        vehicles: "Vehicles"
+        keyholders: "Extra Unit Keyholders"
+        emergency_contacts: "Emergency Contacts"
+        garage_nums: "Garage Number(s)"
+      meal:
+        allergen_gluten: "Gluten"
+        allergen_shellfish: "Shellfish"
+        allergen_soy: "Soy"
+        allergen_corn: "Corn"
+        allergen_dairy: "Dairy"
+        allergen_eggs: "Eggs"
+        allergen_peanuts: "Peanuts"
+        allergen_almonds: "Almonds"
+        allergen_tree_nuts: "Tree nuts"
+        allergen_pineapple: "Pineapple"
+        allergen_bananas: "Bananas"
+        allergen_tofu: "Tofu"
+        allergen_eggplant: "Eggplant"
+        allergen_none: "None of these"
+        asst_cook_assigns: "Assistant Cooks"
+        table_setter_assigns: "Table Setters"
+        cleaner_assigns: "Cleaners"
+        head_cook_assign: "Head Cook"
+        community_id: "Host Community"
+        served_at: "Date/Time"
+        communities: "Communities"
+        resource_ids: "Location(s)"
+        formula: "Formula"
+        title: "Title"
+        entrees: "Entrees"
+        side: "Side"
+        kids: "Kids"
+        dessert: "Dessert"
+        notes: "Notes"
+      meals/message:
+        meal: "Meal"
+        body: "Message"
+        recipient_type: "Recipients"
+      meals/cost:
+        ingredient_cost: "Ingredient Cost"
+        pantry_cost: "Pantry Cost"
+        payment_method: "Payment Method"
+      meals/formula:
+        name: "Name"
+        meal_calc_type: "Calculation Type"
+        pantry_calc_type: "Calculation Type"
+        is_default: "Default Formula?"
+        signup_types: "Signup Types"
+        pantry_fee_disp: "Pantry Fee Amount"
+        pantry_reimbursement: "Allow Pantry Reimbursement?"
+      signup:
+        spots_left: "Spots Left"
+        comments: "Comments for Cook"
+      billing/transaction:
+        incurred_on: "Item Date"
+        household_name: "Household Name"
+        code: "Type"
+      billing/account:
+        household_id: "Household"
+        community_id: "Community Account"
+        current_balance: "Current Balance"
+        credit_limit: "Credit Limit"
+      reservations/reservation:
+        resource: "Resource"
+        pre_notice: "Notice"
+        name: "Event Name"
+        starts_at: "Start Time"
+        ends_at: "End Time"
+        kind: "Type"
+        note: "Note"
+        guidelines: "Guidelines"
+      reservations/resource:
+        name: "Name"
+        guidelines: "Guidelines"
+        hidden: "Hidden"
+        abbrv: "Abbreviation"
+        default_calendar_view: "Calendar View"
+        meal_hostable: "Can Host Meals?"
+      people/emergency_contact:
+        name: "Name"
+        relationship: "Relationship to Household"
+        main_phone: "Main Phone"
+        alt_phone: "Alternate Phone"
+        email: "Email"
+        location: "Location"
+      people/vehicle:
+        make: "Make"
+        model: "Model"
+        color: "Color"
+        plate: "License Plate"
+      people/pet:
+        name: "Name"
+        species: "Species/Breed"
+        color: "Color"
+        vet: "Veterinarian Info"
+        caregivers: "Caregiver Info"
+        health_issues: "Health Issues"
+      work/job:
+        description: "Description"
+        hours: "Hours"
+        hours_per_shift: "Hours per Shift"
+        period_id: "Period"
+        reminders: "Reminders"
+        requester_id: "Requester"
+        shifts: "Shifts"
+        slot_type: "Slot Type"
+        time_type: "Times"
+        title: "Title"
+      work/period:
+        name: "Name"
+        phase: "Phase"
+        starts_on: "Starts On"
+        ends_on: "Ends On"
+        quota_type: "Quota"
+      work/reminder:
+        abs_rel: "Type"
+        abs_time: "Time"
+        rel_magnitude: "Time"
+        note: "Note"
+      work/shift:
+        start_time: "Start Time"
+        end_time: "End Time"
+        hours: "Hours"
+        slots: "# of Slots"
+        workers: "Workers"
+      wiki/page:
+        title: "Title"
+        content: "Content"
+        comment: "Comment"
+        editable_by: "Editable By"
+        data_source: "Data Source"
+    errors:
+      models:
+        signup:
+          attributes:
+            household_id:
+              taken: "Already in the list"
+          exceeded_spots:
+            one: "Based on the number of spots remaining, you can only sign up one person."
+            other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
+        meal:
+          need_location: "You must choose at least one location"
+        reservations/reservation:
+          attributes:
+            starts_at:
+              after_meal_time: "must be at or before the meal time (%{time})"
+            ends_at:
+              before_meal_time: "must be after the meal time (%{time})"
+        user:
+          attributes:
+            photo_content_type:
+              invalid: "has incorrect type"
+        reservations/resource:
+          attributes:
+            photo_content_type:
+              invalid: "has incorrect type"
+            abbrv:
+              blank: "can't be blank if resource can host meals"
+        meals/formula:
+          at_least_one_signup_type: "You must specify a value for at least one signup type."
+          at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
+          attributes:
+            is_default:
+              cant_unset: "You can't unset default. Set another formula to default instead."
+        wiki/page:
+          sample_not_editable: "The sample page is not editable so that it remains intact as a reference for other users. If you would like to experiment, try creating a new page using the 'New Wiki Page' link below."
+          data_fetch:
+            main: "There was a problem fetching data for this page (%{error})"
+            socket_error: "Couldn't connect to server"
+            invalid_json: "Invalid JSON"
+            template_error: "Template Error: %{details}"
+          attributes:
+            title:
+              reserved_slug: "This title is a special reserved word or phrase. Please choose another."
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Must equal or evenly divide %{hours} hours"
+            shifts:
+              more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
+              more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
+              no_shifts: "You must add at least one shift."
+              duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
+              different_length_shifts: "All shfits must be the same length."
+        work/period:
+          attributes:
+            ends_on:
+              not_after_start: "must be after start date"
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Shift must last for %{hours} hours"
+              elapsed_doesnt_evenly_divide_job: "Shift length must equal or evenly divide %{hours} hours"
+            ends_at:
+              not_after_start: "must be after start time"
+            assignments:
+              no_double_assignments: "Duplicate assignees not allowed"
+
+>>>>>>> 7335: Add signup link
   custom_fields:
     labels:
       community:
@@ -243,6 +472,7 @@ en:
       assignments: "Add Worker"
       reminders: "Add Reminder"
       diners: "Add Diner"
+      signups: "Add Household"
 
   select2:
     prompts:

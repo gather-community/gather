@@ -83,7 +83,8 @@ class Meal < ApplicationRecord
   validate :allergen_none_alone
   validates :cost, presence: true, if: :finalized?
   validate { reservation_handler.validate_meal if reservations.any? }
-  validates :resources, presence: { message: :need_location }
+  validates :resources, presence: {message: :need_location}
+  validates_with Meals::SignupsValidator
 
   def self.new_with_defaults(community)
     new(

@@ -34,7 +34,7 @@ module Meals
     end
 
     def collapse?
-      meal.persisted? && !block_content.match?(/\bhas-error\b/)
+      meal.persisted? && !block_content.match?(/class="error"/)
     end
 
     def block_content

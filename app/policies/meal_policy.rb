@@ -172,7 +172,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def signup_attribs
-    [signups_attributes: [:id, diners_attributes: %i[id kind _destroy]]]
+    [signups_attributes: [:id, :household_id, diners_attributes: %i[id kind _destroy]]]
   end
 
   def expense_attribs

@@ -212,12 +212,11 @@ describe MealPolicy do
         cleaner_assigns_attributes: %i[id user_id _destroy]
       }]
     end
-<<<<<<< HEAD
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
-=======
-    let(:signup_attribs) { [signups_attributes: [:id, diners_attributes: %i[id kind _destroy]]] }
->>>>>>> 7335: Add permitted params for signups and test
+    let(:signup_attribs) do
+      [signups_attributes: [:id, :household_id, diners_attributes: %i[id kind _destroy]]]
+    end
     let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 
     shared_examples_for "admin or meals coordinator" do
@@ -245,13 +244,9 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
-<<<<<<< HEAD
         head_cook(actor)
-        expect(subject).to match_array(menu_attribs + worker_attribs + expense_attribs + [:capacity])
-=======
         expect(subject).to match_array(menu_attribs + worker_attribs +
           signup_attribs + expense_attribs + [:capacity])
->>>>>>> 7335: Add permitted params for signups and test
       end
     end
 

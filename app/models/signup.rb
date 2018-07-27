@@ -49,11 +49,11 @@ class Signup < ApplicationRecord
   end
 
   def self.totals_for_meal(meal)
-    SIGNUP_TYPES.map { |st| [st, 0] }.to_h.tap do |totals|
+    SIGNUP_TYPES.map { |t| [t, 0] }.to_h.tap do |totals|
       meal.signups.each do |signup|
         next if signup.marked_for_destruction?
-        SIGNUP_TYPES.each do |st|
-          totals[st] += signup[st]
+        SIGNUP_TYPES.each do |t|
+          totals[t] += signup[t]
         end
       end
     end
@@ -89,18 +89,14 @@ class Signup < ApplicationRecord
     total - total_was
   end
 
-  def all_zero?
-    SIGNUP_TYPES.all? { |t| self[t].zero? }
-  end
-
   # This will eventually be an association.
   def diners
-    SIGNUP_TYPES.flat_map { |st| Array.new(self[st]) { Meals::Diner.new(kind: st) } }
+    SIGNUP_TYPES.flat_map { |t| Array.new(self[t]) { Meals::Diner.new(id: rand(100_000_000), kind: t) } }
   end
 
   # This will eventually be a nested attributes method.
   def diners_attributes=(attrib_sets)
-    SIGNUP_TYPES.each { |st| self[st] = 0 }
+    SIGNUP_TYPES.each { |t| self[t] = 0 }
     attrib_sets = attrib_sets.values if attrib_sets.is_a?(Hash)
     attrib_sets.each do |attribs|
       next if [1, "1", true, "true"].include?(attribs["_destroy"])
@@ -113,6 +109,10 @@ class Signup < ApplicationRecord
   end
 
   private
+
+  def all_zero?
+    SIGNUP_TYPES.all? { |t| self[t].zero? }
+  end
 
   def max_signups_per_type
     SIGNUP_TYPES.each do |t|

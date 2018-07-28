@@ -14,8 +14,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Select2View({el: ".meal-form"});
-    $("#meal_resource_ids").select2();
+    new Gather.Views.AjaxSelect2({el: ".meal-form"});
     new Gather.Views.DirtyChecker({el: '.meal-form'});
     <% unless policy(meal).change_workers_without_notification? %>
       new Gather.Views.WorkerChangeNotificationView({el: '#assignment-fields'});

@@ -37,7 +37,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Select2View({el: 'table.index'});
+    new Gather.Views.AjaxSelect2({el: 'table.index'});
     new Gather.Views.DirtyChecker({el: '.finalize-form'});
   });
 <% end %>

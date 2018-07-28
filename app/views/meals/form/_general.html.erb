@@ -4,7 +4,14 @@
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
         input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
       <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
-        required: true, input_html: { multiple: "multiple" } %>
+        required: true, input_html: {multiple: "multiple"} %>
+      <%= javascript_tag do %>
+        $(function() {
+          // We don't use AjaxSelect2 here since it's not an ajax-based select2.
+          // We specify width 100% so that the control has the proper width when the section is toggled.
+          $("#meal_resource_ids").select2({width: '100%'});
+        });
+      <% end %>
     <% else %>
       <%= f.input :served_at do %>
         <%= meal.served_at_datetime %>

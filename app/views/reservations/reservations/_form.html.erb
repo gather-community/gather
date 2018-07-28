@@ -64,11 +64,11 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Select2View({
+    new Gather.Views.AjaxSelect2({
       el: '.reservations_reservation_sponsor_id',
       extraData: {community_id: <%= reservation.community_id %>}
     });
-    new Gather.Views.Select2View({
+    new Gather.Views.AjaxSelect2({
       el: '.reservations_reservation_reserver_id'
     });
     new Gather.Views.Reservations.ReservationFormView({el: '.reservations--reservation-form'});

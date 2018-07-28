@@ -1,4 +1,5 @@
-Gather.Views.Select2View = Backbone.View.extend
+# Sets up AJAX-based select2 widgets based on data attributes.
+Gather.Views.AjaxSelect2 = Backbone.View.extend
   initialize: (options) ->
     self = this
     @options = options

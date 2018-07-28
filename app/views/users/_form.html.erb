@@ -23,7 +23,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Select2View({el: '.user-form'});
+    new Gather.Views.AjaxSelect2({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',
       maxFilesize: Settings.photos.max_size_mb / 1

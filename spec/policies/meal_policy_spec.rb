@@ -111,17 +111,25 @@ describe MealPolicy do
       before do
         stub_status("closed")
         meal.served_at = Time.current - 30.minutes
+        meal.build_cost(build(:meal_cost).attributes)
       end
 
       it_behaves_like "permits admins or special role but not regular users", :biller
 
-      it "forbids if meal already cancelled" do
-        stub_status("cancelled")
+      it "forbids if meal in future" do
+        meal.served_at = Time.current + 2.days
         expect(subject).not_to permit(admin, meal)
       end
 
-      it "forbids if meal finalized" do
-        stub_status("finalized")
+      it "forbids if wrong status" do
+        %w[cancelled finalized open].each do |bad_status|
+          stub_status(bad_status)
+          expect(subject).not_to permit(admin, meal)
+        end
+      end
+
+      it "forbids if meal cost not present" do
+        meal.cost = nil
         expect(subject).not_to permit(admin, meal)
       end
     end

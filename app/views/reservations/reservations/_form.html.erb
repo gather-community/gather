@@ -66,7 +66,7 @@
   $(function() {
     new Gather.Views.Select2View({
       el: '.reservations_reservation_sponsor_id',
-      extra_data: { community_id: <%= reservation.community_id %> }
+      extraData: {community_id: <%= reservation.community_id %>}
     });
     new Gather.Views.Select2View({
       el: '.reservations_reservation_reserver_id'

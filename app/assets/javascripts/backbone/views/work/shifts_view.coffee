@@ -30,4 +30,4 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
       success: (response) =>
         @resetRefreshInterval()
         card.replaceWith(response.shift)
-        @$(".shifts-topline").replaceWith(response.topline)
+        @$(".shifts-synopsis").replaceWith(response.synopsis)

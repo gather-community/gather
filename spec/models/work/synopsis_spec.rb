@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Work::Topline do
+describe Work::Synopsis do
   let(:user) { create(:user) }
   let(:user2) { create(:user, household: user.household) }
   let(:shares) { [1, 1] }
@@ -10,12 +10,12 @@ describe Work::Topline do
   let(:quota_type) { "by_person" }
   let(:phase) { "open" }
   let(:period) { create(:work_period, quota_type: quota_type, quota: quota, phase: phase) }
-  let(:topline) { described_class.new(period: period, user: user) }
-  let(:regular) { OpenStruct.new(title: I18n.t("work.topline.regular")) }
-  subject { topline.summary }
+  let(:synopsis) { described_class.new(period: period, user: user) }
+  let(:regular) { OpenStruct.new(title: I18n.t("work.synopsis.regular")) }
+  subject { synopsis.data }
 
   before do
-    allow(topline).to receive(:regular).and_return(regular)
+    allow(synopsis).to receive(:regular).and_return(regular)
     period.shares.create!(user: user, portion: shares[0])
     period.shares.create!(user: user2, portion: shares[1])
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Work::ToplineDecorator do
+describe Work::SynopsisDecorator do
   let(:builder) { described_class.new(double(summary: summary)) }
   let(:regular) { OpenStruct.new(title: "regular") }
   subject { builder.to_s }

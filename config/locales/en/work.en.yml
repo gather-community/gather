@@ -9,14 +9,14 @@ en:
       archived: "This period is archived so no signups are permitted."
     num_hours: "%{num} hours"
     preassigned: "This slot was pre-assigned."
-    topline:
+    synopsis:
       done: "You're all set!"
       regular: "regular"
       self: "You have signed up for"
       household: "Your household has"
       chunk:
-        single: "%{fraction} hours"
-        multiple: "%{fraction} %{title} hours"
+        single_html: "%{fraction} hours"
+        multiple_html: "%{fraction} %{title} hours"
 
   work/jobs:
     shifts: "Shifts"

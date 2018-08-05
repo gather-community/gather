@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Work
-  # Calculates data for topline status message.
-  class Topline
+  # Calculates data for synopsis status message.
+  class Synopsis
     attr_accessor :period, :user
 
     delegate :quota_type, to: :period
@@ -12,21 +12,21 @@ module Work
       self.user = user
     end
 
-    def summary
-      return @summary if defined?(@summary)
-      return (@summary = nil) if !period.open? || period.quota_none? || share_for(:self).zero?
-      @summary = {}
-      @summary[:self] = obligations_for(:self)
+    def data
+      return @data if defined?(@data)
+      return (@data = nil) if !period.open? || period.quota_none? || share_for(:self).zero?
+      @data = {}
+      @data[:self] = obligations_for(:self)
       if period.quota_by_person?
-        @summary[:done] = all_ok?(@summary[:self])
+        @data[:done] = all_ok?(@data[:self])
       else
-        @summary[:household] = obligations_for(:household)
-        @summary[:done] = all_ok?(@summary[:household])
+        @data[:household] = obligations_for(:household)
+        @data[:done] = all_ok?(@data[:household])
 
         # If household is all set, this overrides all self obligations to be ok.
-        @summary[:self].each { |o| o[:ok] = true } if @summary[:done]
+        @data[:self].each { |o| o[:ok] = true } if @data[:done]
       end
-      @summary
+      @data
     end
 
     private
@@ -76,7 +76,7 @@ module Work
 
     # Duck type for job.
     def regular
-      @regular ||= OpenStruct.new(title: I18n.t("work.topline.regular"))
+      @regular ||= OpenStruct.new(title: I18n.t("work.synopsis.regular"))
     end
   end
 end

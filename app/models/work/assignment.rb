@@ -9,6 +9,9 @@ module Work
     belongs_to :user
 
     scope :in_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
+    scope :in_period, ->(p) { joins(shift: :job).merge(Job.in_period(p)) }
+    scope :fixed_slot, -> { joins(shift: :job).merge(Job.fixed_slot) }
+    scope :preassigned, -> { where(preassigned: true) }
 
     # Can't merge the order by name scope due to an error/bug with ActsAsTenant
     scope :by_user_name, -> { joins(:user).order(User::NAME_ORDER) }

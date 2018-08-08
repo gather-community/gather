@@ -96,6 +96,23 @@ describe Work::Synopsis do
                               done: true)
           end
         end
+
+        context "with staggering" do
+          let(:starts_at) { Time.current + 10.minutes }
+          let(:round_calc) { double(prev_limit: 5, next_limit: 10, next_starts_at: starts_at) }
+
+          before do
+            allow(Work::RoundCalculator).to receive(:new).and_return(round_calc)
+            allow(period).to receive(:staggering?).and_return(true)
+          end
+
+          it "includes round information" do
+            is_expected.to eq(self: [{bucket: regular, got: 3, ttl: 2.91, ok: true},
+                                     {bucket: fcjob, got: 3, ttl: 6, ok: false}],
+                              done: false,
+                              staggering: {prev_limit: 5, next_limit: 10, next_starts_at: starts_at})
+          end
+        end
       end
 
       context "with another full community job" do

@@ -56,6 +56,9 @@ module Work
       Time.zone.today < starts_on
     end
 
+    def staggering?
+    end
+
     private
 
     def normalize

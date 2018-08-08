@@ -10,6 +10,7 @@ module Work
     def initialize(period:, user:)
       self.period = period
       self.user = user
+      @share_for = {}
     end
 
     def data
@@ -17,19 +18,30 @@ module Work
       return (@data = nil) if !period.open? || period.quota_none? || share_for(:self).zero?
       @data = {}
       @data[:self] = obligations_for(:self)
-      if period.quota_by_person?
-        @data[:done] = all_ok?(@data[:self])
-      else
-        @data[:household] = obligations_for(:household)
-        @data[:done] = all_ok?(@data[:household])
-
-        # If household is all set, this overrides all self obligations to be ok.
-        @data[:self].each { |o| o[:ok] = true } if @data[:done]
-      end
+      period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
+      handle_staggering
       @data
     end
 
     private
+
+    def handle_by_person_quota
+      @data[:done] = all_ok?(@data[:self])
+    end
+
+    def handle_by_household_quota
+      @data[:household] = obligations_for(:household)
+      @data[:done] = all_ok?(@data[:household])
+
+      # If household is all set, this overrides all self obligations to be ok.
+      @data[:self].each { |o| o[:ok] = true } if @data[:done]
+    end
+
+    def handle_staggering
+      return unless period.staggering?
+      calc = RoundCalculator.new(share: share_for(:self))
+      @data[:staggering] = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
+    end
 
     def obligations_for(who)
       buckets.map do |bucket|
@@ -59,7 +71,7 @@ module Work
     end
 
     def share_for(who)
-      Share.for_period(period).where(user: users(who)).sum(:portion)
+      @share_for[who] ||= Share.for_period(period).where(user: users(who)).sum(:portion)
     end
 
     def users(who)

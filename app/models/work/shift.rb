@@ -146,8 +146,8 @@ module Work
         self.starts_at = period_starts_on.in_time_zone
         self.ends_at = period_ends_on.in_time_zone + 1.day - 1.minute
       elsif job_date_only?
-        self.starts_at = starts_at.midnight
-        self.ends_at = ends_at.midnight + 1.day - 1.minute
+        self.starts_at = starts_at.midnight if starts_at.present?
+        self.ends_at = ends_at.midnight + 1.day - 1.minute if ends_at.present?
       end
     end
 
@@ -157,11 +157,10 @@ module Work
     end
 
     def elapsed_hours_must_equal_job_hours
-      return unless job_date_time? && job_hours.present?
+      return unless job_date_time? && job_hours.present? && elapsed_time.present?
       if slot_type == "full_multiple"
-        if elapsed_time.positive? && !(job_hours.hours % elapsed_time).zero?
-          errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
-        end
+        return unless elapsed_time.positive? && !(job_hours.hours % elapsed_time).zero?
+        errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
       elsif elapsed_time != job_hours.hours
         errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
       end

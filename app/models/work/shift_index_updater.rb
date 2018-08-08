@@ -17,7 +17,7 @@ module Work
     private
 
     def process_work_job
-      reindex(source.shifts.includes(assignments: :user)) if source.saved_change_to_title?
+      reindex(source.shifts.includes(assignments: :user))
     end
 
     def process_people_group

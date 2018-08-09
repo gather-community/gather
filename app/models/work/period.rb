@@ -56,7 +56,12 @@ module Work
       Time.zone.today < starts_on
     end
 
-    def staggering?
+    def staggered?
+      pick_type == "staggered"
+    end
+
+    def free_for_all?
+      pick_type == "free_for_all"
     end
 
     private

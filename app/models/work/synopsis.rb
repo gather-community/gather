@@ -38,7 +38,7 @@ module Work
     end
 
     def handle_staggering
-      return unless period.staggering?
+      return unless period.staggered?
       calc = RoundCalculator.new(share: share_for(:self))
       @data[:staggering] = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
     end

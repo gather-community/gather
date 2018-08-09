@@ -9,7 +9,10 @@ describe Work::Synopsis do
   let(:quota) { 23.4 }
   let(:quota_type) { "by_person" }
   let(:phase) { "open" }
-  let(:period) { create(:work_period, quota_type: quota_type, quota: quota, phase: phase) }
+  let(:pick_type) { "free_for_all" }
+  let(:period) do
+    create(:work_period, quota_type: quota_type, quota: quota, phase: phase, pick_type: pick_type)
+  end
   let(:synopsis) { described_class.new(period: period, user: user) }
   let(:regular) { OpenStruct.new(title: I18n.t("work.synopsis.regular")) }
   subject { synopsis.data }
@@ -98,12 +101,12 @@ describe Work::Synopsis do
         end
 
         context "with staggering" do
+          let(:pick_type) { "staggered" }
           let(:starts_at) { Time.current + 10.minutes }
           let(:round_calc) { double(prev_limit: 5, next_limit: 10, next_starts_at: starts_at) }
 
           before do
             allow(Work::RoundCalculator).to receive(:new).and_return(round_calc)
-            allow(period).to receive(:staggering?).and_return(true)
           end
 
           it "includes round information" do

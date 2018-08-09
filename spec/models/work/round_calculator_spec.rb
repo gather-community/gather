@@ -3,7 +3,9 @@
 require "rails_helper"
 
 describe Work::RoundCalculator do
-  describe "#num and #hour_limit" do
+  subject(:calculator) { described_class.new(share: target_share) }
+
+  describe "next_num, prev_limit, next_limit" do
     let!(:shares) { create_list(:work_share, pre_assign_totals.size, period: period) }
     let!(:zero_shares) { create_list(:work_share, 2, period: period, portion: 0) } # Should be ignored.
     let!(:assigns) do
@@ -13,7 +15,6 @@ describe Work::RoundCalculator do
         create(:work_assignment, shift: job.shifts.first, user: share.user, preassigned: true)
       end
     end
-    subject(:calculator) { described_class.new(share: target_share) }
 
     around do |example|
       Timecop.freeze("2018-08-15 #{time}") { example.run }
@@ -40,7 +41,7 @@ describe Work::RoundCalculator do
       # 20                                        ∞
       let(:pre_assign_totals) { [0, 2, 2, 2, 2, 6, 7, 9, 9, 14, 20] }
       let(:period) do
-        create(:work_period, quota_type: "by_person", workers_per_round: 3,
+        create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
                              round_duration: 5.minutes, hours_per_round: 5,
                              auto_open_time: Time.zone.parse("2018-08-15 19:00"))
       end
@@ -155,7 +156,7 @@ describe Work::RoundCalculator do
       #  7        ∞
       let(:pre_assign_totals) { [0, 2, 6, 7] }
       let(:period) do
-        create(:work_period, quota_type: "by_person", workers_per_round: 2,
+        create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 2,
                              round_duration: 5.minutes, hours_per_round: 20,
                              auto_open_time: Time.zone.parse("2018-08-15 19:00"))
       end
@@ -203,6 +204,35 @@ describe Work::RoundCalculator do
       expect(calculator.prev_limit).to eq(prev_limit)
       expect(calculator.next_limit).to eq(next_limit)
       expect(calculator.next_num).to eq(next_num)
+    end
+  end
+
+  describe "next_starts_at" do
+    let(:period) do
+      create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
+                           round_duration: 5.minutes, hours_per_round: 5,
+                           auto_open_time: Time.zone.parse("2018-08-15 19:00"))
+    end
+    let(:target_share) { create(:work_share, period: period) }
+    subject(:next_starts_at) { calculator.next_starts_at }
+
+    before do
+      allow(calculator).to receive(:next_num).and_return(next_num)
+    end
+
+    context do
+      let(:next_num) { 1 }
+      it { is_expected.to eq(Time.zone.parse("2018-08-15 19:00")) }
+    end
+
+    context do
+      let(:next_num) { 5 }
+      it { is_expected.to eq(Time.zone.parse("2018-08-15 19:20")) }
+    end
+
+    context do
+      let(:next_num) { nil }
+      it { is_expected.to be_nil }
     end
   end
 end

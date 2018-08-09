@@ -27,7 +27,7 @@ module Work
       :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
-    scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :by_job_title, -> { joins(:job).order("LOWER(work_jobs.title)") }
     scope :by_date, -> { order(:starts_at, :ends_at) }

@@ -71,6 +71,8 @@ module NavHelper
           }
         ]
       when :people
+        sample_household = Household.new(community: current_community)
+        sample_vehicle = People::Vehicle.new(household: Household.new(community: current_community))
         [
           {
             name: :directory,
@@ -82,7 +84,7 @@ module NavHelper
             name: :households,
             parent: :people,
             path: households_path,
-            permitted: policy(Household.new(community: current_community)).index?,
+            permitted: policy(sample_household).index?,
             icon: "home"
           }, {
             name: :roles,
@@ -90,6 +92,12 @@ module NavHelper
             path: roles_path,
             permitted: policy(User).index?,
             icon: "fa-users"
+          }, {
+            name: :vehicles,
+            parent: :people,
+            path: people_vehicles_path,
+            permitted: policy(sample_vehicle).index?,
+            icon: "fa-car"
           }
         ]
       when :reservations

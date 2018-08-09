@@ -80,6 +80,12 @@ class ApplicationPolicy
     def active_admin_or?(role)
       active_admin? || (active? && user.global_role?(role))
     end
+
+    protected
+
+    def community_only_unless_cluster_admin
+      active_cluster_admin? ? scope : scope.in_community(user.community)
+    end
   end
 
   protected

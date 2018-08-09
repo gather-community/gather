@@ -6,7 +6,7 @@ module Work
     attr_accessor :periods
 
     def initialize(context:, options:, **params)
-      self.periods = Period.for_community(context.current_community).active.oldest_first
+      self.periods = Period.in_community(context.current_community).active.oldest_first
       options[:required] = true
       options[:global] = true
       options[:default] = default_period.try(:id)

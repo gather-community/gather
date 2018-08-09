@@ -12,7 +12,7 @@ module Work
       authorize sample_job
       prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
       @period = lenses[:period].object
-      @jobs = policy_scope(Job).for_community(current_community)
+      @jobs = policy_scope(Job).in_community(current_community)
       if @period.nil?
         lenses.hide!
       else
@@ -97,7 +97,7 @@ module Work
     end
 
     def prep_form_vars
-      @requesters = People::Group.for_community(current_community).by_name
+      @requesters = People::Group.in_community(current_community).by_name
     end
 
     # Pundit built-in helper doesn't work due to namespacing

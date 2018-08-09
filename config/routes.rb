@@ -45,6 +45,10 @@ Rails.application.routes.draw do
     resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
 
+  namespace :people do
+    resources :vehicles, only: :index
+  end
+
   namespace :reservations do
     resources :resources, except: :show do
       member do

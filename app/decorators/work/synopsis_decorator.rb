@@ -15,11 +15,15 @@ module Work
         chunks = data[who].map { |i| chunk_for_item(i) }
         safe_str << h.t("work.synopsis.#{who}") << " " << join_chunks(chunks)
       end
-      sentences << (data[:done] ? h.content_tag(:i, h.t("work.synopsis.done")) : nil)
+      sentences << (data[:done] ? youre_all_set : staggering_plan)
       @to_s = h.safe_join(sentences.compact, " ")
     end
 
     private
+
+    def youre_all_set
+      h.content_tag(:i, h.t("work.synopsis.done"))
+    end
 
     def chunk_for_item(item)
       got = round_next_half(item[:got])
@@ -37,6 +41,31 @@ module Work
 
     def item_count
       @item_count ||= data[:self].size == 1 ? :single : :multiple
+    end
+
+    def staggering_plan
+      return unless staggering.present? && staggering[:prev_limit].present?
+      if staggering[:prev_limit].zero?
+        h.t("work.synopsis.start_choosing", at_or_on_time: next_round_time)
+      elsif staggering[:next_limit].nil?
+        h.t("work.synopsis.round_limit_until",
+          prev: staggering[:prev_limit], until_time: next_round_time(preposition: "until"))
+      else # prev_limit and next_limit both present
+        h.t("work.synopsis.round_limit_with_next",
+          prev: staggering[:prev_limit], next: staggering[:next_limit], at_or_on_time: next_round_time)
+      end
+    end
+
+    def staggering
+      data[:staggering]
+    end
+
+    def next_round_time(preposition: nil)
+      return if staggering[:next_starts_at].nil?
+      preposition ||= staggering[:next_starts_at].today? ? "at" : "on"
+      format = preposition == "on" ? :datetime_no_yr : :regular_time
+      time = h.l(staggering[:next_starts_at], format: format)
+      h.t("common.time_with_preposition.#{preposition}", t: time).strip.gsub("  ", " ")
     end
   end
 end

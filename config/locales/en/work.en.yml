@@ -17,7 +17,9 @@ en:
       chunk:
         single_html: "%{fraction} hours"
         multiple_html: "%{fraction} %{title} hours"
-
+      start_choosing: "You can start choosing jobs %{at_or_on_time}."
+      round_limit_with_next: "Your round limit is %{prev} hours and will rise to %{next} %{at_or_on_time}."
+      round_limit_until: "Your round limit is %{prev} hours %{until_time}."
   work/jobs:
     shifts: "Shifts"
     unlimited: "Unlimited"

@@ -13,6 +13,9 @@ describe Work::Synopsis do
   let(:period) do
     create(:work_period, quota_type: quota_type, quota: quota, phase: phase, pick_type: pick_type)
   end
+  let!(:decoy_period) { create(:work_period) }
+  let!(:decoy_job) { create(:work_job, period: decoy_period) }
+  let!(:decoy_assign) { create(:work_assignment, shift: decoy_job.shifts.first, user: user) }
   let(:synopsis) { described_class.new(period: period, user: user) }
   let(:regular) { OpenStruct.new(title: I18n.t("work.synopsis.regular")) }
   subject { synopsis.data }

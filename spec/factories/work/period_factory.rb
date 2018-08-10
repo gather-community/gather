@@ -4,5 +4,6 @@ FactoryBot.define do
     starts_on "2018-01-01"
     ends_on "2018-03-31"
     community { default_community }
+    pick_type "free_for_all"
   end
 end

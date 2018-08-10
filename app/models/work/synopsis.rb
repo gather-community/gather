@@ -61,7 +61,7 @@ module Work
     end
 
     def assigned_hours_for(who, bucket)
-      scope = Assignment.where(user: users(who)).includes(shift: :job)
+      scope = Assignment.where(user: users(who)).in_period(period).includes(shift: :job)
       if bucket == regular
         scope.merge(Job.fixed_slot).sum("work_jobs.hours")
       else

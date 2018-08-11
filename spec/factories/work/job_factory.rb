@@ -10,7 +10,7 @@ FactoryBot.define do
     end
 
     association :period, factory: :work_period
-    title { Faker::Job.title }
+    sequence(:title) { |n| "#{Faker::Job.title} #{n}" }
     hours 2
     description { Faker::Lorem.paragraph }
 

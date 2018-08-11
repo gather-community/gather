@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808235640) do
+ActiveRecord::Schema.define(version: 20180811132442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -573,7 +573,7 @@ ActiveRecord::Schema.define(version: 20180808235640) do
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.date "ends_on", null: false
-    t.integer "hours_per_round"
+    t.integer "max_rounds_per_worker"
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
     t.string "pick_type", null: false

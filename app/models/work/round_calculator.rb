@@ -5,9 +5,10 @@ module Work
   class RoundCalculator
     attr_accessor :next_num, :next_limit, :prev_limit
 
-    def initialize(share:)
-      self.share = share
-      if auto_open_time.blank? || workers_per_round.blank? || round_duration.blank? || hours_per_round.blank?
+    def initialize(target_share:)
+      self.target_share = target_share
+      if auto_open_time.blank? || workers_per_round.blank? ||
+          round_duration.blank? || max_rounds_per_worker.blank?
         raise ArgumentError, "Required period parameters not set"
       end
       self.next_num = 0
@@ -25,60 +26,66 @@ module Work
 
     private
 
-    attr_accessor :share, :limits_by_cohort
+    attr_accessor :target_share, :limits_by_cohort
 
-    delegate :period, to: :share
+    delegate :period, to: :target_share
     delegate :shares, :quota, :auto_open_time, :workers_per_round,
-      :round_duration, :hours_per_round, to: :period
+      :round_duration, :max_rounds_per_worker, to: :period
 
     # Determines the number of the next round for the given share by iterating through
     # rounds until we reach the appropriate round. To iterate through rounds we cycle through
     # cohorts, increasing their hour limit each time.
     def compute
-      round_limit = 0
+      round_min_need = quota # Represents the minimum distance to quota fulfillment allowed in this round.
       cohorts.cycle do |cohort|
-        round_limit += hours_per_round if cohort == cohorts.first
-        bump_next_num_if_anyone_can_pick(cohort, round_limit)
+        round_min_need -= hours_per_round if cohort == cohorts.first
+        bump_next_num_if_anyone_can_pick(cohort, round_min_need)
         next unless cohort == target_cohort
-        break if update_target_cohort(round_limit)
+        break if update_target_cohort(round_min_need)
       end
     end
 
-    def bump_next_num_if_anyone_can_pick(cohort, limit)
+    def bump_next_num_if_anyone_can_pick(cohort, min_need)
       # We skip (don't increment round number) a cohort
-      # if nobody from it can pick withiin the current limit. That way we don't waste time.
-      self.next_num += 1 if anyone_can_pick?(cohort, limit)
+      # if nobody from it can pick withiin the current min_need. That way we don't waste time.
+      self.next_num += 1 if anyone_can_pick?(cohort, min_need)
     end
 
-    def update_target_cohort(limit)
-      self.prev_limit = next_limit if next_limit_exceeds_target_user_preassigned?
+    # Updates round pick limits for the target cohort.
+    # Returns true if we've reached the stopping condition for the calculator.
+    def update_target_cohort(min_need)
+      limit = limit_from_min_need(target_share, min_need)
+      self.prev_limit = next_limit if target_user_can_pick_next_round?
       self.next_limit = limit
       return false unless done?
-      handle_edge_cases
+      self.prev_limit = self.next_num = nil if Time.current > next_starts_at
       true
     end
 
-    def handle_edge_cases
-      self.next_limit = nil if next_limit >= quota
-      return unless Time.current > next_starts_at
-      self.prev_limit = nil
-      self.next_num = nil
+    def target_user_can_pick_next_round?
+      next_limit > preassigned_total_for(target_share)
     end
 
-    # Stop if limit is high enough and the 'next' round has a start time after current.
-    # Or if next_limit exceeds quota, we know that enough time has passed since auto start
+    # Stop if target user can pick next round and next round has a start time after current.
+    # Or if next_limit is nil, we know that enough time has passed since auto start
     # that there is effectively no limit, so we can also stop.
     def done?
-      next_limit_exceeds_target_user_preassigned? && next_starts_at > Time.current || next_limit >= quota
+      next_limit.nil? || target_user_can_pick_next_round? && next_starts_at > Time.current
     end
 
-    def next_limit_exceeds_target_user_preassigned?
-      next_limit > preassigned_total_for(share.user_id)
+    # Calculates the current pick limit for the given share based on the given min need.
+    def limit_from_min_need(share, min_need)
+      return nil if min_need <= 0.00001
+      [(quota * share.portion - min_need).ceil, 0].max
+    end
+
+    def hours_per_round
+      quota.to_f / max_rounds_per_worker
     end
 
     # Cohort containing the target share.
     def target_cohort
-      @target_cohort ||= cohorts.detect { |c| c.include?(share) }
+      @target_cohort ||= cohorts.detect { |c| c.include?(target_share) }
     end
 
     # Splits shares into groups (cohorts) of size `workers_per_round`.
@@ -87,17 +94,20 @@ module Work
       @cohorts ||= sorted_shares.each_slice(workers_per_round).to_a
     end
 
+    # Sorts shares by how many hours each needs to get to their portion-adjusted quota.
+    # We sort by ID, which we elsewhere ensure is random. This ensures consistent among those
+    # with equal preassigned totals even if other things change.
     def sorted_shares
-      shares.nonzero.order(:id).sort_by { |s| preassigned_total_for(s.user_id) }
+      shares.nonzero.order(:id).sort_by { |s| preassigned_total_for(s) - s.portion * quota }
     end
 
     # Checks if any share in the given cohort has fewer pre-assigned hours than the given limit.
-    def anyone_can_pick?(cohort, limit)
-      cohort.any? { |s| preassigned_total_for(s.user_id) < limit }
+    def anyone_can_pick?(cohort, min_need)
+      cohort.any? { |s| preassigned_total_for(s) < (limit_from_min_need(s, min_need) || 1e9) }
     end
 
-    def preassigned_total_for(user_id)
-      fixed_slot_preassigned_hours_by_user_id[user_id] || 0
+    def preassigned_total_for(share)
+      fixed_slot_preassigned_hours_by_user_id[share.user_id] || 0
     end
 
     # Efficiently loads preassigned totals per user for fixed slot jobs only.

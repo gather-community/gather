@@ -55,27 +55,27 @@ describe Work::RoundCalculator do
 
         context "at time before auto open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: 6, next_num: 1) }
+          it { expect_round(prev_limit: 0, next_limit: 6, next_starts_at: "19:00") }
         end
 
         context "at time within round 1" do
           let(:time) { "19:01" }
-          it { expect_round(prev_limit: 6, next_limit: 12, next_num: 3) }
+          it { expect_round(prev_limit: 6, next_limit: 12, next_starts_at: "19:10") }
         end
 
         context "at time within round 2" do
           let(:time) { "19:06" }
-          it { expect_round(prev_limit: 6, next_limit: 12, next_num: 3) }
+          it { expect_round(prev_limit: 6, next_limit: 12, next_starts_at: "19:10") }
         end
 
         context "at time within round 3" do
           let(:time) { "19:11" }
-          it { expect_round(prev_limit: 12, next_limit: nil, next_num: 6) }
+          it { expect_round(prev_limit: 12, next_limit: nil, next_starts_at: "19:25") }
         end
 
         context "at time within round 8" do
           let(:time) { "19:36" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
 
@@ -88,7 +88,7 @@ describe Work::RoundCalculator do
         end
 
         it "should pick first in round 2" do
-          expect_round(prev_limit: 0, next_limit: 6, next_num: 2)
+          expect_round(prev_limit: 0, next_limit: 6, next_starts_at: "19:05")
         end
       end
 
@@ -97,27 +97,27 @@ describe Work::RoundCalculator do
 
         context "at time before open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: 12, next_num: 5) }
+          it { expect_round(prev_limit: 0, next_limit: 12, next_starts_at: "19:20") }
         end
 
         context "at time within round 3" do
           let(:time) { "19:11" }
-          it { expect_round(prev_limit: 0, next_limit: 12, next_num: 5) }
+          it { expect_round(prev_limit: 0, next_limit: 12, next_starts_at: "19:20") }
         end
 
         context "at time within round 5" do
           let(:time) { "19:21" }
-          it { expect_round(prev_limit: 12, next_limit: nil, next_num: 8) }
+          it { expect_round(prev_limit: 12, next_limit: nil, next_starts_at: "19:35") }
         end
 
         context "at time within round 8" do
           let(:time) { "19:36" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
 
         context "at time within round 12" do
           let(:time) { "19:56" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
 
@@ -126,17 +126,18 @@ describe Work::RoundCalculator do
 
         context "at time before open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: 3, next_num: 5) } # (17 / 2 - 5.66).ceil => 3
+          # (17 / 2 - 5.66).ceil => 3
+          it { expect_round(prev_limit: 0, next_limit: 3, next_starts_at: "19:20") }
         end
 
         context "at time within round 5" do
           let(:time) { "19:21" }
-          it { expect_round(prev_limit: 3, next_limit: nil, next_num: 8) }
+          it { expect_round(prev_limit: 3, next_limit: nil, next_starts_at: "19:35") }
         end
 
         context "at time within round 8" do
           let(:time) { "19:36" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
 
@@ -145,17 +146,17 @@ describe Work::RoundCalculator do
 
         context "at time before open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_num: 10) }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:45") }
         end
 
         context "at time within round 8" do
           let(:time) { "19:36" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_num: 10) }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:45") }
         end
 
         context "at time within round 10" do
           let(:time) { "19:46" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
     end
@@ -180,17 +181,17 @@ describe Work::RoundCalculator do
 
         context "at time before open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_num: 1) }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:00") }
         end
 
         context "at time within round 1" do
           let(:time) { "19:01" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
 
         context "at time within round 2" do
           let(:time) { "19:06" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
 
@@ -199,54 +200,26 @@ describe Work::RoundCalculator do
 
         context "at time before open" do
           let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_num: 2) }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:05") }
         end
 
         context "at time within round 1" do
           let(:time) { "19:01" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_num: 2) }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:05") }
         end
 
         context "at time within round 2" do
           let(:time) { "19:06" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_num: nil) }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
     end
 
-    def expect_round(prev_limit:, next_limit:, next_num:)
+    def expect_round(prev_limit:, next_limit:, next_starts_at:)
+      next_starts_at = Time.zone.parse("2018-08-15 #{next_starts_at}") unless next_starts_at.nil?
       expect(calculator.prev_limit).to eq(prev_limit)
       expect(calculator.next_limit).to eq(next_limit)
-      expect(calculator.next_num).to eq(next_num)
-    end
-  end
-
-  describe "next_starts_at" do
-    let(:period) do
-      create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
-                           round_duration: 5.minutes, max_rounds_per_worker: 2,
-                           auto_open_time: Time.zone.parse("2018-08-15 19:00"))
-    end
-    let(:target_share) { create(:work_share, period: period) }
-    subject(:next_starts_at) { calculator.next_starts_at }
-
-    before do
-      allow(calculator).to receive(:next_num).and_return(next_num)
-    end
-
-    context do
-      let(:next_num) { 1 }
-      it { is_expected.to eq(Time.zone.parse("2018-08-15 19:00")) }
-    end
-
-    context do
-      let(:next_num) { 5 }
-      it { is_expected.to eq(Time.zone.parse("2018-08-15 19:20")) }
-    end
-
-    context do
-      let(:next_num) { nil }
-      it { is_expected.to be_nil }
+      expect(calculator.next_starts_at).to eq(next_starts_at)
     end
   end
 end

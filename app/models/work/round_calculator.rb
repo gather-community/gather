@@ -3,7 +3,7 @@
 module Work
   # Calculates the current limit and next round start time and limit for a given share.
   class RoundCalculator
-    attr_accessor :next_num, :next_limit, :prev_limit
+    attr_accessor :next_limit, :prev_limit
 
     def initialize(target_share:)
       self.target_share = target_share
@@ -26,7 +26,7 @@ module Work
 
     private
 
-    attr_accessor :target_share, :limits_by_cohort
+    attr_accessor :target_share, :limits_by_cohort, :next_num
 
     delegate :period, to: :target_share
     delegate :shares, :quota, :auto_open_time, :workers_per_round,
@@ -48,7 +48,7 @@ module Work
     def bump_next_num_if_anyone_can_pick(cohort, min_need)
       # We skip (don't increment round number) a cohort
       # if nobody from it can pick withiin the current min_need. That way we don't waste time.
-      self.next_num += 1 if anyone_can_pick?(cohort, min_need)
+      self.next_num = next_num + 1 if anyone_can_pick?(cohort, min_need)
     end
 
     # Updates round pick limits for the target cohort.

@@ -4,9 +4,12 @@ en:
     not_setup: "It looks like your community hasn't set up Gather's work share system.\nTalk to your Gather Admin for more info."
     no_signups: "No Signups"
     create_one: "create one first"
-    notices:
-      draft: "This period is in the draft phase so workers can't sign up for jobs yet."
-      archived: "This period is archived so no signups are permitted."
+    phase_notices:
+      shifts:
+        draft: "This period is in the draft phase so workers can't sign up for jobs yet."
+        archived: "This period is archived so no signups are permitted."
+      report:
+        draft: "This period is in the draft phase so the report is not visible yet."
     num_hours: "%{num} hours"
     preassigned: "This slot was pre-assigned."
     synopsis:

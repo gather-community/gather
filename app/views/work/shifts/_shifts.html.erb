@@ -1,16 +1,22 @@
 <% cache @cache_key do %>
-  <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
-  <div class="shifts-main">
-    <%= render("synopsis") %>
-    <% if shifts.empty? %>
-      <div class="col-sm-12 none-found">
-        <%= t("work/jobs.none_found") %> <%= lenses.no_result_clear_filter_link %>
-      </div>
-    <% else %>
-      <div class="flowing-columns">
-        <%= render(partial: "shift", collection: shifts, as: :shift) %>
-      </div>
-      <%= paginate shifts %>
-    <% end %>
-  </div>
+  <% if !policy(sample_shift).index? && @period.draft? %>
+    <div class="none-found">
+      <%= t("work.phase_notices.shifts.draft") %>
+    </div>
+  <% else %>
+    <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
+    <div class="shifts-main">
+      <%= render("synopsis") %>
+      <% if shifts.empty? %>
+        <div class="col-sm-12 none-found">
+          <%= t("work/jobs.none_found") %> <%= lenses.no_result_clear_filter_link %>
+        </div>
+      <% else %>
+        <div class="flowing-columns">
+          <%= render(partial: "shift", collection: shifts, as: :shift) %>
+        </div>
+        <%= paginate shifts %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>

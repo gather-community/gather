@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module Work
+  # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord
-    PHASE_OPTIONS = %i[draft open pending published archived]
-    QUOTA_TYPE_OPTIONS = %i[none by_person by_household]
+    PHASE_OPTIONS = %i[draft ready open published archived].freeze
+    QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
 
     acts_as_tenant :cluster
 
@@ -27,8 +30,8 @@ module Work
       new(
         community: community,
         phase: "draft",
-        starts_on: (Date.today + 1.month).beginning_of_month,
-        ends_on: (Date.today + 1.month).end_of_month
+        starts_on: (Time.zone.today + 1.month).beginning_of_month,
+        ends_on: (Time.zone.today + 1.month).end_of_month
       )
     end
 

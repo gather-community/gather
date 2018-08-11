@@ -35,7 +35,7 @@ describe Work::Synopsis do
     it { expect(synopsis).to be_empty }
   end
 
-  context "period not open" do
+  context "period in draft phase" do
     let(:phase) { "draft" }
     it { expect(synopsis).to be_empty }
   end

@@ -568,8 +568,8 @@ en:
           archived: "Archived"
           draft: "Draft"
           open: "Open"
-          pending: "Pending"
           published: "Published"
+          ready: "Ready"
         quota_type:
           none: "None"
           by_person: "By Person"

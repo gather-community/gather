@@ -15,7 +15,7 @@ module Work
       self.period = period
       self.user = user
       @share_for = {}
-      return if !period.open? || period.quota_none? || share_for(:user).zero?
+      return if !(period.open? || period.ready?) || period.quota_none? || share_for(:user).zero?
       self.for_user = obligations_for(:user)
       period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
       handle_staggering

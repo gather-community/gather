@@ -20,7 +20,7 @@ module NavHelper
       }, {
         name: :work,
         path: work_shifts_path,
-        permitted: policy(sample_shift).index?,
+        permitted: policy(sample_shift).index_wrapper?,
         icon: "wrench"
       }, {
         name: :reservations,
@@ -125,13 +125,13 @@ module NavHelper
             name: :signups,
             parent: :work,
             path: work_shifts_path,
-            permitted: policy(sample_shift).index?,
+            permitted: policy(sample_shift).index_wrapper?,
             icon: "check"
           }, {
             name: :report,
             parent: :work,
             path: work_report_path,
-            permitted: policy(sample_period).report?,
+            permitted: policy(sample_period).report_wrapper?,
             icon: "line-chart"
           }, {
             name: :jobs,

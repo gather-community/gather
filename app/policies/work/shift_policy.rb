@@ -18,8 +18,13 @@ module Work
       self.synopsis = synopsis
     end
 
-    def index?
+    # Controls whether we can see the index page outer wrapper including the period lens.
+    def index_wrapper?
       active_in_community?
+    end
+
+    def index?
+      active_in_community? && (active_admin_or?(:work_coordinator) || !shift.period_draft?)
     end
 
     def show?

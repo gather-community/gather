@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe Work::ShiftPolicy do
   include_context "policy objs"
+  include_context "work policies"
 
   let(:phase) { "open" }
   let(:period) { build(:work_period, community: community, phase: phase) }
@@ -13,18 +14,13 @@ describe Work::ShiftPolicy do
   let(:record) { shift }
   let(:actor) { user }
 
-  shared_examples_for "permits users only in some phases" do |permitted|
-    Work::Period::PHASE_OPTIONS.each do |p|
-      describe "for phase #{p}" do
-        let(:phase) { p.to_s }
-        it_behaves_like permitted.include?(p) ? "permits users in community only" : "forbids all"
-      end
-    end
-  end
-
   describe "permissions" do
-    permissions :index?, :show? do
+    permissions :index_wrapper? do
       it_behaves_like "permits users in community only"
+    end
+
+    permissions :index?, :show? do
+      it_behaves_like "permits users only in some phases", %i[ready open published archived]
     end
 
     permissions :signup? do

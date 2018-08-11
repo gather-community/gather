@@ -8,10 +8,11 @@ module Work
     helper_method :sample_shift, :synopsis
 
     def index
-      authorize sample_shift
+      authorize(sample_shift, :index_wrapper?)
       prepare_lenses(:search, :"work/shift", :"work/period")
       @period = lenses[:period].object
       @shifts = policy_scope(Shift)
+      @shifts = @shifts.none unless policy(sample_shift).index?
 
       if @period.nil?
         lenses.hide!
@@ -19,13 +20,13 @@ module Work
         scope_shifts
         @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
                       lenses.cache_key, params[:page] || 1].join("|")
-        @autorefresh = !params[:norefresh] && (@period.draft? || @period.open?)
+        @autorefresh = !params[:norefresh] && (@period.draft? || @period.ready? || @period.open?)
         @synopsis = Synopsis.new(period: @period, user: current_user)
 
         if request.xhr?
           render partial: "shifts"
-        elsif @period.draft? || @period.archived?
-          flash.now[:notice] = t("work.notices.#{@period.phase}")
+        elsif @period.archived?
+          flash.now[:notice] = t("work.phase_notices.shifts.archived")
         end
       end
     end

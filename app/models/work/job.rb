@@ -47,7 +47,7 @@ module Work
     accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
 
     delegate :community, to: :period
-    delegate :starts_on, :ends_on, :name, :draft?, :open?, :pending?, :published?, :archived?,
+    delegate :starts_on, :ends_on, :name, :draft?, :open?, :published?, :archived?,
       to: :period, prefix: true
 
     def full_period?

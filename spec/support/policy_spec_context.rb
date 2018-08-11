@@ -216,6 +216,12 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "forbids regular users" do
+    it do
+      expect(subject).not_to permit(user, record)
+    end
+  end
+
   shared_examples_for "forbids all" do
     it "doesn't permit super admins" do
       expect(subject).not_to permit(super_admin, record)

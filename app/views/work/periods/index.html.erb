@@ -24,7 +24,7 @@
           <td class="name"><%= link_to(period.name, edit_work_period_path(period)) %></td>
           <td class="start-date"><%= l(period.starts_on) %></td>
           <td class="end-date"><%= l(period.ends_on) %></td>
-          <td class="phase"><%= t("simple_form.options.work_period.phase.#{period.phase}") %></td>
+          <td class="phase"><%= t("work/period.phase_names.#{period.phase}") %></td>
         </tr>
       <% end %>
     </tbody>

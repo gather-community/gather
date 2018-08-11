@@ -28,6 +28,13 @@ en:
     unlimited: "Unlimited"
     full_community: "This is a full community job."
     none_found: "No jobs found."
+  work/period:
+    phase_names:
+      archived: "Archived"
+      draft: "Draft"
+      open: "Open"
+      published: "Published"
+      ready: "Ready"
   work/shares:
     portion_options:
       none: "No Share"

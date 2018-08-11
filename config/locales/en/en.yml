@@ -565,11 +565,11 @@ en:
           n: "Not Preassigned"
       work_period:
         phase:
-          archived: "Archived"
-          draft: "Draft"
-          open: "Open"
-          published: "Published"
-          ready: "Ready"
+          archived: "Archived: Period is in the past, not editable"
+          draft: "Draft: Jobs still being set up, signups hidden"
+          open: "Open: People can pick jobs!"
+          published: "Published: The final work schedule"
+          ready: "Ready: Jobs finalized, synopsis visible, but can't sign up"
         quota_type:
           none: "None"
           by_person: "By Person"

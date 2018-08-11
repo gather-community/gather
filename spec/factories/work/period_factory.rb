@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :work_period, class: "Work::Period" do
-    name { Faker::Lorem.word.capitalize }
+    sequence(:name) { |n| "#{Faker::Lorem.word.capitalize} #{n}" }
     starts_on "2018-01-01"
     ends_on "2018-03-31"
     community { default_community }

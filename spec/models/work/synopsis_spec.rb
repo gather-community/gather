@@ -17,11 +17,13 @@ describe Work::Synopsis do
   let!(:decoy_job) { create(:work_job, period: decoy_period) }
   let!(:decoy_assign) { create(:work_assignment, shift: decoy_job.shifts.first, user: user) }
   let(:synopsis) { described_class.new(period: period, user: user) }
-  let(:regular) { OpenStruct.new(title: I18n.t("work.synopsis.regular")) }
-  subject { synopsis.data }
+  let(:regular) { described_class::REGULAR_BUCKET }
+  let(:for_user) { synopsis.for_user }
+  let(:for_household) { synopsis.for_household }
+  let(:staggering) { synopsis.staggering }
+  let(:done) { synopsis.done? }
 
   before do
-    allow(synopsis).to receive(:regular).and_return(regular)
     period.shares.create!(user: user, portion: shares[0])
     period.shares.create!(user: user2, portion: shares[1])
   end
@@ -30,37 +32,40 @@ describe Work::Synopsis do
 
   context "no quota" do
     let(:quota_type) { "none" }
-    it { is_expected.to be_nil }
+    it { expect(synopsis).to be_empty }
   end
 
   context "period not open" do
     let(:phase) { "draft" }
-    it { is_expected.to be_nil }
+    it { expect(synopsis).to be_empty }
   end
 
   context "no share" do
     let(:shares) { [0, 1] }
-    it { is_expected.to be_nil }
+    it { expect(synopsis).to be_empty }
   end
 
   context "by_person quota" do
     context "no full community jobs" do
       context "zero signups" do
         it do
-          is_expected.to eq(self: [{bucket: regular, got: 0, ttl: 23.4, ok: false}], done: false)
+          expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false}])
+          expect(done).to be false
         end
       end
 
       context "with signup" do
         before { regjob.shifts.first.assignments.create!(user: user) }
         it do
-          is_expected.to eq(self: [{bucket: regular, got: 3.0, ttl: 23.4, ok: false}], done: false)
+          expect(for_user).to eq([{bucket: regular, got: 3.0, ttl: 23.4, ok: false}])
+          expect(done).to be false
         end
 
         context "quota met" do
           let(:quota) { 2.91 }
           it do
-            is_expected.to eq(self: [{bucket: regular, got: 3.0, ttl: 2.91, ok: true}], done: true)
+            expect(for_user).to eq([{bucket: regular, got: 3.0, ttl: 2.91, ok: true}])
+            expect(done).to be true
           end
         end
       end
@@ -74,9 +79,9 @@ describe Work::Synopsis do
 
       context "zero signups" do
         it do
-          is_expected.to eq(self: [{bucket: regular, got: 0, ttl: 23.4, ok: false},
-                                   {bucket: fcjob, got: 0, ttl: 6, ok: false}],
-                            done: false)
+          expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
+                                  {bucket: fcjob, got: 0, ttl: 6, ok: false}])
+          expect(done).to be false
         end
       end
 
@@ -89,17 +94,17 @@ describe Work::Synopsis do
         end
 
         it do
-          is_expected.to eq(self: [{bucket: regular, got: 3, ttl: 2.91, ok: true},
-                                   {bucket: fcjob, got: 3, ttl: 6, ok: false}],
-                            done: false)
+          expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
+                                  {bucket: fcjob, got: 3, ttl: 6, ok: false}])
+          expect(done).to be false
         end
 
         context "all quotas met" do
           before { fcjob.shifts.last.assignments.create!(user: user) }
           it do
-            is_expected.to eq(self: [{bucket: regular, got: 3, ttl: 2.91, ok: true},
-                                     {bucket: fcjob, got: 6, ttl: 6, ok: true}],
-                              done: true)
+            expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
+                                    {bucket: fcjob, got: 6, ttl: 6, ok: true}])
+            expect(done).to be true
           end
         end
 
@@ -113,10 +118,10 @@ describe Work::Synopsis do
           end
 
           it "includes round information" do
-            is_expected.to eq(self: [{bucket: regular, got: 3, ttl: 2.91, ok: true},
-                                     {bucket: fcjob, got: 3, ttl: 6, ok: false}],
-                              done: false,
-                              staggering: {prev_limit: 5, next_limit: 10, next_starts_at: starts_at})
+            expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
+                                    {bucket: fcjob, got: 3, ttl: 6, ok: false}])
+            expect(done).to be false
+            expect(staggering).to eq(prev_limit: 5, next_limit: 10, next_starts_at: starts_at)
           end
         end
       end
@@ -128,10 +133,10 @@ describe Work::Synopsis do
         end
 
         it do
-          is_expected.to eq(self: [{bucket: regular, got: 0, ttl: 23.4, ok: false},
-                                   {bucket: fcjob, got: 0, ttl: 6, ok: false},
-                                   {bucket: fcjob2, got: 0, ttl: 4, ok: false}],
-                            done: false)
+          expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
+                                  {bucket: fcjob, got: 0, ttl: 6, ok: false},
+                                  {bucket: fcjob2, got: 0, ttl: 4, ok: false}])
+          expect(done).to be false
         end
       end
     end
@@ -147,11 +152,11 @@ describe Work::Synopsis do
     context "zero signups, 2 full shares" do
       let(:shares) { [1, 1] }
       it do
-        is_expected.to eq(self:      [{bucket: regular, got: 0, ttl: 23.4, ok: false},
-                                      {bucket: fcjob, got: 0, ttl: 6, ok: false}],
-                          household: [{bucket: regular, got: 0, ttl: 46.8, ok: false},
-                                      {bucket: fcjob, got: 0, ttl: 12, ok: false}],
-                          done:      false)
+        expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
+                                {bucket: fcjob, got: 0, ttl: 6, ok: false}])
+        expect(for_household).to eq([{bucket: regular, got: 0, ttl: 46.8, ok: false},
+                                     {bucket: fcjob, got: 0, ttl: 12, ok: false}])
+        expect(done).to be false
       end
     end
 
@@ -165,11 +170,11 @@ describe Work::Synopsis do
       end
 
       it do
-        is_expected.to eq(self:      [{bucket: regular, got: 0, ttl: 23.4, ok: false},
-                                      {bucket: fcjob, got: 6, ttl: 6, ok: true}],
-                          household: [{bucket: regular, got: 3, ttl: 35.1, ok: false},
-                                      {bucket: fcjob, got: 6, ttl: 9, ok: false}],
-                          done:      false)
+        expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
+                                {bucket: fcjob, got: 6, ttl: 6, ok: true}])
+        expect(for_household).to eq([{bucket: regular, got: 3, ttl: 35.1, ok: false},
+                                     {bucket: fcjob, got: 6, ttl: 9, ok: false}])
+        expect(done).to be false
       end
 
       context "household complete even though user not" do
@@ -180,11 +185,11 @@ describe Work::Synopsis do
         end
 
         it do
-          is_expected.to eq(self:      [{bucket: regular, got: 0, ttl: 1.9, ok: true},
-                                        {bucket: fcjob, got: 6, ttl: 6, ok: true}],
-                            household: [{bucket: regular, got: 3, ttl: 2.85, ok: true},
-                                        {bucket: fcjob, got: 9, ttl: 9, ok: true}],
-                            done:      true)
+          expect(for_user).to eq([{bucket: regular, got: 0, ttl: 1.9, ok: true},
+                                  {bucket: fcjob, got: 6, ttl: 6, ok: true}])
+          expect(for_household).to eq([{bucket: regular, got: 3, ttl: 2.85, ok: true},
+                                       {bucket: fcjob, got: 9, ttl: 9, ok: true}])
+          expect(done).to be true
         end
       end
     end

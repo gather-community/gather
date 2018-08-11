@@ -12,8 +12,8 @@ en:
     synopsis:
       done: "You're all set!"
       regular: "regular"
-      self: "You have signed up for"
-      household: "Your household has"
+      for_user: "You have signed up for"
+      for_household: "Your household has"
       chunk:
         single_html: "%{fraction} hours"
         multiple_html: "%{fraction} %{title} hours"

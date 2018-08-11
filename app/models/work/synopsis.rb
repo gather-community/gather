@@ -3,7 +3,11 @@
 module Work
   # Calculates data for synopsis status message.
   class Synopsis
-    attr_accessor :period, :user
+    # Duck type for Job
+    REGULAR_BUCKET = OpenStruct.new(title: I18n.t("work.synopsis.regular"))
+
+    attr_accessor :period, :user, :for_user, :for_household, :staggering, :done
+    alias done? done
 
     delegate :quota_type, to: :period
 
@@ -11,36 +15,34 @@ module Work
       self.period = period
       self.user = user
       @share_for = {}
-    end
-
-    def data
-      return @data if defined?(@data)
-      return (@data = nil) if !period.open? || period.quota_none? || share_for(:self).zero?
-      @data = {}
-      @data[:self] = obligations_for(:self)
+      return if !period.open? || period.quota_none? || share_for(:user).zero?
+      self.for_user = obligations_for(:user)
       period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
       handle_staggering
-      @data
+    end
+
+    def empty?
+      for_user.nil?
     end
 
     private
 
     def handle_by_person_quota
-      @data[:done] = all_ok?(@data[:self])
+      self.done = all_ok?(for_user)
     end
 
     def handle_by_household_quota
-      @data[:household] = obligations_for(:household)
-      @data[:done] = all_ok?(@data[:household])
+      self.for_household = obligations_for(:household)
+      self.done = all_ok?(for_household)
 
       # If household is all set, this overrides all self obligations to be ok.
-      @data[:self].each { |o| o[:ok] = true } if @data[:done]
+      for_user.each { |o| o[:ok] = true } if done?
     end
 
     def handle_staggering
       return unless period.staggered?
-      calc = RoundCalculator.new(target_share: share_for(:self))
-      @data[:staggering] = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
+      calc = RoundCalculator.new(target_share: share_for(:user))
+      self.staggering = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
     end
 
     def obligations_for(who)
@@ -57,12 +59,12 @@ module Work
     end
 
     def quota_for(who, bucket)
-      (bucket == regular ? period.quota : bucket.hours) * share_for(who)
+      (bucket == REGULAR_BUCKET ? period.quota : bucket.hours) * share_for(who)
     end
 
     def assigned_hours_for(who, bucket)
       scope = Assignment.where(user: users(who)).in_period(period).includes(shift: :job)
-      if bucket == regular
+      if bucket == REGULAR_BUCKET
         scope.merge(Job.fixed_slot).sum("work_jobs.hours")
       else
         # For full community jobs, shift hours are different from job hours, so SQL sum won't work.
@@ -79,16 +81,11 @@ module Work
     end
 
     def buckets
-      @buckets ||= [regular] + Job.full_community.by_title.in_period(period)
+      @buckets ||= [REGULAR_BUCKET] + Job.full_community.by_title.in_period(period)
     end
 
     def round_next_half(num)
       (num * 2).ceil.to_f / 2
-    end
-
-    # Duck type for job.
-    def regular
-      @regular ||= OpenStruct.new(title: I18n.t("work.synopsis.regular"))
     end
   end
 end

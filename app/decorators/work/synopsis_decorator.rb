@@ -5,17 +5,16 @@ module Work
   class SynopsisDecorator < WorkDecorator
     delegate_all
 
-    # Takes a summary data structure and converts to nice string.
-    # See spec for data structure examples.
+    # Converts Synopsis to nice string. See spec for data examples.
     def to_s
       return @to_s if defined?(@to_s)
-      return (@to_s = nil) if data.nil?
-      sentences = %i[self household].map do |who|
-        next unless data[who]
-        chunks = data[who].map { |i| chunk_for_item(i) }
+      return (@to_s = nil) if empty?
+      sentences = %i[for_user for_household].map do |who|
+        next unless send(who)
+        chunks = send(who).map { |i| chunk_for_item(i) }
         safe_str << h.t("work.synopsis.#{who}") << " " << join_chunks(chunks)
       end
-      sentences << (data[:done] ? youre_all_set : staggering_plan)
+      sentences << (done? ? youre_all_set : staggering_plan)
       @to_s = h.safe_join(sentences.compact, " ")
     end
 
@@ -40,7 +39,7 @@ module Work
     end
 
     def item_count
-      @item_count ||= data[:self].size == 1 ? :single : :multiple
+      @item_count ||= for_user.size == 1 ? :single : :multiple
     end
 
     def staggering_plan
@@ -54,10 +53,6 @@ module Work
         h.t("work.synopsis.round_limit_with_next",
           prev: staggering[:prev_limit], next: staggering[:next_limit], at_or_on_time: next_round_time)
       end
-    end
-
-    def staggering
-      data[:staggering]
     end
 
     def next_round_time(preposition: nil)

@@ -92,16 +92,16 @@ class CalendarExport
   end
 
   def description(obj)
-    text = case class_name(obj)
-           when "Meal" then meal_description(obj)
-           when "Assignment" then nil
-           when "Reservations::Reservation" then nil
-           else unknown_class(obj)
-           end
+    lines = case class_name(obj)
+            when "Meal" then meal_description(obj)
+            when "Assignment" then nil
+            when "Reservations::Reservation" then nil
+            else unknown_class(obj)
+            end
 
     # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
     # so we include it at the end of the description instead.
-    "#{text}\n#{url(obj)}"
+    break_lines(Array.wrap(lines) << url(obj))
   end
 
   # TODO: this needs to move to own meal calendar item builder class
@@ -110,7 +110,7 @@ class CalendarExport
     diner_count = if (signup = user_signups_by_meal_id[meal.id])
                     I18n.t("calendar_exports.meals.diner_count", count: signup.total)
                   end
-    [cook, diner_count].compact.join("\n")
+    [cook, diner_count]
   end
 
   def user_signups_by_meal_id
@@ -156,5 +156,15 @@ class CalendarExport
   # Current timezone ID in tzinfo format.
   def tzid
     Time.zone.tzinfo.name
+  end
+
+  # Pad each line in the array (except the last) to a multiple of 75 characters so that
+  # it will be broken properly by the icalendar gem. Somewhat hackish.
+  def break_lines(lines)
+    regex = /\P{M}\p{M}*/u # The regex icalendar uses to split by character.
+    lines[0...-1].each_with_index do |line, i|
+      line.concat(" " * (75 - (line.scan(regex).size + (i.zero? ? 12 : 1)) % 75))
+    end
+    lines.join
   end
 end

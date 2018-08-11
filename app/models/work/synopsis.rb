@@ -25,6 +25,10 @@ module Work
       for_user.nil?
     end
 
+    def staggering?
+      staggering.present?
+    end
+
     private
 
     def handle_by_person_quota

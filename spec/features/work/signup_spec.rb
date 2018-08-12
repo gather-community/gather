@@ -35,6 +35,19 @@ feature "signups", js: true do
         visit(page_path)
         expect(page).to have_content("This period is in the draft phase so workers can't sign up")
       end
+
+      describe "auto open" do
+        before { periods[0].update!(auto_open_time: Time.current + 30.minutes) }
+
+        scenario do
+          visit(page_path)
+          expect(page).to have_content("This period is in the draft phase so workers can't sign up")
+          Timecop.freeze(Time.current + 31.minutes) do
+            visit(page_path)
+            expect(page).to have_content(jobs[0].title)
+          end
+        end
+      end
     end
 
     describe "filters and search", search: Work::Shift do

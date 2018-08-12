@@ -67,6 +67,11 @@ module Work
       pick_type == "free_for_all"
     end
 
+    def auto_open_if_appropriate
+      return unless auto_open_time? && (draft? || ready?) && !auto_opened? && Time.current >= auto_open_time
+      update!(phase: "open")
+    end
+
     private
 
     def normalize

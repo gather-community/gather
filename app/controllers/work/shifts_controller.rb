@@ -11,6 +11,10 @@ module Work
       authorize(sample_shift, :index_wrapper?)
       prepare_lenses(:search, :"work/shift", :"work/period")
       @period = lenses[:period].object
+
+      # Need to do this early because it could affect policies and cache key.
+      @period&.auto_open_if_appropriate
+
       @shifts = policy_scope(Shift)
       @shifts = @shifts.none unless policy(sample_shift).index?
 

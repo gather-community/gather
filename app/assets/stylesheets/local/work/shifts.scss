@@ -71,6 +71,10 @@
   .owners-cell {
     vertical-align: bottom;
     padding-top: 10px;
+
+    .cancel-link a {
+      color: $error-red;
+    }
   }
 
   .shift-times {

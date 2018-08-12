@@ -55,11 +55,7 @@ module Work
       if request.xhr?
         # Synopsis was already computed once for authorization. Force recalculation after change.
         @synopsis = nil
-
-        render json: {
-          shift: render_to_string(partial: "shift", locals: {shift: shift}),
-          synopsis: render_to_string(partial: "synopsis")
-        }
+        render_shift_and_synopsis_json
       else
         if @error
           flash[:error] = @error
@@ -72,14 +68,25 @@ module Work
 
     def unsignup
       @shift = Shift.find(params[:id])
+      @period = @shift.period
       authorize @shift
-      begin
-        @shift.unsignup_user(current_user)
-        flash[:success] = "Your signup was removed successfully."
-      rescue NotSignedUpError
-        flash[:error] = t("work/shift.not_signed_up")
+
+      if request.xhr?
+        begin
+          @shift.unsignup_user(current_user)
+        rescue NotSignedUpError
+          @error = t("work/shift.not_signed_up")
+        end
+        render_shift_and_synopsis_json
+      else
+        begin
+          @shift.unsignup_user(current_user)
+          flash[:success] = "Your signup was removed successfully."
+        rescue NotSignedUpError
+          flash[:error] = t("work/shift.not_signed_up")
+        end
+        redirect_to(work_shifts_path)
       end
-      redirect_to(work_shifts_path)
     end
 
     protected
@@ -89,6 +96,13 @@ module Work
     end
 
     private
+
+    def render_shift_and_synopsis_json
+      render json: {
+        shift: render_to_string(partial: "shift", locals: {shift: shift}),
+        synopsis: render_to_string(partial: "synopsis")
+      }
+    end
 
     def sample_shift
       period = @period || sample_period
@@ -163,6 +177,7 @@ module Work
     end
 
     def synopsis
+      raise "period must be set to build synopsis" unless @period
       # Draper inferral is not working here for some reason.
       @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: current_user))
     end

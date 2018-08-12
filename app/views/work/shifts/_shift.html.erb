@@ -28,6 +28,13 @@
             <% if assignment.preassigned? %>
               &nbsp;<%= icon_tag("thumb-tack", title: I18n.t("work.preassigned")) %>
             <% end %>
+            <% if policy(shift).unsignup? && assignment.user == current_user %>
+              <span class="cancel-link">
+                &nbsp;<%= link_to(icon_tag("close", title: I18n.t("common.cancel")), "javascript:void(0)",
+                  "data-confirm": t("confirmations.work/shift.unsignup")) %>
+                <%= inline_loading_indicator %>
+              </span>
+            <% end %>
           </div>
         <% end %>
         <% if !shift.full_community? && shift.empty_slots > 0 %>

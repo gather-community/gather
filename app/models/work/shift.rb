@@ -117,7 +117,7 @@ module Work
     def unsignup_user(user)
       assignment = assignment_for_user(user)
       raise Work::NotSignedUpError unless assignment
-      assignment.destroy
+      assignments.destroy(assignment)
     end
 
     def user_signed_up?(user)

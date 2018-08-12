@@ -12,6 +12,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
 
   events:
     "click .signup-link": "handleSignupClick"
+    "confirm:complete .cancel-link a": "handleCancelClick"
 
   refresh: ->
     $.ajax
@@ -27,7 +28,21 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
     $.ajax
       method: "post"
       url: "/work/signups/#{card.data("id")}/signup"
-      success: (response) =>
-        @resetRefreshInterval()
-        card.replaceWith(response.shift)
-        @$(".shifts-synopsis").replaceWith(response.synopsis)
+      success: (response) => @updateShiftAndSynopsis(card, response)
+
+  handleCancelClick: (event, confirmAnswer) ->
+    return unless confirmAnswer
+    card = @$(event.target).closest(".shift-card")
+    card.find(".cancel-link a").hide()
+    card.find(".cancel-link .loading-indicator").show()
+    event.preventDefault()
+    $.ajax
+      method: "post"
+      url: "/work/signups/#{card.data("id")}/unsignup"
+      data: {_method: "delete"}
+      success: (response) => @updateShiftAndSynopsis(card, response)
+
+  updateShiftAndSynopsis: (card, response) ->
+    @resetRefreshInterval()
+    card.replaceWith(response.shift)
+    @$(".shifts-synopsis").replaceWith(response.synopsis)

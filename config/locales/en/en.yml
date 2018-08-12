@@ -1,6 +1,7 @@
 en:
   common:
     adults: "Adults"
+    cancel: "Cancel"
     cancelled: "Cancelled"
     children: "Children"
     clearing_the_filter: "clearing the filters"

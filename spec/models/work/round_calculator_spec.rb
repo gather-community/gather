@@ -46,7 +46,7 @@ describe Work::RoundCalculator do
       let(:portions) { [1, 1, 1, 0.5, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1] }
       let(:period) do
         create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
-                             round_duration: 5.minutes, max_rounds_per_worker: 3,
+                             round_duration: 5, max_rounds_per_worker: 3,
                              auto_open_time: Time.zone.parse("2018-08-15 19:00"))
       end
 
@@ -172,7 +172,7 @@ describe Work::RoundCalculator do
       let(:portions) { [1, 1, 1, 1] }
       let(:period) do
         create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 2,
-                             round_duration: 5.minutes, max_rounds_per_worker: 1,
+                             round_duration: 5, max_rounds_per_worker: 1,
                              auto_open_time: Time.zone.parse("2018-08-15 19:00"))
       end
 

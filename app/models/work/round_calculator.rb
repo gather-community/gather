@@ -24,7 +24,7 @@ module Work
     def next_starts_at
       return nil if next_num.nil?
       # Can't memoize this because it's used inside the compute method.
-      auto_open_time + (next_num - 1) * round_duration
+      auto_open_time + (next_num - 1) * round_duration.minutes
     end
 
     private

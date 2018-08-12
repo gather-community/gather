@@ -6,6 +6,7 @@ describe Work::RoundCalculator do
   subject(:calculator) { described_class.new(target_share: target_share) }
 
   describe "next_num, prev_limit, next_limit" do
+    let(:time) { "18:55" }
     let!(:shares) { portions.map { |p| create(:work_share, period: period, portion: p) } }
     let!(:zero_shares) { create_list(:work_share, 2, period: period, portion: 0) } # Should be ignored.
     let!(:assigns) do
@@ -52,6 +53,14 @@ describe Work::RoundCalculator do
 
       context "worker with 0 hours" do
         let(:target_share) { shares[0] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: 6},
+            {starts_at: Time.zone.parse("2018-08-15 19:10"), limit: 12},
+            {starts_at: Time.zone.parse("2018-08-15 19:25"), limit: nil}
+          ])
+        end
 
         context "at time before auto open" do
           let(:time) { "18:55" }
@@ -143,6 +152,12 @@ describe Work::RoundCalculator do
 
       context "worker with more preassigned hours than quota" do
         let(:target_share) { shares[13] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:45"), limit: nil}
+          ])
+        end
 
         context "at time before open" do
           let(:time) { "18:55" }

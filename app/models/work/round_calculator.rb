@@ -1,40 +1,59 @@
 # frozen_string_literal: true
 
 module Work
-  # Calculates the current limit and next round start time and limit for a given share.
+  # Calculates the round schedule for a given share.
+  # Exposes current limit, next round start time and next limit.
   class RoundCalculator
-    attr_accessor :next_limit, :prev_limit
+    attr_accessor :rounds
 
     # Debug mode runs through the full process regardless of time and target share.
     def initialize(target_share:, debug: false)
       self.target_share = target_share
-      if auto_open_time.blank? || workers_per_round.blank? ||
-          round_duration.blank? || max_rounds_per_worker.blank?
-        raise ArgumentError, "Required period parameters not set"
-      end
-      self.now = Time.current
+      ensure_key_params
       self.next_num = 0
-      self.next_limit = 0
-      self.prev_limit = 0
+      self.rounds = []
       setup_debug(debug)
       compute
       raise ArgumentError, "Target share is not in period" if target_cohort.nil?
     end
 
+    def prev_limit
+      prev_round ? prev_round[:limit] : 0
+    end
+
+    def next_limit
+      next_round ? next_round[:limit] : nil
+    end
+
     def next_starts_at
-      return nil if next_num.nil?
-      # Can't memoize this because it's used inside the compute method.
-      auto_open_time + (next_num - 1) * round_duration.minutes
+      next_round ? next_round[:starts_at] : nil
     end
 
     private
 
-    attr_accessor :target_share, :limits_by_cohort, :next_num, :debug, :now
+    attr_accessor :target_share, :limits_by_cohort, :next_num, :debug
     alias debug? debug
 
     delegate :period, to: :target_share
     delegate :shares, :quota, :auto_open_time, :workers_per_round,
       :round_duration, :max_rounds_per_worker, to: :period
+
+    def ensure_key_params
+      if auto_open_time.blank? || workers_per_round.blank? ||
+          round_duration.blank? || max_rounds_per_worker.blank?
+        raise ArgumentError, "Required period parameters not set"
+      end
+    end
+
+    # Gets the next round from the rounds array based on the current time. Nil if none found.
+    def next_round
+      rounds.detect { |r| r[:starts_at] > Time.current }
+    end
+
+    # Gets the previous round from the rounds array based on the current time. Nil if none found.
+    def prev_round
+      rounds.select { |r| r[:starts_at] <= Time.current }.last
+    end
 
     # Determines the number of the next round for the given share by iterating through
     # rounds until we reach the appropriate round. To iterate through rounds we cycle through
@@ -64,22 +83,11 @@ module Work
     # Returns true if we've reached the stopping condition for the calculator.
     def update_target_cohort(min_need)
       limit = limit_from_min_need(target_share, min_need)
-      self.prev_limit = next_limit if target_user_can_pick_next_round?
-      self.next_limit = limit
-      return false unless done?
-      self.prev_limit = self.next_num = nil if now > next_starts_at
-      true
-    end
-
-    def target_user_can_pick_next_round?
-      next_limit > preassigned_total_for(target_share)
-    end
-
-    # Stop if target user can pick next round and next round has a start time after current.
-    # Or if next_limit is nil, we know that enough time has passed since auto start
-    # that there is effectively no limit, so we can also stop.
-    def done?
-      next_limit.nil? || target_user_can_pick_next_round? && next_starts_at > now
+      if limit.nil? || limit > preassigned_total_for(target_share)
+        time = auto_open_time + (next_num - 1) * round_duration.minutes
+        rounds << {starts_at: time, limit: limit}
+      end
+      limit.nil?
     end
 
     # Calculates the current pick limit for the given share based on the given min need.
@@ -132,13 +140,11 @@ module Work
         .to_h
     end
 
-    # If in debug mode, we use a target share in the last cohort and go way into the future to ensure
-    # the full process is run through.
+    # If in debug mode, we use a target share in the last cohort to ensure the full process is run.
     def setup_debug(debug)
       self.debug = debug
       return unless debug?
       self.target_share = cohorts.last[0]
-      self.now = auto_open_time + 1.year
     end
 
     def log(str)

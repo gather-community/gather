@@ -36,7 +36,7 @@ module Work
         (shift.period_open? || shift.period_published?) &&
         !shift.user_signed_up?(user) &&
         !shift.taken? &&
-        round_limit_not_exceeded?
+        !round_limit_exceeded?
     end
 
     def unsignup?
@@ -63,12 +63,12 @@ module Work
       new?
     end
 
-    private
-
-    def round_limit_not_exceeded?
-      synopsis.nil? || !synopsis.staggering? || round_limit.nil? || full_community? ||
-        user_regular_hours + job_hours <= round_limit
+    def round_limit_exceeded?
+      !synopsis.nil? && synopsis.staggering? && !round_limit.nil? && !full_community? &&
+        user_regular_hours + job_hours > round_limit
     end
+
+    private
 
     def user_regular_hours
       # The regular jobs info is always the first element of the array.

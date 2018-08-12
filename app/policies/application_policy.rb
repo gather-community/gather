@@ -40,6 +40,11 @@ class ApplicationPolicy
     false
   end
 
+  # Used to force an authorization failure in some cases.
+  def fail?
+    false
+  end
+
   def attribute_permitted?(attrib)
     permitted_attributes.include?(attrib)
   end

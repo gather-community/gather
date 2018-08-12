@@ -41,12 +41,11 @@ module Work
       @shift = Shift.find(params[:id])
       @period = @shift.period
 
-      # Since we have a custom built policy object, we need to do our own custom authorization.
-      skip_authorization && (shift_policy(shift).signup? || (return render_forbidden))
-
       begin
-        @shift.signup_user(current_user)
-        raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
+        authorize_signup_or_set_error
+        raise_stubbed_error_in_test_mode
+      rescue RoundLimitExceededError
+        @error = t("work/shift.round_limit_exceeded")
       rescue SlotsExceededError
         @error = t("work/shift.slots_exceeded")
       rescue AlreadySignedUpError
@@ -107,6 +106,25 @@ module Work
         .per(50)
       apply_shift_lens
       apply_search_lens
+    end
+
+    # Since we have a custom built policy object, we need to do our own custom authorization.
+    # If authorization fails due to round limit being exceeded, raise a special error.
+    def authorize_signup_or_set_error
+      skip_authorization
+      policy = shift_policy(@shift)
+      if policy.signup?
+        @shift.signup_user(current_user)
+      elsif policy.round_limit_exceeded?
+        raise RoundLimitExceededError
+      else
+        # At this point we don't know what cause the auth fail, so force a failure.
+        authorize(@shift, :fail?)
+      end
+    end
+
+    def raise_stubbed_error_in_test_mode
+      raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
     end
 
     def apply_shift_lens

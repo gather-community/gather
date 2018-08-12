@@ -2,6 +2,7 @@
 
 module Work
   class SlotsExceededError < StandardError; end
+  class RoundLimitExceededError < StandardError; end
   class AlreadySignedUpError < StandardError; end
   class NotSignedUpError < StandardError; end
 

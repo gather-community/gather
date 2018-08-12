@@ -48,6 +48,7 @@ en:
     slots_exceeded: "Sorry, looks like someone beat you to it!"
     already_signed_up: "You've already signed up for this shift."
     not_signed_up: "You have not signed up for this shift."
+    round_limit_exceeded: "You have exceeded your round limit."
     slots_open:
       one: "%{count} slot open"
       other: "%{count} slots open"

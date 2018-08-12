@@ -59,6 +59,10 @@ module Work
       Time.zone.today < starts_on
     end
 
+    def pre_open?
+      draft? || ready?
+    end
+
     def staggered?
       pick_type == "staggered"
     end
@@ -68,7 +72,7 @@ module Work
     end
 
     def auto_open_if_appropriate
-      return unless auto_open_time? && (draft? || ready?) && !auto_opened? && Time.current >= auto_open_time
+      return unless auto_open_time? && pre_open? && !auto_opened? && Time.current >= auto_open_time
       update!(phase: "open")
     end
 

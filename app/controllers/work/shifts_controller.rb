@@ -24,7 +24,7 @@ module Work
         scope_shifts
         @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
                       lenses.cache_key, params[:page] || 1].join("|")
-        @autorefresh = !params[:norefresh] && (@period.draft? || @period.ready? || @period.open?)
+        @autorefresh = !params[:norefresh] && (@period.pre_open? || @period.open?)
 
         if request.xhr?
           render partial: "shifts"

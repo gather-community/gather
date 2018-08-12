@@ -24,7 +24,7 @@ module Work
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
-      :period_draft?, :period_open?, :period_published?, :period_archived?,
+      :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
       :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }

@@ -16,11 +16,12 @@ module Work
     # Can't merge the order by name scope due to an error/bug with ActsAsTenant
     scope :by_user_name, -> { joins(:user).order(User::NAME_ORDER) }
 
-    delegate :job, :community, :period_draft?, :fixed_slot?, :full_community?, to: :shift
+    delegate :job, :community, :period_pre_open?, :fixed_slot?, :full_community?, to: :shift
     delegate :hours, to: :shift, prefix: true
 
     before_save do
-      self.preassigned = period_draft?
+      # Assignments are automatically marked 'preassigned' if the current phase is before the open phase.
+      self.preassigned = period_pre_open?
     end
   end
 end

@@ -5,15 +5,18 @@ module Work
   class RoundCalculator
     attr_accessor :next_limit, :prev_limit
 
-    def initialize(target_share:)
+    # Debug mode runs through the full process regardless of time and target share.
+    def initialize(target_share:, debug: false)
       self.target_share = target_share
       if auto_open_time.blank? || workers_per_round.blank? ||
           round_duration.blank? || max_rounds_per_worker.blank?
         raise ArgumentError, "Required period parameters not set"
       end
+      self.now = Time.current
       self.next_num = 0
       self.next_limit = 0
       self.prev_limit = 0
+      setup_debug(debug)
       compute
       raise ArgumentError, "Target share is not in period" if target_cohort.nil?
     end
@@ -26,7 +29,8 @@ module Work
 
     private
 
-    attr_accessor :target_share, :limits_by_cohort, :next_num
+    attr_accessor :target_share, :limits_by_cohort, :next_num, :debug, :now
+    alias debug? debug
 
     delegate :period, to: :target_share
     delegate :shares, :quota, :auto_open_time, :workers_per_round,
@@ -48,7 +52,12 @@ module Work
     def bump_next_num_if_anyone_can_pick(cohort, min_need)
       # We skip (don't increment round number) a cohort
       # if nobody from it can pick withiin the current min_need. That way we don't waste time.
-      self.next_num = next_num + 1 if anyone_can_pick?(cohort, min_need)
+      if anyone_can_pick?(cohort, min_need)
+        self.next_num = next_num + 1
+        log("Round #{next_num}: Users #{cohort.map(&:user_id)}, Min Need #{min_need}")
+      else
+        log("Nobody in cohort #{cohort.map(&:user_id)} could pick given min need #{min_need}")
+      end
     end
 
     # Updates round pick limits for the target cohort.
@@ -58,7 +67,7 @@ module Work
       self.prev_limit = next_limit if target_user_can_pick_next_round?
       self.next_limit = limit
       return false unless done?
-      self.prev_limit = self.next_num = nil if Time.current > next_starts_at
+      self.prev_limit = self.next_num = nil if now > next_starts_at
       true
     end
 
@@ -70,7 +79,7 @@ module Work
     # Or if next_limit is nil, we know that enough time has passed since auto start
     # that there is effectively no limit, so we can also stop.
     def done?
-      next_limit.nil? || target_user_can_pick_next_round? && next_starts_at > Time.current
+      next_limit.nil? || target_user_can_pick_next_round? && next_starts_at > now
     end
 
     # Calculates the current pick limit for the given share based on the given min need.
@@ -121,6 +130,19 @@ module Work
         .group(:user_id)
         .map { |r| [r[:user_id], r[:total_hours]] }
         .to_h
+    end
+
+    # If in debug mode, we use a target share in the last cohort and go way into the future to ensure
+    # the full process is run through.
+    def setup_debug(debug)
+      self.debug = debug
+      return unless debug?
+      self.target_share = cohorts.last[0]
+      self.now = auto_open_time + 1.year
+    end
+
+    def log(str)
+      Rails.logger.debug(str) if debug?
     end
   end
 end

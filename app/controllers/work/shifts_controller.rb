@@ -5,7 +5,7 @@ module Work
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
     decorates_assigned :shifts, :shift
-    helper_method :sample_shift, :synopsis
+    helper_method :sample_shift, :synopsis, :shift_policy
 
     def index
       authorize(sample_shift, :index_wrapper?)
@@ -21,7 +21,6 @@ module Work
         @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
                       lenses.cache_key, params[:page] || 1].join("|")
         @autorefresh = !params[:norefresh] && (@period.draft? || @period.ready? || @period.open?)
-        @synopsis = Synopsis.new(period: @period, user: current_user)
 
         if request.xhr?
           render partial: "shifts"
@@ -40,7 +39,11 @@ module Work
     # If there are no slots left, shift card will include error message.
     def signup
       @shift = Shift.find(params[:id])
-      authorize @shift
+      @period = @shift.period
+
+      # Since we have a custom built policy object, we need to do our own custom authorization.
+      skip_authorization && (shift_policy(shift).signup? || (return render_forbidden))
+
       begin
         @shift.signup_user(current_user)
         raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
@@ -51,7 +54,9 @@ module Work
       end
 
       if request.xhr?
-        @synopsis = Synopsis.new(period: shift.period, user: current_user)
+        # Synopsis was already computed once for authorization. Force recalculation after change.
+        @synopsis = nil
+
         render json: {
           shift: render_to_string(partial: "shift", locals: {shift: shift}),
           synopsis: render_to_string(partial: "synopsis")
@@ -134,9 +139,14 @@ module Work
       @shifts = @shifts.merge(search.records.records)
     end
 
+    # Custom-builds a ShiftPolicy object with the given shift, including the synopsis if appropriate.
+    def shift_policy(shift)
+      ShiftPolicy.new(current_user, shift, synopsis: shift.period.staggered? ? synopsis.object : nil)
+    end
+
     def synopsis
       # Draper inferral is not working here for some reason.
-      SynopsisDecorator.new(@synopsis)
+      @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: current_user))
     end
   end
 end

@@ -35,7 +35,7 @@
             <%= t("work/shift.slots_open", count: shift.empty_slots) %>
           </div>
         <% end %>
-        <% if policy(shift).signup? %>
+        <% if shift_policy(shift).signup? %>
           <div class="signup-link">
             <a href="#"><%= icon_tag("bolt") %> Sign Up!</a>
             <%= inline_loading_indicator %>

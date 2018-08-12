@@ -14,8 +14,9 @@ module Work
     def initialize(period:, user:)
       self.period = period
       self.user = user
-      @share_for = {}
-      return if !(period.open? || period.ready?) || period.quota_none? || share_for(:user).zero?
+      @portions_for = {}
+      @shares_for = {}
+      return if !(period.open? || period.ready?) || period.quota_none? || portions_for(:user).zero?
       self.for_user = obligations_for(:user)
       period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
       handle_staggering
@@ -45,7 +46,7 @@ module Work
 
     def handle_staggering
       return unless period.staggered?
-      calc = RoundCalculator.new(target_share: share_for(:user))
+      calc = RoundCalculator.new(target_share: shares_for(:user).first)
       self.staggering = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
     end
 
@@ -63,7 +64,7 @@ module Work
     end
 
     def quota_for(who, bucket)
-      (bucket == REGULAR_BUCKET ? period.quota : bucket.hours) * share_for(who)
+      (bucket == REGULAR_BUCKET ? period.quota : bucket.hours) * portions_for(who)
     end
 
     def assigned_hours_for(who, bucket)
@@ -76,8 +77,12 @@ module Work
       end
     end
 
-    def share_for(who)
-      @share_for[who] ||= Share.for_period(period).where(user: users(who)).sum(:portion)
+    def portions_for(who)
+      @portions_for[who] ||= shares_for(who).sum(&:portion)
+    end
+
+    def shares_for(who)
+      @shares_for[who] ||= Share.for_period(period).where(user: users(who)).to_a
     end
 
     def users(who)

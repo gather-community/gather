@@ -17,7 +17,7 @@ feature "signups", js: true do
   it_behaves_like "handles no periods"
 
   context "with period but no shifts" do
-    let!(:period) { create(:work_period) }
+    let!(:period) { create(:work_period, phase: "ready") }
 
     scenario "index" do
       visit(page_path)
@@ -27,6 +27,15 @@ feature "signups", js: true do
 
   context "with jobs" do
     include_context "with jobs"
+
+    context "in draft phase" do
+      before { periods[0].update!(phase: "draft") }
+
+      scenario "index" do
+        visit(page_path)
+        expect(page).to have_content("This period is in the draft phase so workers can't sign up")
+      end
+    end
 
     describe "filters and search", search: Work::Shift do
       include_context "with assignments"

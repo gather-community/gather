@@ -92,6 +92,7 @@ module Work
     # Pundit built-in helper doesn't work due to namespacing
     def period_params
       params.require(:work_period).permit(policy(@period).permitted_attributes)
+        .merge(pick_type: "free_for_all") # Temporary until form includes pick_type
     end
   end
 end

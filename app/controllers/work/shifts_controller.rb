@@ -5,7 +5,7 @@ module Work
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
     decorates_assigned :shifts, :shift
-    helper_method :sample_shift, :synopsis, :shift_policy
+    helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
       authorize(sample_shift, :index_wrapper?)
@@ -22,8 +22,6 @@ module Work
         lenses.hide!
       else
         scope_shifts
-        @cache_key = [current_user.id, @period.cache_key, @shifts.cache_key,
-                      lenses.cache_key, params[:page] || 1].join("|")
         @autorefresh = !params[:norefresh] && (@period.pre_open? || @period.open?)
 
         if request.xhr?
@@ -184,6 +182,18 @@ module Work
       raise "period must be set to build synopsis" unless @period
       # Draper inferral is not working here for some reason.
       @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: current_user))
+    end
+
+    # Cache key for the index page.
+    def cache_key
+      chunks = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key, params[:page] || 1]
+
+      # Need to include current minutes/5 if staggered because the round limit calculations
+      # may change things just with the passage of time. We know things only change this way at 5-minute
+      # increments though.
+      chunks << (Time.current.seconds_since_midnight / 300).floor if @period.staggered?
+
+      chunks.join("|")
     end
   end
 end

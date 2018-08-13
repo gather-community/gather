@@ -162,9 +162,9 @@ class CalendarExport
   # it will be broken properly by the icalendar gem. Somewhat hackish.
   def break_lines(lines)
     regex = /\P{M}\p{M}*/u # The regex icalendar uses to split by character.
-    lines[0...-1].each_with_index do |line, i|
+    lines[0...-1].compact.each_with_index do |line, i|
       line.concat(" " * (75 - (line.scan(regex).size + (i.zero? ? 12 : 1)) % 75))
     end
-    lines.join
+    lines.compact.join
   end
 end

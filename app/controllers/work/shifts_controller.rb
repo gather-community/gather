@@ -119,7 +119,7 @@ module Work
         .by_job_title
         .by_date
         .page(params[:page])
-        .per(50)
+        .per(48) # multiple of 2, 3, & 4
       apply_shift_lens
       apply_search_lens
     end

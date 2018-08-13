@@ -18,7 +18,9 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
     $.ajax
       url: window.location.href
       cache: false
-      success: (html) => @$(".shifts-main").replaceWith(html)
+      success: (response) =>
+        @$(".shifts-main").replaceWith(response.shifts)
+        @$(".pagination").replaceWith(response.pagination)
 
   handleSignupClick: (event) ->
     card = @$(event.target).closest(".shift-card")

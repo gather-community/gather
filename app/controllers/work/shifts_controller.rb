@@ -25,7 +25,7 @@ module Work
         @autorefresh = !params[:norefresh] && (@period.pre_open? || @period.open?)
 
         if request.xhr?
-          render partial: "shifts"
+          render_shifts_and_pagination_json
         elsif @period.archived?
           flash.now[:notice] = t("work.phase_notices.shifts.archived")
         end
@@ -103,6 +103,15 @@ module Work
       render json: {
         shift: render_to_string(partial: "shift", locals: {shift: shift}),
         synopsis: render_to_string(partial: "synopsis")
+      }
+    end
+
+    # We render shifts and pagination separately so we don't have to render the "choose as" dropdown
+    # every refresh (saving a few database hits).
+    def render_shifts_and_pagination_json
+      render json: {
+        shifts: render_to_string(partial: "shifts"),
+        pagination: render_to_string(partial: "pagination")
       }
     end
 

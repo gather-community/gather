@@ -2,7 +2,8 @@
 <% if @period.nil? %>
   <%= render("work/shared/no_period_notice") %>
 <% else %>
-  <%= render "shifts" %>
+  <%= render("shifts") %>
+  <%= render("pagination") %>
 <% end %>
 <%= javascript_tag do %>
   $(function() {

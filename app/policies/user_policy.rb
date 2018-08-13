@@ -49,7 +49,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    active_admin? && !self? && !target_is_admin? && record.adult?
+    active_admin? && !self? && record.adult? && admin_level(user) >= admin_level(record)
   end
 
   def destroy?
@@ -152,9 +152,5 @@ class UserPolicy < ApplicationPolicy
   def guardian?
     return false unless record.is_a?(User) # May be a Class in some cases
     record.guardians.include?(user)
-  end
-
-  def target_is_admin?
-    record.global_role?(:admin) || record.global_role?(:cluster_admin) || record.global_role?(:super_admin)
   end
 end

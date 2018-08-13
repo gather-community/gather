@@ -32,7 +32,9 @@ shared_context "policy objs" do
   let(:admin) { new_user_from(community, label: "admin") }
   let(:admin2) { new_user_from(community, label: "admin2") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
+  let(:cluster_admin2) { new_user_from(community, label: "cluster_admin2") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
+  let(:super_admin2) { new_user_from(community, label: "super_admin2") }
   let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
   let(:outside_super_admin) { with_tenant(clusterB) {
     new_user_from(communityX, label: "outside_super_admin") } }

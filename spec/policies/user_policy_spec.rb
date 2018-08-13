@@ -184,10 +184,16 @@ describe UserPolicy do
         expect(subject).not_to permit(admin, admin)
       end
 
-      it "denies on other admins" do
-        expect(subject).not_to permit(admin, admin2)
+      it "permits on other admins of same level" do
+        expect(subject).to permit(admin, admin2)
+        expect(subject).to permit(cluster_admin, cluster_admin2)
+        expect(subject).to permit(super_admin, super_admin2)
+      end
+
+      it "denies for admins on higher admins" do
         expect(subject).not_to permit(admin, cluster_admin)
         expect(subject).not_to permit(admin, super_admin)
+        expect(subject).not_to permit(cluster_admin, super_admin)
       end
 
       it "denies on children" do

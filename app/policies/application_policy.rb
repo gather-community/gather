@@ -159,4 +159,16 @@ class ApplicationPolicy
   def not_specific_record?
     record.is_a?(Class)
   end
+
+  def admin_level(user)
+    if user.global_role?(:super_admin)
+      3
+    elsif user.global_role?(:cluster_admin)
+      2
+    elsif user.global_role?(:admin)
+      1
+    else
+      0
+    end
+  end
 end

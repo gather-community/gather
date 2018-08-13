@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Work
   # Builds shares for all users in a period, with certain exceptions.
   class PeriodShareBuilder
@@ -8,7 +10,8 @@ module Work
     end
 
     def build
-      users.each do |user|
+      # We randomize the users because staggering calculations depend on share ID for randomness.
+      users.shuffle.each do |user|
         next if existing_shares_by_user_id.key?(user.id)
         period.shares.build(user: user, portion: initial_portion_for(user))
       end
@@ -28,11 +31,8 @@ module Work
       # the user wants to change the quota type to non-none. They will get discarded if not used.
       # For existing periods with quota_type not none, only new users will usually not have shares.
       # We don't want to assume they should get a portion.
-      if @period.new_record? || @period.quota_none?
-        user.child? ? 0 : 1
-      else
-        nil
-      end
+      return unless @period.new_record? || @period.quota_none?
+      user.child? ? 0 : 1
     end
 
     def existing_shares_by_user_id

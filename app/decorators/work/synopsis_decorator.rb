@@ -31,7 +31,7 @@ module Work
     end
 
     def user_full_community_hours
-      for_user[1..-1].map { |bucket| [bucket[:bucket], bucket[:ttl]] }.to_h
+      for_user[1..-1].map { |bucket| [bucket[:bucket], round_next_half(bucket[:ttl])] }.to_h
     end
 
     private

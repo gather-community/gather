@@ -10,6 +10,7 @@ module Work
     alias done? done
 
     delegate :quota_type, to: :period
+    delegate :rounds, to: :round_calculator
 
     def initialize(period:, user:)
       self.period = period
@@ -46,8 +47,12 @@ module Work
 
     def handle_staggering
       return unless period.staggered?
-      calc = RoundCalculator.new(target_share: shares_for(:user).first)
+      calc = round_calculator
       self.staggering = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
+    end
+
+    def round_calculator
+      @round_calculator ||= RoundCalculator.new(target_share: shares_for(:user).first)
     end
 
     def obligations_for(who)

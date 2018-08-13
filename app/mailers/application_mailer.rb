@@ -1,8 +1,13 @@
+# frozen_string_literal: true
+
+# Root mailer for all mailers.
 class ApplicationMailer < ActionMailer::Base
   include SubdomainSettable
   default from: Settings.email.from
 
   protected
+
+  attr_reader :community
 
   # Overrides default mail method.
   #
@@ -17,13 +22,10 @@ class ApplicationMailer < ActionMailer::Base
   def mail(params)
     params[:to] = resolve_recipients(params[:to])
     return if params[:to].empty?
+    raise "@community must be set or community method overridden to send mail" unless community
     with_community_subdomain(community) do
       super
     end
-  end
-
-  def community
-    nil
   end
 
   private

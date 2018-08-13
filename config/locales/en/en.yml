@@ -847,6 +847,8 @@ en:
   work_mailer:
     shift_reminder:
       subject: "Job Reminder: %{title}%{note}%{times}"
+    job_choosing_notice:
+      subject: "Job Choosing is Coming Up!"
 
   users:
     greeting: "Dear %{name},"

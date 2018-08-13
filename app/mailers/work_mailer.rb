@@ -7,6 +7,7 @@ class WorkMailer < ApplicationMailer
     @reminder = reminder
     @shift = assignment.shift.decorate
     @user = assignment.user.decorate
+    @community = @shift.community
 
     # We don't display the time in the subject if there is a note.
     times_str = @reminder.note? ? "" : ", #{@shift.times}"
@@ -16,9 +17,12 @@ class WorkMailer < ApplicationMailer
     mail(to: @user, subject: subject)
   end
 
-  protected
-
-  def community
-    @shift.community
+  def job_choosing_notice(share)
+    @user = share.user.decorate
+    @period = share.period
+    @community = @period.community
+    raise "quota required" if @period.quota_none?
+    @synopsis = Work::SynopsisDecorator.new(Work::Synopsis.new(period: @period, user: @user))
+    mail(to: @user)
   end
 end

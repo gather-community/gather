@@ -18,6 +18,22 @@ module Work
       @to_s = h.safe_join(sentences.compact, " ")
     end
 
+    def user_regular_got
+      round_next_half(for_user[0][:got])
+    end
+
+    def user_adjusted_quota
+      round_next_half(for_user[0][:ttl])
+    end
+
+    def user_need
+      round_next_half([for_user[0][:ttl] - for_user[0][:got], 0].max)
+    end
+
+    def user_full_community_hours
+      for_user[1..-1].map { |bucket| [bucket[:bucket], bucket[:ttl]] }.to_h
+    end
+
     private
 
     def youre_all_set

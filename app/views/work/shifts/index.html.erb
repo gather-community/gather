@@ -3,11 +3,11 @@
   <%= render("work/shared/no_period_notice") %>
 <% else %>
   <%= render("shifts") %>
-  <div class="row">
+  <div class="row table-footer">
     <div class="col-sm-6">
       <%= render("pagination") %>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 choosee">
       <%= lenses[:choosee].render %>
     </div>
   </div>

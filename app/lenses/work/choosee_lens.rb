@@ -8,9 +8,10 @@ module Work
     def initialize(context:, options:, **params)
       options[:required] = true
       options[:global] = true
-      options[:default] = options[:chooser]
+      options[:default] = options[:chooser].id
       options[:floating] = true
       super(options: options, context: context, **params)
+      prohibit_values_not_in_candidate_list
     end
 
     def render
@@ -28,6 +29,10 @@ module Work
 
     private
 
+    def chooser
+      options[:chooser]
+    end
+
     def option_tags
       h.options_for_select(candidates.map { |c| [option_name_for(c), c.id] }, value)
     end
@@ -38,15 +43,26 @@ module Work
 
     # Users this user can choose as (must have a nonzero share) for the current period.
     def candidates
-      [options[:chooser]] + period.shares.nonzero.where(user_id: candidate_ids).includes(:user).map(&:user)
+      @candidates ||= [chooser] + other_household_members + users_with_chooser_as_proxy
     end
 
-    def candidate_ids
-      options[:chooser].household.users.pluck(:id) - [options[:chooser].id]
+    # Other household members with nonzero share for this period.
+    def other_household_members
+      ids = chooser.household.users.pluck(:id) - [chooser.id]
+      period.shares.nonzero.where(user_id: ids).includes(:user).map(&:user)
+    end
+
+    def users_with_chooser_as_proxy
+      User.active.where(job_choosing_proxy_id: chooser.id)
     end
 
     def period
       set[:period].object
+    end
+
+    # This could one day be generic select lens functionality.
+    def prohibit_values_not_in_candidate_list
+      self.value = chooser.id.to_s unless candidates.any? { |c| c.id.to_s == value }
     end
   end
 end

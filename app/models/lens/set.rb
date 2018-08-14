@@ -109,6 +109,10 @@ module Lens
         stores: stores,
         set: self
       )
+
+      # This hash may have been accessed and thus memoized by the lens just built,
+      # but that could be a problem if it's not the last one, so force it to rebuild on the next access.
+      @lenses_by_param_name = nil
     end
 
     def root_store

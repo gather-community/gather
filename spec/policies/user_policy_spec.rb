@@ -343,7 +343,7 @@ describe UserPolicy do
     let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
     let(:base_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :allergies, :doctor, :medical, :school, :household_by_id,
+      :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
       {privacy_settings: [:hide_photo_from_cluster]},
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
     ] }

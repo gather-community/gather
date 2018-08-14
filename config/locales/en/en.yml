@@ -37,6 +37,7 @@ en:
         birthdate_str: "Birthdate"
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
+        job_choosing_proxy_id: "Job Choosing Proxy"
         up_guardianships: "Parents/Guardians"
         privacy_settings: "Privacy Settings"
         school: "School"
@@ -477,6 +478,7 @@ en:
         guidelines: "Text that the user must agree to when making a reservation."
       user:
         joined_on: "Approximate date when you joined the community"
+        job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
         email: "The email address at which you'd prefer to be contacted."
         google_email: "The email address tied to the Google account used for sign-in."
       meals_formula:
@@ -607,12 +609,14 @@ en:
       household: "Please type a few letters of the household's name."
       guardian: "Please type a few letters of the guardian's name."
       user: "Please type a few letters of the user's name."
+      job_choosing_proxy: "Please type a few letters of the user's name."
     placeholders:
       reserver: "Choose Reserver ..."
       sponsor: "Choose Sponsor ..."
       household: "Choose Household ..."
       guardian: "Choose Guardian ..."
       user: "Choose User ..."
+      job_choosing_proxy: "Choose User ..."
 
   csv:
     headers:

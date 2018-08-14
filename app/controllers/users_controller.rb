@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       # For select2 lookups
       format.json do
         @users = case params[:context]
-        when "res_sponsor", "reserver_this_cmty", "guardian"
+        when "res_sponsor", "reserver_this_cmty", "guardian", "job_choosing_proxy"
           @users.in_community(current_community).adults
         when "reserver_any_cmty"
           @users.adults

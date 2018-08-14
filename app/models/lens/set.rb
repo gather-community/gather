@@ -106,7 +106,8 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        stores: stores
+        stores: stores,
+        set: self
       )
     end
 

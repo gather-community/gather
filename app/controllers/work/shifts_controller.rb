@@ -9,7 +9,7 @@ module Work
 
     def index
       authorize(sample_shift, :index_wrapper?)
-      prepare_lenses(:search, :"work/shift", :"work/period")
+      prepare_lenses(:search, :"work/shift", :"work/period", "work/choosee": {chooser: current_user})
       @period = lenses[:period].object
 
       # Need to do this early because it could affect policies and cache key.

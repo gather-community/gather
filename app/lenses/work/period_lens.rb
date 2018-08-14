@@ -23,7 +23,8 @@ module Work
 
     # Gets the period object to which the lens points. May be nil.
     def object
-      Period.find_by(id: value)
+      return @object if defined?(@object)
+      @object = Period.find_by(id: value)
     end
 
     private

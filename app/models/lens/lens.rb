@@ -1,6 +1,6 @@
 module Lens
   class Lens
-    attr_accessor :options, :context, :store, :route_params
+    attr_accessor :options, :context, :store, :route_params, :set
 
     delegate :blank?, :present?, to: :value
     alias_method :active?, :present?
@@ -25,12 +25,13 @@ module Lens
       self.name.underscore.gsub(/_lens\z/, "")
     end
 
-    def initialize(options:, context:, stores:, route_params:)
+    def initialize(options:, context:, stores:, route_params:, set:)
       self.options = options
       self.context = context
       self.route_params = route_params
       self.store = options[:global] ? stores[:global] : stores[:action]
       self.value = route_param_given? ? route_param : (value || options[:default])
+      self.set = set
     end
 
     def full_name

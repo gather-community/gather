@@ -2,6 +2,7 @@ en:
   work:
     no_periods_html: "There are no active work periods. Please %{link}."
     not_setup: "It looks like your community hasn't set up Gather's work share system.\nTalk to your Gather Admin for more info."
+    choosing_as: "You are choosing as %{name}. Any jobs you sign up for will be assigned to them."
     no_signups: "No Signups"
     create_one: "create one first"
     phase_notices:

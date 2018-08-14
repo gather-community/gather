@@ -4,7 +4,7 @@ module Work
   # Controls job signup pages.
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
-    decorates_assigned :shifts, :shift
+    decorates_assigned :shifts, :shift, :choosee
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
@@ -104,6 +104,7 @@ module Work
       prepare_lenses(*names)
       @period = lenses[:period].object
       @choosee = lenses[:choosee].choosee
+      flash.now[:notice] = t("work.choosing_as", name: choosee.full_name) if @choosee != current_user
     end
 
     def render_shift_and_synopsis_json

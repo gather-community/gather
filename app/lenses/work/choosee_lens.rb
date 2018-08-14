@@ -5,12 +5,22 @@ module Work
   class ChooseeLens < ApplicationLens
     param_name :choosee
 
+    def initialize(context:, options:, **params)
+      options[:required] = true
+      options[:global] = true
+      options[:default] = options[:chooser]
+      super(options: options, context: context, **params)
+    end
+
     def render
       h.select_tag(param_name, option_tags,
-        prompt: option_name_for(options[:chooser]),
         class: "form-control",
         onchange: "this.form.submit();",
         "data-param-name": param_name)
+    end
+
+    def choosee
+      User.find_by(id: value)
     end
 
     private
@@ -25,7 +35,7 @@ module Work
 
     # Users this user can choose as (must have a nonzero share) for the current period.
     def candidates
-      period.shares.nonzero.where(user_id: candidate_ids).includes(:user).map(&:user)
+      [options[:chooser]] + period.shares.nonzero.where(user_id: candidate_ids).includes(:user).map(&:user)
     end
 
     def candidate_ids

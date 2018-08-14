@@ -1,4 +1,4 @@
-<div class="shift-card section <%= "mine" if shift.mine? %>" data-id="<%= shift.id %>">
+<div class="shift-card section <%= "mine" if shift.user_signed_up?(@choosee) %>" data-id="<%= shift.id %>">
   <table>
     <tr>
       <td>
@@ -28,7 +28,7 @@
             <% if assignment.preassigned? %>
               &nbsp;<%= icon_tag("thumb-tack", title: I18n.t("work.preassigned")) %>
             <% end %>
-            <% if policy(shift).unsignup? && assignment.user == current_user %>
+            <% if policy(shift).unsignup? && assignment.user == @choosee %>
               <span class="cancel-link">
                 &nbsp;<%= link_to(icon_tag("close", title: I18n.t("common.cancel")), "javascript:void(0)",
                   "data-confirm": t("confirmations.work/shift.unsignup")) %>

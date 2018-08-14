@@ -9,8 +9,7 @@ module Work
 
     def index
       authorize(sample_shift, :index_wrapper?)
-      prepare_lenses(:search, :"work/shift", :"work/period", "work/choosee": {chooser: current_user})
-      @period = lenses[:period].object
+      prepare_lenses_and_set_contextual_vars
 
       # Need to do this early because it could affect policies and cache key.
       @period&.auto_open_if_appropriate
@@ -40,11 +39,11 @@ module Work
     # Called from AJAX on signup link click.
     # If there are no slots left, shift card will include error message.
     def signup
+      prepare_lenses_and_set_contextual_vars
       @shift = Shift.find(params[:id])
-      @period = @shift.period
 
       begin
-        authorize_signup_or_set_error
+        authorize_and_do_signup_or_raise_error
         raise_stubbed_error_in_test_mode
       rescue RoundLimitExceededError
         @error = t("work/shift.round_limit_exceeded")
@@ -69,20 +68,20 @@ module Work
     end
 
     def unsignup
+      prepare_lenses_and_set_contextual_vars
       @shift = Shift.find(params[:id])
-      @period = @shift.period
       authorize @shift
 
       if request.xhr?
         begin
-          @shift.unsignup_user(current_user)
+          @shift.unsignup_user(@choosee)
         rescue NotSignedUpError
           @error = t("work/shift.not_signed_up")
         end
         render_shift_and_synopsis_json
       else
         begin
-          @shift.unsignup_user(current_user)
+          @shift.unsignup_user(@choosee)
           flash[:success] = "Your signup was removed successfully."
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
@@ -98,6 +97,14 @@ module Work
     end
 
     private
+
+    def prepare_lenses_and_set_contextual_vars
+      names = params[:action] == "index" ? %i[search work/shift] : []
+      names << :"work/period" << {"work/choosee": {chooser: current_user}}
+      prepare_lenses(*names)
+      @period = lenses[:period].object
+      @choosee = lenses[:choosee].choosee
+    end
 
     def render_shift_and_synopsis_json
       render json: {
@@ -133,13 +140,13 @@ module Work
       apply_search_lens
     end
 
-    # Since we have a custom built policy object, we need to do our own custom authorization.
-    # If authorization fails due to round limit being exceeded, raise a special error.
-    def authorize_signup_or_set_error
+    def authorize_and_do_signup_or_raise_error
+      # Since we have a custom built policy object, we need to do our own custom authorization.
+      # If authorization fails due to round limit being exceeded, raise a special error.
       skip_authorization
       policy = shift_policy(@shift)
       if policy.signup?
-        @shift.signup_user(current_user)
+        @shift.signup_user(@choosee)
       elsif policy.round_limit_exceeded?
         raise RoundLimitExceededError
       else
@@ -156,8 +163,8 @@ module Work
       @shifts =
         case lenses[:shift].value
         when "open" then @shifts.open
-        when "me" then @shifts.with_user(current_user)
-        when "myhh" then @shifts.with_user(current_user.household.users)
+        when "me" then @shifts.with_user(@choosee)
+        when "myhh" then @shifts.with_user(@choosee.household.users)
         when "notpre" then @shifts.with_non_preassigned_or_empty_slots
         else lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
         end
@@ -184,18 +191,18 @@ module Work
 
     # Custom-builds a ShiftPolicy object with the given shift, including the synopsis if appropriate.
     def shift_policy(shift)
-      ShiftPolicy.new(current_user, shift, synopsis: shift.period.staggered? ? synopsis.object : nil)
+      ShiftPolicy.new(@choosee, shift, synopsis: shift.period.staggered? ? synopsis.object : nil)
     end
 
     def synopsis
       raise "period must be set to build synopsis" unless @period
       # Draper inferral is not working here for some reason.
-      @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: current_user))
+      @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: @choosee))
     end
 
     # Cache key for the index page.
     def cache_key
-      chunks = [current_user.id, @period.cache_key, @shifts.cache_key, lenses.cache_key, params[:page] || 1]
+      chunks = [@choosee.id, @period.cache_key, @shifts.cache_key, lenses.cache_key, params[:page] || 1]
 
       # Need to include current minutes/5 if staggered because the round limit calculations
       # may change things just with the passage of time. We know things only change this way at 5-minute

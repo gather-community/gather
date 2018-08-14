@@ -9,14 +9,17 @@ module Work
       options[:required] = true
       options[:global] = true
       options[:default] = options[:chooser]
+      options[:floating] = true
       super(options: options, context: context, **params)
     end
 
     def render
-      h.select_tag(param_name, option_tags,
-        class: "form-control",
-        onchange: "this.form.submit();",
-        "data-param-name": param_name)
+      h.content_tag(:form, class: "form-inline floating-lens hidden-print") do
+        h.select_tag(param_name, option_tags,
+          class: "form-control",
+          onchange: "this.form.submit();",
+          "data-param-name": param_name)
+      end
     end
 
     def choosee

@@ -43,11 +43,15 @@ module Lens
     end
 
     def required?
-      !!options[:required]
+      options[:required] == true
     end
 
     def global?
-      !!options[:global]
+      options[:global] == true
+    end
+
+    def floating?
+      options[:floating] == true
     end
 
     def value

@@ -3,7 +3,14 @@
   <%= render("work/shared/no_period_notice") %>
 <% else %>
   <%= render("shifts") %>
-  <%= render("pagination") %>
+  <div class="row">
+    <div class="col-sm-6">
+      <%= render("pagination") %>
+    </div>
+    <div class="col-sm-6">
+      <%= lenses[:choosee].render %>
+    </div>
+  </div>
 <% end %>
 <%= javascript_tag do %>
   $(function() {

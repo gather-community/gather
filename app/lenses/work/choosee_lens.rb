@@ -48,6 +48,7 @@ module Work
 
     # Other household members with nonzero share for this period.
     def other_household_members
+      return [] if period.nil?
       ids = chooser.household.users.pluck(:id) - [chooser.id]
       period.shares.nonzero.where(user_id: ids).includes(:user).map(&:user)
     end

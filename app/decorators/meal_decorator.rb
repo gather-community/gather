@@ -39,8 +39,10 @@ class MealDecorator < ApplicationDecorator
     ActionLinkSet.new(
       ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),
       ActionLink.new(object, :summary, icon: "file-text", path: h.summary_meal_path(object)),
-      ActionLink.new(object, :reopen, icon: "unlock", path: h.reopen_meal_path(object), method: :put),
-      ActionLink.new(object, :close, icon: "lock", path: h.close_meal_path(object), method: :put),
+      ActionLink.new(object, :reopen, icon: "unlock", path: h.reopen_meal_path(object),
+                                      method: :put, confirm: true),
+      ActionLink.new(object, :close, icon: "lock", path: h.close_meal_path(object),
+                                     method: :put, confirm: true),
       ActionLink.new(object, :finalize, icon: "certificate", path: h.new_meal_finalize_path(object)),
       ActionLink.new(object, :cancel, icon: "ban", path: h.new_meal_message_path(object, cancel: 1)),
       ActionLink.new(object, :send_message, icon: "envelope", path: h.new_meal_message_path(object)),

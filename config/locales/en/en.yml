@@ -337,7 +337,9 @@ en:
       destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
     meal:
+      close: "Are you sure you want to close this meal? No further signups will be allowed."
       destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
+      reopen: "Are you sure you want to reopen this meal? New signups will be allowed."
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'?"

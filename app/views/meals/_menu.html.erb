@@ -36,6 +36,9 @@
         [None]
       <% end %>
     </section>
+    <% if @meal.menu_posted_at.present? %>
+      <small><br/><%= t("meals.menu_posted_at", time: l(@meal.menu_posted_at)) %></small>
+    <% end %>
   <% else %>
     <hr/>
     No menu posted yet.

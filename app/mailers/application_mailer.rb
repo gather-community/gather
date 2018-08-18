@@ -33,12 +33,22 @@ class ApplicationMailer < ActionMailer::Base
   def resolve_recipients(recipients)
     Array.wrap(recipients).map do |recipient|
       if recipient.is_a?(User)
-        recipient.fake? ? nil : recipient.email
+        resolve_user_email(recipient)
       elsif recipient.is_a?(Household)
         recipient.users.reject(&:fake?).map(&:email)
       else
         recipient
       end
     end.flatten.compact
+  end
+
+  def resolve_user_email(user)
+    if user.fake?
+      nil
+    elsif user.child? && user.email.blank?
+      user.guardians.map(&:email)
+    else
+      user.email
+    end
   end
 end

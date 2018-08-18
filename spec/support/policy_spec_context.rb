@@ -153,6 +153,16 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "permits active users only" do
+    it "permits active users" do
+      expect(subject).to permit(user, record)
+    end
+
+    it "forbids inactive users" do
+      expect(subject).not_to permit(inactive_user, record)
+    end
+  end
+
   shared_examples_for "permits special role but not regular users" do |role_name|
     context do
       let(:actor) { role_member(role_name) }

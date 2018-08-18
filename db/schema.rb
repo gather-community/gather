@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180814155301) do
+ActiveRecord::Schema.define(version: 20180818183634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20180814155301) do
     t.text "entrees"
     t.integer "formula_id", null: false
     t.text "kids"
+    t.datetime "menu_posted_at"
     t.text "notes"
     t.datetime "served_at", null: false
     t.text "side"

@@ -10,6 +10,8 @@ Links to other pages are very important! You can link to other **wiki pages** li
 
 Note that the above link is (probably) red. That's because the page doesn't exist yet. If you click the link, you will have a chance to create the page. The link will then become blue!
 
+If you want to use something other than the page's title as the link text, you can [[Fun Page|do this]].
+
 Links to external pages look [like this](http://example.com).
 
 Plain link text will be automatically recognized: https://gather.coop

@@ -2,33 +2,28 @@
 
 module Work
   # Combination lens with various options for filtering shifts.
-  class ShiftLens < ApplicationLens
+  class ShiftLens < Lens::SelectLens
     REQUESTER_PREFIX = "req"
 
     param_name :shift
-
-    def render
-      h.select_tag(param_name, main_options << divider << requester_options,
-        prompt: I18n.t("#{i18n_key}.all"),
-        class: "form-control",
-        onchange: "this.form.submit();",
-        "data-param-name": param_name)
-    end
+    i18n_key "simple_form.options.work_shift.lens"
+    select_prompt :all
 
     def requester_id
       return unless value =~ /\A#{REQUESTER_PREFIX}(.+)\z/
       Regexp.last_match(1)
     end
 
-    private
+    protected
 
-    def i18n_key
-      @i18n_key ||= "simple_form.options.work_shift.lens"
+    def option_tags
+      main_options << divider << requester_options
     end
 
+    private
+
     def main_options
-      options = %w[open me myhh notpre]
-      h.options_for_select(options.map { |o| [I18n.t("#{i18n_key}.#{o}"), o] }, value)
+      tags_for_options(%i[open me myhh notpre])
     end
 
     def divider

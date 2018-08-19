@@ -2,7 +2,7 @@
 
 module Work
   # Lens to indicate who is being chosen for (for proxy situations).
-  class ChooseeLens < ApplicationLens
+  class ChooseeLens < Lens::SelectLens
     param_name :choosee
 
     def initialize(context:, options:, **params)
@@ -15,12 +15,7 @@ module Work
     end
 
     def render
-      h.content_tag(:form, class: "form-inline floating-lens hidden-print") do
-        h.select_tag(param_name, option_tags,
-          class: "form-control",
-          onchange: "this.form.submit();",
-          "data-param-name": param_name)
-      end
+      h.content_tag(:form, select_tag, class: "form-inline floating-lens hidden-print")
     end
 
     def choosee
@@ -37,13 +32,17 @@ module Work
       h.options_for_select(candidates.map { |c| [option_name_for(c), c.id] }, value)
     end
 
+    def select_prompt
+      option_name_for(options[:chooser])
+    end
+
     def option_name_for(user)
       I18n.t("work/shift.choosing_as", name: user.decorate.full_name)
     end
 
     # Users this user can choose as (must have a nonzero share) for the current period.
     def candidates
-      @candidates ||= [chooser] + other_household_members + users_with_chooser_as_proxy
+      @candidates ||= other_household_members + users_with_chooser_as_proxy
     end
 
     # Other household members with nonzero share for this period.

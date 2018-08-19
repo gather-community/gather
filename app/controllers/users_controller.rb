@@ -174,15 +174,10 @@ class UsersController < ApplicationController
     @users = @users.in_community(@community)
     @users = @users.matching(lenses[:search].value) if lenses[:search].present?
     @users = @users.in_life_stage(lenses[:lifestage].value) if lenses[:lifestage].present?
+    @users = @users.by_active.sorted_by(lenses[:sort].value)
 
     # Regular folks can't see inactive users.
     @users = @users.active unless policy(sample_user).show_inactive?
-
-    if lenses[:sort].present?
-      @users = @users.by_active.sorted_by(lenses[:sort].value)
-    else
-      @users = @users.by_active.by_name
-    end
   end
 
   # Called before authorization to check and prepare household attributes.

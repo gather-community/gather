@@ -6,6 +6,6 @@ class SearchLens < Lens::Lens
 
   def render
     h.text_field_tag(param_name, value,
-      placeholder: I18n.t("search_lens.prompt"), class: "form-control", "data-param-name": param_name)
+      placeholder: I18n.t("search_lens.prompt"), class: css_classes, "data-param-name": param_name)
   end
 end

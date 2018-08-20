@@ -39,6 +39,10 @@ module Lens
       self.class.param_name
     end
 
+    def css_classes
+      "form-control #{param_name.to_s.dasherize}-lens"
+    end
+
     def required?
       options[:required] == true
     end

@@ -7,7 +7,7 @@ module Work
 
     def initialize(context:, options:, **params)
       options[:required] = true
-      options[:global] = true
+      options[:global] = true # Global so that it doesn't cause a clear link to show (sort of a hack).
       options[:default] = options[:chooser].id
       options[:floating] = true
       super(options: options, context: context, **params)

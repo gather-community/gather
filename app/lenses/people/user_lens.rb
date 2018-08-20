@@ -8,7 +8,7 @@ module People
     def render
       h.select_tag(param_name, selected_option_tag,
         prompt: h.t("users.all_users"),
-        class: "form-control",
+        class: css_classes,
         onchange: "this.form.submit();",
         "data-param-name": param_name,
         data: {

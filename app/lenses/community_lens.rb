@@ -29,10 +29,6 @@ class CommunityLens < Lens::SelectLens
     end
   end
 
-  def select_tag_id
-    "community" # The default may be nil if the input name is blank.
-  end
-
   def select_input_name
     options[:subdomain] ? "" : "community"
   end

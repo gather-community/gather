@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "lenses", js: true do
@@ -12,60 +14,135 @@ feature "lenses", js: true do
     login_as(user, scope: :user)
   end
 
-  describe "directory lens" do
-    let(:path) { users_path }
-    let(:nav_link) { "People"}
-
-    scenario "community" do
-      expect_community_dropdown
-    end
-
+  describe "plain select lens" do
     scenario "life stage" do
-      expect_plain_dropdown(id: "lifestage", default_opt: "Adults + Children", opt2: ["Adults", "adult"])
+      visit(users_path)
+      expect_select_lens(param_name: :lifestage, default_opt: "Adults + Children",
+                         opt2: %w[Adults adult], path: users_path, nav_link: "People")
+    end
+  end
+
+  describe "community lens (highly customized)" do
+    context "basic" do
+      scenario do
+        visit(users_path)
+        expect_community_dropdown
+      end
     end
 
+    context "with all option" do
+      scenario do
+        visit(meals_path)
+        expect_community_dropdown(all_option: true)
+      end
+    end
+
+    context "with no subdomain change" do
+      before do
+        [community1, community2, community3].each do |c|
+          create(:account, community: c, household: user.household)
+        end
+      end
+
+      scenario do
+        visit(accounts_household_path(user.household))
+        # This kind of community drop-down does not change the subdomain.
+        expect_community_dropdown(subdomain: false)
+      end
+    end
+  end
+
+  describe "search lens" do
+    scenario "search" do
+      visit(users_path)
+      expect_search(path: users_path, nav_link: "People")
+    end
+  end
+
+  describe "global lens" do
+    let!(:period1) { create(:work_period, name: "Period 1", starts_on: 5.days.ago) }
+    let!(:period2) { create(:work_period, name: "Period 2", starts_on: 100.days.ago) }
+
+    scenario "period" do
+      visit(work_shifts_path)
+      expect(lens_selected_option(:period).text).to eq("Period 1")
+
+      # Select Period 2 and wait.
+      lens_field(:period).select("Period 2")
+      expect(page).to have_echoed_url(/(&|\?)period=#{period2.id}(&|\z)/)
+      expect(lens_selected_option(:period).text).to eq("Period 2")
+
+      # Should be selected on other work pages too.
+      visit(work_jobs_path)
+      expect(page).to have_echoed_url(%r{work/jobs})
+      expect(lens_selected_option(:period).text).to eq("Period 2")
+    end
+  end
+
+  describe "floating lens" do
+    let!(:user2) { create(:user, household: user.household) }
+    let!(:period1) { create(:work_period, name: "Period 1", starts_on: 5.days.ago) }
+
+    before do
+      [user, user2].each { |u| create(:work_share, period: period1, user: u) }
+    end
+
+    scenario "is not in the lens bar" do
+      visit(work_shifts_path)
+      expect(page).not_to have_css("form.lens-bar .choosee-lens")
+      expect(page).to have_css("form.floating-lens .choosee-lens")
+    end
+  end
+
+  #####################################################################################################
+  # TODO: The rest of these specs should be moved into domain-specific spec files.
+  # They don't contribute coverage of the code in the Lens namespace. But for now, they are at least
+  # exercising some endpoints that aren't otherwise exercised.
+  # When these are moved, they should be replaced with specs that actually test the semantics of the
+  # lenses (e.g. that adults-only are actually displayed when you pick that from the lens.)
+  # There is no need to test e.g. the basic select lens behavior over and over.
+  # Lenses that are more custom, though, like choosee lens, deserve a bit more coverage.
+
+  describe "directory lenses" do
     scenario "user sort" do
-      expect_plain_dropdown(id: "sort", default_opt: "By Name", opt2: ["By Unit", "unit"])
+      visit(users_path)
+      expect_select_lens(param_name: :sort, default_opt: "By Name",
+                         opt2: ["By Unit", "unit"], path: users_path, nav_link: "People")
     end
 
     scenario "user view" do
-      expect_plain_dropdown(id: "view", default_opt: "Album", opt2: ["Table", "table"])
-    end
-
-    scenario "search" do
-      expect_search
+      visit(users_path)
+      expect_select_lens(param_name: :view, default_opt: "Album",
+                         opt2: %w[Table table], path: users_path, nav_link: "People")
     end
   end
 
   describe "meals lens" do
-    let(:path) { meals_path }
-    let(:nav_link) { "Meals"}
-
     scenario "community" do
+      visit(meals_path)
       expect_community_dropdown(all_option: true)
     end
 
     scenario "time" do
-      expect_plain_dropdown(id: "time", default_opt: "Upcoming", opt2: ["Past", "past"])
+      visit(meals_path)
+      expect_select_lens(param_name: :time, default_opt: "Upcoming",
+                         opt2: %w[Past past], path: meals_path, nav_link: "Meals")
     end
 
     scenario "search" do
-      expect_search
+      visit(meals_path)
+      expect_search(path: meals_path, nav_link: "Meals")
     end
   end
 
   describe "reservation lens" do
-    let(:path) { reservations_path }
-    let(:nav_link) { "Reservations"}
-
     scenario "community" do
+      visit(reservations_path)
       expect_community_dropdown
     end
   end
 
   describe "my accounts lens" do
-    let(:path) { accounts_household_path(user.household) }
-
     before do
       [community1, community2, community3].each do |c|
         create(:account, community: c, household: user.household)
@@ -73,73 +150,71 @@ feature "lenses", js: true do
     end
 
     scenario "community" do
+      visit(accounts_household_path(user.household))
       # This kind of community drop-down does not change the subdomain.
       expect_community_dropdown(subdomain: false)
     end
   end
 
-  def expect_plain_dropdown(id:, default_opt:, opt2:)
-    visit(path)
-
-    # Initially, nothing should be selected, so the default option should be showing.
-    expect_unselected_option(".lens-bar ##{id}", default_opt)
+  def expect_select_lens(param_name:, default_opt:, opt2:, path:, nav_link:)
+    # Nothing should be initially selected, so the default option should be showing.
+    expect_unselected_option(lens_selector(param_name), default_opt)
 
     # Select the secondary option, wait for page to load, and test.
-    lens_field(id).select(opt2[0])
-    expect(page).to have_echoed_url(%r{(&|\?)#{id}=#{opt2[1]}(&|\z)})
-    expect(lens_selected_option(id).text).to eq opt2[0]
+    lens_field(param_name).select(opt2[0])
+    expect(page).to have_echoed_url(/(&|\?)#{param_name}=#{opt2[1]}(&|\z)/)
+    expect(lens_selected_option(param_name).text).to eq opt2[0]
 
-    expect_rewritten_link_and_session(key: id, value: opt2[1]) do
-      expect(lens_selected_option(id).text).to eq opt2[0]
+    expect_rewritten_link_and_session(key: param_name, value: opt2[1], path: path, nav_link: nav_link) do
+      expect(lens_selected_option(param_name).text).to eq opt2[0]
     end
   end
 
   def expect_community_dropdown(all_option: false, subdomain: true)
-    visit(path)
+    orig_url = current_url
     if all_option
-      expect_unselected_option(".lens-bar #community", "All Communities")
+      expect_unselected_option(lens_selector(:community), "All Communities")
     else
-      expect(lens_selected_option("community").text).to eq "Community 3"
+      expect(lens_selected_option(:community).text).to eq "Community 3"
     end
-    lens_field("community").select("Community 2")
+    lens_field(:community).select("Community 2")
     if subdomain
       expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     else
-      expect(page).to have_echoed_url(%r{(&|\?)community=community2(&|\z)})
+      expect(page).to have_echoed_url(/(&|\?)community=community2(&|\z)/)
     end
-    expect(lens_selected_option("community").text).to eq "Community 2"
+    expect(lens_selected_option(:community).text).to eq "Community 2"
     if all_option
-      expect(page).to have_echoed_url(%r{(&|\?)community=this(&|\z)})
+      expect(page).to have_echoed_url(/(&|\?)community=this(&|\z)/)
 
       # Clear button should work for all option mode only
       first(".lens-bar a.clear").click
-      expect(page).to have_echoed_url(%r{(&|\?)community=(&|\z)})
-      expect_unselected_option(".lens-bar #community", "All Communities")
+      expect(page).to have_echoed_url(/(&|\?)community=(&|\z)/)
+      expect_unselected_option(lens_selector(:community), "All Communities")
     else
       expect(page).not_to have_css(".lens-bar a.clear")
     end
 
     # Direct path visit should maintain value in subdomain mode only.
     unless subdomain
-      visit(path)
-      expect(page).to have_echoed_url(%r{#{path}\z})
-      expect(lens_selected_option("community").text).to eq "Community 2"
+      visit(orig_url)
+      expect(page).to have_echoed_url(orig_url)
+      expect(lens_selected_option(:community).text).to eq "Community 2"
     end
   end
 
-  def expect_search
-    visit(path)
-    expect(lens_field("search").text).to eq ""
-    lens_field("search").set("foo")
-    lens_field("search").native.send_keys(:return)
-    expect(page).to have_echoed_url(%r{(&|\?)search=foo(&|\z)})
-    expect(lens_field("search").value).to eq "foo"
-    expect_rewritten_link_and_session(key: "search", value: "foo") do
-      expect(lens_field("search").value).to eq "foo"
+  def expect_search(path:, nav_link:)
+    expect(lens_field(:search).text).to eq ""
+    lens_field(:search).set("foo")
+    lens_field(:search).native.send_keys(:return)
+    expect(page).to have_echoed_url(/(&|\?)search=foo(&|\z)/)
+    expect(lens_field(:search).value).to eq "foo"
+    expect_rewritten_link_and_session(key: "search", value: "foo", path: path, nav_link: nav_link) do
+      expect(lens_field(:search).value).to eq "foo"
     end
   end
 
-  def expect_rewritten_link_and_session(key:, value:)
+  def expect_rewritten_link_and_session(key:, value:, path:, nav_link:)
     # Click away, check the rewritten link, and come back.
     find(".dropdown a", text: user.name).click
     click_link("Profile")
@@ -150,15 +225,19 @@ feature "lenses", js: true do
 
     # Direct path visit
     visit(path)
-    expect(page).to have_echoed_url(%r{#{path}\z})
+    expect(page).to have_echoed_url(/#{path}\z/)
     yield
   end
 
-  def lens_selected_option(id)
-    lens_field(id).find("option[selected]")
+  def lens_selected_option(param_name)
+    lens_field(param_name).find("option[selected]")
   end
 
-  def lens_field(id)
-    first(".lens-bar ##{id}")
+  def lens_field(param_name)
+    first(lens_selector(param_name))
+  end
+
+  def lens_selector(param_name)
+    ".#{param_name.to_s.dasherize}-lens"
   end
 end

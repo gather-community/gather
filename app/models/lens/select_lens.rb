@@ -38,20 +38,15 @@ module Lens
     end
 
     def select_tag
-      h.select_tag(param_name, option_tags,
+      h.select_tag(select_input_name, option_tags,
         prompt: translated_select_prompt,
-        class: "form-control",
-        id: select_tag_id,
+        class: css_classes,
         onchange: onchange,
         "data-param-name": param_name)
     end
 
     def select_input_name
       param_name
-    end
-
-    def select_tag_id
-      nil
     end
 
     def onchange

@@ -19,7 +19,7 @@ module NavHelper
         icon: "cutlery"
       }, {
         name: :work,
-        path: work_shifts_path,
+        path: lens_path_if_present("work/shifts"),
         permitted: policy(sample_shift).index_wrapper?,
         icon: "wrench"
       }, {
@@ -230,6 +230,7 @@ module NavHelper
   end
 
   def lens_path_if_present(controller)
-    Lens::Set.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
+    Lens::Set.path_for(context: self, controller: controller, action: "index") ||
+      send("#{controller.gsub('/', '_')}_path")
   end
 end

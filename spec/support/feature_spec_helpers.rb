@@ -239,6 +239,11 @@ module FeatureSpecHelpers
     have_css("#url", text: pattern)
   end
 
+  # Checks if the echoed URL (see above) has the given query string key/value pair
+  def have_echoed_url_param(param_name, value)
+    have_echoed_url(/(&|\?)#{param_name}=#{value}(&|\z)/)
+  end
+
   def set_host(host)
     Capybara.app_host = "http://#{host}"
   end
@@ -250,7 +255,7 @@ module FeatureSpecHelpers
   def select_lens_and_wait(param_name, label)
     select_lens(param_name, label)
     value = first(:xpath, "//select[@data-param-name='#{param_name}']/option[.='#{label}']")["value"]
-    expect(page).to have_echoed_url(/(&|\?)#{param_name}=#{value}(&|\z)/)
+    expect(page).to have_echoed_url_param(param_name, value)
   end
 
   def fill_in_lens(param_name, value)
@@ -260,7 +265,7 @@ module FeatureSpecHelpers
 
   def fill_in_lens_and_wait(param_name, value)
     fill_in_lens(param_name, value)
-    expect(page).to have_echoed_url(/(&|\?)#{param_name}=#{value}(&|\z)/)
+    expect(page).to have_echoed_url_param(param_name, value)
   end
 
   def clear_lenses

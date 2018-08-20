@@ -68,8 +68,7 @@ feature "lenses", js: true do
       expect(lens_selected_option(:period).text).to eq("Period 1")
 
       # Select Period 2 and wait.
-      lens_field(:period).select("Period 2")
-      expect(page).to have_echoed_url(/(&|\?)period=#{period2.id}(&|\z)/)
+      select_lens_and_wait("period", "Period 2")
       expect(lens_selected_option(:period).text).to eq("Period 2")
 
       # Should be selected on other work pages too.
@@ -161,8 +160,7 @@ feature "lenses", js: true do
     expect_unselected_option(lens_selector(param_name), default_opt)
 
     # Select the secondary option, wait for page to load, and test.
-    lens_field(param_name).select(opt2[0])
-    expect(page).to have_echoed_url(/(&|\?)#{param_name}=#{opt2[1]}(&|\z)/)
+    select_lens_and_wait(param_name, opt2[0])
     expect(lens_selected_option(param_name).text).to eq opt2[0]
 
     expect_rewritten_link_and_session(key: param_name, value: opt2[1], path: path, nav_link: nav_link) do
@@ -181,15 +179,15 @@ feature "lenses", js: true do
     if subdomain
       expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     else
-      expect(page).to have_echoed_url(/(&|\?)community=community2(&|\z)/)
+      expect(page).to have_echoed_url_param("community", "community2")
     end
     expect(lens_selected_option(:community).text).to eq "Community 2"
     if all_option
-      expect(page).to have_echoed_url(/(&|\?)community=this(&|\z)/)
+      expect(page).to have_echoed_url_param("community", "this")
 
       # Clear button should work for all option mode only
       first(".lens-bar a.clear").click
-      expect(page).to have_echoed_url(/(&|\?)community=(&|\z)/)
+      expect(page).to have_echoed_url_param("community", "")
       expect_unselected_option(lens_selector(:community), "All Communities")
     else
       expect(page).not_to have_css(".lens-bar a.clear")
@@ -205,9 +203,7 @@ feature "lenses", js: true do
 
   def expect_search(path:, nav_link:)
     expect(lens_field(:search).text).to eq ""
-    lens_field(:search).set("foo")
-    lens_field(:search).native.send_keys(:return)
-    expect(page).to have_echoed_url(/(&|\?)search=foo(&|\z)/)
+    fill_in_lens_and_wait(:search, "foo")
     expect(lens_field(:search).value).to eq "foo"
     expect_rewritten_link_and_session(key: "search", value: "foo", path: path, nav_link: nav_link) do
       expect(lens_field(:search).value).to eq "foo"

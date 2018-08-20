@@ -231,6 +231,6 @@ module NavHelper
 
   def lens_path_if_present(controller)
     Lens::Set.path_for(context: self, controller: controller, action: "index") ||
-      send("#{controller.gsub('/', '_')}_path")
+      send("#{controller.tr('/', '_')}_path")
   end
 end

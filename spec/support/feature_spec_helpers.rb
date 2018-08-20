@@ -239,17 +239,33 @@ module FeatureSpecHelpers
     have_css("#url", text: pattern)
   end
 
+  # Checks if the echoed URL (see above) has the given query string key/value pair
+  def have_echoed_url_param(param_name, value)
+    have_echoed_url(/(&|\?)#{param_name}=#{value}(&|\z)/)
+  end
+
   def set_host(host)
     Capybara.app_host = "http://#{host}"
   end
 
-  def select_lens(lens_param_name, value)
-    first(:css, "[data-param-name=#{lens_param_name}]").select(value)
+  def select_lens(param_name, label)
+    first(:css, "[data-param-name=#{param_name}]").select(label)
   end
 
-  def enter_lens(lens_param_name, value)
-    page.execute_script("$('.lens-bar.lower [name=#{lens_param_name}]').val('#{value}');")
+  def select_lens_and_wait(param_name, label)
+    select_lens(param_name, label)
+    value = first(:xpath, "//select[@data-param-name='#{param_name}']/option[.='#{label}']")["value"]
+    expect(page).to have_echoed_url_param(param_name, value)
+  end
+
+  def fill_in_lens(param_name, value)
+    page.execute_script("$('.lens-bar.lower [name=#{param_name}]').val('#{value}');")
     page.execute_script("$('.lens-bar.lower').submit()")
+  end
+
+  def fill_in_lens_and_wait(param_name, value)
+    fill_in_lens(param_name, value)
+    expect(page).to have_echoed_url_param(param_name, value)
   end
 
   def clear_lenses

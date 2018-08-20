@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module Work
-  class PeriodLens < ApplicationLens
+  # Global lens for work periods.
+  class PeriodLens < Lens::SelectLens
     param_name :period
     attr_accessor :periods
 
@@ -13,18 +14,16 @@ module Work
       super(options: options, context: context, **params)
     end
 
-    def render
-      option_tags = h.options_from_collection_for_select(periods, :id, :name, value)
-      h.select_tag(param_name, option_tags,
-        class: "form-control",
-        onchange: "this.form.submit();",
-        "data-param-name": param_name)
-    end
-
     # Gets the period object to which the lens points. May be nil.
     def object
       return @object if defined?(@object)
       @object = Period.find_by(id: value)
+    end
+
+    protected
+
+    def option_tags
+      h.options_from_collection_for_select(periods, :id, :name, value)
     end
 
     private

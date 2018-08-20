@@ -59,7 +59,7 @@ feature "signups", js: true do
         select_lens(:shift, "All Jobs")
         expect_jobs(*jobs[0..3])
 
-        enter_lens(:search, "fruct")
+        fill_in_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
         clear_lenses

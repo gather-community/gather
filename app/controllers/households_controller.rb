@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 class HouseholdsController < ApplicationController
-  include Lensable, AccountShowable, Destructible
+  include AccountShowable
+  include Destructible
+  include Lensable
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 
@@ -9,28 +13,8 @@ class HouseholdsController < ApplicationController
     authorize Household.new(community: current_community)
     @households = policy_scope(Household)
     respond_to do |format|
-      format.html do
-        prepare_lenses({community: {required: true}}, :search)
-        @households = @households.includes(users: :children)
-        @households = @households.in_community(current_community)
-        @households = @households.matching(lenses[:search].value) if lenses[:search].present?
-        @households = @households.by_active_and_name.page(params[:page])
-      end
-
-      # For select2 lookups
-      format.json do
-        @households = @households.active.matching(params[:search])
-        @households = case params[:context]
-        when "finalize"
-          @households # No further scoping needed for finalize
-        when "user_form"
-          HouseholdPolicy::Scope.new(current_user, @households).administerable.in_community(current_community)
-        else
-          raise "invalid select2 context"
-        end
-        @households = @households.by_commty_and_name.page(params[:page]).per(20)
-        render(json: @households, meta: { more: @households.next_page.present? }, root: "results")
-      end
+      format.html { index_html }
+      format.json { index_json }
     end
   end
 
@@ -69,7 +53,7 @@ class HouseholdsController < ApplicationController
   def update
     @household = Household.find(params[:id])
     authorize @household
-    if @household.update_attributes(household_attributes)
+    if @household.update(household_attributes)
       flash[:success] = "Household updated successfully."
       redirect_to households_path
     else
@@ -88,10 +72,10 @@ class HouseholdsController < ApplicationController
     if @accounts.size > 1
       prepare_lenses(community: {required: true, subdomain: false})
       @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
-        Community.find_by(slug: lenses[:community].value)
-      elsif lenses[:community].value.try(:match, /\d+/)
-        Community.find(lenses[:community].value)
-      end
+                     Community.find_by(slug: lenses[:community].value)
+                   elsif lenses[:community].value.try(:match, /\d+/)
+                     Community.find(lenses[:community].value)
+                   end
     end
 
     @community ||= current_user.community
@@ -114,12 +98,40 @@ class HouseholdsController < ApplicationController
       Household.find_by(id: params[:id]).try(:community)
     when "index"
       current_user.community
-    else
-      nil
     end
   end
 
   private
+
+  def index_html
+    prepare_lenses({community: {required: true}}, :"people/sort", :search)
+    @households = @households.includes(users: :children)
+    @households = @households.by_active.ordered_by(lenses[:sort].value)
+    @households = @households.in_community(current_community)
+    @households = @households.matching(lenses[:search].value) if lenses[:search].present?
+    @households = @households.page(params[:page])
+  end
+
+  # For select2 lookups
+  def index_json
+    @households = @households.active.matching(params[:search])
+    @households =
+      case params[:context]
+      when "finalize"
+        @households # No further scoping needed for finalize
+      when "user_form"
+        # Instead of the usual scope.resolve.
+        scope(@households).administerable.in_community(current_community)
+      else
+        raise "invalid select2 context"
+      end
+    @households = @households.by_commty_and_name.page(params[:page]).per(20)
+    render(json: @households, meta: {more: @households.next_page.present?}, root: "results")
+  end
+
+  def scope(relation)
+    HouseholdPolicy::Scope.new(current_user, relation)
+  end
 
   def household_attributes
     params[:household][:community_id] = current_community.id unless multi_community?

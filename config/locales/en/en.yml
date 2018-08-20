@@ -502,6 +502,7 @@ en:
           past: "Past"
           finalizable: "Finalizable"
           all: "All Time"
+          upcoming: "Upcoming"
         cost:
           payment_method:
             check: "Check"
@@ -838,12 +839,19 @@ en:
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+    all_users: "All Users"
 
   date_range_lens:
     past_12: "Past 12 Months"
     this_year: "This Year"
     this_quarter: "This Quarter"
     all_time: "All Time"
+
+  community_lens:
+    all: "All Communities"
+
+  search_lens:
+    prompt: "Search..."
 
   calendar_exports:
     meals:

@@ -12,8 +12,8 @@ class Assignment < ApplicationRecord
   belongs_to :meal, inverse_of: :assignments
 
   def self.by_role
-    array_inner = ROLES.map { |r| "'#{r}'" }.join(",")
-    order("ARRAY_POSITION(ARRAY[#{array_inner}], role::text)")
+    whens = ROLES.each_with_index.map { |r, i| "WHEN '#{r}' THEN #{i}" }.join(" ")
+    order("CASE role #{whens} END")
   end
 
   def empty?

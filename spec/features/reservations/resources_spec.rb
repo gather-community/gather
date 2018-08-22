@@ -37,7 +37,7 @@ feature "resources", js: true do
       visit(reservations_resources_path)
       click_link("Create Resource")
       expect_no_image_and_drop_file("cooper.jpg")
-      click_on("Create Resource")
+      click_button("Save")
 
       expect_validation_error
       expect_image_upload(mode: :existing, path: /cooper/)
@@ -46,7 +46,7 @@ feature "resources", js: true do
       select("Yes", from: "Can Host Meals?")
       select("Month", from: "Calendar View")
       fill_in("Guidelines", with: "Don't do bad stuff")
-      click_on("Create Resource")
+      click_button("Save")
       expect_success
 
       click_link("Foo Bar")
@@ -55,7 +55,7 @@ feature "resources", js: true do
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(mode: :dz_preview)
       fill_in("Name", with: "Baz Qux")
-      click_on("Update Resource")
+      click_button("Save")
 
       expect_success
       expect(page).to have_css("table tr td", text: "Baz Qux")

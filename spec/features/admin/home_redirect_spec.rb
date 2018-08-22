@@ -41,7 +41,7 @@ feature "home redirect" do
   def change_default_home(new_default)
     visit "/admin/settings/community"
     select(new_default, from: "Default Landing Page")
-    click_on("Save Settings")
+    click_button("Save")
     expect(page).to have_content("Settings updated successfully.")
   end
 end

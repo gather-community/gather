@@ -96,7 +96,7 @@ feature "jobs", js: true do
         select2(:clear, from: all("select.assoc_select2")[1])
         select2(users[2].name, from: all("select.assoc_select2")[1])
       end
-      click_on("Create Job")
+      click_button("Save")
 
       expect_success
       within(all("table.index tr")[1]) do
@@ -130,7 +130,7 @@ feature "jobs", js: true do
         pick_datetime(".ends-at", day: 15, hour: 11, next_click: ".shift-slots input")
         find(".shift-slots input").set(6)
       end
-      click_on("Update Job")
+      click_button("Save")
 
       expect_success
       within(all("table.index tr")[1]) do

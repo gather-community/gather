@@ -22,7 +22,7 @@ feature "time zones" do
     expect(page).to have_content("Sun Jan 01 6:00pm")
     visit "/admin/settings/community"
     select("(GMT-03:30) Newfoundland", from: "Time Zone")
-    click_on("Save Settings")
+    click_button("Save")
     expect(page).to have_content("Settings updated successfully.")
     visit "/meals"
     expect(page).to have_content("Sun Jan 01 2:30pm")

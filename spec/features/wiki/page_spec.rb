@@ -21,7 +21,7 @@ feature "pages", js: true do
 
     click_link("Edit")
     fill_in("Content", with: "Here is a link to [[Another Page]]")
-    click_on("Update Page")
+    click_button("Save")
 
     click_on("Another Page")
     expect(page).to have_content("There is no wiki page named 'Another Page'")
@@ -34,7 +34,7 @@ feature "pages", js: true do
       expect(page).to have_css(".wiki-content", text: "Version one")
     end.to change { Wiki::Page.count }.by(0)
 
-    click_on("Create Page")
+    click_button("Save")
 
     expect(page).not_to have_content("This is a preview")
     expect(page).to have_content("Version one")
@@ -46,7 +46,7 @@ feature "pages", js: true do
 
     click_on("Edit")
     fill_in("Content", with: "Version two")
-    click_on("Update Page")
+    click_button("Save")
 
     click_on("History")
     click_on("Compare Selected")
@@ -60,7 +60,7 @@ feature "pages", js: true do
     click_on("New Wiki Page")
     fill_in("Title", with: "Boring Page")
     fill_in("Content", with: "apple **banana** cherry")
-    click_on("Create Page")
+    click_button("Save")
     expect(page).to have_content("apple banana cherry")
 
     click_on("Wiki Page Listing")
@@ -104,7 +104,7 @@ feature "pages", js: true do
       fill_in("Title", with: "A Page")
       fill_in("Content", with: "The Description: {{description}}")
       fill_in("Data Source", with: "http://json-schema.org/example/geo.json")
-      click_on("Create Page")
+      click_button("Save")
     end
 
     scenario "with valid data" do
@@ -121,7 +121,7 @@ feature "pages", js: true do
     visit("/wiki/new")
     fill_in("Title", with: "Boring Page")
     fill_in("Content", with: "apple **banana** <em>bold</em> <script>foo</script>")
-    click_on("Create Page")
+    click_button("Save")
     expect(page.body).to include("apple <strong>banana</strong> <em>bold</em> foo")
   end
 end

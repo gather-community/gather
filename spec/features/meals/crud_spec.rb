@@ -22,11 +22,11 @@ feature "meal crud", js: true do
       test_index
 
       # Create with no menu
-      click_on("Create Meal")
+      click_button("Save")
       select2(location.name, from: "#meal_resource_ids", type: :inline)
       select2(users[0].name, from: "#meal_head_cook_assign_attributes_user_id")
       select2(users[1].name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
-      click_on("Create Meal")
+      click_button("Save")
       expect_success
 
       find("tr", text: users[0].name).find("a", text: "[No Title]").click
@@ -83,7 +83,7 @@ feature "meal crud", js: true do
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
       select2(actor.name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
-      click_on("Update Meal")
+      click_button("Save")
       expect_success
 
       # Show
@@ -112,7 +112,7 @@ feature "meal crud", js: true do
     fill_in("Dessert", with: "Chocolate")
     fill_in("Notes", with: "Partially organic")
     check("Dairy")
-    click_on("Update Meal")
+    click_button("Save")
     expect_success
   end
 

@@ -10,7 +10,7 @@
   <%= f.input :first_name %>
   <%= f.input :last_name %>
 
-  <%= nested_field_set(f, :up_guardianships, label: false, required: true) if @user.child? %>
+  <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) if @user.child? %>
 
   <%= f.input :email, required: @user.adult? %>
   <%= f.input :google_email, disabled: !policy(@user).administer? %>

@@ -59,7 +59,7 @@ module FormHelper
     options[:multiple] = true unless options.has_key?(:multiple)
 
     wrapper_classes = %w[nested-fields subfields]
-    wrapper_classes << "no-label" if options[:label] == false
+    wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
     wrapper_classes << "multiple" if options[:multiple]
 
     f.input(assoc, options.slice(:required, :label)) do
@@ -80,10 +80,5 @@ module FormHelper
         end
       end
     end
-  end
-
-  # Nested field set consisting only of user selects.
-  def user_nested_field_set(f, assoc, options = {})
-    nested_field_set(f, assoc, options.merge(label: false, inner_partial: "shared/user_select"))
   end
 end

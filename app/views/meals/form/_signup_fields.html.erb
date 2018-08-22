@@ -24,7 +24,8 @@
       </div>
     <% end %>
     <div <% if signup.persisted? %>data-toggle-off="<%= signup.id %>"<% end %>>
-      <%= nested_field_set(f, :diners, inner_partial: "meals/form/diner_fields", label: false) %>
+      <%= nested_field_set(f, :diners, inner_partial: "meals/form/diner_fields",
+                                       label: false, inner_labels: false) %>
     </div>
   </td>
 </tr>

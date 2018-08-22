@@ -1,8 +1,12 @@
 <%= meal.form_section(:workers) do %>
   <div id="assignment-fields">
-    <%= user_nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign") %>
+    <%= nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign",
+                                               inner_partial: "shared/user_select",
+                                               inner_labels: false) %>
     <% meal.extra_roles.each do |role| %>
-      <%= user_nested_field_set(f, :"#{role}_assigns", context: "meal_assign") %>
+      <%= nested_field_set(f, :"#{role}_assigns", context: "meal_assign",
+                                                  inner_partial: "shared/user_select",
+                                                  inner_labels: false) %>
     <% end %>
   </div>
 <% end %>

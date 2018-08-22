@@ -26,6 +26,10 @@ module Work
           indexes :assignee_names, analyzer: "english_stemmed"
         end
       end
+
+      def self.indexed_fields
+        mappings.to_hash[:shift][:properties].keys
+      end
     end
 
     def as_indexed_json(_options = {})

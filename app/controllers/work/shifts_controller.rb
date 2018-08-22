@@ -176,6 +176,7 @@ module Work
       search = Work::Shift.search(
         query: {
           multi_match: {
+            fields: Work::Shift.indexed_fields,
             query: lenses[:search].value,
             type: :cross_fields,
             operator: :and

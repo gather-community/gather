@@ -1,12 +1,33 @@
+# frozen_string_literal: true
+
+# Custom buttons
+module ButtonComponents
+  def primary(*args, &block)
+    submit_button_with_class("btn-primary", args, block)
+  end
+
+  def secondary(*args, &block)
+    submit_button_with_class("btn-default", args, block)
+  end
+
+  def submit_button_with_class(css_class, args, block)
+    options = args.extract_options!
+    options[:class] = [options[:class], css_class].compact
+    args << options
+    submit(*args, &block)
+  end
+end
+SimpleForm::FormBuilder.send :include, ButtonComponents
+
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
   config.error_notification_class = "alert alert-danger"
-  config.button_class = "btn btn-default"
+  config.button_class = "btn"
   config.boolean_label_class = nil
 
-  def hint_and_error(b)
-    b.use :hint,  wrap_with: {class: "hint"}
-    b.use :error, wrap_with: {class: "error"}
+  def hint_and_error(builder)
+    builder.use :hint,  wrap_with: {class: "hint"}
+    builder.use :error, wrap_with: {class: "error"}
   end
 
   def build_wrapper(config, name, attribs = {}, &block)
@@ -89,6 +110,6 @@ SimpleForm.setup do |config|
     check_boxes: :horizontal_radio_and_checkboxes,
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
-    boolean: :horizontal_boolean,
+    boolean: :horizontal_boolean
   }
 end

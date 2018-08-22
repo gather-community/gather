@@ -19,9 +19,9 @@
   <% end %>
 
   <%= form_actions do %>
-    <%= f.button :submit, "Cancel", name: "cancel", class: "btn-default" %>
-    <%= f.button :submit, "Preview", name: "preview", class: "btn-default" %>
-    <%= f.button :submit, class: "btn-primary" %>
+    <%= f.button :secondary, t("helpers.submit.cancel"), name: "cancel" %>
+    <%= f.button :secondary, t("helpers.submit.wiki_page.preview"), name: "preview" %>
+    <%= f.button :primary %>
   <% end %>
 
   <%= javascript_tag do %>

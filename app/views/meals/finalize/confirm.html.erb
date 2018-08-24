@@ -3,7 +3,7 @@
 <%= render("meals/time_cook") %>
 
 <%= gather_form_for(@meal, width: :full, name: "finalize",
-  url: meal_finalize_path, method: :post) do |form| %>
+  url: meal_finalize_path, method: :post) do |f| %>
 
   <%= hidden_field_tag :confirmed, "1" %>
 
@@ -54,24 +54,10 @@
   </table>
 
   <%# Hidden data to be resubmitted %>
-  <% signups.each do |signup| %>
-    <%= form.fields_for(:signups, signup) do |signup_form| %>
-      <%= signup_form.hidden_field(:household_id) %>
-      <%= signup_form.hidden_field(:_destroy) %>
-      <% Signup::DINER_TYPES.each do |dt| %>
-        <% if @meal.formula.allows_diner_type?(dt) %>
-          <% Signup::FOOD_TYPES.each do |ft| %>
-            <%= signup_form.hidden_field("#{dt}_#{ft}") %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-  <%= form.simple_fields_for(:cost, @meal.cost) do |mc_form| %>
-    <%= mc_form.hidden_field(:ingredient_cost) %>
-    <%= mc_form.hidden_field(:pantry_cost) %>
-    <%= mc_form.hidden_field(:payment_method) %>
-  <% end %>
+  <div class="hidden">
+    <%= render("meals/form/signups", f: f) %>
+    <%= render("meals/form/expenses", f: f) %>
+  </div>
 
   <%= render("shared/confirm_buttons", f: f) %>
 <% end %>

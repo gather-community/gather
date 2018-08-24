@@ -81,7 +81,6 @@ class Meal < ApplicationRecord
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
-  validates :cost, presence: true, if: :finalized?
   validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: {message: :need_location}
   validates_with Meals::SignupsValidator

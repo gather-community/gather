@@ -3,10 +3,9 @@
 <%= render("meals/time_cook") %>
 
 <%= gather_form_for(@meal, name: "finalize", url: meal_finalize_path, method: :post) do |f| %>
-
+  <%= base_error(f) %>
   <%= render("meals/form/signups", f: f, expanded: true) %>
   <%= render("meals/form/expenses", f: f, expanded: true) %>
-
   <%= form_actions do %>
     <%= f.button :primary, :continue %>
   <% end %>

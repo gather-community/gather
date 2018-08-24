@@ -41,6 +41,11 @@ en:
           from_households:
             one: "from %{count} household"
             other: "from %{count} households"
+    finalizing:
+      duplicates: "There are duplicate signups. Please correct by adding numbers for each diner type."
+      cancelled: "The meal was not finalized. You can edit it below and try again, or click 'Cancel' below to return to the meals page."
+      success: "Meal finalized successfully"
+      review_and_confirm: "<strong>Note:</strong> This meal has not been finalized yet. Please review and confirm your entries below. This information cannot be changed once confirmed, so be careful."
   meals/formulas:
     pantry: "Pantry"
     calc_types:

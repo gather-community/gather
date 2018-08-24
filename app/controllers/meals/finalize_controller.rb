@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Meals
+  # For finalizing meals.
   class FinalizeController < ApplicationController
     helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
@@ -25,38 +26,11 @@ module Meals
       build_meal_cost
 
       if (@dupes = @meal.duplicate_signups).any?
-        flash.now[:error] = "There are duplicate signups. "\
-          "Please correct by adding numbers for each diner type."
-        prepare_and_render_form
+        handle_duplicates
       elsif @meal.valid?
-        if params[:confirmed] == "0"
-          flash.now[:notice] = "The meal was not finalized. You can edit it below and try again, "\
-             "or click 'Cancel' below to return to the meals page."
-          prepare_and_render_form
-        else
-          # Run the save and signup in a transaction in case
-          # the finalize operation fails or we need to confirm.
-          Meal.transaction do
-            @finalizer = Meals::Finalizer.new(@meal)
-
-            if params[:confirmed] == "1"
-              @finalizer.finalize!
-              @meal.save!
-              flash[:success] = "Meal finalized successfully"
-              redirect_to(meals_path(finalizable: 1))
-            else
-              @calculator = @finalizer.calculator
-              @cost = @meal.cost
-              flash.now[:alert] = "<strong>Note:</strong> This meal has not been finalized yet.
-                Please review and confirm your entries below.
-                This information cannot be changed once confirmed, so be careful.".html_safe
-              prepare_and_render_form(:confirm)
-            end
-          end
-        end
+        params[:confirmed] == "0" ? handle_unconfirmed : handle_valid
       else
-        set_validation_error_notice(@meal)
-        prepare_and_render_form
+        handle_invalid
       end
     end
 
@@ -65,6 +39,48 @@ module Meals
     end
 
     private
+
+    def handle_duplicates
+      flash.now[:error] = t("meals.finalizing.duplicates")
+      prepare_and_render_form
+    end
+
+    def handle_unconfirmed
+      flash.now[:notice] = t("meals.finalizing.cancelled")
+      prepare_and_render_form
+    end
+
+    def handle_valid
+      # Run the save and signup in a transaction in case
+      # the finalize operation fails or we need to confirm.
+      Meal.transaction do
+        @finalizer = Meals::Finalizer.new(@meal)
+        if params[:confirmed] == "1"
+          complete_process
+        else
+          show_confirmation_page
+        end
+      end
+    end
+
+    def complete_process
+      @finalizer.finalize!
+      @meal.save!
+      flash[:success] = t("meals.finalizing.success")
+      redirect_to(meals_path(finalizable: 1))
+    end
+
+    def show_confirmation_page
+      @calculator = @finalizer.calculator
+      @cost = @meal.cost
+      flash.now[:alert] = t("meals.finalizing.review_and_confirm")
+      prepare_and_render_form(:confirm)
+    end
+
+    def handle_invalid
+      set_validation_error_notice(@meal)
+      prepare_and_render_form
+    end
 
     def prepare_and_render_form(template = :new)
       # We rerendering form, need to set status back to closed or the policy won't let us edit stuff.

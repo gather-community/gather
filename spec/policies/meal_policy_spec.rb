@@ -111,7 +111,6 @@ describe MealPolicy do
       before do
         stub_status("closed")
         meal.served_at = Time.current - 30.minutes
-        meal.build_cost(build(:meal_cost).attributes)
       end
 
       it_behaves_like "permits admins or special role but not regular users", :biller
@@ -126,11 +125,6 @@ describe MealPolicy do
           stub_status(bad_status)
           expect(subject).not_to permit(admin, meal)
         end
-      end
-
-      it "forbids if meal cost not present" do
-        meal.cost = nil
-        expect(subject).not_to permit(admin, meal)
       end
     end
 

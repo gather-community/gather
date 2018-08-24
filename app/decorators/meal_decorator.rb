@@ -64,6 +64,7 @@ class MealDecorator < ApplicationDecorator
                                       method: :put, confirm: true),
       ActionLink.new(object, :close, icon: "lock", path: h.close_meal_path(object),
                                      method: :put, confirm: true),
+      ActionLink.new(object, :finalize, icon: "certificate", path: h.new_meal_finalize_path(object)),
       ActionLink.new(object, :cancel, icon: "ban", path: h.new_meal_message_path(object, cancel: 1)),
       ActionLink.new(object, :send_message, icon: "envelope", path: h.new_meal_message_path(object))
     )
@@ -71,7 +72,6 @@ class MealDecorator < ApplicationDecorator
 
   def edit_action_link_set
     ActionLinkSet.new(
-      ActionLink.new(object, :finalize, icon: "certificate", path: h.new_meal_finalize_path(object)),
       ActionLink.new(object, :destroy, icon: "trash", path: h.meal_path(object), method: :delete,
                                        confirm: {title: object.title_or_no_title})
     )

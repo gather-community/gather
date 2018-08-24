@@ -1,6 +1,6 @@
 <%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
 <% if policy(meal).change_signups? %>
-  <%= meal.form_section(:signups) do %>
+  <%= meal.form_section(:signups, expanded: local_assigns[:expanded]) do %>
     <table id="signup-table" class="key-value key-value-narrow">
       <%= f.simple_fields_for(:signups) do |signup_form| %>
         <%= render("meals/form/signup_fields", f: signup_form) %>

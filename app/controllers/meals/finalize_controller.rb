@@ -2,6 +2,7 @@ module Meals
   class FinalizeController < ApplicationController
     helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
+    decorates_assigned :meal
 
     def new
       @meal = Meal.find(params[:meal_id])

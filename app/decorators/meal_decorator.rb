@@ -3,8 +3,8 @@
 class MealDecorator < ApplicationDecorator
   delegate_all
 
-  def form_section(section, &block)
-    Meals::FormSection.new(self, section, &block).html
+  def form_section(section, **options, &block)
+    Meals::FormSection.new(self, section, **options, &block).html
   end
 
   def css_classes

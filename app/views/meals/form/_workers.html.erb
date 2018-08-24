@@ -1,4 +1,4 @@
-<%= meal.form_section(:workers) do %>
+<%= meal.form_section(:workers, expanded: local_assigns[:expanded]) do %>
   <div id="assignment-fields">
     <%= nested_field_set(f, :head_cook_assign, multiple: false, context: "meal_assign",
                                                inner_partial: "shared/user_select",

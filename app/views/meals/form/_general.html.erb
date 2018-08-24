@@ -1,4 +1,4 @@
-<%= meal.form_section(:general) do %>
+<%= meal.form_section(:general, expanded: local_assigns[:expanded]) do %>
   <div class="fields">
     <% if policy(meal).change_date_loc_invites? %>
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,

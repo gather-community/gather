@@ -30,7 +30,10 @@ en:
   helpers:
     submit:
       cancel: "Cancel"
+      confirm: "Confirm"
+      continue: "Continue"
       create: "Save"
+      go_back: "Go Back"
       update: "Save"
       meals_message:
         create: "Send Message"

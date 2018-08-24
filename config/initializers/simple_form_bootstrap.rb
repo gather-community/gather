@@ -12,8 +12,14 @@ module ButtonComponents
 
   def submit_button_with_class(css_class, args, block)
     options = args.extract_options!
+
+    # Convert symbol button name to translation.
+    args[0] = I18n.t("helpers.submit.#{args[0]}") if args[0].is_a?(Symbol)
+
+    # Add css class option.
     options[:class] = [options[:class], css_class].compact
     args << options
+
     submit(*args, &block)
   end
 end

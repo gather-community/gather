@@ -3,9 +3,10 @@
 module Meals
   # Models a single section of the meal form.
   class FormSection < ApplicationDecorator
-    def initialize(meal, section, &block)
+    def initialize(meal, section, expanded:, &block)
       self.meal = meal
       self.section = section
+      self.expanded = expanded
       self.block = block
     end
 
@@ -15,7 +16,8 @@ module Meals
 
     private
 
-    attr_accessor :meal, :section, :block
+    attr_accessor :meal, :section, :expanded, :block
+    alias expanded? expanded
 
     def header
       h.content_tag(:h2, t("meals.form.sections.label.#{section}"), class: ("top" if section == :general))
@@ -34,7 +36,7 @@ module Meals
     end
 
     def collapse?
-      meal.persisted? && !block_content.match?(/class="error"/)
+      !expanded? && meal.persisted? && !block_content.match?(/class="error"/)
     end
 
     def block_content

@@ -125,7 +125,7 @@ class Signup < ApplicationRecord
   end
 
   def all_zero?
-    SIGNUP_TYPES.all? { |t| self[t].zero? }
+    diners.all?(&:marked_for_destruction?)
   end
 
   def max_signups_per_type

@@ -243,11 +243,6 @@ class Meal < ApplicationRecord
     end
   end
 
-  def duplicate_signups
-    signups.reject(&:marked_for_destruction?).group_by(&:household_id).
-      values.reject(&:one?).each(&:shift).flatten
-  end
-
   private
 
   def menu_items_present?

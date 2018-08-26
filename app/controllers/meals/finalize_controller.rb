@@ -25,9 +25,7 @@ module Meals
       # Need to build the meal cost object so it can hold validation errors.
       build_meal_cost
 
-      if (@dupes = @meal.duplicate_signups).any?
-        handle_duplicates
-      elsif @meal.valid?
+      if @meal.valid?
         params[:confirmed] == "0" ? handle_unconfirmed : handle_valid
       else
         handle_invalid
@@ -39,11 +37,6 @@ module Meals
     end
 
     private
-
-    def handle_duplicates
-      flash.now[:error] = t("meals.finalizing.duplicates")
-      prepare_and_render_form
-    end
 
     def handle_unconfirmed
       flash.now[:notice] = t("meals.finalizing.cancelled")

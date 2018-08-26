@@ -28,7 +28,7 @@ class Signup < ApplicationRecord
 
   normalize_attributes :comments
 
-  validates :household_id, presence: true
+  validates :household_id, presence: true, uniqueness: {scope: :meal_id}
   validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
   validate :max_signups_per_type
   validate :dont_exceed_spots

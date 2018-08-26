@@ -73,7 +73,7 @@ module Meals
     def show_confirmation_page
       @calculator = @finalizer.calculator
       @cost = @meal.cost
-      flash.now[:alert] = t("meals.finalizing.review_and_confirm")
+      flash.now[:alert] = t("meals.finalizing.review_and_confirm_html").html_safe
       prepare_and_render_form(:confirm)
     end
 
@@ -94,7 +94,7 @@ module Meals
 
     def finalize_params
       params.require(:meal).permit(
-        signups_attributes: %i[id household_id _destroy] + Signup::SIGNUP_TYPES,
+        signups_attributes: [:id, :household_id, diners_attributes: %i[id kind _destroy]],
         cost_attributes: %i[ingredient_cost pantry_cost payment_method]
       )
     end

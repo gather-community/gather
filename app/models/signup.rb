@@ -38,6 +38,8 @@ class Signup < ApplicationRecord
   delegate :community_abbrv, to: :household
   delegate :communities, to: :meal
 
+  before_save :convert_diner_objects_to_diner_type_totals
+
   before_update do
     destroy if all_zero?
   end
@@ -79,7 +81,8 @@ class Signup < ApplicationRecord
   end
 
   def total
-    @total ||= SIGNUP_TYPES.sum { |t| self[t] || 0 }
+    # We use the @diners here instead of persisted counts so we don't count _destroyed ones on re-render.
+    @total ||= diners.count { |d| !d.marked_for_destruction? }
   end
 
   def total_was
@@ -93,7 +96,7 @@ class Signup < ApplicationRecord
 
   # This will eventually be an association.
   def diners
-    SIGNUP_TYPES.flat_map do |t|
+    @diners ||= SIGNUP_TYPES.flat_map do |t|
       # To mimic real association behavior, instantiate one Diner with fake ID for each of the persisted
       # diner count, plus one Diner with no ID for any newly added ones.
       # If there are more in the persisted (*_was) count than the current count, instantiate all with ID.
@@ -104,12 +107,7 @@ class Signup < ApplicationRecord
 
   # This will eventually be a nested attributes method.
   def diners_attributes=(attrib_sets)
-    SIGNUP_TYPES.each { |t| self[t] = 0 }
-    attrib_sets = attrib_sets.values if attrib_sets.is_a?(Hash)
-    attrib_sets.each do |attribs|
-      next if [1, "1", true, "true"].include?(attribs["_destroy"])
-      self[attribs["kind"]] += 1 if SIGNUP_TYPES.include?(attribs["kind"])
-    end
+    @diners = attrib_sets.values.map { |s| Meals::Diner.new(**s.symbolize_keys) }
   end
 
   def build_diner
@@ -117,6 +115,14 @@ class Signup < ApplicationRecord
   end
 
   private
+
+  # This will eventually go away.
+  def convert_diner_objects_to_diner_type_totals
+    SIGNUP_TYPES.each { |t| self[t] = 0 }
+    diners.reject(&:marked_for_destruction?).each do |s|
+      self[s.kind] += 1 if SIGNUP_TYPES.include?(s.kind)
+    end
+  end
 
   def all_zero?
     SIGNUP_TYPES.all? { |t| self[t].zero? }

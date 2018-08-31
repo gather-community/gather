@@ -7,6 +7,7 @@ describe Work::RoundCalculator do
 
   describe "next_num, prev_limit, next_limit" do
     let(:time) { "18:55" }
+    let(:quota) { 17 }
     let!(:shares) { portions.map { |p| create(:work_share, period: period, portion: p) } }
     let!(:zero_shares) { create_list(:work_share, 2, period: period, portion: 0) } # Should be ignored.
     let!(:assigns) do
@@ -22,7 +23,7 @@ describe Work::RoundCalculator do
     end
 
     before do
-      allow(period).to receive(:quota).and_return(17)
+      allow(period).to receive(:quota).and_return(quota)
     end
 
     context "with lots of rounds" do
@@ -260,6 +261,41 @@ describe Work::RoundCalculator do
       context "at time within round 2" do
         let(:time) { "19:06" }
         it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+      end
+    end
+
+    context "with zero quota" do
+      # Pre  Prtn  Need   1  2  3  4  5  6  7  8  9 10
+      # ---------------------------------------------------
+      #   0     1     0   0
+      #   2     1     0   0
+      #   6     1     0   0
+      #   7     1     0   0
+      let(:pre_assign_totals) { [0, 2, 6, 7] }
+      let(:portions) { [1, 1, 1, 1] }
+      let(:quota) { 0 }
+      let(:period) do
+        create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 2,
+                             round_duration: 5, max_rounds_per_worker: 2,
+                             auto_open_time: Time.zone.parse("2018-08-15 19:00"))
+      end
+
+      context "worker in first group" do
+        let(:target_share) { shares[1] }
+
+        context "at time before open" do
+          let(:time) { "18:55" }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:00") }
+        end
+      end
+
+      context "worker in second group" do
+        let(:target_share) { shares[3] }
+
+        context "at time before open" do
+          let(:time) { "18:55" }
+          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:05") }
+        end
       end
     end
 

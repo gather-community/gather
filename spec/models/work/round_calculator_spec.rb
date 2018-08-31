@@ -230,6 +230,39 @@ describe Work::RoundCalculator do
       end
     end
 
+    context "with one large group" do
+      # Pre  Prtn  Need   1  2  3  4  5  6  7  8  9 10
+      # ---------------------------------------------------
+      #   0     1    17   8  0
+      #   2     1    15   8  0
+      #   6     1    11   8  0
+      #   7     1    10   8  0
+      let(:pre_assign_totals) { [0, 2, 6, 7] }
+      let(:portions) { [1, 1, 1, 1] }
+      let(:period) do
+        create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 100,
+                             round_duration: 5, max_rounds_per_worker: 2,
+                             auto_open_time: Time.zone.parse("2018-08-15 19:00"))
+      end
+
+      let(:target_share) { shares[1] }
+
+      context "at time before open" do
+        let(:time) { "18:55" }
+        it { expect_round(prev_limit: 0, next_limit: 9, next_starts_at: "19:00") }
+      end
+
+      context "at time within round 1" do
+        let(:time) { "19:01" }
+        it { expect_round(prev_limit: 9, next_limit: nil, next_starts_at: "19:05") }
+      end
+
+      context "at time within round 2" do
+        let(:time) { "19:06" }
+        it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+      end
+    end
+
     def expect_round(prev_limit:, next_limit:, next_starts_at:)
       next_starts_at = Time.zone.parse("2018-08-15 #{next_starts_at}") unless next_starts_at.nil?
       expect(calculator.prev_limit).to eq(prev_limit)

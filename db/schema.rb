@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180901154355) do
+ActiveRecord::Schema.define(version: 20180901155103) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 20180901154355) do
     t.integer "max_lead_days"
     t.integer "max_length_minutes"
     t.integer "max_minutes_per_year"
+    t.string "name", null: false
     t.string "other_communities"
     t.text "pre_notice"
     t.boolean "requires_kind"

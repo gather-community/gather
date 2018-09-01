@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180818183634) do
+ActiveRecord::Schema.define(version: 20180901154355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -298,7 +298,7 @@ ActiveRecord::Schema.define(version: 20180818183634) do
     t.time "fixed_end_time"
     t.time "fixed_start_time"
     t.boolean "general", default: false, null: false
-    t.string "kinds"
+    t.jsonb "kinds"
     t.integer "max_days_per_year"
     t.integer "max_lead_days"
     t.integer "max_length_minutes"

@@ -18,8 +18,6 @@ module Reservations
 
     delegate :name, to: :community, prefix: true
 
-    serialize :kinds, JSON
-
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.

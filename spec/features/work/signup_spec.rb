@@ -35,19 +35,6 @@ feature "signups", js: true do
         visit(page_path)
         expect(page).to have_content("This period is in the draft phase so workers can't sign up")
       end
-
-      describe "auto open" do
-        before { periods[0].update!(auto_open_time: Time.current + 30.minutes) }
-
-        scenario do
-          visit(page_path)
-          expect(page).to have_content("This period is in the draft phase so workers can't sign up")
-          Timecop.freeze(Time.current + 31.minutes) do
-            visit(page_path)
-            expect(page).to have_content(jobs[0].title)
-          end
-        end
-      end
     end
 
     describe "filters and search", search: Work::Shift do
@@ -137,6 +124,38 @@ feature "signups", js: true do
           jobs[2].shifts[0].signup_user(users[0])
           expect(page).to have_content(users[0].name)
         end
+      end
+    end
+
+    describe "staggering and auto open" do
+      let(:open_time) { Time.current.midnight + (Time.current.hour + 1).hours }
+      let!(:share) { create(:work_share, period: periods[0], user: actor) }
+
+      before do
+        periods[0].update!(
+          auto_open_time: open_time,
+          phase: "ready",
+          pick_type: "staggered",
+          quota_type: "by_person",
+          workers_per_round: 3,
+          round_duration: 5,
+          max_rounds_per_worker: 3,
+          quota: 32
+        )
+      end
+
+      scenario do
+        visit(page_path)
+        time = I18n.l(open_time, format: :time_only)
+        expect(page).to have_content("You have signed up for 0/32 hours. "\
+          "You can start choosing jobs at #{time}")
+        Timecop.freeze(open_time + 2.minutes) do
+          visit(page_path)
+          time = I18n.l(open_time + 5.minutes, format: :time_only)
+          expect(page).to have_content("You have signed up for 0/32 hours. "\
+            "Your round limit is 11 hours and will rise to 22 at #{time}")
+        end
+        expect(periods[0].reload.phase).to eq("open")
       end
     end
   end

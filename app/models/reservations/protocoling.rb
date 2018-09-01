@@ -1,5 +1,7 @@
-# Join class for Resource and Reservations::Protocol
+# frozen_string_literal: true
+
 module Reservations
+  # Join class for Resource and Reservations::Protocol
   class Protocoling < ApplicationRecord
     acts_as_tenant :cluster
 

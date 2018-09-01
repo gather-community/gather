@@ -104,7 +104,8 @@ module Work
       prepare_lenses(*names)
       @period = lenses[:period].object
       @choosee = lenses[:choosee].choosee
-      flash.now[:notice] = t("work.choosing_as", name: choosee.full_name) if @choosee != current_user
+      return if @choosee == current_user
+      flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
     end
 
     def render_shift_and_synopsis_json

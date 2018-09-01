@@ -19,7 +19,8 @@ module Work
     end
 
     def choosee
-      User.find_by(id: value)
+      # Find may return nil if the current_user is not in this cluster (e.g. a superadmin)
+      User.find_by(id: value) || chooser
     end
 
     private

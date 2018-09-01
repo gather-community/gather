@@ -116,6 +116,7 @@ feature "signups", js: true do
           end
         end
 
+        # Unsignup via #show page
         click_on("Knembler")
         expect(page).to have_content(jobs[0].description)
         accept_confirm { click_on("Remove Signup") }
@@ -124,6 +125,10 @@ feature "signups", js: true do
           expect(page).not_to have_content(actor.name)
           click_on("Sign Up!")
           expect(page).to have_content(actor.name)
+
+          # Unsignup via 'x' link
+          find(".cancel-link a").click
+          expect(page).not_to have_content(actor.name)
         end
 
         # Test autorefresh by simulating someone else having signed up.

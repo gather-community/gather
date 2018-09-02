@@ -20,6 +20,8 @@ module Reservations
 
     delegate :name, to: :community, prefix: true
 
+    scope :in_community, ->(c) { where(community_id: c.id) }
+
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.

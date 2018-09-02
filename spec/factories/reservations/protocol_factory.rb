@@ -4,6 +4,7 @@ FactoryBot.define do
       resources []
     end
 
+    sequence(:name) { |i| "Protocol #{i}" }
     kinds nil
     community { resources.first.try(:community) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class MessagePolicy < ApplicationPolicy
     def show?
@@ -5,13 +7,13 @@ module Meals
     end
 
     def create?
-      raise ArgumentError.new("Meal must be set on Message to check permissions") if record.meal.nil?
+      raise ArgumentError, "Meal must be set on Message to check permissions" if record.meal.nil?
       return @create if defined?(@create)
       @create = MealPolicy.new(user, record.meal).send_message?
     end
 
     def permitted_attributes
-      [:kind, :body, :recipient_type]
+      %i[kind body recipient_type]
     end
   end
 end

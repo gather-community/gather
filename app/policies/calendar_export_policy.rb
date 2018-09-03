@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CalendarExportPolicy < ApplicationPolicy
   def index?
     active?

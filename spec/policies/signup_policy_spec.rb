@@ -1,8 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe SignupPolicy do
   describe "permissions" do
-    include_context "policy objs"
+    include_context "policy permissions"
 
     let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
     let(:signup) { build(:signup, meal: meal) }
@@ -41,7 +43,7 @@ describe SignupPolicy do
     subject { SignupPolicy.new(user, Signup.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(*(Signup::SIGNUP_TYPES + [:meal_id, :comments]))
+      expect(subject).to contain_exactly(*(Signup::SIGNUP_TYPES + %i[meal_id comments]))
     end
   end
 end

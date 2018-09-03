@@ -3,14 +3,14 @@
 require "rails_helper"
 
 describe Work::PeriodPolicy do
-  include_context "policy objs"
   include_context "work policies"
 
-  let(:phase) { "published" }
-  let(:period) { build(:work_period, community: community, phase: phase) }
-  let(:record) { period }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:phase) { "published" }
+    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:record) { period }
+
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
@@ -25,28 +25,16 @@ describe Work::PeriodPolicy do
   end
 
   describe "scope" do
-    let(:periodA) { create(:work_period, community: community) }
-    let(:periodB) { create(:work_period, community: communityB) }
-    subject { Work::PeriodPolicy::Scope.new(actor, Work::Period.all).resolve }
+    include_context "policy scopes"
+    let(:klass) { Work::Period }
+    let!(:objs_in_community) { create_list(:work_period, 2, community: community) }
+    let!(:objs_in_cluster) { create_list(:work_period, 2, community: communityB) }
 
-    before do
-      save_policy_objects!(community, communityB, cluster_admin)
-      save_policy_objects!(periodA, periodB)
-    end
-
-    context "for regular users" do
-      let(:actor) { work_coordinator }
-      it { is_expected.to contain_exactly(periodA) }
-    end
-
-    # TODO: refactor to abstract this kind of check into policy spec context file
-    context "for cluster admins" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(periodA, periodB) }
-    end
+    it_behaves_like "allows regular users in community"
   end
 
   describe "permitted attributes" do
+    include_context "policy permissions"
     let(:actor) { work_coordinator }
     subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
 

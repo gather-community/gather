@@ -6,13 +6,7 @@ module Reservations
 
     class Scope < Scope
       def resolve
-        if active_cluster_admin?
-          scope
-        elsif active_admin?
-          scope.in_community(user.community)
-        else
-          scope.none
-        end
+        allow_admins_only
       end
     end
 

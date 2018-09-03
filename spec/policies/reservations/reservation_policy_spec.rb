@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Reservations::ReservationPolicy do
-  include_context "policy objs"
+  include_context "policy permissions"
   let(:starts_at) { Time.current + 1.week }
   let(:ends_at) { starts_at + 1.hour }
   let(:created_at) { nil }
@@ -95,14 +95,14 @@ describe Reservations::ReservationPolicy do
   end
 
   describe "scope" do
-    let!(:reservation1) { create(:reservation) }
-    let!(:reservation2) { create(:reservation) }
-    let(:reserver) { User.new }
+    include_context "policy scopes"
+    let(:klass) { Reservations::Reservation }
+    let(:resource) { create(:resource, community: community) }
+    let(:resourceB) { create(:resource, community: communityB) }
+    let!(:objs_in_community) { create_list(:reservation, 2, resource: resource) }
+    let!(:objs_in_cluster) { create_list(:reservation, 2, resource: resourceB) }
 
-    it "returns all reservations" do
-      permitted = Reservations::ReservationPolicy::Scope.new(reserver, Reservations::Reservation.all).resolve
-      expect(permitted).to contain_exactly(reservation1, reservation2)
-    end
+    it_behaves_like "allows all users in cluster"
   end
 
   describe "permitted_attributes" do

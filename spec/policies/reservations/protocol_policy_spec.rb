@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Reservations::ProtocolPolicy do
   describe "permissions" do
-    include_context "policy objs"
+    include_context "policy permissions"
     let(:protocol) { build(:reservation_protocol, community: community) }
     let(:record) { protocol }
 
@@ -14,29 +14,11 @@ describe Reservations::ProtocolPolicy do
   end
 
   describe "scope" do
-    let!(:community) { create(:community) }
-    let!(:communityB) { create(:community) }
-    let!(:protocol1) { create(:reservation_protocol, community: community) }
-    let!(:protocol2) { create(:reservation_protocol, community: community) }
-    let!(:protocol3) { create(:reservation_protocol, community: communityB) }
-    let(:cluster_admin) { create(:cluster_admin, community: community) }
-    let(:admin) { create(:admin, community: community) }
-    let(:user) { create(:user, community: community) }
-    subject(:permitted) { Reservations::ProtocolPolicy::Scope.new(actor, Reservations::Protocol.all).resolve }
+    include_context "policy scopes"
+    let(:klass) { Reservations::Protocol }
+    let!(:objs_in_community) { create_list(:reservation_protocol, 2, community: community) }
+    let!(:objs_in_cluster) { create_list(:reservation_protocol, 2, community: communityB) }
 
-    context "for admins, return all protocols in community" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(protocol1, protocol2, protocol3) }
-    end
-
-    context "for admins, return all protocols in community" do
-      let(:actor) { admin }
-      it { is_expected.to contain_exactly(protocol1, protocol2) }
-    end
-
-    context "for regular users, return nothing" do
-      let(:actor) { user }
-      it { is_expected.to be_empty }
-    end
+    it_behaves_like "allows only admins in community"
   end
 end

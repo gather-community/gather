@@ -1,5 +1,8 @@
-shared_context "policy objs" do
-  subject { described_class }
+# frozen_string_literal: true
+
+# Objects and examples useful for testing policy permissions.
+shared_context "policy permissions" do
+  subject(:policy) { described_class }
   let(:cluster) { default_cluster }
   let(:clusterB) { create(:cluster, name: "Other Cluster") }
   let(:community) { build(:community, name: "Community A") }
@@ -15,19 +18,29 @@ shared_context "policy objs" do
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.current, label: "inactive_user") }
 
   let(:household) { build(:household, users: [user], community: community) }
-  let(:inactive_household) { build(:household, users: [inactive_user],
-    deactivated_at: Time.current, community: community) }
+  let(:inactive_household) do
+    build(:household, users: [inactive_user],
+                      deactivated_at: Time.current, community: community)
+  end
   let(:account) { build(:account, household: build(:household, community: community)) }
 
   let(:guardian) { user }
   let(:child) { new_user_from(community, child: true, guardians: [guardian], label: "child") }
   let(:other_child) { new_user_from(community, child: true, guardians: [other_user], label: "other_child") }
-  let(:child_in_cmtyB) { new_user_from(communityB, child: true,
-    guardians: [user_in_cmtyB], label: "child_in_cmtyB") }
-  let(:outside_child) { with_tenant(clusterB) { new_user_from(communityX, child: true,
-    guardians: [outside_user], label: "outside_child") } }
-  let(:inactive_child) { new_user_from(community, child: true, guardians: [inactive_user],
-    deactivated_at: Time.current, label: "inactive_child") }
+  let(:child_in_cmtyB) do
+    new_user_from(communityB, child: true,
+                              guardians: [user_in_cmtyB], label: "child_in_cmtyB")
+  end
+  let(:outside_child) do
+    with_tenant(clusterB) do
+      new_user_from(communityX, child: true,
+                                guardians: [outside_user], label: "outside_child")
+    end
+  end
+  let(:inactive_child) do
+    new_user_from(community, child: true, guardians: [inactive_user],
+                             deactivated_at: Time.current, label: "inactive_child")
+  end
 
   let(:admin) { new_user_from(community, label: "admin") }
   let(:admin2) { new_user_from(community, label: "admin2") }
@@ -36,8 +49,11 @@ shared_context "policy objs" do
   let(:super_admin) { new_user_from(community, label: "super_admin") }
   let(:super_admin2) { new_user_from(community, label: "super_admin2") }
   let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
-  let(:outside_super_admin) { with_tenant(clusterB) {
-    new_user_from(communityX, label: "outside_super_admin") } }
+  let(:outside_super_admin) do
+    with_tenant(clusterB) do
+      new_user_from(communityX, label: "outside_super_admin")
+    end
+  end
   let(:admin_in_cmtyB) { new_user_from(communityB, label: "admin_in_cmtyB") }
 
   let(:biller) { new_user_from(community, label: "biller") }
@@ -249,7 +265,8 @@ shared_context "policy objs" do
       it "errors when checking role permission" do |example|
         example.metadata[:permissions].each do |perm|
           expect { subject.new(actor, record).send(perm) }.to raise_error(
-            ApplicationPolicy::CommunityNotSetError)
+            ApplicationPolicy::CommunityNotSetError
+          )
         end
       end
     end
@@ -261,7 +278,7 @@ shared_context "policy objs" do
 
   def new_user_from(community, attribs = {})
     build(:user, attribs.merge(
-      first_name: attribs.delete(:label).capitalize.gsub("_", " "),
+      first_name: attribs.delete(:label).capitalize.tr("_", " "),
       community: community
     ))
   end

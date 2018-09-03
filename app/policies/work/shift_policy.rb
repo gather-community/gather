@@ -9,7 +9,7 @@ module Work
 
     class Scope < Scope
       def resolve
-        community_only_unless_cluster_admin
+        allow_regular_users_in_community
       end
     end
 

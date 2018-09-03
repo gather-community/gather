@@ -1,9 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe HouseholdPolicy do
-  include_context "policy objs"
-
   describe "permissions" do
+    include_context "policy permissions"
     let(:record) { household }
 
     shared_examples_for "permits admins and members of household" do
@@ -135,6 +136,7 @@ describe HouseholdPolicy do
   end
 
   describe "allowed_community_changes" do
+    include_context "policy permissions"
     # Class-based auth not allowed
     let(:sample_household) { Household.new(community: community) }
 
@@ -149,24 +151,28 @@ describe HouseholdPolicy do
 
     it "returns own community for admins" do
       expect(HouseholdPolicy.new(admin, sample_household).allowed_community_changes.to_a).to(
-        contain_exactly(community))
+        contain_exactly(community)
+      )
     end
 
     it "returns cluster communities for cluster admins" do
       expect(HouseholdPolicy.new(cluster_admin, sample_household).allowed_community_changes.to_a).to(
-        contain_exactly(community, communityB))
+        contain_exactly(community, communityB)
+      )
     end
 
     it "returns all communities for super admins" do
       # This query crosses a tenant boundary so need to do it unscoped.
       ActsAsTenant.unscoped do
         expect(HouseholdPolicy.new(super_admin, sample_household).allowed_community_changes.to_a).to(
-          contain_exactly(community, communityB, communityX))
+          contain_exactly(community, communityB, communityX)
+        )
       end
     end
   end
 
   describe "ensure_allowed_community_id" do
+    include_context "policy permissions"
     let(:params) { {community_id: target_id} }
     let(:policy) { described_class.new(user, Household.new(community: community)) }
 
@@ -191,87 +197,38 @@ describe HouseholdPolicy do
   end
 
   describe "scope" do
+    include_context "policy scopes"
+    let(:klass) { Household }
+
+    # We need to list all the users that will be used in the spec here, otherwise they will get
+    # created too late and their households will show up in `permitted` but not in our expectation.
+    let!(:objs_in_community) { [user, other_user, inactive_user, admin, cluster_admin].map(&:household) }
+    let!(:objs_in_cluster) { [userB.household] }
+
     context "normal" do
-      before do
-        save_policy_objects!(community, communityB, communityX,
-          user, other_user, user_in_cmtyB, outside_user)
-      end
-
-      context "for regular user, admin, and cluster admin" do
-        it "returns all households in cluster" do
-          [user, admin, cluster_admin].each do |actor|
-            permitted = HouseholdPolicy::Scope.new(actor, Household.all).resolve
-            expect(permitted).to contain_exactly(*[user, other_user, user_in_cmtyB].map(&:household))
-          end
-        end
-      end
-
-      context "for super admin" do
-        it "returns all households" do
-          ActsAsTenant.unscoped do
-            permitted = HouseholdPolicy::Scope.new(super_admin, Household.all).resolve
-            expect(permitted).to contain_exactly(*
-              [user, other_user, user_in_cmtyB, outside_user].map(&:household))
-          end
-        end
-      end
-
-      context "for inactive user" do
-        it "returns nothing" do
-          permitted = HouseholdPolicy::Scope.new(inactive_user, Household.all).resolve
-          expect(permitted).to eq([])
-        end
-      end
+      it_behaves_like "allows all users in cluster"
     end
 
     describe "administerable" do
-      let(:scope) { HouseholdPolicy::Scope }
-      let!(:cluster) { default_cluster }
-      let!(:clusterB) { create(:cluster, name: "Other Cluster") }
-      let!(:community) { create(:community, name: "Community A") }
-      let!(:communityB) { create(:community, name: "Community B") }
-      let!(:communityX) { with_tenant(clusterB) { create(:community, name: "Community X") } }
-      let!(:household1) { create(:household, community: community) }
-      let!(:household2) { create(:household, community: communityB) }
-      let!(:household3) { with_tenant(clusterB) { create(:household, community: communityX) } }
-      let(:user) { create(:user, household: household1) }
-      let(:admin) { create(:admin, household: household1) }
-      let(:cluster_admin) { create(:cluster_admin, household: household1) }
-      let(:super_admin) { create(:super_admin, household: household1) }
-
-      it "returns nothing for regular user" do
-        expect(scope.new(user, Household.all).administerable.to_a).to eq []
-      end
-
-      it "returns households in community for admin" do
-        results = scope.new(admin, Household.all).administerable
-        expect(results).to contain_exactly(household1)
-      end
-
-      it "returns households in cluster for cluster admin" do
-        results = scope.new(cluster_admin, Household.all).administerable
-        expect(results).to contain_exactly(household1, household2)
-      end
-
-      it "returns all households for super admin" do
-        # This query crosses a tenant boundary so need to do it unscoped.
-        ActsAsTenant.unscoped do
-          results = scope.new(super_admin, Household.all).administerable
-          expect(results).to contain_exactly(household1, household2, household3)
-        end
-      end
+      let(:method) { :administerable }
+      it_behaves_like "allows only admins in community"
     end
   end
 
   describe "permitted attributes" do
-    let(:basic_attribs) { [:name, :garage_nums, :keyholders,
-      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
-      {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]},
-      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
-    ] }
-    let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }
+    let(:basic_attribs) do
+      [:name, :garage_nums, :keyholders,
+       {vehicles_attributes: %i[id make model color plate _destroy]},
+       {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
+                                          email location _destroy]},
+       {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
+    end
+    let(:admin_attribs) { basic_attribs.concat(%i[unit_num old_id old_name community_id]) }
     let(:cluster_admin_attribs) { admin_attribs }
+    let(:user) { create(:user) }
+    let(:admin) { create(:admin) }
+    let(:cluster_admin) { create(:cluster_admin) }
+    let(:household) { create(:household) }
 
     subject { HouseholdPolicy.new(user, household).permitted_attributes }
 

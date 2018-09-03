@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MealPolicy < ApplicationPolicy
-  alias_method :meal, :record
+  alias meal record
 
   class Scope < Scope
     ASSIGNED = "EXISTS (SELECT id FROM assignments
@@ -10,8 +12,11 @@ class MealPolicy < ApplicationPolicy
       WHERE signups.meal_id = meals.id AND signups.household_id = ?)"
 
     def resolve
-      if user.active?
-        scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}", user.id, user.community_id, user.household_id)
+      if active_cluster_admin?
+        scope
+      elsif active?
+        scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
+          user.id, user.community_id, user.household_id)
       else
         scope.where(SIGNED_UP, user.household_id)
       end
@@ -96,25 +101,20 @@ class MealPolicy < ApplicationPolicy
   def permitted_attributes
     # Anybody that can update a meal can change the assignments.
     permitted = [{
-      :head_cook_assign_attributes => [:id, :user_id],
-      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-      :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
-      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
+      head_cook_assign_attributes: %i[id user_id],
+      asst_cook_assigns_attributes: %i[id user_id _destroy],
+      table_setter_assigns_attributes: %i[id user_id _destroy],
+      cleaner_assigns_attributes: %i[id user_id _destroy]
     }]
 
     if set_menu?
-      allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
+      allergens = Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
       permitted += allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-        { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
-      ]
+                                {community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
     end
 
-    if administer?
-      permitted += [:served_at, resource_ids: []]
-    end
-
+    permitted += [:served_at, resource_ids: []] if administer?
     permitted << :formula_id if update_formula?
-
     permitted
   end
 

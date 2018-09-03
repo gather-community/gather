@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class SignupPolicy < ApplicationPolicy
-  alias_method :signup, :record
+  alias signup record
 
   def create?
     active? && invited?
@@ -10,7 +12,7 @@ class SignupPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    Signup::SIGNUP_TYPES + [:meal_id, :comments]
+    Signup::SIGNUP_TYPES + %i[meal_id comments]
   end
 
   private

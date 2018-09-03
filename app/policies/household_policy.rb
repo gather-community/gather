@@ -1,27 +1,15 @@
+# frozen_string_literal: true
+
 class HouseholdPolicy < ApplicationPolicy
-  alias_method :household, :record
+  alias household record
 
   class Scope < Scope
     def resolve
-      if active_super_admin?
-        scope
-      elsif active?
-        scope.in_cluster(user.cluster)
-      else
-        scope.none
-      end
+      allow_all_users_in_cluster
     end
 
     def administerable
-      if active_super_admin?
-        scope
-      elsif active_cluster_admin?
-        scope.in_cluster(user.cluster)
-      elsif active_admin?
-        scope.where(community_id: user.community_id)
-      else
-        scope.none
-      end
+      allow_admins_only
     end
   end
 
@@ -95,14 +83,14 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    permitted = [:name, :garage_nums, :keyholders]
-    permitted.concat([:unit_num, :old_id, :old_name]) if administer?
+    permitted = %i[name garage_nums keyholders]
+    permitted.concat(%i[unit_num old_id old_name]) if administer?
     permitted << :community_id if administer?
-    permitted << {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]}
-    permitted << {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-      :email, :location, :_destroy]}
-    permitted << {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers,
-      :health_issues, :_destroy]}
+    permitted << {vehicles_attributes: %i[id make model color plate _destroy]}
+    permitted << {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
+                                                    email location _destroy]}
+    permitted << {pets_attributes: %i[id name species color vet caregivers
+                                      health_issues _destroy]}
     permitted
   end
 end

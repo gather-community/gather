@@ -33,8 +33,7 @@ module Reservations
         .select { |p| p.applies_to_kind?(kind) || p.kinds.nil? }
     end
 
-    private
-
+    # Needs to be public since it's called by class method.
     def applies_to_kind?(kind)
       kinds.present? && kinds.include?(kind)
     end

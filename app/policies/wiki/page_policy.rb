@@ -1,10 +1,12 @@
- module Wiki
+# frozen_string_literal: true
+
+module Wiki
   class PagePolicy < ApplicationPolicy
-    alias_method :page, :record
+    alias page record
 
     class Scope < Scope
       def resolve
-        community_only_unless_cluster_admin
+        allow_regular_users_in_community
       end
     end
 
@@ -49,7 +51,7 @@
     end
 
     def permitted_attributes
-      permitted = [:title, :content, :comment]
+      permitted = %i[title content comment]
       permitted.push(:editable_by, :data_source) if active_admin_or?(:wikiist)
       permitted
     end

@@ -1,12 +1,13 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe MealPolicy do
-  include_context "policy objs"
-
-  let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
-  let(:record) { meal }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:record) { meal }
+
     permissions :index?, :report? do
       it_behaves_like "permits users in cluster"
     end
@@ -99,7 +100,7 @@ describe MealPolicy do
     permissions :finalize? do
       before do
         stub_status("closed")
-        meal.served_at = Time.now - 30.minutes
+        meal.served_at = Time.current - 30.minutes
       end
 
       it_behaves_like "permits admins or special role but not regular users", :biller
@@ -135,60 +136,83 @@ describe MealPolicy do
         expect(subject).to permit(user, meal)
       end
     end
-  end
 
-  permissions :new_signups? do
-    it "permits if before meal and not closed or full" do
-      Timecop.travel(meal.served_at - 1.day) do
-        expect(subject).to permit(user, meal)
+    permissions :new_signups? do
+      it "permits if before meal and not closed or full" do
+        Timecop.travel(meal.served_at - 1.day) do
+          expect(subject).to permit(user, meal)
+        end
       end
     end
-  end
 
-  permissions :edit_signups? do
-    it "permits if before meal and not closed" do
-      Timecop.travel(meal.served_at - 1.day) do
-        expect(subject).to permit(user, meal)
+    permissions :edit_signups? do
+      it "permits if before meal and not closed" do
+        Timecop.travel(meal.served_at - 1.day) do
+          expect(subject).to permit(user, meal)
+        end
       end
     end
   end
 
   describe "scope" do
-    let!(:user) { create(:user) }
-    let!(:other_community) { create(:community) }
+    include_context "policy scopes"
+    let(:klass) { Meal }
     let!(:meal1) { create(:meal, communities: [user.community]) } # Invited
-    let!(:meal2) { create(:meal, cleaners: [user], communities: [other_community]) } # Assigned
-    let!(:meal3) { create(:meal, communities: [other_community]) } # Signed up
-    let!(:meal4) { create(:meal, communities: [other_community]) } # None of the above
-    let(:permitted) { MealPolicy::Scope.new(user, Meal.all).resolve }
+    let!(:meal2) { create(:meal, cleaners: [actor], communities: [communityB]) } # Assigned
+    let!(:meal3) { create(:meal, communities: [communityB]) } # Signed up
+    let!(:meal4) { create(:meal, communities: [communityB]) } # None of the above
 
     before do
-      meal3.signups.create!(household: user.household, adult_meat: 2)
+      meal3.signups.create!(household: actor.household, adult_meat: 2)
     end
 
-    it "returns meals invited to, assigned to, or signed up for" do
-      expect(permitted).to contain_exactly(meal1, meal2, meal3)
+    context "as regular user" do
+      let(:actor) { user }
+
+      it "returns meals invited to, assigned to, or signed up for" do
+        is_expected.to contain_exactly(meal1, meal2, meal3)
+      end
     end
 
-    context "with inactive user" do
-      before { user.deactivated_at = Time.current }
+    context "as admin" do
+      let(:actor) { admin }
+
+      it "returns meals invited to, assigned to, or signed up for" do
+        is_expected.to contain_exactly(meal1, meal2, meal3)
+      end
+    end
+
+    context "as cluster admin" do
+      let(:actor) { cluster_admin }
+
+      it "returns all meals" do
+        is_expected.to contain_exactly(meal1, meal2, meal3, meal4)
+      end
+    end
+
+    context "as inactive user" do
+      let(:actor) { inactive_user }
 
       it "returns meals only signed up for" do
-        expect(permitted).to contain_exactly(meal3)
+        is_expected.to contain_exactly(meal3)
       end
     end
   end
 
   describe "permitted_attributes" do
-    subject { MealPolicy.new(actor, meal).permitted_attributes }
-    let(:assign_attribs) {[{
-      :head_cook_assign_attributes => [:id, :user_id],
-      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-      :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
-      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-    }]}
-    let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
+    include_context "policy permissions"
+    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:assign_attribs) do
+      [{
+        head_cook_assign_attributes: %i[id user_id],
+        asst_cook_assigns_attributes: %i[id user_id _destroy],
+        table_setter_assigns_attributes: %i[id user_id _destroy],
+        cleaner_assigns_attributes: %i[id user_id _destroy]
+      }]
+    end
+    let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
+    subject { MealPolicy.new(actor, meal).permitted_attributes }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do

@@ -1,11 +1,16 @@
-# Models a single reservation rule, such as max_minutes_per_year = 200.
+# frozen_string_literal: true
+
 module Reservations
+  # Models a single reservation rule, such as max_minutes_per_year = 200.
   class Rule
     attr_accessor :name, :value, :resources, :community
 
-    NAMES = %i(fixed_start_time fixed_end_time max_lead_days
-      max_length_minutes max_minutes_per_year
-      other_communities requires_kind pre_notice)
+    NAMES = %i[fixed_start_time fixed_end_time max_lead_days
+               max_length_minutes max_minutes_per_year max_days_per_year
+               other_communities requires_kind pre_notice].freeze
+
+    # In order of restrictiveness, least to most.
+    OTHER_COMMUNITIES_VALUES = %i[ok sponsor read_only forbidden]
 
     def initialize(name: nil, value: nil, resources: nil, community: nil)
       self.name = name
@@ -32,16 +37,16 @@ module Reservations
 
       when :max_length_minutes
         reservation.ends_at - reservation.starts_at <= value * 60 ||
-          [:ends_at, "Can be at most #{Utils::TimeUtils::humanize_interval(value * 60)} after start time"]
+          [:ends_at, "Can be at most #{Utils::TimeUtils.humanize_interval(value * 60)} after start time"]
 
       when :max_minutes_per_year
         booked = booked_time_for_year(reservation, :seconds)
         if booked >= value * 60
           [:base, "You have already reached your yearly limit of "\
-            "#{Utils::TimeUtils::humanize_interval(value * 60)} for this resource"]
+            "#{Utils::TimeUtils.humanize_interval(value * 60)} for this resource"]
         elsif booked + reservation.seconds > value * 60
-          [:base, "You can book at most #{Utils::TimeUtils::humanize_interval(value * 60)} per year "\
-            "and you have already booked #{Utils::TimeUtils::humanize_interval(booked)}"]
+          [:base, "You can book at most #{Utils::TimeUtils.humanize_interval(value * 60)} per year "\
+            "and you have already booked #{Utils::TimeUtils.humanize_interval(booked)}"]
         else
           true
         end

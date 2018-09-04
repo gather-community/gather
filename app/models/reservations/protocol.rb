@@ -30,6 +30,7 @@ module Reservations
           ON reservation_protocolings.protocol_id = reservation_protocols.id")
         .where(community_id: resource.community_id)
         .where("reservation_protocolings.resource_id = ? OR general = 't'", resource.id)
+        .order(:created_at) # Need a definite ordering for specs
         .select { |p| p.applies_to_kind?(kind) || p.kinds.nil? }
     end
 

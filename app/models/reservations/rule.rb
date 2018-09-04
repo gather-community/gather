@@ -1,19 +1,17 @@
 # Models a single reservation rule, such as max_minutes_per_year = 200.
-# Also stores a reference to the Reservations::Protocol giving rise to the rule.
 module Reservations
   class Rule
-    attr_accessor :name, :value, :protocol
-
-    delegate :community, to: :protocol, prefix: true
+    attr_accessor :name, :value, :resources, :community
 
     NAMES = %i(fixed_start_time fixed_end_time max_lead_days
       max_length_minutes max_minutes_per_year
       other_communities requires_kind pre_notice)
 
-    def initialize(name: nil, value: nil, protocol: nil)
+    def initialize(name: nil, value: nil, resources: nil, community: nil)
       self.name = name
       self.value = value
-      self.protocol = protocol
+      self.resources = resources
+      self.community = community
     end
 
     # Returns true if reservation passes the check (conforms to the rule).
@@ -62,12 +60,12 @@ module Reservations
       when :other_communities
         case value
         when "forbidden", "read_only"
-          reservation.reserver_community == protocol.community ||
+          reservation.reserver_community == community ||
             [:base, "Residents from other communities may not make reservations"]
         when "sponsor"
-          reservation.reserver_community == protocol.community ||
-            reservation.sponsor_community == protocol.community ||
-            [:sponsor_id, "You must have a sponsor from #{protocol.community_name}"]
+          reservation.reserver_community == community ||
+            reservation.sponsor_community == community ||
+            [:sponsor_id, "You must have a sponsor from #{community.name}"]
         else
           raise "Unknown value for other_communities rule"
         end
@@ -92,7 +90,7 @@ module Reservations
     def booked_time_for_year(reservation, unit)
       year = reservation.starts_at.year
       Reservation.booked_time_for(
-        resources: protocol.resources,
+        resources: resources,
         household: reservation.household,
         period: Time.zone.local(year)...Time.zone.local(year + 1),
         unit: unit

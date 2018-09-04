@@ -1,7 +1,9 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Reservations::Rule, type: :model do
-  describe "check" do
+require "rails_helper"
+
+describe Reservations::Rule do
+  describe "#check" do
     let(:reservation) { Reservations::Reservation.new }
 
     describe "fixed_start_time" do
@@ -74,21 +76,33 @@ RSpec.describe Reservations::Rule, type: :model do
       let(:household) { create(:household) }
       let(:user1) { create(:user, household: household) }
       let(:user2) { create(:user, household: household) }
-      let(:protocol) { create(:reservation_protocol, resources: [resource1, resource2]) }
 
       # Create 107.5 hours total (7 days) reservations for resources 1&2 for household.
-      let!(:reservation1) { create(:reservation, reserver: user1, resource: resource1,
-        starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00") } # 8 hours
-      let!(:reservation2) { create(:reservation, reserver: user2, resource: resource2,
-        starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00") } # 26 hours (2 days)
-      let!(:reservation3) { create(:reservation, reserver: user2, resource: resource1,
-        starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30") } # 3.5 hours
-      let!(:reservation4) { create(:reservation, reserver: user2, resource: resource1,
-        starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00") } # 70 hours (3 days)
+      let!(:reservation1) do
+        # 8 hours
+        create(:reservation, reserver: user1, resource: resource1,
+                             starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00")
+      end
+      let!(:reservation2) do
+        # 26 hours (2 days)
+        create(:reservation, reserver: user2, resource: resource2,
+                             starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00")
+      end
+      let!(:reservation3) do
+        # 3.5 hours
+        create(:reservation, reserver: user2, resource: resource1,
+                             starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30")
+      end
+      let!(:reservation4) do
+        # 70 hours (3 days)
+        create(:reservation, reserver: user2, resource: resource1,
+                             starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00")
+      end
 
       describe "max_days_per_year" do
         let(:rule) do
-          Reservations::Rule.new(name: :max_days_per_year, value: max_days, protocol: protocol)
+          Reservations::Rule.new(name: :max_days_per_year, value: max_days,
+                                 resources: [resource1, resource2], community: default_community)
         end
 
         before do
@@ -124,8 +138,8 @@ RSpec.describe Reservations::Rule, type: :model do
 
       describe "max_minutes_per_year" do
         let(:rule) do
-          Reservations::Rule.new(name: :max_minutes_per_year,
-            value: max_hours.hours / 60, protocol: protocol)
+          Reservations::Rule.new(name: :max_minutes_per_year, value: max_hours.hours / 60,
+                                 resources: [resource1, resource2], community: default_community)
         end
 
         before do
@@ -184,8 +198,10 @@ RSpec.describe Reservations::Rule, type: :model do
       let(:insider) { create(:user, household: household1) }
       let(:outsider) { create(:user) }
       let(:outsider2) { create(:user) }
-      let(:protocol) { create(:reservation_protocol, resources: [resource]) }
-      let(:rule) { Reservations::Rule.new(name: :other_communities, value: value, protocol: protocol) }
+      let(:rule) do
+        Reservations::Rule.new(name: :other_communities, value: value,
+                               resources: [resource], community: resource.community)
+      end
 
       shared_examples_for "insiders only" do
         it "should pass for insider" do
@@ -197,7 +213,7 @@ RSpec.describe Reservations::Rule, type: :model do
           reservation.reserver = outsider
           reservation.sponsor = insider
           expect(rule.check(reservation)).to eq [:base,
-            "Residents from other communities may not make reservations"]
+                                                 "Residents from other communities may not make reservations"]
         end
       end
 
@@ -229,13 +245,13 @@ RSpec.describe Reservations::Rule, type: :model do
           reservation.reserver = outsider
           reservation.sponsor = outsider2
           expect(rule.check(reservation)).to eq [:sponsor_id,
-            "You must have a sponsor from #{resource.community.name}"]
+                                                 "You must have a sponsor from #{resource.community.name}"]
         end
 
         it "should fail if outsider has no sponsor" do
           reservation.reserver = outsider
           expect(rule.check(reservation)).to eq [:sponsor_id,
-            "You must have a sponsor from #{resource.community.name}"]
+                                                 "You must have a sponsor from #{resource.community.name}"]
         end
       end
     end

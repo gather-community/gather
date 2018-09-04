@@ -39,7 +39,7 @@ module Reservations
     end
 
     def access_level
-      if (oc = rules[:other_communities]) && oc.protocol_community != reservation.reserver_community
+      if (oc = rules[:other_communities]) && oc.community != reservation.reserver_community
         oc.value
       else
         "ok"

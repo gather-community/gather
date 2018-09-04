@@ -3,11 +3,12 @@
 require "rails_helper"
 
 describe Reservations::RuleSet do
-  describe "build_for" do
-    let(:resource1) { create(:resource) }
-    let(:reservation) { Reservations::Reservation.new(resource: resource1) }
-    let(:rule_set) { Reservations::RuleSet.build_for(reservation) }
+  let(:resource1) { create(:resource) }
+  let(:user) { create(:user) }
+  let(:reservation) { Reservations::Reservation.new(resource: resource1, reserver: user) }
+  let(:rule_set) { Reservations::RuleSet.build_for(reservation) }
 
+  describe "accessors" do
     context "with multiple protocols defining rules" do
       let!(:p1) do
         create(:reservation_protocol, resources: [resource1],
@@ -78,6 +79,37 @@ describe Reservations::RuleSet do
         expect(rule_set.max_days_per_year).to be_nil
         expect(rule_set.other_communities).to be_nil
         expect(rule_set.pre_notice).to be_nil
+      end
+    end
+  end
+
+  describe "#access_level" do
+    subject(:access_level) { rule_set.access_level }
+
+    context "with reserver in same community" do
+      context "with other communities forbidden" do
+        let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
+        it { is_expected.to eq("ok") }
+      end
+
+      context "with no protocols" do
+        let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
+        it { is_expected.to eq("ok") }
+      end
+    end
+
+    context "with reserver in different community" do
+      let(:user) { create(:user, community: create(:community)) }
+
+      context "with multiple protocols" do
+        let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "read_only") }
+        let!(:p2) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
+        it { is_expected.to eq("forbidden") }
+      end
+
+      context "with no protocols" do
+        let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
+        it { is_expected.to eq("ok") }
       end
     end
   end

@@ -6,10 +6,6 @@ module Reservations
   class RuleSet
     include ActiveModel::SerializerSupport
 
-    attr_accessor :reservation, :rules
-
-    delegate :[], to: :rules
-
     # Finds all matching protocols and unions them into one.
     # Raises an error if any two protocols have non-nil values for the same attrib.
     def self.build_for(reservation)
@@ -33,21 +29,27 @@ module Reservations
       self.rules = rules
     end
 
+    # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of the current
+    # reservation's reserver vis a vis the resource.
     def access_level
-      if (oc = rules[:other_communities]) && oc.community != reservation.reserver_community
-        oc.value
+      if other_communities? && other_communities_rule.community != reservation.reserver_community
+        other_communities
       else
         "ok"
       end
     end
 
     Rule::NAMES.each do |rule_name|
-      define_method(:"#{rule_name}") do
-        self[rule_name]&.value
+      define_method(:"#{rule_name}_rule") do
+        rules[rule_name]
+      end
+
+      define_method(rule_name) do
+        rules[rule_name]&.value
       end
 
       define_method(:"#{rule_name}?") do
-        !self[rule_name].nil?
+        !rules[rule_name].nil?
       end
     end
 
@@ -57,6 +59,8 @@ module Reservations
 
     private
 
+    attr_accessor :reservation, :rules
+
     def self.aggregate(protocols, rule_name)
       values = protocols.map(&rule_name)
       case rule_name
@@ -65,7 +69,7 @@ module Reservations
       when :fixed_end_time
         values.max
       when :other_communities
-        values.sort_by { |v| Rule::OTHER_COMMUNITIES_VALUES.index(v.to_sym) }.last
+        values.max_by { |v| Rule::OTHER_COMMUNITIES_VALUES.index(v.to_sym) }
       when :requires_kind
         values.any?
       when :pre_notice

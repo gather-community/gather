@@ -58,10 +58,10 @@ module Reservations
 
       # Set fixed start/end time
       rule_set = reservation.rule_set
-      if fst = rule_set[:fixed_start_time].try(:value)
+      if fst = rule_set.fixed_start_time
         reservation.starts_at = reservation.starts_at.change(hour: fst.hour, min: fst.min)
       end
-      if fet = rule_set[:fixed_end_time].try(:value)
+      if fet = rule_set.fixed_end_time
         reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
       end
       if reservation.starts_at >= reservation.ends_at

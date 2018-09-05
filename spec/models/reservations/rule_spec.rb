@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-describe Reservations::Rule do
+describe Reservations::Rules::Rule do
   describe "#check" do
     let(:reservation) { Reservations::Reservation.new }
 
     describe "fixed_start_time" do
-      let(:rule) { Reservations::Rule.new(name: :fixed_start_time, value: Time.zone.parse("12:00:00")) }
+      let(:rule) { Reservations::Rules::FixedStartTimeRule.new(value: Time.zone.parse("12:00:00")) }
 
       it "passes on match" do
         reservation.starts_at = Time.zone.parse("2016-01-01 12:00pm")
@@ -21,7 +21,7 @@ describe Reservations::Rule do
     end
 
     describe "fixed_end_time" do
-      let(:rule) { Reservations::Rule.new(name: :fixed_end_time, value: Time.zone.parse("18:00:00")) }
+      let(:rule) { Reservations::Rules::FixedEndTimeRule.new(value: Time.zone.parse("18:00:00")) }
 
       it "passes on match" do
         reservation.ends_at = Time.zone.parse("2016-01-01 6:00pm")
@@ -35,7 +35,7 @@ describe Reservations::Rule do
     end
 
     describe "max_lead_days" do
-      let(:rule) { Reservations::Rule.new(name: :max_lead_days, value: 30) }
+      let(:rule) { Reservations::Rules::MaxLeadDaysRule.new(value: 30) }
       before { Timecop.freeze(Time.zone.parse("2016-01-01 3:00pm")) }
       after { Timecop.return }
 
@@ -56,7 +56,7 @@ describe Reservations::Rule do
     end
 
     describe "max_length_minutes" do
-      let(:rule) { Reservations::Rule.new(name: :max_length_minutes, value: 30) }
+      let(:rule) { Reservations::Rules::MaxLengthMinutesRule.new(value: 30) }
       before { reservation.starts_at = Time.zone.parse("2016-01-30 6:00pm") }
 
       it "passes with acceptable length" do
@@ -101,8 +101,9 @@ describe Reservations::Rule do
 
       describe "max_days_per_year" do
         let(:rule) do
-          Reservations::Rule.new(name: :max_days_per_year, value: max_days,
-                                 resources: [resource1, resource2], community: default_community)
+          Reservations::Rules::MaxDaysPerYearRule.new(value: max_days,
+                                                      resources: [resource1, resource2],
+                                                      community: default_community)
         end
 
         before do
@@ -138,8 +139,9 @@ describe Reservations::Rule do
 
       describe "max_minutes_per_year" do
         let(:rule) do
-          Reservations::Rule.new(name: :max_minutes_per_year, value: max_hours.hours / 60,
-                                 resources: [resource1, resource2], community: default_community)
+          Reservations::Rules::MaxMinutesPerYearRule.new(value: max_hours.hours / 60,
+                                                         resources: [resource1, resource2],
+                                                         community: default_community)
         end
 
         before do
@@ -180,7 +182,7 @@ describe Reservations::Rule do
     end
 
     describe "requires_kind" do
-      let(:rule) { Reservations::Rule.new(name: :requires_kind, value: true) }
+      let(:rule) { Reservations::Rules::RequiresKindRule.new(value: true) }
 
       it "should pass if reservation has kind" do
         reservation.kind = "personal"
@@ -199,8 +201,8 @@ describe Reservations::Rule do
       let(:outsider) { create(:user) }
       let(:outsider2) { create(:user) }
       let(:rule) do
-        Reservations::Rule.new(name: :other_communities, value: value,
-                               resources: [resource], community: resource.community)
+        Reservations::Rules::OtherCommunitiesRule.new(value: value, resources: [resource],
+                                                      community: resource.community)
       end
 
       shared_examples_for "insiders only" do
@@ -257,7 +259,7 @@ describe Reservations::Rule do
     end
 
     describe "pre_notice" do
-      let(:rule) { Reservations::Rule.new(name: :pre_notice, value: "Foo bar") }
+      let(:rule) { Reservations::Rules::PreNoticeRule.new(value: "Foo bar") }
 
       it "should always pass" do
         expect(rule.check(reservation)).to be true

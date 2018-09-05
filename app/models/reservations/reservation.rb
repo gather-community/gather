@@ -84,7 +84,7 @@ module Reservations
     end
 
     def rule_set
-      @rule_set ||= RuleSet.build_for(self)
+      @rule_set ||= Rules::RuleSet.build_for(self)
     end
 
     def future?
@@ -136,12 +136,7 @@ module Reservations
 
     def apply_rules
       return if errors.any?
-      rule_set.rules.each do |_, rule|
-        # Check returns 2 element array on failure
-        unless (result = rule.check(self)) == true
-          errors.add(*result)
-        end
-      end
+      rule_set.errors(self).each { |e| errors.add(*e) }
     end
   end
 end

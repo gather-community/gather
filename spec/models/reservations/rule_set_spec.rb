@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-describe Reservations::RuleSet do
+describe Reservations::Rules::RuleSet do
   let(:resource1) { create(:resource) }
   let(:user) { create(:user) }
   let(:reservation) { Reservations::Reservation.new(resource: resource1, reserver: user) }
-  let(:rule_set) { Reservations::RuleSet.build_for(reservation) }
+  let(:rule_set) { described_class.build_for(reservation) }
 
   describe "accessors" do
     context "with multiple protocols defining rules" do

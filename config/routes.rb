@@ -56,9 +56,10 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
+    resources :protocols
   end
 
-  resources :reservations
+  resources :reservations, controller: "reservations/reservations"
 
   resources :calendar_exports, only: :index, path: "calendars" do
     member do

@@ -4,7 +4,7 @@ class Household < ApplicationRecord
   acts_as_tenant :cluster
 
   belongs_to :community
-  has_many :accounts, -> { joins(:community).includes(:community).order("LOWER(communities.name)") },
+  has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
     inverse_of: :household, class_name: "Billing::Account", dependent: :destroy
   has_many :signups, dependent: :destroy
   has_many :users, -> { by_name_adults_first }, inverse_of: :household, dependent: :destroy
@@ -13,11 +13,11 @@ class Household < ApplicationRecord
   has_many :pets, class_name: "People::Pet", dependent: :destroy
 
   scope :active, -> { where("deactivated_at IS NULL") }
-  scope :by_name, -> { order("LOWER(households.name)") }
+  scope :by_name, -> { alpha_order(households: :name) }
   scope :by_unit, -> { order(:unit_num) }
   scope :by_active, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)") }
   scope :ordered_by, ->(col) { col == "unit" ? by_unit : by_name }
-  scope :by_commty_and_name, -> { joins(:community).order("LOWER(communities.abbrv)").by_name }
+  scope :by_commty_and_name, -> { joins(:community).alpha_order(communities: :abbrv).by_name }
   scope :in_community, ->(c) { where(community_id: c.id) }
   scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
 

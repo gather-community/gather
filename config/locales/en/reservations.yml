@@ -1,0 +1,12 @@
+en:
+  reservations:
+    rule_names:
+      fixed_start_time: "Fixed Start Time"
+      fixed_end_time: "Fixed End Time"
+      max_lead_days: "Max. Lead Time"
+      max_length_minutes: "Max. Duration"
+      max_minutes_per_year: "Max. Minutes/Year"
+      max_days_per_year: "Max. Days/Year"
+      other_communities: "Other Communities"
+      requires_kind: "Type Required"
+      pre_notice: "Pre-notice"

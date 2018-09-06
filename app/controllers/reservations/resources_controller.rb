@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reservations
   class ResourcesController < ApplicationController
     include Destructible
@@ -9,8 +11,8 @@ module Reservations
 
     def index
       authorize sample_resource
-      @resources = policy_scope(Reservations::Resource).
-        with_reservation_counts.where(community: current_community).deactivated_last.by_name
+      @resources = policy_scope(Resource).with_reservation_counts
+        .in_community(current_community).deactivated_last.by_name
     end
 
     def new
@@ -39,7 +41,7 @@ module Reservations
     def update
       @resource = Resource.find(params[:id])
       authorize @resource
-      if @resource.update_attributes(resource_params)
+      if @resource.update(resource_params)
         flash[:success] = "Resource updated successfully."
         redirect_to reservations_resources_path
       else

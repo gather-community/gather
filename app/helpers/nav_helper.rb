@@ -114,6 +114,12 @@ module NavHelper
             path: reservations_resources_path,
             permitted: policy(Reservations::Resource.new(community: current_community)).index?,
             icon: "bed"
+          }, {
+            name: :protocols,
+            parent: :reservations,
+            path: reservations_protocols_path,
+            permitted: policy(Reservations::Protocol.new(community: current_community)).index?,
+            icon: "cogs"
           }
         ]
       when :work

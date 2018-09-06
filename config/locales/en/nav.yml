@@ -1,0 +1,39 @@
+en:
+  nav_links:
+    main:
+      people: "People"
+      meals: "Meals"
+      reservations: "Reservations"
+      wiki: "Wiki"
+      work: "Work"
+      admin: "Admin"
+    sub:
+      meals:
+        meals: "Meals"
+        jobs: "Jobs"
+        report: "Report"
+        formulas: "Formulas"
+      people:
+        directory: "Directory"
+        households: "Households"
+        roles: "Roles"
+        vehicles: "Vehicles"
+      reservations:
+        reservations: "Reservations"
+        resources: "Resources"
+        protocols: "Protocols"
+      work:
+        signups: "Signups"
+        report: "Report"
+        jobs: "Jobs"
+        periods: "Periods"
+    personal:
+      profile: "Profile"
+      accounts: "Accounts"
+      account: "Account"
+      calendars: "Calendars"
+      sign_out: "Sign Out"
+    footer:
+      wiki:
+        all: "Wiki Page Listing"
+        new: "New Wiki Page"

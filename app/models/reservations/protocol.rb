@@ -15,12 +15,13 @@ module Reservations
 
     has_many :protocolings, class_name: "Reservations::Protocoling", inverse_of: :protocol,
                             foreign_key: "protocol_id", dependent: :destroy
-    has_many :resources, through: :protocolings
+    has_many :resources, -> { by_name }, through: :protocolings
     belongs_to :community
 
     delegate :name, to: :community, prefix: true
 
     scope :in_community, ->(c) { where(community_id: c.id) }
+    scope :by_name, -> { alpha_order(:name) }
 
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.

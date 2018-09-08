@@ -12,17 +12,19 @@ module Reservations
     def index
       authorize sample_protocol
       @protocols = policy_scope(Protocol).in_community(current_community).includes(:resources).by_name
-      @kinds_present = current_community.settings.reservations.kinds.present?
+      check_if_kinds_present
     end
 
     def new
       @protocol = sample_protocol
       authorize @protocol
+      prep_form_vars
     end
 
     def edit
       @protocol = Protocol.find(params[:id])
       authorize @protocol
+      prep_form_vars
     end
 
     def create
@@ -34,6 +36,7 @@ module Reservations
         redirect_to reservations_protocols_path
       else
         set_validation_error_notice(@protocol)
+        prep_form_vars
         render :new
       end
     end
@@ -46,6 +49,7 @@ module Reservations
         redirect_to reservations_protocols_path
       else
         set_validation_error_notice(@protocol)
+        prep_form_vars
         render :edit
       end
     end
@@ -60,6 +64,15 @@ module Reservations
 
     def sample_protocol
       @sample_protocol ||= Protocol.new(community: current_community)
+    end
+
+    def prep_form_vars
+      @resource_options = policy_scope(Resource).in_community(current_community).active.by_name.decorate
+      @kind_options = current_community.settings.reservations.kinds.split(/\s*,\s*/)
+    end
+
+    def check_if_kinds_present
+      @kinds_present = current_community.settings.reservations.kinds.present?
     end
 
     # Pundit built-in helper doesn't work due to namespacing

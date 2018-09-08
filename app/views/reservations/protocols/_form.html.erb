@@ -1,32 +1,36 @@
-<div class="row" id="resource-forms">
-  <div class="col-sm-3 col-sm-push-9">
-    <%= render("shared/photo_dropzone", obj: resource, format: :thumb, width: 220, height: 165) %>
-  </div>
+<%= gather_form_for(protocol) do |f| %>
+  <h2><%= t("reservations/protocol.applicability") %></h2>
 
-  <div class="col-sm-9 col-sm-pull-3">
-    <%= gather_form_for(resource, width: :full) do |f| %>
-      <%= f.input :photo_tmp_id, as: :hidden %>
-      <%= f.input :photo_destroy, as: :hidden %>
-      <%= f.input :name, maxlength: 24 %>
-      <%= f.input :abbrv, maxlength: 6 %>
-      <%= f.input :meal_hostable, as: :select, required: true %>
-      <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS,
-        required: true %>
-      <%= f.input :guidelines, as: :markdown %>
+  <%= f.input(:resource_ids, collection: @resource_options, label_method: :name,
+                             input_html: {
+                               multiple: "multiple",
+                               "data-placeholder": t("simple_form.placeholders.reservations_protocol.resource_ids")
+                             }) %>
 
-      <%= form_actions do %>
-        <%= f.button :submit, class: "btn-primary" %>
-      <% end %>
+  <% if @kind_options.any? %>
+    <%= f.input(:kinds, collection: @kind_options,
+                        input_html: {
+                          multiple: "multiple",
+                          "data-placeholder": t("simple_form.placeholders.reservations_protocol.kinds")
+                        }) %>
+  <% else %>
+    <%= f.input(:kinds) do %>
+      <%= t("reservations/protocol.no_kinds_html", url: admin_settings_path(type: "community")) %>
     <% end %>
-  </div>
-</div>
+  <% end %>
+
+
+  <h2><%= t("reservations/protocol.rules") %></h2>
+
+  <%= form_actions do %>
+    <%= f.button :submit, class: "btn-primary" %>
+  <% end %>
+<% end %>
 
 <%= javascript_tag do %>
   $(function() {
-    window.uploadView = new Gather.Views.FileUploadView(<%=json(
-      el: '#resource-forms',
-      maxFilesize: Settings.photos.max_size_mb / 1
-    )%>);
-    new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});
+    new Gather.Views.DirtyChecker({el: '.reservations--protocol-form'});
+    $("#reservations_protocol_resource_ids").select2();
+    $("#reservations_protocol_kinds").select2();
   });
 <% end %>

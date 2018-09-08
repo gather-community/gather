@@ -10,22 +10,166 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
-    # Examples
-    # labels:
-    #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
-    # include_blanks:
-    #   defaults:
-    #     age: 'Rather not say'
-    # prompts:
-    #   defaults:
-    #     age: 'Select your age'
+    placeholders:
+      meal:
+        title: "e.g. Southern Red Beans and Rice"
+        entrees: "e.g. Red beans, rice, and smoked pork sausage. Meat free version available. Mild spice!"
+        side: "e.g. Braised collard greens with butter and shallots"
+        kids: "e.g. Mac & cheese and boiled eggs"
+        dessert: "e.g. Dark chocolate squares"
+        notes: "e.g. Some ingredients organic and local where possible"
+      reservations_protocol:
+        kinds: "Select types or leave blank to apply to all  ..."
+        resource_ids: "Select resources or leave blank to apply to all ..."
+      reservations_reservation:
+        name: "e.g. Game night"
+      billing_transaction:
+        description: "e.g. Check #12345"
+      user:
+        birthdate_str: "e.g. Feb 29 1981 (year optional)"
+      household:
+        name: "e.g. Smith or Singh-Whitman"
+        vehicles:
+          make: "e.g. Toyota"
+          model: "e.g. Prius"
+          color: "e.g. Blue"
+        emergency_contacts:
+          relationship: "e.g. Sharon's Mom"
+          location: "e.g. Hastings, MI"
+      work_job:
+        reminders:
+          note: "e.g. Sharpen the saw (optional)"
+      work_period:
+        name: "e.g. Summer 1969"
+      wiki_page:
+        comment: "A comment about this change."
+    hints:
+      markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>Markdown formatting</a>."
+      meal:
+        formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
+      billing_account:
+        credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
+      reservations_protocol:
+        kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
+        resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."
+      reservations_resource:
+        default_calendar_view: "Reservation calendar style when first loaded"
+        abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
+        meal_hostable: "If yes, this resource will show up as possible location when creating a meal."
+        guidelines: "Text that the user must agree to when making a reservation."
+      user:
+        joined_on: "Approximate date when you joined the community"
+        job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
+        email: "The email address at which you'd prefer to be contacted."
+        google_email: "The email address tied to the Google account used for sign-in."
+      meals_formula:
+        is_default: "If checked, this will be the formula selected by default for new meal creation."
+        pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
+        pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
+      wiki_page:
+        content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
+        data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
+      work_job:
+        hours: "Estimated number of hours the job will take. Decimals allowed."
+        slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
+        hours_per_shift: "The amount of hours credit each shift is worth."
+      work_period:
+        quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
+    options:
+      meal:
+        time:
+          past: "Past"
+          finalizable: "Finalizable"
+          all: "All Time"
+          upcoming: "Upcoming"
+        cost:
+          payment_method:
+            check: "Check"
+            credit: "Balance Credit"
+      meals_formula:
+        meal_calc_type:
+          fixed: "Fixed"
+          share: "Proportional"
+        pantry_calc_type:
+          fixed: "Fixed"
+          percent: "Percentage"
+      meals_message:
+        recipient_type:
+          diners: "Diners"
+          team: "Team"
+          all: "Diners + Team"
+      user:
+        preferred_contact:
+          email: "Email"
+          text: "Text"
+          phone: "Phone"
+        life_stage:
+          any: "Adults + Children"
+          adult: "Adults"
+          child: "Children"
+        sort:
+          name: "By Name"
+          unit: "By Unit"
+        view:
+          album: "Album"
+          table: "Table"
+          albumall: "Album w/ Inactive"
+          tableall: "Table w/ Inactive"
+      reservations_protocol:
+        general:
+          "0": "This protocol applies to specific resources"
+          "1": "This protocol applies to all resources"
+      reservations_resource:
+        default_calendar_view:
+          week: "Week"
+          month: "Month"
+      wiki_page:
+        editable_by:
+          everyone: "Everyone"
+          wikiist: "Wikiists & Admins Only"
+      work_job:
+        slot_type:
+          fixed: "This is a regular job with a fixed number of slots"
+          full_single: "This job is for the full community (single shift)"
+          full_multiple: "This job is for the full community (multiple shifts)"
+        time_type:
+          date_time: "This job has a set date and time"
+          date_only: "This job is for a certain date or date range"
+          full_period: "This job is for the whole work period"
+        reminders:
+          abs_rel:
+            relative: "Relative Time"
+            absolute: "Exact Time"
+          rel_unit_sign:
+            days_before: "Days Before"
+            days_after: "Days After"
+            hours_before: "Hours Before"
+            hours_after: "Hours After"
+        requester:
+          any: "Any Requester"
+          none: "No Requester"
+        preassigned:
+          any: "All Jobs"
+          y: "Preassigned"
+          n: "Not Preassigned"
+      work_period:
+        phase:
+          archived: "Archived: Period is in the past, not editable"
+          draft: "Draft: Jobs still being set up, signups hidden"
+          open: "Open: People can pick jobs!"
+          published: "Published: The final work schedule"
+          ready: "Ready: Jobs finalized, synopsis visible, but can't sign up"
+        quota_type:
+          none: "None"
+          by_person: "By Person"
+          by_household: "By Household"
+      work_shift:
+        lens:
+          all: "All Jobs"
+          open: "Open Jobs"
+          me: "My Jobs"
+          myhh: "My Household"
+          notpre: "Not Preassigned"
+    prompts:
+      user:
+        preferred_contact: "How should people contact you for non-emergencies?"

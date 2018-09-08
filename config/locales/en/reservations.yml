@@ -10,3 +10,7 @@ en:
       other_communities: "Other Communities"
       requires_kind: "Type Required"
       pre_notice: "Pre-notice"
+  reservations/protocol:
+    applicability: "Applicability"
+    no_kinds_html: "This community has no reservation types defined. See the <a href='%{url}'>settings page</a>."
+    rules: "Rules"

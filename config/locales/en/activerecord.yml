@@ -82,6 +82,9 @@ en:
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
+      reservations/protocol:
+        resource_ids: "Resources"
+        kinds: "Reservation Types"
       reservations/reservation:
         resource: "Resource"
         pre_notice: "Notice"

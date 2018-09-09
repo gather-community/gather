@@ -29,5 +29,11 @@ module Reservations
     def destroy?
       active_admin?
     end
+
+    def permitted_attributes
+      %i[name requires_kind fixed_start_time fixed_end_time max_lead_days max_length_minutes
+         max_days_per_year max_minutes_per_year pre_notice other_communities] <<
+        {resource_ids: [], kinds: []}
+    end
   end
 end

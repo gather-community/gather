@@ -11,7 +11,7 @@ describe Work::Reminder do
     let(:reminder) { build(:work_reminder, submitted) }
     subject(:normalized) { submitted.keys.map { |k| [k, reminder.send(k)] }.to_h }
 
-    before { reminder.valid? } # Trigger the callback.
+    before { reminder.validate } # Trigger the callback.
 
     context "with both absolute and relative times, absolute chosen" do
       let(:submitted) do

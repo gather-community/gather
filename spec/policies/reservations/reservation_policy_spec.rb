@@ -3,19 +3,20 @@
 require "rails_helper"
 
 describe Reservations::ReservationPolicy do
-  include_context "policy permissions"
-  let(:starts_at) { Time.current + 1.week }
-  let(:ends_at) { starts_at + 1.hour }
-  let(:created_at) { nil }
   let(:reserver) { create(:user) }
   let(:resource) { create(:resource, community: community) }
-  let(:reservation) do
-    build(:reservation, reserver: reserver, resource: resource, created_at: created_at,
-                        starts_at: starts_at, ends_at: ends_at)
-  end
-  let(:record) { reservation }
 
   describe "permissions" do
+    include_context "policy permissions"
+    let(:created_at) { nil }
+    let(:starts_at) { Time.current + 1.week }
+    let(:ends_at) { starts_at + 1.hour }
+    let(:reservation) do
+      build(:reservation, reserver: reserver, resource: resource, created_at: created_at,
+        starts_at: starts_at, ends_at: ends_at)
+      end
+    let(:record) { reservation }
+
     shared_examples_for "permits admins and reserver" do
       it_behaves_like "permits admins but not regular users"
       it "permits reserver" do
@@ -106,6 +107,8 @@ describe Reservations::ReservationPolicy do
   end
 
   describe "permitted_attributes" do
+    include_context "policy permissions"
+    let(:reservation) { build(:reservation, resource: resource) }
     let(:admin_attribs) { basic_attribs + %i[reserver_id] }
     subject { Reservations::ReservationPolicy.new(reserver, reservation).permitted_attributes }
 

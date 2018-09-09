@@ -21,4 +21,20 @@ describe Reservations::ProtocolPolicy do
 
     it_behaves_like "allows only admins in community"
   end
+
+  describe "permitted_attributes" do
+    include_context "policy permissions"
+    let(:actor) { create(:admin) }
+    let(:protocol) { build(:reservation_protocol, community: community) }
+    let(:basic_attribs) do
+      %i[name requires_kind fixed_start_time fixed_end_time max_lead_days
+         max_length_minutes max_days_per_year max_minutes_per_year pre_notice other_communities] <<
+        {resource_ids: [], kinds: []}
+    end
+    subject { Reservations::ProtocolPolicy.new(actor, protocol).permitted_attributes }
+
+    it "should allow basic attribs" do
+      expect(subject).to contain_exactly(*basic_attribs)
+    end
+  end
 end

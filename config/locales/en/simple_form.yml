@@ -52,7 +52,7 @@ en:
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
         resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."
-        fixed_end_time: "All applicable reservations will be required to end at this time."
+        fixed_end_time: "All applicable reservations will be required to end at this time. If before fixed start time, it will be treated as on the following day."
         fixed_start_time: "All applicable reservations will be required to start at this time."
         max_days_per_year: "Users will not be allowed to make applicable reservations on more than this many days per year."
         max_lead_days: "Users will not be allowed to make applicable reservations more than this many days in advance"

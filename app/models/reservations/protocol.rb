@@ -23,6 +23,14 @@ module Reservations
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_name, -> { alpha_order(:name) }
 
+    normalize_attributes :name, :pre_notice, :other_communities
+
+    before_validation :normalize
+
+    validates :name, presence: true, length: {maximum: 64}
+    validates :max_lead_days, :max_length_minutes, :max_days_per_year, :max_minutes_per_year,
+      numericality: {greater_than: 0}, allow_nil: true
+
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.
@@ -38,6 +46,14 @@ module Reservations
     # Needs to be public since it's called by class method.
     def applies_to_kind?(kind)
       kinds.present? && kinds.include?(kind)
+    end
+
+    private
+
+    def normalize
+      # Can only be true if set to true and no kinds. nil otherwise. Should never be false.
+      self.requires_kind = !kinds&.any? && requires_kind? || nil
+      self.kinds = kinds.reject(&:blank?) unless kinds.nil?
     end
   end
 end

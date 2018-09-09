@@ -15,14 +15,14 @@
                           "data-placeholder": t("simple_form.placeholders.reservations_protocol.kinds")
                         }) %>
   <% else %>
-    <%= f.input(:kinds) do %>
+    <%= f.input(:kinds, hint: false) do %>
       <%= t("reservations/protocol.no_kinds_html", url: admin_settings_path(type: "community")) %>
     <% end %>
   <% end %>
 
   <h2><%= t("reservations/protocol.rules") %></h2>
 
-  <%= f.input(:requires_kind) %>
+  <%= f.input(:requires_kind) if @kind_options.any? %>
   <%= f.input(:fixed_start_time, as: :time_picker) %>
   <%= f.input(:fixed_end_time, as: :time_picker) %>
   <%= f.input(:max_lead_days) %>
@@ -41,8 +41,9 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.DirtyChecker({el: '.reservations--protocol-form'});
     $("#reservations_protocol_resource_ids").select2();
     $("#reservations_protocol_kinds").select2();
+    new Gather.Views.Reservations.ProtocolFormView({el: '.reservations--protocol-form'});
+    new Gather.Views.DirtyChecker({el: '.reservations--protocol-form'});
   });
 <% end %>

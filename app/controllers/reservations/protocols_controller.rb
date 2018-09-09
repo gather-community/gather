@@ -68,7 +68,7 @@ module Reservations
 
     def prep_form_vars
       @resource_options = policy_scope(Resource).in_community(current_community).active.by_name.decorate
-      @kind_options = current_community.settings.reservations.kinds.split(/\s*,\s*/)
+      @kind_options = (current_community.settings.reservations.kinds || "").split(/\s*,\s*/)
     end
 
     def check_if_kinds_present

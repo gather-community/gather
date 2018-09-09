@@ -2,7 +2,6 @@
 - id: 9
   fixed_end_time: 2000-01-01 13:00:00.000000000 Z
   fixed_start_time: 2000-01-01 14:00:00.000000000 Z
-  general: false
   kinds:
   max_days_per_year:
   max_lead_days:

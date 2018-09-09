@@ -35,17 +35,17 @@ module Reservations
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.
     def self.matching(resource, kind = nil)
-      joins("LEFT JOIN reservation_protocolings
-          ON reservation_protocolings.protocol_id = reservation_protocols.id")
-        .where(community_id: resource.community_id)
-        .where("reservation_protocolings.resource_id = ? OR general = 't'", resource.id)
+      resource_id_expr = "(SELECT resource_id FROM reservation_protocolings "\
+        "WHERE protocol_id = reservation_protocols.id)"
+      where(community_id: resource.community_id)
+        .where(":id IN #{resource_id_expr} OR NOT EXISTS #{resource_id_expr}", id: resource.id)
+        .where("kinds IS NULL OR kinds ? :kind", kind: kind)
         .order(:created_at) # Need a definite ordering for specs
-        .select { |p| p.applies_to_kind?(kind) || p.kinds.nil? }
     end
 
-    # Needs to be public since it's called by class method.
-    def applies_to_kind?(kind)
-      kinds.present? && kinds.include?(kind)
+    # A protocol is general if it is not applied to any specific resources.
+    def general?
+      resources.none?
     end
 
     private

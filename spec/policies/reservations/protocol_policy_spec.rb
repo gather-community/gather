@@ -8,7 +8,11 @@ describe Reservations::ProtocolPolicy do
     let(:protocol) { build(:reservation_protocol, community: community) }
     let(:record) { protocol }
 
-    permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
+    permissions :index? do
+      it_behaves_like "permits users in cluster"
+    end
+
+    permissions :new?, :create?, :edit?, :update?, :destroy? do
       it_behaves_like "permits admins but not regular users"
     end
   end

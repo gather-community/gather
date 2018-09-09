@@ -61,7 +61,7 @@ en:
         other_communities: "Restricts the ability of members of other communities in your cluster to view and create applicable reservations. If blank, there will be no restrictions on members of other communities."
         pre_notice: "A notice entered here will be displayed at the top of the reservation form for applicable reservations."
         requires_kind: "If checked, applicable reservations will be required to specify a type. Use this in conjunction with other protocols to enforce special rules for some types of reservations."
-        name: "A short, descriptive name for this protocol. It won't be displayed to users."
+        name: "A short, descriptive name for this protocol."
       reservations_resource:
         default_calendar_view: "Reservation calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"

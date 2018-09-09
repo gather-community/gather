@@ -11,11 +11,7 @@ module Reservations
     end
 
     def index?
-      active_admin?
-    end
-
-    def show?
-      active_admin?
+      active_in_cluster?
     end
 
     def create?

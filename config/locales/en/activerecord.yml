@@ -83,8 +83,17 @@ en:
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
       reservations/protocol:
-        resource_ids: "Resources"
+        fixed_end_time: "Fixed End Time"
+        fixed_start_time: "Fixed Start Time"
         kinds: "Reservation Types"
+        max_days_per_year: "Max. Days/Year"
+        max_lead_days: "Max. Lead Time"
+        max_length_minutes: "Max. Duration"
+        max_minutes_per_year: "Max. Minutes/Year"
+        other_communities: "Other Communities"
+        pre_notice: "Pre-notice"
+        requires_kind: "Type Required"
+        resource_ids: "Resources"
       reservations/reservation:
         resource: "Resource"
         pre_notice: "Notice"

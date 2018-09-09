@@ -7,7 +7,7 @@ module Reservations
     def defined_rule_names
       Rules::Rule::NAMES
         .reject { |n| self[n].nil? }
-        .map { |n| h.t("reservations.rule_names.#{n}") }
+        .map { |n| h.t("activerecord.attributes.reservations/protocol.#{n}") }
         .join(", ")
     end
 

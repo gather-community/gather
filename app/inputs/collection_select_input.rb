@@ -6,6 +6,8 @@ class CollectionSelectInput < SimpleForm::Inputs::CollectionSelectInput
     options[:prompt] && value_is_blank? ? super.push("has-prompt") : super
   end
 
+  private
+
   def value_is_blank?
     object.respond_to?(attribute_name) && object.send(attribute_name).blank?
   end

@@ -5,7 +5,7 @@ module Reservations
     # Rule for limiting access to other communities in cluster.
     class OtherCommunitiesRule < Rule
       # In order of restrictiveness, least to most.
-      VALUES = %i[ok sponsor read_only forbidden].freeze
+      VALUES = %i[sponsor read_only forbidden].freeze
 
       def self.aggregate(values)
         values.max_by { |v| VALUES.index(v.to_sym) }

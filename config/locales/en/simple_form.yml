@@ -52,6 +52,16 @@ en:
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
         resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."
+        fixed_end_time: "All applicable reservations will be required to end at this time."
+        fixed_start_time: "All applicable reservations will be required to start at this time."
+        max_days_per_year: "Users will not be allowed to make applicable reservations on more than this many days per year."
+        max_lead_days: "Users will not be allowed to make applicable reservations more than this many days in advance"
+        max_length_minutes: "Users will not be allowed to make reservations longer than this many minutes in duration."
+        max_minutes_per_year: "Users will not be allowed to make more than this many minutes of applicable reservations per year."
+        other_communities: "Restricts the ability of members of other communities in your cluster to view and create applicable reservations. If blank, there will be no restrictions on members of other communities."
+        pre_notice: "A notice entered here will be displayed at the top of the reservation form for applicable reservations."
+        requires_kind: "If checked, applicable reservations will be required to specify a type. Use this in conjunction with other protocols to enforce special rules for some types of reservations."
+        name: "A short, descriptive name for this protocol. It won't be displayed to users."
       reservations_resource:
         default_calendar_view: "Reservation calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
@@ -116,9 +126,10 @@ en:
           albumall: "Album w/ Inactive"
           tableall: "Table w/ Inactive"
       reservations_protocol:
-        general:
-          "0": "This protocol applies to specific resources"
-          "1": "This protocol applies to all resources"
+        other_communities:
+          sponsor: "Can create only if sponsor named"
+          read_only: "Can view only"
+          forbidden: "Can't view or create"
       reservations_resource:
         default_calendar_view:
           week: "Week"

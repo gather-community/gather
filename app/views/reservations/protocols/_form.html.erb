@@ -1,4 +1,6 @@
 <%= gather_form_for(protocol) do |f| %>
+  <%= f.input(:name) %>
+
   <h2><%= t("reservations/protocol.applicability") %></h2>
 
   <%= f.input(:resource_ids, collection: @resource_options, label_method: :name,
@@ -6,7 +8,6 @@
                                multiple: "multiple",
                                "data-placeholder": t("simple_form.placeholders.reservations_protocol.resource_ids")
                              }) %>
-
   <% if @kind_options.any? %>
     <%= f.input(:kinds, collection: @kind_options,
                         input_html: {
@@ -19,8 +20,19 @@
     <% end %>
   <% end %>
 
-
   <h2><%= t("reservations/protocol.rules") %></h2>
+
+  <%= f.input(:requires_kind) %>
+  <%= f.input(:fixed_start_time, as: :time_picker) %>
+  <%= f.input(:fixed_end_time, as: :time_picker) %>
+  <%= f.input(:max_lead_days) %>
+  <%= f.input(:max_length_minutes) %>
+  <%= f.input(:max_days_per_year) %>
+  <%= f.input(:max_minutes_per_year) %>
+  <% if multi_community? %>
+    <%= f.input(:other_communities, collection: Reservations::Rules::OtherCommunitiesRule::VALUES) %>
+  <% end %>
+  <%= f.input(:pre_notice, as: :markdown) %>
 
   <%= form_actions do %>
     <%= f.button :submit, class: "btn-primary" %>

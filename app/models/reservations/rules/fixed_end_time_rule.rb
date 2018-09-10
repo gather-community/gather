@@ -4,10 +4,6 @@ module Reservations
   module Rules
     # Rule for setting fixed end time for all reservations on the resource.
     class FixedEndTimeRule < Rule
-      def self.aggregate(values)
-        values.max
-      end
-
       def check(reservation)
         value.strftime("%T") == reservation.ends_at.strftime("%T") ||
           [:ends_at, "Must be #{value.to_s(:regular_time)}"]

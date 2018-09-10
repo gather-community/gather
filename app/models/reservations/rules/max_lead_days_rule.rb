@@ -4,10 +4,6 @@ module Reservations
   module Rules
     # Rule for limiting how far out reservations can be made.
     class MaxLeadDaysRule < Rule
-      def self.aggregate(values)
-        values.min
-      end
-
       def check(reservation)
         reservation.starts_at.to_date - Time.zone.today <= value ||
           [:starts_at, "Can be at most #{value} days in the future"]

@@ -4,10 +4,6 @@ module Reservations
   module Rules
     # Rule for limiting days reservered per year.
     class MaxDaysPerYearRule < Rule
-      def self.aggregate(values)
-        values.min
-      end
-
       def check(reservation)
         booked = booked_time_for_year(reservation, :days)
         if booked >= value

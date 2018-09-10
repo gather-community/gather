@@ -8,79 +8,16 @@ describe Reservations::Rules::RuleSet do
   let(:reservation) { Reservations::Reservation.new(resource: resource1, reserver: user) }
   let(:rule_set) { described_class.build_for(reservation) }
 
-  describe "accessors" do
-    context "with multiple protocols defining rules" do
-      let!(:p1) do
-        create(:reservation_protocol, resources: [resource1],
-                                      fixed_start_time: "11:00am",
-                                      fixed_end_time: "8:00pm",
-                                      max_lead_days: 20,
-                                      max_length_minutes: 90,
-                                      max_minutes_per_year: 1800,
-                                      max_days_per_year: 14,
-                                      other_communities: "read_only",
-                                      pre_notice: "Foo",
-                                      created_at: Time.current - 10)
-      end
-      let!(:p2) do
-        create(:reservation_protocol, resources: [resource1],
-                                      fixed_start_time: "10:00am",
-                                      fixed_end_time: "6:00pm",
-                                      max_lead_days: 30,
-                                      max_length_minutes: 70,
-                                      max_days_per_year: 10,
-                                      max_minutes_per_year: 1000,
-                                      other_communities: "forbidden",
-                                      requires_kind: true,
-                                      pre_notice: "Bar")
-      end
+  describe "#errors" do
+    let(:rule1) { double(check: [:starts_at, "foo"]) }
+    let(:rule2) { double(check: [:starts_at, "bar"]) }
+    let(:rule3) { double(check: true) }
+    let(:rule4) { double(check: [:base, "baz"]) }
+    subject(:errors) { rule_set.errors(nil) }
 
-      it "should produce correct values" do
-        expect(rule_set.fixed_start_time?).to be(true)
-        expect(rule_set.fixed_end_time?).to be(true)
-        expect(rule_set.max_lead_days?).to be(true)
-        expect(rule_set.max_length_minutes?).to be(true)
-        expect(rule_set.max_minutes_per_year?).to be(true)
-        expect(rule_set.max_days_per_year?).to be(true)
-        expect(rule_set.other_communities?).to be(true)
-        expect(rule_set.requires_kind?).to be(true)
-        expect(rule_set.pre_notice?).to be(true)
+    before { allow(rule_set).to receive(:rules).and_return([rule1, rule2, rule3, rule4]) }
 
-        expect(rule_set.fixed_start_time.strftime("%T")).to eq("10:00:00")
-        expect(rule_set.fixed_end_time.strftime("%T")).to eq("20:00:00")
-        expect(rule_set.max_lead_days).to eq(20)
-        expect(rule_set.max_length_minutes).to eq(70)
-        expect(rule_set.max_minutes_per_year).to eq(1000)
-        expect(rule_set.max_days_per_year).to eq(10)
-        expect(rule_set.other_communities).to eq("forbidden")
-        expect(rule_set.pre_notice).to eq("Foo\nBar")
-      end
-    end
-
-    context "with no rules" do
-      let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
-
-      it "should produce correct values" do
-        expect(rule_set.fixed_start_time?).to be(false)
-        expect(rule_set.fixed_end_time?).to be(false)
-        expect(rule_set.max_lead_days?).to be(false)
-        expect(rule_set.max_length_minutes?).to be(false)
-        expect(rule_set.max_minutes_per_year?).to be(false)
-        expect(rule_set.max_days_per_year?).to be(false)
-        expect(rule_set.other_communities?).to be(false)
-        expect(rule_set.requires_kind?).to be(false)
-        expect(rule_set.pre_notice?).to be(false)
-
-        expect(rule_set.fixed_start_time).to be_nil
-        expect(rule_set.fixed_end_time).to be_nil
-        expect(rule_set.max_lead_days).to be_nil
-        expect(rule_set.max_length_minutes).to be_nil
-        expect(rule_set.max_minutes_per_year).to be_nil
-        expect(rule_set.max_days_per_year).to be_nil
-        expect(rule_set.other_communities).to be_nil
-        expect(rule_set.pre_notice).to be_nil
-      end
-    end
+    it { is_expected.to contain_exactly([:starts_at, "foo"], [:starts_at, "bar"], [:base, "baz"]) }
   end
 
   describe "#access_level" do
@@ -104,6 +41,7 @@ describe Reservations::Rules::RuleSet do
       context "with multiple protocols" do
         let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "read_only") }
         let!(:p2) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
+        let!(:p3) { create(:reservation_protocol, resources: [resource1], max_lead_days: 60) }
         it { is_expected.to eq("forbidden") }
       end
 
@@ -111,6 +49,80 @@ describe Reservations::Rules::RuleSet do
         let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
         it { is_expected.to eq("ok") }
       end
+    end
+  end
+
+  shared_examples_for "fixed time rule" do
+    subject(:value) { rule_set.send(rule_name)&.strftime("%T") }
+
+    context "with multiple rules" do
+      let!(:p1) do
+        create(:reservation_protocol, resources: [resource1], rule_name => "11:00am",
+                                      created_at: Time.current - 10)
+      end
+      let!(:p2) do
+        create(:reservation_protocol, resources: [resource1], rule_name => "10:00am")
+      end
+      it { is_expected.to eq("11:00:00") }
+    end
+
+    context "with no rules" do
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe "#fixed_start_time" do
+    let(:rule_name) { :fixed_start_time }
+    it_behaves_like "fixed time rule"
+  end
+
+  describe "#fixed_end_time" do
+    let(:rule_name) { :fixed_end_time }
+    it_behaves_like "fixed time rule"
+  end
+
+  describe "#pre_notice" do
+    subject(:value) { rule_set.pre_notice }
+
+    context "with multiple rules" do
+      let!(:p1) do
+        create(:reservation_protocol, resources: [resource1], pre_notice: "Foo",
+                                      created_at: Time.current - 10)
+      end
+      let!(:p2) do
+        create(:reservation_protocol, resources: [resource1], pre_notice: "Bar")
+      end
+      it { is_expected.to eq("Foo\n\nBar") }
+    end
+
+    context "with no rules" do
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe "#requires_kind?" do
+    subject(:value) { rule_set.requires_kind? }
+
+    context "with multiple rules" do
+      let!(:p1) do
+        create(:reservation_protocol, resources: [resource1], requires_kind: nil,
+                                      created_at: Time.current - 10)
+      end
+      let!(:p2) do
+        create(:reservation_protocol, resources: [resource1], requires_kind: true)
+      end
+      it { is_expected.to be true }
+    end
+
+    context "with one nil rule" do
+      let!(:p1) do
+        create(:reservation_protocol, resources: [resource1], requires_kind: nil)
+      end
+      it { is_expected.to be false }
+    end
+
+    context "with no rules" do
+      it { is_expected.to be false }
     end
   end
 end

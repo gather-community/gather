@@ -4,7 +4,7 @@ module Reservations
   module Rules
     # Models a single reservation rule, such as max_minutes_per_year = 200.
     class Rule
-      attr_accessor :name, :value, :resources, :community
+      attr_accessor :value, :resources, :community
 
       NAMES = %i[fixed_start_time fixed_end_time max_lead_days
                  max_length_minutes max_minutes_per_year max_days_per_year
@@ -18,6 +18,10 @@ module Reservations
         self.value = value
         self.resources = resources
         self.community = community
+      end
+
+      def name
+        self.class.name.split("::").last.underscore.sub(/_rule$/, "").to_sym
       end
 
       # Abstract method.

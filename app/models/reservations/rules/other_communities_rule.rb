@@ -7,10 +7,6 @@ module Reservations
       # In order of restrictiveness, least to most.
       VALUES = %i[sponsor read_only forbidden].freeze
 
-      def self.aggregate(values)
-        values.max_by { |v| VALUES.index(v.to_sym) }
-      end
-
       def check(reservation)
         case value
         when "forbidden", "read_only"

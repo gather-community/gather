@@ -4,10 +4,6 @@ module Reservations
   module Rules
     # Rule for limiting number of total minutes booked per year.
     class MaxMinutesPerYearRule < Rule
-      def self.aggregate(values)
-        values.min
-      end
-
       def check(reservation)
         booked = booked_time_for_year(reservation, :seconds)
         if booked >= value * 60

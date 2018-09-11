@@ -17,6 +17,7 @@ en:
     "true": "True"
     unknown: "Unknown"
     unlimited: "Unlimited"
+    yes: "Yes"
     time_with_preposition:
       "on": "on %{t}"
       "at": "at %{t}"

@@ -87,7 +87,7 @@ en:
         fixed_start_time: "Fixed Start Time"
         kinds: "Reservation Types"
         max_days_per_year: "Max. Days/Year"
-        max_lead_days: "Max. Lead Time"
+        max_lead_days: "Max. Advance Time"
         max_length_minutes: "Max. Duration"
         max_minutes_per_year: "Max. Minutes/Year"
         other_communities: "Other Communities"

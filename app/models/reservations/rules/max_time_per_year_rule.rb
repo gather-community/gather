@@ -25,6 +25,7 @@ module Reservations
       def booked_time_for_year(reservation, unit)
         year = reservation.starts_at.year
         Reservation
+          .where.not(id: reservation.id)
           .where(resources.present? ? {resource: resources} : nil)
           .where(kinds.present? ? {kind: kinds} : nil)
           .where(reserver: reservation.household_users)

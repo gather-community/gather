@@ -52,5 +52,22 @@ describe Reservations::Rules::MaxMinutesPerYearRule do
       expect(rule.check(reservation)).to eq [:base, "You can book at most 3 hours of Personal/Special "\
         "Foo Room/Bar Room events per year and you have already booked 2 hours"]
     end
+
+    context "with persisted event" do
+      let!(:reservation) do
+        create(:reservation, reserver: user1, starts_at: "2016-01-30 6:00pm", ends_at: "2016-01-30 7:00pm",
+                             resource: resource1, kind: "Personal")
+      end
+
+      it "should ignore the current event on edit" do
+        # Assume we are actually shortening this reservation.
+        # It only be a problem if it goes to more than an hour.
+        reservation.ends_at = "2016-01-30 6:50pm"
+        expect(rule.check(reservation)).to be true
+        reservation.ends_at = "2016-01-30 7:10pm"
+        expect(rule.check(reservation)).to eq [:base, "You can book at most 3 hours of Personal/Special "\
+          "Foo Room/Bar Room events per year and you have already booked 2 hours"]
+      end
+    end
   end
 end

@@ -5,7 +5,7 @@ module Utils
       return "under 1 minute" if secs < 60
 
       secs, n = secs.divmod(60)
-      [[60, "minute"], [24, "hour"], [1000, "day"]].map do |count, name|
+      [[60, "minute"], [10000000, "hour"]].map do |count, name|
         if secs > 0
           secs, n = secs.divmod(count)
           n > 0 ? "#{n.to_i} #{name.pluralize(n.to_i)}" : nil

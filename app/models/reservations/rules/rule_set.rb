@@ -15,12 +15,8 @@ module Reservations
         Protocol.matching(reservation.resource, reservation.kind).each do |protocol|
           Rule::NAMES.each do |rule_name|
             klass = Rule.class_for(rule_name)
-            next unless (value = protocol.send(rule_name)).present?
-            rules << klass.new(
-              value: value,
-              community: reservation.community,
-              resources: protocol.resources
-            )
+            next if (value = protocol.send(rule_name)).blank?
+            rules << klass.new(value: value, community: reservation.community, resources: protocol.resources)
           end
         end
         new(reservation: reservation, rules: rules)

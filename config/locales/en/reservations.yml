@@ -10,3 +10,4 @@ en:
       days:
         one: "1 day"
         other: "%{formatted} days"
+    exceeded_time: "You can book at most %{max} of %{kind_resource} events per year and you have already booked %{booked}"

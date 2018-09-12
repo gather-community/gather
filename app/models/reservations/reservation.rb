@@ -21,6 +21,7 @@ module Reservations
     delegate :community, to: :resource, allow_nil: true
 
     delegate :household, to: :reserver
+    delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :reserver, prefix: true
     delegate :name, to: :reserver_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
@@ -40,15 +41,6 @@ module Reservations
     before_save ->(r) { meal.reservation_handler.sync_resourcings(r) if meal }
 
     normalize_attributes :kind, :note
-
-    # Counts the number of seconds or days booked for the given resources by the given
-    # household over the given period.
-    # The number of days is rounded up for each event.
-    # i.e., a 1-hour event and a 10-hour event both counts as 1 day, while a 36-hour event
-    # counts as 2 days.
-    def self.booked_time_for(resources:, household:, period:, unit:)
-      where(resource: resources, reserver: household.users, starts_at: period).to_a.sum(&unit)
-    end
 
     def self.new_with_defaults(attribs)
       reservation = new(attribs)
@@ -77,6 +69,10 @@ module Reservations
 
     def seconds
       ends_at - starts_at
+    end
+
+    def minutes
+      (seconds.to_f / 1.minute).ceil
     end
 
     def days

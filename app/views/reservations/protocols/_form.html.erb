@@ -1,0 +1,15 @@
+<div class="row" id="protocol-forms">
+
+  <div class="col-sm-9 col-sm-pull-3">
+    <%= simple_form_for(protocol, width: :full) do |f| %>
+      <%= f.input :kinds, maxlength: 24 %>
+      <%= f.input :max_days_per_year, maxlength: 6 %>
+
+      <%= form_actions do %>
+        <%= f.button :submit, class: "btn-primary" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+

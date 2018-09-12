@@ -1,0 +1,45 @@
+# Replace all <bracketed> items with your config info.
+# Note: For a production environment, it is better to use environment variables to set these settings.
+# e.g. `export SETTINGS__OAUTH__GOOGLE__CLIENT_ID=you@gmail.com`
+
+# Google account email to be used when creating initial admin user.
+admin_google_id: stevegaarder@gmail.com
+
+oauth:
+  google:
+    client_id: 117409128248-fvsj1kasq66gr01dcdkbfn6spd903r0t.apps.googleusercontent.com
+    client_secret: vPGY7vjYpnpCFdY89mhRgi1O
+
+# Get a secret key by running 'rake secret'.
+secret_key_base: f14ef171f03edd6e5e83a0a044fb93265ec4dd8bc7393f228fcf51b3278a1cf72c4b2e56bfe1c0edcc9270b6f59de758bbc0f18dc94146ffd0cd3c3d4ccbf53d
+
+
+# URL settings
+# Below is a standard development setup. In production, set the appropriate host (apex domain) and protocol.
+# localhost.tv is a public domain that resolves to 127.0.0.1 for all subdomains.
+url:
+#  host: gather.localhost.tv
+  host: gather.evi.earth
+  protocol: http
+
+email:
+  from: Gather <geekteam@evi.earth>
+  webmaster: gaarder1@evi.earth
+
+# To use a real production server, uncomment the below and enter SMTP settings.
+# For development, use of mailcatcher (default) is recommended.
+# See http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+# To send a test email from the Rails console, enter:
+#
+#   class M < ActionMailer::Base; def t; mail(to: "to@example.com", from: "from@example.com",
+#   subject: "Test", body: "Test"); end; end; M.t.deliver_now
+#
+# replacing the to and from email addresses with valid ones.
+#
+smtp:
+   address: "intertoad.evi.earth"
+   port: 25
+   domain: "evi.earth"
+#   authentication: :plain
+#   user_name: "user"
+#   password: "xxx"

@@ -1,0 +1,7 @@
+class Reservations::ProtocolsController < ApplicationController
+  def index
+#    @protocols = Reservations::Protocol.all
+    @protocols = policy_scope(Reservations::Protocol)
+    authorize @protocols
+  end
+end

@@ -1,0 +1,22 @@
+./policies/household_policy.rb:    permitted.concat([:unit_num, :old_id, :old_name]) if administer?
+./models/household.rb:  validates :unit_num, length: { maximum: 8 }, numericality: { only_integer: true, message: "Nust begin with a number" }, allow_nil: true
+./models/household.rb:  normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
+./models/household.rb:  def unit_num_and_suffix
+./models/household.rb:      unit_num
+./models/household.rb:      "#{unit_num}-#{unit_suffix}"
+./models/household.rb:  def unit_num_and_suffix=(value)
+./models/household.rb:      self.unit_num = value
+./models/household.rb:      self.unit_num = unit_data[1]
+./models/user.rb:  scope :by_unit, -> { joins(:household).order("households.unit_num") }
+./models/user.rb:  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :vehicles, to: :household
+./models/people/exporter.rb:    COLUMNS = %w(first_name last_name unit_num birthdate email child
+./models/utils/fake_data/people_generator.rb:            unit_num: i + 1,
+./decorators/csv/user_decorator.rb:    def unit_num
+./decorators/csv/user_decorator.rb:      household.unit_num
+./decorators/user_decorator.rb:  def unit_num_with_hash
+./decorators/user_decorator.rb:    unit_num.nil? ? nil : "##{unit_num}"
+./decorators/user_decorator.rb:    unit_num.nil? ? nil : h.link_to("##{unit_num}", household)
+./views/users/_printable_album.html.erb:              <div class="unit-num"><%= user.unit_num_with_hash %></div>
+./views/households/_fields.html.erb:<%= f.input :unit_num, as: :string, disabled: !policy(f.object).administer? %>
+./views/households/_unit_community.html.erb:  <td><%= household.unit_num.nil? ? "[None]" : "##{household.unit_num}" %></td>
+./views/households/index.html.erb:          <%= household.unit_num.present? ? household.unit_num : "" %>

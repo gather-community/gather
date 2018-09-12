@@ -15,7 +15,7 @@ feature "household form" do
         visit(new_household_path)
         fill_in("Household Name", with: "Pump")
         select(community_name, from: "Community") if community_name
-        fill_in("Unit Number", with: "33")
+        fill_in("Unit Number and Suffix", with: "33")
         fill_in("Garage Number(s)", with: "7")
         click_on("Create Household")
         expect_success

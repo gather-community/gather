@@ -1,0 +1,1000 @@
+   93  sudo apt-get install postgresql-contrib
+   94  sudo passwd postgres
+   95  su - postgres
+   96  psql
+   97  su - postgresql
+   98  su - postgres
+   99  psql
+  100  ls
+  101  ls db
+  102  more db/schema.rb 
+  103  more config/database.yml
+  104  ls config
+  105  more config/database.yml.travis 
+  106  ls
+  107  adduser --uid 1331 gaarder
+  108  ls
+  109  cd gather/
+  110  ls
+  111  cd config
+  112  ls
+  113  su - postgres
+  114  su - gaarder
+  115  sudo bash
+  116  su - gaarder
+  117  su - postgres
+  118  apt-get install phppgadmin
+  119  dpkg -l phppgadmin
+  120  dpkg -L phppgadmin
+  121  cd /usr/share/phppgadmin/
+  122  ls
+  123  emacs -nw conf/config.inc.php 
+  124  cd /etc/apache2/
+  125  cd sites-enabled/
+  126  ls
+  127  more 000-default.conf 
+  128  cd ..
+  129  ls
+  130  cd conf-enabled/
+  131  ls
+  132  more phppgadmin.conf 
+  133  ls /usr/share/phppgadmin/
+  134  emacs -nw phppgadmin.conf 
+  135  service apache2 restart
+  136  emacs -nw phppgadmin.conf 
+  137  service apache2 restart
+  138  cd gather/
+  139  ls
+  140  more config/database.yml
+  141  ls
+  142  cd gather/
+  143  ls
+  144  cd config
+  145  more database.yml
+  146  ls
+  147  more database.yml.example 
+  148  ls
+  149  more database.yml.example 
+  150  env
+  151  cd ..
+  152  ls
+  153  more README.
+  154  more README.md
+  155  pqsl
+  156  psql
+  157  sudo -u postgres createuser -s pggather
+  158  sudo -u postgres psql
+  159  ls
+  160  cd config
+  161  emacs -nw database.yml
+  162  cd ..
+  163  rake db:create:all
+  164  emacs -nw config/database.yml
+  165  rake db:create:all
+  166  more README.md
+  167  rake db:schema:load:all
+  168  rake db:schema:load
+  169  more README.md
+  170  more config/settings.local.yml
+  171  more README.md 
+  172  rake fake:data
+  173  more README.md 
+  174  bundle exec rspec
+  175  more README.md 
+  176  bundle exec rails s
+  177  bundle exec rails s
+  178  ls
+  179  cd config
+  180  ls
+  181  emacs -nw settings.local.yml
+  182  ls
+  183  grep localhost *
+  184  cd environments/
+  185  ls
+  186  more development.rb 
+  187  cd ../..
+  188  bundle exec rails s -b 0.0.0.0
+  189  bundle exec rspec
+  190  find . -type f -exec grep -H foo {} \;
+  191  find . -type f -exec grep -H foo.gather {} \;
+  192  find . -type f -exec grep -H foo {} \;|more
+  193  ping gather
+  194  ping gather.evi.earth
+  195  bundle exec rails s -b 0.0.0.0
+  196  ls
+  197  cd app
+  198  ls
+  199  cd controllers/
+  200  ls
+  201  more reservations_controller.rb 
+  202  sudo bash
+  203  cd ../..
+  204  bundle exec rails s -b 0.0.0.0
+  205  cd /etc/apache2/sites-enabled/
+  206  ls
+  207  emacs -nw 000-default.conf 
+  208  cd ..
+  209  ls
+  210  cd conf-enabled/
+  211  ls
+  212  emacs -nw phppgadmin.conf 
+  213  systemctl reload apache2
+  214  systemctl start apache2
+  215  cd /etc/apache2
+  216  ls
+  217  cd sites-enabled/
+  218  ls
+  219  more 000-default.conf 
+  220  cd ..
+  221  ls
+  222  cd conf-enabled/
+  223  ls
+  224  emacs -nw phppgadmin.conf 
+  225  systemctl reload apache2
+  226  sudo bash
+  227  cd gather/
+  228  ls
+  229  cd config
+  230  more database.yml
+  231  piong heat130
+  232  ping heat130
+  233  ping heat130.ev.ithaca.ny.us
+  234  cd gather
+  235  ls
+  236  cd config
+  237  more database.yml
+  238  cd ..
+  239  ls
+  240  history
+  241  undle exec rails s -b 0.0.0.0
+  242  bundle exec rails s -b 0.0.0.0
+  243  cd gather
+  244  cd models
+  245  cd app/models/reservations/
+  246  more rule.rb 
+  247  cd gather
+  248  ls
+  249  cd app
+  250  ls
+  251  cd controllers/
+  252  ls
+  253  cd meals
+  254  ls
+  255  cd ..
+  256  more meals_controller.rb 
+  257  cd ../..
+  258  cd config
+  259  more database.yml
+  260  cd ..
+  261  ls
+  262  cd app
+  263  ls
+  264  cd policies/
+  265  ls
+  266  cd reservations/
+  267  lsa
+  268  ls
+  269  more reservation_policy.rb 
+  270  cd ..
+  271  ls
+  272  cd models/
+  273  ls
+  274  more reservations
+  275  cd ..
+  276  cd models
+  277  more reservations.rb 
+  278  cd reservations/
+  279  ls
+  280  more protocoling.rb 
+  281  ls
+  282  more protocol.rb 
+  283  grep matching *
+  284  more rule_set.rb 
+  285  ls
+  286  more protocoling.rb 
+  287  more protocol.rb 
+  288  cd ../..
+  289  ls
+  290  cd ..
+  291  emacs -nw NOTES.SGG app/models/reservations/protocoling.rb 
+  292  cd app/controllers/
+  293  ls
+  294  more reservations_controller.rb 
+  295  more ../../config/database.yml
+  296  cd ..
+  297  ls
+  298  cd ..
+  299  ls
+  300  ls lib
+  301  find . -type f -exec grep logger.debug {} \;
+  302  find . -type f -exec grep logger {} \;
+  303  more NOTES.SGG
+  304  cd app/models/reservations/
+  305  emacs -nw protocol.rb
+  306  cd ../..
+  307  ls
+  308  cd ..
+  309  ls
+  310  cd log
+  311  ls -lart
+  312  tail development.log 
+  313  tail -100 development.log 
+  314  more ../config/database.yml
+  315  cd ..
+  316  cd app/controllers/reservations/
+  317  ls
+  318  more resources_controller.rb 
+  319  grep matching (
+  320  grep matching *
+  321  cd ..
+  322  find . -type f -exec grep matching {} \;
+  323  find . -type f -exec grep -H matching {} \;
+  324  ls
+  325  cd ..
+  326  ls
+  327  ls config
+  328  cd config
+  329  grep protocol routes.rb
+  330  grep reservation routes.rb
+  331  more routes.rb
+  332  cd ..
+  333  emacs -nw app/views/reservations/protocols/index.html.erb
+  334  emacs -nw app/controllers/reservations/protocols_controller.rb
+  335  emacs -nw app/views/reservations/protocols/index.html.erb
+  336  more app/views/reservations/resources/edit.html.erb 
+  337  emacs -nw app/controllers/reservations/protocols_controller.rb
+  338  fg
+  339  more config/database.yml
+  340  find . -iname \*custom\* -print
+  341  cd app/models
+  342  more custom_fields.rb 
+  343  ls
+  344  cd ..
+  345  cd views/reservation
+  346  ls
+  347  cd ..
+  348  cd reservations
+  349  ls
+  350  cd protocols/
+  351  ls
+  352  more new.html.erb
+  353  more ../new.html.erb 
+  354  more ../resources/new.html.erb 
+  355  ls -l ../resources/_form.html.erb 
+  356  more ../resources/_form.html.erb 
+  357  cd ../../..
+  358  cd inputs/
+  359  ls
+  360  cd ..
+  361  find . -type f -exec grep -H SimpleForm {} \; 
+  362  find . -type f -exec grep -H HorizontalForm {} \; 
+  363  cd ..
+  364  find . -type f -exec grep -H HorizontalForm {} \; 
+  365  find . -type f -exec grep -Hi Horizontal,Form {} \; 
+  366  find . -type f -exec grep -Hi Horizontal.Form {} \; 
+  367  cd app/
+  368  ls
+  369  cd views/
+  370  ls
+  371  cd reservations
+  372  cd protocols/
+  373  ls
+  374  cp ../resources/_form.html.erb .
+  375  emacs -nw _form.html.erb 
+  376  cd ../..
+  377  cd ..
+  378  cd config/initializers/
+  379  ls
+  380  more simple_form_bootstrap.rb 
+  381  grep resource *
+  382  ls
+  383  more simple_form.rb
+  384  cd ../..
+  385  cd app
+  386  ls
+  387  cd views/
+  388  ls
+  389  cd reservations
+  390  ls
+  391  ls resources/
+  392  ls protocols/
+  393  more _form.html.erb
+  394  cd ../..
+  395  cd controllers/
+  396  ls
+  397  cd reservations
+  398  ls
+  399  more resources_controller.rb 
+  400  more protocols_controller.rb
+  401  more resources_controller.rb 
+  402  cd gather 
+  403  more config/database.yml
+  404  find . -type f -exec grep -H other_communities {} \;
+  405  more app/models/reservations/rule.rb
+  406  emacs -nw NOTES.SGG
+  407  find . -type f -exec grep -H updated_at {} \;
+  408  man find
+  409  find . -type f -exec grep -H updated_at {} \;|more
+  410  ls
+  411  cd app
+  412  ls
+  413  cd models
+  414  ls
+  415  cd people
+  416  ls
+  417  cd ..
+  418  ls
+  419  cd controllers
+  420  ls
+  421  ls users
+  422  more households_controller.rb 
+  423  cd ..
+  424  find . -type f -exec grep -H in_cluster {} \;
+  425  cd app/models
+  426  more household.rb 
+  427  cd ../..
+  428  ls
+  429  history
+  430  bundle exec rails s -b 0.0.0.0
+  431  ls
+  432  cd app/models/
+  433  cd reservations/
+  434  more rule.rb 
+  435  cd
+  436  cd gther
+  437  cd gather
+  438  ls
+  439  more README.md
+  440  cd ..
+  441  mkdir statsh
+  442  rm statsh/
+  443  rmdir statsh/
+  444  mkdir stash
+  445  tar -cSf - gather | tar -xpSf - -C stash
+  446  cd gather
+  447  git pull origin develop
+  448  git stash
+  449  git config user.email "gaarder1@ecovillage.ithaca.ny.us"
+  450  git config user.name "Steve Gaarder"
+  451  git stash
+  452  git stash show
+  453  git pull origin develop
+  454  ls
+  455  more NOTES.SGG 
+  456  history
+  457  bundle exec rails s -b 0.0.0.0
+  458  history | grep ruby
+  459  rbenv install 2.3.4
+  460  history | grep rbenv
+  461  rbenv install 2.3.4
+  462  rbenv global 2.3.4
+  463  bundle exec rails s -b 0.0.0.0
+  464  rbenv install 2.4.3
+  465  cd /home/zadmin/.rbenv/plugins/ruby-build
+  466  git pull 
+  467  cd -
+  468  ls
+  469  rbenv install 2.4.3
+  470  bundle exec rails s -b 0.0.0.0
+  471  rbenv global 2.4.3
+  472  bundle exec rails s -b 0.0.0.0
+  473  gem install bundler
+  474  bundle exec rails s -b 0.0.0.0
+  475  ls
+  476  more README.md
+  477  bundle install
+  478  more README.md
+  479  bundle exec rails s -b 0.0.0.0
+  480  bin/rails db:migrate RAILS_ENV=development 
+  481  bundle exec rails s -b 0.0.0.0
+  482  bg
+  483  ls
+  484  cd spec
+  485  ls
+  486  cd features/
+  487  ls
+  488  more lens_spec.rb 
+  489  cd ..
+  490  ls
+  491  cd app
+  492  ls
+  493  cd models
+  494  ls
+  495  more meals.rb
+  496  cd meals
+  497  ls
+  498  more status.rb 
+  499  cd ..
+  500  cd spec
+  501  cd ..
+  502  cd spec
+  503  ls
+  504  cd features/
+  505  ls
+  506  ls meals
+  507  cd meals
+  508  more reports_spec.rb 
+  509  cd ..
+  510  ls
+  511  cd app
+  512  ls
+  513  cd controllers
+  514  ls
+  515  more meals_controller.rb 
+  516  cd ../..
+  517  ls
+  518  cd config
+  519  ls
+  520  more database.yml
+  521  kill %1
+  522  cd ..
+  523  find . -type f -exec grep -Hi 'all communities' {} \;
+  524  more spec/features/lens_spec.rb
+  525  cd spec
+  526  ls
+  527  cd policies/
+  528  ls
+  529  grep 'all comm' *
+  530  more household_policy_spec.rb 
+  531  cd ../..
+  532  ls
+  533  rbenv global 2.4.3
+  534  history | grep rails
+  535  bundle exec rails s -b 0.0.0.0
+  536  ls
+  537  find . -name \*migra\* -print
+  538  cd db/migrate/
+  539  ls
+  540  ls -lart
+  541  more *slug*
+  542  more *
+  543  cd ..
+  544  cd config
+  545  more database.yml
+  546  cd ..
+  547  cd db/migrate
+  548  ls
+  549  ls *household*
+  550  more 20150823023017_change_household_structure.rb
+  551  ls *household*
+  552  grep rename_column *households*
+  553  grep rename_column *household*
+  554  grep suffix_column *household*
+  555  grep suffix *household*
+  556  more 20150823023858_household_tweaks.rb
+  557  cd ..
+  558  cd app/models
+  559  ls
+  560  cd reservations/
+  561  lsa
+  562  ls
+  563  emacs -nw protocol.rb
+  564  cd ../..
+  565  cd ..
+  566  history | grep rails
+  567  bundle exec rails s -b 0.0.0.0
+  568  cd app/models/reservations/
+  569  emacs -nw protocol.rb
+  570  more rule_set.rb 
+  571  more protocol.rb 
+  572  more rule_set.rb 
+  573  ls
+  574  more reservation.rb 
+  575  more protocol.rb 
+  576  emacs -nw protocol.rb
+  577  cd ../../..
+  578  history | grep rails
+  579  bundle exec rails s -b 0.0.0.0
+  580  emacs -nw app/models/reservations/protocol.rb 
+  581  bundle exec rails s -b 0.0.0.0
+  582  emacs -nw app/models/reservations/rule_set.rb 
+  583  bundle exec rails s -b 0.0.0.0
+  584  emacs -nw app/models/reservations/rule_set.rb 
+  585  bundle exec rails s -b 0.0.0.0
+  586  emacs -nw NOTES.SGG
+  587  cd app
+  588  cd models
+  589  ls
+  590  more role.rb 
+  591  more ../../config/database.yml
+  592  more role.rb 
+  593  more role.rb |more
+  594  ls
+  595  more wiki.rb
+  596  cd wiki
+  597  ls
+  598  more page.rb 
+  599  cd ..
+  600  ls
+  601  ls spec
+  602  cd app
+  603  ls
+  604  cd models
+  605  ls
+  606  more reservations.rb
+  607  cd reservations/
+  608  ls
+  609  more protocol.rb 
+  610  ls
+  611  c d..
+  612  cd ..
+  613  cd reservations/
+  614  more reservation.rb q
+  615  cd ..
+  616  ls
+  617  cd views
+  618  ls
+  619  cd reservations/
+  620  ls
+  621  cd ../..
+  622  cd ..
+  623  history| grep rails
+  624  bundle exec rails s -b 0.0.0.0
+  625  emacs -nw config/routes.rb
+  626  bundle exec rails s -b 0.0.0.0
+  627  bin/rails generate controller reservation/protocols
+  628  bin/rails destroy controller reservation/protocols
+  629  bin/rails generate controller reservation_protocols
+  630  ls
+  631  bundle exec rails s -b 0.0.0.0
+  632  emacs -nw app/controllers/reservation_protocols_controller.rb 
+  633  bundle exec rails s -b 0.0.0.0
+  634  emacs -nw app/controllers/reservation_protocols_controller.rb 
+  635  bundle exec rails s -b 0.0.0.0
+  636  ls app/models
+  637  more app/models/reservations.rb 
+  638  cd app/models/reservations/
+  639  ls
+  640  more protocol.rb 
+  641  cd ../..
+  642  cd controllers/
+  643  lsa
+  644  ls
+  645  cd reservation
+  646  ls
+  647  cd ..
+  648  cd reservations/
+  649  ls
+  650  more resources_controller.rb 
+  651  cd ../..
+  652  cd ..
+  653  history
+  654  bin/rails destroy controller reservation_protocols
+  655  history | grep bin/rails
+  656  bin/rails generate controller reservation/protocols
+  657  emacs -nw config/routes.rb 
+  658  bundle exec rails s -b 0.0.0.0
+  659  emacs -nw config/routes.rb 
+  660  bundle exec rails s -b 0.0.0.0
+  661  emacs -nw config/routes.rb 
+  662  bundle exec rails s -b 0.0.0.0
+  663  emacs -nw app/controllers/reservation
+  664  ls app/controllers/reservations
+  665  bin/rails destroy controller reservation/protocols
+  666  bin/rails destroy controller reservations/protocols
+  667  ls app/controllers/reservations
+  668  ls app/controllers/reservation
+  669  bin/rails create controller reservations/protocols
+  670  bin/rails generate controller reservations/protocols
+  671  ls app/controllers/reservations
+  672  emacs -nw app/controllers/reservations/protocols_controller.rb 
+  673  bundle exec rails s -b 0.0.0.0
+  674  cd app/views/reservations
+  675  ls
+  676  cd protocols/
+  677  ls
+  678  emacs -nw index.html.erb
+  679  cd ../../..
+  680  cd ..
+  681  bundle exec rails s -b 0.0.0.0
+  682  sudo bash
+  683  df
+  684  shutdown -r now
+  685  parted /dev/sda
+  686  sudo bash
+  687  cd gather
+  688  git stash
+  689  git stash list
+  690  cd app/views
+  691  ls
+  692  cd reservations
+  693  ls
+  694  cd protocols/
+  695  ls
+  696  cd ..
+  697  ls
+  698  git status
+  699  ls
+  700  more Gemfile
+  701  find . -type f -exec grep -Hi horizontal {} \;
+  702  more config/initializers/simple_form.rb 
+  703  more config/initializers/simple_form_bootstrap.rb 
+  704  history
+  705  history|grep 0.0
+  706  bundle exec rails s -b 0.0.0.0
+  707  more config/database.yml
+  708  rails generate migration AddUnitSuffixToHouseholds unit_suffix:string 
+  709  cd config
+  710  ls
+  711  cd ..
+  712  ls
+  713  cd app
+  714  ls
+  715  cd ..
+  716  ls spec
+  717  ls db
+  718  more db/migrate/20180109001533_add_unit_suffix_to_households.rb 
+  719  rake db:migrate
+  720  cd app/models
+  721  ls
+  722  emacs -nw household.rb
+  723  cd ../..
+  724  history | grep 0.0
+  725  bundle exec rails s -b 0.0.0.0
+  726  emacs -nw app/models/household.rb 
+  727  bundle exec rails s -b 0.0.0.0
+  728  emacs -nw app/models/household.rb 
+  729  bundle exec rails s -b 0.0.0.0
+  730  emacs -nw app/models/household.rb 
+  731  bundle exec rails s -b 0.0.0.0
+  732  emacs -nw app/models/household.rb 
+  733  bundle exec rails s -b 0.0.0.0
+  734  emacs -nw app/models/household.rb 
+  735  bundle exec rails s -b 0.0.0.0
+  736  emacs -nw app/models/household.rb 
+  737  bundle exec rails s -b 0.0.0.0
+  738  emacs -nw app/models/household.rb 
+  739  bundle exec rails s -b 0.0.0.0
+  740  emacs -nw app/models/household.rb 
+  741  bundle exec rails s -b 0.0.0.0
+  742  emacs -nw app/models/household.rb 
+  743  bundle exec rails s -b 0.0.0.0
+  744  emacs -nw app/models/household.rb 
+  745  find . -name \*household\* -print
+  746  emacs -nw app/models/household.rb 
+  747  bundle exec rails s -b 0.0.0.0
+  748  emacs -nw app/models/household.rb 
+  749  bundle exec rails s -b 0.0.0.0
+  750  emacs -nw app/models/household.rb 
+  751  bundle exec rails s -b 0.0.0.0
+  752  bundle exec rspec
+  753  sudo apt-get remove phantomjs
+  754  sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  755  sudo mv phantomjs-2.1.1-linux-x86_64.tar.bz2 /root
+  756  sudo tar xvjf /root/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/
+  757  sudo ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/
+  758  phantomjs --version
+  759  bundle exec rspec
+  760  cd ..
+  761  mkdir gather2
+  762  cd gather2
+  763  ls
+  764  git clone https://github.com/sassafrastech/gather.git
+  765  git checkout develop
+  766  ls
+  767  cd gather
+  768  ls
+  769  git checkout develop
+  770  bundle install
+  771  psql -U postgres
+  772  man psql
+  773  sudo -u postgres bash
+  774  more README.
+  775  more README.md
+  776  cp config/settings.local.yml.example config/settings.local.yml
+  777  emacs -nw config/settings.local.yml
+  778  more README.md
+  779  cd config
+  780  cp database.yml.example database.yml
+  781  emacs -nw database.yml
+  782  cd ..
+  783  rake db:create
+  784  rake db:schema:load
+  785  more README.md
+  786  rake fake:data
+  787  bundle exec rspec
+  788  cd ../..
+  789  cd gather
+  790  bundle exec rspec
+  791  rake db:migrate
+  792  bundle exec rspec
+  793  cd models
+  794  cd app/models
+  795  ls
+  796  emacs -nw household.rb 
+  797  grep access *
+  798  more lens.rb 
+  799  emacs -nw household.rb 
+  800  cd ../..
+  801  bundle exec rspec
+  802  cd tmp
+  803  cd capybara/
+  804  lds
+  805  ls
+  806  firefox screenshot_2018-03-02-14-21-41.742.html 
+  807  cp screenshot_2018-03-02-14-21-41.742.html web.evi.earth:.
+  808  scp screenshot_2018-03-02-14-21-41.742.html web.evi.earth:.
+  809  cd ..
+  810  cd config
+  811  ls
+  812  emacs -nw settings.local.yml
+  813  cd ..
+  814  bundle exec rspec
+  815  cd app/models
+  816  emacs -nw household.rb 
+  817  cd ../..
+  818  history
+  819  history| grep bundle
+  820  bundle exec rails s -b 0.0.0.0
+  821  emacs -nw config/settings.local.yml
+  822  bundle exec rails s -b 0.0.0.0
+  823  sudo -u postgres bash
+  824  bundle exec rails s -b 0.0.0.0
+  825  emacs -nw config/settings.local.yml
+  826  sudo -u postgres bash
+  827  bundle exec rspec
+  828  bundle exec rspec 2>splat
+  829  bundle exec rspec >splat
+  830  more splat
+  831  sudo -u postgres bash
+  832  bundle exec rspec >splat2
+  833  more splat2
+  834  rake db:test:prepare
+  835  bundle exec rspec >splat3
+  836  more splat3
+  837  ls
+  838  cd spec
+  839  ls
+  840  cd models
+  841  ls
+  842  cd ..
+  843  find . -iname \*household\* -print
+  844  more features/people/household_form_spec.rb 
+  845  cd ..
+  846  cd app
+  847  ls
+  848  cd views
+  849  ls
+  850  cd households/
+  851  ls
+  852  ls -lart
+  853  more _fields.html.erb 
+  854  cd ..
+  855  ls
+  856  cd ..
+  857  ls
+  858  ls -lart
+  859  cd decorators/
+  860  ls
+  861  more household_decorator.rb 
+  862  ls
+  863  cd ..
+  864  find . -name \*.rb -exec grep -Hi 'unit num' {} \;
+  865  cd ..
+  866  bundle exec rails s -b 0.0.0.0
+  867  cd spec
+  868  ls
+  869  cd features/
+  870  ls
+  871  cd people/
+  872  ls
+  873  emacs -nw household_form_spec.rb 
+  874  cd ../../..
+  875  bundle exec rspec >splat4
+  876  more splat4
+  877  cd app/views
+  878  ls
+  879  cd households/
+  880  ls
+  881  more _fields.html.erb 
+  882  cd ..
+  883  cd spec/
+  884  ls
+  885  ls -lart
+  886  cd models
+  887  ls
+  888  ls -lart
+  889  cd ..
+  890  ls
+  891  cd spec
+  892  ls
+  893  find . -type f -newer ../splat3 -ls
+  894  cd features/people/
+  895  git add household_form_spec.rb 
+  896  more household_form_spec.rb 
+  897  cd ..
+  898  find . -type f -exec grep -H unit_num_and_suffix {} \;
+  899  cd app/models
+  900  ls -l user.rb 
+  901  emacs -nw user.rb 
+  902  cd ..
+  903  history | grep rspec
+  904  bundle exec rspec >splat5
+  905  history
+  906  emacs -nw app/models/user.rb
+  907  bundle exec rspec >splat6
+  908  more splat6
+  909  ls
+  910  mkdir ../splat
+  911  mv splat* ../splat/
+  912  ls
+  913  find . -type f -exec grep -Hi translation {} \;
+  914  bundle exec rspec >../splat/splat7
+  915  more ../splat/splat7
+  916  cd app/views/
+  917  ls
+  918  cd households/
+  919  ls
+  920  more _fields.html.erb 
+  921  cd ../..
+  922  cd ..
+  923  cd spec/
+  924  ls
+  925  cd features/
+  926  ls
+  927  cd people
+  928  emacs -nw household_form_spec.rb 
+  929  git add household_form_spec.rb 
+  930  cd ../../..
+  931  bundle exec rspec 
+  932  emacs -nw spec/models/people/exporter_spec.rb 
+  933  git add spec/models/people/exporter_spec.rb 
+  934  bundle exec rspec 
+  935  ls
+  936  cd spec
+  937  ls
+  938  cd models/people
+  939  ls
+  940  emacs -nw exporter_spec.rb 
+  941  ls
+  942  cd ..
+  943  find . -name \*.rb -exec grep -Hi "unit num" {} \;
+  944  find . -type f -exec grep -Hi "unit num" {} \;
+  945  cd expectations/
+  946  emacs -nw users.csv 
+  947  cd ../..
+  948  historyu
+  949  history
+  950  bundle exec rspec >../splat/splat10
+  951  more ../splat/splat10
+  952  cd spec/policies
+  953  emacs -nw household_policy_spec.rb 
+  954  git add household_policy_spec.rb 
+  955  cd ../..
+  956  bundle exec rspec >../splat/splat11
+  957  more ../splat/splat11
+  958  cd spec/policies/
+  959  emacs -nw user_policy_spec.rb 
+  960  git add user_policy_spec.rb 
+  961  grep unit_num user_policy_spec.rb 
+  962  cd ../..
+  963  bundle exec rspec >../splat/splat12
+  964  more ../splat/splat12
+  965  cd ..
+  966  cd gather2
+  967  ls
+  968  cd gather 
+  969  find . -type f -exec fgrep -Hi 'home?
+  970  find . -type f -exec fgrep -Hi 'home?' {} \;
+  971  cd ../..
+  972  cd gather
+  973  find . -type f -exec fgrep -Hi 'home?' {} \;
+  974  diff ./app/models/wiki/page.rb ../gather2/gather/app/models/wiki/page.rb 
+  975  git status
+  976  git diff
+  977  git status
+  978  git add app/models/household.rb 
+  979  git add app/models/user.rb
+  980  git add app/views/households/_unit_community.html.erb 
+  981  git add app/views/households/index.html.erb 
+  982  git add db/schema.rb
+  983  git add spec/expectations/users.csv 
+  984  git status
+  985  git commit
+  986  tar -cSzf ~/gatherstasher.tar.gz .
+  987  git rebase master
+  988  git status|more
+  989  git checkout 6597_add_suffix_to_unit_num
+  990  git fetch origin
+  991  git rebase master
+  992  git show branch
+  993  git show-branch
+  994  history
+  995  bundle exec rspec >../splat/splat13
+  996  git fetch origin
+  997  git show-branch
+  998  git show-branch -a
+  999  git show-branch
+ 1000  history
+ 1001  git status
+ 1002  ls
+ 1003  more ../splat/splat13
+ 1004  more app/models/wiki/page.rb
+ 1005  more ../gather2/gather/app/models/wiki/page.rb
+ 1006  more app/models/wiki/page.rb
+ 1007  more ../gather2/gather/app/models/wiki/page.rb
+ 1008  diff ../gather2/gather/app/models/wiki/page.rb app/models/wiki/page.rb
+ 1009  git status
+ 1010  git diff 6597_add_suffix_to_unit_num master
+ 1011  git log
+ 1012  more README.md
+ 1013  git rebase develop
+ 1014  git fetch origin
+ 1015  git checkout 6597_add_suffix_to_unit_num
+ 1016  git branch
+ 1017  git fetch --all --dry-run
+ 1018  more README.md
+ 1019  git fetch --dry-run
+ 1020  git checkout develop
+ 1021  git status
+ 1022  more app/models/wiki/page.rb 
+ 1023  diff  app/models/wiki/page.rb ../gather2/gather/app/models/wiki/page.rb
+ 1024  git branch
+ 1025  git checkout 6597_add_suffix_to_unit_num
+ 1026  diff  app/models/wiki/page.rb ../gather2/gather/app/models/wiki/page.rb
+ 1027  git rebase develop
+ 1028  git rebase --abort
+ 1029  emacs -nw ../splat/patch 
+ 1030  git commit --all --amend
+ 1031  git rebase develop
+ 1032  git status
+ 1033  emacs -nw app/models/people/exporter.rb 
+ 1034  emacs -nw db/schema.rb 
+ 1035  emacs -nw spec/expectations/users.csv
+ 1036  emacs -nw spec/models/people/exporter_spec.rb 
+ 1037  emacs -nw spec/policies/user_policy_spec.rb
+ 1038  emacs -nw db/schema.rb 
+ 1039  git status
+ 1040  git add app/models/people/exporter.rb 
+ 1041  git add db/schema.rb 
+ 1042  git add spec/expectations/users.csv 
+ 1043  git add spec/models/people/exporter_spec.rb 
+ 1044  git add spec/policies/user_policy_spec.rb 
+ 1045  git commit
+ 1046  git rebase develop
+ 1047  git rebase --continue
+ 1048  git log --oneline
+ 1049  git reset --hard 536ab3a
+ 1050  git rebase --continue
+ 1051  git status
+ 1052  history | grep add
+ 1053  git add app/models/people/exporter.rb 
+ 1054  git add db/schema.rb 
+ 1055  git add spec/expectations/users.csv 
+ 1056  git add spec/models/people/exporter_spec.rb 
+ 1057  git add spec/policies/user_policy_spec.rb 
+ 1058  git rebase --continue
+ 1059  git rebase --abort
+ 1060  ls
+ 1061  git status
+ 1062  git rebase develop
+ 1063  emacs -nw spec/policies/user_policy_spec.rb 
+ 1064  emacs -nw spec/models/people/exporter_spec.rb
+ 1065  emacs -nw spec/expectations/users.csv 
+ 1066  emacs -nw db/schema.rb 
+ 1067  emacs -nw app/models/people/exporter.rb 
+ 1068  git rebase --continue
+ 1069  git add spec/policies/user_policy_spec.rb 
+ 1070  git add spec/models/people/exporter_spec.rb
+ 1071  git add spec/expectations/users.csv 
+ 1072  git add db/schema.rb
+ 1073  git add app/models/people/exporter.rb 
+ 1074  git rebase --continue
+ 1075  git status
+ 1076  history | grep rspec
+ 1077  bundle exec rspec
+ 1078  rake db:test:prepare
+ 1079  emacs -nw db/schema.rb 
+ 1080  rake db:test:prepare
+ 1081  bundle exec rspec
+ 1082  q
+ 1083  emacs -nw app/policies/user_policy.rb 
+ 1084  ls
+ 1085  emacs -nw spec/policies/user_policy_spec.rb 
+ 1086  bundle exec rspec
+ 1087  more db/schema.rb 
+ 1088  uptime
+ 1089  history | grep git
+ 1090  history | grep git >history-git
+ 1091  more history-git
+ 1092  history >history-all

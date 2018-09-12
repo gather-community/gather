@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  host: localhost
+  username: pggather
+  password: lsayueb2198na
+  timeout: 5000
+
+development:
+  <<: *default
+  database: gather_development
+
+test:
+  <<: *default
+  database: gather_test
+
+production:
+  <<: *default
+  database: gather_production

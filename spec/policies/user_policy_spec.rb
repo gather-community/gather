@@ -355,13 +355,18 @@ describe UserPolicy do
     let(:admin_attribs) { base_attribs + [
       :google_email, :role_admin, :role_biller, :role_photographer,
       :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
-      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
+      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :unit_num_and_suffix, :old_id, :old_name].
         concat(nested_hhold_attribs)}
     ] }
     let(:cluster_admin_attribs) { base_attribs + [
       :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
+<<<<<<< 40448f5066b59882d7c3164e81ad8a26f0612bc1
       :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
       {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :old_id, :old_name].
+=======
+      :role_meals_coordinator,
+      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :unit_num_and_suffix, :old_id, :old_name].
+>>>>>>> Added suffix to unit number with its own database field and accessors
         concat(nested_hhold_attribs)}
     ] }
     let(:nested_hhold_attribs) { [

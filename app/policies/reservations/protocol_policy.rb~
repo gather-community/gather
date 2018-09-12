@@ -1,0 +1,26 @@
+module Reservations
+  class ResourcePolicy < ApplicationPolicy
+    alias_method :protocol, :record
+
+    def index?
+      active_admin?
+    end
+
+    def show?
+      active_admin?
+    end
+
+    def create?
+      active_admin?
+    end
+
+    def update?
+      active_admin?
+    end
+
+    def destroy?
+      active_admin?
+    end
+
+  end
+end

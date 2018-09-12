@@ -1,0 +1,18 @@
+<% content_for(:title) { "Protocols" } %>
+
+
+<table class="index part-width">
+  <tr>
+    <th>ID</th>
+    <th>Req Kind</th>
+    <th>Kinds</th>
+  </tr>
+
+  <% @protocols.each do |protocol| %>
+  <tr>
+    <td><%= protocol.id %></td>
+    <td><%= protocol.requires_kind %></td>
+    <td><%= protocol.kinds %></td>
+  </tr>
+  <% end %>
+  </table>

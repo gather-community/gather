@@ -34,7 +34,7 @@
           <td><%= household.community_name %></td>
         <% end %>
         <td>
-          <%= household.unit_num.present? ? household.unit_num : "" %>
+          <%= household.unit_num.present? ? household.unit_num_and_suffix : "" %>
         </td>
         <td>
           <%= load_showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>

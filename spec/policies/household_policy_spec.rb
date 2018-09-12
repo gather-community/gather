@@ -270,7 +270,7 @@ describe HouseholdPolicy do
         :email, :location, :_destroy]},
       {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
     ] }
-    let(:admin_attribs) { basic_attribs.concat([:unit_num, :old_id, :old_name, :community_id]) }
+    let(:admin_attribs) { basic_attribs.concat([:unit_num, :unit_num_and_suffix, :old_id, :old_name, :community_id]) }
     let(:cluster_admin_attribs) { admin_attribs }
 
     subject { HouseholdPolicy.new(user, household).permitted_attributes }

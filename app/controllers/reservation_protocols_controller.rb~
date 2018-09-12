@@ -1,0 +1,6 @@
+class ReservationProtocolsController < ApplicationController
+  def index
+    @reservation_protocols = ReservationProtocol.All
+  end
+
+end

@@ -28,8 +28,8 @@ class Household < ApplicationRecord
     uniqueness: { scope: :community_id, message:
       "There is already a household with this name at this community" }
   validates :community_id, presence: true
-  validates :unit_num, length: { maximum: 8 }, numericality: true, allow_nil: true
-
+  validates :unit_num, length: { maximum: 8 }, numericality: { only_integer: true, message: "Nust begin with a number" }, allow_nil: true
+  validates :unit_suffix, length: { maximum: 10 }
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
@@ -112,25 +112,28 @@ class Household < ApplicationRecord
   def any_statements?
     accounts.any?{ |a| a.statements.any? }
   end
-# Return the unit number and the suffix (if any), separated with a dash.
-  def unit_num
-    if unit_suffix.blank?()
-      super
+
+#  attr_accessor(:unit_suffix)
+  # Return the unit number and the suffix (if any), separated with a dash.
+  def unit_num_and_suffix
+    if unit_suffix.blank?
+      unit_num
     else
-      "#{super}-#{unit_suffix}"
+      "#{unit_num}-#{unit_suffix}"
     end
   end
-  def unit_num=(value)
+
+  def unit_num_and_suffix=(value)
     # separate unit number and suffix.  Format is either separated with a
     # non-alphanumeric character, or an alpha suffix with no separator.
     unit_data = value.match(/\A(\d+)\W?(\w*)/)
 # if we don't match the regex, store it and let the validator do the complaining
-    if unit_data.blank?() 
-      super(value)
+    if unit_data.blank?
+      self.unit_num = value
     else
-      super(unit_data[1])
+      self.unit_num = unit_data[1]
 # if we have no suffic, store nil
-      if unit_data[2].blank?()
+      if unit_data[2].blank?
         self.unit_suffix = nil
       else
         self.unit_suffix = unit_data[2]

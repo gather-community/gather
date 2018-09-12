@@ -29,8 +29,8 @@ class User < ApplicationRecord
     where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id) }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :in_cluster, ->(id) { joins(household: :community).where("communities.cluster_id = ?", id) }
-  scope :by_name, -> { order(NAME_ORDER) }
-  scope :by_unit, -> { joins(:household).order("households.unit_num") }
+  scope :by_name, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> {
@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
-  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :vehicles, to: :household
+  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper

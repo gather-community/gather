@@ -14,15 +14,15 @@ module Reservations
 
     def index?
       # If record is a Class (not a specific reservation), can't check protocol
-      active? && (not_specific_record? || !forbidden_by_protocol?)
+      active_cluster_admin? || (active? && (not_specific_record? || !forbidden_by_protocol?))
     end
 
     def show?
-      active? && !forbidden_by_protocol?
+      active_cluster_admin? || active? && !forbidden_by_protocol?
     end
 
     def create?
-      active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?
+      active_cluster_admin? || (active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?)
     end
 
     def update?

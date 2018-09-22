@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 module Reservations
   class ReservationDecorator < ApplicationDecorator
     delegate_all
 
-    delegate :pre_notice?, to: :rule_set
-
-    def pre_notice
-      h.safe_render_markdown(rule_set.pre_notice)
+    # Fetches rules matching the given name and kind for the reservations resource and reserver.
+    # Reserver may be nil if it hasn't been set yet.
+    # Allows overriding of kind because in the UI we sometimes need to fetch rules for any kind or no
+    # kind at render time in case the user changes the kind on the client side.
+    def rules(rule_name:, kind:)
+      Rules::RuleSet.build_for(resource: resource, kind: kind, reserver: reserver).rules_with_name(rule_name)
     end
 
     def location_name
@@ -25,7 +29,7 @@ module Reservations
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :destroy, icon: "trash", path: h.reservation_path(object),
-          method: :delete, confirm: {name: name})
+                                         method: :delete, confirm: {name: name})
       )
     end
   end

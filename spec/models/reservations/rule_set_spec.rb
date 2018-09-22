@@ -5,8 +5,7 @@ require "rails_helper"
 describe Reservations::Rules::RuleSet do
   let(:resource1) { create(:resource) }
   let(:user) { create(:user) }
-  let(:reservation) { Reservations::Reservation.new(resource: resource1, reserver: user) }
-  let(:rule_set) { described_class.build_for(reservation) }
+  let(:rule_set) { described_class.build_for(resource: resource1, kind: nil, reserver: user) }
 
   describe "#errors" do
     let(:rule1) { double(check: [:starts_at, "foo"]) }
@@ -81,8 +80,8 @@ describe Reservations::Rules::RuleSet do
     it_behaves_like "fixed time rule"
   end
 
-  describe "#pre_notice" do
-    subject(:value) { rule_set.pre_notice }
+  describe "#rules_with_name" do
+    subject(:value) { rule_set.rules_with_name(:pre_notice).map(&:value) }
 
     context "with multiple rules" do
       let!(:p1) do
@@ -92,11 +91,11 @@ describe Reservations::Rules::RuleSet do
       let!(:p2) do
         create(:reservation_protocol, resources: [resource1], pre_notice: "Bar")
       end
-      it { is_expected.to eq("Foo\n\nBar") }
+      it { is_expected.to eq(%w[Foo Bar]) }
     end
 
     context "with no rules" do
-      it { is_expected.to be_nil }
+      it { is_expected.to be_empty }
     end
   end
 

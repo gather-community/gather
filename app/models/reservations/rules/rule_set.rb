@@ -10,20 +10,23 @@ module Reservations
 
       # Finds all matching protocols and unions them into one.
       # Raises an error if any two protocols have non-nil values for the same attrib.
-      def self.build_for(reservation)
+      def self.build_for(resource:, kind:, reserver:)
         rules = []
-        Protocol.matching(reservation.resource, reservation.kind).each do |protocol|
+        Protocol.matching(resource, kind).each do |protocol|
           Rule::NAMES.each do |rule_name|
             klass = Rule.class_for(rule_name)
             next if (value = protocol.send(rule_name)).blank?
-            rules << klass.new(value: value, community: reservation.community, resources: protocol.resources)
+            rules << klass.new(value: value, community: resource.community, kinds: protocol.kinds,
+                               resources: protocol.resources)
           end
         end
-        new(reservation: reservation, rules: rules)
+        new(resource: resource, kind: kind, reserver: reserver, rules: rules)
       end
 
-      def initialize(reservation:, rules:)
-        self.reservation = reservation
+      def initialize(resource:, kind:, reserver:, rules:)
+        self.resource = resource
+        self.kind = kind
+        self.reserver = reserver
         self.rules = rules
       end
 
@@ -32,10 +35,10 @@ module Reservations
         rules.map { |r| r.check(reservation) }.reject { |v| v == true }
       end
 
-      # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of the current
-      # reservation's reserver vis a vis the resource.
+      # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
+      # current reserver vis a vis the rule set's resource.
       def access_level
-        return "ok" if reservation_community == reserver_community
+        return "ok" if resource_community == reserver_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
       end
@@ -50,17 +53,16 @@ module Reservations
         values_for(:fixed_end_time).first
       end
 
-      # Returns all pre-notices encountered in the rule set joined together, or nil if none exist.
-      def pre_notice
-        values_for(:pre_notice).join("\n\n").presence
+      def rules_with_name(name)
+        rules_by_name[name] || []
       end
 
       # Returns whether any rule in the set has requires_kind == true.
       def requires_kind?
-        rules_by_type[:requires_kind].present?
+        rules_by_name[:requires_kind].present?
       end
 
-      %i[fixed_start_time fixed_end_time pre_notice].each do |method|
+      %i[fixed_start_time fixed_end_time].each do |method|
         define_method(:"#{method}?") do
           !send(method).nil?
         end
@@ -72,16 +74,16 @@ module Reservations
 
       private
 
-      attr_accessor :reservation, :rules
-      delegate :community, to: :reservation, prefix: true
-      delegate :reserver_community, to: :reservation
+      attr_accessor :resource, :kind, :reserver, :rules
+      delegate :community, to: :resource, prefix: true
+      delegate :community, to: :reserver, prefix: true
 
       def values_for(rule_name)
-        rules_by_type[rule_name]&.map(&:value) || []
+        rules_by_name[rule_name]&.map(&:value) || []
       end
 
-      def rules_by_type
-        @rules_by_type ||= rules.group_by(&:name)
+      def rules_by_name
+        @rules_by_name ||= rules.group_by(&:name)
       end
     end
   end

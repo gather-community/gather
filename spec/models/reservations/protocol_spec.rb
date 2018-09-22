@@ -66,6 +66,10 @@ describe Reservations::Protocol do
       expect(Reservations::Protocol.matching(resource1)).to contain_exactly(p1, p5)
     end
 
+    it "should only match protocols with any kind if no kind == :any" do
+      expect(Reservations::Protocol.matching(resource1, :any)).to contain_exactly(p1, p2, p3, p5, p6)
+    end
+
     it "should match correct protocols for different community" do
       expect(Reservations::Protocol.matching(resource2)).to contain_exactly(p4)
     end

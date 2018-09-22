@@ -10,9 +10,11 @@
     <%= resource.name_with_prefix %>
   <% end %>
 
-  <% if reservation.pre_notice? %>
-    <%= f.input :pre_notice, label: "" do %>
-      <div class="alert alert-info pre-notice"><%= reservation.pre_notice %></div>
+  <% reservation.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>
+    <%# Include rule kinds as data attrib so these can be shown/hidden appropriately. %>
+    <% data = rule.kinds.present? ? {kinds: rule.kinds.map { |k| "{#{k}}" }.join} : nil %>
+    <%= f.input :pre_notice, label: "", wrapper_html: {data: data} do %>
+      <%= Reservations::Rules::PreNoticeRuleDecorator.new(rule).alert_tag %>
     <% end %>
   <% end %>
 
@@ -70,6 +72,7 @@
     new Gather.Views.Select2View({
       el: '.reservations_reservation_reserver_id'
     });
+    new Gather.Views.Reservations.ReservationFormView({el: '.reservations--reservation-form'});
     new Gather.Views.DirtyChecker({el: '.reservations--reservation-form'});
   });
 <% end %>

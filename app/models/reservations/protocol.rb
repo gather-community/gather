@@ -53,8 +53,8 @@ module Reservations
 
     def normalize
       # Can only be true if set to true and no kinds. nil otherwise. Should never be false.
+      self.kinds = kinds.reject(&:blank?).presence unless kinds.nil?
       self.requires_kind = !kinds&.any? && requires_kind? || nil
-      self.kinds = kinds.reject(&:blank?) unless kinds.nil?
     end
   end
 end

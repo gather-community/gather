@@ -19,14 +19,14 @@ describe Reservations::Protocol do
         it { is_expected.to eq(requires_kind: nil) }
       end
 
-      context "with true" do
-        let(:submitted) { {requires_kind: true} }
-        it { is_expected.to eq(requires_kind: true) }
+      context "with true and blank kind" do
+        let(:submitted) { {requires_kind: true, kinds: [""]} }
+        it { is_expected.to eq(requires_kind: true, kinds: nil) }
       end
 
-      context "with nil" do
-        let(:submitted) { {requires_kind: nil} }
-        it { is_expected.to eq(requires_kind: nil) }
+      context "with nils" do
+        let(:submitted) { {requires_kind: nil, kinds: nil} }
+        it { is_expected.to eq(requires_kind: nil, kinds: nil) }
       end
 
       context "with true but also with kinds" do

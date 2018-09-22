@@ -10,7 +10,7 @@ module Reservations
 
       # Finds all matching protocols and unions them into one.
       # Raises an error if any two protocols have non-nil values for the same attrib.
-      def self.build_for(resource:, kind:, reserver:)
+      def self.build_for(resource:, kind:)
         rules = []
         Protocol.matching(resource, kind).each do |protocol|
           Rule::NAMES.each do |rule_name|
@@ -20,13 +20,12 @@ module Reservations
                                resources: protocol.resources)
           end
         end
-        new(resource: resource, kind: kind, reserver: reserver, rules: rules)
+        new(resource: resource, kind: kind, rules: rules)
       end
 
-      def initialize(resource:, kind:, reserver:, rules:)
+      def initialize(resource:, kind:, rules:)
         self.resource = resource
         self.kind = kind
-        self.reserver = reserver
         self.rules = rules
       end
 
@@ -36,8 +35,8 @@ module Reservations
       end
 
       # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
-      # current reserver vis a vis the rule set's resource.
-      def access_level
+      # the given reserver vis a vis the rule set's resource.
+      def access_level(reserver_community)
         return "ok" if resource_community == reserver_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
@@ -74,9 +73,8 @@ module Reservations
 
       private
 
-      attr_accessor :resource, :kind, :reserver, :rules
+      attr_accessor :resource, :kind, :rules
       delegate :community, to: :resource, prefix: true
-      delegate :community, to: :reserver, prefix: true
 
       def values_for(rule_name)
         rules_by_name[rule_name]&.map(&:value) || []

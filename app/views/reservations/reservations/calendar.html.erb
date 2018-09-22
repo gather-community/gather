@@ -73,7 +73,7 @@
       focusDate: params[:date],
       viewType: params[:view],
       defaultViewType: @resource.default_calendar_view,
-      ruleSet: ReservationRuleSetSerializer.new(@rule_set)
+      ruleSet: ReservationRuleSetSerializer.new(@rule_set, reserver_community: current_community)
     )%>);
   });
 <% end %>

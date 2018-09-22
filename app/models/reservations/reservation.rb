@@ -80,7 +80,7 @@ module Reservations
     end
 
     def rule_set
-      @rule_set ||= Rules::RuleSet.build_for(resource: resource, kind: kind, reserver: reserver)
+      @rule_set ||= Rules::RuleSet.build_for(resource: resource, kind: kind)
     end
 
     def future?

@@ -5,7 +5,7 @@ require "rails_helper"
 describe Reservations::Rules::RuleSet do
   let(:resource1) { create(:resource) }
   let(:user) { create(:user) }
-  let(:rule_set) { described_class.build_for(resource: resource1, kind: nil, reserver: user) }
+  let(:rule_set) { described_class.build_for(resource: resource1, kind: nil) }
 
   describe "#errors" do
     let(:rule1) { double(check: [:starts_at, "foo"]) }
@@ -20,9 +20,11 @@ describe Reservations::Rules::RuleSet do
   end
 
   describe "#access_level" do
-    subject(:access_level) { rule_set.access_level }
+    subject(:access_level) { rule_set.access_level(community) }
 
     context "with reserver in same community" do
+      let(:community) { resource1.community }
+
       context "with other communities forbidden" do
         let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
         it { is_expected.to eq("ok") }
@@ -35,7 +37,7 @@ describe Reservations::Rules::RuleSet do
     end
 
     context "with reserver in different community" do
-      let(:user) { create(:user, community: create(:community)) }
+      let(:community) { create(:community) }
 
       context "with multiple protocols" do
         let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "read_only") }

@@ -23,8 +23,7 @@
   <% end %>
 
   <% if policy(reservation).choose_reserver? %>
-    <%= f.input :reserver_id, as: :assoc_select2,
-      context: reservation.access_level == "sponsor" ? "reserver_any_cmty" : "reserver_this_cmty"  %>
+    <%= f.input :reserver_id, as: :assoc_select2, context: reservation.reserver_select2_context %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
@@ -38,7 +37,7 @@
       <%= f.input :kind, collection: @kinds, required: true %>
     <% end %>
 
-    <% if reservation.access_level == "sponsor" %>
+    <% if reservation.access_level(current_community) == "sponsor" %>
       <%= f.input :sponsor_id, as: :assoc_select2, context: "res_sponsor", required: true %>
     <% end %>
   <% end %>

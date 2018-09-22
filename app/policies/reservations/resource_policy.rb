@@ -13,7 +13,7 @@ module Reservations
         # at database level.
         ids = scope_with_visibility.all.reject do |resource|
           sample_reservation = Reservation.new(reserver: user, resource: resource)
-          sample_reservation.access_level == "forbidden"
+          sample_reservation.access_level(user.community) == "forbidden"
         end.map(&:id)
         scope.where(id: ids)
       end

@@ -34,7 +34,7 @@ module Reservations
           skip_policy_scope
 
           @rule_set = @sample_reservation.rule_set
-          if @rule_set.access_level == "read_only"
+          if @rule_set.access_level(current_community) == "read_only"
             flash.now[:notice] = "Only #{@resource.community_name} residents may reserve this resource."
           end
 

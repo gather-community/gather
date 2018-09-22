@@ -5,11 +5,10 @@ module Reservations
     delegate_all
 
     # Fetches rules matching the given name and kind for the reservations resource and reserver.
-    # Reserver may be nil if it hasn't been set yet.
     # Allows overriding of kind because in the UI we sometimes need to fetch rules for any kind or no
     # kind at render time in case the user changes the kind on the client side.
     def rules(rule_name:, kind:)
-      Rules::RuleSet.build_for(resource: resource, kind: kind, reserver: reserver).rules_with_name(rule_name)
+      Rules::RuleSet.build_for(resource: resource, kind: kind).rules_with_name(rule_name)
     end
 
     def location_name
@@ -18,6 +17,10 @@ module Reservations
 
     def rendered_note
       h.safe_render_markdown(note)
+    end
+
+    def reserver_select2_context
+      access_level(h.current_community) == "sponsor" ? "reserver_any_cmty" : "reserver_this_cmty"
     end
 
     def show_action_link_set

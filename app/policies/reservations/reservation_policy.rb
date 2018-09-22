@@ -56,11 +56,11 @@ module Reservations
     end
 
     def forbidden_by_protocol?
-      rule_set.access_level == "forbidden"
+      rule_set.access_level(user.community) == "forbidden"
     end
 
     def read_only_by_protocol?
-      rule_set.access_level == "read_only"
+      rule_set.access_level(user.community) == "read_only"
     end
   end
 end

@@ -53,21 +53,22 @@ describe Reservations::Protocol do
     let!(:p4) { create(:reservation_protocol, resources: [resource2]) }
     let!(:p5) { create(:reservation_protocol, community: resource1.community) }
     let!(:p6) { create(:reservation_protocol, community: resource1.community, kinds: %w[Personal Official]) }
+    let!(:p7) { create(:reservation_protocol, community: resource1.community, kinds: []) }
 
     it "should find protocols with matching resource or no resource, and matching kind or no kind" do
-      expect(Reservations::Protocol.matching(resource1, "Personal")).to contain_exactly(p1, p2, p5, p6)
+      expect(Reservations::Protocol.matching(resource1, "Personal")).to contain_exactly(p1, p2, p5, p6, p7)
     end
 
     it "should only match protocols with no kind if given kind doesn't match any" do
-      expect(Reservations::Protocol.matching(resource1, "foo")).to contain_exactly(p1, p5)
+      expect(Reservations::Protocol.matching(resource1, "foo")).to contain_exactly(p1, p5, p7)
     end
 
     it "should only match protocols with no kind if no kind given" do
-      expect(Reservations::Protocol.matching(resource1)).to contain_exactly(p1, p5)
+      expect(Reservations::Protocol.matching(resource1)).to contain_exactly(p1, p5, p7)
     end
 
     it "should only match protocols with any kind if no kind == :any" do
-      expect(Reservations::Protocol.matching(resource1, :any)).to contain_exactly(p1, p2, p3, p5, p6)
+      expect(Reservations::Protocol.matching(resource1, :any)).to contain_exactly(p1, p2, p3, p5, p6, p7)
     end
 
     it "should match correct protocols for different community" do

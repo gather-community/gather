@@ -11,6 +11,7 @@ module Reservations
         case value
         when "forbidden", "read_only"
           reservation.reserver_community == community ||
+            # TODO: When I18ning these messages, add kinds when set.
             [:base, "Residents from other communities may not make reservations"]
         when "sponsor"
           reservation.reserver_community == community ||

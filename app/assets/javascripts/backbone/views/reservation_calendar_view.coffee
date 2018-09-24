@@ -47,18 +47,24 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
     # If month view, default selection is 12am to 12am, which is weird.
     # Change to 12:00 - 13:00 instead. This works better with fixed times.
+    # We need to do this before applying fixed times so that overnight stays go from the day clicked
+    # to the next day instead of ending on the day clicked.
     if view.name == "month" && start.hours() == 0 && end.hours() == 0
       start.hours(12)
       end.hours(13)
       end.days(end.days() - 1)
 
-    # Apply fixed times and handle change if occurs
     [start, end, changed] = @applyFixedTimes(start, end)
-    if changed
-      if @hasEventInInterval(start, end)
-        @calendar.fullCalendar 'unselect'
-      else
-        @calendar.fullCalendar 'select', start, end
+
+    # Redraw selection if fixed times applied. But doing this in month mode causes an infinite loop
+    # and doesn't provide any useful feedback to the user.
+    if changed && view.name != "month"
+      @calendar.fullCalendar('select', start, end)
+      return
+
+    # If there is an overlap we halt the process because overlaps aren't allowed.
+    if @hasEventInInterval(start, end)
+      @calendar.fullCalendar('unselect')
       return
 
     # Save for create method to use.

@@ -13,8 +13,12 @@ module Reservations
       if params[:resource_id]
         @resource = Resource.find(params[:resource_id])
 
-        # We use an unsaved sample reservation to authorize against
-        @sample_reservation = Reservation.new(resource: @resource, reserver: current_user)
+        # We use an unsaved sample reservation to authorize against.
+        # We set kind to nil because we can't know the kind in advance. This object is also used
+        # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
+        # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
+        # Kind-specific rules will be enforced through validation.
+        @sample_reservation = Reservation.new(resource: @resource, reserver: current_user, kind: nil)
         authorize @sample_reservation
 
         # JSON list of reservations for calendar plugin

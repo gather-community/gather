@@ -11,7 +11,7 @@ module Meals
     def create
       authorize Meal, :import?
       importer = Meals::Importer.new
-      importer.import(params[:file], current_community)
+      importer.import(params[:file], current_community, current_user)
     end
 
     def download_meal_csv

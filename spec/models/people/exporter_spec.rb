@@ -21,7 +21,7 @@ describe People::Exporter do
     end
 
     context "with users" do
-      let!(:household) { create(:household, with_members: false, unit_num: "20", garage_nums: "4,9") }
+      let!(:household) { create(:household, with_members: false, unit_num: "20", unit_suffix: "3A", garage_nums: "4,9") }
       let!(:vehicle1) { create(:vehicle, household: household, color: "Blue", make: "Ford",
         model: "F-150", plate: "XYZ123") }
       let!(:vehicle2) { create(:vehicle, household: household, color: "Red", make: "GMC",

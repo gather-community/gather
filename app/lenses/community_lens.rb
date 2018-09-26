@@ -1,5 +1,9 @@
-class CommunityLens < ApplicationLens
+# frozen_string_literal: true
+
+# For selecting community. Highly customized!
+class CommunityLens < Lens::SelectLens
   param_name :community
+  i18n_key "community_lens"
 
   def initialize(**args)
     super(**args)
@@ -8,9 +12,7 @@ class CommunityLens < ApplicationLens
   end
 
   def render
-    return nil unless context.multi_community?
-    h.select_tag(input_name, option_tags, class: "form-control",
-      onchange: onchange, id: "community", "data-param-name": param_name)
+    context.multi_community? ? select_tag : nil
   end
 
   private
@@ -25,6 +27,10 @@ class CommunityLens < ApplicationLens
     else
       value
     end
+  end
+
+  def select_input_name
+    options[:subdomain] ? "" : "community"
   end
 
   def onchange
@@ -43,24 +49,20 @@ class CommunityLens < ApplicationLens
   def new_url
     h.url_for(
       host: "' + this.value + '.#{Settings.url.host}",
-      params: route_params.except(:action, :controller).
-        merge(options[:required] ? {} : {community: "this"})
+      params: route_params.except(:action, :controller)
+        .merge(options[:required] ? {} : {community: "this"})
     )
   end
 
   def option_tags
-    prompt_option_tag << h.options_from_collection_for_select(communities, 'slug', 'name', selected)
-  end
-
-  def input_name
-    options[:subdomain] ? "" : "community"
+    prompt_option_tag << h.options_from_collection_for_select(communities, "slug", "name", selected)
   end
 
   def prompt_option_tag
     if options[:required]
       "".html_safe
     else
-      h.content_tag(:option, "All Communities", value: "all")
+      h.content_tag(:option, translate_option(:all), value: "all")
     end
   end
 end

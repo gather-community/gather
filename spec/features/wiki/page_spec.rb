@@ -14,7 +14,7 @@ feature "pages", js: true do
   scenario "happy path" do
     visit("/wiki")
     click_on("Sample Page")
-    expect(page).to have_content("Basic Formatting")
+    expect(page).to have_content("This is a sample wiki page.")
 
     click_main_nav("Wiki")
     expect(page).to have_content("This is your wiki home page!")
@@ -115,5 +115,13 @@ feature "pages", js: true do
       expect(page).to have_alert("There was a problem fetching data for this page (Invalid JSON)")
       expect(page).not_to have_content("The Description:")
     end
+  end
+
+  scenario "with safe and unsafe HTML" do
+    visit("/wiki/new")
+    fill_in("Title", with: "Boring Page")
+    fill_in("Content", with: "apple **banana** <em>bold</em> <script>foo</script>")
+    click_on("Create Page")
+    expect(page.body).to include("apple <strong>banana</strong> <em>bold</em> foo")
   end
 end

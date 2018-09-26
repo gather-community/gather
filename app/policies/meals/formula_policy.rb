@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Meals
   class FormulaPolicy < ApplicationPolicy
-    alias_method :formula, :record
+    alias formula record
 
     delegate :has_meals?, :is_default?, to: :formula
 
@@ -47,9 +49,9 @@ module Meals
     end
 
     def permitted_attributes
-      attrs = [:name, :is_default]
+      attrs = %i[name is_default pantry_reimbursement]
       if update_calcs?
-        attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_disp, :pantry_reimbursement)
+        attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_disp)
         Signup::SIGNUP_TYPES.map { |st| attrs << :"#{st}_disp" }
       end
       attrs

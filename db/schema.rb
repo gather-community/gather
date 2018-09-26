@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180401204134) do
+ActiveRecord::Schema.define(version: 20180818183634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -139,26 +139,26 @@ ActiveRecord::Schema.define(version: 20180401204134) do
   end
 
   create_table "meal_formulas", id: :serial, force: :cascade do |t|
-    t.decimal "adult_meat", precision: 10, scale: 2
-    t.decimal "adult_veg", precision: 10, scale: 2
-    t.decimal "big_kid_meat", precision: 10, scale: 2
-    t.decimal "big_kid_veg", precision: 10, scale: 2
+    t.decimal "adult_meat", precision: 10, scale: 4
+    t.decimal "adult_veg", precision: 10, scale: 4
+    t.decimal "big_kid_meat", precision: 10, scale: 4
+    t.decimal "big_kid_veg", precision: 10, scale: 4
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.boolean "is_default", default: false, null: false
-    t.decimal "little_kid_meat", precision: 10, scale: 2
-    t.decimal "little_kid_veg", precision: 10, scale: 2
+    t.decimal "little_kid_meat", precision: 10, scale: 4
+    t.decimal "little_kid_veg", precision: 10, scale: 4
     t.string "meal_calc_type", null: false
     t.string "name", null: false
     t.string "pantry_calc_type", null: false
-    t.decimal "pantry_fee", precision: 10, scale: 2, null: false
+    t.decimal "pantry_fee", precision: 10, scale: 4, null: false
     t.boolean "pantry_reimbursement", default: false
-    t.decimal "senior_meat", precision: 10, scale: 2
-    t.decimal "senior_veg", precision: 10, scale: 2
-    t.decimal "teen_meat", precision: 10, scale: 2
-    t.decimal "teen_veg", precision: 10, scale: 2
+    t.decimal "senior_meat", precision: 10, scale: 4
+    t.decimal "senior_veg", precision: 10, scale: 4
+    t.decimal "teen_meat", precision: 10, scale: 4
+    t.decimal "teen_veg", precision: 10, scale: 4
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_formulas_on_cluster_id"
     t.index ["community_id"], name: "index_meal_formulas_on_community_id"
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20180401204134) do
     t.text "entrees"
     t.integer "formula_id", null: false
     t.text "kids"
+    t.datetime "menu_posted_at"
     t.text "notes"
     t.datetime "served_at", null: false
     t.text "side"
@@ -263,7 +264,7 @@ ActiveRecord::Schema.define(version: 20180401204134) do
     t.integer "cluster_id", null: false
     t.string "color"
     t.datetime "created_at", null: false
-    t.integer "household_id"
+    t.integer "household_id", null: false
     t.string "make"
     t.string "model"
     t.string "plate", limit: 10
@@ -464,6 +465,7 @@ ActiveRecord::Schema.define(version: 20180401204134) do
     t.string "google_email"
     t.string "home_phone"
     t.integer "household_id", null: false
+    t.integer "job_choosing_proxy_id"
     t.date "joined_on"
     t.string "last_name", null: false
     t.datetime "last_sign_in_at"
@@ -568,20 +570,51 @@ ActiveRecord::Schema.define(version: 20180401204134) do
   end
 
   create_table "work_periods", force: :cascade do |t|
+    t.datetime "auto_open_time"
+    t.boolean "auto_opened", default: false, null: false
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.date "ends_on", null: false
+    t.integer "max_rounds_per_worker"
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
+    t.string "pick_type", null: false
     t.decimal "quota", precision: 10, scale: 2, default: "0.0", null: false
     t.string "quota_type", default: "none", null: false
+    t.integer "round_duration"
     t.date "starts_on", null: false
     t.datetime "updated_at", null: false
+    t.integer "workers_per_round"
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
     t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
+  end
+
+  create_table "work_reminder_deliveries", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deliver_at", null: false
+    t.boolean "delivered", default: false, null: false
+    t.integer "reminder_id", null: false
+    t.integer "shift_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deliver_at"], name: "index_work_reminder_deliveries_on_deliver_at"
+    t.index ["reminder_id", "shift_id"], name: "index_work_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
+  end
+
+  create_table "work_reminders", force: :cascade do |t|
+    t.string "abs_rel", null: false
+    t.datetime "abs_time"
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "job_id", null: false
+    t.string "note"
+    t.decimal "rel_magnitude", precision: 10, scale: 2
+    t.string "rel_unit_sign"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "job_id"], name: "index_work_reminders_on_cluster_id_and_job_id"
   end
 
   create_table "work_shares", force: :cascade do |t|
@@ -670,6 +703,7 @@ ActiveRecord::Schema.define(version: 20180401204134) do
   add_foreign_key "transactions", "statements"
   add_foreign_key "users", "clusters"
   add_foreign_key "users", "households"
+  add_foreign_key "users", "users", column: "job_choosing_proxy_id"
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
   add_foreign_key "wiki_page_versions", "clusters"
@@ -687,6 +721,11 @@ ActiveRecord::Schema.define(version: 20180401204134) do
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_reminder_deliveries", "clusters"
+  add_foreign_key "work_reminder_deliveries", "work_reminders", column: "reminder_id"
+  add_foreign_key "work_reminder_deliveries", "work_shifts", column: "shift_id"
+  add_foreign_key "work_reminders", "clusters"
+  add_foreign_key "work_reminders", "work_jobs", column: "job_id"
   add_foreign_key "work_shares", "clusters"
   add_foreign_key "work_shares", "users"
   add_foreign_key "work_shares", "work_periods", column: "period_id"

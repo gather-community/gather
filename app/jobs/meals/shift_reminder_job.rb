@@ -7,7 +7,7 @@ module Meals
       each_community_at_correct_hour do |community|
         Assignment::ROLES.each do |role|
           lead_days = Settings.reminders.lead_times.shift[role]
-          meal_ids = Meal.hosted_by(community).served_within_days_from_now(lead_days).pluck(:id)
+          meal_ids = Meal.hosted_by(community).served_within_days_from_now(lead_days).not_cancelled.pluck(:id)
 
           if meal_ids.any?
             # Find all assignments for the target meals that have not yet been notified.

@@ -184,10 +184,16 @@ describe UserPolicy do
         expect(subject).not_to permit(admin, admin)
       end
 
-      it "denies on other admins" do
-        expect(subject).not_to permit(admin, admin2)
+      it "permits on other admins of same level" do
+        expect(subject).to permit(admin, admin2)
+        expect(subject).to permit(cluster_admin, cluster_admin2)
+        expect(subject).to permit(super_admin, super_admin2)
+      end
+
+      it "denies for admins on higher admins" do
         expect(subject).not_to permit(admin, cluster_admin)
         expect(subject).not_to permit(admin, super_admin)
+        expect(subject).not_to permit(cluster_admin, super_admin)
       end
 
       it "denies on children" do
@@ -337,7 +343,7 @@ describe UserPolicy do
     let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
     let(:base_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :allergies, :doctor, :medical, :school, :household_by_id,
+      :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
       {privacy_settings: [:hide_photo_from_cluster]},
       {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
     ] }

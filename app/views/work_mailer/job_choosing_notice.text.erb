@@ -1,0 +1,28 @@
+<%= @user.greeting %>
+
+<% if @period.auto_open_time %>
+Job choosing is coming up on <%= l(@period.auto_open_time, format: :short_date) %>!
+<% else %>
+Job choosing is coming up soon!
+<% end %>
+
+You have <%= @synopsis.user_regular_got %> pre-assigned hours and your quota is <%= @synopsis.user_adjusted_quota %>, so you need to choose <%= @synopsis.user_need %> regular hours.
+
+<% if @synopsis.user_full_community_hours.any? %>
+You are also expected to choose <%= @synopsis.user_full_community_hours.map { |job, hours| "#{hours} #{job.title} hours" }.join(", ") %>.
+<% end %>
+
+<% if @period.staggered? && @synopsis.user_need > 0 %>
+<% if @synopsis.rounds.one? %>
+You can begin choosing at <%= l(@synopsis.rounds[0][:starts_at], format: :regular_time).strip %>.
+<% else %>
+Your round schedule is as follows:
+<% @synopsis.rounds.each do |round| %>
+* At <%= l(round[:starts_at], format: :regular_time).strip %> <%= round[:limit] ? "you can choose up to #{round[:limit]} hours" : "you can finish choosing" %>.
+<% end %>
+<% end %>
+<% elsif @period.auto_open_time %>
+Choosing begins at <%= l(@period.auto_open_time, format: :regular_time).strip %>.
+<% end %>
+
+Thanks for your participation!

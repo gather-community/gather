@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module Work
+  # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord
-    PHASE_OPTIONS = %i[draft open pending published archived]
-    QUOTA_TYPE_OPTIONS = %i[none by_person by_household]
+    PHASE_OPTIONS = %i[draft ready open published archived].freeze
+    QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
 
     acts_as_tenant :cluster
 
@@ -9,7 +12,7 @@ module Work
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :destroy
 
-    scope :for_community, ->(c) { where(community_id: c.id) }
+    scope :in_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
     scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
@@ -27,8 +30,8 @@ module Work
       new(
         community: community,
         phase: "draft",
-        starts_on: (Date.today + 1.month).beginning_of_month,
-        ends_on: (Date.today + 1.month).end_of_month
+        starts_on: (Time.zone.today + 1.month).beginning_of_month,
+        ends_on: (Time.zone.today + 1.month).end_of_month
       )
     end
 
@@ -54,6 +57,23 @@ module Work
 
     def future?
       Time.zone.today < starts_on
+    end
+
+    def pre_open?
+      draft? || ready?
+    end
+
+    def staggered?
+      pick_type == "staggered"
+    end
+
+    def free_for_all?
+      pick_type == "free_for_all"
+    end
+
+    def auto_open_if_appropriate
+      return unless auto_open_time? && pre_open? && !auto_opened? && Time.current >= auto_open_time
+      update!(phase: "open")
     end
 
     private

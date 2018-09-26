@@ -11,7 +11,7 @@ module Lens
 
     def to_s
       h.content_tag(:form, class: "form-inline lens-bar hidden-print #{options[:position]}") do
-        html = set.lenses.map(&:render)
+        html = set.lenses.reject(&:floating?).map(&:render)
         html << link_to_clear
         html.compact.reduce(&h.sep(" "))
       end

@@ -1,6 +1,49 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Wiki::PageDecorator do
+  describe "linkification" do
+    let!(:other_page) { create(:wiki_page, title: "Another Page") }
+    let(:page) { create(:wiki_page, content: content) }
+    let(:decorated) { page.decorate }
+    subject(:rendered) { decorated.formatted_content[29..-12] }
+
+    context "regular link" do
+      let(:content) { "A link to [[Another Page]] stuff" }
+      it { is_expected.to eq(%(A link to <a href="/wiki/another-page">Another Page</a> stuff)) }
+    end
+
+    context "piped link" do
+      let(:content) { "A link to [[Another Page|this page]]" }
+      it { is_expected.to eq(%(A link to <a href="/wiki/another-page">this page</a>)) }
+    end
+
+    context "not found link" do
+      let(:content) { "A link to [[Non-existent Page]]" }
+
+      before do
+        allow(decorated).to receive(:can_create_page?).and_return(can_create_page)
+      end
+
+      context "with page creation permission" do
+        let(:can_create_page) { true }
+        it do
+          is_expected.to eq(+%(A link to <a class=\"not-found\" ) <<
+            %(href=\"/wiki/new?title=Non-existent+Page\">Non-existent Page</a>))
+        end
+      end
+
+      context "without page creation permission" do
+        let(:can_create_page) { false }
+        it do
+          is_expected.to eq(+%(A link to <a class=\"not-found\" ) <<
+            %(href=\"/wiki/notfound\">Non-existent Page</a>))
+        end
+      end
+    end
+  end
+
   describe "data fetch" do
     let(:content) { "foo" }
     let(:data_source) { "http://example.com" }
@@ -12,7 +55,8 @@ describe Wiki::PageDecorator do
       before do
         if attribs[:data_source].present?
           allow(Kernel).to receive(:open).and_return(
-            '{"name":"Rolph","pants":[{"type":"jeans"},{"type":"cords"}]}')
+            '{"name":"Rolph","pants":[{"type":"jeans"},{"type":"cords"}]}'
+          )
         end
       end
 
@@ -20,8 +64,8 @@ describe Wiki::PageDecorator do
         let(:content) { "* Normal stuff" }
 
         it "returns normal content" do
-          expect(decorator.formatted_content.gsub("\n", "")).
-            to eq '<div class="wiki-content"><ul><li>Normal stuff</li></ul></div>'
+          expect(decorator.formatted_content.delete("\n"))
+            .to eq '<div class="wiki-content"><ul><li>Normal stuff</li></ul></div>'
         end
       end
 
@@ -30,8 +74,8 @@ describe Wiki::PageDecorator do
         let(:data_source) { nil }
 
         it "returns normal content" do
-          expect(decorator.formatted_content.gsub("\n", "")).
-            to eq '<div class="wiki-content"><p>Hello {{myvar}}</p></div>'
+          expect(decorator.formatted_content.delete("\n"))
+            .to eq '<div class="wiki-content"><p>Hello {{myvar}}</p></div>'
         end
       end
 
@@ -39,8 +83,8 @@ describe Wiki::PageDecorator do
         let(:content) { "{{name}}: {{#pants}}_{{type}}_{{/pants}}" }
 
         it "returns normal content with markdown converted" do
-          expect(decorator.formatted_content.gsub("\n", "")).
-            to eq '<div class="wiki-content"><p>Rolph: <em>jeans</em><em>cords</em></p></div>'
+          expect(decorator.formatted_content.delete("\n"))
+            .to eq '<div class="wiki-content"><p>Rolph: <em>jeans</em><em>cords</em></p></div>'
         end
       end
     end

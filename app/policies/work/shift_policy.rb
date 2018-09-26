@@ -3,19 +3,28 @@
 module Work
   class ShiftPolicy < ApplicationPolicy
     alias shift record
+    attr_accessor :synopsis
+
+    delegate :job_hours, :full_community?, to: :shift
 
     class Scope < Scope
       def resolve
-        if active_cluster_admin?
-          scope
-        else
-          scope.for_community(user.community)
-        end
+        community_only_unless_cluster_admin
       end
     end
 
-    def index?
+    def initialize(user, record, synopsis: nil)
+      super(user, record)
+      self.synopsis = synopsis
+    end
+
+    # Controls whether we can see the index page outer wrapper including the period lens.
+    def index_wrapper?
       active_in_community?
+    end
+
+    def index?
+      active_in_community? && (active_admin_or?(:work_coordinator) || !shift.period_draft?)
     end
 
     def show?
@@ -23,8 +32,11 @@ module Work
     end
 
     def signup?
-      index? && (shift.period_open? || shift.period_published?) &&
-        !shift.user_signed_up?(user) && !shift.taken?
+      index? &&
+        (shift.period_open? || shift.period_published?) &&
+        !shift.user_signed_up?(user) &&
+        !shift.taken? &&
+        !round_limit_exceeded?
     end
 
     def unsignup?
@@ -49,6 +61,22 @@ module Work
 
     def destroy?
       new?
+    end
+
+    def round_limit_exceeded?
+      !synopsis.nil? && synopsis.staggering? && !round_limit.nil? && !full_community? &&
+        user_regular_hours + job_hours > round_limit
+    end
+
+    private
+
+    def user_regular_hours
+      # The regular jobs info is always the first element of the array.
+      synopsis.for_user[0][:got]
+    end
+
+    def round_limit
+      synopsis.staggering[:prev_limit]
     end
   end
 end

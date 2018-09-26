@@ -19,8 +19,8 @@ module NavHelper
         icon: "cutlery"
       }, {
         name: :work,
-        path: work_shifts_path,
-        permitted: policy(sample_shift).index?,
+        path: lens_path_if_present("work/shifts"),
+        permitted: policy(sample_shift).index_wrapper?,
         icon: "wrench"
       }, {
         name: :reservations,
@@ -71,6 +71,8 @@ module NavHelper
           }
         ]
       when :people
+        sample_household = Household.new(community: current_community)
+        sample_vehicle = People::Vehicle.new(household: Household.new(community: current_community))
         [
           {
             name: :directory,
@@ -82,7 +84,7 @@ module NavHelper
             name: :households,
             parent: :people,
             path: households_path,
-            permitted: policy(Household.new(community: current_community)).index?,
+            permitted: policy(sample_household).index?,
             icon: "home"
           }, {
             name: :roles,
@@ -90,6 +92,12 @@ module NavHelper
             path: roles_path,
             permitted: policy(User).index?,
             icon: "fa-users"
+          }, {
+            name: :vehicles,
+            parent: :people,
+            path: people_vehicles_path,
+            permitted: policy(sample_vehicle).index?,
+            icon: "fa-car"
           }
         ]
       when :reservations
@@ -117,13 +125,13 @@ module NavHelper
             name: :signups,
             parent: :work,
             path: work_shifts_path,
-            permitted: policy(sample_shift).index?,
+            permitted: policy(sample_shift).index_wrapper?,
             icon: "check"
           }, {
             name: :report,
             parent: :work,
             path: work_report_path,
-            permitted: policy(sample_period).report?,
+            permitted: policy(sample_period).report_wrapper?,
             icon: "line-chart"
           }, {
             name: :jobs,
@@ -222,6 +230,7 @@ module NavHelper
   end
 
   def lens_path_if_present(controller)
-    Lens::Set.path_for(context: self, controller: controller, action: "index") || send("#{controller}_path")
+    Lens::Set.path_for(context: self, controller: controller, action: "index") ||
+      send("#{controller.tr('/', '_')}_path")
   end
 end

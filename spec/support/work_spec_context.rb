@@ -2,7 +2,7 @@ shared_context "work" do
   shared_examples "handles no periods" do
     context "with no period" do
       let(:periods) { [] }
-      
+
       context "as coordinator" do
         let(:actor) { create(:work_coordinator) }
 
@@ -26,8 +26,10 @@ shared_context "work" do
   shared_context "with jobs" do
     let!(:periods) do
       [
-        create(:work_period, starts_on: Time.zone.today - 83.days, ends_on: Time.zone.today + 7.days),
-        create(:work_period, starts_on: Time.zone.today + 8.days, ends_on: Time.zone.today + 87.days)
+        create(:work_period, starts_on: Time.zone.today - 83.days, ends_on: Time.zone.today + 7.days,
+                             phase: "open"),
+        create(:work_period, starts_on: Time.zone.today + 8.days, ends_on: Time.zone.today + 87.days,
+                             phase: "open")
       ]
     end
     let!(:users) do

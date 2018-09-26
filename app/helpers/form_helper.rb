@@ -58,7 +58,7 @@ module FormHelper
     options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
     options[:multiple] = true unless options.has_key?(:multiple)
 
-    wrapper_classes = ["nested-fields"]
+    wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-label" if options[:label] == false
     wrapper_classes << "multiple" if options[:multiple]
 

@@ -84,14 +84,33 @@ describe People::Birthdate do
       end
 
       it "has correct age when today is before bday" do
-        Timecop.freeze(Time.zone.parse("2016-2-1")) do
+        Timecop.freeze(Time.zone.parse("2016-6-14")) do
           expect(user.age).to eq 15
         end
       end
 
       it "has correct age when today is after bday" do
-        Timecop.freeze(Time.zone.parse("2016-9-1")) do
+        Timecop.freeze(Time.zone.parse("2016-6-16")) do
           expect(user.age).to eq 16
+        end
+      end
+    end
+
+    context "with full birthdate of feb 29" do
+      let(:user) { create(:user, birthdate_str: "1996-2-29") }
+
+      it "calculates age correctly in leap year" do
+        Timecop.freeze(Time.zone.parse("2016-2-28")) do
+          expect(user.age).to eq(19)
+        end
+        Timecop.freeze(Time.zone.parse("2016-2-29")) do
+          expect(user.age).to eq(20)
+        end
+      end
+
+      it "calculates age correctly in non-leap year" do
+        Timecop.freeze(Time.zone.parse("2017-2-28")) do
+          expect(user.age).to eq(21)
         end
       end
     end

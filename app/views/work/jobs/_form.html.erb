@@ -9,32 +9,35 @@
   <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
   <%= f.input :slot_type, collection: Work::Job::SLOT_TYPE_OPTIONS, include_blank: false %>
   <%= f.input :hours_per_shift, required: true %>
-  <%= f.input :description %>
+  <%= f.input :description, as: :markdown %>
+  <%= nested_field_set(f, :reminders) %>
 
-  <h2>Shifts</h2>
+  <div id="shifts">
+    <h2>Shifts</h2>
 
-  <%= f.error :shifts %>
+    <%= f.error :shifts %>
 
-  <table class="index" id="shift-table">
-    <thead>
-      <tr>
-        <th><%= Work::Shift.human_attribute_name(:start_time) %></th>
-        <th><%= Work::Shift.human_attribute_name(:end_time) %></th>
-        <th><%= Work::Shift.human_attribute_name(:slots) %></th>
-        <th><%= Work::Shift.human_attribute_name(:workers) %></th>
-        <th><%= Work::Shift.human_attribute_name(:hours) %></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="shift-rows">
-      <%= f.simple_fields_for(:shifts) do |shift_form| %>
-        <%= render("shift_fields", f: shift_form) %>
-      <% end %>
-    </tbody>
-  </table>
-  <%= link_to_add_association(t("cocoon.add_links.shifts"), f, :shifts,
-    "data-association-insertion-node": "#shift-rows",
-    "data-association-insertion-method": "append") %>
+    <table class="index" id="shift-table">
+      <thead>
+        <tr>
+          <th><%= Work::Shift.human_attribute_name(:start_time) %></th>
+          <th><%= Work::Shift.human_attribute_name(:end_time) %></th>
+          <th><%= Work::Shift.human_attribute_name(:slots) %></th>
+          <th><%= Work::Shift.human_attribute_name(:workers) %></th>
+          <th><%= Work::Shift.human_attribute_name(:hours) %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="shift-rows">
+        <%= f.simple_fields_for(:shifts) do |shift_form| %>
+          <%= render("shift_fields", f: shift_form) %>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to_add_association(t("cocoon.add_links.shifts"), f, :shifts,
+      "data-association-insertion-node": "#shift-rows",
+      "data-association-insertion-method": "append") %>
+  </div>
 
   <%= form_actions do %>
     <%= f.button :submit, class: "btn-primary" %>
@@ -44,6 +47,7 @@
 <%= javascript_tag do %>
   $(function() {
     new Gather.Views.Work.JobFormView({el: '.work--job-form'});
+    new Gather.Views.Work.JobReminderFieldsView({el: '.work_job_reminders'});
     new Gather.Views.DirtyChecker({el: '.work--job-form'});
     new Gather.Views.Select2View({el: '.work--job-form'});
   });

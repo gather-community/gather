@@ -64,6 +64,10 @@ module GeneralHelpers
     contain_community_url(meal.community, "/meals/#{meal.id}")
   end
 
+  def have_correct_shift_url(shift)
+    contain_community_url(shift.community, "/work/signups/#{shift.id}")
+  end
+
   def stub_status(value)
     allow(meal).to receive(:status).and_return(value)
   end

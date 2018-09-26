@@ -25,7 +25,7 @@
     <% @meal.nonempty_menu_items.each do |item, text| %>
       <hr/>
       <div class="menu-label smaller"><%= item %></div>
-      <section><%= simple_format(text) %></section>
+      <section><%= safe_render_markdown(text) %></section>
     <% end %>
     <hr/>
     <div class="menu-label smaller">allergens</div>
@@ -36,6 +36,9 @@
         [None]
       <% end %>
     </section>
+    <% if @meal.menu_posted_at.present? %>
+      <small><br/><%= t("meals.menu_posted_at", time: l(@meal.menu_posted_at)) %></small>
+    <% end %>
   <% else %>
     <hr/>
     No menu posted yet.

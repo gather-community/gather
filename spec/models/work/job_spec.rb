@@ -112,4 +112,34 @@ describe Work::Job do
       end
     end
   end
+
+  describe "reminder delivery maintenance" do
+    include_context "reminders"
+
+    let(:job) { create(:work_job, shift_count: 2, hours: 2) }
+    let!(:reminder) { create_reminder(job, 1, "hours_after") }
+    subject(:deliveries) { Work::ReminderDelivery.all.to_a }
+
+    before do
+      # Ensure job knows about its reminders.
+      job.reload
+    end
+
+    it "creates deliveries on new shift additions" do
+      job.shifts << build(:work_shift, job: job, starts_at: Time.zone.now + 7.days, hours: 2)
+      job.shifts << build(:work_shift, job: job, starts_at: Time.zone.now + 8.days, hours: 2)
+      job.save!
+      expect(deliveries.size).to eq(4)
+      expect(deliveries.map(&:shift)).to match_array(job.shifts)
+      expect(deliveries.map(&:reminder)).to match_array([reminder] * 4)
+    end
+
+    it "updates deliveries on shift changes" do
+      shift = job.shifts.first
+      shift.update!(starts_at: shift.starts_at + 1.hour, ends_at: shift.ends_at + 1.hour)
+      expect(deliveries.size).to eq(2)
+      delivery = deliveries.index_by(&:shift)[shift]
+      expect(delivery.deliver_at).to eq(shift.reload.starts_at + 1.hour)
+    end
+  end
 end

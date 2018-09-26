@@ -26,6 +26,14 @@ feature "user index" do
       end
     end
 
+    scenario "album view", js: true do
+      inactive.save!
+      visit "/users"
+      select_lens(:view, "Album")
+      expect(page).to have_content(user.name)
+      expect(page).not_to have_content("Longgone")
+    end
+
     scenario "table view", js: true do
       inactive.save!
       visit "/users"

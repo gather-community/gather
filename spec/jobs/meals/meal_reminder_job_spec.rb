@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Meals::MealReminderJob do
   include_context "jobs"
@@ -8,6 +10,7 @@ describe Meals::MealReminderJob do
   let!(:meal1) { create(:meal, :with_menu, title: "Meal 1", served_at: "2017-01-01 18:15") }
   let!(:meal2) { create(:meal, :with_menu, title: "Meal 2", served_at: "2017-01-01 18:15", community: c2) }
   let!(:meal3) { create(:meal, :with_menu, title: "Meal 3", served_at: "2017-01-02 18:15") }
+  let!(:meal4) { create(:meal, :with_menu, :cancelled, title: "Meal 4", served_at: "2017-01-01 18:15") }
   let!(:signup1) { create(:signup, :with_nums, meal: meal1) }
   let!(:signup2) { create(:signup, :with_nums, meal: meal2) }
   let!(:signup3) { create(:signup, :with_nums, meal: meal2) }

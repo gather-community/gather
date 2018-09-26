@@ -1,0 +1,157 @@
+<% content_for(:title, "Markdown Formatting Guide") %>
+
+<div class="markdown-demo">
+  <p><strong>Markdown</strong> is a simple way of creating clean, nice-looking content without needing to learn a special language.</p>
+
+  <div class="row">
+    <div class="html">
+      <p>You can easily do simple formatting like <strong>bold</strong> and <em>italics</em>.</p>
+    </div>
+    <div class="markdown">
+      <pre>
+You can easily do simple formatting like **bold** and _italics_.
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      You can also make
+
+      <ul>
+        <li>bulleted</li>
+        <li>lists</li>
+        <ul>
+          <li>with</li>
+          <li>indented</li>
+          <li>sub-lists</li>
+        </ul>
+      </ul>
+
+      and
+
+      <ol>
+        <li>numbered</li>
+        <li>lists</li>
+      </ol>
+    </div>
+    <div class="markdown">
+      <pre>
+You can also make
+
+* bulleted
+* lists
+* with
+* indented
+* sub-lists
+
+and
+
+1. numbered
+2. lists
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <h1>Headers</h1>
+      <h2>Are</h2>
+      <h3>Easy</h3>
+      <p>as well!</p>
+    </div>
+    <div class="markdown">
+      <pre>
+# Headers
+## Are
+### Easy
+
+as well!
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <table>
+        <thead>
+          <tr>
+            <th>You</th>
+            <th>Can</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>even make pretty</td>
+            <td>tables</td>
+          </tr>
+          <tr>
+            <td>Wow!</td>
+            <td>That's super cool!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="markdown">
+      <pre>
+| You  | Can    |
+|------|--------|
+| even make pretty | tables |
+| Wow! | That's super cool! |
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <p>Links to external pages look <a href="http://example.com">like this</a>.</p>
+      <p>Plain link text will be automatically recognized: <a href="https://gather.coop">https://gather.coop</a></p>
+    </div>
+    <div class="markdown">
+      <pre>
+Links to other pages look [like this](http://example.com).
+
+Plain link text will be automatically recognized: https://gather.coop
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <p>You can display images like this:</p>
+      <p><img src="/sample-image.png" alt="Gather Logo"/></p>
+    </div>
+    <div class="markdown">
+      <pre>
+You can display images like this:
+
+![Gather Logo](https://gather.coop/sample-image.png)
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <p>You might use a horizontal rule to divide your content:</p>
+      <hr>
+      <p>nice!</p>
+    </div>
+    <div class="markdown">
+      <pre>
+You might use a horizontal rule to divide your content:
+
+---
+
+nice!
+      </pre>
+    </div>
+  </div>
+  <div class="row">
+    <div class="html">
+      <p>If you are an advanced user and want to use raw HTML, try it out!</p>
+      <p>For instance, <del>you might want to use strikethrough</del>.</p>
+    </div>
+    <div class="markdown">
+      <pre>
+If you are an advanced user and want to use raw HTML, try it out!
+
+For instance, &lt;del&gt;you might want to use strikethrough&lt;/del&gt;.
+      </pre>
+    </div>
+  </div>
+  <p>Now have fun creating lots of useful and beautiful content!</p>
+</div>

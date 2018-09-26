@@ -10,7 +10,7 @@ module Billing
     has_many :statements, ->{ order(created_at: :desc) }, dependent: :destroy
     has_many :transactions, dependent: :destroy
 
-    scope :for_community, ->(c){ where(community_id: c.id) }
+    scope :in_community, ->(c){ where(community_id: c.id) }
     scope :for_household, ->(h){ where(household_id: h.id) }
     scope :for_community_or_household,
       ->(c, h){ where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
@@ -50,17 +50,17 @@ module Billing
     end
 
     def self.with_activity(community)
-      for_community(community).includes(:last_statement, household: [:users, :community]).with_recent_activity
+      in_community(community).includes(:last_statement, household: [:users, :community]).with_recent_activity
     end
 
     def self.with_recent_statement(community)
-      for_community(community).joins(:last_statement).
+      in_community(community).joins(:last_statement).
         where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
     end
 
     # Returns accounts that have a balance OR a past statement AND an active household
     def self.with_any_activity(community)
-      for_community(community).joins(:household)
+      in_community(community).joins(:household)
         where("ABS(balance_due) >= 0.01 OR ABS(current_balance) >= 0.01 OR
           last_statement_id IS NOT NULL AND households.deactivated_at IS NULL")
     end

@@ -14,6 +14,7 @@ class User < ApplicationRecord
     omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
+  belongs_to :job_choosing_proxy, class_name: "User"
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
     dependent: :destroy
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,

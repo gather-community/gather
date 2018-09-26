@@ -4,11 +4,7 @@ module Work
 
     class Scope < Scope
       def resolve
-        if active_cluster_admin?
-          scope
-        else
-          scope.for_community(user.community)
-        end
+        community_only_unless_cluster_admin
       end
     end
 
@@ -40,8 +36,13 @@ module Work
       index? && !period.jobs?
     end
 
-    def report?
+    # Controls whether we can see the report page outer wrapper including the period lens.
+    def report_wrapper?
       active_in_community?
+    end
+
+    def report?
+      active_in_community? && (active_admin_or?(:work_coordinator) || !period.draft?)
     end
 
     def permitted_attributes

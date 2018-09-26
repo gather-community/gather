@@ -11,6 +11,9 @@
     <dt><%= icon_tag("home") %></dt><dd><%= shift.requester_name %></dd><br/>
   <% end %>
   <dt><%= icon_tag("user") %></dt><dd><%= shift.assginees_with_empty_slots(style: :comma_sep) %></dd><br/>
+  <% shift.reminders.each do |reminder| %>
+    <dt><%= icon_tag("bell") %></dt><dd><%= reminder.decorate.to_s %></dd><br/>
+  <% end %>
 </dl>
 
 <%= safe_render_markdown(shift.job_description) %>

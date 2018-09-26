@@ -13,7 +13,7 @@ module Work
 
     def index
       authorize sample_period
-      @periods = policy_scope(Period).for_community(current_community).latest_first.page(params[:page])
+      @periods = policy_scope(Period).in_community(current_community).latest_first.page(params[:page])
     end
 
     def new
@@ -62,11 +62,11 @@ module Work
       prepare_lenses(:"work/period")
       @period = lenses[:period].object
       if @period.nil?
-        authorize sample_period
+        authorize(sample_period, :report_wrapper?)
         lenses.hide!
       else
-        authorize @period
-        @work_report = Report.new(period: @period, user: current_user)
+        authorize(@period, :report_wrapper?)
+        @work_report = Report.new(period: @period, user: current_user) if policy(@period).report?
       end
     end
 
@@ -92,6 +92,7 @@ module Work
     # Pundit built-in helper doesn't work due to namespacing
     def period_params
       params.require(:work_period).permit(policy(@period).permitted_attributes)
+        .merge(pick_type: "free_for_all") # Temporary until form includes pick_type
     end
   end
 end

@@ -7,7 +7,7 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
     @$(".shift-slots input").trigger("change")
 
   events:
-    'cocoon:after-insert': 'shiftInserted'
+    'cocoon:after-insert #shifts': 'shiftInserted'
     'change #work_job_time_type': 'formatFields'
     'change #work_job_slot_type': 'formatFields'
     'change #work_job_hours': 'computeHours'

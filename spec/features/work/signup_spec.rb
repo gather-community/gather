@@ -17,7 +17,7 @@ feature "signups", js: true do
   it_behaves_like "handles no periods"
 
   context "with period but no shifts" do
-    let!(:period) { create(:work_period) }
+    let!(:period) { create(:work_period, phase: "ready") }
 
     scenario "index" do
       visit(page_path)
@@ -28,6 +28,15 @@ feature "signups", js: true do
   context "with jobs" do
     include_context "with jobs"
 
+    context "in draft phase" do
+      before { periods[0].update!(phase: "draft") }
+
+      scenario "index" do
+        visit(page_path)
+        expect(page).to have_content("This period is in the draft phase so workers can't sign up")
+      end
+    end
+
     describe "filters and search", search: Work::Shift do
       include_context "with assignments"
 
@@ -37,7 +46,7 @@ feature "signups", js: true do
         select_lens(:shift, "All Jobs")
         expect_jobs(*jobs[0..3])
 
-        enter_lens(:search, "fruct")
+        fill_in_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
         clear_lenses
@@ -94,6 +103,7 @@ feature "signups", js: true do
           end
         end
 
+        # Unsignup via #show page
         click_on("Knembler")
         expect(page).to have_content(jobs[0].description)
         accept_confirm { click_on("Remove Signup") }
@@ -102,6 +112,10 @@ feature "signups", js: true do
           expect(page).not_to have_content(actor.name)
           click_on("Sign Up!")
           expect(page).to have_content(actor.name)
+
+          # Unsignup via 'x' link
+          find(".cancel-link a").click
+          expect(page).not_to have_content(actor.name)
         end
 
         # Test autorefresh by simulating someone else having signed up.
@@ -110,6 +124,38 @@ feature "signups", js: true do
           jobs[2].shifts[0].signup_user(users[0])
           expect(page).to have_content(users[0].name)
         end
+      end
+    end
+
+    describe "staggering and auto open" do
+      let(:open_time) { Time.current.midnight + (Time.current.hour + 1).hours }
+      let!(:share) { create(:work_share, period: periods[0], user: actor) }
+
+      before do
+        periods[0].update!(
+          auto_open_time: open_time,
+          phase: "ready",
+          pick_type: "staggered",
+          quota_type: "by_person",
+          workers_per_round: 3,
+          round_duration: 5,
+          max_rounds_per_worker: 3,
+          quota: 32
+        )
+      end
+
+      scenario do
+        visit(page_path)
+        time = I18n.l(open_time, format: :time_only)
+        expect(page).to have_content("You have signed up for 0/32 hours. "\
+          "You can start choosing jobs at #{time}")
+        Timecop.freeze(open_time + 2.minutes) do
+          visit(page_path)
+          time = I18n.l(open_time + 5.minutes, format: :time_only)
+          expect(page).to have_content("You have signed up for 0/32 hours. "\
+            "Your round limit is 11 hours and will rise to 22 at #{time}")
+        end
+        expect(periods[0].reload.phase).to eq("open")
       end
     end
   end

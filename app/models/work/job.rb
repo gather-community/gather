@@ -11,8 +11,10 @@ module Work
     belongs_to :period, class_name: "Work::Period", inverse_of: :jobs
     belongs_to :requester, class_name: "People::Group"
     has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
+    has_many :reminders, -> { canonical_order }, class_name: "Work::Reminder", inverse_of: :job,
+                                                 dependent: :destroy
 
-    scope :for_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
     scope :by_title, -> { order("LOWER(title)") }
     scope :in_period, ->(p) { where(period: p) }
     scope :from_requester, ->(r) { where(requester: r) }
@@ -25,6 +27,9 @@ module Work
 
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
+
+    # Need to use after_commit here because after_update doesn't run on touch.
+    after_commit { reminders.each(&:create_or_update_deliveries) }
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}
@@ -39,9 +44,10 @@ module Work
     validate :hours_per_shift_evenly_divides_hours
 
     accepts_nested_attributes_for :shifts, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
 
     delegate :community, to: :period
-    delegate :starts_on, :ends_on, :name, :draft?, :open?, :pending?, :published?, :archived?,
+    delegate :starts_on, :ends_on, :name, :draft?, :pre_open?, :open?, :published?, :archived?,
       to: :period, prefix: true
 
     def full_period?

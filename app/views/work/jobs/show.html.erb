@@ -26,11 +26,23 @@
     <td><%= Work::Job.human_attribute_name(:slot_type) %></td>
     <td><%= t("simple_form.options.work_job.slot_type.#{job.slot_type}") %></td>
   </tr>
+  <% if job.reminders.any? %>
+    <tr>
+      <td><%= Work::Job.human_attribute_name(:reminders) %></td>
+      <td>
+        <ul>
+          <% job.reminders.each do |reminder| %>
+            <li><%= reminder.decorate.to_s %></li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+  <% end %>
   <tr>
     <td><%= Work::Job.human_attribute_name(:shifts) %></td>
     <td>
       <% job.shifts.decorate.each do |shift| %>
-        <strong><%= shift.times %></strong>
+        <%= shift.times %>
         <ul><%= shift.assginees_with_empty_slots(style: :li) %></ul>
       <% end %>
     </td>

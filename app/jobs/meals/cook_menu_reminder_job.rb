@@ -1,6 +1,8 @@
-# Sends notifications reminding cook to enter menu for all applicable meals in system.
-# Sends an early one and then a later one if menu still not entered.
+# frozen_string_literal: true
+
 module Meals
+  # Sends notifications reminding cook to enter menu for all applicable meals in system.
+  # Sends an early one and then a later one if menu still not entered.
   class CookMenuReminderJob < ReminderJob
     def perform
       each_community_at_correct_hour do |community|
@@ -14,14 +16,14 @@ module Meals
     private
 
     def remindable_assignments(community)
-      early = Assignment.joins(:meal).
-        where(role: "head_cook", reminder_count: 0).
-        merge(Meal.without_menu.hosted_by(community).
-          served_within_days_from_now(Settings.reminders.lead_times.cook_menu.early))
+      early = Assignment.joins(:meal)
+        .where(role: "head_cook", reminder_count: 0)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
+          .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.early))
 
-      late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1).
-        merge(Meal.without_menu.hosted_by(community).
-          served_within_days_from_now(Settings.reminders.lead_times.cook_menu.late))
+      late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
+          .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.late))
 
       (early.to_a + late.to_a).uniq
     end

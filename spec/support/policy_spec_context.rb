@@ -32,7 +32,9 @@ shared_context "policy objs" do
   let(:admin) { new_user_from(community, label: "admin") }
   let(:admin2) { new_user_from(community, label: "admin2") }
   let(:cluster_admin) { new_user_from(community, label: "cluster_admin") }
+  let(:cluster_admin2) { new_user_from(community, label: "cluster_admin2") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
+  let(:super_admin2) { new_user_from(community, label: "super_admin2") }
   let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
   let(:outside_super_admin) { with_tenant(clusterB) {
     new_user_from(communityX, label: "outside_super_admin") } }
@@ -151,6 +153,16 @@ shared_context "policy objs" do
     end
   end
 
+  shared_examples_for "permits active users only" do
+    it "permits active users" do
+      expect(subject).to permit(user, record)
+    end
+
+    it "forbids inactive users" do
+      expect(subject).not_to permit(inactive_user, record)
+    end
+  end
+
   shared_examples_for "permits special role but not regular users" do |role_name|
     context do
       let(:actor) { role_member(role_name) }
@@ -213,6 +225,12 @@ shared_context "policy objs" do
 
     it "permits action on self for inactive user" do
       expect(subject).to permit(inactive_user, inactive_user)
+    end
+  end
+
+  shared_examples_for "forbids regular users" do
+    it do
+      expect(subject).not_to permit(user, record)
     end
   end
 

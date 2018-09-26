@@ -2,6 +2,7 @@
 
 module Work
   class SlotsExceededError < StandardError; end
+  class RoundLimitExceededError < StandardError; end
   class AlreadySignedUpError < StandardError; end
   class NotSignedUpError < StandardError; end
 
@@ -18,14 +19,16 @@ module Work
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
+    has_many :reminder_deliveries, class_name: "Work::ReminderDelivery", inverse_of: :shift,
+                                   dependent: :destroy
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
-      :period_draft?, :period_open?, :period_pending?, :period_published?, :period_archived?,
-      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, to: :job
+      :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
+      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
-    scope :for_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :by_job_title, -> { joins(:job).order("LOWER(work_jobs.title)") }
     scope :by_date, -> { order(:starts_at, :ends_at) }
@@ -114,7 +117,7 @@ module Work
     def unsignup_user(user)
       assignment = assignment_for_user(user)
       raise Work::NotSignedUpError unless assignment
-      assignment.destroy
+      assignments.destroy(assignment)
     end
 
     def user_signed_up?(user)
@@ -144,8 +147,8 @@ module Work
         self.starts_at = period_starts_on.in_time_zone
         self.ends_at = period_ends_on.in_time_zone + 1.day - 1.minute
       elsif job_date_only?
-        self.starts_at = starts_at.midnight
-        self.ends_at = ends_at.midnight + 1.day - 1.minute
+        self.starts_at = starts_at.midnight if starts_at.present?
+        self.ends_at = ends_at.midnight + 1.day - 1.minute if ends_at.present?
       end
     end
 
@@ -155,15 +158,12 @@ module Work
     end
 
     def elapsed_hours_must_equal_job_hours
-      return unless job_date_time? && job_hours.present?
+      return unless job_date_time? && job_hours.present? && elapsed_time.present?
       if slot_type == "full_multiple"
-        unless (job_hours.hours % elapsed_time).zero?
-          errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
-        end
-      else
-        unless elapsed_time == job_hours.hours
-          errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
-        end
+        return unless elapsed_time.positive? && !(job_hours.hours % elapsed_time).zero?
+        errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
+      elsif elapsed_time != job_hours.hours
+        errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
       end
     end
 

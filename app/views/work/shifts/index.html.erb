@@ -2,7 +2,15 @@
 <% if @period.nil? %>
   <%= render("work/shared/no_period_notice") %>
 <% else %>
-  <%= render "shifts" %>
+  <%= render("shifts") %>
+  <div class="row table-footer">
+    <div class="col-sm-6">
+      <%= render("pagination") %>
+    </div>
+    <div class="col-sm-6 choosee">
+      <%= lenses[:choosee].render %>
+    </div>
+  </div>
 <% end %>
 <%= javascript_tag do %>
   $(function() {

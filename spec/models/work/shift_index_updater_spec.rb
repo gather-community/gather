@@ -15,9 +15,18 @@ describe Work::ShiftIndexUpdater do
       updater.update
     end
 
-    it "doesn't update shifts on job description change" do
-      expect(updater).not_to receive(:reindex)
-      job.update!(description: "A new description")
+    it "updates shifts on assignment change" do
+      expect(updater).to receive(:reindex)
+      job.update!(shifts_attributes: {
+        0 => {
+          id: job.shifts.first.id,
+          assignments_attributes: {
+            0 => {
+              user_id: create(:user).id
+            }
+          }
+        }
+      })
       updater.update
     end
   end

@@ -1,11 +1,11 @@
 <div class="<%= classes.join(" ") %>">
   <%= f.hidden_field :id %>
+  <div class="fields-col">
+    <%= render(options[:inner_partial], f: f, options: options) %>
+  </div>
   <% if options[:multiple] %>
     <div class="remove-link-col">
       <%= link_to_remove_association(icon_tag("trash"), f) %>
     </div>
   <% end %>
-  <div class="fields-col">
-    <%= render(options[:inner_partial], f: f, options: options) %>
-  </div>
 </div>

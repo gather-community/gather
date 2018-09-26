@@ -20,4 +20,11 @@ module Concerns::ApplicationController::Setters
       format.any { head :not_found }
     end
   end
+
+  def render_forbidden
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public/403"), layout: false, status: :forbidden }
+      format.any { head :forbidden }
+    end
+  end
 end

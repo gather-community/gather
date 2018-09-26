@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Wiki
+  # Decorates wiki pages. Lots of key stuff happens here!
   class PageDecorator < ApplicationDecorator
     delegate_all
 
@@ -10,20 +13,18 @@ module Wiki
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
       @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
-        h.sanitize(render_markdown(process_data(linkify(content).html_safe)))
+        h.safe_render_markdown(process_data(linkify(content)))
       end
     end
 
     # Tests Mustache syntax and returns any error encountered.
     def template_error
-      begin
-        # An empty hash should not trigger syntax errors. It just results in empty content.
-        # A syntax error is only caused by invalid syntax!
-        Mustache.render(content, {})
-        nil
-      rescue Mustache::Parser::SyntaxError
-        format_mustache_error($!)
-      end
+      # An empty hash should not trigger syntax errors. It just results in empty content.
+      # A syntax error is only caused by invalid syntax!
+      Mustache.render(content, {})
+      nil
+    rescue Mustache::Parser::SyntaxError
+      format_mustache_error($ERROR_INFO)
     end
 
     def revision_info
@@ -37,7 +38,7 @@ module Wiki
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_wiki_page_path(object)),
         ActionLink.new(object, :history, icon: "clock-o", path: h.history_wiki_page_path(object)),
         ActionLink.new(object, :destroy, icon: "trash", path: h.wiki_page_path(object),
-          method: :delete, confirm: {title: title})
+                                         method: :delete, confirm: {title: title})
       )
     end
 
@@ -56,28 +57,37 @@ module Wiki
     private
 
     def linkify(str)
-      str.gsub /\[\[
-                  (?:([^\[\]\|]+)\|)?
-                  ([^\[\]]+)
-                 \]\]
-                 (\w+)?/xu do |m|
-        text = "#$2#$3"
-        title, anchor = if $1 then $1.split('#', 2) else $2 end
-        link_class = nil
-        if page = Page.find_by(community: community, title: title)
-          path = h.wiki_page_path(page) + (anchor ? "##{anchor}" : "")
-        else
-          link_class = "not-found"
-          if h.policy(sample_page).create?
-            path = h.new_wiki_page_path(title: title)
-          else
-            # We know this link will lead to a 404, but since the user doesn't have permissions
-            # to create a page, this is the most consistent UX.
-            path = h.wiki_page_path(slug: Page.reserved_slug(:notfound))
-          end
-        end
-        h.link_to(title, path, class: link_class)
-      end.html_safe
+      str.gsub(link_regex) do
+        link(
+          title: Regexp.last_match[1] || Regexp.last_match[2],
+          display_name: Regexp.last_match[2] || Regexp.last_match[1]
+        )
+      end.html_safe # We can mark this as html_safe because we're using safe_render_markdown.
+    end
+
+    def link(title:, display_name:)
+      link_class = nil
+      if (page = Page.find_by(community: community, title: title))
+        path = h.wiki_page_path(page)
+      else
+        link_class = "not-found"
+        path = if can_create_page?
+                 h.new_wiki_page_path(title: title)
+               else
+                 # We know this link will lead to a 404, but since the user doesn't have permissions
+                 # to create a page, this is the most consistent UX.
+                 h.wiki_page_path(slug: Page.reserved_slug(:notfound))
+               end
+      end
+      h.link_to(display_name, path, class: link_class)
+    end
+
+    def link_regex
+      /\[\[                 # The opening [[
+        (?:([^\[\]\|]+)\|)? # An optional first segment with pipe, not capturing pipe
+        ([^\[\]]+)          # Another segment
+        \]\]                # Closing ]]
+        /x
     end
 
     # Processes mustache syntax in given string combined with data from data_source.
@@ -90,13 +100,13 @@ module Wiki
           self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.socket_error")
           ""
         rescue OpenURI::HTTPError
-          self.data_fetch_error = $!.to_s
+          self.data_fetch_error = $ERROR_INFO.to_s
           ""
         rescue JSON::ParserError
           self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_json")
           ""
         rescue Mustache::Parser::SyntaxError
-          self.data_fetch_error = format_mustache_error($!)
+          self.data_fetch_error = format_mustache_error($ERROR_INFO)
           ""
         end
       else
@@ -105,29 +115,21 @@ module Wiki
     end
 
     def format_mustache_error(error)
-      details = if m = error.to_s.match(/\A.+Line \d+/m)
-        m[0]
-      else
-        error.to_s.gsub(/\s*\^\s*\z/m, "")
-      end
+      details = if (m = error.to_s.match(/\A.+Line \d+/m))
+                  m[0]
+                else
+                  error.to_s.gsub(/\s*\^\s*\z/m, "")
+                end
       I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
         details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
     end
 
-    def render_markdown(str)
-      markdown_renderer.render(str)
-    end
-
-    def markdown_renderer
-      @renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML,
-        autolink: true,
-        space_after_headers: true,
-        tables: true
-      )
-    end
-
     def sample_page
       Page.new(community: community)
+    end
+
+    def can_create_page?
+      h.policy(sample_page).create?
     end
   end
 end

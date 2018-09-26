@@ -40,6 +40,11 @@ class ApplicationPolicy
     false
   end
 
+  # Used to force an authorization failure in some cases.
+  def fail?
+    false
+  end
+
   def attribute_permitted?(attrib)
     permitted_attributes.include?(attrib)
   end
@@ -79,6 +84,12 @@ class ApplicationPolicy
 
     def active_admin_or?(role)
       active_admin? || (active? && user.global_role?(role))
+    end
+
+    protected
+
+    def community_only_unless_cluster_admin
+      active_cluster_admin? ? scope : scope.in_community(user.community)
     end
   end
 
@@ -147,5 +158,17 @@ class ApplicationPolicy
 
   def not_specific_record?
     record.is_a?(Class)
+  end
+
+  def admin_level(user)
+    if user.global_role?(:super_admin)
+      3
+    elsif user.global_role?(:cluster_admin)
+      2
+    elsif user.global_role?(:admin)
+      1
+    else
+      0
+    end
   end
 end

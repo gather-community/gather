@@ -8,13 +8,13 @@ module Meals
 
     def index
       authorize sample_formula
-      @formulas = policy_scope(Formula).for_community(current_community).
+      @formulas = policy_scope(Formula).in_community(current_community).
         with_meal_counts.deactivated_last.by_name
     end
 
     def new
       @formula = sample_formula
-      if Formula.for_community(current_community).empty?
+      if Formula.in_community(current_community).empty?
         @formula.is_default = true
         @force_default = true
       end

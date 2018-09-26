@@ -49,7 +49,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    active_admin? && !self? && !target_is_admin? && record.adult?
+    active_admin? && !self? && record.adult? && admin_level(user) >= admin_level(record)
   end
 
   def destroy?
@@ -118,7 +118,7 @@ class UserPolicy < ApplicationPolicy
     household_permitted.delete(:community_id)
 
     permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on,
+      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :job_choosing_proxy_id,
       :school, :allergies, :doctor, :medical, :preferred_contact, :household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
     permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
@@ -152,9 +152,5 @@ class UserPolicy < ApplicationPolicy
   def guardian?
     return false unless record.is_a?(User) # May be a Class in some cases
     record.guardians.include?(user)
-  end
-
-  def target_is_admin?
-    record.global_role?(:admin) || record.global_role?(:cluster_admin) || record.global_role?(:super_admin)
   end
 end

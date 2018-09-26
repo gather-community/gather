@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Work::PeriodPolicy do
   include_context "policy objs"
+  include_context "work policies"
 
-  let(:period) { build(:work_period, community: community) }
+  let(:phase) { "published" }
+  let(:period) { build(:work_period, community: community, phase: phase) }
   let(:record) { period }
 
   describe "permissions" do
@@ -11,8 +15,12 @@ describe Work::PeriodPolicy do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
 
-    permissions :report? do
+    permissions :report_wrapper? do
       it_behaves_like "permits users in community only"
+    end
+
+    permissions :report? do
+      it_behaves_like "permits users only in some phases", %i[ready open published archived]
     end
   end
 

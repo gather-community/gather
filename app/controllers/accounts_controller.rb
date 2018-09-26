@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
     @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
     @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
 
-    last_statement = Billing::Statement.for_community(@community).order(:created_at).last
+    last_statement = Billing::Statement.in_community(@community).order(:created_at).last
     @last_statement_run = last_statement.try(:created_on)
 
     @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0

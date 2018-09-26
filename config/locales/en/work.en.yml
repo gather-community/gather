@@ -1,0 +1,71 @@
+en:
+  work:
+    no_periods_html: "There are no active work periods. Please %{link}."
+    not_setup: "It looks like your community hasn't set up Gather's work share system.\nTalk to your Gather Admin for more info."
+    choosing_as: "You are choosing as %{name}. Any jobs you sign up for will be assigned to them."
+    no_signups: "No Signups"
+    create_one: "create one first"
+    phase_notices:
+      shifts:
+        draft: "This period is in the draft phase so workers can't sign up for jobs yet."
+        archived: "This period is archived so no signups are permitted."
+      report:
+        draft: "This period is in the draft phase so the report is not visible yet."
+    num_hours: "%{num} hours"
+    preassigned: "This slot was pre-assigned."
+    synopsis:
+      done: "You're all set!"
+      regular: "regular"
+      for_user: "You have signed up for"
+      for_household: "Your household has"
+      chunk:
+        single_html: "%{fraction} hours"
+        multiple_html: "%{fraction} %{title} hours"
+      start_choosing: "You can start choosing jobs %{at_or_on_time}."
+      round_limit_with_next: "Your round limit is %{prev} hours and will rise to %{next} %{at_or_on_time}."
+      round_limit_until: "Your round limit is %{prev} hours %{until_time}."
+  work/jobs:
+    shifts: "Shifts"
+    unlimited: "Unlimited"
+    full_community: "This is a full community job."
+    none_found: "No jobs found."
+  work/period:
+    phase_names:
+      archived: "Archived"
+      draft: "Draft"
+      open: "Open"
+      published: "Published"
+      ready: "Ready"
+  work/shares:
+    portion_options:
+      none: "No Share"
+      one_qtr: "¼ Share"
+      half: "½ Share"
+      three_qtr: "¾ Share"
+      full: "Full Share"
+    intro: "How should the community's work be divided? Most people should get a full share, but in some cases exceptions are needed. A half share means the person will do half as many hours as a person with a full share, etc."
+    change_warning: "This period is currently active. Changing shares or quota type will affect quota calcuations. Proceed with caution!"
+  work/shift:
+    choosing_as: "Choosing as %{name}"
+    slots_exceeded: "Sorry, looks like someone beat you to it!"
+    already_signed_up: "You've already signed up for this shift."
+    not_signed_up: "You have not signed up for this shift."
+    round_limit_exceeded: "You have exceeded your round limit."
+    slots_open:
+      one: "%{count} slot open"
+      other: "%{count} slots open"
+  work/reminder:
+    absolute: "At %{time}"
+    relative:
+      days_before:
+        one: "%{count} day before"
+        other: "%{count} days before"
+      days_after:
+        one: "%{count} day after"
+        other: "%{count} days after"
+      hours_before:
+        one: "%{count} hour before"
+        other: "%{count} hours before"
+      hours_after:
+        one: "%{count} hour after"
+        other: "%{count} hours after"

@@ -65,9 +65,8 @@ class Meal < ApplicationRecord
     :closed?, :finalized?, :open?, :cancelled?,
     :full?, :in_past?, :day_in_past?, to: :status_obj
 
-  after_validation do
-    errors[:resources].each { |m| errors.add(:resource_ids, m) }
-  end
+  after_validation :copy_resource_errors
+  before_save :set_menu_timestamp
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
@@ -193,7 +192,7 @@ class Meal < ApplicationRecord
   end
 
   def menu_posted?
-    MENU_ITEMS.any?{ |i| self[i].present? } || any_allergens?
+    MENU_ITEMS.any? { |i| self[i].present? } || any_allergens?
   end
 
   def nonempty_menu_items
@@ -299,5 +298,13 @@ class Meal < ApplicationRecord
   # errors on associations are shown.
   def add_dummy_base_error
     errors.add(:__dummy, "x")
+  end
+
+  def copy_resource_errors
+    errors[:resources].each { |m| errors.add(:resource_ids, m) }
+  end
+
+  def set_menu_timestamp
+    self.menu_posted_at = Time.current if menu_posted? && title_was.blank?
   end
 end

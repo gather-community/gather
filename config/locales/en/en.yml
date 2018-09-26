@@ -1,6 +1,7 @@
 en:
   common:
     adults: "Adults"
+    cancel: "Cancel"
     cancelled: "Cancelled"
     children: "Children"
     clearing_the_filter: "clearing the filters"
@@ -15,6 +16,10 @@ en:
     "true": "True"
     unknown: "Unknown"
     unlimited: "Unlimited"
+    time_with_preposition:
+      "on": "on %{t}"
+      "at": "at %{t}"
+      "until": "until %{t}"
 
   activerecord:
     models:
@@ -32,6 +37,7 @@ en:
         birthdate_str: "Birthdate"
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
+        job_choosing_proxy_id: "Job Choosing Proxy"
         up_guardianships: "Parents/Guardians"
         privacy_settings: "Privacy Settings"
         school: "School"
@@ -138,6 +144,7 @@ en:
         hours: "Hours"
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
+        reminders: "Reminders"
         requester_id: "Requester"
         shifts: "Shifts"
         slot_type: "Slot Type"
@@ -149,6 +156,11 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
+      work/reminder:
+        abs_rel: "Type"
+        abs_time: "Time"
+        rel_magnitude: "Time"
+        note: "Note"
       work/shift:
         start_time: "Start Time"
         end_time: "End Time"
@@ -279,7 +291,7 @@ en:
               default_total_time: "Default total length of meal reservations in minutes, including prep and cleanup time"
               default_prep_time: "Default meal prep time in minutes"
           billing:
-            payment_instructions: "How to send payment for an account. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+            payment_instructions: "How to send payment for an account."
             statement_terms: "Number of days after the creation date that a statement is due. If zero (0), statements have no due dates."
             late_fee_policy:
               fee_type: "How the fee is calculated"
@@ -325,7 +337,9 @@ en:
       destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
     meal:
+      close: "Are you sure you want to close this meal? No further signups will be allowed."
       destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
+      reopen: "Are you sure you want to reopen this meal? New signups will be allowed."
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'?"
@@ -446,11 +460,15 @@ en:
         emergency_contacts:
           relationship: "e.g. Sharon's Mom"
           location: "e.g. Hastings, MI"
+      work_job:
+        reminders:
+          note: "e.g. Sharpen the saw (optional)"
       work_period:
         name: "e.g. Summer 1969"
       wiki_page:
         comment: "A comment about this change."
     hints:
+      markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>Markdown formatting</a>."
       meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
       billing_account:
@@ -459,9 +477,10 @@ en:
         default_calendar_view: "Reservation calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
         meal_hostable: "If yes, this resource will show up as possible location when creating a meal."
-        guidelines: "Text that the user must agree to when making a reservation. You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
+        guidelines: "Text that the user must agree to when making a reservation."
       user:
         joined_on: "Approximate date when you joined the community"
+        job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
         email: "The email address at which you'd prefer to be contacted."
         google_email: "The email address tied to the Google account used for sign-in."
       meals_formula:
@@ -475,7 +494,6 @@ en:
         hours: "Estimated number of hours the job will take. Decimals allowed."
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
         hours_per_shift: "The amount of hours credit each shift is worth."
-        description: "You can use <a href='https://guides.github.com/features/mastering-markdown/' target='_new'>Markdown formatting</a>."
       work_period:
         quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:
@@ -484,6 +502,7 @@ en:
           past: "Past"
           finalizable: "Finalizable"
           all: "All Time"
+          upcoming: "Upcoming"
         cost:
           payment_method:
             check: "Check"
@@ -515,6 +534,7 @@ en:
         view:
           album: "Album"
           table: "Table"
+          albumall: "Album w/ Inactive"
           tableall: "Table w/ Inactive"
       reservations_resource:
         default_calendar_view:
@@ -533,6 +553,15 @@ en:
           date_time: "This job has a set date and time"
           date_only: "This job is for a certain date or date range"
           full_period: "This job is for the whole work period"
+        reminders:
+          abs_rel:
+            relative: "Relative Time"
+            absolute: "Exact Time"
+          rel_unit_sign:
+            days_before: "Days Before"
+            days_after: "Days After"
+            hours_before: "Hours Before"
+            hours_after: "Hours After"
         requester:
           any: "Any Requester"
           none: "No Requester"
@@ -542,11 +571,11 @@ en:
           n: "Not Preassigned"
       work_period:
         phase:
-          archived: "Archived"
-          draft: "Draft"
-          open: "Open"
-          pending: "Pending"
-          published: "Published"
+          archived: "Archived: Period is in the past, not editable"
+          draft: "Draft: Jobs still being set up, signups hidden"
+          open: "Open: People can pick jobs!"
+          published: "Published: The final work schedule"
+          ready: "Ready: Jobs finalized, synopsis visible, but can't sign up"
         quota_type:
           none: "None"
           by_person: "By Person"
@@ -574,6 +603,7 @@ en:
       pets: "Add Pet"
       shifts: "Add Shift"
       assignments: "Add Worker"
+      reminders: "Add Reminder"
 
   select2:
     prompts:
@@ -582,12 +612,14 @@ en:
       household: "Please type a few letters of the household's name."
       guardian: "Please type a few letters of the guardian's name."
       user: "Please type a few letters of the user's name."
+      job_choosing_proxy: "Please type a few letters of the user's name."
     placeholders:
       reserver: "Choose Reserver ..."
       sponsor: "Choose Sponsor ..."
       household: "Choose Household ..."
       guardian: "Choose Guardian ..."
       user: "Choose User ..."
+      job_choosing_proxy: "Choose User ..."
 
   csv:
     headers:
@@ -606,10 +638,6 @@ en:
         preferred_contact: "Preferred Contact"
         garage_nums: "Garage Nums"
         vehicles: "Vehicles"
-
-  meals:
-    over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
-    cancelled_notice: "This meal has been cancelled."
 
   action_names:
     common:
@@ -701,6 +729,7 @@ en:
         directory: "Directory"
         households: "Households"
         roles: "Roles"
+        vehicles: "Vehicles"
       reservations:
         reservations: "Reservations"
         resources: "Resources"
@@ -783,23 +812,6 @@ en:
       work: "w"
       mobile: "m"
 
-  meals/formulas:
-    pantry: "Pantry"
-    calc_types:
-      fixed: "Fixed"
-      share: "Proportional"
-      percent: "Percentage"
-    hints:
-      meal: "Meal costs can be calculated as a fixed cost or proportionally based on the ingredient cost."
-      pantry: "A pantry fee is a charge billed to each diner to cover the cost of purchasing staples for the kitchen. It can be calculated as a fixed amount or as a percentage of the diner's meal cost."
-      signup_type:
-        fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
-        share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
-    cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
-
-  meals/messages:
-    cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."
-
   meal_mailer:
     meal_reminder:
       subject: "Meal Reminder: %{title} on %{datetime} at %{location}"
@@ -820,14 +832,29 @@ en:
 
   work_mailer:
     shift_reminder:
-      subject: "Job Reminder: %{title} for %{times}"
+      subject: "Job Reminder: %{title}%{note}%{times}"
+    job_choosing_notice:
+      subject: "Job Choosing is Coming Up!"
 
   users:
     greeting: "Dear %{name},"
     preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+    all_users: "All Users"
 
   date_range_lens:
     past_12: "Past 12 Months"
     this_year: "This Year"
     this_quarter: "This Quarter"
     all_time: "All Time"
+
+  community_lens:
+    all: "All Communities"
+
+  search_lens:
+    prompt: "Search..."
+
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} diner from your household"
+        other: "%{count} diners from your household"

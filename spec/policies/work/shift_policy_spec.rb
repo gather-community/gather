@@ -4,26 +4,23 @@ require "rails_helper"
 
 describe Work::ShiftPolicy do
   include_context "policy objs"
+  include_context "work policies"
 
   let(:phase) { "open" }
   let(:period) { build(:work_period, community: community, phase: phase) }
-  let(:job) { build(:work_job, period: period) }
+  let(:slot_type) { "fixed" }
+  let(:job) { build(:work_job, period: period, hours: 3, slot_type: slot_type) }
   let(:shift) { build(:work_shift, job: job) }
   let(:record) { shift }
   let(:actor) { user }
 
-  shared_examples_for "permits users only in some phases" do |permitted|
-    Work::Period::PHASE_OPTIONS.each do |p|
-      describe "for phase #{p}" do
-        let(:phase) { p.to_s }
-        it_behaves_like permitted.include?(p) ? "permits users in community only" : "forbids all"
-      end
-    end
-  end
-
   describe "permissions" do
-    permissions :index?, :show? do
+    permissions :index_wrapper? do
       it_behaves_like "permits users in community only"
+    end
+
+    permissions :index?, :show? do
+      it_behaves_like "permits users only in some phases", %i[ready open published archived]
     end
 
     permissions :signup? do
@@ -37,6 +34,42 @@ describe Work::ShiftPolicy do
       context "when shift is full" do
         before { allow(shift).to receive(:taken?).and_return(true) }
         it { is_expected.not_to permit(user, record) }
+      end
+
+      context "with synopsis for round limit checking" do
+        let(:synopsis) do
+          double(for_user: [{got: picked}], staggering: {prev_limit: limit}, "staggering?": true)
+        end
+        subject(:permitted) { described_class.new(user, shift, synopsis: synopsis).signup? }
+
+        context "with no limit" do
+          let(:picked) { 5 }
+          let(:limit) { nil }
+          it { is_expected.to be true }
+        end
+
+        context "with no picked hours" do
+          let(:picked) { 0 }
+          let(:limit) { 15 }
+          it { is_expected.to be true }
+        end
+
+        context "with picked hours equal to limit plus job hours" do
+          let(:picked) { 11 }
+          let(:limit) { 14 }
+          it { is_expected.to be true }
+        end
+
+        context "with picked hours over limit plus job hours" do
+          let(:picked) { 11 }
+          let(:limit) { 12 }
+          it { is_expected.to be false }
+
+          context "with full community job" do
+            let(:slot_type) { "full_single" }
+            it { is_expected.to be true }
+          end
+        end
       end
     end
 

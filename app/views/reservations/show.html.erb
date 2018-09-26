@@ -45,7 +45,7 @@
   <% if reservation.note %>
     <tr>
       <td>Note</td>
-      <td><%= simple_format(reservation.note) %></td>
+      <td><%= reservation.rendered_note %></td>
     </tr>
   <% end %>
 </table>

@@ -106,8 +106,13 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        stores: stores
+        stores: stores,
+        set: self
       )
+
+      # This hash may have been accessed and thus memoized by the lens just built,
+      # but that could be a problem if it's not the last one, so force it to rebuild on the next access.
+      @lenses_by_param_name = nil
     end
 
     def root_store
@@ -122,8 +127,8 @@ module Lens
     # current controller and action.
     def action_store
       return @action_store if defined?(@action_store)
-      root_store[context.controller_name] ||= {}
-      @action_store = (root_store[context.controller_name][context.action_name] ||= {})
+      root_store[context.controller_path] ||= {}
+      @action_store = (root_store[context.controller_path][context.action_name] ||= {})
     end
 
     # Returns (and inits if necessary) the portion of the root_store for global lenses.
@@ -139,7 +144,7 @@ module Lens
 
     # Save the path if any non-global route_params explictly given,
     # but clear path if all route_params are blank. This is used for rewriting nav links.
-    # We ignore non-global route_params because including such params in rewritten links would
+    # We ignore global route_params because including such params in rewritten links would
     # mess with the global nature of the lens.
     def save_or_clear_path
       non_global_param_names = lenses.reject(&:global?).map(&:param_name)

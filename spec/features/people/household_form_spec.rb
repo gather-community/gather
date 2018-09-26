@@ -19,7 +19,7 @@ feature "household form" do
         fill_in("Garage Number(s)", with: "7")
         click_on("Create Household")
         expect_success
-        select(community_name, from: "community") if community_name
+        select_lens(:community, community_name) if community_name
         click_on("Pump")
         expect(page).to have_css("table.key-value", text: community_name) if community_name
       end

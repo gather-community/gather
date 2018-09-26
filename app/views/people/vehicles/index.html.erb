@@ -1,0 +1,24 @@
+<% content_for(:title, "Vehicles") %>
+
+<% if vehicles.empty? %>
+  <div class="none-found">
+    No vehicles found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Make/Model/Color/Plate</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% vehicles.each do |vehicle| %>
+        <tr>
+          <td><%= vehicle.make_model_etc %></td>
+          <td><%= link_to(vehicle.household_name, vehicle.household) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

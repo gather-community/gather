@@ -43,10 +43,24 @@ module FeatureSpecHelpers
     within(".bootstrap-datetimepicker-widget") do
       find(".datepicker-days td", text: day).click
       find("[data-action=togglePicker]").click
-      sleep 0.25 # If we don't sleep here, the click doesn't seem to register properly.
+      sleep(0.25) # If we don't sleep here, the click doesn't seem to register properly.
       find("[data-action=showHours]").click
-      sleep 0.25
+      sleep(0.25)
       find(".timepicker-hours td", text: hour.to_s.rjust(2, "0")).click
+    end
+    find(next_click).click # Get out of the picker.
+  end
+
+  # Min must be a multiple of 5.
+  def pick_time(selector, hour:, min:, next_click: "body")
+    find("#{selector} .input-group-btn button").click
+    within(".bootstrap-datetimepicker-widget") do
+      find("[data-action=showHours]").click
+      sleep(0.25)
+      find(".timepicker-hours td", text: hour.to_s.rjust(2, "0")).click
+      find("[data-action=showMinutes]").click
+      sleep(0.25)
+      find(".timepicker-minutes td", text: min.to_s.rjust(2, "0")).click
     end
     find(next_click).click # Get out of the picker.
   end

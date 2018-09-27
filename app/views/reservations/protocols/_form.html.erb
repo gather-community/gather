@@ -6,7 +6,8 @@
   <%= f.input(:resource_ids, collection: @resource_options, label_method: :name,
                              input_html: {
                                multiple: "multiple",
-                               "data-placeholder": t("simple_form.placeholders.reservations_protocol.resource_ids")
+                               "data-placeholder":
+                                t("simple_form.placeholders.reservations_protocol.resource_ids")
                              }) %>
   <% if @kind_options.any? %>
     <%= f.input(:kinds, collection: @kind_options,

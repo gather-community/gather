@@ -7,31 +7,37 @@
   <% end %>
 <% end %>
 
-<table class="index">
-  <tr>
-    <th>Name</th>
-    <th>Resources</th>
-    <% if @kinds_present %>
-      <th>Types</th>
-    <% end %>
-    <th>Rules</th>
-  </tr>
-  <% protocols.each do |protocol| %>
+<% if protocols.empty? %>
+  <div class="none-found">
+    No protocols found.
+  </div>
+<% else %>
+  <table class="index">
     <tr>
-      <td class="name">
-        <%= link_to(protocol.name, edit_reservations_protocol_path(protocol)) %>
-      </td>
-      <td>
-        <%= protocol.resource_names %>
-      </td>
+      <th>Name</th>
+      <th>Resources</th>
       <% if @kinds_present %>
-        <td>
-          <%= protocol.kinds&.join(", ") %>
-        </td>
+        <th>Types</th>
       <% end %>
-      <td>
-        <%= protocol.defined_rules %>
-      </td>
+      <th>Rules</th>
     </tr>
-  <% end %>
-</table>
+    <% protocols.each do |protocol| %>
+      <tr>
+        <td class="name">
+          <%= link_to(protocol.name, edit_reservations_protocol_path(protocol)) %>
+        </td>
+        <td>
+          <%= protocol.resource_names %>
+        </td>
+        <% if @kinds_present %>
+          <td>
+            <%= protocol.kinds&.join(", ") %>
+          </td>
+        <% end %>
+        <td>
+          <%= protocol.defined_rules %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

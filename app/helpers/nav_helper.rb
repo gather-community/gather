@@ -25,7 +25,8 @@ module NavHelper
       }, {
         name: :reservations,
         path: lens_path_if_present("reservations"),
-        permitted: policy(Reservations::Reservation).index?,
+        permitted: policy(Reservations::Reservation.new(resource:
+          Reservations::Resource.new(community: current_community))).index?,
         icon: "book"
       }, {
         name: :wiki,
@@ -106,7 +107,8 @@ module NavHelper
             name: :reservations,
             parent: :reservations,
             path: reservations_path,
-            permitted: policy(Reservations::Reservation).index?,
+            permitted: policy(Reservations::Reservation.new(resource:
+              Reservations::Resource.new(community: current_community))).index?,
             icon: "calendar"
           }, {
             name: :resources,

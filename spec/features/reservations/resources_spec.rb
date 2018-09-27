@@ -1,18 +1,17 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "resources", js: true do
   include_context "photo uploads"
 
   let(:actor) { create(:admin) }
-  let(:edit_path) { edit_reservations_resource_path(resources.first) }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
   before do
     login_as(actor, scope: :user)
   end
-
-  it_behaves_like "photo upload widget"
 
   context "with no resources" do
     scenario "index" do
@@ -24,6 +23,9 @@ feature "resources", js: true do
 
   context "with resources" do
     let!(:resources) { create_list(:resource, 2) }
+    let(:edit_path) { edit_reservations_resource_path(resources.first) }
+
+    it_behaves_like "photo upload widget"
 
     scenario "index" do
       visit(reservations_resources_path)

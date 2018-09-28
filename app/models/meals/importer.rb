@@ -27,8 +27,7 @@ module Meals
 
       return if @error
 
-      CSV.foreach(file.path, headers: true) do |rows|
-        # are names unique or not
+      CSV.foreach(file.path, headers: true, skip_lines: /^(?:,\s*)+$/) do |rows|
         formula = Meals::Formula.find_by(name: rows["formula"])
 
         resource_names = rows["Location(s)"].split(";").map(&:strip)

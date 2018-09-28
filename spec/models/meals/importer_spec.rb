@@ -13,7 +13,7 @@ describe Meals::Importer, type: :model do
       Meal.new_with_defaults(current_community)
     end
 
-    it "creates users with varying amounts of info" do
+    it "creates meals with varying amounts of info" do
       mi = create_meal_batch("varying_info.csv")
       expect(mi).to be_succeeded
 
@@ -31,20 +31,12 @@ describe Meals::Importer, type: :model do
       expect(Meal.count).to eq 5
     end
 
-    # it "creates meals from csv" do
-    #   mi = create_meal_batch("user_batch_3.csv")
-    #   expect(mi).to be_succeeded
-    #
-    #   expect(User.count).to eq 3
-    #   expect(Assignment.count).to eq 3
-    # end
-    #
-    # it "ignores blank lines" do
-    #   mi = create_meal_batch("blank_lines.xlsx")
-    #   expect(mi).to be_succeeded
-    #   expect(2).to eq(mi.meals.size)
-    # end
-    #
+    it "ignores blank lines" do
+      mi = create_meal_batch("blank_lines.csv")
+      expect(mi).to be_succeeded
+      expect(mi.meals.size).to eq(2)
+    end
+
     # it "succeeds when headers have trailing invisible blanks" do
     #   mi = create_meal_batch("abnormal_headers.xlsx")
     #   expect(mi).to be_succeeded

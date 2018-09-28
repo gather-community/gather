@@ -37,11 +37,11 @@ describe Meals::Importer, type: :model do
       expect(mi.meals.size).to eq(2)
     end
 
-    # it "succeeds when headers have trailing invisible blanks" do
-    #   mi = create_meal_batch("abnormal_headers.xlsx")
-    #   expect(mi).to be_succeeded
-    # end
-    #
+    it "succeeds when headers have trailing invisible blanks" do
+      mi = create_meal_batch("abnormal_headers.csv")
+      expect(mi).to be_succeeded
+    end
+
     # it "works with one row" do
     #   mi = create_meal_batch("one_row.xlsx")
     #   expect(mi).to be_succeeded

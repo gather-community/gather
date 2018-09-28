@@ -1,2 +1,3 @@
-Date/Time,Location(s),Capacity,Formula,Head Cook,Extra Roles
-2018-01-31,Touchstone housing; Green house,30,Formula name,Ijeoma Arisah,
+served_at,Location(s),capacity,formula,Head Cook,Extra Roles
+2018-01-31,Kitchen; house,30,Formulay,Aunt May,
+2018-02-05,Parlor,40,Formulay,Aunt May,

@@ -42,11 +42,11 @@ describe Meals::Importer, type: :model do
       expect(mi).to be_succeeded
     end
 
-    # it "works with one row" do
-    #   mi = create_meal_batch("one_row.xlsx")
-    #   expect(mi).to be_succeeded
-    #   expect(User.count).to eq 1
-    # end
+    it "works with one row" do
+      mi = create_meal_batch("one_row.csv")
+      expect(mi).to be_succeeded
+      expect(Meal.count).to eq(1)
+    end
     #
     # it "gracefully handles missing header row with a number in it" do
     #   mi = create_meal_batch("missing_headers.xlsx")

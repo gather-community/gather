@@ -47,13 +47,14 @@ describe Meals::Importer, type: :model do
       expect(mi).to be_succeeded
       expect(Meal.count).to eq(1)
     end
-    #
-    # it "gracefully handles missing header row with a number in it" do
-    #   mi = create_meal_batch("missing_headers.xlsx")
-    #   expect(mi).not_to be_succeeded
-    #   expect(mi.errors.messages.values).to eq([["The uploaded spreadsheet has invalid headers."]])
-    # end
-    #
+
+    # TODO - GET THIS TEST TO PASS NEXT WEEK
+    it "gracefully handles file with all headers missing" do
+      mi = create_meal_batch("missing_headers.csv")
+      expect(mi).not_to be_succeeded
+      expect(mi.errors.messages.values).to eq([["The uploaded file has invalid headers."]])
+    end
+
     # context "when checking validation errors on spreadsheet" do
     #   it "handles validation errors gracefully" do
     #     # create batch that should raise too short phone number error

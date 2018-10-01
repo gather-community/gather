@@ -128,7 +128,7 @@ feature "signups", js: true do
     end
 
     describe "staggering and auto open" do
-      let(:open_time) { Time.current.midnight + (Time.current.hour + 1).hours }
+      let(:open_time) { Time.current.tomorrow.midnight + 12.hours }
       let!(:share) { create(:work_share, period: periods[0], user: actor) }
 
       before do
@@ -146,9 +146,9 @@ feature "signups", js: true do
 
       scenario do
         visit(page_path)
-        time = I18n.l(open_time, format: :time_only)
+        time = I18n.l(open_time, format: :datetime_no_yr)
         expect(page).to have_content("You have signed up for 0/32 hours. "\
-          "You can start choosing jobs at #{time}")
+          "You can start choosing jobs on #{time}")
         Timecop.freeze(open_time + 2.minutes) do
           visit(page_path)
           time = I18n.l(open_time + 5.minutes, format: :time_only)

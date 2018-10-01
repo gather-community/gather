@@ -5,7 +5,7 @@ shared_context "photo uploads" do
       visit(edit_path)
       drop_in_dropzone(fixture_file_path("cooper.jpg"))
       expect_image_upload(mode: :dz_preview)
-      click_button("Update")
+      click_button("Save")
       expect_success
 
       # Now upload different image without saving -- photo should stay cooper
@@ -28,7 +28,7 @@ shared_context "photo uploads" do
       visit(edit_path)
       expect_image_upload(mode: :existing, path: /cooper/)
       delete_from_dropzone
-      click_button("Update")
+      click_button("Save")
 
       expect_success
       visit(edit_path)

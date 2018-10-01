@@ -55,8 +55,8 @@ describe Meal do
           expect(meal).not_to be_valid
           expect(meal.signups[0]).to be_valid
           expect(meal.signups[1]).to be_valid
-          expect(meal.signups[2].errors[:household_id].join).to match(/Already in the list/)
-          expect(meal.signups[3].errors[:household_id].join).to match(/Already in the list/)
+          expect(meal.signups[2].errors[:household_id].join).to match(/has already been taken/)
+          expect(meal.signups[3].errors[:household_id].join).to match(/has already been taken/)
         end
       end
     end

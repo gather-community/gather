@@ -35,7 +35,7 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
-    permissions :edit?, :update?, :update_workers? do
+    permissions :edit?, :update?, :change_workers? do
       # We let anyone in host community do this so they can change assignments.
       it_behaves_like "permits admins from community"
       it_behaves_like "permits users in community only"
@@ -46,7 +46,7 @@ describe MealPolicy do
       end
     end
 
-    permissions :update_formula?, :update_signups?, :update_expenses? do
+    permissions :change_formula?, :change_signups?, :change_expenses? do
       it_behaves_like "permits admins or special role but not regular users", :biller
 
       it "forbids if finalized" do

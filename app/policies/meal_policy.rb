@@ -75,7 +75,7 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator)
   end
 
-  def update_formula?
+  def change_formula?
     !meal.finalized? && active_admin_or?(:meals_coordinator, :biller)
   end
 
@@ -87,7 +87,7 @@ class MealPolicy < ApplicationPolicy
     !meal.finalized? && admin_coord_or_head_cook?
   end
 
-  def update_workers?
+  def change_workers?
     active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
   end
 
@@ -96,11 +96,11 @@ class MealPolicy < ApplicationPolicy
   end
 
   # Whether someone can edit signups for _anyone_, not just themselves.
-  def update_signups?
+  def change_signups?
     not_finalized_and_admin_coord_head_cook_or_biller?
   end
 
-  def update_expenses?
+  def change_expenses?
     not_finalized_and_admin_coord_head_cook_or_biller?
   end
 

@@ -42,7 +42,7 @@ feature "periods", js: true do
 
   scenario "create, update" do
     visit(work_periods_path)
-    click_button("Save")
+    click_on("Create Period")
 
     # Fill in basic attribs
     select("Open", from: "Phase")

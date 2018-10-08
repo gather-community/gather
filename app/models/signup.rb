@@ -91,6 +91,31 @@ class Signup < ApplicationRecord
     total - total_was
   end
 
+  # Will eventually be an AR association.
+  def lines
+    @lines ||= SIGNUP_TYPES.map do |t|
+      # To mimic real association behavior, instantiate one Line with fake ID for each of the persisted
+      # diner counts, plus one Line with no ID for any newly added ones.
+      next unless self[t].positive?
+      id = send("#{t}_was").zero? ? nil : rand(100_000_000)
+      Meals::Line.new(id: id, item_id: t, quantity: self[t])
+    end.compact
+  end
+
+  def build_line
+    Meals::Line.new
+  end
+
+  # This will eventually be a nested attributes method.
+  def lines_attributes=(attrib_sets)
+    SIGNUP_TYPES.each { |t| send("#{t}=", 0) }
+    @lines = attrib_sets.values.map do |set|
+      set.symbolize_keys!
+      send("#{set[:item_id]}=", set[:quantity])
+      Meals::Line.new(**set)
+    end
+  end
+
   private
 
   def all_zero?

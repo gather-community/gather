@@ -217,7 +217,7 @@ describe MealPolicy do
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
     let(:signup_attribs) do
-      [signups_attributes: [:id, :household_id, diners_attributes: %i[id kind _destroy]]]
+      [signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]]]
     end
     let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 

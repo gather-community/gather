@@ -87,7 +87,7 @@ module Meals
 
     def finalize_params
       params.require(:meal).permit(
-        signups_attributes: [:id, :household_id, diners_attributes: %i[id kind _destroy]],
+        signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]],
         cost_attributes: %i[ingredient_cost pantry_cost payment_method]
       )
     end

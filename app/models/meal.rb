@@ -53,7 +53,7 @@ class Meal < ApplicationRecord
   accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
-    a["diners_attributes"].values.all? { |v| %w[1 true].include?(v["_destroy"]) }
+    a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
   }
   accepts_nested_attributes_for :cost, reject_if: :all_blank
 

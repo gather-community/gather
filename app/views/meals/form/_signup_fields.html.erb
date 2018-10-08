@@ -1,9 +1,8 @@
-<%# The use of household_id as the field here is arbitrary because the input method has both its label
+<%# The use of `signup` as the field here is arbitrary because the input method has both its label
     and contents overridden. The label is the household name (or a select2 for choosing it) and
     the contents is the order lines. We use the f.input method so that we have the same structure and
     styling as the other regular form fields in the rest of the meal/finalize form. %>
-<%= f.input(:household_id, label: f.object.decorate.household_as_label(f), required: false) do %>
-  <%= f.hidden_field(:household_id) %>
+<%= f.input(:signup, label: f.object.decorate.household_as_label(f), required: false) do %>
   <%= f.error(:base) %>
   <%= nested_field_set(f, :lines, inner_partial: "meals/form/line_fields",
                                   label: false, inner_labels: false, no_remove_link: true) %>

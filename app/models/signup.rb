@@ -18,6 +18,8 @@ class Signup < ApplicationRecord
 
   acts_as_tenant :cluster
 
+  attr_accessor :signup # Dummy used only in form construction.
+
   belongs_to :meal, inverse_of: :signups
   belongs_to :household
 
@@ -109,11 +111,14 @@ class Signup < ApplicationRecord
   # This will eventually be a nested attributes method.
   def lines_attributes=(attrib_sets)
     SIGNUP_TYPES.each { |t| send("#{t}=", 0) }
-    @lines = attrib_sets.values.map do |set|
-      set.symbolize_keys!
-      send("#{set[:item_id]}=", set[:quantity])
-      Meals::Line.new(**set)
+    attrib_sets.values.map do |set|
+      next if set[:quantity].to_i.zero?
+      send("#{set[:item_id]}=", send(set[:item_id]) + set[:quantity].to_i)
     end
+    @lines = SIGNUP_TYPES.map do |t|
+      next if send(t).zero?
+      Meals::Line.new(item_id: t, quantity: send(t))
+    end.compact
   end
 
   private

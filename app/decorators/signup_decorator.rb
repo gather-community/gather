@@ -19,16 +19,17 @@ class SignupDecorator < ApplicationDecorator
   # Used as the label in the signup form.
   def household_as_label(form)
     if persisted?
-      household.decorate.name_with_prefix
+      form.hidden_field(:household_id) << household.decorate.name_with_prefix
+
     else
-      form.error(:household_id)
-      form.select(:household_id, household&.decorate&.selected_option || "", {},
+      form.select(:household_id, household&.decorate&.selected_option_tag || "", {},
         class: "form-control", data: {"select2-src" => "households",
                                       "select2-label-attr" => "name_with_prefix",
                                       "select2-prompt" => t("select2.prompts.household"),
                                       "select2-placeholder" => t("select2.placeholders.household"),
                                       "select2-context" => "meal_form",
-                                      "select2-allow-clear" => true})
+                                      "select2-allow-clear" => true}) <<
+        (form.error(:household_id) || "")
     end
   end
 

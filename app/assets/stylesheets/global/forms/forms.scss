@@ -98,6 +98,10 @@ form {
     }
   }
 
+  label .error {
+    font-weight: normal;
+  }
+
   select.prompt-selected {
     color: $placeholder-color;
   }

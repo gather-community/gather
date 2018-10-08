@@ -258,7 +258,7 @@ en:
       shifts: "Add Shift"
       assignments: "Add Worker"
       reminders: "Add Reminder"
-      diners: "Add Diner"
+      lines: "Add Item"
       signups: "Add Household"
 
   select2:

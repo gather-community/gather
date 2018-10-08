@@ -1,32 +1,10 @@
-<tr class="signup-fields">
-  <% signup = f.object %>
-  <% household = signup.household&.decorate %>
-  <td>
-    <% if signup.persisted? %>
-      <%= household.name_with_prefix %>
-    <% else %>
-      <%= f.error :household_id %>
-      <%= f.select(:household_id, household&.selected_option || "", {}, class: "form-control", data: {
-          "select2-src" => "households",
-          "select2-label-attr" => "name_with_prefix",
-          "select2-prompt" => t("select2.prompts.household"),
-          "select2-placeholder" => t("select2.placeholders.household"),
-          "select2-context" => "finalize",
-          "select2-allow-clear" => true
-      }) %>
-    <% end %>
-  </td>
-  <td>
-    <%= f.error :base %>
-    <% if signup.persisted? %>
-      <div data-toggle-on="<%= signup.id %>">
-        <%= t("meals.form.summaries.signups.diners", count: signup.total) %> &nbsp;
-        <%= link_to(t("common.edit"), "#", "data-toggle": signup.id) %>
-      </div>
-    <% end %>
-    <div <% if signup.persisted? %>data-toggle-off="<%= signup.id %>"<% end %>>
-      <%= nested_field_set(f, :diners, inner_partial: "meals/form/diner_fields",
-                                       label: false, inner_labels: false) %>
-    </div>
-  </td>
-</tr>
+<%# The use of household_id as the field here is arbitrary because the input method has both its label
+    and contents overridden. The label is the household name (or a select2 for choosing it) and
+    the contents is the order lines. We use the f.input method so that we have the same structure and
+    styling as the other regular form fields in the rest of the meal/finalize form. %>
+<%= f.input(:household_id, label: f.object.decorate.household_as_label(f), required: false) do %>
+  <%= f.hidden_field(:household_id) %>
+  <%= f.error(:base) %>
+  <%= nested_field_set(f, :lines, inner_partial: "meals/form/line_fields",
+                                  label: false, inner_labels: false, no_remove_link: true) %>
+<% end %>

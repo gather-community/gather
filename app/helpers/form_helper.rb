@@ -67,17 +67,16 @@ module FormHelper
         f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
           render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
         end <<
-        if options[:multiple]
-          content_tag(:span) do
-            link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
-              partial: wrapper_partial,
-              render_options: {
-                wrapper: :nested_fields, # Simple form wrapper
-                locals: {options: options, classes: wrapper_classes}
-              }
-            )
+          if options[:multiple]
+            content_tag(:span, class: "add-link-wrapper") do
+              link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
+                partial: wrapper_partial,
+                render_options: {
+                  wrapper: :nested_fields, # Simple form wrapper
+                  locals: {options: options, classes: wrapper_classes}
+                })
+            end
           end
-        end
       end
     end
   end

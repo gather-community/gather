@@ -117,8 +117,8 @@ class HouseholdsController < ApplicationController
     @households = @households.active.matching(params[:search])
     @households =
       case params[:context]
-      when "finalize"
-        @households # No further scoping needed for finalize
+      when "meal_form"
+        @households # No further scoping needed for meal form/finalize
       when "user_form"
         # Instead of the usual scope.resolve.
         scope(@households).administerable.in_community(current_community)

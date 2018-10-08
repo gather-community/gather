@@ -95,3 +95,36 @@
     }
   }
 }
+
+form.gather-form.narrow-label-layout.finalize-form,
+form.gather-form.narrow-label-layout.meal-form {
+  .meal_signups_household_id .select2-container .select2-selection__clear {
+    margin-left: 5px;
+  }
+
+  .form-group.meal_signups_lines > .control-wrapper {
+    width: 100%;
+
+    .control-wrapper {
+      display: inline-block;
+    }
+
+    select[name$="[quantity]"] {
+      width: 50px;
+    }
+
+    select[name$="[item_id]"] {
+      width: 200px;
+    }
+
+    .nested-fields.subfields.no-inner-labels {
+      margin-bottom: 4px;
+    }
+
+    .add-link-wrapper {
+      display: block;
+      margin-bottom: 7px;
+      margin-top: -2px;
+    }
+  }
+}

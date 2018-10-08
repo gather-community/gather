@@ -13,3 +13,9 @@
           wrap_object: ->(signup) { signup.decorate.add_first_line }) %>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Meals.SignupView({el: '.signup-fields'});
+  });
+<% end %>

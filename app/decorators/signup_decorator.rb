@@ -31,4 +31,11 @@ class SignupDecorator < ApplicationDecorator
                                       "select2-allow-clear" => true})
     end
   end
+
+  # Adds a first line to the signup and returns the signup.
+  # Used with cocoon's wrap_object
+  def add_first_line
+    self.adult_meat = 1
+    self
+  end
 end

@@ -98,6 +98,10 @@
 
 form.gather-form.narrow-label-layout.finalize-form,
 form.gather-form.narrow-label-layout.meal-form {
+  .signup-fields .form-group {
+    margin-bottom: 0;
+  }
+
   .meal_signups_household_id .select2-container .select2-selection__clear {
     margin-left: 5px;
   }

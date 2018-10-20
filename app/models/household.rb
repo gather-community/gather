@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Household < ApplicationRecord
   include Deactivatable
 
@@ -24,12 +26,12 @@ class Household < ApplicationRecord
 
   delegate :name, :abbrv, :cluster, to: :community, prefix: true
 
-  validates :name, presence: true, length: { maximum: 32 },
-    uniqueness: { scope: :community_id, message:
-      "There is already a household with this name at this community" }
+  validates :name, presence: true, length: {maximum: 32},
+                   uniqueness: {scope: :community_id, message:
+      "There is already a household with this name at this community"}
   validates :community_id, presence: true
-  validates :unit_num, length: { maximum: 8 }, numericality: { only_integer: true, message: "Nust begin with a number" }, allow_nil: true
-  validates :unit_suffix, length: { maximum: 10 }
+  validates :unit_num, length: {maximum: 8}, numericality: {only_integer: true, message: "Nust begin with a number"}, allow_nil: true
+  validates :unit_suffix, length: {maximum: 10}
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
@@ -70,7 +72,7 @@ class Household < ApplicationRecord
   end
 
   def garage_nums=(str)
-    write_attribute(:garage_nums, str.strip.blank? ? nil : str.split(/\s*,\s*/).join(", "))
+    self[:garage_nums] = str.strip.blank? ? nil : str.split(/\s*,\s*/).join(", ")
   end
 
   def after_deactivate
@@ -102,7 +104,7 @@ class Household < ApplicationRecord
   end
 
   def any_transactions?
-    accounts.any?{ |a| a.transactions.any? }
+    accounts.any? { |a| a.transactions.any? }
   end
 
   def any_accounts?
@@ -110,10 +112,10 @@ class Household < ApplicationRecord
   end
 
   def any_statements?
-    accounts.any?{ |a| a.statements.any? }
+    accounts.any? { |a| a.statements.any? }
   end
 
-#  attr_accessor(:unit_suffix)
+  #  attr_accessor(:unit_suffix)
   # Return the unit number and the suffix (if any), separated with a dash.
   def unit_num_and_suffix
     if unit_suffix.blank?
@@ -127,17 +129,13 @@ class Household < ApplicationRecord
     # separate unit number and suffix.  Format is either separated with a
     # non-alphanumeric character, or an alpha suffix with no separator.
     unit_data = value.match(/\A(\d+)\W?(\w*)/)
-# if we don't match the regex, store it and let the validator do the complaining
+    # if we don't match the regex, store it and let the validator do the complaining
     if unit_data.blank?
       self.unit_num = value
     else
       self.unit_num = unit_data[1]
-# if we have no suffic, store nil
-      if unit_data[2].blank?
-        self.unit_suffix = nil
-      else
-        self.unit_suffix = unit_data[2]
-      end
+      # if we have no suffic, store nil
+      self.unit_suffix = unit_data[2].presence
     end
   end
 end

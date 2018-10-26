@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "meal crud", js: true do
@@ -82,6 +84,7 @@ feature "meal crud", js: true do
       find("tr", text: meals[4].head_cook.name).find("a", text: "[No Title]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
+      click_link("Edit Workers")
       select2(actor.name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
       click_button("Save")
       expect_success
@@ -105,6 +108,7 @@ feature "meal crud", js: true do
   end
 
   def fill_in_menu
+    click_link("Edit Menu")
     fill_in("Title", with: "Southern Beans and Rice")
     fill_in("Entrees", with: "Beans, rice, sausage")
     fill_in("Side", with: "Collards")

@@ -13,6 +13,7 @@ module Meals
       signups = meal.signups.to_a
       duplicates = signups - signups.uniq(&:household_id)
       return unless duplicates.any?
+
       meal.errors.add(:signups, :invalid)
       duplicates.each { |d| d.errors.add(:household_id, :taken) }
     end

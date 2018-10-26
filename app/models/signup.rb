@@ -119,6 +119,11 @@ class Signup < ApplicationRecord
       next if send(t).zero?
       Meals::Line.new(item_id: t, quantity: send(t))
     end.compact
+    attrib_sets.values.each do |set|
+      next unless set[:quantity].to_i.zero?
+      # Need to create these explicitly or they won't be preserved if the form is re-rendered.
+      @lines << Meals::Line.new(item_id: set[:item_id], quantity: 0)
+    end
   end
 
   private
@@ -134,7 +139,7 @@ class Signup < ApplicationRecord
   end
 
   def dont_exceed_spots
-    return unless !meal.finalized? && total_change > meal.spots_left
+    return unless !meal.finalized? && meal.capacity.present? && total_change > meal.spots_left
     errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
   end
 

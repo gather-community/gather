@@ -64,8 +64,23 @@ feature "meal crud", js: true do
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu
 
+      # Update to add expenses
+      click_link("Southern Beans")
+      click_link("Edit")
+      click_link("Edit Expenses")
+      fill_in("Ingredient Cost", with: "125.66")
+      fill_in("Pantry Cost", with: "12.30")
+      choose("Balance Credit")
+      click_button("Save")
+      expect_success
+      click_link("Southern Beans")
+      click_link("Edit")
+      click_link("Edit Expenses")
+      expect(page).to have_field("Ingredient Cost", with: "125.66")
+      click_button("Save")
+
       # Show
-      find("a", text: "Southern Beans").click
+      click_link("Southern Beans")
       expect(page).to have_content("Southern Beans and Rice")
       expect(page).to have_content("Chocolate")
 
@@ -130,7 +145,7 @@ feature "meal crud", js: true do
     # Close/reopen
     click_link("Close")
     expect_success
-    find("a", text: "Southern Beans").click
+    click_link("Southern Beans")
     click_link("Reopen")
     expect_success
   end

@@ -77,6 +77,7 @@ RSpec.describe CustomFields::Instance, type: :model do
       it "should work for valid key" do
         expect(instance.fruit).to eq "peach"
         expect(instance.info.comment).to eq "hi!"
+        expect(instance.info.complete?).to be(true)
       end
 
       it "should raise NoMethodError for invalid key" do

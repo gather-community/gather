@@ -68,7 +68,8 @@ class MealPolicy < ApplicationPolicy
   end
 
   def finalize?
-    active_admin_or?(:biller) && meal.closed? && meal.in_past?
+    meal.closed? && meal.in_past? &&
+      (active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?)
   end
 
   def change_date_loc_invites?

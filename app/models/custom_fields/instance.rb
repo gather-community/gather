@@ -24,6 +24,7 @@ module CustomFields
       # Define these methods to pass through to the RootEntry. See docs in GroupEntry for why we do this.
       spec.root.fields.each do |f|
         define_singleton_method(f.key) { root[f.key] }
+        define_singleton_method("#{f.key}?") { root[f.key] } if f.type == :boolean
         define_singleton_method("#{f.key}=") { |value| root[f.key] = value }
       end
 

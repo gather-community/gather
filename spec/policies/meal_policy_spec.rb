@@ -56,12 +56,10 @@ describe MealPolicy do
     end
 
     permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
-      let(:persisted) { true }
-
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
-        head_cook(user)
+        make_head_cook(user)
         expect(subject).to permit(user, meal)
       end
 
@@ -124,6 +122,23 @@ describe MealPolicy do
         %w[cancelled finalized open].each do |bad_status|
           stub_status(bad_status)
           expect(subject).not_to permit(admin, meal)
+        end
+      end
+
+      describe "cooks_can_finalize setting" do
+        before do
+          community.settings.meals.cooks_can_finalize = value
+          make_head_cook(user)
+        end
+
+        context "true" do
+          let(:value) { true }
+          it { is_expected.to permit(user, meal) }
+        end
+
+        context "false" do
+          let(:value) { false }
+          it { is_expected.not_to permit(user, meal) }
         end
       end
     end
@@ -199,7 +214,6 @@ describe MealPolicy do
     include_context "policy permissions"
     subject { MealPolicy.new(actor, meal).permitted_attributes }
     let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
-    let(:persisted) { true }
     let(:date_loc_invite_attribs) do
       [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
     end
@@ -246,7 +260,7 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
-        head_cook(actor)
+        make_head_cook(actor)
         expect(subject).to match_array(menu_attribs + worker_attribs +
           signup_attribs + expense_attribs + [:capacity])
       end
@@ -281,8 +295,13 @@ describe MealPolicy do
     end
   end
 
-  def head_cook(user)
+  def stub_status(value)
+    allow(meal).to receive(:status).and_return(value)
+  end
+
+  def make_head_cook(user)
     save_policy_objects!(community, user)
+    meal.community = community
     meal.save!
     meal.head_cook = user
   end

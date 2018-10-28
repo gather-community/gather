@@ -35,7 +35,7 @@
             <%= icon_tag("certificate") if meal.finalized? %>
           </td>
           <td>
-            <% if signup = meal.signup_for(current_user.household) %>
+            <% if signup = meal.current_signup %>
               <% if policy(meal.sample_signup).update? %>
                 <%= link_to(signup_info(signup), meal_url(meal)) %>
               <% else %>
@@ -71,7 +71,7 @@
         <div class="signup-count">
           <%= signup_count(meal) %> signed up
         </div>
-        <% if signup = meal.signup_for(current_user.household) %>
+        <% if signup = meal.current_signup %>
           <div class="signed-up">
             <%= signup_info(signup) %> signed up from your household
             <%= link_to("(Edit)", meal_url(meal)) if policy(meal.sample_signup).update? %>

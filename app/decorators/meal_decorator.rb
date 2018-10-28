@@ -7,10 +7,14 @@ class MealDecorator < ApplicationDecorator
     Meals::FormSection.new(self, section, **options, &block).html
   end
 
+  def current_signup
+    @current_signup ||= signups.detect { |s| s.household_id == h.current_user.household_id }
+  end
+
   def css_classes
     if cancelled?
       "cancelled"
-    elsif signup_for(h.current_user.household).present?
+    elsif current_signup.present?
       "signed-up"
     else
       ""

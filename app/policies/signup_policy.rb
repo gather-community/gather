@@ -20,6 +20,7 @@ class SignupPolicy < ApplicationPolicy
   private
 
   def invited?
-    signup.communities.include?(user.community)
+    # Compare IDs to prevent N+1 in meals index
+    meal.invitations.any? { |invitation| invitation.community_id == user.community_id }
   end
 end

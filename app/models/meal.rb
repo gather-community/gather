@@ -177,10 +177,6 @@ class Meal < ApplicationRecord
     end
   end
 
-  def signup_for(household)
-    signups.where(household_id: household.id).first
-  end
-
   def signup_count
     @signup_count ||= signups.sum(&:total)
   end

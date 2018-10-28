@@ -182,7 +182,7 @@ class Meal < ApplicationRecord
   end
 
   def signup_count
-    @signup_count ||= Signup.total_for_meal(self)
+    @signup_count ||= signups.sum(&:total)
   end
 
   def signup_totals
@@ -190,7 +190,7 @@ class Meal < ApplicationRecord
   end
 
   def spots_left
-    @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
+    @spots_left ||= [capacity - signup_count, 0].max
   end
 
   def portions(food_type)
@@ -250,9 +250,8 @@ class Meal < ApplicationRecord
   end
 
   def enough_capacity_for_current_signups
-    if persisted? && !finalized? && capacity && capacity < (ttl = Signup.total_for_meal(self))
-      errors.add(:capacity, "must be at least #{ttl} due to current signups")
-    end
+    return unless persisted? && !finalized? && capacity && capacity < signup_count
+    errors.add(:capacity, "must be at least #{ttl} due to current signups")
   end
 
   def title_and_entree_if_other_menu_items

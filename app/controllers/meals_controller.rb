@@ -1,7 +1,7 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
-  decorates_assigned :meal, :meals
+  decorates_assigned :meal, :meals, :meal_summary
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
@@ -115,6 +115,7 @@ class MealsController < ApplicationController
 
   def summary
     @meal = Meal.find(params[:id]).decorate
+    @meal_summary = Meals::Summary.new(@meal)
     authorize @meal
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)

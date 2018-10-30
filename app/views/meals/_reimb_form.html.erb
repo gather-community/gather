@@ -1,0 +1,39 @@
+<div id="reimb-form">
+  <table>
+    <tr>
+      <td>Meal:</td>
+      <td>
+        <%= @meal.title_or_no_title %><br/>
+        <% if @meal.head_cook %>
+          By <%= @meal.head_cook_name %><br/>
+        <% end %>
+        <%= @meal.served_at_datetime %> at <%= @meal.location_name %>
+      </td>
+    </tr>
+    <tr>
+      <td>Date of grocery purchase:</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Amount spent for ingredients:</td>
+      <td>$</td>
+    </tr>
+    <% if @meal.formula.pantry_reimbursement? %>
+      <tr>
+        <td>Amount spent on pantry/staple items:</td>
+        <td>$</td>
+      </tr>
+      <tr>
+        <td>Total amount to be reimbursed:</td>
+        <td>$</td>
+      </tr>
+    <% end %>
+    <tr>
+      <td>Reimbursement method:</td>
+      <td>
+        <%= icon_tag("square-o") %> Account credit<br/>
+        <%= icon_tag("square-o") %> Check payable to <span class="payable-to"></span>
+      </td>
+    </tr>
+  </table>
+</div>

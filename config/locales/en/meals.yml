@@ -3,6 +3,9 @@ en:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
     cancelled_notice: "This meal has been cancelled."
     menu_posted_at: "Menu posted on %{time}."
+    spots_left:
+      one: "1 spot left"
+      other: "%{count} spots left"
     form:
       sections:
         label:

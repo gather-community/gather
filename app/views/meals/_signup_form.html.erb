@@ -1,9 +1,3 @@
-<% if @signup.new_record? && policy(@signup).create? || policy(@signup).update? %>
-  <%= link_to(icon_tag('close'), "#", title: "Clear Form",
-    onclick: "$('.signup select').val(0).trigger('change');
-      $('.signup textarea').val(''); return false") %>
-<% end %>
-
 <h2>
   Signups for <%= @household.name %>
   <%= @meal.closed? ? icon_tag("lock") : "" %>
@@ -18,48 +12,17 @@
 <% elsif @signup.new_record? && @meal.closed? %>
   You have not signed up for this meal and it is now closed.
 <% else %>
-  <%= gather_form_for(@signup, width: :full, layout: :equal_width) do |f| %>
+  <%= gather_form_for(@signup, width: :full, layout: :vertical) do |f| %>
     <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
     <%= f.input :meal_id, as: :hidden %>
     <%= base_error(f, full_width: true) %>
 
-    <%= f.input :spots_left do %>
+    <p>
       <%= icon_tag("exclamation-circle") if @meal.full? %>
-      <strong><%= @meal.spots_left %></strong>
-    <% end %>
+      <%= t("meals.spots_left", count: @meal.spots_left) %>
+    </p>
 
-    <div id="col-labels">
-      <span>Meat</span>
-      <span>Veg</span>
-    </div>
-
-    <% Signup::DINER_TYPES.each do |dt| %>
-      <% next unless @meal.formula.allows_diner_type?(dt) %>
-
-      <%= f.input dt, label: signup_label(dt) do %>
-        <% Signup::FOOD_TYPES.each do |ft| %>
-          <% attrib = "#{dt}_#{ft}" %>
-          <% if @meal.formula.allows_signup_type?(dt, ft) %>
-            <% if policy(@signup).update? %>
-              <%# We blur on change so that people don't accidentally change their selection with
-                  the scroll wheel %>
-              <%= f.select(attrib,
-                (0..Signup::MAX_PEOPLE_PER_TYPE).to_a.map{ |i| [i == 0 ? "0" : "#{i} #{ft}", i] },
-                {include_blank: false}, class: "select form-control", onchange: "this.blur()") %>
-            <% else %>
-              <% if (n = @signup[attrib]) > 0 %>
-                <div class="ro-signup nonzero"><%= n %> <%= ft %></div>
-              <% else %>
-                <div class="ro-signup"></div>
-              <% end %>
-            <% end %>
-          <% else %>
-            <div class="blank"></div>
-          <% end %>
-        <% end %>
-      <% end %>
-
-    <% end %>
+    <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
 
     <% if policy(@signup).update? %>
       <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>

@@ -2,7 +2,7 @@ Gather.Views.Meals.SignupView = Backbone.View.extend
   initialize: (options) ->
 
   events:
-    'cocoon:after-insert .meal_signups_signup': 'selectDistinctItemId'
+    'cocoon:after-insert': 'selectDistinctItemId'
 
   selectDistinctItemId: (e) ->
     newLine = @$(e.target).prev('.nested-fields')

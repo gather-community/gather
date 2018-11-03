@@ -22,7 +22,9 @@
       <%= t("meals.spots_left", count: @meal.spots_left) %>
     </p>
 
-    <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
+    <div class="signup-fields">
+      <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
+    </div>
 
     <% if policy(@signup).update? %>
       <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>
@@ -45,6 +47,7 @@
   <%= javascript_tag do %>
     $(function() {
       new Gather.Views.DirtyChecker({el: '.signup-form'});
+      new Gather.Views.Meals.SignupView({el: '.signup-fields'});
     });
   <% end %>
 <% end %>

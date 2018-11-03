@@ -14,7 +14,7 @@ class SignupPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    Signup::SIGNUP_TYPES + %i[meal_id comments]
+    [:id, :household_id, :meal_id, :comments, lines_attributes: %i[id quantity item_id]]
   end
 
   private

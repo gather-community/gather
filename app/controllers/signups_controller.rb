@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Signups for meals.
 class SignupsController < ApplicationController
   include MealShowable
 
@@ -6,7 +9,7 @@ class SignupsController < ApplicationController
   def create
     @signup = Signup.new(household_id: current_user.household_id)
     @signup.assign_attributes(permitted_attributes(@signup))
-    authorize @signup
+    authorize(@signup)
     if @signup.save_or_destroy
       redirect_after_save
     else
@@ -16,7 +19,7 @@ class SignupsController < ApplicationController
 
   def update
     @signup = Signup.find(params[:id])
-    authorize @signup
+    authorize(@signup)
     @signup.assign_attributes(permitted_attributes(@signup))
     if @signup.save_or_destroy
       redirect_after_save
@@ -41,7 +44,7 @@ class SignupsController < ApplicationController
     @meal = @signup.meal.decorate
     @signups = @meal.signups.includes(household: :community).sorted
     @household = current_user.household.decorate
-    authorize @meal, :show?
+    authorize(@meal, :show?)
     load_prev_next_meal # From MealShowable
     render("meals/show")
   end

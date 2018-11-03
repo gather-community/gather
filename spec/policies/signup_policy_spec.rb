@@ -96,7 +96,8 @@ describe SignupPolicy do
     subject { SignupPolicy.new(user, Signup.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(*(Signup::SIGNUP_TYPES + %i[meal_id comments]))
+      expect(subject).to match_array(:id, :household_id, :comments, :meal_id,
+        lines_attributes: %i[id quantity item_id])
     end
   end
 end

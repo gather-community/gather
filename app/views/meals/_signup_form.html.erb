@@ -14,7 +14,7 @@
 <% else %>
   <%= gather_form_for(@signup, width: :full, layout: :vertical) do |f| %>
     <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
-    <%= f.input :meal_id, as: :hidden %>
+    <%= f.input(:meal_id, as: :hidden) %>
     <%= base_error(f, full_width: true) %>
 
     <p>
@@ -22,25 +22,33 @@
       <%= t("meals.spots_left", count: @meal.spots_left) %>
     </p>
 
-    <div class="signup-fields">
-      <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
-    </div>
+    <div class="signup-fields-with-comments"
+      <%= @signup_link_clicked ? "" : 'data-toggle-off=signup-form' %>>
+      <div class="signup-fields">
+        <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
+      </div>
 
-    <% if policy(@signup).update? %>
-      <%= f.input :comments, maxlength: Signup::MAX_COMMENT_LENGTH %>
-    <% else %>
-      <%= f.input :comments do %>
-        <%= simple_format(@signup.comments) %>
-      <% end %>
-    <% end %>
-
-    <% if policy(@signup).update? %>
-      <%= form_actions do %>
-        <% if @next_meal %>
-          <%= f.button :secondary, t("helpers.submit.signup.save_and_next"), name: "save_and_next" %>
+      <% if policy(@signup).update? %>
+        <%= f.input(:comments, maxlength: Signup::MAX_COMMENT_LENGTH) %>
+      <% else %>
+        <%= f.input(:comments) do %>
+          <%= simple_format(@signup.comments) %>
         <% end %>
-        <%= f.button :primary %>
       <% end %>
+
+      <% if policy(@signup).update? %>
+        <%= form_actions do %>
+          <% if @next_meal %>
+            <%= f.button(:secondary, t("helpers.submit.signup.save_and_next"), name: "save_and_next") %>
+          <% end %>
+          <%= f.button(:primary) %>
+        <% end %>
+      <% end %>
+    </div>
+    <% unless @signup_link_clicked %>
+      <button class="btn btn-primary" data-toggle="signup-form" data-toggle-preserve-link="false">
+        Sign Up
+      </button>
     <% end %>
   <% end %>
 

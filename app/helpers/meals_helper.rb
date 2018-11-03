@@ -3,8 +3,8 @@ module MealsHelper
     link_to(meal.title_or_no_title, meal_url(meal))
   end
 
-  def meal_url(meal)
-    url_in_community(meal.community, meal_path(meal))
+  def meal_url(meal, *args)
+    url_in_community(meal.community, meal_path(meal, *args))
   end
 
   def meal_date_time(meal, with_break: false)
@@ -19,7 +19,8 @@ module MealsHelper
   end
 
   def signup_link(meal)
-    link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up", meal_url(meal))
+    link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up",
+      meal_url(meal, signup: 1))
   end
 
   def signup_count(meal)

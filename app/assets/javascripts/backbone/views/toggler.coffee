@@ -6,10 +6,12 @@ Gather.Views.Toggler = Backbone.View.extend
     'click [data-toggle]': 'toggle'
 
   toggle: (event) ->
-    id = @$(event.currentTarget).data('toggle')
+    source = @$(event.currentTarget)
+    id = source.data('toggle')
     ons = @$("[data-toggle-on=\"#{id}\"]")
     offs = @$("[data-toggle-off=\"#{id}\"]")
     state = if ons.length > 0 then ons.is(':visible') else !offs.is(':visible')
     ons.toggle(!state)
     offs.toggle(state)
+    source.hide() if source.data("toggle-preserve-link") == false
     event.preventDefault()

@@ -69,7 +69,7 @@ module FormHelper
         end <<
           if options[:multiple]
             content_tag(:span, class: "add-link-wrapper") do
-              link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
+              link_to_add_association_with_icon(t("cocoon.add_links.#{assoc}"), f, assoc,
                 partial: wrapper_partial,
                 render_options: {
                   wrapper: :nested_fields, # Simple form wrapper
@@ -79,5 +79,9 @@ module FormHelper
           end
       end
     end
+  end
+
+  def link_to_add_association_with_icon(label, *args)
+    link_to_add_association(icon_tag("plus") << " " << label, *args)
   end
 end

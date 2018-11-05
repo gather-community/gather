@@ -1,6 +1,6 @@
 module MealsHelper
-  def meal_link(meal)
-    link_to(meal.title_or_no_title, meal_url(meal))
+  def meal_link(meal, *args)
+    link_to(meal.title_or_no_title, meal_url(meal, *args))
   end
 
   def meal_url(meal, *args)
@@ -20,7 +20,7 @@ module MealsHelper
 
   def signup_link(meal)
     link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up",
-      meal_url(meal, signup: 1))
+      meal_url(meal, signup: 1, anchor: "signup"))
   end
 
   def signup_count(meal)

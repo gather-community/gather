@@ -7,10 +7,14 @@
     account_link: link_to("account",
       accounts_household_path(current_user.household, community: @meal.community_id)),
     limit: number_to_currency(@account.credit_limit)) %>
+<% elsif @meal.closed? || @meal.finalized? %>
+  <% if @signup.new_record? %>
+    You have not signed up for this meal and it is now closed.
+  <% else %>
+    <%= render("signup_read_only") %>
+  <% end %>
 <% elsif @signup.new_record? && @meal.full? %>
   You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
-<% elsif @signup.new_record? && @meal.closed? %>
-  You have not signed up for this meal and it is now closed.
 <% else %>
   <%= gather_form_for(@signup, width: :full, layout: :vertical) do |f| %>
     <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>

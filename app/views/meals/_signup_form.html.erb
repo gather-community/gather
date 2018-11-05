@@ -23,7 +23,7 @@
     </p>
 
     <div class="signup-fields-with-comments"
-      <%= @signup_link_clicked ? "" : 'data-toggle-off=signup-form' %>>
+      <%= @expand_signup_form ? "" : 'data-toggle-off=signup-form' %>>
       <div class="signup-fields">
         <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
       </div>
@@ -45,7 +45,7 @@
         <% end %>
       <% end %>
     </div>
-    <% unless @signup_link_clicked %>
+    <% unless @expand_signup_form %>
       <button class="btn btn-primary" data-toggle="signup-form" data-toggle-preserve-link="false">
         Sign Up
       </button>

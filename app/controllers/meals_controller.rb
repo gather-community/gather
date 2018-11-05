@@ -36,7 +36,7 @@ class MealsController < ApplicationController
     @signup = Signup.for(current_user, @meal)
     @household = current_user.household.decorate
     @account = current_user.account_for(@meal.community).try(:decorate)
-    @signup_link_clicked = params[:signup].present?
+    @expand_signup_form = params[:signup].present? || @signup.persisted?
     load_signups
     load_prev_next_meal
   end

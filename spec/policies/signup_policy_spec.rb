@@ -6,7 +6,11 @@ describe SignupPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    before do
+      save_policy_objects!(community, user)
+    end
+
+    let(:meal) { create(:meal, community: community, communities: [community, communityC]) }
     let(:signup) { build(:signup, meal: meal) }
 
     shared_examples_for "must be invited, open, and in future" do
@@ -96,7 +100,7 @@ describe SignupPolicy do
     subject { SignupPolicy.new(user, Signup.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to match_array(:id, :household_id, :comments, :meal_id,
+      expect(subject).to contain_exactly(:id, :household_id, :comments, :meal_id,
         lines_attributes: %i[id quantity item_id])
     end
   end

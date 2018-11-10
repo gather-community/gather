@@ -4,8 +4,12 @@ describe Work::Job do
   describe "validation" do
     describe "no duplicate start/end times" do
       it "is valid when times different" do
+        # TODO: To test if we are correctly ignoring _destroy items, we would need to test
+        # these on a persisted job object. Setting _destroy on a non-persisted shift immediately discards it
+        # on assignment to the job.
         job = build(:work_job, shifts_attributes: [
           {starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 14:30", slots: 1},
+          {starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 15:30", slots: 1},
           {starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 15:30", slots: 1}
         ])
         expect(job).to be_valid
@@ -28,7 +32,8 @@ describe Work::Job do
         job = build(:work_job, time_type: "date_time", slot_type: "full_multiple", hours: 4,
           shifts_attributes: [
             {starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 14:30", slots: 2},
-            {starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 15:30", slots: 1}
+            {starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 15:30", slots: 1},
+            {starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 15:00", slots: 1}
           ])
         expect(job).to be_valid
       end

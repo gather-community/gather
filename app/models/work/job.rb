@@ -101,10 +101,6 @@ module Work
       self.hours_per_shift = nil unless date_only_full_community_multiple_slot?
     end
 
-    def shift_count
-      @shift_count ||= shifts.reject(&:marked_for_destruction?).size
-    end
-
     def valid_shift_count
       if shift_count.zero?
         errors.add(:shifts, :no_shifts)
@@ -116,18 +112,30 @@ module Work
     end
 
     def no_duplicate_start_end_times
-      return unless shifts.map { |s| [s.starts_at, s.ends_at] }.uniq.size < shifts.size
+      return unless non_destroyed_shifts.map { |s| [s.starts_at, s.ends_at] }.uniq.size < shift_count
       errors.add(:shifts, :duplicate_start_end_times)
     end
 
     def shifts_same_length_for_date_time_full_multiple
-      return unless date_time? && full_community_multiple_slot? && shifts.map(&:elapsed_time).uniq.size != 1
+      return unless date_time? && full_community_multiple_slot? && !all_shifts_have_same_elapsed_time?
       errors.add(:shifts, :different_length_shifts)
     end
 
     def hours_per_shift_evenly_divides_hours
       return unless hours_per_shift.present? && hours % hours_per_shift != 0
       errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
+    end
+
+    def shift_count
+      @shift_count ||= non_destroyed_shifts.size
+    end
+
+    def all_shifts_have_same_elapsed_time?
+      non_destroyed_shifts.map(&:elapsed_time).uniq.size <= 1
+    end
+
+    def non_destroyed_shifts
+      @non_destroyed_shifts ||= shifts.reject(&:marked_for_destruction?)
     end
   end
 end

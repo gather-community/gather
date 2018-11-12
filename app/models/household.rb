@@ -30,7 +30,8 @@ class Household < ApplicationRecord
                    uniqueness: {scope: :community_id, message:
       "There is already a household with this name at this community"}
   validates :community_id, presence: true
-  validates :unit_num, length: {maximum: 8}, numericality: {only_integer: true, message: "Nust begin with a number"}, allow_nil: true
+  validates :unit_num, length: {maximum: 8}, allow_nil: true,
+                       numericality: {only_integer: true, message: "Nust begin with a number"}
   validates :unit_suffix, length: {maximum: 10}
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
@@ -115,7 +116,7 @@ class Household < ApplicationRecord
     accounts.any? { |a| a.statements.any? }
   end
 
-  #  attr_accessor(:unit_suffix)
+  # attr_accessor(:unit_suffix)
   # Return the unit number and the suffix (if any), separated with a dash.
   def unit_num_and_suffix
     if unit_suffix.blank?

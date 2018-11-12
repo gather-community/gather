@@ -13,8 +13,8 @@ feature "household index including suffix", js: true do
 
   let(:actor) { create(:user) }
   let!(:household1) { create(:household, name: "Alpha", unit_num_and_suffix: "2DEF") }
-  let!(:household2) { create(:household, name: "Bravo", unit_num_and_suffix:  "2-ABC") }
-  let!(:household3) { create(:household, name: "Charlie", unit_num_and_suffix:  "10 ABC") }
+  let!(:household2) { create(:household, name: "Bravo", unit_num_and_suffix: "2-ABC") }
+  let!(:household3) { create(:household, name: "Charlie", unit_num_and_suffix: "10 ABC") }
 
   scenario "sort lens" do
     visit(households_path)

@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require("rails_helper")
 
 describe UserPolicy do
   include_context "policy objs"
@@ -266,21 +268,21 @@ describe UserPolicy do
 
   describe "#grantable_roles" do
     let(:roles) { described_class.new(actor, other_user).grantable_roles }
-    let(:base_roles) { %i(biller photographer meals_coordinator wikiist work_coordinator) }
+    let(:base_roles) { %i[biller photographer meals_coordinator wikiist work_coordinator] }
 
     context "for super admin" do
       let(:actor) { super_admin }
-      it { expect(roles).to match_array(%i(super_admin cluster_admin admin) + base_roles) }
+      it { expect(roles).to match_array(%i[super_admin cluster_admin admin] + base_roles) }
     end
 
     context "for cluster admin" do
       let(:actor) { cluster_admin }
-      it { expect(roles).to match_array(%i(cluster_admin admin) + base_roles) }
+      it { expect(roles).to match_array(%i[cluster_admin admin] + base_roles) }
     end
 
     context "for admin" do
       let(:actor) { admin }
-      it { expect(roles).to match_array(%i(admin) + base_roles) }
+      it { expect(roles).to match_array(%i[admin] + base_roles) }
     end
 
     context "for user with base role" do
@@ -341,35 +343,44 @@ describe UserPolicy do
 
   describe "permitted attributes" do
     let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
-    let(:base_attribs) { [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
-      :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
-      {privacy_settings: [:hide_photo_from_cluster]},
-      {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
-    ] }
-    let(:normal_user_attribs) { base_attribs + [
-      {household_attributes: [:id, :name, :garage_nums, :keyholders].
-        concat(nested_hhold_attribs)}
-    ] }
-    let(:photographer_attribs) { [:photo, :photo_tmp_id] }
-    let(:admin_attribs) { base_attribs + [
-      :google_email, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
-      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :unit_num_and_suffix, :old_id, :old_name].
-        concat(nested_hhold_attribs)}
-    ] }
-    let(:cluster_admin_attribs) { base_attribs + [
-      :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
-      :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
-      {household_attributes: [:id, :name, :garage_nums, :keyholders, :unit_num, :unit_num_and_suffix, :old_id, :old_name].
-        concat(nested_hhold_attribs)}
-    ] }
-    let(:nested_hhold_attribs) { [
-      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
-      {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]},
-      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
-    ] }
+    let(:base_attribs) do
+      [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
+       :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :preferred_contact,
+       :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
+       {privacy_settings: [:hide_photo_from_cluster]},
+       {up_guardianships_attributes: %i[id guardian_id _destroy]}]
+    end
+    let(:normal_user_attribs) do
+      base_attribs + [
+        {household_attributes: %i[id name garage_nums keyholders]
+          .concat(nested_hhold_attribs)}
+      ]
+    end
+    let(:photographer_attribs) { %i[photo photo_tmp_id] }
+    let(:admin_attribs) do
+      base_attribs + [
+        :google_email, :role_admin, :role_biller, :role_photographer,
+        :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
+        {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix old_id old_name]
+          .concat(nested_hhold_attribs)}
+      ]
+    end
+    let(:cluster_admin_attribs) do
+      base_attribs + [
+        :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
+        :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
+        {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix old_id old_name]
+          .concat(nested_hhold_attribs)}
+      ]
+    end
+    let(:nested_hhold_attribs) do
+      [
+        {vehicles_attributes: %i[id make model color plate _destroy]},
+        {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
+                                           email location _destroy]},
+        {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}
+      ]
+    end
     subject { UserPolicy.new(user, user2).permitted_attributes }
 
     shared_examples_for "normal user" do

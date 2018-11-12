@@ -1,5 +1,6 @@
-class UserPolicy < ApplicationPolicy
+# frozen_string_literal: true
 
+class UserPolicy < ApplicationPolicy
   ######### NOTE #########
   # user == the user doing the action
   # record == the user to which the action is being done
@@ -108,7 +109,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    return [:photo, :photo_tmp_id] if update_photo? && !update_info?
+    return %i[photo photo_tmp_id] if update_photo? && !update_info?
 
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.
@@ -117,11 +118,11 @@ class UserPolicy < ApplicationPolicy
     # Changing community is only allowed on the main household form.
     household_permitted.delete(:community_id)
 
-    permitted = [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-      :photo, :photo_tmp_id, :photo_destroy, :birthdate_str, :child, :joined_on, :job_choosing_proxy_id,
-      :school, :allergies, :doctor, :medical, :preferred_contact, :household_by_id]
+    permitted = %i[email first_name last_name mobile_phone home_phone work_phone
+                   photo photo_tmp_id photo_destroy birthdate_str child joined_on job_choosing_proxy_id
+                   school allergies doctor medical preferred_contact household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
-    permitted << {up_guardianships_attributes: [:id, :guardian_id, :_destroy]}
+    permitted << {up_guardianships_attributes: %i[id guardian_id _destroy]}
 
     # We allow household_attributes.id through here even though changing the household ID is very sensitive
     # security-wise. But Rails doesn't let you set change the ID this way. It only uses the ID to determine
@@ -137,9 +138,9 @@ class UserPolicy < ApplicationPolicy
   end
 
   def grantable_roles
-    (active_admin? ? User::ROLES - %i(cluster_admin super_admin) : []) +
-    (active_cluster_admin? ? [:cluster_admin] : []) +
-    (active_super_admin? ? [:super_admin] : [])
+    (active_admin? ? User::ROLES - %i[cluster_admin super_admin] : []) +
+      (active_cluster_admin? ? [:cluster_admin] : []) +
+      (active_super_admin? ? [:super_admin] : [])
   end
 
   private
@@ -151,6 +152,7 @@ class UserPolicy < ApplicationPolicy
   # Checks if the user is a guardian of the user being tested.
   def guardian?
     return false unless record.is_a?(User) # May be a Class in some cases
+
     record.guardians.include?(user)
   end
 end

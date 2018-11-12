@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require("rails_helper")
 
 describe HouseholdPolicy do
   include_context "policy objs"
@@ -144,24 +146,27 @@ describe HouseholdPolicy do
     end
 
     it "returns empty set for regular users" do
-      expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq []
+      expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq([])
     end
 
     it "returns own community for admins" do
       expect(HouseholdPolicy.new(admin, sample_household).allowed_community_changes.to_a).to(
-        contain_exactly(community))
+        contain_exactly(community)
+      )
     end
 
     it "returns cluster communities for cluster admins" do
       expect(HouseholdPolicy.new(cluster_admin, sample_household).allowed_community_changes.to_a).to(
-        contain_exactly(community, communityB))
+        contain_exactly(community, communityB)
+      )
     end
 
     it "returns all communities for super admins" do
       # This query crosses a tenant boundary so need to do it unscoped.
       ActsAsTenant.unscoped do
         expect(HouseholdPolicy.new(super_admin, sample_household).allowed_community_changes.to_a).to(
-          contain_exactly(community, communityB, communityX))
+          contain_exactly(community, communityB, communityX)
+        )
       end
     end
   end
@@ -178,7 +183,7 @@ describe HouseholdPolicy do
     context "when attempting to set permitted community_id" do
       let(:target_id) { 1 }
       it "should leave community_id param alone" do
-        expect(params[:community_id]).to eq 1
+        expect(params[:community_id]).to eq(1)
       end
     end
 
@@ -240,7 +245,7 @@ describe HouseholdPolicy do
       let(:super_admin) { create(:super_admin, household: household1) }
 
       it "returns nothing for regular user" do
-        expect(scope.new(user, Household.all).administerable.to_a).to eq []
+        expect(scope.new(user, Household.all).administerable.to_a).to eq([])
       end
 
       it "returns households in community for admin" do
@@ -264,13 +269,16 @@ describe HouseholdPolicy do
   end
 
   describe "permitted attributes" do
-    let(:basic_attribs) { [:name, :garage_nums, :keyholders,
-      {vehicles_attributes: [:id, :make, :model, :color, :plate, :_destroy]},
-      {emergency_contacts_attributes: [:id, :name, :relationship, :main_phone, :alt_phone,
-        :email, :location, :_destroy]},
-      {pets_attributes: [:id, :name, :species, :color, :vet, :caregivers, :health_issues, :_destroy]}
-    ] }
-    let(:admin_attribs) { basic_attribs.concat([:unit_num, :unit_num_and_suffix, :old_id, :old_name, :community_id]) }
+    let(:basic_attribs) do
+      [:name, :garage_nums, :keyholders,
+       {vehicles_attributes: %i[id make model color plate _destroy]},
+       {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
+                                          email location _destroy]},
+       {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
+    end
+    let(:admin_attribs) do
+      basic_attribs.concat(%i[unit_num unit_num_and_suffix old_id old_name community_id])
+    end
     let(:cluster_admin_attribs) { admin_attribs }
 
     subject { HouseholdPolicy.new(user, household).permitted_attributes }

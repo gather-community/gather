@@ -108,10 +108,6 @@ class Household < ApplicationRecord
     accounts.any? { |a| a.transactions.any? }
   end
 
-  def any_accounts?
-    accounts.any?
-  end
-
   def any_statements?
     accounts.any? { |a| a.statements.any? }
   end

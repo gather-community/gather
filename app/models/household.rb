@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+# A single cohesive household group, not necessarily one-to-one with a unit.
 class Household < ApplicationRecord
   include Deactivatable
 
   acts_as_tenant :cluster
+
+  attr_writer :unit_num_and_suffix
 
   belongs_to :community
   has_many :accounts, -> { joins(:community).includes(:community).order("LOWER(communities.name)") },
@@ -26,18 +29,18 @@ class Household < ApplicationRecord
 
   delegate :name, :abbrv, :cluster, to: :community, prefix: true
 
-  validates :name, presence: true, length: {maximum: 32},
-                   uniqueness: {scope: :community_id, message:
-      "There is already a household with this name at this community"}
+  validates :name, presence: true, length: {maximum: 32}, uniqueness: {scope: :community_id}
   validates :community_id, presence: true
-  validates :unit_num, length: {maximum: 8}, allow_nil: true,
-                       numericality: {only_integer: true, message: "Nust begin with a number"}
-  validates :unit_suffix, length: {maximum: 10}
+  validates :unit_num_and_suffix, length: {maximum: 16}, allow_nil: true
+
+  before_validation :normalize
+  before_save :split_unit_num_and_suffix
+
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
 
-  normalize_attributes :name, :unit_num, :old_id, :old_name, :garage_nums
+  normalize_attributes :name, :old_id, :old_name, :garage_nums
 
   def build_blank_associations
     vehicles.build if vehicles.empty?
@@ -112,27 +115,20 @@ class Household < ApplicationRecord
     accounts.any? { |a| a.statements.any? }
   end
 
-  # attr_accessor(:unit_suffix)
-  # Return the unit number and the suffix (if any), separated with a dash.
   def unit_num_and_suffix
-    if unit_suffix.blank?
-      unit_num
-    else
-      "#{unit_num}-#{unit_suffix}"
-    end
+    @unit_num_and_suffix ||= "#{unit_num}#{unit_suffix}".presence
   end
 
-  def unit_num_and_suffix=(value)
-    # separate unit number and suffix.  Format is either separated with a
-    # non-alphanumeric character, or an alpha suffix with no separator.
-    unit_data = value.match(/\A(\d+)\W?(\w*)/)
-    # if we don't match the regex, store it and let the validator do the complaining
-    if unit_data.blank?
-      self.unit_num = value
-    else
-      self.unit_num = unit_data[1]
-      # if we have no suffic, store nil
-      self.unit_suffix = unit_data[2].presence
-    end
+  private
+
+  def normalize
+    self.unit_num_and_suffix = unit_num_and_suffix&.strip
+  end
+
+  def split_unit_num_and_suffix
+    return if unit_num_and_suffix.blank?
+    return unless (match = unit_num_and_suffix.match(/\A(\d*)(.*)\z/))
+    self.unit_num = match[1].presence&.strip
+    self.unit_suffix = match[2].presence&.strip
   end
 end

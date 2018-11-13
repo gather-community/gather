@@ -277,7 +277,7 @@ describe HouseholdPolicy do
        {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
     end
     let(:admin_attribs) do
-      basic_attribs.concat(%i[unit_num unit_num_and_suffix old_id old_name community_id])
+      basic_attribs.concat(%i[unit_num_and_suffix old_id old_name community_id])
     end
     let(:cluster_admin_attribs) { admin_attribs }
 

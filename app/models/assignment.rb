@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class Assignment < ApplicationRecord
-  ROLES = %w(head_cook asst_cook table_setter cleaner) # In order
+  ROLES = %w[head_cook asst_cook table_setter cleaner].freeze # In order
+  ALL_EXTRA_ROLES = %i[asst_cook table_setter cleaner].freeze
 
   acts_as_tenant :cluster
 
@@ -7,6 +10,11 @@ class Assignment < ApplicationRecord
 
   belongs_to :user, inverse_of: :meal_assignments
   belongs_to :meal, inverse_of: :assignments
+
+  def self.by_role
+    whens = ROLES.each_with_index.map { |r, i| "WHEN '#{r}' THEN #{i}" }.join(" ")
+    order("CASE role #{whens} END")
+  end
 
   def empty?
     user_id.blank?

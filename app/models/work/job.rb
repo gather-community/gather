@@ -15,7 +15,7 @@ module Work
                                                  dependent: :destroy
 
     scope :in_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
-    scope :by_title, -> { order("LOWER(title)") }
+    scope :by_title, -> { alpha_order(:title) }
     scope :in_period, ->(p) { where(period: p) }
     scope :from_requester, ->(r) { where(requester: r) }
     scope :fixed_slot, -> { where(slot_type: "fixed") }

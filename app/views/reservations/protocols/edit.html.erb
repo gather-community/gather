@@ -1,0 +1,3 @@
+<% content_for(:title, "Edit Protocol: #{protocol.name}") %>
+<% content_for(:top_buttons, protocol.action_links(:edit)) %>
+<%= render("form") %>

@@ -20,6 +20,7 @@ module CustomFields
         # words in there like method, display, extend, etc.
         field.fields.each do |f|
           define_singleton_method(f.key) { self[f.key] }
+          define_singleton_method("#{f.key}?") { self[f.key] } if f.type == :boolean
           define_singleton_method("#{f.key}=") { |value| self[f.key] = value }
         end
       end

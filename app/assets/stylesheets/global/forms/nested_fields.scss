@@ -29,11 +29,11 @@
   display: flex;
   margin-bottom: 20px;
 
-  &.no-label {
+  &.no-inner-labels {
     margin-bottom: 10px;
   }
 
-  &:last-of-type, &.no-label:last-of-type {
+  &:last-of-type, &.no-inner-labels:last-of-type {
     margin-bottom: 5px;
   }
 
@@ -68,7 +68,7 @@
     padding-left: 5px;
   }
 
-  &.no-label .remove-link-col {
+  &.no-inner-labels .remove-link-col {
     padding-top: 0;
   }
 }

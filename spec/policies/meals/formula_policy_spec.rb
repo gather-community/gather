@@ -1,11 +1,11 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Meals::FormulaPolicy do
-  include_context "policy objs"
-
-  let(:formula) { build(:meal_formula, community: community) }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:formula) { build(:meal_formula, community: community) }
     let(:record) { formula }
 
     permissions :index?, :show? do
@@ -71,20 +71,20 @@ describe Meals::FormulaPolicy do
   end
 
   describe "scope" do
+    include_context "policy scopes"
+    let(:klass) { Meals::Formula }
     let!(:formulas) { create_list(:meal_formula, 3, community: community) }
-    let(:permitted) { Meals::FormulaPolicy::Scope.new(actor, Meals::Formula.all).resolve }
 
     before do
-      save_policy_objects!(community)
       formulas.last.deactivate
     end
 
     shared_examples_for "returns all formulas" do
-      it { expect(permitted).to match_array(formulas) }
+      it { is_expected.to match_array(formulas) }
     end
 
     shared_examples_for "returns active formulas only" do
-      it { expect(permitted).to match_array(formulas[0..1]) }
+      it { is_expected.to match_array(formulas[0..1]) }
     end
 
     context "admin" do
@@ -103,12 +103,14 @@ describe Meals::FormulaPolicy do
     end
 
     context "regular user in cluster" do
-      let(:actor) { user_in_cmtyB }
+      let(:actor) { userB }
       it_behaves_like "returns active formulas only"
     end
   end
 
   describe "permitted attributes" do
+    let(:formula) { build(:meal_formula, community: default_community) }
+    let(:admin) { create(:admin) }
     subject { Meals::FormulaPolicy.new(admin, formula).permitted_attributes }
 
     context "with no meals" do

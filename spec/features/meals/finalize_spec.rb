@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "finalize meal", js: true do
   let!(:actor) { create(:admin) }
-  let!(:meal) { create(:meal, :with_menu, served_at: Time.now - 3.days) }
+  let!(:meal) { create(:meal, :with_menu, served_at: Time.current - 3.days) }
   let!(:signups) { create_list(:signup, 3, meal: meal, adult_veg: 1) }
   let!(:late_add) { create(:household) }
 
@@ -11,17 +13,21 @@ feature "finalize meal", js: true do
   end
 
   before do
-    login_as(actor, scope: :user)
     meal.close!
+    login_as(actor, scope: :user)
   end
 
-  scenario "zero out row, add row, delete row, continue, modify, finish" do
+  scenario "happy path" do
     visit new_meal_finalize_path(meal)
-    all("select[id$=_adult_veg]")[0].select("")
-    click_link("Add Signup")
-    select2(late_add.name, from: "select[id$=_household_id]")
-    all("select[id$=_adult_veg]")[3].select("5")
-    all(".fa-trash")[1].click
+    click_link("Add Household")
+
+    # Zero out first household
+    all("select[id$=_quantity]").first.select("0")
+
+    # Add a new household
+    select2(late_add.name, from: all("select[id$=_household_id]").last)
+
+    # Fill in expenses
     fill_in("Ingredient Cost", with: "100")
     fill_in("Pantry Cost", with: "10")
     choose("Balance Credit")
@@ -29,11 +35,11 @@ feature "finalize meal", js: true do
 
     # Go to finalize screen
     expect(page).to have_content("meal has not been finalized yet")
-    click_button("Cancel/Modify")
+    click_button("Go Back")
 
     # Go back and add 4 more diners to the late add
     expect(page).to have_content("was not finalized")
-    all("select[id$=_adult_meat]")[0].select("4")
+    all("select[id$=_quantity]").last.select("5")
     click_button("Continue")
 
     click_button("Confirm")
@@ -42,17 +48,15 @@ feature "finalize meal", js: true do
     # Go to meal page to check finalized icon in title and signups correct
     visit meal_path(meal)
     expect(page).to have_css("h1 i.fa-certificate")
-    expect(page).to have_content("#{late_add.name} (9)")
-    expect(page).to have_content("#{signups[2].household_name} (1)")
-    expect(page).not_to have_content(signups[1].household_name)
+    expect(page).to have_content("#{late_add.name} (5)")
+    expect(page).to have_content("#{signups[1].household_name} (1)")
     expect(page).not_to have_content(signups[0].household_name)
 
     # Go to accounts page and ensure correct accounts created
     visit accounts_path
     expect(page).to have_title("Accounts")
-    expect(page).not_to have_content(signups[0].household_name)
-    expect(page).not_to have_content(signups[1].household_name)
-    expect(page).to have_content(signups[2].household_name)
+    expect(page).to have_content(signups[1].household_name)
     expect(page).to have_content(late_add.name)
+    expect(page).not_to have_content(signups[0].household_name)
   end
 end

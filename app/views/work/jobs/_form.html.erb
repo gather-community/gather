@@ -34,13 +34,13 @@
         <% end %>
       </tbody>
     </table>
-    <%= link_to_add_association(t("cocoon.add_links.shifts"), f, :shifts,
+    <%= link_to_add_association_with_icon(t("cocoon.add_links.shifts"), f, :shifts,
       "data-association-insertion-node": "#shift-rows",
       "data-association-insertion-method": "append") %>
   </div>
 
   <%= form_actions do %>
-    <%= f.button :submit, class: "btn-primary" %>
+    <%= f.button :primary %>
   <% end %>
 <% end %>
 
@@ -49,6 +49,6 @@
     new Gather.Views.Work.JobFormView({el: '.work--job-form'});
     new Gather.Views.Work.JobReminderFieldsView({el: '.work_job_reminders'});
     new Gather.Views.DirtyChecker({el: '.work--job-form'});
-    new Gather.Views.Select2View({el: '.work--job-form'});
+    new Gather.Views.AjaxSelect2({el: '.work--job-form'});
   });
 <% end %>

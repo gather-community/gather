@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Work
   class PeriodPolicy < ApplicationPolicy
-    alias_method :period, :record
+    alias period record
 
     class Scope < Scope
       def resolve
-        community_only_unless_cluster_admin
+        allow_regular_users_in_community
       end
     end
 

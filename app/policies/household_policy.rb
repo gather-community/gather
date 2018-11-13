@@ -5,25 +5,11 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if active_super_admin?
-        scope
-      elsif active?
-        scope.in_cluster(user.cluster)
-      else
-        scope.none
-      end
+      allow_all_users_in_cluster
     end
 
     def administerable
-      if active_super_admin?
-        scope
-      elsif active_cluster_admin?
-        scope.in_cluster(user.cluster)
-      elsif active_admin?
-        scope.where(community_id: user.community_id)
-      else
-        scope.none
-      end
+      allow_admins_only
     end
   end
 

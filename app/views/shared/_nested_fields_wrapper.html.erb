@@ -1,9 +1,9 @@
-<div class="<%= classes.join(" ") %>">
+<div class="<%= classes.join(" ") %> <%= "hidden" if f.object.marked_for_destruction? %>">
   <%= f.hidden_field :id %>
   <div class="fields-col">
     <%= render(options[:inner_partial], f: f, options: options) %>
   </div>
-  <% if options[:multiple] %>
+  <% if options[:multiple] && !options[:no_remove_link] %>
     <div class="remove-link-col">
       <%= link_to_remove_association(icon_tag("trash"), f) %>
     </div>

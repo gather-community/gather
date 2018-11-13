@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Work
   class JobPolicy < ApplicationPolicy
-    alias_method :job, :record
+    alias job record
 
     class Scope < Scope
       def resolve
-        community_only_unless_cluster_admin
+        allow_regular_users_in_community
       end
     end
 

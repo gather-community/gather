@@ -35,15 +35,15 @@
             <%= icon_tag("certificate") if meal.finalized? %>
           </td>
           <td>
-            <% if signup = meal.signup_for(current_user.household) %>
-              <% if policy(meal).edit_signups? %>
+            <% if signup = meal.current_signup %>
+              <% if policy(meal.sample_signup).update? %>
                 <%= link_to(signup_info(signup), meal_url(meal)) %>
               <% else %>
                 <%= signup_info(signup) %>
               <% end %>
             <% elsif meal.full? %>
               <span class="weak">[Full]</span>
-            <% elsif policy(meal).new_signups? %>
+            <% elsif policy(meal.sample_signup).create? %>
               <%= signup_link(meal) %>
             <% else %>
               No
@@ -71,14 +71,14 @@
         <div class="signup-count">
           <%= signup_count(meal) %> signed up
         </div>
-        <% if signup = meal.signup_for(current_user.household) %>
+        <% if signup = meal.current_signup %>
           <div class="signed-up">
             <%= signup_info(signup) %> signed up from your household
-            <%= link_to("(Edit)", meal_url(meal)) if policy(meal).edit_signups? %>
+            <%= link_to("(Edit)", meal_url(meal)) if policy(meal.sample_signup).update? %>
           </div>
         <% elsif meal.full? %>
           <span class="weak">[Full]</span>
-        <% elsif policy(meal).new_signups? %>
+        <% elsif policy(meal.sample_signup).create? %>
           <%= signup_link(meal) %>
         <% end %>
       </div>

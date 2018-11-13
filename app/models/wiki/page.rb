@@ -15,7 +15,7 @@ module Wiki
     has_many :versions, -> { order('number DESC') }, class_name: "Wiki::PageVersion", dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
-    scope :by_title, -> { order("LOWER(title)") }
+    scope :by_title, -> { alpha_order(:title) }
 
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved

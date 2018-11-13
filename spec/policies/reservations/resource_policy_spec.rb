@@ -1,8 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Reservations::ResourcePolicy do
   describe "permissions" do
-    include_context "policy objs"
+    include_context "policy permissions"
 
     let(:resource) { build(:resource, community: community) }
     let(:record) { resource }
@@ -26,30 +28,28 @@ describe Reservations::ResourcePolicy do
   end
 
   describe "scope" do
+    include_context "policy scopes"
+    let(:klass) { Reservations::Resource }
     let!(:resource1) { create(:resource) }
     let!(:resource2) { create(:resource) }
     let!(:resource3) { create(:resource) }
     let!(:resource4) { create(:resource, :inactive) }
     let!(:protocol1) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
     let!(:protocol2) { create(:reservation_protocol, resources: [resource2], other_communities: "read_only") }
-    let!(:insider) { create(:user) }
-    let!(:admin) { create(:admin) }
-    let!(:outsider_household) { create(:household, community: create(:community)) }
-    let!(:outsider) { create(:user, household: outsider_household) }
 
-    it "for outsiders, returns only non-forbidden resources" do
-      permitted = Reservations::ResourcePolicy::Scope.new(outsider, Reservations::Resource.all).resolve
-      expect(permitted).to contain_exactly(resource2, resource3)
+    context "for insiders, returns all active resources" do
+      let(:actor) { user }
+      it { is_expected.to contain_exactly(resource1, resource2, resource3) }
     end
 
-    it "for insiders, returns all active resources" do
-      permitted = Reservations::ResourcePolicy::Scope.new(insider, Reservations::Resource.all).resolve
-      expect(permitted).to contain_exactly(resource1, resource2, resource3)
+    context "for outsiders, returns only non-forbidden resources" do
+      let(:actor) { userB }
+      it { is_expected.to contain_exactly(resource2, resource3) }
     end
 
-    it "for admins, returns all resources" do
-      permitted = Reservations::ResourcePolicy::Scope.new(admin, Reservations::Resource.all).resolve
-      expect(permitted).to contain_exactly(resource1, resource2, resource3, resource4)
+    context "for admins, returns all resources" do
+      let(:actor) { admin }
+      it { is_expected.to contain_exactly(resource1, resource2, resource3, resource4) }
     end
   end
 

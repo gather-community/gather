@@ -30,7 +30,7 @@ module Work
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
-    scope :by_job_title, -> { joins(:job).order("LOWER(work_jobs.title)") }
+    scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
     scope :by_date, -> { order(:starts_at, :ends_at) }
     scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
     scope :open, lambda {

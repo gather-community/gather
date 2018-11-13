@@ -26,6 +26,10 @@ FactoryBot.define do
 
     trait :inactive do
       deactivated_at { Time.current - 1 }
+
+      after(:build) do |user|
+        user.household.deactivated_at = Time.current - 1
+      end
     end
 
     trait :child do

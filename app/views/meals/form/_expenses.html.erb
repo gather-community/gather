@@ -1,0 +1,11 @@
+<%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
+<% if policy(meal).change_expenses? %>
+  <% cost = meal.cost %>
+  <%= meal.form_section(:expenses, expanded: local_assigns[:expanded]) do %>
+    <%= f.simple_fields_for(:cost) do |mc_form| %>
+      <%= mc_form.input(:ingredient_cost, input_html: {value: cost.two_decimals(:ingredient)}) %>
+      <%= mc_form.input(:pantry_cost, input_html: {value: cost.two_decimals(:pantry)}) %>
+      <%= mc_form.input(:payment_method, collection: Meals::Cost::PAYMENT_METHODS, as: :radio_buttons) %>
+    <% end %>
+  <% end %>
+<% end %>

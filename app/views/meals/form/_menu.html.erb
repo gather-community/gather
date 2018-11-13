@@ -1,0 +1,25 @@
+<%= meal.form_section(:menu, expanded: local_assigns[:expanded]) do %>
+  <% ([:title] + Meal::MENU_ITEMS).each do |attrib| %>
+    <% if policy(meal).change_menu? %>
+      <%= f.input attrib, as: (:markdown unless attrib == :title) %>
+    <% else %>
+      <%= f.input attrib do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
+    <% end %>
+  <% end %>
+
+  <div class="form-group text optional meal_allergens
+    <%= meal.errors[:allergens].present? ? "has-error" : "" %>">
+    <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
+    <div class="boxes col-sm-9">
+      <% sorted_allergens.each do |allergen| %>
+        <div>
+          <%= f.check_box("allergen_#{allergen}", disabled: !policy(meal).change_menu?) %>
+          <%= f.label("allergen_#{allergen}")%>
+        </div>
+      <% end %>
+    </div>
+    <% if meal.errors[:allergens].present? %>
+      <div class="error col-sm-9 col-sm-offset-3"><%= meal.errors[:allergens].join %></div>
+    <% end %>
+  </div>
+<% end %>

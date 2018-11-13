@@ -1,9 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe People::VehiclePolicy do
-  include_context "policy objs"
-
   describe "permissions" do
+    include_context "policy permissions"
     let(:household) { build(:household, community: community) }
     let(:vehicle) { build(:vehicle, household: household) }
     let(:record) { vehicle }
@@ -18,24 +19,11 @@ describe People::VehiclePolicy do
   end
 
   describe "scope" do
-    let(:vehicle1) { create(:vehicle, household: user.household) }
-    let(:vehicle2) { create(:vehicle, household: user.household) }
-    let(:vehicle3) { create(:vehicle, household: user_in_cmtyB.household) }
-    subject { People::VehiclePolicy::Scope.new(actor, People::Vehicle.all).resolve }
+    include_context "policy scopes"
+    let(:klass) { People::Vehicle }
+    let(:objs_in_community) { create_list(:vehicle, 2, household: user.household) }
+    let(:objs_in_cluster) { create_list(:vehicle, 2, household: userB.household) }
 
-    before do
-      save_policy_objects!(community, communityB, user, user_in_cmtyB)
-    end
-
-    context "for regular users" do
-      let(:actor) { user }
-      it { is_expected.to contain_exactly(vehicle1, vehicle2) }
-    end
-
-    # TODO: refactor to abstract this kind of check into policy spec context file
-    context "for cluster admins" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(vehicle1, vehicle2, vehicle3) }
-    end
+    it_behaves_like "allows regular users in community"
   end
 end

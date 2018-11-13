@@ -1,97 +1,65 @@
 .signup {
   margin-bottom: 20px;
 
-  .prev-meal, .next-meal {
-    line-height: 130%;
-    margin-bottom: 20px;
-
-    > div a:first-of-type, > div a:nth-of-type(3) {
-      color: $gray-text;
-      display: block;
-    }
-
-    i {
-      font-size: 28px;
-      margin-top: 12px;
-    }
-  }
-
-  .prev-meal {
-    padding-right: 5px;
-
-    div {
-      margin-left: 20px;
-    }
-
-    i {
-      float: left;
-    }
-  }
-
-  .next-meal {
-    text-align: right;
-    padding-left: 5px;
-
-    div {
-      margin-right: 20px;
-    }
-
-    i {
-      float: right;
-    }
-  }
-
-  i.fa-close {
-    float: right;
-    color: $gray-text;
-  }
-
-  h3 {
+  h2 {
     margin-top: 0;
   }
+}
 
-  form i.fa-question-circle {
-    margin-right: 5px;
-  }
+@mixin signup-form-control-wrapper {
+  > .control-wrapper {
+    width: 100%;
 
-  // Override the responsive grid stuff because we want to preserve horizontal layout
-  // on small screens for this form
-  .col-sm-6 {
-    width: 50%;
-    float: left;
-  }
-
-  #col-labels {
-    margin-left: 50%;
-    padding-left: 15px;
-    margin-top: -15px;
-    margin-bottom: 5px;
-
-    span {
+    .control-wrapper {
       display: inline-block;
-      width: 47%;
-      text-align: center;
-      font-size: 11px;
-      font-weight: bold;
+    }
+
+    select[name$="[quantity]"] {
+      width: 50px;
+    }
+
+    select[name$="[item_id]"] {
+      width: 200px;
+    }
+
+    .nested-fields.subfields.no-inner-labels {
+      margin-bottom: 4px;
+    }
+
+    .add-link-wrapper {
+      display: block;
+      margin-bottom: 7px;
+      margin-top: -2px;
+    }
+  }
+}
+
+form.gather-form.narrow-label-layout.finalize-form,
+form.gather-form.narrow-label-layout.meal-form {
+  // A single signup row.
+  .signup-fields .form-group {
+    margin-bottom: 0;
+
+    @media screen and (max-width: $screen-xs-max) {
+      margin-bottom: 5px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
-  select.select, div.ro-signup {
-    width: 47%;
-    display: inline-block;
+  .meal_signups_household_id .select2-container .select2-selection__clear {
+    margin-left: 5px;
   }
 
-  div.ro-signup.nonzero {
-    text-align: center;
-    border: 1px solid $light-border-color;
-    border-radius: 3px;
+  .form-group.meal_signups_lines {
+    @include signup-form-control-wrapper;
   }
+}
 
-  // But comments should always be full width.
-  div.signup_comments {
-    .col-sm-6 {
-      text-align: left;
-      width: 100%;
-    }
+form.gather-form.signup-form {
+  .form-group.signup_lines {
+    @include signup-form-control-wrapper;
   }
 }

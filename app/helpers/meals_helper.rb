@@ -1,10 +1,10 @@
 module MealsHelper
-  def meal_link(meal)
-    link_to(meal.title_or_no_title, meal_url(meal))
+  def meal_link(meal, *args)
+    link_to(meal.title_or_no_title, meal_url(meal, *args))
   end
 
-  def meal_url(meal)
-    url_in_community(meal.community, meal_path(meal))
+  def meal_url(meal, *args)
+    url_in_community(meal.community, meal_path(meal, *args))
   end
 
   def meal_date_time(meal, with_break: false)
@@ -19,7 +19,8 @@ module MealsHelper
   end
 
   def signup_link(meal)
-    link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up", meal_url(meal))
+    link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up",
+      meal_url(meal, signup: 1, anchor: "signup"))
   end
 
   def signup_count(meal)
@@ -30,16 +31,6 @@ module MealsHelper
   def signup_label(type)
     icon_tag("question-circle", title: t("signups.tooltips.#{type}"), data: {toggle: "tooltip"}) <<
       t("signups.diner_types.#{type}", count: 1)
-  end
-
-  def community_invited?(meal, community)
-    meal.community_ids.include?(community.id)
-  end
-
-  # We should disable the "own" community checkbox for most users.
-  def disable_community_checkbox?(meal, community)
-    disable = meal.community == community && community_invited?(meal, community)
-    disable ? "disabled" : nil
   end
 
   def sorted_allergens

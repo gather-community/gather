@@ -15,7 +15,7 @@
         <%= f.input :photo_tmp_id, as: :hidden %>
         <%= f.input :photo_destroy, as: :hidden %>
         <%= f.input :household_by_id, as: :hidden %>
-        <%= f.button :submit, "Save Photo", class: "btn-primary" %>
+        <%= f.button :primary %>
       <% end %>
     </div>
   <% end %>
@@ -23,7 +23,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Select2View({el: '.user-form'});
+    new Gather.Views.AjaxSelect2({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',
       maxFilesize: Settings.photos.max_size_mb / 1

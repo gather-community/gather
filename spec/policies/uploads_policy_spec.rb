@@ -1,9 +1,11 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe UploadPolicy do
-  include_context "policy objs"
-
   describe "permissions" do
+    include_context "policy permissions"
+
     permissions :create?, :destroy? do
       it "permits active users" do
         expect(subject).to permit(user, Upload)

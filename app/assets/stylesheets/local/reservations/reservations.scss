@@ -1,0 +1,78 @@
+.reservations {
+  &.action-index {
+    .resource {
+      display: inline-block;
+      margin: 0 20px 20px 0;
+
+      img {
+        display: block;
+        width: 220px;
+        height: 165px;
+      }
+    }
+
+    .sidebar {
+      img {
+        width: 100%;
+        max-width: 220px;
+      }
+
+      > div {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  // These will be shown as appropriate by JS.
+  .reservations_reservation_pre_notice[data-kinds] {
+    display: none;
+  }
+
+  .alert.pre-notice {
+    margin-bottom: 0;
+  }
+
+  #guidelines {
+    height: 200px;
+    background-color: #eee;
+    overflow-y: auto;
+    padding: 8px;
+    margin-bottom: 4px;
+
+    hr {
+      background-color: #222;
+      height: 1px;
+    }
+
+    h1 {
+      font-size: 15px;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 14px;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    h3 {
+      font-size: 13px;
+      margin-top: 0;
+      margin-bottom: 0;
+      color: #888;
+    }
+
+    li {
+      margin-left: -10px;
+    }
+  }
+
+  &.action-show {
+    @media (max-width: 320px) {
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

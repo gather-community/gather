@@ -1,31 +1,82 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Reservations::Protocol, type: :model do
-  describe "matching" do
+require "rails_helper"
+
+describe Reservations::Protocol do
+  describe "normalization" do
+    let(:protocol) { build(:reservation_protocol, submitted) }
+
+    # Get the normalized values for the submitted keys.
+    subject { submitted.keys.map { |k| [k, protocol.send(k)] }.to_h }
+
+    before do
+      protocol.validate
+    end
+
+    describe "requires_kind" do
+      context "with false" do
+        let(:submitted) { {requires_kind: false} }
+        it { is_expected.to eq(requires_kind: nil) }
+      end
+
+      context "with true and blank kind" do
+        let(:submitted) { {requires_kind: true, kinds: [""]} }
+        it { is_expected.to eq(requires_kind: true, kinds: nil) }
+      end
+
+      context "with nils" do
+        let(:submitted) { {requires_kind: nil, kinds: nil} }
+        it { is_expected.to eq(requires_kind: nil, kinds: nil) }
+      end
+
+      context "with true but also with kinds" do
+        let(:submitted) { {requires_kind: true, kinds: ["Personal"]} }
+        it { is_expected.to eq(requires_kind: nil, kinds: ["Personal"]) }
+      end
+    end
+
+    describe "kinds" do
+      context "with blanks" do
+        let(:submitted) { {kinds: ["", "Personal", "", "Official"]} }
+        it { is_expected.to eq(kinds: %w[Personal Official]) }
+      end
+    end
+  end
+
+  describe ".matching" do
     let(:resource1) { create(:resource, community: create(:community)) }
     let(:resource2) { create(:resource, community: create(:community)) }
     let(:resource3) { create(:resource, community: create(:community)) }
     let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
-    let!(:p2) { create(:reservation_protocol, resources: [resource1], kinds: %w(personal special)) }
-    let!(:p3) { create(:reservation_protocol, resources: [resource1], kinds: %w(official)) }
+    let!(:p2) { create(:reservation_protocol, resources: [resource1], kinds: %w[Personal Special]) }
+    let!(:p3) { create(:reservation_protocol, resources: [resource1], kinds: %w[Official]) }
     let!(:p4) { create(:reservation_protocol, resources: [resource2]) }
     let!(:p5) { create(:reservation_protocol, community: resource1.community) }
-    let!(:p6) { create(:reservation_protocol, community: resource1.community, general: true) }
+    let!(:p6) { create(:reservation_protocol, community: resource1.community, kinds: %w[Personal Official]) }
+    let!(:p7) { create(:reservation_protocol, community: resource1.community, kinds: []) }
 
-    it "should find protocols with nil kind or matching kind or general community" do
-      expect(Reservations::Protocol.matching(resource1, "personal")).to contain_exactly(p1, p2, p6)
+    it "should find protocols with matching resource or no resource, and matching kind or no kind" do
+      expect(Reservations::Protocol.matching(resource1, "Personal")).to contain_exactly(p1, p2, p5, p6, p7)
     end
 
-    it "should fallback to unspecified kind if no matching kind" do
-      expect(Reservations::Protocol.matching(resource1, "foo")).to eq [p1, p6]
+    it "should only match protocols with no kind if given kind doesn't match any" do
+      expect(Reservations::Protocol.matching(resource1, "foo")).to contain_exactly(p1, p5, p7)
     end
 
-    it "should match unspecified kind if no kind given" do
-      expect(Reservations::Protocol.matching(resource1)).to eq [p1, p6]
+    it "should only match protocols with no kind if no kind given" do
+      expect(Reservations::Protocol.matching(resource1)).to contain_exactly(p1, p5, p7)
+    end
+
+    it "should only match protocols with any kind if no kind == :any" do
+      expect(Reservations::Protocol.matching(resource1, :any)).to contain_exactly(p1, p2, p3, p5, p6, p7)
+    end
+
+    it "should match correct protocols for different community" do
+      expect(Reservations::Protocol.matching(resource2)).to contain_exactly(p4)
     end
 
     it "should return [] on no match" do
-      expect(Reservations::Protocol.matching(resource3)).to eq []
+      expect(Reservations::Protocol.matching(resource3)).to be_empty
     end
   end
 
@@ -40,7 +91,8 @@ RSpec.describe Reservations::Protocol, type: :model do
       before do
         # Deliberately doing this via SQL so we know the actual value stored in the DB.
         ActiveRecord::Base.connection.execute(
-          "UPDATE reservation_protocols SET fixed_start_time = '2000-01-01 13:00'")
+          "UPDATE reservation_protocols SET fixed_start_time = '2000-01-01 13:00'"
+        )
       end
 
       it "does not apply timezone on retrieval" do

@@ -23,7 +23,7 @@ feature "user form", js: true do
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(mode: :dz_preview)
       fill_in("First Name", with: "Zoor")
-      click_on("Update User")
+      click_button("Save")
 
       expect_success
       expect(page).to have_title(/Zoor/)
@@ -40,7 +40,7 @@ feature "user form", js: true do
     scenario "new user" do
       visit(new_user_path)
       expect_no_image_and_drop_file("cooper.jpg")
-      click_on("Create User")
+      click_button("Save")
 
       expect_validation_error
       expect_image_upload(mode: :existing, path: /cooper/)
@@ -49,7 +49,7 @@ feature "user form", js: true do
       fill_in("Email", with: "foo@example.com")
       select2("Ginger", from: "#user_household_id")
       fill_in("Mobile", with: "5556667777")
-      click_on("Create User")
+      click_button("Save")
 
       expect_success
       expect(page).to have_title(/Foo Barre/)
@@ -60,7 +60,7 @@ feature "user form", js: true do
       visit(edit_user_path(user))
       click_on("move them to another household")
       select2("Potatoheads", from: "#user_household_id")
-      click_on("Update User")
+      click_button("Save")
 
       expect_success
       expect(page).to have_css(%Q{a.household[href$="/households/#{household2.id}"]})
@@ -76,7 +76,7 @@ feature "user form", js: true do
       expect_image_upload(mode: :upload_message)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(mode: :dz_preview)
-      click_on("Save Photo")
+      click_button("Save")
       expect_success
       expect_photo(/chomsky/)
     end

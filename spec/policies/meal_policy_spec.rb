@@ -1,12 +1,13 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe MealPolicy do
-  include_context "policy objs"
-
-  let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
-  let(:record) { meal }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:record) { meal }
+
     permissions :index?, :report? do
       it_behaves_like "permits users in cluster"
     end
@@ -29,18 +30,12 @@ describe MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :administer?, :destroy?, :update_formula? do
+    permissions :new?, :create?, :destroy?, :change_date_loc_invites?, :change_formula?,
+      :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
-    permissions :update_formula? do
-      it "forbids if finalized" do
-        meal.status = "finalized"
-        expect(subject).not_to permit(admin, meal)
-      end
-    end
-
-    permissions :edit?, :update? do
+    permissions :edit?, :update?, :change_workers? do
       # We let anyone in host community do this so they can change assignments.
       it_behaves_like "permits admins from community"
       it_behaves_like "permits users in community only"
@@ -51,17 +46,31 @@ describe MealPolicy do
       end
     end
 
-    permissions :set_menu?, :close?, :cancel? do
+    permissions :change_formula?, :change_signups?, :change_expenses? do
+      it_behaves_like "permits admins or special role but not regular users", :biller
+
+      it "forbids if finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
+    end
+
+    permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits head cook" do
-        set_head_cook(user)
+        make_head_cook(user)
         expect(subject).to permit(user, meal)
+      end
+
+      it "forbids if finalized" do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
       end
     end
 
     permissions :close?, :reopen? do
-      it "denies if meal cancelled" do
+      it "forbids if meal cancelled" do
         stub_status("cancelled")
         expect(subject).not_to permit(admin, meal)
       end
@@ -99,19 +108,38 @@ describe MealPolicy do
     permissions :finalize? do
       before do
         stub_status("closed")
-        meal.served_at = Time.now - 30.minutes
+        meal.served_at = Time.current - 30.minutes
       end
 
       it_behaves_like "permits admins or special role but not regular users", :biller
 
-      it "forbids if meal already cancelled" do
-        stub_status("cancelled")
+      it "forbids if meal in future" do
+        meal.served_at = Time.current + 2.days
         expect(subject).not_to permit(admin, meal)
       end
 
-      it "forbids if meal finalized" do
-        stub_status("finalized")
-        expect(subject).not_to permit(admin, meal)
+      it "forbids if wrong status" do
+        %w[cancelled finalized open].each do |bad_status|
+          stub_status(bad_status)
+          expect(subject).not_to permit(admin, meal)
+        end
+      end
+
+      describe "cooks_can_finalize setting" do
+        before do
+          community.settings.meals.cooks_can_finalize = value
+          make_head_cook(user)
+        end
+
+        context "true" do
+          let(:value) { true }
+          it { is_expected.to permit(user, meal) }
+        end
+
+        context "false" do
+          let(:value) { false }
+          it { is_expected.not_to permit(user, meal) }
+        end
       end
     end
 
@@ -137,68 +165,86 @@ describe MealPolicy do
     end
   end
 
-  permissions :new_signups? do
-    it "permits if before meal and not closed or full" do
-      Timecop.travel(meal.served_at - 1.day) do
-        expect(subject).to permit(user, meal)
-      end
-    end
-  end
-
-  permissions :edit_signups? do
-    it "permits if before meal and not closed" do
-      Timecop.travel(meal.served_at - 1.day) do
-        expect(subject).to permit(user, meal)
-      end
-    end
-  end
-
   describe "scope" do
-    let!(:user) { create(:user) }
-    let!(:other_community) { create(:community) }
+    include_context "policy scopes"
+    let(:klass) { Meal }
     let!(:meal1) { create(:meal, communities: [user.community]) } # Invited
-    let!(:meal2) { create(:meal, cleaners: [user], communities: [other_community]) } # Assigned
-    let!(:meal3) { create(:meal, communities: [other_community]) } # Signed up
-    let!(:meal4) { create(:meal, communities: [other_community]) } # None of the above
-    let(:permitted) { MealPolicy::Scope.new(user, Meal.all).resolve }
+    let!(:meal2) { create(:meal, cleaners: [actor], communities: [communityB]) } # Assigned
+    let!(:meal3) { create(:meal, communities: [communityB]) } # Signed up
+    let!(:meal4) { create(:meal, communities: [communityB]) } # None of the above
 
     before do
-      meal3.signups.create!(household: user.household, adult_meat: 2)
+      meal3.signups.create!(household: actor.household, adult_meat: 2)
     end
 
-    it "returns meals invited to, assigned to, or signed up for" do
-      expect(permitted).to contain_exactly(meal1, meal2, meal3)
+    context "as regular user" do
+      let(:actor) { user }
+
+      it "returns meals invited to, assigned to, or signed up for" do
+        is_expected.to contain_exactly(meal1, meal2, meal3)
+      end
     end
 
-    context "with inactive user" do
-      before { user.deactivated_at = Time.current }
+    context "as admin" do
+      let(:actor) { admin }
+
+      it "returns meals invited to, assigned to, or signed up for" do
+        is_expected.to contain_exactly(meal1, meal2, meal3)
+      end
+    end
+
+    context "as cluster admin" do
+      let(:actor) { cluster_admin }
+
+      it "returns all meals" do
+        is_expected.to contain_exactly(meal1, meal2, meal3, meal4)
+      end
+    end
+
+    context "as inactive user" do
+      let(:actor) { inactive_user }
 
       it "returns meals only signed up for" do
-        expect(permitted).to contain_exactly(meal3)
+        is_expected.to contain_exactly(meal3)
       end
     end
   end
 
   describe "permitted_attributes" do
+    include_context "policy permissions"
     subject { MealPolicy.new(actor, meal).permitted_attributes }
-    let(:assign_attribs) {[{
-      :head_cook_assign_attributes => [:id, :user_id],
-      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-      :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
-      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-    }]}
-    let(:head_cook_attribs) { [:allergen_dairy, :title, :capacity, :entrees] }
+    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:date_loc_invite_attribs) do
+      [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
+    end
+    let(:menu_attribs) do
+      %i[title entrees side kids dessert notes] + Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
+    end
+    let(:worker_attribs) do
+      [{
+        head_cook_assign_attributes: %i[id user_id],
+        asst_cook_assigns_attributes: %i[id user_id _destroy],
+        table_setter_assigns_attributes: %i[id user_id _destroy],
+        cleaner_assigns_attributes: %i[id user_id _destroy]
+      }]
+    end
+    let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
+    let(:signup_attribs) do
+      [signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]]]
+    end
+    let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
-        expect(subject).to include(*(assign_attribs + head_cook_attribs) + admin_attribs)
-        expect(subject).not_to include(:community_id)
+        expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
+          signup_attribs + expense_attribs + %i[capacity formula_id])
       end
 
-      it "should not allow formula_id if meal finalized" do
-        meal.status = "finalized"
+      it "should not allow formula_id, capacity if meal finalized" do
+        stub_status("finalized")
         expect(subject).not_to include(:formula_id)
+        expect(subject).not_to include(:capacity)
       end
     end
 
@@ -206,7 +252,7 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow only assignment attribs" do
-        expect(subject).to contain_exactly(*assign_attribs)
+        expect(subject).to match_array(worker_attribs)
       end
     end
 
@@ -214,9 +260,17 @@ describe MealPolicy do
       let(:actor) { user }
 
       it "should allow more stuff" do
-        set_head_cook(actor)
-        expect(subject).to include(*(assign_attribs + head_cook_attribs))
-        expect(subject).not_to include(*(admin_attribs + [:community_id]))
+        make_head_cook(actor)
+        expect(subject).to match_array(menu_attribs + worker_attribs +
+          signup_attribs + expense_attribs + [:capacity])
+      end
+    end
+
+    context "biller" do
+      let(:actor) { biller }
+
+      it "should allow edit formula" do
+        expect(subject).to match_array((worker_attribs + signup_attribs + expense_attribs) << :formula_id)
       end
     end
 
@@ -235,14 +289,19 @@ describe MealPolicy do
     context "outside admin" do
       let(:actor) { admin_in_cmtyB }
 
-      it "should have only basic attribs" do
-        expect(subject).to contain_exactly(*assign_attribs)
+      it "should have nothing" do
+        expect(subject).to be_empty
       end
     end
   end
 
-  def set_head_cook(user)
+  def stub_status(value)
+    allow(meal).to receive(:status).and_return(value)
+  end
+
+  def make_head_cook(user)
     save_policy_objects!(community, user)
+    meal.community = community
     meal.save!
     meal.head_cook = user
   end

@@ -1,0 +1,43 @@
+<% content_for(:title, "Protocols") %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_protocol).create? %>
+    <%= link_to(icon_tag("plus") << " Create Protocol",
+      new_reservations_protocol_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if protocols.empty? %>
+  <div class="none-found">
+    No protocols found.
+  </div>
+<% else %>
+  <table class="index">
+    <tr>
+      <th>Name</th>
+      <th>Resources</th>
+      <% if @kinds_present %>
+        <th>Types</th>
+      <% end %>
+      <th>Rules</th>
+    </tr>
+    <% protocols.each do |protocol| %>
+      <tr>
+        <td class="name">
+          <%= link_to(protocol.name, edit_reservations_protocol_path(protocol)) %>
+        </td>
+        <td>
+          <%= protocol.resource_names %>
+        </td>
+        <% if @kinds_present %>
+          <td>
+            <%= protocol.kinds&.join(", ") %>
+          </td>
+        <% end %>
+        <td>
+          <%= protocol.defined_rules %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

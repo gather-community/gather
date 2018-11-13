@@ -27,7 +27,7 @@ feature "formulas", js: true do
     fill_in("Teen (Meat)", with: "2")
     find("#meals_formula_pantry_calc_type").select("Percentage")
     fill_in("Pantry Fee Amount", with: "10.2%")
-    click_on("Create Formula")
+    click_button("Save")
     expect_success
 
     click_link("Free Meal")
@@ -35,7 +35,7 @@ feature "formulas", js: true do
     expect(page).to have_content("10.2%")
     click_on("Edit")
     fill_in("Teen (Meat)", with: "2.99")
-    click_on("Update Formula")
+    click_button("Save")
     expect_success
 
     click_link("Free Meal")

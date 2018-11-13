@@ -1,21 +1,26 @@
+# frozen_string_literal: true
+
 class SignupPolicy < ApplicationPolicy
-  alias_method :signup, :record
+  alias signup record
+
+  delegate :meal, to: :signup
 
   def create?
-    active? && invited?
+    active? && invited? && meal.open? && !meal.cancelled? && !meal.full? && !meal.in_past?
   end
 
   def update?
-    invited?
+    invited? && meal.open? && !meal.in_past?
   end
 
   def permitted_attributes
-    Signup::SIGNUP_TYPES + [:meal_id, :comments]
+    [:id, :household_id, :meal_id, :comments, lines_attributes: %i[id quantity item_id]]
   end
 
   private
 
   def invited?
-    signup.communities.include?(user.community)
+    # Compare IDs to prevent N+1 in meals index
+    meal.invitations.any? { |invitation| invitation.community_id == user.community_id }
   end
 end

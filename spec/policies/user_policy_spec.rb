@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require("rails_helper")
+require "rails_helper"
 
 describe UserPolicy do
-  include_context "policy objs"
-
   describe "permissions" do
+    include_context "policy permissions"
     let(:record) { other_user }
 
     shared_examples_for "permits action on own community" do
@@ -267,6 +266,7 @@ describe UserPolicy do
   end
 
   describe "#grantable_roles" do
+    include_context "policy permissions"
     let(:roles) { described_class.new(actor, other_user).grantable_roles }
     let(:base_roles) { %i[biller photographer meals_coordinator wikiist work_coordinator] }
 
@@ -297,51 +297,47 @@ describe UserPolicy do
   end
 
   describe "scope" do
-    before do
-      save_policy_objects!(cluster, clusterB, community, communityB, communityX,
-        user, other_user, inactive_user, user_in_cmtyB, outside_user,
-        admin, cluster_admin, super_admin,
-        child, other_child, inactive_child, child_in_cmtyB, outside_child)
-    end
+    include_context "policy scopes"
+    let(:klass) { User }
 
-    context "for super admin" do
-      it "returns all users" do
-        # This query crosses a tenant boundary so need to do it unscoped.
-        ActsAsTenant.unscoped do
-          permitted = UserPolicy::Scope.new(super_admin, User.all).resolve
-          expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
-            admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cmtyB,
-            outside_user, outside_child)
-        end
+    # If we don't specify guardians, a bunch of extra users get created by the factory.
+    let(:child) { create(:user, :child, guardians: [user], community: community) }
+    let(:other_child) { create(:user, :child, guardians: [user], community: community) }
+    let(:inactive_child) { create(:user, :child, :inactive, guardians: [user], community: community) }
+    let(:childB) { create(:user, :child, guardians: [user], community: communityB) }
+
+    shared_examples_for "adults in cluster and children in community" do
+      let!(:expected) do
+        [user, other_user, userB, inactive_user,
+         admin, cluster_admin, child, inactive_child, other_child]
       end
+      it { is_expected.to match_array(expected) }
     end
 
     context "for cluster admin" do
-      it "returns adults and children in cluster only" do
-        permitted = UserPolicy::Scope.new(cluster_admin, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
-          admin, cluster_admin, super_admin, child, inactive_child, other_child, child_in_cmtyB)
+      let(:actor) { cluster_admin }
+      let!(:expected) do
+        [user, other_user, userB, inactive_user,
+         admin, cluster_admin, child, inactive_child, other_child, childB]
+      end
+      it "returns adults and children in cluster" do
+        is_expected.to match_array(expected)
       end
     end
 
     context "for admin" do
-      it "returns adults in cluster and children in community" do
-        permitted = UserPolicy::Scope.new(admin, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
-          admin, cluster_admin, super_admin, child, inactive_child, other_child)
-      end
+      let(:actor) { admin }
+      it_behaves_like "adults in cluster and children in community"
     end
 
     context "for regular user" do
-      it "returns adults in cluster and children in community" do
-        permitted = UserPolicy::Scope.new(user, User.all).resolve
-        expect(permitted).to contain_exactly(user, other_user, user_in_cmtyB, inactive_user,
-          admin, cluster_admin, super_admin, child, inactive_child, other_child)
-      end
+      let(:actor) { user }
+      it_behaves_like "adults in cluster and children in community"
     end
   end
 
   describe "permitted attributes" do
+    include_context "policy permissions"
     let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
     let(:base_attribs) do
       [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,

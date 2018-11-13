@@ -4,7 +4,7 @@ class People::Group < ApplicationRecord
   belongs_to :community
 
   scope :in_community, ->(c) { where(community_id: c.id) }
-  scope :by_name, -> { order("LOWER(name)") }
+  scope :by_name, -> { alpha_order(:name) }
 
   after_update { Work::ShiftIndexUpdater.new(self).update }
 end

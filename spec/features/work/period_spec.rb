@@ -59,7 +59,7 @@ feature "periods", js: true do
     select("Full Share", from: "Jane Picard")
     select("½ Share", from: "Churl Rox")
 
-    click_on("Create Period")
+    click_button("Save")
 
     # Simulate user creation after period is created.
     create(:user, first_name: "Blep", last_name: "Cruller")
@@ -68,7 +68,7 @@ feature "periods", js: true do
     expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
     select("½ Share", from: "Blep Cruller")
-    click_on("Update Period")
+    click_button("Save")
 
     click_on("Qux")
     expect(page).to have_select("Blep Cruller", selected: "½ Share")

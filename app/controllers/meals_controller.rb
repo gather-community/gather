@@ -1,7 +1,7 @@
 class MealsController < ApplicationController
   include MealShowable, Lensable
 
-  decorates_assigned :meals
+  decorates_assigned :meal, :meals, :meal_summary
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
@@ -36,6 +36,7 @@ class MealsController < ApplicationController
     @signup = Signup.for(current_user, @meal)
     @household = current_user.household.decorate
     @account = current_user.account_for(@meal.community).try(:decorate)
+    @expand_signup_form = params[:signup].present? || @signup.persisted?
     load_signups
     load_prev_next_meal
   end
@@ -59,7 +60,6 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @min_date = nil
-    @notify_on_worker_change = !policy(@meal).administer?
     prep_form_vars
   end
 
@@ -106,39 +106,6 @@ class MealsController < ApplicationController
     redirect_to(meals_path)
   end
 
-  def finalize
-    @meal = Meal.find(params[:id])
-    authorize @meal
-    @meal.build_cost
-    @dupes = []
-  end
-
-  def do_finalize
-    @meal = Meal.find(params[:id])
-    authorize @meal, :finalize?
-
-    # We assign finalized here so that the meal/signup validations don't complain about no spots left.
-    @meal.assign_attributes(finalize_params.merge(status: "finalized"))
-
-    if (@dupes = @meal.duplicate_signups).any?
-      flash.now[:error] = "There are duplicate signups. "\
-        "Please correct by adding numbers for each diner type."
-      render(:finalize)
-    elsif @meal.valid?
-      # Run the save and signup in a transaction in case the finalize operation fails.
-      # Save the meal first so that any signups marked for deletion are deleted.
-      Meal.transaction do
-        @meal.save!
-        Meals::Finalizer.new(@meal).finalize!
-      end
-      flash[:success] = "Meal finalized successfully"
-      redirect_to(meals_path(finalizable: 1))
-    else
-      set_validation_error_notice(@meal)
-      render(:finalize)
-    end
-  end
-
   def reopen
     @meal = Meal.find(params[:id])
     authorize @meal
@@ -149,6 +116,7 @@ class MealsController < ApplicationController
 
   def summary
     @meal = Meal.find(params[:id]).decorate
+    @meal_summary = Meals::Summary.new(@meal)
     authorize @meal
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
@@ -205,7 +173,7 @@ class MealsController < ApplicationController
     else
       @meals = @meals.future.oldest_first
     end
-    @meals = @meals.includes(:signups)
+    @meals = @meals.includes(:signups, :invitations)
     if params[:search].present?
       @meals = @meals.eager_load(:head_cook).
         where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
@@ -220,7 +188,7 @@ class MealsController < ApplicationController
   end
 
   def prep_form_vars
-    @meal = @meal.decorate
+    @meal.build_cost if @meal.cost.nil?
     @meal.ensure_assignments
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community).
@@ -232,7 +200,7 @@ class MealsController < ApplicationController
 
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
-    if !policy(@meal).administer?
+    unless policy(@meal).change_date_loc_invites?
       @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
     end
   end

@@ -13,3 +13,4 @@ class Gather.Views.ApplicationView extends Backbone.View
     Dropzone.autoDiscover = false
 
     new Gather.Views.SelectPromptStyler()
+    new Gather.Views.Toggler()

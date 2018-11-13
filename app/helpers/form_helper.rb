@@ -19,8 +19,8 @@ module FormHelper
 
     classes = options[:html][:class].present? ? [options[:html][:class]] : []
     classes << "gather-form"
-    classes << "form-horizontal" # Used by Bootstrap
-    classes << (layout.to_s.gsub("_", "-") << "-layout") # Layout
+    classes << (layout == :vertical ? "form-vertical" : "form-horizontal") # Used by Bootstrap
+    classes << (layout.to_s.tr("_", "-") << "-layout") # Layout
     classes << (width == :full ? "full-width" : "normal-width")
     classes << "#{name}-form" # Object class name
 
@@ -59,31 +59,29 @@ module FormHelper
     options[:multiple] = true unless options.has_key?(:multiple)
 
     wrapper_classes = %w[nested-fields subfields]
-    wrapper_classes << "no-label" if options[:label] == false
+    wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
     wrapper_classes << "multiple" if options[:multiple]
 
-    f.input(assoc, options.slice(:required)) do
+    f.input(assoc, options.slice(:required, :label)) do
       content_tag(:div, class: "nested-field-set") do
         f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
           render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
         end <<
-        if options[:multiple]
-          content_tag(:span) do
-            link_to_add_association(t("cocoon.add_links.#{assoc}"), f, assoc,
-              partial: wrapper_partial,
-              render_options: {
-                wrapper: :nested_fields, # Simple form wrapper
-                locals: {options: options, classes: wrapper_classes}
-              }
-            )
+          if options[:multiple]
+            content_tag(:span, class: "add-link-wrapper") do
+              link_to_add_association_with_icon(t("cocoon.add_links.#{assoc}"), f, assoc,
+                partial: wrapper_partial,
+                render_options: {
+                  wrapper: :nested_fields, # Simple form wrapper
+                  locals: {options: options, classes: wrapper_classes}
+                })
+            end
           end
-        end
       end
     end
   end
 
-  # Nested field set consisting only of user selects.
-  def user_nested_field_set(f, assoc, options = {})
-    nested_field_set(f, assoc, options.merge(label: false, inner_partial: "shared/user_select"))
+  def link_to_add_association_with_icon(label, *args)
+    link_to_add_association(icon_tag("plus") << " " << label, *args)
   end
 end

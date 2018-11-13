@@ -15,6 +15,9 @@ Layout/AlignParameters:
 Layout/CaseIndentation:
   EnforcedStyle: end
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Layout/FirstParameterIndentation:
   EnforcedStyle: consistent
 
@@ -41,6 +44,7 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
     - config/routes.rb
+    - config/initializers/simple_form_bootstrap.rb
 
 Metrics/LineLength:
   Enabled: true
@@ -70,6 +74,10 @@ Style/MethodCallWithArgsParentheses:
     - []
     - to
     - not_to
+    - require
+    - raise
+  Exclude:
+    - config/initializers/simple_form_bootstrap.rb
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

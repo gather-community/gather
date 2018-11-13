@@ -15,7 +15,9 @@ FactoryBot.define do
 
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.community]
-      meal.resources = [create(:resource)] if meal.resources.empty? && !evaluator.no_resources
+      if meal.resources.empty? && !evaluator.no_resources
+        meal.resources = [create(:resource, meal_hostable: true)]
+      end
     end
 
     trait :with_asst do

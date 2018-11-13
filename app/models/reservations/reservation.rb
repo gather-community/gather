@@ -21,6 +21,7 @@ module Reservations
     delegate :community, to: :resource, allow_nil: true
 
     delegate :household, to: :reserver
+    delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :reserver, prefix: true
     delegate :name, to: :reserver_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
@@ -41,15 +42,6 @@ module Reservations
 
     normalize_attributes :kind, :note
 
-    # Counts the number of seconds or days booked for the given resources by the given
-    # household over the given period.
-    # The number of days is rounded up for each event.
-    # i.e., a 1-hour event and a 10-hour event both counts as 1 day, while a 36-hour event
-    # counts as 2 days.
-    def self.booked_time_for(resources:, household:, period:, unit:)
-      where(resource: resources, reserver: household.users, starts_at: period).to_a.sum(&unit)
-    end
-
     def self.new_with_defaults(attribs)
       reservation = new(attribs)
 
@@ -58,10 +50,10 @@ module Reservations
 
       # Set fixed start/end time
       rule_set = reservation.rule_set
-      if fst = rule_set[:fixed_start_time].try(:value)
+      if fst = rule_set.fixed_start_time
         reservation.starts_at = reservation.starts_at.change(hour: fst.hour, min: fst.min)
       end
-      if fet = rule_set[:fixed_end_time].try(:value)
+      if fet = rule_set.fixed_end_time
         reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
       end
       if reservation.starts_at >= reservation.ends_at
@@ -79,12 +71,16 @@ module Reservations
       ends_at - starts_at
     end
 
+    def minutes
+      (seconds.to_f / 1.minute).ceil
+    end
+
     def days
       (seconds.to_f / 1.day).ceil
     end
 
     def rule_set
-      @rule_set ||= RuleSet.build_for(self)
+      @rule_set ||= Rules::RuleSet.build_for(resource: resource, kind: kind)
     end
 
     def future?
@@ -136,12 +132,7 @@ module Reservations
 
     def apply_rules
       return if errors.any?
-      rule_set.rules.each do |_, rule|
-        # Check returns 2 element array on failure
-        unless (result = rule.check(self)) == true
-          errors.add(*result)
-        end
-      end
+      rule_set.errors(self).each { |e| errors.add(*e) }
     end
   end
 end

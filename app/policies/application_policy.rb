@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Need to load the scope inner class early or we get load errors.
+require File.expand_path(File.join(File.dirname(__FILE__), "application_policy_scope"))
+
 # Parent policy for all policies.
 class ApplicationPolicy
   class CommunityNotSetError < StandardError; end
@@ -53,46 +56,6 @@ class ApplicationPolicy
     Pundit.policy_scope!(user, record.class)
   end
 
-  # Note: It is not a Policy scope's job to:
-  # - Restrict the results to the current community (controller should do that where appropriate)
-  # - Restrict the results to the current cluster (ActsAsTenant should do that)
-  class Scope
-    attr_reader :user, :scope
-
-    delegate :active?, to: :user
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      scope
-    end
-
-    def active_super_admin?
-      active? && user.global_role?(:super_admin)
-    end
-
-    def active_cluster_admin?
-      active? && user.global_role?(:cluster_admin) || active_super_admin?
-    end
-
-    def active_admin?
-      active? && %i[admin cluster_admin super_admin].any? { |r| user.global_role?(r) }
-    end
-
-    def active_admin_or?(role)
-      active_admin? || (active? && user.global_role?(role))
-    end
-
-    protected
-
-    def community_only_unless_cluster_admin
-      active_cluster_admin? ? scope : scope.in_community(user.community)
-    end
-  end
-
   protected
 
   delegate :active?, to: :user
@@ -122,8 +85,8 @@ class ApplicationPolicy
     active? && user.global_role?(role) && own_community_record?
   end
 
-  def active_admin_or?(role)
-    active_admin? || active_with_community_role?(role)
+  def active_admin_or?(*roles)
+    active_admin? || roles.any? { |role| active_with_community_role?(role) }
   end
 
   def own_community_record?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "meal crud", js: true do
@@ -26,7 +28,7 @@ feature "meal crud", js: true do
       select2(location.name, from: "#meal_resource_ids", type: :inline)
       select2(users[0].name, from: "#meal_head_cook_assign_attributes_user_id")
       select2(users[1].name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
-      click_on("Create Meal")
+      click_button("Save")
       expect_success
 
       find("tr", text: users[0].name).find("a", text: "[No Title]").click
@@ -62,8 +64,23 @@ feature "meal crud", js: true do
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu
 
+      # Update to add expenses
+      click_link("Southern Beans")
+      click_link("Edit")
+      click_link("Edit Expenses")
+      fill_in("Ingredient Cost", with: "125.66")
+      fill_in("Pantry Cost", with: "12.30")
+      choose("Balance Credit")
+      click_button("Save")
+      expect_success
+      click_link("Southern Beans")
+      click_link("Edit")
+      click_link("Edit Expenses")
+      expect(page).to have_field("Ingredient Cost", with: "125.66")
+      click_button("Save")
+
       # Show
-      find("a", text: "Southern Beans").click
+      click_link("Southern Beans")
       expect(page).to have_content("Southern Beans and Rice")
       expect(page).to have_content("Chocolate")
 
@@ -82,8 +99,9 @@ feature "meal crud", js: true do
       find("tr", text: meals[4].head_cook.name).find("a", text: "[No Title]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
+      click_link("Edit Workers")
       select2(actor.name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
-      click_on("Update Meal")
+      click_button("Save")
       expect_success
 
       # Show
@@ -105,6 +123,7 @@ feature "meal crud", js: true do
   end
 
   def fill_in_menu
+    click_link("Edit Menu")
     fill_in("Title", with: "Southern Beans and Rice")
     fill_in("Entrees", with: "Beans, rice, sausage")
     fill_in("Side", with: "Collards")
@@ -112,7 +131,7 @@ feature "meal crud", js: true do
     fill_in("Dessert", with: "Chocolate")
     fill_in("Notes", with: "Partially organic")
     check("Dairy")
-    click_on("Update Meal")
+    click_button("Save")
     expect_success
   end
 
@@ -126,7 +145,7 @@ feature "meal crud", js: true do
     # Close/reopen
     click_link("Close")
     expect_success
-    find("a", text: "Southern Beans").click
+    click_link("Southern Beans")
     click_link("Reopen")
     expect_success
   end

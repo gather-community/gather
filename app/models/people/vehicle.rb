@@ -5,7 +5,7 @@ module People
     belongs_to :household, inverse_of: :vehicles
 
     scope :in_community, ->(c) { joins(:household).where(households: {community_id: c.id}) }
-    scope :by_make_model, -> { order("LOWER(make)", "LOWER(model)", "LOWER(color)", "LOWER(plate)") }
+    scope :by_make_model, -> { alpha_order(:make, :model, :color, :plate) }
     scope :active, -> { joins(:household).merge(Household.active) }
 
     normalize_attributes :make, :model, :color, :plate

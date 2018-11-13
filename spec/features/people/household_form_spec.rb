@@ -17,7 +17,7 @@ feature "household form" do
         select(community_name, from: "Community") if community_name
         fill_in("Unit Number", with: "33")
         fill_in("Garage Number(s)", with: "7")
-        click_on("Create Household")
+        click_button("Save")
         expect_success
         select_lens(:community, community_name) if community_name
         click_on("Pump")
@@ -50,7 +50,7 @@ feature "household form" do
           fill_in("Main Phone", with: "7776665555")
           fill_in("Location", with: "Placey Place")
         end
-        click_button("Update Household")
+        click_button("Save")
         expect(page).to have_content("updated successfully")
       end
     end

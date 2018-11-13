@@ -15,7 +15,7 @@ describe Work::Shift do
       context "full community job" do
         before do
           allow(shift).to receive(:full_community?).and_return(true)
-          shift.send(:normalize)
+          shift.validate
         end
 
         context "changes slots to 1m" do
@@ -27,7 +27,7 @@ describe Work::Shift do
       context "fixed slot job" do
         before do
           allow(shift).to receive(:full_community?).and_return(false)
-          shift.send(:normalize)
+          shift.validate
         end
 
         context "leaves slots value unchanged" do
@@ -41,7 +41,7 @@ describe Work::Shift do
       context "job with date_time type" do
         before do
           allow(shift).to receive(:job_date_time?).and_return(true)
-          shift.send(:normalize)
+          shift.validate
         end
 
         context "leaves times unchanged" do
@@ -56,7 +56,7 @@ describe Work::Shift do
           allow(shift).to receive(:full_period?).and_return(true)
           allow(shift).to receive(:period_starts_on).and_return(Date.parse("2018-01-01"))
           allow(shift).to receive(:period_ends_on).and_return(Date.parse("2018-02-28"))
-          shift.send(:normalize)
+          shift.validate
         end
 
         context "sets times to period start/end" do
@@ -68,7 +68,7 @@ describe Work::Shift do
       context "job with date_only type" do
         before do
           allow(shift).to receive(:job_date_only?).and_return(true)
-          shift.send(:normalize)
+          shift.validate
         end
 
         context "sets times to midnight" do

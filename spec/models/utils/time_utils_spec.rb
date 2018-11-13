@@ -31,23 +31,19 @@ RSpec.describe Utils::TimeUtils, type: :model do
     end
 
     it "works for 1 day" do
-      expect(Utils::TimeUtils.humanize_interval(86400)).to eq "1 day"
+      expect(Utils::TimeUtils.humanize_interval(86400)).to eq "24 hours"
     end
 
     it "works for 1 day plus a bit" do
-      expect(Utils::TimeUtils.humanize_interval(86401)).to eq "1 day"
+      expect(Utils::TimeUtils.humanize_interval(86401)).to eq "24 hours"
     end
 
     it "works for 1 day plus a minute" do
-      expect(Utils::TimeUtils.humanize_interval(86460)).to eq "1 day 1 minute"
-    end
-
-    it "works for 1 day plus two hours" do
-      expect(Utils::TimeUtils.humanize_interval(86400 + 7200)).to eq "1 day 2 hours"
+      expect(Utils::TimeUtils.humanize_interval(86460)).to eq "24 hours 1 minute"
     end
 
     it "works for 5 days" do
-      expect(Utils::TimeUtils.humanize_interval(5 * 86400)).to eq "5 days"
+      expect(Utils::TimeUtils.humanize_interval(5 * 86400)).to eq "120 hours"
     end
   end
 end

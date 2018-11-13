@@ -30,6 +30,8 @@ Gather.Views.DirtyChecker = Backbone.View.extend
         orig = moment($(this).find('input').data('initial-value'))
         current = $(this).data('DateTimePicker').date()
         if orig && current && !orig.isSame(current) || (!orig && !current)
+          if $.DirtyForms.debug = true
+            console.log('[DirtyFormDateTimePickerHelper] Found dirty picker ', this)
           isDirty = true
           return false
       isDirty

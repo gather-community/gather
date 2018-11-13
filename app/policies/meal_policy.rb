@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MealPolicy < ApplicationPolicy
-  alias_method :meal, :record
+  alias meal record
 
   class Scope < Scope
     ASSIGNED = "EXISTS (SELECT id FROM assignments
@@ -10,8 +12,11 @@ class MealPolicy < ApplicationPolicy
       WHERE signups.meal_id = meals.id AND signups.household_id = ?)"
 
     def resolve
-      if user.active?
-        scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}", user.id, user.community_id, user.household_id)
+      if active_cluster_admin?
+        scope
+      elsif user.active?
+        scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
+          user.id, user.community_id, user.household_id)
       else
         scope.where(SIGNED_UP, user.household_id)
       end
@@ -38,94 +43,96 @@ class MealPolicy < ApplicationPolicy
     active_admin_or?(:meals_coordinator)
   end
 
-  # We let anyone from host community (or assignees from outside) do this
-  # so they can change assignments.
   def update?
-    active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
-  end
-
-  # Means they can peform the fundamental tasks (set date, communities, etc.)
-  def administer?
-    active_admin_or?(:meals_coordinator)
+    change_date_loc_invites? || change_formula? || change_menu? || change_workers?
   end
 
   def destroy?
-    administer?
+    active_admin_or?(:meals_coordinator)
   end
 
   def summary?
     active_and_associated_or_signed_up?
   end
 
-  def set_menu?
-    active_admin_or_coordinator_or_head_cook?
-  end
-
   def close?
-    active_admin_or_coordinator_or_head_cook? && meal.open?
+    admin_coord_or_head_cook? && meal.open?
   end
 
   def cancel?
-    active_admin_or_coordinator_or_head_cook? && !meal.cancelled? && !meal.finalized?
+    admin_coord_or_head_cook? && !meal.cancelled? && !meal.finalized?
   end
 
   def reopen?
-    active_admin_or_coordinator_or_head_cook? && meal.closed? && !meal.day_in_past?
+    admin_coord_or_head_cook? && meal.closed? && !meal.day_in_past?
   end
 
   def finalize?
-    active_admin_or?(:biller) && meal.closed? && meal.in_past?
+    meal.closed? && meal.in_past? &&
+      (active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?)
   end
 
-  def update_formula?
-    !meal.finalized? && administer?
+  def change_date_loc_invites?
+    active_admin_or?(:meals_coordinator)
+  end
+
+  def change_formula?
+    !meal.finalized? && active_admin_or?(:meals_coordinator, :biller)
+  end
+
+  def change_capacity?
+    !meal.finalized? && admin_coord_or_head_cook?
+  end
+
+  def change_menu?
+    !meal.finalized? && admin_coord_or_head_cook?
+  end
+
+  def change_workers?
+    active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
+  end
+
+  def change_workers_without_notification?
+    active_admin_or?(:meals_coordinator)
+  end
+
+  # Whether someone can edit signups for _anyone_, not just themselves.
+  def change_signups?
+    not_finalized_and_admin_coord_head_cook_or_biller?
+  end
+
+  def change_expenses?
+    not_finalized_and_admin_coord_head_cook_or_biller?
   end
 
   def send_message?
     active_admin_or?(:meals_coordinator) || assigned?
   end
 
-  def new_signups?
-    !meal.closed? && !meal.cancelled? && !meal.full? && !meal.in_past?
-  end
-
-  def edit_signups?
-    !meal.closed? && !meal.cancelled? && !meal.in_past?
-  end
-
   def permitted_attributes
-    # Anybody that can update a meal can change the assignments.
-    permitted = [{
-      :head_cook_assign_attributes => [:id, :user_id],
-      :asst_cook_assigns_attributes => [:id, :user_id, :_destroy],
-      :table_setter_assigns_attributes => [:id, :user_id, :_destroy],
-      :cleaner_assigns_attributes => [:id, :user_id, :_destroy]
-    }]
-
-    if set_menu?
-      allergens = Meal::ALLERGENS.map{ |a| :"allergen_#{a}" }
-      permitted += allergens + [:title, :capacity, :entrees, :side, :kids, :dessert, :notes,
-        { :community_boxes => [Community.all.map(&:id).map(&:to_s)] }
-      ]
-    end
-
-    if administer?
-      permitted += [:served_at, resource_ids: []]
-    end
-
-    permitted << :formula_id if update_formula?
-
+    permitted = []
+    permitted.concat(worker_attribs) if change_workers?
+    permitted.concat(menu_attribs) if change_menu?
+    permitted.concat(date_loc_invite_attribs) if change_date_loc_invites?
+    permitted.concat(signup_attribs) if change_signups?
+    permitted.concat(expense_attribs) if change_expenses?
+    permitted << :formula_id if change_formula?
+    permitted << :capacity if change_capacity?
     permitted
   end
 
   private
 
-  def active_admin_or_coordinator_or_head_cook?
-    active_admin_or?(:meals_coordinator) || active? && head_cook?
+  def admin_coord_or_head_cook?
+    active_admin_or?(:meals_coordinator) || head_cook?
   end
 
   def active_and_associated_or_signed_up?
     active? && associated? || signed_up? || active_admin?
+  end
+
+  def not_finalized_and_admin_coord_head_cook_or_biller?
+    !meal.finalized? && (active_admin_or?(:meals_coordinator, :biller) || head_cook?)
   end
 
   def associated?
@@ -145,6 +152,31 @@ class MealPolicy < ApplicationPolicy
   end
 
   def head_cook?
-    user == meal.head_cook
+    active? && user == meal.head_cook
+  end
+
+  def date_loc_invite_attribs
+    [:served_at, {community_boxes: [Community.all.map(&:id).map(&:to_s)]}, {resource_ids: []}]
+  end
+
+  def menu_attribs
+    Meal::ALLERGENS.map { |a| :"allergen_#{a}" } + %i[title entrees side kids dessert notes]
+  end
+
+  def worker_attribs
+    [{
+      head_cook_assign_attributes: %i[id user_id],
+      asst_cook_assigns_attributes: %i[id user_id _destroy],
+      table_setter_assigns_attributes: %i[id user_id _destroy],
+      cleaner_assigns_attributes: %i[id user_id _destroy]
+    }]
+  end
+
+  def signup_attribs
+    [signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]]]
+  end
+
+  def expense_attribs
+    [cost_attributes: %i[ingredient_cost pantry_cost payment_method]]
   end
 end

@@ -7,7 +7,6 @@ class Meal < ApplicationRecord
     tree_nuts pineapple bananas tofu eggplant none)
   DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}
   MENU_ITEMS = %w(entrees side kids dessert notes)
-  ALL_EXTRA_ROLES = %i(asst_cook table_setter cleaner)
 
   acts_as_tenant :cluster
 
@@ -16,18 +15,18 @@ class Meal < ApplicationRecord
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
-  has_many :assignments, dependent: :destroy
-  has_one :head_cook_assign, ->{ where(role: "head_cook") }, class_name: "Assignment"
-  has_many :asst_cook_assigns, ->{ where(role: "asst_cook") }, class_name: "Assignment"
-  has_many :table_setter_assigns, ->{ where(role: "table_setter") }, class_name: "Assignment"
-  has_many :cleaner_assigns, ->{ where(role: "cleaner") }, class_name: "Assignment"
+  has_many :assignments, -> { by_role }, dependent: :destroy
+  has_one :head_cook_assign, -> { where(role: "head_cook") }, class_name: "Assignment"
+  has_many :asst_cook_assigns, -> { where(role: "asst_cook") }, class_name: "Assignment"
+  has_many :table_setter_assigns, -> { where(role: "table_setter") }, class_name: "Assignment"
+  has_many :cleaner_assigns, -> { where(role: "cleaner") }, class_name: "Assignment"
   has_one :head_cook, through: :head_cook_assign, source: :user
   has_many :asst_cooks, through: :asst_cook_assigns, source: :user
   has_many :table_setters, through: :table_setter_assigns, source: :user
   has_many :cleaners, through: :cleaner_assigns, source: :user
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
-  has_many :signups, ->{ sorted }, dependent: :destroy, inverse_of: :meal
+  has_many :signups, -> { sorted }, dependent: :destroy, inverse_of: :meal
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
@@ -38,9 +37,9 @@ class Meal < ApplicationRecord
   scope :hosted_by, ->(community) { where(community: community) }
   scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
   scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
-  scope :by_community, -> { joins(:community).order("communities.name") }
-  scope :by_community_reverse, -> { joins(:community).order("communities.name DESC") }
-  scope :without_menu, -> { where(MENU_ITEMS.map{ |i| "#{i} IS NULL" }.join(" AND ")) }
+  scope :by_community, -> { joins(:community).alpha_order(communities: :name) }
+  scope :by_community_reverse, -> { joins(:community).alpha_order("communities.name": :desc) }
+  scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
   scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
@@ -53,12 +52,15 @@ class Meal < ApplicationRecord
   accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :signups, allow_destroy: true
-  accepts_nested_attributes_for :cost
+  accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
+    a["id"].blank? && a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
+  }
+  accepts_nested_attributes_for :cost, reject_if: :all_blank
 
   delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true, allow_nil: true
+  delegate :name, to: :formula, prefix: true, allow_nil: true
   delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
@@ -81,9 +83,9 @@ class Meal < ApplicationRecord
   validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
-  validates :cost, presence: true, if: :finalized?
   validate { reservation_handler.validate_meal if reservations.any? }
-  validates :resources, presence: { message: :need_location }
+  validates :resources, presence: {message: :need_location}
+  validates_with Meals::SignupsValidator
 
   def self.new_with_defaults(community)
     new(
@@ -108,13 +110,13 @@ class Meal < ApplicationRecord
   end
 
   def extra_roles
-    @extra_roles ||= ALL_EXTRA_ROLES &
+    @extra_roles ||= Assignment::ALL_EXTRA_ROLES &
       (community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
   end
 
   def people_in_role(role)
-    raise ArgumentError("Invalid role #{role}") unless ALL_EXTRA_ROLES.include?(role)
-    send("#{role.to_s.pluralize}")
+    raise ArgumentError("Invalid role #{role}") unless Assignment::ALL_EXTRA_ROLES.include?(role)
+    send(role.to_s.pluralize)
   end
 
   def workers
@@ -139,6 +141,10 @@ class Meal < ApplicationRecord
     invitations.map(&:community_id)
   end
 
+  def community_invited?(community)
+    community_ids.include?(community.id)
+  end
+
   # Duck type for calendaring.
   def starts_at
     served_at
@@ -161,7 +167,7 @@ class Meal < ApplicationRecord
     to_create = new_ids - existing_ids
     to_delete = existing_ids - new_ids
 
-    to_create.each{ |id| invitations.build(community_id: id) }
+    to_create.each { |id| invitations.build(community_id: id) }
 
     invitations.each do |inv|
       if to_delete.include?(inv.community_id)
@@ -171,12 +177,8 @@ class Meal < ApplicationRecord
     end
   end
 
-  def signup_for(household)
-    signups.where(household_id: household.id).first
-  end
-
   def signup_count
-    @signup_count ||= Signup.total_for_meal(self)
+    @signup_count ||= signups.sum(&:total)
   end
 
   def signup_totals
@@ -184,7 +186,7 @@ class Meal < ApplicationRecord
   end
 
   def spots_left
-    @spots_left ||= [capacity - Signup.total_for_meal(self), 0].max
+    @spots_left ||= [capacity - signup_count, 0].max
   end
 
   def portions(food_type)
@@ -196,7 +198,7 @@ class Meal < ApplicationRecord
   end
 
   def nonempty_menu_items
-    MENU_ITEMS.map{ |i| [i, self[i]] }.to_h.reject{ |i, t| t.blank? }
+    MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |i, t| t.blank? }
   end
 
   # Returns a relation for all meals following the current one.
@@ -237,21 +239,15 @@ class Meal < ApplicationRecord
     end
   end
 
-  def duplicate_signups
-    signups.reject(&:marked_for_destruction?).group_by(&:household_id).
-      values.reject(&:one?).each(&:shift).flatten
-  end
-
   private
 
   def menu_items_present?
-    (['title'] + MENU_ITEMS).any?{ |a| self[a].present? }
+    (['title'] + MENU_ITEMS).any? { |a| self[a].present? }
   end
 
   def enough_capacity_for_current_signups
-    if persisted? && !finalized? && capacity && capacity < (ttl = Signup.total_for_meal(self))
-      errors.add(:capacity, "must be at least #{ttl} due to current signups")
-    end
+    return unless persisted? && !finalized? && capacity && capacity < signup_count
+    errors.add(:capacity, "must be at least #{ttl} due to current signups")
   end
 
   def title_and_entree_if_other_menu_items

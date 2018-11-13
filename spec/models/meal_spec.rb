@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-describe Meal, type: :model do
+describe Meal do
   describe "validations" do
     describe "resources" do
       it "fails if none" do
         meal = build(:meal, no_resources: true)
         expect(meal).not_to be_valid
-        expect(meal.errors[:resources].join).to match /must choose at least one location/
+        expect(meal.errors[:resources].join).to match(/must choose at least one location/)
       end
 
       it "succeeds if some" do
@@ -24,6 +24,40 @@ describe Meal, type: :model do
         meal.build_reservations
         expect(meal.reservation_handler).to receive(:validate_meal)
         meal.valid?
+      end
+    end
+
+    describe "signup uniqueness" do
+      let(:hholds) { create_list(:household, 2) }
+      subject(:meal) { build(:meal, signups: signups) }
+
+      context "with unique signups" do
+        let(:signups) do
+          [
+            build(:signup, :with_nums, household_id: hholds[0].id),
+            build(:signup, :with_nums, household_id: hholds[1].id)
+          ]
+        end
+        it { is_expected.to be_valid }
+      end
+
+      context "with duplicate signups" do
+        let(:signups) do
+          [
+            build(:signup, :with_nums, household_id: hholds[0].id),
+            build(:signup, :with_nums, household_id: hholds[1].id),
+            build(:signup, :with_nums, household_id: hholds[0].id),
+            build(:signup, :with_nums, household_id: hholds[0].id)
+          ]
+        end
+
+        it do
+          expect(meal).not_to be_valid
+          expect(meal.signups[0]).to be_valid
+          expect(meal.signups[1]).to be_valid
+          expect(meal.signups[2].errors[:household_id].join).to match(/has already been taken/)
+          expect(meal.signups[3].errors[:household_id].join).to match(/has already been taken/)
+        end
       end
     end
   end

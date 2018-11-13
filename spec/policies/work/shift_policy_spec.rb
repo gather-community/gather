@@ -3,18 +3,18 @@
 require "rails_helper"
 
 describe Work::ShiftPolicy do
-  include_context "policy objs"
   include_context "work policies"
 
-  let(:phase) { "open" }
-  let(:period) { build(:work_period, community: community, phase: phase) }
-  let(:slot_type) { "fixed" }
-  let(:job) { build(:work_job, period: period, hours: 3, slot_type: slot_type) }
-  let(:shift) { build(:work_shift, job: job) }
-  let(:record) { shift }
-  let(:actor) { user }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:phase) { "open" }
+    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:slot_type) { "fixed" }
+    let(:job) { build(:work_job, period: period, hours: 3, slot_type: slot_type) }
+    let(:shift) { build(:work_shift, job: job) }
+    let(:record) { shift }
+    let(:actor) { user }
+
     permissions :index_wrapper? do
       it_behaves_like "permits users in community only"
     end
@@ -83,28 +83,15 @@ describe Work::ShiftPolicy do
   end
 
   describe "scope" do
+    include_context "policy scopes"
+    let(:klass) { Work::Shift }
     let(:period) { create(:work_period, community: community) }
     let(:periodB) { create(:work_period, community: communityB) }
-    let(:job) { create(:work_job, period: period) }
-    let(:jobB) { create(:work_job, period: periodB) }
-    let(:shift) { job.shifts.first }
-    let(:shiftB) { jobB.shifts.first }
-    subject { Work::ShiftPolicy::Scope.new(actor, Work::Shift.all).resolve }
+    let(:job) { create(:work_job, period: period, shift_count: 2) }
+    let(:jobB) { create(:work_job, period: periodB, shift_count: 2) }
+    let!(:objs_in_community) { job.shifts }
+    let!(:objs_in_cluster) { jobB.shifts }
 
-    before do
-      save_policy_objects!(community, communityB, user, other_user, user_in_cmtyB, cluster_admin)
-      save_policy_objects!(shift, shiftB)
-    end
-
-    context "for regular users" do
-      let(:actor) { user }
-      it { is_expected.to contain_exactly(shift) }
-    end
-
-    # TODO: refactor to abstract this kind of check into policy spec context file
-    context "for cluster admins" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(shift, shiftB) }
-    end
+    it_behaves_like "allows regular users in community"
   end
 end

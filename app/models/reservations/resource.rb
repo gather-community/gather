@@ -26,9 +26,10 @@ module Reservations
     validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?
 
+    scope :in_community, ->(c) { where(community: c) }
     scope :meal_hostable, -> { where(meal_hostable: true) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
-    scope :by_name, -> { order(:name) }
+    scope :by_name, -> { alpha_order(:name) }
     scope :with_reservation_counts, lambda {
       select("resources.*, (SELECT COUNT(id) FROM reservations
         WHERE resource_id = resources.id) AS reservation_count")

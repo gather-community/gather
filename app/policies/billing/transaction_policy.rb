@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Billing
   class TransactionPolicy < BillingPolicy
-    alias_method :transaction, :record
+    alias transaction record
 
     def index?
       true
@@ -15,7 +17,7 @@ module Billing
     end
 
     def permitted_attributes
-      [:incurred_on, :code, :description, :amount]
+      %i[incurred_on code description amount]
     end
   end
 end

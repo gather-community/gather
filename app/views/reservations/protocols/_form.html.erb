@@ -1,0 +1,50 @@
+<%= gather_form_for(protocol) do |f| %>
+  <%= f.input(:name) %>
+
+  <h2><%= t("reservations/protocol.applicability") %></h2>
+
+  <%= f.input(:resource_ids, collection: @resource_options, label_method: :name,
+                             input_html: {
+                               multiple: "multiple",
+                               "data-placeholder":
+                                t("simple_form.placeholders.reservations_protocol.resource_ids")
+                             }) %>
+  <% if @kind_options.any? %>
+    <%= f.input(:kinds, collection: @kind_options,
+                        input_html: {
+                          multiple: "multiple",
+                          "data-placeholder": t("simple_form.placeholders.reservations_protocol.kinds")
+                        }) %>
+  <% else %>
+    <%= f.input(:kinds, hint: false) do %>
+      <%= t("reservations/protocol.no_kinds_html", url: admin_settings_path(type: "community")) %>
+    <% end %>
+  <% end %>
+
+  <h2><%= t("reservations/protocol.rules") %></h2>
+
+  <%= f.input(:requires_kind) if @kind_options.any? %>
+  <%= f.input(:fixed_start_time, as: :time_picker) %>
+  <%= f.input(:fixed_end_time, as: :time_picker) %>
+  <%= f.input(:max_lead_days) %>
+  <%= f.input(:max_length_minutes) %>
+  <%= f.input(:max_days_per_year) %>
+  <%= f.input(:max_minutes_per_year) %>
+  <% if multi_community? %>
+    <%= f.input(:other_communities, collection: Reservations::Rules::OtherCommunitiesRule::VALUES) %>
+  <% end %>
+  <%= f.input(:pre_notice, as: :markdown) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    $("#reservations_protocol_resource_ids").select2();
+    $("#reservations_protocol_kinds").select2();
+    new Gather.Views.Reservations.ProtocolFormView({el: '.reservations--protocol-form'});
+    new Gather.Views.DirtyChecker({el: '.reservations--protocol-form'});
+  });
+<% end %>

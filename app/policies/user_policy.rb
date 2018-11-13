@@ -7,12 +7,10 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if active_super_admin?
+      if active_cluster_admin?
         scope
-      elsif active_cluster_admin?
-        scope.in_cluster(user.cluster_id)
       else
-        result = scope.all_in_community_or_adult_in_cluster(user.community)
+        scope.all_in_community_or_adult_in_cluster(user.community)
       end
     end
   end

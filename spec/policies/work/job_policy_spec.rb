@@ -1,14 +1,13 @@
 require "rails_helper"
 
 describe Work::JobPolicy do
-  include_context "policy objs"
-
-  let(:phase) { "open" }
-  let(:period) { build(:work_period, community: community, phase: phase) }
-  let(:job) { build(:work_job, period: period) }
-  let(:record) { job }
-
   describe "permissions" do
+    include_context "policy permissions"
+    let(:phase) { "open" }
+    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:job) { build(:work_job, period: period) }
+    let(:record) { job }
+
     permissions :index?, :show? do
       it_behaves_like "permits users in community only"
     end
@@ -26,30 +25,19 @@ describe Work::JobPolicy do
   end
 
   describe "scope" do
-    let!(:period) { create(:work_period, community: community) }
-    let!(:periodB) { create(:work_period, community: communityB) }
-    let!(:job1) { create(:work_job, period: period) }
-    let!(:job2) { create(:work_job, period: period) }
-    let!(:job3) { create(:work_job, period: periodB) }
-    subject { Work::JobPolicy::Scope.new(actor, Work::Job.all).resolve }
+    include_context "policy scopes"
+    let(:klass) { Work::Job }
+    let(:period) { create(:work_period, community: community) }
+    let(:periodB) { create(:work_period, community: communityB) }
+    let!(:objs_in_community) { create_list(:work_job, 2, period: period) }
+    let!(:objs_in_cluster) { create_list(:work_job, 2, period: periodB) }
 
-    before do
-      save_policy_objects!(community, communityB, user, cluster_admin)
-    end
-
-    context "for regular users" do
-      let(:actor) { user }
-      it { is_expected.to contain_exactly(job1, job2) }
-    end
-
-    # TODO: refactor to abstract this kind of check into policy spec context file
-    context "for cluster admins" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(job1, job2, job3) }
-    end
+    it_behaves_like "allows regular users in community"
   end
 
   describe "permitted attributes" do
+    include_context "policy permissions"
+    let(:period) { build(:work_period) }
     let(:actor) { work_coordinator }
 
     subject { Work::JobPolicy.new(actor, Work::Job.new(period: period)).permitted_attributes }

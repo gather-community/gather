@@ -1,9 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Wiki::PagePolicy do
-  include_context "policy objs"
-
   describe "permissions" do
+    include_context "policy permissions"
     let(:page) { build(:wiki_page, community: community, creator: user) }
     let(:record) { page }
 
@@ -62,28 +63,16 @@ describe Wiki::PagePolicy do
   end
 
   describe "scope" do
-    let!(:page1) { create(:wiki_page, community: community) }
-    let!(:page2) { create(:wiki_page, community: community) }
-    let!(:page3) { create(:wiki_page, community: communityB) }
-    subject { Wiki::PagePolicy::Scope.new(actor, Wiki::Page.all).resolve }
+    include_context "policy scopes"
+    let(:klass) { Wiki::Page }
+    let!(:objs_in_community) { create_list(:wiki_page, 2, community: community) }
+    let!(:objs_in_cluster) { create_list(:wiki_page, 2, community: communityB) }
 
-    before do
-      save_policy_objects!(community, communityB, user, cluster_admin)
-    end
-
-    context "for regular users" do
-      let(:actor) { user }
-      it { is_expected.to contain_exactly(page1, page2) }
-    end
-
-    # TODO: refactor to abstract this kind of check into policy spec context file
-    context "for cluster admins" do
-      let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(page1, page2, page3) }
-    end
+    it_behaves_like "allows regular users in community"
   end
 
   describe "permitted attributes" do
+    include_context "policy permissions"
     subject { Wiki::PagePolicy.new(actor, Wiki::Page.new(community: community)).permitted_attributes }
 
     shared_examples_for "regular user" do

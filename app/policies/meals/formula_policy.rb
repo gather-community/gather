@@ -6,7 +6,7 @@ module Meals
 
     delegate :has_meals?, :is_default?, to: :formula
 
-    class Scope < ApplicationPolicy::Scope
+    class Scope < Scope
       def resolve
         if active_admin_or?(:meals_coordinator)
           scope

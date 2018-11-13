@@ -1,0 +1,16 @@
+// Change placeholders to the same color as hints.
+// Chrome, Firefox, Opera, Safari 10.1+
+::placeholder {
+  color: $gray-text;
+  opacity: 1; // Firefox
+}
+
+// Internet Explorer 10-11
+:-ms-input-placeholder {
+  color: $gray-text;
+}
+
+// Microsoft Edge
+::-ms-input-placeholder {
+  color: $gray-text;
+}

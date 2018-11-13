@@ -10,7 +10,7 @@ class HouseholdDecorator < ApplicationDecorator
     "#{cmty_prefix}#{object.name}#{suffix}"
   end
 
-  def selected_option
+  def selected_option_tag
     h.content_tag(:option, name_with_prefix, value: id, selected: "selected")
   end
 

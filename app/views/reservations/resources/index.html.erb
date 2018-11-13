@@ -7,19 +7,25 @@
   <% end %>
 <% end %>
 
-<table class="index part-width">
-  <tr>
-    <th></th>
-    <th>Name</th>
-    <th>Reservations</th>
-  </tr>
-  <% resources.each do |resource| %>
-    <tr class="<%= resource.tr_classes %>">
-      <td><%= image_tag(resource.photo.url(:thumb), alt: resource.name) %></td>
-      <td class="name">
-        <%= link_to(resource.name_with_inactive, edit_reservations_resource_path(resource.id)) %>
-      </td>
-      <td><%= number_with_delimiter(resource.reservation_count) %></td>
+<% if resources.empty? %>
+  <div class="none-found">
+    No resources found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Reservations</th>
     </tr>
-  <% end %>
-</table>
+    <% resources.each do |resource| %>
+      <tr class="<%= resource.tr_classes %>">
+        <td><%= image_tag(resource.photo.url(:thumb), alt: resource.name) %></td>
+        <td class="name">
+          <%= link_to(resource.name_with_inactive, edit_reservations_resource_path(resource.id)) %>
+        </td>
+        <td><%= number_with_delimiter(resource.reservation_count) %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

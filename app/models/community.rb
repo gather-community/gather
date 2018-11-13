@@ -26,8 +26,10 @@ class Community < ApplicationRecord
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
     {key: :default_landing_page, type: :enum, options: %w(meals directory reservations wiki), default: "directory", required: true},
     {key: :meals, type: :group, fields: [
-      {key: :reimb_instructions, type: :string},
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
+      {key: :reimb_instructions, type: :markdown},
+      {key: :show_reimb_form, type: :boolean, default: false},
+      {key: :cooks_can_finalize, type: :boolean, default: false},
       {key: :default_shift_times, type: :group, fields: [
         {key: :start, type: :group, fields: [
           {key: :head_cook, type: :integer, required: true, default: -195},

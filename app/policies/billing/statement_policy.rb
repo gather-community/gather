@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Billing
   class StatementPolicy < BillingPolicy
-    alias_method :statement, :record
+    alias statement record
 
     def index?
       active_admin_or?(:biller)

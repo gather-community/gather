@@ -16,3 +16,4 @@ window.Gather =
     Meals: {}
     People: {}
     Work: {}
+    Reservations: {}

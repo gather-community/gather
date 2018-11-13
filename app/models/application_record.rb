@@ -4,6 +4,21 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
+  # Takes one or more symbols or hashes (e.g. `alpha_order(:name, :title, communities: :name)`)
+  # and converts to an `order` call with LOWER wrapping each column
+  # (e.g. order("LOWER(name), LOWER(title), LOWER(communities.name)")).
+  # If the value in a hash element is `:desc`, sorts descending.
+  def self.alpha_order(*args)
+    cols = args.flat_map do |arg|
+      if arg.is_a?(Hash)
+        arg.map { |k, v| v == :desc ? "LOWER(#{k}) DESC" : "LOWER(#{k}.#{v})" }
+      else
+        "LOWER(#{arg})"
+      end
+    end
+    order(cols.join(", "))
+  end
+
   protected
 
   # Runs the given block inside a transaction with repeatable_read isolation.

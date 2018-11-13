@@ -8,7 +8,7 @@ describe People::Exporter do
   describe "to_csv" do
     context "with no users" do
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Birthdate,Email,Is Child,"\
+        expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Unit Suffix,Birthdate,Email,Is Child,"\
           "Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles\n")
       end
 

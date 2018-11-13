@@ -25,7 +25,7 @@ en:
       household:
         name: "Household Name"
         community_id: "Community"
-        unit_num: "Unit Number"
+        unit_num_and_suffix: "Unit Number"
         vehicles: "Vehicles"
         keyholders: "Extra Unit Keyholders"
         emergency_contacts: "Emergency Contacts"
@@ -171,6 +171,9 @@ en:
         data_source: "Data Source"
     errors:
       models:
+        household:
+          name:
+            taken: "There is already a household with this name at this community"
         signup:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."

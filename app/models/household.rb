@@ -33,8 +33,7 @@ class Household < ApplicationRecord
   validates :community_id, presence: true
   validates :unit_num_and_suffix, length: {maximum: 16}, allow_nil: true
 
-  before_validation :normalize
-  before_save :split_unit_num_and_suffix
+  before_validation :split_unit_num_and_suffix
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
@@ -116,19 +115,22 @@ class Household < ApplicationRecord
   end
 
   def unit_num_and_suffix
-    @unit_num_and_suffix ||= "#{unit_num}#{unit_suffix}".presence
+    "#{unit_num}#{unit_suffix}".presence
   end
 
   private
 
-  def normalize
-    self.unit_num_and_suffix = unit_num_and_suffix&.strip.presence
-  end
-
   def split_unit_num_and_suffix
-    return if unit_num_and_suffix.blank?
-    return unless (match = unit_num_and_suffix.match(/\A(\d*)(.*)\z/))
+    @unit_num_and_suffix = @unit_num_and_suffix&.strip
+
+    # We don't use the reader method here because that would combine unit_num and unit_suffix.
+    # We are only interested in parsing if a combined value has been given.
+    return if @unit_num_and_suffix.blank?
+    return unless (match = @unit_num_and_suffix.match(/\A(\d*)(.*)\z/))
+
     self.unit_num = match[1].presence&.strip
-    self.unit_suffix = match[2].presence&.strip
+
+    # We strip leading - from suffix so that e.g. 20-2A ends up as [20,2A] instead of [20,-2A].
+    self.unit_suffix = match[2].presence&.strip&.gsub(/\A-/, "")
   end
 end

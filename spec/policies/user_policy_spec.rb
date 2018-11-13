@@ -357,7 +357,7 @@ describe UserPolicy do
       base_attribs + [
         :google_email, :role_admin, :role_biller, :role_photographer,
         :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
-        {household_attributes: %i[id name garage_nums keyholders unit_num old_id old_name]
+        {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix old_id old_name]
           .concat(nested_hhold_attribs)}
       ]
     end
@@ -365,7 +365,7 @@ describe UserPolicy do
       base_attribs + [
         :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
         :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
-        {household_attributes: %i[id name garage_nums keyholders unit_num old_id old_name]
+        {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix old_id old_name]
           .concat(nested_hhold_attribs)}
       ]
     end
@@ -373,7 +373,7 @@ describe UserPolicy do
       [
         {vehicles_attributes: %i[id make model color plate _destroy]},
         {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-                                             email location _destroy]},
+                                           email location _destroy]},
         {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}
       ]
     end

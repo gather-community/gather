@@ -67,11 +67,10 @@ class HouseholdPolicy < ApplicationPolicy
   # Checks that the community_id param in the given hash is an allowable change.
   # If it is not, sets the param to nil.
   def ensure_allowed_community_id(params)
-    unless allowed_community_changes.map(&:id).include?(params[:community_id].to_i)
-      # Important to delete instead of set to nil, as setting to nil
-      # will set the household to nil and the form won't save.
-      params.delete(:community_id)
-    end
+    return if allowed_community_changes.map(&:id).include?(params[:community_id].to_i)
+    # Important to delete instead of set to nil, as setting to nil
+    # will set the household to nil and the form won't save.
+    params.delete(:community_id)
   end
 
   def accounts?
@@ -79,12 +78,13 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def destroy?
-    active_admin? && !record.any_users? && !record.any_assignments? && !record.any_signups? && !record.any_accounts?
+    active_admin? && !record.any_users? && !record.any_assignments? &&
+      !record.any_signups? && !record.any_accounts?
   end
 
   def permitted_attributes
     permitted = %i[name garage_nums keyholders]
-    permitted.concat(%i[unit_num old_id old_name]) if administer?
+    permitted.concat(%i[unit_num_and_suffix old_id old_name]) if administer?
     permitted << :community_id if administer?
     permitted << {vehicles_attributes: %i[id make model color plate _destroy]}
     permitted << {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone

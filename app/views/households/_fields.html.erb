@@ -9,7 +9,8 @@
   <%# If we disable the above, the community_id doesn't come through on submit, but we need it. %>
   <%= f.hidden_field :community_id unless policy(f.object).change_community? %>
 <% end %>
-<%= f.input :unit_num, disabled: !policy(f.object).administer? %>
+<%= f.input :unit_num_and_suffix, as: :string, input_html: {class: "numeric"},
+                                  disabled: !policy(f.object).administer? %>
 <%= f.input :garage_nums %>
 <%= f.input :keyholders %>
 <%= nested_field_set(f, :vehicles) %>

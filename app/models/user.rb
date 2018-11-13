@@ -16,24 +16,27 @@ class User < ApplicationRecord
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
-    dependent: :destroy
+                              dependent: :destroy
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
-    dependent: :destroy
+                                dependent: :destroy
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
-  scope :all_in_community_or_adult_in_cluster, ->(c) { joins(household: :community).
-    where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id) }
+  scope :all_in_community_or_adult_in_cluster, ->(c) {
+                                                 joins(household: :community)
+                                                   .where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id)
+                                               }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order(NAME_ORDER) }
-  scope :by_unit, -> { joins(:household).order("households.unit_num") }
+  scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> {
-    order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
+                                 order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}")
+                               }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
   scope :active_or_assigned_to, ->(meal) do
     t = arel_table
@@ -52,7 +55,7 @@ class User < ApplicationRecord
 
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
-  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :vehicles, to: :household
+  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
@@ -67,16 +70,16 @@ class User < ApplicationRecord
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :email, presence: true, if: :adult?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
-    unless: ->(u) { u.google_email.blank? }
+                           unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validate :household_present
-  validate :at_least_one_phone, if: ->(u){ u.new_record? }
+  validate :at_least_one_phone, if: ->(u) { u.new_record? }
   validate { birthdate_wrapper.validate }
 
   has_attached_file :photo,
-    styles: { thumb: "150x150#", medium: "300x300#" },
+    styles: {thumb: "150x150#", medium: "300x300#"},
     default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
   validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
@@ -152,7 +155,7 @@ class User < ApplicationRecord
 
   def privacy_settings=(settings)
     settings = {} if settings.blank?
-    settings.each do |k,v|
+    settings.each do |k, v|
       settings[k] = v == "1" || v == "true" || v == true
     end
     write_attribute(:privacy_settings, settings)

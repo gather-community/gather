@@ -2,6 +2,8 @@ module Csv
   class UserDecorator < ::UserDecorator
     delegate_all
 
+    delegate :unit_num, :unit_suffix, :garage_nums, to: :household
+
     def birthdate
       object.birthday.str(formats: [:csv_month_day, :csv_full])
     end
@@ -16,14 +18,6 @@ module Csv
 
     def vehicles
       adult? && household.vehicles.any? ? household.vehicles.map(&:to_s).join("; ") : nil
-    end
-
-    def unit_num
-      household.unit_num
-    end
-
-    def garage_nums
-      household.garage_nums
     end
 
     private

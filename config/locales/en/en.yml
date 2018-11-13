@@ -209,6 +209,7 @@ en:
         first_name: "First Name"
         last_name: "Last Name"
         unit_num: "Unit Num"
+        unit_suffix: "Unit Suffix"
         birthdate: "Birthdate"
         email: "Email"
         child: "Is Child"

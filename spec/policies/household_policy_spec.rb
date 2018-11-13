@@ -146,7 +146,7 @@ describe HouseholdPolicy do
     end
 
     it "returns empty set for regular users" do
-      expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq []
+      expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq([])
     end
 
     it "returns own community for admins" do
@@ -184,7 +184,7 @@ describe HouseholdPolicy do
     context "when attempting to set permitted community_id" do
       let(:target_id) { 1 }
       it "should leave community_id param alone" do
-        expect(params[:community_id]).to eq 1
+        expect(params[:community_id]).to eq(1)
       end
     end
 
@@ -223,7 +223,7 @@ describe HouseholdPolicy do
                                           email location _destroy]},
        {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
     end
-    let(:admin_attribs) { basic_attribs.concat(%i[unit_num old_id old_name community_id]) }
+    let(:admin_attribs) { basic_attribs.concat(%i[unit_num_and_suffix old_id old_name community_id]) }
     let(:cluster_admin_attribs) { admin_attribs }
     let(:user) { create(:user) }
     let(:admin) { create(:admin) }

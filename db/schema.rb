@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20180909151729) do
     t.string "keyholders"
     t.string "name", limit: 50, null: false
     t.integer "unit_num"
+    t.string "unit_suffix"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_households_on_cluster_id"
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true

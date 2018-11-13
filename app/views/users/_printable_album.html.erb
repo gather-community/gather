@@ -6,7 +6,7 @@
           <%= user.photo_if_permitted(:medium) %>
           <div class="info">
             <div>
-              <div class="unit-num"><%= user.unit_num_with_hash %></div>
+              <div class="unit-num"><%= user.unit_num_and_suffix_with_hash %></div>
               <div class="name"><%= user.name %></div>
             </div>
             <% if user.email.present? %>

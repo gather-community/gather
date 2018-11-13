@@ -115,7 +115,7 @@ class Household < ApplicationRecord
   end
 
   def unit_num_and_suffix
-    "#{unit_num}#{unit_suffix}".presence
+    [unit_num, unit_suffix].compact.join("-").presence
   end
 
   private

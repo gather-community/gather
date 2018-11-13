@@ -73,7 +73,7 @@ describe Household do
     end
   end
 
-  describe "#unit_num_and_suffix" do
+  describe "#unit_num_and_suffix reader" do
     let(:household) { build(:household, unit_num_and_suffix: input) }
 
     context "after validation" do
@@ -91,7 +91,7 @@ describe Household do
 
       context "digits and letters with space" do
         let(:input) { "12 A" }
-        it { is_expected.to eq("12A") }
+        it { is_expected.to eq("12-A") }
       end
 
       context "nothing" do

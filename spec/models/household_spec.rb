@@ -63,5 +63,59 @@ describe Household do
     end
   end
 
-  # ADD SPEC FOR UNIT NUM AND SUFFIX READER, CHECK DECORATOR
+  describe "#unit_num_and_suffix" do
+    let(:household) { build(:household, unit_num_and_suffix: input) }
+
+    context "after validation" do
+      subject(:output) { household.tap(&:validate).unit_num_and_suffix }
+
+      context "digits only" do
+        let(:input) { "  12 " }
+        it { is_expected.to eq("12") }
+      end
+
+      context "letters only" do
+        let(:input) { "A" }
+        it { is_expected.to eq("A") }
+      end
+
+      # Space should still be there because it only gets stripped on parse.
+      context "digits and letters with space" do
+        let(:input) { "12 A" }
+        it { is_expected.to eq("12 A") }
+      end
+
+      context "nothing" do
+        let(:input) { "" }
+        it { is_expected.to be_nil }
+      end
+    end
+
+    context "after save" do
+      before { household.save }
+
+      subject(:output) { Household.find(household.id).unit_num_and_suffix }
+
+      context "digits only" do
+        let(:input) { "  12 " }
+        it { is_expected.to eq("12") }
+      end
+
+      context "letters only" do
+        let(:input) { "A" }
+        it { is_expected.to eq("A") }
+      end
+
+      # Space is removed on save.
+      context "digits and letters with space" do
+        let(:input) { "12 A" }
+        it { is_expected.to eq("12A") }
+      end
+
+      context "nothing" do
+        let(:input) { "" }
+        it { is_expected.to be_nil }
+      end
+    end
+  end
 end

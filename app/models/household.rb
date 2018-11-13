@@ -122,7 +122,7 @@ class Household < ApplicationRecord
   private
 
   def normalize
-    self.unit_num_and_suffix = unit_num_and_suffix&.strip
+    self.unit_num_and_suffix = unit_num_and_suffix&.strip.presence
   end
 
   def split_unit_num_and_suffix

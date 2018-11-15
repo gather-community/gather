@@ -61,11 +61,11 @@ Rails.application.routes.draw do
 
   resources :reservations, controller: "reservations/reservations"
 
-  resources :calendar_exports, only: :index, path: "calendars" do
+  resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports" do
     member do
       # This is the show action, allowing paths to include the user's calendar token,
       # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4
-      get ":calendar_token", to: "calendar_exports#show", as: ""
+      get ":calendar_token", to: "calendars/exports#show", as: ""
     end
     collection do
       put :reset_token

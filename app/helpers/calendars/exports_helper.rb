@@ -1,7 +1,7 @@
 module Calendars
   module ExportsHelper
     def calendar_exports_link
-      url = url_in_home_community(calendar_exports_path)
+      url = url_in_home_community(calendars_exports_path)
       link_to(url, class: "btn btn-default calendar-export") do
         content_tag(:span, class: "fa-stack") do
           icon_tag("calendar-o", class: "fa-stack-2x") <<
@@ -12,7 +12,7 @@ module Calendars
 
     def calendar_link(type)
       content_tag(:div) do
-        url = calendar_export_url(type.gsub("_", "-"),
+        url = calendars_export_url(type.gsub("_", "-"),
           calendar_token: current_user.calendar_token,
           format: :ics,
           protocol: :webcal,

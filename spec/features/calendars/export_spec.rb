@@ -3,7 +3,8 @@
 require "rails_helper"
 
 feature "calendar export" do
-  let!(:user) { create(:user, calendar_token: "xyz") }
+  let(:token) { "z8-fwETMhx93t9nxkeQ_" }
+  let!(:user) { create(:user, calendar_token: token) }
 
   describe "index" do
     before do
@@ -11,7 +12,7 @@ feature "calendar export" do
     end
 
     scenario do
-      visit("/calendars")
+      visit("/calendars/exports")
       click_on("All Meals")
       expect(page).to have_content("BEGIN:VCALENDAR")
     end
@@ -25,7 +26,7 @@ feature "calendar export" do
         let!(:meal) { create(:meal) }
 
         scenario "happy path" do
-          visit("/calendars/all-meals/xyz.ics")
+          visit("/calendars/exports/all-meals/#{token}.ics")
           expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
             "CALSCALE:GREGORIAN METHOD:PUBLISH")
           # Ensure correct subdomain for links (not https b/c test mode)
@@ -33,13 +34,18 @@ feature "calendar export" do
         end
 
         scenario "bad calendar type" do
-          visit("/calendars/pants/xyz.ics")
+          visit("/calendars/exports/pants/#{token}.ics")
           expect(page).to have_content("Invalid calendar type")
         end
 
         scenario "bad token" do
-          visit("/calendars/meals/xyzw.ics")
+          visit("/calendars/exports/meals/z8TfwETMhx93t655keKA.ics")
           expect(page).to have_http_status(403)
+        end
+
+        scenario "legacy URL" do
+          visit("/calendars/all-meals/#{token}.ics")
+          expect_pairs(x_wr_calname: "All Meals")
         end
       end
 
@@ -55,7 +61,7 @@ feature "calendar export" do
         let!(:signup) { create(:signup, meal: meal1, household: user.household, adult_meat: 2) }
 
         scenario "your meals" do
-          visit("/calendars/meals/xyz.ics")
+          visit("/calendars/exports/meals/#{token}.ics")
           expect_pairs(
             x_wr_calname: "Meals You're Attending",
             description: /By #{user.name}\s+2 diners from your household/,
@@ -67,7 +73,7 @@ feature "calendar export" do
         end
 
         scenario "community meals" do
-          visit("/calendars/community-meals/xyz.ics")
+          visit("/calendars/exports/community-meals/#{token}.ics")
           expect_pairs(
             x_wr_calname: "#{user.community.name} Meals",
             summary: "Meal2"
@@ -76,7 +82,7 @@ feature "calendar export" do
         end
 
         scenario "all meals" do
-          visit("/calendars/all-meals/xyz.ics")
+          visit("/calendars/exports/all-meals/#{token}.ics")
           expect_pairs(
             x_wr_calname: "All Meals",
             summary: "Other Cmty Meal"
@@ -84,7 +90,7 @@ feature "calendar export" do
         end
 
         scenario "jobs" do
-          visit("/calendars/shifts/xyz.ics")
+          visit("/calendars/exports/shifts/#{token}.ics")
           expect_pairs(
             x_wr_calname: "Your Meal Jobs",
             summary: "Head Cook: Meal1",
@@ -100,7 +106,7 @@ feature "calendar export" do
         let!(:reservation2) { create(:reservation, name: "Dance") }
 
         scenario "your reservations" do
-          visit("/calendars/your-reservations/xyz.ics")
+          visit("/calendars/exports/your-reservations/#{token}.ics")
           expect_pairs(
             x_wr_calname: "Your Reservations",
             summary: "Games (#{user.name})",
@@ -111,7 +117,7 @@ feature "calendar export" do
         end
 
         scenario "reservations" do
-          visit("/calendars/reservations/xyz.ics")
+          visit("/calendars/exports/reservations/#{token}.ics")
           expect_pairs(
             x_wr_calname: "Reservations",
             summary: "Dance (#{reservation2.reserver.name})"
@@ -122,7 +128,7 @@ feature "calendar export" do
 
     context "with apex subdomain" do
       scenario "your meals" do
-        visit("/calendars/meals/xyz.ics")
+        visit("/calendars/exports/meals/#{token}.ics")
         expect(page).to have_content("Meals You're Attending")
 
         # We don't want to redirect when fetching ICS in case some clients don't support that.

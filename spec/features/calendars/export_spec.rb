@@ -13,7 +13,23 @@ feature "calendar export" do
 
     scenario do
       visit("/calendars/exports")
-      click_on("All Meals")
+      click_link("All Meals")
+      expect(page).to have_content("BEGIN:VCALENDAR")
+    end
+  end
+
+  describe "reset_token" do
+    before do
+      login_as(user, scope: :user)
+    end
+
+    scenario do
+      visit("/calendars/exports")
+      old_token = get_token_from_url
+      click_link("click here to reset your secret token")
+      expect(page).to have_content("Token reset successfully")
+      expect(get_token_from_url).not_to eq(old_token)
+      click_link("All Meals")
       expect(page).to have_content("BEGIN:VCALENDAR")
     end
   end
@@ -142,5 +158,9 @@ feature "calendar export" do
       value = value.is_a?(Regexp) ? value : Regexp.quote(value)
       expect(page.body).to match(/#{key.to_s.dasherize.upcase}:#{value}/)
     end
+  end
+
+  def get_token_from_url
+    find("a", text: "All Meals")[:href].match(%r{/([A-Za-z0-9_\-]{20})\.ics})[1]
   end
 end

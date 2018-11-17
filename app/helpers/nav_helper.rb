@@ -162,7 +162,7 @@ module NavHelper
   end
 
   def personal_nav_items
-    sample_calendar = Calendars::Exports::Base.new("meals", current_user)
+    sample_export = Calendars::Exports::Export.new(user: current_user)
     items =
       [
         {
@@ -179,7 +179,7 @@ module NavHelper
         }, {
           name: :calendars,
           path: calendar_exports_path,
-          permitted: Calendars::ExportPolicy.new(current_user, sample_calendar).index?,
+          permitted: Calendars::ExportPolicy.new(current_user, sample_export).index?,
           icon: "calendar"
         }, {
           name: :sign_out,

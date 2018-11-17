@@ -248,11 +248,11 @@ en:
       unsignup: "Remove Signup"
 
   calendars:
-    meals: "Meals You're Attending"
+    your_meals: "Meals You're Attending"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
-    shifts: "Your Meal Jobs"
-    reservations: "%{community} Reservations"
+    assignments: "Your Meal Jobs"
+    community_reservations: "%{community} Reservations"
     your_reservations: "Your Reservations"
 
   signups:

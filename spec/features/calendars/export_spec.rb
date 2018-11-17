@@ -25,10 +25,10 @@ feature "calendar export" do
 
     scenario do
       visit("/calendars/exports")
-      old_token = get_token_from_url
+      old_token = token_from_url
       click_link("click here to reset your secret token")
       expect(page).to have_content("Token reset successfully")
-      expect(get_token_from_url).not_to eq(old_token)
+      expect(token_from_url).not_to eq(old_token)
       click_link("All Meals")
       expect(page).to have_content("BEGIN:VCALENDAR")
     end
@@ -78,6 +78,7 @@ feature "calendar export" do
 
         scenario "your meals" do
           visit("/calendars/exports/meals/#{token}.ics")
+          puts page.body
           expect_pairs(
             x_wr_calname: "Meals You're Attending",
             description: /By #{user.name}\s+2 diners from your household/,
@@ -160,7 +161,7 @@ feature "calendar export" do
     end
   end
 
-  def get_token_from_url
+  def token_from_url
     find("a", text: "All Meals")[:href].match(%r{/([A-Za-z0-9_\-]{20})\.ics})[1]
   end
 end

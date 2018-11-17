@@ -23,7 +23,7 @@ module Calendars
         )
 
         link_to(icon_tag("calendar"), url) << " " <<
-        link_to(Exports::Base.new(type, current_user).name, url) << tag(:br) <<
+        link_to(Exports::Factory.build(type: type, user: current_user).calendar_name, url) << tag(:br) <<
         link_to("Copy Link", url,
           class: "copy",
           onclick: "copyTextToClipboard('#{url}'); return false"

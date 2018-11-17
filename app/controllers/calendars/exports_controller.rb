@@ -15,7 +15,7 @@ module Calendars
     def show
       authorize(sample_export, policy_class: ExportPolicy)
       begin
-        data = Exports::Base.new(params[:id].tr("-", "_"), current_user).generate
+        data = Exports::Factory.build(type: params[:id], user: current_user).generate
         send_data(data, filename: "#{params[:id]}.ics", type: "text/calendar")
       rescue Exports::TypeError
         render(plain: "Invalid calendar type", status: :not_found)
@@ -42,7 +42,7 @@ module Calendars
     private
 
     def sample_export
-      Exports::Base.new("meals", current_user)
+      Exports::Export.new(user: current_user)
     end
   end
 end

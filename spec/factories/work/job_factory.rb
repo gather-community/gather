@@ -22,7 +22,7 @@ FactoryBot.define do
             hours: hours,
             slots: ev.shift_slots
           }
-          attribs[:starts_at] = Time.zone.parse(ev.shift_times[i]) if ev.shift_times[i]
+          attribs[:starts_at] = Time.zone.parse(ev.shift_times[i].to_s) if ev.shift_times[i]
           job.shifts << FactoryBot.build(:work_shift, attribs)
         end
       end

@@ -61,26 +61,31 @@ feature "calendar export" do
 
         scenario "legacy URL" do
           visit("/calendars/all-meals/#{token}.ics")
-          expect_pairs(x_wr_calname: "All Meals")
+          expect_calendar_name("All Meals")
         end
       end
 
       describe "meals" do
         let(:communityB) { create(:community) }
         let!(:resource) { create(:resource, name: "Dining Room") }
-        let!(:meal1) { create(:meal, :with_menu, title: "Meal1", head_cook: user, resources: [resource]) }
-        let!(:meal2) { create(:meal, :with_menu, title: "Meal2") }
+        let!(:meal1) do
+          create(:meal, :with_menu, title: "Meal1", head_cook: user,
+                                    served_at: Time.current + 1.day, resources: [resource])
+        end
+        let!(:meal2) do
+          create(:meal, :with_menu, title: "Meal2", served_at: Time.current + 2.days)
+        end
         let!(:meal3) do
           create(:meal, :with_menu, title: "Other Cmty Meal", community: communityB,
+                                    served_at: Time.current + 3.days,
                                     communities: [meal1.community, communityB])
         end
         let!(:signup) { create(:signup, meal: meal1, household: user.household, adult_meat: 2) }
 
         scenario "your meals" do
           visit("/calendars/exports/meals/#{token}.ics")
-          puts page.body
-          expect_pairs(
-            x_wr_calname: "Meals You're Attending",
+          expect_calendar_name("Meals You're Attending")
+          expect_events(
             description: /By #{user.name}\s+2 diners from your household/,
             summary: "Meal1",
             location: "#{user.community_abbrv} Dining Room"
@@ -91,41 +96,38 @@ feature "calendar export" do
 
         scenario "community meals" do
           visit("/calendars/exports/community-meals/#{token}.ics")
-          expect_pairs(
-            x_wr_calname: "#{user.community.name} Meals",
-            summary: "Meal2"
-          )
+          expect_calendar_name("#{user.community.name} Meals")
+          expect_events({
+            summary: "Meal1"
+          },
+            summary: "Meal2")
           expect(page).not_to have_content("Other Cmty Meal")
         end
 
         scenario "all meals" do
           visit("/calendars/exports/all-meals/#{token}.ics")
-          expect_pairs(
-            x_wr_calname: "All Meals",
-            summary: "Other Cmty Meal"
-          )
-        end
-
-        scenario "jobs" do
-          visit("/calendars/exports/shifts/#{token}.ics")
-          expect_pairs(
-            x_wr_calname: "Your Meal Jobs",
-            summary: "Head Cook: Meal1",
-            location: "#{user.community_abbrv} Dining Room",
-            description: %r{http://.+/meals/}
-          )
+          expect_calendar_name("All Meals")
+          expect_events({
+            summary: "Meal1"
+          }, {
+            summary: "Meal2"
+          },
+            summary: "Other Cmty Meal")
         end
       end
 
       describe "reservations" do
         let(:resource) { create(:resource, name: "Fun Room") }
-        let!(:reservation1) { create(:reservation, resource: resource, reserver: user, name: "Games") }
-        let!(:reservation2) { create(:reservation, name: "Dance") }
+        let!(:reservation1) do
+          create(:reservation, starts_at: Time.current + 1.hour, resource: resource,
+                               reserver: user, name: "Games")
+        end
+        let!(:reservation2) { create(:reservation, starts_at: Time.current + 2.hours, name: "Dance") }
 
         scenario "your reservations" do
           visit("/calendars/exports/your-reservations/#{token}.ics")
-          expect_pairs(
-            x_wr_calname: "Your Reservations",
+          expect_calendar_name("Your Reservations")
+          expect_events(
             summary: "Games (#{user.name})",
             location: "Fun Room",
             description: %r{http://.+/reservations/}
@@ -133,14 +135,16 @@ feature "calendar export" do
           expect(page).not_to have_content("Dance")
         end
 
-        scenario "reservations" do
-          visit("/calendars/exports/reservations/#{token}.ics")
-          expect_pairs(
-            x_wr_calname: "Reservations",
-            summary: "Dance (#{reservation2.reserver.name})"
-          )
+        scenario "community reservations" do
+          visit("/calendars/exports/community-reservations/#{token}.ics")
+          expect_calendar_name("Reservations")
+          expect_events({
+            summary: "Games (#{user.name})"
+          },
+            summary: "Dance (#{reservation2.reserver.name})")
         end
       end
+
     end
 
     context "with apex subdomain" do
@@ -154,10 +158,17 @@ feature "calendar export" do
     end
   end
 
-  def expect_pairs(hash)
-    hash.each do |key, value|
-      value = value.is_a?(Regexp) ? value : Regexp.quote(value)
-      expect(page.body).to match(/#{key.to_s.dasherize.upcase}:#{value}/)
+  def expect_calendar_name(name)
+    expect(page.body).to match(/X-WR-CALNAME:#{name}/)
+  end
+
+  def expect_events(*events)
+    blocks = page.body.scan(/BEGIN:VEVENT.+?END:VEVENT/m)
+    events.each_with_index do |event, i|
+      event.each do |key, value|
+        value = value.is_a?(Regexp) ? value : Regexp.quote(value)
+        expect(blocks[i]).to match(/#{key.to_s.dasherize.upcase}:#{value}/)
+      end
     end
   end
 

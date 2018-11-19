@@ -32,7 +32,7 @@ module Calendars
             object_id: object.id,
             starts_at: object.starts_at,
             ends_at: object.ends_at,
-            location: object.location_name,
+            location: location(object),
             summary: summary(object),
             description: description(object),
             url: url(object)
@@ -47,6 +47,14 @@ module Calendars
         host = "#{user.subdomain}.#{Settings.url.host}"
         Rails.application.routes.url_helpers.send(url_helper_method, obj,
           Settings.url.to_h.slice(:port, :protocol).merge(host: host))
+      end
+
+      def description(_object)
+        nil
+      end
+
+      def location(object)
+        object.location_name
       end
 
       private

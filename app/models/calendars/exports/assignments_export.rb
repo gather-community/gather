@@ -2,10 +2,15 @@
 
 module Calendars
   module Exports
-    # Exports assignments
+    # Exports assignments. Used by communities that don't use the work system for managing jobs.
+    # Eventually this will go away when we fully integrate meals and work.
     class AssignmentsExport < Export
       def class_name
         "Assignment"
+      end
+
+      def calendar_name
+        I18n.t("calendars.your_jobs")
       end
 
       protected
@@ -16,10 +21,6 @@ module Calendars
 
       def summary(assignment)
         assignment.title
-      end
-
-      def description(_assignment)
-        nil
       end
 
       def url(assignment)

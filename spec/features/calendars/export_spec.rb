@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "calendar export" do
   let(:token) { "z8-fwETMhx93t9nxkeQ_" }
+  let(:signature) { Calendars::Exports::Generator::UID_SIGNATURE }
   let!(:user) { create(:user, calendar_token: token) }
 
   describe "index" do
@@ -145,6 +146,67 @@ feature "calendar export" do
         end
       end
 
+      describe "shifts" do
+        let(:meal1_time) { Time.current.midnight + 3.days + 18.hours }
+        let(:meal2_time) { Time.current.midnight + 7.days + 18.hours }
+        let!(:meal1) do
+          create(:meal, :with_menu, title: "Figs", served_at: meal1_time, head_cook: user)
+        end
+        let!(:meal2) { create(:meal, served_at: meal1_time) }
+
+        context "when using work system" do
+          let(:period) { create(:work_period, starts_on: Time.current) }
+          let!(:job1) do
+            create(:work_job, title: "Head Cook", period: period, time_type: "date_time",
+                              description: "Cook all the things",
+                              shift_count: 2, shift_times: [meal1_time, meal2_time])
+          end
+          let!(:job2) do
+            create(:work_job, title: "Frumbler", period: period, time_type: "date_only",
+                              description: "A very silly job.",
+                              shift_count: 1, shift_times: [Time.current.midnight + 2.days])
+          end
+
+          before do
+            # Associate meals with appropriate shifts.
+            job1.shifts[0].update!(meal_id: meal1.id)
+            job1.shifts[1].update!(meal_id: meal2.id)
+
+            # Assign meal shift and other job shift to user.
+            job1.shifts[0].assignments.create!(user: user)
+            job2.shifts[0].assignments.create!(user: user)
+          end
+
+          scenario "includes all shifts" do
+            visit("/calendars/exports/your-jobs/#{token}.ics")
+            expect_calendar_name("Your Jobs")
+            expect_events({
+              summary: "Frumbler",
+              location: nil,
+              description: %r{A very silly job\.\s+\n http://.+/work/signups/}
+            },
+              uid: "#{signature}_Shift_#{job1.shifts[0].id}",
+              summary: "Head Cook: Figs",
+              location: meal1.resources[0].name,
+              description: %r{Cook all the things\s+\n http://.+/work/signups/})
+          end
+        end
+
+        context "when not using work system" do
+          let!(:assignment) { meal1.assignments[0] }
+
+          scenario "uses meal assignments only" do
+            visit("/calendars/exports/your-jobs/#{token}.ics")
+            expect_calendar_name("Your Jobs")
+            expect_events(
+              uid: "#{signature}_Assignment_#{assignment.id}",
+              summary: "Head Cook: Figs",
+              location: meal1.resources[0].name,
+              description: %r{http://.+/meals/}
+            )
+          end
+        end
+      end
     end
 
     context "with apex subdomain" do
@@ -164,10 +226,15 @@ feature "calendar export" do
 
   def expect_events(*events)
     blocks = page.body.scan(/BEGIN:VEVENT.+?END:VEVENT/m)
+    expect(blocks.size).to eq(events.size)
     events.each_with_index do |event, i|
       event.each do |key, value|
-        value = value.is_a?(Regexp) ? value : Regexp.quote(value)
-        expect(blocks[i]).to match(/#{key.to_s.dasherize.upcase}:#{value}/)
+        if value.nil?
+          expect(blocks[i]).not_to match(/^#{key.to_s.dasherize.upcase}:/)
+        else
+          value = value.is_a?(Regexp) ? value : Regexp.quote(value)
+          expect(blocks[i]).to match(/^#{key.to_s.dasherize.upcase}:#{value}/)
+        end
       end
     end
   end

@@ -251,9 +251,9 @@ en:
     your_meals: "Meals You're Attending"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
-    assignments: "Your Meal Jobs"
     community_reservations: "%{community} Reservations"
     your_reservations: "Your Reservations"
+    your_jobs: "Your Jobs"
 
   signups:
     tooltips:

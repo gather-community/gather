@@ -20,10 +20,6 @@ module Calendars
         reservation.name << (reservation.meal? ? "" : " (#{reservation.reserver_name})")
       end
 
-      def description(_reservation)
-        nil
-      end
-
       def url(reservation)
         url_for(reservation, :reservation_url)
       end

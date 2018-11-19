@@ -4,7 +4,7 @@ require "rails_helper"
 
 feature "calendar export" do
   let(:token) { "z8-fwETMhx93t9nxkeQ_" }
-  let(:signature) { Calendars::Exports::Generator::UID_SIGNATURE }
+  let(:signature) { Calendars::Exports::IcalGenerator::UID_SIGNATURE }
   let!(:user) { create(:user, calendar_token: token) }
 
   describe "index" do

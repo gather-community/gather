@@ -38,7 +38,7 @@ module Calendars
             url: url(object)
           )
         end
-        Generator.new(self).generate
+        IcalGenerator.new(self).generate
       end
 
       protected

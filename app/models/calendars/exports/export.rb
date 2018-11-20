@@ -30,8 +30,8 @@ module Calendars
         self.events = objects.map do |object|
           Event.new(
             object_id: object.id,
-            starts_at: object.starts_at,
-            ends_at: object.ends_at,
+            starts_at: start_time(object),
+            ends_at: end_time(object),
             location: location(object),
             summary: summary(object),
             description: description(object),
@@ -47,6 +47,14 @@ module Calendars
         host = "#{user.subdomain}.#{Settings.url.host}"
         Rails.application.routes.url_helpers.send(url_helper_method, obj,
           Settings.url.to_h.slice(:port, :protocol).merge(host: host))
+      end
+
+      def start_time(object)
+        object.starts_at
+      end
+
+      def end_time(object)
+        object.ends_at
       end
 
       def description(_object)

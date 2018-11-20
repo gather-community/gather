@@ -148,6 +148,7 @@ en:
       filename: "%Y-%m-%d"
       csv_full: "%Y-%m-%d"
       csv_month_day: "%m-%d"
+      iso: "%Y%m%d"
   time:
     formats:
       default: "%a %b %d %Y %l:%M%P"
@@ -162,6 +163,7 @@ en:
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
       time_only: "%l:%M%P"
+      iso: "%Y%m%dT%H%M%S"
 
   datepicker:
     dformat: '%b %d %Y'

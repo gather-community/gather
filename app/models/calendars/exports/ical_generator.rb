@@ -31,13 +31,22 @@ module Calendars
       def add_event(event)
         cal.event do |e|
           e.uid = "#{UID_SIGNATURE}_#{data.class_name}_#{event.object_id}"
-          e.dtstart = Icalendar::Values::DateTime.new(event.starts_at, tzid: tzid)
-          e.dtend = Icalendar::Values::DateTime.new(event.ends_at, tzid: tzid)
+          e.dtstart = date_or_time_value(event.starts_at)
+          e.dtend = date_or_time_value(event.ends_at)
           e.location = event.location
           e.summary = event.summary
           # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
           # so we include it at the end of the description instead.
           e.description = break_lines(Array.wrap(event.description) << event.url)
+        end
+      end
+
+      # Source values may be Times or Dates, need to convert to appropriate Icalendar values.
+      def date_or_time_value(source)
+        if source.is_a?(Time)
+          Icalendar::Values::DateTime.new(source, tzid: tzid)
+        else
+          Icalendar::Values::Date.new(source)
         end
       end
 

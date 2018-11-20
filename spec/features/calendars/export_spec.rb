@@ -69,9 +69,10 @@ feature "calendar export" do
       describe "meals" do
         let(:communityB) { create(:community) }
         let!(:resource) { create(:resource, name: "Dining Room") }
+        let(:meal1_time) { Time.current.midnight + 18.hours }
         let!(:meal1) do
           create(:meal, :with_menu, title: "Meal1", head_cook: user,
-                                    served_at: Time.current + 1.day, resources: [resource])
+                                    served_at: meal1_time, resources: [resource])
         end
         let!(:meal2) do
           create(:meal, :with_menu, title: "Meal2", served_at: Time.current + 2.days)
@@ -89,7 +90,9 @@ feature "calendar export" do
           expect_events(
             description: /By #{user.name}\s+2 diners from your household/,
             summary: "Meal1",
-            location: "#{user.community_abbrv} Dining Room"
+            location: "#{user.community_abbrv} Dining Room",
+            "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso),
+            "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time + 1.hour, format: :iso)
           )
           expect(page).not_to have_content("Meal2")
           expect(page).not_to have_content("Other Cmty Meal")
@@ -119,9 +122,10 @@ feature "calendar export" do
 
       describe "reservations" do
         let(:resource) { create(:resource, name: "Fun Room") }
+        let(:reservation1_time) { Time.current + 1.hour }
         let!(:reservation1) do
-          create(:reservation, starts_at: Time.current + 1.hour, resource: resource,
-                               reserver: user, name: "Games")
+          create(:reservation, starts_at: reservation1_time, ends_at: reservation1_time + 90.minutes,
+                               resource: resource, reserver: user, name: "Games")
         end
         let!(:reservation2) { create(:reservation, starts_at: Time.current + 2.hours, name: "Dance") }
 
@@ -131,7 +135,9 @@ feature "calendar export" do
           expect_events(
             summary: "Games (#{user.name})",
             location: "Fun Room",
-            description: %r{http://.+/reservations/}
+            description: %r{http://.+/reservations/},
+            "DTSTART;TZID=Etc/UTC" => I18n.l(reservation1_time, format: :iso),
+            "DTEND;TZID=Etc/UTC" => I18n.l(reservation1_time + 90.minutes, format: :iso)
           )
           expect(page).not_to have_content("Dance")
         end
@@ -150,21 +156,22 @@ feature "calendar export" do
         let(:meal1_time) { Time.current.midnight + 3.days + 18.hours }
         let(:meal2_time) { Time.current.midnight + 7.days + 18.hours }
         let!(:meal1) do
-          create(:meal, :with_menu, title: "Figs", served_at: meal1_time, head_cook: user)
+          create(:meal, :with_menu, title: "Figs", served_at: meal1_time, asst_cooks: [user])
         end
         let!(:meal2) { create(:meal, served_at: meal1_time) }
 
         context "when using work system" do
           let(:period) { create(:work_period, starts_on: Time.current) }
+          let(:shift2_1_time) { Time.current.midnight + 2.days }
           let!(:job1) do
-            create(:work_job, title: "Head Cook", period: period, time_type: "date_time",
-                              description: "Cook all the things",
-                              shift_count: 2, shift_times: [meal1_time, meal2_time])
+            create(:work_job, title: "Assistant Cook", period: period, time_type: "date_time",
+                              description: "Help cook the things", hours: 2,
+                              shift_count: 2, shift_times: [meal1_time - 2.hours, meal2_time - 2.hours])
           end
           let!(:job2) do
             create(:work_job, title: "Frumbler", period: period, time_type: "date_only",
                               description: "A very silly job.",
-                              shift_count: 1, shift_times: [Time.current.midnight + 2.days])
+                              shift_count: 1, shift_times: [shift2_1_time])
           end
 
           before do
@@ -183,26 +190,32 @@ feature "calendar export" do
             expect_events({
               summary: "Frumbler",
               location: nil,
-              description: %r{A very silly job\.\s+\n http://.+/work/signups/}
+              description: %r{A very silly job\.\s+\n http://.+/work/signups/},
+              "DTSTART;VALUE=DATE" => I18n.l(shift2_1_time.to_date, format: :iso),
+              "DTEND;VALUE=DATE" => I18n.l(shift2_1_time.to_date + 1, format: :iso)
             },
               uid: "#{signature}_Shift_#{job1.shifts[0].id}",
-              summary: "Head Cook: Figs",
+              summary: "Assistant Cook: Figs",
               location: meal1.resources[0].name,
-              description: %r{Cook all the things\s+\n http://.+/work/signups/})
+              description: %r{Help cook the things\s+\n http://.+/work/signups/},
+              "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 2.hours, format: :iso),
+              "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso))
           end
         end
 
         context "when not using work system" do
-          let!(:assignment) { meal1.assignments[0] }
+          let!(:assignment) { meal1.asst_cook_assigns[0] }
 
           scenario "uses meal assignments only" do
             visit("/calendars/exports/your-jobs/#{token}.ics")
             expect_calendar_name("Your Jobs")
             expect_events(
               uid: "#{signature}_Assignment_#{assignment.id}",
-              summary: "Head Cook: Figs",
+              summary: "Assistant Cook: Figs",
               location: meal1.resources[0].name,
-              description: %r{http://.+/meals/}
+              description: %r{http://.+/meals/},
+              "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 135.minutes, format: :iso),
+              "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
             )
           end
         end
@@ -228,13 +241,18 @@ feature "calendar export" do
     blocks = page.body.scan(/BEGIN:VEVENT.+?END:VEVENT/m)
     expect(blocks.size).to eq(events.size)
     events.each_with_index do |event, i|
-      event.each do |key, value|
-        if value.nil?
-          expect(blocks[i]).not_to match(/^#{key.to_s.dasherize.upcase}:/)
-        else
-          value = value.is_a?(Regexp) ? value : Regexp.quote(value)
-          expect(blocks[i]).to match(/^#{key.to_s.dasherize.upcase}:#{value}/)
-        end
+      expect_event(event, blocks[i])
+    end
+  end
+
+  def expect_event(event, block)
+    event.each do |key, value|
+      if value.nil?
+        expect(block).not_to match(/^#{key.to_s.dasherize.upcase}:/)
+      else
+        key = key.is_a?(Symbol) ? key.to_s.dasherize.upcase : key
+        value = value.is_a?(Regexp) ? value : Regexp.quote(value)
+        expect(block).to match(/^#{key}:#{value}/)
       end
     end
   end

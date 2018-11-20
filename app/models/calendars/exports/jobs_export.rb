@@ -10,6 +10,14 @@ module Calendars
 
       protected
 
+      def start_time(shift)
+        shift.date_time? ? super : shift.starts_at.to_date
+      end
+
+      def end_time(shift)
+        shift.date_time? ? super : shift.ends_at.to_date + 1
+      end
+
       def summary(shift)
         shift.job_title << (shift.meal.nil? ? "" : ": #{shift.meal.title_or_no_title}")
       end

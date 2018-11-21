@@ -170,8 +170,10 @@ feature "calendar export" do
         context "when using work system" do
           let(:period_start) { Time.zone.today }
           let(:period_end) { Time.zone.today + 60.days }
-          let(:period) { create(:work_period, starts_on: period_start, ends_on: period_end) }
-          let(:shift2_1_time) { Time.current.midnight + 2.days }
+          let(:shift2_1_start) { Time.current.midnight + 2.days }
+          let(:period) do
+            create(:work_period, starts_on: period_start, ends_on: period_end, phase: "published")
+          end
           let!(:job1) do
             create(:work_job, title: "Assistant Cook", period: period, time_type: "date_time",
                               description: "Help cook the things", hours: 2,
@@ -180,11 +182,16 @@ feature "calendar export" do
           let!(:job2) do
             create(:work_job, title: "Single-day", period: period, time_type: "date_only",
                               description: "A very silly job.",
-                              shift_count: 2, shift_starts: [shift2_1_time, shift2_1_time + 2.days])
+                              shift_count: 2, shift_starts: [shift2_1_start, shift2_1_start + 2.days])
           end
           let!(:job3) do
             create(:work_job, title: "Multi-day", period: period, time_type: "full_period",
                               description: "Do something periodically",
+                              shift_count: 1)
+          end
+          let!(:unpublished_job) do
+            create(:work_job, title: "Unpublished", period: create(:work_period, phase: "open"),
+                              time_type: "full_period", description: "Do something periodically",
                               shift_count: 1)
           end
 
@@ -198,6 +205,7 @@ feature "calendar export" do
             job2.shifts[0].assignments.create!(user: user)
             job2.shifts[1].assignments.create!(user: create(:user)) # Decoy
             job3.shifts[0].assignments.create!(user: user)
+            unpublished_job.shifts[0].assignments.create!(user: user)
           end
 
           scenario "includes all shifts" do
@@ -221,8 +229,8 @@ feature "calendar export" do
               summary: "Single-day",
               location: nil,
               description: %r{A very silly job\.\s+\n http://.+/work/signups/},
-              "DTSTART;VALUE=DATE" => I18n.l(shift2_1_time.to_date, format: :iso),
-              "DTEND;VALUE=DATE" => I18n.l(shift2_1_time.to_date + 1, format: :iso)
+              "DTSTART;VALUE=DATE" => I18n.l(shift2_1_start.to_date, format: :iso),
+              "DTEND;VALUE=DATE" => I18n.l(shift2_1_start.to_date + 1, format: :iso)
             }, {
               uid: "#{signature}_Shift_#{job1.shifts[0].id}",
               summary: "Assistant Cook: Figs",

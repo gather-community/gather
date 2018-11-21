@@ -4,11 +4,11 @@
   <div id="links" class="col-sm-9">
     <p>You can view Gather calendars in your favorite calendar app:</p>
 
-    <%= calendar_link("meals") %>
+    <%= calendar_link("your_meals") %>
     <%= calendar_link("all_meals") %>
     <%= calendar_link("community_meals") if multi_community? %>
-    <%= calendar_link("shifts") %>
-    <%= calendar_link("reservations") %>
+    <%= calendar_link("your_jobs") %>
+    <%= calendar_link("community_reservations") %>
     <%= calendar_link("your_reservations") %>
   </div>
 
@@ -76,6 +76,6 @@
 
 <div class="footnote">
   If you accidentally share your calendar links and want to make them private again,
-  <%= link_to("click here to reset your secret token", reset_token_calendar_exports_path, method: :put) %>.
+  <%= link_to("click here to reset your secret token", reset_token_calendars_exports_path, method: :put) %>.
   Note: This will make the old links inoperative, so you will need to update your calendar app.
 </div>

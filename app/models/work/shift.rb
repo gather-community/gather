@@ -17,6 +17,7 @@ module Work
     # We set touch: true so that shift changes will update the job updated_at stamp, which
     # we use in a cache key.
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
+    belongs_to :meal
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
     has_many :reminder_deliveries, class_name: "Work::ReminderDelivery", inverse_of: :shift,
@@ -30,7 +31,9 @@ module Work
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
+    scope :published, -> { joins(job: :period).where(work_periods: {phase: "published"}) }
     scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
+    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :by_date, -> { order(:starts_at, :ends_at) }
     scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
     scope :open, lambda {

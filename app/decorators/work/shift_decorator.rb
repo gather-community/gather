@@ -78,6 +78,10 @@ module Work
       t("work/shift.slots_open", count: empty_slots)
     end
 
+    def location_name
+      meal&.decorate&.location_name
+    end
+
     def show_action_link_set
       links = [ActionLink.new(object, :edit_job, icon: "pencil", path: h.edit_work_job_path(job),
                                                  permitted: h.policy(job).edit?)]

@@ -61,15 +61,33 @@ Rails.application.routes.draw do
 
   resources :reservations, controller: "reservations/reservations"
 
-  resources :calendar_exports, only: :index, path: "calendars" do
-    member do
-      # This is the show action, allowing paths to include the user's calendar token,
-      # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4
-      get ":calendar_token", to: "calendar_exports#show", as: ""
+  # Legacy calendar routes
+  get "calendars/:id/:calendar_token",
+    to: "calendars/exports#show",
+    constraints: {
+      # These are the original calendar export types. Only these need to work for legacy URLs.
+      id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
+      # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
+      # Enforcing this will make it easier to distinguish from other calendars routes in future.
+      calendar_token: /[A-Za-z0-9_\-]{20}/
+    }
+
+  namespace :calendars do
+    resources :exports, only: :index do
+      member do
+        # This is the show action, allowing paths to include the user's calendar token,
+        # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4.
+        # The calendar's type gets captured as the :id param, so this is equivalent to
+        # /calendars/:id/:calendar_token
+        get ":calendar_token", to: "exports#show", as: ""
+      end
+      collection do
+        put :reset_token
+      end
     end
-    collection do
-      put :reset_token
-    end
+  end
+
+  resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports" do
   end
 
   resources :signups, only: %i[create update]

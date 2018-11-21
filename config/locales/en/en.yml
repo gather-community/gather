@@ -148,6 +148,7 @@ en:
       filename: "%Y-%m-%d"
       csv_full: "%Y-%m-%d"
       csv_month_day: "%m-%d"
+      iso: "%Y%m%d"
   time:
     formats:
       default: "%a %b %d %Y %l:%M%P"
@@ -162,6 +163,7 @@ en:
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
       time_only: "%l:%M%P"
+      iso: "%Y%m%dT%H%M%S"
 
   datepicker:
     dformat: '%b %d %Y'
@@ -248,12 +250,12 @@ en:
       unsignup: "Remove Signup"
 
   calendars:
-    meals: "Meals You're Attending"
+    your_meals: "Meals You're Attending"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
-    shifts: "Your Meal Jobs"
-    reservations: "%{community} Reservations"
+    community_reservations: "%{community} Reservations"
     your_reservations: "Your Reservations"
+    your_jobs: "Your Jobs"
 
   signups:
     tooltips:

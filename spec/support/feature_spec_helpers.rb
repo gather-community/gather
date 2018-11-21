@@ -52,7 +52,7 @@ module FeatureSpecHelpers
   end
 
   # Min must be a multiple of 5.
-  def pick_time(selector, hour:, min:, next_click: "body")
+  def pick_time(selector, hour:, min:, ampm:, next_click: "body")
     find("#{selector} .input-group-btn button").click
     within(".bootstrap-datetimepicker-widget") do
       find("[data-action=showHours]").click
@@ -61,6 +61,8 @@ module FeatureSpecHelpers
       find("[data-action=showMinutes]").click
       sleep(0.25)
       find(".timepicker-minutes td", text: min.to_s.rjust(2, "0")).click
+      sleep(0.25)
+      first(".btn-primary", text: ampm == :pm ? "AM" : "PM")&.click
     end
     find(next_click).click # Get out of the picker.
   end

@@ -9,7 +9,7 @@ describe Work::ReminderDelivery do
     subject(:deliver_at) { delivery.deliver_at.to_s(:machine_datetime_no_zone) }
 
     context "date_time job" do
-      let(:job) { create(:work_job, shift_times: [shift_start], shift_count: 1) }
+      let(:job) { create(:work_job, shift_starts: [shift_start], shift_count: 1) }
 
       context "absolute time" do
         let(:shift_start) { "2018-01-01 12:00" }
@@ -56,7 +56,7 @@ describe Work::ReminderDelivery do
 
     context "date_only job" do
       let(:job) do
-        create(:work_job, shift_times: [shift_start], shift_count: 1, time_type: "date_only")
+        create(:work_job, shift_starts: [shift_start], shift_count: 1, time_type: "date_only")
       end
 
       context "zero days" do

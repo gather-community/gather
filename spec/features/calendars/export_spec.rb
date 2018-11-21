@@ -6,6 +6,7 @@ feature "calendar export" do
   let(:token) { "z8-fwETMhx93t9nxkeQ_" }
   let(:signature) { Calendars::Exports::IcalGenerator::UID_SIGNATURE }
   let!(:user) { create(:user, calendar_token: token) }
+  let(:communityB) { create(:community) }
 
   describe "index" do
     before do
@@ -67,7 +68,6 @@ feature "calendar export" do
       end
 
       describe "meals" do
-        let(:communityB) { create(:community) }
         let!(:resource) { create(:resource, name: "Dining Room") }
         let(:meal1_time) { Time.current.midnight + 18.hours }
         let!(:meal1) do
@@ -130,6 +130,10 @@ feature "calendar export" do
                                resource: resource, reserver: user, name: "Games")
         end
         let!(:reservation2) { create(:reservation, starts_at: Time.current + 2.hours, name: "Dance") }
+        let!(:other_cmty_reservation) do
+          create(:reservation, starts_at: Time.current + 24.hours, name: "Nope",
+                               resource: create(:resource, community: communityB))
+        end
 
         scenario "your reservations" do
           visit("/calendars/exports/your-reservations/#{token}.ics")
@@ -146,7 +150,7 @@ feature "calendar export" do
 
         scenario "community reservations" do
           visit("/calendars/exports/community-reservations/#{token}.ics")
-          expect_calendar_name("Reservations")
+          expect_calendar_name("#{user.community.name} Reservations")
           expect_events({
             summary: "Games (#{user.name})"
           }, {
@@ -176,7 +180,7 @@ feature "calendar export" do
           let!(:job2) do
             create(:work_job, title: "Single-day", period: period, time_type: "date_only",
                               description: "A very silly job.",
-                              shift_count: 1, shift_starts: [shift2_1_time])
+                              shift_count: 2, shift_starts: [shift2_1_time, shift2_1_time + 2.days])
           end
           let!(:job3) do
             create(:work_job, title: "Multi-day", period: period, time_type: "full_period",
@@ -192,6 +196,7 @@ feature "calendar export" do
             # Assign meal shift and other job shifts to user.
             job1.shifts[0].assignments.create!(user: user)
             job2.shifts[0].assignments.create!(user: user)
+            job2.shifts[1].assignments.create!(user: create(:user)) # Decoy
             job3.shifts[0].assignments.create!(user: user)
           end
 

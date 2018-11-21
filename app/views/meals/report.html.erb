@@ -79,7 +79,11 @@
           highlight: @community.name) %>
       <% end %>
 
-      <div class="footnote">All statistics include finalized meals only.</div>
+      <div class="footnote">
+        The above statistics include finalized, non-cancelled meals only.
+        There were <%= @report.cancelled %> cancelled meals
+        <%= multi_community? ? "at #{@community.name} " : "" %>in this period.
+      </div>
     </div>
   </div>
 

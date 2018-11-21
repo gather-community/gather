@@ -101,6 +101,15 @@ module Meals
       end
     end
 
+    def cancelled
+      Meal
+        .hosted_by(community)
+        .where("served_at >= ?", range.first)
+        .where("served_at < ?", range.last)
+        .where(status: "cancelled")
+        .count
+    end
+
     private
 
     def default_range

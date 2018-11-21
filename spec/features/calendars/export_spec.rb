@@ -103,8 +103,9 @@ feature "calendar export" do
           expect_calendar_name("#{user.community.name} Meals")
           expect_events({
             summary: "Meal1"
-          },
-            summary: "Meal2")
+          }, {
+            summary: "Meal2"
+          })
           expect(page).not_to have_content("Other Cmty Meal")
         end
 
@@ -115,8 +116,9 @@ feature "calendar export" do
             summary: "Meal1"
           }, {
             summary: "Meal2"
-          },
-            summary: "Other Cmty Meal")
+          }, {
+            summary: "Other Cmty Meal"
+          })
         end
       end
 
@@ -147,8 +149,9 @@ feature "calendar export" do
           expect_calendar_name("Reservations")
           expect_events({
             summary: "Games (#{user.name})"
-          },
-            summary: "Dance (#{reservation2.reserver.name})")
+          }, {
+            summary: "Dance (#{reservation2.reserver.name})"
+          })
         end
       end
 
@@ -161,17 +164,24 @@ feature "calendar export" do
         let!(:meal2) { create(:meal, served_at: meal1_time) }
 
         context "when using work system" do
-          let(:period) { create(:work_period, starts_on: Time.current) }
+          let(:period_start) { Time.zone.today }
+          let(:period_end) { Time.zone.today + 60.days }
+          let(:period) { create(:work_period, starts_on: period_start, ends_on: period_end) }
           let(:shift2_1_time) { Time.current.midnight + 2.days }
           let!(:job1) do
             create(:work_job, title: "Assistant Cook", period: period, time_type: "date_time",
                               description: "Help cook the things", hours: 2,
-                              shift_count: 2, shift_times: [meal1_time - 2.hours, meal2_time - 2.hours])
+                              shift_count: 2, shift_starts: [meal1_time - 2.hours, meal2_time - 2.hours])
           end
           let!(:job2) do
-            create(:work_job, title: "Frumbler", period: period, time_type: "date_only",
+            create(:work_job, title: "Single-day", period: period, time_type: "date_only",
                               description: "A very silly job.",
-                              shift_count: 1, shift_times: [shift2_1_time])
+                              shift_count: 1, shift_starts: [shift2_1_time])
+          end
+          let!(:job3) do
+            create(:work_job, title: "Multi-day", period: period, time_type: "full_period",
+                              description: "Do something periodically",
+                              shift_count: 1)
           end
 
           before do
@@ -179,27 +189,43 @@ feature "calendar export" do
             job1.shifts[0].update!(meal_id: meal1.id)
             job1.shifts[1].update!(meal_id: meal2.id)
 
-            # Assign meal shift and other job shift to user.
+            # Assign meal shift and other job shifts to user.
             job1.shifts[0].assignments.create!(user: user)
             job2.shifts[0].assignments.create!(user: user)
+            job3.shifts[0].assignments.create!(user: user)
           end
 
           scenario "includes all shifts" do
             visit("/calendars/exports/your-jobs/#{token}.ics")
             expect_calendar_name("Your Jobs")
             expect_events({
-              summary: "Frumbler",
+              uid: "#{signature}_Shift_#{job3.shifts[0].id}",
+              summary: "Multi-day (Start)",
+              location: nil,
+              description: %r{Do something periodically\s+\n http://.+/work/signups/},
+              "DTSTART;VALUE=DATE" => I18n.l(period_start.to_date, format: :iso),
+              "DTEND;VALUE=DATE" => I18n.l(period_start.to_date + 1, format: :iso)
+            }, {
+              uid: "#{signature}_Shift_#{job3.shifts[0].id}",
+              summary: "Multi-day (End)",
+              location: nil,
+              description: %r{Do something periodically\s+\n http://.+/work/signups/},
+              "DTSTART;VALUE=DATE" => I18n.l(period_end.to_date, format: :iso),
+              "DTEND;VALUE=DATE" => I18n.l(period_end.to_date + 1, format: :iso)
+            }, {
+              summary: "Single-day",
               location: nil,
               description: %r{A very silly job\.\s+\n http://.+/work/signups/},
               "DTSTART;VALUE=DATE" => I18n.l(shift2_1_time.to_date, format: :iso),
               "DTEND;VALUE=DATE" => I18n.l(shift2_1_time.to_date + 1, format: :iso)
-            },
+            }, {
               uid: "#{signature}_Shift_#{job1.shifts[0].id}",
               summary: "Assistant Cook: Figs",
               location: meal1.resources[0].name,
               description: %r{Help cook the things\s+\n http://.+/work/signups/},
               "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 2.hours, format: :iso),
-              "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso))
+              "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
+            })
           end
         end
 

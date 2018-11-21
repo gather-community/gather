@@ -27,21 +27,27 @@ module Calendars
       end
 
       def generate
-        self.events = objects.map do |object|
-          Event.new(
-            object_id: object.id,
-            starts_at: start_time(object),
-            ends_at: end_time(object),
-            location: location(object),
-            summary: summary(object),
-            description: description(object),
-            url: url(object)
-          )
-        end
+        self.events = objects.flat_map { |o| events_for_object(o) }
         IcalGenerator.new(self).generate
       end
 
       protected
+
+      def events_for_object(object)
+        [Event.new(basic_event_attribs(object))]
+      end
+
+      def basic_event_attribs(object)
+        {
+          object_id: object.id,
+          starts_at: starts_at(object),
+          ends_at: ends_at(object),
+          location: location(object),
+          summary: summary(object),
+          description: description(object),
+          url: url(object)
+        }
+      end
 
       def url_for(obj, url_helper_method)
         host = "#{user.subdomain}.#{Settings.url.host}"
@@ -49,11 +55,11 @@ module Calendars
           Settings.url.to_h.slice(:port, :protocol).merge(host: host))
       end
 
-      def start_time(object)
+      def starts_at(object)
         object.starts_at
       end
 
-      def end_time(object)
+      def ends_at(object)
         object.ends_at
       end
 

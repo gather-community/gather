@@ -35,9 +35,9 @@ describe Work::ShiftReminderJob do
   end
 
   context "with multiple matching reminders in different clusters" do
-    let(:jobA) { create(:work_job, period: periodA, shift_times: ["2018-01-01 11:30"], shift_slots: 3) }
-    let(:jobB1) { create(:work_job, period: periodB, shift_times: ["2018-01-02 12:00"], shift_slots: 1) }
-    let(:jobB2) { create(:work_job, period: periodB, shift_times: ["2018-01-03 12:00"], shift_slots: 1) }
+    let(:jobA) { create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3) }
+    let(:jobB1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
+    let(:jobB2) { create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1) }
     let!(:assignA1) { jobA.shifts.first.assignments.create!(user: userA1) }
     let!(:assignA2) { jobA.shifts.first.assignments.create!(user: userA2) }
     let!(:assignB1) { jobB1.shifts.first.assignments.create!(user: userB1) }
@@ -71,9 +71,9 @@ describe Work::ShiftReminderJob do
   end
 
   context "with one reminder already sent and one too far in past" do
-    let(:job1) { create(:work_job, period: periodB, shift_times: ["2018-01-02 12:00"], shift_slots: 1) }
+    let(:job1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
     let(:job2) do
-      create(:work_job, period: periodB, shift_times: ["2018-01-03 12:00", "2018-01-03 13:00"],
+      create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00", "2018-01-03 13:00"],
                         shift_count: 2, shift_slots: 1)
     end
     let!(:assign1) { job1.shifts.first.assignments.create!(user: userB1) }

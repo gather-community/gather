@@ -1,0 +1,7 @@
+en:
+  calendars:
+    exports:
+      jobs:
+        summary_with_suffix:
+          start: "%{base} (Start)"
+          end: "%{base} (End)"

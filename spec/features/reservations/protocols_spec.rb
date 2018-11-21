@@ -50,8 +50,8 @@ feature "protocols", js: true do
       select2(resources[0].name, from: "#reservations_protocol_resource_ids", type: :inline)
       select2("Official", from: "#reservations_protocol_kinds", type: :inline)
       expect(page).not_to have_content("Type Required")
-      pick_time(".reservations_protocol_fixed_start_time", hour: 2, min: 30)
-      pick_time(".reservations_protocol_fixed_end_time", hour: 1, min: 30)
+      pick_time(".reservations_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm)
+      pick_time(".reservations_protocol_fixed_end_time", hour: 1, min: 30, ampm: :pm)
       fill_in("Max. Advance Time", with: "30")
       click_on("Save")
 

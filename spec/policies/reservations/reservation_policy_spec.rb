@@ -13,8 +13,8 @@ describe Reservations::ReservationPolicy do
     let(:ends_at) { starts_at + 1.hour }
     let(:reservation) do
       build(:reservation, reserver: reserver, resource: resource, created_at: created_at,
-        starts_at: starts_at, ends_at: ends_at)
-      end
+                          starts_at: starts_at, ends_at: ends_at)
+    end
     let(:record) { reservation }
 
     shared_examples_for "permits admins and reserver" do

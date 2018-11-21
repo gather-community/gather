@@ -6,7 +6,7 @@ describe Calendars::ExportPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:record) { Calendars::Exports::Base.new("meals", user) }
+    let(:record) { Calendars::Exports::Export.new(user: user) }
 
     permissions :index?, :show?, :reset_token? do
       it "permits active users" do

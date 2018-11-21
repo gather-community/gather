@@ -131,8 +131,7 @@ feature "calendar export" do
         end
         let!(:reservation2) { create(:reservation, starts_at: Time.current + 2.hours, name: "Dance") }
         let!(:other_cmty_reservation) do
-          create(:reservation, starts_at: Time.current + 24.hours, name: "Nope",
-                               resource: create(:resource, community: communityB))
+          create(:reservation, name: "Nope", resource: create(:resource, community: communityB))
         end
 
         scenario "your reservations" do

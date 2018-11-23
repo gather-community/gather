@@ -1,10 +1,16 @@
-class User < ApplicationRecord
-  include Deactivatable, Phoneable, PhotoDestroyable
+# frozen_string_literal: true
 
-  ROLES = %i(super_admin cluster_admin admin biller photographer meals_coordinator wikiist work_coordinator)
+# Users are the key to the whole thing!
+class User < ApplicationRecord
+  include PhotoDestroyable
+  include Phoneable
+  include Deactivatable
+
+  ROLES = %i[super_admin cluster_admin admin biller photographer
+             meals_coordinator wikiist work_coordinator].freeze
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
-  CONTACT_TYPES = %i(email text phone)
-  NAME_ORDER = "LOWER(first_name), LOWER(last_name)".freeze
+  CONTACT_TYPES = %i[email text phone].freeze
+  NAME_ORDER = "LOWER(first_name), LOWER(last_name)"
 
   acts_as_tenant :cluster
   rolify
@@ -16,32 +22,31 @@ class User < ApplicationRecord
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
-                              dependent: :destroy
+                              dependent: :destroy, inverse_of: :down_guardianships
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
-                                dependent: :destroy
+                                dependent: :destroy, inverse_of: :up_guardianships
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
-  scope :all_in_community_or_adult_in_cluster, ->(c) {
-                                                 joins(household: :community)
-                                                   .where("communities.id = ? OR users.child = 'f' AND communities.cluster_id = ?", c.id, c.cluster_id)
-                                               }
+  scope :all_in_community_or_adult_in_cluster, lambda { |c|
+    joins(household: :community)
+      .where("communities.id = ? OR users.child = 'f'", c.id)
+      .where("communities.cluster_id = ?", c.cluster_id)
+  }
   scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
   scope :by_name, -> { order(NAME_ORDER) }
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
-  scope :by_name_adults_first, -> {
-                                 order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}")
-                               }
+  scope :by_name_adults_first, -> { order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
-  scope :active_or_assigned_to, ->(meal) do
+  scope :active_or_assigned_to, lambda { |meal|
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
-  end
+  }
   scope :never_signed_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }
@@ -55,7 +60,8 @@ class User < ApplicationRecord
 
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
-  delegate :community_id, :community_name, :community_abbrv, :cluster, :unit_num, :unit_num_and_suffix, :vehicles, to: :household
+  delegate :community_id, :community_name, :community_abbrv, :cluster,
+    :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
   delegate :age, to: :birthdate_wrapper
@@ -82,7 +88,7 @@ class User < ApplicationRecord
   has_attached_file :photo,
     styles: {thumb: "150x150#", medium: "300x300#"},
     default_url: "missing/users/:style.png"
-  validates_attachment_content_type :photo, content_type: %w(image/jpg image/jpeg image/png image/gif)
+  validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
   validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
 
   accepts_nested_attributes_for :household
@@ -95,7 +101,7 @@ class User < ApplicationRecord
   after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)
-    where(google_email: auth.info[:email]).first
+    find_by(google_email: auth.info[:email])
   end
 
   # Transient variable indicating whether the User's household is being edited by setting the ID.
@@ -103,7 +109,7 @@ class User < ApplicationRecord
   def household_by_id?
     @household_by_id
   end
-  alias_method :household_by_id, :household_by_id?
+  alias household_by_id household_by_id?
 
   # Setter for household_by_id?
   def household_by_id=(val)
@@ -128,7 +134,7 @@ class User < ApplicationRecord
   # Ensures provider and uid are set.
   def update_for_oauth!(auth)
     self.google_email = auth.info[:email]
-    self.provider = 'google_oauth2'
+    self.provider = "google_oauth2"
     self.uid = auth.uid
     save(validate: false)
   end
@@ -139,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}" << (active? ? "" : " (Inactive)")
+    "#{first_name} #{last_name} #{active? ? nil : ' (Inactive)'}"
   end
 
   def kind
@@ -156,10 +162,8 @@ class User < ApplicationRecord
 
   def privacy_settings=(settings)
     settings = {} if settings.blank?
-    settings.each do |k, v|
-      settings[k] = v == "1" || v == "true" || v == true
-    end
-    write_attribute(:privacy_settings, settings)
+    settings.each { |k, v| settings[k] = ["1", "true", true].include?(v) }
+    self[:privacy_settings] = settings
   end
 
   def any_assignments?
@@ -177,7 +181,7 @@ class User < ApplicationRecord
   end
 
   def ensure_calendar_token!
-    reset_calendar_token! unless calendar_token.present?
+    reset_calendar_token! if calendar_token.blank?
   end
 
   def reset_calendar_token!
@@ -195,7 +199,7 @@ class User < ApplicationRecord
     end
 
     define_method("role_#{role}=") do |bool|
-      bool == true || bool == "1" ? add_role(role) : remove_role(role)
+      ["1", "true", true].include?(bool) ? add_role(role) : remove_role(role)
     end
   end
 
@@ -226,14 +230,13 @@ class User < ApplicationRecord
   def generate_token
     loop do
       token = Devise.friendly_token
-      break token unless User.where(calendar_token: token).first
+      break token unless User.find_by(calendar_token: token)
     end
   end
 
   def household_present
-    unless household_id.present? || household.present? && !household.marked_for_destruction?
-      errors.add(:household_id, :blank)
-    end
+    return if household_id.present? || household.present? && !household.marked_for_destruction?
+    errors.add(:household_id, :blank)
   end
 
   # Returns a hash of global roles (those with no associated resource) indexed by name.

@@ -9,6 +9,7 @@ describe Meals::FormulaPolicy do
     let(:record) { formula }
 
     permissions :index?, :show? do
+      it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in cluster"
     end
 

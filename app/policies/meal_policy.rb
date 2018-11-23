@@ -52,7 +52,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def summary?
-    active_and_associated_or_signed_up?
+    active_cluster_admin? || active_and_associated_or_signed_up?
   end
 
   def close?

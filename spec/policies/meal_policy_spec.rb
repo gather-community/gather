@@ -9,10 +9,12 @@ describe MealPolicy do
     let(:record) { meal }
 
     permissions :index?, :report? do
+      it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in cluster"
     end
 
     permissions :show?, :summary? do
+      it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in community only"
 
       it "permits users in other invited communities" do

@@ -7,6 +7,7 @@ describe Meals::MessagePolicy do
     include_context "policy permissions"
 
     let(:meal) { create(:meal, cleaners: [user]) }
+    let(:record) { message }
 
     before do
       save_policy_objects!(community, user)
@@ -24,6 +25,8 @@ describe Meals::MessagePolicy do
       # More detailed tests of these permissions in meal policy spec.
       # This spec mostly tests connection of this policy to meal policy.
       permissions :new?, :create? do
+        it_behaves_like "permits cluster and super admins"
+
         it "permits team members" do
           expect(subject).to permit(user, message)
         end

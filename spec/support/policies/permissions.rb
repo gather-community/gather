@@ -48,7 +48,7 @@ shared_context "policy permissions" do
   let(:cluster_admin2) { new_user_from(community, label: "cluster_admin2") }
   let(:super_admin) { new_user_from(community, label: "super_admin") }
   let(:super_admin2) { new_user_from(community, label: "super_admin2") }
-  let(:outside_cluster_admin) { new_user_from(community, label: "outside_cluster_admin") }
+  let(:outside_cluster_admin) { new_user_from(communityB, label: "outside_cluster_admin") }
   let(:outside_super_admin) do
     with_tenant(clusterB) do
       new_user_from(communityX, label: "outside_super_admin")

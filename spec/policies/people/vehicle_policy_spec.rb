@@ -10,6 +10,7 @@ describe People::VehiclePolicy do
     let(:record) { vehicle }
 
     permissions :index? do
+      it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in community only"
     end
 

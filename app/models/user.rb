@@ -22,9 +22,9 @@ class User < ApplicationRecord
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
-                              dependent: :destroy, inverse_of: :down_guardianships
+                              dependent: :destroy, inverse_of: :child
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
-                                dependent: :destroy, inverse_of: :up_guardianships
+                                dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy

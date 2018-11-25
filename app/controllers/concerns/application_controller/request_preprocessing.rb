@@ -17,6 +17,11 @@ module Concerns::ApplicationController::RequestPreprocessing
     # The actual before_action (set_tenant) is called below.
     set_current_tenant_through_filter
 
+    # Prevent CSRF attacks by raising an exception.
+    # For APIs, you may want to use :null_session instead.
+    # Must be before authenticate_user! or CSRF error will happen.
+    protect_from_forgery with: :exception
+
     before_action :log_full_url
     before_action :set_default_nav_context
     before_action :check_subdomain_validity

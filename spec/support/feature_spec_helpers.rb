@@ -209,7 +209,7 @@ module FeatureSpecHelpers
 
   def expect_valid_sign_in_link_and_click
     # Should point to apex domain
-    expect(page).to have_css("a[href='http://#{Settings.url.host}:31337/users/auth/google_oauth2']",
+    expect(page).to have_css("a[href='http://#{Settings.url.host}:31337/people/users/auth/google_oauth2']",
       text: "Sign in with Google")
 
     click_link "Sign in with Google"

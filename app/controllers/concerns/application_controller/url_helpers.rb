@@ -56,6 +56,6 @@ module Concerns::ApplicationController::UrlHelpers
   end
 
   def after_sign_out_path_for(user)
-    signed_out_url(host: Settings.url.host)
+    user_signed_out_url(host: Settings.url.host)
   end
 end

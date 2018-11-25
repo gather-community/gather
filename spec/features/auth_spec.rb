@@ -1,14 +1,11 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "authentication" do
   let!(:user) { create(:user, google_email: existing_google_id) }
   let(:oauth_google_id) { "foo@gmail.com" }
   let(:existing_google_id) { nil }
-
-  scenario "default sign-in route redirects to landing page" do
-    visit "/users/sign_in"
-    expect(page).to have_content("Life is better together")
-  end
 
   context "with oauth stubbed" do
     around do |example|
@@ -26,7 +23,7 @@ feature "authentication" do
             visit "/?token=#{sent_token}"
             expect_valid_sign_in_link_and_click
             expect(page).to be_signed_in_root
-            expect(user.reload.google_email).to eq "foo@gmail.com"
+            expect(user.reload.google_email).to eq("foo@gmail.com")
           end
         end
 
@@ -101,7 +98,7 @@ feature "authentication" do
     context "with invalid query params on callback" do
       it "should show error" do
         expect do
-          visit "/users/auth/google_oauth2/callback" # No params
+          visit "/people/users/auth/google_oauth2/callback" # No params
           expect(page).to be_signed_out_root
           expect(page).to have_content("Could not sign you in from Google because of an unspecified error.")
         end.to change { ActionMailer::Base.deliveries.size }.by(1)

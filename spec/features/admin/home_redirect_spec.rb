@@ -8,7 +8,7 @@ feature "home redirect" do
     login_as(actor, scope: :user)
   end
 
-  context "with admin logged in" do
+  context "with admin signed in" do
     let(:actor) { create(:admin) }
 
     scenario "admin changes default home and visits root url" do
@@ -23,7 +23,7 @@ feature "home redirect" do
     end
   end
 
-  context "with user logged in" do
+  context "with user signed in" do
     let(:home_cmty) { create(:community) }
     let(:actor) { create(:user, community: home_cmty) }
 

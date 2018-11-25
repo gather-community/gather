@@ -5,7 +5,7 @@
     No users found.
   </div>
 <% else %>
-  <p>Check the users you'd like to invite. Users with <%= icon_tag("question-circle") %> by their names have never logged in.</p>
+  <p>Check the users you'd like to invite. Users with <%= icon_tag("question-circle") %> by their names have never signed in.</p>
 
   <%= form_tag("/people/sign-in-invitations", method: :post) do %>
     <div class="flowing-columns">

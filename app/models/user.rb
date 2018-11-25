@@ -138,7 +138,7 @@ class User < ApplicationRecord
     save(validate: false)
   end
 
-  # We assume that people always want to stay logged in!
+  # We assume that people always want to stay signed in!
   def remember_me
     true
   end

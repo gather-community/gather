@@ -71,8 +71,8 @@ en:
       user:
         joined_on: "Approximate date when you joined the community"
         job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
-        email: "The email address at which you'd prefer to be contacted."
-        google_email: "The email address tied to the Google account used for sign-in."
+        email: "The email address at which you'd prefer to be contacted. Also used for signing in with a password."
+        google_email: "The email address tied to the Google account used for sign-in. Not displayed in the directory. Ask an <a href='/roles'>admin</a> if you need this changed."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."

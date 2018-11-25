@@ -1,4 +1,4 @@
-<h2>Forgot your password?</h2>
+<% content_for(:title, "Forgot Password") %>
 
 <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
   <%= f.error_notification %>

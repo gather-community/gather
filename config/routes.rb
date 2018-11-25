@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
+  devise_for :users, path: "users", path_names: {sign_in: "sign-in", sign_out: "sign-out"}, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks"
   }
+  get "users/signed-out", to: "landing#signed_out", as: :signed_out
 
   resources :users do
     collection do
@@ -147,7 +148,6 @@ Rails.application.routes.draw do
 
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
-  get "signed-out", to: "landing#signed_out", as: :signed_out
   get "about/:page", to: "landing#public_static"
 
   authenticated :user do

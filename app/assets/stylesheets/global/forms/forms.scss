@@ -42,13 +42,10 @@ form {
     width: 150px;
   }
 
-  // Labels inside control area shouldn't be bold
-  .form-group > div label {
+  // Labels inside control area and explicitly .light labels shouldn't be bold.
+  .form-group > div label,
+  label.light {
     font-weight: normal;
-  }
-
-  .form-actions {
-    text-align: right;
   }
 
   .hint {
@@ -132,8 +129,19 @@ form {
   }
 
   .form-actions .btn {
-    margin-left: 10px;
     min-width: 75px;
+  }
+
+  .form-actions.with-top-marg {
+    margin-top: 10px;
+  }
+
+  .form-actions.text-left .btn {
+    margin-right: 10px;
+  }
+
+  .form-actions.text-right .btn {
+    margin-left: 10px;
   }
 
   // Allow hiding the time picker switch with special class.

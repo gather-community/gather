@@ -63,14 +63,6 @@ class UserPolicy < ApplicationPolicy
     record.active? && active_admin?
   end
 
-  def invite?
-    active_admin?
-  end
-
-  def send_invites?
-    active_admin?
-  end
-
   def update?
     update_info? || update_photo?
   end

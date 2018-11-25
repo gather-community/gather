@@ -6,11 +6,11 @@ Rails.application.routes.draw do
                      controllers: {omniauth_callbacks: "people/users/omniauth_callbacks"}
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
+  namespace :people do
+    resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
+  end
+
   resources :users do
-    collection do
-      get :invite
-      post :send_invites, path: "send-invites"
-    end
     member do
       put :activate
       put :deactivate

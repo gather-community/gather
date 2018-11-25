@@ -32,9 +32,9 @@ module FormHelper
     end
   end
 
-  def form_actions
+  def form_actions(align: :right, classes: "")
     content_tag(:div, class: "row") do
-      content_tag(:div, class: "form-actions col-sm-12") do
+      content_tag(:div, class: "form-actions col-sm-12 text-#{align} #{classes}") do
         capture { yield }
       end
     end

@@ -170,7 +170,7 @@ describe UserPolicy do
       it_behaves_like "inactive users"
     end
 
-    permissions :new?, :create?, :invite?, :send_invites? do
+    permissions :new?, :create? do
       it_behaves_like "permits admins but not regular users"
     end
 

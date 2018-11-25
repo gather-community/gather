@@ -1,0 +1,36 @@
+<% content_for(:title, "Invite Users to Sign In") %>
+
+<% if @users.empty? %>
+  <div class="none-found">
+    No users found.
+  </div>
+<% else %>
+  <p>Check the users you'd like to invite. Users with <%= icon_tag("question-circle") %> by their names have never logged in.</p>
+
+  <%= form_tag("/people/sign-in-invitations", method: :post) do %>
+    <div class="flowing-columns">
+      <% @users.each do |u| %>
+        <div class="invite-list">
+          <label class="light">
+            <input type="checkbox" name="to_invite[]" value="<%= u.id %>"
+              <%= 'data-nosignin="true"' if u.never_signed_in? %>>&nbsp;
+            <%= u.name %>
+            <%= icon_tag("question-circle") if u.never_signed_in? %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+
+    <%= form_actions(align: :left, classes: "with-top-marg") do %>
+      <a href="#" class="btn btn-default"
+        onclick="$('.invite-list input[type=checkbox][data-nosignin]').prop('checked', true); return false;">
+        Select All No-Sign-Ins
+      </a>
+      <a href="#" class="btn btn-default"
+        onclick="$('.invite-list input[type=checkbox]').prop('checked', true); return false;">
+        Select All
+      </a>
+      <input type="submit" value="Send Invites" class="btn btn-primary">
+    <% end %>
+  <% end %>
+<% end %>

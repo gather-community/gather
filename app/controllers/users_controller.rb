@@ -113,23 +113,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def invite
-    authorize sample_user
-    @users = User.in_community(current_community).adults.never_signed_in.active.by_name
-  end
-
-  # Expects params[to_invite] = ["1", "5", ...]
-  def send_invites
-    authorize sample_user
-    if params[:to_invite].blank?
-      flash[:error] = "You didn't select any users."
-    else
-      Delayed::Job.enqueue(People::InviteJob.new(current_community.id, params[:to_invite]))
-      flash[:success] = "Invites sent."
-      redirect_to(users_path)
-    end
-  end
-
   def impersonate
     @user = User.find(params[:id])
     authorize @user

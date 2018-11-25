@@ -47,7 +47,6 @@ class User < ApplicationRecord
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
   }
-  scope :never_signed_in, -> { where(sign_in_count: 0) }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
@@ -219,6 +218,10 @@ class User < ApplicationRecord
     # We don't return false for adult inactive users because they
     # can still see some pages.
     adult?
+  end
+
+  def never_signed_in?
+    sign_in_count.zero?
   end
 
   private

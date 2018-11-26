@@ -104,7 +104,13 @@ class UserDecorator < ApplicationDecorator
       ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
       ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object)),
       ActionLink.new(object, :impersonate, icon: "user-circle-o", path: h.impersonate_user_path(object),
-                                           method: :post)
+                                           method: :post),
+      ActionLink.new(object, :invite,
+        icon: "life-ring",
+        method: :post,
+        path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
+        confirm: {name: name},
+        permitted: People::SignInInvitationsPolicy.new(h.current_user, community).create?)
     )
   end
 

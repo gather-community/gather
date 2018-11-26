@@ -73,6 +73,7 @@ en:
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'?"
+      invite: "This will send an email to '%{name}' with instructions on how to sign in. Proceed?"
     reservations/protocol:
       destroy: "Are you sure you want to delete the protocol '%{name}'? This action cannot be undone."
     reservations/resource:
@@ -240,6 +241,7 @@ en:
     user:
       update_info: "Edit Profile"
       update_photo: "Edit Photo"
+      invite_sign_in: "Invite"
     wiki/page:
       history: "History"
     work/job:

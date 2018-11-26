@@ -1,0 +1,6 @@
+en:
+  people:
+    sign_in_invitations:
+      sent:
+        one: "Invitation sent."
+        other: "Invitations sent."

@@ -17,3 +17,9 @@
     margin-top: 15px;
   }
 }
+
+select.form-control {
+  // The default of 6px 12px was too much for narrow select boxes on Windows.
+  // select padding seems to have no effect on Mac.
+  padding: 6px;
+}

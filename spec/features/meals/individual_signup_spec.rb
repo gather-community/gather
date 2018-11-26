@@ -55,7 +55,7 @@ feature "meal signups", js: true do
       all("select[id$=_quantity]")[0].select("0")
       all("select[id$=_quantity]")[1].select("0")
       click_button("Save")
-      expect(page).to have_css("td", text: "No") # Signed up column
+      expect(page).to have_css("td", text: "Sign Up") # Signed up column
       click_link("Burgers")
       expect(page).to have_css("button.btn-primary", text: "Sign Up")
     end

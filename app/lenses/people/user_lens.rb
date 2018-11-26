@@ -24,7 +24,7 @@ module People
     # Returns the tag that says 'All Users'. Remote select2s only need one actual option tag.
     def selected_option_tag
       if value.present?
-        user = context.policy_scope(User).find(value)
+        user = UserPolicy::Scope.new(h.current_user, User).resolve.find(value)
         h.content_tag(:option, user.name, value: user.id, selected: "selected")
       else
         ""

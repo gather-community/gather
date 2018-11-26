@@ -67,10 +67,11 @@ module Calendars
       # it will be broken properly by the icalendar gem. Somewhat hackish.
       def break_lines(lines)
         regex = /\P{M}\p{M}*/u # The regex icalendar uses to split by character.
-        lines[0...-1].compact.each_with_index do |line, i|
-          lines[i] += " " * (75 - (line.scan(regex).size + (i.zero? ? 12 : 1)) % 75)
+        lines = lines.compact
+        padded = lines[0...-1].map.with_index do |line, i|
+          line + " " * (75 - (line.scan(regex).size + (i.zero? ? 12 : 1)) % 75)
         end
-        lines.compact.join
+        padded.push(lines[-1]).join
       end
     end
   end

@@ -1,14 +1,14 @@
 <% content_for(:title, "Confirm Transaction") %>
 
-<%= gather_form_for([@account, @transaction], width: :full,
-  url: account_transactions_path(@account)) do |form| %>
+<%= gather_form_for([@account, @transaction],
+      width: :full, url: account_transactions_path(@account)) do |f| %>
 
   <%= hidden_field_tag :account_id, @account.id %>
   <%= hidden_field_tag :confirmed, "1" %>
-  <%= form.hidden_field :incurred_on %>
-  <%= form.hidden_field :code  %>
-  <%= form.hidden_field :description %>
-  <%= form.hidden_field :amount  %>
+  <%= f.hidden_field :incurred_on %>
+  <%= f.hidden_field :code  %>
+  <%= f.hidden_field :description %>
+  <%= f.hidden_field :amount  %>
 
   <p>
     Below is how the new transaction will appear on the household's statement.

@@ -34,6 +34,10 @@ module Meals
       in_community(community).where(is_default: true).first
     end
 
+    def item_id_options
+      defined_signup_types.map { |t| [I18n.t("signups.types.#{t}"), t] }
+    end
+
     def defined_signup_types
       Signup::SIGNUP_TYPES.select { |st| self[st].present? }
     end

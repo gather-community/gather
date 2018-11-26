@@ -1,4 +1,4 @@
 <div class="line-fields">
   <%= f.input(:quantity, collection: (0..10).to_a, label: false, include_blank: false) %>
-  <%= f.input(:item_id, collection: f.object.item_options, label: false, include_blank: false) %>
+  <%= f.input(:item_id, collection: options[:formula].item_id_options, label: false, include_blank: false) %>
 </div>

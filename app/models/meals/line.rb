@@ -13,11 +13,6 @@ module Meals
       self._destroy = _destroy
     end
 
-    # Eventually this method will pull data from the meal formula.
-    def item_options
-      Signup::SIGNUP_TYPES.map { |t| [I18n.t("signups.types.#{t}"), t] }
-    end
-
     def new_record?
       id.nil?
     end

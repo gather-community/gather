@@ -5,6 +5,6 @@
     styling as the other regular form fields in the rest of the meal/finalize form. %>
 <%= f.input(:signup, label: label, required: false) do %>
   <%= f.error(:base) %>
-  <%= nested_field_set(f, :lines, inner_partial: "meals/form/line_fields",
+  <%= nested_field_set(f, :lines, inner_partial: "meals/form/line_fields", formula: f.object.formula,
                                   label: false, inner_labels: false, no_remove_link: true) %>
 <% end %>

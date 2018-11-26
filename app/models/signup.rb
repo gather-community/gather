@@ -38,7 +38,7 @@ class Signup < ApplicationRecord
 
   delegate :name, :users, :adults, to: :household, prefix: true
   delegate :community_abbrv, to: :household
-  delegate :communities, to: :meal
+  delegate :communities, :formula, to: :meal
 
   before_update do
     destroy if all_zero?

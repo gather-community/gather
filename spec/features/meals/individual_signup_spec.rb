@@ -78,4 +78,16 @@ feature "meal signups", js: true do
       expect(page).to have_select(all("select[id$=_item_id]")[1][:id], selected: "Teen (Meat)")
     end
   end
+
+  context "with formula with limited signup types" do
+    let(:formula) { create(:meal_formula, senior_meat: nil, senior_veg: 1.0) }
+    let(:item_options) { all("select[id$=_item_id] option").map { |o| o[:value] } }
+
+    scenario "senior should not appear in dropdown" do
+      visit(meal_path(meal))
+      click_button("Sign Up")
+      expect(item_options).to include("senior_veg")
+      expect(item_options).not_to include("senior_meat")
+    end
+  end
 end

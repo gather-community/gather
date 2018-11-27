@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "authentication" do
+feature "google oauth" do
   let!(:user) { create(:user, google_email: existing_google_id) }
   let(:oauth_google_id) { "foo@gmail.com" }
   let(:existing_google_id) { nil }

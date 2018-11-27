@@ -83,6 +83,7 @@ Style/MethodCallWithArgsParentheses:
     - config/initializers/simple_form_bootstrap.rb
     - config/deploy.rb
     - config/deploy/**/*.rb
+    - Gemfile*
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

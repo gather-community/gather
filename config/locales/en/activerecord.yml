@@ -190,6 +190,8 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
+          password:
+            password_strength: "is too weak. Try making it longer or adding special characters."
         reservations/resource:
           attributes:
             photo_content_type:

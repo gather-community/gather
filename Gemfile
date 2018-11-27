@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 gem "active_model_serializers", "~> 0.9.3"
@@ -11,7 +13,8 @@ gem "cocoon", "~> 1.2"
 gem "coffee-rails", "~> 4.1"
 gem "config", "~> 1.4"
 gem "daemons", "~> 1.2"
-gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails", branch: "master", submodules: true
+gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
+                            branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.3"
 gem "diffy", "~> 3.2"
@@ -36,13 +39,14 @@ gem "paperclip", git: "https://github.com/sassafrastech/paperclip", branch: "tmp
 gem "pg", "~> 0.18"
 gem "phony_rails", "~> 0.12"
 gem "pundit", "~> 2.0"
-gem "rails-backbone", "~> 1.2"
 gem "rails", "~> 5.1.0"
+gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.3"
 gem "redis-rails", "~> 5.0"
 gem "rolify", "~> 4.1"
 gem "sass-rails", "~> 5.0"
 gem "simple_form", "~> 3.1"
+gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.8"
 gem "uglifier", ">= 1.3.0"
 gem "whenever", "~> 0.9"
@@ -55,8 +59,8 @@ group :development, :test do
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
-  gem "capybara-screenshot", "~> 1.0"
   gem "capybara", git: "https://github.com/smoyth/capybara", branch: "2.18_stable"
+  gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 1.6"
   gem "fix-db-schema-conflicts", "~> 3.0"
   # gem "i18n-debug", "~> 1.1" # Great for debugging i18n paths. Uncomment temporarily when neeeded.

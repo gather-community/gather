@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name} #{active? ? nil : ' (Inactive)'}"
+    "#{first_name} #{last_name}#{active? ? nil : ' (Inactive)'}"
   end
 
   def kind
@@ -187,6 +187,12 @@ class User < ApplicationRecord
   def reset_calendar_token!
     update_attribute(:calendar_token, generate_token)
   end
+
+  # Exposing this as a public method.
+  def reset_reset_password_token!
+    set_reset_password_token
+  end
+
 
   # All roles are currently global.
   # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense

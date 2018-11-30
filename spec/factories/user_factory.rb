@@ -1,3 +1,5 @@
+DEFAULT_PASSWORD = "ga4893d4bXq;"
+
 FactoryBot.define do
   factory :user do
     transient do
@@ -9,6 +11,8 @@ FactoryBot.define do
     email { "person#{rand(10000000..99999999)}@example.com" }
     google_email { "person#{rand(10000000..99999999)}@gmail.com" }
     mobile_phone "5555551212"
+    password DEFAULT_PASSWORD
+    password_confirmation DEFAULT_PASSWORD
 
     household do
       attribs = {with_members: false} # Don't want to create extra users.

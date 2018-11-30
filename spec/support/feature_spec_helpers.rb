@@ -90,8 +90,8 @@ module FeatureSpecHelpers
     find(".#{into} input.date_picker").set(value)
   end
 
-  def expect_success
-    expect(page).to have_css("div.alert-success", text: /successfully/)
+  def expect_success(pattern = /successfully/)
+    expect(page).to have_css("div.alert-success", text: pattern)
   end
 
   def expect_validation_error
@@ -161,6 +161,21 @@ module FeatureSpecHelpers
     expect_no_image_upload
     drop_in_dropzone(fixture_file_path(filename))
     expect_image_upload(mode: :dz_preview)
+  end
+
+  # Signs in to the app by filling in the password form instead of using the faster Warden helper login_as.
+  # Used for special cases, including when you need to sign out midway through the spec.
+  def full_sign_in_as(user)
+    visit(new_user_session_path)
+    fill_in("Email Address", with: user.email)
+    fill_in("Password", with: DEFAULT_PASSWORD)
+    click_button("Sign In")
+  end
+
+  # Only works if you signed in with full_sign_in_as.
+  def full_sign_out
+    click_on_personal_nav("Sign Out")
+    expect(page).to have_content("You are now signed out of Gather.")
   end
 
   def expect_photo(pattern)

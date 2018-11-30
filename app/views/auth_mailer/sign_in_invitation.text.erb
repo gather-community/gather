@@ -1,0 +1,11 @@
+<%= @user.greeting %>
+
+You have been invited to sign in to Gather, <%= @user.community_name %>'s community management system!
+
+Please click the link below to begin.
+
+<%= root_url(token: @token) %>
+
+From there you can choose to sign in with Google or a password. If you haven't set a password yet you will be able to.
+
+Hope to see you soon!

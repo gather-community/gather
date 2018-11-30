@@ -360,6 +360,10 @@ en:
       work: "w"
       mobile: "m"
 
+  auth_mailer:
+    sign_in_invitation:
+      subject: "Instructions for Signing In to Gather"
+
   meal_mailer:
     meal_reminder:
       subject: "Meal Reminder: %{title} on %{datetime} at %{location}"

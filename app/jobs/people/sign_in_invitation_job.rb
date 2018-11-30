@@ -14,7 +14,10 @@ module People
       with_community(community) do
         # Need to scope to community so folks can't invite users in communities in other clusters.
         # (ActsAsTenant prevents other clusters).
-        User.in_community(community).where(id: user_ids).each(&:send_reset_password_instructions)
+        User.in_community(community).where(id: user_ids).each do |user|
+          token = user.reset_reset_password_token!
+          AuthMailer.sign_in_invitation(user, token).deliver_now
+        end
       end
     end
   end

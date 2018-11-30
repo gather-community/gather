@@ -9,9 +9,7 @@ feature "google oauth" do
 
   context "with oauth stubbed" do
     around do |example|
-      stub_omniauth(google_oauth2: {email: oauth_google_id}) do
-        example.run
-      end
+      stub_omniauth(google_oauth2: {email: oauth_google_id}) { example.run }
     end
 
     context "with token" do

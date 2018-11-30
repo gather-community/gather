@@ -32,7 +32,7 @@ module People
 
           # Else log them in and grab their google_email
           else by_token.reset_password_period_valid?
-               sign_in_and_clear_token(by_token, auth)
+            sign_in_and_clear_token(by_token, auth)
           end
 
           session[:invite_token] = nil

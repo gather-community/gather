@@ -22,6 +22,7 @@ en:
         allergies: "Allergies"
         doctor: "Doctor Info"
         medical: "Medical Info"
+        remember_me: "Keep me logged in after I close my browser"
       household:
         name: "Household Name"
         community_id: "Community"

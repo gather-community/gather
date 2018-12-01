@@ -139,11 +139,6 @@ class User < ApplicationRecord
     save(validate: false)
   end
 
-  # We assume that people always want to stay signed in!
-  def remember_me
-    true
-  end
-
   def name
     "#{first_name} #{last_name}#{active? ? nil : ' (Inactive)'}"
   end

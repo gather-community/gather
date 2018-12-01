@@ -12,6 +12,9 @@
     <%= link_to(icon_tag("google") << " Sign in with Google",
       user_google_oauth2_omniauth_authorize_url(host: Settings.url.host),
       id: "sign-in-btn", class: "btn btn-primary") %>
+    <%= link_to(icon_tag("google") << " Sign in with Password",
+      new_user_session_url(host: Settings.url.host),
+      id: "sign-in-btn", class: "btn btn-primary") %>
     <div id="help-links">
       <div>
         <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>

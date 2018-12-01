@@ -16,6 +16,8 @@ en:
       timeout: "Your session expired. Please sign in again to continue."
       unauthenticated: "Please sign in to view that page."
       unconfirmed: "You have to confirm your email address before continuing."
+    authentication_keys:
+      email: "email"
     mailer:
       confirmation_instructions:
         subject: "Confirmation Instructions"

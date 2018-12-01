@@ -47,7 +47,7 @@ feature "sign in invitations", js: true do
         # Sign in with Google.
         # If the user's google email has been updated, we know the token process worked as expected.
         click_link("Sign in with Google")
-        expect(page).to have_content("Bob Flob")
+        expect(page).to have_signed_in_user(invitee2)
         expect(invitee2.reload.google_email).to eq("bob1234flob@gmail.com")
       end
     end

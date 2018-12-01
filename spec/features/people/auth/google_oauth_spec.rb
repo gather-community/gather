@@ -73,10 +73,13 @@ feature "google oauth" do
     context "with matching email" do
       let(:existing_google_id) { oauth_google_id }
 
-      it "should sign the user in" do
+      it "should sign the user in and remember after cookie cleared" do
         visit "/"
         expect_valid_sign_in_link_and_click
-        expect(page).to be_signed_in_root
+        expect(page).to have_signed_in_user(user)
+        clear_session_cookie
+        visit(meals_path)
+        expect(page).to have_signed_in_user(user)
       end
     end
 

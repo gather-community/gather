@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  include Lensable, Destructible
+  include Destructible
+  include Lensable
 
   helper_method :sample_user
 
@@ -8,7 +11,7 @@ class UsersController < ApplicationController
   decorates_assigned :household, :user, :users
 
   def index
-    authorize User
+    authorize(User)
     @users = policy_scope(User)
     respond_to do |format|
       format.html do
@@ -48,7 +51,7 @@ class UsersController < ApplicationController
         @users = @users.can_be_guardian if params[:context] == "guardian"
         @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.by_name.page(params[:page]).per(20)
-        render(json: @users, meta: { more: @users.next_page.present? }, root: "results")
+        render(json: @users, meta: {more: @users.next_page.present?}, root: "results")
       end
 
       format.csv do
@@ -62,69 +65,67 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    authorize @user
+    authorize(@user)
     @households_and_members = @user.all_households.map do |h|
       [h.decorate, load_showable_users_and_children_in(h)]
     end.to_h
-    @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups).
-      past.not_cancelled.newest_first
+    @head_cook_meals = policy_scope(Meal).head_cooked_by(@user).includes(:signups)
+      .past.not_cancelled.newest_first
   end
 
   def new
     @user = User.new(child: params[:child].present?, household_by_id: true)
     set_blank_household
     prepare_user_form
-    authorize @user
+    authorize(@user)
   end
 
   def create
     @user = User.new
     return unless bootstrap_household
     @user.assign_attributes(permitted_attributes(@user))
-    authorize @user
+    authorize(@user)
     if @user.save
       flash[:success] = "User created successfully."
-      redirect_to user_path(@user)
+      redirect_to(user_path(@user))
     else
-      set_validation_error_notice(@user)
       prepare_user_form
-      render :new
+      render(:new)
     end
   end
 
   def edit
     @user = User.find(params[:id])
     @user.household_by_id = false
-    authorize @user
+    authorize(@user)
     prepare_user_form
   end
 
   def update
     @user = User.find(params[:id])
     return unless bootstrap_household
-    authorize @user
-    if @user.update_attributes(permitted_attributes(@user))
+    authorize(@user)
+    if @user.update(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
-      redirect_to user_path(@user)
+      redirect_to(user_path(@user))
     else
-      set_validation_error_notice(@user)
       prepare_user_form
-      render :edit
+      render(:edit)
     end
   end
 
   def impersonate
     @user = User.find(params[:id])
-    authorize @user
+    authorize(@user)
     session[:impersonating_id] = @user.id
-    redirect_to root_path
+    redirect_to(root_path)
   end
 
   def unimpersonate
     @user = User.find(params[:id])
     skip_authorization
     session.delete(:impersonating_id)
-    redirect_to user_path(@user)
+    redirect_to(user_path(@user))
   end
 
   protected
@@ -140,8 +141,6 @@ class UsersController < ApplicationController
       User.find_by(id: params[:id]).try(:community)
     when "index"
       current_user.community
-    else
-      nil
     end
   end
 
@@ -152,7 +151,9 @@ class UsersController < ApplicationController
       :"people/view", :search)
     @community = current_community
     load_communities_in_cluster
-    lenses.remove_lens(:"people/life_stage") unless policy(sample_user).index_children_for_community?(@community)
+    unless policy(sample_user).index_children_for_community?(@community)
+      lenses.remove_lens(:"people/life_stage")
+    end
     @users = @users.includes(household: :community)
     @users = @users.in_community(@community)
     @users = @users.matching(lenses[:search].value) if lenses[:search].present?
@@ -177,7 +178,7 @@ class UsersController < ApplicationController
       params[:user].delete(:household_attributes)
 
       # We set the household here so that the UserPolicy can use it.
-      @user.household = Household.find_by_id(params[:user][:household_id])
+      @user.household = Household.find_by(id: params[:user][:household_id])
 
       # This prevents non-admins (e.g. self, parent) from changing their household.
       # It also prevents admins from changing users to a household to which they are not permitted.
@@ -195,8 +196,7 @@ class UsersController < ApplicationController
         @user.validate
         skip_authorization
         set_blank_household
-        set_validation_error_notice(@user)
-        render @user.new_record? ? :new : :edit
+        render(@user.new_record? ? :new : :edit)
         return false
       end
     when "false"
@@ -216,7 +216,7 @@ class UsersController < ApplicationController
     # administer permission. So we can return to the main method and use the normal `authorize` method
     # which will check that the current_user has the appropriate permissions to create/update a user
     # with the given household.
-    return true
+    true
   end
 
   # Sets a blank, unpersisted household that will be acceptable to the policy.

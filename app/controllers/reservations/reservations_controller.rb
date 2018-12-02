@@ -19,7 +19,7 @@ module Reservations
         # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
         # Kind-specific rules will be enforced through validation.
         @sample_reservation = Reservation.new(resource: @resource, reserver: current_user, kind: nil)
-        authorize @sample_reservation
+        authorize(@sample_reservation)
 
         # JSON list of reservations for calendar plugin
         if request.xhr?
@@ -29,7 +29,7 @@ module Reservations
             .where(resource_id: params[:resource_id])
             .where("starts_at < ? AND ends_at > ?",
               Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
-          render json: @reservations
+          render(json: @reservations)
 
         # Main reservation pages
         else
@@ -52,7 +52,7 @@ module Reservations
         prepare_lenses(community: {required: true})
         @community = current_community
 
-        authorize Reservation
+        authorize(Reservation)
 
         # This will happen in JSON mode.
         # We don't actually return any Reservations here.
@@ -66,7 +66,7 @@ module Reservations
 
     def show
       @reservation = Reservation.find(params[:id])
-      authorize @reservation
+      authorize(@reservation)
       @resource = @reservation.resource
     end
 
@@ -80,13 +80,13 @@ module Reservations
         starts_at: params[:start],
         ends_at: params[:end]
       )
-      authorize @reservation
+      authorize(@reservation)
       prep_form_vars
     end
 
     def edit
       @reservation = Reservation.find(params[:id])
-      authorize @reservation
+      authorize(@reservation)
       @reservation.guidelines_ok = "1"
       prep_form_vars
     end
@@ -95,34 +95,32 @@ module Reservations
       @reservation = Reservation.new(reserver: current_user)
       set_resource
       @reservation.assign_attributes(reservation_params)
-      authorize @reservation
+      authorize(@reservation)
       if @reservation.save
         flash[:success] = "Reservation created successfully."
         redirect_to_reservation_in_context(@reservation)
       else
         prep_form_vars
-        set_validation_error_notice(@reservation)
-        render :new
+        render(:new)
       end
     end
 
     def update
       @reservation = Reservation.find(params[:id])
-      authorize @reservation
+      authorize(@reservation)
       return handle_xhr_update if request.xhr?
       if @reservation.update(reservation_params)
         flash[:success] = "Reservation updated successfully."
         redirect_to_reservation_in_context(@reservation)
       else
         prep_form_vars
-        set_validation_error_notice(@reservation)
-        render :edit
+        render(:edit)
       end
     end
 
     def destroy
       @reservation = Reservation.find(params[:id])
-      authorize @reservation
+      authorize(@reservation)
       @reservation.destroy
       flash[:success] = "Reservation deleted successfully."
       redirect_to(reservations_path(resource_id: @reservation.resource_id))
@@ -149,7 +147,7 @@ module Reservations
 
     def handle_xhr_update
       if @reservation.update(reservation_params.merge(guidelines_ok: "1"))
-        head :ok
+        head(:ok)
       else
         render(partial: "update_error_messages", status: :unprocessable_entity)
       end
@@ -168,8 +166,8 @@ module Reservations
     end
 
     def redirect_to_reservation_in_context(reservation)
-      redirect_to reservations_path(resource_id: reservation.resource_id,
-                                    date: I18n.l(reservation.starts_at, format: :url_date))
+      redirect_to(reservations_path(resource_id: reservation.resource_id,
+                                    date: I18n.l(reservation.starts_at, format: :url_date)))
     end
   end
 end

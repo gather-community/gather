@@ -1,22 +1,25 @@
+# frozen_string_literal: true
+
 class MealsController < ApplicationController
-  include MealShowable, Lensable
+  include Lensable
+  include MealShowable
 
   decorates_assigned :meal, :meals, :meal_summary
 
   before_action :init_meal, only: :new
   before_action :create_worker_change_notifier, only: :update
-  before_action -> { nav_context(:meals, :meals) }, except: [:jobs, :report]
+  before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
   def index
     prepare_lenses(:search, :"meals/time", :community)
 
-    authorize sample_meal
+    authorize(sample_meal)
     load_meals(:index)
     load_communities_in_cluster
   end
 
   def jobs
-    authorize sample_meal
+    authorize(sample_meal)
     nav_context(:meals, :jobs)
     prepare_lenses(:"people/user", :"meals/time")
     @user = User.find(lenses[:user].value) if lenses[:user].present?
@@ -26,7 +29,7 @@ class MealsController < ApplicationController
 
   def show
     @meal = Meal.find(params[:id]).decorate
-    authorize @meal
+    authorize(@meal)
 
     # Don't want the singup form to get cached
     set_no_cache unless @meal.in_past?
@@ -42,7 +45,7 @@ class MealsController < ApplicationController
   end
 
   def report
-    authorize sample_meal, :report?
+    authorize(sample_meal, :report?)
     @community = current_community
     nav_context(:meals, :report)
     prepare_lenses(*report_lenses)
@@ -51,14 +54,14 @@ class MealsController < ApplicationController
   end
 
   def new
-    authorize @meal
+    authorize(@meal)
     @min_date = Time.zone.today.strftime("%Y-%m-%d")
     prep_form_vars
   end
 
   def edit
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize(@meal)
     @min_date = nil
     prep_form_vars
   end
@@ -71,36 +74,34 @@ class MealsController < ApplicationController
     )
     @meal.assign_attributes(permitted_attributes(@meal))
     @meal.build_reservations
-    authorize @meal
+    authorize(@meal)
     if @meal.save
       flash[:success] = "Meal created successfully."
-      redirect_to meals_path
+      redirect_to(meals_path)
     else
-      set_validation_error_notice(@meal)
       prep_form_vars
-      render :new
+      render(:new)
     end
   end
 
   def update
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize(@meal)
     @meal.assign_attributes(permitted_attributes(@meal))
     @meal.build_reservations
     if @meal.save
       flash[:success] = "Meal updated successfully."
       @worker_change_notifier.try(:check_and_send!)
-      redirect_to meals_path
+      redirect_to(meals_path)
     else
-      set_validation_error_notice(@meal)
       prep_form_vars
-      render :edit
+      render(:edit)
     end
   end
 
   def close
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize(@meal)
     @meal.close!
     flash[:success] = "Meal closed successfully."
     redirect_to(meals_path)
@@ -108,7 +109,7 @@ class MealsController < ApplicationController
 
   def reopen
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize(@meal)
     @meal.reopen!
     flash[:success] = "Meal reopened successfully."
     redirect_to(meals_path)
@@ -117,7 +118,7 @@ class MealsController < ApplicationController
   def summary
     @meal = Meal.find(params[:id]).decorate
     @meal_summary = Meals::Summary.new(@meal)
-    authorize @meal
+    authorize(@meal)
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
     if @meal.open? && current_user == @meal.head_cook
@@ -128,7 +129,7 @@ class MealsController < ApplicationController
 
   def destroy
     @meal = Meal.find(params[:id])
-    authorize @meal
+    authorize(@meal)
     if @meal.destroy
       flash[:success] = "Meal deleted successfully."
     else
@@ -164,19 +165,19 @@ class MealsController < ApplicationController
     @meals = @meals.hosted_by(context == :index ? lens_communities : current_community)
     @meals = @meals.worked_by(lenses[:user].value) if lenses[:user].present?
 
-    if lenses[:time].finalizable?
-      @meals = @meals.finalizable.where(community_id: current_community).oldest_first
-    elsif lenses[:time].past?
-      @meals = @meals.past.newest_first
-    elsif lenses[:time].all?
-      @meals = @meals.oldest_first
-    else
-      @meals = @meals.future.oldest_first
-    end
+    @meals = if lenses[:time].finalizable?
+               @meals.finalizable.where(community_id: current_community).oldest_first
+             elsif lenses[:time].past?
+               @meals.past.newest_first
+             elsif lenses[:time].all?
+               @meals.oldest_first
+             else
+               @meals.future.oldest_first
+             end
     @meals = @meals.includes(:signups, :invitations)
     if params[:search].present?
-      @meals = @meals.eager_load(:head_cook).
-        where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
+      @meals = @meals.eager_load(:head_cook)
+        .where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
@@ -191,8 +192,8 @@ class MealsController < ApplicationController
     @meal.build_cost if @meal.cost.nil?
     @meal.ensure_assignments
     load_communities_in_cluster
-    @formula_options = policy_scope(Meals::Formula).in_community(current_community).
-      active_or_selected(@meal.formula).by_name
+    @formula_options = policy_scope(Meals::Formula).in_community(current_community)
+      .active_or_selected(@meal.formula).by_name
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
     @sample_formula = Meals::Formula.new(community: current_community)
     @sample_resource = Reservations::Resource.new(community: current_community)

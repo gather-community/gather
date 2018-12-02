@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class FormulasController < ApplicationController
     include Destructible
@@ -7,9 +9,9 @@ module Meals
     helper_method :sample_formula
 
     def index
-      authorize sample_formula
-      @formulas = policy_scope(Formula).in_community(current_community).
-        with_meal_counts.deactivated_last.by_name
+      authorize(sample_formula)
+      @formulas = policy_scope(Formula).in_community(current_community)
+        .with_meal_counts.deactivated_last.by_name
     end
 
     def new
@@ -18,42 +20,40 @@ module Meals
         @formula.is_default = true
         @force_default = true
       end
-      authorize @formula
+      authorize(@formula)
     end
 
     def show
       @formula = Formula.find(params[:id])
-      authorize @formula
+      authorize(@formula)
     end
 
     def edit
       @formula = Formula.find(params[:id])
-      authorize @formula
+      authorize(@formula)
       flash.now[:notice] = I18n.t("meals/formulas.cant_edit_notice") unless policy(@formula).update_calcs?
     end
 
     def create
       @formula = sample_formula
       @formula.assign_attributes(formula_params)
-      authorize @formula
+      authorize(@formula)
       if @formula.save
         flash[:success] = "Formula created successfully."
-        redirect_to meals_formulas_path
+        redirect_to(meals_formulas_path)
       else
-        set_validation_error_notice(@formula)
-        render :new
+        render(:new)
       end
     end
 
     def update
       @formula = Formula.find(params[:id])
-      authorize @formula
-      if @formula.update_attributes(formula_params)
+      authorize(@formula)
+      if @formula.update(formula_params)
         flash[:success] = "Formula updated successfully."
-        redirect_to meals_formulas_path
+        redirect_to(meals_formulas_path)
       else
-        set_validation_error_notice(@formula)
-        render :edit
+        render(:edit)
       end
     end
 

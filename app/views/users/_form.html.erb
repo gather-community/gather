@@ -1,23 +1,8 @@
 <div class="row" id="user-forms">
   <% if policy(@user).update_info? %>
-    <div class="col-sm-3 col-sm-push-9">
-      <%= render("shared/photo_dropzone", obj: @user, format: :thumb, width: 150, height: 150) %>
-    </div>
-
-    <div class="col-sm-9 col-sm-pull-3">
-      <%= render("full_form") %>
-    </div>
+    <%= render("full_form") %>
   <% elsif policy(@user).update_photo? %>
-    <div class="col-sm-12">
-      <%= render("shared/photo_dropzone",
-        obj: @user, format: :medium, width: 300, height: 300, hide_existing: true) %>
-      <%= gather_form_for(@user, width: :full) do |f| %>
-        <%= f.input :photo_tmp_id, as: :hidden %>
-        <%= f.input :photo_destroy, as: :hidden %>
-        <%= f.input :household_by_id, as: :hidden %>
-        <%= f.button :primary %>
-      <% end %>
-    </div>
+    <%= render("photo_only_form") %>
   <% end %>
 </div>
 

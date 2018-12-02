@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class MessagesController < ApplicationController
     before_action -> { nav_context(:meals, :meals) }
@@ -10,23 +12,22 @@ module Meals
         @message.recipient_type = "all"
       end
       show_cancel_notice_if_appropriate
-      authorize @message
+      authorize(@message)
     end
 
     def create
       @meal = Meal.find(params[:meal_id])
       @message = Message.new(meal: @meal, sender: current_user)
       @message.assign_attributes(message_params)
-      authorize @message
+      authorize(@message)
       if @message.save
         @meal.cancel! if @message.cancellation?
         flash[:success] = "Message sent successfully."
         Delayed::Job.enqueue(MessageJob.new(@message.id))
-        redirect_to meal_path(@meal)
+        redirect_to(meal_path(@meal))
       else
         show_cancel_notice_if_appropriate
-        set_validation_error_notice(@message)
-        render :new
+        render(:new)
       end
     end
 

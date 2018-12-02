@@ -3,11 +3,6 @@ module Concerns::ApplicationController::Setters
 
   protected
 
-  def set_validation_error_notice(object)
-    flash.now[:error] = "Please correct the errors below."
-    @full_validation_errors = object.errors.full_messages.join(", ")
-  end
-
   def set_no_cache
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"

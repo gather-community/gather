@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Work
-# Controls CRUD for periods, plus the work report.
+  # Controls CRUD for periods, plus the work report.
   class PeriodsController < WorkController
     include Destructible
 
@@ -12,19 +12,19 @@ module Work
     helper_method :work_report
 
     def index
-      authorize sample_period
+      authorize(sample_period)
       @periods = policy_scope(Period).in_community(current_community).latest_first.page(params[:page])
     end
 
     def new
       @period = Period.new_with_defaults(current_community)
-      authorize @period
+      authorize(@period)
       prep_form_vars
     end
 
     def edit
       @period = Period.find(params[:id])
-      authorize @period
+      authorize(@period)
       prep_form_vars
       flash.now[:alert] = t("work/shares.change_warning") unless period.draft? || period.archived?
     end
@@ -32,29 +32,27 @@ module Work
     def create
       @period = Period.new(community: current_community)
       @period.assign_attributes(period_params)
-      authorize @period
+      authorize(@period)
       if @period.save
         QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period created successfully."
-        redirect_to work_periods_path
+        redirect_to(work_periods_path)
       else
-        set_validation_error_notice(@period)
         prep_form_vars
-        render :new
+        render(:new)
       end
     end
 
     def update
       @period = Period.find(params[:id])
-      authorize @period
-      if @period.update_attributes(period_params)
+      authorize(@period)
+      if @period.update(period_params)
         QuotaCalculator.new(@period).recalculate_and_save
         flash[:success] = "Period updated successfully."
-        redirect_to work_periods_path
+        redirect_to(work_periods_path)
       else
-        set_validation_error_notice(@period)
         prep_form_vars
-        render :edit
+        render(:edit)
       end
     end
 

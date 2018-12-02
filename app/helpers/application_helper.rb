@@ -18,8 +18,7 @@ module ApplicationHelper
   end
 
   def flash_message(type, text)
-    title = type.to_sym == :error && @full_validation_errors || nil
-    content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in", title: title) do
+    content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
       content_tag(:button, 'x', class: "close", data: {dismiss: 'alert'}) << text
     end
   end

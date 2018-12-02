@@ -9,7 +9,7 @@ module Work
     helper_method :sample_job
 
     def index
-      authorize sample_job
+      authorize(sample_job)
       prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
       @period = lenses[:period].object
       @jobs = policy_scope(Job).in_community(current_community)
@@ -22,7 +22,7 @@ module Work
 
     def show
       @job = Job.includes(shifts: :assignments).find(params[:id])
-      authorize @job
+      authorize(@job)
     end
 
     def new
@@ -30,42 +30,40 @@ module Work
       @job = Job.new(period_id: params[:period])
       @job.shifts.build
       @job.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
-      authorize @job
+      authorize(@job)
       prep_form_vars
     end
 
     def edit
       @job = Job.includes(:reminders, shifts: :assignments).find(params[:id])
-      authorize @job
+      authorize(@job)
       prep_form_vars
     end
 
     def create
       @job = Job.new
       @job.assign_attributes(job_params)
-      authorize @job
+      authorize(@job)
       if @job.save
         flash[:success] = "Job created successfully."
         QuotaCalculator.new(@job.period).recalculate_and_save
-        redirect_to work_jobs_path
+        redirect_to(work_jobs_path)
       else
-        set_validation_error_notice(@job)
         prep_form_vars
-        render :new
+        render(:new)
       end
     end
 
     def update
       @job = Job.includes(shifts: :assignments).find(params[:id])
-      authorize @job
-      if @job.update_attributes(job_params)
+      authorize(@job)
+      if @job.update(job_params)
         QuotaCalculator.new(@job.period).recalculate_and_save
         flash[:success] = "Job updated successfully."
-        redirect_to work_jobs_path
+        redirect_to(work_jobs_path)
       else
-        set_validation_error_notice(@job)
         prep_form_vars
-        render :edit
+        render(:edit)
       end
     end
 

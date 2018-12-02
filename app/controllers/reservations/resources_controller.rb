@@ -10,43 +10,41 @@ module Reservations
     before_action -> { nav_context(:reservations, :resources) }
 
     def index
-      authorize sample_resource
+      authorize(sample_resource)
       @resources = policy_scope(Resource).with_reservation_counts
         .in_community(current_community).deactivated_last.by_name
     end
 
     def new
       @resource = sample_resource
-      authorize @resource
+      authorize(@resource)
     end
 
     def edit
       @resource = Resource.find(params[:id])
-      authorize @resource
+      authorize(@resource)
     end
 
     def create
       @resource = sample_resource
       @resource.assign_attributes(resource_params)
-      authorize @resource
+      authorize(@resource)
       if @resource.save
         flash[:success] = "Resource created successfully."
-        redirect_to reservations_resources_path
+        redirect_to(reservations_resources_path)
       else
-        set_validation_error_notice(@resource)
-        render :new
+        render(:new)
       end
     end
 
     def update
       @resource = Resource.find(params[:id])
-      authorize @resource
+      authorize(@resource)
       if @resource.update(resource_params)
         flash[:success] = "Resource updated successfully."
-        redirect_to reservations_resources_path
+        redirect_to(reservations_resources_path)
       else
-        set_validation_error_notice(@resource)
-        render :edit
+        render(:edit)
       end
     end
 

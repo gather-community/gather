@@ -1,11 +1,12 @@
-class TransactionsController < ApplicationController
+# frozen_string_literal: true
 
+class TransactionsController < ApplicationController
   before_action -> { nav_context(:accounts) }
 
   def index
     @account = Billing::Account.find(params[:account_id]).decorate
-    authorize @account, :show?
-    authorize Billing::Transaction
+    authorize(@account, :show?)
+    authorize(Billing::Transaction)
     @transactions = policy_scope(Billing::Transaction).includes(account: :community)
     @transactions = @transactions.where(account: @account).no_statement
     @charges = @transactions.select(&:charge?)
@@ -17,16 +18,16 @@ class TransactionsController < ApplicationController
 
   def new
     @account = Billing::Account.find(params[:account_id])
-    authorize @account, :update?
+    authorize(@account, :update?)
     @transaction = Billing::Transaction.new(incurred_on: Time.zone.today, account: @account).decorate
-    authorize @transaction
+    authorize(@transaction)
   end
 
   def create
     @account = Billing::Account.find(params[:account_id])
-    authorize @account, :update?
+    authorize(@account, :update?)
     @transaction = Billing::Transaction.new(account: @account)
-    authorize @transaction
+    authorize(@transaction)
     @transaction.assign_attributes(transaction_params)
     @transaction = @transaction.decorate
     if @transaction.valid?
@@ -34,17 +35,16 @@ class TransactionsController < ApplicationController
       if params[:confirmed] == "1"
         @transaction.save
         flash[:success] = "Transaction added successfully."
-        return redirect_to accounts_path
+        return redirect_to(accounts_path)
       elsif params[:confirmed] == "0"
         flash.now[:notice] = "The transaction was not added. You can edit it below and try again, "\
            "or click 'Cancel' below to return to the accounts page."
-        render :new
+        render(:new)
       else
-        render :confirm
+        render(:confirm)
       end
     else
-      set_validation_error_notice(@transaction)
-      render :new
+      render(:new)
     end
   end
 

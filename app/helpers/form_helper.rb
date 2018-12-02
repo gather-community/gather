@@ -10,7 +10,11 @@ module FormHelper
   #   - The :narrower_label layout is 2/10.
   #   - The :equal_width layout is 6/6.
   #   - Layouts are achieved using CSS in the global/forms/bootstrap.scss file.
-  def gather_form_for(obj, options = {}, &block)
+  #
+  # Other options:
+  # - top_error_notification: Whether or not to include the f.error_notification at the top of the form.
+  #     Defaults to true.
+  def gather_form_for(obj, options = {})
     width = options.delete(:width) || :normal
     name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
     layout = options.delete(:layout) || :narrow_label
@@ -28,7 +32,15 @@ module FormHelper
 
     # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
-      simple_form_for(obj, options, &block)
+      simple_form_for(obj, options) do |form|
+        unless options[:top_error_notification] == false
+          # We include the full error messages for debugging purposes in case the attribute on which
+          # they are set is not included in the form. This shouldn't happen but does occasionally
+          # and is hard to debug when it does.
+          form.error_notification(title: obj.errors.full_messages.join(", "))
+        end
+        yield(form)
+      end
     end
   end
 

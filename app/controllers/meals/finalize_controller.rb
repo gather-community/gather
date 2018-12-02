@@ -9,7 +9,7 @@ module Meals
 
     def new
       @meal = Meal.find(params[:meal_id])
-      authorize @meal, :finalize?
+      authorize(@meal, :finalize?)
       @dupes = []
       build_meal_cost
       prepare_and_render_form
@@ -17,7 +17,7 @@ module Meals
 
     def create
       @meal = Meal.find(params[:meal_id])
-      authorize @meal, :finalize?
+      authorize(@meal, :finalize?)
 
       # We assign finalized here so that the meal/signup validations don't complain about no spots left.
       @meal.assign_attributes(finalize_params.merge(status: "finalized"))
@@ -28,7 +28,7 @@ module Meals
       if @meal.valid?
         params[:confirmed] == "0" ? handle_unconfirmed : handle_valid
       else
-        handle_invalid
+        prepare_and_render_form
       end
     end
 
@@ -68,11 +68,6 @@ module Meals
       @cost = @meal.cost
       flash.now[:alert] = t("meals.finalizing.review_and_confirm_html").html_safe
       prepare_and_render_form(:confirm)
-    end
-
-    def handle_invalid
-      set_validation_error_notice(@meal)
-      prepare_and_render_form
     end
 
     def prepare_and_render_form(template = :new)

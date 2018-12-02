@@ -10,7 +10,7 @@ class HouseholdsController < ApplicationController
   decorates_assigned :household, :members
 
   def index
-    authorize Household.new(community: current_community)
+    authorize(Household.new(community: current_community))
     @households = policy_scope(Household)
     respond_to do |format|
       format.html { index_html }
@@ -21,51 +21,49 @@ class HouseholdsController < ApplicationController
   def show
     @household = Household.find(params[:id])
     @members = load_showable_users_and_children_in(@household)
-    authorize @household
+    authorize(@household)
   end
 
   def new
     @household = Household.new(community: current_community)
-    authorize @household
+    authorize(@household)
     prepare_household_form
   end
 
   def create
     @household = Household.new(community: current_community)
     @household.assign_attributes(household_attributes)
-    authorize @household
+    authorize(@household)
     if @household.save
       flash[:success] = "Household created successfully."
-      redirect_to households_path
+      redirect_to(households_path)
     else
-      set_validation_error_notice(@household)
       prepare_household_form
-      render :new
+      render(:new)
     end
   end
 
   def edit
     @household = Household.find(params[:id])
-    authorize @household
+    authorize(@household)
     prepare_household_form
   end
 
   def update
     @household = Household.find(params[:id])
-    authorize @household
+    authorize(@household)
     if @household.update(household_attributes)
       flash[:success] = "Household updated successfully."
-      redirect_to households_path
+      redirect_to(households_path)
     else
-      set_validation_error_notice(@household)
       prepare_household_form
-      render :edit
+      render(:edit)
     end
   end
 
   def accounts
     @household = Household.find(params[:id])
-    authorize @household
+    authorize(@household)
 
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
 

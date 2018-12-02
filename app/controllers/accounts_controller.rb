@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
   include AccountShowable
 
@@ -5,13 +7,13 @@ class AccountsController < ApplicationController
 
   def index
     @community = current_community
-    authorize sample_account
+    authorize(sample_account)
     @accounts = policy_scope(Billing::Account)
-    @accounts = @accounts.where(community: @community).
-      includes(:last_statement, household: [:users, :community]).
-      with_any_activity(@community).
-      by_cmty_and_household_name.
-      decorate
+    @accounts = @accounts.where(community: @community)
+      .includes(:last_statement, household: %i[users community])
+      .with_any_activity(@community)
+      .by_cmty_and_household_name
+      .decorate
 
     @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
     @active_accounts = Billing::Account.with_activity(@community).count
@@ -23,9 +25,9 @@ class AccountsController < ApplicationController
 
     @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
 
-    last_fee = Billing::Transaction.joins(:account).
-      where(code: "late_fee", accounts: { community_id: @community.id }).
-      order(:incurred_on).last
+    last_fee = Billing::Transaction.joins(:account)
+      .where(code: "late_fee", accounts: {community_id: @community.id})
+      .order(:incurred_on).last
 
     @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
   end
@@ -33,29 +35,28 @@ class AccountsController < ApplicationController
   def show
     @account = Billing::Account.find(params[:id]).decorate
     @community = @account.community
-    authorize @account
+    authorize(@account)
     prep_account_vars
   end
 
   def edit
     @account = Billing::Account.find(params[:id]).decorate
-    authorize @account
+    authorize(@account)
   end
 
   def update
     @account = Billing::Account.find(params[:id])
-    authorize @account
-    if @account.update_attributes(account_params)
+    authorize(@account)
+    if @account.update(account_params)
       flash[:success] = "Account updated successfully."
       redirect_to(accounts_path)
     else
-      set_validation_error_notice(@account)
       render(:edit)
     end
   end
 
   def apply_late_fees
-    authorize sample_account
+    authorize(sample_account)
     late_fee_applier.apply!
     flash[:success] = "Late fees applied."
     redirect_to(accounts_path)

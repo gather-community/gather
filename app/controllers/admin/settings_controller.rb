@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 module Admin
   class SettingsController < ApplicationController
     def edit
       @community = current_community
-      authorize current_community
+      authorize(current_community)
     end
 
     def update
       @community = current_community
-      authorize current_community
+      authorize(current_community)
       if @community.update(settings_params)
         flash[:success] = "Settings updated successfully."
-        redirect_to admin_settings_path(type: params[:type])
+        redirect_to(admin_settings_path(type: params[:type]))
       else
-        set_validation_error_notice(@community)
-        render :edit
+        render(:edit)
       end
     end
 

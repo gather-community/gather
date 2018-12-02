@@ -16,10 +16,9 @@
 <% elsif @signup.new_record? && @meal.full? %>
   You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
 <% else %>
-  <%= gather_form_for(@signup, width: :full, layout: :vertical) do |f| %>
+  <%= gather_form_for(@signup, width: :full, layout: :vertical, top_error_notification: false) do |f| %>
     <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
     <%= f.input(:meal_id, as: :hidden) %>
-    <%= base_error(f, full_width: true) %>
 
     <p>
       <%= icon_tag("exclamation-circle") if @meal.full? %>
@@ -27,7 +26,7 @@
     </p>
 
     <div class="signup-fields-with-comments"
-      <%= @expand_signup_form ? "" : 'data-toggle-off=signup-form' %>>
+      <%= @expand_signup_form ? "" : "data-toggle-off=signup-form" %>>
       <div class="signup-fields">
         <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
       </div>

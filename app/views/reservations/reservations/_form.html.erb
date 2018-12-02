@@ -2,9 +2,6 @@
       url: reservation.new_record? ? reservations_path : reservation_path(reservation)) do |f| %>
 
   <%= f.hidden_field :resource_id %>
-
-  <%= base_error(f) %>
-
   <%= f.input :resource do %>
     <%= image_tag(resource.photo.url(:thumb)) %><br/>
     <%= resource.name_with_prefix %>

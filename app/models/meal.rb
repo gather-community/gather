@@ -269,8 +269,7 @@ class Meal < ApplicationRecord
       marked_user_ids = {}
       send("#{role}_assigns").each do |a|
         if marked_user_ids[a.user_id]
-          a.errors.add(:user_id, "user cannot be assigned to this role twice")
-          add_dummy_base_error
+          errors.add("#{role}_assigns", "A user cannot be assigned to this role twice")
         else
           marked_user_ids[a.user_id] = true
         end
@@ -288,12 +287,6 @@ class Meal < ApplicationRecord
     if allergen_none? && allergens.size > 1
       errors.add(:allergens, "none can't be selected if other allergens present")
     end
-  end
-
-  # Adds an error to the base object so that valid? returns false and
-  # errors on associations are shown.
-  def add_dummy_base_error
-    errors.add(:__dummy, "x")
   end
 
   def copy_resource_errors

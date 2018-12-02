@@ -1,7 +1,4 @@
 <%= gather_form_for(meal) do |f| %>
-  <%= f.error_notification %>
-  <%= base_error(f) %>
-
   <%= render("meals/form/general", f: f) %>
   <%= render("meals/form/workers", f: f) %>
   <%= render("meals/form/menu", f: f) %>

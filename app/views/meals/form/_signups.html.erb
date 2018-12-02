@@ -3,7 +3,7 @@
   <%= meal.form_section(:signups, expanded: local_assigns[:expanded]) do %>
     <div class="signup-fields">
       <%= f.simple_fields_for(:signups) do |signup_form| %>
-        <%= render("meals/form/signup_fields", f: signup_form) %>
+        <%= render("meals/form/signup_fields", f: signup_form, nested: true) %>
       <% end %>
     </div>
     <%= link_to_add_association_with_icon(t("cocoon.add_links.signups"), f, :signups,

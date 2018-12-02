@@ -33,13 +33,15 @@ module FormHelper
     # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
       simple_form_for(obj, options) do |form|
-        unless options[:top_error_notification] == false
+        top_errors = []
+        if options[:top_error_notification] != false
           # We include the full error messages for debugging purposes in case the attribute on which
           # they are set is not included in the form. This shouldn't happen but does occasionally
           # and is hard to debug when it does.
-          form.error_notification(title: obj.errors.full_messages.join(", "))
+          top_errors << form.error_notification(title: obj.errors.full_messages.join(", "))
         end
-        yield(form)
+        top_errors << form.error(:base) if obj.errors[:base].present?
+        safe_join(top_errors.push(capture { yield(form) }))
       end
     end
   end
@@ -49,16 +51,6 @@ module FormHelper
       content_tag(:div, class: "form-actions col-sm-12 text-#{align} #{classes}") do
         capture { yield }
       end
-    end
-  end
-
-  # TODO: Refactor this in favor of f.error :base
-  def base_error(f, full_width: false, key: :base)
-    return unless f.object.errors[key].any?
-    col_styles = full_width ? "col-sm-12" : "col-sm-6 col-sm-offset-2"
-    # Mimics the way it works for fields
-    content_tag(:div, class: "row") do
-      content_tag(:div, f.error(key), class: "has-error base-error #{col_styles}")
     end
   end
 

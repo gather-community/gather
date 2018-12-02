@@ -10,8 +10,7 @@ class AuthMailer < Devise::Mailer
   def reset_password_instructions(user, token, opts = {})
     with_community_subdomain(user.community) do
       return if user.fake?
-      @user = user.decorate
-      super
+      super(user.decorate, token, opts)
     end
   end
 

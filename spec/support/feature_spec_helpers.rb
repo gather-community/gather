@@ -94,8 +94,12 @@ module FeatureSpecHelpers
     expect(page).to have_css("div.alert-success", text: pattern)
   end
 
-  def expect_validation_error
-    expect(page).to have_css("div.alert-danger", text: /Please correct/)
+  def expect_validation_error(text = nil)
+    if text
+      expect(page).to have_css("div.error", text: text)
+    else
+      expect(page).to have_css("div.alert-danger", text: /Please review/)
+    end
   end
 
   def expect_image_upload(mode:, path: nil)
@@ -314,6 +318,11 @@ module FeatureSpecHelpers
   def fill_in_lens_and_wait(param_name, value)
     fill_in_lens(param_name, value)
     expect(page).to have_echoed_url_param(param_name, value)
+  end
+
+  def match_and_visit_url(str, regex)
+    expect(str).to match(regex)
+    visit(str.match(regex)[0].strip)
   end
 
   def clear_lenses

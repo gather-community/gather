@@ -81,6 +81,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, password_strength: {use_dictionary: true}
+  validates_confirmation_of :password
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? }
   validate { birthdate_wrapper.validate }

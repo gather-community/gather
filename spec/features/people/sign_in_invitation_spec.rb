@@ -41,8 +41,7 @@ feature "sign in invitations", js: true do
         url_regex = %r{https?://.+/?token=.+$}
         email = ActionMailer::Base.deliveries.detect { |d| d.body.encoded.include?("Flob") }.body.encoded
         expect(email).to match(/Bob Flob/)
-        expect(email).to match(url_regex)
-        visit(email.match(url_regex)[0].strip)
+        match_and_visit_url(email, url_regex)
 
         # Sign in with Google.
         # If the user's google email has been updated, we know the token process worked as expected.

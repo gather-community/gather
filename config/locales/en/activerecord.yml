@@ -22,7 +22,7 @@ en:
         allergies: "Allergies"
         doctor: "Doctor Info"
         medical: "Medical Info"
-        remember_me: "Keep me logged in after I close my browser"
+        remember_me: "Stay signed in after you close your browser"
       household:
         name: "Household Name"
         community_id: "Community"
@@ -191,6 +191,8 @@ en:
           attributes:
             photo_content_type:
               invalid: "has incorrect type"
+            password_confirmation:
+              confirmation: "doesn't match password"
           password:
             password_strength: "is too weak. Try making it longer or adding special characters."
         reservations/resource:

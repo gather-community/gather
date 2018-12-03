@@ -3,7 +3,10 @@
 Rails.application.routes.draw do
   devise_for :users, path: "people/users",
                      path_names: {sign_in: "sign-in", sign_out: "sign-out"},
-                     controllers: {omniauth_callbacks: "people/users/omniauth_callbacks"}
+                     controllers: {
+                       sessions: "people/users/sessions",
+                       omniauth_callbacks: "people/users/omniauth_callbacks"
+                     }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
   namespace :people do

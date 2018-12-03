@@ -7,14 +7,11 @@ module People
       before_action :skip_authorization
 
       def google_oauth2
-        Rails.logger.info("Entering google_oauth2 method")
-        Rails.logger.info("Expected oauth state is #{session['omniauth.state']}")
-
         auth = request.env["omniauth.auth"]
+        invite_token = request.env["omniauth.params"]["state"].presence
 
         # If invite token is present, try to find user by that.
-        if (t = session[:invite_token]) && (by_token = User.with_reset_password_token(t))
-
+        if invite_token && (by_token = User.with_reset_password_token(invite_token))
           if !by_token.reset_password_period_valid?
             set_flash_message(:error, :failure, kind: "Google", reason: "your invitation has expired")
             redirect_to(sign_in_url)
@@ -34,9 +31,6 @@ module People
           else
             store_id_clear_token_and_sign_in(by_token, auth)
           end
-
-          session[:invite_token] = nil
-
         # if no invite, try to find by google_email
         elsif (by_email = User.from_omniauth(auth))
           by_email.update_for_oauth!(auth)

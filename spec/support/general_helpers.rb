@@ -56,6 +56,11 @@ module GeneralHelpers
     I18n.locale = old_locale
   end
 
+  # Tests for a URL with no subdomain.
+  def contain_apex_url(path)
+    include("http://#{Settings.url.host}:#{Settings.url.port}#{path}")
+  end
+
   def contain_community_url(community, path)
     include("http://#{community.slug}.#{Settings.url.host}:#{Settings.url.port}#{path}")
   end

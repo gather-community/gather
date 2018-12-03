@@ -362,7 +362,7 @@ en:
 
   auth_mailer:
     sign_in_invitation:
-      subject: "Instructions for Signing In to Gather"
+      subject: "Instructions for Signing in to Gather"
 
   meal_mailer:
     meal_reminder:

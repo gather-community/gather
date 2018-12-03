@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "meal messages" do
   let!(:meal) { create(:meal, asst_cooks: [create(:user)]) }
   let!(:user) { meal.head_cook }
   let!(:signup) { create_list(:signup, 2, :with_nums, meal: meal) }
+  let(:email_sent) { email_sent_by { process_queued_job } }
 
   around do |example|
     with_user_home_subdomain(user) { example.run }
@@ -14,14 +17,12 @@ feature "meal messages" do
   end
 
   scenario "cancel meal" do
-    expect do
-      visit meal_path(meal)
-      click_link "Cancel"
-      fill_in "Message", with: "Foo bar"
-      click_button "Send Message"
-      expect(page).to have_content("Message sent successfully")
-      expect(page).to have_content("This meal has been cancelled")
-      Delayed::Worker.new.work_off
-    end.to change { ActionMailer::Base.deliveries.size }.by(4) # Signed up households + team
+    visit meal_path(meal)
+    click_link "Cancel"
+    fill_in "Message", with: "Foo bar"
+    click_button "Send Message"
+    expect(page).to have_content("Message sent successfully")
+    expect(page).to have_content("This meal has been cancelled")
+    expect(email_sent.size).to eq(4) # Signed up households + team
   end
 end

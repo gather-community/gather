@@ -98,11 +98,12 @@ feature "google oauth" do
   context "without oauth stubbed" do
     context "with invalid query params on callback" do
       it "should show error" do
-        expect do
+        email_sent = email_sent_by do
           visit "/people/users/auth/google_oauth2/callback" # No params
           expect(page).to be_signed_out_root
           expect(page).to have_content("Could not sign you in from Google because of an unspecified error.")
-        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+        end
+        expect(email_sent.size).to eq(1)
       end
     end
   end

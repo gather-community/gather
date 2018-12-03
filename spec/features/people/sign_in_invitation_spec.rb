@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "sign in invitations", js: true do
   let(:actor) { create(:admin) }
+  let(:email_sent) { email_sent_by { process_queued_job } }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -22,13 +23,12 @@ feature "sign in invitations", js: true do
       expect_success(/Invitation sent./)
       full_sign_out
 
-      expect_worker_to_send_emails(count: 1)
-
       # Get the link from the email and visit it.
+      expect(email_sent.size).to eq(1)
       url_regex = %r{https?://.+/?token=.+$}
-      email = ActionMailer::Base.deliveries.last.body.encoded
-      expect(email).to match(/Bob Flob/)
-      match_and_visit_url(email, url_regex)
+      body = email_sent.last.body.encoded
+      expect(body).to match(/Bob Flob/)
+      match_and_visit_url(body, url_regex)
 
       # Sign in with Google.
       # If the user's google email has been updated, we know the token process worked as expected.
@@ -49,13 +49,12 @@ feature "sign in invitations", js: true do
       expect_success(/Invitation sent./)
       full_sign_out
 
-      expect_worker_to_send_emails(count: 1)
-
       # Get the link from the email and visit it.
+      expect(email_sent.size).to eq(1)
       url_regex = %r{https?://.+/?token=.+$}
-      email = ActionMailer::Base.deliveries.last.body.encoded
-      expect(email).to match(/Bob Flob/)
-      match_and_visit_url(email, url_regex)
+      body = email_sent.last.body.encoded
+      expect(body).to match(/Bob Flob/)
+      match_and_visit_url(body, url_regex)
 
       click_link("Sign in with Password")
       click_link("Don't know your password")
@@ -92,13 +91,8 @@ feature "sign in invitations", js: true do
       click_button("Send Invitations")
       expect_success(/Invitations sent./)
 
-      expect_worker_to_send_emails(count: 2)
-      expect(ActionMailer::Base.deliveries[-2..-1].map(&:to))
-        .to contain_exactly([invitee2.email], [invitee3.email])
+      expect(email_sent.size).to eq(2)
+      expect(email_sent.map(&:to)).to contain_exactly([invitee2.email], [invitee3.email])
     end
-  end
-
-  def expect_worker_to_send_emails(count:)
-    expect { Delayed::Worker.new.work_off }.to change { ActionMailer::Base.deliveries.size }.by(count)
   end
 end

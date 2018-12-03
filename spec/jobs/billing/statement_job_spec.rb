@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Billing::StatementJob do
   include_context "jobs"
@@ -10,25 +12,19 @@ describe Billing::StatementJob do
       let!(:trans2) { create(:transaction) }
 
       it "should send emails and create statements" do
-        expect do
-          perform_job(trans1.community_id)
-        end.to change { ActionMailer::Base.deliveries.size }.by(2)
-        expect(statement_count).to eq 2
+        expect(email_sent_by { perform_job(trans1.community_id) }.size).to eq(2)
+        expect(statement_count).to eq(2)
 
         # Should do nothing the second time because of recent statement.
-        expect do
-          perform_job(trans1.community_id)
-        end.to change { ActionMailer::Base.deliveries.size }.by(0)
-        expect(statement_count).to eq 2
+        expect(email_sent_by { perform_job(trans1.community_id) }.size).to eq(0)
+        expect(statement_count).to eq(2)
       end
     end
 
     context "with no accounts having activity" do
       it "should do nothing" do
-        expect do
-          perform_job(default_community.id)
-        end.to change { ActionMailer::Base.deliveries.size }.by(0)
-        expect(statement_count).to eq 0
+        expect(email_sent_by { perform_job(default_community.id) }.size).to eq(0)
+        expect(statement_count).to eq(0)
       end
     end
 

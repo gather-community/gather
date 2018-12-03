@@ -10,12 +10,6 @@ shared_context "jobs" do
       described_class.new(*args).perform
     end
   end
-
-  def mails_sent
-    old_count = ActionMailer::Base.deliveries.size
-    perform_job
-    ActionMailer::Base.deliveries[old_count..-1] || []
-  end
 end
 
 shared_context "reminder jobs" do

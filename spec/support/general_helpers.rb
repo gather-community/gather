@@ -72,4 +72,14 @@ module GeneralHelpers
   def have_correct_shift_url(shift)
     contain_community_url(shift.community, "/work/signups/#{shift.id}")
   end
+
+  def email_sent_by
+    old_count = ActionMailer::Base.deliveries.size
+    yield
+    ActionMailer::Base.deliveries[old_count..-1] || []
+  end
+
+  def process_queued_job
+    Delayed::Worker.new.work_off
+  end
 end

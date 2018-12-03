@@ -51,10 +51,12 @@ feature "password auth" do
     click_on("Send Reset Instructions")
     expect(page).to have_content("Email not found")
     fill_in("Email Address", with: user.email)
-    click_on("Send Reset Instructions")
-    expect(page).to have_alert("You will receive an email with instructions on how to reset your password")
-    email = ActionMailer::Base.deliveries.last.body.encoded
-    match_and_visit_url(email, %r{https?://.+/people/users/password/edit\?reset_password_token=.+$})
+    email_sent = email_sent_by do
+      click_on("Send Reset Instructions")
+      expect(page).to have_alert("You will receive an email with instructions on how to reset your password")
+    end
+    body = email_sent[0].body.encoded
+    match_and_visit_url(body, %r{https?://.+/people/users/password/edit\?reset_password_token=.+$})
     fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
     fill_in("Re-type New Password", with: "x")
     click_on("Reset Password")

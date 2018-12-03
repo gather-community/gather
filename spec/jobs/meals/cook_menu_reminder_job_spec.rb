@@ -15,7 +15,7 @@ describe Meals::CookMenuReminderJob do
   let!(:meal3) { create(:meal, head_cook: user2, cleaners: [user1], served_at: "2017-01-14") }
   let!(:meal4) { create(:meal, head_cook: user3, served_at: "2017-01-05", status: "cancelled") }
   let!(:meal5) { create(:meal, head_cook: user4, served_at: "2017-01-10", status: "cancelled") }
-  subject(:mails) { mails_sent }
+  subject(:email_sent) { email_sent_by { perform_job } }
 
   # reminder jobs shared context sets correct time by default
   context "at correct hour" do
@@ -24,8 +24,8 @@ describe Meals::CookMenuReminderJob do
       let(:meal2_trait) { nil }
 
       it "should send to both normal meals but not cancelled ones" do
-        expect(mails.map(&:to)).to contain_exactly([meal1.head_cook.email], [meal2.head_cook.email])
-        expect(mails.first.subject).to match(/\AMenu Reminder: Please Post Menu/)
+        expect(email_sent.map(&:to)).to contain_exactly([meal1.head_cook.email], [meal2.head_cook.email])
+        expect(email_sent.first.subject).to match(/\AMenu Reminder: Please Post Menu/)
       end
 
       context "with early reminders already sent for both meals" do
@@ -35,7 +35,7 @@ describe Meals::CookMenuReminderJob do
         end
 
         it "should send to sooner meal only" do
-          expect(mails.map(&:to)).to contain_exactly([meal1.head_cook.email])
+          expect(email_sent.map(&:to)).to contain_exactly([meal1.head_cook.email])
         end
       end
     end
@@ -45,7 +45,7 @@ describe Meals::CookMenuReminderJob do
       let(:meal2_trait) { nil }
 
       it "should send to later meal only" do
-        expect(mails.map(&:to)).to contain_exactly([meal2.head_cook.email])
+        expect(email_sent.map(&:to)).to contain_exactly([meal2.head_cook.email])
       end
     end
 
@@ -54,7 +54,7 @@ describe Meals::CookMenuReminderJob do
       let(:meal2_trait) { :with_menu }
 
       it "should send to neither meal" do
-        expect(mails).to be_empty
+        expect(email_sent).to be_empty
       end
     end
   end
@@ -65,7 +65,7 @@ describe Meals::CookMenuReminderJob do
 
     it "should send to neither meal" do
       Timecop.freeze(2.hours) do
-        expect(mails).to be_empty
+        expect(email_sent).to be_empty
       end
     end
   end

@@ -80,8 +80,8 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
-  validates :password, password_strength: {use_dictionary: true}
-  validates_confirmation_of :password
+  validates :password, password_strength: {use_dictionary: true}, if: :password_required?
+  validates :password, confirmation: true
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? }
   validate { birthdate_wrapper.validate }
@@ -253,5 +253,9 @@ class User < ApplicationRecord
   def temp_email_uniqueness_exception?
     [4007, 4019, 4005, 4027, 4818, 4815, 4020, 4012, 4286, 2773, 4824, 4823, 4813, 4796,
       4016, 4037, 4018, 4039, 2670, 3024, 2559, 2566, 4032, 4043].include?(id)
+  end
+
+  def password_required?
+    new_record? || password.present? || password_confirmation.present?
   end
 end

@@ -45,19 +45,65 @@ describe User do
         end
       end
 
-      context "with weak password" do
-        let(:password) { "passw0rd" }
-        it_behaves_like "too weak"
+      context "with new record" do
+        context "with weak password" do
+          let(:password) { "passw0rd" }
+          it_behaves_like "too weak"
+        end
+
+        context "with dictionary password" do
+          let(:password) { "contortionist" }
+          it_behaves_like "too weak"
+        end
+
+        context "with strong password" do
+          let(:password) { "2a89fhq;*42ata2;84ty8;Q:4t8qa" }
+          it { expect(user).to be_valid }
+        end
+
+        context "with nil password" do
+          let(:password) { nil }
+          it_behaves_like "too weak"
+        end
       end
 
-      context "with dictionary password" do
-        let(:password) { "contortionist" }
-        it_behaves_like "too weak"
-      end
-
-      context "with strong password" do
+      context "with persisted record" do
         let(:password) { "2a89fhq;*42ata2;84ty8;Q:4t8qa" }
+        let(:saved) { create(:user, password: password, password_confirmation: password) }
+        let(:user) { User.find(saved.id) } # Reload so password is definitely wiped.
+
+        it "updates cleanly when password not set" do
+          user.first_name = "Fish"
+          expect(user).to be_valid
+        end
+
+        it "updates cleanly when password empty string" do
+          user.update(first_name: "Fish", password: "")
+          expect(user).to be_valid
+        end
+
+        it "errors when password changed and invalid" do
+          user.update(first_name: "Fish", password: "foo", password_confirmation: "foo")
+          expect(user.errors[:password].join).to match(/is too weak/)
+        end
+      end
+    end
+
+    describe "password confirmation" do
+      let(:password) { "2a89fhq;*42ata2;84ty8;Q:4t8qa" }
+      let(:user) { build(:user, password: password, password_confirmation: confirmation) }
+
+      context "with matching confirmaiton" do
+        let(:confirmation) { password }
         it { expect(user).to be_valid }
+      end
+
+      context "without matching confirmation" do
+        let(:confirmation) { "x" }
+        it do
+          expect(user).not_to be_valid
+          expect(user.errors[:password_confirmation].join).to eq("doesn't match password")
+        end
       end
     end
 

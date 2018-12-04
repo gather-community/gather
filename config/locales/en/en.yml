@@ -36,6 +36,7 @@ en:
       go_back: "Go Back"
       update: "Save"
       sign_in: "Sign In"
+      send_reset_instructions: "Send Reset Instructions"
       meals_message:
         create: "Send Message"
       signup:

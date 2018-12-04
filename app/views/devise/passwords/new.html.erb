@@ -1,15 +1,16 @@
 <% content_for(:title, "Forgot Password") %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+<%= gather_form_for(resource, layout: :vertical, width: :narrow, url: password_path(resource_name),
+                              html: {method: :post}) do |f| %>
+  <p>
+    Enter your email address to have instructions sent to you via email.
+    Follow the instructions in the email to reset your password. The email may take a few
+    moments to arrive.
+  </p>
 
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
-  </div>
+  <%= f.input(:email, required: false, autofocus: true, hint: false) %>
 
-  <div class="form-actions">
-    <%= f.button :primary, "Send Reset Instructions" %>
-  </div>
+  <%= form_actions do %>
+    <%= f.button(:primary, :send_reset_instructions) %>
+  <% end %>
 <% end %>
-
-<%= render "devise/shared/links" %>

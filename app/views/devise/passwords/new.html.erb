@@ -1,7 +1,7 @@
 <% content_for(:title, "Forgot Password") %>
 
-<%= gather_form_for(resource, layout: :vertical, width: :narrow, url: password_path(resource_name),
-                              html: {method: :post}) do |f| %>
+<%= gather_form_for(resource, layout: :vertical, width: :narrow, top_error_notification: false,
+                              url: password_path(resource_name), html: {method: :post}) do |f| %>
   <p>
     Enter your email address to have instructions sent to you via email.
     Follow the instructions in the email to reset your password. The email may take a few

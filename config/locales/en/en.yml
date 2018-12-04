@@ -37,6 +37,7 @@ en:
       update: "Save"
       sign_in: "Sign In"
       send_reset_instructions: "Send Reset Instructions"
+      reset_password: "Reset Password"
       meals_message:
         create: "Send Message"
       signup:

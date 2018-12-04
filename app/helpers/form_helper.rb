@@ -25,7 +25,7 @@ module FormHelper
     classes << "gather-form"
     classes << (layout == :vertical ? "form-vertical" : "form-horizontal") # Used by Bootstrap
     classes << (layout.to_s.tr("_", "-") << "-layout") # Layout
-    classes << (width == :full ? "full-width" : "normal-width")
+    classes << "#{width}-width"
     classes << "#{name}-form" # Object class name
 
     options[:html][:class] = classes.join(" ")
@@ -48,8 +48,15 @@ module FormHelper
 
   def form_actions(align: :right, classes: "")
     content_tag(:div, class: "row") do
-      content_tag(:div, class: "form-actions col-sm-12 text-#{align} #{classes}") do
-        capture { yield }
+      content_tag(:div, class: "form-actions col-sm-12 buttons-#{align} #{classes}") do
+        content = capture { yield }
+        if content.match?(/class="secondary-links"/)
+          content
+        else
+          # If no secondary-links are defined we add a blank div so that flexbox justify works properly.
+          content_tag(:div, "", class: "secondary-links") <<
+            content_tag(:div, content, class: "buttons")
+        end
       end
     end
   end

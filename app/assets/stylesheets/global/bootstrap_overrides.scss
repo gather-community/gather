@@ -8,13 +8,7 @@
 
 .form-vertical {
   .form-group {
-    // Margin doesn't seem necessary in vertical form because of label line spacing.
-    margin-bottom: 0;
-  }
-
-  .form-actions {
-    // But then we do need spacing for buttons, which come directly below a component.
-    margin-top: 15px;
+    margin-bottom: 10px;
   }
 }
 

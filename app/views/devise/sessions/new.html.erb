@@ -1,17 +1,17 @@
 <% content_for(:title, "Sign In") %>
 
-<h2>Sign in</h2>
-
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= gather_form_for(resource, layout: :vertical, width: :narrow, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="form-inputs">
-    <%= f.input :email, required: false, autofocus: true %>
-    <%= f.input :password, required: false %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+    <%= f.input(:email, required: false, autofocus: true, hint: false) %>
+    <%= f.input(:password, required: false, hint: false) %>
+    <%= f.input(:remember_me, as: :boolean) %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :primary, "Sign In" %>
-  </div>
+  <%= form_actions do %>
+    <div class="secondary-links">
+      <%= link_to("Don't know your password?", reset_password_path) %>
+    </div>
+    <div class="buttons">
+      <%= f.button(:primary, :sign_in) %>
+    </div>
+  <% end %>
 <% end %>
-
-<%= link_to("Don't know your password?", reset_password_path) %>

@@ -1,0 +1,30 @@
+form {
+  // Overriding error message style
+  .has-error {
+    .hint {
+      margin-bottom: 0;
+    }
+
+    &.base-error {
+      padding-bottom: 15px;
+    }
+  }
+
+  .error {
+    color: $error-red;
+    display: block;
+    background-color: $error-red-bg;
+    padding: 0 5px;
+    border: 1px solid $error-red-border;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  label .error {
+    font-weight: normal;
+  }
+}

@@ -1,0 +1,34 @@
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+
+  .btn {
+    min-width: 75px;
+  }
+
+  &.with-top-marg {
+    margin-top: 10px;
+  }
+
+  &.buttons-right {
+    .btn {
+      margin-left: 10px;
+    }
+
+    .secondary-links a {
+      margin-right: 10px;
+    }
+  }
+
+  &.buttons-left {
+    flex-direction: row-reverse;
+
+    .btn {
+      margin-right: 10px;
+    }
+
+    .secondary-links a {
+      margin-left: 10px;
+    }
+  }
+}

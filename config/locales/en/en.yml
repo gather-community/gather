@@ -35,6 +35,7 @@ en:
       create: "Save"
       go_back: "Go Back"
       update: "Save"
+      sign_in: "Sign In"
       meals_message:
         create: "Send Message"
       signup:

@@ -9,12 +9,14 @@
   <div id="main">
     <div id="blurb">Life is better together.</div>
     <%= image_tag("logo-white.png", id: "logo") %>
-    <%= link_to(icon_tag("google") << " Sign in with Google",
-      user_google_oauth2_omniauth_authorize_url(host: Settings.url.host, state: @invite_token),
-      id: "sign-in-btn", class: "btn btn-primary") %>
-    <%= link_to(icon_tag("google") << " Sign in with Password",
-      new_user_session_url(host: Settings.url.host, reset_password_token: @invite_token),
-      id: "sign-in-btn", class: "btn btn-primary") %>
+    <div id="sign-in-btns">
+      <%= link_to(icon_tag("google") << " Sign in with Google",
+        user_google_oauth2_omniauth_authorize_url(host: Settings.url.host, state: @invite_token),
+        id: "sign-in-btn", class: "btn btn-primary") %>
+      <%= link_to(icon_tag("asterisk") << " Sign in with Password",
+        new_user_session_url(host: Settings.url.host, reset_password_token: @invite_token),
+        id: "sign-in-btn", class: "btn btn-primary") %>
+    </div>
     <div id="help-links">
       <div>
         <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>

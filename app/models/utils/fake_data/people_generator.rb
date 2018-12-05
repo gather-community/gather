@@ -34,13 +34,15 @@ module Utils
             bday = Faker::Date.birthday(age, age + 1)
             first_name = Faker::Name.unisex_name
 
+            email = "#{first_name}#{rand(10000000..99999999)}@example.com"
+
             build(:user,
               fake: true,
               first_name: first_name,
               last_name: bool_prob(70) ? last_name : last_names.pop,
               birthdate: bday,
-              email: "#{first_name}@example.com",
-              google_email: "#{first_name}#{rand(10000..99999)}@example.com",
+              email: email,
+              google_email: email,
               mobile_phone: Faker::PhoneNumber.simple,
               home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
               work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,

@@ -6,8 +6,8 @@ FactoryBot.define do
 
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    email { "person#{rand(1000000..9999999)}@example.com" }
-    google_email { "person#{rand(1000000..9999999)}@gmail.com" }
+    email { "person#{rand(10000000..99999999)}@example.com" }
+    google_email { "person#{rand(10000000..99999999)}@gmail.com" }
     mobile_phone "5555551212"
 
     household do

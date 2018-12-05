@@ -69,7 +69,7 @@ class User < ApplicationRecord
   # Contact email does not have to be unique because some people share them (grrr!)
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :email, presence: true, if: :adult?
-  validates :email, uniqueness: true, unless: :temp_email_uniqueness_exception?
+  validates :email, uniqueness: true, allow_nil: true, unless: :temp_email_uniqueness_exception?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
                            unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true

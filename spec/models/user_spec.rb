@@ -1,27 +1,53 @@
 require 'rails_helper'
 
 describe User do
-  describe "phone validation" do
-    it "should allow good phone number" do
-      user = create(:user, mobile_phone: "7343151234")
-      expect(user).to be_valid
+  describe "validation" do
+    describe "phone" do
+      let(:user) { build(:user, mobile_phone: phone).tap(&:validate) }
+
+      context "with good phone number" do
+        let(:phone) { "7343151234" }
+        it { expect(user).to be_valid }
+      end
+
+      context "with good formatted phone number" do
+        let(:phone) { "(734) 315-1234" }
+        it { expect(user).to be_valid }
+      end
+
+      context "with too-long number" do
+        let(:phone) { "73431509811" }
+        it { expect(user.errors[:mobile_phone]).not_to be_empty }
+      end
+
+      context "with formatted too-long number" do
+        let(:phone) { "(734) 315-09811" }
+        it { expect(user.errors[:mobile_phone]).not_to be_empty }
+      end
     end
 
-    it "should allow good formatted phone number" do
-      user = create(:user, mobile_phone: "(734) 315-1234")
-      expect(user).to be_valid
-    end
+    describe "email" do
+      describe "uniqueness" do
+        let(:user) { build(:user, email: email).tap(&:validate) }
 
-    it "should disallow too-long number" do
-      user = build(:user, mobile_phone: "73431509811")
-      user.save
-      expect(user.errors[:mobile_phone]).not_to be_empty
-    end
+        context "with unused email" do
+          let(:email) { "a@b.com" }
+          it { expect(user).to be_valid }
+        end
 
-    it "should disallow formatted too-long number" do
-      user = build(:user, mobile_phone: "(734) 315-09811")
-      user.save
-      expect(user.errors[:mobile_phone]).not_to be_empty
+        context "with taken email" do
+          let!(:other_user) { create(:user, email: "a@b.com") }
+          let(:email) { "a@b.com" }
+          it { expect(user.errors[:email]).to eq(["has already been taken"]) }
+        end
+
+        context "with email taken in other cluster" do
+          let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
+          let!(:other_user) { create(:user, community: other_cmty, email: "a@b.com") }
+          let(:email) { "a@b.com" }
+          it { expect(user.errors[:email]).to eq(["has already been taken"]) }
+        end
+      end
     end
   end
 

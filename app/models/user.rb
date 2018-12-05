@@ -69,6 +69,7 @@ class User < ApplicationRecord
   # Contact email does not have to be unique because some people share them (grrr!)
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :email, presence: true, if: :adult?
+  validates :email, uniqueness: true, unless: :temp_email_uniqueness_exception?
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
                            unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
@@ -238,5 +239,10 @@ class User < ApplicationRecord
   # Returns a hash of global roles (those with no associated resource) indexed by name.
   def global_roles
     @global_roles ||= roles.where(resource_id: nil).to_a.index_by(&:name).with_indifferent_access
+  end
+
+  def temp_email_uniqueness_exception?
+    [4007, 4019, 4005, 4027, 4818, 4815, 4020, 4012, 4286, 2773, 4824, 4823, 4813, 4796,
+      4016, 4037, 4018, 4039, 2670, 3024, 2559, 2566, 4032, 4043].include?(id)
   end
 end

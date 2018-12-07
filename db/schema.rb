@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181118210711) do
+ActiveRecord::Schema.define(version: 20181207171358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -580,7 +580,7 @@ ActiveRecord::Schema.define(version: 20181118210711) do
     t.integer "max_rounds_per_worker"
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
-    t.string "pick_type", null: false
+    t.string "pick_type", default: "free_for_all", null: false
     t.decimal "quota", precision: 10, scale: 2, default: "0.0", null: false
     t.string "quota_type", default: "none", null: false
     t.integer "round_duration"

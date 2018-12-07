@@ -169,10 +169,10 @@ module FeatureSpecHelpers
 
   # Signs in to the app by filling in the password form instead of using the faster Warden helper login_as.
   # Used for special cases, including when you need to sign out midway through the spec.
-  def full_sign_in_as(user)
+  def full_sign_in_as(user, password: DEFAULT_PASSWORD)
     visit(new_user_session_path)
     fill_in("Email Address", with: user.email)
-    fill_in("Password", with: DEFAULT_PASSWORD)
+    fill_in("Password", with: password)
     click_button("Sign In")
   end
 

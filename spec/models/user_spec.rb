@@ -40,7 +40,7 @@ describe User do
       shared_examples_for "too weak" do
         it do
           expect(user).not_to be_valid
-          expect(user.errors[:password].join).to eq("is too weak. "\
+          expect(user.errors[:password].join).to eq("was too weak. "\
             "Try making it longer or adding special characters.")
         end
       end
@@ -84,7 +84,7 @@ describe User do
 
         it "errors when password changed and invalid" do
           user.update(first_name: "Fish", password: "foo", password_confirmation: "foo")
-          expect(user.errors[:password].join).to match(/is too weak/)
+          expect(user.errors[:password].join).to match(/was too weak/)
         end
       end
     end

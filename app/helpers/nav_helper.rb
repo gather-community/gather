@@ -182,6 +182,11 @@ module NavHelper
           permitted: Calendars::ExportPolicy.new(current_user, sample_export).index?,
           icon: "calendar"
         }, {
+          name: :change_passwd,
+          path: user_password_change_path(current_user),
+          permitted: UserPolicy.new(current_user, current_user).update?,
+          icon: "asterisk"
+        }, {
           name: :sign_out,
           path: destroy_user_session_path,
           permitted: true,

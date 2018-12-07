@@ -32,6 +32,7 @@ en:
       accounts: "Accounts"
       account: "Account"
       calendars: "Calendars"
+      change_passwd: "Change Password"
       sign_out: "Sign Out"
     footer:
       wiki:

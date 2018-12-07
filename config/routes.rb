@@ -20,6 +20,12 @@ Rails.application.routes.draw do
       post :impersonate
       post :unimpersonate
     end
+
+    resource :password_change, only: %i[show update], module: :people, path: "password-change"
+  end
+
+  namespace :people do
+    resources :vehicles, only: :index
   end
 
   namespace :meals do
@@ -46,10 +52,6 @@ Rails.application.routes.draw do
 
     resources :messages, only: %i[new create], module: :meals
     resource :finalize, only: %i[new create], module: :meals, controller: :finalize
-  end
-
-  namespace :people do
-    resources :vehicles, only: :index
   end
 
   namespace :reservations do

@@ -1,0 +1,11 @@
+<% content_for(:title, "Change Password") %>
+
+<%= gather_form_for(current_user, top_error_notification: false, url: user_password_change_path) do |f| %>
+  <%= f.input(:current_password, label: "Current Password", autofocus: true) %>
+  <%= f.input(:password, label: "New Password") %>
+  <%= f.input(:password_confirmation, label: "Re-type New Password") %>
+
+  <%= form_actions do %>
+    <%= f.button(:primary) %>
+  <% end %>
+<% end %>

@@ -194,7 +194,7 @@ en:
             password_confirmation:
               confirmation: "Didn't match password"
           password:
-            password_strength: "Your password is too weak. Try making it longer or adding special characters."
+            password_strength: "Your password was too weak. Try making it longer or adding special characters."
         reservations/resource:
           attributes:
             photo_content_type:

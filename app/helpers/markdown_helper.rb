@@ -3,6 +3,7 @@
 # Markdown is a minimalistic markup syntax
 module MarkdownHelper
   def safe_render_markdown(str)
+    return "" if str.blank?
     renderer = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
       autolink: true,
       space_after_headers: true,

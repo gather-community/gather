@@ -4,5 +4,7 @@ translations:
   - file: "app/assets/javascripts/i18n/translations.js"
     only: [
       "*.datepicker.*",
-      "*.timepicker.*"
+      "*.timepicker.*",
+      "*.password.strength.*",
+      "*.errors.messages.doesnt_match"
     ]

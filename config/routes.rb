@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :vehicles, only: :index
     resource :password_change, only: %i[show edit update], path: "password-change" do
       patch :check
+      post :strength
     end
   end
 

@@ -100,11 +100,12 @@ module FeatureSpecHelpers
 
   def expect_validation_error(text = nil)
     if text
-      expect(page).to have_css("div.error", text: text)
+      expect(page).to have_css(".form-group .error, .form-group .success", text: text)
     else
       expect(page).to have_css("div.alert-danger", text: /Please review/)
     end
   end
+  alias expect_validation_message expect_validation_error
 
   def expect_image_upload(mode:, path: nil)
     case mode

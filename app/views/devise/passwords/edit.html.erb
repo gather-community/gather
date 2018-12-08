@@ -16,3 +16,9 @@
     <%= f.button(:primary, :reset_password) %>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.People.PasswordFormView({el: '.user-form'});
+  });
+<% end %>

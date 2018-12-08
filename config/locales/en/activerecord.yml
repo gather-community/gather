@@ -191,8 +191,6 @@ en:
           attributes:
             photo_content_type:
               invalid: "Incorrect type"
-            password_confirmation:
-              confirmation: "Didn't match password"
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
         reservations/resource:

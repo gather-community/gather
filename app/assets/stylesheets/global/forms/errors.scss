@@ -10,12 +10,19 @@ form {
     }
   }
 
+  .success {
+    color: $brand-success;
+    background-color: $state-success-bg;
+  }
+
   .error {
-    color: $error-red;
+    color: $brand-danger;
+    background-color: $state-danger-bg;
+  }
+
+  .error, .warning, .success {
     display: block;
-    background-color: $error-red-bg;
     padding: 0 5px;
-    border: 1px solid $error-red-border;
     margin-top: 5px;
     margin-bottom: 5px;
 

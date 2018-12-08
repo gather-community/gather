@@ -11,6 +11,7 @@ class User < ApplicationRecord
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze
   NAME_ORDER = "LOWER(first_name), LOWER(last_name)"
+  PASSWORD_MIN_ENTROPY = 16
 
   acts_as_tenant :cluster
   rolify
@@ -80,7 +81,8 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
-  validates :password, password_strength: {use_dictionary: true}, if: :password_required?
+  validates :password, password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
+                       if: :password_required?
   validates :password, confirmation: true
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? }

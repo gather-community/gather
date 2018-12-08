@@ -30,13 +30,16 @@ feature "sign in invitations", js: true do
       click_on("Continue")
 
       fill_in("New Password", with: "foo")
+      expect_validation_message(/Too weak/)
       fill_in("Re-type New Password", with: "fo")
+      expect_validation_message(/Doesn't match/)
       click_on("Save")
 
       expect_validation_error(/was too weak/)
       expect_validation_error(/Didn't match/)
 
       fill_in("New Password", with: "48hafeirafar42")
+      expect_validation_message(/Good/)
       fill_in("Re-type New Password", with: "48hafeirafar42")
       click_on("Save")
 

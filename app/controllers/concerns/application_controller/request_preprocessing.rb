@@ -41,7 +41,7 @@ module Concerns::ApplicationController::RequestPreprocessing
 
   # Currently we are only checking for calendar_token, but could add others later.
   def authenticate_user_from_token!
-    if params[:calendar_token] && user = User.find_by_calendar_token(params[:calendar_token])
+    if params[:calendar_token] && (user = User.find_by_calendar_token(params[:calendar_token]))
       # We are passing store false, so the user is not
       # actually stored in the session and a token is needed for every request.
       sign_in user, store: false
@@ -62,7 +62,7 @@ module Concerns::ApplicationController::RequestPreprocessing
   # Does nothing if subdomain is not present.
   # Renders 404 if community not found.
   def check_subdomain_validity
-    return unless subdomain.present?
+    return if subdomain.blank?
     self.current_community = Community.find_by(slug: subdomain)
     render_error_page(:not_found) if current_community.nil?
   end
@@ -71,8 +71,12 @@ module Concerns::ApplicationController::RequestPreprocessing
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
     # place to return to (for example, we don't want to return to the sign in page after signing in).
-    return if devise_controller? || request.fullpath == "/?sign-in=1" ||
-      request.fullpath =~ %r{\A/\?token=.+} || request.fullpath == user_signed_out_path
+    return if devise_controller? ||
+      request.fullpath == "/?sign-in=1" ||
+      request.fullpath =~ %r{\A/\?token=.+} ||
+      request.fullpath == user_signed_out_path ||
+      request.fullpath == strength_people_password_change_path
+
     session["user_return_to"] = request.url
   end
 

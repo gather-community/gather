@@ -43,7 +43,7 @@ feature "password auth" do
     expect(page).to have_signed_in_user(user)
   end
 
-  scenario "forgot password" do
+  scenario "forgot password", js: true do
     visit(root_path)
     click_on("Sign in with Password")
     click_on("Don't know your password?")
@@ -60,8 +60,9 @@ feature "password auth" do
     fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
     fill_in("Re-type New Password", with: "x")
     click_on("Reset Password")
-    expect_validation_error("doesn't match password")
+    expect_validation_message("Didn't match password")
     fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
+    expect_validation_message("Good")
     fill_in("Re-type New Password", with: "48hafeirafar42")
     click_on("Reset Password")
     expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")

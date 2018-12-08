@@ -6,7 +6,8 @@
   <p>
     Enter a new password below and you will be signed in to Gather.
   </p>
-
+  <%= safe_render_markdown(t("password.strength_info")) %>
+  
   <%= f.input(:reset_password_token, as: :hidden) %>
   <%= f.full_error(:reset_password_token) %>
   <%= f.input(:password, label: "New Password", autofocus: true) %>

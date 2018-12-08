@@ -2,6 +2,7 @@
 
 <%= gather_form_for(current_user, top_error_notification: false,
                                   url: people_password_change_path) do |f| %>
+  <%= safe_render_markdown(t("password.strength_info")) %>
   <%= f.input(:password, label: "New Password") %>
   <%= f.input(:password_confirmation, label: "Re-type New Password") %>
 

@@ -16,6 +16,9 @@ class User < ApplicationRecord
   acts_as_tenant :cluster
   rolify
 
+  attr_accessor :changing_password
+  alias changing_password? changing_password
+
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
     omniauth_providers: [:google_oauth2]
@@ -81,7 +84,8 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
-  validates :password, password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
+  validates :password, presence: true,
+                       password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
                        if: :password_required?
   validates :password, confirmation: true
   validate :household_present
@@ -258,6 +262,6 @@ class User < ApplicationRecord
   end
 
   def password_required?
-    new_record? || password.present? || password_confirmation.present?
+    new_record? || changing_password? || password.present? || password_confirmation.present?
   end
 end

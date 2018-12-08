@@ -11,44 +11,28 @@ feature "sign in invitations", js: true do
     full_sign_in_as(actor)
     visit(people_password_change_path)
 
-    fill_in("Current Password", with: "junk")
-    click_on("Continue")
+    click_on("Save")
+    expect_validation_message(/Can't be blank/)
 
-    expect_validation_error("Is invalid")
-    fill_in("Current Password", with: DEFAULT_PASSWORD)
-    click_on("Continue")
+    fill_in("New Password", with: "foo")
+    expect_validation_message(/Too weak/)
+    fill_in("Re-type New Password", with: "fo")
+    expect_validation_message(/Doesn't match/)
+    click_on("Save")
 
-    Timecop.travel(5.days) do
-      fill_in("New Password", with: "48hafeirafar42")
-      fill_in("Re-type New Password", with: "48hafeirafar42")
-      click_on("Save")
+    expect_validation_error(/was too weak/)
+    expect_validation_error(/Didn't match/)
 
-      expect_error(/Too much time has passed/)
-      visit(people_password_change_path)
+    fill_in("New Password", with: "48hafeirafar42")
+    expect_validation_message(/Good/)
+    fill_in("Re-type New Password", with: "48hafeirafar42")
+    click_on("Save")
 
-      fill_in("Current Password", with: DEFAULT_PASSWORD)
-      click_on("Continue")
+    expect_success
 
-      fill_in("New Password", with: "foo")
-      expect_validation_message(/Too weak/)
-      fill_in("Re-type New Password", with: "fo")
-      expect_validation_message(/Doesn't match/)
-      click_on("Save")
-
-      expect_validation_error(/was too weak/)
-      expect_validation_error(/Didn't match/)
-
-      fill_in("New Password", with: "48hafeirafar42")
-      expect_validation_message(/Good/)
-      fill_in("Re-type New Password", with: "48hafeirafar42")
-      click_on("Save")
-
-      expect_success
-
-      # Ensure the change worked.
-      full_sign_out
-      full_sign_in_as(actor, password: "48hafeirafar42")
-      expect(page).to show_signed_in_user_name(actor.name)
-    end
+    # Ensure the change worked.
+    full_sign_out
+    full_sign_in_as(actor, password: "48hafeirafar42")
+    expect(page).to show_signed_in_user_name(actor.name)
   end
 end

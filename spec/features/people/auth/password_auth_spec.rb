@@ -57,14 +57,20 @@ feature "password auth" do
     end
     body = email_sent[0].body.encoded
     match_and_visit_url(body, %r{https?://.+/people/users/password/edit\?reset_password_token=.+$})
+
+    click_on("Reset Password")
+    expect_validation_message(/Can't be blank/)
+
     fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
     fill_in("Re-type New Password", with: "x")
     click_on("Reset Password")
+
     expect_validation_message("Didn't match password")
     fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
     expect_validation_message("Good")
     fill_in("Re-type New Password", with: "48hafeirafar42")
     click_on("Reset Password")
+
     expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
   end
 end

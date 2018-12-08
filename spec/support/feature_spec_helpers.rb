@@ -94,6 +94,10 @@ module FeatureSpecHelpers
     expect(page).to have_css("div.alert-success", text: pattern)
   end
 
+  def expect_error(pattern)
+    expect(page).to have_css("div.alert-danger", text: pattern)
+  end
+
   def expect_validation_error(text = nil)
     if text
       expect(page).to have_css("div.error", text: text)

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
 
   namespace :people do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
+    resources :vehicles, only: :index
+    resource :password_change, only: %i[show edit update], path: "password-change" do
+      patch :check
+    end
   end
 
   resources :users do
@@ -20,12 +24,9 @@ Rails.application.routes.draw do
       post :impersonate
       post :unimpersonate
     end
-
-    resource :password_change, only: %i[show update], module: :people, path: "password-change"
   end
 
   namespace :people do
-    resources :vehicles, only: :index
   end
 
   namespace :meals do

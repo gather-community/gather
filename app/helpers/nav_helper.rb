@@ -183,7 +183,7 @@ module NavHelper
           icon: "calendar"
         }, {
           name: :change_passwd,
-          path: user_password_change_path(current_user),
+          path: people_password_change_path(current_user),
           permitted: UserPolicy.new(current_user, current_user).update?,
           icon: "asterisk"
         }, {

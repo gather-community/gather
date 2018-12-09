@@ -175,7 +175,7 @@ describe Work::Shift do
       end
 
       describe "no double assignments" do
-        let(:shift) do
+        subject(:shift) do
           build(:work_shift, job: job,
                              starts_at: "2018-01-01 12:30",
                              ends_at: "2018-01-01 14:00",
@@ -185,18 +185,22 @@ describe Work::Shift do
 
         context "with assignments ok" do
           let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[1].id}} }
-
-          it "should be valid" do
-            expect(shift).to be_valid
-          end
+          it { is_expected.to be_valid }
         end
 
         context "with double assignments" do
           let(:assignments_attributes) { {0 => {user_id: users[0].id}, 1 => {user_id: users[0].id}} }
 
-          it "should be invalid" do
-            expect(shift).not_to be_valid
-            expect(shift.errors[:assignments].join).to eq "Duplicate assignees not allowed"
+          context "when double signups allowed" do
+            before { job.double_signups_allowed = true }
+            it { is_expected.to be_valid }
+          end
+
+          context "when double signups not allowed" do
+            it "should be invalid" do
+              expect(shift).not_to be_valid
+              expect(shift.errors[:assignments].join).to eq "Duplicate assignees not allowed"
+            end
           end
         end
       end
@@ -208,7 +212,8 @@ describe Work::Shift do
   describe "#signup_user", database_cleaner: :truncate do
     let(:phase) { "open" }
     let(:period) { create(:work_period, phase: phase) }
-    let(:job) { create(:work_job, shift_slots: 2, period: period) }
+    let(:double_signups) { false }
+    let(:job) { create(:work_job, shift_slots: 2, period: period, double_signups_allowed: double_signups) }
     let(:shift) { job.shifts.first }
     let!(:user1) { create(:user) }
     let!(:user2) { create(:user) }
@@ -225,8 +230,17 @@ describe Work::Shift do
       end
 
       context "if user already signed up" do
-        it "raises error" do
-          expect { shift.signup_user(user1) }.to raise_error(Work::AlreadySignedUpError)
+        context "double signups allowed" do
+          let(:double_signups) { true }
+          it "doesn't raise" do
+            expect { shift.signup_user(user1) }.not_to raise_error
+          end
+        end
+
+        context "double signups not allowed" do
+          it "raises error" do
+            expect { shift.signup_user(user1) }.to raise_error(Work::AlreadySignedUpError)
+          end
         end
       end
 

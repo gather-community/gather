@@ -34,7 +34,7 @@ module Work
     def signup?
       index? &&
         (shift.period_open? || shift.period_published?) &&
-        !shift.user_signed_up?(user) &&
+        (shift.double_signups_allowed? || !shift.user_signed_up?(user)) &&
         !shift.taken? &&
         !round_limit_exceeded?
     end

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207171358) do
+ActiveRecord::Schema.define(version: 20181209182414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -546,7 +546,7 @@ ActiveRecord::Schema.define(version: 20181207171358) do
     t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index ["cluster_id", "shift_id", "user_id"], name: "index_work_assignments_on_cluster_id_and_shift_id_and_user_id", unique: true
+    t.index ["cluster_id", "shift_id", "user_id"], name: "index_work_assignments_on_cluster_id_and_shift_id_and_user_id"
     t.index ["cluster_id"], name: "index_work_assignments_on_cluster_id"
     t.index ["shift_id"], name: "index_work_assignments_on_shift_id"
     t.index ["user_id"], name: "index_work_assignments_on_user_id"
@@ -556,6 +556,7 @@ ActiveRecord::Schema.define(version: 20181207171358) do
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.text "description", null: false
+    t.boolean "double_signups_allowed", default: false
     t.decimal "hours", precision: 6, scale: 2, null: false
     t.decimal "hours_per_shift", precision: 6, scale: 2
     t.integer "period_id", null: false

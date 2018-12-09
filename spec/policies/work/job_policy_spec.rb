@@ -44,7 +44,8 @@ describe Work::JobPolicy do
 
     it do
       expect(subject).to match_array(
-        %i[description hours period_id requester_id slot_type hours_per_shift time_type title] <<
+        %i[description hours period_id requester_id slot_type hours_per_shift
+           time_type title double_signups_allowed] <<
           {shifts_attributes: %i[starts_at ends_at slots id _destroy] <<
             {assignments_attributes: %i[id user_id]}} <<
             {reminders_attributes: %i[abs_rel abs_time rel_magnitude rel_unit_sign note id _destroy]}

@@ -28,7 +28,16 @@ describe Work::ShiftPolicy do
 
       context "when already signed up" do
         before { allow(shift).to receive(:user_signed_up?).and_return(true) }
-        it { is_expected.not_to permit(user, record) }
+
+        context "when double signups allowed" do
+          before { allow(shift).to receive(:double_signups_allowed?).and_return(true) }
+          it { is_expected.to permit(user, record) }
+        end
+
+        context "when double signups not allowed" do
+          before { allow(shift).to receive(:double_signups_allowed?).and_return(false) }
+          it { is_expected.not_to permit(user, record) }
+        end
       end
 
       context "when shift is full" do

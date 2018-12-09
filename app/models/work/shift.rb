@@ -26,7 +26,8 @@ module Work
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
       :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
-      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders, to: :job
+      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
+      :double_signups_allowed?, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
@@ -112,7 +113,7 @@ module Work
     def signup_user(user)
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
-        raise Work::AlreadySignedUpError if user_signed_up?(user)
+        raise Work::AlreadySignedUpError if !job.double_signups_allowed? && user_signed_up?(user)
         assignments.create!(user_id: user.id)
       end
     end
@@ -171,6 +172,7 @@ module Work
     end
 
     def no_double_assignments
+      return if double_signups_allowed?
       user_ids = assignments.reject(&:marked_for_destruction?).map(&:user_id)
       return if user_ids.size == user_ids.uniq.size
       errors.add(:assignments, :no_double_assignments)

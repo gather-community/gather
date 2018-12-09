@@ -138,6 +138,7 @@ en:
         health_issues: "Health Issues"
       work/job:
         description: "Description"
+        double_signups_allowed: "Double Signups Allowed?"
         hours: "Hours"
         hours_per_shift: "Hours per Shift"
         period_id: "Period"

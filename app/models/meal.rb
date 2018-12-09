@@ -80,7 +80,7 @@ class Meal < ApplicationRecord
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  validate :no_double_assignments
+  # validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
   validate { reservation_handler.validate_meal if reservations.any? }

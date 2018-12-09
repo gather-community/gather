@@ -35,8 +35,9 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend
   handleCancelClick: (event, confirmAnswer) ->
     return unless confirmAnswer
     card = @$(event.target).closest(".shift-card")
-    card.find(".cancel-link a").hide()
-    card.find(".cancel-link .loading-indicator").show()
+    link = @$(event.target).closest(".cancel-link")
+    link.find("a").hide()
+    link.find(".loading-indicator").show()
     event.preventDefault()
     $.ajax
       method: "post"

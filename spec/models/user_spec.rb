@@ -126,7 +126,14 @@ describe User do
           let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
           let!(:other_user) { create(:user, community: other_cmty, email: "a@b.com") }
           let(:email) { "a@b.com" }
-          it { expect(user.errors[:email]).to eq(["has already been taken"]) }
+
+          it do
+            with_tenant(create(:cluster)) do
+              pp user.cluster_id
+              expect(user.cluster_id).not_to eq(other_user.cluster_id)
+              expect(user.errors[:email]).to eq(["has already been taken"])
+            end
+          end
         end
       end
     end

@@ -75,7 +75,7 @@ feature "subdomain handling" do
         visit "/meals"
         click_on_personal_nav("Sign Out")
         expect(page).to have_content("You are now signed out")
-        expect(current_url).to have_subdomain_and_path(nil, "/signed-out")
+        expect(current_url).to have_subdomain_and_path(nil, "/people/users/signed-out")
       end
     end
 

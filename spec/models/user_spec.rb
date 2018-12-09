@@ -35,7 +35,9 @@ describe User do
     end
 
     describe "password strength" do
-      let(:user) { build(:user, password: password, password_confirmation: password) }
+      let(:user) do
+        build(:user, password: password, password_confirmation: password, changing_password: true)
+      end
 
       shared_examples_for "too weak" do
         it do
@@ -63,13 +65,18 @@ describe User do
 
         context "with nil password" do
           let(:password) { nil }
-          it_behaves_like "too weak"
+          it do
+            expect(user).not_to be_valid
+            expect(user.errors[:password].join).to eq("can't be blank")
+          end
         end
       end
 
       context "with persisted record" do
         let(:password) { "2a89fhq;*42ata2;84ty8;Q:4t8qa" }
-        let(:saved) { create(:user, password: password, password_confirmation: password) }
+        let(:saved) do
+          create(:user, password: password, password_confirmation: password, changing_password: true)
+        end
         let(:user) { User.find(saved.id) } # Reload so password is definitely wiped.
 
         it "updates cleanly when password not set" do
@@ -102,7 +109,7 @@ describe User do
         let(:confirmation) { "x" }
         it do
           expect(user).not_to be_valid
-          expect(user.errors[:password_confirmation].join).to eq("doesn't match password")
+          expect(user.errors[:password_confirmation].join).to eq("Didn't match password")
         end
       end
     end

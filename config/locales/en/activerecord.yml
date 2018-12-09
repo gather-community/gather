@@ -190,13 +190,13 @@ en:
         user:
           attributes:
             photo_content_type:
-              invalid: "Incorrect type"
+              invalid: "has incorrect type"
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
         reservations/resource:
           attributes:
             photo_content_type:
-              invalid: "Incorrect type"
+              invalid: "has incorrect type"
             abbrv:
               blank: "can't be blank if resource can host meals"
         meals/formula:

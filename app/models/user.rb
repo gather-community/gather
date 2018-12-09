@@ -84,9 +84,10 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
-  validates :password, presence: true,
-                       password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
-                       if: :password_required?
+  validates :password, presence: true, if: :password_required?
+  validates :password, password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
+                       if: :password_required_and_not_blank?
+
   validates :password, confirmation: true
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? }
@@ -257,6 +258,10 @@ class User < ApplicationRecord
   end
 
   def password_required?
-    new_record? || changing_password? || password.present? || password_confirmation.present?
+    changing_password? || password.present? || password_confirmation.present?
+  end
+
+  def password_required_and_not_blank?
+    password_required? && password.present?
   end
 end

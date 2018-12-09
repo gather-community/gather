@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207171358) do
+ActiveRecord::Schema.define(version: 20181209131139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -492,6 +492,7 @@ ActiveRecord::Schema.define(version: 20181207171358) do
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

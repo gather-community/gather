@@ -1,5 +1,4 @@
 .form-inline.lens-bar {
-  display: inline-block;
   margin-bottom: 10px;
   white-space: nowrap;
 
@@ -35,6 +34,10 @@
     margin-left: 10px;
     margin-right: 10px;
 
+    &.upper {
+      display: inline-block;
+    }
+
     &.lower {
       display: none;
     }
@@ -51,16 +54,14 @@
 
   // Mobile
   @media screen and (max-width: $screen-xs-max) {
-    display: block;
-
     &.lower {
       display: none;
     }
 
     .form-control {
       display: block;
-      width: 100%;
       margin-bottom: 10px;
+      width: 100%;
     }
 
     a.clear {

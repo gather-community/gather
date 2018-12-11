@@ -133,6 +133,13 @@ class UserPolicy < ApplicationPolicy
       (active_super_admin? ? [:super_admin] : [])
   end
 
+  def exportable_attributes
+    all = %i[id first_name last_name unit_num unit_suffix birthdate email google_email child
+             mobile_phone home_phone work_phone joined_on preferred_contact
+             garage_nums vehicles]
+    active_admin? ? all : all - [:google_email]
+  end
+
   private
 
   def self?

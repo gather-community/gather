@@ -426,4 +426,33 @@ describe UserPolicy do
       end
     end
   end
+
+  describe "#exportable_attributes" do
+    include_context "policy permissions"
+
+    let(:sample_user) { double(community: community) }
+    subject(:exportable) { described_class.new(actor, sample_user).exportable_attributes }
+
+    context "for regular user" do
+      let(:actor) { user }
+      it do
+        is_expected.to match_array(
+          %i[id first_name last_name unit_num unit_suffix birthdate email child
+             mobile_phone home_phone work_phone joined_on preferred_contact
+             garage_nums vehicles]
+        )
+      end
+    end
+
+    context "for admin" do
+      let(:actor) { admin }
+      it do
+        is_expected.to match_array(
+          %i[id first_name last_name unit_num unit_suffix birthdate email child google_email
+             mobile_phone home_phone work_phone joined_on preferred_contact
+             garage_nums vehicles]
+        )
+      end
+    end
+  end
 end

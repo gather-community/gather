@@ -3,13 +3,15 @@
 require "rails_helper"
 
 describe People::Exporter do
-  let(:exporter) { described_class.new(User.by_name) }
+  let(:actor) { create(:user) }
+  let(:policy) { UserPolicy.new(actor, User.new(household: Household.new(community: actor.community))) }
+  let(:exporter) { described_class.new(User.by_name.where.not(id: actor.id), policy: policy) }
 
   describe "to_csv" do
     context "with no users" do
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Unit Suffix,Birthdate,Email,Is Child,"\
-          "Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles\n")
+        expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Unit Suffix,Birthdate,Email,"\
+          "Is Child,Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles\n")
       end
 
       context "with other locale" do

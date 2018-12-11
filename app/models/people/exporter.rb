@@ -1,16 +1,15 @@
-require 'csv'
+# frozen_string_literal: true
+
+require "csv"
 
 module People
   # Exports a collection of users to CSV.
   class Exporter
-    attr_accessor :collection
+    attr_accessor :collection, :policy
 
-    COLUMNS = %w(id first_name last_name unit_num unit_suffix birthdate email child
-      mobile_phone home_phone work_phone joined_on preferred_contact
-      garage_nums vehicles)
-
-    def initialize(collection)
+    def initialize(collection, policy:)
       self.collection = collection.includes(household: :vehicles)
+      self.policy = policy
     end
 
     def to_csv
@@ -24,13 +23,17 @@ module People
 
     private
 
+    def columns
+      @columns ||= policy.exportable_attributes
+    end
+
     def headers
-      COLUMNS.map { |c| I18n.t("csv.headers.user.#{c}") }
+      columns.map { |c| I18n.t("csv.headers.user.#{c}") }
     end
 
     def row_for(user)
       user = Csv::UserDecorator.new(user)
-      COLUMNS.map { |c| user.send(c) }
+      columns.map { |c| user.send(c) }
     end
   end
 end

@@ -25,6 +25,8 @@ class User < ApplicationRecord
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
+  has_many :job_choosing_proxiers, class_name: "User", foreign_key: :job_choosing_proxy_id,
+                                   inverse_of: :job_choosing_proxy, dependent: :nullify
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
                               dependent: :destroy, inverse_of: :child
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
@@ -33,6 +35,7 @@ class User < ApplicationRecord
   has_many :children, through: :down_guardianships
   has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
+  has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|

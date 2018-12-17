@@ -25,8 +25,6 @@ class User < ApplicationRecord
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
-  has_many :job_choosing_proxiers, class_name: "User", foreign_key: :job_choosing_proxy_id,
-                                   inverse_of: :job_choosing_proxy, dependent: :nullify
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
                               dependent: :destroy, inverse_of: :child
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
@@ -173,7 +171,36 @@ class User < ApplicationRecord
   end
 
   def any_assignments?
-    meal_assignments.any? || work_assignments.any?
+    meal_assignments.any?(&:persisted?) || work_assignments.any?(&:persisted?)
+  end
+
+  def any_job_choosing_proxies?
+    self.class.where(job_choosing_proxy: self).any?
+  end
+
+  def any_work_shares?
+    work_shares.any?(&:persisted?)
+  end
+
+  def any_guardianships?
+    up_guardianships.any?(&:persisted?) || down_guardianships.any?(&:persisted?)
+  end
+
+  def any_created_meals?
+    Meal.where(creator: self).any?
+  end
+
+  def any_reservations?
+    Reservations::Reservation.where(reserver: self).any?
+  end
+
+  def any_sponsored_reservations?
+    Reservations::Reservation.where(sponsor: self).any?
+  end
+
+  def any_wiki_contributions?
+    Wiki::Page.where(creator: self).or(Wiki::Page.where(updator: self)).any? ||
+      Wiki::PageVersion.where(updator: self).any?
   end
 
   def activate
@@ -198,7 +225,6 @@ class User < ApplicationRecord
   def reset_reset_password_token!
     set_reset_password_token
   end
-
 
   # All roles are currently global.
   # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense

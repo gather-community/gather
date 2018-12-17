@@ -250,6 +250,7 @@ describe User do
   # - In the model spec, test for the appropriate behavior (dependent destruction, nullification, or error)
   #   for each foreign key.
   # - In the policy spec, test for the appropriate restrictions on destroy.
+  # - In the feature spec, test the destruction/deactivation/activation happy paths.
   describe "destruction" do
     shared_examples_for "raises foreign key error" do
       it "raises error" do

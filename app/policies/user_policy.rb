@@ -51,8 +51,18 @@ class UserPolicy < ApplicationPolicy
     active_admin? && !self? && record.adult? && admin_level(user) >= admin_level(record)
   end
 
+  # We don't allow destroy if the user referred to from an independent record in the community, such
+  # as a child (guardian), reservation (reserver, sponsor), wiki page (creator, updator), etc.
+  # Records that are not independent, i.e., that make no sense without the user (e.g. work share,
+  # job choosing proxy), can be dependendly destroyed or nullified.
   def destroy?
-    active_admin? && !record.any_assignments?
+    active_admin? &&
+      !record.any_assignments? &&
+      !record.any_guardianships? &&
+      !record.any_created_meals? &&
+      !record.any_reservations? &&
+      !record.any_sponsored_reservations? &&
+      !record.any_wiki_contributions?
   end
 
   def activate?

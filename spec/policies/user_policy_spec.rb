@@ -248,9 +248,18 @@ describe UserPolicy do
 
     permissions :destroy? do
       shared_examples_for "full denial" do
-        it "denies action on admins" do
+        it "denies action to admins" do
           expect(subject).not_to permit(admin, user)
         end
+      end
+
+      context "with non-restricted associations" do
+        before do
+          allow(user).to receive(:any_job_choosing_proxies?).and_return(true)
+          allow(user).to receive(:any_work_shares?).and_return(true)
+        end
+
+        it_behaves_like "permits admins but not regular users"
       end
 
       context "with assignments" do
@@ -258,9 +267,29 @@ describe UserPolicy do
         it_behaves_like "full denial"
       end
 
-      context "without assignment" do
-        before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits admins but not regular users"
+      context "with guardianships" do
+        before { allow(user).to receive(:any_guardianships?).and_return(true) }
+        it_behaves_like "full denial"
+      end
+
+      context "with created meals" do
+        before { allow(user).to receive(:any_created_meals?).and_return(true) }
+        it_behaves_like "full denial"
+      end
+
+      context "with own reservations" do
+        before { allow(user).to receive(:any_reservations?).and_return(true) }
+        it_behaves_like "full denial"
+      end
+
+      context "with sponsored reservations" do
+        before { allow(user).to receive(:any_sponsored_reservations?).and_return(true) }
+        it_behaves_like "full denial"
+      end
+
+      context "with wiki contributions" do
+        before { allow(user).to receive(:any_wiki_contributions?).and_return(true) }
+        it_behaves_like "full denial"
       end
     end
   end

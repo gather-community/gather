@@ -25,6 +25,8 @@ class User < ApplicationRecord
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
+  has_many :job_choosing_proxiers, class_name: "User", foreign_key: :job_choosing_proxy_id,
+                                   inverse_of: :job_choosing_proxy, dependent: :nullify
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
                               dependent: :destroy, inverse_of: :child
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,

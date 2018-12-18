@@ -178,7 +178,7 @@ class Meal < ApplicationRecord
   end
 
   def signup_count
-    @signup_count ||= signups.sum(&:total)
+    signups.sum(&:total)
   end
 
   def signup_totals
@@ -247,7 +247,7 @@ class Meal < ApplicationRecord
 
   def enough_capacity_for_current_signups
     return unless persisted? && !finalized? && capacity && capacity < signup_count
-    errors.add(:capacity, "must be at least #{ttl} due to current signups")
+    errors.add(:capacity, "must be at least #{signup_count} due to current signups")
   end
 
   def title_and_entree_if_other_menu_items

@@ -92,7 +92,7 @@ class Signup < ApplicationRecord
   end
 
   def total
-    @total ||= SIGNUP_TYPES.sum { |t| send(t) || 0 }
+    SIGNUP_TYPES.sum { |t| send(t) || 0 }
   end
 
   def total_was

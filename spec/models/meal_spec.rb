@@ -60,6 +60,21 @@ describe Meal do
         end
       end
     end
+
+    describe "enough capacity" do
+      let!(:signup) { create(:signup, adult_meat: 5) }
+      let(:meal) { signup.meal.tap { |m| m.signups.reload } }
+
+      it "saves cleanly with enough capacity" do
+        meal.update(capacity: 5)
+        expect(meal).to be_valid
+      end
+
+      it "errors with not enough capacity" do
+        meal.update(capacity: 4)
+        expect(meal.errors[:capacity].join).to eq("must be at least 5 due to current signups")
+      end
+    end
   end
 
   describe "menu_posted_at" do

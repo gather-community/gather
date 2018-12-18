@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181209182414) do
+ActiveRecord::Schema.define(version: 20181218140456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -236,10 +236,10 @@ ActiveRecord::Schema.define(version: 20181209182414) do
   end
 
   create_table "people_guardianships", id: :serial, force: :cascade do |t|
-    t.integer "child_id"
+    t.integer "child_id", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.integer "guardian_id"
+    t.integer "guardian_id", null: false
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_people_guardianships_on_child_id"
     t.index ["cluster_id"], name: "index_people_guardianships_on_cluster_id"
@@ -674,6 +674,8 @@ ActiveRecord::Schema.define(version: 20181209182414) do
   add_foreign_key "people_groups", "clusters"
   add_foreign_key "people_groups", "communities"
   add_foreign_key "people_guardianships", "clusters"
+  add_foreign_key "people_guardianships", "users", column: "child_id"
+  add_foreign_key "people_guardianships", "users", column: "guardian_id"
   add_foreign_key "people_pets", "clusters"
   add_foreign_key "people_pets", "households"
   add_foreign_key "people_vehicles", "clusters"

@@ -247,6 +247,10 @@ describe UserPolicy do
     end
 
     permissions :destroy? do
+      let(:user) { create(:user) }
+      let(:admin) { create(:admin) }
+      let(:record) { create(:user) }
+
       shared_examples_for "full denial" do
         it "denies action to admins" do
           expect(subject).not_to permit(admin, user)
@@ -254,41 +258,61 @@ describe UserPolicy do
       end
 
       context "with non-restricted associations" do
-        before do
-          allow(user).to receive(:any_job_choosing_proxies?).and_return(true)
-          allow(user).to receive(:any_work_shares?).and_return(true)
-        end
+        let!(:proxier) { create(:user, job_choosing_proxy: user) }
+        let!(:share) { create(:work_share, user: user) }
 
         it_behaves_like "permits admins but not regular users"
       end
 
       context "with assignments" do
-        before { allow(user).to receive(:any_assignments?).and_return(true) }
+        let!(:assignment) { create(:work_assignment, user: user) }
         it_behaves_like "full denial"
       end
 
-      context "with guardianships" do
-        before { allow(user).to receive(:any_guardianships?).and_return(true) }
+      context "with child" do
+        let!(:child) { create(:user, :child, guardians: [user]) }
+        it_behaves_like "full denial"
+      end
+
+      context "with guardian" do
+        before { user.update!(child: true, guardians: [create(:user)]) }
         it_behaves_like "full denial"
       end
 
       context "with created meals" do
-        before { allow(user).to receive(:any_created_meals?).and_return(true) }
+        let!(:meal) { create(:meal, creator: user) }
         it_behaves_like "full denial"
       end
 
       context "with own reservations" do
-        before { allow(user).to receive(:any_reservations?).and_return(true) }
+        let!(:reservation) { create(:reservation, reserver: user) }
         it_behaves_like "full denial"
       end
 
       context "with sponsored reservations" do
-        before { allow(user).to receive(:any_sponsored_reservations?).and_return(true) }
+        let!(:reservation) { create(:reservation, sponsor: user) }
         it_behaves_like "full denial"
       end
 
-      context "with wiki contributions" do
-        before { allow(user).to receive(:any_wiki_contributions?).and_return(true) }
+      context "with wiki page creation" do
+        let!(:page) { create(:wiki_page, creator: user) }
+        it_behaves_like "full denial"
+      end
+
+      context "with wiki page update" do
+        let!(:page) { create(:wiki_page, updator: user) }
+        it_behaves_like "full denial"
+      end
+
+      context "with wiki page version update" do
+        let!(:page) { create(:wiki_page) }
+
+        before do
+          page.update!(content: "x", updator: user)
+          page.update!(content: "y", updator: create(:user))
+          # Only relation at this point should be to second page version
+        end
+
         it_behaves_like "full denial"
       end
     end

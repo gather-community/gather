@@ -15,6 +15,7 @@ module Reservations
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }
+    scope :related_to, ->(user) { where(reserver: user).or(where(sponsor: user)) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
     # and sponsor_community for other uses.

@@ -172,39 +172,6 @@ class User < ApplicationRecord
     self[:privacy_settings] = settings
   end
 
-  def any_assignments?
-    meal_assignments.any?(&:persisted?) || work_assignments.any?(&:persisted?)
-  end
-
-  def any_job_choosing_proxies?
-    self.class.where(job_choosing_proxy: self).any?
-  end
-
-  def any_work_shares?
-    work_shares.any?(&:persisted?)
-  end
-
-  def any_guardianships?
-    up_guardianships.any?(&:persisted?) || down_guardianships.any?(&:persisted?)
-  end
-
-  def any_created_meals?
-    Meal.where(creator: self).any?
-  end
-
-  def any_reservations?
-    Reservations::Reservation.where(reserver: self).any?
-  end
-
-  def any_sponsored_reservations?
-    Reservations::Reservation.where(sponsor: self).any?
-  end
-
-  def any_wiki_contributions?
-    Wiki::Page.where(creator: self).or(Wiki::Page.where(updator: self)).any? ||
-      Wiki::PageVersion.where(updator: self).any?
-  end
-
   def activate
     super
     household.user_activated

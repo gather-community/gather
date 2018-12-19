@@ -16,6 +16,7 @@ module Wiki
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { alpha_order(:title) }
+    scope :related_to, ->(user) { where(creator: user).or(where(updator: user)) }
 
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved

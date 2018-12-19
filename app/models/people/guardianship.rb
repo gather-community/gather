@@ -7,5 +7,7 @@ module People
 
     belongs_to :guardian, class_name: "User"
     belongs_to :child, class_name: "User"
+
+    scope :related_to, ->(user) { where(guardian: user).or(where(child: user)) }
   end
 end

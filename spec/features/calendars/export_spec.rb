@@ -164,7 +164,9 @@ feature "calendar export" do
         let!(:meal1) do
           create(:meal, :with_menu, title: "Figs", served_at: meal1_time, asst_cooks: [user])
         end
-        let!(:meal2) { create(:meal, served_at: meal1_time) }
+        let!(:meal2) do
+          create(:meal, :with_menu, title: "Buns", served_at: meal2_time, asst_cooks: [user])
+        end
 
         context "when using work system" do
           let(:period_start) { Time.zone.today }
@@ -201,6 +203,7 @@ feature "calendar export" do
 
             # Assign meal shift and other job shifts to user.
             job1.shifts[0].assignments.create!(user: user)
+            job1.shifts[1].assignments.create!(user: user)
             job2.shifts[0].assignments.create!(user: user)
             job2.shifts[1].assignments.create!(user: create(:user)) # Decoy
             job3.shifts[0].assignments.create!(user: user)
@@ -237,6 +240,13 @@ feature "calendar export" do
               description: %r{Help cook the things\s+\n http://.+/work/signups/},
               "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 2.hours, format: :iso),
               "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
+            }, {
+              uid: "#{signature}_Shift_#{job1.shifts[1].id}",
+              summary: "Assistant Cook: Buns",
+              location: meal2.resources[0].name,
+              description: %r{Help cook the things\s+\n http://.+/work/signups/},
+              "DTSTART;TZID=Etc/UTC" => I18n.l(meal2_time - 2.hours, format: :iso),
+              "DTEND;TZID=Etc/UTC" => I18n.l(meal2_time, format: :iso)
             })
           end
         end

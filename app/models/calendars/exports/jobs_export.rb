@@ -43,7 +43,7 @@ module Calendars
       end
 
       def summary(shift)
-        shift.job_title << (shift.meal.nil? ? "" : ": #{shift.meal.title_or_no_title}")
+        [shift.job_title, shift.meal&.title_or_no_title].compact.join(": ")
       end
 
       def description(shift)

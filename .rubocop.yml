@@ -15,9 +15,6 @@ Layout/AlignParameters:
 Layout/CaseIndentation:
   EnforcedStyle: end
 
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 Layout/FirstParameterIndentation:
   EnforcedStyle: consistent
 
@@ -79,13 +76,16 @@ Style/Documentation:
     - "app/policies/**/*"
     - "app/decorators/**/*"
 
+Style/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
 Style/MethodCallWithArgsParentheses:
   Enabled: true
   IgnoredMethods:
-    - []
+    - "[]"
     - to
     - not_to
     - require

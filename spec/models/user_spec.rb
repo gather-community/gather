@@ -223,25 +223,6 @@ describe User do
     end
   end
 
-  describe "#any_assignments?" do
-    let(:user) { create(:user) }
-    subject { user.any_assignments? }
-
-    context "with nothing" do
-      it { is_expected.to be(false) }
-    end
-
-    context "with meal assignment" do
-      before { user.meal_assignments.create!(role: "cleaner", meal: create(:meal)) }
-      it { is_expected.to be(true) }
-    end
-
-    context "with work assignment" do
-      before { user.work_assignments.create!(shift: create(:work_shift)) }
-      it { is_expected.to be(true) }
-    end
-  end
-
   # Our approach to destruction is to:
   # - Set the policy to only allow deletions that won't trigger foreign key constraints.
   # - Set the `dependent` option to nullify or destroy as appropriate for legal deletions.

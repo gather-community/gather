@@ -224,7 +224,8 @@ describe User do
   end
 
   # Our approach to destruction is to:
-  # - Set the policy to only allow deletions that won't trigger foreign key constraints.
+  # - Set the policy to only disallow deletions based on business logic.
+  # - Other deletions may be allowed from scripts, e.g. fake users, but not by the policy.
   # - Set the `dependent` option to nullify or destroy as appropriate for legal deletions.
   # - Not to set the `dependent` option for illegal destroys and let the DB raise an error if one
   #   is somehow attempted.
@@ -239,85 +240,83 @@ describe User do
       end
     end
 
-    context "adult with role" do
-      let!(:user) { create(:user) }
+    let!(:user) { create(:user) }
 
-      context "with meal assignment" do
-        let!(:meal) { create(:meal, head_cook: user) }
+    context "with meal assignment" do
+      let!(:meal) { create(:meal, head_cook: user) }
 
-        it "destroys cleanly" do
-          user.destroy
-          expect(meal.reload.head_cook).to be_nil
-        end
+      it "destroys user cleanly but not meal" do
+        user.destroy
+        expect(meal.reload.head_cook).to be_nil
       end
+    end
 
-      context "with job assignment and share" do
-        let!(:period) { create(:work_period) }
-        let!(:share) { create(:work_share, user: user, period: period) }
-        let!(:job) { create(:work_job, period: period) }
-        let!(:assignment) { create(:work_assignment, user: user, shift: job.shifts[0]) }
+    context "with job assignment and share" do
+      let!(:period) { create(:work_period) }
+      let!(:share) { create(:work_share, user: user, period: period) }
+      let!(:job) { create(:work_job, period: period) }
+      let!(:assignment) { create(:work_assignment, user: user, shift: job.shifts[0]) }
 
-        it "destroys cleanly" do
-          user.destroy
-          expect { job.reload }.not_to raise_error
-          expect { share.reload }.to raise_error(ActiveRecord::RecordNotFound)
-          expect { assignment.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        end
+      it "destroys cleanly" do
+        user.destroy
+        expect { job.reload }.not_to raise_error
+        expect { share.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { assignment.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
+    end
 
-      context "with parent" do
-        let!(:child) { create(:user, :child, guardians: [user]) }
+    context "with parent" do
+      let!(:child) { create(:user, :child, guardians: [user]) }
 
-        it "destroys cleanly without destroying parent" do
-          expect(user.reload.down_guardianships).not_to be_empty
-          child.destroy
-          expect(user.reload.up_guardianships).to be_empty
-        end
+      it "destroys cleanly without destroying parent" do
+        expect(user.reload.down_guardianships).not_to be_empty
+        child.destroy
+        expect(user.reload.up_guardianships).to be_empty
       end
+    end
 
-      context "with child" do
-        let!(:child) { create(:user, :child, guardians: [user]) }
+    context "with child" do
+      let!(:child) { create(:user, :child, guardians: [user]) }
 
-        it "destroys cleanly without destroying child" do
-          expect(child.reload.up_guardianships).not_to be_empty
-          user.destroy
-          expect(child.reload.up_guardianships).to be_empty
-        end
+      it "destroys cleanly without destroying child" do
+        expect(child.reload.up_guardianships).not_to be_empty
+        user.destroy
+        expect(child.reload.up_guardianships).to be_empty
       end
+    end
 
-      context "with job choosing proxy" do
-        let!(:proxy) { create(:user, job_choosing_proxy: user) }
+    context "with job choosing proxy" do
+      let!(:proxy) { create(:user, job_choosing_proxy: user) }
 
-        it "destroys cleanly" do
-          user.destroy
-          expect(proxy.reload.job_choosing_proxy).to be_nil
-        end
+      it "destroys cleanly and nullifies" do
+        user.destroy
+        expect(proxy.reload.job_choosing_proxy).to be_nil
       end
+    end
 
-      context "with meal creation record" do
-        let!(:meal) { create(:meal, creator: user) }
-        it_behaves_like "raises foreign key error"
-      end
+    context "with meal creation record" do
+      let!(:meal) { create(:meal, creator: user) }
+      it_behaves_like "raises foreign key error"
+    end
 
-      context "with reservation reserver record" do
-        let!(:reservation) { create(:reservation, reserver: user) }
-        it_behaves_like "raises foreign key error"
-      end
+    context "with reservation reserver record" do
+      let!(:reservation) { create(:reservation, reserver: user) }
+      it_behaves_like "raises foreign key error"
+    end
 
-      context "with reservation sponsor record" do
-        let!(:reservation) { create(:reservation, sponsor: user) }
-        it_behaves_like "raises foreign key error"
-      end
+    context "with reservation sponsor record" do
+      let!(:reservation) { create(:reservation, sponsor: user) }
+      it_behaves_like "raises foreign key error"
+    end
 
-      context "with wiki page creator record" do
-        let!(:wiki_page) { create(:wiki_page, creator: user) }
-        it_behaves_like "raises foreign key error"
-      end
+    context "with wiki page creator record" do
+      let!(:wiki_page) { create(:wiki_page, creator: user) }
+      it_behaves_like "raises foreign key error"
+    end
 
-      context "with wiki page updator record" do
-        let!(:wiki_page) { create(:wiki_page, updator: user) }
-        it_behaves_like "raises foreign key error"
-      end
+    context "with wiki page updator record" do
+      let!(:wiki_page) { create(:wiki_page, updator: user) }
+      it_behaves_like "raises foreign key error"
     end
   end
 end

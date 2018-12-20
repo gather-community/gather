@@ -109,4 +109,21 @@ describe Household do
       end
     end
   end
+
+  describe "destruction" do
+    let!(:household) { create(:household) }
+
+    context "with dependent-destroy associations" do
+      let!(:account) { create(:account, household: household) }
+      let!(:signup) { create(:signup, household: household, adult_meat: 2) }
+      let!(:vehicle) { create(:vehicle, household: household) }
+      let!(:emergency_contact) { create(:emergency_contact, household: household) }
+      let!(:pet) { create(:pet, household: household) }
+
+      it "destroys cleanly" do
+        household.destroy
+        expect { household.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end

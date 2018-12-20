@@ -78,8 +78,13 @@ class HouseholdPolicy < ApplicationPolicy
   end
 
   def destroy?
-    active_admin? && !record.any_users? && !record.any_assignments? &&
-      !record.any_signups? && !record.any_accounts?
+    active_admin? && destroy_users? &&
+      Signup.where(household: household).none? &&
+      Billing::Account.where(household: household).none?
+  end
+
+  def destroy_users?
+    household.users.all? { |u| UserPolicy.new(user, u).destroy? }
   end
 
   def permitted_attributes

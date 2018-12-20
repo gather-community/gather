@@ -89,30 +89,6 @@ class Household < ApplicationRecord
     deactivate(skip_callback: true) if users.all?(&:inactive?)
   end
 
-  def any_assignments?
-    users.any?(&:any_assignments?)
-  end
-
-  def any_accounts?
-    accounts.any?
-  end
-
-  def any_signups?
-    signups.any?
-  end
-
-  def any_users?
-    users.any?
-  end
-
-  def any_transactions?
-    accounts.any? { |a| a.transactions.any? }
-  end
-
-  def any_statements?
-    accounts.any? { |a| a.statements.any? }
-  end
-
   def unit_num_and_suffix
     [unit_num, unit_suffix].compact.join("-").presence
   end

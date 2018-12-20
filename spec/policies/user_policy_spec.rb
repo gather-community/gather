@@ -249,71 +249,66 @@ describe UserPolicy do
     permissions :destroy? do
       let(:user) { create(:user) }
       let(:admin) { create(:admin) }
+      let(:super_admin) { create(:super_admin) }
       let(:record) { create(:user) }
 
-      shared_examples_for "full denial" do
-        it "denies action to admins" do
-          expect(subject).not_to permit(admin, user)
-        end
-      end
-
       context "with non-restricted associations" do
-        let!(:proxier) { create(:user, job_choosing_proxy: user) }
-        let!(:share) { create(:work_share, user: user) }
+        let!(:proxier) { create(:user, job_choosing_proxy: record) }
+        let!(:share) { create(:work_share, user: record) }
 
         it_behaves_like "permits admins but not regular users"
       end
 
       context "with assignments" do
-        let!(:assignment) { create(:work_assignment, user: user) }
-        it_behaves_like "full denial"
+        let!(:assignment) { create(:work_assignment, user: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with child" do
-        let!(:child) { create(:user, :child, guardians: [user]) }
-        it_behaves_like "full denial"
+        let!(:child) { create(:user, :child, guardians: [record]) }
+        it_behaves_like "forbids all"
       end
 
       context "with guardian" do
-        before { user.update!(child: true, guardians: [create(:user)]) }
-        it_behaves_like "full denial"
+        before { record.update!(child: true, guardians: [create(:user)]) }
+        it_behaves_like "forbids all"
       end
 
       context "with created meals" do
-        let!(:meal) { create(:meal, creator: user) }
-        it_behaves_like "full denial"
+        let!(:meal) { create(:meal, creator: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with own reservations" do
-        let!(:reservation) { create(:reservation, reserver: user) }
-        it_behaves_like "full denial"
+        let!(:reservation) { create(:reservation, reserver: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with sponsored reservations" do
-        let!(:reservation) { create(:reservation, sponsor: user) }
-        it_behaves_like "full denial"
+        let!(:reservation) { create(:reservation, sponsor: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with wiki page creation" do
-        let!(:page) { create(:wiki_page, creator: user) }
-        it_behaves_like "full denial"
+        let!(:page) { create(:wiki_page, creator: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with wiki page update" do
-        let!(:page) { create(:wiki_page, updator: user) }
-        it_behaves_like "full denial"
+        let!(:page) { create(:wiki_page, updator: record) }
+        it_behaves_like "forbids all"
       end
 
       context "with wiki page version update" do
         let!(:page) { create(:wiki_page) }
 
         before do
-          page.update!(content: "x", updator: user)
+          page.update!(content: "x", updator: record)
           page.update!(content: "y", updator: create(:user))
           # Only relation at this point should be to second page version
         end
 
-        it_behaves_like "full denial"
+        it_behaves_like "forbids all"
       end
     end
   end

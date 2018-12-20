@@ -99,38 +99,28 @@ describe HouseholdPolicy do
     end
 
     permissions :destroy? do
-      shared_examples_for "full denial" do
-        it "forbids admins" do
-          expect(subject).not_to permit(admin, household)
-        end
+      let(:user) { create(:user) }
+      let(:admin) { create(:admin) }
+      let(:super_admin) { create(:super_admin) }
+      let(:household) { create(:household) }
 
-        it "forbids billers" do
-          expect(subject).not_to permit(biller, household)
-        end
+      context "with no restrictions" do
+        it_behaves_like "permits admins but not regular users"
       end
 
-      context "with user" do
-        it_behaves_like "full denial"
-      end
-
-      context "with assignment" do
-        before { household.users.first.meal_assignments.build }
-        it_behaves_like "full denial"
+      context "with non-deletable user" do
+        let!(:reservation) { create(:reservation, reserver: household.users[0]) }
+        it_behaves_like "forbids all"
       end
 
       context "with signup" do
-        before { household.signups.build }
-        it_behaves_like "full denial"
+        let!(:signup) { create(:signup, household: household, adult_meat: 2) }
+        it_behaves_like "forbids all"
       end
 
       context "with account" do
-        before { household.accounts.build }
-        it_behaves_like "full denial"
-      end
-
-      context "without any of the above" do
-        before { household.users = [] }
-        it_behaves_like "permits admins but not regular users"
+        let!(:account) { create(:account, household: household) }
+        it_behaves_like "forbids all"
       end
     end
   end

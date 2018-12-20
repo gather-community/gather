@@ -252,19 +252,27 @@ feature "calendar export" do
         end
 
         context "when not using work system" do
-          let!(:assignment) { meal1.asst_cook_assigns[0] }
+          let!(:assignment1) { meal1.asst_cook_assigns[0] }
+          let!(:assignment2) { meal2.asst_cook_assigns[0] }
 
           scenario "uses meal assignments only" do
             visit("/calendars/exports/your-jobs/#{token}.ics")
             expect_calendar_name("Your Jobs")
-            expect_events(
-              uid: "#{signature}_Assignment_#{assignment.id}",
+            expect_events({
+              uid: "#{signature}_Assignment_#{assignment1.id}",
               summary: "Assistant Cook: Figs",
               location: meal1.resources[0].name,
               description: %r{http://.+/meals/},
               "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 135.minutes, format: :iso),
               "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
-            )
+            },{
+              uid: "#{signature}_Assignment_#{assignment2.id}",
+              summary: "Assistant Cook: Buns",
+              location: meal2.resources[0].name,
+              description: %r{http://.+/meals/},
+              "DTSTART;TZID=Etc/UTC" => I18n.l(meal2_time - 135.minutes, format: :iso),
+              "DTEND;TZID=Etc/UTC" => I18n.l(meal2_time, format: :iso)
+            })
           end
         end
       end

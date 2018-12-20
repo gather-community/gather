@@ -37,7 +37,9 @@ describe WorkMailer do
       end
 
       it "renders the note in the body" do
-        expect(mail.body.encoded).to match(/This reminder includes the following note:\n-+\nDo stuff\n-+\n/)
+        expect(mail.body.encoded).to match(
+          /This reminder includes the following note:\r\n-+\r\nDo stuff\r\n-+/
+        )
       end
     end
   end

@@ -1,4 +1,8 @@
 <% content_for(:title, "Job Signups") %>
+<% content_for(:top_buttons) do %>
+  <%= calendar_exports_link %>
+<% end %>
+
 <% if @period.nil? %>
   <%= render("work/shared/no_period_notice") %>
 <% else %>

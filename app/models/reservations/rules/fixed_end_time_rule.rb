@@ -6,7 +6,7 @@ module Reservations
     class FixedEndTimeRule < Rule
       def check(reservation)
         value.strftime("%T") == reservation.ends_at.strftime("%T") ||
-          [:ends_at, "Must be #{value.to_s(:regular_time)}"]
+          [:ends_at, "Must be #{I18n.l(value, format: :regular_time)}"]
       end
     end
   end

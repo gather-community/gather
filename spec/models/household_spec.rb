@@ -109,4 +109,29 @@ describe Household do
       end
     end
   end
+
+  describe "destruction" do
+    let!(:household) { create(:household) }
+
+    context "with non-restricted associations" do
+      let!(:vehicle) { create(:vehicle, household: household) }
+      let!(:emergency_contact) { create(:emergency_contact, household: household) }
+      let!(:pet) { create(:pet, household: household) }
+
+      it "destroys cleanly" do
+        household.destroy
+        expect { household.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with account" do
+      let!(:account) { create(:account, household: household) }
+      it { expect { household.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with meal signup" do
+      let!(:signup) { create(:signup, household: household, adult_meat: 2) }
+      it { expect { household.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+  end
 end

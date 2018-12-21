@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "user form", js: true do
@@ -18,7 +20,7 @@ feature "user form", js: true do
 
   shared_examples_for "editing user" do
     scenario "edit user" do
-      visit(edit_user_path(user))
+      visit(edit_path)
       expect_image_upload(mode: :existing, path: /cooper/)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(mode: :dz_preview)
@@ -57,13 +59,30 @@ feature "user form", js: true do
     end
 
     scenario "editing household" do
-      visit(edit_user_path(user))
+      visit(edit_path)
       click_on("move them to another household")
       select2("Potatoheads", from: "#user_household_id")
       click_button("Save")
 
       expect_success
-      expect(page).to have_css(%Q{a.household[href$="/households/#{household2.id}"]})
+      expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
+    end
+
+    scenario "deactivate/activate/delete" do
+      visit(edit_path)
+      accept_confirm { click_on("Deactivate") }
+      expect_success
+
+      visit(edit_path)
+      click_link("reactivate")
+      expect_success
+
+      visit(edit_path)
+      expect(page).not_to have_content("reactivate")
+      accept_confirm { click_on("Delete") }
+      expect_success
+
+      expect { user.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

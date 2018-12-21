@@ -247,20 +247,68 @@ describe UserPolicy do
     end
 
     permissions :destroy? do
-      shared_examples_for "full denial" do
-        it "denies action on admins" do
-          expect(subject).not_to permit(admin, user)
-        end
+      let(:user) { create(:user) }
+      let(:admin) { create(:admin) }
+      let(:super_admin) { create(:super_admin) }
+      let(:record) { create(:user) }
+
+      context "with non-restricted associations" do
+        let!(:proxier) { create(:user, job_choosing_proxy: record) }
+        let!(:share) { create(:work_share, user: record) }
+
+        it_behaves_like "permits admins but not regular users"
       end
 
       context "with assignments" do
-        before { allow(user).to receive(:any_assignments?).and_return(true) }
-        it_behaves_like "full denial"
+        let!(:assignment) { create(:work_assignment, user: record) }
+        it_behaves_like "forbids all"
       end
 
-      context "without assignment" do
-        before { allow(user).to receive(:any_assignments?).and_return(false) }
-        it_behaves_like "permits admins but not regular users"
+      context "with child" do
+        let!(:child) { create(:user, :child, guardians: [record]) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with guardian" do
+        before { record.update!(child: true, guardians: [create(:user)]) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with created meals" do
+        let!(:meal) { create(:meal, creator: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with own reservations" do
+        let!(:reservation) { create(:reservation, reserver: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with sponsored reservations" do
+        let!(:reservation) { create(:reservation, sponsor: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with wiki page creation" do
+        let!(:page) { create(:wiki_page, creator: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with wiki page update" do
+        let!(:page) { create(:wiki_page, updator: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with wiki page version update" do
+        let!(:page) { create(:wiki_page) }
+
+        before do
+          page.update!(content: "x", updator: record)
+          page.update!(content: "y", updator: create(:user))
+          # Only relation at this point should be to second page version
+        end
+
+        it_behaves_like "forbids all"
       end
     end
   end

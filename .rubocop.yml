@@ -15,9 +15,6 @@ Layout/AlignParameters:
 Layout/CaseIndentation:
   EnforcedStyle: end
 
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 Layout/FirstParameterIndentation:
   EnforcedStyle: consistent
 
@@ -37,7 +34,13 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 Metrics/AbcSize:
-  Max: 28
+  Max: 35
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
 
 Metrics/BlockLength:
   Enabled: true
@@ -54,6 +57,11 @@ Metrics/MethodLength:
   Enabled: true
   Max: 12
 
+# We rely on foreign key constraints to raise errors in some cases, instead
+# of using restrict_with_exception.
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Enabled: false
 
@@ -68,13 +76,16 @@ Style/Documentation:
     - "app/policies/**/*"
     - "app/decorators/**/*"
 
+Style/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
 Style/MethodCallWithArgsParentheses:
   Enabled: true
   IgnoredMethods:
-    - []
+    - "[]"
     - to
     - not_to
     - require

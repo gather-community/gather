@@ -10,8 +10,8 @@ class Household < ApplicationRecord
 
   belongs_to :community
   has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
-    inverse_of: :household, class_name: "Billing::Account", dependent: :destroy
-  has_many :signups, dependent: :destroy
+    inverse_of: :household, class_name: "Billing::Account"
+  has_many :signups
   has_many :users, -> { by_name_adults_first }, inverse_of: :household, dependent: :destroy
   has_many :vehicles, class_name: "People::Vehicle", dependent: :destroy
   has_many :emergency_contacts, class_name: "People::EmergencyContact", dependent: :destroy
@@ -87,30 +87,6 @@ class Household < ApplicationRecord
 
   def user_deactivated
     deactivate(skip_callback: true) if users.all?(&:inactive?)
-  end
-
-  def any_assignments?
-    users.any?(&:any_assignments?)
-  end
-
-  def any_accounts?
-    accounts.any?
-  end
-
-  def any_signups?
-    signups.any?
-  end
-
-  def any_users?
-    users.any?
-  end
-
-  def any_transactions?
-    accounts.any? { |a| a.transactions.any? }
-  end
-
-  def any_statements?
-    accounts.any? { |a| a.statements.any? }
   end
 
   def unit_num_and_suffix

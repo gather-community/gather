@@ -223,22 +223,95 @@ describe User do
     end
   end
 
-  describe "#any_assignments?" do
-    let(:user) { create(:user) }
-    subject { user.any_assignments? }
-
-    context "with nothing" do
-      it { is_expected.to be(false) }
-    end
+  # Our approach to destruction is to:
+  # - Set the policy to only disallow deletions based on what users of various roles should be able
+  #   to destroy given various combinations of existing associations.
+  # - Set association `dependent` options to avoid DB constraint errors UNLESS the destroy is never allowed.
+  # - In the model spec, assume destroy has been called and test for the appropriate behavior
+  #   (dependent destruction, nullification, or error) for each foreign key.
+  # - In the policy spec, test for the appropriate restrictions on destroy.
+  # - In the feature spec, test the destruction/deactivation/activation happy paths.
+  # - For fake users and households, destruction may happen when associations are present that would
+  #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
+  #   deleting dependent objects first, and then users and households.
+  describe "destruction" do
+    let!(:user) { create(:user) }
 
     context "with meal assignment" do
-      before { user.meal_assignments.create!(role: "cleaner", meal: create(:meal)) }
-      it { is_expected.to be(true) }
+      let!(:meal) { create(:meal, head_cook: user) }
+
+      it "destroys user cleanly but not meal" do
+        user.destroy
+        expect(meal.reload.head_cook).to be_nil
+      end
     end
 
-    context "with work assignment" do
-      before { user.work_assignments.create!(shift: create(:work_shift)) }
-      it { is_expected.to be(true) }
+    context "with job assignment and share" do
+      let!(:period) { create(:work_period) }
+      let!(:share) { create(:work_share, user: user, period: period) }
+      let!(:job) { create(:work_job, period: period) }
+      let!(:assignment) { create(:work_assignment, user: user, shift: job.shifts[0]) }
+
+      it "destroys cleanly" do
+        user.destroy
+        expect { job.reload }.not_to raise_error
+        expect { share.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { assignment.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with parent" do
+      let!(:child) { create(:user, :child, guardians: [user]) }
+
+      it "destroys cleanly without destroying parent" do
+        expect(user.reload.down_guardianships).not_to be_empty
+        child.destroy
+        expect(user.reload.up_guardianships).to be_empty
+      end
+    end
+
+    context "with child" do
+      let!(:child) { create(:user, :child, guardians: [user]) }
+
+      it "destroys cleanly without destroying child" do
+        expect(child.reload.up_guardianships).not_to be_empty
+        user.destroy
+        expect(child.reload.up_guardianships).to be_empty
+      end
+    end
+
+    context "with job choosing proxy" do
+      let!(:proxy) { create(:user, job_choosing_proxy: user) }
+
+      it "destroys cleanly and nullifies" do
+        user.destroy
+        expect(proxy.reload.job_choosing_proxy).to be_nil
+      end
+    end
+
+    context "with meal creation record" do
+      let!(:meal) { create(:meal, creator: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with reservation reserver record" do
+      let!(:reservation) { create(:reservation, reserver: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with reservation sponsor record" do
+      let!(:reservation) { create(:reservation, sponsor: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with wiki page creator record" do
+      let!(:wiki_page) { create(:wiki_page, creator: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with wiki page updator record" do
+      let!(:wiki_page) { create(:wiki_page, updator: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
   end
 end

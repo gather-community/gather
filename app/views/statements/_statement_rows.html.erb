@@ -1,6 +1,6 @@
 <% @statements.each do |statement| %>
   <tr>
-    <td><%= statement.created_on.to_s(:short_date) %></td>
+    <td><%= l(statement.created_on, format: :short_date) %></td>
     <td><%= currency_with_cr(statement.new_charges) %></td>
     <td><%= link_to(currency_with_cr(statement.total_due), statement_path(statement)) %></td>
   </tr>

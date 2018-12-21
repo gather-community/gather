@@ -1,5 +1,5 @@
 <tr>
-  <td class="col-md-1"><%= txn.incurred_on.to_s(:short_date) %></td>
+  <td class="col-md-1"><%= l(txn.incurred_on, format: :short_date) %></td>
   <td class="col-md-1"><%= t("transaction_codes.#{txn.code}") %></td>
   <td class="col-md-6"><%= txn.description %></td>
   <td class="col-md-1 num">

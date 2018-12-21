@@ -6,6 +6,11 @@ module ApplicationHelper
     notice: "alert-info"
   }.freeze
 
+  def l(date_or_time, *args)
+    return nil if date_or_time.nil?
+    I18n.l(date_or_time, *args)
+  end
+
   def bootstrap_class_for(flash_type)
     FLASH_TYPE_TO_CSS[flash_type.to_sym] || flash_type.to_s
   end

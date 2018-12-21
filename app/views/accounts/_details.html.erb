@@ -11,7 +11,7 @@
           <tr>
             <td>Statement Date</td>
             <td>
-              <%= @account.last_statement_on.try(:to_s, :short_date) || "N/A" %>
+              <%= l(@account.last_statement_on, format: :short_date) || "N/A" %>
             </td>
           </tr>
           <tr>

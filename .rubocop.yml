@@ -57,9 +57,6 @@ Metrics/MethodLength:
   Enabled: true
   Max: 12
 
-Rails/FilePath:
-  EnforcedStyle: slashes # I mean when will we ever not be on a slash-based filesystem.
-
 # We rely on foreign key constraints to raise errors in some cases, instead
 # of using restrict_with_exception.
 Rails/HasManyOrHasOneDependent:

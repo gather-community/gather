@@ -2,4 +2,3 @@
 
 # Only language time formats that should not differ by locale, such as machine-readable formats
 # should be in this file.
-Time::DATE_FORMATS[:machine_datetime_no_zone] = "%Y-%m-%d %H:%M"

@@ -26,14 +26,29 @@ feature "lenses", js: true do
     context "basic" do
       scenario do
         visit(users_path)
-        expect_community_dropdown
+        expect(lens_selected_option(:community).text).to eq("Community 3")
+        lens_field(:community).select("Community 2")
+        expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
+        expect(lens_selected_option(:community).text).to eq("Community 2")
+        expect(page).not_to have_css(".lens-bar a.clear")
       end
     end
 
     context "with all option" do
       scenario do
         visit(meals_path)
-        expect_community_dropdown(all_option: true)
+
+        expect_unselected_option(lens_selector(:community), "All Communities")
+        lens_field(:community).select("Community 2")
+
+        expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
+        expect(lens_selected_option(:community).text).to eq("Community 2")
+        expect(page).to have_echoed_url_param("community", "this")
+        # Clear button should work for all option mode only
+        first(".lens-bar a.clear").click
+
+        expect(page).to have_echoed_url_param("community", "")
+        expect_unselected_option(lens_selector(:community), "All Communities")
       end
     end
 
@@ -46,8 +61,18 @@ feature "lenses", js: true do
 
       scenario do
         visit(accounts_household_path(user.household))
-        # This kind of community drop-down does not change the subdomain.
-        expect_community_dropdown(subdomain: false)
+        expect(lens_selected_option(:community).text).to eq("Community 3")
+
+        lens_field(:community).select("Community 2")
+
+        expect(page).to have_echoed_url(%r{\Ahttp://community3\.})
+        expect(page).to have_echoed_url_param("community", "community2")
+        expect(lens_selected_option(:community).text).to eq("Community 2")
+        expect(page).not_to have_css(".lens-bar a.clear")
+        visit(accounts_household_path(user.household))
+
+        expect(page).to have_echoed_url(accounts_household_path(user.household))
+        expect(lens_selected_option(:community).text).to eq("Community 2")
       end
     end
   end
@@ -90,6 +115,17 @@ feature "lenses", js: true do
       visit(work_shifts_path)
       expect(page).not_to have_css("form.lens-bar .choosee-lens")
       expect(page).to have_css("form.floating-lens .choosee-lens")
+    end
+  end
+
+  describe "inter-community behavior" do
+    scenario "separate lenses per-community" do
+      visit(users_path) # community3
+      fill_in_lens_and_wait(:search, "foo")
+      with_subdomain("community1") do
+        visit(users_path)
+        expect_lens_value(:search, "")
+      end
     end
   end
 
@@ -161,30 +197,39 @@ feature "lenses", js: true do
 
     # Select the secondary option, wait for page to load, and test.
     select_lens_and_wait(param_name, opt2[0])
-    expect(lens_selected_option(param_name).text).to eq opt2[0]
+    expect(lens_selected_option(param_name).text).to eq(opt2[0])
 
     expect_rewritten_link_and_session(key: param_name, value: opt2[1], path: path, nav_link: nav_link) do
-      expect(lens_selected_option(param_name).text).to eq opt2[0]
+      expect(lens_selected_option(param_name).text).to eq(opt2[0])
     end
   end
 
   def expect_community_dropdown(all_option: false, subdomain: true)
+    # Save URL before we change
     orig_url = current_url
+
+    # If lens includes 'All Communites' option, that should be default.
+    # Otherwise user's home cmty should be default.
     if all_option
       expect_unselected_option(lens_selector(:community), "All Communities")
     else
-      expect(lens_selected_option(:community).text).to eq "Community 3"
+      expect(lens_selected_option(:community).text).to eq("Community 3")
     end
     lens_field(:community).select("Community 2")
+
+    # If the lens changes the subdomain, check for that.
+    # Else check for QS param.
     if subdomain
       expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     else
       expect(page).to have_echoed_url_param("community", "community2")
     end
-    expect(lens_selected_option(:community).text).to eq "Community 2"
+
+    # Check for correct selected param.
+    expect(lens_selected_option(:community).text).to eq("Community 2")
+
     if all_option
       expect(page).to have_echoed_url_param("community", "this")
-
       # Clear button should work for all option mode only
       first(".lens-bar a.clear").click
       expect(page).to have_echoed_url_param("community", "")
@@ -197,16 +242,16 @@ feature "lenses", js: true do
     unless subdomain
       visit(orig_url)
       expect(page).to have_echoed_url(orig_url)
-      expect(lens_selected_option(:community).text).to eq "Community 2"
+      expect(lens_selected_option(:community).text).to eq("Community 2")
     end
   end
 
   def expect_search(path:, nav_link:)
-    expect(lens_field(:search).text).to eq ""
+    expect(lens_field(:search).text).to eq("")
     fill_in_lens_and_wait(:search, "foo")
-    expect(lens_field(:search).value).to eq "foo"
+    expect(lens_field(:search).value).to eq("foo")
     expect_rewritten_link_and_session(key: "search", value: "foo", path: path, nav_link: nav_link) do
-      expect(lens_field(:search).value).to eq "foo"
+      expect(lens_field(:search).value).to eq("foo")
     end
   end
 

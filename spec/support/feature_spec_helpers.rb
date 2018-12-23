@@ -303,8 +303,12 @@ module FeatureSpecHelpers
     clear_cookie("_gather_session")
   end
 
+  def lens_node(param_name)
+    first(:css, "[data-param-name=#{param_name}]")
+  end
+
   def select_lens(param_name, label)
-    first(:css, "[data-param-name=#{param_name}]").select(label)
+    lens_node(param_name).select(label)
   end
 
   def select_lens_and_wait(param_name, label)
@@ -321,6 +325,10 @@ module FeatureSpecHelpers
   def fill_in_lens_and_wait(param_name, value)
     fill_in_lens(param_name, value)
     expect(page).to have_echoed_url_param(param_name, value)
+  end
+
+  def expect_lens_value(param_name, value)
+    expect(lens_node(param_name).value).to eq(value)
   end
 
   def match_and_visit_url(str, regex)

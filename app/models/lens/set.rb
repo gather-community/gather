@@ -4,7 +4,8 @@ module Lens
     attr_accessor :lenses, :route_params, :context, :visible
     alias_method :visible?, :visible
 
-    LENS_VERSION = 4
+    LENS_VERSION = 5
+    PATH_CHAR_LIMIT = 128
 
     # Gets the last explicit path for the given controller and action.
     # `context` - The calling view.
@@ -22,7 +23,7 @@ module Lens
       self.context = context
       self.lenses ||= []
       self.visible = true
-      context.session.delete(:lenses) if route_params[:clearlenses]
+      reset_root_store if route_params[:clearlenses]
       expire_store_on_version_upgrade
       build_lenses(lens_names)
       save_or_clear_path
@@ -106,7 +107,7 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        stores: stores,
+        stores: {global: global_store, action: action_store},
         set: self
       )
 
@@ -116,30 +117,30 @@ module Lens
     end
 
     def root_store
-      @root_store ||= (context.session[:lenses] ||= {})
+      @root_store ||= (context.session[:lenses] ||= {"V" => LENS_VERSION})
     end
 
-    def stores
-      @stores ||= {global: global_store, action: action_store}
+    def community_store
+      @community_store ||= (root_store[context.current_community.id.to_s] ||= {})
     end
 
-    # Returns (and inits if necessary) the portion of the root_store for the
-    # current controller and action.
-    def action_store
-      return @action_store if defined?(@action_store)
-      root_store[context.controller_path] ||= {}
-      @action_store = (root_store[context.controller_path][context.action_name] ||= {})
-    end
-
-    # Returns (and inits if necessary) the portion of the root_store for global lenses.
+    # The portion of the community_store for global lenses.
     def global_store
-      @global_store = (root_store["_global"] ||= {})
+      @global_store ||= (community_store["G"] ||= {})
+    end
+
+    # The portion of the community_store for the current controller and action.
+    def action_store
+      @action_store ||= (community_store["#{context.controller_path}__#{context.action_name}"] ||= {})
     end
 
     def expire_store_on_version_upgrade
-      if (root_store["version"] || 1) < LENS_VERSION
-        @root_store = context.session[:lenses] = {"version" => LENS_VERSION}
-      end
+      reset_root_store if (root_store["V"] || 1) < LENS_VERSION
+    end
+
+    def reset_root_store
+      @root_store = nil
+      context.session.delete(:lenses)
     end
 
     # Save the path if any non-global route_params explictly given,
@@ -153,7 +154,7 @@ module Lens
         if non_global_params.values.all?(&:blank?)
           action_store.delete("_path")
         else
-          action_store["_path"] = "#{context.request.path}?#{non_global_params.to_query}"
+          action_store["_path"] = "#{context.request.path}?#{non_global_params.to_query}"[0..PATH_CHAR_LIMIT]
         end
       end
     end

@@ -24,11 +24,11 @@ module Lens
       name.underscore.gsub(/_lens\z/, "")
     end
 
-    def initialize(options:, context:, stores:, route_params:, set:)
+    def initialize(options:, context:, storage:, route_params:, set:)
       self.options = options
       self.context = context
       self.route_params = route_params
-      self.store = options[:global] ? stores[:global] : stores[:action]
+      self.store = options[:global] ? storage.global_store : storage.action_store
       self.value = route_param_given? ? route_param : (value || options[:default])
       self.set = set
     end

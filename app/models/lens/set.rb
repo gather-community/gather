@@ -1,10 +1,11 @@
-# Models a set of parameters and parameter values that scope an index view.
-module Lens
-  class Set
-    attr_accessor :lenses, :route_params, :context, :visible
-    alias_method :visible?, :visible
+# frozen_string_literal: true
 
-    LENS_VERSION = 5
+module Lens
+  # Models a set of parameters and parameter values that scope an index view.
+  class Set
+    attr_accessor :storage, :lenses, :route_params, :context, :visible
+    alias visible? visible
+
     PATH_CHAR_LIMIT = 128
 
     # Gets the last explicit path for the given controller and action.
@@ -23,8 +24,9 @@ module Lens
       self.context = context
       self.lenses ||= []
       self.visible = true
-      reset_root_store if route_params[:clearlenses]
-      expire_store_on_version_upgrade
+      self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
+                                 controller_path: context.controller_path, action_name: context.action_name)
+      storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
       save_or_clear_path
     end
@@ -107,40 +109,13 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        stores: {global: global_store, action: action_store},
+        storage: storage,
         set: self
       )
 
       # This hash may have been accessed and thus memoized by the lens just built,
       # but that could be a problem if it's not the last one, so force it to rebuild on the next access.
       @lenses_by_param_name = nil
-    end
-
-    def root_store
-      @root_store ||= (context.session[:lenses] ||= {"V" => LENS_VERSION})
-    end
-
-    def community_store
-      @community_store ||= (root_store[context.current_community.id.to_s] ||= {})
-    end
-
-    # The portion of the community_store for global lenses.
-    def global_store
-      @global_store ||= (community_store["G"] ||= {})
-    end
-
-    # The portion of the community_store for the current controller and action.
-    def action_store
-      @action_store ||= (community_store["#{context.controller_path}__#{context.action_name}"] ||= {})
-    end
-
-    def expire_store_on_version_upgrade
-      reset_root_store if (root_store["V"] || 1) < LENS_VERSION
-    end
-
-    def reset_root_store
-      @root_store = nil
-      context.session.delete(:lenses)
     end
 
     # Save the path if any non-global route_params explictly given,
@@ -152,9 +127,10 @@ module Lens
       if (route_params.keys.map(&:to_sym) & non_global_param_names).present?
         non_global_params = route_params.slice(*non_global_param_names).reject { |_, v| v.blank? }
         if non_global_params.values.all?(&:blank?)
-          action_store.delete("_path")
+          storage.action_store.delete("_path")
         else
-          action_store["_path"] = "#{context.request.path}?#{non_global_params.to_query}"[0..PATH_CHAR_LIMIT]
+          storage.action_store["_path"] =
+            "#{context.request.path}?#{non_global_params.to_query}"[0..PATH_CHAR_LIMIT]
         end
       end
     end

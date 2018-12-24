@@ -6,14 +6,6 @@ module Lens
     attr_accessor :storage, :lenses, :route_params, :context, :visible
     alias visible? visible
 
-    PATH_CHAR_LIMIT = 128
-
-    # Gets the last explicit path for the given controller and action.
-    # `context` - The calling view.
-    def self.path_for(context:, controller:, action:)
-      context.session["lenses"].try(:[], controller).try(:[], action).try(:[], "_path")
-    end
-
     # `context` - The calling controller.
     # `lens_names` - The names of the lenses that make up the set, e.g. [:community, :search].
     #    Can be a hash or an array. If a hash, the values are hashes of options.
@@ -28,7 +20,7 @@ module Lens
                                  controller_path: context.controller_path, action_name: context.action_name)
       storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
-      save_or_clear_path
+      PathSaver.new(storage: storage).write(lenses: lenses, path: request_path, params: route_params)
     end
 
     def bar(options = {})
@@ -60,7 +52,7 @@ module Lens
     end
 
     def path_to_clear
-      context.request.path << "?" << query_string_to_clear
+      request_path << "?" << query_string_to_clear
     end
 
     def cache_key
@@ -118,29 +110,16 @@ module Lens
       @lenses_by_param_name = nil
     end
 
-    # Save the path if any non-global route_params explictly given,
-    # but clear path if all route_params are blank. This is used for rewriting nav links.
-    # We ignore global route_params because including such params in rewritten links would
-    # mess with the global nature of the lens.
-    def save_or_clear_path
-      non_global_param_names = lenses.reject(&:global?).map(&:param_name)
-      if (route_params.keys.map(&:to_sym) & non_global_param_names).present?
-        non_global_params = route_params.slice(*non_global_param_names).reject { |_, v| v.blank? }
-        if non_global_params.values.all?(&:blank?)
-          storage.action_store.delete("_path")
-        else
-          storage.action_store["_path"] =
-            "#{context.request.path}?#{non_global_params.to_query}"[0..PATH_CHAR_LIMIT]
-        end
-      end
-    end
-
     def lenses_by_param_name
       @lenses_by_param_name ||= lenses.index_by(&:param_name)
     end
 
     def view
       context.view_context
+    end
+
+    def request_path
+      context.request.path
     end
   end
 end

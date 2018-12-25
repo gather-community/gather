@@ -1,8 +1,7 @@
 <%= meal.form_section(:general, expanded: local_assigns[:expanded]) do %>
   <div class="fields">
     <% if policy(meal).change_date_loc_invites? %>
-      <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true,
-        input_html: {data: {date_options: @min_date.present? ? {minDate: @min_date} : {}}} %>
+      <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true %>
       <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
         required: true, input_html: {multiple: "multiple"} %>
       <%= javascript_tag do %>

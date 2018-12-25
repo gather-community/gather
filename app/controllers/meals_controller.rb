@@ -55,14 +55,12 @@ class MealsController < ApplicationController
 
   def new
     authorize(@meal)
-    @min_date = Time.zone.today.strftime("%Y-%m-%d")
     prep_form_vars
   end
 
   def edit
     @meal = Meal.find(params[:id])
     authorize(@meal)
-    @min_date = nil
     prep_form_vars
   end
 

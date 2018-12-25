@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Lens
+  # Manages storage for lenses across communities, controllers, and actions.
   class Storage
     attr_accessor :session, :community_id, :controller_path, :action_name
 
@@ -11,7 +12,7 @@ module Lens
       self.community_id = community_id
       self.controller_path = controller_path
       self.action_name = action_name
-      reset_on_version_upgrade
+      reset if (root_store["V"] || 1) < LENS_VERSION
     end
 
     def root_store
@@ -35,12 +36,6 @@ module Lens
     def reset
       @root_store = nil
       session.delete(:lenses)
-    end
-
-    private
-
-    def reset_on_version_upgrade
-      reset_root_store if (root_store["V"] || 1) < LENS_VERSION
     end
   end
 end

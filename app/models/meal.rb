@@ -90,7 +90,7 @@ class Meal < ApplicationRecord
   def self.new_with_defaults(community)
     new(
       served_at: default_datetime,
-      capacity: DEFAULT_CAPACITY,
+      capacity: community.settings.meals.default_capacity,
       community_ids: Community.all.map(&:id),
       community: community,
       formula: Meals::Formula.default_for(community)

@@ -11,6 +11,7 @@ en:
             reimb_instructions: "Reimbursement Instructions"
             show_reimb_form: "Show printable reimbursement form"
             cooks_can_finalize: "Cooks can finalize meals"
+            default_capacity: "Default Capacity"
             default_shift_times:
               _self: "Default Shift Times"
               start:
@@ -49,6 +50,7 @@ en:
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
             show_reimb_form: "Whether to show a printable reimbursement form (including grocery and pantry amounts and reimbursement method) on the meal summary page. Uncheck if you prefer an electronic reimbursement process."
             cooks_can_finalize: "Whether head cooks can finalize meals in addition to billers, meals coordinators, and admins."
+            default_capacity: "The default setting for how many people a meal can accommodate."
             default_shift_times:
               _self: "When shifts start and end, relative to meal serving time. In minutes."
           reservations:

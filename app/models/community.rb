@@ -28,6 +28,7 @@ class Community < ApplicationRecord
     {key: :meals, type: :group, fields: [
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :reimb_instructions, type: :markdown},
+      {key: :default_capacity, type: :integer, default: 50},
       {key: :show_reimb_form, type: :boolean, default: false},
       {key: :cooks_can_finalize, type: :boolean, default: false},
       {key: :default_shift_times, type: :group, fields: [

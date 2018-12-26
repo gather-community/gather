@@ -55,6 +55,7 @@ en:
         communities: "Communities"
         resource_ids: "Location(s)"
         formula: "Formula"
+        capacity: "Capacity"
         title: "Title"
         entrees: "Entrees"
         side: "Side"

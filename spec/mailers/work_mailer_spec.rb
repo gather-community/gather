@@ -74,8 +74,8 @@ describe WorkMailer do
           expect(mail.body.encoded).to include("You have 5 pre-assigned hours and your quota is 15.5, "\
             "so you need to choose 10.5 regular hours.")
           expect(mail.body.encoded).to include("You are also expected to choose 4 Junk hours.")
-          expect(mail.body.encoded).to include("You can begin choosing at 7:00pm.\r\n\r\n"\
-            "Thanks for your participation!")
+          expect(mail.body.encoded).to include("You can begin choosing at 7:00pm.\r\n\r\nGo to")
+          expect(mail.body.encoded).to have_correct_shifts_url(default_community)
         end
       end
 

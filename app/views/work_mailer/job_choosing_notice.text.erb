@@ -13,16 +13,22 @@ You are also expected to choose <%= @synopsis.user_full_community_hours.map { |j
 <% end %>
 
 <% if @period.staggered? && @synopsis.user_need > 0 %>
-<% if @synopsis.rounds.one? %>
+  <% if @synopsis.rounds.one? %>
 You can begin choosing at <%= l(@synopsis.rounds[0][:starts_at], format: :regular_time).strip %>.
-<% else %>
+  <% else %>
 Your round schedule is as follows:
-<% @synopsis.rounds.each do |round| %>
+    <% @synopsis.rounds.each do |round| %>
 * At <%= l(round[:starts_at], format: :regular_time).strip %> <%= round[:limit] ? "you can choose up to #{round[:limit]} hours" : "you can finish choosing" %>.
-<% end %>
-<% end %>
-<% elsif @period.auto_open_time %>
+    <% end %>
+  <% end %>
+
+Go to <%= work_shifts_url %> at the time(s) above to choose your jobs. You can also stop by earlier to see what jobs are available and plan your picks. But you won't be able to sign up until the times listed above.
+<% else %>
+  <% if @period.auto_open_time %>
 Choosing begins at <%= l(@period.auto_open_time, format: :regular_time).strip %>.
+
+  <% end %>
+Visit <%= work_shifts_url %> for more information.
 <% end %>
 
 Thanks for your participation!

@@ -69,6 +69,10 @@ module GeneralHelpers
     contain_community_url(meal.community, "/meals/#{meal.id}")
   end
 
+  def have_correct_shifts_url(community)
+    contain_community_url(community, "/work/signups")
+  end
+
   def have_correct_shift_url(shift)
     contain_community_url(shift.community, "/work/signups/#{shift.id}")
   end

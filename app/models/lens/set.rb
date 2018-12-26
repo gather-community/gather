@@ -1,16 +1,10 @@
-# Models a set of parameters and parameter values that scope an index view.
+# frozen_string_literal: true
+
 module Lens
+  # Models a set of parameters and parameter values that scope an index view.
   class Set
-    attr_accessor :lenses, :route_params, :context, :visible
-    alias_method :visible?, :visible
-
-    LENS_VERSION = 4
-
-    # Gets the last explicit path for the given controller and action.
-    # `context` - The calling view.
-    def self.path_for(context:, controller:, action:)
-      context.session["lenses"].try(:[], controller).try(:[], action).try(:[], "_path")
-    end
+    attr_accessor :storage, :lenses, :route_params, :context, :visible
+    alias visible? visible
 
     # `context` - The calling controller.
     # `lens_names` - The names of the lenses that make up the set, e.g. [:community, :search].
@@ -22,10 +16,11 @@ module Lens
       self.context = context
       self.lenses ||= []
       self.visible = true
-      context.session.delete(:lenses) if route_params[:clearlenses]
-      expire_store_on_version_upgrade
+      self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
+                                 controller_path: context.controller_path, action_name: context.action_name)
+      storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
-      save_or_clear_path
+      PathSaver.new(storage: storage).write(lenses: lenses, path: request_path, params: route_params)
     end
 
     def bar(options = {})
@@ -57,7 +52,7 @@ module Lens
     end
 
     def path_to_clear
-      context.request.path << "?" << query_string_to_clear
+      request_path << "?" << query_string_to_clear
     end
 
     def cache_key
@@ -106,7 +101,7 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        stores: stores,
+        storage: storage,
         set: self
       )
 
@@ -115,55 +110,16 @@ module Lens
       @lenses_by_param_name = nil
     end
 
-    def root_store
-      @root_store ||= (context.session[:lenses] ||= {})
-    end
-
-    def stores
-      @stores ||= {global: global_store, action: action_store}
-    end
-
-    # Returns (and inits if necessary) the portion of the root_store for the
-    # current controller and action.
-    def action_store
-      return @action_store if defined?(@action_store)
-      root_store[context.controller_path] ||= {}
-      @action_store = (root_store[context.controller_path][context.action_name] ||= {})
-    end
-
-    # Returns (and inits if necessary) the portion of the root_store for global lenses.
-    def global_store
-      @global_store = (root_store["_global"] ||= {})
-    end
-
-    def expire_store_on_version_upgrade
-      if (root_store["version"] || 1) < LENS_VERSION
-        @root_store = context.session[:lenses] = {"version" => LENS_VERSION}
-      end
-    end
-
-    # Save the path if any non-global route_params explictly given,
-    # but clear path if all route_params are blank. This is used for rewriting nav links.
-    # We ignore global route_params because including such params in rewritten links would
-    # mess with the global nature of the lens.
-    def save_or_clear_path
-      non_global_param_names = lenses.reject(&:global?).map(&:param_name)
-      if (route_params.keys.map(&:to_sym) & non_global_param_names).present?
-        non_global_params = route_params.slice(*non_global_param_names).reject { |_, v| v.blank? }
-        if non_global_params.values.all?(&:blank?)
-          action_store.delete("_path")
-        else
-          action_store["_path"] = "#{context.request.path}?#{non_global_params.to_query}"
-        end
-      end
-    end
-
     def lenses_by_param_name
       @lenses_by_param_name ||= lenses.index_by(&:param_name)
     end
 
     def view
       context.view_context
+    end
+
+    def request_path
+      context.request.path
     end
   end
 end

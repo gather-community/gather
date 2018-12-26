@@ -5,6 +5,8 @@ module Lens
     delegate :blank?, :present?, to: :value
     alias_method :active?, :present?
 
+    VALUE_CHAR_LIMIT = 32
+
     def self.class_var_get_or_set(name, value, default: nil)
       name = "@@#{name}"
       if value.nil?
@@ -22,11 +24,11 @@ module Lens
       name.underscore.gsub(/_lens\z/, "")
     end
 
-    def initialize(options:, context:, stores:, route_params:, set:)
+    def initialize(options:, context:, storage:, route_params:, set:)
       self.options = options
       self.context = context
       self.route_params = route_params
-      self.store = options[:global] ? stores[:global] : stores[:action]
+      self.store = options[:global] ? storage.global_store : storage.action_store
       self.value = route_param_given? ? route_param : (value || options[:default])
       self.set = set
     end
@@ -69,11 +71,20 @@ module Lens
       if val.nil?
         store.delete(param_name.to_s)
       else
-        store[param_name.to_s] = val
+        store[param_name.to_s] = truncate(val)
       end
     end
 
     private
+
+    # Make sure val isn't too huge and doesn't blow up the session cookie.
+    def truncate(val)
+      if val.is_a?(String)
+        val[0...VALUE_CHAR_LIMIT]
+      else
+        val
+      end
+    end
 
     def route_param
       route_params[param_name].presence

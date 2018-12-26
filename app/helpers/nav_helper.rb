@@ -244,7 +244,8 @@ module NavHelper
   end
 
   def lens_path_if_present(controller)
-    Lens::Set.path_for(context: self, controller: controller, action: "index") ||
-      send("#{controller.tr('/', '_')}_path")
+    storage = Lens::Storage.new(session: session, community_id: current_community.id,
+                                controller_path: controller, action_name: "index")
+    Lens::PathSaver.new(storage: storage).read || send("#{controller.tr('/', '_')}_path")
   end
 end

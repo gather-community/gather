@@ -5,9 +5,8 @@ module Meals
   # Checks the DB to see when to send.
   class MealReminderJob < ReminderJob
     def perform
-      lead_days = Settings.reminders.lead_times.meal
-
       each_community_at_correct_hour do |community|
+        lead_days = community.settings.meals.reminder_lead_times.diner
         meal_ids = Meal.hosted_by(community).served_within_days_from_now(lead_days).not_cancelled.pluck(:id)
 
         next unless meal_ids.any?

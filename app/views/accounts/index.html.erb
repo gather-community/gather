@@ -23,7 +23,7 @@
     <ul>
       <li><%= t(".summary", count: @active_accounts) %></li>
       <% if @last_statement_run.present? %>
-        <li><%= t(".last_statement_run", date: l(@last_statement_run.to_s, format: :short_date)) %></li>
+        <li><%= t(".last_statement_run", date: l(@last_statement_run, format: :short_date)) %></li>
       <% else %>
         <li><%= t(".statements_never_run") %></li>
       <% end %>

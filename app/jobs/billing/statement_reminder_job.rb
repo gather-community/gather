@@ -16,7 +16,7 @@ module Billing
     private
 
     def remindable_statements(community)
-      lead_days = Settings.reminders.lead_times.statement
+      lead_days = community.settings.billing.statement_reminder_lead_time
       Statement
         .in_community(community)
         .due_within_days_from_now(lead_days)

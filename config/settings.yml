@@ -2,20 +2,6 @@ meals:
   close_cutoff_age: 2 # hours
 reminders:
   time_of_day: 6 # 6:00am
-  # Reminder lead times in days.
-  # Reminders sent if object is before 11:59pm on `days` days from now.
-  # So 0 means anytime today, 1 means anytime today or tomorrow, etc.
-  lead_times:
-    meal: 0
-    statement: 5
-    shift:
-      head_cook: 3
-      asst_cook: 2
-      table_setter: 2
-      cleaner: 2
-    cook_menu:
-      early: 10
-      late: 5
 photos:
   max_size_mb: 8
 url:

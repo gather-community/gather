@@ -19,11 +19,11 @@ module Meals
       early = Assignment.joins(:meal)
         .where(role: "head_cook", reminder_count: 0)
         .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.early))
+          .served_within_days_from_now(community.settings.meals.reminder_lead_times.early_menu))
 
       late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1)
         .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(Settings.reminders.lead_times.cook_menu.late))
+          .served_within_days_from_now(community.settings.meals.reminder_lead_times.late_menu))
 
       (early.to_a + late.to_a).uniq
     end

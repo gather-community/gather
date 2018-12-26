@@ -24,11 +24,12 @@ class Community < ApplicationRecord
 
   custom_fields :settings, spec: [
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
-    {key: :default_landing_page, type: :enum, options: %w(meals directory reservations wiki), default: "directory", required: true},
+    {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
+     default: "directory", required: true},
     {key: :meals, type: :group, fields: [
       {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :reimb_instructions, type: :markdown},
-      {key: :default_capacity, type: :integer, default: 50},
+      {key: :default_capacity, type: :integer, required: true, default: 50},
       {key: :show_reimb_form, type: :boolean, default: false},
       {key: :cooks_can_finalize, type: :boolean, default: false},
       {key: :default_shift_times, type: :group, fields: [
@@ -45,6 +46,13 @@ class Community < ApplicationRecord
           {key: :cleaner, type: :integer, required: true, default: 165}
         ]}
       ]},
+      {key: :reminder_lead_times, type: :group, fields: [
+        {key: :diner, type: :integer, required: true, default: 0},
+        {key: :early_menu, type: :integer, required: true, default: 10},
+        {key: :late_menu, type: :integer, required: true, default: 5},
+        {key: :head_cook, type: :integer, required: true, default: 3},
+        {key: :job, type: :integer, required: true, default: 2}
+      ]}
     ]},
     {key: :reservations, type: :group, fields: [
       {key: :kinds, type: :string},
@@ -56,8 +64,9 @@ class Community < ApplicationRecord
     {key: :billing, type: :group, fields: [
       {key: :payment_instructions, type: :markdown},
       {key: :statement_terms, type: :integer, default: 30},
+      {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
       {key: :late_fee_policy, type: :group, fields: [
-        {key: :fee_type, type: :enum, options: %w(none fixed percent), default: "none", required: true},
+        {key: :fee_type, type: :enum, options: %w[none fixed percent], default: "none", required: true},
         {key: :threshold, type: :decimal},
         {key: :amount, type: :decimal}
       ]}

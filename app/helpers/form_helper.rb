@@ -14,9 +14,10 @@ module FormHelper
   # Other options:
   # - top_error_notification: Whether or not to include the f.error_notification at the top of the form.
   #     Defaults to true.
-  def gather_form_for(obj, options = {})
+  def gather_form_for(objs, options = {})
+    obj = Array.wrap(objs).last # objs may be an array or a single object
     width = options.delete(:width) || :normal
-    name = options.delete(:name) || Array.wrap(obj).last.model_name.name.underscore.dasherize.gsub("/", "--")
+    name = options.delete(:name) || obj.model_name.name.underscore.dasherize.gsub("/", "--")
     layout = options.delete(:layout) || :narrow_label
 
     options[:html] ||= {}
@@ -32,7 +33,7 @@ module FormHelper
 
     # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
-      simple_form_for(obj, options) do |form|
+      simple_form_for(objs, options) do |form|
         top_errors = []
         if options[:top_error_notification] != false
           # We include the full error messages for debugging purposes in case the attribute on which

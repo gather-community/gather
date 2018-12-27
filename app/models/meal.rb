@@ -80,7 +80,6 @@ class Meal < ApplicationRecord
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  # validate :no_double_assignments
   validate :allergens_some_or_none_if_menu
   validate :allergen_none_alone
   validate { reservation_handler.validate_meal if reservations.any? }
@@ -261,19 +260,6 @@ class Meal < ApplicationRecord
   def at_least_one_community
     if invitations.reject(&:blank?).empty?
       errors.add(:invitations, "you must invite at least one community")
-    end
-  end
-
-  def no_double_assignments
-    %w(asst_cook table_setter cleaner).each do |role|
-      marked_user_ids = {}
-      send("#{role}_assigns").each do |a|
-        if marked_user_ids[a.user_id]
-          errors.add("#{role}_assigns", "A user cannot be assigned to this role twice")
-        else
-          marked_user_ids[a.user_id] = true
-        end
-      end
     end
   end
 

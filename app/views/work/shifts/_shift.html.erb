@@ -1,8 +1,8 @@
 <div class="shift-card section <%= "mine" if shift.user_signed_up?(@choosee) %>" data-id="<%= shift.id %>">
   <table>
     <tr>
-      <td>
-        <%= shift.link_with_icon %>
+      <td class="title-cell">
+        <%= shift.link_with_icons %>
       </td>
       <td>
         <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
@@ -24,7 +24,7 @@
       <td class="owners-cell">
         <% shift.assignments.each do |assignment| %>
           <div class="owner-name">
-            <%= assignment.user.decorate.name_with_inactive %>
+            <%= link_to(assignment.user.decorate.name_with_inactive, assignment.user) %>
             <% if assignment.preassigned? %>
               &nbsp;<%= icon_tag("thumb-tack", title: I18n.t("work.preassigned")) %>
             <% end %>

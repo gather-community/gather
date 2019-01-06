@@ -3,6 +3,10 @@
 class MealDecorator < ApplicationDecorator
   delegate_all
 
+  def title_or_no_title
+    title || "[No Title]"
+  end
+
   def form_section(section, **options, &block)
     Meals::FormSection.new(self, section, **options, &block).html
   end

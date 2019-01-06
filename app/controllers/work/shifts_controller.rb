@@ -4,7 +4,7 @@ module Work
   # Controls job signup pages.
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
-    decorates_assigned :shifts, :shift, :choosee
+    decorates_assigned :shifts, :shift, :choosee, :meal
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
@@ -34,6 +34,7 @@ module Work
     def show
       @shift = Shift.find(params[:id])
       authorize @shift
+      @meal = @shift.meal
     end
 
     # Called from AJAX on signup link click.

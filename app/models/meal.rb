@@ -132,6 +132,7 @@ class Meal < ApplicationRecord
     end
   end
 
+  # DEPRECATED: prefer method of same name in decorator
   def title_or_no_title
     title || "[No Title]"
   end

@@ -45,4 +45,8 @@ class ApplicationDecorator < Draper::Decorator
   def safe_str
     "".html_safe
   end
+
+  def join_icons(icons)
+    icons.map { |i| safe_str << nbsp(2) << i }.reduce(&:<<)
+  end
 end

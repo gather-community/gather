@@ -1,4 +1,4 @@
-<% content_for(:title, shift.job_title_with_icon) %>
+<% content_for(:title, shift.job_title_with_icons) %>
 <% content_for(:title_no_html, shift.job_title) %>
 <% content_for(:top_buttons, shift.action_links) %>
 
@@ -9,6 +9,9 @@
   <dt><%= icon_tag("folder-open") %></dt><dd><%= shift.period_name %></dd><br/>
   <% if shift.requester_name %>
     <dt><%= icon_tag("home") %></dt><dd><%= shift.requester_name %></dd><br/>
+  <% end %>
+  <% if shift.meal? %>
+    <dt><%= icon_tag("cutlery") %></dt><dd><%= link_to(meal.title_or_no_title, meal.object) %></dd><br/>
   <% end %>
   <dt><%= icon_tag("user") %></dt><dd><%= shift.assginees_with_empty_slots(style: :comma_sep) %></dd><br/>
   <% shift.reminders.each do |reminder| %>

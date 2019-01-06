@@ -132,6 +132,10 @@ module Work
       assignments.detect { |a| a.user_id == user.id }
     end
 
+    def meal?
+      meal.present?
+    end
+
     private
 
     # Re-retrieves assignments_count so that we have the most recent data.

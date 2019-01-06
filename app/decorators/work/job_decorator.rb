@@ -24,14 +24,6 @@ module Work
         icons
     end
 
-    def icons
-      i = []
-      i << (safe_str << " " << h.icon_tag("users")) if full_community?
-      i << (safe_str << " " << h.icon_tag("thumb-tack")) if preassignments?
-      i.reduce(&:<<)
-
-    end
-
     def title_with_icon
       str = "".html_safe << title
       str << " " << full_community_icon if full_community?
@@ -44,6 +36,15 @@ module Work
 
     def total_slots_formatted
       total_slots >= Shift::UNLIMITED_SLOTS ? h.t("common.unlimited") : total_slots
+    end
+
+    private
+
+    def icons
+      i = []
+      i << full_community_icon if full_community?
+      i << h.icon_tag("thumb-tack") if preassignments?
+      join_icons(i)
     end
   end
 end

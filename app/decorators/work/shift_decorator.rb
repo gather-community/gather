@@ -4,16 +4,12 @@ module Work
   class ShiftDecorator < WorkDecorator
     delegate_all
 
-    def job_title_with_icon
-      str = "".html_safe << job_title
-      str << " " << full_community_icon if full_community?
-      str
+    def job_title_with_icons
+      safe_str << job_title << icons(links: false)
     end
 
-    def link_with_icon
-      link = h.link_to(job_title, object, class: "title")
-      link << " " << full_community_icon if full_community?
-      link
+    def link_with_icons
+      h.link_to(job_title, object, class: "title") << icons
     end
 
     # Returns formatted times. Examples:
@@ -100,6 +96,21 @@ module Work
 
     def time_format
       @time_format ||= job_date_time? ? :datetime_no_yr : :short_date
+    end
+
+    def meal_icon_link
+      h.link_to(meal_icon, meal)
+    end
+
+    def meal_icon
+      h.icon_tag("cutlery")
+    end
+
+    def icons(links: true)
+      i = []
+      i << full_community_icon if full_community?
+      i << (links ? meal_icon_link : meal_icon) if meal?
+      join_icons(i)
     end
   end
 end

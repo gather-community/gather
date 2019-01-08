@@ -7,7 +7,9 @@ module Work
     acts_as_tenant :cluster
 
     belongs_to :community
+    belongs_to :requester, class_name: "People::Group"
 
+    scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
   end
 end

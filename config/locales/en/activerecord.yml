@@ -149,6 +149,10 @@ en:
         slot_type: "Slot Type"
         time_type: "Times"
         title: "Title"
+      work/job_template:
+        title: "Title"
+        requester: "Requester"
+        hours: "Hours"
       work/period:
         name: "Name"
         phase: "Phase"

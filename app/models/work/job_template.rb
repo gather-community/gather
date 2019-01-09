@@ -11,5 +11,22 @@ module Work
 
     scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
+
+    normalize_attributes :title, :description
+
+    before_validation :normalize
+
+    private
+
+    def normalize
+      if time_type == "date_time" && meal?
+        if shift_start_offset.present? && shift_end_offset.present?
+          self.hours = (shift_end_offset - shift_start_offset).to_f / 60
+        end
+      else
+        self.shift_start_offset = nil
+        self.shift_end_offset = nil
+      end
+    end
   end
 end

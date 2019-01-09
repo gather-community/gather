@@ -1,0 +1,21 @@
+<%= gather_form_for(template) do |f| %>
+  <%= f.input :title %>
+  <%= f.input :hours %>
+  <%= f.input :requester_id, collection: @requesters %>
+  <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
+  <%= f.input :description, as: :markdown %>
+  <%= f.input :double_signups_allowed, as: :boolean %>
+  <%= f.input :meal, as: :boolean %>
+  <%= f.input :shift_start_offset %>
+  <%= f.input :shift_end_offset %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.work--job-form'});
+  });
+<% end %>

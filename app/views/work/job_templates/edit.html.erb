@@ -1,0 +1,3 @@
+<% content_for(:title, "Edit Template: #{template.title}") %>
+<% content_for(:top_buttons, template.action_links(:edit)) %>
+<%= render("form") %>

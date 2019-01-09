@@ -39,6 +39,9 @@ en:
       work_job:
         reminders:
           note: "e.g. Sharpen the saw (optional)"
+      work_job_template:
+        reminders:
+          note: "e.g. Soak the oats (optional)"
       work_period:
         name: "e.g. Summer 1969"
       wiki_page:
@@ -84,6 +87,13 @@ en:
         hours: "Estimated number of hours the job will take. Decimals allowed."
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
         hours_per_shift: "The amount of hours credit each shift is worth."
+        double_signups_allowed: "Double signups may not be suitable for some jobs."
+      work_job_template:
+        requester_id: "The group that requests or oversees this job."
+        hours: "Estimated number of hours the job will take. Decimals allowed."
+        double_signups_allowed: "Double signups may not be suitable for some jobs."
+        shift_start_offset: "Number of minutes before/after the start of the meal that this job should start. Negatives represent times prior to the meal start."
+        shift_end_offset: "Number of minutes before/after the start of the meal that this job should end. Negatives represent times prior to the meal start."
       work_period:
         quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:
@@ -164,6 +174,11 @@ en:
           any: "All Jobs"
           y: "Preassigned"
           n: "Not Preassigned"
+      work_job_template:
+        time_type:
+          date_time: "Jobs from this template will have a set date and time"
+          date_only: "Jobs from this template will be for a certain date or date range"
+          full_period: "Jobs from this template will be for the whole work period"
       work_period:
         phase:
           archived: "Archived: Period is in the past, not editable"

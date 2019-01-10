@@ -2,12 +2,12 @@
   <%= f.input :title %>
   <%= f.input :requester_id, collection: @requesters %>
   <%= f.input :time_type, collection: Work::Job::TIMES_OPTIONS, include_blank: false %>
-  <%= f.input :description, as: :markdown %>
-  <%= f.input :double_signups_allowed, as: :boolean %>
   <%= f.input :meal_related, as: :boolean %>
   <%= f.input :shift_start %>
   <%= f.input :shift_end %>
   <%= f.input :hours %>
+  <%= f.input :description, as: :markdown %>
+  <%= f.input :double_signups_allowed, as: :boolean %>
 
   <%= form_actions do %>
     <%= f.button :primary %>
@@ -16,6 +16,7 @@
 
 <%= javascript_tag do %>
   $(function() {
+    new Gather.Views.Work.JobTemplateFormView({el: '.work--job-template-form'});
     new Gather.Views.DirtyChecker({el: '.work--job-form'});
   });
 <% end %>

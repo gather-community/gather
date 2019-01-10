@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190109141253) do
+ActiveRecord::Schema.define(version: 20190110012917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -624,6 +624,17 @@ ActiveRecord::Schema.define(version: 20190109141253) do
     t.index ["reminder_id", "shift_id"], name: "index_work_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
   end
 
+  create_table "work_reminder_templates", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "job_template_id", null: false
+    t.string "note", limit: 256
+    t.integer "rel_magnitude", null: false
+    t.string "rel_unit_sign", limit: 16, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "job_template_id"], name: "index_work_reminder_templates_on_cluster_id_and_job_template_id"
+  end
+
   create_table "work_reminders", force: :cascade do |t|
     t.string "abs_rel", null: false
     t.datetime "abs_time"
@@ -750,6 +761,8 @@ ActiveRecord::Schema.define(version: 20190109141253) do
   add_foreign_key "work_reminder_deliveries", "clusters"
   add_foreign_key "work_reminder_deliveries", "work_reminders", column: "reminder_id"
   add_foreign_key "work_reminder_deliveries", "work_shifts", column: "shift_id"
+  add_foreign_key "work_reminder_templates", "clusters"
+  add_foreign_key "work_reminder_templates", "work_job_templates", column: "job_template_id"
   add_foreign_key "work_reminders", "clusters"
   add_foreign_key "work_reminders", "work_jobs", column: "job_id"
   add_foreign_key "work_shares", "clusters"

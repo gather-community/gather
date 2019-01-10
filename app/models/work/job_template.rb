@@ -8,6 +8,7 @@ module Work
 
     belongs_to :community
     belongs_to :requester, class_name: "People::Group"
+    has_many :reminder_templates, class_name: "Work::ReminderTemplate", inverse_of: :job_templates
 
     scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }

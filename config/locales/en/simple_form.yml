@@ -92,8 +92,8 @@ en:
         requester_id: "The group that requests or oversees this job."
         hours: "Estimated number of hours the job will take. Decimals allowed."
         double_signups_allowed: "Double signups may not be suitable for some jobs."
-        shift_start_offset: "Number of minutes before/after the start of the meal that this job should start. Negatives represent times prior to the meal start."
-        shift_end_offset: "Number of minutes before/after the start of the meal that this job should end. Negatives represent times prior to the meal start."
+        shift_start: "Number of minutes before/after the start of the meal that this job should start. Negatives represent times prior to the meal start."
+        shift_end: "Number of minutes before/after the start of the meal that this job should end. Negatives represent times prior to the meal start."
       work_period:
         quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:

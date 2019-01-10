@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190108004637) do
+ActiveRecord::Schema.define(version: 20190109141253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -558,10 +558,10 @@ ActiveRecord::Schema.define(version: 20190108004637) do
     t.text "description", null: false
     t.boolean "double_signups_allowed", default: false
     t.decimal "hours", precision: 6, scale: 2, null: false
-    t.boolean "meal", default: false, null: false
+    t.boolean "meal_related", default: false, null: false
     t.integer "requester_id"
-    t.integer "shift_end_offset"
-    t.integer "shift_start_offset"
+    t.integer "shift_end"
+    t.integer "shift_start"
     t.string "special", limit: 32
     t.string "time_type", limit: 32, default: "date_time", null: false
     t.string "title", limit: 128, null: false

@@ -15,28 +15,28 @@ describe Work::JobTemplate do
 
     describe "offsets and hours" do
       context "meal related with offsets and hours" do
-        let(:submitted) { {meal: true, shift_start_offset: -90, shift_end_offset: 0, hours: 5} }
-        it { is_expected.to eq(meal: true, shift_start_offset: -90, shift_end_offset: 0, hours: 1.5) }
+        let(:submitted) { {meal_related: true, shift_start: -90, shift_end: 0, hours: 5} }
+        it { is_expected.to eq(meal_related: true, shift_start: -90, shift_end: 0, hours: 1.5) }
       end
 
       context "meal related but not date_time with offsets and hours" do
         let(:submitted) do
-          {meal: true, time_type: "date_only", shift_start_offset: -90, shift_end_offset: 0, hours: 5}
+          {meal_related: true, time_type: "date_only", shift_start: -90, shift_end: 0, hours: 5}
         end
         it do
-          is_expected.to eq(meal: true, time_type: "date_only", shift_start_offset: nil,
-                            shift_end_offset: nil, hours: 5)
+          is_expected.to eq(meal_related: true, time_type: "date_only",
+                            shift_start: nil, shift_end: nil, hours: 5)
         end
       end
 
       context "meal related without offsets" do
-        let(:submitted) { {meal: true, shift_start_offset: nil, shift_end_offset: nil, hours: 5} }
-        it { is_expected.to eq(meal: true, shift_start_offset: nil, shift_end_offset: nil, hours: 5) }
+        let(:submitted) { {meal_related: true, shift_start: nil, shift_end: nil, hours: 5} }
+        it { is_expected.to eq(meal_related: true, shift_start: nil, shift_end: nil, hours: 5) }
       end
 
       context "not meal related with offsets and hours" do
-        let(:submitted) { {meal: false, shift_start_offset: -90, shift_end_offset: 0, hours: 5} }
-        it { is_expected.to eq(meal: false, shift_start_offset: nil, shift_end_offset: nil, hours: 5) }
+        let(:submitted) { {meal_related: false, shift_start: -90, shift_end: 0, hours: 5} }
+        it { is_expected.to eq(meal_related: false, shift_start: nil, shift_end: nil, hours: 5) }
       end
     end
   end

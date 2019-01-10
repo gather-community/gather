@@ -16,17 +16,35 @@ module Work
 
     before_validation :normalize
 
+    validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :community_id}
+    validates :hours, presence: true, numericality: {greater_than: 0}
+    validates :time_type, presence: true
+    validates :description, presence: true
+    validates :shift_start, presence: true, if: :meal_related_and_date_time?
+    validates :shift_end, presence: true, if: :meal_related_and_date_time?
+    validate :shift_time_positive
+
     private
 
     def normalize
-      if time_type == "date_time" && meal?
-        if shift_start_offset.present? && shift_end_offset.present?
-          self.hours = (shift_end_offset - shift_start_offset).to_f / 60
-        end
+      if meal_related_and_date_time?
+        self.hours = (shift_end - shift_start).to_f / 60 if shift_start.present? && shift_end.present?
       else
-        self.shift_start_offset = nil
-        self.shift_end_offset = nil
+        self.shift_start = nil
+        self.shift_end = nil
       end
+    end
+
+    # Sets a validation message on shift_end if shift_start and shift_end are given and
+    # and the resulting elapsed time is not positive. This would also raise an error on hours
+    # but if these are set, hours is not visible.
+    def shift_time_positive
+      return unless shift_start.present? && shift_end.present? && !(shift_end - shift_start).positive?
+      errors.add(:shift_end, :not_after_start)
+    end
+
+    def meal_related_and_date_time?
+      meal_related? && time_type == "date_time"
     end
   end
 end

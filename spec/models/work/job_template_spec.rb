@@ -40,4 +40,48 @@ describe Work::JobTemplate do
       end
     end
   end
+
+  describe "validation" do
+    describe "shift_time_positive" do
+      subject(:template) do
+        build(:work_job_template, meal_related: true, shift_start: shift_start, shift_end: shift_end)
+      end
+
+      context "with positive elapsed time" do
+        let(:shift_start) { -90 }
+        let(:shift_end) { -30 }
+        it { is_expected.to be_valid }
+      end
+
+      context "with zero elapsed time" do
+        let(:shift_start) { 30 }
+        let(:shift_end) { 30 }
+        it { is_expected.to have_errors(shift_end: /Must be after/) }
+      end
+
+      context "with negative elapsed time" do
+        let(:shift_start) { 30 }
+        let(:shift_end) { -30 }
+        it { is_expected.to have_errors(shift_end: /Must be after/) }
+      end
+    end
+
+    describe "offsets required" do
+      subject(:template) do
+        build(:work_job_template, meal_related: meal_related, time_type: time_type)
+      end
+
+      context "when meal_related and date_time" do
+        let(:meal_related) { true }
+        let(:time_type) { "date_time" }
+        it { is_expected.to have_errors(shift_start: /can't be blank/, shift_end: /can't be blank/) }
+      end
+
+      context "when not meal related" do
+        let(:meal_related) { false }
+        let(:time_type) { "date_time" }
+        it { is_expected.to be_valid }
+      end
+    end
+  end
 end

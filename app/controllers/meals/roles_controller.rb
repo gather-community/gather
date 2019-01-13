@@ -11,23 +11,24 @@ module Meals
 
     def index
       authorize(sample_role)
-      @roles = policy_scope(Role).in_community(current_community).deactivated_last.by_title
+      @roles = policy_scope(Meals::Role).in_community(current_community).deactivated_last.by_title
     end
 
     def new
-      @role = Role.new
+      @role = Meals::Role.new(community: current_community)
       authorize(@role)
+      @role.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
       prep_form_vars
     end
 
     def edit
-      @role = Role.find(params[:id])
+      @role = Meals::Role.find(params[:id])
       authorize(@role)
       prep_form_vars
     end
 
     def create
-      @role = Role.new
+      @role = Meals::Role.new
       @role.assign_attributes(role_params.merge(community_id: current_community.id))
       authorize(@role)
       if @role.save
@@ -40,7 +41,7 @@ module Meals
     end
 
     def update
-      @role = Role.find(params[:id])
+      @role = Meals::Role.find(params[:id])
       authorize(@role)
       if @role.update(role_params)
         flash[:success] = "Role updated successfully."
@@ -54,7 +55,7 @@ module Meals
     protected
 
     def klass
-      Role
+      Meals::Role
     end
 
     private
@@ -64,7 +65,7 @@ module Meals
     end
 
     def sample_role
-      Role.new(community: current_community)
+      Meals::Role.new(community: current_community)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

@@ -179,6 +179,12 @@ en:
           date_time: "Jobs from this template will have a set date and time"
           date_only: "Jobs from this template will be for a certain date or date range"
           full_period: "Jobs from this template will be for the whole work period"
+        reminder_templates:
+          rel_unit_sign:
+            days_before: "Days Before"
+            days_after: "Days After"
+            hours_before: "Hours Before"
+            hours_after: "Hours After"
       work_period:
         phase:
           archived: "Archived: Period is in the past, not editable"

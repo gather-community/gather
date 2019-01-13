@@ -1,0 +1,8 @@
+<div class="field-row">
+  <%= f.input(:rel_magnitude, as: :numeric, required: true) %>
+  <%= f.input(:rel_unit_sign, collection: Work::Reminder::REL_UNIT_SIGN_OPTIONS,
+                              include_blank: false, label: false) %>
+</div>
+<div class="field-row">
+  <%= f.input(:note) %>
+</div>

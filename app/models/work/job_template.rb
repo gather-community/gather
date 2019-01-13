@@ -8,7 +8,7 @@ module Work
 
     belongs_to :community
     belongs_to :requester, class_name: "People::Group"
-    has_many :reminder_templates, class_name: "Work::ReminderTemplate", inverse_of: :job_templates
+    has_many :reminder_templates, class_name: "Work::ReminderTemplate", inverse_of: :job_template
 
     scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
@@ -24,6 +24,8 @@ module Work
     validates :shift_start, presence: true, if: :meal_related_and_date_time?
     validates :shift_end, presence: true, if: :meal_related_and_date_time?
     validate :shift_time_positive
+
+    accepts_nested_attributes_for :reminder_templates, reject_if: :all_blank, allow_destroy: true
 
     private
 

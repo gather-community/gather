@@ -159,6 +159,7 @@ en:
         description: "Job Description"
         double_signups_allowed: "The same person can sign up more than once for a shift of this job"
         meal_related: "This job is related to meal service"
+        reminder_templates: "Reminders"
       work/period:
         name: "Name"
         phase: "Phase"
@@ -168,6 +169,9 @@ en:
       work/reminder:
         abs_rel: "Type"
         abs_time: "Time"
+        rel_magnitude: "Time"
+        note: "Note"
+      work/reminder_template:
         rel_magnitude: "Time"
         note: "Note"
       work/shift:

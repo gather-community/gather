@@ -8,6 +8,7 @@
   <%= f.input :hours %>
   <%= f.input :description, as: :markdown %>
   <%= f.input :double_signups_allowed, as: :boolean %>
+  <%= nested_field_set(f, :reminder_templates) %>
 
   <%= form_actions do %>
     <%= f.button :primary %>

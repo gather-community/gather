@@ -3,6 +3,8 @@
 module Meals
   # Meal roles are types of jobs for meals like head cook, assistant cook, etc.
   class Role < ApplicationRecord
+    include Deactivatable
+
     TIMES_OPTIONS = %i[date_time date_only].freeze
 
     acts_as_tenant :cluster
@@ -18,7 +20,8 @@ module Meals
 
     before_validation :normalize
 
-    validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :community_id}
+    validates :title, presence: true, length: {maximum: 128},
+                      uniqueness: {scope: %i[community_id deactivated_at]}
     validates :count_per_meal, presence: true
     validates :time_type, presence: true
     validates :description, presence: true
@@ -27,6 +30,10 @@ module Meals
     validate :shift_time_positive
 
     accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
+
+    def head_cook?
+      special == "head_cook"
+    end
 
     private
 

@@ -11,7 +11,7 @@ module Meals
 
     def index
       authorize(sample_role)
-      @roles = policy_scope(Role).in_community(current_community).by_title
+      @roles = policy_scope(Role).in_community(current_community).deactivated_last.by_title
     end
 
     def new

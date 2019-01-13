@@ -34,8 +34,16 @@ module Meals
       index?
     end
 
+    def activate?
+      index? && Role.where(title: role.title).active.none?
+    end
+
+    def deactivate?
+      index? && role.active? && !role.head_cook?
+    end
+
     def destroy?
-      index? && role.special != "head_cook"
+      index? && !role.head_cook?
     end
 
     def permitted_attributes

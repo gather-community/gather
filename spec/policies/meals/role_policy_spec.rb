@@ -8,14 +8,26 @@ describe Meals::RolePolicy do
     let(:role) { build(:meal_role, community: community) }
     let(:record) { role }
 
-    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
+    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :activate?, :deactivate?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
     context "head_cook special role" do
       let(:role) { build(:meal_role, community: community, special: "head_cook") }
 
-      permissions :destroy? do
+      permissions :deactivate?, :destroy? do
+        it "forbids" do
+          expect(subject).not_to permit(meals_coordinator, role)
+        end
+      end
+    end
+
+    context "with conflicting active role" do
+      let(:community) { create(:community) }
+      let!(:conflicting) { create(:meal_role, community: community, title: "Foo") }
+      let!(:role) { create(:meal_role, :inactive, community: community, title: "Foo") }
+
+      permissions :activate? do
         it "forbids" do
           expect(subject).not_to permit(meals_coordinator, role)
         end

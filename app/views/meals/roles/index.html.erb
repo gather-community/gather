@@ -20,7 +20,7 @@
     </thead>
     <tbody>
       <% roles.each do |role| %>
-        <tr>
+        <tr class="<%= role.tr_classes %>">
           <td class="title"><%= link_to(role.title, edit_meals_role_path(role)) %></td>
           <td class="count_per_meal"><%= role.count_per_meal %></td>
         </tr>

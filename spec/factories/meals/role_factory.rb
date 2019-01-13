@@ -12,5 +12,9 @@ FactoryBot.define do
         role.reminders.build(build(:meal_role_reminder).attributes)
       end
     end
+
+    trait :inactive do
+      deactivated_at { Time.current - 1 }
+    end
   end
 end

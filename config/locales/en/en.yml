@@ -116,6 +116,10 @@ en:
       one_html: "This formula was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
+    meals/role:
+      one_html: "This role was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
 
   successes:
     household:
@@ -137,6 +141,7 @@ en:
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
     meals/role:
+      activate: "Role activated successfully."
       deactivate: "Role deactivated successfully."
       destroy: "Role deleted successfully."
     work/job:

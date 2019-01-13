@@ -22,14 +22,16 @@ describe Meals::RolePolicy do
     it_behaves_like "allows only admins or special role in community", :meals_coordinator
   end
 
-  # describe "permitted attributes" do
-  #   include_context "policy permissions"
-  #   let(:actor) { work_coordinator }
-  #   subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
-  #
-  #   it do
-  #     expect(subject).to match_array(%i[starts_on ends_on name phase quota_type] <<
-  #       {shares_attributes: %i[id user_id portion]})
-  #   end
-  # end
+  describe "permitted attributes" do
+    include_context "policy permissions"
+    let(:actor) { meals_coordinator }
+    subject { Meals::RolePolicy.new(actor, Meals::Role.new).permitted_attributes }
+
+    it do
+      expect(subject).to match_array(
+        %i[description time_type title double_signups_allowed count_per_meal shift_start shift_end] <<
+          {reminders_attributes: %i[rel_magnitude rel_unit_sign note id _destroy]}
+      )
+    end
+  end
 end

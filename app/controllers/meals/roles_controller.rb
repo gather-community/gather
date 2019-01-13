@@ -27,7 +27,8 @@ module Meals
     end
 
     def create
-      @role = Role.new(role_params.merge(community_id: current_community))
+      @role = Role.new
+      @role.assign_attributes(role_params.merge(community_id: current_community.id))
       authorize(@role)
       if @role.save
         flash[:success] = "Role created successfully."
@@ -68,7 +69,7 @@ module Meals
 
     # Pundit built-in helper doesn't work due to namespacing
     def role_params
-      # params.require(:work_period).permit(policy(@period).permitted_attributes)
+      params.require(:meals_role).permit(policy(@role).permitted_attributes)
     end
   end
 end

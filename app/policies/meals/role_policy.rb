@@ -36,12 +36,9 @@ module Meals
       index?
     end
 
-    # def permitted_attributes
-    #   %i[description hours period_id requester_id slot_type time_type
-    #      hours_per_shift title double_signups_allowed] <<
-    #     {shifts_attributes: %i[starts_at ends_at slots id _destroy] <<
-    #       {assignments_attributes: %i[id user_id]}} <<
-    #     {reminders_attributes: %i[abs_rel abs_time rel_magnitude rel_unit_sign note id _destroy]}
-    # end
+    def permitted_attributes
+      %i[description time_type title double_signups_allowed count_per_meal shift_start shift_end] <<
+        {reminders_attributes: %i[rel_magnitude rel_unit_sign note id _destroy]}
+    end
   end
 end

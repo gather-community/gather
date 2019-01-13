@@ -8,7 +8,8 @@ module Meals
     acts_as_tenant :cluster
 
     belongs_to :community
-    has_many :reminders, class_name: "Meals::RoleReminder", foreign_key: :meal_role_id, inverse_of: :role
+    has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder",
+                                                 foreign_key: :meal_role_id, inverse_of: :role
 
     scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }

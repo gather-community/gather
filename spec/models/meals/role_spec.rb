@@ -67,4 +67,21 @@ describe Meals::Role do
       end
     end
   end
+
+  # Our approach to destruction is to:
+  # - Set the policy to only disallow deletions based on what users of various roles should be able
+  #   to destroy given various combinations of existing associations.
+  # - Set association `dependent` options to avoid DB constraint errors UNLESS the destroy is never allowed.
+  # - In the model spec, assume destroy has been called and test for the appropriate behavior
+  #   (dependent destruction, nullification, or error) for each foreign key.
+  # - In the policy spec, test for the appropriate restrictions on destroy.
+  # - In the feature spec, test the destruction/deactivation/activation happy paths.
+  describe "destruction" do
+    let(:role) { create(:meal_role, :with_reminder) }
+
+    it "destroys reminder" do
+      role.destroy
+      expect(Meals::RoleReminder.count).to be_zero
+    end
+  end
 end

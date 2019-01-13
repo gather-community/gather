@@ -8,7 +8,7 @@ module Meals
     acts_as_tenant :cluster
 
     belongs_to :community
-    has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder",
+    has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder", dependent: :destroy,
                                                  foreign_key: :meal_role_id, inverse_of: :role
 
     scope :by_title, -> { alpha_order(:title) }

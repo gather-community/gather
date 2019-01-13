@@ -6,5 +6,11 @@ FactoryBot.define do
     community { default_community }
     time_type { "date_only" }
     description { Faker::Lorem.paragraph }
+
+    trait :with_reminder do
+      after(:build) do |role|
+        role.reminders.build(build(:meal_role_reminder).attributes)
+      end
+    end
   end
 end

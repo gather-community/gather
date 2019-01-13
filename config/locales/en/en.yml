@@ -87,6 +87,9 @@ en:
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
+    meals/role:
+      destroy: "Are you sure you want to delete the role '%{title}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the role '%{title}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
     work/job:
@@ -133,6 +136,9 @@ en:
       activate: "Formula activated successfully."
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
+    meals/role:
+      deactivate: "Role deactivated successfully."
+      destroy: "Role deleted successfully."
     work/job:
       destroy: "Job deleted successfully."
     work/period:

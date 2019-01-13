@@ -8,7 +8,7 @@ module Meals
 
     acts_as_tenant :cluster
 
-    belongs_to :role, class_name: "Meals::Role", inverse_of: :reminders
+    belongs_to :role, class_name: "Meals::Role", inverse_of: :reminders, foreign_key: :meal_role_id
 
     # Used for consistency in display and specs.
     scope :canonical_order, -> { order(:rel_unit_sign, :rel_magnitude, :note) }

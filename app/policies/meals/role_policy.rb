@@ -2,6 +2,8 @@
 
 module Meals
   class RolePolicy < ApplicationPolicy
+    alias role record
+
     class Scope < Scope
       def resolve
         allow_admins_in_community_or(:meals_coordinator)
@@ -33,7 +35,7 @@ module Meals
     end
 
     def destroy?
-      index?
+      index? && role.special != "head_cook"
     end
 
     def permitted_attributes

@@ -41,6 +41,10 @@ Rails.application.routes.draw do
 
   get "/meals/reports", to: redirect("/meals/report") # Legacy path
 
+  namespace :meals do
+    resources :roles, except: :show
+  end
+
   resources :meals do
     collection do
       get :jobs
@@ -141,7 +145,6 @@ Rails.application.routes.draw do
       end
     end
     resources :jobs
-    resources :job_templates, except: :show, path: "job-templates"
     resources :periods, except: :show
     get "report", to: "periods#report", as: :report
     get "/", to: redirect("/work/signups")

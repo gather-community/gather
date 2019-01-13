@@ -13,6 +13,7 @@ en:
         jobs: "Jobs"
         report: "Report"
         formulas: "Formulas"
+        roles: "Roles"
       people:
         directory: "Directory"
         households: "Households"
@@ -27,7 +28,6 @@ en:
         report: "Report"
         jobs: "Jobs"
         periods: "Periods"
-        job_templates: "Templates"
     personal:
       profile: "Profile"
       accounts: "Accounts"

@@ -69,6 +69,12 @@ module NavHelper
             path: meals_formulas_path,
             permitted: policy(Meals::Formula.new(community: current_community)).index?,
             icon: "calculator"
+          }, {
+            name: :roles,
+            parent: :meals,
+            path: meals_roles_path,
+            permitted: policy(Meals::Role.new(community: current_community)).index?,
+            icon: "user-circle-o"
           }
         ]
       when :people
@@ -153,12 +159,6 @@ module NavHelper
             path: work_periods_path,
             permitted: policy(sample_period).index?,
             icon: "folder-open"
-          }, {
-            name: :job_templates,
-            parent: :work,
-            path: work_job_templates_path,
-            permitted: policy(Work::JobTemplate.new(community: current_community)).index?,
-            icon: "files-o"
           }
         ]
       else

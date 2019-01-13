@@ -2,27 +2,23 @@
 
 require "rails_helper"
 
-describe Work::JobTemplatePolicy do
-  include_context "work policies"
-
+describe Meals::RolePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:template) { build(:work_job_template, community: community) }
-    let(:record) { template }
+    let(:role) { build(:meal_role, community: community) }
+    let(:record) { role }
 
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
-      it_behaves_like "permits admins or special role but not regular users", :work_coordinator
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
   end
 
   describe "scope" do
     include_context "policy scopes"
-    let(:klass) { Work::JobTemplate }
-    let!(:objs_in_community) { create_list(:work_job_template, 2, community: community) }
-    let!(:objs_in_cluster) { create_list(:work_job_template, 2, community: communityB) }
+    let(:klass) { Meals::Role }
+    let!(:objs_in_community) { create_list(:meal_role, 2, community: community) }
+    let!(:objs_in_cluster) { create_list(:meal_role, 2, community: communityB) }
 
-    it_behaves_like "allows only admins or special role in community", :work_coordinator
     it_behaves_like "allows only admins or special role in community", :meals_coordinator
   end
 

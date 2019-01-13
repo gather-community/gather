@@ -78,6 +78,18 @@ en:
         signup_types: "Signup Types"
         pantry_fee_disp: "Pantry Fee Amount"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
+      meals/role:
+        title: "Job Title"
+        time_type: "Times"
+        shift_start: "Start Time"
+        shift_end: "End Time"
+        description: "Job Description"
+        double_signups_allowed: "The same person can sign up more than once for this role in a single meal"
+        count_per_meal: "People per Meal"
+        reminders: "Reminders"
+      meals/role_reminder:
+        rel_magnitude: "Send Time"
+        note: "Note (optional)"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -149,17 +161,6 @@ en:
         slot_type: "Slot Type"
         time_type: "Times"
         title: "Title"
-      work/job_template:
-        title: "Job Title"
-        requester_id: "Requester"
-        hours: "Hours"
-        time_type: "Times"
-        shift_start: "Start Time"
-        shift_end: "End Time"
-        description: "Job Description"
-        double_signups_allowed: "The same person can sign up more than once for a shift of this job"
-        meal_related: "This job is related to meal service"
-        reminder_templates: "Reminders"
       work/period:
         name: "Name"
         phase: "Phase"
@@ -168,11 +169,8 @@ en:
         quota_type: "Quota"
       work/reminder:
         abs_rel: "Type"
-        abs_time: "Time"
-        rel_magnitude: "Time"
-        note: "Note"
-      work/reminder_template:
-        rel_magnitude: "Time"
+        abs_time: "Send Time"
+        rel_magnitude: "Send Time"
         note: "Note"
       work/shift:
         start_time: "Start Time"
@@ -221,6 +219,10 @@ en:
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Must be after start time"
         wiki/page:
           sample_not_editable: "The sample page is not editable so that it remains intact as a reference for other users. If you would like to experiment, try creating a new page using the 'New Wiki Page' link below."
           data_fetch:
@@ -241,10 +243,6 @@ en:
               no_shifts: "You must add at least one shift."
               duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
               different_length_shifts: "All shfits must be the same length."
-        work/job_template:
-          attributes:
-            shift_end:
-              not_after_start: "Must be after start time"
         work/period:
           attributes:
             ends_on:

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-module Work
-  # Models an archetype of a job that can be instantiated for a given period.
-  # Used heavily in meals-work integration.
-  class JobTemplate < ApplicationRecord
+module Meals
+  # Meal roles are types of jobs for meals like head cook, assistant cook, etc.
+  class Role < ApplicationRecord
+    TIMES_OPTIONS = %i[date_time date_only].freeze
+
     acts_as_tenant :cluster
 
     belongs_to :community
-    belongs_to :requester, class_name: "People::Group"
-    has_many :reminder_templates, class_name: "Work::ReminderTemplate", inverse_of: :job_template
+    has_many :reminders, class_name: "Meals::RoleReminder", foreign_key: :meal_role_id, inverse_of: :role
 
     scope :by_title, -> { alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
@@ -18,24 +18,21 @@ module Work
     before_validation :normalize
 
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :community_id}
-    validates :hours, presence: true, numericality: {greater_than: 0}
+    validates :count_per_meal, presence: true
     validates :time_type, presence: true
     validates :description, presence: true
-    validates :shift_start, presence: true, if: :meal_related_and_date_time?
-    validates :shift_end, presence: true, if: :meal_related_and_date_time?
+    validates :shift_start, presence: true, if: :date_time?
+    validates :shift_end, presence: true, if: :date_time?
     validate :shift_time_positive
 
-    accepts_nested_attributes_for :reminder_templates, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
 
     private
 
     def normalize
-      if meal_related_and_date_time?
-        self.hours = (shift_end - shift_start).to_f / 60 if shift_start.present? && shift_end.present?
-      else
-        self.shift_start = nil
-        self.shift_end = nil
-      end
+      return if date_time?
+      self.shift_start = nil
+      self.shift_end = nil
     end
 
     # Sets a validation message on shift_end if shift_start and shift_end are given and
@@ -46,8 +43,8 @@ module Work
       errors.add(:shift_end, :not_after_start)
     end
 
-    def meal_related_and_date_time?
-      meal_related? && time_type == "date_time"
+    def date_time?
+      time_type == "date_time"
     end
   end
 end

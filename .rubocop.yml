@@ -75,6 +75,7 @@ Style/BracesAroundHashParameters:
 
 Style/Documentation:
   Exclude:
+    - "app/controllers/**/*"
     - "app/policies/**/*"
     - "app/decorators/**/*"
     - "db/migrate/*.rb"

@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-module Work
-  class JobTemplatePolicy < ApplicationPolicy
-    alias template record
-
+module Meals
+  class RolePolicy < ApplicationPolicy
     class Scope < Scope
       def resolve
-        allow_admins_in_community_or(:work_coordinator, :meals_coordinator)
+        allow_admins_in_community_or(:meals_coordinator)
       end
     end
 
     def index?
-      active_admin_or?(:work_coordinator, :meals_coordinator)
+      active_admin_or?(:meals_coordinator)
     end
 
     def show?

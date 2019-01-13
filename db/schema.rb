@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190110012917) do
+ActiveRecord::Schema.define(version: 20190113142833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,35 @@ ActiveRecord::Schema.define(version: 20190110012917) do
     t.string "recipient_type", null: false
     t.integer "sender_id", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "meal_role_reminders", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "meal_role_id", null: false
+    t.string "note", limit: 256
+    t.integer "rel_magnitude", null: false
+    t.string "rel_unit_sign", limit: 16, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "meal_role_id"], name: "index_meal_role_reminders_on_cluster_id_and_meal_role_id"
+  end
+
+  create_table "meal_roles", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.integer "count_per_meal", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
+    t.text "description", null: false
+    t.boolean "double_signups_allowed", default: false
+    t.integer "shift_end"
+    t.integer "shift_start"
+    t.string "special", limit: 32
+    t.string "time_type", limit: 32, default: "date_time", null: false
+    t.string "title", limit: 128, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "community_id", "title"], name: "index_meal_roles_on_cluster_id_and_community_id_and_title", where: "(deactivated_at IS NULL)"
+    t.index ["cluster_id"], name: "index_meal_roles_on_cluster_id"
   end
 
   create_table "meals", id: :serial, force: :cascade do |t|
@@ -551,25 +580,6 @@ ActiveRecord::Schema.define(version: 20190110012917) do
     t.index ["user_id"], name: "index_work_assignments_on_user_id"
   end
 
-  create_table "work_job_templates", force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.text "description", null: false
-    t.boolean "double_signups_allowed", default: false
-    t.decimal "hours", precision: 6, scale: 2, null: false
-    t.boolean "meal_related", default: false, null: false
-    t.integer "requester_id"
-    t.integer "shift_end"
-    t.integer "shift_start"
-    t.string "special", limit: 32
-    t.string "time_type", limit: 32, default: "date_time", null: false
-    t.string "title", limit: 128, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_work_job_templates_on_cluster_id"
-    t.index ["community_id", "title"], name: "index_work_job_templates_on_community_id_and_title", unique: true
-  end
-
   create_table "work_jobs", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -622,17 +632,6 @@ ActiveRecord::Schema.define(version: 20190110012917) do
     t.datetime "updated_at", null: false
     t.index ["deliver_at"], name: "index_work_reminder_deliveries_on_deliver_at"
     t.index ["reminder_id", "shift_id"], name: "index_work_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
-  end
-
-  create_table "work_reminder_templates", force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "job_template_id", null: false
-    t.string "note", limit: 256
-    t.integer "rel_magnitude", null: false
-    t.string "rel_unit_sign", limit: 16, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id", "job_template_id"], name: "index_work_reminder_templates_on_cluster_id_and_job_template_id"
   end
 
   create_table "work_reminders", force: :cascade do |t|
@@ -693,6 +692,10 @@ ActiveRecord::Schema.define(version: 20190110012917) do
   add_foreign_key "meal_costs", "meals"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
+  add_foreign_key "meal_role_reminders", "clusters"
+  add_foreign_key "meal_role_reminders", "meal_roles"
+  add_foreign_key "meal_roles", "clusters"
+  add_foreign_key "meal_roles", "communities"
   add_foreign_key "meals", "clusters"
   add_foreign_key "meals", "communities"
   add_foreign_key "meals", "meal_formulas", column: "formula_id"
@@ -751,8 +754,6 @@ ActiveRecord::Schema.define(version: 20190110012917) do
   add_foreign_key "work_assignments", "clusters"
   add_foreign_key "work_assignments", "users"
   add_foreign_key "work_assignments", "work_shifts", column: "shift_id"
-  add_foreign_key "work_job_templates", "clusters"
-  add_foreign_key "work_job_templates", "communities"
   add_foreign_key "work_jobs", "clusters"
   add_foreign_key "work_jobs", "people_groups", column: "requester_id"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
@@ -761,8 +762,6 @@ ActiveRecord::Schema.define(version: 20190110012917) do
   add_foreign_key "work_reminder_deliveries", "clusters"
   add_foreign_key "work_reminder_deliveries", "work_reminders", column: "reminder_id"
   add_foreign_key "work_reminder_deliveries", "work_shifts", column: "shift_id"
-  add_foreign_key "work_reminder_templates", "clusters"
-  add_foreign_key "work_reminder_templates", "work_job_templates", column: "job_template_id"
   add_foreign_key "work_reminders", "clusters"
   add_foreign_key "work_reminders", "work_jobs", column: "job_id"
   add_foreign_key "work_shares", "clusters"

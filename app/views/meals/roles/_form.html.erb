@@ -1,6 +1,6 @@
 <%= gather_form_for(role) do |f| %>
   <%= f.input :title %>
-  <%= f.input :count_per_meal %>
+  <%= f.input :count_per_meal, disabled: role.head_cook? %>
   <%= f.input :time_type, collection: Meals::Role::TIMES_OPTIONS, include_blank: false %>
   <%= f.input :shift_start %>
   <%= f.input :shift_end %>

@@ -38,9 +38,11 @@ module Meals
     private
 
     def normalize
-      return if date_time?
-      self.shift_start = nil
-      self.shift_end = nil
+      unless date_time?
+        self.shift_start = nil
+        self.shift_end = nil
+      end
+      self.count_per_meal = 1 if head_cook?
     end
 
     # Sets a validation message on shift_end if shift_start and shift_end are given and

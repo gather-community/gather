@@ -24,6 +24,18 @@ describe Meals::Role do
         it { is_expected.to eq(time_type: "date_time", shift_start: -90, shift_end: 0) }
       end
     end
+
+    describe "count_per_meal" do
+      context "head_cook" do
+        let(:submitted) { {special: "head_cook", count_per_meal: 3} }
+        it { is_expected.to eq(special: "head_cook", count_per_meal: 1) }
+      end
+
+      context "not head_cook" do
+        let(:submitted) { {special: nil, count_per_meal: 3} }
+        it { is_expected.to eq(special: nil, count_per_meal: 3) }
+      end
+    end
   end
 
   describe "validation" do

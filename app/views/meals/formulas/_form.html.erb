@@ -3,7 +3,15 @@
   <%= f.input :is_default, disabled: @force_default %>
   <%= f.hidden_field :is_default if @force_default %>
   <%= f.input :pantry_reimbursement %>
-
+  <%= f.input :role_ids, collection: @role_options, label_method: :title_with_suffix,
+        required: true, input_html: {multiple: "multiple"} %>
+  <%= javascript_tag do %>
+    $(function() {
+      // We don't use AjaxSelect2 here since it's not an ajax-based select2.
+      // We specify width 100% so that the control has the proper width when the section is toggled.
+      $("#meals_formula_role_ids").select2({width: '100%'});
+    });
+  <% end %>
   <% if policy(formula).update_calcs? %>
     <h2>Meal Calculations</h2>
     <p class="hint"><%= t("meals/formulas.hints.meal") %></p>

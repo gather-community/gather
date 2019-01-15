@@ -77,6 +77,7 @@ en:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
         pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
+        role_ids: "Which roles are needed for meals under this formula?"
       meals_role:
         double_signups_allowed: "Double assignments may not be suitable for some roles."
         time_type: "Form some roles (such as head cook), people may want to choose their own times to work. If so, choose 'date only'. If a specific schedule is desired, choose 'date and time'."

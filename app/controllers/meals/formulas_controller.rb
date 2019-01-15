@@ -16,11 +16,13 @@ module Meals
 
     def new
       @formula = sample_formula
+      @formula.role_ids = [Meals::Role.in_community(current_community).head_cook.first.id]
       if Formula.in_community(current_community).empty?
         @formula.is_default = true
         @force_default = true
       end
       authorize(@formula)
+      prep_form_vars
     end
 
     def show
@@ -32,6 +34,7 @@ module Meals
       @formula = Formula.find(params[:id])
       authorize(@formula)
       flash.now[:notice] = I18n.t("meals/formulas.cant_edit_notice") unless policy(@formula).update_calcs?
+      prep_form_vars
     end
 
     def create
@@ -67,6 +70,11 @@ module Meals
 
     def sample_formula
       Formula.new(community: current_community)
+    end
+
+    def prep_form_vars
+      @role_options = Meals::Role.in_community(current_community)
+        .active_or_selected(@formula.role_ids).by_title.decorate
     end
 
     # Pundit built-in helper doesn't work due to namespacing

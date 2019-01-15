@@ -78,6 +78,7 @@ en:
         signup_types: "Signup Types"
         pantry_fee_disp: "Pantry Fee Amount"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
+        role_ids: "Roles"
       meals/role:
         title: "Job Title"
         time_type: "Times"

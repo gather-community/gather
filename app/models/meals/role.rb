@@ -13,8 +13,9 @@ module Meals
     has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder", dependent: :destroy,
                                                  foreign_key: :meal_role_id, inverse_of: :role
 
-    scope :by_title, -> { alpha_order(:title) }
+    scope :by_title, -> { order("special = 'head_cook'").alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
+    scope :head_cook, -> { where(special: "head_cook") }
 
     normalize_attributes :title, :description
 

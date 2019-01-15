@@ -47,8 +47,8 @@ feature "protocols", js: true do
 
       expect(page).to have_content("Type Required")
       fill_in("Name", with: "Stuff")
-      select2(resources[0].name, from: "#reservations_protocol_resource_ids", type: :inline)
-      select2("Official", from: "#reservations_protocol_kinds", type: :inline)
+      select2(resources[0].name, from: "#reservations_protocol_resource_ids", multiple: true)
+      select2("Official", from: "#reservations_protocol_kinds", multiple: true)
       expect(page).not_to have_content("Type Required")
       pick_time(".reservations_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm)
       pick_time(".reservations_protocol_fixed_end_time", hour: 1, min: 30, ampm: :pm)

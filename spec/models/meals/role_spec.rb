@@ -93,6 +93,7 @@ describe Meals::Role do
 
     it "destroys reminder" do
       role.destroy
+      expect(Meals::Role.count).to be_zero
       expect(Meals::RoleReminder.count).to be_zero
     end
 

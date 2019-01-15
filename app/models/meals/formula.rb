@@ -11,7 +11,7 @@ module Meals
 
     belongs_to :community
     has_many :meals, inverse_of: :formula
-    has_many :formula_roles, inverse_of: :formula
+    has_many :formula_roles, inverse_of: :formula, dependent: :destroy
     has_many :roles, through: :formula_roles
 
     scope :in_community, ->(c) { where(community_id: c.id) }

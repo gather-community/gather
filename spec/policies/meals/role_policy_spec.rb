@@ -33,6 +33,20 @@ describe Meals::RolePolicy do
         end
       end
     end
+
+    context "with associated formula" do
+      let(:community) { create(:community) }
+      let!(:role) { create(:meal_role, community: community) }
+      let!(:formula) { create(:meal_formula, community: community, roles: [role]) }
+
+      permissions :deactivate? do
+        it { is_expected.to permit(meals_coordinator, role) }
+      end
+
+      permissions :destroy? do
+        it { is_expected.not_to permit(meals_coordinator, role) }
+      end
+    end
   end
 
   describe "scope" do

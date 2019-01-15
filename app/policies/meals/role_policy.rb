@@ -43,7 +43,7 @@ module Meals
     end
 
     def destroy?
-      index? && !role.head_cook?
+      index? && !role.head_cook? && Meals::FormulaRole.where(role: record).none?
     end
 
     def permitted_attributes

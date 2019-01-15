@@ -95,5 +95,10 @@ describe Meals::Role do
       role.destroy
       expect(Meals::RoleReminder.count).to be_zero
     end
+
+    context "with associated formula" do
+      let!(:formula) { create(:meal_formula, roles: [role]) }
+      it { expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
   end
 end

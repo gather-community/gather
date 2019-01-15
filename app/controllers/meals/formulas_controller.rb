@@ -45,6 +45,7 @@ module Meals
         flash[:success] = "Formula created successfully."
         redirect_to(meals_formulas_path)
       else
+        prep_form_vars
         render(:new)
       end
     end
@@ -56,6 +57,7 @@ module Meals
         flash[:success] = "Formula updated successfully."
         redirect_to(meals_formulas_path)
       else
+        prep_form_vars
         render(:edit)
       end
     end

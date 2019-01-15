@@ -7,6 +7,11 @@ FactoryBot.define do
     time_type { "date_only" }
     description { Faker::Lorem.paragraph }
 
+    trait :head_cook do
+      special { "head_cook" }
+      title { "Head Cook" }
+    end
+
     trait :with_reminder do
       after(:build) do |role|
         role.reminders.build(build(:meal_role_reminder).attributes)

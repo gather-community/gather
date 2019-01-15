@@ -220,6 +220,8 @@ en:
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
+            role_ids:
+              must_have_head_cook: "Must include %{title}"
         meals/role:
           attributes:
             shift_end:

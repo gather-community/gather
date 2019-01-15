@@ -3,6 +3,32 @@
 require "rails_helper"
 
 describe Meals::Formula do
+  describe "validation" do
+    describe "must_have_head_cook_role" do
+      let!(:head_cook_role) { create(:meal_role, :head_cook) }
+      let!(:other_role) { create(:meal_role) }
+
+      context "with head cook role assigned" do
+        subject(:formula) { build(:meal_formula, role_ids: [head_cook_role.id, other_role.id]) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with other role only role assigned" do
+        subject(:formula) { build(:meal_formula, role_ids: [other_role.id]) }
+        it { is_expected.to have_errors(role_ids: "Must include Head Cook") }
+      end
+
+      context "with head_cook role assigned but removed" do
+        subject(:formula) { create(:meal_formula, role_ids: [head_cook_role.id]) }
+
+        it do
+          formula.assign_attributes(role_ids: [other_role.id])
+          expect(formula).to have_errors(role_ids: "Must include Head Cook")
+        end
+      end
+    end
+  end
+
   # Our approach to destruction is to:
   # - Set the policy to only disallow deletions based on what users of various roles should be able
   #   to destroy given various combinations of existing associations.

@@ -26,6 +26,7 @@ module Meals
     validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
     validate :at_least_one_signup_type
     validate :cant_unset_default
+    validate :must_have_head_cook_role
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
     end
@@ -109,6 +110,12 @@ module Meals
           errors.add(:signup_types, :at_least_one_nonzero_signup_type)
         end
       end
+    end
+
+    def must_have_head_cook_role
+      head_cook_role = Meals::Role.head_cook.first
+      return if role_ids.include?(head_cook_role.id)
+      errors.add(:role_ids, :must_have_head_cook, title: head_cook_role.title)
     end
 
     def ensure_unique_default

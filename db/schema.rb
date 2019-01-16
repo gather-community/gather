@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190114133524) do
+ActiveRecord::Schema.define(version: 20190116134922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -596,6 +596,7 @@ ActiveRecord::Schema.define(version: 20190114133524) do
     t.boolean "double_signups_allowed", default: false
     t.decimal "hours", precision: 6, scale: 2, null: false
     t.decimal "hours_per_shift", precision: 6, scale: 2
+    t.bigint "meal_role_id"
     t.integer "period_id", null: false
     t.integer "requester_id"
     t.string "slot_type", limit: 32, default: "fixed", null: false
@@ -603,6 +604,7 @@ ActiveRecord::Schema.define(version: 20190114133524) do
     t.string "title", limit: 128, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_work_jobs_on_cluster_id"
+    t.index ["meal_role_id"], name: "index_work_jobs_on_meal_role_id"
     t.index ["period_id", "title"], name: "index_work_jobs_on_period_id_and_title", unique: true
     t.index ["period_id"], name: "index_work_jobs_on_period_id"
     t.index ["requester_id"], name: "index_work_jobs_on_requester_id"
@@ -766,6 +768,7 @@ ActiveRecord::Schema.define(version: 20190114133524) do
   add_foreign_key "work_assignments", "users"
   add_foreign_key "work_assignments", "work_shifts", column: "shift_id"
   add_foreign_key "work_jobs", "clusters"
+  add_foreign_key "work_jobs", "meal_roles"
   add_foreign_key "work_jobs", "people_groups", column: "requester_id"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"

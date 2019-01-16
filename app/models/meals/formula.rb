@@ -113,7 +113,7 @@ module Meals
     end
 
     def must_have_head_cook_role
-      head_cook_role = Meals::Role.head_cook.first
+      head_cook_role = Meals::Role.in_community(community).head_cook.first
       return if head_cook_role.nil? || role_ids.include?(head_cook_role.id)
       errors.add(:role_ids, :must_have_head_cook, title: head_cook_role.title)
     end

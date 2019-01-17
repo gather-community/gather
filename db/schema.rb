@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190116135325) do
+ActiveRecord::Schema.define(version: 20190117032902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,13 @@ ActiveRecord::Schema.define(version: 20190116135325) do
     t.integer "meal_id", null: false
     t.integer "reminder_count", default: 0, null: false
     t.string "role", null: false
+    t.bigint "role_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["cluster_id"], name: "index_assignments_on_cluster_id"
     t.index ["meal_id"], name: "index_assignments_on_meal_id"
     t.index ["role"], name: "index_assignments_on_role"
+    t.index ["role_id"], name: "index_assignments_on_role_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end
 
@@ -691,6 +693,7 @@ ActiveRecord::Schema.define(version: 20190116135325) do
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "assignments", "clusters"
+  add_foreign_key "assignments", "meal_roles", column: "role_id"
   add_foreign_key "assignments", "meals"
   add_foreign_key "assignments", "users"
   add_foreign_key "communities", "clusters"

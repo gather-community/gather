@@ -33,7 +33,7 @@ class Assignment < ApplicationRecord
   end
 
   def <=>(other)
-    ROLES.index(role) <=> ROLES.index(other.role)
+    ROLES.index(old_role) <=> ROLES.index(other.old_role)
   end
 
   private

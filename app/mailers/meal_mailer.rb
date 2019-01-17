@@ -16,7 +16,7 @@ class MealMailer < ApplicationMailer
     @assignment = assignment
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
+    @role = I18n.t("assignment_roles.#{assignment.old_role}", count: 1)
     @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
     @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
     @datetime = I18n.l(@assignment.starts_at, format: :datetime_no_yr)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190117032902) do
+ActiveRecord::Schema.define(version: 20190117034413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,14 +39,14 @@ ActiveRecord::Schema.define(version: 20190117032902) do
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.integer "meal_id", null: false
+    t.string "old_role", null: false
     t.integer "reminder_count", default: 0, null: false
-    t.string "role", null: false
     t.bigint "role_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["cluster_id"], name: "index_assignments_on_cluster_id"
     t.index ["meal_id"], name: "index_assignments_on_meal_id"
-    t.index ["role"], name: "index_assignments_on_role"
+    t.index ["old_role"], name: "index_assignments_on_old_role"
     t.index ["role_id"], name: "index_assignments_on_role_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end

@@ -32,7 +32,7 @@ module Meals
     attr_accessor :role, :user
 
     def initialize(assignment)
-      self.role = assignment.role
+      self.role = assignment.old_role
       self.user = assignment.user
     end
 

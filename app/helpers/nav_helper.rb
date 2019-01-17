@@ -98,13 +98,13 @@ module NavHelper
             parent: :people,
             path: roles_path,
             permitted: policy(User).index?,
-            icon: "fa-users"
+            icon: "user-circle-o"
           }, {
             name: :vehicles,
             parent: :people,
             path: people_vehicles_path,
             permitted: policy(sample_vehicle).index?,
-            icon: "fa-car"
+            icon: "car"
           }
         ]
       when :reservations

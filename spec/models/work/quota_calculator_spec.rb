@@ -55,7 +55,7 @@ describe Work::QuotaCalculator do
           job4.shifts.first.assignments.create(user: users[0], preassigned: true)
         end
 
-        # Pre-assigned: 4 + 3 = 7
+        # Preassigned: 4 + 3 = 7
         # Remaining: 27 + 1.5 + 16 = 44.5
         # Total: 78.5
         #
@@ -104,7 +104,7 @@ describe Work::QuotaCalculator do
         context "with quota_type by_person" do
           let(:quota_type) { "by_person" }
 
-          # Pre-assigned: 3 + 2 + 25 + 5 + 1 = 36
+          # Preassigned: 3 + 2 + 25 + 5 + 1 = 36
           # Remaining: 27 + 1.5 + 14 = 42.5
           # Total: 78.5
           #
@@ -132,7 +132,7 @@ describe Work::QuotaCalculator do
             users[3].update!(household: users[1].household)
           end
 
-          # Pre-assigned: 3 + 2 + 25 + 5 + 1 = 36
+          # Preassigned: 3 + 2 + 25 + 5 + 1 = 36
           # Remaining: 27 + 1.5 + 14 = 42.5
           # Total: 78.5
           #

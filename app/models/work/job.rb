@@ -95,6 +95,10 @@ module Work
       shifts.flat_map(&:assignments)
     end
 
+    def meal_role?
+      meal_role_id.present?
+    end
+
     private
 
     def normalize

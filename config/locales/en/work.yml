@@ -27,7 +27,9 @@ en:
   work/jobs:
     shifts: "Shifts"
     unlimited: "Unlimited"
-    full_community: "This is a full community job."
+    full_community: "This is a full community job"
+    preassignments: "This job has preassignments"
+    meal_related: "This job is meal related"
     none_found: "No jobs found."
   work/period:
     phase_names:

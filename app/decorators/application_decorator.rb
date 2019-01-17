@@ -43,7 +43,7 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def safe_str
-    "".html_safe
+    "".html_safe # rubocop:disable Rails/OutputSafety # It's just an empty string!
   end
 
   def join_icons(icons)

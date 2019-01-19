@@ -5,7 +5,10 @@ module Calendars
     # Exports assignments. Used by communities that don't use the work system for managing jobs.
     # Eventually this will go away when we fully integrate meals and work.
     class AssignmentsExport < Export
-      def class_name
+      def kind_name
+        # kind_name is used only for building global object IDs.
+        # This is Assignment without mention of Meals for legacy reasons. Changing it would break
+        # existing calendars.
         "Assignment"
       end
 

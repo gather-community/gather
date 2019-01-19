@@ -16,10 +16,10 @@ class Meal < ApplicationRecord
   belongs_to :creator, class_name: "User"
   belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
   has_many :assignments, -> { by_role }, dependent: :destroy
-  has_one :head_cook_assign, -> { where(role: "head_cook") }, class_name: "Assignment"
-  has_many :asst_cook_assigns, -> { where(role: "asst_cook") }, class_name: "Assignment"
-  has_many :table_setter_assigns, -> { where(role: "table_setter") }, class_name: "Assignment"
-  has_many :cleaner_assigns, -> { where(role: "cleaner") }, class_name: "Assignment"
+  has_one :head_cook_assign, -> { where(old_role: "head_cook") }, class_name: "Meals::Assignment"
+  has_many :asst_cook_assigns, -> { where(old_role: "asst_cook") }, class_name: "Meals::Assignment"
+  has_many :table_setter_assigns, -> { where(old_role: "table_setter") }, class_name: "Meals::Assignment"
+  has_many :cleaner_assigns, -> { where(old_role: "cleaner") }, class_name: "Meals::Assignment"
   has_one :head_cook, through: :head_cook_assign, source: :user
   has_many :asst_cooks, through: :asst_cook_assigns, source: :user
   has_many :table_setters, through: :table_setter_assigns, source: :user
@@ -109,12 +109,12 @@ class Meal < ApplicationRecord
   end
 
   def extra_roles
-    @extra_roles ||= Assignment::ALL_EXTRA_ROLES &
+    @extra_roles ||= Meals::Assignment::ALL_EXTRA_ROLES &
       (community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
   end
 
   def people_in_role(role)
-    raise ArgumentError("Invalid role #{role}") unless Assignment::ALL_EXTRA_ROLES.include?(role)
+    raise ArgumentError("Invalid role #{role}") unless Meals::Assignment::ALL_EXTRA_ROLES.include?(role)
     send(role.to_s.pluralize)
   end
 

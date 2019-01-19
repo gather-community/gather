@@ -15,5 +15,9 @@ FactoryBot.define do
     pantry_fee 0.10
     meal_calc_type "share"
     pantry_calc_type "percent"
+    roles do
+      [Meals::Role.find_by(community_id: community.id, special: "head_cook") ||
+        create(:meal_role, :head_cook)]
+    end
   end
 end

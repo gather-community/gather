@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# At the point this migration is run, the assignments table won't have been renamed yet.
 class Assignment < ApplicationRecord
   belongs_to :meal
 end

@@ -36,6 +36,10 @@ module Meals
       special == "head_cook"
     end
 
+    def date_time?
+      time_type == "date_time"
+    end
+
     private
 
     def normalize
@@ -52,10 +56,6 @@ module Meals
     def shift_time_positive
       return unless shift_start.present? && shift_end.present? && !(shift_end - shift_start).positive?
       errors.add(:shift_end, :not_after_start)
-    end
-
-    def date_time?
-      time_type == "date_time"
     end
   end
 end

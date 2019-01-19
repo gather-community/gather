@@ -10,8 +10,13 @@ FactoryBot.define do
     community { default_community }
 
     association :formula, factory: :meal_formula
-    association :head_cook, factory: :user
     association :creator, factory: :user
+
+    after(:build) do |meal|
+      return if meal.head_cook_assign.present?
+      meal.build_head_cook_assign(old_role: "head_cook", user: create(:user),
+                                  role: meal.formula.roles.detect { |r| r.special == "head_cook" })
+    end
 
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.community]

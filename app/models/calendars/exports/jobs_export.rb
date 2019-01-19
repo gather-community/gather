@@ -4,7 +4,7 @@ module Calendars
   module Exports
     # Abstract parent class for jobs calendars of various sorts
     class JobsExport < Export
-      def class_name
+      def kind_name
         "Shift"
       end
 

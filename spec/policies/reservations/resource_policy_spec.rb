@@ -6,7 +6,7 @@ describe Reservations::ResourcePolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:resource) { build(:resource, community: community) }
+    let(:resource) { create(:resource, community: community) }
     let(:record) { resource }
 
     permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do

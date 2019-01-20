@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 # Objects and examples useful for testing policy permissions.
@@ -5,10 +6,10 @@ shared_context "policy permissions" do
   subject(:policy) { described_class }
   let(:cluster) { default_cluster }
   let(:clusterB) { create(:cluster, name: "Other Cluster") }
-  let(:community) { build(:community, name: "Community A") }
-  let(:communityB) { build(:community, name: "Community B") }
-  let(:communityC) { build(:community, name: "Community C") }
-  let(:communityX) { with_tenant(clusterB) { build(:community, name: "Community X") } }
+  let(:community) { create(:community, name: "Community A") }
+  let(:communityB) { create(:community, name: "Community B") }
+  let(:communityC) { create(:community, name: "Community C") }
+  let(:communityX) { with_tenant(clusterB) { create(:community, name: "Community X") } }
 
   let(:user) { new_user_from(community, label: "user") }
   let(:other_user) { new_user_from(community, label: "other_user") }
@@ -17,12 +18,12 @@ shared_context "policy permissions" do
   let(:outside_user) { with_tenant(clusterB) { new_user_from(communityX, label: "outside_user") } }
   let(:inactive_user) { new_user_from(community, deactivated_at: Time.current, label: "inactive_user") }
 
-  let(:household) { build(:household, users: [user], community: community) }
+  let(:household) { create(:household, users: [user], community: community) }
   let(:inactive_household) do
-    build(:household, users: [inactive_user],
-                      deactivated_at: Time.current, community: community)
+    create(:household, users: [inactive_user],
+                       deactivated_at: Time.current, community: community)
   end
-  let(:account) { build(:account, household: build(:household, community: community)) }
+  let(:account) { create(:account, household: create(:household, community: community)) }
 
   let(:guardian) { user }
   let(:child) { new_user_from(community, child: true, guardians: [guardian], label: "child") }
@@ -277,7 +278,7 @@ shared_context "policy permissions" do
   end
 
   def new_user_from(community, attribs = {})
-    build(:user, attribs.merge(
+    create(:user, attribs.merge(
       first_name: attribs.delete(:label).capitalize.tr("_", " "),
       community: community
     ))

@@ -5,7 +5,7 @@ require "rails_helper"
 describe Meals::RolePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:role) { build(:meal_role, community: community) }
+    let(:role) { create(:meal_role, community: community) }
     let(:record) { role }
 
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :activate?, :deactivate?, :destroy? do
@@ -13,7 +13,7 @@ describe Meals::RolePolicy do
     end
 
     context "head_cook special role" do
-      let(:role) { build(:meal_role, community: community, special: "head_cook") }
+      let(:role) { create(:meal_role, community: community, special: "head_cook") }
 
       permissions :deactivate?, :destroy? do
         it "forbids" do

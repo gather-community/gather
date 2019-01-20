@@ -8,7 +8,7 @@ describe Work::PeriodPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "published" }
-    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:period) { create(:work_period, community: community, phase: phase) }
     let(:record) { period }
 
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do

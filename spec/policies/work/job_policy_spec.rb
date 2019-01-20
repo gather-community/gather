@@ -4,8 +4,8 @@ describe Work::JobPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "open" }
-    let(:period) { build(:work_period, community: community, phase: phase) }
-    let(:job) { build(:work_job, period: period) }
+    let(:period) { create(:work_period, community: community, phase: phase) }
+    let(:job) { create(:work_job, period: period) }
     let(:record) { job }
 
     permissions :index?, :show? do
@@ -37,7 +37,7 @@ describe Work::JobPolicy do
 
   describe "permitted attributes" do
     include_context "policy permissions"
-    let(:period) { build(:work_period) }
+    let(:period) { create(:work_period) }
     let(:actor) { work_coordinator }
 
     subject { Work::JobPolicy.new(actor, Work::Job.new(period: period)).permitted_attributes }

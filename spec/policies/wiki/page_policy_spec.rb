@@ -5,7 +5,7 @@ require "rails_helper"
 describe Wiki::PagePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:page) { build(:wiki_page, community: community, creator: user) }
+    let(:page) { create(:wiki_page, community: community, creator: user) }
     let(:record) { page }
 
     permissions :index?, :all?, :show?, :new?, :edit?, :create?, :update?, :history?, :compare? do

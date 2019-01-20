@@ -5,7 +5,7 @@ require "rails_helper"
 describe MealPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:meal) { create(:meal, community: community, communities: [community, communityC]) }
     let(:record) { meal }
 
     permissions :index?, :report? do
@@ -22,12 +22,12 @@ describe MealPolicy do
       end
 
       it "permits non-invited workers" do
-        meal.assignments.build(user: user_in_cmtyB)
+        meal.assignments.create(user: user_in_cmtyB)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
 
       it "permits non-invited but signed-up folks" do
-        meal.signups.build(household: user_in_cmtyB.household)
+        meal.signups.create(household: user_in_cmtyB.household)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
@@ -43,7 +43,7 @@ describe MealPolicy do
       it_behaves_like "permits users in community only"
 
       it "permits non-invited workers" do
-        meal.assignments.build(user: user_in_cmtyB)
+        meal.assignments.create(user: user_in_cmtyB)
         expect(subject).to permit(user_in_cmtyB, meal)
       end
     end
@@ -161,7 +161,7 @@ describe MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits team members" do
-        meal.assignments.build(user: user)
+        meal.assignments.create(user: user)
         expect(subject).to permit(user, meal)
       end
     end
@@ -215,7 +215,7 @@ describe MealPolicy do
   describe "permitted_attributes" do
     include_context "policy permissions"
     subject { MealPolicy.new(actor, meal).permitted_attributes }
-    let(:meal) { build(:meal, community: community, communities: [community, communityC]) }
+    let(:meal) { create(:meal, community: community, communities: [community, communityC]) }
     let(:date_loc_invite_attribs) do
       [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
     end
@@ -302,7 +302,6 @@ describe MealPolicy do
   end
 
   def make_head_cook(user)
-    save_policy_objects!(community, user)
     meal.community = community
     meal.save!
     meal.head_cook = user

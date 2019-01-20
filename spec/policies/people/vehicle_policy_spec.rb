@@ -5,8 +5,8 @@ require "rails_helper"
 describe People::VehiclePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:household) { build(:household, community: community) }
-    let(:vehicle) { build(:vehicle, household: household) }
+    let(:household) { create(:household, community: community) }
+    let(:vehicle) { create(:vehicle, household: household) }
     let(:record) { vehicle }
 
     permissions :index? do

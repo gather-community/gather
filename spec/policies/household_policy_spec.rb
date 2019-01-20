@@ -130,11 +130,6 @@ describe HouseholdPolicy do
     # Class-based auth not allowed
     let(:sample_household) { Household.new(community: community) }
 
-    before do
-      save_policy_objects!(cluster, clusterB, community, communityB, communityX,
-        user, admin, cluster_admin, super_admin)
-    end
-
     it "returns empty set for regular users" do
       expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq([])
     end

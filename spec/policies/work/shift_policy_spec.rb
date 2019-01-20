@@ -8,10 +8,10 @@ describe Work::ShiftPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "open" }
-    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:period) { create(:work_period, community: community, phase: phase) }
     let(:slot_type) { "fixed" }
-    let(:job) { build(:work_job, period: period, hours: 3, slot_type: slot_type) }
-    let(:shift) { build(:work_shift, job: job) }
+    let(:job) { create(:work_job, period: period, hours: 3, slot_type: slot_type) }
+    let(:shift) { create(:work_shift, job: job) }
     let(:record) { shift }
     let(:actor) { user }
 

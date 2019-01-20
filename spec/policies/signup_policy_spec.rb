@@ -6,12 +6,8 @@ describe SignupPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    before do
-      save_policy_objects!(community, user)
-    end
-
     let(:meal) { create(:meal, community: community, communities: [community, communityC]) }
-    let(:signup) { build(:signup, meal: meal) }
+    let(:signup) { create(:signup, meal: meal) }
 
     shared_examples_for "must be invited, open, and in future" do
       context "in future and open" do

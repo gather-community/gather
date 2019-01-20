@@ -12,7 +12,7 @@ describe Reservations::ReservationPolicy do
     let(:starts_at) { Time.current + 1.week }
     let(:ends_at) { starts_at + 1.hour }
     let(:reservation) do
-      build(:reservation, reserver: reserver, resource: resource, created_at: created_at,
+      create(:reservation, reserver: reserver, resource: resource, created_at: created_at,
                           starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { reservation }
@@ -70,7 +70,7 @@ describe Reservations::ReservationPolicy do
     end
 
     context "meal reservation" do
-      let(:reservation) { build(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
+      let(:reservation) { create(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -108,7 +108,7 @@ describe Reservations::ReservationPolicy do
 
   describe "permitted_attributes" do
     include_context "policy permissions"
-    let(:reservation) { build(:reservation, resource: resource) }
+    let(:reservation) { create(:reservation, resource: resource) }
     let(:admin_attribs) { basic_attribs + %i[reserver_id] }
     subject { Reservations::ReservationPolicy.new(reserver, reservation).permitted_attributes }
 
@@ -144,7 +144,7 @@ describe Reservations::ReservationPolicy do
 
     context "meal reservation" do
       let(:basic_attribs) { %i[starts_at ends_at note] }
-      let(:reservation) { build(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
+      let(:reservation) { create(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
       it_behaves_like "each user type"
     end
   end

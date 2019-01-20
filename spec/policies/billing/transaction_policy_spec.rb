@@ -6,7 +6,7 @@ describe Billing::TransactionPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:transaction) { Billing::Transaction.new(account: Billing::Account.new(community: community)) }
+    let(:transaction) { create(:transaction) }
     let(:record) { transaction }
 
     permissions :index? do
@@ -29,8 +29,8 @@ describe Billing::TransactionPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Billing::Transaction }
-    let!(:account1) { create(:account, community: community) }
-    let!(:account2) { create(:account, community: community, household: actor.household) }
+    let!(:account1) { create(:account) }
+    let!(:account2) { create(:account, household: actor.household) }
     let!(:account3) { create(:account, community: communityB, household: actor.household) }
     let!(:account4) { create(:account, community: communityB) }
     let!(:transaction1) { create(:transaction, account: account1) }

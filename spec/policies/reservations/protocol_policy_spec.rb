@@ -5,7 +5,7 @@ require "rails_helper"
 describe Reservations::ProtocolPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:protocol) { create(:reservation_protocol, community: community) }
+    let(:protocol) { create(:reservation_protocol) }
     let(:record) { protocol }
 
     permissions :index? do
@@ -20,7 +20,7 @@ describe Reservations::ProtocolPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Reservations::Protocol }
-    let!(:objs_in_community) { create_list(:reservation_protocol, 2, community: community) }
+    let!(:objs_in_community) { create_list(:reservation_protocol, 2) }
     let!(:objs_in_cluster) { create_list(:reservation_protocol, 2, community: communityB) }
 
     it_behaves_like "allows only admins in community"
@@ -29,7 +29,7 @@ describe Reservations::ProtocolPolicy do
   describe "permitted_attributes" do
     include_context "policy permissions"
     let(:actor) { create(:admin) }
-    let(:protocol) { create(:reservation_protocol, community: community) }
+    let(:protocol) { create(:reservation_protocol) }
     let(:basic_attribs) do
       %i[name requires_kind fixed_start_time fixed_end_time max_lead_days
          max_length_minutes max_days_per_year max_minutes_per_year pre_notice other_communities] <<

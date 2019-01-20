@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :meal_role, class: "Meals::Role" do
     sequence(:title) { |n| "#{Faker::Job.title} #{n}" }
-    community { default_community }
+    community { Defaults.community }
     time_type { "date_only" }
     description { Faker::Lorem.paragraph }
 
@@ -14,7 +14,7 @@ FactoryBot.define do
 
     trait :with_reminder do
       after(:build) do |role|
-        role.reminders.build(build(:meal_role_reminder).attributes)
+        role.reminders.build(build(:meal_role_reminder, role: role).attributes)
       end
     end
 

@@ -193,9 +193,6 @@ en:
       vehicles: "Add Vehicle"
       emergency_contacts: "Add Emergency Contact"
       up_guardianships: "Add Parent/Guardian"
-      asst_cook_assigns: "Add Assistant Cook"
-      cleaner_assigns: "Add Cleaner"
-      table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
       shifts: "Add Shift"
       assignments: "Add Worker"
@@ -313,20 +310,6 @@ en:
 
   titles:
     meals/messages: "Send Meal Message"
-
-  assignment_roles:
-    head_cook:
-      one: "Head Cook"
-      other: "Head Cooks"
-    asst_cook:
-      one: "Assistant Cook"
-      other: "Assistant Cooks"
-    table_setter:
-      one: "Table Setter"
-      other: "Table Setters"
-    cleaner:
-      one: "Cleaner"
-      other: "Cleaners"
 
   transaction_codes:
     meal: "Meal"

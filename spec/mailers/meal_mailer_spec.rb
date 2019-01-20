@@ -29,7 +29,7 @@ describe MealMailer do
   end
 
   describe "shift_reminder" do
-    let(:assignment) { create(:assignment, meal: meal, role: "asst_cook") }
+    let(:assignment) { create(:meal_assignment, meal: meal, role: "asst_cook") }
     let(:mail) { described_class.shift_reminder(assignment).deliver_now }
 
     before do
@@ -76,7 +76,7 @@ describe MealMailer do
   end
 
   describe "cook_menu_reminder" do
-    let(:mail) { described_class.cook_menu_reminder(meal.head_cook_assign).deliver_now }
+    let(:mail) { described_class.cook_menu_reminder(meal.assignments[0]).deliver_now }
 
     it "sets the right recipient" do
       expect(mail.to).to eq([meal.head_cook.email])

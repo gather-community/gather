@@ -49,8 +49,8 @@ describe Billing::AccountPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Billing::Account }
-    let!(:account1) { create(:account, community: community) }
-    let!(:account2) { create(:account, community: community, household: actor.household) }
+    let!(:account1) { create(:account) }
+    let!(:account2) { create(:account, household: actor.household) }
     let!(:account3) { create(:account, community: communityB, household: actor.household) }
     let!(:account4) { create(:account, community: communityB) }
 

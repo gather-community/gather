@@ -6,15 +6,14 @@ describe Meals::Assignment do
   describe "ordering" do
     let!(:role1) { create(:meal_role, title: "B") }
     let!(:role2) { create(:meal_role, title: "A") }
-    let!(:role3) { create(:meal_role, :head_cook, title: "Z") }
     let!(:meal) { create(:meal) }
-    let!(:assignment1) { create(:assignment, meal: meal, role: role1) }
-    let!(:assignment2) { create(:assignment, meal: meal, role: role2) }
-    let!(:assignment3) { meal.head_cook_assign }
+    let!(:assignment1) { meal.assignments[0] }
+    let!(:assignment2) { create(:meal_assignment, meal: meal, role: role1) }
+    let!(:assignment3) { create(:meal_assignment, meal: meal, role: role2) }
 
     describe ".by_role" do
       it "orders by role title, head cook first" do
-        expect(described_class.by_role.to_a).to eq([assignment3, assignment2, assignment1])
+        expect(described_class.by_role.to_a).to eq([assignment1, assignment3, assignment2])
       end
     end
 
@@ -22,12 +21,12 @@ describe Meals::Assignment do
       it do
         expect(assignment1 <=> assignment1).to eq(0) # rubocop:disable Lint/UselessComparison
         expect(assignment1 <=> assignment2).to eq(1)
-        expect(assignment1 <=> assignment3).to eq(-1)
+        expect(assignment1 <=> assignment3).to eq(1)
         expect(assignment2 <=> assignment1).to eq(-1)
         expect(assignment2 <=> assignment2).to eq(0) # rubocop:disable Lint/UselessComparison
-        expect(assignment2 <=> assignment3).to eq(-1)
-        expect(assignment3 <=> assignment1).to eq(1)
-        expect(assignment3 <=> assignment2).to eq(1)
+        expect(assignment2 <=> assignment3).to eq(1)
+        expect(assignment3 <=> assignment1).to eq(-1)
+        expect(assignment3 <=> assignment2).to eq(-1)
         expect(assignment3 <=> assignment3).to eq(0) # rubocop:disable Lint/UselessComparison
       end
     end
@@ -35,7 +34,7 @@ describe Meals::Assignment do
 
   describe "timing" do
     let(:meal) { create(:meal, served_at: "2017-01-01 12:00") }
-    let(:assignment) { create(:assignment, meal: meal, role: role) }
+    let(:assignment) { create(:meal_assignment, meal: meal, role: role) }
 
     context "for date_time role" do
       let(:role) { create(:meal_role, time_type: "date_time", shift_start: -120, shift_end: 30) }
@@ -58,7 +57,7 @@ describe Meals::Assignment do
 
   describe "#title" do
     let(:role) { create(:meal_role, title: "Junker") }
-    let(:assignment) { create(:assignment, meal: meal, role: role) }
+    let(:assignment) { create(:meal_assignment, meal: meal, role: role) }
     subject(:title) { assignment.title }
 
     context "with no title" do

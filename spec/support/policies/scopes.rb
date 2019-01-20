@@ -2,8 +2,8 @@
 
 # Objects and examples useful for testing policy scopes.
 shared_context "policy scopes" do
-  let(:cluster) { default_cluster }
-  let(:community) { default_community }
+  let(:cluster) { Defaults.cluster }
+  let(:community) { Defaults.community }
   let(:communityB) { create(:community, name: "Community B") }
 
   let(:user) { create(:user, community: community) }

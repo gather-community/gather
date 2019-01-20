@@ -22,6 +22,7 @@ module Work
         elsif rel_days?
           shift.starts_at.midnight + rel_sign * rel_magnitude.days + 9.hours
         else
+          p rel_magnitude
           shift.starts_at + rel_sign * rel_magnitude.hours
         end
     end

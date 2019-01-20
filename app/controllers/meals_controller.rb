@@ -174,7 +174,7 @@ class MealsController < ApplicationController
              end
     @meals = @meals.includes(:signups, :invitations)
     if params[:search].present?
-      @meals = @meals.eager_load(:head_cook)
+      @meals = @meals.eager_load(:assignments)
         .where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
     end
@@ -188,7 +188,6 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.build_cost if @meal.cost.nil?
-    @meal.ensure_assignments
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community)
       .active_or_selected(@meal.formula_id).by_name

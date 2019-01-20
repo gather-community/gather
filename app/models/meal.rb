@@ -15,15 +15,8 @@ class Meal < ApplicationRecord
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
-  has_many :assignments, -> { by_role }, dependent: :destroy
-  has_one :head_cook_assign, -> { where(old_role: "head_cook") }, class_name: "Meals::Assignment"
-  has_many :asst_cook_assigns, -> { where(old_role: "asst_cook") }, class_name: "Meals::Assignment"
-  has_many :table_setter_assigns, -> { where(old_role: "table_setter") }, class_name: "Meals::Assignment"
-  has_many :cleaner_assigns, -> { where(old_role: "cleaner") }, class_name: "Meals::Assignment"
-  has_one :head_cook, through: :head_cook_assign, source: :user
-  has_many :asst_cooks, through: :asst_cook_assigns, source: :user
-  has_many :table_setters, through: :table_setter_assigns, source: :user
-  has_many :cleaners, through: :cleaner_assigns, source: :user
+  has_many :assignments, -> { by_role }, class_name: "Meals::Assignment",
+                                         dependent: :destroy, inverse_of: :meal
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
   has_many :signups, -> { sorted }, dependent: :destroy, inverse_of: :meal
@@ -42,16 +35,12 @@ class Meal < ApplicationRecord
   scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
-  scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
-  scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
+  scope :worked_by, ->(user) { includes(:meal_assignments).where(meal_assignments: {user: user}) }
+  scope :head_cooked_by, ->(user) { worked_by(user).where(meal_assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
 
   Meals::Status.define_scopes(self)
 
-  accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
-  accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
     a["id"].blank? && a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
   }
@@ -61,7 +50,8 @@ class Meal < ApplicationRecord
   delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true, allow_nil: true
   delegate :name, to: :formula, prefix: true, allow_nil: true
-  delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
+  delegate :roles, :head_cook_role, :allowed_diner_types,
+    :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
     :closed?, :finalized?, :open?, :cancelled?,
@@ -104,32 +94,20 @@ class Meal < ApplicationRecord
     within_days_from_now(:served_at, days)
   end
 
+  def head_cook
+    assignments.detect(&:head_cook?)&.user
+  end
+
   def status_obj
     @status_obj ||= Meals::Status.new(self)
   end
 
-  def extra_roles
-    @extra_roles ||= Meals::Assignment::ALL_EXTRA_ROLES &
-      (community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
-  end
-
-  def people_in_role(role)
-    raise ArgumentError("Invalid role #{role}") unless Meals::Assignment::ALL_EXTRA_ROLES.include?(role)
-    send(role.to_s.pluralize)
+  def assignments_by_role
+    assignments.group_by(&:role)
   end
 
   def workers
     @workers ||= assignments.map(&:user).uniq
-  end
-
-  # Ensures there is one head_cook assignment and 2 each of the others.
-  # Creates blank ones if needed.
-  def ensure_assignments
-    build_head_cook_assign if head_cook_assign.nil?
-    extra_roles.each do |role|
-      collection = send("#{role}_assigns")
-      (DEFAULT_ASSIGN_COUNTS[role] - collection.size).times { collection.build }
-    end
   end
 
   # DEPRECATED: prefer method of same name in decorator

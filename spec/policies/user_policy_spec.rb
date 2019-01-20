@@ -25,7 +25,7 @@ describe UserPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on adults in other community in cluster" do
-        expect(subject).to permit(actor, user_in_cmtyB)
+        expect(subject).to permit(actor, usercmtyB)
       end
     end
 
@@ -33,8 +33,8 @@ describe UserPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on users in other community in cluster" do
-        expect(subject).not_to permit(actor, user_in_cmtyB)
-        expect(subject).not_to permit(actor, child_in_cmtyB)
+        expect(subject).not_to permit(actor, usercmtyB)
+        expect(subject).not_to permit(actor, childcmtyB)
       end
 
       it "denies action on users outside cluster" do
@@ -47,7 +47,7 @@ describe UserPolicy do
       it_behaves_like "permits action on own community and cluster community adults"
 
       it "denies action on children in other community in cluster" do
-        expect(subject).not_to permit(actor, child_in_cmtyB)
+        expect(subject).not_to permit(actor, childcmtyB)
       end
 
       it "denies action on users outside cluster" do
@@ -76,7 +76,7 @@ describe UserPolicy do
         it_behaves_like "permits action on own community and cluster community adults"
 
         it "permits action on children in other community in cluster" do
-          expect(subject).to permit(actor, child_in_cmtyB)
+          expect(subject).to permit(actor, childcmtyB)
         end
 
         it "denies action on users outside cluster" do
@@ -90,7 +90,7 @@ describe UserPolicy do
         it_behaves_like "permits action on own community and cluster community adults"
 
         it "permits action on children in other community in cluster" do
-          expect(subject).to permit(actor, child_in_cmtyB)
+          expect(subject).to permit(actor, childcmtyB)
         end
 
         it "permits action on users outside cluster" do
@@ -161,7 +161,7 @@ describe UserPolicy do
       context "for normal user with flag set to hide on target" do
         let(:actor) { user }
         before do
-          user_in_cmtyB.privacy_settings["hide_photo_from_cluster"] = true
+          usercmtyB.privacy_settings["hide_photo_from_cluster"] = true
         end
         it_behaves_like "permits action on own community users but denies on all others"
       end
@@ -349,9 +349,9 @@ describe UserPolicy do
     let(:klass) { User }
 
     # If we don't specify guardians, a bunch of extra users get created by the factory.
-    let(:child) { create(:user, :child, guardians: [user], community: community) }
-    let(:other_child) { create(:user, :child, guardians: [user], community: community) }
-    let(:inactive_child) { create(:user, :child, :inactive, guardians: [user], community: community) }
+    let(:child) { create(:user, :child, guardians: [user]) }
+    let(:other_child) { create(:user, :child, guardians: [user]) }
+    let(:inactive_child) { create(:user, :child, :inactive, guardians: [user]) }
     let(:childB) { create(:user, :child, guardians: [user], community: communityB) }
 
     shared_examples_for "adults in cluster and children in community" do
@@ -454,7 +454,7 @@ describe UserPolicy do
     end
 
     context "admin from other community" do
-      let(:user) { admin_in_cmtyB }
+      let(:user) { admincmtyB }
       it_behaves_like "normal user"
     end
 

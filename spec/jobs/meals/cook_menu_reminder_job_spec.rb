@@ -30,8 +30,8 @@ describe Meals::CookMenuReminderJob do
 
       context "with early reminders already sent for both meals" do
         before do
-          meal1.head_cook_assign.update_attribute(:reminder_count, 1)
-          meal2.head_cook_assign.update_attribute(:reminder_count, 1)
+          meal1.assignments[0].update_attribute(:reminder_count, 1)
+          meal2.assignments[0].update_attribute(:reminder_count, 1)
         end
 
         it "should send to sooner meal only" do

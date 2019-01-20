@@ -19,7 +19,7 @@ module Calendars
       protected
 
       def scope
-        user.meal_assignments.includes(:meal).oldest_first
+        Meals::Assignment.where(user: user).includes(:meal).oldest_first
       end
 
       def summary(assignment)

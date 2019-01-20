@@ -8,7 +8,7 @@ This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_ti
 The meal staff is:
 
 <% @assigns.each do |a| -%>
-- <%= I18n.t("assignment_roles.#{a.old_role}", count: 1) %>: <%= a.user.name %>
+- a.role_title: <%= a.user.name %>
 <% end -%>
 <% end %>
 

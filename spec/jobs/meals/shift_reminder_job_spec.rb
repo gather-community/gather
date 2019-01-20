@@ -17,7 +17,7 @@ describe Meals::ShiftReminderJob do
 
   before do
     # Make meal2 already notified.
-    meal2.asst_cook_assigns[0].update_attribute(:reminder_count, 1)
+    meal2.assignments[1].update!(reminder_count: 1)
   end
 
   it "sends the right number of emails" do
@@ -27,14 +27,14 @@ describe Meals::ShiftReminderJob do
 
   it "sends correct emails" do
     # Both should go for meal1.
-    expect(MealMailer).to receive(:shift_reminder).with(meal1.head_cook_assign).and_return(mlrdbl)
-    expect(MealMailer).to receive(:shift_reminder).with(meal1.asst_cook_assigns[0]).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal1.assignments[0]).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal1.assignments[1]).and_return(mlrdbl)
 
     # Meal 2 asst_cook already sent.
-    expect(MealMailer).to receive(:shift_reminder).with(meal2.head_cook_assign).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal2.assignments[0]).and_return(mlrdbl)
 
     # Meal 3 too early for asst_cook, but not head cook.
-    expect(MealMailer).to receive(:shift_reminder).with(meal3.head_cook_assign).and_return(mlrdbl)
+    expect(MealMailer).to receive(:shift_reminder).with(meal3.assignments[0]).and_return(mlrdbl)
 
     # Meal 4 outside window.
     perform_job
@@ -43,7 +43,7 @@ describe Meals::ShiftReminderJob do
   it "updates notification count" do
     perform_job
     meals = [meal1, meal2, meal3, meal4].map(&:reload)
-    assigns = meals.map { |m| [m.head_cook_assign, m.asst_cook_assigns[0]] }.flatten
-    expect(assigns.map(&:reminder_count)).to eq [1, 1, 1, 1, 1, 0, 0, 0]
+    assigns = meals.map { |m| [m.assignments[0], m.assignments[1]] }.flatten
+    expect(assigns.map(&:reminder_count)).to eq([1, 1, 1, 1, 1, 0, 0, 0])
   end
 end

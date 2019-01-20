@@ -4,8 +4,8 @@ class MealPolicy < ApplicationPolicy
   alias meal record
 
   class Scope < Scope
-    ASSIGNED = "EXISTS (SELECT id FROM assignments
-      WHERE assignments.meal_id = meals.id AND assignments.user_id = ?)"
+    ASSIGNED = "EXISTS (SELECT id FROM meal_assignments
+      WHERE meal_assignments.meal_id = meals.id AND meal_assignments.user_id = ?)"
     INVITED = "EXISTS (SELECT id FROM invitations
       WHERE invitations.meal_id = meals.id AND invitations.community_id = ?)"
     SIGNED_UP = "EXISTS (SELECT id FROM signups
@@ -164,12 +164,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def worker_attribs
-    [{
-      head_cook_assign_attributes: %i[id user_id],
-      asst_cook_assigns_attributes: %i[id user_id _destroy],
-      table_setter_assigns_attributes: %i[id user_id _destroy],
-      cleaner_assigns_attributes: %i[id user_id _destroy]
-    }]
+    [{}]
   end
 
   def signup_attribs

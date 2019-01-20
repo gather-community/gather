@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Reservations::ReservationPolicy do
   let(:reserver) { create(:user) }
-  let(:resource) { create(:resource, community: community) }
+  let(:resource) { create(:resource) }
 
   describe "permissions" do
     include_context "policy permissions"
@@ -98,7 +98,7 @@ describe Reservations::ReservationPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Reservations::Reservation }
-    let(:resource) { create(:resource, community: community) }
+    let(:resource) { create(:resource) }
     let(:resourceB) { create(:resource, community: communityB) }
     let!(:objs_in_community) { create_list(:reservation, 2, resource: resource) }
     let!(:objs_in_cluster) { create_list(:reservation, 2, resource: resourceB) }
@@ -132,7 +132,7 @@ describe Reservations::ReservationPolicy do
       end
 
       context "outside admin" do
-        let(:reserver) { admin_in_cmtyB }
+        let(:reserver) { admincmtyB }
         it_behaves_like "basic attribs"
       end
     end

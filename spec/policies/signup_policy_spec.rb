@@ -6,8 +6,8 @@ describe SignupPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:meal) { create(:meal, community: community, communities: [community, communityC]) }
-    let(:signup) { create(:signup, meal: meal) }
+    let(:meal) { create(:meal, communities: [community, communityC]) }
+    let(:signup) { create(:signup, :with_nums, meal: meal) }
 
     shared_examples_for "must be invited, open, and in future" do
       context "in future and open" do
@@ -22,8 +22,8 @@ describe SignupPolicy do
         end
 
         it "forbids non-invitees, even admins" do
-          expect(subject).not_to permit(user_in_cmtyB, signup)
-          expect(subject).not_to permit(admin_in_cmtyB, signup)
+          expect(subject).not_to permit(usercmtyB, signup)
+          expect(subject).not_to permit(admincmtyB, signup)
         end
       end
 

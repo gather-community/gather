@@ -2,12 +2,12 @@
 
 <% if @added.any? -%>
 <% @added.each do |a| -%>
-- <%= a.user.name %> was added as <%= t("assignment_roles.#{a.old_role}", count: 1) %>
+- <%= a.user.name %> was added as <%= a.role_title %>
 <% end -%>
 <% end -%>
 <% if @removed.any? -%>
 <% @removed.each do |a| -%>
-- <%= a.user.name %> was removed as <%= t("assignment_roles.#{a.old_role}", count: 1) %>
+- <%= a.user.name %> was removed as <%= a.role_title %>
 <% end -%>
 <% end -%>
 

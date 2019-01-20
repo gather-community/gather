@@ -1,7 +1,7 @@
 FactoryBot.define do
-  factory :assignment, class: "Meals::Assignment" do
+  factory :meal_assignment, class: "Meals::Assignment" do
     meal
     user
-    old_role { "asst_cook" }
+    association :role, factory: :meal_role
   end
 end

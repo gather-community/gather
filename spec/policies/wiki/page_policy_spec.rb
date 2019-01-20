@@ -5,7 +5,7 @@ require "rails_helper"
 describe Wiki::PagePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:page) { create(:wiki_page, community: community, creator: user) }
+    let(:page) { create(:wiki_page, creator: user) }
     let(:record) { page }
 
     permissions :index?, :all?, :show?, :new?, :edit?, :create?, :update?, :history?, :compare? do
@@ -25,7 +25,7 @@ describe Wiki::PagePolicy do
         end
 
         it "denies wikiist from other community" do
-          expect(subject).not_to permit(wikiist_in_cmtyB, page)
+          expect(subject).not_to permit(wikiistcmtyB, page)
         end
 
         it "denies creator" do
@@ -65,7 +65,7 @@ describe Wiki::PagePolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Wiki::Page }
-    let!(:objs_in_community) { create_list(:wiki_page, 2, community: community) }
+    let!(:objs_in_community) { create_list(:wiki_page, 2) }
     let!(:objs_in_cluster) { create_list(:wiki_page, 2, community: communityB) }
 
     it_behaves_like "allows regular users in community"
@@ -93,7 +93,7 @@ describe Wiki::PagePolicy do
     end
 
     context "for outside wikiist" do
-      let(:actor) { wikiist_in_cmtyB }
+      let(:actor) { wikiistcmtyB }
       it_behaves_like "regular user"
     end
 

@@ -3,7 +3,7 @@ class MealMailer < ApplicationMailer
     @household = signup.household.decorate
     @signup = signup
     @meal = signup.meal.decorate
-    @assigns = @meal.assignments.sort
+    @assigns = @meal.assignments
 
     mail(to: @household, subject: default_i18n_subject(
       title: @meal.title_or_no_title,
@@ -16,8 +16,8 @@ class MealMailer < ApplicationMailer
     @assignment = assignment
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @role = I18n.t("assignment_roles.#{assignment.old_role}", count: 1)
-    @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
+    @role = assignment.role_title
+    @other_assigns = @meal.assignments.reject { |a| a.user == @user }
     @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
     @datetime = I18n.l(@assignment.starts_at, format: :datetime_no_yr)
     @shift_start = I18n.l(@assignment.starts_at, format: :regular_time)

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     sequence(:name) { |n| "Formula #{n}" }
-    community { default_community }
+    community { Defaults.community }
     senior_meat 0.75
     senior_veg 0.6
     adult_meat 1.0

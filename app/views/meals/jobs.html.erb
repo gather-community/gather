@@ -4,8 +4,6 @@
   <%= calendar_exports_link %>
 <% end %>
 
-<% table_setter_present = meals.any? { |m| m.table_setters.any? } %>
-
 <% if meals.empty? %>
   <div class="none-found">
     No jobs found<% @user ? "for #{@user.name}" : "" %>.
@@ -16,12 +14,7 @@
       <th class="nowrap">Date/Time</th>
       <th>Location</th>
       <th>Title</th>
-      <th>Head Cook</th>
-      <th>Assistant Cooks</th>
-      <% if table_setter_present %>
-        <th>Table Setters</th>
-      <% end %>
-      <th>Cleaners</th>
+      <th>Jobs</th>
     </tr>
     <% meals.each do |meal| %>
       <tr class="<%= meal.css_classes %>">
@@ -29,15 +22,10 @@
         <td><%= meal.location_abbrv %></td>
         <td><%= meal_link(meal) %></td>
         <td class="nowrap">
-          <% if meal.head_cook.present? %>
-            <%= user_link(meal.head_cook, highlight: lenses[:user].value) %>
+          <% meal.assignments.each do |assignment| %>
+            <%= assignment.role_title %>: <%= user_link(assignment.user, highlight: lenses[:user].value) %>
           <% end %>
         </td>
-        <td class="nowrap"><%= meal.asst_cooks.map { |c| user_link(c, highlight: lenses[:user].value) }.reduce(:<<) %></td>
-        <% if table_setter_present %>
-          <td class="nowrap"><%= meal.table_setters.map { |c| user_link(c, highlight: lenses[:user].value) }.reduce(:<<) %></td>
-        <% end %>
-        <td class="nowrap"><%= meal.cleaners.map { |c| user_link(c, highlight: lenses[:user].value) }.reduce(:<<) %></td>
       </tr>
     <% end %>
   </table>
@@ -50,21 +38,10 @@
           <%= meal_link(meal) %> at <%= meal.location_abbrv %>
         </div>
         <div class="jobs">
-          <% if meal.head_cook.present? %>
+          <% meal.assignments.each do |assignment| %>
             <div class="job">
-              <%= user_link(meal.head_cook, highlight: lenses[:user].value) %> (Head)
+              <%= assignment.role_title %>: <%= user_link(assignment.user, highlight: lenses[:user].value) %>
             </div>
-          <% end %>
-          <% meal.asst_cooks.each do |u| %>
-            <div class="job"><%= user_link(u, highlight: lenses[:user].value) %> (Asst)</div>
-          <% end %>
-          <% if table_setter_present %>
-            <% meal.table_setters.each do |u| %>
-              <div class="job"><%= user_link(u, highlight: lenses[:user].value) %> (Tbl Set)</div>
-            <% end %>
-          <% end %>
-          <% meal.cleaners.each do |u| %>
-            <div class="job"><%= user_link(u, highlight: lenses[:user].value) %> (Clean)</div>
           <% end %>
         </div>
       </div>

@@ -92,6 +92,10 @@ module Meals
       end
     end
 
+    def head_cook_role
+      roles.detect(&:head_cook?)
+    end
+
     private
 
     def cant_unset_default

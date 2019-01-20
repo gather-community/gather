@@ -16,16 +16,17 @@ module Meals
     private
 
     def remindable_assignments(community)
-      early = Assignment.joins(:meal)
-        .where(role: "head_cook", reminder_count: 0)
-        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(community.settings.meals.reminder_lead_times.early_menu))
-
-      late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1)
-        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(community.settings.meals.reminder_lead_times.late_menu))
-
+      early = scope(0, community.settings.meals.reminder_lead_times.early_menu)
+      late = scope(1, community.settings.meals.reminder_lead_times.late_menu)
       (early.to_a + late.to_a).uniq
+    end
+
+    def scope(reminder_count, days_from_now)
+      Assignment.joins(:meal, :role)
+        .where(reminder_count: reminder_count)
+        .merge(Meal::Role.head_cook)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
+          .served_within_days_from_now(days_from_now))
     end
   end
 end

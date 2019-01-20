@@ -29,20 +29,20 @@ module Meals
   end
 
   class AssociationProxy
-    attr_accessor :role, :user
+    attr_accessor :role_id, :user
 
     def initialize(assignment)
-      self.role = assignment.old_role
+      self.role_id = assignment.role_id
       self.user = assignment.user
     end
 
     def ==(other)
-      role == other.role && user == other.user
+      role_id == other.role_id && user == other.user
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     def hash
-      [role, user].hash
+      [role_id, user].hash
     end
   end
 end

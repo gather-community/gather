@@ -37,11 +37,11 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on households in other community in cluster" do
-        expect(subject).to permit(user, user_in_cmtyB.household)
+        expect(subject).to permit(user, usercmtyB.household)
       end
 
       it "permits outside super admins" do
-        expect(subject).to permit(outside_super_admin, user_in_cmtyB.household)
+        expect(subject).to permit(outside_super_admin, usercmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -53,7 +53,7 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on households in other community in cluster" do
-        expect(subject).not_to permit(user, user_in_cmtyB.household)
+        expect(subject).not_to permit(user, usercmtyB.household)
       end
 
       it "denies action on households outside cluster" do
@@ -127,8 +127,13 @@ describe HouseholdPolicy do
 
   describe "allowed_community_changes" do
     include_context "policy permissions"
+
     # Class-based auth not allowed
     let(:sample_household) { Household.new(community: community) }
+
+    before do
+      communityB && communityX # Force these to be created.
+    end
 
     it "returns empty set for regular users" do
       expect(HouseholdPolicy.new(user, sample_household).allowed_community_changes.to_a).to eq([])

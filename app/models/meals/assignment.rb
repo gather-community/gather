@@ -16,6 +16,7 @@ module Meals
     belongs_to :role, class_name: "Meals::Role"
 
     delegate :head_cook?, to: :role
+    delegate :title, to: :role, prefix: true
 
     def empty?
       user_id.blank?

@@ -3,23 +3,26 @@ FactoryBot.define do
     transient do
       communities []
       no_resources false
+      head_cook nil
+      asst_cooks []
+      cleaners []
     end
 
     served_at { Time.current + 7.days }
     capacity 64
-    community { default_community }
+    community { Defaults.community }
 
     association :formula, factory: :meal_formula
     association :creator, factory: :user
 
-    after(:build) do |meal|
-      return if meal.head_cook_assign.present?
-      meal.build_head_cook_assign(old_role: "head_cook", user: create(:user),
-                                  role: meal.formula.roles.detect { |r| r.special == "head_cook" })
-    end
-
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.community]
+
+      head_cook = evaluator.head_cook || create(:user, community: meal.community)
+      build_assignment(meal, "Head Cook", head_cook)
+      evaluator.asst_cooks.each { |user| build_assignment(meal, "Assistant Cook", user) }
+      evaluator.cleaners.each { |user| build_assignment(meal, "Cleaner", user) }
+
       if meal.resources.empty? && !evaluator.no_resources
         meal.resources = [create(:resource, meal_hostable: true)]
       end
@@ -51,4 +54,10 @@ FactoryBot.define do
       status "cancelled"
     end
   end
+end
+
+def build_assignment(meal, role_title, user)
+  role = meal.formula.roles.detect { |r| r.title == role_title } ||
+    create(:meal_role, community: meal.community)
+  meal.assignments.build(role: role, user: user)
 end

@@ -252,8 +252,8 @@ feature "calendar export" do
         end
 
         context "when not using work system" do
-          let!(:assignment1) { meal1.asst_cook_assigns[0] }
-          let!(:assignment2) { meal2.asst_cook_assigns[0] }
+          let!(:assignment1) { meal1.assignments.detect { |a| a.role_title == "Assistant Cook" } }
+          let!(:assignment2) { meal2.assignments.detect { |a| a.role_title == "Assistant Cook" } }
 
           scenario "uses meal assignments only" do
             visit("/calendars/exports/your-jobs/#{token}.ics")

@@ -242,6 +242,7 @@ describe User do
 
       it "destroys user cleanly but not meal" do
         user.destroy
+        expect(Meals::Assignment.count).to be_zero
         expect(meal.reload.head_cook).to be_nil
       end
     end

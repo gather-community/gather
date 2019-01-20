@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Meals::Finalizer, type: :model do
+describe Meals::Finalizer do
   let(:meal) { create(:meal, :with_menu,
     cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"}) }
   let(:households) { create_list(:household, 2) }

@@ -5,7 +5,7 @@ require "rails_helper"
 describe Meals::FormulaPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:formula) { create(:meal_formula, community: community) }
+    let(:formula) { create(:meal_formula) }
     let(:record) { formula }
 
     permissions :index?, :show? do
@@ -74,7 +74,7 @@ describe Meals::FormulaPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Meals::Formula }
-    let!(:formulas) { create_list(:meal_formula, 3, community: community) }
+    let!(:formulas) { create_list(:meal_formula, 3) }
 
     before do
       formulas.last.deactivate
@@ -110,7 +110,7 @@ describe Meals::FormulaPolicy do
   end
 
   describe "permitted attributes" do
-    let(:formula) { create(:meal_formula, community: default_community) }
+    let(:formula) { create(:meal_formula) }
     let(:admin) { create(:admin) }
     let(:base_attribs) { %i[name is_default pantry_reimbursement] << {role_ids: []} }
     subject { Meals::FormulaPolicy.new(admin, formula).permitted_attributes }

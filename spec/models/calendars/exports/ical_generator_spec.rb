@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Calendars::Exports::IcalGenerator do
   let(:export) do
-    double(calendar_name: "Foo Calendar", events: events, class_name: "Thing", sample_time: Time.current)
+    double(calendar_name: "Foo Calendar", events: events, kind_name: "Thing", sample_time: Time.current)
   end
   subject(:ical) { described_class.new(export).generate }
 

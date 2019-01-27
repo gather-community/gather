@@ -20,6 +20,7 @@ class Meal < ApplicationRecord
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
   has_many :signups, -> { sorted }, dependent: :destroy, inverse_of: :meal
+  has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
 
   # Resources are chosen by the user. Reservations are then automatically created.
@@ -35,7 +36,9 @@ class Meal < ApplicationRecord
   scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
-  scope :worked_by, ->(user) { includes(:meal_assignments).where(meal_assignments: {user: user}) }
+  scope :worked_by, lambda { |user|
+    where("#{user.id} IN (SELECT user_id FROM meal_assignments WHERE meal_assignments.meal_id = meals.id)")
+  }
   scope :head_cooked_by, ->(user) { worked_by(user).where(meal_assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
 

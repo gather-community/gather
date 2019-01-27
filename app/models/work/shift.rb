@@ -27,7 +27,7 @@ module Work
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
       :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
       :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
-      :double_signups_allowed?, to: :job
+      :double_signups_allowed?, :meal_role_id, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }

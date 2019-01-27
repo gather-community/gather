@@ -27,9 +27,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :people do
-  end
-
   namespace :meals do
     resources :formulas do
       member do
@@ -94,8 +91,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports" do
-  end
+  resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports"
 
   resources :signups, only: %i[create update]
 

@@ -3,11 +3,23 @@
 require "rails_helper"
 
 describe Wiki::PageDecorator do
+  let(:decorator) { page.decorate }
+  subject(:rendered) { decorator.formatted_content[29..-12] } # Removes outer div and p tags.
+
+  describe "sanitization" do
+    let(:content) do
+      '<b>Bold</b> <iframe src="http://f.oo"></iframe> <a href="foo/bar"></a> <script></script> Stuff'
+    end
+    let(:page) { create(:wiki_page, content: content) }
+
+    it "leaves iframe tags but removes script tags" do
+      is_expected.to eq('<b>Bold</b> <iframe src="http://f.oo"></iframe> <a href="foo/bar"></a>  Stuff')
+    end
+  end
+
   describe "linkification" do
     let!(:other_page) { create(:wiki_page, title: "Another Page") }
     let(:page) { create(:wiki_page, content: content) }
-    let(:decorated) { page.decorate }
-    subject(:rendered) { decorated.formatted_content[29..-12] }
 
     context "regular link" do
       let(:content) { "A link to [[Another Page]] stuff" }
@@ -23,7 +35,7 @@ describe Wiki::PageDecorator do
       let(:content) { "A link to [[Non-existent Page]]" }
 
       before do
-        allow(decorated).to receive(:can_create_page?).and_return(can_create_page)
+        allow(decorator).to receive(:can_create_page?).and_return(can_create_page)
       end
 
       context "with page creation permission" do
@@ -49,7 +61,6 @@ describe Wiki::PageDecorator do
     let(:data_source) { "http://example.com" }
     let(:attribs) { {content: content, data_source: data_source} }
     let(:page) { create(:wiki_page, attribs) }
-    let(:decorator) { page.decorate }
 
     context "with no errors" do
       before do

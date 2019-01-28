@@ -13,7 +13,8 @@ module Wiki
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
       @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
-        h.safe_render_markdown(process_data(linkify(content)))
+        # iframe tags are useful for embedding and should be generally safe especially in closed communities.
+        h.safe_render_markdown(process_data(linkify(content)), extra_allowed_tags: %w[iframe])
       end
     end
 

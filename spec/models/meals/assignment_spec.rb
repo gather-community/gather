@@ -7,7 +7,7 @@ describe Meals::Assignment do
     let!(:role1) { create(:meal_role, title: "B") }
     let!(:role2) { create(:meal_role, title: "A") }
     let!(:meal) { create(:meal) }
-    let!(:assignment1) { meal.assignments[0] }
+    let!(:assignment1) { meal.assignments[0] } # Head cook
     let!(:assignment2) { create(:meal_assignment, meal: meal, role: role1) }
     let!(:assignment3) { create(:meal_assignment, meal: meal, role: role2) }
 

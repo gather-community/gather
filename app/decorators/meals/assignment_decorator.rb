@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class AssignmentDecorator < ApplicationDecorator
     delegate_all

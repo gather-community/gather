@@ -9,41 +9,14 @@
     No jobs found<% @user ? "for #{@user.name}" : "" %>.
   </div>
 <% else %>
-  <table class="index non-mobile">
-    <tr>
-      <th class="nowrap">Date/Time</th>
-      <th>Location</th>
-      <th>Title</th>
-      <th>Jobs</th>
-    </tr>
-    <% meals.each do |meal| %>
-      <tr class="<%= meal.css_classes %>">
-        <td class="nowrap"><%= meal_date_time(meal, with_break: true) %></td>
-        <td><%= meal.location_abbrv %></td>
-        <td><%= meal_link(meal) %></td>
-        <td class="nowrap">
-          <% meal.assignments.each do |assignment| %>
-            <%= assignment.role_title %>: <%= user_link(assignment.user, highlight: lenses[:user].value) %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-
-  <div class="meals-list mobile">
+  <div class="meals-list">
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes %>">
-        <h2><%= meal_date_time(meal) %></h2>
-        <div class="title">
-          <%= meal_link(meal) %> at <%= meal.location_abbrv %>
-        </div>
-        <div class="jobs">
-          <% meal.assignments.each do |assignment| %>
-            <div class="job">
-              <%= assignment.role_title %>: <%= user_link(assignment.user, highlight: lenses[:user].value) %>
-            </div>
-          <% end %>
-        </div>
+        <h4><%= meal_date_time(meal) %></h4>
+        <div><%= meal_link(meal) %> at <%= meal.location_abbrv %></div>
+        <% meal.roles.each do |role| %>
+          <div><%= role.title %>: <%= meal.worker_links_for_role(role) %></div>
+        <% end %>
       </div>
     <% end %>
   </div>

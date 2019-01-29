@@ -104,6 +104,7 @@ module Work
 
     def normalize
       self.hours_per_shift = nil unless date_only_full_community_multiple_slot?
+      reminders.destroy_all if meal_role?
     end
 
     def valid_shift_count

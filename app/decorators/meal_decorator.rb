@@ -64,6 +64,12 @@ class MealDecorator < ApplicationDecorator
     @cost ||= meal.cost.decorate
   end
 
+  def worker_links_for_role(role)
+    assignments = assignments_by_role[role] || []
+    links = assignments.map { |a| h.user_link(a.user, highlight: h.lenses[:user].value) }
+    links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
+  end
+
   def show_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),

@@ -37,7 +37,8 @@ class Meal < ApplicationRecord
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
   scope :worked_by, lambda { |user|
-    where("#{user.id} IN (SELECT user_id FROM meal_assignments WHERE meal_assignments.meal_id = meals.id)")
+    user = user.id if user.is_a?(User)
+    where("? IN (SELECT user_id FROM meal_assignments WHERE meal_assignments.meal_id = meals.id)", user)
   }
   scope :head_cooked_by, ->(user) { worked_by(user).where(meal_assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
@@ -111,6 +112,10 @@ class Meal < ApplicationRecord
 
   def workers
     @workers ||= assignments.map(&:user).uniq
+  end
+
+  def assignments_by_role
+    @assignments_by_role ||= assignments.group_by(&:role)
   end
 
   # DEPRECATED: prefer method of same name in decorator

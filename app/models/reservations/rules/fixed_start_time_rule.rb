@@ -6,7 +6,7 @@ module Reservations
     class FixedStartTimeRule < Rule
       def check(reservation)
         value.strftime("%T") == reservation.starts_at.strftime("%T") ||
-          [:starts_at, "Must be #{I18n.l(value, format: :regular_time)}"]
+          [:starts_at, "Must be #{I18n.l(value, format: :time_only)}"]
       end
     end
   end

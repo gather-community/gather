@@ -39,19 +39,23 @@ class MealDecorator < ApplicationDecorator
   end
 
   def served_at_datetime
-    I18n.l(served_at, format: :full_datetime).gsub("  ", " ")
+    l(served_at, format: :full_datetime)
+  end
+
+  def served_at_time_only
+    l(served_at, format: :time_only)
   end
 
   def served_at_datetime_no_yr
-    I18n.l(served_at, format: :datetime_no_yr).gsub("  ", " ")
+    l(served_at, format: :datetime_no_yr)
   end
 
   def served_at_short_date
-    I18n.l(served_at, format: :short_date).gsub("  ", " ")
+    l(served_at, format: :short_date)
   end
 
   def served_at_shorter_date
-    I18n.l(served_at, format: :shorter_date).gsub("  ", " ")
+    l(served_at, format: :shorter_date)
   end
 
   # We should disable the "own" community checkbox for most users.

@@ -13,20 +13,15 @@ class MealMailer < ApplicationMailer
   end
 
   def shift_reminder(assignment)
-    @assignment = assignment
+    @assignment = assignment.decorate
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
     @role = assignment.role_title
     @other_assigns = @meal.assignments.reject { |a| a.user == @user }
-    @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
-    @datetime = I18n.l(@assignment.starts_at, format: :datetime_no_yr)
-    @shift_start = I18n.l(@assignment.starts_at, format: :regular_time)
-    @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
-    @serve_time = I18n.l(@meal.served_at, format: :regular_time)
 
     mail(to: @user, subject: default_i18n_subject(
       role: @role,
-      datetime: @datetime,
+      datetime: @assignment.starts_at_with_date,
       location: @meal.location_abbrv
     ))
   end

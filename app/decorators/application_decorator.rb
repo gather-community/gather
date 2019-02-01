@@ -17,7 +17,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def l(*args)
     return nil if args.first.nil?
-    I18n.l(*args)
+    I18n.l(*args).gsub("  ", " ").strip
   end
 
   # Returns a Proc that inserts the given separator, to be passed to array.reduce.

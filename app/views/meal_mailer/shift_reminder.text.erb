@@ -2,7 +2,7 @@
 
 This is a reminder that you are scheduled as <%= @role %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_short_date %>.
 
-Your shift is on <%= @date %> from <%= @shift_start %>-<%= @shift_end %> at <%= @meal.location_name %>. The meal is scheduled to be served at <%= @serve_time %>.
+Your shift is on <%= @assignment.date_or_times %> at <%= @meal.location_name %>. The meal is scheduled to be served at <%= @meal.served_at_time_only %>.
 
 Your help is crucial! Please arrive promptly for your shift!
 

@@ -1,10 +1,20 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe MealMailer do
   let!(:multiple_communities) { create_list(:community, 2) }
   let(:resource) { create(:resource, name: "Place", abbrv: "CH") }
   let(:ca) { resource.community.abbrv }
-  let(:meal) { create(:meal, :with_menu, served_at: "2017-01-01 12:00", resources: [resource]) }
+  let(:head_cook_role) { create(:meal_role, :head_cook, description: "Cook something tasty") }
+  let(:asst_cook_role) do
+    create(:meal_role, title: "Assistant Cook", time_type: "date_time",
+                       shift_start: -90, shift_end: -5, description: "Assist the wise cook")
+  end
+  let(:taster_role) { create(:meal_role, title: "Taster", time_type: "date_only") }
+  let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role, taster_role]) }
+  let(:served_at) { Time.zone.parse("2017-01-01 12:00") }
+  let(:meal) { create(:meal, :with_menu, served_at: served_at, formula: formula, resources: [resource]) }
 
   # This tests fake user handling for mails with a household recipient.
   describe "meal_reminder with fake user" do
@@ -29,27 +39,42 @@ describe MealMailer do
   end
 
   describe "shift_reminder" do
-    let(:assignment) { create(:meal_assignment, meal: meal, role: "asst_cook") }
     let(:mail) { described_class.shift_reminder(assignment).deliver_now }
 
-    before do
-      allow(assignment).to receive(:starts_at).and_return(Time.zone.parse("2017-01-01 11:00"))
-      allow(assignment).to receive(:ends_at).and_return(Time.zone.parse("2017-01-01 11:55"))
+    context "for role with date_time" do
+      let(:assignment) { create(:meal_assignment, meal: meal, role: asst_cook_role) }
+
+      it "sets the right recipient" do
+        expect(mail.to).to eq([assignment.user.email])
+      end
+
+      it "renders the subject" do
+        expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH")
+      end
+
+      it "renders the correct times and URL in the body" do
+        expect(mail.body.encoded).to match("Your shift is on Sun Jan 01 10:30am–11:55am at #{ca} Place.")
+        expect(mail.body.encoded).to match("The meal is scheduled to be served at 12:00pm.")
+        expect(mail.body.encoded).to have_correct_meal_url(meal)
+      end
     end
 
-    it "sets the right recipient" do
-      expect(mail.to).to eq([assignment.user.email])
-    end
+    context "for role with date_only" do
+      let(:assignment) { create(:meal_assignment, meal: meal, role: taster_role) }
 
-    it "renders the subject" do
-      expect(mail.subject).to eq(
-        "Job Reminder: Assistant Cook for Meal on Sun Jan 01 11:00am at #{ca} CH")
-    end
+      it "sets the right recipient" do
+        expect(mail.to).to eq([assignment.user.email])
+      end
 
-    it "renders the correct times and URL in the body" do
-      expect(mail.body.encoded).to match "Your shift is on Sun Jan 01 from 11:00am-11:55am at #{ca} Place."
-      expect(mail.body.encoded).to match "The meal is scheduled to be served at 12:00pm."
-      expect(mail.body.encoded).to have_correct_meal_url(meal)
+      it "renders the subject" do
+        expect(mail.subject).to eq("Job Reminder: Taster on Sun Jan 01 at #{ca} CH")
+      end
+
+      it "renders the correct times and URL in the body" do
+        expect(mail.body.encoded).to match("Your shift is on Sun Jan 01 at #{ca} Place.")
+        expect(mail.body.encoded).to match("The meal is scheduled to be served at 12:00pm.")
+        expect(mail.body.encoded).to have_correct_meal_url(meal)
+      end
     end
   end
 
@@ -62,7 +87,7 @@ describe MealMailer do
     let!(:decoy_user) { create(:user) }
 
     it "sets the right recipients" do
-      recips = ((added + removed).map(&:user).push(initiator, meal.head_cook, *meal_coords)).map(&:email)
+      recips = (added + removed).map(&:user).push(initiator, meal.head_cook, *meal_coords).map(&:email)
       expect(mail.to).to contain_exactly(*recips)
     end
 

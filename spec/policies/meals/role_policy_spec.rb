@@ -34,17 +34,21 @@ describe Meals::RolePolicy do
       end
     end
 
-    context "with associated formula" do
-      let(:community) { create(:community) }
-      let!(:role) { create(:meal_role) }
-      let!(:formula) { create(:meal_formula, roles: [role]) }
-
-      permissions :deactivate? do
-        it { is_expected.to permit(meals_coordinator, role) }
+    permissions :destroy? do
+      context "with associated formula" do
+        let(:community) { create(:community) }
+        let!(:formula) { create(:meal_formula, roles: [role]) }
+        it_behaves_like "forbids all"
       end
 
-      permissions :destroy? do
-        it { is_expected.not_to permit(meals_coordinator, role) }
+      context "with associated job" do
+        let!(:job) { create(:work_job, meal_role_id: role.id) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with associated meal assignment" do
+        let!(:meal_assignment) { create(:meal_assignment, role: role) }
+        it_behaves_like "forbids all"
       end
     end
   end

@@ -89,16 +89,30 @@ describe Meals::Role do
   # - In the policy spec, test for the appropriate restrictions on destroy.
   # - In the feature spec, test the destruction/deactivation/activation happy paths.
   describe "destruction" do
-    let(:role) { create(:meal_role, :with_reminder) }
+    let(:role) { create(:meal_role) }
 
-    it "destroys reminder" do
-      role.destroy
-      expect(Meals::Role.count).to be_zero
-      expect(Meals::RoleReminder.count).to be_zero
+    context "with reminder" do
+      let(:role) { create(:meal_role, :with_reminder) }
+
+      it "destroys reminder" do
+        role.destroy
+        expect(Meals::Role.count).to be_zero
+        expect(Meals::RoleReminder.count).to be_zero
+      end
     end
 
     context "with associated formula" do
       let!(:formula) { create(:meal_formula, roles: [role]) }
+      it { expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with associated job" do
+      let!(:job) { create(:work_job, meal_role_id: role.id) }
+      it { expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with associated meal assignment" do
+      let!(:meal_assignment) { create(:meal_assignment, role: role) }
       it { expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
   end

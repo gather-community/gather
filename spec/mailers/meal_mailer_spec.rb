@@ -80,8 +80,8 @@ describe MealMailer do
 
   describe "worker_change_notice" do
     let(:initiator) { create(:user) }
-    let(:added) { create_list(:assignment, 2, meal: meal, role: "asst_cook") }
-    let(:removed) { build_list(:assignment, 2, meal: meal, role: "asst_cook") }
+    let(:added) { create_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
+    let(:removed) { build_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
     let(:mail) { described_class.worker_change_notice(initiator, meal, added, removed).deliver_now }
     let!(:meal_coords) { create_list(:meals_coordinator, 2) }
     let!(:decoy_user) { create(:user) }

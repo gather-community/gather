@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# For emails related to meals.
 class MealMailer < ApplicationMailer
   def meal_reminder(signup)
     @household = signup.household.decorate
@@ -16,11 +19,10 @@ class MealMailer < ApplicationMailer
     @assignment = assignment.decorate
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @role = assignment.role_title
     @other_assigns = @meal.assignments.reject { |a| a.user == @user }
 
     mail(to: @user, subject: default_i18n_subject(
-      role: @role,
+      role: assignment.role_title,
       datetime: @assignment.starts_at_with_date,
       location: @meal.location_abbrv
     ))
@@ -43,11 +45,9 @@ class MealMailer < ApplicationMailer
     @assignment = assignment
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @type = assignment.reminder_count == 0 ? :first : :second
+    @type = assignment.reminder_count.zero? ? :first : :second
 
-    mail(to: @user, subject: default_i18n_subject(
-      date: @meal.served_at_short_date
-    ))
+    mail(to: @user, subject: default_i18n_subject(date: @meal.served_at_short_date))
   end
 
   def normal_message(message, recipient)
@@ -65,7 +65,7 @@ class MealMailer < ApplicationMailer
     @recipient = recipient.decorate
     @meal = @message.meal.decorate
     mail(to: @recipient, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+         subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
   def community

@@ -68,6 +68,9 @@ GEM
     active_model_serializers (0.9.7)
       activemodel (>= 3.2)
       concurrent-ruby (~> 1.0)
+    active_record-postgres-constraints (0.1.4)
+      pg
+      rails (~> 5.0)
     activejob (5.1.6.1)
       activesupport (= 5.1.6.1)
       globalid (>= 0.3.6)
@@ -482,6 +485,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.9.3)
+  active_record-postgres-constraints (~> 0.1)
   acts_as_tenant (~> 0.4)
   attribute_normalizer (~> 1.2)
   awesome_print (~> 1.6)

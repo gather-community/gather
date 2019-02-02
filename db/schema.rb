@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190201212640) do
+ActiveRecord::Schema.define(version: 20190202225339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -320,6 +320,22 @@ ActiveRecord::Schema.define(version: 20190201212640) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_people_vehicles_on_cluster_id"
     t.index ["household_id"], name: "index_people_vehicles_on_household_id"
+  end
+
+  create_table "reminder_deliveries", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deliver_at", null: false
+    t.boolean "delivered", default: false, null: false
+    t.bigint "meal_id"
+    t.integer "reminder_id", null: false
+    t.bigint "shift_id"
+    t.datetime "updated_at", null: false
+    t.index ["deliver_at"], name: "index_reminder_deliveries_on_deliver_at"
+    t.index ["meal_id"], name: "index_reminder_deliveries_on_meal_id"
+    t.index ["reminder_id", "meal_id"], name: "index_reminder_deliveries_on_reminder_id_and_meal_id", unique: true
+    t.index ["reminder_id", "shift_id"], name: "index_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
+    t.check_constraint :reminder_deliveries_583897000, "(((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL)))"
   end
 
   create_table "reservation_guideline_inclusions", id: :serial, force: :cascade do |t|
@@ -646,18 +662,6 @@ ActiveRecord::Schema.define(version: 20190201212640) do
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
-  create_table "work_reminder_deliveries", force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "deliver_at", null: false
-    t.boolean "delivered", default: false, null: false
-    t.integer "reminder_id", null: false
-    t.integer "shift_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["deliver_at"], name: "index_work_reminder_deliveries_on_deliver_at"
-    t.index ["reminder_id", "shift_id"], name: "index_work_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
-  end
-
   create_table "work_reminders", force: :cascade do |t|
     t.string "abs_rel", null: false
     t.datetime "abs_time"
@@ -741,6 +745,10 @@ ActiveRecord::Schema.define(version: 20190201212640) do
   add_foreign_key "people_pets", "households"
   add_foreign_key "people_vehicles", "clusters"
   add_foreign_key "people_vehicles", "households"
+  add_foreign_key "reminder_deliveries", "clusters"
+  add_foreign_key "reminder_deliveries", "meals"
+  add_foreign_key "reminder_deliveries", "work_reminders", column: "reminder_id"
+  add_foreign_key "reminder_deliveries", "work_shifts", column: "shift_id"
   add_foreign_key "reservation_guideline_inclusions", "clusters"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "reservation_guideline_inclusions", "resources"
@@ -790,9 +798,6 @@ ActiveRecord::Schema.define(version: 20190201212640) do
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
-  add_foreign_key "work_reminder_deliveries", "clusters"
-  add_foreign_key "work_reminder_deliveries", "work_reminders", column: "reminder_id"
-  add_foreign_key "work_reminder_deliveries", "work_shifts", column: "shift_id"
   add_foreign_key "work_reminders", "clusters"
   add_foreign_key "work_reminders", "work_jobs", column: "job_id"
   add_foreign_key "work_shares", "clusters"

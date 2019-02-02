@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190129015243) do
+ActiveRecord::Schema.define(version: 20190201212640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,18 @@ ActiveRecord::Schema.define(version: 20190129015243) do
     t.string "recipient_type", null: false
     t.integer "sender_id", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "meal_reminder_deliveries", force: :cascade do |t|
+    t.integer "assignment_id", null: false
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deliver_at", null: false
+    t.boolean "delivered", default: false, null: false
+    t.integer "reminder_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deliver_at"], name: "index_meal_reminder_deliveries_on_deliver_at"
+    t.index ["reminder_id", "assignment_id"], name: "index_meal_reminder_deliveries_on_reminder_id_and_assignment_id", unique: true
   end
 
   create_table "meal_role_reminders", force: :cascade do |t|
@@ -706,6 +718,9 @@ ActiveRecord::Schema.define(version: 20190129015243) do
   add_foreign_key "meal_formula_roles", "meal_roles", column: "role_id"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
+  add_foreign_key "meal_reminder_deliveries", "clusters"
+  add_foreign_key "meal_reminder_deliveries", "meal_assignments", column: "assignment_id"
+  add_foreign_key "meal_reminder_deliveries", "meal_role_reminders", column: "reminder_id"
   add_foreign_key "meal_role_reminders", "clusters"
   add_foreign_key "meal_role_reminders", "meal_roles"
   add_foreign_key "meal_roles", "clusters"

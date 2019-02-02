@@ -14,12 +14,15 @@ module Meals
       joins("LEFT JOIN meal_roles ON meal_roles.id = meal_assignments.role_id").merge(Meals::Role.by_title)
     }
 
+    has_many :reminder_deliveries, class_name: "Meals::ReminderDelivery", inverse_of: :assignment,
+                                   dependent: :destroy
     belongs_to :user, inverse_of: :meal_assignments
     belongs_to :meal, inverse_of: :assignments
     belongs_to :role, class_name: "Meals::Role"
 
     delegate :head_cook?, :date_time?, to: :role
     delegate :title, to: :role, prefix: true
+    delegate :community, to: :meal
 
     def empty?
       user_id.blank?
@@ -65,7 +68,7 @@ module Meals
     private
 
     def shift_time_offset(start_or_end)
-      meal.community.settings.meals.default_shift_times[start_or_end][role].minutes
+      community.settings.meals.default_shift_times[start_or_end][role].minutes
     end
   end
 end

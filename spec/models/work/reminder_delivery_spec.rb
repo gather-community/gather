@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Work::ReminderDelivery do
-  include_context "reminders"
+  include_context "work reminders"
   describe "deliver_at computation" do
     let(:delivery) { reminder.deliveries.first }
     subject(:deliver_at) { delivery.deliver_at.iso8601 }

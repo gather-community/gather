@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context "reminders" do
+shared_context "work reminders" do
   def create_reminder(job, time_or_magnitude, unit_sign = nil, note: nil)
     absolute = !time_or_magnitude.is_a?(Numeric)
     create(:work_reminder,

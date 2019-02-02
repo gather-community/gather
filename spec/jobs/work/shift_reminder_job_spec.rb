@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Work::ShiftReminderJob do
   include_context "jobs"
-  include_context "reminders"
+  include_context "work reminders"
 
   let(:time) { "2018-01-01 9:01" }
   let(:time_offset) { 0 }

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Work::Reminder do
-  include_context "reminders"
+  include_context "work reminders"
 
   let(:tomorrow) { Time.current.tomorrow }
 

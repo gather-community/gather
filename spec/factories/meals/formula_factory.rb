@@ -17,7 +17,7 @@ FactoryBot.define do
     pantry_calc_type "percent"
     roles do
       [Meals::Role.find_by(community_id: community.id, special: "head_cook") ||
-        create(:meal_role, :head_cook)]
+        create(:meal_role, :head_cook, community: community)]
     end
   end
 end

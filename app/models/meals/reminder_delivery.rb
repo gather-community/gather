@@ -9,9 +9,17 @@ module Meals
     belongs_to :assignment, class_name: "Meals::Assignment", inverse_of: :reminder_deliveries
 
     delegate :job, :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
-    delegate :community, :assignments, to: :shift
+    delegate :community, to: :assignment
 
     before_save :compute_deliver_at
+
+    # shift has multiple assignments, send to all
+    # assignment has single user, send to one only
+    # role may have other assignments for that particular meal; this is where the names kind of change meaning, confusing
+    # duck type for now
+    def assignments
+      [assignment]
+    end
 
     private
 

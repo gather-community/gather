@@ -5,14 +5,19 @@ module Meals
   # Checks the DB to see when to send.
   # Runs every hour.
   class ShiftReminderJob < ReminderJob
+    # In case the job hasn't run for awhile, how old is too old to deliver?
+    EXPIRY_TIME = 3.hours
+
     def perform
-      each_community_at_correct_hour do |community|
-        Assignment::ROLES.each do |role|
-          days = lead_days(community, role)
-          meal_ids = Meal.hosted_by(community).served_within_days_from_now(days).not_cancelled.pluck(:id)
-          assignments(meal_ids, role).each do |assignment|
-            MealMailer.shift_reminder(assignment).deliver_now
-            assignment.update_attribute(:reminder_count, 1)
+      ActsAsTenant.without_tenant do
+        scheduled_deliveries_by_community.each do |community, deliveries|
+          with_community(community) do
+            deliveries.each do |delivery|
+              delivery.assignments.each do |assign|
+                MealMailer.shift_reminder(assign, delivery.reminder).deliver_now
+              end
+              delivery.update!(delivered: true)
+            end
           end
         end
       end
@@ -20,18 +25,13 @@ module Meals
 
     private
 
-    def lead_days(community, role)
-      if role.to_sym == :head_cook
-        community.settings.meals.reminder_lead_times.head_cook
-      else
-        community.settings.meals.reminder_lead_times.job
-      end
-    end
-
-    # Finds all assignments for the target meals that have not yet been notified.
-    def assignments(meal_ids, role)
-      return [] if meal_ids.empty?
-      Assignment.where(meal_id: meal_ids).where(reminder_count: 0).where(role: role).includes(:user, :meal)
+    def scheduled_deliveries_by_community
+      ReminderDelivery
+        .where("deliver_at <= ?", Time.zone.now)
+        .where("deliver_at >= ?", Time.zone.now - EXPIRY_TIME)
+        .where(delivered: false)
+        .includes(assignment: [:user, :role, meal: :community])
+        .group_by(&:community)
     end
   end
 end

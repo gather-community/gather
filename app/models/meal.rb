@@ -106,10 +106,6 @@ class Meal < ApplicationRecord
     @status_obj ||= Meals::Status.new(self)
   end
 
-  def assignments_by_role
-    assignments.group_by(&:role)
-  end
-
   def workers
     @workers ||= assignments.map(&:user).uniq
   end

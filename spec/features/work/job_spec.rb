@@ -152,7 +152,7 @@ feature "jobs", js: true do
     end
 
     context "as regular user" do
-      include_context "reminders"
+      include_context "work reminders"
 
       let(:actor) { create(:user) }
       let(:one_week_hence) { Time.zone.now + 7.days }

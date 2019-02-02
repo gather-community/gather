@@ -39,23 +39,41 @@ describe MealMailer do
   end
 
   describe "shift_reminder" do
-    let(:mail) { described_class.shift_reminder(assignment).deliver_now }
+    let(:reminder) { double(note?: false) }
+    let(:mail) { described_class.shift_reminder(assignment, reminder).deliver_now }
 
     context "for role with date_time" do
       let(:assignment) { create(:meal_assignment, meal: meal, role: asst_cook_role) }
 
-      it "sets the right recipient" do
-        expect(mail.to).to eq([assignment.user.email])
+      context "without note" do
+        it "sets the right recipient" do
+          expect(mail.to).to eq([assignment.user.email])
+        end
+
+        it "renders the subject" do
+          expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH")
+        end
+
+        it "renders the correct times and URL in the body" do
+          expect(mail.body.encoded).to match("Your shift is on Sun Jan 01 10:30am–11:55am at #{ca} Place.")
+          expect(mail.body.encoded).to match("The meal is scheduled to be served at 12:00pm.")
+          expect(mail.body.encoded).not_to match("includes the following note")
+          expect(mail.body.encoded).to have_correct_meal_url(meal)
+        end
       end
 
-      it "renders the subject" do
-        expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH")
-      end
+      context "with note" do
+        let(:reminder) { double(note?: true, note: "Hi there! And stuff.") }
 
-      it "renders the correct times and URL in the body" do
-        expect(mail.body.encoded).to match("Your shift is on Sun Jan 01 10:30am–11:55am at #{ca} Place.")
-        expect(mail.body.encoded).to match("The meal is scheduled to be served at 12:00pm.")
-        expect(mail.body.encoded).to have_correct_meal_url(meal)
+        it "renders the subject" do
+          expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH "\
+            "(Hi there! And stuff.)")
+        end
+
+        it "renders the correct times and URL in the body" do
+          expect(mail.body.encoded).to match("includes the following note:")
+          expect(mail.body.encoded).to match("Hi there! And stuff.")
+        end
       end
     end
 

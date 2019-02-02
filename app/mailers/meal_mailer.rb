@@ -15,16 +15,18 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def shift_reminder(assignment)
+  def shift_reminder(assignment, reminder)
     @assignment = assignment.decorate
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
+    @reminder = reminder
     @other_assigns = @meal.assignments.reject { |a| a.user == @user }
 
     mail(to: @user, subject: default_i18n_subject(
       role: assignment.role_title,
       datetime: @assignment.starts_at_with_date,
-      location: @meal.location_abbrv
+      location: @meal.location_abbrv,
+      note: @reminder.note? ? " (#{@reminder.note})" : ""
     ))
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190202225339) do
+ActiveRecord::Schema.define(version: 20190203144955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,18 +184,6 @@ ActiveRecord::Schema.define(version: 20190202225339) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "meal_reminder_deliveries", force: :cascade do |t|
-    t.integer "assignment_id", null: false
-    t.integer "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "deliver_at", null: false
-    t.boolean "delivered", default: false, null: false
-    t.integer "reminder_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["deliver_at"], name: "index_meal_reminder_deliveries_on_deliver_at"
-    t.index ["reminder_id", "assignment_id"], name: "index_meal_reminder_deliveries_on_reminder_id_and_assignment_id", unique: true
-  end
-
   create_table "meal_role_reminders", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -330,6 +318,7 @@ ActiveRecord::Schema.define(version: 20190202225339) do
     t.bigint "meal_id"
     t.integer "reminder_id", null: false
     t.bigint "shift_id"
+    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["deliver_at"], name: "index_reminder_deliveries_on_deliver_at"
     t.index ["meal_id"], name: "index_reminder_deliveries_on_meal_id"
@@ -723,9 +712,6 @@ ActiveRecord::Schema.define(version: 20190202225339) do
   add_foreign_key "meal_formula_roles", "meal_roles", column: "role_id"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
-  add_foreign_key "meal_reminder_deliveries", "clusters"
-  add_foreign_key "meal_reminder_deliveries", "meal_assignments", column: "assignment_id"
-  add_foreign_key "meal_reminder_deliveries", "meal_role_reminders", column: "reminder_id"
   add_foreign_key "meal_role_reminders", "clusters"
   add_foreign_key "meal_role_reminders", "meal_roles"
   add_foreign_key "meal_roles", "clusters"
@@ -747,7 +733,6 @@ ActiveRecord::Schema.define(version: 20190202225339) do
   add_foreign_key "people_vehicles", "households"
   add_foreign_key "reminder_deliveries", "clusters"
   add_foreign_key "reminder_deliveries", "meals"
-  add_foreign_key "reminder_deliveries", "work_reminders", column: "reminder_id"
   add_foreign_key "reminder_deliveries", "work_shifts", column: "shift_id"
   add_foreign_key "reservation_guideline_inclusions", "clusters"
   add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"

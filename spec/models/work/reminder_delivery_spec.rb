@@ -2,6 +2,7 @@
 
 require "rails_helper"
 
+# This spec covers the details of the deliver_at computation.
 describe Work::ReminderDelivery do
   include_context "work reminders"
   describe "deliver_at computation" do

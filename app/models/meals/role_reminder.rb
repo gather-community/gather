@@ -46,11 +46,11 @@ module Meals
     end
 
     def create_or_update_deliveries
-      role.assignments.each do |assignment|
-        if (delivery = deliveries.find_by(assignment: assignment))
+      Meal.where(formula_id: role.formulas.pluck(:id)).pluck(:id).each do |meal_id|
+        if (delivery = deliveries.find_by(meal_id: meal_id))
           delivery.save! # Run callbacks to ensure recomputation.
         else
-          deliveries.create!(assignment: assignment)
+          deliveries.create!(meal_id: meal_id)
         end
       end
     end

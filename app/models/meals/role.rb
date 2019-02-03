@@ -13,6 +13,8 @@ module Meals
     has_many :assignments, class_name: "Meals::Assignment", foreign_key: :role_id, inverse_of: :role
     has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder", dependent: :destroy,
                                                  foreign_key: :meal_role_id, inverse_of: :role
+    has_many :formula_roles, inverse_of: :role, dependent: :destroy
+    has_many :formulas, through: :formula_roles
 
     scope :by_title, -> { order("special = 'head_cook'").alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }

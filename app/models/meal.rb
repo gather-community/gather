@@ -22,7 +22,7 @@ class Meal < ApplicationRecord
   has_many :signups, -> { sorted }, dependent: :destroy, inverse_of: :meal
   has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
-  has_many :reminder_deliveries, class_name: "Meals::ReminderDelivery", inverse_of: :meal,
+  has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
                                  dependent: :destroy
 
   # Resources are chosen by the user. Reservations are then automatically created.

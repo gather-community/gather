@@ -4,7 +4,7 @@ require "rails_helper"
 
 # See Work::JobReminder spec for coverage of parent class behaviors.
 describe Meals::RoleReminder do
-  describe "ReminderDelivery creation" do
+  describe "RoleReminderDelivery creation" do
     let(:head_cook_role) { create(:meal_role, :head_cook) }
     let(:asst_cook_role) { create(:meal_role, title: "Assistant Cook") }
     let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role]) }
@@ -12,7 +12,7 @@ describe Meals::RoleReminder do
     let!(:meals) { create_list(:meal, 3, formula: formula) }
     let!(:reminder1) { create_reminder(role: head_cook_role, rel_magnitude: 2, rel_unit_sign: "days_before") }
     let!(:reminder2) { create_reminder(role: asst_cook_role, rel_magnitude: 3, rel_unit_sign: "days_before") }
-    subject(:deliveries) { Meals::ReminderDelivery.all.to_a }
+    subject(:deliveries) { Meals::RoleReminderDelivery.all.to_a }
 
     it "creates deliveries on creation" do
       expect(deliveries.map { |d| [d.meal, d.reminder] }).to contain_exactly(

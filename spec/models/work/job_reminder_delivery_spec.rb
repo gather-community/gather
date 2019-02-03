@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # This spec covers the details of the deliver_at computation.
-describe Work::ReminderDelivery do
+describe Work::JobReminderDelivery do
   include_context "work reminders"
   describe "deliver_at computation" do
     let(:delivery) { reminder.deliveries.first }

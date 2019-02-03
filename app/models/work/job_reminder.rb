@@ -2,7 +2,7 @@
 
 module Work
   # Models a reminder to do a job, or part of a job.
-  class JobReminder < ::Reminder
+  class JobReminder < Reminder
     belongs_to :job, class_name: "Work::Job", inverse_of: :reminders
 
     protected
@@ -16,7 +16,7 @@ module Work
     end
 
     def delivery_type
-      "Work::ReminderDelivery"
+      "Work::JobReminderDelivery"
     end
   end
 end

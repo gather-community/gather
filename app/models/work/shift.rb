@@ -20,7 +20,7 @@ module Work
     belongs_to :meal
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
-    has_many :reminder_deliveries, class_name: "Work::ReminderDelivery", inverse_of: :shift,
+    has_many :reminder_deliveries, class_name: "Work::JobReminderDelivery", inverse_of: :shift,
                                    dependent: :destroy
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true

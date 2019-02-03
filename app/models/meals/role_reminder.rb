@@ -3,7 +3,7 @@
 module Meals
   # Models a reminder for a meal role.
   # Doesn't support absolute times since that wouldn't make sense.
-  class RoleReminder < ::Reminder
+  class RoleReminder < Reminder
     belongs_to :role, class_name: "Meals::Role", inverse_of: :reminders, foreign_key: :role_id
 
     protected
@@ -17,7 +17,7 @@ module Meals
     end
 
     def delivery_type
-      "Meals::ReminderDelivery"
+      "Meals::RoleReminderDelivery"
     end
   end
 end

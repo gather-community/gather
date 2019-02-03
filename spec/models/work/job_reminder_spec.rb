@@ -71,10 +71,10 @@ describe Work::JobReminder do
     end
   end
 
-  describe "ReminderDelivery creation" do
+  describe "JobReminderDelivery creation" do
     let(:job) { create(:work_job, shift_count: 2) }
     let(:reminder) { create_reminder(job, "2018-01-01 12:00") }
-    subject(:deliveries) { Work::ReminderDelivery.all.to_a }
+    subject(:deliveries) { Work::JobReminderDelivery.all.to_a }
 
     it "creates deliveries on creation" do
       expect(deliveries.size).to eq(2)

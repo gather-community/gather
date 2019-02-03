@@ -152,13 +152,13 @@ feature "jobs", js: true do
     end
 
     context "as regular user" do
-      include_context "work reminders"
+      include_context "reminders"
 
       let(:actor) { create(:user) }
       let(:one_week_hence) { Time.zone.now + 7.days }
       let!(:job) { create(:work_job, period: periods[0], shift_count: 2) }
-      let!(:reminder1) { create_reminder(job, one_week_hence) }
-      let!(:reminder2) { create_reminder(job, 1, "days_before", note: "Sharpen the knife") }
+      let!(:reminder1) { create_work_job_reminder(job, one_week_hence) }
+      let!(:reminder2) { create_work_job_reminder(job, 1, "days_before", note: "Sharpen the knife") }
       let!(:assignments1) { create_list(:work_assignment, 3, shift: job.shifts[0]) }
       let!(:assignments2) { create_list(:work_assignment, 3, shift: job.shifts[1]) }
 

@@ -4,14 +4,16 @@ require "rails_helper"
 
 # See Work::JobReminder spec for coverage of parent class behaviors.
 describe Meals::RoleReminder do
+  include_context "reminders"
+
   describe "RoleReminderDelivery creation" do
     let(:head_cook_role) { create(:meal_role, :head_cook) }
     let(:asst_cook_role) { create(:meal_role, title: "Assistant Cook") }
     let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role]) }
     # We shouldn't need to assign roles to anyone since Deliveries are made based on role/meal combo.
     let!(:meals) { create_list(:meal, 3, formula: formula) }
-    let!(:reminder1) { create_reminder(role: head_cook_role, rel_magnitude: 2, rel_unit_sign: "days_before") }
-    let!(:reminder2) { create_reminder(role: asst_cook_role, rel_magnitude: 3, rel_unit_sign: "days_before") }
+    let!(:reminder1) { create_meal_role_reminder(head_cook_role, 2, "days_before") }
+    let!(:reminder2) { create_meal_role_reminder(asst_cook_role, 3, "days_before") }
     subject(:deliveries) { Meals::RoleReminderDelivery.all.to_a }
 
     it "creates deliveries on creation" do
@@ -20,9 +22,5 @@ describe Meals::RoleReminder do
         [meals[0], reminder2], [meals[1], reminder2], [meals[2], reminder2]
       )
     end
-  end
-
-  def create_reminder(role:, rel_magnitude:, rel_unit_sign:)
-    create(:meal_role_reminder, role: role, rel_magnitude: rel_magnitude, rel_unit_sign: rel_unit_sign)
   end
 end

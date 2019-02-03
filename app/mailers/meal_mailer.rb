@@ -15,7 +15,7 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def shift_reminder(assignment, reminder)
+  def role_reminder(assignment, reminder)
     @assignment = assignment.decorate
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate

@@ -3,12 +3,16 @@
 module Work
   # Tracks the delivery of a given reminder for a given Shift, in order to prevent duplicate deliveries.
   class JobReminderDelivery < ReminderDelivery
-    belongs_to :shift, class_name: "Work::Shift", inverse_of: :reminder_deliveries
+    # See parent class for associations.
 
     protected
 
     def event
       shift
+    end
+
+    def send_mail(assignment)
+      WorkMailer.job_reminder(assignment, reminder).deliver_now
     end
   end
 end

@@ -3,12 +3,12 @@
 require "rails_helper"
 
 describe WorkMailer do
-  describe "shift_reminder" do
+  describe "job_reminder" do
     let(:job) { create(:work_job, title: "First Frungler", shift_starts: ["2018-01-01 9:00"]) }
     let(:user) { create(:user) }
     let(:assignment) { create(:work_assignment, shift: job.shifts.first) }
     let(:reminder) { create(:work_job_reminder, job: job, note: note) }
-    let(:mail) { described_class.shift_reminder(assignment, reminder).deliver_now }
+    let(:mail) { described_class.job_reminder(assignment, reminder).deliver_now }
 
     context "with no note" do
       let(:note) { nil }

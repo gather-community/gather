@@ -6,10 +6,19 @@ class ReminderDelivery < ApplicationRecord
 
   belongs_to :reminder, class_name: "Reminder", inverse_of: :deliveries
 
+  # These are subclass-specific but they need to be up here so we can eager load them.
+  belongs_to :shift, class_name: "Work::Shift", inverse_of: :reminder_deliveries
+  belongs_to :meal, inverse_of: :reminder_deliveries
+
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
   delegate :community, :assignments, to: :event
 
   before_save :compute_deliver_at
+
+  def deliver!
+    assignments.each { |assignment| send_mail(assignment) }
+    update!(delivered: true)
+  end
 
   private
 

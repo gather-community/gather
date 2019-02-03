@@ -38,9 +38,9 @@ describe MealMailer do
     end
   end
 
-  describe "shift_reminder" do
+  describe "role_reminder" do
     let(:reminder) { double(note?: false) }
-    let(:mail) { described_class.shift_reminder(assignment, reminder).deliver_now }
+    let(:mail) { described_class.role_reminder(assignment, reminder).deliver_now }
 
     context "for role with date_time" do
       let(:assignment) { create(:meal_assignment, meal: meal, role: asst_cook_role) }

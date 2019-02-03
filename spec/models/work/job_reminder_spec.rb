@@ -4,7 +4,7 @@ require "rails_helper"
 
 # This spec covers behaviors in the parent Reminder class as well as child class specific things.
 describe Work::JobReminder do
-  include_context "work reminders"
+  include_context "reminders"
 
   let(:tomorrow) { Time.current.tomorrow }
 
@@ -73,7 +73,7 @@ describe Work::JobReminder do
 
   describe "JobReminderDelivery creation" do
     let(:job) { create(:work_job, shift_count: 2) }
-    let(:reminder) { create_reminder(job, "2018-01-01 12:00") }
+    let(:reminder) { create_work_job_reminder(job, "2018-01-01 12:00") }
     subject(:deliveries) { Work::JobReminderDelivery.all.to_a }
 
     it "creates deliveries on creation" do

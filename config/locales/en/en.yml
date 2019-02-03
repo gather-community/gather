@@ -367,7 +367,7 @@ en:
         diner_count:
           one: "There is %{count} diner signed up from your household."
           other: "There are %{count} diners signed up from your household."
-    shift_reminder:
+    role_reminder:
       subject: "Job Reminder: %{role} on %{datetime} at %{location}%{note}"
     worker_change_notice:
       subject: "Meal Job Assignment Change Notice"
@@ -379,7 +379,7 @@ en:
       subject: "Meal on %{datetime} CANCELLED"
 
   work_mailer:
-    shift_reminder:
+    job_reminder:
       subject: "Job Reminder: %{title}%{note}%{times}"
     job_choosing_notice:
       subject: "Job Choosing is Coming Up!"

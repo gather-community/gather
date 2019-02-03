@@ -121,10 +121,10 @@ describe Work::Job do
   end
 
   describe "reminder delivery maintenance" do
-    include_context "work reminders"
+    include_context "reminders"
 
     let(:job) { create(:work_job, shift_count: 2, hours: 2) }
-    let!(:reminder) { create_reminder(job, 1, "hours_after") }
+    let!(:reminder) { create_work_job_reminder(job, 1, "hours_after") }
     subject(:deliveries) { Work::ReminderDelivery.all.to_a }
 
     before do

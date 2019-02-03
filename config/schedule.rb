@@ -10,9 +10,8 @@ every 5.minutes do
   enqueue %w[
     Billing::StatementReminderJob
     Meals::MealReminderJob
-    Meals::ShiftReminderJob
     Meals::CookMenuReminderJob
     Meals::ClosePastMealsJob
-    Work::ShiftReminderJob
+    CustomReminderJob
   ].join(",")
 end

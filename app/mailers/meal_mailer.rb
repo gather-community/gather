@@ -47,7 +47,7 @@ class MealMailer < ApplicationMailer
     @assignment = assignment
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @type = assignment.reminder_count.zero? ? :first : :second
+    @type = assignment.cook_menu_reminder_count.zero? ? :first : :second
 
     mail(to: @user, subject: default_i18n_subject(date: @meal.served_at_short_date))
   end

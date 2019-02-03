@@ -4,6 +4,8 @@
 class ReminderDelivery < ApplicationRecord
   acts_as_tenant :cluster
 
+  belongs_to :reminder, class_name: "Reminder", inverse_of: :deliveries
+
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
   delegate :community, :assignments, to: :event
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :work_reminder, class: "Work::Reminder" do
+  factory :work_job_reminder, class: "Work::JobReminder" do
     association :job, factory: :work_job
     note "Do stuff"
 

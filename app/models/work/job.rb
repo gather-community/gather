@@ -12,7 +12,7 @@ module Work
     belongs_to :requester, class_name: "People::Group"
 
     has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
-    has_many :reminders, -> { canonical_order }, class_name: "Work::Reminder", inverse_of: :job,
+    has_many :reminders, -> { canonical_order }, class_name: "Work::JobReminder", inverse_of: :job,
                                                  dependent: :destroy
 
     scope :in_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }

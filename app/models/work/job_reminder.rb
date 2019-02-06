@@ -8,11 +8,11 @@ module Work
     protected
 
     def event_key
-      :shift_id
+      :shift
     end
 
-    def event_ids
-      job.shifts.pluck(:id)
+    def events
+      job.shifts
     end
 
     def delivery_type

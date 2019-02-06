@@ -32,6 +32,7 @@ module Meals
     end
 
     after_save :ensure_unique_default
+    after_update :create_missing_reminder_deliveries
 
     def self.default_for(community)
       in_community(community).where(is_default: true).first
@@ -137,6 +138,24 @@ module Meals
       value = value.try(:gsub, /[^#{separator}0-9]/, "")
       return nil if value.blank?
       value.to_f / (pct ? 100 : 1)
+    end
+
+    def create_missing_reminder_deliveries
+      reminders = Meals::RoleReminder.where(role_id: roles.in_community(community).pluck(:id))
+
+      # We only consider recent or future meals because otherwise we'd have to iterate over quite a lot
+      # of meals for a mature community, and with little benefit, since reminders only usually relate
+      # to events in the future or recent past.
+      current_meals = meals.hosted_by(community).future_or_recent(Reminder::MAX_FUTURE_DISTANCE)
+      deliveries = RoleReminderDelivery.where(reminder_id: reminders.pluck(:id))
+        .index_by { |d| [d.meal_id, d.reminder_id] }
+      reminders.includes(:role).find_each do |reminder|
+        current_meals.find_each do |meal|
+          # We only need to create deliveries here, not update.
+          next if deliveries[[meal.id, reminder.id]]
+          RoleReminderDelivery.create!(meal: meal, reminder: reminder)
+        end
+      end
     end
   end
 end

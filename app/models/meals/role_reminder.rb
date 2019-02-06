@@ -9,11 +9,11 @@ module Meals
     protected
 
     def event_key
-      :meal_id
+      :meal
     end
 
-    def event_ids
-      Meal.where(formula_id: role.formulas.pluck(:id)).pluck(:id)
+    def events
+      Meal.where(formula_id: role.formulas.pluck(:id))
     end
 
     def delivery_type

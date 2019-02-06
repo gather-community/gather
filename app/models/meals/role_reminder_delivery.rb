@@ -13,9 +13,9 @@ module Meals
       meal
     end
 
-    # We compute start time relative to shift start to be consistent with the work module.
+    # We compute start time relative to shift_start (if given) to be consistent with the work module.
     def starts_at
-      super + role.shift_start.minutes
+      super + (role.shift_start&.minutes || 0)
     end
 
     def send_mail(assignment)

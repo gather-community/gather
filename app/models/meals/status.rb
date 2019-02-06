@@ -13,6 +13,7 @@ module Meals
       c.scope :finalizable, -> { c.past.where.not(status: ["finalized", "cancelled"]) }
       c.scope :past, -> { c.where("served_at <= ?", Time.current.midnight) }
       c.scope :future, -> { c.where("served_at >= ?", Time.current.midnight) }
+      c.scope :future_or_recent, ->(t) { c.where("served_at >= ?", Time.current.midnight - t) }
     end
 
     def initialize(meal)

@@ -12,7 +12,7 @@ module Meals
     belongs_to :community
     has_many :assignments, class_name: "Meals::Assignment", foreign_key: :role_id, inverse_of: :role
     has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder", dependent: :destroy,
-                                                 foreign_key: :meal_role_id, inverse_of: :role
+                                                 foreign_key: :role_id, inverse_of: :role
     has_many :formula_roles, inverse_of: :role, dependent: :destroy
     has_many :formulas, through: :formula_roles
 
@@ -23,6 +23,7 @@ module Meals
     normalize_attributes :title, :description
 
     before_validation :normalize
+    after_update :update_reminder_deliveries
 
     validates :title, presence: true, length: {maximum: 128},
                       uniqueness: {scope: %i[community_id deactivated_at]}
@@ -59,6 +60,10 @@ module Meals
     def shift_time_positive
       return unless shift_start.present? && shift_end.present? && !(shift_end - shift_start).positive?
       errors.add(:shift_end, :not_after_start)
+    end
+
+    def update_reminder_deliveries
+      Meals::RoleReminderDelivery.where(reminder_id: reminders.pluck(:id)).find_each(&:save!)
     end
   end
 end

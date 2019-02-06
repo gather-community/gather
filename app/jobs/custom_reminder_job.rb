@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Sends notifications for reminders that use the Reminder/ReminderDelivery system.
-# Runs every hour.
+# Should run frequently because reminders can be set for any time, not just on the hour.
 class CustomReminderJob < ReminderJob
   # In case the job hasn't run for awhile, how old is too old to deliver?
   EXPIRY_TIME = 3.hours

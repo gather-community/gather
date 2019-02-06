@@ -20,6 +20,12 @@ class ReminderDelivery < ApplicationRecord
     update!(delivered: true)
   end
 
+  protected
+
+  def starts_at
+    event.starts_at
+  end
+
   private
 
   def compute_deliver_at
@@ -27,9 +33,9 @@ class ReminderDelivery < ApplicationRecord
       if abs_time?
         abs_time
       elsif rel_days?
-        event.starts_at.midnight + rel_sign * rel_magnitude.days + Settings.reminders.time_of_day.hours
+        starts_at.midnight + rel_sign * rel_magnitude.days + Settings.reminders.time_of_day.hours
       else
-        event.starts_at + rel_sign * rel_magnitude.hours
+        starts_at + rel_sign * rel_magnitude.hours
       end
   end
 end

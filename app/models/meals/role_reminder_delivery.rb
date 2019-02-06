@@ -7,8 +7,15 @@ module Meals
 
     protected
 
+    delegate :role, to: :reminder
+
     def event
       meal
+    end
+
+    # We compute start time relative to shift start to be consistent with the work module.
+    def starts_at
+      super + role.shift_start.minutes
     end
 
     def send_mail(assignment)

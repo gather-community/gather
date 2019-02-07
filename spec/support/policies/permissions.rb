@@ -14,10 +14,10 @@ shared_context "policy permissions" do
   let(:communityX) { with_tenant(clusterB) { create(:community, name: "Community X") } }
   let(:user) { create(:user, first_name: "user") }
   let(:other_user) { create(:user, first_name: "other_user") }
-  let(:usercmtyB) { create(:user, community: communityB, first_name: "usercmtyB") }
-  let(:user_in_cmtyC) { create(:user, community: communityC, first_name: "user_in_cmtyC") }
-  let(:outside_user) do
-    with_tenant(clusterB) { create(:user, community: communityX, first_name: "outside_user") }
+  let(:user_cmtyB) { create(:user, community: communityB, first_name: "user_cmtyB") }
+  let(:user_cmtyC) { create(:user, community: communityC, first_name: "user_cmtyC") }
+  let(:user_cmtyX) do
+    with_tenant(clusterB) { create(:user, community: communityX, first_name: "user_cmtyX") }
   end
   let(:inactive_user) { create(:user, deactivated_at: Time.current, first_name: "inactive_user") }
   let(:household) { create(:household, users: [user], community: community) }
@@ -29,14 +29,14 @@ shared_context "policy permissions" do
   let(:guardian) { user }
   let(:child) { create(:user, child: true, guardians: [guardian], first_name: "child") }
   let(:other_child) { create(:user, child: true, guardians: [other_user], first_name: "other_child") }
-  let(:childcmtyB) do
+  let(:child_cmtyB) do
     create(:user, community: communityB, child: true,
-                  guardians: [usercmtyB], first_name: "childcmtyB")
+                  guardians: [user_cmtyB], first_name: "child_cmtyB")
   end
-  let(:outside_child) do
+  let(:child_cmtyX) do
     with_tenant(clusterB) do
       create(:user, community: communityX, child: true,
-                    guardians: [outside_user], first_name: "outside_child")
+                    guardians: [user_cmtyX], first_name: "child_cmtyX")
     end
   end
   let(:inactive_child) do
@@ -47,39 +47,39 @@ shared_context "policy permissions" do
   let(:admin2) { create(:admin, first_name: "admin2") }
   let(:cluster_admin) { create(:cluster_admin, first_name: "cluster_admin") }
   let(:cluster_admin2) { create(:cluster_admin, first_name: "cluster_admin2") }
-  let(:outside_cluster_admin) do
-    create(:cluster_admin, community: communityB, first_name: "outside_cluster_admin")
+  let(:cluster_admin_cmtyX) do
+    create(:cluster_admin, community: communityB, first_name: "cluster_admin_cmtyX")
   end
   let(:super_admin) { create(:super_admin, first_name: "super_admin") }
   let(:super_admin2) { create(:super_admin, first_name: "super_admin2") }
-  let(:outside_super_admin) do
+  let(:super_admin_cmtyX) do
     with_tenant(clusterB) do
-      create(:super_admin, community: communityX, first_name: "outside_super_admin")
+      create(:super_admin, community: communityX, first_name: "super_admin_cmtyX")
     end
   end
-  let(:admincmtyB) { create(:admin, community: communityB, first_name: "admincmtyB") }
+  let(:admin_cmtyB) { create(:admin, community: communityB, first_name: "admin_cmtyB") }
   let(:biller) { create(:biller, first_name: "biller") }
-  let(:billercmtyB) { create(:biller, community: communityB, first_name: "billercmtyB") }
+  let(:biller_cmtyB) { create(:biller, community: communityB, first_name: "biller_cmtyB") }
   let(:photographer) { create(:photographer, first_name: "photographer") }
-  let(:photographercmtyB) { create(:photographer, community: communityB, first_name: "photographercmtyB") }
+  let(:photographer_cmtyB) { create(:photographer, community: communityB, first_name: "photographer_cmtyB") }
   let(:meals_coordinator) { create(:meals_coordinator, first_name: "meals_coord") }
-  let(:meals_coordinatorcmtyB) do
-    create(:meals_coordinator, community: communityB, first_name: "meals_coordcmtyB")
+  let(:meals_coordinator_cmtyB) do
+    create(:meals_coordinator, community: communityB, first_name: "meals_coord_cmtyB")
   end
   let(:work_coordinator) { create(:work_coordinator, first_name: "work_coordinator") }
-  let(:work_coordinatorcmtyB) do
-    create(:work_coordinator, community: communityB, first_name: "work_coordinatorcmtyB")
+  let(:work_coordinator_cmtyB) do
+    create(:work_coordinator, community: communityB, first_name: "work_coordinator_cmtyB")
   end
   let(:wikiist) { create(:wikiist, first_name: "wikiist") }
-  let(:wikiistcmtyB) { create(:wikiist, community: communityB, first_name: "wikiistcmtyB") }
+  let(:wikiist_cmtyB) { create(:wikiist, community: communityB, first_name: "wikiist_cmtyB") }
 
   shared_examples_for "permits cluster and super admins" do
     it "permits cluster admins from cluster" do
-      expect(subject).to permit(outside_cluster_admin, record)
+      expect(subject).to permit(cluster_admin_cmtyX, record)
     end
 
     it "permits outside super admins" do
-      expect(subject).to permit(outside_super_admin, record)
+      expect(subject).to permit(super_admin_cmtyX, record)
     end
   end
 
@@ -95,8 +95,8 @@ shared_context "policy permissions" do
     it_behaves_like "permits users in community"
 
     it "forbids users from other communities" do
-      usercmtyB.community
-      expect(subject).not_to permit(usercmtyB, record)
+      user_cmtyB.community
+      expect(subject).not_to permit(user_cmtyB, record)
     end
   end
 
@@ -104,11 +104,11 @@ shared_context "policy permissions" do
     it_behaves_like "permits users in community"
 
     it "permits users from other communities in cluster" do
-      expect(subject).to permit(usercmtyB, record)
+      expect(subject).to permit(user_cmtyB, record)
     end
 
     it "forbids users from communities outside cluster" do
-      expect(subject).not_to permit(outside_user, record)
+      expect(subject).not_to permit(user_cmtyX, record)
     end
   end
 
@@ -124,7 +124,7 @@ shared_context "policy permissions" do
     end
 
     it "forbids admins from outside community" do
-      expect(subject).not_to permit(admincmtyB, record)
+      expect(subject).not_to permit(admin_cmtyB, record)
     end
   end
 
@@ -173,7 +173,7 @@ shared_context "policy permissions" do
   shared_examples_for "permits cluster admins only" do
     it "permits cluster admins" do
       expect(subject).to permit(cluster_admin, record)
-      expect(subject).to permit(outside_cluster_admin, record)
+      expect(subject).to permit(cluster_admin_cmtyX, record)
     end
 
     it "forbids admins" do

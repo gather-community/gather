@@ -19,17 +19,17 @@ describe MealPolicy do
       it_behaves_like "permits users in community only"
 
       it "permits users in other invited communities" do
-        expect(subject).to permit(user_in_cmtyC, meal)
+        expect(subject).to permit(user_cmtyC, meal)
       end
 
       it "permits non-invited workers" do
-        meal.assignments << create(:meal_assignment, meal: meal, user: usercmtyB)
-        expect(subject).to permit(usercmtyB, meal)
+        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB)
+        expect(subject).to permit(user_cmtyB, meal)
       end
 
       it "permits non-invited but signed-up folks" do
-        meal.signups.create(household: usercmtyB.household)
-        expect(subject).to permit(usercmtyB, meal)
+        meal.signups.create(household: user_cmtyB.household)
+        expect(subject).to permit(user_cmtyB, meal)
       end
     end
 
@@ -44,8 +44,8 @@ describe MealPolicy do
       it_behaves_like "permits users in community only"
 
       it "permits non-invited workers" do
-        meal.assignments << create(:meal_assignment, meal: meal, user: usercmtyB)
-        expect(subject).to permit(usercmtyB, meal)
+        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB)
+        expect(subject).to permit(user_cmtyB, meal)
       end
     end
 
@@ -287,7 +287,7 @@ describe MealPolicy do
     end
 
     context "outside admin" do
-      let(:actor) { admincmtyB }
+      let(:actor) { admin_cmtyB }
 
       it "should have nothing" do
         expect(subject).to be_empty

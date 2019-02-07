@@ -18,12 +18,12 @@ describe SignupPolicy do
 
         it "permits invitees" do
           expect(subject).to permit(user, signup)
-          expect(subject).to permit(user_in_cmtyC, signup)
+          expect(subject).to permit(user_cmtyC, signup)
         end
 
         it "forbids non-invitees, even admins" do
-          expect(subject).not_to permit(usercmtyB, signup)
-          expect(subject).not_to permit(admincmtyB, signup)
+          expect(subject).not_to permit(user_cmtyB, signup)
+          expect(subject).not_to permit(admin_cmtyB, signup)
         end
       end
 

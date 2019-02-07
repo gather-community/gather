@@ -25,7 +25,7 @@ describe Wiki::PagePolicy do
         end
 
         it "denies wikiist from other community" do
-          expect(subject).not_to permit(wikiistcmtyB, page)
+          expect(subject).not_to permit(wikiist_cmtyB, page)
         end
 
         it "denies creator" do
@@ -93,7 +93,7 @@ describe Wiki::PagePolicy do
     end
 
     context "for outside wikiist" do
-      let(:actor) { wikiistcmtyB }
+      let(:actor) { wikiist_cmtyB }
       it_behaves_like "regular user"
     end
 

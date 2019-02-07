@@ -132,7 +132,7 @@ describe Reservations::ReservationPolicy do
       end
 
       context "outside admin" do
-        let(:reserver) { admincmtyB }
+        let(:reserver) { admin_cmtyB }
         it_behaves_like "basic attribs"
       end
     end

@@ -37,15 +37,15 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on households in other community in cluster" do
-        expect(subject).to permit(user, usercmtyB.household)
+        expect(subject).to permit(user, user_cmtyB.household)
       end
 
       it "permits outside super admins" do
-        expect(subject).to permit(outside_super_admin, usercmtyB.household)
+        expect(subject).to permit(super_admin_cmtyX, user_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
-        expect(subject).not_to permit(user, outside_user.household)
+        expect(subject).not_to permit(user, user_cmtyX.household)
       end
     end
 
@@ -53,11 +53,11 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on households in other community in cluster" do
-        expect(subject).not_to permit(user, usercmtyB.household)
+        expect(subject).not_to permit(user, user_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
-        expect(subject).not_to permit(user, outside_user.household)
+        expect(subject).not_to permit(user, user_cmtyX.household)
       end
     end
 

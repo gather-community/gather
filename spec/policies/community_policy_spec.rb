@@ -12,7 +12,7 @@ describe CommunityPolicy do
       it_behaves_like "permits users in cluster"
 
       it "permits superadmins from outside cluster" do
-        expect(subject).to permit(outside_super_admin, record)
+        expect(subject).to permit(super_admin_cmtyX, record)
       end
     end
 

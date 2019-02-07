@@ -28,9 +28,7 @@ module Work
 
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
-
-    # Need to use after_commit here because after_update doesn't run on touch.
-    after_commit { reminders.each(&:create_or_update_deliveries) }
+    after_save :create_or_update_deliveries
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}
@@ -142,6 +140,10 @@ module Work
 
     def non_destroyed_shifts
       @non_destroyed_shifts ||= shifts.reject(&:marked_for_destruction?)
+    end
+
+    def create_or_update_deliveries
+      reminders.each(&:save!)
     end
   end
 end

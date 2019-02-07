@@ -48,6 +48,8 @@ class Reminder < ApplicationRecord
     %w[days_before days_after].include?(rel_unit_sign)
   end
 
+  private
+
   def create_or_update_deliveries
     # Run callbacks on existing deliveries to ensure recomputation.
     deliveries.find_each(&:save!)
@@ -55,8 +57,6 @@ class Reminder < ApplicationRecord
       deliveries.find_or_create_by!(event_key => event, type: delivery_type)
     end
   end
-
-  private
 
   def normalize
     if abs_time?

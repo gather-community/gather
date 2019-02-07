@@ -30,7 +30,7 @@ describe Work::PeriodPolicy do
     let!(:objs_in_community) { create_list(:work_period, 2) }
     let!(:objs_in_cluster) { create_list(:work_period, 2, community: communityB) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 
   describe "permitted attributes" do

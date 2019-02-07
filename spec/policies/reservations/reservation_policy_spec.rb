@@ -103,7 +103,7 @@ describe Reservations::ReservationPolicy do
     let!(:objs_in_community) { create_list(:reservation, 2, resource: resource) }
     let!(:objs_in_cluster) { create_list(:reservation, 2, resource: resourceB) }
 
-    it_behaves_like "allows all users in cluster"
+    it_behaves_like "permits all users in cluster"
   end
 
   describe "permitted_attributes" do

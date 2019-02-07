@@ -23,7 +23,7 @@ describe Reservations::ProtocolPolicy do
     let!(:objs_in_community) { create_list(:reservation_protocol, 2) }
     let!(:objs_in_cluster) { create_list(:reservation_protocol, 2, community: communityB) }
 
-    it_behaves_like "allows only admins in community"
+    it_behaves_like "permits only admins in community"
   end
 
   describe "permitted_attributes" do

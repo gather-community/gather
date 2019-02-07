@@ -59,7 +59,7 @@ describe Meals::RolePolicy do
     let!(:objs_in_community) { create_list(:meal_role, 2) }
     let!(:objs_in_cluster) { create_list(:meal_role, 2, community: communityB) }
 
-    it_behaves_like "allows only admins or special role in community", :meals_coordinator
+    it_behaves_like "permits only admins or special role in community", :meals_coordinator
   end
 
   describe "permitted attributes" do

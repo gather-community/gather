@@ -25,6 +25,6 @@ describe People::VehiclePolicy do
     let(:objs_in_community) { create_list(:vehicle, 2, household: user.household) }
     let(:objs_in_cluster) { create_list(:vehicle, 2, household: userB.household) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 end

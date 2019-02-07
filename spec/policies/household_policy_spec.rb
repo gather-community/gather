@@ -196,12 +196,12 @@ describe HouseholdPolicy do
     let!(:objs_in_cluster) { [userB.household] }
 
     context "normal" do
-      it_behaves_like "allows all users in cluster"
+      it_behaves_like "permits all users in cluster"
     end
 
     describe "administerable" do
       let(:method) { :administerable }
-      it_behaves_like "allows only admins in community"
+      it_behaves_like "permits only admins in community"
     end
   end
 

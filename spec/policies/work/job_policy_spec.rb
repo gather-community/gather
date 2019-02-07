@@ -32,7 +32,7 @@ describe Work::JobPolicy do
     let!(:objs_in_community) { create_list(:work_job, 2, period: period) }
     let!(:objs_in_cluster) { create_list(:work_job, 2, period: periodB) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 
   describe "permitted attributes" do

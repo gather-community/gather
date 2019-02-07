@@ -101,6 +101,6 @@ describe Work::ShiftPolicy do
     let!(:objs_in_community) { job.shifts }
     let!(:objs_in_cluster) { jobB.shifts }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 end

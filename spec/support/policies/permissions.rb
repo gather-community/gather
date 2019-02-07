@@ -194,7 +194,7 @@ shared_context "policy permissions" do
       expect(subject).to permit(user, user)
     end
 
-    it "allows guardians to edit own children" do
+    it "permits guardians to edit own children" do
       expect(subject).to permit(guardian, child)
     end
 

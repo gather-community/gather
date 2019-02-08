@@ -52,7 +52,7 @@ module Work
     }
 
     before_validation :normalize
-    after_save :create_or_update_deliveries
+    after_save :update_reminder_deliveries
 
     validates :starts_at, :ends_at, presence: true, unless: :full_period?
     validates :slots, presence: true, numericality: {greater_than: 0}
@@ -191,7 +191,7 @@ module Work
       @ends_at_date ||= ends_at.to_date
     end
 
-    def create_or_update_deliveries
+    def update_reminder_deliveries
       reminders.each(&:save!)
     end
   end

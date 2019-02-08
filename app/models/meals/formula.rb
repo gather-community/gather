@@ -32,7 +32,7 @@ module Meals
     end
 
     after_save :ensure_unique_default
-    after_update :create_missing_reminder_deliveries
+    after_update :update_reminder_deliveries
 
     def self.default_for(community)
       in_community(community).where(is_default: true).first
@@ -140,22 +140,35 @@ module Meals
       value.to_f / (pct ? 100 : 1)
     end
 
-    def create_missing_reminder_deliveries
-      reminders = Meals::RoleReminder.where(role_id: roles.in_community(community).pluck(:id))
-
+    def update_reminder_deliveries
+      # We have to iterate over each pair of 1. reminders associated with this formula and
+      # 2. meals associated with this formula and ensure that a RoleReminderDelivery exists for each pair.
+      # If a role is removed from the formula, the role doesn't get removed from the meal, so we don't
+      # need to worry about deleting the deliveries.
+      #
       # We only consider recent or future meals because otherwise we'd have to iterate over quite a lot
       # of meals for a mature community, and with little benefit, since reminders only usually relate
       # to events in the future or recent past.
-      current_meals = meals.hosted_by(community).future_or_recent(Reminder::MAX_FUTURE_DISTANCE)
-      deliveries = RoleReminderDelivery.where(reminder_id: reminders.pluck(:id))
-        .index_by { |d| [d.meal_id, d.reminder_id] }
-      reminders.includes(:role).find_each do |reminder|
-        current_meals.find_each do |meal|
-          # We only need to create deliveries here, not update.
-          next if deliveries[[meal.id, reminder.id]]
+      current_meals.find_each do |meal|
+        reminders.includes(:role).find_each do |reminder|
+          next if meal_reminder_pairs_with_deliveries[[meal.id, reminder.id]]
           RoleReminderDelivery.create!(meal: meal, reminder: reminder)
         end
       end
+    end
+
+    def reminders
+      @reminders ||= Meals::RoleReminder.where(role_id: role_ids)
+    end
+
+    def current_meals
+      meals.hosted_by(community).future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
+    end
+
+    def meal_reminder_pairs_with_deliveries
+      @meal_reminder_pairs_with_deliveries ||= RoleReminderDelivery
+        .where(reminder_id: reminders.pluck(:id))
+        .index_by { |d| [d.meal_id, d.reminder_id] }
     end
   end
 end

@@ -28,7 +28,7 @@ module Work
 
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
-    after_save :create_or_update_deliveries
+    after_save :update_reminder_deliveries
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}
@@ -142,7 +142,7 @@ module Work
       @non_destroyed_shifts ||= shifts.reject(&:marked_for_destruction?)
     end
 
-    def create_or_update_deliveries
+    def update_reminder_deliveries
       reminders.each(&:save!)
     end
   end

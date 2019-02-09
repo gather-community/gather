@@ -16,8 +16,8 @@ module Meals
       :meal
     end
 
-    def events
-      Meal.where(formula_id: role.formulas.pluck(:id))
+    def remindable_events
+      Meal.where(formula_id: role.formula_ids).future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
     end
 
     def delivery_type

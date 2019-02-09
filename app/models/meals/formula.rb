@@ -162,7 +162,7 @@ module Meals
     end
 
     def current_meals
-      meals.hosted_by(community).future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
+      meals.future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
     end
 
     def meal_reminder_pairs_with_deliveries

@@ -11,7 +11,7 @@ module Work
       :shift
     end
 
-    def events
+    def remindable_events
       job.shifts
     end
 

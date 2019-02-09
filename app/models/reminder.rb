@@ -49,7 +49,7 @@ class Reminder < ApplicationRecord
   def update_reminder_deliveries
     # Run callbacks on existing deliveries to ensure recomputation.
     deliveries.find_each(&:save!)
-    events.find_each do |event|
+    remindable_events.find_each do |event|
       deliveries.find_or_create_by!(event_key => event, type: delivery_type)
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190203170912) do
+ActiveRecord::Schema.define(version: 20190208215738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,7 +303,6 @@ ActiveRecord::Schema.define(version: 20190203170912) do
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deliver_at", null: false
-    t.boolean "delivered", default: false, null: false
     t.bigint "meal_id"
     t.integer "reminder_id", null: false
     t.bigint "shift_id"

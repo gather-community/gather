@@ -22,7 +22,6 @@ class CustomReminderJob < ReminderJob
     ReminderDelivery
       .where("deliver_at <= ?", Time.zone.now)
       .where("deliver_at >= ?", Time.zone.now - EXPIRY_TIME)
-      .where(delivered: false)
       .includes(eager_loads)
       .group_by(&:community)
   end

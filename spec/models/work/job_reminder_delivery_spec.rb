@@ -2,9 +2,26 @@
 
 require "rails_helper"
 
-# This spec covers the details of the deliver_at computation.
+# This spec covers base class behaviors like the deliver_at computation.
 describe Work::JobReminderDelivery do
   include_context "reminders"
+
+  describe "deliver!" do
+    let(:reminder) { create_work_job_reminder(create(:work_job), "2018-01-01 09:15") }
+    let(:delivery) { reminder.deliveries[0] }
+    let(:assignments) { [double, double] }
+
+    before do
+      allow(delivery).to receive(:assignments).and_return(assignments)
+    end
+
+    it "should send mail and destroy self" do
+      expect(delivery).to receive(:send_mail).twice
+      delivery.deliver!
+      expect(delivery).to be_destroyed
+    end
+  end
+
   describe "deliver_at computation" do
     let(:delivery) { reminder.deliveries.first }
     subject(:deliver_at) { delivery.deliver_at.iso8601 }

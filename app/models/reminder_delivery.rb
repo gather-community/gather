@@ -17,7 +17,7 @@ class ReminderDelivery < ApplicationRecord
 
   def deliver!
     assignments.each { |assignment| send_mail(assignment) }
-    update!(delivered: true)
+    destroy
   end
 
   protected

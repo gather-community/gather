@@ -90,7 +90,7 @@ describe CustomReminderJob do
       let!(:reminder4) { create_work_job_reminder(job1, "2018-01-01 3:00") } # Too early
 
       before do
-        job2.shifts[0].reminder_deliveries.index_by(&:reminder)[reminder2].update!(delivered: true)
+        job2.shifts[0].reminder_deliveries.index_by(&:reminder)[reminder2].destroy
       end
 
       it_behaves_like "sends correct number of emails", 3

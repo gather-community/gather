@@ -6,7 +6,7 @@ describe CustomReminderJob do
   include_context "jobs"
   include_context "reminders"
 
-  let(:time) { "2018-01-01 9:01" }
+  let(:time) { "2018-01-01 6:01" }
   let(:time_offset) { 0 }
 
   # Create periods and users in two clusters.
@@ -47,9 +47,9 @@ describe CustomReminderJob do
       let!(:assignA2) { jobA.shifts[0].assignments.create!(user: userA2) }
       let!(:assignB1) { jobB1.shifts[0].assignments.create!(user: userB1) }
       let!(:assignB2) { jobB2.shifts[0].assignments.create!(user: userB1) }
-      let!(:reminderA1) { create_work_job_reminder(jobA, "2018-01-01 9:00") }
-      let!(:reminderB1) { create_work_job_reminder(jobB1, "2018-01-01 9:00") }
-      let!(:reminderB2) { create_work_job_reminder(jobB2, "2018-01-01 9:00") }
+      let!(:reminderA1) { create_work_job_reminder(jobA, "2018-01-01 6:00") }
+      let!(:reminderB1) { create_work_job_reminder(jobB1, "2018-01-01 6:00") }
+      let!(:reminderB2) { create_work_job_reminder(jobB2, "2018-01-01 6:00") }
       let!(:decoy) { create_work_job_reminder(jobB1, "2018-01-01 10:00") }
 
       context "slightly earlier" do
@@ -84,10 +84,10 @@ describe CustomReminderJob do
       let!(:assign1) { job1.shifts[0].assignments.create!(user: userB1) }
       let!(:assign2) { job2.shifts[0].assignments.create!(user: userB1) }
       let!(:assign3) { job2.shifts[-1].assignments.create!(user: userB1) }
-      let!(:reminder1) { create_work_job_reminder(job1, "2018-01-01 9:00") }
-      let!(:reminder2) { create_work_job_reminder(job2, "2018-01-01 9:00") }
-      let!(:reminder3) { create_work_job_reminder(job1, "2018-01-01 8:30") }
-      let!(:reminder4) { create_work_job_reminder(job1, "2018-01-01 5:00") } # Too early
+      let!(:reminder1) { create_work_job_reminder(job1, "2018-01-01 6:00") }
+      let!(:reminder2) { create_work_job_reminder(job2, "2018-01-01 6:00") }
+      let!(:reminder3) { create_work_job_reminder(job1, "2018-01-01 5:30") }
+      let!(:reminder4) { create_work_job_reminder(job1, "2018-01-01 3:00") } # Too early
 
       before do
         job2.shifts[0].reminder_deliveries.index_by(&:reminder)[reminder2].update!(delivered: true)
@@ -109,7 +109,7 @@ describe CustomReminderJob do
     let(:period) { create(:work_period, community: cmtyB) }
     let(:job) { create(:work_job, period: period, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
     let!(:shift_assignment) { job.shifts[0].assignments.create!(user: userB1) }
-    let!(:job_reminder) { create_work_job_reminder(job, "2018-01-01 9:00") }
+    let!(:job_reminder) { create_work_job_reminder(job, "2018-01-01 6:00") }
 
     let(:role) { create(:meal_role, :head_cook, community: cmtyA) }
     let(:formula) { create(:meal_formula, community: cmtyA, roles: [role]) }

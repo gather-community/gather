@@ -3,11 +3,9 @@
 # Sends notifications for reminders that use the Reminder/ReminderDelivery system.
 # Should run frequently because reminders can be set for any time, not just on the hour.
 class CustomReminderJob < ReminderJob
-  # In case the job hasn't run for awhile, how old is too old to deliver?
-  EXPIRY_TIME = 3.hours
-
   def perform
     ActsAsTenant.without_tenant do
+      clean_old_deliveries
       scheduled_deliveries_by_community.each do |community, deliveries|
         with_community(community) do
           deliveries.each(&:deliver!)
@@ -18,12 +16,12 @@ class CustomReminderJob < ReminderJob
 
   private
 
+  def clean_old_deliveries
+    ReminderDelivery.too_old.delete_all
+  end
+
   def scheduled_deliveries_by_community
-    ReminderDelivery
-      .where("deliver_at <= ?", Time.zone.now)
-      .where("deliver_at >= ?", Time.zone.now - EXPIRY_TIME)
-      .includes(eager_loads)
-      .group_by(&:community)
+    ReminderDelivery.where("deliver_at <= ?", Time.zone.now).includes(eager_loads).group_by(&:community)
   end
 
   # Returns eager loads that may be needed by any of the ReminderDelivery subclasses or to

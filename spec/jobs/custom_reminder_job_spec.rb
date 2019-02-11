@@ -51,13 +51,18 @@ describe CustomReminderJob do
       let!(:reminderB1) { create_work_job_reminder(jobB1, "2018-01-01 6:00") }
       let!(:reminderB2) { create_work_job_reminder(jobB2, "2018-01-01 6:00") }
       let!(:decoy) { create_work_job_reminder(jobB1, "2018-01-01 10:00") }
+      let!(:other_reminder) { create_work_job_reminder(jobB1, "2018-01-01 8:00") }
+      let!(:old_stray_delivery) do
+        other_reminder.deliveries[0].tap { |d| d.update!(deliver_at: 1.day.ago) }
+      end
 
       context "slightly earlier" do
         let(:time_offset) { -2.minutes }
 
-        it "should send nothing" do
+        it "should send nothing but delete old delivery" do
           expect(WorkMailer).not_to receive(:job_reminder)
           perform_job
+          expect { old_stray_delivery.reload }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
 

@@ -12,6 +12,8 @@ class ReminderDelivery < ApplicationRecord
   belongs_to :shift, class_name: "Work::Shift", inverse_of: :reminder_deliveries
   belongs_to :meal, inverse_of: :reminder_deliveries
 
+  scope :too_old, -> { where("deliver_at < ?", Time.current - TOO_OLD) }
+
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
   delegate :community, :assignments, to: :event
 

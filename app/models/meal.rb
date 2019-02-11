@@ -65,7 +65,10 @@ class Meal < ApplicationRecord
 
   after_validation :copy_resource_errors
   before_save :set_menu_timestamp
-  after_save :update_reminder_deliveries
+  after_save do
+    return unless saved_change_to_served_at?
+    Meals::RoleReminderDeliveryMaintainer.instance.meal_saved(roles, reminder_deliveries)
+  end
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
@@ -267,17 +270,5 @@ class Meal < ApplicationRecord
 
   def set_menu_timestamp
     self.menu_posted_at = Time.current if menu_posted? && title_was.blank?
-  end
-
-  def update_reminder_deliveries
-    return unless saved_change_to_served_at?
-
-    # Run callbacks on existing deliveries to ensure recomputation.
-    reminder_deliveries.includes(reminder: :role).find_each(&:save!)
-
-    # Create any missing deliveries.
-    roles.includes(:reminders).flat_map(&:reminders).each do |reminder|
-      reminder_deliveries.find_or_create_by!(reminder: reminder)
-    end
   end
 end

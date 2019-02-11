@@ -12,16 +12,8 @@ module Meals
 
     protected
 
-    def event_key
-      :meal
-    end
-
-    def remindable_events
-      Meal.where(formula_id: role.formula_ids).future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
-    end
-
-    def delivery_type
-      "Meals::RoleReminderDelivery"
+    def delivery_maintainer
+      RoleReminderDeliveryMaintainer.instance
     end
   end
 end

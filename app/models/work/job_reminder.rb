@@ -7,16 +7,8 @@ module Work
 
     protected
 
-    def event_key
-      :shift
-    end
-
-    def remindable_events
-      job.shifts
-    end
-
-    def delivery_type
-      "Work::JobReminderDelivery"
+    def delivery_maintainer
+      JobReminderDeliveryMaintainer.instance
     end
   end
 end

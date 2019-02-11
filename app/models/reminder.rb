@@ -13,7 +13,7 @@ class Reminder < ApplicationRecord
   scope :canonical_order, -> { order(:abs_rel, :abs_time, :rel_unit_sign, :rel_magnitude, :note) }
 
   before_validation :normalize
-  after_save :update_reminder_deliveries
+  after_save { delivery_maintainer.reminder_saved(self, deliveries) }
 
   validates :rel_magnitude, presence: true, if: :rel_time?
   validates :abs_time, presence: true, if: :abs_time?
@@ -45,14 +45,6 @@ class Reminder < ApplicationRecord
   end
 
   private
-
-  def update_reminder_deliveries
-    # Run callbacks on existing deliveries to ensure recomputation.
-    deliveries.find_each(&:save!)
-    remindable_events.find_each do |event|
-      deliveries.find_or_create_by!(event_key => event, type: delivery_type)
-    end
-  end
 
   def normalize
     if abs_time?

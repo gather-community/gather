@@ -8,7 +8,7 @@ module Work
     belongs_to :shift, inverse_of: :assignments, counter_cache: true, touch: true
     belongs_to :user
 
-    scope :in_community, ->(c) { joins(shift: {job: :period}).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(shift: {job: :period}).where(work_periods: {community_id: c.id}) }
     scope :in_period, ->(p) { joins(shift: :job).merge(Job.in_period(p)) }
     scope :fixed_slot, -> { joins(shift: :job).merge(Job.fixed_slot) }
     scope :preassigned, -> { where(preassigned: true) }

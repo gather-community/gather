@@ -6,9 +6,9 @@ class ReminderDeliveryMaintainer
 
   def reminder_saved(reminder, deliveries)
     # Run callbacks on existing deliveries to ensure recomputation.
-    deliveries.find_each(&:save!)
+    deliveries.find_each(&:calculate_and_save)
     remindable_events(reminder).find_each do |event|
-      deliveries.find_or_create_by!(event_key => event, type: delivery_type)
+      deliveries.find_or_initialize_by(event_key => event, type: delivery_type).calculate_and_save
     end
   end
 end

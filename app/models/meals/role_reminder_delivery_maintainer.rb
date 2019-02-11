@@ -19,24 +19,24 @@ module Meals
       current_meals(meals).find_each do |meal|
         reminders_for_roles.includes(:role).find_each do |reminder|
           next if pairs[[meal.id, reminder.id]]
-          RoleReminderDelivery.create!(meal: meal, reminder: reminder)
+          RoleReminderDelivery.new(meal: meal, reminder: reminder).calculate_and_save
         end
       end
     end
 
     def meal_saved(roles, deliveries)
       # Run callbacks on existing deliveries to ensure recomputation.
-      deliveries.includes(reminder: :role).find_each(&:save!)
+      deliveries.includes(reminder: :role).find_each(&:calculate_and_save)
 
       # Create any missing deliveries.
       roles.includes(:reminders).flat_map(&:reminders).each do |reminder|
-        deliveries.find_or_create_by!(reminder: reminder)
+        deliveries.find_or_initialize_by(reminder: reminder).calculate_and_save
       end
     end
 
     def role_saved(reminders)
       RoleReminderDelivery.where(reminder_id: reminders.pluck(:id))
-        .includes(:meal, :reminder).find_each(&:save!)
+        .includes(:meal, :reminder).find_each(&:calculate_and_save)
     end
 
     private

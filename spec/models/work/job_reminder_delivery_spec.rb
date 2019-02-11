@@ -26,9 +26,14 @@ describe Work::JobReminderDelivery do
     let(:delivery) { reminder.deliveries.first }
     subject(:deliver_at) { delivery.deliver_at.iso8601 }
 
-    # This ensures that times aren't UTC even when there is a non-UTC timezone.
-    # Below, when we get times in iso8601, they should in the correct zone.
-    before { Time.zone = "Saskatchewan" }
+    before do
+      # This ensures that times aren't UTC even when there is a non-UTC timezone.
+      # Below, when we get times in iso8601, they should in the correct zone.
+      Time.zone = "Saskatchewan"
+
+      # Need to fix time b/c reminder deliveries in past won't save.
+      Timecop.freeze("2017-12-25 00:00")
+    end
 
     context "date_time job" do
       let(:job) { create(:work_job, shift_starts: [shift_start], shift_count: 1) }
@@ -73,6 +78,23 @@ describe Work::JobReminderDelivery do
         let(:shift_start) { "2017-12-30 11:00" }
         let!(:reminder) { create_work_job_reminder(job, 3.5, "hours_after") }
         it { is_expected.to eq("2017-12-30T14:30:00-06:00") }
+      end
+
+      context "time in past" do
+        let(:shift_start) { "2017-12-30 11:00" }
+        let!(:reminder) { create_work_job_reminder(job, 10, "days_before") }
+        it { expect(delivery).not_to be_persisted }
+      end
+
+      context "time changing to past" do
+        let(:shift_start) { "2017-12-30 11:00" }
+        let!(:reminder) { create_work_job_reminder(job, 2, "days_before") }
+
+        it "destroys delivery" do
+          expect(delivery).to be_persisted
+          reminder.update!(rel_magnitude: 10)
+          expect { delivery.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
     end
 

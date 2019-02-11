@@ -2,6 +2,8 @@
 
 # Tracks the delivery of a given reminder for a given Shift, in order to prevent duplicate deliveries.
 class ReminderDelivery < ApplicationRecord
+  TOO_OLD = 1.hour
+
   acts_as_tenant :cluster
 
   belongs_to :reminder, class_name: "Reminder", inverse_of: :deliveries
@@ -13,11 +15,23 @@ class ReminderDelivery < ApplicationRecord
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
   delegate :community, :assignments, to: :event
 
-  before_save :compute_deliver_at
-
   def deliver!
     assignments.each { |assignment| send_mail(assignment) }
     destroy
+  end
+
+  # Calculates (or recaculates) deliver_at.
+  # If not persisted: saves only if deliver_at in future.
+  # If persisted: saves if deliver_at changes; destroys if deliver_at in past.
+  def calculate_and_save
+    compute_deliver_at
+    if new_record?
+      save! unless too_old?
+    elsif too_old?
+      destroy
+    elsif will_save_change_to_deliver_at?
+      save!
+    end
   end
 
   protected
@@ -27,6 +41,10 @@ class ReminderDelivery < ApplicationRecord
   end
 
   private
+
+  def too_old?
+    deliver_at < Time.current - TOO_OLD
+  end
 
   def compute_deliver_at
     self.deliver_at =

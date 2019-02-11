@@ -5,16 +5,16 @@ module Work
   class JobReminderDeliveryMaintainer < ReminderDeliveryMaintainer
     def job_saved(reminders)
       JobReminderDelivery.where(reminder_id: reminders.pluck(:id))
-        .includes(:reminder, shift: :job).find_each(&:save!)
+        .includes(:reminder, shift: :job).find_each(&:calculate_and_save)
     end
 
     def shift_saved(reminders, deliveries)
       # Run callbacks on existing deliveries to ensure recomputation.
-      deliveries.includes(:reminder).find_each(&:save!)
+      deliveries.includes(:reminder).find_each(&:calculate_and_save)
 
       # Create any missing deliveries.
       reminders.each do |reminder|
-        deliveries.find_or_create_by!(reminder: reminder)
+        deliveries.find_or_initialize_by(reminder: reminder).calculate_and_save
       end
     end
 

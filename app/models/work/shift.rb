@@ -52,7 +52,7 @@ module Work
     }
 
     before_validation :normalize
-    after_save { JobReminderDeliveryMaintainer.instance.shift_saved(reminders, reminder_deliveries) }
+    after_save { JobReminderMaintainer.instance.shift_saved(reminders, reminder_deliveries) }
 
     validates :starts_at, :ends_at, presence: true, unless: :full_period?
     validates :slots, presence: true, numericality: {greater_than: 0}

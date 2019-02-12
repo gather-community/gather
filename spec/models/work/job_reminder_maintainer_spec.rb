@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Work::JobReminderDeliveryMaintainer do
+describe Work::JobReminderMaintainer do
   include_context "reminders"
 
   let(:job) { create(:work_job, shift_count: 2, hours: 2) }

@@ -13,7 +13,7 @@ module Meals
     protected
 
     def delivery_maintainer
-      RoleReminderDeliveryMaintainer.instance
+      RoleReminderMaintainer.instance
     end
   end
 end

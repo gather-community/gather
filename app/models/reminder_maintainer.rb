@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Updates ReminderDeliverys for various events
-class ReminderDeliveryMaintainer
+class ReminderMaintainer
   include Singleton
 
   def reminder_saved(reminder, deliveries)

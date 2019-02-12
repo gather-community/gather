@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Meals::RoleReminderDeliveryMaintainer do
+describe Meals::RoleReminderMaintainer do
   include_context "reminders"
 
   let(:yr_mo) { (Time.zone.today + 60).strftime("%Y-%m") }

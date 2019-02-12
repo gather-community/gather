@@ -23,7 +23,7 @@ module Meals
     normalize_attributes :title, :description
 
     before_validation :normalize
-    after_update { RoleReminderDeliveryMaintainer.instance.role_saved(reminders) }
+    after_update { RoleReminderMaintainer.instance.role_saved(reminders) }
 
     validates :title, presence: true, length: {maximum: 128},
                       uniqueness: {scope: %i[community_id deactivated_at]}

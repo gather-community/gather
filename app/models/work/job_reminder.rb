@@ -8,7 +8,7 @@ module Work
     protected
 
     def delivery_maintainer
-      JobReminderDeliveryMaintainer.instance
+      JobReminderMaintainer.instance
     end
   end
 end

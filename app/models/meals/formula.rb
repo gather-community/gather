@@ -32,7 +32,7 @@ module Meals
     end
 
     after_save :ensure_unique_default
-    after_update { RoleReminderDeliveryMaintainer.instance.formula_saved(meals, roles) }
+    after_update { RoleReminderMaintainer.instance.formula_saved(meals, roles) }
 
     def self.default_for(community)
       in_community(community).where(is_default: true).first

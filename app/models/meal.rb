@@ -67,7 +67,7 @@ class Meal < ApplicationRecord
   before_save :set_menu_timestamp
   after_save do
     return unless saved_change_to_served_at?
-    Meals::RoleReminderDeliveryMaintainer.instance.meal_saved(roles, reminder_deliveries)
+    Meals::RoleReminderMaintainer.instance.meal_saved(roles, reminder_deliveries)
   end
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity

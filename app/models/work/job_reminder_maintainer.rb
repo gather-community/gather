@@ -2,7 +2,7 @@
 
 module Work
   # Updates JobReminderDeliverys for various events
-  class JobReminderDeliveryMaintainer < ReminderDeliveryMaintainer
+  class JobReminderMaintainer < ReminderMaintainer
     def job_saved(reminders)
       JobReminderDelivery.where(reminder_id: reminders.pluck(:id))
         .includes(:reminder, shift: :job).find_each(&:calculate_and_save)

@@ -56,7 +56,7 @@ en:
     slots_open:
       one: "%{count} slot open"
       other: "%{count} slots open"
-  work/reminder:
+  work/job_reminder:
     absolute: "At %{time}"
     relative:
       days_before:

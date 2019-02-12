@@ -164,7 +164,7 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
-      work/reminder:
+      work/job_reminder:
         abs_rel: "Type"
         abs_time: "Send Time"
         rel_magnitude: "Send Time"

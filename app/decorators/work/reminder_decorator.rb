@@ -12,9 +12,9 @@ module Work
 
     def time
       if abs_time?
-        t("work/reminder.absolute", time: I18n.l(abs_time))
+        t("work/job_reminder.absolute", time: I18n.l(abs_time))
       else
-        t("work/reminder.relative.#{rel_unit_sign}", count: to_int_if_no_fractional_part(rel_magnitude))
+        t("work/job_reminder.relative.#{rel_unit_sign}", count: to_int_if_no_fractional_part(rel_magnitude))
       end
     end
 

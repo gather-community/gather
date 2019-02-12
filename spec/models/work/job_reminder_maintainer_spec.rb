@@ -5,7 +5,8 @@ require "rails_helper"
 describe Work::JobReminderMaintainer do
   include_context "reminders"
 
-  let(:job) { create(:work_job, shift_count: 2, hours: 2) }
+  let(:base_t) { Time.current.midnight + 40.hours } # 6pm tomorrow
+  let(:job) { create(:work_job, shift_count: 2, hours: 2, shift_starts: [base_t + 2.days, base_t + 3.days]) }
   let!(:reminder) { create_work_job_reminder(job, 1, "hours_after") }
   let(:shift1) { job.shifts[0] }
   let(:shift1_delivery) { deliveries.detect { |d| d.shift == shift1 } }
@@ -18,8 +19,8 @@ describe Work::JobReminderMaintainer do
 
   context "on new shift additions" do
     before do
-      job.shifts << build(:work_shift, job: job, starts_at: Time.zone.now + 7.days, hours: 2)
-      job.shifts << build(:work_shift, job: job, starts_at: Time.zone.now + 8.days, hours: 2)
+      job.shifts << build(:work_shift, job: job, starts_at: base_t + 7.days, hours: 2)
+      job.shifts << build(:work_shift, job: job, starts_at: base_t + 8.days, hours: 2)
       job.save!
     end
 

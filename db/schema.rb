@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190208215738) do
+ActiveRecord::Schema.define(version: 20190212031453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -310,8 +310,8 @@ ActiveRecord::Schema.define(version: 20190208215738) do
     t.datetime "updated_at", null: false
     t.index ["deliver_at"], name: "index_reminder_deliveries_on_deliver_at"
     t.index ["meal_id"], name: "index_reminder_deliveries_on_meal_id"
-    t.index ["reminder_id", "meal_id"], name: "index_reminder_deliveries_on_reminder_id_and_meal_id", unique: true
-    t.index ["reminder_id", "shift_id"], name: "index_reminder_deliveries_on_reminder_id_and_shift_id", unique: true
+    t.index ["reminder_id"], name: "index_reminder_deliveries_on_reminder_id"
+    t.index ["shift_id"], name: "index_reminder_deliveries_on_shift_id"
     t.check_constraint :reminder_deliveries_583897000, "(((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL)))"
   end
 

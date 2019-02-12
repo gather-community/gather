@@ -11,7 +11,19 @@
   <%= f.input :hours_per_shift, required: true %>
   <%= f.input :description, as: :markdown %>
   <%= f.input :double_signups_allowed, as: :boolean %>
-  <%= nested_field_set(f, :reminders) %>
+
+  <% if job.meal_role? %>
+    <%= f.input :reminders do %>
+      Reminders for this job should be set on its
+      <% if policy(job.meal_role).edit? %>
+        <%= link_to("meal role page", edit_meals_role_path(job.meal_role)) %>.
+      <% else %>
+        meal role page.
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= nested_field_set(f, :reminders) %>
+  <% end %>
 
   <div id="shifts">
     <h2>Shifts</h2>

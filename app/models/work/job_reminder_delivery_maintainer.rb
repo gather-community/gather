@@ -31,5 +31,9 @@ module Work
     def delivery_type
       "Work::JobReminderDelivery"
     end
+
+    def eager_loads
+      {shift: :job}
+    end
   end
 end

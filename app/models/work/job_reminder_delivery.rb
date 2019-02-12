@@ -5,11 +5,11 @@ module Work
   class JobReminderDelivery < ReminderDelivery
     # See parent class for associations.
 
-    protected
-
     def event
       shift
     end
+
+    protected
 
     def send_mail(assignment)
       WorkMailer.job_reminder(assignment, reminder).deliver_now

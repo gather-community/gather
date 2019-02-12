@@ -14,10 +14,10 @@ module Meals
       # We only consider recent or future meals because otherwise we'd have to iterate over quite a lot
       # of meals for a mature community, and with little benefit, since reminders only usually relate
       # to events in the future or recent past.
-      reminders_for_roles = reminders(roles)
+      reminders_for_roles = reminders(roles).includes(:role)
       pairs = meal_reminder_pairs_with_deliveries(reminders_for_roles)
       current_meals(meals).find_each do |meal|
-        reminders_for_roles.includes(:role).find_each do |reminder|
+        reminders_for_roles.each do |reminder|
           next if pairs[[meal.id, reminder.id]]
           RoleReminderDelivery.new(meal: meal, reminder: reminder).calculate_and_save
         end
@@ -63,6 +63,10 @@ module Meals
     end
 
     def event_key
+      :meal
+    end
+
+    def eager_loads
       :meal
     end
   end

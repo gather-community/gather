@@ -5,13 +5,13 @@ module Meals
   class RoleReminderDelivery < ReminderDelivery
     # See parent class for associations.
 
-    protected
-
-    delegate :role, to: :reminder
-
     def event
       meal
     end
+
+    protected
+
+    delegate :role, to: :reminder
 
     # We compute start time relative to shift_start (if given) to be consistent with the work module.
     def starts_at

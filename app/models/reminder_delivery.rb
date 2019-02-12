@@ -36,7 +36,15 @@ class ReminderDelivery < ApplicationRecord
     end
   end
 
+  def event
+    raise NotImplementedError
+  end
+
   protected
+
+  def send_mail
+    raise NotImplementedError
+  end
 
   def starts_at
     event.starts_at

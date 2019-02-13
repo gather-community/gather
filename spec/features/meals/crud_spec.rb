@@ -5,7 +5,9 @@ require "rails_helper"
 feature "meal crud", js: true do
   let!(:users) { create_list(:user, 2) }
   let!(:location) { create(:resource, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
-  let!(:formula) { create(:meal_formula, is_default: true) }
+  let!(:formula) { create(:meal_formula, :with_asst_cook_role, is_default: true) }
+  let(:hc_role) { formula.roles[0] }
+  let(:ac_role) { formula.roles[1] }
   let!(:meals) { create_list(:meal, 5, formula: formula, resources: [location]) }
   let!(:meal) { meals.first }
 
@@ -26,8 +28,9 @@ feature "meal crud", js: true do
       # Create with no menu
       click_on("Create Meal")
       select2(location.name, from: "#meal_resource_ids", multiple: true)
-      select2(users[0].name, from: "#meal_head_cook_assign_attributes_user_id")
-      select2(users[1].name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
+      select_worker(users[0].name, role: hc_role)
+      add_worker_field(role: ac_role)
+      select_worker(users[1].name, role: ac_role)
       click_button("Save")
       expect_success
 
@@ -100,7 +103,8 @@ feature "meal crud", js: true do
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
       click_link("Edit Workers")
-      select2(actor.name, from: "#meal_asst_cook_assigns_attributes_0_user_id")
+      add_worker_field(role: ac_role)
+      select_worker(actor.name, role: ac_role)
       click_button("Save")
       expect_success
 
@@ -120,6 +124,19 @@ feature "meal crud", js: true do
     visit("/meals")
     expect(page).to have_css("tr", text: meals[0].head_cook.name)
     expect(page).to have_css("tr", text: meals[4].head_cook.name)
+  end
+
+  def worker_div_selector(role:)
+    %(#assignment-fields div[data-role-id="#{role.id}"])
+  end
+
+  def add_worker_field(role:)
+    find("#{worker_div_selector(role: role)} a.add_fields").click
+  end
+
+  def select_worker(user, role:)
+    select = all("#{worker_div_selector(role: role)} select")[0]
+    select2(user, from: select)
   end
 
   def fill_in_menu

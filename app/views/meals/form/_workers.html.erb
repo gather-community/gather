@@ -1,14 +1,16 @@
 <%= meal.form_section(:workers, expanded: local_assigns[:expanded]) do %>
   <div id="assignment-fields">
     <% meal.roles.each do |role| %>
-      <%= nested_field_set(f, :assignments,
-            objects: meal.assignments_by_role[role] || [],
-            context: "meal_assign",
-            label: role.title,
-            multiple: !role.head_cook?,
-            inner_partial: "meals/form/assignment_fields",
-            inner_labels: false,
-            wrap_object: Proc.new { |assign| assign.role = role; assign }) %>
+      <div data-role-id="<%= role.id %>">
+        <%= nested_field_set(f, :assignments,
+              objects: meal.assignments_by_role[role] || [],
+              context: "meal_assign",
+              label: role.title,
+              multiple: !role.head_cook?,
+              inner_partial: "meals/form/assignment_fields",
+              inner_labels: false,
+              wrap_object: Proc.new { |assign| assign.role = role; assign }) %>
+      </div>
     <% end %>
   </div>
 <% end %>

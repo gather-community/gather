@@ -89,7 +89,7 @@ class MealsController < ApplicationController
     @meal.build_reservations
     if @meal.save
       flash[:success] = "Meal updated successfully."
-      @worker_change_notifier.try(:check_and_send!)
+      @worker_change_notifier&.check_and_send!
       redirect_to(meals_path)
     else
       prep_form_vars
@@ -198,9 +198,8 @@ class MealsController < ApplicationController
 
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
-    unless policy(@meal).change_date_loc_invites?
-      @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
-    end
+    return if policy(@meal).change_date_loc_invites?
+    @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
   end
 
   def report_lenses

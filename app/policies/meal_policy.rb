@@ -164,7 +164,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def worker_attribs
-    [{}]
+    [assignments_attributes: %i[id user_id role_id _destroy]]
   end
 
   def signup_attribs

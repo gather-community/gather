@@ -51,6 +51,7 @@ class Meal < ApplicationRecord
     a["id"].blank? && a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
   }
   accepts_nested_attributes_for :cost, reject_if: :all_blank
+  accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
   delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
@@ -66,8 +67,9 @@ class Meal < ApplicationRecord
   after_validation :copy_resource_errors
   before_save :set_menu_timestamp
   after_save do
-    return unless saved_change_to_served_at?
-    Meals::RoleReminderMaintainer.instance.meal_saved(roles, reminder_deliveries)
+    if saved_change_to_served_at?
+      Meals::RoleReminderMaintainer.instance.meal_saved(roles, reminder_deliveries)
+    end
   end
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
@@ -87,13 +89,11 @@ class Meal < ApplicationRecord
   validates_with Meals::SignupsValidator
 
   def self.new_with_defaults(community)
-    new(
-      served_at: default_datetime,
-      capacity: community.settings.meals.default_capacity,
-      community_ids: Community.all.map(&:id),
-      community: community,
-      formula: Meals::Formula.default_for(community)
-    )
+    formula = Meals::Formula.default_for(community)
+    meal = new(served_at: default_datetime, capacity: community.settings.meals.default_capacity,
+               community_ids: Community.all.map(&:id), community: community, formula: formula)
+    meal.assignments.build(role: formula.head_cook_role)
+    meal
   end
 
   def self.default_datetime

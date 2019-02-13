@@ -225,9 +225,7 @@ describe MealPolicy do
     let(:menu_attribs) do
       %i[title entrees side kids dessert notes] + Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
     end
-    let(:worker_attribs) do
-      [{}]
-    end
+    let(:worker_attribs) { [assignments_attributes: %i[id user_id role_id _destroy]] }
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
     let(:signup_attribs) do

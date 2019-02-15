@@ -1,5 +1,5 @@
 # Shows an alert if user attempts to change workers.
-Gather.Views.MealFormWorkerView = Backbone.View.extend
+Gather.Views.MealWorkerFormView = Backbone.View.extend
   initialize: (options) ->
     @options = options
 
@@ -8,7 +8,7 @@ Gather.Views.MealFormWorkerView = Backbone.View.extend
     'change #assignment-fields': 'workersChanged'
 
   workersChanged: ->
-    if !@shown && !@options.notifyOnWorkerChange
+    if !@shown && !@newRecord && !@options.notifyOnWorkerChange
       alert('Note: If you change meal workers, an email notification will be sent to ' +
         'the meals committee/manager and all current and newly assigned workers.')
       @shown = true

@@ -18,7 +18,7 @@
     // sets up select2s in them.
     new Gather.Views.DirtyChecker({el: '.meal-form'});
     new Gather.Views.AjaxSelect2({el: '.meal-form'});
-    new Gather.Views.MealFormWorkerView(<%=json(
+    new Gather.Views.MealWorkerFormView(<%=json(
       el: ".meal-form",
       notifyOnWorkerChange: policy(meal).change_workers_without_notification?,
       newRecord: meal.new_record?

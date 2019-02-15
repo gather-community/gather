@@ -18,7 +18,8 @@
     new Gather.Views.DirtyChecker({el: '.meal-form'});
     new Gather.Views.MealFormWorkerView(<%=json(
       el: ".meal-form",
-      notifyOnWorkerChange: policy(meal).change_workers_without_notification?
+      notifyOnWorkerChange: policy(meal).change_workers_without_notification?,
+      newRecord: meal.new_record?
     )%>);
   });
 <% end %>

@@ -1,4 +1,9 @@
 <%= meal.form_section(:workers, expanded: local_assigns[:expanded]) do %>
+  <div class="alert alert-info formula-change-notice hiding">
+    The formula for this meal has been changed, which may make other roles available for assignment below.
+    To see any new meal roles, please save the meal and return to this page. Existing worker
+    assignments won't be deleted if their roles are not associated with the new formula.
+  </div>
   <div id="assignment-fields">
     <% meal.roles.each do |role| %>
       <div data-role-id="<%= role.id %>">

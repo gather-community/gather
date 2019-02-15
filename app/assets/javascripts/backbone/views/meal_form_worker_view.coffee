@@ -12,3 +12,9 @@ Gather.Views.MealFormWorkerView = Backbone.View.extend
       alert('Note: If you change meal workers, an email notification will be sent to ' +
         'the meals committee/manager and all current and newly assigned workers.')
       @shown = true
+
+  formulaChanged: (e) ->
+    if !@options.newRecord
+      origFormula = $(e.currentTarget).find("option[selected]").attr("value")
+      curFormula = $(e.currentTarget).val()
+      @$('.formula-change-notice').toggle(origFormula != curFormula)

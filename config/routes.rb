@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :worker_form, path: "worker-form"
     end
     member do
       put :close

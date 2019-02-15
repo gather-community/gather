@@ -6,7 +6,7 @@ class MealsController < ApplicationController
 
   decorates_assigned :meal, :meals, :meal_summary
 
-  before_action :init_meal, only: :new
+  before_action :init_meal, only: %i[new worker_form]
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
@@ -123,6 +123,15 @@ class MealsController < ApplicationController
       flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
         "You should close the meal using the link below before printing this summary."
     end
+  end
+
+  # Renders just the workers section of the form. Accepts a formula_id, and sets the
+  # meal formula to that ID (without saving) if provided.
+  # This is a collection action, only used for new meals.
+  def worker_form
+    authorize(@meal, :new?)
+    @meal.formula_id = params[:formula_id] if params[:formula_id]
+    render(partial: "meals/form/single_section", layout: false, locals: {section: "workers"})
   end
 
   def destroy

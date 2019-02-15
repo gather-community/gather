@@ -5,7 +5,8 @@ require "rails_helper"
 feature "meal crud", js: true do
   let!(:users) { create_list(:user, 2) }
   let!(:location) { create(:resource, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
-  let!(:formula) { create(:meal_formula, :with_asst_cook_role, is_default: true) }
+  let!(:formula) { create(:meal_formula, :with_asst_cook_role, name: "Formula 1", is_default: true) }
+  let!(:no_ac_formula) { create(:meal_formula, name: "Formula 2") }
   let(:hc_role) { formula.roles[0] }
   let(:ac_role) { formula.roles[1] }
   let!(:meals) { create_list(:meal, 5, formula: formula, resources: [location]) }
@@ -28,6 +29,13 @@ feature "meal crud", js: true do
       # Create with no menu
       click_on("Create Meal")
       select2(location.name, from: "#meal_resource_ids", multiple: true)
+
+      # Formula change changes worker roles
+      select("Formula 2", from: "Formula")
+      expect(page).not_to have_content("Assistant Cook")
+      select("Formula 1", from: "Formula")
+      expect(page).to have_content("Assistant Cook")
+
       select_worker(users[0].name, role: hc_role)
       add_worker_field(role: ac_role)
       select_worker(users[1].name, role: ac_role)

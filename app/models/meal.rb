@@ -38,11 +38,14 @@ class Meal < ApplicationRecord
   scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
-  scope :worked_by, lambda { |user|
+  scope :worked_by, lambda { |user, head_cook_only: false|
     user = user.id if user.is_a?(User)
-    where("? IN (SELECT user_id FROM meal_assignments WHERE meal_assignments.meal_id = meals.id)", user)
+    assignments = Meals::Assignment.arel_table
+    meals = Meal.arel_table
+    rel = Meals::Assignment.select(:user_id).where(assignments[:meal_id].eq(meals[:id]))
+    rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
+    where("? IN (#{rel.to_sql})", user)
   }
-  scope :head_cooked_by, ->(user) { worked_by(user).where(meal_assignments: {role: "head_cook"}) }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
 
   Meals::Status.define_scopes(self)

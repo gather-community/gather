@@ -13,6 +13,7 @@ module Meals
       # We need to write this join as SQL or the cluster gem messes things up in some cases.
       joins("LEFT JOIN meal_roles ON meal_roles.id = meal_assignments.role_id").merge(Meals::Role.by_title)
     }
+    scope :head_cook_role, -> { merge(Meals::Role.head_cook) }
 
     belongs_to :user, inverse_of: :meal_assignments
     belongs_to :meal, inverse_of: :assignments

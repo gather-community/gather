@@ -42,6 +42,14 @@ describe Work::JobReminderMaintainer do
     end
   end
 
+  context "on reminder creation" do
+    it "creates deliveries" do
+      expect(deliveries.size).to eq(2)
+      expect(deliveries.map(&:shift)).to match_array(job.shifts)
+      expect(deliveries.map(&:reminder)).to match_array([reminder] * 2)
+    end
+  end
+
   context "on reminder changes" do
     before do
       reminder.update!(rel_unit_sign: "hours_before")

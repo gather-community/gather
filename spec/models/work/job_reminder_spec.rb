@@ -70,16 +70,4 @@ describe Work::JobReminder do
       end
     end
   end
-
-  describe "JobReminderDelivery creation" do
-    let(:job) { create(:work_job, shift_count: 2) }
-    let(:reminder) { create_work_job_reminder(job, "2018-01-01 12:00") }
-    subject(:deliveries) { Work::JobReminderDelivery.all.to_a }
-
-    it "creates deliveries on creation" do
-      expect(deliveries.size).to eq(2)
-      expect(deliveries.map(&:shift)).to match_array(job.shifts)
-      expect(deliveries.map(&:reminder)).to match_array([reminder] * 2)
-    end
-  end
 end

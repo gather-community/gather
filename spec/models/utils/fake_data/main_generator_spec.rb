@@ -4,7 +4,7 @@ require "rails_helper"
 require "fileutils"
 
 describe Utils::FakeData::MainGenerator do
-  let(:community) { create(:community) }
+  let(:community) { Defaults.community }
   let(:cluster) { community.cluster }
 
   before do

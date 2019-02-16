@@ -26,13 +26,13 @@ describe Work::JobReminderDelivery do
     let(:delivery) { reminder.deliveries.first }
     subject(:deliver_at) { delivery.deliver_at.iso8601 }
 
-    before do
+    around do |example|
       # This ensures that times aren't UTC even when there is a non-UTC timezone.
       # Below, when we get times in iso8601, they should in the correct zone.
       Time.zone = "Saskatchewan"
 
       # Need to fix time b/c reminder deliveries in past won't save.
-      Timecop.freeze("2017-12-25 00:00")
+      Timecop.freeze("2017-12-25 00:00") { example.run }
     end
 
     context "date_time job" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Work
-  class ReminderDecorator < WorkDecorator
+  class JobReminderDecorator < WorkDecorator
     delegate_all
 
     def to_s

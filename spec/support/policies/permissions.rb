@@ -161,7 +161,7 @@ shared_context "policy permissions" do
     end
 
     it "forbids role from outside community" do
-      expect(subject).not_to permit(role_member("#{role_name}cmtyB"), record)
+      expect(subject).not_to permit(role_member("#{role_name}_cmtyB"), record)
     end
   end
 

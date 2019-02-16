@@ -49,8 +49,8 @@ describe Meals::Assignment do
       let(:role) { create(:meal_role, time_type: "date_only") }
 
       it do
-        expect(assignment.starts_at).to be_nil
-        expect(assignment.ends_at).to be_nil
+        expect(assignment.starts_at).to eq(Date.parse("2017-01-01"))
+        expect(assignment.ends_at).to eq(Date.parse("2017-01-01"))
       end
     end
   end

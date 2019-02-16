@@ -158,7 +158,7 @@ feature "calendar export" do
         end
       end
 
-      describe "shifts" do
+      describe "your jobs" do
         let(:head_cook_role) { create(:meal_role, :head_cook, description: "Cook something tasty") }
         let(:asst_cook_role) do
           create(:meal_role, title: "Assistant Cook", time_type: "date_time",
@@ -239,14 +239,14 @@ feature "calendar export" do
           visit("/calendars/exports/your-jobs/#{token}.ics")
           expect_calendar_name("Your Jobs")
           expect_events({
-            uid: "#{signature}_Shift_#{job3.shifts[0].id}",
+            uid: "#{signature}_Shift_#{job3.shifts[0].assignments[0].id}",
             summary: "Multi-day (Start)",
             location: nil,
             description: %r{Do something periodically\s+\n http://.+/work/signups/},
             "DTSTART;VALUE=DATE" => I18n.l(period_start.to_date, format: :iso),
             "DTEND;VALUE=DATE" => I18n.l(period_start.to_date + 1, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job3.shifts[0].id}",
+            uid: "#{signature}_Shift_#{job3.shifts[0].assignments[0].id}",
             summary: "Multi-day (End)",
             location: nil,
             description: %r{Do something periodically\s+\n http://.+/work/signups/},
@@ -259,14 +259,14 @@ feature "calendar export" do
             "DTSTART;VALUE=DATE" => I18n.l(shift2_1_start.to_date, format: :iso),
             "DTEND;VALUE=DATE" => I18n.l(shift2_1_start.to_date + 1, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job1.shifts[0].id}",
+            uid: "#{signature}_Shift_#{job1.shifts[0].assignments[0].id}",
             summary: "Assistant Cook: Figs",
             location: meal1.resources[0].name,
             description: %r{Help cook the things\s+\n http://.+/work/signups/},
             "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 2.hours, format: :iso),
             "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job1.shifts[1].id}",
+            uid: "#{signature}_Shift_#{job1.shifts[1].assignments[0].id}",
             summary: "Assistant Cook: Buns",
             location: meal2.resources[0].name,
             description: %r{Help cook the things\s+\n http://.+/work/signups/},

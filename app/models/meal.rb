@@ -95,7 +95,7 @@ class Meal < ApplicationRecord
     formula = Meals::Formula.default_for(community)
     meal = new(served_at: default_datetime, capacity: community.settings.meals.default_capacity,
                community_ids: Community.all.map(&:id), community: community, formula: formula)
-    meal.assignments.build(role: formula.head_cook_role)
+    meal.assignments.build(role: formula.head_cook_role) if formula
     meal
   end
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 feature "lenses", js: true do
-  let!(:community1) { create(:community, name: "Community 1", slug: "community1") }
+  let!(:community1) { Defaults.community }
   let!(:community2) { create(:community, name: "Community 2", slug: "community2") }
   let!(:community3) { create(:community, name: "Community 3", slug: "community3") }
   let!(:user) { create(:user, community: community3) }
@@ -131,7 +131,7 @@ feature "lenses", js: true do
     scenario "separate lenses per-community" do
       visit(users_path) # community3
       fill_in_lens_and_wait(:search, "foo")
-      with_subdomain("community1") do
+      with_subdomain("default") do
         visit(users_path)
         expect_lens_value(:search, "")
       end

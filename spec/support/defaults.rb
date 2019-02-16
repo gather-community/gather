@@ -7,7 +7,7 @@ class Defaults
   end
 
   def self.community
-    @community ||= FactoryBot.create(:community, name: "Default")
+    @community ||= FactoryBot.create(:community, name: "Default", slug: "default", abbrv: "df")
   end
 
   # Resets the variables so they will be re-created on next get.

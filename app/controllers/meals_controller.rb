@@ -182,10 +182,12 @@ class MealsController < ApplicationController
                @meals.future.oldest_first
              end
     @meals = @meals.includes(:signups, :invitations)
+
     if params[:search].present?
-      @meals = @meals.eager_load(:assignments)
-        .where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
-          "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+      subq = Meals::Assignment.select("DISTINCT meal_id").joins(:user)
+        .where("first_name ILIKE ? OR last_name ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+        .where("meals.id = meal_assignments.meal_id")
+      @meals = @meals.where("title ILIKE ? OR meals.id IN (#{subq.to_sql})", "%#{params[:search]}%")
     end
 
     @meals = @meals.page(params[:page])

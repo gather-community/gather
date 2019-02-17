@@ -5,7 +5,7 @@ require "rails_helper"
 describe Meals::FormulaPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:formula) { build(:meal_formula, community: community) }
+    let(:formula) { create(:meal_formula) }
     let(:record) { formula }
 
     permissions :index?, :show? do
@@ -74,7 +74,7 @@ describe Meals::FormulaPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Meals::Formula }
-    let!(:formulas) { create_list(:meal_formula, 3, community: community) }
+    let!(:formulas) { create_list(:meal_formula, 3) }
 
     before do
       formulas.last.deactivate
@@ -110,14 +110,15 @@ describe Meals::FormulaPolicy do
   end
 
   describe "permitted attributes" do
-    let(:formula) { build(:meal_formula, community: default_community) }
+    let(:formula) { create(:meal_formula) }
     let(:admin) { create(:admin) }
+    let(:base_attribs) { %i[name is_default pantry_reimbursement] << {role_ids: []} }
     subject { Meals::FormulaPolicy.new(admin, formula).permitted_attributes }
 
     context "with no meals" do
       it "should allow all attribs" do
-        expect(subject).to contain_exactly(:name, :is_default, :meal_calc_type, :pantry_calc_type,
-          :pantry_fee_disp, :pantry_reimbursement, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
+        expect(subject).to contain_exactly(:meal_calc_type, :pantry_calc_type,
+          :pantry_fee_disp, *base_attribs, *Signup::SIGNUP_TYPES.map { |st| "#{st}_disp".to_sym })
       end
     end
 
@@ -125,7 +126,7 @@ describe Meals::FormulaPolicy do
       before { allow(formula).to receive(:has_meals?).and_return(true) }
 
       it "should not allow restricted attribs" do
-        expect(subject).to contain_exactly(:name, :is_default, :pantry_reimbursement)
+        expect(subject).to contain_exactly(*base_attribs)
       end
     end
   end

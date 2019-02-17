@@ -4,7 +4,7 @@ module Calendars
   module Exports
     # Abstract parent class for meals calendars of various sorts
     class MealsExport < Export
-      def class_name
+      def kind_name(_object)
         "Meal"
       end
 

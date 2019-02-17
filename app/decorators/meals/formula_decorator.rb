@@ -37,6 +37,10 @@ module Meals
       active? ? "" : "inactive"
     end
 
+    def role_titles
+      roles.decorate.map(&:title_with_suffix).join(", ")
+    end
+
     Signup::SIGNUP_TYPES.each do |st|
       define_method("#{st}_disp") do
         if fixed_meal?

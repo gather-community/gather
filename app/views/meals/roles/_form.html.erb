@@ -1,0 +1,21 @@
+<%= gather_form_for(role) do |f| %>
+  <%= f.input :title %>
+  <%= f.input :count_per_meal, disabled: role.head_cook? %>
+  <%= f.input :time_type, collection: Meals::Role::TIMES_OPTIONS, include_blank: false %>
+  <%= f.input :shift_start %>
+  <%= f.input :shift_end %>
+  <%= f.input :description, as: :markdown %>
+  <%= f.input :double_signups_allowed, as: :boolean %>
+  <%= nested_field_set(f, :reminders) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Meals.RoleFormView({el: '.meals--role-form'});
+    new Gather.Views.DirtyChecker({el: '.meals--role-form'});
+  });
+<% end %>

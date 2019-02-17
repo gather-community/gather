@@ -7,7 +7,7 @@ describe Billing::StatementJob do
 
   describe "perform" do
     context "with accounts having activity" do
-      # Accounts and households will be in default_community
+      # Accounts and households will be in Defaults.community
       let!(:trans1) { create(:transaction) }
       let!(:trans2) { create(:transaction) }
 
@@ -23,7 +23,7 @@ describe Billing::StatementJob do
 
     context "with no accounts having activity" do
       it "should do nothing" do
-        expect(email_sent_by { perform_job(default_community.id) }.size).to eq(0)
+        expect(email_sent_by { perform_job(Defaults.community.id) }.size).to eq(0)
         expect(statement_count).to eq(0)
       end
     end

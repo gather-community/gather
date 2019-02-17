@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :wiki_page, class: "Wiki::Page" do
-    community { default_community }
+    community { Defaults.community }
     content { Faker::Lorem.paragraph(2) }
     association :creator, factory: :user
     updator { creator }

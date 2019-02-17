@@ -11,7 +11,7 @@ module MealsHelper
     date_fmt = params[:time] == "all" ? :short_date_with_yr : :short_date
     spacer = with_break ? tag(:br) : " "
     content_tag(:span, l(meal.served_at, format: date_fmt), class: "date") <<
-      spacer << content_tag(:span, l(meal.served_at, format: :regular_time), class: "time")
+      spacer << content_tag(:span, l(meal.served_at, format: :time_only), class: "time")
   end
 
   def signup_info(signup)

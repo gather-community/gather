@@ -9,10 +9,6 @@ describe Meals::MessagePolicy do
     let(:meal) { create(:meal, cleaners: [user]) }
     let(:record) { message }
 
-    before do
-      save_policy_objects!(community, user)
-    end
-
     context "with meal set" do
       let(:message) { Meals::Message.new(meal: meal, sender: user) }
 

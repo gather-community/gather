@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Reservations::MealReservationHandler, type: :model do
-  let(:community) { default_community }
+  let(:community) { Defaults.community }
   let(:resources) { create_list(:resource, 2) }
   let(:meal) { build(:meal, :with_menu, community: community, title: "A very very very long title",
     resources: resources, served_at: "2017-01-01 12:00") }

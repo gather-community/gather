@@ -2,7 +2,9 @@ require "rails_helper"
 
 feature "formulas", js: true do
   let(:actor) { create(:meals_coordinator) }
-  let!(:formulas) { create_list(:meal_formula, 2) }
+  let!(:head_cook_role) { create(:meal_role, :head_cook) }
+  let!(:other_role) { create(:meal_role, title: "Stumbler") }
+  let!(:formulas) { create_list(:meal_formula, 2, roles: [head_cook_role]) }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
@@ -21,6 +23,7 @@ feature "formulas", js: true do
     click_link("Create")
     fill_in("Name", with: "Free Meal")
     check("Default")
+    select2("Stumbler", from: "#meals_formula_role_ids", multiple: true)
     find("#meals_formula_meal_calc_type").select("Fixed")
     expect(page).to have_content("Enter the price diners of each type")
     fill_in("Adult (Meat)", with: "$2.50")
@@ -31,6 +34,7 @@ feature "formulas", js: true do
     expect_success
 
     click_link("Free Meal")
+    expect(page).to have_content("Head Cook, Stumbler")
     expect(page).to have_content("$2.00")
     expect(page).to have_content("10.2%")
     click_on("Edit")

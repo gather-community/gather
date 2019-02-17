@@ -2,8 +2,8 @@
 
 # Objects and examples useful for testing policy scopes.
 shared_context "policy scopes" do
-  let(:cluster) { default_cluster }
-  let(:community) { default_community }
+  let(:cluster) { Defaults.cluster }
+  let(:community) { Defaults.community }
   let(:communityB) { create(:community, name: "Community B") }
 
   let(:user) { create(:user, community: community) }
@@ -23,7 +23,7 @@ shared_context "policy scopes" do
     it { is_expected.to match_array(objs_in_community + objs_in_cluster) }
   end
 
-  shared_examples_for "allows regular users in community" do
+  shared_examples_for "permits regular users in community" do
     it_behaves_like "all cluster objects visible to cluster admin"
 
     context "for regular users" do
@@ -37,7 +37,7 @@ shared_context "policy scopes" do
     end
   end
 
-  shared_examples_for "allows only admins in community" do
+  shared_examples_for "permits only admins in community" do
     it_behaves_like "all cluster objects visible to cluster admin"
 
     context "for admins" do
@@ -51,8 +51,8 @@ shared_context "policy scopes" do
     end
   end
 
-  shared_examples_for "allows only admins or special role in community" do |role|
-    it_behaves_like "allows only admins in community"
+  shared_examples_for "permits only admins or special role in community" do |role|
+    it_behaves_like "permits only admins in community"
 
     context "for special role" do
       let(:actor) { send(role) }
@@ -60,7 +60,7 @@ shared_context "policy scopes" do
     end
   end
 
-  shared_examples_for "allows all users in cluster" do
+  shared_examples_for "permits all users in cluster" do
     context "for regular users" do
       let(:actor) { user }
       it { is_expected.to match_array(objs_in_community + objs_in_cluster) }

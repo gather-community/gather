@@ -7,32 +7,15 @@ en:
           default_landing_page: "Default Landing Page"
           meals:
             _self: "Meals"
-            extra_roles: "Extra Roles"
             reimb_instructions: "Reimbursement Instructions"
             show_reimb_form: "Show printable reimbursement form"
             cooks_can_finalize: "Cooks can finalize meals"
             default_capacity: "Default Capacity"
-            default_shift_times:
-              _self: "Default Shift Times"
-              start:
-                _self: "Start Times"
-                head_cook: "Head Cook"
-                asst_cook: "Assistant Cook"
-                table_setter: "Table Setter"
-                cleaner: "Cleaner"
-              end:
-                _self: "End Times"
-                head_cook: "Head Cook"
-                asst_cook: "Assistant Cook"
-                table_setter: "Table Setter"
-                cleaner: "Cleaner"
             reminder_lead_times:
               _self: "Reminder Days in Advance"
               diner: "Diner Reminder"
               early_menu: "Early Menu Reminder"
               late_menu: "Late Menu Reminder"
-              head_cook: "Head Cook Reminder"
-              job: "Job Reminder"
           reservations:
             _self: "Reservations"
             kinds: "Types"
@@ -54,20 +37,15 @@ en:
       community:
         settings:
           meals:
-            extra_roles: "Roles aside from head cook, separated by commas. Choose from <code>asst_cook</code>, <code>table_setter</code>, and <code>cleaner</code>. Spelling must be exact."
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
             show_reimb_form: "Whether to show a printable reimbursement form (including grocery and pantry amounts and reimbursement method) on the meal summary page. Uncheck if you prefer an electronic reimbursement process."
             cooks_can_finalize: "Whether head cooks can finalize meals in addition to billers, meals coordinators, and admins."
             default_capacity: "The default setting for how many people a meal can accommodate."
-            default_shift_times:
-              _self: "When shifts start and end, relative to meal serving time. In minutes."
             reminder_lead_times:
-              _self: "The number of days in advance reminders of various types are sent. Reminders are sent at 6am local time. Entering a '0' means the reminder will be sent on the morning of the day of the meal."
+              _self: "The number of days in advance reminders of various types are sent. Reminders are sent at 6am local time. Entering a '0' means the reminder will be sent on the morning of the day of the meal. See the meal roles page for more reminder settings."
               diner: "The reminder sent to all diners."
               early_menu: "The reminder sent to the head cook to remind them to enter a menu."
               late_menu: "A second, more urgent reminder sent to the head cook if they still haven't entered a menu. Should be fewer days in advance than the early menu reminder."
-              head_cook: "A reminder to the head cook containing the date, time, and other workers for the meal. Typically fewer days in advance than the menu reminders."
-              job: "A reminder for meal workers other than the head cook listing the date and time of their shift and the other workers on the meal."
           reservations:
             kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
             meals:

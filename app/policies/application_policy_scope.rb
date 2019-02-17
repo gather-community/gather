@@ -34,8 +34,8 @@ class ApplicationPolicy
       active? && %i[admin cluster_admin super_admin].any? { |r| user.global_role?(r) }
     end
 
-    def active_admin_or?(role)
-      active_admin? || (active? && user.global_role?(role))
+    def active_admin_or?(*roles)
+      active_admin? || (active? && roles.any? { |r| user.global_role?(r) })
     end
 
     # Assumes there is an `in_community` scope on the target class.
@@ -43,6 +43,17 @@ class ApplicationPolicy
       if active_cluster_admin?
         scope
       elsif active_admin?
+        scope.in_community(user.community)
+      else
+        scope.none
+      end
+    end
+
+    # Assumes there is an `in_community` scope on the target class.
+    def allow_admins_in_community_or(*roles)
+      if active_cluster_admin?
+        scope
+      elsif active_admin_or?(*roles)
         scope.in_community(user.community)
       else
         scope.none

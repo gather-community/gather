@@ -6,7 +6,7 @@ FactoryBot.define do
 
     sequence(:name) { |i| "Protocol #{i}" }
     kinds nil
-    community { resources.first&.community }
+    community { resources.first&.community || Defaults.community }
 
     after(:create) do |protocol, evaluator|
       protocol.resources = evaluator.resources

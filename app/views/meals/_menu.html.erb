@@ -10,13 +10,12 @@
         for <%= @meal.communities.map(&:name).join(', ') %>
       </div>
     <% end %>
-    <% @meal.extra_roles.each do |role| %>
-      <% people = @meal.people_in_role(role) %>
+    <% @meal.assignments_by_role.each do |role, assignments| %>
       <div class="chunk">
-        <%= t("assignment_roles.#{role}", count: people.size) %>
-        <%= "[None]" if people.empty? %>
-        <% people.each do |p| %>
-          <div class="job"><%= user_link(p) %></div>
+        <%= role.title %>
+        <%= "[None]" if assignments.empty? %>
+        <% assignments.each do |a| %>
+          <div class="job"><%= user_link(a.user) %></div>
         <% end %>
       </div>
     <% end %>

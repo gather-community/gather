@@ -11,6 +11,8 @@ module Meals
 
     belongs_to :community
     has_many :meals, inverse_of: :formula
+    has_many :formula_roles, inverse_of: :formula, dependent: :destroy
+    has_many :roles, -> { by_title }, through: :formula_roles
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
@@ -24,11 +26,13 @@ module Meals
     validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
     validate :at_least_one_signup_type
     validate :cant_unset_default
+    validate :must_have_head_cook_role
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
     end
 
     after_save :ensure_unique_default
+    after_update { RoleReminderMaintainer.instance.formula_saved(meals, roles) }
 
     def self.default_for(community)
       in_community(community).where(is_default: true).first
@@ -89,6 +93,10 @@ module Meals
       end
     end
 
+    def head_cook_role
+      roles.detect(&:head_cook?)
+    end
+
     private
 
     def cant_unset_default
@@ -107,6 +115,12 @@ module Meals
           errors.add(:signup_types, :at_least_one_nonzero_signup_type)
         end
       end
+    end
+
+    def must_have_head_cook_role
+      head_cook_role = Meals::Role.in_community(community).head_cook.first
+      return if head_cook_role.nil? || role_ids.include?(head_cook_role.id)
+      errors.add(:role_ids, :must_have_head_cook, title: head_cook_role.title)
     end
 
     def ensure_unique_default

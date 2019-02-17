@@ -1,0 +1,22 @@
+<%= @user.greeting %>
+
+This is a reminder that you are scheduled as <%= @assignment.role_title %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_short_date %>.
+
+Your shift is on <%= @assignment.date_or_times %> at <%= @meal.location_name %>. The meal is scheduled to be served at <%= @meal.served_at_time_only %>.
+<% if @reminder.note? %>
+
+This reminder includes the following note:
+--------------
+<%= @reminder.note %>
+--------------
+<% end %>
+
+Your help is crucial! Please arrive promptly for your shift!
+
+Here is some contact information for other workers for the meal:
+
+<% @other_assigns.each do |a| -%>
+<%= a.role_title %>: <%= a.user.name %>, <%= a.user.email %>, <%= a.user.phone_list %>
+<% end %>
+
+<%= render("meal_link") %>

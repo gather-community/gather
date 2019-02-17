@@ -19,7 +19,7 @@ describe "general mailer" do
   describe "mail to child" do
     let(:guardians) { create_list(:user, 2) }
     let(:meal) { create(:meal, head_cook: teen) }
-    let(:mail) { MealMailer.cook_menu_reminder(meal.head_cook_assign).deliver_now }
+    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
 
     context "with email address" do
       let(:teen) { create(:user, :child, guardians: guardians, email: "teen@foo.com") }

@@ -5,8 +5,8 @@ require "rails_helper"
 describe People::VehiclePolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:household) { build(:household, community: community) }
-    let(:vehicle) { build(:vehicle, household: household) }
+    let(:household) { create(:household) }
+    let(:vehicle) { create(:vehicle, household: household) }
     let(:record) { vehicle }
 
     permissions :index? do
@@ -25,6 +25,6 @@ describe People::VehiclePolicy do
     let(:objs_in_community) { create_list(:vehicle, 2, household: user.household) }
     let(:objs_in_cluster) { create_list(:vehicle, 2, household: userB.household) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 end

@@ -10,6 +10,7 @@ class Community < ApplicationRecord
   belongs_to :cluster, inverse_of: :communities
   has_many :meals, inverse_of: :community, dependent: :destroy
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
+  has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
   has_many :reservation_protocols, class_name: "Reservations::Protocol",
                                    inverse_of: :community, dependent: :destroy
   has_many :reservation_shared_guidelines, class_name: "Reservations::SharedGuidelines",
@@ -27,31 +28,14 @@ class Community < ApplicationRecord
     {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
      default: "directory", required: true},
     {key: :meals, type: :group, fields: [
-      {key: :extra_roles, type: :string, default: "asst_cook, cleaner"},
       {key: :reimb_instructions, type: :markdown},
       {key: :default_capacity, type: :integer, required: true, default: 50},
       {key: :show_reimb_form, type: :boolean, default: false},
       {key: :cooks_can_finalize, type: :boolean, default: false},
-      {key: :default_shift_times, type: :group, fields: [
-        {key: :start, type: :group, fields: [
-          {key: :head_cook, type: :integer, required: true, default: -195},
-          {key: :asst_cook, type: :integer, required: true, default: -135},
-          {key: :table_setter, type: :integer, required: true, default: -60},
-          {key: :cleaner, type: :integer, required: true, default: 45}
-        ]},
-        {key: :end, type: :group, fields: [
-          {key: :head_cook, type: :integer, required: true, default: 0},
-          {key: :asst_cook, type: :integer, required: true, default: 0},
-          {key: :table_setter, type: :integer, required: true, default: 0},
-          {key: :cleaner, type: :integer, required: true, default: 165}
-        ]}
-      ]},
       {key: :reminder_lead_times, type: :group, fields: [
         {key: :diner, type: :integer, required: true, default: 0},
         {key: :early_menu, type: :integer, required: true, default: 10},
-        {key: :late_menu, type: :integer, required: true, default: 5},
-        {key: :head_cook, type: :integer, required: true, default: 3},
-        {key: :job, type: :integer, required: true, default: 2}
+        {key: :late_menu, type: :integer, required: true, default: 5}
       ]}
     ]},
     {key: :reservations, type: :group, fields: [

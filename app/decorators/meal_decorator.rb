@@ -3,6 +3,10 @@
 class MealDecorator < ApplicationDecorator
   delegate_all
 
+  def title_or_no_title
+    title || "[No Title]"
+  end
+
   def form_section(section, **options, &block)
     Meals::FormSection.new(self, section, **options, &block).html
   end
@@ -35,19 +39,23 @@ class MealDecorator < ApplicationDecorator
   end
 
   def served_at_datetime
-    I18n.l(served_at, format: :full_datetime).gsub("  ", " ")
+    l(served_at, format: :full_datetime)
+  end
+
+  def served_at_time_only
+    l(served_at, format: :time_only)
   end
 
   def served_at_datetime_no_yr
-    I18n.l(served_at, format: :datetime_no_yr).gsub("  ", " ")
+    l(served_at, format: :datetime_no_yr)
   end
 
   def served_at_short_date
-    I18n.l(served_at, format: :short_date).gsub("  ", " ")
+    l(served_at, format: :short_date)
   end
 
   def served_at_shorter_date
-    I18n.l(served_at, format: :shorter_date).gsub("  ", " ")
+    l(served_at, format: :shorter_date)
   end
 
   # We should disable the "own" community checkbox for most users.
@@ -58,6 +66,12 @@ class MealDecorator < ApplicationDecorator
 
   def cost
     @cost ||= meal.cost.decorate
+  end
+
+  def worker_links_for_role(role)
+    assignments = assignments_by_role[role] || []
+    links = assignments.map { |a| h.user_link(a.user, highlight: h.lenses[:user].value) }
+    links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
   end
 
   def show_action_link_set

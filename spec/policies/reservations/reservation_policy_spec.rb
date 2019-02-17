@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Reservations::ReservationPolicy do
   let(:reserver) { create(:user) }
-  let(:resource) { create(:resource, community: community) }
+  let(:resource) { create(:resource) }
 
   describe "permissions" do
     include_context "policy permissions"
@@ -12,7 +12,7 @@ describe Reservations::ReservationPolicy do
     let(:starts_at) { Time.current + 1.week }
     let(:ends_at) { starts_at + 1.hour }
     let(:reservation) do
-      build(:reservation, reserver: reserver, resource: resource, created_at: created_at,
+      create(:reservation, reserver: reserver, resource: resource, created_at: created_at,
                           starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { reservation }
@@ -70,7 +70,7 @@ describe Reservations::ReservationPolicy do
     end
 
     context "meal reservation" do
-      let(:reservation) { build(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
+      let(:reservation) { create(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -98,17 +98,17 @@ describe Reservations::ReservationPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Reservations::Reservation }
-    let(:resource) { create(:resource, community: community) }
+    let(:resource) { create(:resource) }
     let(:resourceB) { create(:resource, community: communityB) }
     let!(:objs_in_community) { create_list(:reservation, 2, resource: resource) }
     let!(:objs_in_cluster) { create_list(:reservation, 2, resource: resourceB) }
 
-    it_behaves_like "allows all users in cluster"
+    it_behaves_like "permits all users in cluster"
   end
 
   describe "permitted_attributes" do
     include_context "policy permissions"
-    let(:reservation) { build(:reservation, resource: resource) }
+    let(:reservation) { create(:reservation, resource: resource) }
     let(:admin_attribs) { basic_attribs + %i[reserver_id] }
     subject { Reservations::ReservationPolicy.new(reserver, reservation).permitted_attributes }
 
@@ -132,7 +132,7 @@ describe Reservations::ReservationPolicy do
       end
 
       context "outside admin" do
-        let(:reserver) { admin_in_cmtyB }
+        let(:reserver) { admin_cmtyB }
         it_behaves_like "basic attribs"
       end
     end
@@ -144,7 +144,7 @@ describe Reservations::ReservationPolicy do
 
     context "meal reservation" do
       let(:basic_attribs) { %i[starts_at ends_at note] }
-      let(:reservation) { build(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
+      let(:reservation) { create(:reservation, reserver: reserver, resource: resource, kind: "_meal") }
       it_behaves_like "each user type"
     end
   end

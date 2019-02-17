@@ -67,8 +67,9 @@ module FormHelper
   # - Parent model has accepts_nested_attributes_for :childmodels
   def nested_field_set(f, assoc, options = {})
     wrapper_partial = "shared/nested_fields_wrapper"
+    wrap_object_proc = options.delete(:wrap_object) # Used for messing with template object.
     options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
-    options[:multiple] = true unless options.has_key?(:multiple)
+    options[:multiple] = true unless options.key?(:multiple)
 
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
@@ -76,13 +77,15 @@ module FormHelper
 
     f.input(assoc, options.slice(:required, :label)) do
       content_tag(:div, class: "nested-field-set") do
-        f.simple_fields_for(assoc, wrapper: :nested_fields) do |f2|
+        fields_for_args = [assoc, options[:objects]].compact
+        f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
           render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
         end <<
           if options[:multiple]
             content_tag(:span, class: "add-link-wrapper") do
               link_to_add_association_with_icon(t("cocoon.add_links.#{assoc}"), f, assoc,
                 partial: wrapper_partial,
+                wrap_object: wrap_object_proc,
                 render_options: {
                   wrapper: :nested_fields, # Simple form wrapper
                   locals: {options: options, classes: wrapper_classes}

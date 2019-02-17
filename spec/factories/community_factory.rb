@@ -1,7 +1,3 @@
-def default_community
-  Community.first || create(:community)
-end
-
 FactoryBot.define do
   factory :community do
     sequence(:name) { |n| "Community #{n}" }

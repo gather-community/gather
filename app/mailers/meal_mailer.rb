@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
+# For emails related to meals.
 class MealMailer < ApplicationMailer
   def meal_reminder(signup)
     @household = signup.household.decorate
     @signup = signup
     @meal = signup.meal.decorate
-    @assigns = @meal.assignments.sort
+    @assigns = @meal.assignments
 
     mail(to: @household, subject: default_i18n_subject(
       title: @meal.title_or_no_title,
@@ -12,22 +15,18 @@ class MealMailer < ApplicationMailer
     ))
   end
 
-  def shift_reminder(assignment)
-    @assignment = assignment
+  def role_reminder(assignment, reminder)
+    @assignment = assignment.decorate
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @role = I18n.t("assignment_roles.#{assignment.role}", count: 1)
-    @other_assigns = @meal.assignments.sort.reject{ |a| a.user == @user }
-    @date = I18n.l(@assignment.starts_at, format: :date_wkday_no_yr)
-    @datetime = I18n.l(@assignment.starts_at, format: :datetime_no_yr)
-    @shift_start = I18n.l(@assignment.starts_at, format: :regular_time)
-    @shift_end = I18n.l(@assignment.ends_at, format: :regular_time)
-    @serve_time = I18n.l(@meal.served_at, format: :regular_time)
+    @reminder = reminder
+    @other_assigns = @meal.assignments.reject { |a| a.user == @user }
 
     mail(to: @user, subject: default_i18n_subject(
-      role: @role,
-      datetime: @datetime,
-      location: @meal.location_abbrv
+      role: assignment.role_title,
+      datetime: @assignment.starts_at_with_date,
+      location: @meal.location_abbrv,
+      note: @reminder.note? ? " (#{@reminder.note})" : ""
     ))
   end
 
@@ -48,11 +47,9 @@ class MealMailer < ApplicationMailer
     @assignment = assignment
     @user = assignment.user.decorate
     @meal = assignment.meal.decorate
-    @type = assignment.reminder_count == 0 ? :first : :second
+    @type = assignment.cook_menu_reminder_count.zero? ? :first : :second
 
-    mail(to: @user, subject: default_i18n_subject(
-      date: @meal.served_at_short_date
-    ))
+    mail(to: @user, subject: default_i18n_subject(date: @meal.served_at_short_date))
   end
 
   def normal_message(message, recipient)
@@ -70,7 +67,7 @@ class MealMailer < ApplicationMailer
     @recipient = recipient.decorate
     @meal = @message.meal.decorate
     mail(to: @recipient, reply_to: [message.sender_email],
-      subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+         subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
   end
 
   def community

@@ -43,7 +43,7 @@ describe Reservations::Rules::MaxDaysPerYearRule do
     context "rule with kinds and resources" do
       let(:rule) do
         described_class.new(value: 4, resources: [resource1, resource2], kinds: %w[Personal Special],
-                            community: default_community)
+                            community: Defaults.community)
       end
 
       it "should work for event 1 hour long" do
@@ -60,7 +60,7 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
     context "rule with resources only" do
       let(:rule) do
-        described_class.new(value: max_days, resources: [resource1, resource2], community: default_community)
+        described_class.new(value: max_days, resources: [resource1, resource2], community: Defaults.community)
       end
 
       context "with max 9 days per year" do
@@ -91,7 +91,7 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
     context "rule with no resources or kinds" do
       let(:rule) do
-        described_class.new(value: 9, resources: nil, kinds: nil, community: default_community)
+        described_class.new(value: 9, resources: nil, kinds: nil, community: Defaults.community)
       end
 
       it "should work for event 1 hour long" do

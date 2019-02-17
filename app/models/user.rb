@@ -33,7 +33,7 @@ class User < ApplicationRecord
                                 dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
-  has_many :meal_assignments, class_name: "Assignment", inverse_of: :user, dependent: :destroy
+  has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
@@ -43,7 +43,7 @@ class User < ApplicationRecord
       .where("communities.id = ? OR users.child = 'f'", c.id)
       .where("communities.cluster_id = ?", c.cluster_id)
   }
-  scope :in_community, ->(id) { joins(:household).where("households.community_id = ?", id) }
+  scope :in_community, ->(id) { joins(:household).where(households: {community_id: id}) }
   scope :by_name, -> { order(NAME_ORDER) }
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }

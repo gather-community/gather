@@ -8,7 +8,7 @@ describe Work::PeriodPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "published" }
-    let(:period) { build(:work_period, community: community, phase: phase) }
+    let(:period) { create(:work_period, phase: phase) }
     let(:record) { period }
 
     permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
@@ -27,10 +27,10 @@ describe Work::PeriodPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Work::Period }
-    let!(:objs_in_community) { create_list(:work_period, 2, community: community) }
+    let!(:objs_in_community) { create_list(:work_period, 2) }
     let!(:objs_in_cluster) { create_list(:work_period, 2, community: communityB) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 
   describe "permitted attributes" do

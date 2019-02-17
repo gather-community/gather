@@ -30,7 +30,7 @@ module Calendars
       # `event` should be an Event object.
       def add_event(event)
         cal.event do |e|
-          e.uid = "#{UID_SIGNATURE}_#{data.class_name}_#{event.object_id}"
+          e.uid = "#{UID_SIGNATURE}_#{event.kind_name}_#{event.object_id}"
           e.dtstart = date_or_time_value(event.starts_at)
           e.dtend = date_or_time_value(event.ends_at)
           e.location = event.location

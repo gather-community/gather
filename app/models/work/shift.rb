@@ -20,17 +20,17 @@ module Work
     belongs_to :meal
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
-    has_many :reminder_deliveries, class_name: "Work::ReminderDelivery", inverse_of: :shift,
+    has_many :reminder_deliveries, class_name: "Work::JobReminderDelivery", inverse_of: :shift,
                                    dependent: :destroy
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
       :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
       :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
-      :double_signups_allowed?, to: :job
+      :double_signups_allowed?, :meal_role_id, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
-    scope :in_community, ->(c) { joins(job: :period).where("work_periods.community_id": c.id) }
+    scope :in_community, ->(c) { joins(job: :period).where(work_periods: {community_id: c.id}) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :published, -> { joins(job: :period).where(work_periods: {phase: "published"}) }
     scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
@@ -52,6 +52,7 @@ module Work
     }
 
     before_validation :normalize
+    after_save { JobReminderMaintainer.instance.shift_saved(reminders, reminder_deliveries) }
 
     validates :starts_at, :ends_at, presence: true, unless: :full_period?
     validates :slots, presence: true, numericality: {greater_than: 0}
@@ -130,6 +131,10 @@ module Work
 
     def assignment_for_user(user)
       assignments.detect { |a| a.user_id == user.id }
+    end
+
+    def meal?
+      meal.present?
     end
 
     private

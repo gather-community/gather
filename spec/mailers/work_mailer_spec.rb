@@ -3,12 +3,12 @@
 require "rails_helper"
 
 describe WorkMailer do
-  describe "shift_reminder" do
+  describe "job_reminder" do
     let(:job) { create(:work_job, title: "First Frungler", shift_starts: ["2018-01-01 9:00"]) }
     let(:user) { create(:user) }
     let(:assignment) { create(:work_assignment, shift: job.shifts.first) }
-    let(:reminder) { create(:work_reminder, job: job, note: note) }
-    let(:mail) { described_class.shift_reminder(assignment, reminder).deliver_now }
+    let(:reminder) { create(:work_job_reminder, job: job, note: note) }
+    let(:mail) { described_class.job_reminder(assignment, reminder).deliver_now }
 
     context "with no note" do
       let(:note) { nil }
@@ -49,7 +49,7 @@ describe WorkMailer do
     let(:fc_job) { double(title: "Junk") }
     let(:period) do
       double(auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
-             community: default_community, quota_none?: false)
+             community: Defaults.community, quota_none?: false)
     end
     let(:synopsis) do
       double(user_regular_got: 5, user_adjusted_quota: 15.5, user_need: 10.5,
@@ -75,7 +75,7 @@ describe WorkMailer do
             "so you need to choose 10.5 regular hours.")
           expect(mail.body.encoded).to include("You are also expected to choose 4 Junk hours.")
           expect(mail.body.encoded).to include("You can begin choosing at 7:00pm.\r\n\r\nGo to")
-          expect(mail.body.encoded).to have_correct_shifts_url(default_community)
+          expect(mail.body.encoded).to have_correct_shifts_url(Defaults.community)
         end
       end
 

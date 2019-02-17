@@ -8,8 +8,8 @@ module Work
     belongs_to :period, inverse_of: :shares
     belongs_to :user
 
-    scope :in_community, ->(c) { joins(:period).where("work_periods.community_id": c.id) }
-    scope :for_period, ->(p) { joins(:user).where(period_id: p.id, "users.deactivated_at": nil) }
+    scope :in_community, ->(c) { joins(:period).where(work_periods: {community_id: c.id}) }
+    scope :for_period, ->(p) { joins(:user).where(period_id: p.id, users: {deactivated_at: nil}) }
     scope :nonzero, -> { where("portion > 0") }
     scope :by_user_name, -> { joins(:user).merge(User.by_name) }
 

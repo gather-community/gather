@@ -27,7 +27,9 @@ en:
   work/jobs:
     shifts: "Shifts"
     unlimited: "Unlimited"
-    full_community: "This is a full community job."
+    full_community: "This is a full community job"
+    preassignments: "This job has preassignments"
+    meal_related: "This job is meal related"
     none_found: "No jobs found."
   work/period:
     phase_names:
@@ -54,7 +56,7 @@ en:
     slots_open:
       one: "%{count} slot open"
       other: "%{count} slots open"
-  work/reminder:
+  work/job_reminder:
     absolute: "At %{time}"
     relative:
       days_before:

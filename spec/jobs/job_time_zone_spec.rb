@@ -1,5 +1,8 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
+require "rails_helper"
+
+# A dummy reminder job class for use in the spec. 
 class SomeReminderJob < ReminderJob
   def self.do_stuff(community)
   end
@@ -15,7 +18,7 @@ describe SomeReminderJob do
   include_context "jobs"
   include_context "reminder jobs"
 
-  let(:cmty1) { create(:community) } # Defaults to UTC
+  let(:cmty1) { Defaults.community } # Defaults to UTC
   let(:cmty2) { create(:community) }
 
   before do

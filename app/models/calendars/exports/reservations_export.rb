@@ -4,7 +4,7 @@ module Calendars
   module Exports
     # Abstract parent class for reservation calendars of various sorts
     class ReservationsExport < Export
-      def class_name
+      def kind_name(_object)
         "Reservation"
       end
 

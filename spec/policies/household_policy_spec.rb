@@ -37,15 +37,15 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "permits action on households in other community in cluster" do
-        expect(subject).to permit(user, user_in_cmtyB.household)
+        expect(subject).to permit(user, user_cmtyB.household)
       end
 
       it "permits outside super admins" do
-        expect(subject).to permit(outside_super_admin, user_in_cmtyB.household)
+        expect(subject).to permit(super_admin_cmtyX, user_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
-        expect(subject).not_to permit(user, outside_user.household)
+        expect(subject).not_to permit(user, user_cmtyX.household)
       end
     end
 
@@ -53,11 +53,11 @@ describe HouseholdPolicy do
       it_behaves_like "permits action on own community"
 
       it "denies action on households in other community in cluster" do
-        expect(subject).not_to permit(user, user_in_cmtyB.household)
+        expect(subject).not_to permit(user, user_cmtyB.household)
       end
 
       it "denies action on households outside cluster" do
-        expect(subject).not_to permit(user, outside_user.household)
+        expect(subject).not_to permit(user, user_cmtyX.household)
       end
     end
 
@@ -127,12 +127,12 @@ describe HouseholdPolicy do
 
   describe "allowed_community_changes" do
     include_context "policy permissions"
+
     # Class-based auth not allowed
     let(:sample_household) { Household.new(community: community) }
 
     before do
-      save_policy_objects!(cluster, clusterB, community, communityB, communityX,
-        user, admin, cluster_admin, super_admin)
+      communityB && communityX # Force these to be created.
     end
 
     it "returns empty set for regular users" do
@@ -196,12 +196,12 @@ describe HouseholdPolicy do
     let!(:objs_in_cluster) { [userB.household] }
 
     context "normal" do
-      it_behaves_like "allows all users in cluster"
+      it_behaves_like "permits all users in cluster"
     end
 
     describe "administerable" do
       let(:method) { :administerable }
-      it_behaves_like "allows only admins in community"
+      it_behaves_like "permits only admins in community"
     end
   end
 

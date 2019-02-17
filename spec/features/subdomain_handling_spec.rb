@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "subdomain handling" do
   let(:apex) { Settings.url.host }
-  let(:cluster) { default_cluster }
+  let(:cluster) { Defaults.cluster }
   let(:cluster2) { create(:cluster) }
   let!(:home_cmty) { create(:community, slug: "foo") }
   let!(:neighbor_cmty) { create(:community, slug: "bar") }

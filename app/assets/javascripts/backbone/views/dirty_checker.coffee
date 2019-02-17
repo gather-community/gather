@@ -11,6 +11,7 @@ Gather.Views.DirtyChecker = Backbone.View.extend
     'dp.change': 'datetimePickerChanged'
     'cocoon:after-insert': 'rescan'
     'cocoon:after-remove': 'rescan'
+    'gather:select2inserted': 'rescan'
 
   rescan: ->
     @$el.dirtyForms('rescan')

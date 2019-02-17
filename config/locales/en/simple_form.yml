@@ -77,6 +77,13 @@ en:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_disp: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
         pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
+        role_ids: "Which roles are needed for meals under this formula?"
+      meals_role:
+        double_signups_allowed: "Double assignments may not be suitable for some roles."
+        time_type: "Form some roles (such as head cook), people may want to choose their own times to work. If so, choose 'date only'. If a specific schedule is desired, choose 'date and time'."
+        shift_start: "Number of minutes before/after the start of the meal that people should show up. Negatives represent times prior to the meal start."
+        shift_end: "Number of minutes before/after the start of the meal that this role ends. Negatives represent times prior to the meal start."
+        count_per_meal: "How many people are typically needed for this role for a given meal?"
       wiki_page:
         content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
@@ -84,6 +91,7 @@ en:
         hours: "Estimated number of hours the job will take. Decimals allowed."
         slot_type: "Use 'full community' for things like work days. When in doubt, choose 'fixed number'."
         hours_per_shift: "The amount of hours credit each shift is worth."
+        double_signups_allowed: "Double signups may not be suitable for some jobs."
       work_period:
         quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
     options:
@@ -153,8 +161,8 @@ en:
             relative: "Relative Time"
             absolute: "Exact Time"
           rel_unit_sign:
-            days_before: "Days Before"
-            days_after: "Days After"
+            days_before: "Days Before (at 6am)"
+            days_after: "Days After (at 6am)"
             hours_before: "Hours Before"
             hours_after: "Hours After"
         requester:
@@ -164,6 +172,16 @@ en:
           any: "All Jobs"
           y: "Preassigned"
           n: "Not Preassigned"
+      meals_role:
+        time_type:
+          date_time: "This role has a set date and time"
+          date_only: "This role is for a certain date only"
+        reminders:
+          rel_unit_sign:
+            days_before: "Days Before (at 6am)"
+            days_after: "Days After (at 6am)"
+            hours_before: "Hours Before"
+            hours_after: "Hours After"
       work_period:
         phase:
           archived: "Archived: Period is in the past, not editable"

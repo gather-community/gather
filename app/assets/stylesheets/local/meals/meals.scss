@@ -20,11 +20,13 @@
     }
   }
 
-  tr.signed-up, div.meals-list div.meal.signed-up {
+  tr.signed-up,
+  div.meals-list div.meal.signed-up {
     background-color: $highlight-color;
   }
 
-  tr.cancelled, div.meals-list div.meal.cancelled {
+  tr.cancelled,
+  div.meals-list div.meal.cancelled {
     background-color: $fainter-gray;
     color: $gray-text;
     text-decoration: line-through;
@@ -39,26 +41,22 @@
     display: block;
   }
 
-  // For mobile devices
+  // For mobile devices in meals index, or all devices for meal jobs list.
   div.meals-list {
-
     div.meal {
-      background-color: #f3f3f3;
+      background-color: $fainter-gray;
       margin-bottom: 20px;
       padding: 10px;
-      border-top: 1px solid $light-border-color;
-      border-bottom: 1px solid $light-border-color;
 
       &:last-of-type {
         margin-bottom: 0;
       }
 
-      h2 {
-        margin: 0 0 10px 0;
+      h4 {
+        margin: 0 0 5px;
       }
 
       div.title {
-        border-bottom: $light-border;
         margin-bottom: 10px;
       }
     }
@@ -68,7 +66,7 @@
     display: inline-block;
 
     &:not(:last-child)::after{
-      content: ", ";;
+      content: ", ";
     }
   }
 

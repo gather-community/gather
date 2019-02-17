@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 gem "active_model_serializers", "~> 0.9.3"
+gem "active_record-postgres-constraints", "~> 0.1"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
 gem "babosa", "~> 1.0"

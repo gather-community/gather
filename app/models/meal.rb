@@ -15,19 +15,15 @@ class Meal < ApplicationRecord
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
-  has_many :assignments, -> { by_role }, dependent: :destroy
-  has_one :head_cook_assign, -> { where(role: "head_cook") }, class_name: "Assignment"
-  has_many :asst_cook_assigns, -> { where(role: "asst_cook") }, class_name: "Assignment"
-  has_many :table_setter_assigns, -> { where(role: "table_setter") }, class_name: "Assignment"
-  has_many :cleaner_assigns, -> { where(role: "cleaner") }, class_name: "Assignment"
-  has_one :head_cook, through: :head_cook_assign, source: :user
-  has_many :asst_cooks, through: :asst_cook_assigns, source: :user
-  has_many :table_setters, through: :table_setter_assigns, source: :user
-  has_many :cleaners, through: :cleaner_assigns, source: :user
+  has_many :assignments, -> { by_role }, class_name: "Meals::Assignment",
+                                         dependent: :destroy, inverse_of: :meal
   has_many :invitations, dependent: :destroy
   has_many :communities, through: :invitations
   has_many :signups, -> { sorted }, dependent: :destroy, inverse_of: :meal
+  has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
   has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
+  has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
+                                 dependent: :destroy
 
   # Resources are chosen by the user. Reservations are then automatically created.
   has_many :resourcings, class_name: "Reservations::Resourcing", dependent: :destroy
@@ -42,26 +38,30 @@ class Meal < ApplicationRecord
   scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
   scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
   scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
-  scope :worked_by, ->(user) { includes(:assignments).where(assignments: {user: user}) }
-  scope :head_cooked_by, ->(user) { worked_by(user).where(assignments: {role: "head_cook"}) }
+  scope :worked_by, lambda { |user, head_cook_only: false|
+    user = user.id if user.is_a?(User)
+    assignments = Meals::Assignment.arel_table
+    meals = Meal.arel_table
+    rel = Meals::Assignment.select(:user_id).where(assignments[:meal_id].eq(meals[:id]))
+    rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
+    where("? IN (#{rel.to_sql})", user)
+  }
   scope :attended_by, ->(household) { includes(:signups).where(signups: {household_id: household.id}) }
 
   Meals::Status.define_scopes(self)
 
-  accepts_nested_attributes_for :head_cook_assign, reject_if: :all_blank
-  accepts_nested_attributes_for :asst_cook_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :table_setter_assigns, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :cleaner_assigns, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
     a["id"].blank? && a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
   }
   accepts_nested_attributes_for :cost, reject_if: :all_blank
+  accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
   delegate :cluster, to: :community
   delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true, allow_nil: true
   delegate :name, to: :formula, prefix: true, allow_nil: true
-  delegate :allowed_diner_types, :allowed_signup_types, :portion_factors, to: :formula
+  delegate :roles, :head_cook_role, :allowed_diner_types,
+    :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
     :closed?, :finalized?, :open?, :cancelled?,
@@ -69,6 +69,11 @@ class Meal < ApplicationRecord
 
   after_validation :copy_resource_errors
   before_save :set_menu_timestamp
+  after_save do
+    if saved_change_to_served_at?
+      Meals::RoleReminderMaintainer.instance.meal_saved(roles, reminder_deliveries)
+    end
+  end
 
   normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
@@ -87,13 +92,11 @@ class Meal < ApplicationRecord
   validates_with Meals::SignupsValidator
 
   def self.new_with_defaults(community)
-    new(
-      served_at: default_datetime,
-      capacity: community.settings.meals.default_capacity,
-      community_ids: Community.all.map(&:id),
-      community: community,
-      formula: Meals::Formula.default_for(community)
-    )
+    formula = Meals::Formula.default_for(community)
+    meal = new(served_at: default_datetime, capacity: community.settings.meals.default_capacity,
+               community_ids: Community.all.map(&:id), community: community, formula: formula)
+    meal.assignments.build(role: formula.head_cook_role) if formula
+    meal
   end
 
   def self.default_datetime
@@ -104,34 +107,23 @@ class Meal < ApplicationRecord
     within_days_from_now(:served_at, days)
   end
 
+  def head_cook
+    assignments.detect(&:head_cook?)&.user
+  end
+
   def status_obj
     @status_obj ||= Meals::Status.new(self)
-  end
-
-  def extra_roles
-    @extra_roles ||= Assignment::ALL_EXTRA_ROLES &
-      (community.settings.meals.extra_roles || "").split(/\s*,\s*/).map(&:to_sym)
-  end
-
-  def people_in_role(role)
-    raise ArgumentError("Invalid role #{role}") unless Assignment::ALL_EXTRA_ROLES.include?(role)
-    send(role.to_s.pluralize)
   end
 
   def workers
     @workers ||= assignments.map(&:user).uniq
   end
 
-  # Ensures there is one head_cook assignment and 2 each of the others.
-  # Creates blank ones if needed.
-  def ensure_assignments
-    build_head_cook_assign if head_cook_assign.nil?
-    extra_roles.each do |role|
-      collection = send("#{role}_assigns")
-      (DEFAULT_ASSIGN_COUNTS[role] - collection.size).times { collection.build }
-    end
+  def assignments_by_role
+    @assignments_by_role ||= assignments.group_by(&:role)
   end
 
+  # DEPRECATED: prefer method of same name in decorator
   def title_or_no_title
     title || "[No Title]"
   end

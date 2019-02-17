@@ -17,7 +17,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def l(*args)
     return nil if args.first.nil?
-    I18n.l(*args)
+    I18n.l(*args).gsub("  ", " ").strip
   end
 
   # Returns a Proc that inserts the given separator, to be passed to array.reduce.
@@ -43,6 +43,10 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def safe_str
-    "".html_safe
+    "".html_safe # rubocop:disable Rails/OutputSafety # It's just an empty string!
+  end
+
+  def join_icons(icons)
+    icons.map { |i| safe_str << nbsp(2) << i }.reduce(&:<<)
   end
 end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 feature "lenses", js: true do
-  let!(:community1) { create(:community, name: "Community 1", slug: "community1") }
+  let!(:community1) { Defaults.community }
   let!(:community2) { create(:community, name: "Community 2", slug: "community2") }
   let!(:community3) { create(:community, name: "Community 3", slug: "community3") }
   let!(:user) { create(:user, community: community3) }
@@ -85,8 +85,14 @@ feature "lenses", js: true do
   end
 
   describe "global lens" do
-    let!(:period1) { create(:work_period, name: "Period 1", starts_on: 5.days.ago) }
-    let!(:period2) { create(:work_period, name: "Period 2", starts_on: 100.days.ago) }
+    let!(:period1) do
+      create(:work_period, community: user.community, name: "Period 1",
+                           phase: "published", starts_on: 5.days.ago)
+    end
+    let!(:period2) do
+      create(:work_period, community: user.community, name: "Period 2",
+                           phase: "published", starts_on: 100.days.ago)
+    end
 
     scenario "period" do
       visit(work_shifts_path)
@@ -105,7 +111,10 @@ feature "lenses", js: true do
 
   describe "floating lens" do
     let!(:user2) { create(:user, household: user.household) }
-    let!(:period1) { create(:work_period, name: "Period 1", starts_on: 5.days.ago) }
+    let!(:period1) do
+      create(:work_period, community: user.community, name: "Period 1",
+                           phase: "published", starts_on: 5.days.ago)
+    end
 
     before do
       [user, user2].each { |u| create(:work_share, period: period1, user: u) }
@@ -122,7 +131,7 @@ feature "lenses", js: true do
     scenario "separate lenses per-community" do
       visit(users_path) # community3
       fill_in_lens_and_wait(:search, "foo")
-      with_subdomain("community1") do
+      with_subdomain("default") do
         visit(users_path)
         expect_lens_value(:search, "")
       end

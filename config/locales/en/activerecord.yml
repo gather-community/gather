@@ -46,10 +46,6 @@ en:
         allergen_tofu: "Tofu"
         allergen_eggplant: "Eggplant"
         allergen_none: "None of these"
-        asst_cook_assigns: "Assistant Cooks"
-        table_setter_assigns: "Table Setters"
-        cleaner_assigns: "Cleaners"
-        head_cook_assign: "Head Cook"
         community_id: "Host Community"
         served_at: "Date/Time"
         communities: "Communities"
@@ -78,6 +74,19 @@ en:
         signup_types: "Signup Types"
         pantry_fee_disp: "Pantry Fee Amount"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
+        role_ids: "Roles"
+      meals/role:
+        title: "Job Title"
+        time_type: "Times"
+        shift_start: "Start Time"
+        shift_end: "End Time"
+        description: "Job Description"
+        double_signups_allowed: "The same person can sign up more than once for this role in a single meal"
+        count_per_meal: "People per Meal"
+        reminders: "Reminders"
+      meals/role_reminder:
+        rel_magnitude: "Send Time"
+        note: "Note (optional)"
       signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
@@ -139,7 +148,7 @@ en:
         health_issues: "Health Issues"
       work/job:
         description: "Description"
-        double_signups_allowed: "Double Signups Allowed?"
+        double_signups_allowed: "The same person can sign up more than once for a shift of this job"
         hours: "Hours"
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
@@ -155,10 +164,10 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
-      work/reminder:
+      work/job_reminder:
         abs_rel: "Type"
-        abs_time: "Time"
-        rel_magnitude: "Time"
+        abs_time: "Send Time"
+        rel_magnitude: "Send Time"
         note: "Note"
       work/shift:
         start_time: "Start Time"
@@ -207,6 +216,12 @@ en:
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."
+            role_ids:
+              must_have_head_cook: "Must include %{title}"
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Must be after start time"
         wiki/page:
           sample_not_editable: "The sample page is not editable so that it remains intact as a reference for other users. If you would like to experiment, try creating a new page using the 'New Wiki Page' link below."
           data_fetch:

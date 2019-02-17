@@ -1,0 +1,32 @@
+<% content_for(:title, "Meal Roles") %>
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_role).create? %>
+    <%= link_to(icon_tag("plus") << " Create Role",
+      new_meals_role_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if roles.empty? %>
+  <div class="none-found">
+    No roles found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th><%= Meals::Role.human_attribute_name(:title) %></th>
+        <th><%= Meals::Role.human_attribute_name(:count_per_meal) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% roles.each do |role| %>
+        <tr class="<%= role.tr_classes %>">
+          <td class="title">
+            <%= link_to(role.title_with_suffix, edit_meals_role_path(role)) %>
+          </td>
+          <td class="count_per_meal"><%= role.count_per_meal %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

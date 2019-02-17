@@ -87,6 +87,9 @@ en:
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
+    meals/role:
+      destroy: "Are you sure you want to delete the role '%{title}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the role '%{title}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
     work/job:
@@ -113,6 +116,10 @@ en:
       one_html: "This formula was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
+    meals/role:
+      one_html: "This role was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
 
   successes:
     household:
@@ -133,6 +140,10 @@ en:
       activate: "Formula activated successfully."
       deactivate: "Formula deactivated successfully."
       destroy: "Formula deleted successfully."
+    meals/role:
+      activate: "Role activated successfully."
+      deactivate: "Role deactivated successfully."
+      destroy: "Role deleted successfully."
     work/job:
       destroy: "Job deleted successfully."
     work/period:
@@ -160,13 +171,12 @@ en:
       datetime_no_yr: "%a %b %d %l:%M%P"
       full_datetime: "%a %b %d %Y %l:%M%P"
       machine_readable: "%Y-%m-%d %H:%M"
-      regular_time: "%l:%M%P"
+      time_only: "%l:%M%P"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
-      time_only: "%l:%M%P"
       iso: "%Y%m%dT%H%M%S"
 
   datepicker:
@@ -182,9 +192,6 @@ en:
       vehicles: "Add Vehicle"
       emergency_contacts: "Add Emergency Contact"
       up_guardianships: "Add Parent/Guardian"
-      asst_cook_assigns: "Add Assistant Cook"
-      cleaner_assigns: "Add Cleaner"
-      table_setter_assigns: "Add Table Setter"
       pets: "Add Pet"
       shifts: "Add Shift"
       assignments: "Add Worker"
@@ -303,20 +310,6 @@ en:
   titles:
     meals/messages: "Send Meal Message"
 
-  assignment_roles:
-    head_cook:
-      one: "Head Cook"
-      other: "Head Cooks"
-    asst_cook:
-      one: "Assistant Cook"
-      other: "Assistant Cooks"
-    table_setter:
-      one: "Table Setter"
-      other: "Table Setters"
-    cleaner:
-      one: "Cleaner"
-      other: "Cleaners"
-
   transaction_codes:
     meal: "Meal"
     oldbal: "Old System"
@@ -374,8 +367,8 @@ en:
         diner_count:
           one: "There is %{count} diner signed up from your household."
           other: "There are %{count} diners signed up from your household."
-    shift_reminder:
-      subject: "Job Reminder: %{role} for Meal on %{datetime} at %{location}"
+    role_reminder:
+      subject: "Job Reminder: %{role} on %{datetime} at %{location}%{note}"
     worker_change_notice:
       subject: "Meal Job Assignment Change Notice"
     cook_menu_reminder:
@@ -386,7 +379,7 @@ en:
       subject: "Meal on %{datetime} CANCELLED"
 
   work_mailer:
-    shift_reminder:
+    job_reminder:
       subject: "Job Reminder: %{title}%{note}%{times}"
     job_choosing_notice:
       subject: "Job Choosing is Coming Up!"

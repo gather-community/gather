@@ -36,7 +36,7 @@ describe Reservations::Rules::MaxMinutesPerYearRule do
     let(:reservation) { Reservations::Reservation.new(reserver: user1, starts_at: "2016-01-30 6:00pm") }
     let(:rule) do
       described_class.new(value: 180, resources: [resource1, resource2], kinds: %w[Personal Special],
-                          community: default_community)
+                          community: Defaults.community)
     end
 
     # Most functionality is in the parent class and covered by max_days_per_year_spec

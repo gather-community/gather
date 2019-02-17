@@ -8,7 +8,7 @@ module Meals
       each_community_at_correct_hour do |community|
         remindable_assignments(community).each do |assignment|
           MealMailer.cook_menu_reminder(assignment).deliver_now
-          assignment.increment!(:reminder_count)
+          assignment.increment!(:cook_menu_reminder_count)
         end
       end
     end
@@ -16,16 +16,17 @@ module Meals
     private
 
     def remindable_assignments(community)
-      early = Assignment.joins(:meal)
-        .where(role: "head_cook", reminder_count: 0)
-        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(community.settings.meals.reminder_lead_times.early_menu))
-
-      late = Assignment.joins(:meal).where(role: "head_cook", reminder_count: 1)
-        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
-          .served_within_days_from_now(community.settings.meals.reminder_lead_times.late_menu))
-
+      early = scope(community, 0, community.settings.meals.reminder_lead_times.early_menu)
+      late = scope(community, 1, community.settings.meals.reminder_lead_times.late_menu)
       (early.to_a + late.to_a).uniq
+    end
+
+    def scope(community, cook_menu_reminder_count, days_from_now)
+      Assignment.joins(:meal, :role)
+        .where(cook_menu_reminder_count: cook_menu_reminder_count)
+        .merge(Meals::Role.head_cook)
+        .merge(Meal.without_menu.not_cancelled.hosted_by(community)
+          .served_within_days_from_now(days_from_now))
     end
   end
 end

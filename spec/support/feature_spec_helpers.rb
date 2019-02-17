@@ -8,8 +8,8 @@ module FeatureSpecHelpers
   # Fills in the given value into the given select (a Node::Element or CSS selector),
   # then selects the first matching option.
   # If a Node::Element object is provided, it must have a unique ID.
-  # Works with dropdown and inline style select2 boxes. Works with a remote data source.
-  def select2(value, from:, type: :dropdown)
+  # Works with single and multiple style select2 boxes. Works with a remote data source.
+  def select2(value, from:, multiple: false)
     if from.is_a?(Capybara::Node::Element)
       select_el = from
       raise "Element must have a unique ID attribute so jQuery can grab it" if select_el[:id].blank?
@@ -27,11 +27,11 @@ module FeatureSpecHelpers
     else
       # Several of the elements selected below are inserted at the bottom of the DOM so we can't scope them.
       without do
-        if type == :dropdown
+        if multiple
+          span_el.find(".select2-search__field").click
+        else
           execute_script("$('#{css}').select2('open')")
           find(".select2-search--dropdown .select2-search__field").set(value)
-        elsif type == :inline
-          span_el.find(".select2-search__field").click
         end
         find(".select2-dropdown .select2-results li", text: /#{value}/).click
       end

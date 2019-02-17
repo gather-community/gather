@@ -82,7 +82,7 @@ module Reservations
     end
 
     def meal_time
-      I18n.l(meal.served_at, format: :regular_time)
+      I18n.l(meal.served_at, format: :time_only)
     end
   end
 end

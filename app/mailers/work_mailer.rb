@@ -2,7 +2,7 @@
 
 # Sends work-related emails.
 class WorkMailer < ApplicationMailer
-  def shift_reminder(assignment, reminder)
+  def job_reminder(assignment, reminder)
     @assignment = assignment
     @reminder = reminder
     @shift = assignment.shift.decorate

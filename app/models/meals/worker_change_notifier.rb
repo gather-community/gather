@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Meals
+  # Checks if workers changed and notifies relevant parties.
   class WorkerChangeNotifier
-    attr_accessor :initiator, :meal, :orig_assigns
+    attr_accessor :initiator, :meal, :orig
 
     def initialize(initiator, meal)
       self.initiator = initiator
@@ -9,40 +12,40 @@ module Meals
     end
 
     def check_and_send!
-      assigns = get_assigns
-      added = assigns - orig_assigns
-      removed = orig_assigns - assigns
-      if added.any? || removed.any?
-        MealMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
-      end
+      current = assignment_wrappers
+      added = (current - orig).map(&:assignment)
+      removed = (orig - current).map(&:assignment)
+      return unless added.any? || removed.any?
+      MealMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
     end
 
     private
 
     def save_original_assignments
-      self.orig_assigns = get_assigns
+      self.orig = assignment_wrappers
     end
 
-    def get_assigns
-      meal.assignments.reload.map { |a| AssociationProxy.new(a) }
+    def assignment_wrappers
+      meal.assignments.reload.map { |a| AssignmentWrapper.new(a) }
     end
   end
 
-  class AssociationProxy
-    attr_accessor :role, :user
+  # Wrapper to make comparison easier.
+  class AssignmentWrapper
+    attr_accessor :assignment
+    delegate :role_id, :user, to: :assignment
 
     def initialize(assignment)
-      self.role = assignment.role
-      self.user = assignment.user
+      self.assignment = assignment
     end
 
     def ==(other)
-      role == other.role && user == other.user
+      role_id == other.role_id && user == other.user
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     def hash
-      [role, user].hash
+      [role_id, user].hash
     end
   end
 end

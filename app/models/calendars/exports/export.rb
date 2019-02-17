@@ -45,7 +45,8 @@ module Calendars
           location: location(object),
           summary: summary(object),
           description: description(object),
-          url: url(object)
+          url: url(object),
+          kind_name: kind_name(object)
         }
       end
 
@@ -71,11 +72,11 @@ module Calendars
         object.location_name
       end
 
-      private
-
       def objects
         @objects ||= scope.decorate.to_a
       end
+
+      private
 
       def i18n_key
         self.class.name.match(/Calendars::Exports::(.+)Export/)[1].underscore

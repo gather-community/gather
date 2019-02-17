@@ -34,6 +34,12 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
+    resources :roles, except: :show do
+      member do
+        put :activate
+        put :deactivate
+      end
+    end
   end
 
   get "/meals/reports", to: redirect("/meals/report") # Legacy path
@@ -42,6 +48,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :worker_form, path: "worker-form"
     end
     member do
       put :close

@@ -4,8 +4,8 @@ describe Work::JobPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "open" }
-    let(:period) { build(:work_period, community: community, phase: phase) }
-    let(:job) { build(:work_job, period: period) }
+    let(:period) { create(:work_period, phase: phase) }
+    let(:job) { create(:work_job, period: period) }
     let(:record) { job }
 
     permissions :index?, :show? do
@@ -27,17 +27,17 @@ describe Work::JobPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Work::Job }
-    let(:period) { create(:work_period, community: community) }
+    let(:period) { create(:work_period) }
     let(:periodB) { create(:work_period, community: communityB) }
     let!(:objs_in_community) { create_list(:work_job, 2, period: period) }
     let!(:objs_in_cluster) { create_list(:work_job, 2, period: periodB) }
 
-    it_behaves_like "allows regular users in community"
+    it_behaves_like "permits regular users in community"
   end
 
   describe "permitted attributes" do
     include_context "policy permissions"
-    let(:period) { build(:work_period) }
+    let(:period) { create(:work_period) }
     let(:actor) { work_coordinator }
 
     subject { Work::JobPolicy.new(actor, Work::Job.new(period: period)).permitted_attributes }

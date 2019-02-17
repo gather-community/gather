@@ -3,8 +3,10 @@ RSpec.configure do |config|
   # We also reset TZ to default in case previous spec changed it.
   config.around do |example|
     Time.zone = "UTC"
-    with_tenant(FactoryBot.create(:cluster, name: "Default")) do
+    with_tenant(Defaults.cluster) do
+      Defaults.community
       example.run
+      Defaults.reset
     end
   end
 end

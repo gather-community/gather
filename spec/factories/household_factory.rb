@@ -4,7 +4,7 @@ FactoryBot.define do
       with_members true
     end
 
-    community { default_community }
+    community { Defaults.community }
     sequence(:name) { |n| "Household#{n}" }
 
     trait :with_vehicles do

@@ -6,7 +6,7 @@ class MealsController < ApplicationController
 
   decorates_assigned :meal, :meals, :meal_summary
 
-  before_action :init_meal, only: :new
+  before_action :init_meal, only: %i[new worker_form]
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
@@ -89,7 +89,7 @@ class MealsController < ApplicationController
     @meal.build_reservations
     if @meal.save
       flash[:success] = "Meal updated successfully."
-      @worker_change_notifier.try(:check_and_send!)
+      @worker_change_notifier&.check_and_send!
       redirect_to(meals_path)
     else
       prep_form_vars
@@ -123,6 +123,15 @@ class MealsController < ApplicationController
       flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
         "You should close the meal using the link below before printing this summary."
     end
+  end
+
+  # Renders just the workers section of the form. Accepts a formula_id, and sets the
+  # meal formula to that ID (without saving) if provided.
+  # This is a collection action, only used for new meals.
+  def worker_form
+    authorize(@meal, :new?)
+    @meal.formula_id = params[:formula_id] if params[:formula_id]
+    render(partial: "meals/form/single_section", layout: false, locals: {section: "workers"})
   end
 
   def destroy
@@ -173,10 +182,12 @@ class MealsController < ApplicationController
                @meals.future.oldest_first
              end
     @meals = @meals.includes(:signups, :invitations)
+
     if params[:search].present?
-      @meals = @meals.eager_load(:head_cook)
-        .where("title ILIKE ? OR users.first_name ILIKE ? OR users.last_name ILIKE ?",
-          "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+      subq = Meals::Assignment.select("DISTINCT meal_id").joins(:user)
+        .where("first_name ILIKE ? OR last_name ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+        .where("meals.id = meal_assignments.meal_id")
+      @meals = @meals.where("title ILIKE ? OR meals.id IN (#{subq.to_sql})", "%#{params[:search]}%")
     end
 
     @meals = @meals.page(params[:page])
@@ -188,10 +199,9 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.build_cost if @meal.cost.nil?
-    @meal.ensure_assignments
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community)
-      .active_or_selected(@meal.formula).by_name
+      .active_or_selected(@meal.formula_id).by_name
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
     @sample_formula = Meals::Formula.new(community: current_community)
     @sample_resource = Reservations::Resource.new(community: current_community)
@@ -199,9 +209,8 @@ class MealsController < ApplicationController
 
   def create_worker_change_notifier
     @meal = Meal.find(params[:id])
-    unless policy(@meal).change_date_loc_invites?
-      @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
-    end
+    return if policy(@meal).change_date_loc_invites?
+    @worker_change_notifier = Meals::WorkerChangeNotifier.new(current_user, @meal)
   end
 
   def report_lenses

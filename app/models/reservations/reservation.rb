@@ -98,7 +98,7 @@ module Reservations
 
     def timespan
       I18n.l(starts_at, format: :full_datetime) << " - " <<
-        I18n.l(ends_at, format: single_day? ? :regular_time : :full_datetime)
+        I18n.l(ends_at, format: single_day? ? :time_only : :full_datetime)
     end
 
     def single_day?

@@ -239,14 +239,14 @@ feature "calendar export" do
           visit("/calendars/exports/your-jobs/#{token}.ics")
           expect_calendar_name("Your Jobs")
           expect_events({
-            uid: "#{signature}_Shift_#{job3.shifts[0].assignments[0].id}",
+            uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}",
             summary: "Multi-day (Start)",
             location: nil,
             description: %r{Do something periodically\s+\n http://.+/work/signups/},
             "DTSTART;VALUE=DATE" => I18n.l(period_start.to_date, format: :iso),
             "DTEND;VALUE=DATE" => I18n.l(period_start.to_date + 1, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job3.shifts[0].assignments[0].id}",
+            uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}",
             summary: "Multi-day (End)",
             location: nil,
             description: %r{Do something periodically\s+\n http://.+/work/signups/},
@@ -259,14 +259,14 @@ feature "calendar export" do
             "DTSTART;VALUE=DATE" => I18n.l(shift2_1_start.to_date, format: :iso),
             "DTEND;VALUE=DATE" => I18n.l(shift2_1_start.to_date + 1, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job1.shifts[0].assignments[0].id}",
+            uid: "#{signature}_Work_Assignment_#{job1.shifts[0].assignments[0].id}",
             summary: "Assistant Cook: Figs",
             location: meal1.resources[0].name,
             description: %r{Help cook the things\s+\n http://.+/work/signups/},
             "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time - 2.hours, format: :iso),
             "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso)
           }, {
-            uid: "#{signature}_Shift_#{job1.shifts[1].assignments[0].id}",
+            uid: "#{signature}_Work_Assignment_#{job1.shifts[1].assignments[0].id}",
             summary: "Assistant Cook: Buns",
             location: meal2.resources[0].name,
             description: %r{Help cook the things\s+\n http://.+/work/signups/},
@@ -276,14 +276,14 @@ feature "calendar export" do
             # These entries are generated from meal assignments, not work assignments, so
             # the description and timing match the meal role, not the work job.
             # We know to use assignments[1] because the head cook is always [0].
-            uid: "#{signature}_Assignment_#{meal3.assignments[1].id}",
+            uid: "#{signature}_Meals_Assignment_#{meal3.assignments[1].id}",
             summary: "Assistant Cook: Rice",
             location: meal3.resources[0].name,
             description: %r{Assist the wise cook\s+\n http://.+/meals/},
             "DTSTART;TZID=Etc/UTC" => I18n.l(meal3_time - 90.minutes, format: :iso),
             "DTEND;TZID=Etc/UTC" => I18n.l(meal3_time, format: :iso)
           }, {
-            uid: "#{signature}_Assignment_#{meal4.assignments[0].id}",
+            uid: "#{signature}_Meals_Assignment_#{meal4.assignments[0].id}",
             summary: "Head Cook: Corn",
             location: meal4.resources[0].name,
             description: %r{Cook something tasty\s+\n http://.+/meals/},

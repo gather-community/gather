@@ -11,8 +11,7 @@ module Calendars
       end
 
       def kind_name(assignment)
-        # These are set this way for legacy reasons.
-        work?(assignment) ? "Shift" : "Assignment"
+        work?(assignment) ? "Work_Assignment" : "Meals_Assignment"
       end
 
       def events_for_object(assignment)

@@ -51,12 +51,14 @@ describe Work::Period do
 
     context "with staggering fields" do
       let(:period) do
-        create(:work_period, pick_type: "staggered", round_duration: 5,
-                             max_rounds_per_worker: 3, workers_per_round: 10)
+        create(:work_period, quota_type: "by_person", pick_type: "staggered", round_duration: 5,
+                             auto_open_time: Time.current + 1.day, max_rounds_per_worker: 3,
+                             workers_per_round: 10)
       end
 
       context "with staggered pick type" do
         it "keeps values" do
+          expect(period.pick_type).to eq("staggered")
           expect(period.round_duration).to eq(5)
           expect(period.max_rounds_per_worker).to eq(3)
           expect(period.workers_per_round).to eq(10)
@@ -67,6 +69,17 @@ describe Work::Period do
         before { period.update!(pick_type: "free_for_all") }
 
         it "loses values" do
+          expect(period.round_duration).to be_nil
+          expect(period.max_rounds_per_worker).to be_nil
+          expect(period.workers_per_round).to be_nil
+        end
+      end
+
+      context "with none quota type" do
+        before { period.update!(quota_type: "none") }
+
+        it "loses values and switches to free_for_all" do
+          expect(period.pick_type).to eq("free_for_all")
           expect(period.round_duration).to be_nil
           expect(period.max_rounds_per_worker).to be_nil
           expect(period.workers_per_round).to be_nil

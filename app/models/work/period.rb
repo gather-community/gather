@@ -85,6 +85,7 @@ module Work
     def normalize
       shares.destroy_all if quota_none?
       self.phase = "open" if should_auto_open?
+      self.pick_type = "free_for_all" if quota_none?
       return if staggered?
       self.round_duration = nil
       self.max_rounds_per_worker = nil

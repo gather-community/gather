@@ -5,6 +5,7 @@ module Work
   class Period < ApplicationRecord
     PHASE_OPTIONS = %i[draft ready open published archived].freeze
     QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
+    PICK_TYPE_OPTIONS = %i[free_for_all staggered].freeze
 
     acts_as_tenant :cluster
 

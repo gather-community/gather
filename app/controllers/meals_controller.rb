@@ -199,6 +199,7 @@ class MealsController < ApplicationController
 
   def prep_form_vars
     @meal.build_cost if @meal.cost.nil?
+    @roles = (meal.roles + meal.assignments.map(&:role)).uniq
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community)
       .active_or_selected(@meal.formula_id).by_name

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190212031453) do
+ActiveRecord::Schema.define(version: 20190217152923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -635,7 +635,6 @@ ActiveRecord::Schema.define(version: 20190212031453) do
 
   create_table "work_periods", force: :cascade do |t|
     t.datetime "auto_open_time"
-    t.boolean "auto_opened", default: false, null: false
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false

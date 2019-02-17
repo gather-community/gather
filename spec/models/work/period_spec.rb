@@ -11,15 +11,9 @@ describe Work::Period do
       period.reload.phase
     end
 
-    context "in pre-open phase" do
+    context "in pre-open phase and after auto_open_time" do
       let(:phase) { "draft" }
       it { is_expected.to eq("open") }
-    end
-
-    context "already auto-opened" do
-      let(:phase) { "draft" }
-      before { period.update!(auto_opened: true) }
-      it { is_expected.to eq("draft") }
     end
 
     context "no auto_open_time" do
@@ -77,6 +71,16 @@ describe Work::Period do
           expect(period.max_rounds_per_worker).to be_nil
           expect(period.workers_per_round).to be_nil
         end
+      end
+    end
+
+    context "with auto_open_time in past" do
+      let(:period) do
+        create(:work_period, phase: "draft", auto_open_time: Time.current - 1.hour)
+      end
+
+      it "should open on save" do
+        expect(period).to be_open
       end
     end
   end

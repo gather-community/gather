@@ -76,18 +76,22 @@ module Work
     end
 
     def auto_open_if_appropriate
-      return unless auto_open_time? && pre_open? && !auto_opened? && Time.current >= auto_open_time
-      update!(phase: "open")
+      update!(phase: "open") if should_auto_open?
     end
 
     private
 
     def normalize
       shares.destroy_all if quota_none?
+      self.phase = "open" if should_auto_open?
       return if staggered?
       self.round_duration = nil
       self.max_rounds_per_worker = nil
       self.workers_per_round = nil
+    end
+
+    def should_auto_open?
+      auto_open_time? && pre_open? && Time.current >= auto_open_time
     end
 
     def start_before_end

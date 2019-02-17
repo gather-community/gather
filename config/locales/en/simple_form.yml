@@ -161,8 +161,8 @@ en:
             relative: "Relative Time"
             absolute: "Exact Time"
           rel_unit_sign:
-            days_before: "Days Before"
-            days_after: "Days After"
+            days_before: "Days Before (at 6am)"
+            days_after: "Days After (at 6am)"
             hours_before: "Hours Before"
             hours_after: "Hours After"
         requester:
@@ -178,8 +178,8 @@ en:
           date_only: "This role is for a certain date only"
         reminders:
           rel_unit_sign:
-            days_before: "Days Before"
-            days_after: "Days After"
+            days_before: "Days Before (at 6am)"
+            days_after: "Days After (at 6am)"
             hours_before: "Hours Before"
             hours_after: "Hours After"
       work_period:

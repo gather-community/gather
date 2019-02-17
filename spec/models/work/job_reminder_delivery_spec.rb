@@ -62,6 +62,14 @@ describe Work::JobReminderDelivery do
         it { is_expected.to eq("2018-01-01T06:00:00-06:00") }
       end
 
+      context "fractional days" do
+        let(:shift_start) { "2017-12-31 12:00" }
+        let!(:reminder) { create_work_job_reminder(job, 1.5, "days_after") }
+        it "are coerced to integer" do
+          is_expected.to eq("2018-01-01T06:00:00-06:00")
+        end
+      end
+
       context "negative hours" do
         let(:shift_start) { "2018-01-01 14:00" }
         let!(:reminder) { create_work_job_reminder(job, 3, "hours_before") }

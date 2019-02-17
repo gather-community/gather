@@ -55,6 +55,7 @@ class Reminder < ApplicationRecord
       if rel_unit_sign.blank? || !REL_UNIT_SIGN_OPTIONS.include?(rel_unit_sign.to_sym)
         self.rel_unit_sign = "days_before"
       end
+      self.rel_magnitude = rel_magnitude.to_i if rel_days?
     end
   end
 end

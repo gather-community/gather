@@ -80,6 +80,10 @@ module Work
 
     def normalize
       shares.destroy_all if quota_none?
+      return if staggered?
+      self.round_duration = nil
+      self.max_rounds_per_worker = nil
+      self.workers_per_round = nil
     end
 
     def start_before_end

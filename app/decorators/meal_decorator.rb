@@ -31,11 +31,11 @@ class MealDecorator < ApplicationDecorator
   end
 
   def location_name
-    resources.first.decorate.name_with_prefix
+    resources.first&.decorate&.name_with_prefix
   end
 
   def location_abbrv
-    resources.first.decorate.abbrv_with_prefix
+    resources.first&.decorate&.abbrv_with_prefix
   end
 
   def served_at_datetime

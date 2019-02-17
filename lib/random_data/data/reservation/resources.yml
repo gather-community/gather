@@ -48,12 +48,14 @@
   guidelines:
   abbrv: CH
   name: Dining Room
+  meal_hostable: true
   :shared_guideline_ids: []
 - id: 115
   default_calendar_view: week
   guidelines:
   abbrv: Ctyd
   name: Courtyard
+  meal_hostable: true
   :shared_guideline_ids: []
 - id: 116
   default_calendar_view: week
@@ -108,5 +110,6 @@
     be bought by head cooks."
   abbrv: CH
   name: Kitchen
+  meal_hostable: true
   :shared_guideline_ids:
   - 4

@@ -25,7 +25,7 @@ feature "meal report", js: true do
   context "with data" do
     before do
       meals = create_list(:meal, 2, :finalized, community: community,
-                                                served_at: Time.zone.today.beginning_of_year)
+                                                served_at: Time.zone.today - 3.months)
       meals.each do |m|
         m.signups << build(:signup, meal: m, adult_meat: 2)
         m.signups << build(:signup, meal: m, adult_veg: 1)

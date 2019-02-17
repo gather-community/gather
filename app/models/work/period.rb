@@ -22,6 +22,10 @@ module Work
 
     validates :name, :starts_on, :ends_on, presence: true
     validates :name, uniqueness: {scope: :community_id}
+    validates :auto_open_time, presence: true, if: :staggered?
+    validates :round_duration, presence: true, numericality: {greater_than: 0}, if: :staggered?
+    validates :max_rounds_per_worker, presence: true, numericality: {greater_than: 0}, if: :staggered?
+    validates :workers_per_round, presence: true, numericality: {greater_than: 0}, if: :staggered?
     validate :start_before_end
 
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }

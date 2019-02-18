@@ -38,6 +38,9 @@ en:
       open: "Open"
       published: "Published"
       ready: "Ready"
+    num_minutes:
+      one: "1 minute"
+      other: "%{count} minutes"
   work/shares:
     portion_options:
       none: "No Share"

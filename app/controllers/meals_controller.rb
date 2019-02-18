@@ -119,10 +119,9 @@ class MealsController < ApplicationController
     authorize(@meal)
     load_signups
     @cost_calculator = MealCostCalculator.build(@meal)
-    if @meal.open? && current_user == @meal.head_cook
-      flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
-        "You should close the meal using the link below before printing this summary."
-    end
+    return unless @meal.open? && current_user == @meal.head_cook
+    flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
+      "You should close the meal using the link below before printing this summary."
   end
 
   # Renders just the workers section of the form. Accepts a formula_id, and sets the
@@ -131,6 +130,7 @@ class MealsController < ApplicationController
   def worker_form
     authorize(@meal, :new?)
     @meal.formula_id = params[:formula_id] if params[:formula_id]
+    prep_worker_form_vars
     render(partial: "meals/form/single_section", layout: false, locals: {section: "workers"})
   end
 
@@ -198,14 +198,18 @@ class MealsController < ApplicationController
   end
 
   def prep_form_vars
+    prep_worker_form_vars
     @meal.build_cost if @meal.cost.nil?
-    @roles = (meal.roles + meal.assignments.map(&:role)).uniq
     load_communities_in_cluster
     @formula_options = policy_scope(Meals::Formula).in_community(current_community)
       .active_or_selected(@meal.formula_id).by_name
     @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
     @sample_formula = Meals::Formula.new(community: current_community)
     @sample_resource = Reservations::Resource.new(community: current_community)
+  end
+
+  def prep_worker_form_vars
+    @roles = (meal.roles + meal.assignments.map(&:role)).uniq
   end
 
   def create_worker_change_notifier

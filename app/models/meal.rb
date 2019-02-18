@@ -60,7 +60,7 @@ class Meal < ApplicationRecord
   delegate :name, to: :community, prefix: true
   delegate :name, to: :head_cook, prefix: true, allow_nil: true
   delegate :name, to: :formula, prefix: true, allow_nil: true
-  delegate :roles, :head_cook_role, :allowed_diner_types,
+  delegate :head_cook_role, :allowed_diner_types,
     :allowed_signup_types, :portion_factors, to: :formula
   delegate :build_reservations, to: :reservation_handler
   delegate :close!, :reopen!, :cancel!, :finalize!,
@@ -105,6 +105,10 @@ class Meal < ApplicationRecord
 
   def self.served_within_days_from_now(days)
     within_days_from_now(:served_at, days)
+  end
+
+  def roles
+    formula&.roles || []
   end
 
   def head_cook

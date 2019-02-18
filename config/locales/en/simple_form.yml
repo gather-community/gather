@@ -94,6 +94,11 @@ en:
         double_signups_allowed: "Double signups may not be suitable for some jobs."
       work_period:
         quota_type: "Setting a quota enables a status message at the top of the signup page letting users know what their fair share of the work is."
+        auto_open_time: "If you enter a time here, the period will automatically change to the 'open' phase after that time. Required if pick type is 'take turns'."
+        pick_type: "Choose 'take turns' if you are planning a job choosing event and it's too hectic for everyone to pick jobs at once. Smaller groups of people will then take turns picking jobs in 'rounds'."
+        max_rounds_per_worker: "How many rounds should a worker have to go through to meet their quota? More rounds means a longer job choosing event."
+        workers_per_round: "How many workers should be choosing jobs in a given round? More workers means more hectic choosing. Fewer workers means more rounds so the job choosing event takes longer."
+        round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
     options:
       meal:
         time:
@@ -193,6 +198,9 @@ en:
           none: "None"
           by_person: "By Person"
           by_household: "By Household"
+        pick_type:
+          free_for_all: "Everyone picks at once"
+          staggered: "Groups of workers take turns choosing"
       work_shift:
         lens:
           all: "All Jobs"

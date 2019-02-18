@@ -6,6 +6,14 @@
       <%= f.input :starts_on, as: :date_picker %>
       <%= f.input :ends_on, as: :date_picker %>
       <%= f.input :quota_type, collection: Work::Period::QUOTA_TYPE_OPTIONS, include_blank: false %>
+      <%= f.input :auto_open_time, as: :datetime_picker %>
+      <%= f.input :pick_type, collection: Work::Period::PICK_TYPE_OPTIONS, include_blank: false,
+                              wrapper_html: {class: "hiding"} %>
+      <div class="staggering-options hiding" %>
+        <%= f.input :max_rounds_per_worker %>
+        <%= f.input :workers_per_round %>
+        <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>
+      </div>
     </div>
   </div>
 
@@ -41,7 +49,7 @@
   <%= javascript_tag do %>
   $(function() {
     new Gather.Views.DirtyChecker({el: '.work--period-form'});
-    new Gather.Views.Work.PeriodsView({el: '.work--period-form'});
+    new Gather.Views.Work.PeriodFormView({el: '.work--period-form'});
   });
   <% end %>
 <% end %>

@@ -19,7 +19,8 @@ describe Work::RoundCalculator do
     end
 
     around do |example|
-      Timecop.freeze("2018-08-15 #{time}") { example.run }
+      # Go to the 14th, on which everything gets 'set up'. The auto_open_time is set for the 15th at 7pm.
+      Timecop.freeze("2018-08-14 12:00") { example.run }
     end
 
     before do
@@ -300,10 +301,12 @@ describe Work::RoundCalculator do
     end
 
     def expect_round(prev_limit:, next_limit:, next_starts_at:)
-      next_starts_at = Time.zone.parse("2018-08-15 #{next_starts_at}") unless next_starts_at.nil?
-      expect(calculator.prev_limit).to eq(prev_limit)
-      expect(calculator.next_limit).to eq(next_limit)
-      expect(calculator.next_starts_at).to eq(next_starts_at)
+      Timecop.freeze("2018-08-15 #{time}") do
+        next_starts_at = Time.zone.parse("2018-08-15 #{next_starts_at}") unless next_starts_at.nil?
+        expect(calculator.prev_limit).to eq(prev_limit)
+        expect(calculator.next_limit).to eq(next_limit)
+        expect(calculator.next_starts_at).to eq(next_starts_at)
+      end
     end
   end
 end

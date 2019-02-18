@@ -9,9 +9,8 @@ describe Work::Synopsis do
   let(:quota) { 23.4 }
   let(:quota_type) { "by_person" }
   let(:phase) { "open" }
-  let(:pick_type) { "free_for_all" }
   let(:period) do
-    create(:work_period, quota_type: quota_type, quota: quota, phase: phase, pick_type: pick_type)
+    create(:work_period, quota_type: quota_type, quota: quota, phase: phase)
   end
   let!(:decoy_period) { create(:work_period) }
   let!(:decoy_job) { create(:work_job, period: decoy_period) }
@@ -50,7 +49,7 @@ describe Work::Synopsis do
       context "zero signups" do
         it do
           expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false}])
-          expect(done).to be false
+          expect(done).to be(false)
         end
       end
 
@@ -58,14 +57,14 @@ describe Work::Synopsis do
         before { regjob.shifts.first.assignments.create!(user: user) }
         it do
           expect(for_user).to eq([{bucket: regular, got: 3.0, ttl: 23.4, ok: false}])
-          expect(done).to be false
+          expect(done).to be(false)
         end
 
         context "quota met" do
           let(:quota) { 2.91 }
           it do
             expect(for_user).to eq([{bucket: regular, got: 3.0, ttl: 2.91, ok: true}])
-            expect(done).to be true
+            expect(done).to be(true)
           end
         end
       end
@@ -81,7 +80,7 @@ describe Work::Synopsis do
         it do
           expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
                                   {bucket: fcjob, got: 0, ttl: 6, ok: false}])
-          expect(done).to be false
+          expect(done).to be(false)
         end
       end
 
@@ -96,7 +95,7 @@ describe Work::Synopsis do
         it do
           expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
                                   {bucket: fcjob, got: 3, ttl: 6, ok: false}])
-          expect(done).to be false
+          expect(done).to be(false)
         end
 
         context "all quotas met" do
@@ -104,23 +103,23 @@ describe Work::Synopsis do
           it do
             expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
                                     {bucket: fcjob, got: 6, ttl: 6, ok: true}])
-            expect(done).to be true
+            expect(done).to be(true)
           end
         end
 
         context "with staggering" do
-          let(:pick_type) { "staggered" }
           let(:starts_at) { Time.current + 10.minutes }
           let(:round_calc) { double(prev_limit: 5, next_limit: 10, next_starts_at: starts_at) }
 
           before do
+            allow(period).to receive(:staggered?).and_return(true)
             allow(Work::RoundCalculator).to receive(:new).and_return(round_calc)
           end
 
           it "includes round information" do
             expect(for_user).to eq([{bucket: regular, got: 3, ttl: 2.91, ok: true},
                                     {bucket: fcjob, got: 3, ttl: 6, ok: false}])
-            expect(done).to be false
+            expect(done).to be(false)
             expect(staggering).to eq(prev_limit: 5, next_limit: 10, next_starts_at: starts_at)
           end
         end
@@ -136,7 +135,7 @@ describe Work::Synopsis do
           expect(for_user).to eq([{bucket: regular, got: 0, ttl: 23.4, ok: false},
                                   {bucket: fcjob, got: 0, ttl: 6, ok: false},
                                   {bucket: fcjob2, got: 0, ttl: 4, ok: false}])
-          expect(done).to be false
+          expect(done).to be(false)
         end
       end
     end
@@ -156,7 +155,7 @@ describe Work::Synopsis do
                                 {bucket: fcjob, got: 0, ttl: 6, ok: false}])
         expect(for_household).to eq([{bucket: regular, got: 0, ttl: 46.8, ok: false},
                                      {bucket: fcjob, got: 0, ttl: 12, ok: false}])
-        expect(done).to be false
+        expect(done).to be(false)
       end
     end
 
@@ -174,7 +173,7 @@ describe Work::Synopsis do
                                 {bucket: fcjob, got: 6, ttl: 6, ok: true}])
         expect(for_household).to eq([{bucket: regular, got: 3, ttl: 35.1, ok: false},
                                      {bucket: fcjob, got: 6, ttl: 9, ok: false}])
-        expect(done).to be false
+        expect(done).to be(false)
       end
 
       context "household complete even though user not" do
@@ -189,7 +188,7 @@ describe Work::Synopsis do
                                   {bucket: fcjob, got: 6, ttl: 6, ok: true}])
           expect(for_household).to eq([{bucket: regular, got: 3, ttl: 2.85, ok: true},
                                        {bucket: fcjob, got: 9, ttl: 9, ok: true}])
-          expect(done).to be true
+          expect(done).to be(true)
         end
       end
     end

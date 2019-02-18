@@ -16,7 +16,7 @@ require "rails_helper"
 #   scenario "meals form", js: true do
 #     visit(new_meal_path)
 #     expect_no_confirm_on_reload
-#     enter_datetime(I18n.l(Time.current, format: :full_datetime), into: "meal_served_at")
+#     pick_datetime(".meal_served_at")
 #     expect_confirm_on_reload
 #     # Tried to test more field types but it was taking forever.
 #   end

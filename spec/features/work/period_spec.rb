@@ -46,11 +46,12 @@ feature "periods", js: true do
 
     # Fill in basic attribs
     select("Open", from: "Phase")
-    enter_date("2018-01-01", into: "work_period_starts_on")
-    enter_date("2018-02-01", into: "work_period_ends_on")
+    pick_date(".work_period_starts_on", day: 15)
+    pick_date(".work_period_ends_on", day: 20)
     fill_in("Name", with: "Qux")
 
     # Set quota attrib and choose share values
+    expect(page).not_to have_content("Pick Type")
     expect(page).not_to have_select("Jane Picard")
     select("By Household", from: "Quota")
     expect(page).to have_select("Jane Picard", selected: "Full Share")
@@ -58,6 +59,14 @@ feature "periods", js: true do
     expect(page).to have_select("Kid Knelt", selected: "No Share")
     select("Full Share", from: "Jane Picard")
     select("½ Share", from: "Churl Rox")
+
+    # Set auto open time, pick type, and staggering options
+    expect(page).not_to have_content("Round Duration")
+    pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
+    select("Groups of workers take turns choosing", from: "Pick Type")
+    fill_in("Max. Rounds per Worker", with: 2)
+    fill_in("Workers per Group", with: 5)
+    select("3 minutes", from: "Round Duration")
 
     click_button("Save")
 
@@ -67,6 +76,8 @@ feature "periods", js: true do
     click_on("Qux")
     expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
+    expect(page).to have_select("Pick Type", selected: "Groups of workers take turns choosing")
+    expect(page).to have_select("Round Duration", selected: "3 minutes")
     select("½ Share", from: "Blep Cruller")
     click_button("Save")
 

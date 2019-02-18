@@ -36,7 +36,10 @@ module Work
         community: community,
         phase: "draft",
         starts_on: (Time.zone.today + 1.month).beginning_of_month,
-        ends_on: (Time.zone.today + 1.month).end_of_month
+        ends_on: (Time.zone.today + 1.month).end_of_month,
+        max_rounds_per_worker: 3,
+        workers_per_round: 10,
+        round_duration: 5
       )
     end
 

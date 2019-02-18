@@ -41,12 +41,20 @@ module FeatureSpecHelpers
   def pick_datetime(selector, day:, hour:, next_click: "body")
     find("#{selector} .input-group-btn button").click
     within(".bootstrap-datetimepicker-widget") do
-      find(".datepicker-days td", text: day).click
+      first(".datepicker-days td", text: day, match: :prefer_exact).click
       find("[data-action=togglePicker]").click
       sleep(0.25) # If we don't sleep here, the click doesn't seem to register properly.
       find("[data-action=showHours]").click
       sleep(0.25)
-      find(".timepicker-hours td", text: hour.to_s.rjust(2, "0")).click
+      find(".timepicker-hours td", text: hour.to_s.rjust(2, "0"), match: :prefer_exact).click
+    end
+    find(next_click).click # Get out of the picker.
+  end
+
+  def pick_date(selector, day:, next_click: "body")
+    find("#{selector} .input-group-btn button").click
+    within(".bootstrap-datetimepicker-widget") do
+      first(".datepicker-days td", text: day, match: :prefer_exact).click
     end
     find(next_click).click # Get out of the picker.
   end
@@ -78,16 +86,6 @@ module FeatureSpecHelpers
 
   def have_signed_in_user(user)
     have_css(".personal-nav a", text: user.name)
-  end
-
-  def enter_datetime(value, into:)
-    value = I18n.l(Time.parse(value), format: :full_datetime)
-    find(".#{into} input.datetime_picker").set(value)
-  end
-
-  def enter_date(value, into:)
-    value = I18n.l(Date.parse(value), format: :full)
-    find(".#{into} input.date_picker").set(value)
   end
 
   def expect_success(pattern = /successfully/)

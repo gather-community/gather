@@ -7,7 +7,6 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
   events:
     "change #work_period_quota_type": "quotaTypeOrPhaseChanged"
     "change #work_period_phase": "quotaTypeOrPhaseChanged"
-    "change #work_period_auto_open_time": "autoOpenTimeChanged"
     "change #work_period_pick_type": "pickTypeChanged"
 
   quotaTypeOrPhaseChanged: ->

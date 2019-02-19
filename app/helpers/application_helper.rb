@@ -74,4 +74,10 @@ module ApplicationHelper
   def inline_loading_indicator
     image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none")
   end
+
+  # The logo should take the user back to their home cmty root if they are in a different one.
+  def logo_link_url
+    return home_path if !current_community || !current_user || current_community == current_user.community
+    home_url(host: "#{current_user.subdomain}.#{Settings.url.host}")
+  end
 end

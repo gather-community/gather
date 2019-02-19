@@ -2,7 +2,7 @@ module Concerns::ApplicationController::UrlHelpers
   extend ActiveSupport::Concern
 
   included do
-    helper_method :home_path, :url_in_community, :url_in_home_community
+    helper_method :home_path, :home_url, :url_in_community, :url_in_home_community
   end
 
   protected
@@ -47,8 +47,12 @@ module Concerns::ApplicationController::UrlHelpers
     redirect_to url_in_home_community(home_path)
   end
 
-  def home_path
-    current_user.try(:inactive?) ? inactive_path : root_path
+  def home_path(*args)
+    current_user&.inactive? ? inactive_path(*args) : root_path(*args)
+  end
+
+  def home_url(*args)
+    current_user&.inactive? ? inactive_url(*args) : root_url(*args)
   end
 
   def sign_in_url

@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 # Creates a new cluster, community, and fake data. Also adds a superadmin user with the Gmail address
 # given in Settings.admin_google_id (from settings.local.yml.example)
+
+require File.expand_path(File.join(File.dirname(__FILE__), "../../spec/support/defaults"))
+
 namespace :fake do
   task data: :environment do
     exit("admin_google_id setting not found") unless Settings.admin_google_id

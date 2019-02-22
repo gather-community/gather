@@ -332,13 +332,10 @@ en:
       recent_statements:
         one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
         other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
+    several: "You have Gather accounts with %{count} communities. Each community manages its own accounts. Use the dropdown above to change communities."
 
   households:
     greeting: "Dear %{name} Household,"
-    accounts:
-      intro:
-        one: "You have a Gather account with one community. Each community manages its own accounts."
-        other: "You have Gather accounts with %{count} communities. Each community manages its own accounts."
 
   roles:
     admin: "Admin"

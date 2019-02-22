@@ -5,6 +5,8 @@ class AccountsController < ApplicationController
 
   before_action -> { nav_context(:accounts) }
 
+  decorates_assigned :accounts, :account, :last_statement
+
   def index
     @community = current_community
     authorize(sample_account)

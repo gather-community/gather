@@ -50,15 +50,6 @@ module AccountsHelper
     msg
   end
 
-  def credit_limit(account)
-    if account.credit_limit
-      num = number_to_currency(account.credit_limit)
-      account.credit_exceeded? ? content_tag(:span, num, class: "exceeded") : num
-    else
-      "None"
-    end
-  end
-
   def payment_instructions
     if instr = @community.settings.billing.payment_instructions
       content_tag(:h2, "How to Pay", class: "inner") << safe_render_markdown(instr)

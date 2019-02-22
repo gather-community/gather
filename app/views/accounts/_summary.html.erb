@@ -1,0 +1,79 @@
+<h2>Summary</h2>
+<table class="key-value key-value-full">
+  <tr>
+    <td>Last Statement Date</td>
+    <td>
+      <% if last_statement %>
+        <%= link_to(l(last_statement.created_on, format: :short_date), statement_path(last_statement)) %>
+      <% else %>
+        N/A
+      <% end %>
+    </td>
+  </tr>
+  <% if last_statement %>
+    <tr>
+      <td>Last Statement Balance</td>
+      <td>
+        <%= link_to(currency_with_cr(last_statement.total_due), statement_path(last_statement)) %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>New Payments/Credits</td>
+    <td>
+      <%= link_to(currency_with_cr(-account.total_new_credits), account_transactions_path(account)) %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Balance Due</strong></td>
+    <td>
+      <strong><%= currency_with_cr(account.balance_due) %></strong>
+      <% if footnotes && account.positive_balance_due? %>
+        <strong>*</strong>
+      <% end %>
+    </td>
+  </tr>
+  <% if account.positive_balance_due? && last_statement&.due_on? %>
+    <tr>
+      <td><strong>Due Date</strong></td>
+      <td>
+        <strong><%= l(last_statement.due_on, format: :short_date) %></strong>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>New Charges</td>
+    <td>
+      <%= link_to(currency_with_cr(account.total_new_charges), account_transactions_path(account)) %>
+    </td>
+  </tr>
+  <tr>
+    <td>Current Balance</td>
+    <td>
+      <%= currency_with_cr(account.current_balance) %>
+      <% if footnotes && account.pos_cur_bal_and_credit_limit? %>
+        <strong>**</strong>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>Credit Limit</td>
+    <td>
+      <%= account.credit_limit_or_none %>
+    </td>
+  </tr>
+</table>
+
+<% if footnotes && account.positive_balance_due? %>
+  <div class="footnote">
+    <strong>*</strong> This is the amount you currently owe. It is the amount due on your last
+    statement minus any payments received since then.
+    If you have already sent payment but it is not reflected here, please disregard.
+  </div>
+<% end %>
+<% if footnotes && account.pos_cur_bal_and_credit_limit? %>
+  <div class="footnote">
+    <strong>**</strong> This balance includes charges and credits since your last statement.
+      If it exceeds your credit limit, you will not be able to sign up for meals.
+  </div>
+<% end %>

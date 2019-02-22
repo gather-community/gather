@@ -7,7 +7,7 @@ class HouseholdsController < ApplicationController
 
   before_action -> { nav_context(:people, :households) }, except: :accounts
 
-  decorates_assigned :household, :members
+  decorates_assigned :household, :members, :account, :last_statement
 
   def index
     authorize(Household.new(community: current_community))

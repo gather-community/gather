@@ -3,10 +3,5 @@
 <% if @accounts.empty? %>
   There are not yet any charges associated with your household.
 <% else %>
-  <% if multi_community? %>
-    <p class="subtitle">
-      <%= t(".intro", count: @accounts.size) %>
-    </p>
-  <% end %>
   <%= render("accounts/details", footnotes: true) %>
 <% end %>

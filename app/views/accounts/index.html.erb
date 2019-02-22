@@ -42,7 +42,7 @@
       <th class="amount">Credit Limit</th>
       <th></th>
     </tr>
-    <% @accounts.each do |account| %>
+    <% accounts.each do |account| %>
       <tr>
         <td>
           <%= link_to(account.household_name.html_safe << no_user_warning(account),
@@ -67,7 +67,7 @@
           <strong><%= currency_with_cr(account.current_balance) %></strong>
         </td>
         <td class="amount">
-          <%= credit_limit(account) %>
+          <%= account.credit_limit %>
         </td>
         <td>
           <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>

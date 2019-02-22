@@ -1,15 +1,15 @@
 <% if @has_activity %>
-  <%= render("accounts/topline") %>
+  <%= render("accounts/synopsis") %>
   <div class="row">
     <div class="col-sm-6">
       <%= render("accounts/summary", footnotes: footnotes) %>
       <%= render("accounts/statement_list") %>
     </div>
     <div class="col-sm-6">
-      <%= payment_instructions %>
-
+      <%= render("accounts/payment_instructions") %>
       <% if @accounts.size > 1 %>
-        <h2 class="inner">Looking For Another Account?</h2>
+        <% cls = @community.settings.billing.payment_instructions ? "inner" : "top" %>
+        <h2 class="<%= cls %>">Looking For Another Account?</h2>
         <%= t("accounts.several", count: @accounts.size) %>
       <% end %>
     </div>

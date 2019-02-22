@@ -104,7 +104,6 @@ Rails.application.routes.draw do
 
   resources :households do
     member do
-      get :accounts
       put :activate
       put :deactivate
     end
@@ -114,6 +113,7 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index show edit update] do
     collection do
+      get :yours
       put :apply_late_fees
     end
     resources :transactions, only: %i[index new create]

@@ -1,3 +1,3 @@
-<% content_for(:title, "Account: #{@account.household_name}") %>
-<% content_for(:top_buttons, @account.action_links) %>
-<%= render("accounts/details", footnotes: false) %>
+<% content_for(:title, "Account: #{account.household_name}") %>
+<% content_for(:top_buttons, account.action_links) %>
+<%= render("details", footnotes: false) %>

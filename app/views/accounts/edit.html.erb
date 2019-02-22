@@ -1,18 +1,18 @@
-<% content_for(:title, "Edit Account: #{@account.household_name}") %>
+<% content_for(:title, "Edit Account: #{account.household_name}") %>
 
-<% if @account.household_no_users? %>
+<% if account.household_no_users? %>
   <div class="alert alert-warning">
     <%= icon_tag("warning") %> This account has no users associated with it and cannot recieve statements.
   </div>
 <% end %>
 
-<% form_url = @account.new_record? ? accounts_path : account_path(@account) %>
-<%= gather_form_for(@account, url: form_url) do |f| %>
+<% form_url = account.new_record? ? accounts_path : account_path(account) %>
+<%= gather_form_for(account, url: form_url) do |f| %>
 
-  <%= f.input :household_id do %><%= @account.household_name %><% end %>
-  <%= f.input :community_id do %><%= @account.community_name %><% end %>
-  <%= f.input :current_balance do %><%= currency_with_cr(@account.current_balance) %><% end %>
-  <%= f.input :credit_limit, input_html: { value: number_with_precision(@account.credit_limit, precision: 2) } %>
+  <%= f.input :household_id do %><%= account.household_name %><% end %>
+  <%= f.input :community_id do %><%= account.community_name %><% end %>
+  <%= f.input :current_balance do %><%= currency_with_cr(account.current_balance) %><% end %>
+  <%= f.input :credit_limit, input_html: { value: number_with_precision(account.credit_limit, precision: 2) } %>
 
   <%= form_actions do %>
     <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>

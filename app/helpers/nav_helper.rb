@@ -178,8 +178,8 @@ module NavHelper
           icon: "vcard"
         }, {
           name: :accounts,
-          path: accounts_household_path(current_user.household),
-          permitted: policy(current_user.household).accounts?,
+          path: yours_accounts_path,
+          permitted: policy(Billing::Account.new).yours?,
           icon: "money",
           i18n_key: multi_community? ? :accounts : :account
         }, {

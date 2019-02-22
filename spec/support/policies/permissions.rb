@@ -146,6 +146,16 @@ shared_context "policy permissions" do
     end
   end
 
+  shared_examples_for "permits active and inactive users" do
+    it "permits active users" do
+      expect(subject).to permit(user, record)
+    end
+
+    it "permits inactive users" do
+      expect(subject).to permit(inactive_user, record)
+    end
+  end
+
   shared_examples_for "permits special role but not regular users" do |role_name|
     context do
       let(:actor) { role_member(role_name) }

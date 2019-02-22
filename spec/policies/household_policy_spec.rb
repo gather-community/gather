@@ -86,14 +86,6 @@ describe HouseholdPolicy do
       end
     end
 
-    permissions :accounts? do
-      it_behaves_like "permits admins and members of household"
-
-      it "permits billers" do
-        expect(subject).to permit(biller, user.household)
-      end
-    end
-
     permissions :change_community? do
       it_behaves_like "permits cluster admins only"
     end

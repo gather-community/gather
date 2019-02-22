@@ -1,8 +1,8 @@
-<% if @accounts.size > 1 %>
+<% if accounts.size > 1 %>
   <% cls = @community.settings.billing.payment_instructions ? "inner" : "top" %>
   <h2 class="<%= cls %>">Looking For Another Account?</h2>
-  <% others = @accounts.map(&:community) - [@community] %>
-  <% others.map! { |c| link_to(c.name, accounts_household_path(@household, community_id: c.id)) } %>
+  <% others = accounts.map(&:community) - [@community] %>
+  <% others.map! { |c| link_to(c.name, yours_accounts_path(community_id: c.id)) } %>
   <% if others.size == 1 %>
     <p><%= t("accounts.others.one_html", cmty: others[0]) %></p>
   <% else %>

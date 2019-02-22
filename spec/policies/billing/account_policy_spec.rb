@@ -19,6 +19,10 @@ describe Billing::AccountPolicy do
       it_behaves_like "permits admins or special role but not regular users", :biller
     end
 
+    permissions :yours? do
+      it_behaves_like "permits active and inactive users"
+    end
+
     permissions :show? do
       it_behaves_like "permits admins or special role but not regular users", :biller
 

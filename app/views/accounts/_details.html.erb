@@ -1,13 +1,13 @@
 <% if @has_activity %>
-  <%= render("accounts/synopsis") %>
+  <%= render("synopsis") %>
   <div class="row">
     <div class="col-sm-6">
-      <%= render("accounts/summary", footnotes: footnotes) %>
-      <%= render("accounts/statement_list") %>
+      <%= render("summary", footnotes: footnotes) %>
+      <%= render("statement_list") %>
     </div>
     <div class="col-sm-6">
-      <%= render("accounts/payment_instructions") %>
-      <%= render("accounts/other_accounts") %>
+      <%= render("payment_instructions") %>
+      <%= render("other_accounts") if accounts %>
     </div>
   </div>
 <% else %>

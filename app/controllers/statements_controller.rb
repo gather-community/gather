@@ -1,20 +1,19 @@
+# frozen_string_literal: true
+
 class StatementsController < ApplicationController
   PER_PAGE = 5
 
   before_action -> { nav_context(:accounts) }
 
+  decorates_assigned :statement
+
   def show
     @statement = Billing::Statement.find(params[:id]).decorate
-    authorize @statement
-    @charges = @statement.charges
-    @credits = @statement.credits
-    @total_charges = @statement.total_charges
-    @total_credits = @statement.total_credits
-    @community = @statement.community
+    authorize(@statement)
   end
 
   def generate
-    authorize sample_statement
+    authorize(sample_statement)
     Delayed::Job.enqueue(Billing::StatementJob.new(current_community.id))
 
     flash[:success] = "Statement generation started. Please try refreshing "\
@@ -25,7 +24,7 @@ class StatementsController < ApplicationController
     if with_no_users.any?
       flash[:alert] = "The following households have no associated users and thus "\
         "statements were not generated for them: " <<
-        (with_no_users.map { |a| a.decorate.household_name }.join(", ")) <<
+        with_no_users.map { |a| a.decorate.household_name }.join(", ") <<
         ". Try sending statements again once the households have associated users."
     end
 
@@ -34,7 +33,7 @@ class StatementsController < ApplicationController
 
   def more
     @account = Billing::Account.find(params[:account_id])
-    authorize @account, :show?
+    authorize(@account, :show?)
     @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
     render(partial: "statements/statement_rows")
   end
@@ -50,8 +49,6 @@ class StatementsController < ApplicationController
     case params[:action]
     when "show"
       Billing::Statement.find_by(id: params[:id]).try(:community)
-    else
-      nil
     end
   end
 end

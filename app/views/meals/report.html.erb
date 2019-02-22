@@ -3,7 +3,7 @@
 <% range = %w(first last).map { |m| l(@report.range.send(m), format: :month_yr) }.join(" - ") %>
 
 <% if @report.empty? %>
-  <div class="none-found">
+  <div class="center-notice">
     No matching meal data found for <%= range %>. The report includes finalized meals only.
   </div>
 <% else %>

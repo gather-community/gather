@@ -1,5 +1,4 @@
 <% if @has_activity %>
-  <%= render("synopsis") %>
   <div class="row">
     <div class="col-sm-6">
       <%= render("summary", footnotes: footnotes) %>
@@ -11,5 +10,7 @@
     </div>
   </div>
 <% else %>
-  There is no activity on this account.
+  <div class="center-notice">
+    There is no activity on this account.
+  </div>
 <% end %>

@@ -1,38 +1,44 @@
 <% content_for(:title) do
-    suffix = @account.household == current_user.household ? "" : ": #{@account.household_name}"
-    "Recent Transactions#{suffix}"
+    suffix = account.household == current_user.household ? "" : ": #{account.household_name}"
+    "Recent Activity#{suffix}"
   end
 %>
 
 <table class="key-value key-value-narrow">
   <tr>
     <td>Account Community</td>
-    <td>
-      <%= @community.name %>
-    </td>
+    <td><%= @community.name %></td>
   </tr>
   <tr>
     <td>Household</td>
-    <td>
-      <%= @account.household_name %>
-    </td>
-  </tr>
-  <tr>
-    <td>Total Payments/Credits</td>
-    <td>
-      <%= currency_with_cr_span(@credits.sum(&:amount)) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Total Charges</td>
-    <td>
-      <%= currency_with_cr_span(@charges.sum(&:amount)) %>
-    </td>
+    <td><%= account.household_name %></td>
   </tr>
 </table>
 
-<% if @transactions.none? %>
-  <p class="inner">There are no recent transactions for this account.</p>
+<h2>Activity</h2>
+
+<% if transactions.none? && last_statement.nil? %>
+  <div class="center-notice">There is no activity on this account.</div>
 <% else %>
-  <%= render("charges_and_credits") %>
+  <%= render(layout: "txn_table") do %>
+    <tr>
+      <td><%= l(last_statement&.created_on, format: :short_date) %></td>
+      <td></td>
+      <td>Last statement balance</td>
+      <td></td>
+      <td></td>
+      <td class="num"><%= currency_with_cr_span(last_statement&.total_due || 0) %></td>
+    </tr>
+
+    <%= render("transactions/txn_rows", transactions: transactions) %>
+
+    <tr class="total">
+      <td></td>
+      <td></td>
+      <td>Current balance</td>
+      <td></td>
+      <td></td>
+      <td class="num"><%= currency_with_cr_span(account.current_balance) %></td>
+    </tr>
+  <% end %>
 <% end %>

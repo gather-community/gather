@@ -12,6 +12,14 @@ table {
         white-space: nowrap;
       }
 
+      &.narrow {
+        max-width: 100px;
+      }
+
+      &.narrowish {
+        max-width: 150px;
+      }
+
       &:first-of-type {
         padding-left: 10px;
       }

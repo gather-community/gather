@@ -1,0 +1,29 @@
+<% if transactions.empty? %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td><em>There was no activity for this period</em></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+<% else %>
+  <% transactions.each do |txn| %>
+    <tr>
+      <td><%= l(txn.incurred_on, format: :short_date) %></td>
+      <td><%= t("transaction_codes.#{txn.code}") %></td>
+      <td>
+        <% if txn.statementable.present? %>
+          <%= link_to(txn.description, polymorphic_path(txn.statementable)) %>
+        <% else %>
+          <%= txn.description %>
+        <% end %>
+      </td>
+      <td class="num"><%= txn.quantity %></td>
+      <td class="num"><%= currency_with_cr(txn.unit_price) %></td>
+      <td class="num">
+        <%= currency_with_cr_span(txn.amount) %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

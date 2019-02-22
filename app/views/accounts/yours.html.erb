@@ -3,5 +3,6 @@
 <% if accounts.empty? %>
   There are not yet any charges associated with your household.
 <% else %>
+  <%= render("synopsis") if @has_activity %>
   <%= render("details", footnotes: true) %>
 <% end %>

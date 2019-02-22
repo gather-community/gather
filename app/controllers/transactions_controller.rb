@@ -3,16 +3,15 @@
 class TransactionsController < ApplicationController
   before_action -> { nav_context(:accounts) }
 
+  decorates_assigned :account, :transactions, :last_statement
+
   def index
     @account = Billing::Account.find(params[:account_id]).decorate
+    @last_statement = @account.last_statement
     authorize(@account, :show?)
     authorize(Billing::Transaction)
     @transactions = policy_scope(Billing::Transaction).includes(account: :community)
     @transactions = @transactions.where(account: @account).no_statement
-    @charges = @transactions.select(&:charge?)
-    @credits = @transactions.select(&:credit?)
-    @total_charges = @charges.sum(&:amount)
-    @total_credits = @credits.sum(&:amount)
     @community = @account.community
   end
 

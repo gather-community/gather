@@ -4,4 +4,24 @@
     width: 20px;
     padding-left: 4px;
   }
+
+  table.index.transactions {
+    tr {
+      :nth-child(1), :nth-child(4), :nth-child(5), :nth-child(6) {
+        max-width: 100px;
+      }
+
+      :nth-child(2) {
+        max-width: 150px;
+      }
+    }
+
+    tr.total {
+      background-color: $fainter-gray;
+
+      td {
+        font-weight: bold;
+      }
+    }
+  }
 }

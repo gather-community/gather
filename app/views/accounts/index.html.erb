@@ -67,7 +67,7 @@
           <strong><%= currency_with_cr(account.current_balance) %></strong>
         </td>
         <td class="amount">
-          <%= account.credit_limit %>
+          <%= number_to_currency(account.credit_limit) %>
         </td>
         <td>
           <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>

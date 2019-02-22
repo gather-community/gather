@@ -7,11 +7,7 @@
     </div>
     <div class="col-sm-6">
       <%= render("accounts/payment_instructions") %>
-      <% if @accounts.size > 1 %>
-        <% cls = @community.settings.billing.payment_instructions ? "inner" : "top" %>
-        <h2 class="<%= cls %>">Looking For Another Account?</h2>
-        <%= t("accounts.several", count: @accounts.size) %>
-      <% end %>
+      <%= render("accounts/other_accounts") %>
     </div>
   </div>
 <% else %>

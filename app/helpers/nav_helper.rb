@@ -6,35 +6,68 @@ module NavHelper
     sample_period = Work::Period.new(community: current_community)
     sample_job = Work::Job.new(period: sample_period)
     sample_shift = Work::Shift.new(job: sample_job)
-    items = [
-      {
+    # Build up the main menu list
+    items = []
+    # check if there are any main menu items defined in Settings.
+    c_settings_topmenu = current_community.settings.top_menu_customizations
+    settings_topmenu = if c_settings_topmenu.nil?
+                          []
+                        else
+                          # create an array of arrays from the setting string.
+                          c_settings_topmenu.scan(%r{\[([\w\- ]+)\]\(([\w/\.:%&\?]+)\)})
+                        end
+    # add each standard main menu item unless that item has been overridden
+    # in the Settings.
+    unless settings_topmenu.any? { |h| h[0] == :people.to_s }
+      items.push(
         name: :people,
         path: lens_path_if_present("users"),
         permitted: policy(User).index?,
         icon: "users"
-      }, {
+      )
+    end
+    unless settings_topmenu.any? { |h| h[0] == :meals.to_s }
+      items.push(
         name: :meals,
         path: lens_path_if_present("meals"),
         permitted: policy(Meal.new(community: current_community)).index?,
         icon: "cutlery"
-      }, {
+      )
+    end
+    unless settings_topmenu.any? { |h| h[0] == :work.to_s }
+      items.push(
         name: :work,
         path: lens_path_if_present("work/shifts"),
         permitted: policy(sample_shift).index_wrapper?,
         icon: "wrench"
-      }, {
+      )
+    end
+    unless settings_topmenu.any? { |h| h[0] == :reservations.to_s }
+      items.push(
         name: :reservations,
         path: lens_path_if_present("reservations"),
-        permitted: policy(Reservations::Reservation.new(resource:
-          Reservations::Resource.new(community: current_community))).index?,
+        permitted: policy(Reservations::Reservation.new(resource:                        Reservations::Resource.new(community: current_community))).index?,
         icon: "book"
-      }, {
+      )
+    end
+    unless settings_topmenu.any? { |h| h[0] == :wiki.to_s }
+      items.push(
         name: :wiki,
         path: "/wiki",
         permitted: policy(Wiki::Page.new(community: current_community)).show?,
         icon: "info-circle"
-      }
-    ]
+      )
+    end
+    # Add in any items defined in Settings, unless the path for that item i "none"
+    settings_topmenu.each do |menuitem|
+      next if menuitem[1] == "none"
+      items.push(
+        name: menuitem[0],
+        path: menuitem[1],
+        permitted: true,
+        icon: "info-circle"
+      )
+    end
     filter_and_set_active_nav_items(items, type: :main, active: @context[:section])
   end
 

@@ -36,7 +36,7 @@ en:
     hints:
       community:
         settings:
-          top_menu_customizations: "Enter links in Markdown format.  All other text and markup will be ignored. "
+          top_menu_customizations: "Enter links in Markdown format, like this: [link-name](link-path).  A link-path of 'none' will remove a link completely. All other text and markup will be ignored. "
           meals:
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
             show_reimb_form: "Whether to show a printable reimbursement form (including grocery and pantry amounts and reimbursement method) on the meal summary page. Uncheck if you prefer an electronic reimbursement process."

@@ -39,7 +39,7 @@ class MealDecorator < ApplicationDecorator
   end
 
   def served_at_datetime
-    l(served_at, format: :full_datetime)
+    l(served_at)
   end
 
   def served_at_time_only

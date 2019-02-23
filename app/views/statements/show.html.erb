@@ -11,12 +11,12 @@
   </tr>
   <tr>
     <td>Statement Date</td>
-    <td><%= l(statement.created_on, format: :short_date) %></td>
+    <td><%= l(statement.created_on) %></td>
   </tr>
   <% if statement.due_on %>
     <tr>
       <td>Due Date</td>
-      <td><%= l(statement.due_on, format: :short_date) %></td>
+      <td><%= l(statement.due_on) %></td>
     </tr>
   <% end %>
 </table>

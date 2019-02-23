@@ -4,7 +4,7 @@
     <td>Last Statement Date</td>
     <td>
       <% if last_statement %>
-        <%= link_to(l(last_statement.created_on, format: :short_date), statement_path(last_statement)) %>
+        <%= link_to(l(last_statement.created_on), statement_path(last_statement)) %>
       <% else %>
         N/A
       <% end %>

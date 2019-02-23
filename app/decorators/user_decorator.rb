@@ -26,11 +26,11 @@ class UserDecorator < ApplicationDecorator
 
   def birthdate
     return nil if object.birthdate.nil?
-    I18n.l(object.birthdate, format: :full)
+    I18n.l(object.birthdate)
   end
 
   def joined_on
-    l(object.joined_on, format: :full)
+    l(object.joined_on)
   end
 
   def mobile_phone

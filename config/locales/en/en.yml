@@ -153,7 +153,6 @@ en:
     # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
     formats:
       default: "%b %d %Y"
-      full: "%b %d %Y"
       month_day: "%b %d"
       month_yr: "%B %Y"
       short_date: "%a %b %d"
@@ -169,7 +168,6 @@ en:
       default: "%a %b %d %Y %l:%M%P"
       date_wkday_no_yr: "%a %b %d"
       datetime_no_yr: "%a %b %d %l:%M%P"
-      full_datetime: "%a %b %d %Y %l:%M%P"
       machine_readable: "%Y-%m-%d %H:%M"
       time_only: "%l:%M%P"
       short_date: "%a %b %d"

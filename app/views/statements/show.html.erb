@@ -44,10 +44,16 @@
 <% end %>
 
 <% if statement.household == current_user.household %>
-  <div class="center-notice">
-    <%= icon_tag("info-circle") %>
-    For the most current account information,
-    <%= link_to("visit your accounts page",
-          yours_accounts_path(multi_community? ? {community: statement.community_id} : {})) %>.
+  <div class="row">
+    <% if account.last_statement_id == statement.id %>
+      <div class="col-sm-6">
+        <%= render("accounts/payment_instructions", top: false) %>
+      </div>
+      <div class="col-sm-6">
+        <%= render("link_to_accounts_page") %>
+      </div>
+    <% else %>
+      <%= render("link_to_accounts_page") %>
+    <% end %>
   </div>
 <% end %>

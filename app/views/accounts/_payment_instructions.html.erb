@@ -1,4 +1,4 @@
 <% if @community.settings.billing.payment_instructions %>
-  <h2 class="top">How To Pay</h2>
+  <h2 class="<%= local_assigns[:top] == false || "top" %>">How To Pay</h2>
   <%= safe_render_markdown(@community.settings.billing.payment_instructions) %>
 <% end %>

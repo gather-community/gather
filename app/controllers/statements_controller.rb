@@ -5,10 +5,12 @@ class StatementsController < ApplicationController
 
   before_action -> { nav_context(:accounts) }
 
-  decorates_assigned :statement
+  decorates_assigned :statement, :account
 
   def show
-    @statement = Billing::Statement.find(params[:id]).decorate
+    @statement = Billing::Statement.find(params[:id])
+    @account = @statement.account
+    @community = @statement.community
     authorize(@statement)
   end
 

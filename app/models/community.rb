@@ -27,6 +27,7 @@ class Community < ApplicationRecord
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
     {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
      default: "directory", required: true},
+    {key: :top_menu_customizations, type: :markdown},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},
       {key: :default_capacity, type: :integer, required: true, default: 50},

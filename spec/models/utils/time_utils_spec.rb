@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Utils::TimeUtils do
   describe "humanize_interval" do

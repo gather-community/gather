@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe CustomFields::Fields::Field do
   let(:field) { CustomFields::Fields::StringField.new(key: "foo") }

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe CustomFields::Spec do
   describe "constructor" do

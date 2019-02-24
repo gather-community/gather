@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe CustomFields::Fields::EmailField do
   let(:field) { described_class.new(key: "foo") }

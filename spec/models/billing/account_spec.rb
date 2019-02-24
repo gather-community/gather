@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 module Billing
   describe Account do

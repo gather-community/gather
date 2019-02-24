@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe CustomFields::Entries::BasicEntry do
   let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b), required: true) }

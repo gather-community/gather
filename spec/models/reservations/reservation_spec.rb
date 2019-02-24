@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Reservations::Reservation do
   let(:resource) { create(:resource) }

@@ -2,7 +2,8 @@
 <div class="payment-instructions">
   <h2>How To Pay</h2>
   <% if account.pay_with_paypal? %>
-    <%= link_to("#{methods.paypal_me}/#{number_with_precision(account.balance_due, precision: 2)}") do %>
+    <%= link_to("#{methods.paypal_me}/#{number_with_precision(account.balance_due, precision: 2)}",
+          data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted."}) do %>
       <%= account.payment_badge(:paypal) %>
     <% end %>
   <% end %>

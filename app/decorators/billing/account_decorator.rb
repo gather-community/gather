@@ -30,8 +30,10 @@ module Billing
     end
 
     def payment_badge(type)
-      h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
+      image = h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
         class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
+      link_method = "#{type}_link"
+      respond_to?(link_method) ? send(link_method, image) : image
     end
 
     def pay_with_paypal?
@@ -68,6 +70,13 @@ module Billing
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_account_path(object)),
         ActionLink.new(object, :add_txn, icon: "plus", path: h.new_account_transaction_path(object))
       )
+    end
+
+    private
+
+    def paypal_link(image)
+      link_to(image, "#{methods.paypal_me}/#{number_with_precision(account.balance_due, precision: 2)}",
+        data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted."})
     end
   end
 end

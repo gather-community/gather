@@ -1,39 +1,34 @@
-<% methods = account.payment_settings %>
+<% methods = Billing::PaymentMethodsDecorator.new(account) %>
 <div class="payment-instructions">
   <h2>How To Pay</h2>
-  <% if account.pay_with_paypal? %>
-    <%= link_to("#{methods.paypal_me}/#{number_with_precision(account.balance_due, precision: 2)}",
-          data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted."}) do %>
-      <%= account.payment_badge(:paypal) %>
-    <% end %>
-  <% end %>
-  <%= account.payment_badge(:online_bill_pay) if account.pay_with_online_bill_pay? %>
-  <%= account.payment_badge(:check) if account.pay_with_check? %>
-  <%= account.payment_badge(:cash) if account.pay_with_cash? %>
+  <%= methods.payment_badge(:paypal) %>
+  <%= methods.payment_badge(:online_bill_pay) %>
+  <%= methods.payment_badge(:check) %>
+  <%= methods.payment_badge(:cash) %>
 
-  <% if account.pay_with_paypal? %>
+  <% if methods.pay_with_paypal? %>
     <h3>PayPal</h3>
     Click the logo above to pay with PayPal.
   <% end %>
 
-  <% if account.pay_with_online_bill_pay? %>
+  <% if methods.pay_with_online_bill_pay? %>
     <h3>Online Bill Pay</h3>
     Most banks offer online bill pay, which you can use to easily send a check online.
     Add a new bill payee and enter the following:
     <ul>
       <li>Payee name: <strong><%= methods.check_payee %></strong></li>
-      <li>Account number: <strong><%= account.number_padded %></strong></li>
+      <li>Account number: <strong><%= methods.number_padded %></strong></li>
       <li>Address:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
     </ul>
   <% end %>
 
-  <% if account.pay_with_check? %>
+  <% if methods.pay_with_check? %>
     <h3>Check</h3>
     <ul>
       <% if methods.check_payee %>
         <li>Make checks payable to <strong><%= methods.check_payee %></strong></li>
       <% end %>
-      <li>Write your account number <strong><%= account.number_padded %></strong> on the memo line.</li>
+      <li>Write your account number <strong><%= methods.number_padded %></strong> on the memo line.</li>
       <% if methods.check_address %>
         <li>Mail checks to:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
       <% end %>
@@ -43,7 +38,7 @@
     </ul>
   <% end %>
 
-  <% if account.pay_with_cash? %>
+  <% if methods.pay_with_cash? %>
     <h3>Cash</h3>
     <%= methods.cash_dropoff %>
   <% end %>
@@ -52,17 +47,17 @@
     <%= safe_render_markdown(methods.additional_info) %>
   <% end %>
 
-  <% if account.no_payment_instructions? %>
+  <% if methods.no_payment_instructions? %>
     No payment instructions have been provided.
-    <% if policy(account.community).edit? %>
+    <% if policy(methods.community).edit? %>
       Please go to the <%= link_to("settings page", admin_settings_path(type: "community")) %> to enter some.
     <% end %>
   <% end %>
 
-  <% if methods.show_billing_contact && account.billing_contact %>
+  <% if methods.show_billing_contact && methods.billing_contact %>
     <p>
       Please contact
-      <%= link_to(account.billing_contact, "mailto:#{account.billing_contact}") %>
+      <%= link_to(methods.billing_contact, "mailto:#{methods.billing_contact}") %>
       with any billing inquiries.
     </p>
   <% end %>

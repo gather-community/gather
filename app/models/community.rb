@@ -47,7 +47,6 @@ class Community < ApplicationRecord
     ]},
     {key: :billing, type: :group, fields: [
       {key: :contact, type: :email},
-      {key: :payment_instructions, type: :markdown},
       {key: :statement_terms, type: :integer, default: 30},
       {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
       {key: :payment_methods, type: :group, fields: [

@@ -67,14 +67,14 @@ en:
             statement_terms: "Number of days after the creation date that a statement is due. If zero (0), statements have no due dates."
             statement_reminder_lead_time: "The number of days in advance of the due date that the statement payment reminder will be sent. Reminders won't be sent if statements don't have due dates or the balance has been paid."
             payment_methods:
-              _self: "Instructions or information for various payment methods. Leave blank if method not accepted."
+              _self: "Instructions or information for various payment methods. Leave blank if method not accepted. Visit your <a href='/accounts/yours'>accounts page</a> to see how the instructions look."
               paypal_me: "Enter your <a href='https://paypal.me'>PayPal.me link</a>. This is the easiest way for members to pay with PayPal without incurring a fee."
               check_payee: "Enter who checks should be made payable to. Leave blank if checks not accepted."
               check_address: "Enter an address if you accept checks by mail. This will also enable online bill pay instructions to be shown."
               check_dropoff: "Enter instructions for dropping a check off in person. Leave blank if checks must be mailed or aren't accepted."
               cash_dropoff: "Enter instructions for dropping off cash in person. Leave blank if cash not accepted."
               additional_info: "Enter any additional info you want to include in the payment instructions area."
-              show_billing_contact: "Whether the billing contact email above (if given) should be included at the bottom of the payment instructions. Uncheck and add to 'Additional Info' if you want to customize the way it's included."
+              show_billing_contact: "Whether the billing contact email above (if given) should be included at the bottom of the payment instructions. Uncheck and add to 'Additional Info' yourself if you want to customize the way it's included."
             late_fee_policy:
               fee_type: "How the fee is calculated"
               threshold: "Minimum outstanding balance for a fee to be assessed"

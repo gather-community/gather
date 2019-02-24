@@ -5,11 +5,6 @@ module CustomFields
         :email
       end
 
-      def normalize(value)
-        stripped = value.try(:strip)
-        stripped == "" ? nil : stripped
-      end
-
       protected
 
       def set_implicit_validations

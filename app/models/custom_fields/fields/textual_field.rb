@@ -2,7 +2,7 @@ module CustomFields
   module Fields
     class TextualField < Field
       def normalize(value)
-        value.try(:strip) == "" ? nil : value
+        value&.strip.presence
       end
     end
   end

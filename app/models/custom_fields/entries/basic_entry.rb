@@ -24,8 +24,7 @@ module CustomFields
               :"errors.messages.#{options[:message]}"
             ])
           end
-          validator = "ActiveModel::Validations::#{name.to_s.camelize}Validator".constantize
-          parent.validates_with(validator, options.merge(attributes: [key]))
+          parent.validates_with(validator(name), options.merge(attributes: [key]))
         end
       end
 
@@ -72,6 +71,15 @@ module CustomFields
           result = result.html_safe
         end
         [type, result]
+      end
+
+      def validator(validation_name)
+        validation_name = validation_name.to_s.camelize
+        begin
+          "#{validation_name}Validator".constantize
+        rescue NameError
+          "ActiveModel::Validations::#{validation_name}Validator".constantize
+        end
       end
     end
   end

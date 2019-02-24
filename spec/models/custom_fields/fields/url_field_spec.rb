@@ -1,20 +1,17 @@
 require "rails_helper"
 
-describe CustomFields::Fields::TextField do
+describe CustomFields::Fields::UrlField do
   let(:field) { described_class.new(key: "foo") }
 
   describe "normalization" do
-    it "should convert empty string to nil" do
-      expect(field.normalize("")).to be_nil
-    end
-
-    it "should convert whitespace to nil" do
-      expect(field.normalize("  \n\t ")).to be_nil
-    end
-
     it "should strip whitespace" do
+      expect(field.normalize("  https://junk.com ")).to eq("https://junk.com")
+    end
+
+    it "should leave other stuff alone" do
+      # Invalid email should be caught by validation
       expect(field.normalize(nil)).to be_nil
-      expect(field.normalize(" pants ")).to eq("pants")
+      expect(field.normalize("pants")).to eq "pants"
     end
   end
 

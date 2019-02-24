@@ -53,7 +53,7 @@ class Community < ApplicationRecord
       {key: :payment_methods, type: :group, fields: [
         {key: :check, type: :markdown},
         {key: :cash, type: :markdown},
-        {key: :paypal_me, type: :string},
+        {key: :paypal_me, type: :url, host: "paypal.me"},
         {key: :additional_info, type: :markdown}
       ]},
       {key: :late_fee_policy, type: :group, fields: [

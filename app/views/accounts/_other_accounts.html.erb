@@ -2,8 +2,8 @@
   <div class="center-notice">
     <%= icon_tag("question-circle") %> Looking for another account?
     <% others = accounts.map(&:community) - [@community] %>
-    <% others.map! { |c| link_to(c.name, yours_accounts_path(community_id: c.id)) } %>
-    <% if others.size != 1 %>
+    <% others.map! { |c| link_to(c.name, yours_accounts_path(community: c.id)) } %>
+    <% if others.size == 1 %>
       <%= t("accounts.others.one_html", cmty: others[0]) %>
     <% else %>
       <%= t("accounts.others.multiple_html", cmtys: safe_join(others, ", ")) %>

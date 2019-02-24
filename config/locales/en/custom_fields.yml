@@ -25,9 +25,16 @@ en:
               default_prep_time: "Default Prep Time"
           billing:
             _self: "Billing"
+            billing_contact: "Billing Contact"
             payment_instructions: "Payment Instructions"
             statement_terms: "Statement Terms"
             statement_reminder_lead_time: "Statement Reminder\nDays in Advance"
+            payment_methods:
+              _self: "Payment Method Info"
+              check: "Check"
+              cash: "Cash"
+              paypal_me: "Paypal.me"
+              additional_info: "Additional Info"
             late_fee_policy:
               _self: "Late Fee Policy"
               fee_type: "Fee Type"
@@ -52,9 +59,16 @@ en:
               default_total_time: "Default total length of meal reservations in minutes, including prep and cleanup time"
               default_prep_time: "Default meal prep time in minutes"
           billing:
+            billing_contact: "Email for billing inquiries. Will be included with payment instructions."
             payment_instructions: "How to send payment for an account."
             statement_terms: "Number of days after the creation date that a statement is due. If zero (0), statements have no due dates."
             statement_reminder_lead_time: "The number of days in advance of the due date that the statement payment reminder will be sent. Reminders won't be sent if statements don't have due dates or the balance has been paid."
+            payment_methods:
+              _self: "Instructions or information for various payment methods. Leave blank if method not accepted."
+              check: "Enter instructions for how to pay by check. Be sure to include who to make it out to."
+              cash: "Enter instructions for how to pay with cash."
+              paypal_me: "Enter your <a href='https://paypal.me'>Paypal.me link</a>. This is the easiest way for members to pay with Paypal."
+              additional_info: "Enter any additional info you want to include in the payment instructions area."
             late_fee_policy:
               fee_type: "How the fee is calculated"
               threshold: "Minimum outstanding balance for a fee to be assessed"

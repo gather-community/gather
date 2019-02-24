@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Fields::BooleanField, type: :model do
+describe CustomFields::Fields::BooleanField do
   let(:field) { described_class.new(key: "foo") }
 
   describe "normalization" do

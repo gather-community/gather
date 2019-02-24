@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Fields::IntegerField, type: :model do
+describe CustomFields::Fields::IntegerField do
   let(:field) { described_class.new(key: "foo") }
 
   describe "normalization" do

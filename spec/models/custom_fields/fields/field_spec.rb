@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Fields::Field, type: :model do
+describe CustomFields::Fields::Field do
   let(:field) { CustomFields::Fields::StringField.new(key: "foo") }
 
   it "should symbolize string params" do

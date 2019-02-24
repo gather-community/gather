@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Entries::BasicEntry, type: :model do
+describe CustomFields::Entries::BasicEntry do
   let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w(a b), required: true) }
   let(:entry) { described_class.new(field: field, hash: {foo: "b"}) }
 

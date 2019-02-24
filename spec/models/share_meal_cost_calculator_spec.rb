@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ShareMealCostCalculator, type: :model do
+describe ShareMealCostCalculator do
 
   let(:formula) do
     build(:meal_formula,

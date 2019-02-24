@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Instance, type: :model do
+describe CustomFields::Instance do
   let(:spec_data) { [
     {key: "fruit", type: "enum", options: %w(apple banana peach), required: true, default: "peach"},
     {key: "info", type: "group", fields: [

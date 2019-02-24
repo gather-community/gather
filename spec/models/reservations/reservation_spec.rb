@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Reservations::Reservation, type: :model do
+describe Reservations::Reservation do
   let(:resource) { create(:resource) }
   let(:resource2) { create(:resource) }
 

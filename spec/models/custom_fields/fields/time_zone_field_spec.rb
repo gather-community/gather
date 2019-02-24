@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Fields::TimeZoneField, type: :model do
+describe CustomFields::Fields::TimeZoneField do
   let(:field) { described_class.new(key: "foo") }
 
   describe "normalization" do

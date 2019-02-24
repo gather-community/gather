@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "custom field declaration", type: :model do
+describe "custom field declaration" do
   describe "getters and setters" do
     let(:fake) { FakeCustomFieldModel.new }
 

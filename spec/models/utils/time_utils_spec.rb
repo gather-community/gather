@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Utils::TimeUtils, type: :model do
+describe Utils::TimeUtils do
   describe "humanize_interval" do
     it "works for < 1 minute" do
       expect(Utils::TimeUtils.humanize_interval(59)).to eq "under 1 minute"

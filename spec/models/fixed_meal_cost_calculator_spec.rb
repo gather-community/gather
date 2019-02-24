@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FixedMealCostCalculator, type: :model do
+describe FixedMealCostCalculator do
 
   let(:formula) do
     build(:meal_formula,

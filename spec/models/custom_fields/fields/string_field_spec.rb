@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomFields::Fields::StringField, type: :model do
+describe CustomFields::Fields::StringField do
   let(:field) { described_class.new(key: "foo") }
 
   describe "normalization" do

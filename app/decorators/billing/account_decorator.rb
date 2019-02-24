@@ -50,6 +50,15 @@ module Billing
       payment_settings.check_payee && payment_settings.check_address
     end
 
+    def no_payment_instructions?
+      payment_settings.paypal_me.nil? &&
+        payment_settings.check_payee.nil? &&
+        payment_settings.check_address.nil? &&
+        payment_settings.check_dropoff.nil? &&
+        payment_settings.cash_dropoff.nil? &&
+        payment_settings.additional_info.nil?
+    end
+
     def number_padded
       @number_padded ||= id.to_s.rjust(6, "0")
     end

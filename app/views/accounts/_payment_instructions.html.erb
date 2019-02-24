@@ -51,6 +51,13 @@
     <%= safe_render_markdown(methods.additional_info) %>
   <% end %>
 
+  <% if account.no_payment_instructions? %>
+    No payment instructions have been provided.
+    <% if policy(account.community).edit? %>
+      Please go to the <%= link_to("settings page", admin_settings_path(type: "community")) %> to enter some.
+    <% end %>
+  <% end %>
+
   <% if methods.show_billing_contact && account.billing_contact %>
     <p>
       Please contact

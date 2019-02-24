@@ -46,15 +46,18 @@ class Community < ApplicationRecord
       ]}
     ]},
     {key: :billing, type: :group, fields: [
-      {key: :billing_contact, type: :email},
+      {key: :contact, type: :email},
       {key: :payment_instructions, type: :markdown},
       {key: :statement_terms, type: :integer, default: 30},
       {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
       {key: :payment_methods, type: :group, fields: [
-        {key: :check, type: :markdown},
-        {key: :cash, type: :markdown},
         {key: :paypal_me, type: :url, host: "paypal.me"},
-        {key: :additional_info, type: :markdown}
+        {key: :check_payee, type: :string},
+        {key: :check_address, type: :text},
+        {key: :check_dropoff, type: :string},
+        {key: :cash_dropoff, type: :string},
+        {key: :additional_info, type: :markdown},
+        {key: :show_billing_contact, type: :boolean, default: true}
       ]},
       {key: :late_fee_policy, type: :group, fields: [
         {key: :fee_type, type: :enum, options: %w[none fixed percent], default: "none", required: true},

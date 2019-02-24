@@ -333,6 +333,11 @@ en:
     others:
       one_html: "You have a Gather account with %{cmty}."
       multiple_html: "You have a Gather accounts with the following communities."
+    payment_badge_alt:
+      paypal: "PayPal payment badge"
+      online_bill_pay: "Online bill pay payment badge"
+      check: "Check payment badge"
+      cash: "Cash payment badge"
 
   households:
     greeting: "Dear %{name} Household,"

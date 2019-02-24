@@ -1,4 +1,59 @@
-<% if @community.settings.billing.payment_instructions %>
-  <h2 class="<%= local_assigns[:top] == false || "top" %>">How To Pay</h2>
-  <%= safe_render_markdown(@community.settings.billing.payment_instructions) %>
+<% methods = account.payment_settings %>
+<h2 class="<%= local_assigns[:top] == false || "top" %>">How To Pay</h2>
+<% if account.pay_with_paypal? %>
+  <%= link_to("#{methods.paypal_me}/#{number_with_precision(account.balance_due, precision: 2)}") do %>
+    <%= account.payment_badge(:paypal) %>
+  <% end %>
+<% end %>
+<%= account.payment_badge(:online_bill_pay) if account.pay_with_online_bill_pay? %>
+<%= account.payment_badge(:check) if account.pay_with_check? %>
+<%= account.payment_badge(:cash) if account.pay_with_cash? %>
+
+<% if account.pay_with_paypal? %>
+  <h3>PayPal</h3>
+  Click the logo above to pay with PayPal.
+<% end %>
+
+<% if account.pay_with_online_bill_pay? %>
+  <h3>Online Bill Pay</h3>
+  Most banks offer online bill pay, which you can use to easily send a check online.
+  Add a new bill payee and enter the following:
+  <ul>
+    <li>Payee name: <strong><%= methods.check_payee %></strong></li>
+    <li>Account number: <strong><%= account.number_padded %></strong></li>
+    <li>Address:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
+  </ul>
+<% end %>
+
+<% if account.pay_with_check? %>
+  <h3>Check</h3>
+  <ul>
+    <% if methods.check_payee %>
+      <li>Make checks payable to <strong><%= methods.check_payee %></strong></li>
+    <% end %>
+    <li>Write your account number <strong><%= account.number_padded %></strong> on the memo line.</li>
+    <% if methods.check_address %>
+      <li>Mail checks to:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
+    <% end %>
+    <% if methods.check_dropoff %>
+      <li><%= methods.check_dropoff %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if account.pay_with_cash? %>
+  <h3>Cash</h3>
+  <%= methods.cash_dropoff %>
+<% end %>
+
+<% if methods.additional_info %>
+  <%= safe_render_markdown(methods.additional_info) %>
+<% end %>
+
+<% if methods.show_billing_contact && account.billing_contact %>
+  <p>
+    Please contact
+    <%= link_to(account.billing_contact, "mailto:#{account.billing_contact}") %>
+    with any billing inquiries.
+  </p>
 <% end %>

@@ -8,6 +8,7 @@ AllCops:
     - "tmp/**/*"
     - "uploads/**/*"
     - "vendor/**/*"
+    - "**/*.erb"
 
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation

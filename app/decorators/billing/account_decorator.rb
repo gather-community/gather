@@ -21,6 +21,39 @@ module Billing
       end
     end
 
+    def payment_settings
+      community.settings.billing.payment_methods
+    end
+
+    def billing_contact
+      community.settings.billing.contact
+    end
+
+    def payment_badge(type)
+      h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
+        class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
+    end
+
+    def pay_with_paypal?
+      payment_settings.paypal_me
+    end
+
+    def pay_with_check?
+      payment_settings.check_payee || payment_settings.check_address || payment_settings.check_dropoff
+    end
+
+    def pay_with_cash?
+      payment_settings.cash_dropoff
+    end
+
+    def pay_with_online_bill_pay?
+      payment_settings.check_payee && payment_settings.check_address
+    end
+
+    def number_padded
+      @number_padded ||= id.to_s.rjust(6, "0")
+    end
+
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_account_path(object)),

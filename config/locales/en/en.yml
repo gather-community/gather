@@ -331,8 +331,8 @@ en:
         one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
         other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
     others:
-      one_html: "You have a Gather account with %{cmty}."
-      multiple_html: "You have a Gather accounts with the following communities."
+      one_html: "You have another Gather account with %{cmty}."
+      multiple_html: "You also have Gather accounts with %{cmtys}."
     payment_badge_alt:
       paypal: "PayPal payment badge"
       online_bill_pay: "Online bill pay payment badge"

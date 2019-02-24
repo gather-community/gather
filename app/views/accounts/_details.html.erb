@@ -6,9 +6,9 @@
     </div>
     <div class="col-sm-6">
       <%= render("payment_instructions") %>
-      <%= render("other_accounts") if accounts %>
     </div>
   </div>
+  <%= render("other_accounts") if accounts %>
 <% else %>
   <div class="center-notice">
     There is no activity on this account.

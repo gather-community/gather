@@ -11,11 +11,11 @@ module NavHelper
     # check if there are any main menu items defined in Settings.
     c_settings_topmenu = current_community.settings.top_menu_customizations
     settings_topmenu = if c_settings_topmenu.nil?
-                          []
-                        else
-                          # create an array of arrays from the setting string.
-                          c_settings_topmenu.scan(%r{\[([\w\- ]+)\]\(([\w/\.:%&\?]+)\)})
-                        end
+                         []
+                       else
+                         # create an array of arrays from the setting string.
+                         c_settings_topmenu.scan(%r{\[([\w\- ]+)\]\(([\w/\.:%&\?]+)\)})
+                       end
     # add each standard main menu item unless that item has been overridden
     # in the Settings.
     unless settings_topmenu.any? { |h| h[0] == :people.to_s }

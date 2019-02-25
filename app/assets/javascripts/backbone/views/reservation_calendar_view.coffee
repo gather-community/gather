@@ -25,6 +25,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
       selectable: @ruleSet.access_level != "read_only"
       selectOverlap: false
       selectHelper: true
+      longPressDelay: 500
       header:
         left: 'title'
         center: 'agendaDay,agendaWeek,month'

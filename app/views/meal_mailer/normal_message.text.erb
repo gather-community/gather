@@ -3,9 +3,7 @@
 <%= @message.sender_name %> sent the following message in regard to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_datetime_no_yr %> at <%= @meal.location_name %>.
 
 --------------
-
 <%= @message.body %>
-
 --------------
 
 <%= render("meal_link") %>

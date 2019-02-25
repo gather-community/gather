@@ -21,7 +21,7 @@ describe MealMailer do
     let(:users) { create_list(:user, 2) }
     let(:fake_user) { create(:user, fake: true) }
     let(:household) { create(:household, users: users + [fake_user]) }
-    let(:signup) { create(:signup, household: household, meal: meal, adult_meat: 1) }
+    let(:signup) { create(:signup, household: household, meal: meal, adult_meat: 1, comments: "Foo\nBar") }
     let(:mail) { described_class.meal_reminder(signup).deliver_now }
 
     it "sets the right recipient" do
@@ -35,6 +35,7 @@ describe MealMailer do
     it "renders the correct name and URL in the body" do
       expect(mail.body.encoded).to match("Dear #{household.name} Household")
       expect(mail.body.encoded).to have_correct_meal_url(meal)
+      expect(mail.body.encoded).to match(/Foo\s+Bar/m)
     end
   end
 

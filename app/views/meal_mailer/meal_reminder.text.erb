@@ -2,13 +2,19 @@
 
 This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_datetime_no_yr %> at <%= @meal.location_name %>.
 
-<%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %>
+<%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %><% if @signup.comments.present? %> Your signup included the following comments:
+--------------
+<%= @signup.comments %>
+--------------
+<% else %>
+
+<% end %>
 
 <% if @assigns.any? -%>
 The meal staff is:
 
 <% @assigns.each do |a| -%>
-- a.role_title: <%= a.user.name %>
+- <%= a.role_title %>: <%= a.user.name %>
 <% end -%>
 <% end %>
 

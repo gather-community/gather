@@ -62,7 +62,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <% if @head_cook_meals.any? %>
+        <% if head_cook_meals.any? %>
           <h2>Past Head Cook Meals</h2>
           <table class="index part-width">
             <tr>
@@ -70,13 +70,13 @@
               <th class="col-md-3">Title</th>
               <th class="col-md-1">Signups</th>
             </tr>
-            <% @head_cook_meals.each do |meal| %>
+            <% head_cook_meals.each do |meal| %>
               <tr>
                 <td class="col-md-1">
                   <%= l(meal.served_at.to_date, format: :short_date) %>
                 </td>
                 <td class="col-md-3">
-                  <%= link_to(meal.title || "[No title]", meal) %>
+                  <%= link_to(meal.title_or_no_title, meal) %>
                 </td>
                 <td class="col-md-1">
                   <%= meal.signup_count %>

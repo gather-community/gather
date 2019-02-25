@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 # Methods common to controllers that can render the meal show action
 module MealShowable
   extend ActiveSupport::Concern
 
   included do
+    decorates_assigned :prev_meal, :next_meal
     helper_method :sample_meal
   end
 

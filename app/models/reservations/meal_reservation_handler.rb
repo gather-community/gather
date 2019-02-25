@@ -13,7 +13,7 @@ module Reservations
     # Builds, not creates, because we want to see if validation passes first.
     def build_reservations
       prefix = "Meal:"
-      title = truncate(meal.title_or_no_title,
+      title = truncate(meal.decorate.title_or_no_title,
         length: ::Reservations::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
 
       current_reservations = []

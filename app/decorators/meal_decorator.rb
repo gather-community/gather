@@ -4,7 +4,7 @@ class MealDecorator < ApplicationDecorator
   delegate_all
 
   def title_or_no_title
-    title || "[No Title]"
+    title || "[No Menu]"
   end
 
   def form_section(section, **options, &block)
@@ -91,7 +91,7 @@ class MealDecorator < ApplicationDecorator
   def edit_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :destroy, icon: "trash", path: h.meal_path(object), method: :delete,
-                                       confirm: {title: object.title_or_no_title})
+                                       confirm: {title: title_or_no_title})
     )
   end
 

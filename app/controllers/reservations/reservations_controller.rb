@@ -5,7 +5,7 @@ module Reservations
   class ReservationsController < ApplicationController
     include Lensable
 
-    decorates_assigned :reservation, :resource, :resources
+    decorates_assigned :reservation, :resource, :resources, :meal
 
     before_action -> { nav_context(:reservations, :reservations) }
 
@@ -68,6 +68,7 @@ module Reservations
       @reservation = Reservation.find(params[:id])
       authorize(@reservation)
       @resource = @reservation.resource
+      @meal = @reservation.meal
     end
 
     def new

@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 
   before_action -> { nav_context(:people, :directory) }
 
-  decorates_assigned :household, :user, :users
+  decorates_assigned :household, :user, :users, :head_cook_meals
 
   def index
     authorize(User)

@@ -4,6 +4,8 @@ module Meals
   class MessagesController < ApplicationController
     before_action -> { nav_context(:meals, :meals) }
 
+    decorates_assigned :meal
+
     def new
       @meal = Meal.find(params[:meal_id])
       @message = Message.new(meal: @meal)

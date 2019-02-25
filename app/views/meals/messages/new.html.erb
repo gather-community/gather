@@ -5,8 +5,8 @@
   <%= f.hidden_field :recipient_type %><%# In case disabled below %>
 
   <%= f.input :meal do %>
-    <%= @meal.title_or_no_title %>
-    <div class="detail"><%= l(@meal.served_at, format: :full_datetime) %></div>
+    <%= meal.title_or_no_title %>
+    <div class="detail"><%= l(meal.served_at, format: :full_datetime) %></div>
   <% end %>
 
   <%= f.input :recipient_type, collection: Meals::Message::RECIPIENT_TYPES,

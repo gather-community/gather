@@ -13,14 +13,14 @@
     <td>Date/Time</td>
     <td><%= reservation.timespan %></td>
   </tr>
-  <% if reservation.meal %>
+  <% if meal %>
     <tr>
       <td>Meal</td>
       <td>
-        <% if policy(reservation.meal).show? %>
-          <%= link_to(reservation.meal_title_or_no_title, meal_path(reservation.meal)) %>
+        <% if policy(meal).show? %>
+          <%= link_to(meal.title_or_no_title, meal_path(meal)) %>
         <% else %>
-          <%= reservation.meal_title_or_no_title %>
+          <%= meal.title_or_no_title %>
         <% end %>
       </td>
     </tr>

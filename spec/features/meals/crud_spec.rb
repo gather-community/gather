@@ -42,7 +42,7 @@ feature "meal crud", js: true do
       click_button("Save")
       expect_success
 
-      find("tr", text: users[0].name).find("a", text: "[No Title]").click
+      find("tr", text: users[0].name).find("a", text: "[No Menu]").click
       click_link("Edit")
       fill_in_menu
 
@@ -70,7 +70,7 @@ feature "meal crud", js: true do
       expect(page).not_to have_content("Create Meal")
 
       # Update to add menu
-      find("table.index tr", text: actor.name).find("a", text: "[No Title]").click
+      find("table.index tr", text: actor.name).find("a", text: "[No Menu]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu
@@ -107,7 +107,7 @@ feature "meal crud", js: true do
       expect(page).not_to have_content("Create Meal")
 
       # Update to change assignment
-      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Title]").click
+      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Menu]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
       click_link("Edit Workers")
@@ -117,7 +117,7 @@ feature "meal crud", js: true do
       expect_success
 
       # Show
-      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Title]").click
+      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Menu]").click
       expect(page).to have_css("#meal-menu", text: actor.name)
 
       # Summary

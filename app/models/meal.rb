@@ -127,11 +127,6 @@ class Meal < ApplicationRecord
     @assignments_by_role ||= assignments.group_by(&:role)
   end
 
-  # DEPRECATED: prefer method of same name in decorator
-  def title_or_no_title
-    title || "[No Title]"
-  end
-
   def community_ids
     invitations.map(&:community_id)
   end

@@ -54,20 +54,4 @@ describe Meals::Assignment do
       end
     end
   end
-
-  describe "#title" do
-    let(:role) { create(:meal_role, title: "Junker") }
-    let(:assignment) { create(:meal_assignment, meal: meal, role: role) }
-    subject(:title) { assignment.title }
-
-    context "with no title" do
-      let(:meal) { create(:meal) }
-      it { is_expected.to eq("Junker: [No Title]") }
-    end
-
-    context "with meal title" do
-      let(:meal) { create(:meal, :with_menu, title: "Sushitime") }
-      it { is_expected.to eq("Junker: Sushitime") }
-    end
-  end
 end

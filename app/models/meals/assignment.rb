@@ -39,10 +39,6 @@ module Meals
       starts_at.nil? || ends_at.nil? ? nil : ends_at - starts_at
     end
 
-    def title
-      "#{role.title}: #{meal.title_or_no_title}"
-    end
-
     def <=>(other)
       [(head_cook? ? 1 : 0), role.title] <=> [(other.head_cook? ? 1 : 0), other.role.title]
     end

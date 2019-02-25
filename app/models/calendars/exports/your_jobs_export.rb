@@ -47,7 +47,7 @@ module Calendars
       end
 
       def summary(assignment)
-        [assignment.job_title, assignment.meal&.title_or_no_title].compact.join(": ")
+        [assignment.job_title, assignment.meal&.decorate&.title_or_no_title].compact.join(": ")
       end
 
       def location(assignment)

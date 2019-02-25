@@ -23,11 +23,17 @@ module Calendars
       end
 
       def description(meal)
-        cook = meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil
-        diner_count = if (signup = user_signups_by_meal_id[meal.id])
-                        I18n.t("calendar_exports.meals.diner_count", count: signup.total)
-                      end
-        [cook, diner_count]
+        lines = []
+        lines << (meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil)
+        signup = user_signups_by_meal_id[meal.id]
+        if signup
+          lines << I18n.t("calendar_exports.meals.diner_count", count: signup.total)
+          if signup.comments.present?
+            comments = I18n.t("calendar_exports.meals.signup_comments", comments: signup.comments)
+            lines.concat(comments.split("\n"))
+          end
+        end
+        lines
       end
 
       def url(meal)

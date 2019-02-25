@@ -406,3 +406,4 @@ en:
       diner_count:
         one: "%{count} diner from your household"
         other: "%{count} diners from your household"
+      signup_comments: "Signup comments:\n%{comments}"

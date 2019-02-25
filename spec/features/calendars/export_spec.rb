@@ -82,13 +82,15 @@ feature "calendar export" do
                                     served_at: Time.current + 3.days,
                                     communities: [meal1.community, communityB])
         end
-        let!(:signup) { create(:signup, meal: meal1, household: user.household, adult_meat: 2) }
+        let!(:signup) do
+          create(:signup, meal: meal1, household: user.household, adult_meat: 2, comments: "Foo\nBar")
+        end
 
         scenario "your meals" do
           visit("/calendars/exports/meals/#{token}.ics")
           expect_calendar_name("Meals You're Attending")
           expect_events(
-            description: /By #{user.name}\s+2 diners from your household/,
+            description: /By #{user.name}\s+2 diners from your household\s+Signup comments:\s+Foo\s+Bar/,
             summary: "Meal1",
             location: "#{user.community_abbrv} Dining Room",
             "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso),

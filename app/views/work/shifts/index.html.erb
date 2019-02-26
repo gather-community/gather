@@ -1,4 +1,4 @@
-<% content_for(:title, "Job Signups") %>
+<% content_for(:title, @period&.name || "Job Signups") %>
 <% content_for(:top_buttons) do %>
   <%= calendar_exports_link %>
 <% end %>

@@ -82,10 +82,13 @@ RSpec.describe(Reservations::Reservation, type: :model) do
   describe "other validations" do
     describe "can't change start time on not-just-created reservation after it begins" do
       let(:ends_at) { starts_at + 1.hour }
-      subject(:reservation) do
-        create(:reservation, created_at: created_at, starts_at: starts_at, ends_at: ends_at).tap do |r|
-          r.starts_at += 10.minutes # Attempt to change the start time.
-        end
+      let(:privileged_changer) { false }
+      let(:reservation) do
+        create(:reservation, created_at: created_at, starts_at: starts_at, ends_at: ends_at,
+                             privileged_changer: privileged_changer)
+      end
+      subject(:changed_reservation) do
+        reservation.tap { |r| r.starts_at += 10.minutes } # Attempt to change the start time.
       end
 
       context "just-created reservation with start time in past" do
@@ -104,7 +107,15 @@ RSpec.describe(Reservations::Reservation, type: :model) do
 
         context "start time in past" do
           let(:starts_at) { 5.minutes.ago }
-          it { is_expected.to have_errors(starts_at: "can't be changed after reservation begins") }
+
+          context "privileged changer" do
+            let(:privileged_changer) { true }
+            it { is_expected.to be_valid }
+          end
+
+          context "normal changer" do
+            it { is_expected.to have_errors(starts_at: "can't be changed after reservation begins") }
+          end
         end
       end
     end

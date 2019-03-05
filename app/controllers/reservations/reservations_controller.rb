@@ -163,7 +163,9 @@ module Reservations
 
     # Pundit built-in helper doesn't work due to namespacing
     def reservation_params
-      params.require(:reservations_reservation).permit(policy(@reservation).permitted_attributes)
+      permitted = params.require(:reservations_reservation).permit(policy(@reservation).permitted_attributes)
+      permitted[:privileged_changer] = true if policy(@reservation).privileged_change?
+      permitted
     end
 
     def redirect_to_reservation_in_context(reservation)

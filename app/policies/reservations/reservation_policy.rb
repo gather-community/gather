@@ -29,6 +29,12 @@ module Reservations
       active_admin? || active_reserver? || (meal? && active_with_community_role?(:meals_coordinator))
     end
 
+    # Allowed to make certain changes that would otherwise be invalid.
+    # Which exact changes this allows are defined in the Reservation model and/or Rule system.
+    def privileged_change?
+      active_admin?
+    end
+
     def choose_reserver?
       active_admin?
     end

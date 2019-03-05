@@ -75,6 +75,10 @@ describe Reservations::ReservationPolicy do
           it_behaves_like "permits admins but not reserver"
         end
       end
+
+      permissions :privileged_change? do
+        it_behaves_like "permits admins but not reserver"
+      end
     end
 
     context "meal reservation" do

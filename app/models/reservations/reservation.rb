@@ -6,7 +6,8 @@ module Reservations
 
     self.table_name = "reservations"
 
-    attr_accessor :guidelines_ok
+    attr_accessor :guidelines_ok, :privileged_changer
+    alias privileged_changer? privileged_changer
 
     belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
@@ -135,7 +136,7 @@ module Reservations
     end
 
     def restrict_changes_in_past
-      return unless persisted? && !recently_created?
+      return unless persisted? && !recently_created? && !privileged_changer?
       if will_save_change_to_starts_at? && starts_at_was.past?
         errors.add(:starts_at, "can't be changed after reservation begins")
       end

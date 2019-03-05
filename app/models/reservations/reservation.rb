@@ -34,6 +34,7 @@ module Reservations
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted
     validate :start_before_end
+    validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
     validate ->(r) { meal.reservation_handler.validate_reservation(r) if meal }
@@ -112,15 +113,13 @@ module Reservations
     private
 
     def guidelines_accepted
-      if new_record? && resource.guidelines? && !guidelines_ok?
-        errors.add(:guidelines, "You must agree to the guidelines")
-      end
+      return unless new_record? && resource.guidelines? && !guidelines_ok?
+      errors.add(:guidelines, "You must agree to the guidelines")
     end
 
     def start_before_end
-      if starts_at.present? && ends_at.present? && starts_at >= ends_at
-        errors.add(:ends_at, "must be after start time")
-      end
+      return unless starts_at.present? && ends_at.present? && starts_at >= ends_at
+      errors.add(:ends_at, "must be after start time")
     end
 
     def no_overlap
@@ -133,6 +132,16 @@ module Reservations
     def apply_rules
       return if errors.any?
       rule_set.errors(self).each { |e| errors.add(*e) }
+    end
+
+    def restrict_changes_in_past
+      return unless persisted? && !recently_created?
+      if will_save_change_to_starts_at? && starts_at_was.past?
+        errors.add(:starts_at, "can't be changed after reservation begins")
+      end
+      if will_save_change_to_ends_at? && ends_at.past? # rubocop:disable Style/GuardClause # || structure
+        errors.add(:ends_at, "can't be changed to a time in the past")
+      end
     end
   end
 end

@@ -13,7 +13,7 @@ describe Reservations::ReservationPolicy do
     let(:ends_at) { starts_at + 1.hour }
     let(:reservation) do
       create(:reservation, reserver: reserver, resource: resource, created_at: created_at,
-                          starts_at: starts_at, ends_at: ends_at)
+                           starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { reservation }
 
@@ -43,9 +43,17 @@ describe Reservations::ReservationPolicy do
       permissions :edit?, :update? do
         it_behaves_like "permits admins and reserver"
 
-        context "with reservation in past" do
-          let(:starts_at) { 1.week.ago }
-          it_behaves_like "permits admins but not reserver"
+        context "just-created reservation with end time in past" do
+          let(:starts_at) { 3.hours.ago }
+          let(:created_at) { 50.minutes.ago }
+          it_behaves_like "permits admins and reserver"
+        end
+
+        context "not-just-created reservation with end time in past" do
+          let(:created_at) { 90.minutes.ago }
+          let(:starts_at) { 3.hours.ago }
+
+          it_behaves_like "permits admins and reserver"
         end
       end
 
@@ -61,7 +69,7 @@ describe Reservations::ReservationPolicy do
           it_behaves_like "permits admins and reserver"
         end
 
-        context "old past reservation" do
+        context "not-just-created reservation" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 1.week.ago }
           it_behaves_like "permits admins but not reserver"

@@ -112,6 +112,7 @@ class User < ApplicationRecord
   after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)
+    return nil if auth.info[:email].blank?
     find_by(google_email: auth.info[:email])
   end
 

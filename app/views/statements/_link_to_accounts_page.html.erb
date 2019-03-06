@@ -1,0 +1,6 @@
+<div class="center-notice">
+  <%= icon_tag("info-circle") %>
+  For the most current account information,
+  <%= link_to("visit your accounts page",
+        yours_accounts_path(multi_community? ? {community: statement.community_id} : {})) %>.
+</div>

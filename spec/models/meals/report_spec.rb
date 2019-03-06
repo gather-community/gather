@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe(Meals::Report, type: :model) do
+describe(Meals::Report) do
   let!(:community) { create(:community, name: "Community 1", abbrv: "C1") }
   let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
   let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }

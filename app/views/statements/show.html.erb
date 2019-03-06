@@ -1,92 +1,65 @@
-<% content_for(:title, "Statement ##{@statement.id.to_s.rjust(5, '0')}") %>
+<% content_for(:title, "Statement ##{statement.id.to_s.rjust(5, '0')}") %>
 
 <table class="key-value key-value-full">
+  <% if multi_community? %>
+    <tr>
+      <td>Account Community</td>
+      <td><%= statement.community_name %></td>
+    </tr>
+  <% end %>
   <tr>
-    <td>Community Account</td>
-    <td>
-      <%= @community.name %>
-    </td>
+    <td>Account Number</td>
+    <td><%= account.number_padded %></td>
   </tr>
   <tr>
     <td>Household</td>
-    <td>
-      <%= @statement.household_name %>
-    </td>
+    <td><%= statement.household_name %></td>
   </tr>
   <tr>
-    <td>Date</td>
-    <td>
-      <%= l(@statement.created_on, format: :short_date) %>
-    </td>
+    <td>Statement Date</td>
+    <td><%= l(statement.created_on) %></td>
   </tr>
-</table>
-
-<% if @statement.transactions.empty? %>
-  <p class="inner">
-    There are no new charges or credits on this statement.
-    <% if @statement.total_due > 0 %>
-      Please pay the outstanding balance below. Thanks!
-    <% else %>
-      Please note your credit balance below.
-    <% end %>
-  </p>
-<% else %>
-  <%= render("transactions/charges_and_credits") %>
-<% end %>
-
-
-<h2 class="inner">Summary</h2>
-
-<table class="key-value key-value-full">
-  <tr>
-    <td>Previous Balance</td>
-    <td>
-      <%= currency_with_cr_span(@statement.prev_balance) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Total Payments/Credits</td>
-    <td>
-      <%= currency_with_cr_span(@statement.total_credits) %>
-    </td>
-  </tr>
-  <tr>
-    <td>Total Charges</td>
-    <td>
-      <%= currency_with_cr_span(@statement.total_charges) %>
-    </td>
-  </tr>
-  <tr>
-    <td><strong>Pay This Amount</strong></td>
-    <td>
-      <strong><%= currency_with_cr_span(@statement.total_due) %></strong>
-    </td>
-  </tr>
-  <% if @statement.due_on %>
+  <% if statement.due_on %>
     <tr>
       <td>Due Date</td>
-      <td>
-        <%= l(@statement.due_on, format: :short_date) %>
-      </td>
+      <td><%= l(statement.due_on) %></td>
     </tr>
   <% end %>
 </table>
 
-<div class="summary">
-  <% if @statement.total_due > 0 %>
-    <%= icon_tag("warning") %> Please pay
-    <% if @statement.due_on.present? %>
-      <%= number_to_currency(@statement.total_due) %> by
-      <%= l(@statement.due_on, format: :short_date) %>. Thanks!
-    <% else %>
-      <%= number_to_currency(@statement.total_due) %>. Thanks!
-    <% end %>
-  <% elsif @statement.total_due == 0 %>
-    <%= icon_tag("info-circle") %> Your account balance is zero. Nice job!
-  <% else %>
-    <%= icon_tag("info-circle") %> Your account has a credit of
-    <%= number_to_currency(-@statement.total_due) %>. No payment necessary!
-  <% end %>
-</div>
+<h2>Activity</h2>
 
-<%= payment_instructions %>
+<%= render(layout: "transactions/txn_table") do %>
+  <tr>
+    <td><%= l(statement.prev_stmt_on, format: :short_date) %></td>
+    <td></td>
+    <td>Previous balance</td>
+    <td></td>
+    <td></td>
+    <td class="num"><%= currency_with_cr_span(statement.prev_balance) %></td>
+  </tr>
+  <%= render("transactions/txn_rows", transactions: statement.transactions.decorate) %>
+  <tr class="total">
+    <td><%= l(statement.created_on, format: :short_date) %></td>
+    <td></td>
+    <td>Statement balance</td>
+    <td></td>
+    <td></td>
+    <td class="num"><%= currency_with_cr_span(statement.total_due) %></td>
+  </tr>
+<% end %>
+
+<% if statement.household == current_user.household %>
+  <div class="row">
+    <% if account.last_statement_id == statement.id %>
+      <div class="col-sm-6">
+        <%= render("accounts/payment_instructions") %>
+      </div>
+      <div class="col-sm-6">
+        <%= render("link_to_accounts_page") %>
+      </div>
+    <% else %>
+      <%= render("link_to_accounts_page") %>
+    <% end %>
+  </div>
+<% end %>

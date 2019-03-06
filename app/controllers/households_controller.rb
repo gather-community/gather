@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class HouseholdsController < ApplicationController
-  include AccountShowable
   include Destructible
   include Lensable
 
-  before_action -> { nav_context(:people, :households) }, except: :accounts
+  before_action -> { nav_context(:people, :households) }
 
   decorates_assigned :household, :members
 
@@ -61,28 +60,6 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  def accounts
-    @household = Household.find(params[:id])
-    authorize(@household)
-
-    @accounts = policy_scope(@household.accounts).includes(:community).to_a
-
-    if @accounts.size > 1
-      prepare_lenses(community: {required: true, subdomain: false})
-      @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
-                     Community.find_by(slug: lenses[:community].value)
-                   elsif lenses[:community].value.try(:match, /\d+/)
-                     Community.find(lenses[:community].value)
-                   end
-    end
-
-    @community ||= current_user.community
-    @communities = @accounts.map(&:community)
-    @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
-
-    prep_account_vars if @account
-  end
-
   protected
 
   def klass
@@ -92,7 +69,7 @@ class HouseholdsController < ApplicationController
   # See def'n in ApplicationController for documentation.
   def community_for_route
     case params[:action]
-    when "show", "accounts"
+    when "show"
       Household.find_by(id: params[:id]).try(:community)
     when "index"
       current_user.community

@@ -73,10 +73,6 @@ class HouseholdPolicy < ApplicationPolicy
     params.delete(:community_id)
   end
 
-  def accounts?
-    active_admin_or?(:biller) || household == user.household
-  end
-
   def destroy?
     active_admin? && destroy_users? &&
       Signup.where(household: household).none? &&

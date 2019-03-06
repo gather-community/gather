@@ -3,7 +3,7 @@
 <% if @period.nil? %>
   <%= render("work/shared/no_period_notice") %>
 <% elsif !policy(@period).report? && @period.draft? %>
-  <div class="none-found">
+  <div class="center-notice">
     <%= t("work.phase_notices.report.draft") %>
   </div>
 <% else %>

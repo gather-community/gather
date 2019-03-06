@@ -16,9 +16,10 @@ h1, h2, h3 {
   font-family: 'Montserrat Alternates', sans-serif;
 
   a {
+    color: $theme-main;
+    font-family: $font-family-sans-serif;
     font-size: 12px;
     font-weight: normal;
-    font-family: 'Raleway';
   }
 }
 

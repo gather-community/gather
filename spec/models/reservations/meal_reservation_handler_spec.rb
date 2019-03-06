@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Reservations::MealReservationHandler, type: :model do
+describe Reservations::MealReservationHandler do
   let(:community) { Defaults.community }
   let(:resources) { create_list(:resource, 2) }
   let(:meal) { build(:meal, :with_menu, community: community, title: "A very very very long title",

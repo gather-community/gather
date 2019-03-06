@@ -99,6 +99,14 @@ module Billing
       save!
     end
 
+    def positive_current_balance?
+      current_balance >= 0.01
+    end
+
+    def positive_balance_due?
+      balance_due >= 0.01
+    end
+
     def credit_exceeded?
       credit_limit && credit_limit < current_balance
     end

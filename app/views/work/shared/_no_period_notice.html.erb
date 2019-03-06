@@ -1,4 +1,4 @@
-<div class="none-found">
+<div class="center-notice">
   <% if policy(sample_period).create? %>
     <%= t("work.no_periods_html", link: link_to(t("work.create_one"), new_work_period_path)) %>
   <% else %>

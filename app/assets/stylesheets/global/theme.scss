@@ -43,6 +43,14 @@ ul.no-marker {
   margin: 0;
 }
 
+.center-notice {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  margin-top: 40px;
+  text-align: center;
+}
+
 .callout {
   background-color: #eee;
   padding: 20px;
@@ -55,4 +63,8 @@ ul.no-marker {
   ul:last-of-type {
     margin-bottom: 0;
   }
+}
+
+.no-bot-mrg {
+  margin-bottom: 0;
 }

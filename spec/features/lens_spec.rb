@@ -60,7 +60,7 @@ feature "lenses", js: true do
       end
 
       scenario do
-        visit(accounts_household_path(user.household))
+        visit(yours_accounts_path)
         expect(lens_selected_option(:community).text).to eq("Community 3")
 
         lens_field(:community).select("Community 2")
@@ -69,9 +69,9 @@ feature "lenses", js: true do
         expect(page).to have_echoed_url_param("community", "community2")
         expect(lens_selected_option(:community).text).to eq("Community 2")
         expect(page).not_to have_css(".lens-bar a.clear")
-        visit(accounts_household_path(user.household))
+        visit(yours_accounts_path)
 
-        expect(page).to have_echoed_url(accounts_household_path(user.household))
+        expect(page).to have_echoed_url(yours_accounts_path)
         expect(lens_selected_option(:community).text).to eq("Community 2")
       end
     end
@@ -194,7 +194,7 @@ feature "lenses", js: true do
     end
 
     scenario "community" do
-      visit(accounts_household_path(user.household))
+      visit(yours_accounts_path)
       # This kind of community drop-down does not change the subdomain.
       expect_community_dropdown(subdomain: false)
     end

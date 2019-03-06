@@ -50,7 +50,7 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{I18n.l(Time.current, format: :full_datetime)}", id: "gen-time")
+    content_tag(:div, "Generated: #{I18n.l(Time.current)}", id: "gen-time")
   end
 
   def print_button
@@ -60,7 +60,7 @@ module ApplicationHelper
   def inactive_notice(object)
     i18n_key = "activatables.#{object.model_name.i18n_key}"
     html = "".html_safe
-    time = l(object.deactivated_at, format: :full_datetime)
+    time = l(object.deactivated_at)
     html << t("#{i18n_key}.one_html", time: time)
     if policy(object).activate?
       text = t("#{i18n_key}.three")

@@ -8,6 +8,10 @@ module Billing
       active_admin_or?(:biller)
     end
 
+    def yours?
+      true
+    end
+
     def apply_late_fees?
       active_admin_or?(:biller)
     end

@@ -2,11 +2,11 @@ module CustomFields
   module Fields
     # Models the definition of single field in a config.
     class Field
-      attr_accessor :key, :required, :options, :validation, :default
+      attr_accessor :key, :required, :options, :validation, :default, :extra_params
 
       TYPES = %i(string text boolean enum integer group)
 
-      def initialize(key:, required: false, options: nil, validation: nil, default: nil)
+      def initialize(key:, required: false, options: nil, validation: nil, default: nil, **extra_params)
         self.key = key = key.to_sym
 
         # Any methods of the GroupEntry class can't be used as keys as they would
@@ -19,6 +19,7 @@ module CustomFields
         self.options = options
         self.validation = (validation || {}).deep_symbolize_keys!
         self.default = default
+        self.extra_params = extra_params
         set_implicit_validations
       end
 

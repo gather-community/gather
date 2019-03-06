@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-  include AccountShowable
 
   before_action -> { nav_context(:accounts) }
+
+  decorates_assigned :accounts, :account, :last_statement, :community, :statements
 
   def index
     @community = current_community
@@ -30,6 +31,28 @@ class AccountsController < ApplicationController
       .order(:incurred_on).last
 
     @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
+  end
+
+  def yours
+    @household = current_user.household
+    authorize(sample_account)
+
+    @accounts = policy_scope(@household.accounts).includes(:community).to_a
+
+    if @accounts.size > 1
+      prepare_lenses(community: {required: true, subdomain: false})
+      @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
+                     Community.find_by(slug: lenses[:community].value)
+                   elsif lenses[:community].value.try(:match, /\d+/)
+                     Community.find(lenses[:community].value)
+                   end
+    end
+
+    @community ||= current_user.community
+    @communities = @accounts.map(&:community)
+    @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
+
+    prep_account_vars if @account
   end
 
   def show
@@ -75,5 +98,11 @@ class AccountsController < ApplicationController
 
   def late_fee_applier
     @late_fee_applier ||= Billing::LateFeeApplier.new(current_community)
+  end
+
+  def prep_account_vars
+    @statements = @account.statements.page(params[:page] || 1).per(StatementsController::PER_PAGE)
+    @last_statement = @account.last_statement
+    @has_activity = @account.transactions.any?
   end
 end

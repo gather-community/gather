@@ -18,7 +18,7 @@
           <input type="radio" name="new" value="<%=v.number%>" <%= 'checked="true" ' if v == versions[-2] %>/>
         <% end %>
       </td>
-      <td class="timestamp"><%= l(v.updated_at, format: :full_datetime) %></td>
+      <td class="timestamp"><%= l(v.updated_at) %></td>
       <td class="updater"><%= v.updator_name %></td>
       <td><%= v.comment %></td>
     </tr>

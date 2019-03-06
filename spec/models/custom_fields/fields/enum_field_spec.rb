@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe CustomFields::Fields::EnumField, type: :model do
+describe CustomFields::Fields::EnumField do
   let(:field) { described_class.new(key: "foo", options: %w(a b)) }
 
   describe "normalization" do

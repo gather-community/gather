@@ -1,0 +1,11 @@
+<% if statements.any? %>
+  <h2 class="inner">Statements</h2>
+  <table class="index">
+    <tr>
+      <th>Date</th>
+      <th>Activity</th>
+      <th>Total Due</th>
+    </tr>
+    <%= render("statements/statement_rows") %>
+  </table>
+<% end %>

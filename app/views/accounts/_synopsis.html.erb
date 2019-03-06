@@ -1,0 +1,17 @@
+<div class="synopsis no-bot-mrg">
+  <% if account.balance_due.positive? %>
+    <% statement = account.last_statement %>
+    <%= icon_tag("warning") %> Please pay
+    <% if statement.due_on.present? %>
+      <%= number_to_currency(account.balance_due) %> by
+      <%= l(statement.due_on, format: :short_date) %>. Thanks!
+    <% else %>
+      <%= number_to_currency(account.balance_due) %>. Thanks!
+    <% end %>
+  <% elsif account.balance_due.zero? %>
+    <%= icon_tag("info-circle") %> Your balance due is zero. Nice job!
+  <% else %>
+    <%= icon_tag("info-circle") %> Your account has a credit of
+    <%= number_to_currency(-account.balance_due) %>. No payment necessary!
+  <% end %>
+</div>

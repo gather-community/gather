@@ -149,44 +149,6 @@ en:
     work/period:
       destroy: "Period deleted successfully."
 
-  date:
-    # SEE OTHER FORMATS IN time_formats.rb. Should move them here gradually.
-    formats:
-      default: "%b %d %Y"
-      full: "%b %d %Y"
-      month_day: "%b %d"
-      month_yr: "%B %Y"
-      short_date: "%a %b %d"
-      short_date_with_yr: "%a %b %d %Y"
-      url_date: "%Y-%m-%d"
-      weekday: "%A"
-      filename: "%Y-%m-%d"
-      csv_full: "%Y-%m-%d"
-      csv_month_day: "%m-%d"
-      iso: "%Y%m%d"
-  time:
-    formats:
-      default: "%a %b %d %Y %l:%M%P"
-      date_wkday_no_yr: "%a %b %d"
-      datetime_no_yr: "%a %b %d %l:%M%P"
-      full_datetime: "%a %b %d %Y %l:%M%P"
-      machine_readable: "%Y-%m-%d %H:%M"
-      time_only: "%l:%M%P"
-      short_date: "%a %b %d"
-      short_date_with_yr: "%a %b %d %Y"
-      shorter_date: "%b %d"
-      full_date: "%b %d %Y"
-      url_date: "%Y-%m-%d"
-      iso: "%Y%m%dT%H%M%S"
-
-  datepicker:
-    dformat: '%b %d %Y'
-    pformat: 'MMM D YYYY'
-  timepicker:
-    dformat: '%l:%M%P'
-    pformat: 'h:mma'
-  dayViewHeaderFormat: 'MMMM YYYY'
-
   cocoon:
     add_links:
       vehicles: "Add Vehicle"
@@ -332,13 +294,17 @@ en:
       recent_statements:
         one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
         other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
+    others:
+      one_html: "You have another Gather account with %{cmty}."
+      multiple_html: "You also have Gather accounts with %{cmtys}."
+    payment_badge_alt:
+      paypal: "PayPal payment badge"
+      online_bill_pay: "Online bill pay payment badge"
+      check: "Check payment badge"
+      cash: "Cash payment badge"
 
   households:
     greeting: "Dear %{name} Household,"
-    accounts:
-      intro:
-        one: "You have a Gather account with one community. Each community manages its own accounts."
-        other: "You have Gather accounts with %{count} communities. Each community manages its own accounts."
 
   roles:
     admin: "Admin"

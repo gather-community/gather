@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Meals::Finalizer do
   let(:meal) { create(:meal, :with_menu,

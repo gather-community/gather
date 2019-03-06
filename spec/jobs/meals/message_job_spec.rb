@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Meals::MessageJob do
   include_context "jobs"

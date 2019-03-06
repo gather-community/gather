@@ -18,7 +18,7 @@ module People
       object.birthdate = d
     end
 
-    def str(formats: [:month_day, :full])
+    def str(formats: [:month_day, :default])
       if invalid?
         @str
       elsif date.nil?

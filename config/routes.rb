@@ -84,13 +84,14 @@ Rails.application.routes.draw do
     }
 
   namespace :calendars do
+    # index - The calendar export page
     resources :exports, only: :index do
       member do
-        # This is the show action, allowing paths to include the user's calendar token,
+        # This is the personalized show action, allowing paths to include the user's calendar token,
         # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4.
         # The calendar's type gets captured as the :id param, so this is equivalent to
         # /calendars/:id/:calendar_token
-        get ":calendar_token", to: "exports#show", as: ""
+        get "(:calendar_token)", to: "exports#show", as: ""
       end
       collection do
         put :reset_token

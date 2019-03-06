@@ -5,9 +5,9 @@ module Work
   class ShiftsController < WorkController
     before_action -> { nav_context(:work, :signups) }
 
-    # This seems to cause issues from time to time probably due to heavy AJAX reloading.
+    # CSRF protection seems to cause issues from time to time probably due to heavy AJAX reloading.
     # CSRF is not a big security threat here so we're disabling.
-    skip_forgery_protection only: %i[signup unsignup]
+    skip_before_action :verify_authenticity_token, only: %i[signup unsignup]
 
     decorates_assigned :shifts, :shift, :choosee, :meal
 

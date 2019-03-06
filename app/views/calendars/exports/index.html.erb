@@ -1,40 +1,38 @@
 <% content_for(:title, "Calendars") %>
+<% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
 <div class="row">
-  <div id="links" class="col-sm-9">
-    <p>You can view Gather calendars in your favorite calendar app:</p>
+  <div class="links col-sm-6">
+    <h2 class="top">Personalized Calendars</h2>
+    <p>Personalized calendars include information tailored for you or your household.
+    <%= decorator.calendar_link("your_meals") %>
+    <%= decorator.calendar_link("all_meals") %>
+    <%= decorator.calendar_link("community_meals") if multi_community? %>
+    <%= decorator.calendar_link("your_jobs") %>
+    <%= decorator.calendar_link("community_reservations") %>
+    <%= decorator.calendar_link("your_reservations") %>
 
-    <%= calendar_link("your_meals") %>
-    <%= calendar_link("all_meals") %>
-    <%= calendar_link("community_meals") if multi_community? %>
-    <%= calendar_link("your_jobs") %>
-    <%= calendar_link("community_reservations") %>
-    <%= calendar_link("your_reservations") %>
+    <h2>Community Calendars</h2>
+    <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
+    <%= decorator.calendar_link("all_meals", personalized: false) %>
+    <%= decorator.calendar_link("community_meals", personalized: false) if multi_community? %>
+    <%= decorator.calendar_link("community_reservations", personalized: false) %>
   </div>
-
-  <div class="callout col-sm-3">
-    <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
-    Calendar links are tailored and unique to you, so don't share them. If you want to tell
-    someone about this fun feature, send them the
-    <%= link_to("link to this page", calendar_exports_path) %>,
-    not an individual calendar.
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-12">
-    <h2>Instructions</h2>
-    <h3><%= icon_tag("google") %> Google Calendar</h3>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-sm-6">
+    <div class="callout">
+      <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
+      Personalized calendar links are tailored and unique to you, so don't share them. If you want to tell
+      someone about this fun feature, send them the
+      <%= link_to("link to this page", calendar_exports_path) %>,
+      not an individual calendar.
+    </div>
+
+    <h2>Import Instructions</h2>
+
+    <h3><%= icon_tag("google") %> Google Calendar</h3>
     <h4>Method 1</h4>
     If you are signed in to your Google account, try simply clicking the link of the calendar you
     want to import. Google Calendar should open on its own and ask you to import.
-  </div>
-  <div class="col-sm-6">
     <h4>Method 2</h4>
     <ol>
       <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
@@ -44,22 +42,11 @@
       <li>Click 'Add Calendar'.</li>
       <li>The events should appear on your calendar after a few seconds.</li>
     </ol>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-12">
     <h3><%= icon_tag("apple") %> Apple Calendar</h3>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-6">
     <h4>Method 1</h4>
     Try simply clicking the link of the calendar you want to import. If your browser is set to handle
     webcal links with Apple Calendar, it may just work!
-  </div>
-  <div class="col-sm-6">
     <h4>Method 2</h4>
     <ol>
       <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
@@ -75,7 +62,7 @@
 </div>
 
 <div class="footnote">
-  If you accidentally share your calendar links and want to make them private again,
+  If you accidentally share your personalized calendar links and want to make them private again,
   <%= link_to("click here to reset your secret token", reset_token_calendars_exports_path, method: :put) %>.
   Note: This will make the old links inoperative, so you will need to update your calendar app.
 </div>

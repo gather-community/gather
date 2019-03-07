@@ -21,11 +21,6 @@ module Calendars
         I18n.t("calendars.#{i18n_key}", community: Community.multiple? ? user.community_name : "").strip
       end
 
-      # Returns a date from the first object in the list. Returns nil if no objects.
-      def sample_time
-        objects.first&.starts_at
-      end
-
       def generate
         self.events = objects.flat_map { |o| events_for_object(o) }
         IcalGenerator.new(self).generate

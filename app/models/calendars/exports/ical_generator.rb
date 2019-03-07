@@ -55,7 +55,7 @@ module Calendars
       # Version 2 of the gem is supposed to have better timezone support, if it ever comes out.
       def set_timezone
         tz = TZInfo::Timezone.get(tzid)
-        cal.add_timezone(tz.ical_timezone(data.sample_time || Time.current))
+        cal.add_timezone(tz.ical_timezone(Time.current))
       end
 
       # Current timezone ID in tzinfo format.

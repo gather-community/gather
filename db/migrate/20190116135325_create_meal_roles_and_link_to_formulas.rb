@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+class Meals::RoleReminder < ActiveRecord::Base
+  self.table_name = "meal_role_reminders"
+  acts_as_tenant :cluster
+end
+
 class CreateMealRolesAndLinkToFormulas < ActiveRecord::Migration[5.1]
   def up
     each_community do |community|
@@ -14,7 +19,10 @@ class CreateMealRolesAndLinkToFormulas < ActiveRecord::Migration[5.1]
 
       # Link roles to existing formulas.
       Meals::Formula.in_community(community).each do |formula|
-        formula.update!(role_ids: roles.map(&:id))
+        roles.each do |role|
+          execute("INSERT INTO meal_formula_roles(created_at, formula_id, role_id, updated_at)
+            VALUES (NOW(), #{formula.id}, #{role.id}, NOW())")
+        end
       end
     end
   end
@@ -36,11 +44,15 @@ class CreateMealRolesAndLinkToFormulas < ActiveRecord::Migration[5.1]
     attrs[:special] = head_cook ? key.to_s : nil
     attrs[:time_type] = head_cook ? "date_only" : "date_time"
     attrs[:title] = TITLES[key]
-    attrs[:reminders_attributes] = [{
+    role = Meals::Role.new(attrs).tap { |r| r.save(validate: false) }
+
+    attrs = {
+      meal_role_id: role.id,
       rel_magnitude: setting(community, %w[reminder_lead_times] << (head_cook ? key : :job)).to_i,
       rel_unit_sign: "days_before"
-    }]
-    Meals::Role.create!(attrs)
+    }
+    Meals::RoleReminder.new(attrs).save(validate: false)
+    role
   end
 
   # Need to query b/c the code for getting it nicely will have disappeared by the time this is run.

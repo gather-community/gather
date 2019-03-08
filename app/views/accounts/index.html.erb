@@ -32,6 +32,7 @@
 
   <table class="index">
     <tr>
+      <th>Num</th>
       <th>Household</th>
       <th class="amount">Last Stmt. Date</th>
       <th class="amount">Due Last Stmt.</th>
@@ -44,6 +45,9 @@
     </tr>
     <% accounts.each do |account| %>
       <tr>
+        <td>
+          <%= account.number_padded %>
+        </td>
         <td>
           <%= link_to(account.household_name.html_safe << no_user_warning(account),
             account_path(account)) %>

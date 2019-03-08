@@ -51,6 +51,8 @@ class Community < ApplicationRecord
       {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
       {key: :payment_methods, type: :group, fields: [
         {key: :paypal_me, type: :url, host: "paypal.me"},
+        {key: :paypal_email, type: :email},
+        {key: :paypal_friend, type: :boolean, default: true},
         {key: :check_payee, type: :string},
         {key: :check_address, type: :text},
         {key: :check_dropoff, type: :string},

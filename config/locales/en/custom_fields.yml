@@ -32,6 +32,8 @@ en:
             payment_methods:
               _self: "Payment Method Info"
               paypal_me: "PayPal.me"
+              paypal_email: "PayPal via Email"
+              paypal_friend: "Request members to send PayPal payment as 'sending to a friend'"
               check_payee: "Check Payee"
               check_address: "Check Mailing Address"
               check_dropoff: "Check Drop-off Instructions"
@@ -68,7 +70,9 @@ en:
             statement_reminder_lead_time: "The number of days in advance of the due date that the statement payment reminder will be sent. Reminders won't be sent if statements don't have due dates or the balance has been paid."
             payment_methods:
               _self: "Instructions or information for various payment methods. Leave blank if method not accepted. Visit your <a href='/accounts/yours'>accounts page</a> to see how the instructions look."
-              paypal_me: "Enter your <a href='https://paypal.me'>PayPal.me link</a>. This is the easiest way for members to pay with PayPal without incurring a fee."
+              paypal_me: "Enter your <a href='https://paypal.me'>PayPal.me link</a>. This is the easiest way for members to pay with PayPal. Note that there is no way to avoid paying a fee with this method if you have a business PayPal account."
+              paypal_email: "If you want to accept PayPal but don't want to use PayPal.me, enter the email address to which members should send payments."
+              paypal_friend: "Applies to either PayPal.me or PayPal via Email. Select if you can justify payments as being between friends according to PayPal's terms of use. Sending in this manner avoids fees."
               check_payee: "Enter who checks should be made payable to. Leave blank if checks not accepted."
               check_address: "Enter an address if you accept checks by mail. This will also enable online bill pay instructions to be shown."
               check_dropoff: "Enter instructions for dropping a check off in person. Leave blank if checks must be mailed or aren't accepted."

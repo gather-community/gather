@@ -6,9 +6,19 @@
   <%= methods.payment_badge(:check) %>
   <%= methods.payment_badge(:cash) %>
 
-  <% if methods.pay_with_paypal? %>
+  <% if methods.pay_with_paypal_me? %>
     <h3>PayPal</h3>
     Click the logo above to pay with PayPal.
+  <% elsif methods.pay_with_paypal_email? %>
+    <h3>PayPal</h3>
+    <% if methods.paypal_friend? %>
+      <ul>
+        <li>Please send PayPal payments to <strong><%= methods.paypal_email %></strong>.</li>
+        <li>Be sure to choose <strong>sending to a friend</strong> to avoid being charged a fee.</li>
+      </ul>
+    <% else %>
+      Please send PayPal payments to <strong><%= methods.paypal_email %></strong>.
+    <% end %>
   <% end %>
 
   <% if methods.pay_with_online_bill_pay? %>

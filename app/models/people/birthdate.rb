@@ -66,7 +66,7 @@ module People
     end
 
     def format
-      full? ? :full : :month_day
+      full? ? :default : :month_day
     end
 
     def validate

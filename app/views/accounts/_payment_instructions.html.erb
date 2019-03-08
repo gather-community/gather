@@ -13,11 +13,11 @@
     <h3>PayPal</h3>
     <% if methods.paypal_friend? %>
       <ul>
-        <li>Please send PayPal payments to <strong><%= methods.paypal_email %></strong>.</li>
+        <li>Send PayPal payments to <strong><%= methods.paypal_email %></strong>.</li>
         <li>Be sure to choose <strong>sending to a friend</strong> to avoid being charged a fee.</li>
       </ul>
     <% else %>
-      Please send PayPal payments to <strong><%= methods.paypal_email %></strong>.
+      Send PayPal payments to <strong><%= methods.paypal_email %></strong>.
     <% end %>
   <% end %>
 

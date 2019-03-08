@@ -10,7 +10,11 @@
 
       th, td {
         &:first-of-type {
-          width: 24%;
+          width: 6%;
+        }
+
+        &:nth-of-type(2) {
+          width: 18%;
         }
 
         &.amount {

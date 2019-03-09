@@ -11,10 +11,11 @@ module Calendars
     class Export
       MAX_EVENT_AGE = 1.year
 
-      attr_accessor :user, :events
+      attr_accessor :user, :community, :events
 
-      def initialize(user:)
+      def initialize(user: nil, community: nil)
         self.user = user
+        self.community = community
       end
 
       def calendar_name

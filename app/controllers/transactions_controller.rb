@@ -3,7 +3,7 @@
 class TransactionsController < ApplicationController
   before_action -> { nav_context(:accounts) }
 
-  decorates_assigned :account, :transactions, :last_statement
+  decorates_assigned :account, :transaction, :transactions, :last_statement
 
   def index
     @account = Billing::Account.find(params[:account_id]).decorate

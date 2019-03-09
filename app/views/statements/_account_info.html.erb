@@ -1,0 +1,14 @@
+<% if multi_community? %>
+  <tr>
+    <td>Account Community</td>
+    <td><%= account.community_name %></td>
+  </tr>
+<% end %>
+<tr>
+  <td>Account Number</td>
+  <td><%= account.number_padded %></td>
+</tr>
+<tr>
+  <td>Household</td>
+  <td><%= account.household_name %></td>
+</tr>

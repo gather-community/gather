@@ -1,9 +1,9 @@
 <% content_for(:title, "Confirm Transaction") %>
 
-<%= gather_form_for([@account, @transaction],
-      width: :full, url: account_transactions_path(@account)) do |f| %>
+<%= gather_form_for([account, transaction],
+      width: :full, url: account_transactions_path(account)) do |f| %>
 
-  <%= hidden_field_tag :account_id, @account.id %>
+  <%= hidden_field_tag :account_id, account.id %>
   <%= hidden_field_tag :confirmed, "1" %>
   <%= f.hidden_field :incurred_on %>
   <%= f.hidden_field :code  %>
@@ -16,19 +16,13 @@
     Please verify the information below is correct.
   </p>
 
-  <table class="key-value key-value-narrow">
-    <tr>
-      <td>Household</td>
-      <td>
-        <%= @transaction.household_name %>
-      </td>
-    </tr>
+  <table class="key-value key-value-full">
+    <%= render("statements/account_info") %>
   </table>
 
-  <table class="index">
-    <%= render("transactions/#{@transaction.chg_crd}_header") %>
-    <%= render("transactions/#{@transaction.chg_crd}_row", txn: @transaction) %>
-  </table>
+  <%= render(layout: "transactions/txn_table") do %>
+    <%= render("txn_rows", transactions: [transaction]) %>
+  <% end %>
 
   <%= render("shared/confirm_buttons", f: f) %>
 <% end %>

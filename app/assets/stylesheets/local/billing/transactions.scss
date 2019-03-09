@@ -1,5 +1,5 @@
 // See account_summary and statements for more styles affecting transactions
-.transactions {
+#content.transactions {
   &.action-create {
     table.key-value tr {
       border-top: 1px solid $light-border-color;
@@ -13,5 +13,10 @@
 
   .transaction_amount input {
     width: 200px;
+  }
+
+  table.index.transactions tr :nth-child(3) {
+    // In the txn confirm table, Ensure the description column is biggest else it looks weird.
+    width: 50%;
   }
 }

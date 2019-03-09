@@ -1,8 +1,8 @@
-<%= gather_form_for([@account, @transaction], url: account_transactions_path(@account)) do |f| %>
-  <%= hidden_field_tag :account_id, @account.id %>
+<%= gather_form_for([account, transaction], url: account_transactions_path(account)) do |f| %>
+  <%= hidden_field_tag :account_id, account.id %>
 
   <%= f.input :household_name do %>
-    <%= @transaction.household_name %>
+    <%= transaction.household_name %>
   <% end %>
 
   <%= f.input :incurred_on, as: :date_picker,

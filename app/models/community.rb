@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
+# This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields
 
-  SLUG_REGEX = /[a-z][a-z\-]*/
+  SLUG_REGEX = /[a-z][a-z\-]*/.freeze
 
   acts_as_tenant :cluster
   resourcify
@@ -22,6 +25,8 @@ class Community < ApplicationRecord
 
   scope :by_name, -> { order("name") }
   scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }
+
+  before_create :generate_calendar_token
 
   custom_fields :settings, spec: [
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
@@ -90,5 +95,11 @@ class Community < ApplicationRecord
 
   def lc_abbrv
     abbrv.downcase
+  end
+
+  private
+
+  def generate_calendar_token
+    self.calendar_token = UniqueTokenGenerator.generate(self.class, :calendar_token)
   end
 end

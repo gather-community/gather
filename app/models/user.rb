@@ -106,7 +106,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   # This is needed for remembering users across sessions because users don't always have passwords.
-  before_create { self.remember_token ||= Devise.friendly_token }
+  before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_destroy { photo.destroy }
   after_update { Work::ShiftIndexUpdater.new(self).update }
@@ -188,7 +188,7 @@ class User < ApplicationRecord
   end
 
   def reset_calendar_token!
-    update_attribute(:calendar_token, generate_token)
+    update_attribute(:calendar_token, UniqueTokenGenerator.generate(self.class, :calendar_token))
   end
 
   # Exposing this as a public method.
@@ -237,13 +237,6 @@ class User < ApplicationRecord
 
   def at_least_one_phone
     errors.add(:phone, "You must enter at least one phone number") if adult? && no_phones?
-  end
-
-  def generate_token
-    loop do
-      token = Devise.friendly_token
-      break token unless User.find_by(calendar_token: token)
-    end
   end
 
   def household_present

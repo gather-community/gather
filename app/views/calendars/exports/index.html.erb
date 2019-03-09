@@ -3,20 +3,24 @@
 
 <div class="row">
   <div class="links col-sm-6">
-    <h2 class="top">Personalized Calendars</h2>
-    <p>Personalized calendars include information tailored for you or your household.
-    <%= decorator.calendar_link("your_meals") %>
-    <%= decorator.calendar_link("all_meals") %>
-    <%= decorator.calendar_link("community_meals") if multi_community? %>
-    <%= decorator.calendar_link("your_jobs") %>
-    <%= decorator.calendar_link("community_reservations") %>
-    <%= decorator.calendar_link("your_reservations") %>
+    <div class="personalized-links">
+      <h2 class="top">Personalized Calendars</h2>
+      <p>Personalized calendars include information tailored for you or your household.</p>
+      <%= decorator.calendar_link("your_meals") %>
+      <%= decorator.calendar_link("all_meals") %>
+      <%= decorator.calendar_link("community_meals") if multi_community? %>
+      <%= decorator.calendar_link("your_jobs") %>
+      <%= decorator.calendar_link("community_reservations") %>
+      <%= decorator.calendar_link("your_reservations") %>
+    </div>
 
-    <h2>Community Calendars</h2>
-    <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
-    <%= decorator.calendar_link("all_meals", personalized: false) %>
-    <%= decorator.calendar_link("community_meals", personalized: false) if multi_community? %>
-    <%= decorator.calendar_link("community_reservations", personalized: false) %>
+    <div class="community-links">
+      <h2>Community Calendars</h2>
+      <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
+      <%= decorator.calendar_link("all_meals", personalized: false) %>
+      <%= decorator.calendar_link("community_meals", personalized: false) if multi_community? %>
+      <%= decorator.calendar_link("community_reservations", personalized: false) %>
+    </div>
   </div>
   <div class="col-sm-6">
     <div class="callout">

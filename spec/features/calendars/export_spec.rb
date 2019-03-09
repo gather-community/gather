@@ -15,7 +15,7 @@ feature "calendar export" do
 
     scenario do
       visit("/calendars/exports")
-      click_link("All Meals")
+      within(".personalized-links") { click_link("All Meals") }
       expect(page).to have_content("BEGIN:VCALENDAR")
     end
   end
@@ -31,7 +31,7 @@ feature "calendar export" do
       click_link("click here to reset your secret token")
       expect(page).to have_content("Token reset successfully")
       expect(token_from_url).not_to eq(old_token)
-      click_link("All Meals")
+      within(".personalized-links") { click_link("All Meals") }
       expect(page).to have_content("BEGIN:VCALENDAR")
     end
   end
@@ -332,6 +332,8 @@ feature "calendar export" do
   end
 
   def token_from_url
-    find("a", text: "All Meals")[:href].match(%r{/([A-Za-z0-9_\-]{20})\.ics})[1]
+    within(".personalized-links") do
+      find("a", text: "All Meals")[:href].match(%r{/([A-Za-z0-9_\-]{20})\.ics})[1]
+    end
   end
 end

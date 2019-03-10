@@ -10,9 +10,9 @@ module Calendars
         instance.build(**args)
       end
 
-      def build(type:, user:)
+      def build(type:, user: nil, community: nil)
         type = mapped_type(type.tr("-", "_")).camelize
-        Exports.const_get("#{type}Export").new(user: user)
+        Exports.const_get("#{type}Export").new(user: user, community: community)
       rescue NameError
         raise Exports::TypeError, "#{type} is not a valid calendar export type"
       end

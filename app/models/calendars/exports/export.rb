@@ -11,11 +11,13 @@ module Calendars
     class Export
       MAX_EVENT_AGE = 1.year
 
-      attr_accessor :user, :community, :events
+      attr_accessor :user, :events
 
       def initialize(user: nil, community: nil)
-        self.user = user
-        self.community = community
+        raise ArgumentError, "One of user or community required" if user.nil? && community.nil?
+
+        # Make a temporary stand-in user if no user given.
+        self.user = user || User.new(household: Household.new(community: community))
       end
 
       def calendar_name

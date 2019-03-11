@@ -23,18 +23,17 @@ module Calendars
       export = Exports::Factory.build(type: params[:id], community: current_community)
       policy = ExportPolicy.new(nil, export, community_token: params[:calendar_token])
       authorize_with_explict_policy_object(export, :community?, policy_object: policy)
-      send_data(export.generate, filename: "#{params[:id]}.ics", type: "text/calendar")
+      send_calendar_data(export)
     rescue Exports::TypeError
-      render(plain: "Invalid calendar type", status: :not_found)
+      handle_calendar_error
     end
 
     def personalized
       export = Exports::Factory.build(type: params[:id], user: current_user)
       authorize(export, policy_class: ExportPolicy)
-      send_data(export.generate, filename: "#{params[:id]}.ics", type: "text/calendar")
+      send_calendar_data(export)
     rescue Exports::TypeError
-      skip_authorization # Auth may not have been performed yet but that's OK b/c we're erroring.
-      render(plain: "Invalid calendar type", status: :not_found)
+      handle_calendar_error
     end
 
     def reset_token
@@ -58,6 +57,15 @@ module Calendars
 
     def sample_export
       Exports::Export.new(user: current_user)
+    end
+
+    def send_calendar_data(export)
+      send_data(export.generate, filename: "#{params[:id]}.ics", type: "text/calendar")
+    end
+
+    def handle_calendar_error
+      skip_authorization # Auth may not have been performed yet but that's OK b/c we're erroring.
+      render(plain: "Invalid calendar type", status: :not_found)
     end
   end
 end

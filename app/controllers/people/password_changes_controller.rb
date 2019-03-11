@@ -4,6 +4,7 @@ module People
   # Changing password
   class PasswordChangesController < ApplicationController
     skip_before_action :authenticate_user!, only: :strength
+    skip_after_action :verify_authorized, only: :strength
 
     def show
       authorize(current_user, :edit?)
@@ -21,7 +22,6 @@ module People
     end
 
     def strength
-      skip_authorization
       bits = StrongPassword::StrengthChecker.new(params[:password]).calculate_entropy(use_dictionary: true)
       bits = [0, bits].max.round
       category = if bits < User::PASSWORD_MIN_ENTROPY then :weak

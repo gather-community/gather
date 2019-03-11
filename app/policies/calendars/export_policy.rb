@@ -21,7 +21,7 @@ module Calendars
     end
 
     def community?
-      record.community.calendar_token == community_token
+      record.community_calendar_token == community_token
     end
 
     def reset_token?

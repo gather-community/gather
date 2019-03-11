@@ -9,6 +9,9 @@ module Work
     # CSRF is not a big security threat here so we're disabling.
     skip_before_action :verify_authenticity_token, only: %i[signup unsignup]
 
+    # Since we have a specially built policy object, we need to do our own custom authorization.
+    skip_after_action :verify_authorized, only: :signup
+
     decorates_assigned :shifts, :shift, :choosee, :meal
 
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
@@ -150,9 +153,8 @@ module Work
     end
 
     def authorize_and_do_signup_or_raise_error
-      # Since we have a custom built policy object, we need to do our own custom authorization.
+      # We use a custom authorization flow here.
       # If authorization fails due to round limit being exceeded, raise a special error.
-      skip_authorization
       policy = shift_policy(@shift)
       if policy.signup?
         @shift.signup_user(@choosee)

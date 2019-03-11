@@ -21,11 +21,17 @@ module Calendars
     private
 
     def calendar_url(type, personalized)
-      token = personalized ? user.calendar_token : nil
+      if personalized
+        method = :personalized_calendars_export_url
+        token = user.calendar_token
+      else
+        method = :community_calendars_export_url
+        token = community.calendar_token
+      end
+
       # If we don't set port to nil then it will be included in the
       # webcal link which some clients don't like.
-      h.calendars_export_url(type.tr("_", "-"), calendar_token: token, format: :ics,
-                                                protocol: :webcal, port: nil)
+      h.send(method, type.tr("_", "-"), calendar_token: token, format: :ics, protocol: :webcal, port: nil)
     end
   end
 end

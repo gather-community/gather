@@ -8,6 +8,8 @@ class UsersController < ApplicationController
 
   before_action -> { nav_context(:people, :directory) }
 
+  skip_after_action :verify_authorized, only: :unimpersonate
+
   decorates_assigned :household, :user, :users, :head_cook_meals
 
   def index
@@ -124,7 +126,6 @@ class UsersController < ApplicationController
 
   def unimpersonate
     @user = User.find(params[:id])
-    skip_authorization
     session.delete(:impersonating_id)
     redirect_to(user_path(@user))
   end

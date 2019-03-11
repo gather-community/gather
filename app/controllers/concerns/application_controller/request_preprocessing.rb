@@ -46,8 +46,14 @@ module Concerns::ApplicationController::RequestPreprocessing
       # actually stored in the session and a token is needed for every request.
       sign_in user, store: false
     else
-      render_error_page(:forbidden)
+      render_error_page(:unauthorized)
     end
+  end
+
+  def authorize_with_explict_policy_object(record, query, policy_object:)
+    skip_authorization # We are doing this manually so need to skip the check.
+    return if policy_object.send(query)
+    raise Pundit::NotAuthorizedError, query: query, record: record, policy: policy_object
   end
 
   def log_full_url
@@ -90,7 +96,7 @@ module Concerns::ApplicationController::RequestPreprocessing
       # Dont redirect calendar requests to sign in because that makes no sense.
       # Auth with token already fails hard with 403 but if someone points their calendar app at a bad URL
       # we get errors if we redirect.
-      render_error_page(:forbidden)
+      render_error_page(:unauthorized)
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.

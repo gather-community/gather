@@ -3,22 +3,21 @@
 # Controls landing, ping, privacy policy, and other assorted pages.
 class LandingController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_after_action :verify_authorized
+  skip_after_action :verify_policy_scoped
 
   def index
-    skip_policy_scope
     @invite_token = params[:token]
     render(layout: false)
   end
 
   # Used by uptime checker
   def ping
-    skip_authorization
     @status = SystemStatus.new
     render(layout: nil, formats: :text, status: @status.ok? ? 200 : 503)
   end
 
   def signed_out
-    skip_authorization
     if user_signed_in?
       redirect_to(root_path)
     else
@@ -28,7 +27,6 @@ class LandingController < ApplicationController
   end
 
   def public_static
-    skip_authorization
     render_not_found unless %w[privacy-policy markdown].include?(params[:page])
     render(params[:page].tr("-", "_"))
   end

@@ -2,8 +2,8 @@
 <% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
 <div class="row">
-  <div class="links col-sm-6">
-    <div class="personalized-links">
+  <div class="col-sm-6">
+    <div class="links personalized-links">
       <h2 class="top">Personalized Calendars</h2>
       <p>Personalized calendars include information tailored for you or your household.</p>
       <%= decorator.calendar_link("your_meals") %>
@@ -14,7 +14,7 @@
       <%= decorator.calendar_link("your_reservations") %>
     </div>
 
-    <div class="community-links">
+    <div class="links community-links">
       <h2>Community Calendars</h2>
       <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
       <%= decorator.calendar_link("all_meals", personalized: false) %>

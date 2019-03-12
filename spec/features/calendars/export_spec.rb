@@ -68,20 +68,20 @@ feature "calendar export" do
         end
 
         scenario "bad user token" do
-          visit("/calendars/exports/meals/totalgarbageofatoken.ics")
+          visit("/calendars/exports/all-meals/totalgarbageofatoken.ics")
           expect(page).to have_http_status(401)
         end
 
         scenario "bad community token" do
           expect do
-            visit("/calendars/exports/meals/+totalgarbageofatoken.ics")
+            visit("/calendars/exports/all-meals/+totalgarbageofatoken.ics")
           end.to raise_error(Pundit::NotAuthorizedError) # Error reaches here b/c not a JS test.
         end
 
         scenario "legacy URL" do
-          visit("/calendars/all-meals/#{user_token}.ics")
+          visit("/calendars/meals/#{user_token}.ics")
           expect(page).to have_http_status(200)
-          expect(page).to have_content("All Meals")
+          expect(page).to have_content("Meals You're Attending")
         end
       end
     end
@@ -96,7 +96,6 @@ feature "calendar export" do
       end
     end
   end
-
 
   def token_from_url
     within(".personalized-links") do

@@ -4,6 +4,8 @@ module Calendars
   module Exports
     # Exports all meals for user's household
     class YourMealsExport < MealsExport
+      include UserRequiring
+
       protected
 
       def scope

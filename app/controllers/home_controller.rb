@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   skip_before_action :ensure_subdomain
+  skip_after_action :verify_authorized, only: :inactive
 
   def index
     skip_policy_scope
@@ -15,7 +16,6 @@ class HomeController < ApplicationController
   end
 
   def inactive
-    skip_authorization
     redirect_to root_path if current_user.active?
   end
 end

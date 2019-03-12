@@ -4,6 +4,8 @@ module Calendars
   module Exports
     # Exports your jobs
     class YourJobsExport < Export
+      include UserRequiring
+
       protected
 
       def objects

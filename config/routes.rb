@@ -74,7 +74,7 @@ Rails.application.routes.draw do
 
   # Legacy calendar routes
   get "calendars/:id/:calendar_token",
-    to: "calendars/exports#show",
+    to: "calendars/exports#personalized",
     constraints: {
       # These are the original calendar export types. Only these need to work for legacy URLs.
       id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
@@ -84,13 +84,21 @@ Rails.application.routes.draw do
     }
 
   namespace :calendars do
+    # index - The calendar export page
     resources :exports, only: :index do
       member do
-        # This is the show action, allowing paths to include the user's calendar token,
-        # e.g. /calendars/meals/558327a88c6a2c635fac627dcdbc50f4.
+        TOKEN_CONSTRAINTS = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
+
+        # This is the personalized show action, allowing paths to include the user's calendar token,
+        # e.g. /calendars/meals/D7sbPv7YCUhxMs4Pyx9D.
         # The calendar's type gets captured as the :id param, so this is equivalent to
         # /calendars/:id/:calendar_token
-        get ":calendar_token", to: "exports#show", as: ""
+        get ":calendar_token", to: "exports#personalized", as: :personalized, constraints: TOKEN_CONSTRAINTS
+
+        # This is the community show action, allowing paths to include the community's calendar token.
+        # The community part is indicated by a leading +, e.g.
+        # e.g. /calendars/meals/+X7sbPv7YCUhxMs4Pyx9D.
+        get "+:calendar_token", to: "exports#community", as: :community, constraints: TOKEN_CONSTRAINTS
       end
       collection do
         put :reset_token

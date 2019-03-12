@@ -10,9 +10,12 @@ class ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
-    raise Pundit::NotAuthorizedError, "must be signed in" if user.blank?
     @user = user
     @record = record
+
+    # This error may be caught and suppressed by child initializers so we put it down here
+    # so the inst vars still get set.
+    raise Pundit::NotAuthorizedError, "must be signed in" if user.blank?
   end
 
   def index?

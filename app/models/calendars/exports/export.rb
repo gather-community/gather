@@ -12,9 +12,15 @@ module Calendars
       MAX_EVENT_AGE = 1.year
 
       attr_accessor :user, :events
+      
+      delegate :community, to: :user
+      delegate :calendar_token, to: :community, prefix: true
 
-      def initialize(user:)
-        self.user = user
+      def initialize(user: nil, community: nil)
+        raise ArgumentError, "One of user or community required" if user.nil? && community.nil?
+
+        # Make a temporary stand-in user if no user given.
+        self.user = user || User.new(household: Household.new(community: community))
       end
 
       def calendar_name

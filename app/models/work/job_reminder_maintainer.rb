@@ -3,18 +3,17 @@
 module Work
   # Updates JobReminderDeliverys for various events
   class JobReminderMaintainer < ReminderMaintainer
-    def job_saved(reminders)
+    # You currently can't change a shift without also saving its job so we only need to handle job saves.
+    def job_saved(shifts, reminders)
+      # Run callbacks on existing deliveries to ensure recomputation.
       JobReminderDelivery.where(reminder_id: reminders.pluck(:id))
         .includes(:reminder, shift: :job).find_each(&:calculate_and_save)
-    end
-
-    def shift_saved(reminders, deliveries)
-      # Run callbacks on existing deliveries to ensure recomputation.
-      deliveries.includes(:reminder).find_each(&:calculate_and_save)
 
       # Create any missing deliveries.
       reminders.each do |reminder|
-        deliveries.find_or_initialize_by(reminder: reminder).calculate_and_save
+        shifts.each do |shift|
+          JobReminderDelivery.find_or_initialize_by(shift: shift, reminder: reminder).calculate_and_save
+        end
       end
     end
 

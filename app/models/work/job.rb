@@ -29,7 +29,7 @@ module Work
 
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
-    after_save { JobReminderMaintainer.instance.job_saved(reminders) }
+    after_save { JobReminderMaintainer.instance.job_saved(shifts, reminders) }
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}

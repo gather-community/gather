@@ -60,15 +60,18 @@ Follow these steps to setup a development environment for Gather.
 1. Ensure Redis is running.
     1. If you installed via Homebrew, try `brew services start redis`.
     1. If you are on Linux try `sudo systemctl start redis` or `sudo service redis start`.
+1. Trust the development certificate
+    1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gather.localhost.tv.crt`.
+    2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
 1. Start the server
-    1. Run `bundle exec rails s`.
+    1. Run `. bin/server` (the leading `.` is important to ensure nvm loads the correct node version).
     1. Leave this console open.
 1. Start DelayedJob
     1. Open a new console.
     1. Go to the project directory.
     1. Run `bin/delayed_job start`.
 1. Start using the system
-    1. In a browser, go to `http://gather.localhost.tv:3000` to start Gather.
+    1. In a browser, go to `https://gather.localhost.tv:3000` to start Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
 

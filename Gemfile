@@ -75,6 +75,7 @@ group :development, :test do
   gem "rubocop", "0.54.0" # Should match Hound. See: http://help.houndci.com/configuration/rubocop
   gem "selenium-webdriver", "~> 2.0"
   gem "spring", "~> 1.3"
+  gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
   gem "webmock", "~> 3.1"
 end

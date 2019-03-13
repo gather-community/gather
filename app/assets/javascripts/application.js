@@ -34,6 +34,7 @@
 //= require backbone/backbone
 //= require i18n
 //= require i18n/translations
+//= require serviceworker-companion
 //= require_tree .
 
 $(document).ready(function(){ $('form').preventDoubleSubmission(); });

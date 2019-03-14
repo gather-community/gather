@@ -8,7 +8,7 @@ module Concerns::ApplicationController::UrlHelpers
   protected
 
   def default_url_options
-    Settings.url.to_h.slice(:host, :port).tap do |options|
+    Settings.url.to_h.slice(:protocol, :host, :port).tap do |options|
       # Preserve the current subdomain if present.
       options[:host] = "#{current_community.slug}.#{options[:host]}" if current_community
     end

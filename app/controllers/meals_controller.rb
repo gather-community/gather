@@ -4,7 +4,7 @@ class MealsController < ApplicationController
   include Lensable
   include MealShowable
 
-  decorates_assigned :meal, :meals, :meal_summary
+  decorates_assigned :meals, :meal_summary
 
   before_action :init_meal, only: %i[new worker_form]
   before_action :create_worker_change_notifier, only: :update
@@ -37,11 +37,8 @@ class MealsController < ApplicationController
     flash.now[:error] = I18n.t("meals.cancelled_notice") if @meal.cancelled?
 
     @signup = Signup.for(current_user, @meal)
-    @household = current_user.household.decorate
-    @account = current_user.account_for(@meal.community).try(:decorate)
     @expand_signup_form = params[:signup].present? || @signup.persisted?
-    load_signups
-    load_prev_next_meal
+    prep_show_meal_vars
   end
 
   def report
@@ -191,10 +188,6 @@ class MealsController < ApplicationController
     end
 
     @meals = @meals.page(params[:page])
-  end
-
-  def load_signups
-    @signups = @meal.signups.community_first(@meal.community).sorted.decorate
   end
 
   def prep_form_vars

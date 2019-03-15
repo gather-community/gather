@@ -1,7 +1,7 @@
 class ApplicationDecorator < Draper::Decorator
   include Utilities
 
-  delegate :t, to: :h # I18n helper
+  delegate :t, :safe_str, to: :h # I18n helper
 
   def self.collection_decorator_class
     PaginatingDecorator
@@ -40,10 +40,6 @@ class ApplicationDecorator < Draper::Decorator
   def to_int_if_no_fractional_part(num)
     # Convert to integer if no fractional part so that .0 doesn't show.
     (num - num.to_i < 0.0001) ? num.to_i : num
-  end
-
-  def safe_str
-    "".html_safe # rubocop:disable Rails/OutputSafety # It's just an empty string!
   end
 
   def join_icons(icons)

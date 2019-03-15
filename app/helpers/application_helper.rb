@@ -80,4 +80,8 @@ module ApplicationHelper
     return home_path if !current_community || !current_user || current_community == current_user.community
     home_url(host: "#{current_user.subdomain}.#{Settings.url.host}")
   end
+
+  def safe_str
+    "".html_safe # rubocop:disable Rails/OutputSafety # It's just an empty string!
+  end
 end

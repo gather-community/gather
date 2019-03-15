@@ -21,7 +21,7 @@ secret_key_base: <secret key>
 # localhost.tv is a public domain that resolves to 127.0.0.1 for all subdomains.
 url:
   host: gather.localhost.tv
-  protocol: http
+  protocol: https
 
 email:
   from: Gather <support@example.coop>

@@ -1,28 +1,37 @@
 <h2>
-  Signups for <%= @household.name %>
-  <%= @meal.closed? ? icon_tag("lock") : "" %>
+  Signups for <%= household.name %>
+  <%= meal.closed? ? icon_tag("lock") : "" %>
 </h2>
-<% if @account.present? && @account.credit_exceeded? && @signup.new_record? %>
-  <%= t("meals.over_limit_notice_html", community: @meal.community.name,
-    account_link: link_to("account",
-      yours_accounts_path(community: @meal.community_id)),
-    limit: number_to_currency(@account.credit_limit)) %>
-<% elsif @meal.closed? || @meal.finalized? %>
-  <% if @signup.new_record? %>
+<% if account.present? && account.credit_exceeded? && signup.new_record? %>
+  <%= t("meals.over_limit_notice_html", community: meal.community.name,
+        account_link: link_to("account", yours_accounts_path(community: meal.community_id)),
+        limit: number_to_currency(account.credit_limit)) %>
+<% elsif meal.closed? || meal.finalized? %>
+  <% if signup.new_record? %>
     You have not signed up for this meal and it is now closed.
   <% else %>
     <%= render("signup_read_only") %>
   <% end %>
-<% elsif @signup.new_record? && @meal.full? %>
-  You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up.
+<% elsif signup.new_record? && meal.full? %>
+  You have not signed up for this meal and it is now full.
+  You can check back later to see if a spot opens up.
+
+<%# By this point we have checked for some of the common reasons why you can't sign up, but not all %>
+<%# So now we check the policy for any other reasons. %>
+<% elsif signup.new_record? && !policy(signup).create? || signup.persisted? && !policy(signup).update? %>
+  <% if signup.new_record? %>
+    You have not signed up for this meal.
+  <% else %>
+    <%= render("signup_read_only") %>
+  <% end %>
 <% else %>
-  <%= gather_form_for(@signup, width: :full, layout: :vertical, top_error_notification: false) do |f| %>
-    <%= hidden_field_tag("next_meal_id", @next_meal.try(:id)) %>
+  <%= gather_form_for(signup, width: :full, layout: :vertical, top_error_notification: false) do |f| %>
+    <%= hidden_field_tag("next_meal_id", next_meal&.id) %>
     <%= f.input(:meal_id, as: :hidden) %>
 
     <p>
-      <%= icon_tag("exclamation-circle") if @meal.full? %>
-      <%= t("meals.spots_left", count: @meal.spots_left) %>
+      <%= icon_tag("exclamation-circle") if meal.full? %>
+      <%= t("meals.spots_left", count: meal.spots_left) %>
     </p>
 
     <div class="signup-fields-with-comments"
@@ -31,21 +40,13 @@
         <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
       </div>
 
-      <% if policy(@signup).update? %>
-        <%= f.input(:comments, maxlength: Signup::MAX_COMMENT_LENGTH) %>
-      <% else %>
-        <%= f.input(:comments) do %>
-          <%= simple_format(@signup.comments) %>
-        <% end %>
-      <% end %>
+      <%= f.input(:comments, maxlength: Signup::MAX_COMMENT_LENGTH) %>
 
-      <% if policy(@signup).update? %>
-        <%= form_actions do %>
-          <% if @next_meal %>
-            <%= f.button(:secondary, t("helpers.submit.signup.save_and_next"), name: "save_and_next") %>
-          <% end %>
-          <%= f.button(:primary) %>
+      <%= form_actions do %>
+        <% if next_meal %>
+          <%= f.button(:secondary, t("helpers.submit.signup.save_and_next"), name: "save_and_next") %>
         <% end %>
+        <%= f.button(:primary) %>
       <% end %>
     </div>
     <% unless @expand_signup_form %>

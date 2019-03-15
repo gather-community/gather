@@ -41,12 +41,10 @@ class SignupsController < ApplicationController
   end
 
   def render_meal_show
-    @meal = @signup.meal.decorate
-    @signups = @meal.signups.includes(household: :community).sorted
-    @household = current_user.household.decorate
+    @meal = @signup.meal
     @expand_signup_form = true
     authorize(@meal, :show?)
-    load_prev_next_meal # From MealShowable
+    prep_show_meal_vars
     render("meals/show")
   end
 end

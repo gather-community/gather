@@ -12,9 +12,13 @@ module MealShowable
   def prep_show_meal_vars
     @next_meal = policy_scope(@meal.following_meals).future.oldest_first.first
     @prev_meal = policy_scope(@meal.previous_meals).future.newest_first.first
-    @signups = @meal.signups.community_first(@meal.community).sorted
     @household = current_user.household
     @account = current_user.account_for(@meal.community)
+    load_signups
+  end
+
+  def load_signups
+    @signups = @meal.signups.community_first(@meal.community).sorted
   end
 
   def sample_meal

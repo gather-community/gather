@@ -1,12 +1,12 @@
-<% content_for(:title, @meal.title || "Untitled Meal") %>
+<% content_for(:title, meal.title || "Untitled Meal") %>
 <% content_for(:title_icons) do
   "".html_safe <<
-    (@meal.cancelled? ? icon_tag("ban") : "") <<
-    (@meal.closed? ? icon_tag("lock") : "") <<
-    (@meal.finalized? ? icon_tag("certificate") : "")
+    (meal.cancelled? ? icon_tag("ban") : "") <<
+    (meal.closed? ? icon_tag("lock") : "") <<
+    (meal.finalized? ? icon_tag("certificate") : "")
 end %>
 
-<% content_for(:top_buttons, @meal.action_links) %>
+<% content_for(:top_buttons, meal.action_links) %>
 
 <div class="row">
   <div class="col-sm-8">

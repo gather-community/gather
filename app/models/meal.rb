@@ -91,20 +91,6 @@ class Meal < ApplicationRecord
   validates :resources, presence: {message: :need_location}
   validates_with Meals::SignupsValidator
 
-  def self.new_with_defaults(community)
-    formula = Meals::Formula.default_for(community)
-    meal = new(served_at: default_datetime, capacity: community.settings.meals.default_capacity,
-               community_ids: Community.all.map(&:id), community: community, formula: formula)
-    (formula&.roles || []).each do |role|
-      role.count_per_meal.times { meal.assignments.build(role: role) }
-    end
-    meal
-  end
-
-  def self.default_datetime
-    Time.current.midnight + 7.days + Meal::DEFAULT_TIME
-  end
-
   def self.served_within_days_from_now(days)
     within_days_from_now(:served_at, days)
   end

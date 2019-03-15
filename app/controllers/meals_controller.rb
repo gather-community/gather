@@ -6,7 +6,6 @@ class MealsController < ApplicationController
 
   decorates_assigned :meal, :meals, :meal_summary
 
-  before_action :init_meal, only: %i[new worker_form]
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
@@ -54,6 +53,7 @@ class MealsController < ApplicationController
   end
 
   def new
+    @meal = init_meal
     authorize(@meal)
     prep_form_vars
   end
@@ -128,8 +128,8 @@ class MealsController < ApplicationController
   # meal formula to that ID (without saving) if provided.
   # This is a collection action, only used for new meals.
   def worker_form
+    @meal = init_meal(formula_id: params[:formula_id])
     authorize(@meal, :new?)
-    @meal.formula_id = params[:formula_id] if params[:formula_id]
     prep_worker_form_vars
     render(partial: "meals/form/single_section", layout: false, locals: {section: "workers"})
   end
@@ -163,8 +163,15 @@ class MealsController < ApplicationController
 
   private
 
-  def init_meal
-    @meal = Meal.new_with_defaults(current_community)
+  def init_meal(community: current_community, formula_id: nil)
+    formula = formula_id.nil? ? Meals::Formula.default_for(community) : Meals::Formula.find(formula_id)
+    served_at = Time.current.midnight + 7.days + Meal::DEFAULT_TIME
+    meal = Meal.new(served_at: served_at, capacity: community.settings.meals.default_capacity,
+                    community_ids: Community.all.map(&:id), community: community, formula: formula)
+    (formula&.roles || []).each do |role|
+      role.count_per_meal.times { meal.assignments.build(role: role) }
+    end
+    meal
   end
 
   def load_meals(context)

@@ -27,7 +27,7 @@ class MealsController < ApplicationController
   end
 
   def show
-    @meal = Meal.find(params[:id]).decorate
+    @meal = Meal.find(params[:id])
     authorize(@meal)
 
     # Don't want the singup form to get cached

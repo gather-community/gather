@@ -3,14 +3,14 @@
   <%= render("meals/time_cook") %>
   <div id="details">
     <div class="chunk">
-      At <%= @meal.location_name %>
+      At <%= meal.location_name %>
     </div>
     <% if multi_community? %>
       <div class="chunk">
-        for <%= @meal.communities.map(&:name).join(', ') %>
+        for <%= meal.communities.map(&:name).join(', ') %>
       </div>
     <% end %>
-    <% @meal.assignments_by_role.each do |role, assignments| %>
+    <% meal.assignments_by_role.each do |role, assignments| %>
       <div class="chunk">
         <%= role.title %>
         <%= "[None]" if assignments.empty? %>
@@ -20,8 +20,8 @@
       </div>
     <% end %>
   </div>
-  <% if @meal.menu_posted? %>
-    <% @meal.nonempty_menu_items.each do |item, text| %>
+  <% if meal.menu_posted? %>
+    <% meal.nonempty_menu_items.each do |item, text| %>
       <hr/>
       <div class="menu-label smaller"><%= item %></div>
       <section><%= safe_render_markdown(text) %></section>
@@ -29,14 +29,14 @@
     <hr/>
     <div class="menu-label smaller">allergens</div>
     <section>
-      <% if @meal.any_allergens? %>
-        <%= @meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
+      <% if meal.any_allergens? %>
+        <%= meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
       <% else %>
         [None]
       <% end %>
     </section>
-    <% if @meal.menu_posted_at.present? %>
-      <small><br/><%= t("meals.menu_posted_at", time: l(@meal.menu_posted_at)) %></small>
+    <% if meal.menu_posted_at.present? %>
+      <small><br/><%= t("meals.menu_posted_at", time: l(meal.menu_posted_at)) %></small>
     <% end %>
   <% else %>
     <hr/>

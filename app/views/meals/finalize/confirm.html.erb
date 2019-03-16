@@ -38,15 +38,15 @@
   <h2>Cook Reimbursement Request</h2>
   <table class="key-value key-value-narrow">
     <tr>
-      <td><%= @cost.class.human_attribute_name(:ingredient_cost) %></td>
+      <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
       <td><strong><%= number_to_currency(@cost.ingredient_cost) %></strong></td>
     </tr>
     <tr>
-      <td><%= @cost.class.human_attribute_name(:pantry_cost) %></td>
+      <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
       <td><strong><%= number_to_currency(@cost.pantry_cost) %></strong></td>
     </tr>
     <tr>
-      <td><%= @cost.class.human_attribute_name(:payment_method) %></td>
+      <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
       <td>
         <strong><%= t("simple_form.options.meal.cost.payment_method.#{@cost.payment_method}") %></strong>
       </td>

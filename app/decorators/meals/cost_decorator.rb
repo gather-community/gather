@@ -15,7 +15,7 @@ module Meals
     end
 
     def t_payment_method
-      t("simple_form.options.meal.cost.payment_method.#{payment_method}").downcase
+      t("simple_form.options.meal.cost.payment_method.#{payment_method}")
     end
   end
 end

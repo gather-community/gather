@@ -77,7 +77,9 @@ module Meals
       chunks = []
       chunks << t("#{base_key}.ingredients", cost: cost.currency(:ingredient))
       chunks << t("#{base_key}.pantry", cost: cost.currency(:pantry)) if cost.pantry_cost.present?
-      chunks << t("#{base_key}.payment", method: cost.t_payment_method) if cost.payment_method.present?
+      if cost.payment_method.present?
+        chunks << t("#{base_key}.payment", method: cost.t_payment_method).downcase
+      end
       h.safe_join(chunks, ", ")
     end
 

@@ -64,7 +64,7 @@ en:
         recipient_type: "Recipients"
       meals/cost:
         ingredient_cost: "Ingredient Cost"
-        pantry_cost: "Pantry Cost"
+        pantry_cost: "Pantry Reimbursables"
         payment_method: "Payment Method"
       meals/formula:
         name: "Name"
@@ -72,7 +72,7 @@ en:
         pantry_calc_type: "Calculation Type"
         is_default: "Default Formula?"
         signup_types: "Signup Types"
-        pantry_fee_disp: "Pantry Fee Amount"
+        pantry_fee_disp: "Pantry Fee"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
         role_ids: "Roles"
       meals/role:

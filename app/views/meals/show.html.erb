@@ -58,6 +58,57 @@ end %>
   </div>
 </div>
 
+<% unless meal.cancelled? %>
+  <div class="row">
+    <div class="col-sm-12 cost-info">
+      <h2>Cost</h2>
+      <% if meal.finalized? || formula.fixed_meal? %>
+        <div class="row">
+          <div class="col-sm-4">
+            <table class="key-value">
+              <% formula.defined_signup_types.each do |st| %>
+                <tr>
+                  <td><%= t("signups.types.#{st}") %></td>
+                  <td><%= @calculator.price_for(st) %></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+          <div class="col-sm-4">
+            <table class="key-value">
+              <tr>
+                <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
+                <td><%= cost.ingredient_cost_disp %></td>
+              </tr>
+              <tr>
+                <td>
+                  <%= t("activerecord.attributes.meals/formula.pantry_fee_disp") %>
+                  (Included)
+                </td>
+                <td><%= formula.pantry_fee_disp %></td>
+              </tr>
+              <% if policy(account).show? %>
+                <% if formula.pantry_reimbursement? %>
+                  <tr>
+                    <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
+                    <td><%= cost.pantry_cost_disp %></td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
+                  <td><%= cost.t_payment_method %></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      <% else %>
+        This meal uses a proportional formula so cost calculations will be performed after the meal has taken place and is finalized.
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <%= javascript_tag do %>
   $(function() {
     $('[data-toggle="tooltip"]').tooltip();

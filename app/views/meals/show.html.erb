@@ -69,7 +69,7 @@ end %>
               <% formula.defined_signup_types.each do |st| %>
                 <tr>
                   <td><%= t("signups.types.#{st}") %></td>
-                  <td><%= @calculator.price_for(st) %></td>
+                  <td><%= number_to_currency(cost.blank? ? @calculator.price_for(st) : cost.send(st)) %></td>
                 </tr>
               <% end %>
             </table>
@@ -78,7 +78,7 @@ end %>
             <table class="key-value">
               <tr>
                 <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-                <td><%= cost.ingredient_cost_nice %></td>
+                <td><%= cost.present? ? cost.ingredient_cost_nice : "?" %></td>
               </tr>
               <tr>
                 <td>
@@ -87,7 +87,7 @@ end %>
                 </td>
                 <td><%= formula.pantry_fee_nice %></td>
               </tr>
-              <% if policy(account).show? %>
+              <% if policy(account).show? && cost.present? %>
                 <% if formula.pantry_reimbursement? %>
                   <tr>
                     <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>

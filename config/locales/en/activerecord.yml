@@ -65,7 +65,7 @@ en:
       meals/cost:
         ingredient_cost: "Ingredient Cost"
         pantry_cost: "Pantry Reimbursables"
-        payment_method: "Payment Method"
+        payment_method: "Reimbursement Method"
       meals/formula:
         name: "Name"
         meal_calc_type: "Calculation Type"

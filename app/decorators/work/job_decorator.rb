@@ -30,11 +30,11 @@ module Work
       str
     end
 
-    def hours_formatted
+    def hours_nice
       to_int_if_no_fractional_part(hours)
     end
 
-    def total_slots_formatted
+    def total_slots_nice
       total_slots >= Shift::UNLIMITED_SLOTS ? h.t("common.unlimited") : total_slots
     end
 

@@ -19,26 +19,26 @@ module Work
     def times
       if starts_at.to_date == ends_at.to_date
         if job_date_time?
-          starts_at_formatted << "–" << h.l(ends_at, format: :time_only).strip
+          starts_at_nice << "–" << h.l(ends_at, format: :time_only).strip
         else
-          starts_at_formatted
+          starts_at_nice
         end
       elsif !job_date_time? && starts_and_ends_on_month_boundaries?
         [h.l(starts_at, format: "%B"), h.l(ends_at, format: "%B")].uniq.join("–")
       else
-        "#{starts_at_formatted}–#{ends_at_formatted}"
+        "#{starts_at_nice}–#{ends_at_nice}"
       end
     end
 
-    def starts_at_formatted
+    def starts_at_nice
       h.l(starts_at, format: time_format).strip.gsub(/\s\s+/, " ")
     end
 
-    def ends_at_formatted
+    def ends_at_nice
       h.l(ends_at, format: time_format).strip.gsub(/\s\s+/, " ")
     end
 
-    def hours_formatted
+    def hours_nice
       to_int_if_no_fractional_part(hours)
     end
 

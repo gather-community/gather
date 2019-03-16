@@ -21,7 +21,7 @@ module Meals
       end
     end
 
-    def pantry_fee_disp
+    def pantry_fee_nice
       if fixed_pantry?
         h.number_to_currency(pantry_fee)
       else
@@ -42,7 +42,7 @@ module Meals
     end
 
     Signup::SIGNUP_TYPES.each do |st|
-      define_method("#{st}_disp") do
+      define_method("#{st}_nice") do
         if fixed_meal?
           h.number_to_currency(object[st])
         else

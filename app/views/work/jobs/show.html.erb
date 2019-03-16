@@ -10,7 +10,7 @@
   <tr>
     <td><%= Work::Job.human_attribute_name(:hours) %></td>
     <td>
-      <%= job.hours_formatted %> hours
+      <%= job.hours_nice %> hours
       <% "(#{job.hours_per_shift} per shift)" if job.hours_per_shift %>
     </td>
   </tr>

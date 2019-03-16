@@ -83,12 +83,12 @@ module Meals
       Signup::SIGNUP_TYPES.map { |st| self[st] }.compact.max
     end
 
-    def pantry_fee_disp=(str)
+    def pantry_fee_nice=(str)
       self.pantry_fee = normalize_amount(str, pct: !fixed_pantry?)
     end
 
     Signup::SIGNUP_TYPES.each do |st|
-      define_method("#{st}_disp=") do |str|
+      define_method("#{st}_nice=") do |str|
         send("#{st}=", normalize_amount(str, pct: !fixed_meal?))
       end
     end

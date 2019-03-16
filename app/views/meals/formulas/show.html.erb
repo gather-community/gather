@@ -25,7 +25,7 @@
       <% formula.defined_signup_types.each do |st| %>
         <div class="signup-type">
           <div><%= t("signups.types.#{st}") %></div>
-          <div><%= formula.send("#{st}_disp") %></div>
+          <div><%= formula.send("#{st}_nice") %></div>
         </div>
       <% end %>
     </td>
@@ -41,6 +41,6 @@
   </tr>
   <tr>
     <td><%= t("activerecord.attributes.meals/formula.pantry_fee") %></td>
-    <td><%= formula.pantry_fee_disp %></td>
+    <td><%= formula.pantry_fee_nice %></td>
   </tr>
 </table>

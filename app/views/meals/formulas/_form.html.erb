@@ -24,7 +24,7 @@
       </div>
       <div class="fields">
         <% Signup::SIGNUP_TYPES.each do |st| %>
-          <%= f.input "#{st}_disp", as: :string, label: t("signups.types.#{st}") %>
+          <%= f.input "#{st}_nice", as: :string, label: t("signups.types.#{st}") %>
         <% end %>
       </div>
     <% end %>
@@ -32,7 +32,7 @@
     <h2>Pantry Calculations</h2>
     <p class="hint"><%= t("meals/formulas.hints.pantry") %></p>
     <%= f.input :pantry_calc_type, collection: Meals::Formula::PANTRY_CALC_TYPES %>
-    <%= f.input :pantry_fee_disp, as: :string %>
+    <%= f.input :pantry_fee_nice, as: :string %>
   <% end %>
 
   <%= form_actions do %>

@@ -72,7 +72,7 @@ en:
         pantry_calc_type: "Calculation Type"
         is_default: "Default Formula?"
         signup_types: "Signup Types"
-        pantry_fee_disp: "Pantry Fee"
+        pantry_fee_nice: "Pantry Fee"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
         role_ids: "Roles"
       meals/role:

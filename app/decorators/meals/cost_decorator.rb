@@ -4,17 +4,19 @@ module Meals
   class CostDecorator < ApplicationDecorator
     delegate_all
 
-    def currency(item)
-      num = self[:"#{item}_cost"]
-      num.blank? ? "?" : h.number_to_currency(num)
+    (Signup::SIGNUP_TYPES + %i[ingredient_cost pantry_cost]).each do |attrib|
+      define_method("#{attrib}_nice") do
+        (num = self[attrib]).blank? ? "?" : h.number_to_currency(num)
+      end
     end
 
-    def two_decimals(item)
-      num = self[:"#{item}_cost"]
-      num.blank? ? nil : h.number_with_precision(num, precision: 2)
+    %i[ingredient_cost pantry_cost].each do |attrib|
+      define_method("#{attrib}_decimals") do
+        (num = self[attrib]).blank? ? nil : h.number_with_precision(num, precision: 2)
+      end
     end
 
-    def t_payment_method
+    def payment_method_nice
       t("simple_form.options.meal.cost.payment_method.#{payment_method}")
     end
   end

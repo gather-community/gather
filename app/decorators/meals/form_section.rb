@@ -75,10 +75,10 @@ module Meals
       base_key = "meals.form.summaries.expenses"
       return safe_str << t("#{base_key}.none") if cost.blank?
       chunks = []
-      chunks << t("#{base_key}.ingredients", cost: cost.currency(:ingredient))
-      chunks << t("#{base_key}.pantry", cost: cost.currency(:pantry)) if cost.pantry_cost.present?
+      chunks << t("#{base_key}.ingredients", cost: cost.ingredient_cost_nice)
+      chunks << t("#{base_key}.pantry", cost: cost.pantry_cost_nice) if cost.pantry_cost.present?
       if cost.payment_method.present?
-        chunks << t("#{base_key}.payment", method: cost.t_payment_method).downcase
+        chunks << t("#{base_key}.payment", method: cost.payment_method_nice).downcase
       end
       h.safe_join(chunks, ", ")
     end

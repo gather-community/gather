@@ -65,7 +65,7 @@ end %>
       <% if meal.finalized? || formula.fixed_meal? %>
         <div class="row">
           <div class="col-sm-4">
-            <table class="key-value">
+            <table class="key-value key-value-full">
               <% formula.defined_signup_types.each do |st| %>
                 <tr>
                   <td><%= t("signups.types.#{st}") %></td>
@@ -73,9 +73,10 @@ end %>
                 </tr>
               <% end %>
             </table>
+            <br/>
           </div>
           <div class="col-sm-4">
-            <table class="key-value">
+            <table class="key-value key-value-full">
               <tr>
                 <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
                 <td><%= cost.present? ? cost.ingredient_cost_nice : "?" %></td>

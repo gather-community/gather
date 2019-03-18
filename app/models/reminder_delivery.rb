@@ -15,7 +15,7 @@ class ReminderDelivery < ApplicationRecord
   scope :too_old, -> { where("deliver_at < ?", Time.current - TOO_OLD) }
 
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
-  delegate :community, :assignments, to: :event
+  delegate :community, to: :event
 
   def deliver!
     assignments.each { |assignment| send_mail(assignment) }
@@ -34,6 +34,10 @@ class ReminderDelivery < ApplicationRecord
     elsif will_save_change_to_deliver_at?
       save!
     end
+  end
+
+  def assignments
+    raise NotImplementedError
   end
 
   def event

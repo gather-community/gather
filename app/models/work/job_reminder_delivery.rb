@@ -5,6 +5,8 @@ module Work
   class JobReminderDelivery < ReminderDelivery
     # See parent class for associations.
 
+    delegate :assignments, to: :shift
+
     def event
       shift
     end

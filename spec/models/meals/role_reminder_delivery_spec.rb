@@ -22,4 +22,18 @@ describe Meals::RoleReminderDelivery do
 
     it { is_expected.to eq("#{yr_mo}-04T08:20:00Z") }
   end
+
+  describe "#assignments" do
+    let!(:meal) { create(:meal, formula: formula) }
+    let(:assignments) do
+      [meal.assignments[0], # This is created by factory.
+       meal.assignments.create!(role: ac_role, user: create(:user)),
+       meal.assignments.create!(role: ac_role, user: create(:user))]
+    end
+
+    it "is correct for hc_role and ac_role" do
+      expect(hc_reminder.deliveries[0].assignments).to match_array([assignments[0]])
+      expect(ac_reminder1.deliveries[0].assignments).to match_array(assignments[1..2])
+    end
+  end
 end

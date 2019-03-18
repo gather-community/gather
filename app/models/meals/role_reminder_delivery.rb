@@ -9,6 +9,10 @@ module Meals
       meal
     end
 
+    def assignments
+      meal.assignments_by_role[role]
+    end
+
     protected
 
     delegate :role, to: :reminder

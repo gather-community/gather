@@ -10,7 +10,7 @@ module Meals
     end
 
     def assignments
-      meal.assignments_by_role[role]
+      meal.assignments_by_role[role] || []
     end
 
     protected

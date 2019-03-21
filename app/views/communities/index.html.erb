@@ -1,0 +1,13 @@
+<% content_for(:title, "Communities") %>
+
+<table>
+  <% communities.each do |community| %>
+    <tr>
+      <td><%= community.id %></td>
+      <td><%= link_to(community.name, url_in_community(community)) %></td>
+      <td><%= community.user_count %></td>
+      <td><%= community.meal_count %></td>
+      <td><%= community.last_meal_age %></td>
+    </tr>
+  <% end %>
+</table>

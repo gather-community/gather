@@ -26,7 +26,9 @@ module Utils
         resource_data.each do |row|
           resource = create(:resource, row.except("id", :shared_guideline_ids).merge(
             community: community,
-            photo: photos ? resource_photo(row["id"]) : nil
+            photo: photos ? resource_photo(row["id"]) : nil,
+            created_at: community.created_at,
+            updated_at: community.updated_at
           ))
           row[:obj] = resource
           resource_map[row["id"]] = row[:obj]

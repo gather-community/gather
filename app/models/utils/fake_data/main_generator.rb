@@ -16,7 +16,8 @@ module Utils
 
         people_gen = PeopleGenerator.new(community: community, photos: photos)
         resource_gen = ResourceGenerator.new(community: community, photos: photos)
-        reservation_gen = ReservationGenerator.new(resource_map: resource_gen.resource_map)
+        reservation_gen = ReservationGenerator.new(community: community,
+                                                   resource_map: resource_gen.resource_map)
         statement_gen = StatementGenerator.new(community: community)
         meal_gen = MealGenerator.new(community: community, statement_gen: statement_gen)
 

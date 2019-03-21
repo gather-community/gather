@@ -22,12 +22,14 @@ module Utils
         # All but 4 accounts get paid up.
         Billing::Account.all.shuffle[0..-4].each do |acct|
           next if acct.balance_due <= 0
-          Timecop.travel(rand(20).days) do
+          Timecop.freeze(rand(20).days) do
             acct.transactions.create!(
               amount: acct.balance_due,
               code: "payment",
               incurred_on: Date.today,
-              description: "Check ##{rand(10000)}"
+              description: "Check ##{rand(10000)}",
+              created_at: community.created_at,
+              updated_at: community.updated_at
             )
           end
         end

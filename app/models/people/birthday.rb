@@ -1,5 +1,7 @@
 module People
-  class Birthdate
+  # Represents a birthday with an optional year. As opposed to user.birthdate, which is a regular date object.
+  # Birthdays with no year have their years stored as 0004.
+  class Birthday
     YEAR_MIN = Time.zone.today.year - 115
     NO_YEAR = 4
 
@@ -70,7 +72,7 @@ module People
     end
 
     def validate
-      object.errors.add(:birthdate_str, :invalid) if invalid?
+      object.errors.add(:birthday_str, :invalid) if invalid?
     end
 
     private

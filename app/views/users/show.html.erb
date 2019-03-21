@@ -34,10 +34,10 @@
             </tr>
           <% end %>
           <% if policy(user).show_personal_info? %>
-            <% if user.birthdate %>
+            <% if user.birthday? %>
               <tr>
                 <td>Birthday</td>
-                <td><%= l(user.birthday.date, format: user.birthday.format) %></td>
+                <td><%= user.birthday_nice %></td>
               </tr>
             <% end %>
             <% %i(age joined_on school allergies doctor medical).each do |attr| %>

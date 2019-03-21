@@ -12,7 +12,7 @@ en:
         mobile_phone: "Mobile"
         home_phone: "Home"
         work_phone: "Work"
-        birthdate_str: "Birthdate"
+        birthday_str: "Birthday"
         preferred_contact: "Preferred Contact"
         joined_on: "Join Date"
         job_choosing_proxy_id: "Job Choosing Proxy"

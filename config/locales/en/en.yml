@@ -185,7 +185,7 @@ en:
         last_name: "Last Name"
         unit_num: "Unit Num"
         unit_suffix: "Unit Suffix"
-        birthdate: "Birthdate"
+        birthdate: "Birthday"
         email: "Email"
         child: "Is Child"
         mobile_phone: "Mobile Phone"

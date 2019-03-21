@@ -100,6 +100,12 @@ module NavHelper
             permitted: policy(User).index?,
             icon: "user-circle-o"
           }, {
+            name: :birthdays,
+            parent: :people,
+            path: people_birthdays_path,
+            permitted: policy(User).index?,
+            icon: "birthday-cake"
+          }, {
             name: :vehicles,
             parent: :people,
             path: people_vehicles_path,

@@ -24,9 +24,9 @@ class UserDecorator < ApplicationDecorator
     "#{first_name}#{active? ? '' : ' (Inactive)'}"
   end
 
-  def birthdate
-    return nil if object.birthdate.nil?
-    I18n.l(object.birthdate)
+  def birthday_nice
+    return nil unless object.birthday?
+    l(birthday.date, format: birthday.format)
   end
 
   def joined_on

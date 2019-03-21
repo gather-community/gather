@@ -50,6 +50,7 @@ class User < ApplicationRecord
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> { order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
+  scope :by_birthday, -> { order(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")) }
   scope :active_or_assigned_to, lambda { |meal|
     t = arel_table
     where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
@@ -69,8 +70,8 @@ class User < ApplicationRecord
   delegate :community_id, :community_name, :community_abbrv, :cluster,
     :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
-  delegate :str, :str=, to: :birthdate_wrapper, prefix: :birthdate
-  delegate :age, to: :birthdate_wrapper
+  delegate :str, :str=, to: :birthday, prefix: :birthday
+  delegate :age, to: :birthday
   delegate :subdomain, to: :community
 
   normalize_attributes :email, :google_email, with: :email
@@ -94,7 +95,7 @@ class User < ApplicationRecord
   validates :password, confirmation: true
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? }
-  validate { birthdate_wrapper.validate }
+  validate { birthday.validate }
 
   has_attached_file :photo,
     styles: {thumb: "150x150#", medium: "300x300#"},
@@ -159,12 +160,12 @@ class User < ApplicationRecord
     child? ? "child" : "adult"
   end
 
-  def birthday
-    birthdate_wrapper
+  def birthday?
+    birthdate.present?
   end
 
-  def birthdate_wrapper
-    @birthdate_wrapper ||= People::Birthdate.new(self)
+  def birthday
+    @birthday ||= People::Birthday.new(self)
   end
 
   def privacy_settings=(settings)

@@ -18,6 +18,7 @@ en:
         directory: "Directory"
         households: "Households"
         roles: "Roles"
+        birthdays: "Birthdays"
         vehicles: "Vehicles"
       reservations:
         reservations: "Reservations"

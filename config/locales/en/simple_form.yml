@@ -26,7 +26,7 @@ en:
       billing_transaction:
         description: "e.g. Check #12345"
       user:
-        birthdate_str: "e.g. Feb 29 1981 (year optional)"
+        birthday_str: "e.g. Feb 29 1981 (year optional)"
       household:
         name: "e.g. Smith or Singh-Whitman"
         vehicles:

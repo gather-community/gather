@@ -1,0 +1,18 @@
+<% content_for(:title, "Birthdays") %>
+
+<% if users.empty? %>
+  <div class="center-notice">
+    No users found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <tbody>
+      <% users.each do |user| %>
+        <tr>
+          <td><%= link_to(user.name, user) %></td>
+          <td><%= user.birthday_nice || "?" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

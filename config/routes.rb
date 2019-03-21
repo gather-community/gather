@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   namespace :people do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
+    resources :birthdays, only: :index
     resources :vehicles, only: :index
     resource :password_change, only: %i[show edit update], path: "password-change" do
       patch :check

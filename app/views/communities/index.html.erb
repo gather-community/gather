@@ -24,7 +24,7 @@
           <% end %>
         </td>
         <td>
-          <% if community.user_count > 0 %>
+          <% if community.user_count&.> 0 %>
             <%= content_tag(:span, community.user_count,
                   class: (Time.zone.today - community.last_user_created_at.to_date).to_i < 60 ? "recent" : "",
                   title: community.last_user_created_at) %>

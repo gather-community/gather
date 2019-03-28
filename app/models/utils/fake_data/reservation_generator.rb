@@ -1,7 +1,8 @@
 module Utils
   module FakeData
     class ReservationGenerator < Generator
-      attr_accessor :resource_map, :data
+      attr_accessor :resource_map, :community, :data
+
       RESERVATIONS_EXPORTED_ON = Date.new(2017, 6, 14)
 
       def initialize(community:, resource_map:)

@@ -1,13 +1,64 @@
 <% content_for(:title, "Communities") %>
 
 <table>
-  <% communities.each do |community| %>
+  <thead>
     <tr>
-      <td><%= community.id %></td>
-      <td><%= link_to(community.name, url_in_community(community)) %></td>
-      <td><%= community.user_count %></td>
-      <td><%= community.meal_count %></td>
-      <td><%= community.last_meal_age %></td>
+      <td>ID</td>
+      <td>Name</td>
+      <td>Login?</td>
+      <td>Users</td>
+      <td>Meals</td>
+      <td>Rsrvs</td>
+      <td>Jobs</td>
+      <td>Txns</td>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% communities.each do |community| %>
+      <tr>
+        <td><%= community.id %></td>
+        <td><%= link_to(community.name, url_in_community(community)) %></td>
+        <td>
+          <% if community.last_login_at && (Time.zone.today - community.last_login_at.to_date).to_i < 14 %>
+            <%= icon_tag("check", title: community.last_login_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.user_count > 0 %>
+            <%= content_tag(:span, community.user_count,
+                  class: (Time.zone.today - community.last_user_created_at.to_date).to_i < 60 ? "recent" : "",
+                  title: community.last_user_created_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.meal_count&.> 0 %>
+            <%= content_tag(:span, community.meal_count,
+                  class: (Time.zone.today - community.last_meal_served_at.to_date).to_i < 30 ? "recent" : "",
+                  title: community.last_meal_served_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.rsrv_count&.> 0 %>
+            <%= content_tag(:span, community.rsrv_count,
+                  class: (Time.zone.today - community.last_rsrv_starts_at.to_date).to_i < 30 ? "recent" : "",
+                  title: community.last_rsrv_starts_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.job_count&.> 0 %>
+            <%= content_tag(:span, community.job_count,
+                  class: (Time.zone.today - community.last_job_starts_at.to_date).to_i < 30 ? "recent" : "",
+                  title: community.last_job_starts_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.txn_count&.> 0 %>
+            <%= content_tag(:span, community.txn_count,
+                  class: (Time.zone.today - community.last_txn_created_at.to_date).to_i < 30 ? "recent" : "",
+                  title: community.last_txn_created_at) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

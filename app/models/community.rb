@@ -23,7 +23,7 @@ class Community < ApplicationRecord
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
 
-  scope :by_name, -> { order("name") }
+  scope :by_name, -> { order(:name) }
   scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }
 
   before_create :generate_calendar_token

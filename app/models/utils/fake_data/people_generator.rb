@@ -48,7 +48,9 @@ module Utils
               work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
               joined_on: joined,
               preferred_contact: %w(phone email text).sample,
-              photo: photos ? File.open(path) : nil
+              photo: photos ? File.open(path) : nil,
+              created_at: community.created_at,
+              updated_at: community.updated_at
             )
           end.compact
 
@@ -69,19 +71,23 @@ module Utils
               guardians: adults,
               birthdate: bday,
               photo: photos ? File.open(path) : nil,
-              joined_on: [bday, joined].max
+              joined_on: [bday, joined].max,
+              created_at: community.created_at,
+              updated_at: community.updated_at
             )
           end.compact
 
           members = adults + kids
-          self.users.concat(members)
+          users.concat(members)
 
           create(:household, :with_vehicles, :with_emerg_contacts, :with_pets,
             name: adults.map(&:last_name).uniq.join("-"),
             community: community,
             unit_num: i + 1,
             garage_nums: garages[i].to_s,
-            users: members
+            users: members,
+            created_at: community.created_at,
+            updated_at: community.updated_at
           )
         end
       end
@@ -90,7 +96,7 @@ module Utils
       def deactivate_households
         households.shuffle[0...3].each do |h|
           joined = h.users.map(&:joined_on).max
-          Timecop.travel(joined + rand((Date.today - joined).to_i)) do
+          Timecop.freeze(joined + rand((Date.today - joined).to_i)) do
             h.deactivate
           end
         end

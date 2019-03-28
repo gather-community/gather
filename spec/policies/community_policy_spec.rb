@@ -8,6 +8,12 @@ describe CommunityPolicy do
 
     let(:record) { community }
 
+    permissions :index? do
+      it "permits super admins only" do
+        expect(subject).to permit(super_admin_cmtyX, record)
+      end
+    end
+
     permissions :show? do
       it_behaves_like "permits users in cluster"
 

@@ -33,9 +33,9 @@ module Utils
         real_now = Time.zone.now
 
         # All but 1 month of meals should be in past.
-        Timecop.travel(((MONTHS - 1) * 30).days.ago.beginning_of_week.midnight) do
+        Timecop.freeze(((MONTHS - 1) * 30).days.ago.beginning_of_week.midnight) do
           MONTHS.times do |month|
-            Timecop.travel(month.months) do
+            Timecop.freeze(month.months) do
               finalize_and_run_statements if month > 0 && Time.zone.now < real_now
               4.times do |week|
                 create_meals_and_signups_for_week(week)
@@ -72,7 +72,9 @@ module Utils
             asst_cooks: staff[1..2],
             cleaners: staff[3..4],
             served_at: served_at,
-            creator: creator
+            creator: creator,
+            created_at: community.created_at,
+            updated_at: community.updated_at
           ))
           meal.build_reservations
           meal.save!

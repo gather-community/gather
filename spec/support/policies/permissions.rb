@@ -73,6 +73,16 @@ shared_context "policy permissions" do
   let(:wikiist) { create(:wikiist, first_name: "wikiist") }
   let(:wikiist_cmtyB) { create(:wikiist, community: communityB, first_name: "wikiist_cmtyB") }
 
+  shared_examples_for "permits super admins only" do
+    it "forbids cluster admins from cluster" do
+      expect(subject).not_to permit(cluster_admin_cmtyX, record)
+    end
+
+    it "permits outside super admins" do
+      expect(subject).to permit(super_admin_cmtyX, record)
+    end
+  end
+
   shared_examples_for "permits cluster and super admins" do
     it "permits cluster admins from cluster" do
       expect(subject).to permit(cluster_admin_cmtyX, record)

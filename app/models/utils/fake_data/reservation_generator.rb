@@ -1,10 +1,12 @@
 module Utils
   module FakeData
     class ReservationGenerator < Generator
-      attr_accessor :resource_map, :data
+      attr_accessor :resource_map, :community, :data
+
       RESERVATIONS_EXPORTED_ON = Date.new(2017, 6, 14)
 
-      def initialize(resource_map:)
+      def initialize(community:, resource_map:)
+        self.community = community
         self.resource_map = resource_map
       end
 
@@ -19,7 +21,9 @@ module Utils
             reserver: adults.sample,
             resource: resource_map[row["resource_id"]],
             guidelines_ok: "1",
-            name: Faker::Hipster.words(2).join(" ").capitalize[0..23]
+            name: Faker::Hipster.words(2).join(" ").capitalize[0..23],
+            created_at: community.created_at,
+            updated_at: community.updated_at
           ))
         end
       end

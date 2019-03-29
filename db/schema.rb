@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190308221522) do
+ActiveRecord::Schema.define(version: 20190329164358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 20190308221522) do
     t.integer "formula_id", null: false
     t.text "kids"
     t.datetime "menu_posted_at"
+    t.boolean "no_allergens", default: false, null: false
     t.text "notes"
     t.datetime "served_at", null: false
     t.text "side"
@@ -313,7 +314,7 @@ ActiveRecord::Schema.define(version: 20190308221522) do
     t.index ["meal_id"], name: "index_reminder_deliveries_on_meal_id"
     t.index ["reminder_id"], name: "index_reminder_deliveries_on_reminder_id"
     t.index ["shift_id"], name: "index_reminder_deliveries_on_shift_id"
-    t.check_constraint :reminder_deliveries_583897000, "(((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL)))"
+    t.check_constraint :reminder_deliveries_741100539, "(((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL)))"
   end
 
   create_table "reminders", force: :cascade do |t|
@@ -330,7 +331,7 @@ ActiveRecord::Schema.define(version: 20190308221522) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id", "job_id"], name: "index_reminders_on_cluster_id_and_job_id"
     t.index ["role_id"], name: "index_reminders_on_role_id"
-    t.check_constraint :reminders_952604000, "(((role_id IS NOT NULL) AND (job_id IS NULL)) OR ((job_id IS NOT NULL) AND (role_id IS NULL)))"
+    t.check_constraint :reminders_850637520, "(((role_id IS NOT NULL) AND (job_id IS NULL)) OR ((job_id IS NOT NULL) AND (role_id IS NULL)))"
   end
 
   create_table "reservation_guideline_inclusions", id: :serial, force: :cascade do |t|

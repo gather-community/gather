@@ -35,6 +35,6 @@ module MealsHelper
 
   def sorted_allergens
     prefix = "activerecord.attributes.meal.allergen_"
-    Meal::ALLERGENS.sort_by { |a| [a == "none" ? 1 : 0, I18n.t("#{prefix}_#{a}")] }
+    Meal::ALLERGENS.sort_by { |a| I18n.t("#{prefix}_#{a}") }
   end
 end

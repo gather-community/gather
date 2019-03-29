@@ -63,7 +63,7 @@ module Meals
         items = Meal::MENU_ITEMS.select { |i| meal[i].present? }
         items = items.map { |i| Meal.human_attribute_name(i).downcase }.join(", ")
         items = items.empty? ? nil : t("meals.form.summaries.with_items", items: items)
-        allergens = t("meals.form.summaries.and_allergen_count", count: meal.allergens.without("none").size)
+        allergens = t("meals.form.summaries.and_allergen_count", count: meal.allergens.size)
         h.safe_join([meal.title, items, allergens].compact, ", ")
       else
         safe_str << t("meals.form.summaries.no_menu")

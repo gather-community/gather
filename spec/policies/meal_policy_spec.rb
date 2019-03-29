@@ -223,7 +223,7 @@ describe MealPolicy do
       [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
     end
     let(:menu_attribs) do
-      %i[title entrees side kids dessert notes] + Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
+      %i[title entrees side kids dessert notes no_allergens] + Meal::ALLERGENS.map { |a| :"allergen_#{a}" }
     end
     let(:worker_attribs) { [assignments_attributes: %i[id user_id role_id _destroy]] }
     let(:head_cook_attribs) { %i[allergen_dairy title capacity entrees] }

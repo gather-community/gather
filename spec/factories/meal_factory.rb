@@ -31,7 +31,6 @@ FactoryBot.define do
     trait :with_menu do
       title "Yummy food"
       entrees "Good stuff"
-      allergen_gluten true
     end
 
     trait :finalized do

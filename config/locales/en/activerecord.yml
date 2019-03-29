@@ -45,7 +45,7 @@ en:
         allergen_bananas: "Bananas"
         allergen_tofu: "Tofu"
         allergen_eggplant: "Eggplant"
-        allergen_none: "None of these"
+        no_allergens: "None of these"
         community_id: "Host Community"
         served_at: "Date/Time"
         communities: "Communities"

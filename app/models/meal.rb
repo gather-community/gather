@@ -4,7 +4,7 @@ class Meal < ApplicationRecord
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds
-    tree_nuts pineapple bananas tofu eggplant none)
+    tree_nuts pineapple bananas tofu eggplant)
   DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}
   MENU_ITEMS = %w(entrees side kids dessert notes)
 
@@ -85,8 +85,7 @@ class Meal < ApplicationRecord
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  validate :allergens_some_or_none_if_menu
-  validate :allergen_none_alone
+  validate :allergens_specified_appropriately
   validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: {message: :need_location}
   validates_with Meals::SignupsValidator
@@ -242,15 +241,12 @@ class Meal < ApplicationRecord
     end
   end
 
-  def allergens_some_or_none_if_menu
-    if menu_items_present? && allergens.empty?
+  def allergens_specified_appropriately
+    return unless menu_items_present?
+    if allergens.empty? && !no_allergens?
       errors.add(:allergens, "at least one box must be checked if menu entered")
-    end
-  end
-
-  def allergen_none_alone
-    if allergen_none? && allergens.size > 1
-      errors.add(:allergens, "none can't be selected if other allergens present")
+    elsif no_allergens? && allergens.any?
+      errors.add(:allergens, "'None' can't be selected if other allergens present")
     end
   end
 

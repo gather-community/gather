@@ -64,7 +64,7 @@ en:
         recipient_type: "Recipients"
       meals/cost:
         ingredient_cost: "Ingredient Cost"
-        pantry_cost: "Pantry Reimbursables"
+        pantry_cost: "Pantry Reimbursable Cost"
         payment_method: "Reimbursement Method"
       meals/formula:
         name: "Name"

@@ -4,7 +4,7 @@ class MealsController < ApplicationController
   include Lensable
   include MealShowable
 
-  decorates_assigned :meals, :cost, :formula, :meal_summary
+  decorates_assigned :meals, :meal_summary
 
   before_action :create_worker_change_notifier, only: :update
   before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]

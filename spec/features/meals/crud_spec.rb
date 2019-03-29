@@ -80,7 +80,7 @@ feature "meal crud", js: true do
       click_link("Edit")
       click_link("Edit Expenses")
       fill_in("Ingredient Cost", with: "125.66")
-      fill_in("Pantry Cost", with: "12.30")
+      fill_in("Pantry Reimbursable Cost", with: "12.30")
       choose("Balance Credit")
       click_button("Save")
       expect_success

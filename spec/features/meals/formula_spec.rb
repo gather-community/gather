@@ -29,7 +29,7 @@ feature "formulas", js: true do
     fill_in("Adult (Meat)", with: "$2.50")
     fill_in("Teen (Meat)", with: "2")
     find("#meals_formula_pantry_calc_type").select("Percentage")
-    fill_in("Pantry Fee Amount", with: "10.2%")
+    fill_in("Pantry Fee", with: "10.2%")
     click_button("Save")
     expect_success
 

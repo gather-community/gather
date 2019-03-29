@@ -5,7 +5,7 @@ module MealShowable
   extend ActiveSupport::Concern
 
   included do
-    decorates_assigned :meal, :signup, :prev_meal, :next_meal, :cost, :formula, :signups, :household, :account
+    decorates_assigned :meal, :signup, :prev_meal, :next_meal, :cost, :formula, :account, :signups, :household
     helper_method :sample_meal
   end
 

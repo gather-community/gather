@@ -72,6 +72,10 @@ class MealPolicy < ApplicationPolicy
       (active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?)
   end
 
+  def show_reimbursement_details?
+    active_admin_or?(:meals_coordinator, :biller) || head_cook?
+  end
+
   def change_date_loc_invites?
     active_admin_or?(:meals_coordinator)
   end

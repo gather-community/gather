@@ -88,8 +88,10 @@ end %>
                 </td>
                 <td><%= formula.pantry_fee_nice %></td>
               </tr>
-              <% if policy(account).show? && cost.present? %>
+              <% if cost.present? && policy(meal).show_reimbursement_details? %>
                 <% if formula.pantry_reimbursement? %>
+                  <%# This is in here because without context an average
+                      user might think it's related to pantry fee. %>
                   <tr>
                     <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
                     <td><%= cost.pantry_cost_nice %></td>

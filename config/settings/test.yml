@@ -1,2 +1,4 @@
 url:
+  host: gather.localhost.tv
+  protocol: http
   port: 31337

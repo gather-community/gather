@@ -4,7 +4,5 @@ reminders:
   time_of_day: 6 # 6:00am
 photos:
   max_size_mb: 8
-url:
-  port: 80 # Overridden where necessary
 work:
   min_age: 5

@@ -16,13 +16,6 @@ oauth:
 # Get a secret key by running 'rake secret'.
 secret_key_base: <secret key>
 
-# URL settings
-# Below is a standard development setup. In production, set the appropriate host (apex domain) and protocol.
-# localhost.tv is a public domain that resolves to 127.0.0.1 for all subdomains.
-url:
-  host: gather.localhost.tv
-  protocol: https
-
 email:
   from: Gather <support@example.coop>
   webmaster: someone@example.com

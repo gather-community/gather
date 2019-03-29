@@ -29,7 +29,7 @@ feature "finalize meal", js: true do
 
     # Fill in expenses
     fill_in("Ingredient Cost", with: "100")
-    fill_in("Pantry Cost", with: "10")
+    fill_in("Pantry Reimbursable Cost", with: "10")
     choose("Balance Credit")
     click_button("Continue")
 

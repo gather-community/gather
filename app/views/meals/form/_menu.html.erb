@@ -10,7 +10,7 @@
   <div class="form-group text optional meal_allergens
     <%= meal.errors[:allergens].present? ? "has-error" : "" %>">
     <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
-    <div class="boxes col-sm-9">
+    <div class="boxes col-sm-9" <%= Rails.env.test? ? 'style="height: 200px"' : '' %>
       <% meal.allergen_options.each do |allergen| %>
         <div>
           <%= label_tag do %>

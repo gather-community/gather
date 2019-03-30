@@ -25,6 +25,10 @@ class MealDecorator < ApplicationDecorator
     end
   end
 
+  def nonempty_menu_items
+    MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
+  end
+
   # Returns a non-persisted SignupPolicy with this meal. Used for policy checks.
   def sample_signup
     @sample_signup ||= Signup.new(meal: meal)

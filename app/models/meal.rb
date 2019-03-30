@@ -10,8 +10,6 @@ class Meal < ApplicationRecord
 
   acts_as_tenant :cluster
 
-  serialize :allergens, JSON
-
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
   belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
@@ -171,7 +169,7 @@ class Meal < ApplicationRecord
   end
 
   def menu_posted?
-    MENU_ITEMS.any? { |i| self[i].present? } || any_allergens?
+    MENU_ITEMS.any? { |i| self[i].present? } || allergens?
   end
 
   def nonempty_menu_items
@@ -196,24 +194,8 @@ class Meal < ApplicationRecord
         served_at, served_at, community_name, community_name, id)
   end
 
-  def any_allergens?
-    allergens.present? && allergens != ["none"]
-  end
-
-  ALLERGENS.each do |allergen|
-    define_method("allergen_#{allergen}?") do
-      allergens.include?(allergen)
-    end
-
-    alias_method "allergen_#{allergen}", "allergen_#{allergen}?"
-
-    define_method("allergen_#{allergen}=") do |yn|
-      if yn == true || yn == "1"
-        self.allergens << allergen unless send("allergen_#{allergen}?")
-      else
-        allergens.delete(allergen)
-      end
-    end
+  def allergen?(allergen)
+    allergens.include?(allergen)
   end
 
   private

@@ -36,7 +36,7 @@ module Meals
     end
 
     def collapse?
-      !expanded? && meal.persisted? && !block_content.match?(/class="error"/)
+      !expanded? && meal.persisted? && !block_content.match?(/class="error("| )/)
     end
 
     def block_content

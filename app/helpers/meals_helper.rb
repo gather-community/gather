@@ -32,9 +32,4 @@ module MealsHelper
     icon_tag("question-circle", title: t("signups.tooltips.#{type}"), data: {toggle: "tooltip"}) <<
       t("signups.diner_types.#{type}", count: 1)
   end
-
-  def sorted_allergens
-    prefix = "activerecord.attributes.meal.allergen_"
-    Meal::ALLERGENS.sort_by { |a| I18n.t("#{prefix}_#{a}") }
-  end
 end

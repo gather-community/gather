@@ -11,10 +11,13 @@
     <%= meal.errors[:allergens].present? ? "has-error" : "" %>">
     <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
     <div class="boxes col-sm-9">
-      <% sorted_allergens.each do |allergen| %>
+      <% meal.allergen_options.each do |allergen| %>
         <div>
-          <%= f.check_box("allergen_#{allergen}", disabled: !policy(meal).change_menu?) %>
-          <%= f.label("allergen_#{allergen}") %>
+          <%= label_tag do %>
+            <%= check_box_tag("meal[allergens][]", allergen, meal.allergen?(allergen),
+                  disabled: !policy(meal).change_menu?) %>
+            <%= allergen %>
+          <% end %>
         </div>
       <% end %>
       <div>

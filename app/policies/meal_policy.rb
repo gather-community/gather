@@ -164,7 +164,7 @@ class MealPolicy < ApplicationPolicy
   end
 
   def menu_attribs
-    Meal::ALLERGENS.map { |a| :"allergen_#{a}" } + %i[title entrees side kids dessert notes no_allergens]
+    %i[title entrees side kids dessert notes no_allergens] << {allergens: []}
   end
 
   def worker_attribs

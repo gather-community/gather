@@ -68,6 +68,10 @@ class MealDecorator < ApplicationDecorator
     @cost ||= meal.cost.decorate
   end
 
+  def allergen_options
+    (%w[Shellfish Soy Corn Dairy Eggs Peanuts Almonds Pineapple Bananas Tofu Eggplant] + allergens).uniq.sort
+  end
+
   def worker_links_for_role(role)
     assignments = assignments_by_role[role] || []
     links = assignments.map { |a| h.user_link(a.user, highlight: h.lenses[:user].value) }

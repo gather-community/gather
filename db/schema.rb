@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190329164358) do
+ActiveRecord::Schema.define(version: 20190329164909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 20190329164358) do
   end
 
   create_table "meals", id: :serial, force: :cascade do |t|
-    t.text "allergens", default: "[]", null: false
+    t.jsonb "allergens", default: [], null: false
     t.integer "capacity", null: false
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false

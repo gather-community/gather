@@ -26,7 +26,7 @@ class MealDecorator < ApplicationDecorator
   end
 
   def nonempty_menu_items
-    MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
+    Meal::MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
   end
 
   # Returns a non-persisted SignupPolicy with this meal. Used for policy checks.
@@ -73,7 +73,7 @@ class MealDecorator < ApplicationDecorator
   end
 
   def allergen_options
-    (%w[Shellfish Soy Corn Dairy Eggs Peanuts Almonds Pineapple Bananas Tofu Eggplant] + allergens).uniq.sort
+    (community.settings.meals.allergens.split(/\s*,\s*/) + allergens).uniq.sort
   end
 
   def worker_links_for_role(role)

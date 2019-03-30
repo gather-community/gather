@@ -8,6 +8,7 @@ en:
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
+            allergens: "Allergens"
             show_reimb_form: "Show printable reimbursement form"
             cooks_can_finalize: "Cooks can finalize meals"
             default_capacity: "Default Capacity"
@@ -50,6 +51,7 @@ en:
         settings:
           meals:
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
+            allergens: "Comma-separated list of allergens cooks select from when posting menus."
             show_reimb_form: "Whether to show a printable reimbursement form (including grocery and pantry amounts and reimbursement method) on the meal summary page. Uncheck if you prefer an electronic reimbursement process."
             cooks_can_finalize: "Whether head cooks can finalize meals in addition to billers, meals coordinators, and admins."
             default_capacity: "The default setting for how many people a meal can accommodate."

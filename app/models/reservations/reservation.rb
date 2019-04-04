@@ -136,10 +136,10 @@ module Reservations
 
     def restrict_changes_in_past
       return unless persisted? && !recently_created? && !privileged_changer?
-      if will_save_change_to_starts_at? && starts_at_was.past?
+      if will_save_change_to_starts_at? && starts_at_was&.past?
         errors.add(:starts_at, "can't be changed after reservation begins")
       end
-      if will_save_change_to_ends_at? && ends_at.past? # rubocop:disable Style/GuardClause # || structure
+      if will_save_change_to_ends_at? && ends_at&.past? # rubocop:disable Style/GuardClause # || structure
         errors.add(:ends_at, "can't be changed to a time in the past")
       end
     end

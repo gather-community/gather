@@ -24,10 +24,10 @@ class StatementsController < ApplicationController
     with_no_users = Billing::Account.includes(:household).with_activity_but_no_users(current_community)
 
     if with_no_users.any?
+      who = with_no_users.map { |a| a.decorate.household_name }.join(", ")
       flash[:alert] = "The following households have no associated users and thus "\
-        "statements were not generated for them: " <<
-        with_no_users.map { |a| a.decorate.household_name }.join(", ") <<
-        ". Try sending statements again once the households have associated users."
+        "statements were not generated for them: #{who}. "\
+        "Try sending statements again once the households have associated users."
     end
 
     redirect_to(accounts_path)

@@ -94,6 +94,7 @@ feature "meal crud", js: true do
       click_link("Southern Beans")
       expect(page).to have_content("Southern Beans and Rice")
       expect(page).to have_content("Chocolate")
+      expect(page).to have_content("Shellfish")
 
       summary_close_reopen
     end
@@ -155,7 +156,7 @@ feature "meal crud", js: true do
     fill_in("Kids", with: "Mac and cheese")
     fill_in("Dessert", with: "Chocolate")
     fill_in("Notes", with: "Partially organic")
-    check("Dairy")
+    check("Shellfish")
     click_button("Save")
     expect_success
   end

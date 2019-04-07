@@ -34,6 +34,7 @@ class Community < ApplicationRecord
      default: "directory", required: true},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},
+      {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
       {key: :default_capacity, type: :integer, required: true, default: 50},
       {key: :show_reimb_form, type: :boolean, default: false},
       {key: :cooks_can_finalize, type: :boolean, default: false},

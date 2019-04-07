@@ -4,13 +4,11 @@ class Meal < ApplicationRecord
   DEFAULT_TIME = 18.hours + 15.minutes
   DEFAULT_CAPACITY = 64
   ALLERGENS = %w(gluten shellfish soy corn dairy eggs peanuts almonds
-    tree_nuts pineapple bananas tofu eggplant none)
+    tree_nuts pineapple bananas tofu eggplant)
   DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}
   MENU_ITEMS = %w(entrees side kids dessert notes)
 
   acts_as_tenant :cluster
-
-  serialize :allergens, JSON
 
   belongs_to :community, class_name: "Community"
   belongs_to :creator, class_name: "User"
@@ -85,8 +83,7 @@ class Meal < ApplicationRecord
   validate :enough_capacity_for_current_signups
   validate :title_and_entree_if_other_menu_items
   validate :at_least_one_community
-  validate :allergens_some_or_none_if_menu
-  validate :allergen_none_alone
+  validate :allergens_specified_appropriately
   validate { reservation_handler.validate_meal if reservations.any? }
   validates :resources, presence: {message: :need_location}
   validates_with Meals::SignupsValidator
@@ -172,11 +169,7 @@ class Meal < ApplicationRecord
   end
 
   def menu_posted?
-    MENU_ITEMS.any? { |i| self[i].present? } || any_allergens?
-  end
-
-  def nonempty_menu_items
-    MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |i, t| t.blank? }
+    allergens? || title? || MENU_ITEMS.any? { |a| self[a].present? }
   end
 
   # Returns a relation for all meals following the current one.
@@ -197,31 +190,11 @@ class Meal < ApplicationRecord
         served_at, served_at, community_name, community_name, id)
   end
 
-  def any_allergens?
-    allergens.present? && allergens != ["none"]
-  end
-
-  ALLERGENS.each do |allergen|
-    define_method("allergen_#{allergen}?") do
-      allergens.include?(allergen)
-    end
-
-    alias_method "allergen_#{allergen}", "allergen_#{allergen}?"
-
-    define_method("allergen_#{allergen}=") do |yn|
-      if yn == true || yn == "1"
-        self.allergens << allergen unless send("allergen_#{allergen}?")
-      else
-        allergens.delete(allergen)
-      end
-    end
+  def allergen?(allergen)
+    allergens.include?(allergen)
   end
 
   private
-
-  def menu_items_present?
-    (['title'] + MENU_ITEMS).any? { |a| self[a].present? }
-  end
 
   def enough_capacity_for_current_signups
     return unless persisted? && !finalized? && capacity && capacity < signup_count
@@ -229,28 +202,22 @@ class Meal < ApplicationRecord
   end
 
   def title_and_entree_if_other_menu_items
-    %w(title entrees).each do |attrib|
-      if self[attrib].blank? && (menu_items_present? || allergens.present?)
-        errors.add(attrib, "can't be blank if other menu items entered")
-      end
+    %w[title entrees].each do |attrib|
+      errors.add(attrib, "can't be blank if other menu items entered") if self[attrib].blank? && menu_posted?
     end
   end
 
   def at_least_one_community
-    if invitations.reject(&:blank?).empty?
-      errors.add(:invitations, "you must invite at least one community")
-    end
+    return unless invitations.reject(&:blank?).empty?
+    errors.add(:invitations, "you must invite at least one community")
   end
 
-  def allergens_some_or_none_if_menu
-    if menu_items_present? && allergens.empty?
+  def allergens_specified_appropriately
+    return unless menu_posted?
+    if !allergens? && !no_allergens?
       errors.add(:allergens, "at least one box must be checked if menu entered")
-    end
-  end
-
-  def allergen_none_alone
-    if allergen_none? && allergens.size > 1
-      errors.add(:allergens, "none can't be selected if other allergens present")
+    elsif allergens? && no_allergens?
+      errors.add(:allergens, "'None' can't be selected if other allergens present")
     end
   end
 

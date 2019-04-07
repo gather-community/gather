@@ -67,7 +67,7 @@ class MealsController < ApplicationController
       community_ids: [current_user.community_id],
       creator: current_user
     )
-    @meal.assign_attributes(permitted_attributes(@meal))
+    @meal.assign_attributes(meal_attributes)
     @meal.build_reservations
     authorize(@meal)
     if @meal.save
@@ -82,7 +82,7 @@ class MealsController < ApplicationController
   def update
     @meal = Meal.find(params[:id])
     authorize(@meal)
-    @meal.assign_attributes(permitted_attributes(@meal))
+    @meal.assign_attributes(meal_attributes)
     @meal.build_reservations
     if @meal.save
       flash[:success] = "Meal updated successfully."
@@ -159,6 +159,12 @@ class MealsController < ApplicationController
   end
 
   private
+
+  def meal_attributes
+    attribs = permitted_attributes(@meal)
+    attribs["allergens"] ||= []
+    attribs
+  end
 
   def init_meal(community: current_community, formula_id: nil)
     formula = formula_id.nil? ? Meals::Formula.default_for(community) : Meals::Formula.find(formula_id)

@@ -86,7 +86,7 @@ describe Meal do
     it "gets set automatically when menu entered on update" do
       meal = create(:meal)
       expect(meal.menu_posted_at).to be_nil
-      meal.update!(title: "Fish!", entrees: "Fish, obvs", allergen_none: true)
+      meal.update!(title: "Fish!", entrees: "Fish, obvs", no_allergens: true)
       expect(meal.menu_posted_at).to be_within(1.second).of(Time.current)
     end
 

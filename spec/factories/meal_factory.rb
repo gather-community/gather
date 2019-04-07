@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :meal do
     transient do
@@ -31,7 +33,7 @@ FactoryBot.define do
     trait :with_menu do
       title "Yummy food"
       entrees "Good stuff"
-      allergen_gluten true
+      allergens { %w[Dairy Soy] }
     end
 
     trait :finalized do

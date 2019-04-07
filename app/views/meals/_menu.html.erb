@@ -29,8 +29,8 @@
     <hr/>
     <div class="menu-label smaller">allergens</div>
     <section>
-      <% if meal.any_allergens? %>
-        <%= meal.allergens.map{ |a| t("activerecord.attributes.meal.allergen_#{a}") }.join(", ") %>
+      <% if meal.allergens? %>
+        <%= meal.allergens.join(", ") %>
       <% else %>
         [None]
       <% end %>

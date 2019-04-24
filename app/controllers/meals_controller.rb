@@ -162,7 +162,7 @@ class MealsController < ApplicationController
 
   def meal_attributes
     attribs = permitted_attributes(@meal)
-    attribs["allergens"] ||= []
+    attribs["allergens"] ||= [] if @meal.new_record?
     attribs
   end
 

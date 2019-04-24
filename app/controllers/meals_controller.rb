@@ -58,6 +58,7 @@ class MealsController < ApplicationController
   def edit
     @meal = Meal.find(params[:id])
     authorize(@meal)
+    ensure_head_cook_assignment_present
     prep_form_vars
   end
 
@@ -216,6 +217,11 @@ class MealsController < ApplicationController
 
   def prep_worker_form_vars
     @roles = (meal.roles + meal.assignments.map(&:role)).uniq
+  end
+
+  def ensure_head_cook_assignment_present
+    return unless @meal.head_cook.nil?
+    @meal.assignments.build(role: meal.head_cook_role)
   end
 
   def create_worker_change_notifier

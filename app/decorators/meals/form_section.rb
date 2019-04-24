@@ -51,10 +51,11 @@ module Meals
     end
 
     def workers_summary
-      if meal.workers.empty?
+      nonblank_workers = meal.workers.reject(&:blank?)
+      if nonblank_workers.empty?
         safe_str << t("meals.form.summaries.no_workers")
       else
-        h.safe_join(UserDecorator.decorate_collection(meal.workers).map(&:name), ", ")
+        h.safe_join(UserDecorator.decorate_collection(nonblank_workers).map(&:name), ", ")
       end
     end
 

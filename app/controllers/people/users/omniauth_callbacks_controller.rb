@@ -10,8 +10,12 @@ module People
         auth = request.env["omniauth.auth"]
         invite_token = request.env["omniauth.params"]["state"].presence
 
+        if auth.info[:email].blank?
+          reason = "Google did not provide an email address. Please notify an administrator."
+          set_flash_message(:error, :failure, kind: "Google", reason: reason)
+          redirect_to(sign_in_url)
         # If invite token is present, try to find user by that.
-        if invite_token && (by_token = User.with_reset_password_token(invite_token))
+        elsif invite_token && (by_token = User.with_reset_password_token(invite_token))
           if !by_token.reset_password_period_valid?
             set_flash_message(:error, :failure, kind: "Google", reason: "your invitation has expired")
             redirect_to(sign_in_url)

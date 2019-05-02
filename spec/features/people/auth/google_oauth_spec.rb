@@ -12,6 +12,17 @@ feature "google oauth" do
       stub_omniauth(google_oauth2: {email: oauth_google_id}) { example.run }
     end
 
+    context "with null email from google" do
+      let(:oauth_google_id) { nil }
+
+      it "should show error" do
+        visit "/"
+        expect_valid_sign_in_link_and_click
+        expect(page).to be_signed_out_root
+        expect(page).to have_content("Google did not provide an email address")
+      end
+    end
+
     context "with token" do
       let!(:sent_token) { user.send(:set_reset_password_token) }
 

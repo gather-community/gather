@@ -1,6 +1,8 @@
-DEFAULT_PASSWORD = "ga4893d4bXq;"
+# frozen_string_literal: true
 
 FactoryBot.define do
+  FactoryBot::DEFAULT_PASSWORD = "ga4893d4bXq;"
+
   factory :user do
     transient do
       community nil
@@ -8,11 +10,11 @@ FactoryBot.define do
 
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    email { "person#{rand(10000000..99999999)}@example.com" }
-    google_email { "person#{rand(10000000..99999999)}@gmail.com" }
+    email { "person#{rand(10_000_000..99_999_999)}@example.com" }
+    google_email { "person#{rand(10_000_000..99_999_999)}@gmail.com" }
     mobile_phone "5555551212"
-    password DEFAULT_PASSWORD
-    password_confirmation DEFAULT_PASSWORD
+    password FactoryBot::DEFAULT_PASSWORD
+    password_confirmation FactoryBot::DEFAULT_PASSWORD
 
     household do
       attribs = {with_members: false} # Don't want to create extra users.

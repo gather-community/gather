@@ -90,18 +90,18 @@ Rails.application.routes.draw do
     # index - The calendar export page
     resources :exports, only: :index do
       member do
-        TOKEN_CONSTRAINTS = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
+        token_constraints = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
 
         # This is the personalized show action, allowing paths to include the user's calendar token,
         # e.g. /calendars/meals/D7sbPv7YCUhxMs4Pyx9D.
         # The calendar's type gets captured as the :id param, so this is equivalent to
         # /calendars/:id/:calendar_token
-        get ":calendar_token", to: "exports#personalized", as: :personalized, constraints: TOKEN_CONSTRAINTS
+        get ":calendar_token", to: "exports#personalized", as: :personalized, constraints: token_constraints
 
         # This is the community show action, allowing paths to include the community's calendar token.
         # The community part is indicated by a leading +, e.g.
         # e.g. /calendars/meals/+X7sbPv7YCUhxMs4Pyx9D.
-        get "+:calendar_token", to: "exports#community", as: :community, constraints: TOKEN_CONSTRAINTS
+        get "+:calendar_token", to: "exports#community", as: :community, constraints: token_constraints
       end
       collection do
         put :reset_token

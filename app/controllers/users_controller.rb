@@ -111,7 +111,7 @@ class UsersController < ApplicationController
     authorize(@user)
     skip_email_confirmation_if_never_signed_in!
     if @user.update(permitted_attributes(@user))
-      flash[:success] = "User updated successfully."
+      set_flash_on_update
       redirect_to(user_path(@user))
     else
       prepare_user_form
@@ -259,6 +259,23 @@ class UsersController < ApplicationController
       flash[:success] = "User created and invited successfully."
     else
       flash[:success] = "User created successfully."
+    end
+  end
+
+  def set_flash_on_update
+    # Unlike with create, confirmation instructions are sent automatically by Devise because
+    # we didn't opt out of them.
+    msg = @user == current_user ? +"Profile updated successfully." : +"User updated successfully."
+    if @user.unconfirmed_email?
+      if @user == current_user
+        msg << " You need to confirm your new email address. "
+        msg << "Please check your email at #{@user.unconfirmed_email}."
+      else
+        msg << " This user needs to confirm their new email address (#{@user.unconfirmed_email})."
+      end
+      flash[:alert] = msg
+    else
+      flash[:success] = msg
     end
   end
 end

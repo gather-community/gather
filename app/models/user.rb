@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
-    omniauth_providers: [:google_oauth2]
+    :confirmable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"

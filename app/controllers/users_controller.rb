@@ -89,7 +89,12 @@ class UsersController < ApplicationController
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
     if @user.save
-      flash[:success] = "User created successfully."
+      if params[:save_and_invite]
+        Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
+        flash[:success] = "User created and invited successfully."
+      else
+        flash[:success] = "User created successfully."
+      end
       redirect_to(user_path(@user))
     else
       prepare_user_form

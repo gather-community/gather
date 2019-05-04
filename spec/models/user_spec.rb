@@ -223,6 +223,43 @@ describe User do
     end
   end
 
+  # This is important because we use reset_password_token for sign in invitations and thus email
+  # confirmations. If the user's email changes we can't accept the old invite.
+  describe "changing email deletes reset_password_token" do
+    let(:user) { create(:user) }
+    subject { user.reset_password_token }
+
+    before { user.reset_reset_password_token! }
+
+    context "with email change" do
+      before do
+        user.reload
+        user.update!(email: "new@foo.com")
+      end
+
+      it { is_expected.to be_nil }
+    end
+
+    context "with email change but no reconfirm" do
+      before do
+        user.reload
+        user.skip_reconfirmation!
+        user.update!(email: "new@foo.com")
+      end
+
+      it { is_expected.to be_nil }
+    end
+
+    context "without email change" do
+      before do
+        user.reload
+        user.update!(first_name: "Ruddiger")
+      end
+
+      it { is_expected.not_to be_nil }
+    end
+  end
+
   # Our approach to destruction is to:
   # - Set the policy to only disallow deletions based on what users of various roles should be able
   #   to destroy given various combinations of existing associations.

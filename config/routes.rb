@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     member do
       put :activate
       put :deactivate
+      put :resend_email_confirmation
       post :impersonate
       post :unimpersonate
     end

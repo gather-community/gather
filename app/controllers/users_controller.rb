@@ -119,6 +119,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_email_confirmation
+    @user = User.find(params[:id])
+    authorize(@user, :update_info?)
+    @user.send_confirmation_instructions
+    flash[:success] = "Instructions sent."
+    redirect_to(user_path(@user))
+  end
+
   def impersonate
     @user = User.find(params[:id])
     authorize(@user)

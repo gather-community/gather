@@ -88,13 +88,9 @@ class UsersController < ApplicationController
     return unless bootstrap_household
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
+    skip_email_confirmation_if_never_signed_in!
     if @user.save
-      if params[:save_and_invite]
-        Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
-        flash[:success] = "User created and invited successfully."
-      else
-        flash[:success] = "User created successfully."
-      end
+      send_invite_and_set_flash_on_create
       redirect_to(user_path(@user))
     else
       prepare_user_form
@@ -113,6 +109,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return unless bootstrap_household
     authorize(@user)
+    skip_email_confirmation_if_never_signed_in!
     if @user.update(permitted_attributes(@user))
       flash[:success] = "User updated successfully."
       redirect_to(user_path(@user))
@@ -240,5 +237,28 @@ class UsersController < ApplicationController
 
   def sample_user
     User.new(household: Household.new(community: current_community))
+  end
+
+  def skip_email_confirmation_if_never_signed_in!
+    # Per app policy, users that have never signed in can only sign in via an invite email, which also
+    # confirms their email address. So there is no need to also send a confirmation email to these folks
+    # when saving them. This is applicable to both create and update.
+    # Wo DO still want to keep confirmed set to false since that is still true and we want to be able
+    # to rely on that flag elsewhere.
+    # However, on update, there is no need to reconfirm (storing new email in unconfirmed_email), and doing so
+    # will result in the invite going to the wrong email if e.g. the admin makes a mistake entering the
+    # email of a new user and then goes back and corrects it.
+    return unless @user.sign_in_count.zero?
+    @user.skip_confirmation_notification!
+    @user.skip_reconfirmation!
+  end
+
+  def send_invite_and_set_flash_on_create
+    if params[:save_and_invite]
+      Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
+      flash[:success] = "User created and invited successfully."
+    else
+      flash[:success] = "User created successfully."
+    end
   end
 end

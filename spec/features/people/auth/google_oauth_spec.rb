@@ -27,7 +27,7 @@ feature "google oauth" do
       let!(:sent_token) { user.send(:set_reset_password_token) }
 
       context "and token is still valid" do
-        context "with no existing google_email" do
+        context "when user with token has no existing google_email" do
           it "should sign the user in and capture their google ID" do
             visit "/?token=#{sent_token}"
             expect_valid_sign_in_link_and_click
@@ -36,7 +36,18 @@ feature "google oauth" do
           end
         end
 
-        context "with different google_email" do
+        context "when user with token already has the google ID" do
+          let(:existing_google_id) { "foo@gmail.com" }
+
+          it "should sign the user in" do
+            visit "/?token=#{sent_token}"
+            expect_valid_sign_in_link_and_click
+            expect(page).to be_signed_in_root
+            expect(user.reload.google_email).to eq("foo@gmail.com")
+          end
+        end
+
+        context "when user with token has different google_email" do
           let(:existing_google_id) { "bar@gmail.com" }
 
           it "should fail with error" do
@@ -47,14 +58,14 @@ feature "google oauth" do
           end
         end
 
-        context "and different user exists with the oauth google ID" do
+        context "when different user exists with the oauth google ID" do
           let!(:other_user) { create(:user, google_email: "foo@gmail.com", first_name: "Torsten") }
 
-          it "should sign in the other user" do
+          it "should fail with error" do
             visit "/?token=#{sent_token}"
             expect_valid_sign_in_link_and_click
-            expect(page).to be_signed_in_root
-            expect(page).to show_signed_in_user_name("Torsten")
+            expect(page).to be_signed_out_root
+            expect(page).to have_content("your Google ID foo@gmail.com is associated with another user")
           end
         end
       end

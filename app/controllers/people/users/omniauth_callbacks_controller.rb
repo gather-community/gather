@@ -9,6 +9,7 @@ module People
       def google_oauth2
         auth = request.env["omniauth.auth"]
         invite_token = request.env["omniauth.params"]["state"].presence
+        by_google_id = User.from_omniauth(auth) # May be nil
 
         if auth.info[:email].blank?
           reason = "Google did not provide an email address. Please notify an administrator."
@@ -26,19 +27,20 @@ module People
               kind: "Google", reason: "you must sign in with the Google ID #{by_token.google_email}")
             redirect_to(sign_in_url)
 
-          # If there is already a user with that google_email, log them in
-          # INSTEAD of the one with the token. Shouldn't happen often.
-          elsif (by_email = User.from_omniauth(auth))
-            store_id_clear_token_and_sign_in(by_email, auth)
+          # If there is a different user with that google_email, notify them.
+          elsif by_google_id.present? && by_google_id != by_token
+            set_flash_message(:error, :failure,
+              kind: "Google", reason: "your Google ID #{auth.info[:email]} is associated with another user")
+            redirect_to(sign_in_url)
 
           # Else log them in and grab their google_email
           else
             store_id_clear_token_and_sign_in(by_token, auth)
           end
         # if no invite, try to find by google_email
-        elsif (by_email = User.from_omniauth(auth))
-          by_email.update_for_oauth!(auth)
-          sign_in_remember_and_redirect(by_email)
+        elsif by_google_id
+          by_google_id.update_for_oauth!(auth)
+          sign_in_remember_and_redirect(by_google_id)
         else
           set_flash_message(:error, :failure,
             kind: "Google", reason: "your Google ID #{auth.info[:email]} was not found in the system")

@@ -63,6 +63,10 @@ module People
       def store_id_clear_token_and_sign_in(user, auth)
         user.update_for_oauth!(auth)
         user.send(:clear_reset_password_token)
+
+        # Since we now know the user controls the email we sent the token to, we can confirm them.
+        user.confirm
+
         sign_in_remember_and_redirect(user)
       end
 

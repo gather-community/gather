@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "sign in invitations", js: true do
+feature "changing password when already signed in", js: true do
   let(:actor) { create(:user, password: "ga4893d4bXq;", password_confirmation: "ga4893d4bXq;") }
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }

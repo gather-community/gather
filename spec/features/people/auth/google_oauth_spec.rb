@@ -17,7 +17,7 @@ feature "google oauth" do
 
       it "should show error" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("Google did not provide an email address")
       end
@@ -30,7 +30,7 @@ feature "google oauth" do
         context "when user with token has no existing google_email" do
           it "should sign the user in and capture their google ID" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_in_root
             expect(user.reload.google_email).to eq("foo@gmail.com")
           end
@@ -41,7 +41,7 @@ feature "google oauth" do
 
           it "should sign the user in" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_in_root
             expect(user.reload.google_email).to eq("foo@gmail.com")
           end
@@ -52,7 +52,7 @@ feature "google oauth" do
 
           it "should fail with error" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_out_root
             expect(page).to have_content("you must sign in with the Google ID bar@gmail.com")
           end
@@ -63,7 +63,7 @@ feature "google oauth" do
 
           it "should fail with error" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_out_root
             expect(page).to have_content("your Google ID foo@gmail.com is associated with another user")
           end
@@ -74,7 +74,7 @@ feature "google oauth" do
         it "should show error" do
           Timecop.travel(User.reset_password_within + 1.hour) do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_out_root
             expect(page).to have_content("invitation has expired")
             expect(user.reload.google_email).to be_nil
@@ -85,7 +85,7 @@ feature "google oauth" do
       context "and token is nonsense" do
         it "should show error" do
           visit "/?token=pants"
-          expect_valid_sign_in_link_and_click
+          expect_sign_in_with_google_link_and_click
           expect(page).to be_signed_out_root
           expect(page).to have_content("foo@gmail.com was not found in the system")
         end
@@ -95,9 +95,12 @@ feature "google oauth" do
     context "with matching email" do
       let(:existing_google_id) { oauth_google_id }
 
+      # User must be already confirmed for this flow.
+      before { user.confirm }
+
       it "should sign the user in and remember after cookie cleared" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to have_signed_in_user(user)
         clear_session_cookie
         visit(meals_path)
@@ -110,7 +113,7 @@ feature "google oauth" do
 
       it "should show error" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("foo@gmail.com was not found in the system")
       end

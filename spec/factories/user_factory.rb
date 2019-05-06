@@ -52,5 +52,10 @@ FactoryBot.define do
     trait :with_photo do
       photo { File.open("#{Rails.root}/spec/fixtures/cooper.jpg") }
     end
+
+    trait :unconfirmed do
+      confirmed_at { nil }
+      confirmation_sent_at { Time.current - 60 }
+    end
   end
 end

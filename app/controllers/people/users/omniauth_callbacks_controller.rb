@@ -13,38 +13,31 @@ module People
 
         if auth.info[:email].blank?
           reason = "Google did not provide an email address. Please notify an administrator."
-          set_flash_message(:error, :failure, kind: "Google", reason: reason)
-          redirect_to(sign_in_url)
+          fail_with_msg(reason: reason)
         # If invite token is present, try to find user by that.
         elsif invite_token && (by_token = User.with_reset_password_token(invite_token))
           if !by_token.reset_password_period_valid?
-            set_flash_message(:error, :failure, kind: "Google", reason: "your invitation has expired")
-            redirect_to(sign_in_url)
+            fail_with_msg(reason: "your invitation has expired")
 
           # If we find them but they are signing in with the wrong google_email, notify them.
           elsif !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
-            set_flash_message(:error, :failure,
-              kind: "Google", reason: "you must sign in with the Google ID #{by_token.google_email}")
-            redirect_to(sign_in_url)
+            fail_with_msg("you must sign in with the Google ID #{by_token.google_email}")
 
           # If there is a different user with that google_email, notify them.
           elsif by_google_id.present? && by_google_id != by_token
-            set_flash_message(:error, :failure,
-              kind: "Google", reason: "your Google ID #{auth.info[:email]} is associated with another user")
-            redirect_to(sign_in_url)
-
-          # Else log them in and grab their google_email
+            fail_with_msg("your Google ID #{auth.info[:email]} is associated with another user")
           else
-            store_id_clear_token_and_sign_in(by_token, auth)
+            clean_up_sign_in(by_token, auth)
           end
         # if no invite, try to find by google_email
         elsif by_google_id
-          by_google_id.update_for_oauth!(auth)
-          sign_in_remember_and_redirect(by_google_id)
+          if by_google_id.confirmed? || by_google_id.email == by_google_id.google_email
+            clean_up_sign_in(by_google_id, auth)
+          else
+            fail_with_msg("you must use an invititation when first signing in")
+          end
         else
-          set_flash_message(:error, :failure,
-            kind: "Google", reason: "your Google ID #{auth.info[:email]} was not found in the system")
-          redirect_to(sign_in_url)
+          fail_with_msg("your Google ID #{auth.info[:email]} was not found in the system")
         end
       end
 
@@ -53,24 +46,24 @@ module People
           Rails.logger.info("OAuth failed. See error email for more details.")
           ExceptionNotifier.notify_exception(StandardError.new("oauth failure"), env: request.env)
         end
-        set_flash_message(:error, :failure,
-          kind: "Google", reason: "of an unspecified error. The administrators have been notified")
-        redirect_to(sign_in_url)
+        fail_with_msg("of an unspecified error. The administrators have been notified")
       end
 
       private
 
-      def store_id_clear_token_and_sign_in(user, auth)
+      def fail_with_msg(msg)
+        set_flash_message(:error, :failure, kind: "Google", reason: msg)
+        redirect_to(sign_in_url)
+      end
+
+      def clean_up_sign_in(user, auth)
         user.update_for_oauth!(auth)
         user.send(:clear_reset_password_token)
 
-        # Since we now know the user controls the email we sent the token to, we can confirm them.
+        # If the user wasn't confirmed before now, we don't let them sign in unless they used an invite
+        # or their email matches their google_email. So if they got this far we can confirm.
         user.confirm
 
-        sign_in_remember_and_redirect(user)
-      end
-
-      def sign_in_remember_and_redirect(user)
         # We always set remember_me for OAuth sign-ins. So if someone signs in with Google
         # on a shared computer and doesn’t sign out explicitly, they stay signed into Gather.
         # BUT they should be explicitly signing out of Google too or that will stay logged in.

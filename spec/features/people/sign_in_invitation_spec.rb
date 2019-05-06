@@ -17,6 +17,7 @@ feature "sign in invitations", js: true do
     end
 
     it do
+      expect(invitee).not_to be_confirmed
       full_sign_in_as(actor)
       visit(user_path(invitee))
       accept_confirm { click_on("Invite") }
@@ -35,6 +36,7 @@ feature "sign in invitations", js: true do
       click_link("Sign in with Google")
       expect(page).to have_signed_in_user(invitee)
       expect(invitee.reload.google_email).to eq("bob1234flob@gmail.com")
+      expect(invitee).to be_confirmed
     end
   end
 
@@ -43,6 +45,7 @@ feature "sign in invitations", js: true do
     let!(:decoy) { create(:user) }
 
     it do
+      expect(invitee).not_to be_confirmed
       full_sign_in_as(actor)
       visit(user_path(invitee))
       accept_confirm { click_on("Invite") }
@@ -63,6 +66,7 @@ feature "sign in invitations", js: true do
       fill_in("Re-type New Password", with: "48hafeirafar42")
       click_on("Reset Password")
       expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
+      expect(invitee.reload).to be_confirmed
     end
   end
 

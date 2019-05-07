@@ -58,5 +58,9 @@ FactoryBot.define do
     trait :unconfirmed do
       confirmed_at { nil }
     end
+
+    trait :pending_reconfirmation do
+      unconfirmed_email { "newemail@example.com" }
+    end
   end
 end

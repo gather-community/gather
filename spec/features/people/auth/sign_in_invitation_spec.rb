@@ -9,7 +9,7 @@ feature "sign in invitations", js: true do
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
   describe "google oauth happy path" do
-    let!(:invitee) { create(:user, first_name: "Bob", last_name: "Flob", google_email: nil) }
+    let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob", google_email: nil) }
     let!(:decoy) { create(:user) }
 
     around do |example|
@@ -41,7 +41,7 @@ feature "sign in invitations", js: true do
   end
 
   describe "password happy path" do
-    let!(:invitee) { create(:user, first_name: "Bob", last_name: "Flob") }
+    let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob") }
     let!(:decoy) { create(:user) }
 
     it do

@@ -88,7 +88,7 @@ class UsersController < ApplicationController
     return unless bootstrap_household
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
-    skip_email_confirmation_if_never_signed_in!
+    skip_email_confirmation_if_unconfirmed!
     if @user.save
       send_invite_and_set_flash_on_create
       redirect_to(user_path(@user))
@@ -109,7 +109,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return unless bootstrap_household
     authorize(@user)
-    skip_email_confirmation_if_never_signed_in!
+    skip_email_confirmation_if_unconfirmed!
     if @user.update(permitted_attributes(@user))
       set_flash_on_update
       redirect_to(user_path(@user))
@@ -255,8 +255,8 @@ class UsersController < ApplicationController
     User.new(household: Household.new(community: current_community))
   end
 
-  def skip_email_confirmation_if_never_signed_in!
-    # Per app policy, users that have never signed in can only sign in via an invite email, which also
+  def skip_email_confirmation_if_unconfirmed!
+    # Per app policy, users that are unconfirmed can only sign in via an invite email, which also
     # confirms their email address. So there is no need to also send a confirmation email to these folks
     # when saving them. This is applicable to both create (trivially) and update.
     # Wo DO still want to keep confirmed set to false since that is still true and we want to be able
@@ -264,7 +264,7 @@ class UsersController < ApplicationController
     # However, on update, there is no need to reconfirm (storing new email in unconfirmed_email), and doing so
     # will result in the invite going to the wrong email if e.g. the admin makes a mistake entering the
     # email of a new user and then goes back and corrects it.
-    return unless @user.sign_in_count.zero?
+    return if @user.confirmed?
     @user.skip_confirmation_notification!
     @user.skip_reconfirmation!
   end

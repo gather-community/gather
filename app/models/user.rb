@@ -227,7 +227,7 @@ class User < ApplicationRecord
   def active_for_authentication?
     # We don't return false for adult inactive users because they
     # can still see some pages.
-    adult?
+    super && adult?
   end
 
   def never_signed_in?

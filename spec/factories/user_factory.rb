@@ -15,6 +15,8 @@ FactoryBot.define do
     mobile_phone "5555551212"
     password FactoryBot::DEFAULT_PASSWORD
     password_confirmation FactoryBot::DEFAULT_PASSWORD
+    confirmed_at { Time.current - 60 }
+    confirmation_sent_at { nil }
 
     household do
       attribs = {with_members: false} # Don't want to create extra users.
@@ -55,7 +57,6 @@ FactoryBot.define do
 
     trait :unconfirmed do
       confirmed_at { nil }
-      confirmation_sent_at { Time.current - 60 }
     end
   end
 end

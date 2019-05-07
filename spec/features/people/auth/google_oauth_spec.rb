@@ -95,9 +95,6 @@ feature "google oauth" do
     context "with matching email" do
       let(:existing_google_id) { oauth_google_id }
 
-      # User must be already confirmed for this flow.
-      before { user.confirm }
-
       it "should sign the user in and remember after cookie cleared" do
         visit "/"
         expect_sign_in_with_google_link_and_click
@@ -116,6 +113,32 @@ feature "google oauth" do
         expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("foo@gmail.com was not found in the system")
+      end
+    end
+
+    context "with unconfirmed user" do
+      let!(:user) { create(:user, :unconfirmed, email: email, google_email: "foo@gmail.com") }
+
+      context "when google ID different from email" do
+        let(:email) { "foo@isp.net" }
+
+        scenario "denies login without invite" do
+          visit("/")
+          expect_sign_in_with_google_link_and_click
+          expect(page).to be_signed_out_root
+          expect(page).to have_content("you must use an invititation when first signing in")
+        end
+      end
+
+      context "when google ID same as email" do
+        let(:email) { "foo@gmail.com" }
+
+        scenario "signs in and confirms" do
+          visit("/")
+          expect_sign_in_with_google_link_and_click
+          expect(page).to be_signed_in_root
+          expect(user.reload).to be_confirmed
+        end
       end
     end
   end

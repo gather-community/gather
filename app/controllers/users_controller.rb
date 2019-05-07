@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     authorize(@user, :update_info?)
     @user.update!(unconfirmed_email: nil, confirmation_token: nil)
-    flash[:success] = "Email change cancelled."
+    flash[:success] = "Email change canceled."
     redirect_to(user_path(@user))
   end
 

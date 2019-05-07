@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
     if @user.save
-      send_invite_and_set_flash_on_create
+      send_invite_and_flash_on_create
       redirect_to(user_path(@user))
     else
       prepare_user_form
@@ -111,7 +111,7 @@ class UsersController < ApplicationController
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
     if @user.update(permitted_attributes(@user))
-      set_flash_on_update
+      flash_on_update
       redirect_to(user_path(@user))
     else
       prepare_user_form
@@ -269,7 +269,7 @@ class UsersController < ApplicationController
     @user.skip_reconfirmation!
   end
 
-  def send_invite_and_set_flash_on_create
+  def send_invite_and_flash_on_create
     if params[:save_and_invite]
       Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
       flash[:success] = "User created and invited successfully."
@@ -278,7 +278,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def set_flash_on_update
+  def flash_on_update
     # Unlike with create, confirmation instructions are sent automatically by Devise because
     # we didn't opt out of them.
     msg = @user == current_user ? +"Profile updated successfully." : +"User updated successfully."
@@ -290,6 +290,8 @@ class UsersController < ApplicationController
         msg << " This user needs to confirm their new email address (#{@user.unconfirmed_email})."
       end
       flash[:alert] = msg
+    # If a user's email address changes, Devise automatically deletes the password reset token for
+    # security purposes. So let's let them know that.
     elsif @user.saved_change_to_reset_password_token? && @user.reset_password_token.blank?
       msg << " However, this change may have invalidated a sign-in invitation.
         You may want to send a new one."

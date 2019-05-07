@@ -20,7 +20,7 @@ feature "user show" do
         click_link("Resend confirmation instructions")
         expect(page).to have_alert("Instructions sent.")
       end
-      expect(emails.map(&:subject)).to eq(["Confirm Your Email"])
+      expect(emails.map(&:subject)).to eq(["Please Confirm Your Email Address"])
     end
 
     scenario "clicking resend instructions link" do

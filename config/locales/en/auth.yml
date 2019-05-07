@@ -20,7 +20,7 @@ en:
       email: "email"
     mailer:
       confirmation_instructions:
-        subject: "Confirm Your Email"
+        subject: "Please Confirm Your Email Address"
       reset_password_instructions:
         subject: "Resetting Your Password"
       unlock_instructions:

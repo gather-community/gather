@@ -12,6 +12,11 @@ class AuthMailer < Devise::Mailer
     super(user.decorate, token, opts)
   end
 
+  def confirmation_instructions(user, token, opts = {})
+    return if user.fake?
+    super(user.decorate, token, opts)
+  end
+
   def sign_in_invitation(user, token)
     return if user.fake?
     @user = user.decorate

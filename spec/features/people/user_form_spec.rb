@@ -44,7 +44,8 @@ feature "user form", js: true do
         expect(page).to have_alert(/confirm (your|their) new email address/)
       end
 
-      expect(emails.map(&:subject)).to eq(["Confirm Your Email"])
+      expect(emails.map(&:subject)).to eq(["Please Confirm Your Email Address"])
+      expect(emails[0].body.encoded).to match(/security measure/)
       expect(user.reload).to be_confirmed
       expect(user.unconfirmed_email).to eq("newone@example.com")
     end

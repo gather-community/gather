@@ -6,7 +6,8 @@ Rails.application.routes.draw do
                      controllers: {
                        sessions: "people/users/sessions",
                        omniauth_callbacks: "people/users/omniauth_callbacks",
-                       passwords: "people/users/passwords"
+                       passwords: "people/users/passwords",
+                       confirmations: "people/users/confirmations"
                      }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 

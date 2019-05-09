@@ -14,7 +14,8 @@ module People
         # The exception to this is if the user is reconfirming (upon email change), in which case
         # we don't confirm them, since the above no longer holds in that case.
         super do |user|
-          user.confirm if user.valid? && !user.confirmed? && !user.pending_reconfirmation?
+          # Note: Using .valid? here instead of .errors.empty? ends up removing the errors from the object.
+          user.confirm if user.errors.empty? && !user.confirmed? && !user.pending_reconfirmation?
         end
       end
     end

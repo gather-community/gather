@@ -485,9 +485,9 @@ describe UserPolicy do
       let(:actor) { user }
       it do
         is_expected.to match_array(
-          %i[id first_name last_name unit_num unit_suffix birthdate email child
+          %i[id first_name last_name unit_num unit_suffix birthdate email child guardian_names
              mobile_phone home_phone work_phone joined_on preferred_contact
-             garage_nums vehicles]
+             garage_nums vehicles keyholders emergency_contacts pets]
         )
       end
     end
@@ -496,9 +496,9 @@ describe UserPolicy do
       let(:actor) { admin }
       it do
         is_expected.to match_array(
-          %i[id first_name last_name unit_num unit_suffix birthdate email child google_email
+          %i[id first_name last_name unit_num unit_suffix birthdate email child guardian_names google_email
              mobile_phone home_phone work_phone joined_on preferred_contact
-             garage_nums vehicles]
+             garage_nums vehicles keyholders emergency_contacts pets]
         )
       end
     end

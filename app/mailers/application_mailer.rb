@@ -39,7 +39,7 @@ class ApplicationMailer < ActionMailer::Base
       elsif recipient.is_a?(Household)
         recipient.users.flat_map { |u| resolve_user_email(u, via_household: true) }
       else
-        raise ArgumentError("Invalid recipient type: #{recipient}")
+        raise ArgumentError, "Invalid recipient type: #{recipient}"
       end
     end.flatten.uniq.compact
   end

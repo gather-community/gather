@@ -45,7 +45,7 @@ describe WorkMailer do
   end
 
   describe "job_choosing_notice" do
-    let(:user) { double(greeting: "Hello Tom") }
+    let(:user) { create(:user, first_name: "Tom") }
     let(:fc_job) { double(title: "Junk") }
     let(:period) do
       double(auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
@@ -55,7 +55,7 @@ describe WorkMailer do
       double(user_regular_got: 5, user_adjusted_quota: 15.5, user_need: 10.5,
              user_full_community_hours: {fc_job => 4}, rounds: rounds)
     end
-    let(:share) { double(user: double(decorate: user), period: period) }
+    let(:share) { double(user: user, period: period) }
     let(:mail) { described_class.job_choosing_notice(share).deliver_now }
 
     before do

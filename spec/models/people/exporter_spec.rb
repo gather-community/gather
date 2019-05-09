@@ -45,7 +45,7 @@ describe People::Exporter do
       let!(:contact2) do
         create(:emergency_contact,
           household: household1, email: "l@n.com", location: "King's Landing", main_phone: "+15456736543",
-          name: "Spin Lok", relationship: "Close friend")
+          alt_phone: nil, name: "Spin Lok", relationship: "Close friend")
       end
       let!(:pet1) { create(:pet, household: household1, name: "Po", color: "Blue", species: "Snake") }
       let!(:pet2) { create(:pet, household: household1, name: "Wu", color: "Green", species: "Bird") }

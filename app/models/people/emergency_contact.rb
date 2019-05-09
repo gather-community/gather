@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module People
   class EmergencyContact < ApplicationRecord
     include Phoneable

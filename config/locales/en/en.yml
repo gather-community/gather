@@ -195,6 +195,10 @@ en:
         preferred_contact: "Preferred Contact"
         garage_nums: "Garage Nums"
         vehicles: "Vehicles"
+        guardian_names: "Parents/Guardians"
+        keyholders: "Keyholders"
+        emergency_contacts: "Emergency Contacts"
+        pets: "Pets"
 
   action_names:
     common:

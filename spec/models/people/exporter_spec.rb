@@ -11,7 +11,8 @@ describe People::Exporter do
     context "with no users" do
       it "should return valid csv" do
         expect(exporter.to_csv).to eq("ID,First Name,Last Name,Unit Num,Unit Suffix,Birthday,Email,"\
-          "Is Child,Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,Garage Nums,Vehicles\n")
+          "Is Child,Parents/Guardians,Mobile Phone,Home Phone,Work Phone,Join Date,Preferred Contact,"\
+          "Garage Nums,Vehicles,Keyholders,Emergency Contacts,Pets\n")
       end
 
       context "with other locale" do
@@ -24,35 +25,55 @@ describe People::Exporter do
     end
 
     context "with users" do
-      let!(:household) do
-        create(:household, with_members: false, unit_num: "20", unit_suffix: "3A", garage_nums: "4,9")
+      let!(:household1) do
+        create(:household, with_members: false, unit_num: "20", unit_suffix: "3A", garage_nums: "4,9",
+                           keyholders: "Sally, Muhammad")
       end
       let!(:vehicle1) do
-        create(:vehicle, household: household, color: "Blue", make: "Ford",
+        create(:vehicle, household: household1, color: "Blue", make: "Ford",
                          model: "F-150", plate: "XYZ123")
       end
       let!(:vehicle2) do
-        create(:vehicle, household: household, color: "Red", make: "GMC",
+        create(:vehicle, household: household1, color: "Red", make: "GMC",
                          model: "Jimmy", plate: "XYZ456")
       end
+      let!(:contact1) do
+        create(:emergency_contact,
+          household: household1, alt_phone: "+17895550099", email: "j@k.com", location: "Anchorage",
+          main_phone: "+15456736543", name: "Wei Lu", relationship: "Ron's Mother")
+      end
+      let!(:contact2) do
+        create(:emergency_contact,
+          household: household1, email: "l@n.com", location: "King's Landing", main_phone: "+15456736543",
+          name: "Spin Lok", relationship: "Close friend")
+      end
+      let!(:pet1) { create(:pet, household: household1, name: "Po", color: "Blue", species: "Snake") }
+      let!(:pet2) { create(:pet, household: household1, name: "Wu", color: "Green", species: "Bird") }
       let!(:adult1) do
-        create(:user, household: household, first_name: "Ron", last_name: "South", email: "a@b.com",
+        create(:user, household: household1, first_name: "Ron", last_name: "South", email: "a@b.com",
                       birthdate: "1980/07/20", joined_on: "2016/03/12", preferred_contact: "email",
                       mobile_phone: "+17345556376", home_phone: "+17345551981")
       end
       let!(:adult2) do
-        create(:user, household: household, first_name: "Jenn", last_name: "Blount", email: "d@d.com",
+        create(:user, household: household1, first_name: "Jenn", last_name: "Blount", email: "c@d.com",
                       birthdate: "0004/03/10", joined_on: "2016/08/01", preferred_contact: "text",
                       mobile_phone: "+17345550085", work_phone: "+17345554512")
       end
       let!(:child) do
-        create(:user, :child, household: household, first_name: "Billy", last_name: "South", email: "e@f.com",
-                              birthdate: nil, joined_on: "2008/11/29", preferred_contact: "text",
-                              mobile_phone: "+17345557737", guardians: [adult1, adult2])
+        create(:user, :child, household: household1, first_name: "Billy", last_name: "South",
+                              email: "e@f.com", joined_on: "2008/11/29", preferred_contact: "text",
+                              birthdate: nil, mobile_phone: "+17345557737", guardians: [adult1, adult2])
+      end
+
+      let!(:household2) { create(:household, with_members: false) }
+      let!(:adult3) do
+        create(:user, household: household2, first_name: "Zorgon", last_name: "Puzt",
+                      email: "g@h.com", mobile_phone: "+17345558788")
       end
 
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq(prepare_expectation("users.csv", id: [child, adult2, adult1].map(&:id)))
+        expect(exporter.to_csv).to eq(prepare_expectation("users.csv",
+          id: [child, adult2, adult1, adult3].map(&:id)))
       end
     end
   end

@@ -13,7 +13,7 @@ module Csv
 
     def guardian_names
       return nil if guardians.none?
-      guardians.decorate.map(&:full_name).sort.join(", ")
+      guardians.active.decorate.map(&:full_name).sort.join(", ")
     end
 
     def joined_on

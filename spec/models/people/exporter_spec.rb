@@ -5,7 +5,7 @@ require "rails_helper"
 describe People::Exporter do
   let(:actor) { create(:user) }
   let(:policy) { UserPolicy.new(actor, User.new(household: Household.new(community: actor.community))) }
-  let(:exporter) { described_class.new(User.by_name.where.not(id: actor.id), policy: policy) }
+  let(:exporter) { described_class.new(User.by_name.active.where.not(id: actor.id), policy: policy) }
 
   describe "to_csv" do
     context "with no users" do
@@ -59,10 +59,12 @@ describe People::Exporter do
                       birthdate: "0004/03/10", joined_on: "2016/08/01", preferred_contact: "text",
                       mobile_phone: "+17345550085", work_phone: "+17345554512")
       end
+      let!(:inactive) { create(:user, :inactive) }
       let!(:child) do
         create(:user, :child, household: household1, first_name: "Billy", last_name: "South",
                               email: "e@f.com", joined_on: "2008/11/29", preferred_contact: "text",
-                              birthdate: nil, mobile_phone: "+17345557737", guardians: [adult1, adult2])
+                              birthdate: nil, mobile_phone: "+17345557737",
+                              guardians: [adult1, adult2, inactive])
       end
 
       let!(:household2) { create(:household, with_members: false) }

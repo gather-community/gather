@@ -1,14 +1,16 @@
-# Expects PHONE_TYPES to be defined on the including model
+# frozen_string_literal: true
+
+# Handles normalizing and displaying phone numbers
 module Phoneable
   extend ActiveSupport::Concern
 
-  included do |base|
+  included do |_base|
     def self.handle_phone_types(*phone_types)
       class_variable_set("@@phone_types", phone_types)
 
       phone_types.each do |p|
-        phony_normalize "#{p}_phone", default_country_code: 'US'
-        validates_plausible_phone "#{p}_phone", normalized_country_code: 'US', country_number: '1'
+        phony_normalize "#{p}_phone", default_country_code: "US"
+        validates_plausible_phone "#{p}_phone", normalized_country_code: "US", country_number: "1"
       end
     end
   end

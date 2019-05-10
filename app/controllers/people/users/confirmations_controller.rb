@@ -7,7 +7,6 @@ module People
     class ConfirmationsController < Devise::ConfirmationsController
       protected
 
-      # Redirect to user's profile on successful confirm.
       def after_confirmation_path_for(resource_name, resource)
         if signed_in?(resource_name)
           # Devise sets a flash[:notice] which we will use as-is on the user page.

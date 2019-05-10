@@ -17,7 +17,7 @@ feature "google oauth" do
 
       it "should show error" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("Google did not provide an email address")
       end
@@ -27,34 +27,45 @@ feature "google oauth" do
       let!(:sent_token) { user.send(:set_reset_password_token) }
 
       context "and token is still valid" do
-        context "with no existing google_email" do
+        context "when user with token has no existing google_email" do
           it "should sign the user in and capture their google ID" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_in_root
             expect(user.reload.google_email).to eq("foo@gmail.com")
           end
         end
 
-        context "with different google_email" do
+        context "when user with token already has the google ID" do
+          let(:existing_google_id) { "foo@gmail.com" }
+
+          it "should sign the user in" do
+            visit "/?token=#{sent_token}"
+            expect_sign_in_with_google_link_and_click
+            expect(page).to be_signed_in_root
+            expect(user.reload.google_email).to eq("foo@gmail.com")
+          end
+        end
+
+        context "when user with token has different google_email" do
           let(:existing_google_id) { "bar@gmail.com" }
 
           it "should fail with error" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_out_root
             expect(page).to have_content("you must sign in with the Google ID bar@gmail.com")
           end
         end
 
-        context "and different user exists with the oauth google ID" do
+        context "when different user exists with the oauth google ID" do
           let!(:other_user) { create(:user, google_email: "foo@gmail.com", first_name: "Torsten") }
 
-          it "should sign in the other user" do
+          it "should fail with error" do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
-            expect(page).to be_signed_in_root
-            expect(page).to show_signed_in_user_name("Torsten")
+            expect_sign_in_with_google_link_and_click
+            expect(page).to be_signed_out_root
+            expect(page).to have_content("your Google ID foo@gmail.com is associated with another user")
           end
         end
       end
@@ -63,7 +74,7 @@ feature "google oauth" do
         it "should show error" do
           Timecop.travel(User.reset_password_within + 1.hour) do
             visit "/?token=#{sent_token}"
-            expect_valid_sign_in_link_and_click
+            expect_sign_in_with_google_link_and_click
             expect(page).to be_signed_out_root
             expect(page).to have_content("invitation has expired")
             expect(user.reload.google_email).to be_nil
@@ -74,7 +85,7 @@ feature "google oauth" do
       context "and token is nonsense" do
         it "should show error" do
           visit "/?token=pants"
-          expect_valid_sign_in_link_and_click
+          expect_sign_in_with_google_link_and_click
           expect(page).to be_signed_out_root
           expect(page).to have_content("foo@gmail.com was not found in the system")
         end
@@ -86,7 +97,7 @@ feature "google oauth" do
 
       it "should sign the user in and remember after cookie cleared" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to have_signed_in_user(user)
         clear_session_cookie
         visit(meals_path)
@@ -99,9 +110,35 @@ feature "google oauth" do
 
       it "should show error" do
         visit "/"
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("foo@gmail.com was not found in the system")
+      end
+    end
+
+    context "with unconfirmed user" do
+      let!(:user) { create(:user, :unconfirmed, email: email, google_email: "foo@gmail.com") }
+
+      context "when google ID different from email" do
+        let(:email) { "foo@isp.net" }
+
+        scenario "denies login without invite" do
+          visit("/")
+          expect_sign_in_with_google_link_and_click
+          expect(page).to be_signed_out_root
+          expect(page).to have_content("you must use an invititation when first signing in")
+        end
+      end
+
+      context "when google ID same as email" do
+        let(:email) { "foo@gmail.com" }
+
+        scenario "signs in and confirms" do
+          visit("/")
+          expect_sign_in_with_google_link_and_click
+          expect(page).to be_signed_in_root
+          expect(user.reload).to be_confirmed
+        end
       end
     end
   end

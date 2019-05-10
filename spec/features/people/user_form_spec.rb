@@ -19,53 +19,128 @@ feature "user form", js: true do
   end
 
   shared_examples_for "editing user" do
-    scenario "edit user" do
+    scenario "edit user without changing email" do
       visit(edit_path)
       expect_image_upload(mode: :existing, path: /cooper/)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(mode: :dz_preview)
       fill_in("First Name", with: "Zoor")
-      click_button("Save")
+      emails = email_sent_by do
+        click_button("Save")
+        expect(page).to have_alert(/updated successfully/)
+      end
 
-      expect_success
+      expect(emails).to be_empty
       expect(page).to have_title(/Zoor/)
       expect_photo(/chomsky/)
+      expect(user.reload.unconfirmed_email).to be_nil
+    end
+
+    scenario "edit user email" do
+      visit(edit_path)
+      fill_in("Email Address", with: "newone@example.com")
+      emails = email_sent_by do
+        click_button("Save")
+        expect(page).to have_alert(/confirm (your|their) new email address/)
+      end
+
+      expect(emails.map(&:subject)).to eq(["Please Confirm Your Email Address"])
+      expect(emails[0].body.encoded).to match(/security measure/)
+      expect(user.reload).to be_confirmed
+      expect(user.unconfirmed_email).to eq("newone@example.com")
     end
   end
 
   context "as admin" do
     let(:actor) { admin }
 
-    it_behaves_like "editing user"
     it_behaves_like "photo upload widget"
 
-    scenario "new user" do
-      visit(new_user_path)
-      expect_no_image_and_drop_file("cooper.jpg")
-      click_button("Save")
+    context "creating" do
+      scenario "new user" do
+        visit(new_user_path)
+        expect_no_image_and_drop_file("cooper.jpg")
+        click_button("Save")
 
-      expect_validation_error
-      expect_image_upload(mode: :existing, path: /cooper/)
-      fill_in("First Name", with: "Foo")
-      fill_in("Last Name", with: "Barre")
-      fill_in("Email", with: "foo@example.com")
-      select2("Ginger", from: "#user_household_id")
-      fill_in("Mobile", with: "5556667777")
-      click_button("Save")
+        expect_validation_error
+        expect_image_upload(mode: :existing, path: /cooper/)
+        fill_in("First Name", with: "Foo")
+        fill_in("Last Name", with: "Barre")
+        fill_in("Email", with: "foo@example.com")
+        select2("Ginger", from: "#user_household_id")
+        fill_in("Mobile", with: "5556667777")
+        click_button("Save")
 
-      expect_success
-      expect(page).to have_title(/Foo Barre/)
-      expect_photo(/cooper/)
+        expect(page).to have_alert("User created successfully.")
+        expect(page).to have_title(/Foo Barre/)
+        expect_photo(/cooper/)
+
+        expect(email_sent_by { process_queued_job }).to be_empty
+        expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
+      end
+
+      scenario "new user with invite" do
+        visit(new_user_path)
+        fill_in("First Name", with: "Foo")
+        fill_in("Last Name", with: "Barre")
+        fill_in("Email", with: "foo@example.com")
+        select2("Ginger", from: "#user_household_id")
+        fill_in("Mobile", with: "5556667777")
+        click_on("Save & Invite")
+
+        expect(page).to have_alert("User created and invited successfully.")
+
+        emails = email_sent_by { process_queued_job }
+        expect(emails.map(&:subject)).to eq(["Instructions for Signing in to Gather"])
+        expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
+      end
     end
 
-    scenario "editing household" do
-      visit(edit_path)
-      click_on("move them to another household")
-      select2("Potatoheads", from: "#user_household_id")
-      click_button("Save")
+    context "editing" do
+      it_behaves_like "editing user"
 
-      expect_success
-      expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
+      scenario "editing household" do
+        visit(edit_path)
+        click_on("move them to another household")
+        select2("Potatoheads", from: "#user_household_id")
+        click_button("Save")
+
+        expect_success
+        expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
+      end
+
+      context "with unconfirmed user" do
+        let(:user) { create(:user, :unconfirmed) }
+
+        shared_examples_for "editing email does not result in confirmation email" do
+          scenario do
+            visit(edit_path)
+            fill_in("Email Address", with: "newone@example.com")
+            emails = email_sent_by do
+              click_button("Save")
+              expect(page).to have_alert(alert)
+            end
+
+            expect(emails).to be_empty
+            expect(user.reload).not_to be_confirmed
+            expect(user.unconfirmed_email).to be_nil
+          end
+        end
+
+        context "with invite pending" do
+          let(:alert) { /invalidated a sign-in invitation/ }
+
+          before { user.reset_reset_password_token! }
+
+          it_behaves_like "editing email does not result in confirmation email"
+        end
+
+        context "without invite pending" do
+          let(:alert) { "User updated successfully." }
+
+          it_behaves_like "editing email does not result in confirmation email"
+        end
+      end
     end
 
     scenario "deactivate/activate/delete" do

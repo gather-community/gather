@@ -21,7 +21,7 @@ feature "subdomain handling" do
         visit root_path
         expect(page).not_to have_content("Please sign in to view that page")
         expect(current_url).to have_subdomain("bar")
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(page).to have_content(user.name)
         expect(current_url).to have_subdomain("bar")
       end
@@ -31,7 +31,7 @@ feature "subdomain handling" do
       with_subdomain("bar") do
         visit meals_path
         expect(page).to have_content("Please sign in to view that page")
-        expect_valid_sign_in_link_and_click
+        expect_sign_in_with_google_link_and_click
         expect(current_url).to have_subdomain_and_path("bar", "/meals")
       end
     end
@@ -45,7 +45,7 @@ feature "subdomain handling" do
 
     scenario "visiting apex domain root and signing in should take you to community root" do
       visit "/"
-      expect_valid_sign_in_link_and_click
+      expect_sign_in_with_google_link_and_click
       expect(page).to have_content(user.name)
       expect(current_url).to have_subdomain_and_path("foo", "/users")
     end

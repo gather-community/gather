@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
-    omniauth_providers: [:google_oauth2]
+    :confirmable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
@@ -227,7 +227,7 @@ class User < ApplicationRecord
   def active_for_authentication?
     # We don't return false for adult inactive users because they
     # can still see some pages.
-    adult?
+    super && adult?
   end
 
   def never_signed_in?

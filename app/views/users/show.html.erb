@@ -16,7 +16,19 @@
           <% if user.email? %>
             <tr>
               <td>Email</td>
-              <td><%= user.email_link %></td>
+              <td>
+                <%= user.email_link %>
+                <% if user.unconfirmed_email? && policy(user).update_info? %>
+                  <br/>
+                  <em>
+                    Pending confirmation: <%= user.unconfirmed_email %><br/>
+                    <%= link_to("Resend confirmation instructions",
+                          resend_email_confirmation_user_path(@user), method: :put) %> | 
+                    <%= link_to("Cancel change",
+                          cancel_email_change_user_path(@user), method: :delete) %>
+                  </em>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           <% unless user.no_phones? %>

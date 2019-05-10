@@ -88,8 +88,9 @@ class UsersController < ApplicationController
     return unless bootstrap_household
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
+    skip_email_confirmation_if_unconfirmed!
     if @user.save
-      flash[:success] = "User created successfully."
+      send_invite_and_flash_on_create
       redirect_to(user_path(@user))
     else
       prepare_user_form
@@ -108,13 +109,30 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return unless bootstrap_household
     authorize(@user)
+    skip_email_confirmation_if_unconfirmed!
     if @user.update(permitted_attributes(@user))
-      flash[:success] = "User updated successfully."
+      flash_on_update
       redirect_to(user_path(@user))
     else
       prepare_user_form
       render(:edit)
     end
+  end
+
+  def resend_email_confirmation
+    @user = User.find(params[:id])
+    authorize(@user, :update_info?)
+    @user.send_confirmation_instructions
+    flash[:success] = "Instructions sent."
+    redirect_to(user_path(@user))
+  end
+
+  def cancel_email_change
+    @user = User.find(params[:id])
+    authorize(@user, :update_info?)
+    @user.update!(unconfirmed_email: nil, confirmation_token: nil)
+    flash[:success] = "Email change canceled."
+    redirect_to(user_path(@user))
   end
 
   def impersonate
@@ -235,5 +253,51 @@ class UsersController < ApplicationController
 
   def sample_user
     User.new(household: Household.new(community: current_community))
+  end
+
+  def skip_email_confirmation_if_unconfirmed!
+    # Per app policy, users that are unconfirmed can only sign in via an invite email, which also
+    # confirms their email address. So there is no need to also send a confirmation email to these folks
+    # when saving them. This is applicable to both create (trivially) and update.
+    # Wo DO still want to keep confirmed set to false since that is still true and we want to be able
+    # to rely on that flag elsewhere.
+    # However, on update, there is no need to reconfirm (storing new email in unconfirmed_email), and doing so
+    # will result in the invite going to the wrong email if e.g. the admin makes a mistake entering the
+    # email of a new user and then goes back and corrects it.
+    return if @user.confirmed?
+    @user.skip_confirmation_notification!
+    @user.skip_reconfirmation!
+  end
+
+  def send_invite_and_flash_on_create
+    if params[:save_and_invite]
+      Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
+      flash[:success] = "User created and invited successfully."
+    else
+      flash[:success] = "User created successfully."
+    end
+  end
+
+  def flash_on_update
+    # Unlike with create, confirmation instructions are sent automatically by Devise because
+    # we didn't opt out of them.
+    msg = @user == current_user ? +"Profile updated successfully." : +"User updated successfully."
+    if @user.unconfirmed_email?
+      if @user == current_user
+        msg << " You need to confirm your new email address. "
+        msg << "Please check your email at #{@user.unconfirmed_email}."
+      else
+        msg << " This user needs to confirm their new email address (#{@user.unconfirmed_email})."
+      end
+      flash[:alert] = msg
+    # If a user's email address changes, Devise automatically deletes the password reset token for
+    # security purposes. So let's let them know that.
+    elsif @user.saved_change_to_reset_password_token? && @user.reset_password_token.blank?
+      msg << " However, this change may have invalidated a sign-in invitation.
+        You may want to send a new one."
+      flash[:alert] = msg
+    else
+      flash[:success] = msg
+    end
   end
 end

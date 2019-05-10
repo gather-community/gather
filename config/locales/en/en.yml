@@ -35,6 +35,7 @@ en:
       create: "Save"
       go_back: "Go Back"
       update: "Save"
+      save_and_invite: "Save & Invite"
       sign_in: "Sign In"
       send_reset_instructions: "Send Reset Instructions"
       reset_password: "Reset Password"

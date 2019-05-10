@@ -15,12 +15,12 @@ en:
       not_found_in_database: "Invalid %{authentication_keys} or password."
       timeout: "Your session expired. Please sign in again to continue."
       unauthenticated: "Please sign in to view that page."
-      unconfirmed: "You have to confirm your email address before continuing."
+      unconfirmed: "You must use an invititation when first signing in."
     authentication_keys:
       email: "email"
     mailer:
       confirmation_instructions:
-        subject: "Confirmation Instructions"
+        subject: "Please Confirm Your Email Address"
       reset_password_instructions:
         subject: "Resetting Your Password"
       unlock_instructions:

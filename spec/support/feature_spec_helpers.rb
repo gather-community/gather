@@ -172,7 +172,7 @@ module FeatureSpecHelpers
 
   # Signs in to the app by filling in the password form instead of using the faster Warden helper login_as.
   # Used for special cases, including when you need to sign out midway through the spec.
-  def full_sign_in_as(user, password: DEFAULT_PASSWORD)
+  def full_sign_in_as(user, password: FactoryBot::DEFAULT_PASSWORD)
     visit(new_user_session_path)
     fill_in("Email Address", with: user.email)
     fill_in("Password", with: password)
@@ -229,7 +229,7 @@ module FeatureSpecHelpers
     end
   end
 
-  def expect_valid_sign_in_link_and_click
+  def expect_sign_in_with_google_link_and_click
     # Should point to apex domain
     expect(page).to have_css("a[href^='http://#{Settings.url.host}:31337']", text: "Sign in with Google")
     click_link("Sign in with Google")

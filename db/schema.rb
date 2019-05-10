@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190330123440) do
+ActiveRecord::Schema.define(version: 20190507130627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -514,6 +514,9 @@ ActiveRecord::Schema.define(version: 20190330123440) do
     t.string "calendar_token"
     t.boolean "child", default: false, null: false
     t.integer "cluster_id", null: false
+    t.datetime "confirmation_sent_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
@@ -547,10 +550,12 @@ ActiveRecord::Schema.define(version: 20190330123440) do
     t.string "school"
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
+    t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
     t.string "work_phone"
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_email"], name: "index_users_on_google_email", unique: true

@@ -2,8 +2,25 @@
   position: fixed;
   bottom: 0;
   text-align: center;
-  padding: 20px 0;
   background-color: $fainter-gray;
   width: 100%;
   display: none;
+
+  .btn {
+    margin: 20px 0;
+  }
+
+  .opt-out {
+    display: block;
+    float: right;
+    vertical-align: top;
+    font-size: 50px;
+    line-height: 25px;
+    color: #aaa;
+    margin: 5px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }

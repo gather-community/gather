@@ -134,23 +134,27 @@
 
   <%= render("layouts/error_modal") %>
 
-  <div id="add-to-home" class="add-to-home">
-    <div id="add-to-home-btn" class="btn btn-primary">Add Gather To Your Home Screen</div>
+  <div class="add-to-home">
+    <div class="btn btn-primary">Add Gather To Your Home Screen</div>
+    <a href="#" class="opt-out">&times;</a>
   </div>
 
   <script>
     // Add to home screen stuff. Should move into proper file later.
     let deferredPrompt;
-    let panel = document.getElementById('add-to-home');
-    let btnAdd = document.getElementById('add-to-home-btn');
+    let panel = document.querySelector('.add-to-home');
+    let btnAdd = document.querySelector('.add-to-home .btn');
+    let btnDontAdd = document.querySelector('.add-to-home .opt-out');
 
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
-      // Stash the event so it can be triggered later.
-      deferredPrompt = e;
-      // Update UI notify the user they can add to home screen
-      panel.style.display = 'block';
+      if (!window.localStorage.getItem('dontAddToHomeScreen')) {
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can add to home screen
+        panel.style.display = 'block';
+      }
     });
 
     btnAdd.addEventListener('click', (e) => {
@@ -168,6 +172,12 @@
           }
           deferredPrompt = null;
         });
+    });
+
+    btnDontAdd.addEventListener('click', (e) => {
+      e.preventDefault();
+      panel.style.display = 'none';
+      window.localStorage.setItem('dontAddToHomeScreen', true);
     });
   </script>
 </body>

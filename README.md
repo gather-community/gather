@@ -1,5 +1,6 @@
 # Gather
-A cohousing meals management system.
+
+The App for Community - https://info.gather.coop
 
 ## Platform
 Gather is a Ruby on Rails application with some client-side JavaScript for dynamic view elements. HTML is generally rendered server-side. [SCSS](http://sass-lang.com/) is used for styling. No special IDE is required for Ruby on Rails development.

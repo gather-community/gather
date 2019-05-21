@@ -34,7 +34,7 @@
       <%= f.input :kind, collection: @kinds, required: true %>
     <% end %>
 
-    <% if reservation.access_level(current_community) == "sponsor" %>
+    <% if reservation.access_level(current_user.community) == "sponsor" %>
       <%= f.input :sponsor_id, as: :assoc_select2, context: "res_sponsor", required: true %>
     <% end %>
   <% end %>

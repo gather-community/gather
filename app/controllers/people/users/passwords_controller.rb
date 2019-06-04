@@ -16,6 +16,8 @@ module People
         super do |user|
           # Note: Using .valid? here instead of .errors.empty? ends up removing the errors from the object.
           if user.errors.empty? && !user.confirmed? && !user.pending_reconfirmation?
+            # We don't use user.confirm here because that might fail if the user's confirmation_sent_at
+            # value is old, but we don't use that for initial confirmation.
             user.update_attribute(:confirmed_at, Time.current)
           end
         end

@@ -62,6 +62,8 @@ module People
 
         # If the user wasn't confirmed before now, we don't let them sign in unless they used an invite
         # or their email matches their google_email. So if they got this far we can confirm.
+        # We don't use user.confirm here because that might fail if the user's confirmation_sent_at
+        # value is old, but we don't use that for initial confirmation.
         user.update_attribute(:confirmed_at, Time.current)
 
         # We always set remember_me for OAuth sign-ins. So if someone signs in with Google

@@ -13,9 +13,15 @@
       <%= link_to(icon_tag("google") << " Sign in with Google",
         user_google_oauth2_omniauth_authorize_url(host: Settings.url.host, state: @invite_token),
         id: "sign-in-btn", class: "btn btn-primary") %>
-      <%= link_to(icon_tag("asterisk") << " Sign in with Password",
-        new_user_session_url(host: Settings.url.host, reset_password_token: @invite_token),
-        id: "sign-in-btn", class: "btn btn-primary") %>
+      <% if @invite_token %>
+        <%= link_to(icon_tag("asterisk") << " Sign in with Password",
+              edit_user_password_url(host: Settings.url.host, reset_password_token: @invite_token),
+              id: "sign-in-btn", class: "btn btn-primary") %>
+      <% else %>
+        <%= link_to(icon_tag("asterisk") << " Sign in with Password",
+              new_user_session_url(host: Settings.url.host),
+              id: "sign-in-btn", class: "btn btn-primary") %>
+      <% end %>
     </div>
     <div id="help-links">
       <div>

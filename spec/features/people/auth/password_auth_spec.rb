@@ -48,24 +48,24 @@ feature "password auth" do
     scenario "forgot password", js: true do
       visit(root_path)
       click_on("Sign in with Password")
-      click_on("Don't know your password?")
+      click_on("I don't know my password")
       fill_in("Email Address", with: "#{user.email}x")
       click_on("Send Reset Instructions")
       expect(page).to have_content("Email not found")
       submit_email_and_visit_new_password_entry_page
 
-      click_on("Reset Password")
+      click_on("Set Password")
       expect_validation_message(/Can't be blank/)
 
       fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
       fill_in("Re-type New Password", with: "x")
-      click_on("Reset Password")
+      click_on("Set Password")
 
       expect_validation_message("Didn't match password")
       fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
       expect_validation_message("Good")
       fill_in("Re-type New Password", with: "48hafeirafar42")
-      click_on("Reset Password")
+      click_on("Set Password")
 
       expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
     end
@@ -103,12 +103,12 @@ feature "password auth" do
 
       visit(root_path)
       click_on("Sign in with Password")
-      click_on("Don't know your password?")
+      click_on("I don't know my password")
       submit_email_and_visit_new_password_entry_page
 
       fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
       fill_in("Re-type New Password", with: "48hafeirafar42", match: :prefer_exact)
-      click_on("Reset Password")
+      click_on("Set Password")
 
       expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
       expect(page).to have_signed_in_user(user)

@@ -7,14 +7,19 @@
     Enter a new password below and you will be signed in to Gather.
   </p>
   <%= safe_render_markdown(t("password.strength_info")) %>
-  
+
   <%= f.input(:reset_password_token, as: :hidden) %>
   <%= f.full_error(:reset_password_token) %>
   <%= f.input(:password, label: "New Password", autofocus: true) %>
   <%= f.input(:password_confirmation, label: "Re-type New Password") %>
 
   <%= form_actions do %>
-    <%= f.button(:primary, :reset_password) %>
+    <div class="secondary-links">
+      <%= link_to("I already have a password", new_user_session_path) %>
+    </div>
+    <div class="buttons">
+      <%= f.button(:primary, :set_password) %>
+    </div>
   <% end %>
 <% end %>
 

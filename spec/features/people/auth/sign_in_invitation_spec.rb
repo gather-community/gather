@@ -8,65 +8,92 @@ feature "sign in invitations", js: true do
 
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
-  describe "google oauth happy path" do
-    let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob", google_email: nil) }
+  describe "google oauth" do
     let!(:decoy) { create(:user) }
 
     around do |example|
       stub_omniauth(google_oauth2: {email: "bob1234flob@gmail.com"}) { example.run }
     end
 
-    it do
-      expect(invitee).not_to be_confirmed
-      full_sign_in_as(actor)
-      visit(user_path(invitee))
-      accept_confirm { click_on("Invite") }
-      expect_success(/Invitation sent./)
-      full_sign_out
+    shared_examples_for "successful google sign in" do
+      it do
+        expect(invitee).not_to be_confirmed
+        full_sign_in_as(actor)
+        visit(user_path(invitee))
+        accept_confirm { click_on("Invite") }
+        expect_success(/Invitation sent./)
+        full_sign_out
 
-      # Get the link from the email and visit it.
-      expect(email_sent.size).to eq(1)
-      url_regex = %r{https?://.+/?token=.+$}
-      body = email_sent.last.body.encoded
-      expect(body).to match(/Bob Flob/)
-      match_and_visit_url(body, url_regex)
+        # Get the link from the email and visit it.
+        expect(email_sent.size).to eq(1)
+        url_regex = %r{https?://.+/?token=.+$}
+        body = email_sent.last.body.encoded
+        expect(body).to match(/Bob Flob/)
+        match_and_visit_url(body, url_regex)
 
-      # Sign in with Google.
-      # If the user's google email has been updated, we know the token process worked as expected.
-      click_link("Sign in with Google")
-      expect(page).to have_signed_in_user(invitee)
-      expect(invitee.reload.google_email).to eq("bob1234flob@gmail.com")
-      expect(invitee).to be_confirmed
+        # Sign in with Google.
+        # If the user's google email has been updated, we know the token process worked as expected.
+        click_link("Sign in with Google")
+        expect(page).to have_signed_in_user(invitee)
+        expect(invitee.reload.google_email).to eq("bob1234flob@gmail.com")
+        expect(invitee).to be_confirmed
+      end
+    end
+
+    describe "happy path" do
+      let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob", google_email: nil) }
+      it_behaves_like "successful google sign in"
+    end
+
+    describe "with user created awhile ago" do
+      let!(:invitee) do
+        Timecop.travel(-1.week) do
+          create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob", google_email: nil)
+        end
+      end
+      it_behaves_like "successful google sign in"
     end
   end
 
-  describe "password happy path" do
-    let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob") }
+  describe "password auth" do
     let!(:decoy) { create(:user) }
 
-    it do
-      expect(invitee).not_to be_confirmed
-      full_sign_in_as(actor)
-      visit(user_path(invitee))
-      accept_confirm { click_on("Invite") }
-      expect_success(/Invitation sent./)
-      full_sign_out
+    shared_examples_for "successful password set" do
+      it do
+        expect(invitee).not_to be_confirmed
+        full_sign_in_as(actor)
+        visit(user_path(invitee))
+        accept_confirm { click_on("Invite") }
+        expect_success(/Invitation sent./)
+        full_sign_out
 
-      # Get the link from the email and visit it.
-      expect(email_sent.size).to eq(1)
-      url_regex = %r{https?://.+/?token=.+$}
-      body = email_sent.last.body.encoded
-      expect(body).to match(/Bob Flob/)
-      match_and_visit_url(body, url_regex)
+        # Get the link from the email and visit it.
+        expect(email_sent.size).to eq(1)
+        url_regex = %r{https?://.+/?token=.+$}
+        body = email_sent.last.body.encoded
+        expect(body).to match(/Bob Flob/)
+        match_and_visit_url(body, url_regex)
 
-      click_link("Sign in with Password")
-      click_link("Don't know your password")
-      expect(page).to have_title("Enter a New Password")
-      fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
-      fill_in("Re-type New Password", with: "48hafeirafar42")
-      click_on("Reset Password")
-      expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
-      expect(invitee.reload).to be_confirmed
+        click_link("Sign in with Password")
+        expect(page).to have_title("Enter a New Password")
+        fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
+        fill_in("Re-type New Password", with: "48hafeirafar42")
+        click_on("Set Password")
+        expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
+        expect(invitee.reload).to be_confirmed
+      end
+    end
+
+    describe "happy path" do
+      let!(:invitee) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob") }
+      it_behaves_like "successful password set"
+    end
+
+    describe "with user created awhile ago" do
+      let!(:invitee) do
+        Timecop.travel(-1.week) { create(:user, :unconfirmed, first_name: "Bob", last_name: "Flob") }
+      end
+      it_behaves_like "successful password set"
     end
   end
 

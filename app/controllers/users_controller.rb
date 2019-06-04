@@ -259,7 +259,7 @@ class UsersController < ApplicationController
     # Per app policy, users that are unconfirmed can only sign in via an invite email, which also
     # confirms their email address. So there is no need to also send a confirmation email to these folks
     # when saving them. This is applicable to both create (trivially) and update.
-    # Wo DO still want to keep confirmed set to false since that is still true and we want to be able
+    # Wo DO still want to keep confirmed_at set to NULL since that is still true and we want to be able
     # to rely on that flag elsewhere.
     # However, on update, there is no need to reconfirm (storing new email in unconfirmed_email), and doing so
     # will result in the invite going to the wrong email if e.g. the admin makes a mistake entering the

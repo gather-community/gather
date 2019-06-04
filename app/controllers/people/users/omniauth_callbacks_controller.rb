@@ -62,7 +62,7 @@ module People
 
         # If the user wasn't confirmed before now, we don't let them sign in unless they used an invite
         # or their email matches their google_email. So if they got this far we can confirm.
-        user.confirm
+        user.update_attribute(:confirmed_at, Time.current)
 
         # We always set remember_me for OAuth sign-ins. So if someone signs in with Google
         # on a shared computer and doesn’t sign out explicitly, they stay signed into Gather.

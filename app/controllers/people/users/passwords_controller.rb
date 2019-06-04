@@ -15,7 +15,9 @@ module People
         # we don't confirm them, since the above no longer holds in that case.
         super do |user|
           # Note: Using .valid? here instead of .errors.empty? ends up removing the errors from the object.
-          user.confirm if user.errors.empty? && !user.confirmed? && !user.pending_reconfirmation?
+          if user.errors.empty? && !user.confirmed? && !user.pending_reconfirmation?
+            user.update_attribute(:confirmed_at, Time.current)
+          end
         end
       end
     end

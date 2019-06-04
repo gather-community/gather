@@ -7,7 +7,9 @@ class LandingController < ApplicationController
   skip_after_action :verify_policy_scoped
 
   def index
-    @invite_token = params[:token]
+    if (@invite_token = params[:token])
+      flash.now[:notice] = "Welcome to Gather! Please choose a sign in option below."
+    end
     render(layout: false)
   end
 

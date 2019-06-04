@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :reservation_protocol, class: "Reservations::Protocol" do
     transient do
-      resources []
+      resources { [] }
     end
 
     sequence(:name) { |i| "Protocol #{i}" }
-    kinds nil
+    kinds { nil }
     community { resources.first&.community || Defaults.community }
 
     after(:create) do |protocol, evaluator|

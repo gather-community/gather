@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :household do
     transient do
-      with_members true
+      with_members { true }
     end
 
     community { Defaults.community }

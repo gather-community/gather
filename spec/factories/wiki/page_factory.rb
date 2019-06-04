@@ -7,7 +7,7 @@ FactoryBot.define do
     title { Faker::Lorem.sentence(3, true, 1).gsub(".", "") }
 
     trait :with_data_source do
-      data_source "http://example.com"
+      data_source { "http://example.com" }
     end
   end
 end

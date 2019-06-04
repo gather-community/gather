@@ -4,7 +4,7 @@ FactoryBot.define do
     starts_on { Date.new(2018, 1, 1) }
     ends_on { starts_on + 30.days }
     community { Defaults.community }
-    pick_type "free_for_all"
+    pick_type { "free_for_all" }
 
     trait :with_shares do
       after(:create) do |period|

@@ -3,16 +3,16 @@
 FactoryBot.define do
   factory :work_job, class: "Work::Job" do
     transient do
-      shift_count 1
-      shift_slots 3
-      shift_hours nil
-      shift_starts []
-      shift_ends []
+      shift_count { 1 }
+      shift_slots { 3 }
+      shift_hours { nil }
+      shift_starts { [] }
+      shift_ends { [] }
     end
 
     association :period, factory: :work_period
     sequence(:title) { |n| "#{Faker::Job.title} #{n}" }
-    hours 2
+    hours { 2 }
     description { Faker::Lorem.paragraph }
 
     before(:create) do |job, ev|

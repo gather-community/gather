@@ -3,6 +3,6 @@ FactoryBot.define do
     meal
     association :sender, factory: :user
     recipient_type { Meals::Message::RECIPIENT_TYPES.sample.to_s }
-    body "Stuff"
+    body { "Stuff" }
   end
 end

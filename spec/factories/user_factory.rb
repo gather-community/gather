@@ -5,16 +5,16 @@ FactoryBot.define do
 
   factory :user do
     transient do
-      community nil
+      community { nil }
     end
 
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     email { "person#{rand(10_000_000..99_999_999)}@example.com" }
     google_email { "person#{rand(10_000_000..99_999_999)}@gmail.com" }
-    mobile_phone "5555551212"
-    password FactoryBot::DEFAULT_PASSWORD
-    password_confirmation FactoryBot::DEFAULT_PASSWORD
+    mobile_phone { "5555551212" }
+    password { FactoryBot::DEFAULT_PASSWORD }
+    password_confirmation { FactoryBot::DEFAULT_PASSWORD }
     confirmed_at { Time.current - 60 }
     confirmation_sent_at { nil }
 
@@ -42,9 +42,9 @@ FactoryBot.define do
 
     trait :child do
       transient do
-        guardians nil
+        guardians { nil }
       end
-      child true
+      child { true }
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

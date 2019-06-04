@@ -3,15 +3,15 @@
 FactoryBot.define do
   factory :meal do
     transient do
-      communities []
-      no_resources false
-      head_cook nil
-      asst_cooks []
-      cleaners []
+      communities { [] }
+      no_resources { false }
+      head_cook { nil }
+      asst_cooks { [] }
+      cleaners { [] }
     end
 
     served_at { Time.current + 7.days }
-    capacity 64
+    capacity { 64 }
     community { Defaults.community }
 
     association :formula, factory: :meal_formula
@@ -31,14 +31,14 @@ FactoryBot.define do
     end
 
     trait :with_menu do
-      title "Yummy food"
-      entrees "Good stuff"
+      title { "Yummy food" }
+      entrees { "Good stuff" }
       allergens { %w[Dairy Soy] }
     end
 
     trait :finalized do
       with_menu
-      status "finalized"
+      status { "finalized" }
 
       after(:build) do |meal|
         meal.cost = build(:meal_cost)
@@ -47,7 +47,7 @@ FactoryBot.define do
 
     trait :cancelled do
       with_menu
-      status "cancelled"
+      status { "cancelled" }
     end
   end
 end

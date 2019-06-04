@@ -75,11 +75,10 @@ feature "sign in invitations", js: true do
         match_and_visit_url(body, url_regex)
 
         click_link("Sign in with Password")
-        click_link("Don't know your password")
         expect(page).to have_title("Enter a New Password")
         fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
         fill_in("Re-type New Password", with: "48hafeirafar42")
-        click_on("Reset Password")
+        click_on("Set Password")
         expect(page).to have_alert("Your password has been changed successfully. You are now signed in.")
         expect(invitee.reload).to be_confirmed
       end

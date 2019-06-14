@@ -5,7 +5,7 @@
   <tr class="surheader">
     <th></th>
     <th colspan="3" class="totals">Totals</th>
-    <th colspan="3" class="general-avg">General Averages</th>
+    <th colspan="2" class="general-avg">General Averages</th>
     <% if multi_community? %>
       <th colspan="<%= @communities.size %>" class="cmty-rep">Avg. Community Representation</th>
     <% end %>
@@ -18,7 +18,6 @@
     <th class="totals">Cost</th>
     <th class="general-avg">Full Meal Price</th>
     <th class="general-avg">Diners</th>
-    <th class="general-avg">Veg. Diners</th>
     <% if multi_community? %>
       <% @communities.each do |community| %>
         <th class="cmty-rep"><%= community.name %></th>
@@ -48,11 +47,6 @@
         <td class="totals"><%= number_to_currency(cols["ttl_cost"]) %></td>
         <td class="general-avg"><%= number_to_currency(cols["avg_adult_cost"]) %></td>
         <td class="general-avg"><%= number_with_precision(cols["avg_diners"], precision: 1) %></td>
-        <td class="general-avg">
-          <span title="<%= number_with_precision(cols["avg_veg"], precision: 1) %>">
-            <%= number_to_percentage(cols["avg_veg_pct"], precision: 0) %>
-          </span>
-        </td>
         <% if multi_community? %>
           <% @communities.each do |c| %>
             <td class="cmty-rep">

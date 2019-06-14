@@ -171,8 +171,6 @@ module Meals
           AVG(meal_costs.adult_meat)::real AS avg_adult_cost,
           SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
           AVG(signup_ttls.ttl_diners)::real AS avg_diners,
-          AVG(signup_ttls.ttl_veg)::real AS avg_veg,
-          (AVG(signup_ttls.ttl_veg) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_veg_pct,
           #{diner_type_avg_exprs},
           #{community_avg_exprs}
         FROM meals
@@ -182,7 +180,6 @@ module Meals
             SELECT
               signups.meal_id,
               SUM(#{full_signup_col_sum_expr}) AS ttl_diners,
-              SUM(#{signup_col_sum_expr(food_types: ['veg'])}) AS ttl_veg,
               #{diner_type_sum_exprs},
               #{community_sum_exprs}
             FROM signups

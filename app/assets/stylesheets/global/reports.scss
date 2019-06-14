@@ -70,8 +70,10 @@
       }
     }
 
-    tr.highlight td {
-      background-color: $highlight-color;
+    tr.highlight.totals {
+      td {
+        background-color: $highlight-color !important;
+      }
     }
 
     th {

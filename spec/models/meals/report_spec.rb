@@ -198,8 +198,6 @@ describe(Meals::Report) do
           expect(feb["ttl_cost"]).to eq(24)
           expect(feb["avg_adult_cost"]).to eq(2.50)
           expect(feb["avg_diners"]).to eq(8.0)
-          expect(feb["avg_veg"]).to eq(2.5)
-          expect(feb["avg_veg_pct"]).to be_within(0.1).of(31.25)
           expect(feb["avg_adult"]).to eq(5.5)
           expect(feb["avg_adult_pct"]).to be_within(0.1).of(68.75)
           expect(feb["avg_from_#{community.id}"]).to eq(5.5)
@@ -219,8 +217,6 @@ describe(Meals::Report) do
           expect(all["ttl_cost"]).to eq(48)
           expect(all["avg_adult_cost"]).to eq(2.50)
           expect(all["avg_diners"]).to eq(7.75)
-          expect(all["avg_veg"]).to eq(1.75)
-          expect(all["avg_veg_pct"]).to be_within(0.1).of(22.58)
           expect(all["avg_adult"]).to eq(6)
           expect(all["avg_adult_pct"]).to be_within(0.1).of(77.4)
         end

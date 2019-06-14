@@ -26,8 +26,8 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
     data = [{key: 'Avg. Cost', values: @data.cost_by_month[0]}]
     chart = @lineChart().forceY([0,8])
     @setMonthXAxis(chart, data)
-    chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickFormat(d3.format('$.2f'))
-    @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Month")
+    chart.yAxis.axisLabel('Avg. Full Meal Price').tickFormat(d3.format('$.2f'))
+    @addChart(num, chart, data, "Avg. Full #{@cmty}Meal Price by Month")
 
   addMealsByMonth: (num) ->
     data = [{key: 'Meals', values: @data.meals_by_month[0]}]
@@ -47,8 +47,8 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
     data = [{values: @data.cost_by_weekday[0]}]
     chart = @barChart().forceY([0,8])
     chart.xAxis.axisLabel('Weekday').tickFormat (d) => @tickFormat(data, d)
-    chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
-    @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Weekday")
+    chart.yAxis.axisLabel('Avg. Full Meal Price').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
+    @addChart(num, chart, data, "Avg. Full #{@cmty}Meal Price by Weekday")
 
   addCommunityRep: (num) ->
     data = @data.community_rep

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190507130627) do
-
+ActiveRecord::Schema.define(version: 20190620005654) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -201,6 +200,18 @@ ActiveRecord::Schema.define(version: 20190507130627) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id", "community_id", "title"], name: "index_meal_roles_on_cluster_id_and_community_id_and_title", where: "(deactivated_at IS NULL)"
     t.index ["cluster_id"], name: "index_meal_roles_on_cluster_id"
+  end
+
+  create_table "meal_types", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "discounted", default: false, null: false
+    t.string "name", limit: 32, null: false
+    t.string "portion_type", limit: 32
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_types_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_types_on_community_id"
   end
 
   create_table "meals", id: :serial, force: :cascade do |t|
@@ -712,6 +723,8 @@ ActiveRecord::Schema.define(version: 20190507130627) do
   add_foreign_key "meal_formulas", "communities"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
+  add_foreign_key "meal_types", "clusters"
+  add_foreign_key "meal_types", "communities"
   add_foreign_key "meals", "clusters"
   add_foreign_key "meals", "communities"
   add_foreign_key "meals", "meal_formulas", column: "formula_id"

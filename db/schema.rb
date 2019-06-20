@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 20190620005654) do
     t.datetime "created_at", null: false
     t.boolean "discounted", default: false, null: false
     t.string "name", limit: 32, null: false
-    t.string "portion_type", limit: 32
+    t.string "subtype", limit: 32
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_types_on_cluster_id"
     t.index ["community_id"], name: "index_meal_types_on_community_id"

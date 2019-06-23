@@ -116,7 +116,7 @@ class MealsController < ApplicationController
     @meal_summary = Meals::Summary.new(@meal)
     authorize(@meal)
     load_signups
-    @cost_calculator = MealCostCalculator.build(@meal)
+    @cost_calculator = Meals::CostCalculator.build(@meal)
     return unless @meal.open? && current_user == @meal.head_cook
     flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
       "You should close the meal using the link below before printing this summary."

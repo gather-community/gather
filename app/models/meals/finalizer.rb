@@ -19,7 +19,7 @@ module Meals
     end
 
     def calculator
-      @calculator ||= MealCostCalculator.build(meal)
+      @calculator ||= CostCalculator.build(meal)
     end
 
     private

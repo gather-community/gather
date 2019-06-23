@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 module Meals
+  # Describes a meal system.
   class Formula < ApplicationRecord
     include Deactivatable
 
     attr_accessor :signup_types # For validation error setting only
 
-    MEAL_CALC_TYPES = %i(fixed share)
-    PANTRY_CALC_TYPES = %i(fixed percent)
+    MEAL_CALC_TYPES = %i[fixed share].freeze
+    PANTRY_CALC_TYPES = %i[fixed percent].freeze
 
     acts_as_tenant :cluster
 
@@ -17,8 +20,10 @@ module Meals
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
-    scope :with_meal_counts, -> { select("meal_formulas.*,
-      (SELECT COUNT(id) FROM meals WHERE formula_id = meal_formulas.id) AS meal_count") }
+    scope :with_meal_counts, lambda {
+                               select("meal_formulas.*, (SELECT COUNT(id) FROM meals "\
+                                 "WHERE formula_id = meal_formulas.id) AS meal_count")
+                             }
     scope :by_name, -> { alpha_order(:name) }
 
     normalize_attribute :name
@@ -36,7 +41,7 @@ module Meals
     after_update { RoleReminderMaintainer.instance.formula_saved(meals, roles) }
 
     def self.default_for(community)
-      in_community(community).where(is_default: true).first
+      in_community(community).find_by(is_default: true)
     end
 
     def item_id_options
@@ -47,7 +52,7 @@ module Meals
       Signup::SIGNUP_TYPES.select { |st| self[st].present? }
     end
 
-    def has_meals?
+    def meals?
       meals.any?
     end
 
@@ -60,7 +65,7 @@ module Meals
     end
 
     def allows_diner_type?(diner_type)
-      Signup::SIGNUP_TYPES.any?{ |st| st =~ /\A#{diner_type}_/ && self[st].present? }
+      Signup::SIGNUP_TYPES.any? { |st| st =~ /\A#{diner_type}_/ && self[st].present? }
     end
 
     def allows_signup_type?(diner_type_or_both, meal_type = nil)
@@ -69,7 +74,7 @@ module Meals
     end
 
     def portion_factors
-      allowed_diner_types.map{ |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
+      allowed_diner_types.map { |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
     end
 
     def fixed_meal?
@@ -101,9 +106,7 @@ module Meals
     private
 
     def cant_unset_default
-      if is_default_changed? && is_default_was
-        errors.add(:is_default, :cant_unset)
-      end
+      errors.add(:is_default, :cant_unset) if is_default_changed? && is_default_was
     end
 
     def at_least_one_signup_type
@@ -111,10 +114,8 @@ module Meals
         if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
           errors.add(:signup_types, :at_least_one_signup_type)
         end
-      else
-        if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st] == 0 }
-          errors.add(:signup_types, :at_least_one_nonzero_signup_type)
-        end
+      elsif Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
+        errors.add(:signup_types, :at_least_one_nonzero_signup_type)
       end
     end
 
@@ -125,9 +126,7 @@ module Meals
     end
 
     def ensure_unique_default
-      if is_default?
-        self.class.in_community(community).where.not(id: id).update_all(is_default: false)
-      end
+      self.class.in_community(community).where.not(id: id).update_all(is_default: false) if is_default?
     end
 
     def separator

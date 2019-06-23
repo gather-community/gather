@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     transient do
@@ -23,6 +25,19 @@ FactoryBot.define do
       head_cook_role = Meals::Role.find_by(community_id: community.id, special: "head_cook") ||
         create(:meal_role, :head_cook, community: community)
       [head_cook_role, asst_cook_role].compact
+    end
+
+    after(:build) do |formula|
+      rank = 0
+      Signup::SIGNUP_TYPES.each do |st|
+        next unless (share = formula.send(st))
+        type = Meals::Type.new(community: formula.community,
+                               discounted: share < 1,
+                               name: st.split("_").map(&:capitalize).join(" "),
+                               subtype: st.split("_")[-1].capitalize)
+        formula.parts.build(rank: rank, share: share, type: type)
+        rank += 1
+      end
     end
 
     trait :with_asst_cook_role do

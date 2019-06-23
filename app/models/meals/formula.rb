@@ -13,6 +13,7 @@ module Meals
     has_many :meals, inverse_of: :formula
     has_many :formula_roles, inverse_of: :formula, dependent: :destroy
     has_many :roles, -> { by_title }, through: :formula_roles
+    has_many :parts, class_name: "Meals::FormulaPart", inverse_of: :formula, dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }

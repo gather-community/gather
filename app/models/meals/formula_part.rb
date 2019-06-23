@@ -6,5 +6,9 @@ module Meals
     acts_as_tenant :cluster
     belongs_to :formula
     belongs_to :type
+
+    def nonzero?
+      !share.zero?
+    end
   end
 end

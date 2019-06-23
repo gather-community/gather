@@ -111,10 +111,10 @@ module Meals
 
     def at_least_one_signup_type
       if fixed_meal?
-        if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
+        if parts.empty? && Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
           errors.add(:signup_types, :at_least_one_signup_type)
         end
-      elsif Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
+      elsif parts.none?(&:nonzero?) && Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
         errors.add(:signup_types, :at_least_one_nonzero_signup_type)
       end
     end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ShareMealCostCalculator do
+describe Meals::ShareCostCalculator do
 
   let(:formula) do
     build(:meal_formula,
@@ -13,7 +13,7 @@ describe ShareMealCostCalculator do
     )
   end
   let(:meal) { build(:meal, formula: formula) }
-  let(:calculator) { ShareMealCostCalculator.new(meal) }
+  let(:calculator) { Meals::ShareCostCalculator.new(meal) }
 
   before do
     meal.build_cost

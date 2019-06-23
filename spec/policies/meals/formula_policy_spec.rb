@@ -23,7 +23,7 @@ describe Meals::FormulaPolicy do
     end
 
     context "with existing meals" do
-      before { allow(formula).to receive(:has_meals?).and_return(true) }
+      before { allow(formula).to receive(:meals?).and_return(true) }
 
       permissions :deactivate?, :edit?, :update? do
         it "permits" do
@@ -123,7 +123,7 @@ describe Meals::FormulaPolicy do
     end
 
     context "with existing meals" do
-      before { allow(formula).to receive(:has_meals?).and_return(true) }
+      before { allow(formula).to receive(:meals?).and_return(true) }
 
       it "should not allow restricted attribs" do
         expect(subject).to contain_exactly(*base_attribs)

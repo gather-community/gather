@@ -4,7 +4,7 @@ module Meals
   class FormulaPolicy < ApplicationPolicy
     alias formula record
 
-    delegate :has_meals?, :is_default?, to: :formula
+    delegate :meals?, :is_default?, to: :formula
 
     class Scope < Scope
       def resolve
@@ -33,7 +33,7 @@ module Meals
     end
 
     def update_calcs?
-      !has_meals? && active_admin_or?(:meals_coordinator)
+      !meals? && active_admin_or?(:meals_coordinator)
     end
 
     def activate?

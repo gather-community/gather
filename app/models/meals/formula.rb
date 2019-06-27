@@ -7,6 +7,9 @@ module Meals
 
     attr_accessor :signup_types # For validation error setting only
 
+    # 73 TODO: Remove
+    attr_accessor :flag_xxx
+
     MEAL_CALC_TYPES = %i[fixed share].freeze
     PANTRY_CALC_TYPES = %i[fixed percent].freeze
 
@@ -30,7 +33,7 @@ module Meals
 
     validates :name, :meal_calc_type, :pantry_calc_type, :pantry_fee, presence: true
     validates :pantry_fee, numericality: {greater_than_or_equal_to: 0}
-    validate :at_least_one_signup_type
+    validate :at_least_one_type
     validate :cant_unset_default
     validate :must_have_head_cook_role
 
@@ -131,13 +134,21 @@ module Meals
       errors.add(:is_default, :cant_unset) if is_default_changed? && is_default_was
     end
 
-    def at_least_one_signup_type
-      if fixed_meal?
-        if parts.empty? && Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
-          errors.add(:signup_types, :at_least_one_signup_type)
+    def at_least_one_type
+      if flag_xxx
+        if fixed_meal?
+          errors.add(:parts, :at_least_one_type) if parts.empty?
+        elsif parts.none?(&:nonzero?)
+          errors.add(:parts, :at_least_one_nonzero_type)
         end
-      elsif parts.none?(&:nonzero?) && Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
-        errors.add(:signup_types, :at_least_one_nonzero_signup_type)
+      else # 73 TODO: remove
+        if fixed_meal?
+          if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
+            errors.add(:signup_types, :at_least_one_type)
+          end
+        elsif Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
+          errors.add(:signup_types, :at_least_one_nonzero_type)
+        end
       end
     end
 

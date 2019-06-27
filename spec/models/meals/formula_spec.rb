@@ -4,6 +4,43 @@ require "rails_helper"
 
 describe Meals::Formula do
   describe "validation" do
+    describe "at_least_one_type" do
+      subject(:formula) { build(:meal_formula, flag_xxx: true, part_shares: part_shares, meal_calc_type: calc_type) }
+
+      context "fixed type" do
+        let(:calc_type) { "fixed" }
+
+        context "with no parts" do
+          let(:part_shares) { [] }
+          it { is_expected.to have_errors(parts: "must include at least one meal type") }
+        end
+
+        context "with all zero parts" do
+          let(:part_shares) { [0, 0] }
+          it { is_expected.to be_valid }
+        end
+
+        context "with parts" do
+          let(:part_shares) { [2, 3] }
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context "share type" do
+        let(:calc_type) { "share" }
+
+        context "with all zero parts" do
+          let(:part_shares) { [0, 0] }
+          it { is_expected.to have_errors(parts: "must include at least one non-zero meal type") }
+        end
+
+        context "with parts" do
+          let(:part_shares) { [1, 0.5] }
+          it { is_expected.to be_valid }
+        end
+      end
+    end
+
     describe "must_have_head_cook_role" do
       let!(:head_cook_role) { create(:meal_role, :head_cook) }
       let!(:other_role) { create(:meal_role) }

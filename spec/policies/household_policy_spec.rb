@@ -106,7 +106,7 @@ describe HouseholdPolicy do
       end
 
       context "with signup" do
-        let!(:signup) { create(:signup, household: household, adult_meat: 2) }
+        let!(:signup) { create(:signup, :with_nums, household: household) }
         it_behaves_like "forbids all"
       end
 

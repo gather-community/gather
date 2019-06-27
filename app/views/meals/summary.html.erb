@@ -86,7 +86,7 @@
           <tr>
             <% 2.times do |i| %>
               <td><%= number_to_currency(costs[i]) %></td>
-              <td><%= number_to_currency(@cost_calculator.max_ingredient_cost_for_per_adult_cost(costs[i])) %></td>
+              <td><%= number_to_currency(@cost_calculator.max_ingredient_cost_for_full_price_of(costs[i])) %></td>
               <td>&nbsp;&nbsp;&nbsp;</td>
             <% end %>
           </tr>

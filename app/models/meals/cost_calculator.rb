@@ -24,10 +24,10 @@ module Meals
     end
 
     # Returns a price for the given signup type, rounded to the nearest cent.
-    def price_for(signup_type)
-      return prices[signup_type] if prices.key?(signup_type)
-      base_price = base_price_for(signup_type)
-      prices[signup_type] = base_price ? (base_price + pantry_fee_for(base_price)).round(2) : nil
+    def price_for(type)
+      return prices[type] if prices.key?(type)
+      base_price = base_price_for(type)
+      prices[type] = base_price ? (base_price + pantry_fee_for(base_price)).round(2) : nil
     end
 
     protected
@@ -37,6 +37,12 @@ module Meals
     def sum_product
       @sum_product ||= Signup.totals_for_meal(meal).map do |signup_type, count|
         (formula[signup_type] || 0) * count
+      end.reduce(:+)
+    end
+
+    def sum_product_zzz
+      @sum_product_zzz ||= meal.signup_totals_zzz.map do |type, count|
+        (formula[type] || 0) * count
       end.reduce(:+)
     end
 

@@ -203,8 +203,8 @@ en:
             abbrv:
               blank: "can't be blank if resource can host meals"
         meals/formula:
-          at_least_one_signup_type: "You must specify a value for at least one signup type."
-          at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
+          at_least_one_type: "You must include at least one meal type."
+          at_least_one_nonzero_type: "You must include at least one non-zero meal type if the calculation type is proportional."
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."

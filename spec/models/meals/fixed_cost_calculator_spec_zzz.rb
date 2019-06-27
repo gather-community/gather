@@ -24,7 +24,7 @@ describe Meals::FixedCostCalculator do
       it "should be correct" do
         expect(calculator.price_for(types[0])).to be_within(0.005).of(4.5)
         expect(calculator.price_for(types[1])).to be_within(0.005).of(3.5)
-        expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
+        expect(calculator.price_for(types[2])).to be_zero
       end
     end
 
@@ -43,7 +43,7 @@ describe Meals::FixedCostCalculator do
       it "should be correct" do
         expect(calculator.price_for(types[0])).to be_within(0.005).of(4.4)
         expect(calculator.price_for(types[1])).to be_within(0.005).of(3.3)
-        expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
+        expect(calculator.price_for(types[2])).to be_zero
       end
     end
   end

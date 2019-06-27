@@ -28,7 +28,7 @@ describe Meals::ShareCostCalculator do
         it "should be correct" do
           expect(calculator.price_for(types[0])).to be_within(0.005).of(9.39)
           expect(calculator.price_for(types[1])).to be_within(0.005).of(7.17)
-          expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
+          expect(calculator.price_for(types[2])).to be_zero
         end
       end
 
@@ -50,7 +50,7 @@ describe Meals::ShareCostCalculator do
         it "should be correct" do
           expect(calculator.price_for(types[0])).to be_within(0.005).of(9.78)
           expect(calculator.price_for(types[1])).to be_within(0.005).of(7.33)
-          expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
+          expect(calculator.price_for(types[2])).to be_zero
         end
       end
 
@@ -76,7 +76,7 @@ describe Meals::ShareCostCalculator do
 
     describe "price_for" do
       it "should be zero" do
-        expect(calculator.price_for(types[0])).to be_within(0.005).of(0)
+        expect(calculator.price_for(types[0])).to be_zero
       end
     end
   end

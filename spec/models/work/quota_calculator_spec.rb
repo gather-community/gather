@@ -9,14 +9,14 @@ describe Work::QuotaCalculator do
   subject { described_class.new(period).calculate }
 
   context "with no jobs or shares" do
-    it { is_expected.to be_within(0.01).of(0) }
+    it { is_expected.to be_zero }
   end
 
   context "with shares but no jobs" do
     before do
       [1, 0, 1, 1, 0.5, 0.5].each_with_index { |p, i| period.shares.create!(user: users[i], portion: p) }
     end
-    it { is_expected.to be_within(0.01).of(0) }
+    it { is_expected.to be_zero }
   end
 
   context "with jobs" do
@@ -31,7 +31,7 @@ describe Work::QuotaCalculator do
     end
 
     context "with no shares" do
-      it { is_expected.to be_within(0.01).of(0) }
+      it { is_expected.to be_zero }
     end
 
     context "with shares" do
@@ -98,7 +98,7 @@ describe Work::QuotaCalculator do
 
         context "with quota_type none" do
           let(:quota_type) { "none" }
-          it { is_expected.to be_within(0.01).of(0) }
+          it { is_expected.to be_zero }
         end
 
         context "with quota_type by_person" do

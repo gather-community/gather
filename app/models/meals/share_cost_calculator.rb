@@ -9,24 +9,24 @@ module Meals
 
     # Calculates the maximum amount the cook can spend on ingredients in order for
     # the meal to cost the given amount per adult.
-    def max_ingredient_cost_for_per_adult_cost(per_adult_cost)
+    def max_ingredient_cost_for_full_price_of(full_price)
       if formula.fixed_pantry?
-        adult_equivs * (per_adult_cost - formula.pantry_fee)
+        full_price_equivs * (full_price - formula.pantry_fee)
       else
-        adult_equivs * per_adult_cost / (formula.pantry_fee + 1)
+        full_price_equivs * full_price / (formula.pantry_fee + 1)
       end
     end
 
     protected
 
-    def base_price_for(signup_type)
+    def base_price_for(type)
       raise "ingredient_cost must be set to calculate base price" if meal.cost.ingredient_cost.blank?
-      return 0 if adult_equivs.zero?
-      per_adult_cost = meal.cost.ingredient_cost / adult_equivs
-      formula[signup_type] ? formula[signup_type] * per_adult_cost : nil
+      return 0 if full_price_equivs.zero?
+      full_price = meal.cost.ingredient_cost / full_price_equivs
+      formula[type] ? formula[type] * full_price : nil
     end
 
-    def adult_equivs
+    def full_price_equivs
       sum_product
     end
   end

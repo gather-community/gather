@@ -1,4 +1,5 @@
 <div class="line-fields">
   <%= f.input(:quantity, collection: (0..10).to_a, label: false, include_blank: false) %>
+  <%# 73 TODO: Move item_id_options to FormulaDecorator %>
   <%= f.input(:item_id, collection: options[:formula].item_id_options, label: false, include_blank: false) %>
 </div>

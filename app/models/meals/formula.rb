@@ -101,10 +101,6 @@ module Meals
       pantry_calc_type.blank? || pantry_calc_type == "fixed"
     end
 
-    def max_cost
-      Signup::SIGNUP_TYPES.map { |st| self[st] }.compact.max
-    end
-
     def pantry_fee_nice=(str)
       self.pantry_fee = normalize_amount(str, pct: !fixed_pantry?)
     end

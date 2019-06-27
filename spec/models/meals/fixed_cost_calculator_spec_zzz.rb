@@ -22,15 +22,15 @@ describe Meals::FixedCostCalculator do
 
     describe "price_for" do
       it "should be correct" do
-        expect(calculator.price_for(types[0])).to be_within(0.001).of(4.5)
-        expect(calculator.price_for(types[1])).to be_within(0.001).of(3.5)
-        expect(calculator.price_for(types[2])).to be_within(0.001).of(0)
+        expect(calculator.price_for(types[0])).to be_within(0.005).of(4.5)
+        expect(calculator.price_for(types[1])).to be_within(0.005).of(3.5)
+        expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
       end
     end
 
     describe "max_ingredient_cost" do
       it "should be correct" do
-        expect(calculator.max_ingredient_cost_zzz).to be_within(0.001).of(45)
+        expect(calculator.max_ingredient_cost_zzz).to be_within(0.005).of(45)
       end
     end
   end
@@ -41,9 +41,9 @@ describe Meals::FixedCostCalculator do
 
     describe "price_for" do
       it "should be correct" do
-        expect(calculator.price_for(types[0])).to be_within(0.001).of(4.4)
-        expect(calculator.price_for(types[1])).to be_within(0.001).of(3.3)
-        expect(calculator.price_for(types[2])).to be_within(0.001).of(0)
+        expect(calculator.price_for(types[0])).to be_within(0.005).of(4.4)
+        expect(calculator.price_for(types[1])).to be_within(0.005).of(3.3)
+        expect(calculator.price_for(types[2])).to be_within(0.005).of(0)
       end
     end
   end

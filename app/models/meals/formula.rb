@@ -33,6 +33,8 @@ module Meals
     validate :at_least_one_signup_type
     validate :cant_unset_default
     validate :must_have_head_cook_role
+
+    # 73 TODO: Remove
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
     end
@@ -60,10 +62,12 @@ module Meals
       @types ||= parts.map(&:type)
     end
 
+    # 73 TODO: Remove
     def item_id_options
       defined_signup_types.map { |t| [I18n.t("signups.types.#{t}"), t] }
     end
 
+    # 73 TODO: Remove
     def defined_signup_types
       Signup::SIGNUP_TYPES.select { |st| self[st].present? }
     end
@@ -72,23 +76,28 @@ module Meals
       meals.any?
     end
 
+    # 73 TODO: Remove
     def allowed_diner_types
       @allowed_diner_types ||= Signup::DINER_TYPES.select { |dt| allows_diner_type?(dt) }
     end
 
+    # 73 TODO: Remove
     def allowed_signup_types
       @allowed_signup_types ||= Signup::SIGNUP_TYPES.select { |st| allows_signup_type?(st) }
     end
 
+    # 73 TODO: Remove
     def allows_diner_type?(diner_type)
       Signup::SIGNUP_TYPES.any? { |st| st =~ /\A#{diner_type}_/ && self[st].present? }
     end
 
+    # 73 TODO: Remove
     def allows_signup_type?(diner_type_or_both, meal_type = nil)
       attrib = meal_type.present? ? "#{diner_type_or_both}_#{meal_type}" : diner_type_or_both
       !self[attrib].nil?
     end
 
+    # 73 TODO: Remove
     def portion_factors
       allowed_diner_types.map { |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
     end
@@ -105,6 +114,7 @@ module Meals
       self.pantry_fee = normalize_amount(str, pct: !fixed_pantry?)
     end
 
+    # 73 TODO: Remove
     Signup::SIGNUP_TYPES.each do |st|
       define_method("#{st}_nice=") do |str|
         send("#{st}=", normalize_amount(str, pct: !fixed_meal?))

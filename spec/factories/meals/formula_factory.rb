@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     transient do
       asst_cook_role { nil }
-      part_shares { [] }
+      part_shares { nil }
     end
 
     sequence(:name) { |n| "Formula #{n}" }
@@ -29,23 +29,26 @@ FactoryBot.define do
     end
 
     after(:build) do |formula, evaluator|
-      # Create types and parts for the given share values.
-      evaluator.part_shares.each_with_index do |share, index|
-        type = Meals::Type.new(community: formula.community,
-                               discounted: share < 1,
-                               name: "#{formula.name} Type #{index}")
-        formula.parts.build(rank: index, share: share, type: type)
-      end
-
-      rank = evaluator.part_shares.size
-      Signup::SIGNUP_TYPES.each do |st|
-        next unless (share = formula.send(st))
-        type = Meals::Type.new(community: formula.community,
-                               discounted: share < 1,
-                               name: st.split("_").map(&:capitalize).join(" "),
-                               subtype: st.split("_")[-1].capitalize)
-        formula.parts.build(rank: rank, share: share, type: type)
-        rank += 1
+      if evaluator.part_shares.nil?
+        # 73 TODO: Remove
+        rank = 0
+        Signup::SIGNUP_TYPES.each do |st|
+          next unless (share = formula.send(st))
+          type = Meals::Type.new(community: formula.community,
+                                 discounted: share < 1,
+                                 name: st.split("_").map(&:capitalize).join(" "),
+                                 subtype: st.split("_")[-1].capitalize)
+          formula.parts.build(rank: rank, share: share, type: type)
+          rank += 1
+        end
+      else
+        # Create types and parts for the given share values.
+        evaluator.part_shares.each_with_index do |share, index|
+          type = Meals::Type.new(community: formula.community,
+                                 discounted: share < 1,
+                                 name: "#{formula.name} Type #{index}")
+          formula.parts.build(rank: index, share: share, type: type)
+        end
       end
     end
 

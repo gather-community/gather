@@ -44,6 +44,22 @@ module Meals
       in_community(community).find_by(is_default: true)
     end
 
+    def [](key)
+      if key.is_a?(Meals::Type)
+        parts_by_type[key].share
+      else # 73 TODO: remove
+        read_attribute(key)
+      end
+    end
+
+    def parts_by_type
+      @parts_by_type ||= parts.index_by(&:type)
+    end
+
+    def types
+      @types ||= parts.map(&:type)
+    end
+
     def item_id_options
       defined_signup_types.map { |t| [I18n.t("signups.types.#{t}"), t] }
     end

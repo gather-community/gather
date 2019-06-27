@@ -63,6 +63,7 @@ class Signup < ApplicationRecord
     end
   end
 
+  # 73 TODO: Remove
   def self.totals_for_meal(meal)
     SIGNUP_TYPES.map { |st| [st, 0] }.to_h.tap do |totals|
       meal.signups.each do |signup|

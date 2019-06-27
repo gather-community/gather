@@ -160,6 +160,17 @@ class Meal < ApplicationRecord
     @signup_totals = Signup.totals_for_meal(self)
   end
 
+  def signup_totals_zzz
+    @signup_totals = formula.parts.map { |p| [p.type, 0] }.to_h.tap do |totals|
+      signups.each do |signup|
+        next if signup.marked_for_destruction?
+        formula.parts.each do |part|
+          totals[part.type] += signup[part.legacy_type]
+        end
+      end
+    end
+  end
+
   def spots_left
     @spots_left ||= [capacity - signup_count, 0].max
   end

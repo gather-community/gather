@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     transient do
       asst_cook_role { nil }
+      part_shares { [] }
     end
 
     sequence(:name) { |n| "Formula #{n}" }
@@ -27,8 +28,16 @@ FactoryBot.define do
       [head_cook_role, asst_cook_role].compact
     end
 
-    after(:build) do |formula|
-      rank = 0
+    after(:build) do |formula, evaluator|
+      # Create types and parts for the given share values.
+      evaluator.part_shares.each_with_index do |share, index|
+        type = Meals::Type.new(community: formula.community,
+                               discounted: share < 1,
+                               name: "#{formula.name} Type #{index}")
+        formula.parts.build(rank: index, share: share, type: type)
+      end
+
+      rank = evaluator.part_shares.size
       Signup::SIGNUP_TYPES.each do |st|
         next unless (share = formula.send(st))
         type = Meals::Type.new(community: formula.community,

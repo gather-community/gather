@@ -7,6 +7,8 @@ module Meals
     belongs_to :formula
     belongs_to :type
 
+    validates :share, presence: true, numericality: {greater_than_or_equal_to: 0}
+
     def nonzero?
       !share.zero?
     end

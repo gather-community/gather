@@ -3,7 +3,7 @@ module MealSummaryHelper
 
   def portion_counts(meal)
     "This meal will require approximately ".html_safe <<
-      Signup::FOOD_TYPES.map do |ft|
+      Meals::Signup::FOOD_TYPES.map do |ft|
         content_tag(:strong) do
           num = meal.portions(ft).ceil
           ft_str = t("signups.food_types.#{ft}").downcase

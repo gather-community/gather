@@ -10,7 +10,7 @@ class ReminderDelivery < ApplicationRecord
 
   # These are subclass-specific but they need to be up here so we can eager load them.
   belongs_to :shift, class_name: "Work::Shift", inverse_of: :reminder_deliveries
-  belongs_to :meal, inverse_of: :reminder_deliveries
+  belongs_to :meal, class_name: "Meals::Meal", inverse_of: :reminder_deliveries
 
   scope :too_old, -> { where("deliver_at < ?", Time.current - TOO_OLD) }
 

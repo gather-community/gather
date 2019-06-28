@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   end
 
   namespace :meals do
+    resources :signups, only: %i[create update]
     resources :formulas do
       member do
         put :activate
@@ -51,7 +52,7 @@ Rails.application.routes.draw do
 
   get "/meals/reports", to: redirect("/meals/report") # Legacy path
 
-  resources :meals do
+  resources :meals, controller: "meals/meals" do
     collection do
       get :jobs
       get :report
@@ -114,8 +115,6 @@ Rails.application.routes.draw do
   end
 
   resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports"
-
-  resources :signups, only: %i[create update]
 
   resources :households do
     member do

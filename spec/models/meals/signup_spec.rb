@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-describe Signup do
+describe Meals::Signup do
   describe "with no signups" do
     context "on create" do
-      let(:signup) { build(:signup) }
+      let(:signup) { build(:meal_signup) }
 
       it "should delete itself if all zeros" do
         expect(signup).not_to be_valid
@@ -14,7 +14,7 @@ describe Signup do
     end
 
     context "on update" do
-      let(:signup) { create(:signup, adult_veg: 2) }
+      let(:signup) { create(:meal_signup, adult_veg: 2) }
 
       it "should delete itself" do
         signup.update!(adult_veg: 0)
@@ -27,11 +27,11 @@ describe Signup do
     describe "dont_exceed_spots" do
       let(:meal) { create(:meal, capacity: 5) }
       # Need to use meal.id so that this instance of meal doesn't memoize spots_left.
-      let!(:existing_signup) { create(:signup, meal_id: meal.id, adult_meat: 2, adult_veg: 0) }
+      let!(:existing_signup) { create(:meal_signup, meal_id: meal.id, adult_meat: 2, adult_veg: 0) }
 
       context "with new record" do
         # Need to reload meal because otherwise it doesn't know about existing_signup.
-        let(:signup) { build(:signup, meal: meal.reload, adult_meat: 2, adult_veg: veg).tap(&:validate) }
+        let(:signup) { build(:meal_signup, meal: meal.reload, adult_meat: 2, adult_veg: veg).tap(&:validate) }
 
         context "with just right" do
           let(:veg) { 1 }
@@ -49,7 +49,7 @@ describe Signup do
 
       context "with existing record" do
         # After this one is created there will be a total of 4 diners.
-        let!(:signup) { create(:signup, meal: meal.reload, adult_meat: 2, adult_veg: 0) }
+        let!(:signup) { create(:meal_signup, meal: meal.reload, adult_meat: 2, adult_veg: 0) }
 
         before { signup.reload.update(adult_veg: veg) }
 

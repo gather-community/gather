@@ -11,11 +11,11 @@ describe Meals::MealReminderJob do
   let!(:meal2) { create(:meal, :with_menu, title: "Meal 2", served_at: "2017-01-01 18:15", community: c2) }
   let!(:meal3) { create(:meal, :with_menu, title: "Meal 3", served_at: "2017-01-02 18:15") }
   let!(:meal4) { create(:meal, :with_menu, :cancelled, title: "Meal 4", served_at: "2017-01-01 18:15") }
-  let!(:signup1) { create(:signup, :with_nums, meal: meal1) }
-  let!(:signup2) { create(:signup, :with_nums, meal: meal2) }
-  let!(:signup3) { create(:signup, :with_nums, meal: meal2) }
-  let!(:signup4) { create(:signup, :with_nums, meal: meal3) }
-  let!(:signup5) { create(:signup, :with_nums, meal: meal1, notified: true) }
+  let!(:signup1) { create(:meal_signup, :with_nums, meal: meal1) }
+  let!(:signup2) { create(:meal_signup, :with_nums, meal: meal2) }
+  let!(:signup3) { create(:meal_signup, :with_nums, meal: meal2) }
+  let!(:signup4) { create(:meal_signup, :with_nums, meal: meal3) }
+  let!(:signup5) { create(:meal_signup, :with_nums, meal: meal1, notified: true) }
   let(:strlen) { "Meal Reminder: Meal X".size }
 
   it "sends the right number of emails" do

@@ -5,7 +5,7 @@ require "rails_helper"
 feature "finalize meal", js: true do
   let!(:actor) { create(:admin) }
   let!(:meal) { create(:meal, :with_menu, served_at: Time.current - 3.days) }
-  let!(:signups) { create_list(:signup, 3, meal: meal, adult_veg: 1) }
+  let!(:signups) { create_list(:meal_signup, 3, meal: meal, adult_veg: 1) }
   let!(:late_add) { create(:household) }
 
   around do |example|

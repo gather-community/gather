@@ -23,7 +23,7 @@
                   <em>
                     Pending confirmation: <%= user.unconfirmed_email %><br/>
                     <%= link_to("Resend confirmation instructions",
-                          resend_email_confirmation_user_path(@user), method: :put) %> | 
+                          resend_email_confirmation_user_path(@user), method: :put) %> |
                     <%= link_to("Cancel change",
                           cancel_email_change_user_path(@user), method: :delete) %>
                   </em>

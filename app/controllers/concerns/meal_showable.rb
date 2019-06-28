@@ -25,6 +25,6 @@ module MealShowable
   end
 
   def sample_meal
-    Meal.new(community: current_community)
+    Meals::Meal.new(community: current_community)
   end
 end

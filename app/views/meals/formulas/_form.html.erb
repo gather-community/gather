@@ -23,7 +23,7 @@
         <% end %>
       </div>
       <div class="fields">
-        <% Signup::SIGNUP_TYPES.each do |st| %>
+        <% Meals::Signup::SIGNUP_TYPES.each do |st| %>
           <%= f.input "#{st}_nice", as: :string, label: t("signups.types.#{st}") %>
         <% end %>
       </div>

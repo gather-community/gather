@@ -41,7 +41,7 @@ en:
       set_password: "Set Password"
       meals_message:
         create: "Send Message"
-      signup:
+      meals_signup:
         save_and_next: "Save & Go To Next Meal"
       wiki_page:
         preview: "Preview"
@@ -58,7 +58,7 @@ en:
     household:
       deactivate: "Deactivate Household"
       destroy: "Delete Household"
-    meal:
+    meals/meal:
       destroy: "Delete Meal"
     user:
       deactivate: "Deactivate User"
@@ -70,7 +70,7 @@ en:
     household:
       destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
-    meal:
+    meals/meal:
       close: "Are you sure you want to close this meal? No further signups will be allowed."
       destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
       reopen: "Are you sure you want to reopen this meal? New signups will be allowed."

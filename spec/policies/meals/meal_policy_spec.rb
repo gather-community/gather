@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe MealPolicy do
+describe Meals::MealPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:head_cook) { create(:user) }
@@ -171,7 +171,7 @@ describe MealPolicy do
 
   describe "scope" do
     include_context "policy scopes"
-    let(:klass) { Meal }
+    let(:klass) { Meals::Meal }
     let!(:meal1) { create(:meal, communities: [user.community]) } # Invited
     let!(:meal2) { create(:meal, cleaners: [actor], communities: [communityB]) } # Assigned
     let!(:meal3) { create(:meal, communities: [communityB]) } # Signed up
@@ -216,7 +216,7 @@ describe MealPolicy do
 
   describe "permitted_attributes" do
     include_context "policy permissions"
-    subject { MealPolicy.new(actor, meal).permitted_attributes }
+    subject { described_class.new(actor, meal).permitted_attributes }
     let(:head_cook) { create(:user) }
     let(:meal) { create(:meal, head_cook: head_cook, communities: [community, communityC]) }
     let(:date_loc_invite_attribs) do

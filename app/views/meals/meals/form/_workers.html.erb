@@ -12,7 +12,7 @@
               context: "meal_assign",
               label: role.title,
               multiple: !role.head_cook?,
-              inner_partial: "meals/form/assignment_fields",
+              inner_partial: "meals/meals/form/assignment_fields",
               inner_labels: false,
               wrap_object: Proc.new { |assign| assign.role = role; assign }) %>
       </div>

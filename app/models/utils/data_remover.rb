@@ -6,7 +6,7 @@ module Utils
     end
 
     def remove
-      to_destroy_all = [Billing::Account, Meal, Meals::Formula, Reservations::Reservation,
+      to_destroy_all = [Billing::Account, Meals::Meal, Meals::Formula, Reservations::Reservation,
         Reservations::Protocol, Reservations::Resource, Reservations::SharedGuidelines]
       to_destroy_all.each { |c| c.destroy_all }
 

@@ -48,7 +48,7 @@ feature "meal signups", js: true do
   end
 
   context "with existing signup" do
-    let!(:signup) { create(:signup, meal: meal, household: user.household, adult_veg: 3, teen_meat: 4) }
+    let!(:signup) { create(:meal_signup, meal: meal, household: user.household, adult_veg: 3, teen_meat: 4) }
 
     scenario "edit, then unsignup" do
       visit(meal_path(meal))
@@ -63,10 +63,10 @@ feature "meal signups", js: true do
 
   context "with previous signup under current formula" do
     let!(:older_meal) { create(:meal, formula: formula, served_at: Time.current - 20.days) }
-    let!(:older_signup) { create(:signup, meal: older_meal, household: user.household, adult_meat: 3) }
+    let!(:older_signup) { create(:meal_signup, meal: older_meal, household: user.household, adult_meat: 3) }
     let!(:old_meal) { create(:meal, formula: formula, served_at: Time.current - 10.days) }
     let!(:old_signup) do
-      create(:signup, meal: old_meal, household: user.household, adult_veg: 3, teen_meat: 4)
+      create(:meal_signup, meal: old_meal, household: user.household, adult_veg: 3, teen_meat: 4)
     end
 
     scenario "same items and quantites should be copied" do

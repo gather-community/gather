@@ -1,6 +1,6 @@
 <% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
 
-<%= render("meals/time_cook") %>
+<%= render("meals/meals/time_cook") %>
 
 <%= gather_form_for(@meal, width: :full, name: "finalize",
   url: meal_finalize_path, method: :post) do |f| %>
@@ -11,9 +11,9 @@
     <%= render "table_header", extra_col: false %>
     <tr class="cost">
       <td><strong>Calculated Cost</strong></td>
-      <% Signup::DINER_TYPES.each do |dt| %>
+      <% Meals::Signup::DINER_TYPES.each do |dt| %>
         <% if @meal.formula.allows_diner_type?(dt) %>
-          <% Signup::FOOD_TYPES.each do |ft| %>
+          <% Meals::Signup::FOOD_TYPES.each do |ft| %>
             <% signup_type = "#{dt}_#{ft}" %>
             <td class="count"><%= number_to_currency(@calculator.price_for(signup_type)) %></td>
           <% end %>
@@ -23,9 +23,9 @@
     <% signups.reject(&:marked_for_destruction?).each do |signup| %>
       <tr>
         <td><%= signup.household_name %></td>
-        <% Signup::DINER_TYPES.each do |dt| %>
+        <% Meals::Signup::DINER_TYPES.each do |dt| %>
           <% if @meal.formula.allows_diner_type?(dt) %>
-            <% Signup::FOOD_TYPES.each do |ft| %>
+            <% Meals::Signup::FOOD_TYPES.each do |ft| %>
               <% signup_type = "#{dt}_#{ft}" %>
               <td class="count"><%= signup.count_or_blank(signup_type) %></td>
             <% end %>
@@ -48,15 +48,15 @@
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
       <td>
-        <strong><%= t("simple_form.options.meal.cost.payment_method.#{@cost.payment_method}") %></strong>
+        <strong><%= t("simple_form.options.meals_meal.cost.payment_method.#{@cost.payment_method}") %></strong>
       </td>
     </tr>
   </table>
 
   <%# Hidden data to be resubmitted %>
   <div class="hidden">
-    <%= render("meals/form/signups", f: f) %>
-    <%= render("meals/form/expenses", f: f) %>
+    <%= render("meals/meals/form/signups", f: f) %>
+    <%= render("meals/meals/form/expenses", f: f) %>
   </div>
 
   <%= render("shared/confirm_buttons", f: f) %>

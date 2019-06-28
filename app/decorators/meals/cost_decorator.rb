@@ -15,7 +15,7 @@ module Meals
     end
 
     def payment_method_nice
-      t("simple_form.options.meal.cost.payment_method.#{payment_method}")
+      t("simple_form.options.meals_meal.cost.payment_method.#{payment_method}")
     end
   end
 end

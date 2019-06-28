@@ -17,7 +17,7 @@ describe Meals::FixedCostCalculator do
 
   before do
     meal.build_cost
-    allow(Signup).to receive(:totals_for_meal).and_return(
+    allow(Meals::Signup).to receive(:totals_for_meal).and_return(
       "adult_meat" => 9, "adult_veg" => 3, "little_kid_veg" => 2
     )
   end

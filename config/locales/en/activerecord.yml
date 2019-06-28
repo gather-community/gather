@@ -1,7 +1,7 @@
 en:
   activerecord:
     models:
-      meal: "Meal"
+      meals/meal: "Meal"
     attributes:
       user:
         first_name: "First Name"
@@ -31,7 +31,7 @@ en:
         keyholders: "Extra Unit Keyholders"
         emergency_contacts: "Emergency Contacts"
         garage_nums: "Garage Number(s)"
-      meal:
+      meals/meal:
         no_allergens: "None of these"
         community_id: "Host Community"
         served_at: "Date/Time"
@@ -74,7 +74,7 @@ en:
       meals/role_reminder:
         rel_magnitude: "Send Time"
         note: "Note (optional)"
-      signup:
+      meals/signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
       billing/transaction:
@@ -178,11 +178,11 @@ en:
         household:
           name:
             taken: "There is already a household with this name at this community"
-        signup:
+        meals/signup:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
-        meal:
+        meals/meal:
           need_location: "You must choose at least one location"
         reservations/reservation:
           attributes:

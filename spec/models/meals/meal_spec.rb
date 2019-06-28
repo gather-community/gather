@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Meal do
+describe Meals::Meal do
   describe "validations" do
     describe "resources" do
       it "fails if none" do
@@ -34,8 +34,8 @@ describe Meal do
       context "with unique signups" do
         let(:signups) do
           [
-            build(:signup, :with_nums, household_id: hholds[0].id),
-            build(:signup, :with_nums, household_id: hholds[1].id)
+            build(:meal_signup, :with_nums, household_id: hholds[0].id),
+            build(:meal_signup, :with_nums, household_id: hholds[1].id)
           ]
         end
         it { is_expected.to be_valid }
@@ -44,10 +44,10 @@ describe Meal do
       context "with duplicate signups" do
         let(:signups) do
           [
-            build(:signup, :with_nums, household_id: hholds[0].id),
-            build(:signup, :with_nums, household_id: hholds[1].id),
-            build(:signup, :with_nums, household_id: hholds[0].id),
-            build(:signup, :with_nums, household_id: hholds[0].id)
+            build(:meal_signup, :with_nums, household_id: hholds[0].id),
+            build(:meal_signup, :with_nums, household_id: hholds[1].id),
+            build(:meal_signup, :with_nums, household_id: hholds[0].id),
+            build(:meal_signup, :with_nums, household_id: hholds[0].id)
           ]
         end
 
@@ -62,7 +62,7 @@ describe Meal do
     end
 
     describe "enough capacity" do
-      let!(:signup) { create(:signup, adult_meat: 5) }
+      let!(:signup) { create(:meal_signup, adult_meat: 5) }
       let(:meal) { signup.meal.tap { |m| m.signups.reload } }
 
       it "saves cleanly with enough capacity" do

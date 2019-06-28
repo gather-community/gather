@@ -17,7 +17,7 @@ describe Meals::ShareCostCalculator do
 
   before do
     meal.build_cost
-    allow(Signup).to receive(:totals_for_meal).and_return(
+    allow(Meals::Signup).to receive(:totals_for_meal).and_return(
       "adult_meat" => 9, "adult_veg" => 3, "little_kid_veg" => 2 # 11.25 adult equivalents
     )
   end
@@ -76,7 +76,7 @@ describe Meals::ShareCostCalculator do
     before { meal.cost = build(:meal_cost, ingredient_cost: 0, pantry_cost: 15) }
 
     before do
-      allow(Signup).to receive(:totals_for_meal).and_return("adult_meat" => 0)
+      allow(Meals::Signup).to receive(:totals_for_meal).and_return("adult_meat" => 0)
     end
 
     describe "price_for" do

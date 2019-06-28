@@ -46,7 +46,7 @@ module Utils
       end
 
       def finalize_and_run_statements
-        Meal.where.not(status: "finalized").each do |meal|
+        Meals::Meal.where.not(status: "finalized").each do |meal|
           meal.status = "finalized"
           meal.build_cost(
             ingredient_cost: rand(10000) / 100.0 + 32,
@@ -83,7 +83,7 @@ module Utils
           households.shuffle[0...num_households].each do |household|
             members = household.users.to_a
             type = bool_prob(70) ? "meat" : "veg"
-            create(:signup,
+            create(:meal_signup,
               meal: meal,
               household: household,
               "senior_#{type}" => members.count { |u| u.age && u.age >= 65 },

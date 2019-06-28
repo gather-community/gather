@@ -57,7 +57,7 @@ class UserPolicy < ApplicationPolicy
   # job choosing proxy), can be dependendly destroyed or nullified.
   def destroy?
     active_admin? &&
-      Meal.where(creator: record).none? &&
+      Meals::Meal.where(creator: record).none? &&
       Meals::Assignment.where(user: record).none? &&
       People::Guardianship.related_to(record).none? &&
       Reservations::Reservation.related_to(record).none? &&

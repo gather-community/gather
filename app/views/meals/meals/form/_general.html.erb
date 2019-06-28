@@ -8,7 +8,7 @@
         $(function() {
           // We don't use AjaxSelect2 here since it's not an ajax-based select2.
           // We specify width 100% so that the control has the proper width when the section is toggled.
-          $("#meal_resource_ids").select2({width: '100%'});
+          $("#meals_meal_resource_ids").select2({width: '100%'});
         });
       <% end %>
     <% else %>
@@ -29,9 +29,9 @@
             <% @communities.each do |c| %>
               <% checked = meal.community_invited?(c) %>
               <% disabled = meal.disable_community_checkbox?(c) %>
-              <%= check_box_tag("meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
-              <%= hidden_field_tag("meal[community_boxes][#{c.id}]", "1") if disabled %>
-              <%= label_tag("meal[community_boxes][#{c.id}]", c.name) %>
+              <%= check_box_tag("meals_meal[community_boxes][#{c.id}]", "1", checked, disabled: disabled) %>
+              <%= hidden_field_tag("meals_meal[community_boxes][#{c.id}]", "1") if disabled %>
+              <%= label_tag("meals_meal[community_boxes][#{c.id}]", c.name) %>
               &nbsp;&nbsp;
             <% end %>
           </div>

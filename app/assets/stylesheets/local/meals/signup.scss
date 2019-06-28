@@ -35,7 +35,7 @@
 }
 
 form.gather-form.narrow-label-layout.finalize-form,
-form.gather-form.narrow-label-layout.meal-form {
+form.gather-form.narrow-label-layout.meals--meal-form {
   // A single signup row.
   .signup-fields .form-group {
     margin-bottom: 0;
@@ -58,7 +58,7 @@ form.gather-form.narrow-label-layout.meal-form {
   }
 }
 
-form.gather-form.signup-form {
+form.gather-form.meals--signup-form {
   .form-group.signup_lines {
     @include signup-form-control-wrapper;
   }

@@ -12,7 +12,7 @@ module Calendars
 
       def base_scope
         # Eager loading resources due to location.
-        MealPolicy::Scope.new(user, Meal).resolve
+        Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
           .includes(:resources)
           .with_max_age(MAX_EVENT_AGE)
           .oldest_first
@@ -43,7 +43,7 @@ module Calendars
       private
 
       def user_signups_by_meal_id
-        @user_signups_by_meal_id ||= Signup
+        @user_signups_by_meal_id ||= Meals::Signup
           .includes(:meal)
           .where(household: user.household, meal: objects)
           .index_by(&:meal_id)

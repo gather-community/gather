@@ -32,7 +32,7 @@ FactoryBot.define do
       if evaluator.part_shares.nil?
         # 73 TODO: Remove
         rank = 0
-        Signup::SIGNUP_TYPES.each do |st|
+        Meals::Signup::SIGNUP_TYPES.each do |st|
           next unless (share = formula.send(st))
           type = Meals::Type.new(community: formula.community,
                                  discounted: share < 1,

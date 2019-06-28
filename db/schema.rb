@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190621015134) do
+ActiveRecord::Schema.define(version: 20190628175345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,16 +86,6 @@ ActiveRecord::Schema.define(version: 20190621015134) do
     t.index ["community_id"], name: "index_households_on_community_id"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["name"], name: "index_households_on_name"
-  end
-
-  create_table "invitations", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.integer "meal_id", null: false
-    t.index ["cluster_id"], name: "index_invitations_on_cluster_id"
-    t.index ["community_id", "meal_id"], name: "index_invitations_on_community_id_and_meal_id", unique: true
-    t.index ["community_id"], name: "index_invitations_on_community_id"
-    t.index ["meal_id"], name: "index_invitations_on_meal_id"
   end
 
   create_table "meal_assignments", id: :serial, force: :cascade do |t|
@@ -187,6 +177,16 @@ ActiveRecord::Schema.define(version: 20190621015134) do
     t.index ["deactivated_at"], name: "index_meal_formulas_on_deactivated_at"
   end
 
+  create_table "meal_invitations", id: :serial, force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.integer "meal_id", null: false
+    t.index ["cluster_id"], name: "index_meal_invitations_on_cluster_id"
+    t.index ["community_id", "meal_id"], name: "index_meal_invitations_on_community_id_and_meal_id", unique: true
+    t.index ["community_id"], name: "index_meal_invitations_on_community_id"
+    t.index ["meal_id"], name: "index_meal_invitations_on_meal_id"
+  end
+
   create_table "meal_messages", id: :serial, force: :cascade do |t|
     t.text "body", null: false
     t.integer "cluster_id", null: false
@@ -214,6 +214,31 @@ ActiveRecord::Schema.define(version: 20190621015134) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id", "community_id", "title"], name: "index_meal_roles_on_cluster_id_and_community_id_and_title", where: "(deactivated_at IS NULL)"
     t.index ["cluster_id"], name: "index_meal_roles_on_cluster_id"
+  end
+
+  create_table "meal_signups", id: :serial, force: :cascade do |t|
+    t.integer "adult_meat", default: 0, null: false
+    t.integer "adult_veg", default: 0, null: false
+    t.integer "big_kid_meat", default: 0, null: false
+    t.integer "big_kid_veg", default: 0, null: false
+    t.integer "cluster_id", null: false
+    t.text "comments"
+    t.datetime "created_at", null: false
+    t.integer "household_id", null: false
+    t.integer "little_kid_meat", default: 0, null: false
+    t.integer "little_kid_veg", default: 0, null: false
+    t.integer "meal_id", null: false
+    t.boolean "notified", default: false, null: false
+    t.integer "senior_meat", default: 0, null: false
+    t.integer "senior_veg", default: 0, null: false
+    t.integer "teen_meat", default: 0, null: false
+    t.integer "teen_veg", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_signups_on_cluster_id"
+    t.index ["household_id", "meal_id"], name: "index_meal_signups_on_household_id_and_meal_id", unique: true
+    t.index ["household_id"], name: "index_meal_signups_on_household_id"
+    t.index ["meal_id"], name: "index_meal_signups_on_meal_id"
+    t.index ["notified"], name: "index_meal_signups_on_notified"
   end
 
   create_table "meal_types", force: :cascade do |t|
@@ -469,31 +494,6 @@ ActiveRecord::Schema.define(version: 20190621015134) do
     t.index ["name"], name: "index_roles_on_name"
   end
 
-  create_table "signups", id: :serial, force: :cascade do |t|
-    t.integer "adult_meat", default: 0, null: false
-    t.integer "adult_veg", default: 0, null: false
-    t.integer "big_kid_meat", default: 0, null: false
-    t.integer "big_kid_veg", default: 0, null: false
-    t.integer "cluster_id", null: false
-    t.text "comments"
-    t.datetime "created_at", null: false
-    t.integer "household_id", null: false
-    t.integer "little_kid_meat", default: 0, null: false
-    t.integer "little_kid_veg", default: 0, null: false
-    t.integer "meal_id", null: false
-    t.boolean "notified", default: false, null: false
-    t.integer "senior_meat", default: 0, null: false
-    t.integer "senior_veg", default: 0, null: false
-    t.integer "teen_meat", default: 0, null: false
-    t.integer "teen_veg", default: 0, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_signups_on_cluster_id"
-    t.index ["household_id", "meal_id"], name: "index_signups_on_household_id_and_meal_id", unique: true
-    t.index ["household_id"], name: "index_signups_on_household_id"
-    t.index ["meal_id"], name: "index_signups_on_meal_id"
-    t.index ["notified"], name: "index_signups_on_notified"
-  end
-
   create_table "statements", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "cluster_id", null: false
@@ -722,9 +722,6 @@ ActiveRecord::Schema.define(version: 20190621015134) do
   add_foreign_key "communities", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
-  add_foreign_key "invitations", "clusters"
-  add_foreign_key "invitations", "communities"
-  add_foreign_key "invitations", "meals"
   add_foreign_key "meal_assignments", "clusters"
   add_foreign_key "meal_assignments", "meal_roles", column: "role_id"
   add_foreign_key "meal_assignments", "meals"
@@ -738,8 +735,14 @@ ActiveRecord::Schema.define(version: 20190621015134) do
   add_foreign_key "meal_formula_roles", "meal_roles", column: "role_id"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
+  add_foreign_key "meal_invitations", "clusters"
+  add_foreign_key "meal_invitations", "communities"
+  add_foreign_key "meal_invitations", "meals"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
+  add_foreign_key "meal_signups", "clusters"
+  add_foreign_key "meal_signups", "households"
+  add_foreign_key "meal_signups", "meals"
   add_foreign_key "meal_types", "clusters"
   add_foreign_key "meal_types", "communities"
   add_foreign_key "meals", "clusters"
@@ -784,9 +787,6 @@ ActiveRecord::Schema.define(version: 20190621015134) do
   add_foreign_key "reservations", "users", column: "sponsor_id"
   add_foreign_key "resources", "clusters"
   add_foreign_key "resources", "communities"
-  add_foreign_key "signups", "clusters"
-  add_foreign_key "signups", "households"
-  add_foreign_key "signups", "meals"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
   add_foreign_key "transactions", "accounts"

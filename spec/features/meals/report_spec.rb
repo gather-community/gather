@@ -27,8 +27,8 @@ feature "meal report", js: true do
       meals = create_list(:meal, 2, :finalized, community: community,
                                                 served_at: Time.zone.today - 3.months)
       meals.each do |m|
-        m.signups << build(:signup, meal: m, adult_meat: 2)
-        m.signups << build(:signup, meal: m, adult_veg: 1)
+        m.signups << build(:meal_signup, meal: m, adult_meat: 2)
+        m.signups << build(:meal_signup, meal: m, adult_veg: 1)
         m.save!
       end
     end

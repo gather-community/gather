@@ -130,7 +130,7 @@ describe Household do
     end
 
     context "with meal signup" do
-      let!(:signup) { create(:signup, :with_nums, household: household) }
+      let!(:signup) { create(:meal_signup, :with_nums, household: household) }
       it { expect { household.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :signup do
+  factory :meal_signup, class: "Meals::Signup" do
     transient do
       # Type-agnostic way of requesting a specific number of diners be included in the signup
       diner_count { nil }

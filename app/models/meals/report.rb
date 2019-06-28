@@ -178,13 +178,13 @@ module Meals
           #{community_join}
           INNER JOIN (
             SELECT
-              signups.meal_id,
+              meal_signups.meal_id,
               SUM(#{full_signup_col_sum_expr}) AS ttl_diners,
               #{diner_type_sum_exprs},
               #{community_sum_exprs}
-            FROM signups
-              INNER JOIN households ON households.id = signups.household_id
-            GROUP BY signups.meal_id
+            FROM meal_signups
+              INNER JOIN households ON households.id = meal_signups.household_id
+            GROUP BY meal_signups.meal_id
           ) signup_ttls ON signup_ttls.meal_id = meals.id
         WHERE #{wheres.join(' AND ')}
         #{breakout_group_order}
@@ -223,7 +223,7 @@ module Meals
       @full_signup_col_sum_expr ||= signup_col_sum_expr
     end
 
-    def signup_col_sum_expr(tbl = "signups", prefix: "", diner_types: nil, food_types: nil)
+    def signup_col_sum_expr(tbl = "meal_signups", prefix: "", diner_types: nil, food_types: nil)
       diner_types ||= Signup::DINER_TYPES
       food_types ||= Signup::FOOD_TYPES
       types = diner_types.map { |dt| food_types.map { |ft| "#{prefix}#{dt}_#{ft}" } }.flatten

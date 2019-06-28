@@ -49,8 +49,8 @@ describe(Meals::Report) do
     before do
       meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
       meals.each do |m|
-        m.signups << build(:signup, meal: m, adult_meat: 1)
-        m.signups << build(:signup, meal: m, senior_veg: 1, little_kid_meat: 1)
+        m.signups << build(:meal_signup, meal: m, adult_meat: 1)
+        m.signups << build(:meal_signup, meal: m, senior_veg: 1, little_kid_meat: 1)
         m.save!
       end
     end
@@ -75,8 +75,8 @@ describe(Meals::Report) do
       before do
         meals = create_list(:meal, 2, :finalized, community: community, served_at: 1.day.ago)
         meals.each do |m|
-          m.signups << build(:signup, meal: m, adult_meat: 2)
-          m.signups << build(:signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, adult_meat: 2)
+          m.signups << build(:meal_signup, meal: m, adult_veg: 1)
           m.save!
         end
 
@@ -104,8 +104,8 @@ describe(Meals::Report) do
         meals << create(:meal, :finalized, community: communityX)
 
         meals.each do |m|
-          m.signups << build(:signup, meal: m, adult_meat: 2)
-          m.signups << build(:signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, adult_meat: 2)
+          m.signups << build(:meal_signup, meal: m, adult_veg: 1)
           m.save!
         end
       end
@@ -147,21 +147,21 @@ describe(Meals::Report) do
         counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
         meals.each_with_index do |m, i|
           m.cost.adult_meat = i + 1
-          m.signups << build(:signup, meal: m, adult_meat: counts[i][0], household: hholds[0])
-          m.signups << build(:signup, meal: m, senior_veg: counts[i][1], household: hholds[1])
+          m.signups << build(:meal_signup, meal: m, adult_meat: counts[i][0], household: hholds[0])
+          m.signups << build(:meal_signup, meal: m, senior_veg: counts[i][1], household: hholds[1])
           m.save!
         end
 
         # Cancelled meal, should be ignored.
         m = create(:meal, :cancelled, community: community, served_at: "2016-04-12 18:00")
-        m.signups << build(:signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:signup, meal: m, senior_veg: 2, household: hholds[1])
+        m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
         m.save!
 
         # Cancelled meal in other community, should be ignored.
         m = create(:meal, :cancelled, community: community2, served_at: "2016-04-12 18:00")
-        m.signups << build(:signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:signup, meal: m, senior_veg: 2, household: hholds[1])
+        m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
         m.save!
 
         # Very old meal, should be ignored.
@@ -170,11 +170,11 @@ describe(Meals::Report) do
         # Meals from community 2 and X
         meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)
         meals2.each do |meal|
-          meal.signups << build(:signup, meal: meal, adult_meat: 2)
+          meal.signups << build(:meal_signup, meal: meal, adult_meat: 2)
           meal.save!
         end
         meal3 = create(:meal, :finalized, community: communityX, served_at: 2.months.ago)
-        meal3.signups << build(:signup, meal: meal3, adult_meat: 2)
+        meal3.signups << build(:meal_signup, meal: meal3, adult_meat: 2)
         meal3.save!
       end
 

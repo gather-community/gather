@@ -1,5 +1,5 @@
 <%= meal.form_section(:menu, expanded: local_assigns[:expanded]) do %>
-  <% ([:title] + Meal::MENU_ITEMS).each do |attrib| %>
+  <% ([:title] + Meals::Meal::MENU_ITEMS).each do |attrib| %>
     <% if policy(meal).change_menu? %>
       <%= f.input(attrib, as: attrib == :title ? nil : :markdown) %>
     <% else %>
@@ -16,7 +16,7 @@
         <% meal.allergen_options.each do |allergen| %>
           <div>
             <%= label_tag do %>
-              <%= check_box_tag("meal[allergens][]", allergen, meal.allergen?(allergen)) %>
+              <%= check_box_tag("meals_meal[allergens][]", allergen, meal.allergen?(allergen)) %>
               <%= allergen %>
             <% end %>
           </div>

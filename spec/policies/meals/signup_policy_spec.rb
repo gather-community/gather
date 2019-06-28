@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-describe SignupPolicy do
+describe Meals::SignupPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
     let(:meal) { create(:meal, communities: [community, communityC]) }
-    let(:signup) { create(:signup, :with_nums, meal: meal) }
+    let(:signup) { create(:meal_signup, :with_nums, meal: meal) }
 
     shared_examples_for "must be invited, open, and in future" do
       context "in future and open" do
@@ -93,7 +93,7 @@ describe SignupPolicy do
 
   describe "permitted_attributes" do
     let(:user) { User.new }
-    subject { SignupPolicy.new(user, Signup.new).permitted_attributes }
+    subject { described_class.new(user, Meals::Signup.new).permitted_attributes }
 
     it "should allow basic attribs" do
       expect(subject).to contain_exactly(:id, :household_id, :comments, :meal_id,

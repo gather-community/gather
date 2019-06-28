@@ -4,7 +4,7 @@ Gather.Views.MealWorkerFormView = Backbone.View.extend
     @options = options
 
   events:
-    'change #meal_formula_id': 'formulaChanged'
+    'change #meals_meal_formula_id': 'formulaChanged'
     'change #assignment-fields': 'workersChanged'
 
   workersChanged: ->

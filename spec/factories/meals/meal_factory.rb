@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :meal do
+  factory :meal, class: "Meals::Meal" do
     transient do
       communities { [] }
       no_resources { false }

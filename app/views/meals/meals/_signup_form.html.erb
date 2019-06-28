@@ -37,10 +37,10 @@
     <div class="signup-fields-with-comments"
       <%= @expand_signup_form ? "" : "data-toggle-off=signup-form" %>>
       <div class="signup-fields">
-        <%= render("meals/form/signup_fields", f: f, hide_household: true) %>
+        <%= render("meals/meals/form/signup_fields", f: f, hide_household: true) %>
       </div>
 
-      <%= f.input(:comments, maxlength: Signup::MAX_COMMENT_LENGTH) %>
+      <%= f.input(:comments, maxlength: Meals::Signup::MAX_COMMENT_LENGTH) %>
 
       <%= form_actions do %>
         <% if next_meal %>
@@ -58,7 +58,7 @@
 
   <%= javascript_tag do %>
     $(function() {
-      new Gather.Views.DirtyChecker({el: '.signup-form'});
+      new Gather.Views.DirtyChecker({el: '.meals--signup-form'});
       new Gather.Views.Meals.SignupView({el: '.signup-fields'});
     });
   <% end %>

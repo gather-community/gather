@@ -10,7 +10,7 @@
 </tr>
 <tr>
   <% @meal.allowed_diner_types.each do %>
-    <% Signup::FOOD_TYPES.each do |ft| %>
+    <% Meals::Signup::FOOD_TYPES.each do |ft| %>
       <th class="count"><%= t("signups.food_types.#{ft}") %></th>
     <% end %>
   <% end %>

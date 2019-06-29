@@ -43,12 +43,24 @@ namespace :db do
             reminders_attributes: [{rel_magnitude: 1, rel_unit_sign: "days_before"}]
           )
         ]
-        Meals::Formula.create!(
+        types = [
+          Meals::Type.create!(community: cmty, name: "Adult Meat", subtype: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Adult Veg", subtype: "Veg"),
+          Meals::Type.create!(community: cmty, name: "Big Kid Meat", subtype: "Meat", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Big Kid Veg", subtype: "Veg", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Little Kid Meat", subtype: "Meat", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Little Kid Veg", subtype: "Veg", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Senior Meat", subtype: "Meat", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Senior Veg", subtype: "Veg", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Teen Meat", subtype: "Meat", discounted: true),
+          Meals::Type.create!(community: cmty, name: "Teen Veg", subtype: "Veg", discounted: true)
+        ]
+        formula = Meals::Formula.create!(
           community: cmty,
           is_default: true,
           name: "Default Formula",
           adult_meat: 1,
-          adult_veg: 0.9,
+          adult_veg: 1,
           big_kid_meat: 0.5,
           big_kid_veg: 0.4,
           little_kid_meat: 0,
@@ -62,6 +74,9 @@ namespace :db do
           pantry_fee: 0.1,
           roles: roles
         )
+        [1, 1, 0.5, 0.4, 0, 0, 0.9, 0.8, 0.5, 0.4].each_with_index do |share, index|
+          formula.parts.create!(type: types[index], rank: index, share: share)
+        end
         admin_hhold = Household.create!(
           community: cmty,
           name: args.last_name

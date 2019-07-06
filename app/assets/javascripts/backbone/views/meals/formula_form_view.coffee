@@ -8,6 +8,6 @@ Gather.Views.Meals.FormulaFormView = Backbone.View.extend
 
   updateMeal: ->
     meal_calc_type = @$('#meals_formula_meal_calc_type').val()
-    @$('.signup-type-hints p').hide()
+    @$('.formula-part-hints p').hide()
     if meal_calc_type
-      @$(".signup-type-hints p.#{meal_calc_type}").show()
+      @$(".formula-part-hints p.#{meal_calc_type}").show()

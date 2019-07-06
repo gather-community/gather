@@ -22,10 +22,10 @@
   <tr>
     <td><%= t("activerecord.attributes.meals/formula.signup_types") %></td>
     <td>
-      <% formula.defined_signup_types.each do |st| %>
-        <div class="signup-type">
-          <div><%= t("signups.types.#{st}") %></div>
-          <div><%= formula.send("#{st}_nice") %></div>
+      <% formula.parts.decorate.each do |part| %>
+        <div class="formula-part">
+          <div><%= part.name %></div>
+          <div><%= part.share_formatted %></div>
         </div>
       <% end %>
     </td>

@@ -45,4 +45,10 @@ class ApplicationDecorator < Draper::Decorator
   def join_icons(icons)
     icons.map { |i| safe_str << nbsp(2) << i }.reduce(&:<<)
   end
+
+  protected
+
+  def decimal_to_percentage(num)
+    h.number_to_percentage(num.try(:*, 100), precision: 1)
+  end
 end

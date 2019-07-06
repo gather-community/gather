@@ -54,11 +54,5 @@ module Meals
           method: :delete, confirm: {name: name})
       )
     end
-
-    private
-
-    def decimal_to_percentage(num)
-      h.number_to_percentage(num.try(:*, 100), precision: 1)
-    end
   end
 end

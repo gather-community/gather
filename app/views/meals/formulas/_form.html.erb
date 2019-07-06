@@ -17,7 +17,7 @@
     <p class="hint"><%= t("meals/formulas.hints.meal") %></p>
     <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
     <%= f.input :signup_types, required: true do %>
-      <div class="signup-type-hints">
+      <div class="formula-part-hints">
         <% Meals::Formula::MEAL_CALC_TYPES.each do |t| %>
           <%= content_tag(:p, t("meals/formulas.hints.signup_type.#{t}"), class: "hint #{t}") %>
         <% end %>

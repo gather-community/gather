@@ -7,7 +7,12 @@ module Meals
     belongs_to :formula
     belongs_to :type
 
+    scope :by_rank, -> { order(:rank) }
+
     validates :share, presence: true, numericality: {greater_than_or_equal_to: 0}
+
+    delegate :name, to: :type
+    delegate :fixed_meal?, to: :formula
 
     def nonzero?
       !share.zero?

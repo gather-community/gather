@@ -11,11 +11,17 @@ module Meals
 
     validates :share, presence: true, numericality: {greater_than_or_equal_to: 0}
 
+    accepts_nested_attributes_for :type
+
     delegate :name, to: :type
     delegate :fixed_meal?, to: :formula
 
     def nonzero?
       !share.zero?
+    end
+
+    def share_formatted=(value)
+      self.share = CurrencyPercentageNormalizer.normalize(value, pct: !fixed_meal?)
     end
 
     # 73 TODO: Remove

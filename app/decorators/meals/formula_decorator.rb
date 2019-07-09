@@ -10,7 +10,7 @@ module Meals
       end
     end
 
-    def pantry_fee_nice
+    def pantry_fee_formatted
       if fixed_pantry?
         h.number_to_currency(pantry_fee)
       else

@@ -83,10 +83,10 @@ end %>
               </tr>
               <tr>
                 <td>
-                  <%= t("activerecord.attributes.meals/formula.pantry_fee_nice") %>
+                  <%= t("activerecord.attributes.meals/formula.pantry_fee_formatted") %>
                   (Included)
                 </td>
-                <td><%= formula.pantry_fee_nice %></td>
+                <td><%= formula.pantry_fee_formatted %></td>
               </tr>
               <% if cost.present? && policy(meal).show_reimbursement_details? %>
                 <% if formula.pantry_reimbursement? %>

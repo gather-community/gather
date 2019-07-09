@@ -161,6 +161,7 @@ en:
       reminders: "Add Reminder"
       lines: "Add Item"
       signups: "Add Household"
+      parts: "Add Meal Type"
 
   select2:
     prompts:
@@ -170,6 +171,7 @@ en:
       guardian: "Please type a few letters of the guardian's name."
       user: "Please type a few letters of the user's name."
       job_choosing_proxy: "Please type a few letters of the user's name."
+      type: "Please type a few letters of the meal type's name, or enter the full name to add a new type."
     placeholders:
       reserver: "Choose Reserver ..."
       sponsor: "Choose Sponsor ..."
@@ -177,6 +179,7 @@ en:
       guardian: "Choose Guardian ..."
       user: "Choose User ..."
       job_choosing_proxy: "Choose User ..."
+      type: "Choose or Enter Type ..."
 
   csv:
     headers:

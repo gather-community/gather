@@ -16,23 +16,12 @@
     <h2>Meal Calculations</h2>
     <p class="hint"><%= t("meals/formulas.hints.meal") %></p>
     <%= f.input :meal_calc_type, collection: Meals::Formula::MEAL_CALC_TYPES %>
-    <%= f.input :signup_types, required: true do %>
-      <div class="formula-part-hints">
-        <% Meals::Formula::MEAL_CALC_TYPES.each do |t| %>
-          <%= content_tag(:p, t("meals/formulas.hints.signup_type.#{t}"), class: "hint #{t}") %>
-        <% end %>
-      </div>
-      <div class="fields">
-        <% Meals::Signup::SIGNUP_TYPES.each do |st| %>
-          <%= f.input "#{st}_nice", as: :string, label: t("signups.types.#{st}") %>
-        <% end %>
-      </div>
-    <% end %>
+    <%= nested_field_set(f, :parts, required: true, top_hint: "meals/formulas/parts_hints") %>
 
     <h2>Pantry Calculations</h2>
     <p class="hint"><%= t("meals/formulas.hints.pantry") %></p>
     <%= f.input :pantry_calc_type, collection: Meals::Formula::PANTRY_CALC_TYPES %>
-    <%= f.input :pantry_fee_nice, as: :string %>
+    <%= f.input :pantry_fee_formatted, as: :string %>
   <% end %>
 
   <%= form_actions do %>
@@ -44,5 +33,6 @@
   $(function() {
     new Gather.Views.Meals.FormulaFormView({el: '.meals--formula-form'});
     new Gather.Views.DirtyChecker({el: '.meals--formula-form'});
+    new Gather.Views.AjaxSelect2({el: '.meals--formula-form'});
   });
 <% end %>

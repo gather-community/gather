@@ -58,8 +58,8 @@ en:
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
         is_default: "Default Formula?"
-        signup_types: "Signup Types"
-        pantry_fee_nice: "Pantry Fee"
+        parts: "Meal Types"
+        pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
         role_ids: "Roles"
       meals/role:

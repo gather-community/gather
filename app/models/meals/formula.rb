@@ -38,6 +38,8 @@ module Meals
     validate :cant_unset_default
     validate :must_have_head_cook_role
 
+    accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
+
     # 73 TODO: Remove
     Signup::SIGNUP_TYPES.each do |st|
       validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
@@ -114,15 +116,8 @@ module Meals
       pantry_calc_type.blank? || pantry_calc_type == "fixed"
     end
 
-    def pantry_fee_nice=(str)
-      self.pantry_fee = normalize_amount(str, pct: !fixed_pantry?)
-    end
-
-    # 73 TODO: Remove
-    Signup::SIGNUP_TYPES.each do |st|
-      define_method("#{st}_nice=") do |str|
-        send("#{st}=", normalize_amount(str, pct: !fixed_meal?))
-      end
+    def pantry_fee_formatted=(str)
+      self.pantry_fee = CurrencyPercentageNormalizer.normalize(str, pct: !fixed_pantry?)
     end
 
     def head_cook_role
@@ -165,13 +160,6 @@ module Meals
 
     def separator
       I18n.t("number.format.separator")
-    end
-
-    # Converts a string like "$2.11" or "82%" to 2.11 or 82, respectively. If pct is true, divides by 100.
-    def normalize_amount(value, pct:)
-      value = value.try(:gsub, /[^#{separator}0-9]/, "")
-      return nil if value.blank?
-      value.to_f / (pct ? 100 : 1)
     end
   end
 end

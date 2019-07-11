@@ -3,6 +3,7 @@
 translations:
   - file: "app/assets/javascripts/i18n/translations.js"
     only: [
+      "*.common.*",
       "*.datepicker.*",
       "*.timepicker.*",
       "*.password.strength.*",

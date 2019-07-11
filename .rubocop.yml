@@ -80,8 +80,9 @@ Style/BracesAroundHashParameters:
 Style/Documentation:
   Exclude:
     - "app/controllers/**/*"
-    - "app/policies/**/*"
     - "app/decorators/**/*"
+    - "app/policies/**/*"
+    - "app/serializers/**/*"
     - "db/migrate/*.rb"
 
 Style/EmptyLineAfterGuardClause:

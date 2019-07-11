@@ -6,6 +6,7 @@ en:
     cancelled: "Cancelled"
     children: "Children"
     clearing_the_filter: "clearing the filters"
+    create_new: "Create New"
     community_count:
       one: "%{count} Community"
       other: "%{count} Communities"

@@ -6,5 +6,7 @@ module Meals
     acts_as_tenant :cluster
 
     belongs_to :community
+
+    scope :in_community, ->(c) { where(community_id: c.id) }
   end
 end

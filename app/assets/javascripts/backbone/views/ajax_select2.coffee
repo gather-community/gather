@@ -25,7 +25,7 @@ Gather.Views.AjaxSelect2 = Backbone.View.extend
     self = this
     $select.select2
       ajax:
-        url: "/#{src}"
+        url: src
         dataType: 'json'
         delay: 250
         data: (params) ->

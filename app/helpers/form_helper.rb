@@ -75,6 +75,8 @@ module FormHelper
   # - inner_labels - Whether to display labels on fields inside each item. Defaults to true.
   # - wrap_object - Passed to link_to_add_association.
   # - top_hint - Path to a partial that will be rendered inside the wrapper above the fields.
+  # - decorate - Whether the nested objects should have `decorate` called on them. Requires `objects` to
+  #     be specified explicitly.
   #
   # Any other options given are passed to the inner partial.
   def nested_field_set(f, assoc, options = {})
@@ -86,6 +88,15 @@ module FormHelper
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
     wrapper_classes << "multiple" if options[:multiple]
+
+    if options[:decorate]
+      options[:objects] ||= f.object.send(assoc)
+      options[:objects] = options[:objects].decorate
+
+      # Wrap the existing wrap_object_proc (if one is given)
+      old_wrap_object = wrap_object_proc
+      wrap_object_proc = ->(object) { (old_wrap_object ? old_wrap_object.call(object) : object).decorate }
+    end
 
     f.input(assoc, options.slice(:required, :label)) do
       content_tag(:div, class: "nested-field-set") do

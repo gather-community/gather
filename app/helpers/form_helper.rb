@@ -91,7 +91,7 @@ module FormHelper
 
     if options[:decorate]
       options[:objects] ||= f.object.send(assoc)
-      options[:objects] = options[:objects].decorate
+      options[:objects] = options[:objects].map(&:decorate) # .decorate on the relation doesn't work
 
       # Wrap the existing wrap_object_proc (if one is given)
       old_wrap_object = wrap_object_proc

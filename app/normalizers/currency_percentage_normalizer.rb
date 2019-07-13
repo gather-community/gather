@@ -4,6 +4,7 @@
 # If options[:pct] is true, divides by 100.
 module CurrencyPercentageNormalizer
   def self.normalize(value, options = {})
+    separator = I18n.t("number.format.separator")
     value = value&.gsub(/[^#{separator}0-9]/, "")
     return nil if value.blank?
     value.to_f / (options[:pct] ? 100 : 1)

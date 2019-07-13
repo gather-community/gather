@@ -4,12 +4,17 @@ module Meals
   # Joins formula to meal part
   class FormulaPart < ApplicationRecord
     acts_as_tenant :cluster
-    belongs_to :formula
+
+    attr_accessor :share_input
+
+    belongs_to :formula, inverse_of: :parts
     belongs_to :type
 
     scope :by_rank, -> { order(:rank) }
 
-    validates :share, presence: true, numericality: {greater_than_or_equal_to: 0}
+    validates :share_input, presence: true
+
+    before_validation :set_share_from_input
 
     accepts_nested_attributes_for :type
 
@@ -20,13 +25,15 @@ module Meals
       !share.zero?
     end
 
-    def share_formatted=(value)
-      self.share = CurrencyPercentageNormalizer.normalize(value, pct: !fixed_meal?)
-    end
-
     # 73 TODO: Remove
     def legacy_type
       name.downcase.gsub(" ", "_")
+    end
+
+    private
+
+    def set_share_from_input
+      self.share = CurrencyPercentageNormalizer.normalize(share_input, pct: !fixed_meal?)
     end
   end
 end

@@ -7,9 +7,6 @@ module Meals
 
     attr_accessor :signup_types # For validation error setting only
 
-    # 73 TODO: Remove
-    attr_accessor :flag_xxx
-
     MEAL_CALC_TYPES = %i[fixed share].freeze
     PANTRY_CALC_TYPES = %i[fixed percent].freeze
 
@@ -131,20 +128,10 @@ module Meals
     end
 
     def at_least_one_type
-      if flag_xxx
-        if fixed_meal?
-          errors.add(:parts, :at_least_one_type) if parts.empty?
-        elsif parts.none?(&:nonzero?)
-          errors.add(:parts, :at_least_one_nonzero_type)
-        end
-      else # 73 TODO: remove
-        if fixed_meal?
-          if Signup::SIGNUP_TYPES.all? { |st| self[st].blank? }
-            errors.add(:signup_types, :at_least_one_type)
-          end
-        elsif Signup::SIGNUP_TYPES.all? { |st| self[st].blank? || self[st].zero? }
-          errors.add(:signup_types, :at_least_one_nonzero_type)
-        end
+      if fixed_meal?
+        errors.add(:parts, :at_least_one_type) if parts.empty?
+      elsif parts.none?(&:nonzero?)
+        errors.add(:parts, :at_least_one_nonzero_type)
       end
     end
 
@@ -156,10 +143,6 @@ module Meals
 
     def ensure_unique_default
       self.class.in_community(community).where.not(id: id).update_all(is_default: false) if is_default?
-    end
-
-    def separator
-      I18n.t("number.format.separator")
     end
   end
 end

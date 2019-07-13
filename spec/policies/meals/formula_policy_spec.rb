@@ -118,7 +118,8 @@ describe Meals::FormulaPolicy do
     context "with no meals" do
       it "should allow all attribs" do
         expect(subject).to contain_exactly(:meal_calc_type, :pantry_calc_type,
-          :pantry_fee_formatted, *base_attribs, *Meals::Signup::SIGNUP_TYPES.map { |st| "#{st}_nice".to_sym })
+          :pantry_fee_formatted, *base_attribs,
+          parts_attributes: [:id, :type_id, :share_formatted, :_destroy, type_attributes: %i[name]])
       end
     end
 

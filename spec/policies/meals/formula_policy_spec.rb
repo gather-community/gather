@@ -119,7 +119,7 @@ describe Meals::FormulaPolicy do
       it "should allow all attribs" do
         expect(subject).to contain_exactly(:meal_calc_type, :pantry_calc_type,
           :pantry_fee_formatted, *base_attribs,
-          parts_attributes: [:id, :type_id, :share_input, :_destroy, type_attributes: %i[name]])
+          parts_attributes: [:id, :type_id, :share_formatted, :_destroy, type_attributes: %i[name]])
       end
     end
 

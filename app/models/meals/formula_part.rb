@@ -4,6 +4,7 @@ module Meals
   # Joins formula to meal part
   class FormulaPart < ApplicationRecord
     acts_as_tenant :cluster
+    acts_as_list scope: :formula, column: :rank
 
     attr_accessor :share_input
 

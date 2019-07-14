@@ -48,7 +48,7 @@ module Meals
     def appropriate_share_value
       if share.blank? && share_formatted.present?
         errors.add(:share_formatted, :invalid)
-      elsif share.negative?
+      elsif share&.negative?
         errors.add(:share_formatted, :negative)
       end
     end

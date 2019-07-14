@@ -129,8 +129,8 @@ module Meals
 
     def at_least_one_type
       if fixed_meal?
-        errors.add(:parts, :at_least_one_type) if parts.empty?
-      elsif parts.none?(&:nonzero?)
+        errors.add(:parts, :at_least_one_type) if parts.reject(&:marked_for_destruction?).empty?
+      elsif parts.reject(&:marked_for_destruction?).none?(&:nonzero?)
         errors.add(:parts, :at_least_one_nonzero_type)
       end
     end

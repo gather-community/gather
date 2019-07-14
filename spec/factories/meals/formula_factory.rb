@@ -35,7 +35,6 @@ FactoryBot.define do
         Meals::Signup::SIGNUP_TYPES.each do |st|
           next unless (share = formula.send(st))
           type = Meals::Type.new(community: formula.community,
-                                 discounted: share < 1,
                                  name: st.split("_").map(&:capitalize).join(" "),
                                  subtype: st.split("_")[-1].capitalize)
           formula.parts.build(rank: rank, share: share, type: type)
@@ -45,7 +44,6 @@ FactoryBot.define do
         # Create types and parts for the given share values.
         evaluator.part_shares.each_with_index do |share, index|
           type = Meals::Type.new(community: formula.community,
-                                 discounted: false,
                                  name: "#{formula.name} Type #{index}")
           formula.parts.build(rank: index, share_formatted: share, type: type)
         end

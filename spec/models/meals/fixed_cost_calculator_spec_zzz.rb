@@ -4,8 +4,8 @@ require "rails_helper"
 
 describe Meals::FixedCostCalculator do
   let(:formula) do
-    build(:meal_formula, meal_calc_type: "fixed", pantry_calc_type: pantry_calc_type,
-                         pantry_fee: pantry_fee, part_shares: [4, 3, 0])
+    create(:meal_formula, meal_calc_type: "fixed", pantry_calc_type: pantry_calc_type,
+                          pantry_fee: pantry_fee, part_shares: %w[4 3 0])
   end
   let(:types) { formula.types }
   let(:meal) { build(:meal, formula: formula) }

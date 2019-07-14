@@ -5,7 +5,7 @@ require "rails_helper"
 describe Meals::Formula do
   describe "validation" do
     describe "at_least_one_type" do
-      subject(:formula) { build(:meal_formula, flag_xxx: true, part_shares: part_shares, meal_calc_type: calc_type) }
+      subject(:formula) { build(:meal_formula, part_shares: part_shares, meal_calc_type: calc_type) }
 
       context "fixed type" do
         let(:calc_type) { "fixed" }
@@ -16,12 +16,12 @@ describe Meals::Formula do
         end
 
         context "with all zero parts" do
-          let(:part_shares) { [0, 0] }
+          let(:part_shares) { %w[0 0] }
           it { is_expected.to be_valid }
         end
 
         context "with parts" do
-          let(:part_shares) { [2, 3] }
+          let(:part_shares) { %w[2 3] }
           it { is_expected.to be_valid }
         end
       end
@@ -30,12 +30,12 @@ describe Meals::Formula do
         let(:calc_type) { "share" }
 
         context "with all zero parts" do
-          let(:part_shares) { [0, 0] }
+          let(:part_shares) { %w[0 0] }
           it { is_expected.to have_errors(parts: "must include at least one non-zero meal type") }
         end
 
         context "with parts" do
-          let(:part_shares) { [1, 0.5] }
+          let(:part_shares) { %w[100% 50%] }
           it { is_expected.to be_valid }
         end
       end
@@ -62,6 +62,49 @@ describe Meals::Formula do
           formula.assign_attributes(role_ids: [other_role.id])
           expect(formula).to have_errors(role_ids: "Must include Head Cook")
         end
+      end
+    end
+
+    describe "share numericality" do
+      subject(:formula) { build(:meal_formula, part_shares: part_shares, meal_calc_type: calc_type) }
+
+      context "percentage" do
+        let(:part_shares) { %w[10% 20%] }
+        let(:calc_type) { "share" }
+
+        it do
+          is_expected.to be_valid
+          expect(formula.parts[0].share).to be_within(0.005).of(0.1)
+          expect(formula.parts[1].share).to be_within(0.005).of(0.2)
+        end
+      end
+
+      context "currency" do
+        let(:part_shares) { %w[4 .50] }
+        let(:calc_type) { "fixed" }
+
+        it do
+          is_expected.to be_valid
+          expect(formula.parts[0].share).to be_within(0.005).of(4)
+          expect(formula.parts[1].share).to be_within(0.005).of(0.5)
+        end
+      end
+
+      context "negative" do
+        let(:part_shares) { %w[-1 0.50] }
+        let(:calc_type) { "fixed" }
+
+        it "should strip -" do
+          is_expected.to be_valid
+          expect(formula.parts[0].share).to be_within(0.005).of(1)
+          expect(formula.parts[1].share).to be_within(0.005).of(0.5)
+        end
+      end
+
+      context "non-numeric" do
+        let(:part_shares) { %w[x 0.50] }
+        let(:calc_type) { "fixed" }
+        it { is_expected.to have_errors("parts.share_formatted": "is invalid") }
       end
     end
   end

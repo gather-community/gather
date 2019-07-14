@@ -16,6 +16,7 @@ module Meals
     before_validation :set_share_form_formatted
 
     validates :share_formatted, presence: true
+    validate :appropriate_share_value
 
     accepts_nested_attributes_for :type
 
@@ -23,7 +24,7 @@ module Meals
     delegate :fixed_meal?, to: :formula
 
     def nonzero?
-      !share.zero?
+      !share&.zero?
     end
 
     def share_formatted=(value)
@@ -42,6 +43,14 @@ module Meals
 
     def set_share_form_formatted
       self.share = CurrencyPercentageNormalizer.normalize(@share_formatted, pct: !formula.fixed_meal?)
+    end
+
+    def appropriate_share_value
+      if share.blank? && share_formatted.present?
+        errors.add(:share_formatted, :invalid)
+      elsif share.negative?
+        errors.add(:share_formatted, :negative)
+      end
     end
   end
 end

@@ -20,26 +20,16 @@
   }
 
   form {
-    .meals_formula_meal_types {
+    .meals_formula_parts {
       div.formula-part-hints p {
         display: none;
       }
 
-      div.fields {
-        @media screen and (min-width: $screen-md-min) {
-          column-count: 2;
+      .subfields .fields-col {
+        display: flex;
 
-          // Inner signup type control.
-          .form-group {
-            label {
-              width: 50%;
-            }
-
-            div {
-              width: 50%;
-              padding-right: 20px;
-            }
-          }
+        > * {
+          flex: 1;
         }
       }
     }

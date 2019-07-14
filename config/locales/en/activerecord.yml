@@ -62,6 +62,9 @@ en:
         pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
         role_ids: "Roles"
+      meals/formula_part:
+        type_id: "Type"
+        share_formatted: "Price/Share"
       meals/role:
         title: "Job Title"
         time_type: "Times"

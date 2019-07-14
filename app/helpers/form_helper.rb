@@ -77,6 +77,7 @@ module FormHelper
   # - top_hint - Path to a partial that will be rendered inside the wrapper above the fields.
   # - decorate - Whether the nested objects should have `decorate` called on them. Requires `objects` to
   #     be specified explicitly.
+  # - single_row - Set to true if the fields are just a single row. Affects only styles.
   #
   # Any other options given are passed to the inner partial.
   def nested_field_set(f, assoc, options = {})
@@ -88,6 +89,7 @@ module FormHelper
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
     wrapper_classes << "multiple" if options[:multiple]
+    wrapper_classes << "single-row" if options[:single_row]
 
     if options[:decorate]
       options[:objects] ||= f.object.send(assoc)

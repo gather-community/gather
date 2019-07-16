@@ -30,16 +30,6 @@ module Meals
       roles.decorate.map(&:title_with_suffix).join(", ")
     end
 
-    Signup::SIGNUP_TYPES.each do |st|
-      define_method("#{st}_nice") do
-        if fixed_meal?
-          h.number_to_currency(object[st])
-        else
-          decimal_to_percentage(object[st])
-        end
-      end
-    end
-
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meals_formula_path(object))

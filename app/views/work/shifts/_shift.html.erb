@@ -5,8 +5,8 @@
         <%= shift.link_with_icons %>
       </td>
       <td>
-        <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_nice) %>">
-          <%= shift.hours_nice %>h
+        <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
+          <%= shift.hours_formatted %>h
         </div>
       </td>
     </tr>

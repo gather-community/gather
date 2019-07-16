@@ -10,7 +10,7 @@
       <% users.each do |user| %>
         <tr>
           <td><%= link_to(user.name, user) %></td>
-          <td><%= user.birthday_nice || "?" %></td>
+          <td><%= user.birthday_formatted || "?" %></td>
         </tr>
       <% end %>
     </tbody>

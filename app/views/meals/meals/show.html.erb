@@ -79,7 +79,7 @@ end %>
             <table class="key-value key-value-full">
               <tr>
                 <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-                <td><%= cost.present? ? cost.ingredient_cost_nice : "?" %></td>
+                <td><%= cost.present? ? cost.ingredient_cost_formatted : "?" %></td>
               </tr>
               <tr>
                 <td>
@@ -94,12 +94,12 @@ end %>
                       user might think it's related to pantry fee. %>
                   <tr>
                     <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
-                    <td><%= cost.pantry_cost_nice %></td>
+                    <td><%= cost.pantry_cost_formatted %></td>
                   </tr>
                 <% end %>
                 <tr>
                   <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
-                  <td><%= cost.payment_method_nice %></td>
+                  <td><%= cost.payment_method_formatted %></td>
                 </tr>
               <% end %>
             </table>

@@ -62,7 +62,7 @@ describe Meals::Meal do
     end
 
     describe "enough capacity" do
-      let!(:signup) { create(:meal_signup, adult_meat: 5) }
+      let!(:signup) { create(:meal_signup, diner_count: 5) }
       let(:meal) { signup.meal.tap { |m| m.signups.reload } }
 
       it "saves cleanly with enough capacity" do

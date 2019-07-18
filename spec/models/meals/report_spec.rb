@@ -50,13 +50,13 @@ describe(Meals::Report) do
       meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
       meals.each do |m|
         m.signups << build(:meal_signup, meal: m, adult_meat: 1)
-        m.signups << build(:meal_signup, meal: m, senior_veg: 1, little_kid_meat: 1)
+        m.signups << build(:meal_signup, meal: m, senior_veg: 1, teen_meat: 1)
         m.save!
       end
     end
 
     it "should return all diner types in results" do
-      expect(report.diner_types).to eq(%w[adult senior little_kid])
+      expect(report.diner_types).to eq(%w[adult senior teen])
     end
   end
 

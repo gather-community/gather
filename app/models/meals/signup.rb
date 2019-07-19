@@ -17,6 +17,8 @@ module Meals
       little_kid: 0
     }.freeze
 
+    attr_accessor :flag_zzz
+
     acts_as_tenant :cluster
 
     attr_accessor :signup # Dummy used only in form construction.
@@ -42,9 +44,7 @@ module Meals
     delegate :community_abbrv, to: :household
     delegate :communities, :formula, to: :meal
 
-    before_update do
-      destroy if all_zero?
-    end
+    accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 
     def self.for(user, meal)
       find_or_initialize_by(household_id: user.household_id, meal_id: meal.id) do |new_signup|
@@ -95,16 +95,19 @@ module Meals
     end
 
     def total
-      SIGNUP_TYPES.sum { |t| send(t) || 0 }
+      if flag_zzz
+        parts.reject(&:marked_for_destruction?).sum(&:count)
+      else
+        SIGNUP_TYPES.sum { |t| send(t) || 0 }
+      end
     end
 
     def total_was
-      SIGNUP_TYPES.sum { |t| send("#{t}_was") || 0 }
-    end
-
-    # The diff in the current total minus the total before the current update
-    def total_change
-      total - total_was
+      if flag_zzz
+        parts.map(&:count_was).compact.sum # Deliberately including those marked_for_destruction
+      else
+        SIGNUP_TYPES.sum { |t| send("#{t}_was") || 0 }
+      end
     end
 
     # Will eventually be an AR association.
@@ -143,7 +146,11 @@ module Meals
     private
 
     def all_zero?
-      SIGNUP_TYPES.all? { |t| self[t].zero? }
+      if flag_zzz
+        parts.all?(&:zero?)
+      else
+        SIGNUP_TYPES.all? { |t| self[t].zero? }
+      end
     end
 
     def max_signups_per_type
@@ -153,7 +160,7 @@ module Meals
     end
 
     def dont_exceed_spots
-      return unless !meal.finalized? && meal.capacity.present? && total_change > meal.spots_left
+      return unless !meal.finalized? && meal.capacity.present? && total - total_was > meal.spots_left
       errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
     end
 

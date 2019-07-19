@@ -7,5 +7,7 @@ module Meals
 
     belongs_to :type
     belongs_to :signup, inverse_of: :parts
+
+    delegate :zero?, to: :count
   end
 end

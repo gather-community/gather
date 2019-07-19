@@ -3,26 +3,6 @@
 require "rails_helper"
 
 describe Meals::Signup do
-  describe "with no signups" do
-    context "on create" do
-      let(:signup) { build(:meal_signup) }
-
-      it "should delete itself if all zeros" do
-        expect(signup).not_to be_valid
-        expect(signup.errors[:base].join).to match("must sign up at least")
-      end
-    end
-
-    context "on update" do
-      let(:signup) { create(:meal_signup, adult_veg: 2) }
-
-      it "should delete itself" do
-        signup.update!(adult_veg: 0)
-        expect(signup).to be_destroyed
-      end
-    end
-  end
-
   describe "validation" do
     describe "dont_exceed_spots" do
       let(:meal) { create(:meal, capacity: 5) }

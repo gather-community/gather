@@ -20,7 +20,7 @@ FactoryBot.define do
       if evaluator.diner_counts.nil?
         # 73 TODO: Remove
         Meals::Signup::SIGNUP_TYPES.each do |st|
-          next unless (count = signup.send(st))
+          next unless (count = signup.send(st)) && count > 0
           type = Meals::Type.new(community: meal.community,
                                  name: st.split("_").map(&:capitalize).join(" "),
                                  subtype: st.split("_")[-1].capitalize)

@@ -44,16 +44,16 @@ namespace :db do
           )
         ]
         types = [
-          Meals::Type.create!(community: cmty, name: "Adult Meat", subtype: "Meat"),
-          Meals::Type.create!(community: cmty, name: "Adult Veg", subtype: "Veg"),
-          Meals::Type.create!(community: cmty, name: "Big Kid Meat", subtype: "Meat"),
-          Meals::Type.create!(community: cmty, name: "Big Kid Veg", subtype: "Veg"),
-          Meals::Type.create!(community: cmty, name: "Little Kid Meat", subtype: "Meat"),
-          Meals::Type.create!(community: cmty, name: "Little Kid Veg", subtype: "Veg"),
-          Meals::Type.create!(community: cmty, name: "Senior Meat", subtype: "Meat"),
-          Meals::Type.create!(community: cmty, name: "Senior Veg", subtype: "Veg"),
-          Meals::Type.create!(community: cmty, name: "Teen Meat", subtype: "Meat"),
-          Meals::Type.create!(community: cmty, name: "Teen Veg", subtype: "Veg")
+          Meals::Type.create!(community: cmty, name: "Adult Meat", category: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Adult Veg", category: "Veg"),
+          Meals::Type.create!(community: cmty, name: "Big Kid Meat", category: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Big Kid Veg", category: "Veg"),
+          Meals::Type.create!(community: cmty, name: "Little Kid Meat", category: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Little Kid Veg", category: "Veg"),
+          Meals::Type.create!(community: cmty, name: "Senior Meat", category: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Senior Veg", category: "Veg"),
+          Meals::Type.create!(community: cmty, name: "Teen Meat", category: "Meat"),
+          Meals::Type.create!(community: cmty, name: "Teen Veg", category: "Veg")
         ]
         formula = Meals::Formula.create!(
           community: cmty,

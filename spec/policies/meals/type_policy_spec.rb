@@ -27,6 +27,6 @@ describe Meals::TypePolicy do
     let(:actor) { meals_coordinator }
     subject { Meals::TypePolicy.new(actor, Meals::Type.new).permitted_attributes }
 
-    it { is_expected.to match_array(%i[name subtype]) }
+    it { is_expected.to match_array(%i[name category]) }
   end
 end

@@ -23,7 +23,7 @@ FactoryBot.define do
           next unless (count = signup.send(st)) && count > 0
           type = Meals::Type.new(community: meal.community,
                                  name: st.split("_").map(&:capitalize).join(" "),
-                                 subtype: st.split("_")[-1].capitalize)
+                                 category: st.split("_")[-1].capitalize)
           signup.parts.build(count: count, type: type)
         end
       else

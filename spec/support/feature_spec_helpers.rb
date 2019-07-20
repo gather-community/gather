@@ -338,6 +338,10 @@ module FeatureSpecHelpers
     find(".lens-bar a.clear").click
   end
 
+  def click_delete_link
+    find("a .fa-trash").click
+  end
+
   def click_print_button
     first(:css, ".btn-print").click
   end

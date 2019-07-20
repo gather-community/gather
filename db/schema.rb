@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190718165646) do
+ActiveRecord::Schema.define(version: 20190720205637) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -268,11 +268,11 @@ ActiveRecord::Schema.define(version: 20190718165646) do
   end
 
   create_table "meal_types", force: :cascade do |t|
+    t.string "category", limit: 32
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "name", limit: 32, null: false
-    t.string "subtype", limit: 32
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_types_on_cluster_id"
     t.index ["community_id"], name: "index_meal_types_on_community_id"

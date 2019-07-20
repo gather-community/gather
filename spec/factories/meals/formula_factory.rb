@@ -36,7 +36,7 @@ FactoryBot.define do
           next unless (share = formula.send(st))
           type = Meals::Type.new(community: formula.community,
                                  name: st.split("_").map(&:capitalize).join(" "),
-                                 subtype: st.split("_")[-1].capitalize)
+                                 category: st.split("_")[-1].capitalize)
           formula.parts.build(rank: rank, share_formatted: share, type: type)
           rank += 1
         end

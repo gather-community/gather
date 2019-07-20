@@ -15,7 +15,7 @@ module Meals
     end
 
     def permitted_attributes
-      %i[name subtype]
+      %i[name category]
     end
   end
 end

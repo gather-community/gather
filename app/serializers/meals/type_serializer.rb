@@ -2,6 +2,6 @@
 
 module Meals
   class TypeSerializer < ApplicationSerializer
-    attributes :id, :name, :subtype
+    attributes :id, :name, :category
   end
 end

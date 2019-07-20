@@ -160,8 +160,12 @@ module Meals
     end
 
     def dont_exceed_spots
-      return unless !meal.finalized? && meal.capacity.present? && total - total_was > meal.spots_left
-      errors.add(:base, :exceeded_spots, count: meal.spots_left + total_was)
+      total_change = total - total_was
+      return unless !meal.finalized? && meal.capacity.present? && total_change.positive?
+      other_signups_total = (meal.signups - [self]).sum(&:total)
+      return if other_signups_total + total <= meal.capacity
+      max_spots_can_take = [meal.capacity - other_signups_total, total_was].max
+      errors.add(:base, :exceeded_spots, count: max_spots_can_take)
     end
 
     def nonzero_signups_if_new

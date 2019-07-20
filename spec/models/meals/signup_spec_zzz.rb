@@ -101,19 +101,73 @@ describe Meals::Signup do
       # Need to use meal.id so that this instance of meal doesn't memoize spots_left.
       let!(:previous_signup) { create(:meal_signup, meal_id: meal.id, diner_count: 2, flag_zzz: true) }
 
-      # Need to reload meal because otherwise it doesn't know about previous_signup.
-      subject(:signup) { build(:meal_signup, meal: meal.reload, diner_count: new_count, flag_zzz: true) }
+      context "with new record" do
+        # Need to reload meal because otherwise it doesn't know about previous_signup.
+        subject(:signup) { build(:meal_signup, meal: meal.reload, diner_count: new_count, flag_zzz: true) }
 
-      context "with just the right number" do
-        let(:new_count) { 3 }
-        it { is_expected.to be_valid }
+        context "with just the right number" do
+          let(:new_count) { 3 }
+          it { is_expected.to be_valid }
+        end
+
+        context "with too many" do
+          let(:new_count) { 4 }
+          it do
+            is_expected.to have_errors(base: "Based on the number of spots remaining, "\
+              "you can sign up a maximum of 3 people.")
+          end
+        end
       end
 
-      context "with too many" do
-        let(:new_count) { 4 }
-        it do
-          is_expected.to have_errors(base: "Based on the number of spots remaining, "\
-            "you can sign up a maximum of 3 people.")
+      context "with existing record being modified" do
+        subject(:signup) { create(:meal_signup, meal: meal.reload, diner_count: 1, flag_zzz: true) }
+
+        before do
+          signup.parts[0].count = new_count
+        end
+
+        context "with just the right number" do
+          let(:new_count) { 3 }
+          it { is_expected.to be_valid }
+        end
+
+        context "with too many" do
+          let(:new_count) { 4 }
+          it do
+            is_expected.to have_errors(base: "Based on the number of spots remaining, "\
+              "you can sign up a maximum of 3 people.")
+          end
+        end
+
+        context "with capacity being previously exceeded somehow" do
+          subject(:signup) { create(:meal_signup, meal: meal.reload, diner_count: 3, flag_zzz: true) }
+
+          before do
+            # This change will put total at 8 despite capacity being 5.
+            previous_signup.parts[0].update_column(:count, 5)
+
+            # We update comments so that model will be dirty even if no change in diner count.
+            signup.parts[0].count = new_count
+            signup.comments = "new comment"
+
+            # 73 TODO: Remove
+            meal.signups.each { |s| s.flag_zzz = true }
+          end
+
+          context "if not changing diner count" do
+            let(:new_count) { 3 }
+            it "should be valid even though capacity still exceeded since it's not this person's fault" do
+              is_expected.to be_valid
+            end
+          end
+
+          context "if increasing diner count" do
+            let(:new_count) { 4 }
+            it "should be invalid and report the previous signup count as the max" do
+              is_expected.to have_errors(base: "Based on the number of spots remaining, "\
+                "you can sign up a maximum of 3 people.")
+            end
+          end
         end
       end
     end

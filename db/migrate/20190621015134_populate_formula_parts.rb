@@ -3,6 +3,18 @@
 class PopulateFormulaParts < ActiveRecord::Migration[5.1]
   TYPES = %i[adult_meat adult_veg senior_meat senior_veg teen_meat teen_veg
              big_kid_meat big_kid_veg little_kid_meat little_kid_veg].freeze
+  PORTION_SIZES = {
+    adult_meat: 1,
+    adult_veg: 1,
+    senior_meat: 0.75,
+    senior_veg: 0.75,
+    teen_meat: 0.75,
+    teen_veg: 0.75,
+    big_kid_meat: 0.5,
+    big_kid_veg: 0.5,
+    little_kid_meat: 0,
+    little_kid_veg: 0
+  }
 
   def up
     Cluster.all.each do |cluster|
@@ -12,8 +24,11 @@ class PopulateFormulaParts < ActiveRecord::Migration[5.1]
           community.meal_formulas.each do |formula|
             TYPES.each_with_index do |type_name, rank|
               next if (share = formula[type_name]).blank?
+              share_formatted = formula.fixed_meal? ? share : share * 100
               Meals::FormulaPart.create!(formula: formula, type: type_map[type_name],
-                                         share: share, rank: rank)
+                                         share_formatted: share_formatted,
+                                         portion_size: PORTION_SIZES[type_name],
+                                         rank: rank)
             end
           end
         end

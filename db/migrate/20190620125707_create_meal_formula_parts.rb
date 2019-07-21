@@ -7,6 +7,7 @@ class CreateMealFormulaParts < ActiveRecord::Migration[5.1]
       t.references :formula, index: true, null: false, foreign_key: {to_table: :meal_formulas}
       t.references :type, index: true, null: false, foreign_key: {to_table: :meal_types}
       t.decimal :share, null: false, precision: 10, scale: 4
+      t.decimal :portion_size, null: false, precision: 10, scale: 2
 
       t.timestamps
     end

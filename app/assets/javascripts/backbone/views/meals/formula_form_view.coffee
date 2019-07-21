@@ -9,9 +9,9 @@ Gather.Views.Meals.FormulaFormView = Backbone.View.extend
 
   updateMeal: ->
     meal_calc_type = @$('#meals_formula_meal_calc_type').val()
-    @$('.formula-part-hints p').hide()
+    @$('.formula-part-hints div').hide()
     if meal_calc_type
-      @$(".formula-part-hints p.#{meal_calc_type}").show()
+      @$(".formula-part-hints div.#{meal_calc_type}").show()
 
   handleTypeChanged: (event) ->
     # If the user types in a new type name, we remove the select2 altogether and show the text box.

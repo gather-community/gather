@@ -59,8 +59,14 @@ en:
       meal: "Meal costs can be calculated as a fixed cost or proportionally based on the ingredient cost."
       pantry: "A pantry fee is a charge billed to each diner to cover the cost of purchasing staples for the kitchen. It can be calculated as a fixed amount or as a percentage of the diner's meal cost."
       meal_type:
-        fixed: "Add each meal type and its price."
-        share: "Add each meal type and its percentage share. For example, if one meal type should have a 1/4 discount, enter 75%. An entry of 100% represents a full, equal share of the ingredient cost, while 0% implies no charge."
+        fixed: "Add each meal type, its price, and relative portion size. Portion sizes are used for helping cooks shop for groceries."
+        share: "Add each meal type, its percentage share, and relative portion size.\n\nPercentage shares are used to determine cost. For example, if one meal type should have a 1/4 discount, enter 75%. An entry of 100% represents a full, equal share of the ingredient cost, while 0% implies no charge.\n\nPortion sizes are used for helping cooks shop for groceries."
     cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ Portion"
+      half: "½ Portion"
+      three_qtr: "¾ Portion"
+      full: "Full Portion"
   meals/messages:
     cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."

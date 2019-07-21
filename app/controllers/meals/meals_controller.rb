@@ -115,6 +115,7 @@ module Meals
     def summary
       @meal = Meal.find(params[:id]).decorate
       @meal_summary = Summary.new(@meal)
+      @portion_count_builder = PortionCountBuilder.new(@meal)
       authorize(@meal)
       load_signups
       @cost_calculator = CostCalculator.build(@meal)

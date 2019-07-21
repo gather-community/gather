@@ -20,7 +20,7 @@ module Meals
 
     accepts_nested_attributes_for :type
 
-    delegate :name, to: :type
+    delegate :name, :category, to: :type
     delegate :fixed_meal?, to: :formula
 
     def nonzero?

@@ -16,6 +16,7 @@ module Meals
     before_validation :set_share_form_formatted
 
     validates :share_formatted, presence: true
+    validates :portion_size, presence: true
     validate :appropriate_share_value
 
     accepts_nested_attributes_for :type

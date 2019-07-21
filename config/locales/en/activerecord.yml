@@ -65,6 +65,7 @@ en:
       meals/formula_part:
         type_id: "Type"
         share_formatted: "Price/Share"
+        portion_size: "Portion Size"
       meals/role:
         title: "Job Title"
         time_type: "Times"

@@ -17,10 +17,10 @@ module Meals
         total = signups.sum do |signup|
           signup.parts.sum do |signup_part|
             matching_formula_part = formula_parts_by_type[signup_part.type]
-            matching_formula_part ? signup_part.count * matching_formula_part.share : 0
+            matching_formula_part ? signup_part.count.to_f * matching_formula_part.share : 0
           end
         end
-        "#{total.ceil} #{category}"
+        [total.ceil, category].compact.join(" ")
       end << " portions"
     end
 

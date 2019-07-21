@@ -42,7 +42,7 @@ module Meals
 
     delegate :name, :users, :adults, to: :household, prefix: true
     delegate :community_abbrv, to: :household
-    delegate :communities, :formula, to: :meal
+    delegate :communities, :formula, :types, to: :meal
 
     accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 

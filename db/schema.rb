@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(version: 20190720205637) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "formula_id", null: false
+    t.decimal "portion_size", precision: 10, scale: 2, null: false
     t.integer "rank", null: false
     t.decimal "share", precision: 10, scale: 4, null: false
     t.bigint "type_id", null: false

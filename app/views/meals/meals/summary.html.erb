@@ -15,7 +15,7 @@
     <%= generated_time %>
     <h2>Signups</h2>
     <div id="portion-counts">
-      <%= portion_counts(@meal) %>
+      <%= @portion_count_builder.portion_counts %>
     </div>
     <table class="compact">
       <%= render("summary_signups_header") %>

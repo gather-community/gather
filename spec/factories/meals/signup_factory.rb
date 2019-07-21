@@ -29,9 +29,7 @@ FactoryBot.define do
       else
         # Create types and parts for the given share values.
         evaluator.diner_counts.each_with_index do |count, index|
-          type = Meals::Type.new(community: meal.community,
-                                 name: "Type #{rand(10_000_000..99_999_999)}")
-          signup.parts.build(count: count, type: type)
+          signup.parts.build(count: count, type: signup.types[index])
 
           # 73 TODO: Remove
           # Need this to keep things in sync and avoid old validation errors.

@@ -64,7 +64,7 @@ module Meals
     delegate :name, to: :community, prefix: true
     delegate :name, to: :head_cook, prefix: true, allow_nil: true
     delegate :name, to: :formula, prefix: true, allow_nil: true
-    delegate :head_cook_role, :allowed_diner_types,
+    delegate :head_cook_role, :types, :allowed_diner_types,
       :allowed_signup_types, :portion_factors, to: :formula
     delegate :build_reservations, to: :reservation_handler
     delegate :close!, :reopen!, :cancel!, :finalize!,

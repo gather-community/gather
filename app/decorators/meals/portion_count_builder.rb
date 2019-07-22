@@ -6,7 +6,9 @@ module Meals
 
     def portion_counts
       chunks = formula_parts_by_category.map { |c, fp| chunk(c, fp) }
-      safe_str << "This meal will require approximately " << chunks.reduce(&sep(" and ")) << ".*"
+      h.content_tag(:div, class: "portion-counts") do
+        safe_str << "This meal will require approximately " << chunks.reduce(&sep(" and ")) << ".*"
+      end
     end
 
     private
@@ -17,7 +19,7 @@ module Meals
         total = signups.sum do |signup|
           signup.parts.sum do |signup_part|
             matching_formula_part = formula_parts_by_type[signup_part.type]
-            matching_formula_part ? signup_part.count.to_f * matching_formula_part.share : 0
+            matching_formula_part ? signup_part.count.to_f * matching_formula_part.portion_size : 0
           end
         end
         [total.ceil, category].compact.join(" ")

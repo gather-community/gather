@@ -14,9 +14,7 @@
   <div class="col-sm-12">
     <%= generated_time %>
     <h2>Signups</h2>
-    <div id="portion-counts">
-      <%= @portion_count_builder.portion_counts %>
-    </div>
+    <%= @portion_count_builder.portion_counts %>
     <table class="compact">
       <%= render("summary_signups_header") %>
       <% @signups.each do |signup| %>

@@ -44,8 +44,12 @@ FactoryBot.define do
         # Create types and parts for the given share values.
         evaluator.part_shares.each_with_index do |share, index|
           type = Meals::Type.new(community: formula.community,
-                                 name: "#{formula.name} Type #{index}")
-          formula.parts.build(rank: index, share_formatted: share, type: type)
+                                 name: "#{formula.name} Type #{index}",
+                                 category: share.is_a?(Array) ? share[1] : nil)
+          formula.parts.build(rank: index,
+                              share_formatted: share.is_a?(Array) ? share[0] : share,
+                              portion_size: share.is_a?(Array) ? share[2] : 1,
+                              type: type)
         end
       end
     end

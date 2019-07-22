@@ -7,7 +7,7 @@ describe Meals::PortionCountBuilder do
 
   context "with no categores" do
     let(:formula) do
-      create(:meal_formula, meal_calc_type: "share", part_shares: [["100%", nil], ["50%", nil]])
+      create(:meal_formula, meal_calc_type: "share", part_shares: [["100%", nil, 1], ["75%", nil, 0.5]])
     end
     let(:meal) { create(:meal, formula: formula) }
     let!(:signups) do

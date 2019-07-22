@@ -14,7 +14,7 @@
 
 <h2>Meal Calculations</h2>
 
-<table class="key-value key-value-narrow">
+<table class="key-value">
   <tr>
     <td><%= t("activerecord.attributes.meals/formula.meal_calc_type") %></td>
     <td><%= t("simple_form.options.meals_formula.meal_calc_type.#{formula.meal_calc_type}") %></td>
@@ -22,12 +22,20 @@
   <tr>
     <td><%= t("activerecord.attributes.meals/formula.signup_types") %></td>
     <td>
-      <% formula.parts.decorate.each do |part| %>
-        <div class="formula-part">
-          <div><%= part.name %></div>
-          <div><%= part.share_formatted %></div>
+      <div class="formula-parts">
+        <div class="header">
+          <div><%= t("activerecord.attributes.meals/formula_part.name") %></div>
+          <div><%= t("activerecord.attributes.meals/formula_part.share_formatted") %></div>
+          <div><%= t("activerecord.attributes.meals/formula_part.portion_size") %></div>
         </div>
-      <% end %>
+        <% formula.parts.decorate.each do |part| %>
+          <div class="formula-part">
+            <div><%= part.name %></div>
+            <div><%= part.share_formatted %></div>
+            <div><%= part.portion_size_short_name %></div>
+          </div>
+        <% end %>
+      </div>
     </td>
   </tr>
 </table>

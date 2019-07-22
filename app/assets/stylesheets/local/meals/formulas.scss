@@ -6,14 +6,22 @@
   table.key-value {
     margin-bottom: 20px;
 
-    div.formula-part {
-      display: table-row;
+    div.formula-parts {
+      div.header {
+        color: $medium-gray;
+        font-size: 12px;
+      }
 
-      div {
-        display: table-cell;
+      div.formula-part, div.header {
+        display: table-row;
 
-        &:first-child {
-          padding-right: 20px;
+        div {
+          display: table-cell;
+          padding-right: 10px;
+
+          &:last-child {
+            padding-right: 0;
+          }
         }
       }
     }

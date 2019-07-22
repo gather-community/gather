@@ -12,9 +12,9 @@ class PopulateFormulaParts < ActiveRecord::Migration[5.1]
     teen_veg: 0.75,
     big_kid_meat: 0.5,
     big_kid_veg: 0.5,
-    little_kid_meat: 0,
-    little_kid_veg: 0
-  }
+    little_kid_meat: 0.25,
+    little_kid_veg: 0.25
+  }.freeze
 
   def up
     Cluster.all.each do |cluster|

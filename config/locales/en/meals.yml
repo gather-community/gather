@@ -68,5 +68,10 @@ en:
       half: "½ Portion"
       three_qtr: "¾ Portion"
       full: "Full Portion"
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Full"
   meals/messages:
     cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."

@@ -9,5 +9,14 @@ module Meals
     belongs_to :signup, inverse_of: :parts
 
     delegate :zero?, to: :count
+    delegate :name, to: :type, prefix: true
+
+    # Sorts by rank of the associated meal_formula_part
+    def self.by_rank
+      joins(signup: :meal)
+        .joins("LEFT JOIN meal_formula_parts ON meal_formula_parts.formula_id = meals.formula_id
+          AND meal_formula_parts.type_id = meal_signup_parts.type_id")
+        .order("meal_formula_parts.rank")
+    end
   end
 end

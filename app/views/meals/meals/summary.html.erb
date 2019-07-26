@@ -50,11 +50,7 @@
       <% end %>
     </table>
     <small id="portion-formula">
-      * Total portions calculated as
-      <%= @meal.portion_factors.map do |dt, f|
-        dt = t("signups.diner_types.#{dt}", count: 2)
-        f == 0 ? nil : "#{f} &times; #{dt}"
-      end.compact.join(" + ").html_safe %>.
+      * Total portions calculated using portion size values in <%= link_to("meal formula", @meal.formula) %>.
     </small>
   </div>
 </div>

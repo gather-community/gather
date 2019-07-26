@@ -23,20 +23,20 @@
             <td class="cmty"><%= signup.community_abbrv %></td>
           <% end %>
           <td class="hhld"><%= signup.household_name %></td>
-          <% @meal.allowed_signup_types.each do |st| %>
-            <td><%= signup[st] unless signup[st] == 0 %></td>
+          <% @meal.types.each do |type| %>
+            <td><%= signup.parts_by_type[type]&.count %></td>
           <% end %>
           <td><%= signup.comments %></td>
         </tr>
       <% end %>
       <tr class="total">
         <td colspan="<%= multi_community? ? 2 : 1 %>">Total</td>
-        <% @meal.allowed_signup_types.each do |st| %>
-          <td><%= @meal.signup_totals[st] %></td>
+        <% @meal.types.each do |type| %>
+          <td><%= @meal.signup_totals_zzz[type] %></td>
         <% end %>
         <td><%= @meal.signup_count %></td>
       </tr>
-      <% cols = @meal.allowed_signup_types.size + (multi_community? ? 3 : 2) %>
+      <% cols = @meal.types.size + (multi_community? ? 3 : 2) %>
       <tr class="late-signups-header">
         <td colspan="<%= cols %>">
           Late Signups

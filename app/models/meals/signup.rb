@@ -143,6 +143,10 @@ module Meals
       end
     end
 
+    def parts_by_type
+      @parts_by_type ||= parts.index_by(&:type)
+    end
+
     private
 
     def all_zero?

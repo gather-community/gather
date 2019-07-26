@@ -34,7 +34,7 @@ module Meals
     end
 
     def formula_parts_by_category
-      @formula_parts_by_category ||= formula.parts.group_by(&:category)
+      @formula_parts_by_category ||= formula.parts.includes(:type).group_by(&:category)
     end
   end
 end

@@ -80,7 +80,7 @@
             <th></th>
           <% end %>
         </tr>
-        <% MealSummaryHelper::COST_TABLE_AMOUNTS.each_slice(2).to_a.each do |costs| %>
+        <% [3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 8, 9, 10, 11].each_slice(2).to_a.each do |costs| %>
           <tr>
             <% 2.times do |i| %>
               <td><%= number_to_currency(costs[i]) %></td>

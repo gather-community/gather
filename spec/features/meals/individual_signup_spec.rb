@@ -4,7 +4,7 @@ require "rails_helper"
 
 feature "meal signups", js: true do
   let(:user) { create(:user) }
-  let(:formula) { create(:meal_formula) }
+  let(:formula) { create(:meal_formula, name: "Fmla A", part_shares: [1, 1, 1]) }
   let!(:meal) do
     create(:meal, :with_menu, formula: formula, title: "Burgers", served_at: Time.current + 7.days)
   end
@@ -27,28 +27,28 @@ feature "meal signups", js: true do
     # Fix validation error
     expect(page).to have_content("You must sign up at least one person")
     all("select[id$=_count]")[0].select("2")
-    all("select[id$=_type_id]")[0].select("Adult (Veg)")
-    click_link("Add Item")
+    all("select[id$=_type_id]")[0].select("Fmla A Type 2")
+    click_link("Add Signup")
     all("select[id$=_count]")[1].select("1")
-    all("select[id$=_type_id]")[1].select("Teen (Meat)")
+    all("select[id$=_type_id]")[1].select("Fmla A Type 1")
     fill_in("Comments", with: "Extra tasty please")
     click_button("Save")
 
     # Edit existing
     click_link("Burgers")
-    all("select[id$=_count]")[1].select("3")
+    all("select[id$=_count]")[0].select("3")
     click_button("Save")
 
     # Read-only mode
     meal.close!
     click_link("Burgers")
-    expect(page).to have_content("2 Adult (Veg)")
-    expect(page).to have_content("3 Teen (Meat)")
+    expect(page).to have_content("3 Fmla A Type 1")
+    expect(page).to have_content("2 Fmla A Type 2")
     expect(page).to have_content('"Extra tasty please"')
   end
 
   context "with existing signup" do
-    let!(:signup) { create(:meal_signup, meal: meal, household: user.household, adult_veg: 3, teen_meat: 4) }
+    let!(:signup) { create(:meal_signup, meal: meal, household: user.household, diner_counts: [4, 3]) }
 
     scenario "edit, then unsignup" do
       visit(meal_path(meal))
@@ -66,28 +66,16 @@ feature "meal signups", js: true do
     let!(:older_signup) { create(:meal_signup, meal: older_meal, household: user.household, adult_meat: 3) }
     let!(:old_meal) { create(:meal, formula: formula, served_at: Time.current - 10.days) }
     let!(:old_signup) do
-      create(:meal_signup, meal: old_meal, household: user.household, adult_veg: 3, teen_meat: 4)
+      create(:meal_signup, meal: old_meal, household: user.household, diner_counts: [4, 3])
     end
 
     scenario "same items and quantites should be copied" do
       visit(meal_path(meal))
       click_button("Sign Up")
-      expect(page).to have_select(all("select[id$=_count]")[0][:id], selected: "3")
-      expect(page).to have_select(all("select[id$=_type_id]")[0][:id], selected: "Adult (Veg)")
-      expect(page).to have_select(all("select[id$=_count]")[1][:id], selected: "4")
-      expect(page).to have_select(all("select[id$=_type_id]")[1][:id], selected: "Teen (Meat)")
-    end
-  end
-
-  context "with formula with limited signup types" do
-    let(:formula) { create(:meal_formula, senior_meat: nil, senior_veg: 1.0) }
-    let(:item_options) { all("select[id$=_type_id] option").map { |o| o[:value] } }
-
-    scenario "senior should not appear in dropdown" do
-      visit(meal_path(meal))
-      click_button("Sign Up")
-      expect(item_options).to include("senior_veg")
-      expect(item_options).not_to include("senior_meat")
+      expect(page).to have_select(all("select[id$=_count]")[0][:id], selected: "4")
+      expect(page).to have_select(all("select[id$=_type_id]")[0][:id], selected: "Fmla A Type 1")
+      expect(page).to have_select(all("select[id$=_count]")[1][:id], selected: "3")
+      expect(page).to have_select(all("select[id$=_type_id]")[1][:id], selected: "Fmla A Type 2")
     end
   end
 end

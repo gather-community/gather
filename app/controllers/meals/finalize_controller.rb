@@ -84,7 +84,10 @@ module Meals
       params.require(:meals_meal).permit(
         signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]],
         cost_attributes: %i[ingredient_cost pantry_cost payment_method]
-      )
+      ).tap do |permitted|
+        # 73 TODO: Remove
+        (permitted["signups_attributes"] || []).each { |_, attrs| attrs.merge!("flag_zzz": true) }
+      end
     end
   end
 end

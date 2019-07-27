@@ -16,6 +16,11 @@ module Meals
       end
     end
 
+    def total_diners_formatted
+      self.flag_zzz = true
+      h.icon_tag("check") << " #{total}"
+    end
+
     # Returns the household name or, if not persisted, a select2 control for selecting it.
     # Used as the label in the signup form.
     def household_as_label(form)

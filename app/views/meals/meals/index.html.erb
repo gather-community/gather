@@ -37,9 +37,9 @@
           <td>
             <% if signup = meal.current_signup %>
               <% if policy(meal.sample_signup).update? %>
-                <%= link_to(signup_info(signup), meal_url(meal)) %>
+                <%= link_to(signup.total_diners_formatted, meal_url(meal)) %>
               <% else %>
-                <%= signup_info(signup) %>
+                <%= signup.total_diners_formatted %>
               <% end %>
             <% elsif meal.full? %>
               <span class="weak">[Full]</span>
@@ -71,7 +71,7 @@
         <div><%= signup_count(meal) %> signed up</div>
         <% if (signup = meal.current_signup) %>
           <div class="signed-up">
-            <%= signup_info(signup) %> signed up from your household
+            <%= signup.total_diners_formatted %> signed up from your household
             <%= link_to("(Edit)", meal_url(meal)) if policy(meal.sample_signup).update? %>
           </div>
         <% elsif meal.full? %>

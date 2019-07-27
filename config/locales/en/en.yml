@@ -162,7 +162,7 @@ en:
       reminders: "Add Reminder"
       signups: "Add Household"
       meals/signup:
-        parts: "Add Signup"
+        parts: "Add Item"
       meals/formula:
         parts: "Add Meal Type"
 

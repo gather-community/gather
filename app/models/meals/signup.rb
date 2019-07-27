@@ -49,21 +49,15 @@ module Meals
     accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 
     def self.for(user, meal)
-      find_or_initialize_by(household_id: user.household_id, meal_id: meal.id) do |new_signup|
-        # lines = default_lines_for(household: user.household, formula: meal.formula)
-        # # Eventually we'll be able to just assign `lines` directly.
-        # new_signup.lines_attributes =
-        #   lines.each_with_index.map { |l, i| [i, {item_id: l.item_id, quantity: l.quantity}] }.to_h
-      end
-    end
-
-    # Gets the most recently used or generically default lines for the given household/formula pair.
-    def self.default_lines_for(household:, formula:)
-      if (recent = joins(:meal).where(household: household)
-          .where(meals: {formula_id: formula.id}).order(created_at: :desc).first)
-        recent.lines
-      else
-        [Meals::Line.new(quantity: 1, item_id: formula.defined_signup_types.first)]
+      find_or_initialize_by(household_id: user.household_id, meal_id: meal.id) do |signup|
+        # For new signup, build parts similar to the most recently used for the given household/formula pair.
+        recent = joins(:meal).where(household: user.household).includes(parts: :type)
+          .where(meals: {formula_id: meal.formula_id}).order(created_at: :desc).first
+        if recent
+          recent.parts.map { |p| signup.parts.build(type: p.type, count: p.count) }
+        else
+          signup.parts.build(type: meal.types[0], count: 1)
+        end
       end
     end
 

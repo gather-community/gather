@@ -16,8 +16,8 @@ module Meals
     has_many :meals, inverse_of: :formula
     has_many :formula_roles, inverse_of: :formula, dependent: :destroy
     has_many :roles, -> { by_title }, through: :formula_roles
-    has_many :parts, -> { by_rank }, class_name: "Meals::FormulaPart", inverse_of: :formula,
-                                     dependent: :destroy
+    has_many :parts, -> { includes(:type).by_rank }, class_name: "Meals::FormulaPart", inverse_of: :formula,
+                                                     dependent: :destroy
     has_many :types, through: :parts
 
     scope :in_community, ->(c) { where(community_id: c.id) }

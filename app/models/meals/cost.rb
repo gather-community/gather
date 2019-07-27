@@ -7,7 +7,8 @@ module Meals
 
     PAYMENT_METHODS = %i[check credit].freeze
 
-    has_many :parts, class_name: "Meals::CostPart", inverse_of: :cost, dependent: :destroy
+    has_many :parts, -> { includes(:type).by_rank },
+      class_name: "Meals::CostPart", inverse_of: :cost, dependent: :destroy
     belongs_to :meal, inverse_of: :cost
 
     validates :ingredient_cost, presence: true, numericality: {greater_than_or_equal_to: 0}

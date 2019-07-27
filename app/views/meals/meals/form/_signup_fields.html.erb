@@ -1,7 +1,7 @@
 <% label = local_assigns[:hide_household] ? false : f.object.decorate.household_as_label(f) %>
 <%# The use of `signup` as the field here is arbitrary because the input method has both its label
     and contents overridden. The label is the household name (or a select2 for choosing it) and
-    the contents is the order lines. We use the f.input method so that we have the same structure and
+    the contents is the signup parts. We use the f.input method so that we have the same structure and
     styling as the other regular form fields in the rest of the meal/finalize form. %>
 <%= f.input(:signup, label: label, required: false) do %>
   <%# If this form is nested inside an outer form, we need to show the base error for each signup. %>

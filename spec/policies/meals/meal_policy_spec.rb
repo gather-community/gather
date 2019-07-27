@@ -229,7 +229,7 @@ describe Meals::MealPolicy do
     let(:head_cook_attribs) { %i[title capacity entrees] }
     let(:admin_attribs) { [:formula_id] }
     let(:signup_attribs) do
-      [signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]]]
+      [signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]]]
     end
     let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
 

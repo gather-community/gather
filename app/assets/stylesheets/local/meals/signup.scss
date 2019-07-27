@@ -14,11 +14,11 @@
       display: inline-block;
     }
 
-    select[name$="[quantity]"] {
+    select[name$="[count]"] {
       width: 60px;
     }
 
-    select[name$="[item_id]"] {
+    select[name$="[type_id]"] {
       width: 200px;
     }
 

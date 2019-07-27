@@ -21,22 +21,22 @@ feature "meal signups", js: true do
     visit meals_path
     click_link("Burgers")
     click_button("Sign Up")
-    all("select[id$=_quantity]")[0].select(0)
+    all("select[id$=_count]")[0].select(0)
     click_button("Save")
 
     # Fix validation error
     expect(page).to have_content("You must sign up at least one person")
-    all("select[id$=_quantity]")[0].select("2")
-    all("select[id$=_item_id]")[0].select("Adult (Veg)")
+    all("select[id$=_count]")[0].select("2")
+    all("select[id$=_type_id]")[0].select("Adult (Veg)")
     click_link("Add Item")
-    all("select[id$=_quantity]")[1].select("1")
-    all("select[id$=_item_id]")[1].select("Teen (Meat)")
+    all("select[id$=_count]")[1].select("1")
+    all("select[id$=_type_id]")[1].select("Teen (Meat)")
     fill_in("Comments", with: "Extra tasty please")
     click_button("Save")
 
     # Edit existing
     click_link("Burgers")
-    all("select[id$=_quantity]")[1].select("3")
+    all("select[id$=_count]")[1].select("3")
     click_button("Save")
 
     # Read-only mode
@@ -52,8 +52,8 @@ feature "meal signups", js: true do
 
     scenario "edit, then unsignup" do
       visit(meal_path(meal))
-      all("select[id$=_quantity]")[0].select("0")
-      all("select[id$=_quantity]")[1].select("0")
+      all("select[id$=_count]")[0].select("0")
+      all("select[id$=_count]")[1].select("0")
       click_button("Save")
       expect(page).to have_css("td", text: "Sign Up") # Signed up column
       click_link("Burgers")
@@ -72,16 +72,16 @@ feature "meal signups", js: true do
     scenario "same items and quantites should be copied" do
       visit(meal_path(meal))
       click_button("Sign Up")
-      expect(page).to have_select(all("select[id$=_quantity]")[0][:id], selected: "3")
-      expect(page).to have_select(all("select[id$=_item_id]")[0][:id], selected: "Adult (Veg)")
-      expect(page).to have_select(all("select[id$=_quantity]")[1][:id], selected: "4")
-      expect(page).to have_select(all("select[id$=_item_id]")[1][:id], selected: "Teen (Meat)")
+      expect(page).to have_select(all("select[id$=_count]")[0][:id], selected: "3")
+      expect(page).to have_select(all("select[id$=_type_id]")[0][:id], selected: "Adult (Veg)")
+      expect(page).to have_select(all("select[id$=_count]")[1][:id], selected: "4")
+      expect(page).to have_select(all("select[id$=_type_id]")[1][:id], selected: "Teen (Meat)")
     end
   end
 
   context "with formula with limited signup types" do
     let(:formula) { create(:meal_formula, senior_meat: nil, senior_veg: 1.0) }
-    let(:item_options) { all("select[id$=_item_id] option").map { |o| o[:value] } }
+    let(:item_options) { all("select[id$=_type_id] option").map { |o| o[:value] } }
 
     scenario "senior should not appear in dropdown" do
       visit(meal_path(meal))

@@ -25,8 +25,8 @@ feature "meal signups form", js: true do
     expect(page).to have_content("Has already been taken")
 
     # Spot check one line
-    expect(page).to have_select(all("select[id$=_quantity]")[2][:id], selected: "4")
-    expect(page).to have_select(all("select[id$=_item_id]")[2][:id], selected: "Teen (Veg)")
+    expect(page).to have_select(all("select[id$=_count]")[2][:id], selected: "4")
+    expect(page).to have_select(all("select[id$=_type_id]")[2][:id], selected: "Teen (Veg)")
 
     # Fix and submit
     select2(households[1].name, from: all("select[id$=_household_id]")[1])
@@ -44,8 +44,8 @@ feature "meal signups form", js: true do
     visit edit_meal_path(meal)
     click_link("Edit Signups")
     expect(all(".meals_meal_signups_signup").size).to eq(1)
-    expect(page).to have_select(all("select[id$=_quantity]")[0][:id], selected: "6")
-    expect(page).to have_select(all("select[id$=_item_id]")[0][:id], selected: "Teen (Meat)")
+    expect(page).to have_select(all("select[id$=_count]")[0][:id], selected: "6")
+    expect(page).to have_select(all("select[id$=_type_id]")[0][:id], selected: "Teen (Meat)")
   end
 
   def enter_signup(quantities:, household: nil, index: nil)
@@ -56,9 +56,9 @@ feature "meal signups form", js: true do
     within(all(".meals_meal_signups_signup")[index]) do
       select2(household.name, from: first("select[id$=_household_id]")) unless household.nil?
       quantities.each_with_index do |pair, i|
-        click_link("Add Item") if all("select[id$=_quantity]").size <= i
-        all("select[id$=_quantity]")[i].select(pair[1].to_s)
-        all("select[id$=_item_id]")[i].select(pair[0])
+        click_link("Add Item") if all("select[id$=_count]").size <= i
+        all("select[id$=_count]")[i].select(pair[1].to_s)
+        all("select[id$=_type_id]")[i].select(pair[0])
       end
     end
   end

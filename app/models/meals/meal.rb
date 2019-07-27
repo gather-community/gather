@@ -55,7 +55,7 @@ module Meals
     Meals::Status.define_scopes(self)
 
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
-      a["id"].blank? && a["lines_attributes"].values.all? { |v| v["quantity"] == "0" }
+      a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
     accepts_nested_attributes_for :cost, reject_if: :all_blank
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true

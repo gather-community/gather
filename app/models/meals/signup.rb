@@ -58,7 +58,7 @@ module Meals
         if recent
           recent.parts.map { |p| signup.parts.build(type: p.type, count: p.count) }
         else
-          signup.parts.build(type: meal.types[0], count: 1)
+          signup.init_default
         end
       end
     end
@@ -82,6 +82,11 @@ module Meals
 
     def self.all_zero_attribs?(attribs)
       attribs.slice(*SIGNUP_TYPES).values.map(&:to_i).uniq == [0]
+    end
+
+    # Sets some default part data.
+    def init_default
+      parts.build(type: meal.types[0], count: 1)
     end
 
     def count_for(diner_type, food_type)

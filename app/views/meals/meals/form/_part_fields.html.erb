@@ -1,0 +1,4 @@
+<div class="part-fields">
+  <%= f.input(:count, collection: (0..10).to_a, label: false, include_blank: false) %>
+  <%= f.input(:type_id, collection: options[:formula].types, label: false, include_blank: false) %>
+</div>

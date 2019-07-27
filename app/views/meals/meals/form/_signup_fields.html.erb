@@ -7,6 +7,6 @@
   <%# If this form is nested inside an outer form, we need to show the base error for each signup. %>
   <%# Otherwise it's handled by the gather_form_for helper. %>
   <%= f.error(:base) if local_assigns[:nested] %>
-  <%= nested_field_set(f, :lines, inner_partial: "meals/meals/form/line_fields", formula: f.object.formula,
+  <%= nested_field_set(f, :parts, inner_partial: "meals/meals/form/part_fields", formula: f.object.formula,
                                   label: false, inner_labels: false, no_remove_link: true) %>
 <% end %>

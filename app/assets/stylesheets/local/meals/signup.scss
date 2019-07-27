@@ -53,13 +53,13 @@ form.gather-form.narrow-label-layout.meals--meal-form {
     margin-left: 5px;
   }
 
-  .form-group.meals_meal_signups_lines {
+  .form-group.meals_meal_signups_parts {
     @include signup-form-control-wrapper;
   }
 }
 
 form.gather-form.meals--signup-form {
-  .form-group.meals_signup_lines {
+  .form-group.meals_signup_parts {
     @include signup-form-control-wrapper;
   }
 }

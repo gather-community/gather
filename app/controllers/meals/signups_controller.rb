@@ -11,7 +11,7 @@ module Meals
       @signup = Signup.new(household_id: current_user.household_id)
       @signup.assign_attributes(signup_params)
       authorize(@signup)
-      if @signup.save_or_destroy
+      if @signup.save
         redirect_after_save
       else
         render_meal_show
@@ -22,7 +22,7 @@ module Meals
       @signup = Signup.find(params[:id])
       authorize(@signup)
       @signup.assign_attributes(signup_params)
-      if @signup.save_or_destroy
+      if @signup.save
         redirect_after_save
       else
         render_meal_show

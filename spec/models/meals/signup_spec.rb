@@ -47,5 +47,27 @@ describe Meals::Signup do
         end
       end
     end
+
+    describe "no_dupe_types" do
+      let(:formula) { create(:meal_formula, part_shares: [1, 0.5]) }
+      let(:meal) { create(:meal, formula: formula) }
+      subject(:signup) { build(:meal_signup, meal: meal, parts_attributes: parts_attributes, flag_zzz: true) }
+
+      context "without dupe types" do
+        let(:parts_attributes) do
+          [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 3}]
+        end
+
+        it { is_expected.to be_valid }
+      end
+
+      context "with dupe types" do
+        let(:parts_attributes) do
+          [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[0].id, count: 3}]
+        end
+
+        it { is_expected.to have_errors(base: "Please sign up each type only once") }
+      end
+    end
   end
 end

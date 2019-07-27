@@ -40,6 +40,7 @@ module Meals
     validate :max_signups_per_type
     validate :dont_exceed_spots
     validate :nonzero_signups_if_new
+    validate :no_dupe_types
 
     delegate :name, :users, :adults, to: :household, prefix: true
     delegate :community_abbrv, to: :household
@@ -175,6 +176,12 @@ module Meals
 
     def nonzero_signups_if_new
       errors.add(:base, "You must sign up at least one person") if new_record? && all_zero?
+    end
+
+    def no_dupe_types
+      type_ids = parts.map(&:type_id)
+      return if type_ids.uniq.size == type_ids.size
+      errors.add(:base, "Please sign up each type only once")
     end
   end
 end

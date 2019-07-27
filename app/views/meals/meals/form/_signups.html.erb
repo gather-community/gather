@@ -10,7 +10,7 @@
           partial: "meals/meals/form/signup_fields",
           "data-association-insertion-node": ".signup-fields",
           "data-association-insertion-method": "append",
-          wrap_object: ->(signup) { signup.decorate.add_first_line }) %>
+          wrap_object: ->(signup) { signup.tap(&:init_default) }) %>
   <% end %>
 <% end %>
 

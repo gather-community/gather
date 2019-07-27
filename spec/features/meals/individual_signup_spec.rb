@@ -28,7 +28,7 @@ feature "meal signups", js: true do
     expect(page).to have_content("You must sign up at least one person")
     all("select[id$=_count]")[0].select("2")
     all("select[id$=_type_id]")[0].select("Fmla A Type 2")
-    click_link("Add Signup")
+    click_link("Add Item")
     all("select[id$=_count]")[1].select("1")
     all("select[id$=_type_id]")[1].select("Fmla A Type 1")
     fill_in("Comments", with: "Extra tasty please")

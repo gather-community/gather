@@ -106,39 +106,6 @@ module Meals
       end
     end
 
-    # Will eventually be an AR association.
-    def lines
-      @lines ||= SIGNUP_TYPES.map do |t|
-        # To mimic real association behavior, instantiate one Line with fake ID for each of the persisted
-        # diner counts, plus one Line with no ID for any newly added ones.
-        next unless self[t].positive?
-        id = send("#{t}_was").zero? ? nil : rand(100_000_000)
-        Meals::Line.new(id: id, item_id: t, quantity: self[t])
-      end.compact
-    end
-
-    def build_line
-      Meals::Line.new
-    end
-
-    # This will eventually be a nested attributes method.
-    def lines_attributes=(attrib_sets)
-      SIGNUP_TYPES.each { |t| send("#{t}=", 0) }
-      attrib_sets.values.map do |set|
-        next if set[:quantity].to_i.zero?
-        send("#{set[:item_id]}=", send(set[:item_id]) + set[:quantity].to_i)
-      end
-      @lines = SIGNUP_TYPES.map do |t|
-        next if send(t).zero?
-        Meals::Line.new(item_id: t, quantity: send(t))
-      end.compact
-      attrib_sets.values.each do |set|
-        next unless set[:quantity].to_i.zero?
-        # Need to create these explicitly or they won't be preserved if the form is re-rendered.
-        @lines << Meals::Line.new(item_id: set[:item_id], quantity: 0)
-      end
-    end
-
     def parts_by_type
       @parts_by_type ||= parts.index_by(&:type)
     end

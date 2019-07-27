@@ -173,7 +173,7 @@ module Meals
     end
 
     def signup_attribs
-      [signups_attributes: [:id, :household_id, lines_attributes: %i[id quantity item_id]]]
+      [signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]]]
     end
 
     def expense_attribs

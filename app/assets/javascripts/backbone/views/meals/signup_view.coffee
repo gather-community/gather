@@ -2,15 +2,15 @@ Gather.Views.Meals.SignupView = Backbone.View.extend
   initialize: (options) ->
 
   events:
-    'cocoon:after-insert': 'selectDistinctItemId'
+    'cocoon:after-insert': 'selectDistinctTypeId'
 
-  selectDistinctItemId: (e) ->
+  selectDistinctTypeId: (e) ->
     newLine = @$(e.target).prev('.nested-fields')
     return if newLine.length == 0
-    prevItemIds = newLine.prevAll('.nested-fields').find('select[name$="[item_id]"]')
+    prevTypeIds = newLine.prevAll('.nested-fields').find('select[name$="[type_id]"]')
       .map(-> $(this).val()).get()
-    newLine.find('select[name$="[item_id]"] option').each ->
-      itemId = $(this).attr('value')
-      return true if prevItemIds.indexOf(itemId) != -1
-      newLine.find('select[name$="[item_id]"]').val(itemId)
+    newLine.find('select[name$="[type_id]"] option').each ->
+      typeId = $(this).attr('value')
+      return true if prevTypeIds.indexOf(typeId) != -1
+      newLine.find('select[name$="[type_id]"]').val(typeId)
       false # Break out of the loop

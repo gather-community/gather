@@ -14,12 +14,19 @@
       display: inline-block;
     }
 
-    select[name$="[count]"] {
+    .part-fields {
+      display: flex;
+    }
+
+    .control-wrapper.meals_signup_parts_count,
+    .control-wrapper.meals_meal_signups_parts_count {
       width: 60px;
     }
 
-    select[name$="[type_id]"] {
-      width: 200px;
+    .control-wrapper.meals_signup_parts_type_id,
+    .control-wrapper.meals_meal_signups_parts_type_id {
+      width: 100%;
+      max-width: 200px;
     }
 
     .nested-fields.subfields.no-inner-labels {

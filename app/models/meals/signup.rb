@@ -35,6 +35,8 @@ module Meals
 
     normalize_attributes :comments
 
+    after_update :destroy_if_all_zero
+
     validates :household_id, presence: true, uniqueness: {scope: :meal_id}
     validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
     validate :max_signups_per_type
@@ -80,10 +82,6 @@ module Meals
 
     def self.all_zero_attribs?(attribs)
       attribs.slice(*SIGNUP_TYPES).values.map(&:to_i).uniq == [0]
-    end
-
-    def save_or_destroy
-      all_zero? && persisted? ? destroy : save
     end
 
     def count_for(diner_type, food_type)
@@ -143,6 +141,10 @@ module Meals
       type_ids = parts.map(&:type_id)
       return if type_ids.uniq.size == type_ids.size
       errors.add(:base, "Please sign up each type only once")
+    end
+
+    def destroy_if_all_zero
+      destroy if parts.any? && all_zero? # 73 TODO: Remove parts.any?
     end
   end
 end

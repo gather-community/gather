@@ -3,40 +3,6 @@
 require "rails_helper"
 
 describe Meals::Signup do
-  describe "#save_or_destroy" do
-    context "with new record" do
-      let(:signup) { build(:meal_signup) }
-
-      it "should call save even if all zeros" do
-        signup.save_or_destroy
-        expect(signup).not_to be_destroyed
-        expect(signup).not_to be_valid
-      end
-    end
-
-    context "with existing record being modified" do
-      let(:signup) { create(:meal_signup, diner_counts: [1, 2], flag_zzz: true) }
-
-      it "should be destroyed if zero signups" do
-        signup.assign_attributes(parts_attributes: {
-          "0": {id: signup.parts[0].id, count: 0},
-          "1": {id: signup.parts[1].id, count: 0}
-        })
-        signup.save_or_destroy
-        expect(signup).to be_destroyed
-      end
-
-      it "should be saved if nonzero signups" do
-        signup.assign_attributes(parts_attributes: {
-          "0": {id: signup.parts[0].id, count: 3},
-          "1": {id: signup.parts[1].id, count: 3}
-        })
-        signup.save_or_destroy
-        expect(signup.parts[0].reload.count).to eq(3)
-      end
-    end
-  end
-
   describe "#total and #total_was" do
     context "with no signups" do
       subject(:signup) { build(:meal_signup, parts_attributes: {"0": {count: 0}}, flag_zzz: true) }

@@ -162,7 +162,10 @@ en:
       reminders: "Add Reminder"
       lines: "Add Item"
       signups: "Add Household"
-      parts: "Add Meal Type"
+      meals/signup:
+        parts: "Add Signup"
+      meals/formula:
+        parts: "Add Meal Type"
 
   select2:
     prompts:

@@ -23,7 +23,8 @@ module Meals
 
     attr_accessor :signup # Dummy used only in form construction.
 
-    has_many :parts, class_name: "Meals::SignupPart", inverse_of: :signup, dependent: :destroy
+    has_many :parts, -> { includes(:type).by_rank },
+      class_name: "Meals::SignupPart", inverse_of: :signup, dependent: :destroy
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :signups
     belongs_to :household
 
@@ -48,10 +49,10 @@ module Meals
 
     def self.for(user, meal)
       find_or_initialize_by(household_id: user.household_id, meal_id: meal.id) do |new_signup|
-        lines = default_lines_for(household: user.household, formula: meal.formula)
-        # Eventually we'll be able to just assign `lines` directly.
-        new_signup.lines_attributes =
-          lines.each_with_index.map { |l, i| [i, {item_id: l.item_id, quantity: l.quantity}] }.to_h
+        # lines = default_lines_for(household: user.household, formula: meal.formula)
+        # # Eventually we'll be able to just assign `lines` directly.
+        # new_signup.lines_attributes =
+        #   lines.each_with_index.map { |l, i| [i, {item_id: l.item_id, quantity: l.quantity}] }.to_h
       end
     end
 

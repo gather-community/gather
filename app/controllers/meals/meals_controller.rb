@@ -37,7 +37,7 @@ module Meals
       flash.now[:error] = I18n.t("meals.cancelled_notice") if @meal.cancelled?
 
       @signup = Signup.for(current_user, @meal)
-      @signup_parts = @signup.parts.includes(:type).by_rank
+      @signup_parts = @signup.parts
       @expand_signup_form = params[:signup].present? || @signup.persisted?
       prep_show_meal_vars
     end

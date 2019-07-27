@@ -15,7 +15,7 @@ module Meals
     end
 
     def permitted_attributes
-      [:id, :household_id, :meal_id, :comments, lines_attributes: %i[id quantity item_id]]
+      [:id, :household_id, :meal_id, :comments, parts_attributes: %i[id type_id count _destroy]]
     end
 
     private

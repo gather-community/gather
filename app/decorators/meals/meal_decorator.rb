@@ -13,7 +13,7 @@ module Meals
     end
 
     def current_signup
-      @current_signup ||= signups.detect { |s| s.household_id == h.current_user.household_id }
+      @current_signup ||= signups.detect { |s| s.household_id == h.current_user.household_id }&.decorate
     end
 
     def css_classes

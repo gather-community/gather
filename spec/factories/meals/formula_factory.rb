@@ -47,7 +47,7 @@ FactoryBot.define do
           attrs = {share: attrs} unless attrs.is_a?(Hash)
           type = Meals::Type.new(community: formula.community, category: attrs[:category],
                                  name: attrs[:type] || "#{formula.name} Type #{index + 1}")
-          formula.parts.build(rank: index, type: type, share_formatted: attrs[:share],
+          formula.parts.build(rank: index, type: type, share_formatted: attrs[:share] || "100%",
                               portion_size: attrs[:portion] || 1)
         end
       end

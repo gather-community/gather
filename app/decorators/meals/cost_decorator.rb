@@ -17,5 +17,11 @@ module Meals
     def payment_method_formatted
       t("simple_form.options.meals_meal.cost.payment_method.#{payment_method}")
     end
+
+    # Calculates price temporarily with given calculator if not yet calculated. Else just looks it up.
+    def formatted_price_for_type(type:, calculator:)
+      price = blank? ? calculator.price_for(type) : parts_by_type[type]&.value
+      h.number_to_currency(price)
+    end
   end
 end

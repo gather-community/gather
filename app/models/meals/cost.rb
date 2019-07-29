@@ -22,5 +22,9 @@ module Meals
     def blank?
       ingredient_cost.blank? && pantry_cost.blank? && payment_method.blank?
     end
+
+    def parts_by_type
+      @parts_by_type ||= parts.index_by(&:type)
+    end
   end
 end

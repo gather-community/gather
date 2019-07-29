@@ -66,10 +66,10 @@ end %>
         <div class="row">
           <div class="col-sm-4">
             <table class="key-value key-value-full">
-              <% formula.defined_signup_types.each do |st| %>
+              <% formula.types.each do |type| %>
                 <tr>
-                  <td><%= t("signups.types.#{st}") %></td>
-                  <td><%= number_to_currency(cost.blank? ? @calculator.price_for(st) : cost.send(st)) %></td>
+                  <td><%= type.name %></td>
+                  <td><%= cost.formatted_price_for_type(type: type, calculator: @calculator) %></td>
                 </tr>
               <% end %>
             </table>

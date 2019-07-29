@@ -8,7 +8,7 @@ module Utils
         self.photos = photos
       end
 
-      def generate
+      def generate_samples
         create_households_and_users
         deactivate_households
       end

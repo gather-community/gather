@@ -29,6 +29,7 @@ FactoryBot.define do
       else
         # Create types and parts for the given share values.
         evaluator.diner_counts.each_with_index do |count, index|
+          next if count.zero?
           signup.parts.build(count: count, type: signup.types[index])
 
           # 73 TODO: Remove

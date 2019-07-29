@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :meal_formula, class: "Meals::Formula" do
     transient do
       asst_cook_role { nil }
-      part_shares { nil }
+      parts_attrs { nil }
     end
 
     sequence(:name) { |n| "Formula #{n}" }
@@ -29,7 +29,7 @@ FactoryBot.define do
     end
 
     after(:build) do |formula, evaluator|
-      if evaluator.part_shares.nil?
+      if evaluator.parts_attrs.nil?
         # 73 TODO: Remove
         rank = 0
         Meals::Signup::SIGNUP_TYPES.each do |st|
@@ -43,14 +43,12 @@ FactoryBot.define do
         end
       else
         # Create types and parts for the given share values.
-        evaluator.part_shares.each_with_index do |share, index|
-          type = Meals::Type.new(community: formula.community,
-                                 name: "#{formula.name} Type #{index + 1}",
-                                 category: share.is_a?(Array) ? share[1] : nil)
-          formula.parts.build(rank: index,
-                              share_formatted: share.is_a?(Array) ? share[0] : share,
-                              portion_size: share.is_a?(Array) ? share[2] : 1,
-                              type: type)
+        evaluator.parts_attrs.each_with_index do |attrs, index|
+          attrs = {share: attrs} unless attrs.is_a?(Hash)
+          type = Meals::Type.new(community: formula.community, category: attrs[:category],
+                                 name: attrs[:type] || "#{formula.name} Type #{index + 1}")
+          formula.parts.build(rank: index, type: type, share_formatted: attrs[:share],
+                              portion_size: attrs[:portion] || 1)
         end
       end
     end

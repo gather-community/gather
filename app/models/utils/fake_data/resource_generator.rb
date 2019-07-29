@@ -9,7 +9,7 @@ module Utils
         self.resource_map = {}
       end
 
-      def generate
+      def generate_samples
         create_resources
         create_shared_guidelines_and_associate
         create_resource_protocols_and_associate

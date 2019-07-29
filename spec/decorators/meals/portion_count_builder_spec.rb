@@ -7,7 +7,8 @@ describe Meals::PortionCountBuilder do
 
   context "with no categores" do
     let(:formula) do
-      create(:meal_formula, meal_calc_type: "share", part_shares: [["100%", nil, 1], ["75%", nil, 0.5]])
+      create(:meal_formula, meal_calc_type: "share",
+                            parts_attrs: [{share: "100%", portion: 1}, {share: "75%", portion: 0.5}])
     end
     let(:meal) { create(:meal, formula: formula) }
     let!(:signups) do
@@ -23,7 +24,9 @@ describe Meals::PortionCountBuilder do
   context "with categores" do
     let(:formula) do
       create(:meal_formula, meal_calc_type: "share",
-                            part_shares: [["100%", "Meat", 1], ["75%", "Meat", 0.5], ["100%", "Veg", 1]])
+                            parts_attrs: [{share: "100%", category: "Meat", portion: 1},
+                                          {share: "75%", category: "Meat", portion: 0.5},
+                                          {share: "100%", category: "Veg", portion: 1}])
     end
     let(:meal) { create(:meal, formula: formula) }
     let!(:signups) do
@@ -42,7 +45,9 @@ describe Meals::PortionCountBuilder do
   context "with mix of categores and no categories" do
     let(:formula) do
       create(:meal_formula, meal_calc_type: "share",
-                            part_shares: [["100%", "Meat", 1], ["75%", nil, 0.5], ["100%", "Veg", 1]])
+                            parts_attrs: [{share: "100%", category: "Meat", portion: 1},
+                                          {share: "75%", portion: 0.5},
+                                          {share: "100%", category: "Veg", portion: 1}])
     end
     let(:meal) { create(:meal, formula: formula) }
     let!(:signups) do

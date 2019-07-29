@@ -5,23 +5,23 @@ require "rails_helper"
 describe Meals::Formula do
   describe "validation" do
     describe "at_least_one_type" do
-      subject(:formula) { build(:meal_formula, part_shares: part_shares, meal_calc_type: calc_type) }
+      subject(:formula) { build(:meal_formula, parts_attrs: parts_attrs, meal_calc_type: calc_type) }
 
       context "fixed type" do
         let(:calc_type) { "fixed" }
 
         context "with no parts" do
-          let(:part_shares) { [] }
+          let(:parts_attrs) { [] }
           it { is_expected.to have_errors(parts: "must include at least one meal type") }
         end
 
         context "with all zero parts" do
-          let(:part_shares) { %w[0 0] }
+          let(:parts_attrs) { %w[0 0] }
           it { is_expected.to be_valid }
         end
 
         context "with parts" do
-          let(:part_shares) { %w[2 3] }
+          let(:parts_attrs) { %w[2 3] }
           it { is_expected.to be_valid }
         end
       end
@@ -30,12 +30,12 @@ describe Meals::Formula do
         let(:calc_type) { "share" }
 
         context "with all zero parts" do
-          let(:part_shares) { %w[0 0] }
+          let(:parts_attrs) { %w[0 0] }
           it { is_expected.to have_errors(parts: "must include at least one non-zero meal type") }
         end
 
         context "with parts" do
-          let(:part_shares) { %w[100% 50%] }
+          let(:parts_attrs) { %w[100% 50%] }
           it { is_expected.to be_valid }
         end
       end
@@ -66,10 +66,10 @@ describe Meals::Formula do
     end
 
     describe "share numericality" do
-      subject(:formula) { build(:meal_formula, part_shares: part_shares, meal_calc_type: calc_type) }
+      subject(:formula) { build(:meal_formula, parts_attrs: parts_attrs, meal_calc_type: calc_type) }
 
       context "percentage" do
-        let(:part_shares) { %w[10% 20%] }
+        let(:parts_attrs) { %w[10% 20%] }
         let(:calc_type) { "share" }
 
         it do
@@ -80,7 +80,7 @@ describe Meals::Formula do
       end
 
       context "currency" do
-        let(:part_shares) { %w[4 .50] }
+        let(:parts_attrs) { %w[4 .50] }
         let(:calc_type) { "fixed" }
 
         it do
@@ -91,7 +91,7 @@ describe Meals::Formula do
       end
 
       context "negative" do
-        let(:part_shares) { %w[-1 0.50] }
+        let(:parts_attrs) { %w[-1 0.50] }
         let(:calc_type) { "fixed" }
 
         it "should strip -" do
@@ -102,7 +102,7 @@ describe Meals::Formula do
       end
 
       context "non-numeric" do
-        let(:part_shares) { %w[x 0.50] }
+        let(:parts_attrs) { %w[x 0.50] }
         let(:calc_type) { "fixed" }
         it { is_expected.to have_errors("parts.share_formatted": "is invalid") }
       end

@@ -4,7 +4,7 @@ require "rails_helper"
 
 feature "meal signups", js: true do
   let(:user) { create(:user) }
-  let(:formula) { create(:meal_formula, name: "Fmla A", part_shares: [1, 1, 1]) }
+  let(:formula) { create(:meal_formula, name: "Fmla A", parts_attrs: [1, 1, 1]) }
   let!(:meal) do
     create(:meal, :with_menu, formula: formula, title: "Burgers", served_at: Time.current + 7.days)
   end

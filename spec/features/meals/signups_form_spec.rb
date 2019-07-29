@@ -4,7 +4,7 @@ require "rails_helper"
 
 feature "meal signups form", js: true do
   let(:actor) { create(:meals_coordinator) }
-  let(:formula) { create(:meal_formula, name: "Fmla A", part_shares: [1, 1, 1, 1]) }
+  let(:formula) { create(:meal_formula, name: "Fmla A", parts_attrs: [1, 1, 1, 1]) }
   let!(:meal) { create(:meal, formula: formula, served_at: Time.current + 7.days) }
   let!(:households) { create_list(:household, 2) }
 

@@ -5,7 +5,7 @@ require "rails_helper"
 describe Meals::ShareCostCalculator do
   let(:formula) do
     create(:meal_formula, meal_calc_type: "share", pantry_calc_type: pantry_calc_type,
-                          pantry_fee: pantry_fee, part_shares: %w[100% 75% 0])
+                          pantry_fee: pantry_fee, parts_attrs: %w[100% 75% 0])
   end
   let(:types) { formula.types }
   let(:meal) { build(:meal, formula: formula) }

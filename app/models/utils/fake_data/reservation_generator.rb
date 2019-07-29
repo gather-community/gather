@@ -10,7 +10,7 @@ module Utils
         self.resource_map = resource_map
       end
 
-      def generate
+      def generate_samples
         self.data = load_yaml("reservation/reservations.yml")
         adults = User.adults.active.to_a
 

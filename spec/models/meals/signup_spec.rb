@@ -49,7 +49,7 @@ describe Meals::Signup do
     end
 
     describe "no_dupe_types" do
-      let(:formula) { create(:meal_formula, part_shares: [1, 0.5]) }
+      let(:formula) { create(:meal_formula, parts_attrs: [1, 0.5]) }
       let(:meal) { create(:meal, formula: formula) }
       subject(:signup) { build(:meal_signup, meal: meal, parts_attributes: parts_attributes, flag_zzz: true) }
 

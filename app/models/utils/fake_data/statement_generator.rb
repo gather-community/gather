@@ -7,7 +7,7 @@ module Utils
         self.community = community
       end
 
-      def generate
+      def generate_samples
         make_statements
         pay_bills
       end

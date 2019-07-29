@@ -10,6 +10,7 @@ module Meals
 
     delegate :zero?, to: :count
     delegate :name, to: :type, prefix: true
+    delegate :household_id, to: :signup
 
     # Sorts by rank of the associated meal_formula_part
     def self.by_rank

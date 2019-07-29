@@ -1,13 +1,15 @@
-# Finalizes meals
+# frozen_string_literal: true
+
 module Meals
+  # Finalizes meals and creates transactions.
   class Finalizer
-    attr_accessor :meal, :meal_cost
+    attr_accessor :meal, :cost
 
     delegate :signups, to: :meal
 
     def initialize(meal)
       self.meal = meal
-      self.meal_cost = meal.cost
+      self.cost = meal.cost
     end
 
     # Takes numbers of each diner type, computes cost for each diner type based on formulas,
@@ -15,7 +17,7 @@ module Meals
     def finalize!
       create_diner_transactions
       create_reimbursement_transaction
-      copy_meal_costs
+      copy_prices
     end
 
     def calculator
@@ -27,43 +29,45 @@ module Meals
     def create_diner_transactions
       signups.each do |signup|
         next if signup.marked_for_destruction?
-        meal.allowed_signup_types.each do |signup_type|
-          next if signup[signup_type] == 0
-
-          price = calculator.price_for(signup_type)
-          next if price < 0.01
-
-          Billing::Transaction.create!(
-            account: Billing::Account.for(signup.household_id, meal.community_id),
-            code: "meal",
-            incurred_on: meal.served_at.to_date,
-            description: "#{meal.title}: #{I18n.t('signups.types.' << signup_type)}",
-            quantity: signup[signup_type],
-            unit_price: price,
-            statementable: meal
-          )
-        end
+        signup.parts.each { |p| create_diner_transaction(signup_part: p) }
       end
+    end
+
+    def create_diner_transaction(signup_part:)
+      return if signup_part.count.zero?
+      price = calculator.price_for(signup_part.type)
+      return if price < 0.01
+
+      Billing::Transaction.create!(
+        account: Billing::Account.for(signup_part.household_id, meal.community_id),
+        code: "meal",
+        incurred_on: meal.served_at.to_date,
+        description: "#{meal.title}: #{signup_part.type_name}",
+        quantity: signup_part.count,
+        unit_price: price,
+        statementable: meal
+      )
     end
 
     def create_reimbursement_transaction
-      if meal_cost.payment_method == "credit" && meal_cost.total_cost > 0 && meal.head_cook.present?
-        Billing::Transaction.create!(
-          account: Billing::Account.for(meal.head_cook.household_id, meal.community_id),
-          code: "reimb",
-          incurred_on: meal.served_at.to_date,
-          description: "#{meal.title}: Grocery Reimbursement",
-          amount: -(meal_cost.total_cost),
-          statementable: meal
-        )
-      end
+      return unless cost.payment_method == "credit" && cost.total_cost.positive? &&
+        meal.head_cook.present?
+
+      Billing::Transaction.create!(
+        account: Billing::Account.for(meal.head_cook.household_id, meal.community_id),
+        code: "reimb",
+        incurred_on: meal.served_at.to_date,
+        description: "#{meal.title}: Grocery Reimbursement",
+        amount: -cost.total_cost,
+        statementable: meal
+      )
     end
 
-    def copy_meal_costs
+    def copy_prices
       attribs = {}
-      meal.allowed_signup_types.each { |st| attribs[st] = calculator.price_for(st) }
-      %i(meal_calc_type pantry_calc_type pantry_fee).each { |a| attribs[a] = calculator.send(a) }
-      meal_cost.update_attributes!(attribs)
+      %i[meal_calc_type pantry_calc_type pantry_fee].each { |a| attribs[a] = calculator.send(a) }
+      cost.update!(attribs)
+      meal.types.each { |type| cost.parts.create!(type: type, value: calculator.price_for(type)) }
     end
   end
 end

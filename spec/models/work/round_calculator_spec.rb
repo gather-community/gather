@@ -28,25 +28,35 @@ describe Work::RoundCalculator do
     end
 
     context "with lots of rounds" do
-      # Pre  Prtn  Need   1  2  3  4  5  6  7  8  9 10
-      # ----------------------------------------------
-      #  0      1    17  11     5        0
-      #  2      1    15  11     5        0
-      #  2      1    15  11     5        0
-      #  2      1    15     11     5        0
-      #  6      1    11     11     5        0
-      #  9      1     8     11     5        0
-      #  9      1     8               5        0
-      #  2    0.5   6.5               5        0
-      # 11      1     3               5        0
-      #  7    0.5   1.5                           0
-      # 20      1    -3                           0
-      # 20      1    -3                           0
-      # 20      1    -3                              0
-      # 20      1    -3                              0
-      # 20      1    -3                              0
-      let(:pre_assign_totals) { [0, 2, 2, 2, 2, 6, 7, 9, 9, 11, 20, 20, 20, 20, 20] }
-      let(:portions) { [1, 1, 1, 0.5, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1] }
+      # Quota: 17
+      # Max rounds per worker: 3
+      # Implied round max: 5.6
+      # For given worker:
+      #   Num rounds: Need / round max
+      #   Hours per round: Need / Num rounds
+      # Idx   Pre  Prtn  Need   1  2  3  4  5  6  7  8  9 10
+      # ---------------------------------------------------
+      #  0     0      1    17  11     5        0
+      #  1     2      1    15  11     5        0
+      #  2     2      1    15  11     5        0
+      #  3     2      1    15     11     5        0
+      #  4     6      1    11            5        0
+      #  5     9      1     8            5        0
+      #  6    10      1     7               5        0
+      #  7     2    0.5   6.5               5        0
+      #  8    11      1     6               5        0
+      #  9     3    0.5   5.5                           0
+      # 10    20      1    -3                           0
+      # 11    20      1    -3                           0
+      # 12    20      1    -3                              0
+      # 13    21      1    -3                              0
+      # 14    21      1    -3                              0
+
+      # rubocop:disable Layout/ExtraSpacing
+      let(:pre_assign_totals) { [0, 2, 2, 2, 6, 9, 10,   2, 11,   3, 20, 20, 20, 21, 21] }
+      let(:portions) {          [1, 1, 1, 1, 1, 1,  1, 0.5,  1, 0.5,  1,  1,  1,  1,  1] }
+      # rubocop:enable Layout/ExtraSpacing
+
       let(:period) do
         create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
                              round_duration: 5, max_rounds_per_worker: 3,
@@ -91,7 +101,7 @@ describe Work::RoundCalculator do
       end
 
       context "worker with 2 hours, one of many, with large ID" do
-        let(:target_share) { shares[1] }
+        let(:target_share) { shares[3] }
         let(:time) { "18:55" }
 
         before do
@@ -103,8 +113,46 @@ describe Work::RoundCalculator do
         end
       end
 
+      context "worker with same need as min need in first round" do
+        let(:target_share) { shares[4] }
+        let(:time) { "18:55" }
+
+        it "starts in round 4" do
+          expect_round(prev_limit: 0, next_limit: 12, next_starts_at: "19:15")
+        end
+      end
+
+      context "worker with lower need than min need in first round" do
+        let(:target_share) { shares[5] }
+        let(:time) { "18:55" }
+
+        it "starts in round 4" do
+          expect_round(prev_limit: 0, next_limit: 12, next_starts_at: "19:15")
+        end
+      end
+
+      context "worker with 2 hours, half share" do
+        let(:target_share) { shares[7] }
+
+        context "at time before open" do
+          let(:time) { "18:55" }
+          # (17 / 2 - 5.66).ceil => 3
+          it { expect_round(prev_limit: 0, next_limit: 3, next_starts_at: "19:20") }
+        end
+
+        context "at time within round 5" do
+          let(:time) { "19:21" }
+          it { expect_round(prev_limit: 3, next_limit: nil, next_starts_at: "19:35") }
+        end
+
+        context "at time within round 8" do
+          let(:time) { "19:36" }
+          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        end
+      end
+
       context "worker with 11 hours" do
-        let(:target_share) { shares[9] }
+        let(:target_share) { shares[8] }
 
         context "at time before open" do
           let(:time) { "18:55" }
@@ -132,23 +180,12 @@ describe Work::RoundCalculator do
         end
       end
 
-      context "worker with 2 hours, half share" do
-        let(:target_share) { shares[3] }
+      context "worker with 3 hours, half share" do
+        let(:target_share) { shares[9] }
+        let(:time) { "18:55" }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          # (17 / 2 - 5.66).ceil => 3
-          it { expect_round(prev_limit: 0, next_limit: 3, next_starts_at: "19:20") }
-        end
-
-        context "at time within round 5" do
-          let(:time) { "19:21" }
-          it { expect_round(prev_limit: 3, next_limit: nil, next_starts_at: "19:35") }
-        end
-
-        context "at time within round 8" do
-          let(:time) { "19:36" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        it "starts in round 9" do
+          expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:40")
         end
       end
 

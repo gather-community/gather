@@ -5,6 +5,8 @@ module Work
   class Share < ApplicationRecord
     acts_as_tenant :cluster
 
+    attr_accessor :rounds_completed, :current_min_need, :num_rounds, :hours_per_round
+
     belongs_to :period, inverse_of: :shares
     belongs_to :user
 

@@ -59,12 +59,6 @@ describe Work::RoundCalculator do
       # 13    21      1    -3                           0
       # 14    21      1    -3                           0
 
-      # LEFT OFF HERE -- UPDATED ROUND NEEDS ABOVE SHOULD BE ADDED TO SPECS BELOW AND THEN MADE TO PASS
-      # INSTEAD OF USING THE SAME LIMIT FOR ALL IN COHORT, WE'RE CALCULATING BASED ON INDIVIDUAL HOURS PER ROUND SO THAT THINGS ARE A LITTLE SMOOTHER
-      # AND WE DON'T END UP WITH PEOPLE PICKING 1 HOUR IN FIRST ROUND
-      # THIS WAY FOR FOLKS WITH PRIORITY, THEY WILL PICK A REASONABLE AMOUNT OF HOURS IN FIRST ROUND
-      # PRIORITY WILL MEAN YOU'LL JUST GET ADDED TO EARLIER COHORT
-
       # rubocop:disable Layout/ExtraSpacing
       let(:pre_assign_totals) { [0, 2, 2, 2, 6, 9, 10,   2, 11,   3, 20, 20, 20, 21, 21] }
       let(:portions) {          [1, 1, 1, 1, 1, 1,  1, 0.5,  1, 0.5,  1,  1,  1,  1,  1] }

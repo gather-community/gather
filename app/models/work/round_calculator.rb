@@ -60,17 +60,19 @@ module Work
       loop do
         shares = top_n_shares
         return if shares.all? { |s| s.current_min_need.zero? }
-        shares.each do |share|
-          share.rounds_completed += 1
-          share.current_min_need -= share.hours_per_round
-          next unless share == target_share
-          time = auto_open_time + (round_num - 1) * round_duration.minutes
-          limit = (quota * share.portion - share.current_min_need).ceil
-          limit = nil if limit >= quota * share.portion
-          rounds << {starts_at: time, limit: limit}
-        end
+        shares.each { |s| compute_share_round(s) }
         self.round_num = round_num + 1
       end
+    end
+
+    def compute_share_round(share)
+      share.rounds_completed += 1
+      share.current_min_need -= share.hours_per_round
+      return unless share == target_share
+      time = auto_open_time + (round_num - 1) * round_duration.minutes
+      limit = (quota * share.portion - share.current_min_need).ceil
+      limit = nil if limit >= quota * share.portion
+      rounds << {starts_at: time, limit: limit}
     end
 
     def compute_shares_with_no_initial_need

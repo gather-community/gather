@@ -101,6 +101,11 @@ describe Work::RoundCalculator do
           it { expect_round(prev_limit: 12, next_limit: nil, next_starts_at: "19:30") }
         end
 
+        context "at time right before round 7" do
+          let(:time) { "19:29" }
+          it { expect_round(prev_limit: 12, next_limit: nil, next_starts_at: "19:30") }
+        end
+
         context "at time within round 7" do
           let(:time) { "19:31" }
           it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
@@ -115,7 +120,7 @@ describe Work::RoundCalculator do
           target_share.update!(id: 1e9)
         end
 
-        it "should pick first in round 2" do
+        it "starts in round 2" do
           expect_round(prev_limit: 0, next_limit: 7, next_starts_at: "19:05")
         end
       end
@@ -141,39 +146,22 @@ describe Work::RoundCalculator do
       context "worker with 2 preassigned hours, half share" do
         let(:target_share) { shares[7] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          # (17 / 2 - 5.66).ceil => 3
-          it { expect_round(prev_limit: 0, next_limit: 6, next_starts_at: "19:10") }
-        end
-
-        context "at time within round 3" do
-          let(:time) { "19:11" }
-          it { expect_round(prev_limit: 6, next_limit: nil, next_starts_at: "19:25") }
-        end
-
-        context "at time within round 6" do
-          let(:time) { "19:26" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:10"), limit: 6},
+            {starts_at: Time.zone.parse("2018-08-15 19:25"), limit: nil}
+          ])
         end
       end
 
       context "worker with 11 preassigned hours" do
         let(:target_share) { shares[8] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: 14, next_starts_at: "19:10") }
-        end
-
-        context "at time within round 3" do
-          let(:time) { "19:11" }
-          it { expect_round(prev_limit: 14, next_limit: nil, next_starts_at: "19:30") }
-        end
-
-        context "at time within round 7" do
-          let(:time) { "19:31" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:10"), limit: 14},
+            {starts_at: Time.zone.parse("2018-08-15 19:30"), limit: nil}
+          ])
         end
       end
 
@@ -193,21 +181,6 @@ describe Work::RoundCalculator do
           expect(calculator.rounds).to eq([
             {starts_at: Time.zone.parse("2018-08-15 19:40"), limit: nil}
           ])
-        end
-
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:40") }
-        end
-
-        context "at time within round 8" do
-          let(:time) { "19:36" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:40") }
-        end
-
-        context "at time within round 9" do
-          let(:time) { "19:41" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
         end
       end
     end
@@ -230,38 +203,20 @@ describe Work::RoundCalculator do
       context "worker with low preassigned hours" do
         let(:target_share) { shares[1] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:00") }
-        end
-
-        context "at time within round 1" do
-          let(:time) { "19:01" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
-        end
-
-        context "at time within round 2" do
-          let(:time) { "19:06" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: nil}
+          ])
         end
       end
 
       context "worker with higher preassigned hours" do
         let(:target_share) { shares[3] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:05") }
-        end
-
-        context "at time within round 1" do
-          let(:time) { "19:01" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:05") }
-        end
-
-        context "at time within round 2" do
-          let(:time) { "19:06" }
-          it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: nil}
+          ])
         end
       end
     end
@@ -283,19 +238,11 @@ describe Work::RoundCalculator do
 
       let(:target_share) { shares[1] }
 
-      context "at time before open" do
-        let(:time) { "18:55" }
-        it { expect_round(prev_limit: 0, next_limit: 10, next_starts_at: "19:00") }
-      end
-
-      context "at time within round 1" do
-        let(:time) { "19:01" }
-        it { expect_round(prev_limit: 10, next_limit: nil, next_starts_at: "19:05") }
-      end
-
-      context "at time within round 2" do
-        let(:time) { "19:06" }
-        it { expect_round(prev_limit: nil, next_limit: nil, next_starts_at: nil) }
+      it "has correct round schedule" do
+        expect(calculator.rounds).to eq([
+          {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: 10},
+          {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: nil}
+        ])
       end
     end
 
@@ -319,18 +266,20 @@ describe Work::RoundCalculator do
       context "worker in first group" do
         let(:target_share) { shares[1] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:00") }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: nil}
+          ])
         end
       end
 
       context "worker in second group" do
         let(:target_share) { shares[3] }
 
-        context "at time before open" do
-          let(:time) { "18:55" }
-          it { expect_round(prev_limit: 0, next_limit: nil, next_starts_at: "19:00") }
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: nil}
+          ])
         end
       end
     end

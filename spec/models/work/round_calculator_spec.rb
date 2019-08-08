@@ -8,7 +8,12 @@ describe Work::RoundCalculator do
   describe "next_num, prev_limit, next_limit" do
     let(:time) { "18:55" }
     let(:quota) { 17 }
-    let!(:shares) { portions.map { |p| create(:work_share, period: period, portion: p) } }
+    let(:priority) { [] }
+    let!(:shares) do
+      portions.each_with_index.map do |portion, i|
+        create(:work_share, period: period, portion: portion, priority: priority[i] == true)
+      end
+    end
     let!(:zero_shares) { create_list(:work_share, 2, period: period, portion: 0) } # Should be ignored.
     let!(:assigns) do
       shares.each_with_index.map do |share, i|
@@ -216,6 +221,77 @@ describe Work::RoundCalculator do
         it "has correct round schedule" do
           expect(calculator.rounds).to eq([
             {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: nil}
+          ])
+        end
+      end
+    end
+
+    context "with workers with priority" do
+      # Pre  Prtn  Need  Pri  1  2  3  4  5  6  7  8  9 10
+      # -------------------------------------------------------
+      #   0  0.25  4.25    Y  0
+      #  18     1    -1    Y  0
+      #   6     1    11       5  0
+      #   7     1    10          5  0
+      #   7     1    10          5  0
+      let(:pre_assign_totals) { [0, 18, 6, 7, 7] }
+      let(:portions) { [0.25, 1, 1, 1, 1] }
+      let(:priority) { [true, true, false, false, false] }
+      let(:period) do
+        create(:work_period, pick_type: "staggered", quota_type: "by_person", workers_per_round: 3,
+                             round_duration: 5, max_rounds_per_worker: 2,
+                             auto_open_time: Time.zone.parse("2018-08-15 19:00"))
+      end
+
+      context "worker 0" do
+        let(:target_share) { shares[0] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: nil}
+          ])
+        end
+      end
+
+      context "worker 1" do
+        let(:target_share) { shares[1] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: nil}
+          ])
+        end
+      end
+
+      context "worker 2" do
+        let(:target_share) { shares[2] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:00"), limit: 12},
+            {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: nil}
+          ])
+        end
+      end
+
+      context "worker 3" do
+        let(:target_share) { shares[3] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: 12},
+            {starts_at: Time.zone.parse("2018-08-15 19:10"), limit: nil}
+          ])
+        end
+      end
+
+      context "worker 4" do
+        let(:target_share) { shares[4] }
+
+        it "has correct round schedule" do
+          expect(calculator.rounds).to eq([
+            {starts_at: Time.zone.parse("2018-08-15 19:05"), limit: 12},
+            {starts_at: Time.zone.parse("2018-08-15 19:10"), limit: nil}
           ])
         end
       end

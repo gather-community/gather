@@ -22,5 +22,9 @@ module Work
     def adjusted_quota
       period.quota.nil? ? nil : period.quota * portion
     end
+
+    def finished_computing?
+      rounds_completed.positive? && current_min_need.zero?
+    end
   end
 end

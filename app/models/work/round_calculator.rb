@@ -93,6 +93,8 @@ module Work
         share.current_min_need = [share.portion * quota - preassigned_total_for(share), 0].max
         share.num_rounds = if quota.zero? || share.current_min_need.zero?
                              1
+                           elsif preassigned_total_for(share).zero?
+                             (share.portion * max_rounds_per_worker).ceil
                            else
                              (share.current_min_need / max_hours_per_round).ceil
                            end

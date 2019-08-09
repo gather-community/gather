@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190507130627) do
-
+ActiveRecord::Schema.define(version: 20190805123914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -667,6 +666,7 @@ ActiveRecord::Schema.define(version: 20190507130627) do
     t.datetime "created_at", null: false
     t.integer "period_id", null: false
     t.decimal "portion", precision: 4, scale: 3, default: "1.0", null: false
+    t.boolean "priority", default: false, null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["period_id", "user_id"], name: "index_work_shares_on_period_id_and_user_id", unique: true

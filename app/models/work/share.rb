@@ -24,7 +24,7 @@ module Work
     end
 
     def finished_computing?
-      rounds_completed.positive? && current_min_need.zero?
+      rounds_completed.positive? && current_min_need.abs < 0.001
     end
   end
 end

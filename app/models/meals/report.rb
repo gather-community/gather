@@ -11,12 +11,6 @@ module Meals
       self.range = range || default_range
     end
 
-    # 73 TODO: Remove
-    # Returns all diner types that appear in range-constrained results.
-    def diner_types
-      by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"].positive? } : []
-    end
-
     def empty?
       # We don't check overview because that ignores the range.
       by_month.nil?
@@ -95,9 +89,6 @@ module Meals
         ]
         data[:community_rep] = communities.map do |c|
           by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.id}"]} : {}
-        end
-        data[:diner_types] = diner_types.map do |dt|
-          by_month ? {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]} : {}
         end
       end
     end
@@ -191,20 +182,6 @@ module Meals
       ", *vars).to_a
     end
 
-    def diner_type_avg_exprs
-      Signup::DINER_TYPES.map do |dt|
-        "AVG(ttl_#{dt})::real AS avg_#{dt}, "\
-        "(AVG(ttl_#{dt}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_#{dt}_pct"
-      end.join(",\n")
-    end
-
-    def diner_type_sum_exprs
-      Signup::DINER_TYPES.map do |dt|
-        expr = signup_col_sum_expr(diner_types: [dt])
-        "SUM(#{expr}) AS ttl_#{dt}"
-      end.join(",\n")
-    end
-
     def community_avg_exprs
       communities.map do |c|
         "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, "\
@@ -217,17 +194,6 @@ module Meals
         expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN msp.count ELSE 0 END)"
         "#{expr} AS ttl_from_#{c.id}"
       end.join(",\n")
-    end
-
-    def full_signup_col_sum_expr
-      @full_signup_col_sum_expr ||= signup_col_sum_expr
-    end
-
-    def signup_col_sum_expr(tbl = "meal_signups", prefix: "", diner_types: nil, food_types: nil)
-      diner_types ||= Signup::DINER_TYPES
-      food_types ||= Signup::FOOD_TYPES
-      types = diner_types.map { |dt| food_types.map { |ft| "#{prefix}#{dt}_#{ft}" } }.flatten
-      types.map { |c| "#{tbl}.#{c}" }.join("+")
     end
 
     def communities

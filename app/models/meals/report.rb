@@ -11,6 +11,7 @@ module Meals
       self.range = range || default_range
     end
 
+    # 73 TODO: Remove
     # Returns all diner types that appear in range-constrained results.
     def diner_types
       by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"].positive? } : []
@@ -74,7 +75,7 @@ module Meals
         ]
         data[:cost_by_month] = [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_adult_cost"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_max_cost"] || 0, l: k_v[0].strftime("%b")}
           end
         ]
         data[:meals_by_month] = [
@@ -89,7 +90,7 @@ module Meals
         ]
         data[:cost_by_weekday] = [
           (by_weekday || {}).each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%a")}
+            {x: i, y: k_v[1]["avg_max_cost"], l: k_v[0].strftime("%a")}
           end
         ]
         data[:community_rep] = communities.map do |c|
@@ -157,8 +158,6 @@ module Meals
         vars << range.first << range.last
       end
 
-      community_join = "INNER JOIN communities ON meals.community_id = communities.id"
-
       # Scope to community cluster
       wheres << "communities.cluster_id = ?"
       vars << community.cluster_id
@@ -168,23 +167,25 @@ module Meals
           #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
-          AVG(meal_costs.adult_meat)::real AS avg_adult_cost,
+          AVG(max_meal_costs.max_diner_cost)::real AS avg_max_cost,
           SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
           AVG(signup_ttls.ttl_diners)::real AS avg_diners,
-          #{diner_type_avg_exprs},
           #{community_avg_exprs}
         FROM meals
-          INNER JOIN meal_costs ON meals.id = meal_costs.meal_id
-          #{community_join}
+          INNER JOIN communities ON meals.community_id = communities.id
+          INNER JOIN (
+            SELECT mc.meal_id, ingredient_cost, pantry_cost, MAX(value) AS max_diner_cost
+              FROM meal_cost_parts mcp INNER JOIN meal_costs mc ON mcp.cost_id = mc.id
+              GROUP BY mc.meal_id, mc.ingredient_cost, mc.pantry_cost
+          ) max_meal_costs ON max_meal_costs.meal_id = meals.id
           INNER JOIN (
             SELECT
-              meal_signups.meal_id,
-              SUM(#{full_signup_col_sum_expr}) AS ttl_diners,
-              #{diner_type_sum_exprs},
+              ms.meal_id,
+              SUM(msp.count) AS ttl_diners,
               #{community_sum_exprs}
-            FROM meal_signups
-              INNER JOIN households ON households.id = meal_signups.household_id
-            GROUP BY meal_signups.meal_id
+            FROM meal_signup_parts msp INNER JOIN meal_signups ms ON msp.signup_id = ms.id
+              INNER JOIN households ON households.id = ms.household_id
+            GROUP BY ms.meal_id
           ) signup_ttls ON signup_ttls.meal_id = meals.id
         WHERE #{wheres.join(' AND ')}
         #{breakout_group_order}
@@ -214,7 +215,7 @@ module Meals
 
     def community_sum_exprs
       communities.map do |c|
-        expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN #{full_signup_col_sum_expr} ELSE 0 END)"
+        expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN msp.count ELSE 0 END)"
         "#{expr} AS ttl_from_#{c.id}"
       end.join(",\n")
     end

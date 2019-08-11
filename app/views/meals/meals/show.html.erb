@@ -50,7 +50,7 @@ end %>
       <% if @signups.empty? %>
         Nobody, yet!
       <% else %>
-        <% @signups.each do |s| %>
+        <% @signups.each do |s| s.flag_zzz = true %>
           <li><%= s.household.decorate.name_with_prefix %> (<%= s.total %>)</li>
         <% end %>
       <% end %>

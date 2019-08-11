@@ -9,11 +9,8 @@ module Meals
     end
 
     def count_or_blank(type)
-      if (count = object[type]) && count.positive?
-        count
-      else
-        ""
-      end
+      count = parts_by_type[type]&.count
+      count.nil? || count.zero? ? "" : count
     end
 
     def total_diners_formatted

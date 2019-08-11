@@ -8,28 +8,23 @@
   <%= hidden_field_tag :confirmed, "1" %>
 
   <table class="index confirm">
-    <%= render "table_header", extra_col: false %>
+    <tr>
+      <th>Household</th>
+      <% meal.types.each do |type| %>
+        <th><%= type.name %></th>
+      <% end %>
+    </tr>
     <tr class="cost">
       <td><strong>Calculated Cost</strong></td>
-      <% Meals::Signup::DINER_TYPES.each do |dt| %>
-        <% if @meal.formula.allows_diner_type?(dt) %>
-          <% Meals::Signup::FOOD_TYPES.each do |ft| %>
-            <% signup_type = "#{dt}_#{ft}" %>
-            <td class="count"><%= number_to_currency(@calculator.price_for(signup_type)) %></td>
-          <% end %>
-        <% end %>
+      <% meal.types.each do |type| %>
+        <td><%= number_to_currency(@calculator.price_for(type)) %></td>
       <% end %>
     </tr>
     <% signups.reject(&:marked_for_destruction?).each do |signup| %>
       <tr>
         <td><%= signup.household_name %></td>
-        <% Meals::Signup::DINER_TYPES.each do |dt| %>
-          <% if @meal.formula.allows_diner_type?(dt) %>
-            <% Meals::Signup::FOOD_TYPES.each do |ft| %>
-              <% signup_type = "#{dt}_#{ft}" %>
-              <td class="count"><%= signup.count_or_blank(signup_type) %></td>
-            <% end %>
-          <% end %>
+        <% meal.types.each do |type| %>
+          <td class="count"><%= signup.count_or_blank(type) %></td>
         <% end %>
       </tr>
     <% end %>

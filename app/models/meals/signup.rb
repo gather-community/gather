@@ -89,6 +89,7 @@ module Meals
       parts.build(type: meal.types[0], count: 1)
     end
 
+    # 73 TODO: Remove
     def count_for(diner_type, food_type)
       self["#{diner_type}_#{food_type}"]
     end

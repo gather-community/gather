@@ -14,7 +14,7 @@
       <td><%= t("transaction_codes.#{txn.code}") %></td>
       <td>
         <% if txn.statementable.present? %>
-          <%= link_to(txn.description, polymorphic_path(txn.statementable)) %>
+          <%= link_to(txn.description, txn.statementable_path) %>
         <% else %>
           <%= txn.description %>
         <% end %>

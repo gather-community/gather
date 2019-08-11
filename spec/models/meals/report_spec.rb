@@ -7,6 +7,14 @@ describe(Meals::Report) do
   let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
   let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }
   let(:range) { nil }
+  let(:formula) do
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", portion: 1},
+      {type: "Teen", share: "75%", portion: 0.75},
+      {type: "Kid", share: "50%", portion: 0.5},
+      {type: "Little Kid", share: "0%", portion: 0.25}
+    ])
+  end
   let!(:report) { Meals::Report.new(community, range: range) }
 
   around do |example|
@@ -24,8 +32,8 @@ describe(Meals::Report) do
 
     context "with previous month having unfinalized meals" do
       before do
-        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
-        create(:meal, community: community, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, formula: formula, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -35,8 +43,8 @@ describe(Meals::Report) do
 
     context "with previous month having all finalized meals" do
       before do
-        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
-        create(:meal, :finalized, community: community, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -45,25 +53,10 @@ describe(Meals::Report) do
     end
   end
 
-  describe "diner_types" do
-    before do
-      meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
-      meals.each do |m|
-        m.signups << build(:meal_signup, meal: m, adult_meat: 1)
-        m.signups << build(:meal_signup, meal: m, senior_veg: 1, teen_meat: 1)
-        m.save!
-      end
-    end
-
-    it "should return all diner types in results" do
-      expect(report.diner_types).to eq(%w[adult senior teen])
-    end
-  end
-
   describe "#empty?" do
     context "without finalized meals" do
       before do
-        create(:meal, community: community)
+        create(:meal, formula: formula, community: community)
       end
 
       it "should be empty" do
@@ -73,15 +66,16 @@ describe(Meals::Report) do
 
     context "with only finalized meals not in range" do
       before do
-        meals = create_list(:meal, 2, :finalized, community: community, served_at: 1.day.ago)
+        meals = create_list(:meal, 2, :finalized, formula: formula, community: community,
+                                                  served_at: 1.day.ago)
         meals.each do |m|
-          m.signups << build(:meal_signup, meal: m, adult_meat: 2)
-          m.signups << build(:meal_signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1, 0, 0])
           m.save!
         end
 
         # The report range won't include these meals because one is unfinalized and they're on the same day.
-        create(:meal, community: community, served_at: 1.day.ago)
+        create(:meal, formula: formula, community: community, served_at: 1.day.ago)
       end
 
       it "should be empty" do
@@ -94,18 +88,18 @@ describe(Meals::Report) do
     context "with finalized meals" do
       before do
         meals = []
-        meals << create(:meal, :finalized, community: community, served_at: 1.month.ago)
-        meals << create(:meal, :finalized, community: community, served_at: 6.months.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community, served_at: 1.month.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community, served_at: 6.months.ago)
 
         # Very old meal in different community.
-        meals << create(:meal, :finalized, community: community2, served_at: 2.years.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community2, served_at: 2.years.ago)
 
         # Meal in communityX. Should not show in results.
-        meals << create(:meal, :finalized, community: communityX)
+        meals << create(:meal, :finalized, formula: formula, community: communityX)
 
         meals.each do |m|
-          m.signups << build(:meal_signup, meal: m, adult_meat: 2)
-          m.signups << build(:meal_signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1, 0, 0])
           m.save!
         end
       end
@@ -125,7 +119,7 @@ describe(Meals::Report) do
     context "without finalized meals" do
       describe "by_month" do
         before do
-          create(:meal, community: community)
+          create(:meal, formula: formula, community: community)
         end
 
         it "should return nil" do
@@ -138,10 +132,14 @@ describe(Meals::Report) do
       before do
         meals = []
         hholds = []
-        meals << create(:meal, :finalized, community: community, served_at: "2016-01-01 18:00") # Fri
-        meals << create(:meal, :finalized, community: community, served_at: "2016-02-10 18:00") # Wed
-        meals << create(:meal, :finalized, community: community, served_at: "2016-02-12 18:00") # Fri
-        meals << create(:meal, :finalized, community: community, served_at: "2016-04-05 18:00") # Tue
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-01-01 18:00") # Fri
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-02-10 18:00") # Wed
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-02-12 18:00") # Fri
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
         counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
@@ -153,27 +151,28 @@ describe(Meals::Report) do
         end
 
         # Cancelled meal, should be ignored.
-        m = create(:meal, :cancelled, community: community, served_at: "2016-04-12 18:00")
+        m = create(:meal, :cancelled, formula: formula, community: community, served_at: "2016-04-12 18:00")
         m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
         m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
         m.save!
 
         # Cancelled meal in other community, should be ignored.
-        m = create(:meal, :cancelled, community: community2, served_at: "2016-04-12 18:00")
+        m = create(:meal, :cancelled, formula: formula, community: community2, served_at: "2016-04-12 18:00")
         m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
         m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
         m.save!
 
         # Very old meal, should be ignored.
-        create(:meal, :finalized, community: community, served_at: 2.years.ago)
+        create(:meal, :finalized, formula: formula, community: community, served_at: 2.years.ago)
 
         # Meals from community 2 and X
-        meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)
+        meals2 = create_list(:meal, 2, :finalized, formula: formula, community: community2,
+                                                   served_at: 2.months.ago)
         meals2.each do |meal|
           meal.signups << build(:meal_signup, meal: meal, adult_meat: 2)
           meal.save!
         end
-        meal3 = create(:meal, :finalized, community: communityX, served_at: 2.months.ago)
+        meal3 = create(:meal, :finalized, formula: formula, community: communityX, served_at: 2.months.ago)
         meal3.signups << build(:meal_signup, meal: meal3, adult_meat: 2)
         meal3.save!
       end
@@ -196,7 +195,7 @@ describe(Meals::Report) do
           expect(feb["ttl_meals"]).to eq(2)
           expect(feb["ttl_diners"]).to eq(16)
           expect(feb["ttl_cost"]).to eq(24)
-          expect(feb["avg_adult_cost"]).to eq(2.50)
+          expect(feb["avg_max_cost"]).to eq(2.50)
           expect(feb["avg_diners"]).to eq(8.0)
           expect(feb["avg_adult"]).to eq(5.5)
           expect(feb["avg_adult_pct"]).to be_within(0.1).of(68.75)
@@ -210,12 +209,12 @@ describe(Meals::Report) do
           expect(apr["ttl_meals"]).to eq(1)
           expect(apr["ttl_diners"]).to eq(9)
           expect(apr["ttl_cost"]).to eq(12)
-          expect(apr["avg_adult_cost"]).to eq(4.00)
+          expect(apr["avg_max_cost"]).to eq(4.00)
 
           expect(all["ttl_meals"]).to eq(4)
           expect(all["ttl_diners"]).to eq(31)
           expect(all["ttl_cost"]).to eq(48)
-          expect(all["avg_adult_cost"]).to eq(2.50)
+          expect(all["avg_max_cost"]).to eq(2.50)
           expect(all["avg_diners"]).to eq(7.75)
           expect(all["avg_adult"]).to eq(6)
           expect(all["avg_adult_pct"]).to be_within(0.1).of(77.4)

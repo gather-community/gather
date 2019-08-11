@@ -144,22 +144,29 @@ describe(Meals::Report) do
         hholds << create(:household, community: community2)
         counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
         meals.each_with_index do |m, i|
-          m.cost.adult_meat = i + 1
-          m.signups << build(:meal_signup, meal: m, adult_meat: counts[i][0], household: hholds[0])
-          m.signups << build(:meal_signup, meal: m, senior_veg: counts[i][1], household: hholds[1])
+          # Assigns adult meals cost of $2.10, $4.20, $6.30, and $8.40, respectively.
+          m.cost.parts[0].update!(value: 2.1 * (i + 1))
+
+          # Assigns teen meals cost of 1.88. Serves as a decoy since we only check adult costs.
+          m.cost.parts.create!(value: 1.88, type: m.formula.types[1])
+
+          m.signups << build(:meal_signup, meal: m, diner_counts: [counts[i][0], 0, 0, 0],
+                                           household: hholds[0])
+          m.signups << build(:meal_signup, meal: m, diner_counts: [0, counts[i][1], 0, 0],
+                                           household: hholds[1])
           m.save!
         end
 
         # Cancelled meal, should be ignored.
         m = create(:meal, :cancelled, formula: formula, community: community, served_at: "2016-04-12 18:00")
-        m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0], household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [0, 2, 0, 0], household: hholds[1])
         m.save!
 
         # Cancelled meal in other community, should be ignored.
         m = create(:meal, :cancelled, formula: formula, community: community2, served_at: "2016-04-12 18:00")
-        m.signups << build(:meal_signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:meal_signup, meal: m, senior_veg: 2, household: hholds[1])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0], household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [0, 2, 0, 0], household: hholds[1])
         m.save!
 
         # Very old meal, should be ignored.
@@ -169,11 +176,11 @@ describe(Meals::Report) do
         meals2 = create_list(:meal, 2, :finalized, formula: formula, community: community2,
                                                    served_at: 2.months.ago)
         meals2.each do |meal|
-          meal.signups << build(:meal_signup, meal: meal, adult_meat: 2)
+          meal.signups << build(:meal_signup, meal: meal, diner_counts: [2, 0, 0, 0])
           meal.save!
         end
         meal3 = create(:meal, :finalized, formula: formula, community: communityX, served_at: 2.months.ago)
-        meal3.signups << build(:meal_signup, meal: meal3, adult_meat: 2)
+        meal3.signups << build(:meal_signup, meal: meal3, diner_counts: [2, 0, 0, 0])
         meal3.save!
       end
 
@@ -190,34 +197,31 @@ describe(Meals::Report) do
 
           expect(jan["ttl_meals"]).to eq(1)
           expect(jan["ttl_diners"]).to eq(6)
-          expect(jan["ttl_cost"]).to eq(12)
+          expect(jan["ttl_cost"]).to be_within(0.01).of(12)
+          expect(jan["avg_max_cost"]).to be_within(0.01).of(2.10)
 
           expect(feb["ttl_meals"]).to eq(2)
           expect(feb["ttl_diners"]).to eq(16)
-          expect(feb["ttl_cost"]).to eq(24)
-          expect(feb["avg_max_cost"]).to eq(2.50)
-          expect(feb["avg_diners"]).to eq(8.0)
-          expect(feb["avg_adult"]).to eq(5.5)
-          expect(feb["avg_adult_pct"]).to be_within(0.1).of(68.75)
-          expect(feb["avg_from_#{community.id}"]).to eq(5.5)
+          expect(feb["ttl_cost"]).to be_within(0.01).of(24)
+          expect(feb["avg_max_cost"]).to be_within(0.01).of(5.25)
+          expect(feb["avg_diners"]).to be_within(0.01).of(8.0)
+          expect(feb["avg_from_#{community.id}"]).to be_within(0.01).of(5.5)
           expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(68.75)
-          expect(feb["avg_from_#{community2.id}"]).to eq(2.5)
+          expect(feb["avg_from_#{community2.id}"]).to be_within(0.01).of(2.5)
           expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of(31.25)
 
           expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq(1)
           expect(apr["ttl_diners"]).to eq(9)
-          expect(apr["ttl_cost"]).to eq(12)
-          expect(apr["avg_max_cost"]).to eq(4.00)
+          expect(apr["ttl_cost"]).to be_within(0.01).of(12)
+          expect(apr["avg_max_cost"]).to be_within(0.01).of(8.40)
 
           expect(all["ttl_meals"]).to eq(4)
           expect(all["ttl_diners"]).to eq(31)
-          expect(all["ttl_cost"]).to eq(48)
-          expect(all["avg_max_cost"]).to eq(2.50)
+          expect(all["ttl_cost"]).to be_within(0.01).of(48)
+          expect(all["avg_max_cost"]).to be_within(0.01).of(5.25)
           expect(all["avg_diners"]).to eq(7.75)
-          expect(all["avg_adult"]).to eq(6)
-          expect(all["avg_adult_pct"]).to be_within(0.1).of(77.4)
         end
 
         context "with explicit range" do

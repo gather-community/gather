@@ -139,7 +139,6 @@ module Meals
     end
 
     def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
-
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
 

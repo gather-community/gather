@@ -213,7 +213,7 @@ module Meals
         SELECT
           meal_types.name,
           COALESCE(meal_signup_totals.total::real / 4, 0) AS avg_diners,
-          COALESCE(meal_signup_totals.total::real / 4 * 100 / 7.75, 0) AS avg_diners_pct
+          COALESCE(100 * meal_signup_totals.total::real / 4 / 10.0, 0) AS avg_diners_pct
         FROM meal_types
           LEFT OUTER JOIN (
             SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total

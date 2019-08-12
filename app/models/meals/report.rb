@@ -151,7 +151,7 @@ module Meals
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
       where_expr, vars = meal_cmty_where_expr(all_communities: all_communities, ignore_range: ignore_range)
 
-      query("
+      sql = <<-SQL
         SELECT
           #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
@@ -178,7 +178,8 @@ module Meals
           ) signup_ttls ON signup_ttls.meal_id = meals.id
         WHERE #{where_expr}
         #{breakout_group_order}
-      ", *vars).to_a
+      SQL
+      query(sql, *vars).to_a
     end
     # rubocop:enable Metrics/MethodLength
 
@@ -187,7 +188,7 @@ module Meals
       where_expr, vars = meal_cmty_where_expr
       ttl_meals = by_month[:all]["ttl_meals"]
       avg_diners = by_month[:all]["avg_diners"]
-      query(%(
+      sql = <<-SQL
         SELECT
           meal_types.#{col_name},
           COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_diners,
@@ -213,7 +214,8 @@ module Meals
         )
         GROUP BY meal_types.#{col_name}
         ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
-      ), *[ttl_meals, ttl_meals, avg_diners, vars * 2].flatten).to_a
+      SQL
+      query(sql, *[ttl_meals, ttl_meals, avg_diners, vars * 2].flatten).to_a
     end
     # rubocop:enable Metrics/MethodLength
 

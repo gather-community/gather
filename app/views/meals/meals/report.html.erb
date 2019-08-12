@@ -14,7 +14,7 @@
         <table class="numbers">
           <tr class="numbers">
             <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_meals"]) %></td>
-            <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_diners"]) %></td>
+            <td><%= number_with_delimiter(@report.overview[@community.id]["ttl_servings"]) %></td>
             <td><%= number_to_currency(@report.overview[@community.id]["ttl_cost"]) %></td>
           </tr>
           <tr class="captions">
@@ -30,7 +30,7 @@
           <table class="numbers">
             <tr class="numbers">
               <td><%= number_with_delimiter(@report.overview[:all]["ttl_meals"]) %></td>
-              <td><%= number_with_delimiter(@report.overview[:all]["ttl_diners"]) %></td>
+              <td><%= number_with_delimiter(@report.overview[:all]["ttl_servings"]) %></td>
               <td><%= number_to_currency(@report.overview[:all]["ttl_cost"]) %></td>
             </tr>
             <tr class="captions">

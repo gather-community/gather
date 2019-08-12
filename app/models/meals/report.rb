@@ -72,7 +72,7 @@ module Meals
       return @chart_data if defined?(@chart_data)
       @chart_data[:diners_by_month] = [
         by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_diners"] || 0, l: k_v[0].strftime("%b")}
+          {x: i, y: k_v[1]["avg_servings"] || 0, l: k_v[0].strftime("%b")}
         end
       ]
       @chart_data[:cost_by_month] = [
@@ -87,7 +87,7 @@ module Meals
       ]
       @chart_data[:diners_by_weekday] = [
         (by_weekday || {}).each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%a")}
+          {x: i, y: k_v[1]["avg_servings"], l: k_v[0].strftime("%a")}
         end
       ]
       @chart_data[:cost_by_weekday] = [
@@ -156,21 +156,21 @@ module Meals
           #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
-          AVG(max_meal_costs.max_diner_cost)::real AS avg_max_cost,
-          SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
-          AVG(signup_ttls.ttl_diners)::real AS avg_diners,
+          AVG(max_meal_costs.max_serving_cost)::real AS avg_max_cost,
+          SUM(signup_ttls.ttl_servings)::integer AS ttl_servings,
+          AVG(signup_ttls.ttl_servings)::real AS avg_servings,
           #{community_avg_exprs}
         FROM meals
           INNER JOIN communities ON meals.community_id = communities.id
           INNER JOIN (
-            SELECT mc.meal_id, ingredient_cost, pantry_cost, MAX(value) AS max_diner_cost
+            SELECT mc.meal_id, ingredient_cost, pantry_cost, MAX(value) AS max_serving_cost
               FROM meal_cost_parts mcp INNER JOIN meal_costs mc ON mcp.cost_id = mc.id
               GROUP BY mc.meal_id, mc.ingredient_cost, mc.pantry_cost
           ) max_meal_costs ON max_meal_costs.meal_id = meals.id
           INNER JOIN (
             SELECT
               ms.meal_id,
-              SUM(msp.count) AS ttl_diners,
+              SUM(msp.count) AS ttl_servings,
               #{community_sum_exprs}
             FROM meal_signup_parts msp INNER JOIN meal_signups ms ON msp.signup_id = ms.id
               INNER JOIN households ON households.id = ms.household_id
@@ -187,12 +187,12 @@ module Meals
     def type_or_category_query(col_name:)
       where_expr, vars = meal_cmty_where_expr
       ttl_meals = by_month[:all]["ttl_meals"]
-      avg_diners = by_month[:all]["avg_diners"]
+      avg_servings = by_month[:all]["avg_servings"]
       sql = <<-SQL
         SELECT
           meal_types.#{col_name},
-          COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_diners,
-          COALESCE(100 * SUM(meal_signup_totals.total::real) / ? / ?, 0) AS avg_diners_pct
+          COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_servings,
+          COALESCE(100 * SUM(meal_signup_totals.total::real) / ? / ?, 0) AS avg_servings_pct
         FROM meal_types
           LEFT OUTER JOIN (
             SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total
@@ -215,7 +215,7 @@ module Meals
         GROUP BY meal_types.#{col_name}
         ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
       SQL
-      query(sql, *[ttl_meals, ttl_meals, avg_diners, vars * 2].flatten).to_a
+      query(sql, *[ttl_meals, ttl_meals, avg_servings, vars * 2].flatten).to_a
     end
     # rubocop:enable Metrics/MethodLength
 
@@ -236,7 +236,7 @@ module Meals
     def community_avg_exprs
       communities.map do |c|
         "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, "\
-        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_from_#{c.id}_pct"
+        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_servings))::real AS avg_from_#{c.id}_pct"
       end.join(",\n")
     end
 

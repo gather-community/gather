@@ -185,11 +185,13 @@ module Meals
     # rubocop:disable Metrics/MethodLength
     def type_or_category_query(col_name:)
       where_expr, vars = meal_cmty_where_expr
+      ttl_meals = by_month[:all]["ttl_meals"]
+      avg_diners = by_month[:all]["avg_diners"]
       query(%(
         SELECT
           meal_types.#{col_name},
-          COALESCE(SUM(meal_signup_totals.total::real) / 4, 0) AS avg_diners,
-          COALESCE(100 * SUM(meal_signup_totals.total::real) / 4 / 10.0, 0) AS avg_diners_pct
+          COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_diners,
+          COALESCE(100 * SUM(meal_signup_totals.total::real) / ? / ?, 0) AS avg_diners_pct
         FROM meal_types
           LEFT OUTER JOIN (
             SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total
@@ -211,7 +213,7 @@ module Meals
         )
         GROUP BY meal_types.#{col_name}
         ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
-      ), *(vars * 2).flatten).to_a
+      ), *[ttl_meals, ttl_meals, avg_diners, vars * 2].flatten).to_a
     end
     # rubocop:enable Metrics/MethodLength
 

@@ -262,6 +262,21 @@ describe(Meals::Report) do
           expect(report.by_community.keys).to eq(["Community 1", "Community 2"])
         end
       end
+
+      describe "by_type" do
+        it "should have correct data" do
+          expect(report.by_type.size).to eq(4)
+          expect(report.by_type.keys).to eq(["Adult", "Teen", "Kid", "Little Kid"])
+          expect(report.by_type["Adult"]["avg_diners"]).to be_within(0.01).of(24.0 / 4.0)
+          expect(report.by_type["Adult"]["avg_diners_pct"]).to be_within(0.01).of(100 * (24.0 / 4.0) / 7.75)
+          expect(report.by_type["Teen"]["avg_diners"]).to be_within(0.01).of(7.0 / 4.0)
+          expect(report.by_type["Teen"]["avg_diners_pct"]).to be_within(0.01).of(100 * (7.0 / 4.0) / 7.75)
+          expect(report.by_type["Kid"]["avg_diners"]).to be_within(0.01).of(0)
+          expect(report.by_type["Kid"]["avg_diners_pct"]).to be_within(0.01).of(0)
+          expect(report.by_type["Little Kid"]["avg_diners"]).to be_within(0.01).of(0)
+          expect(report.by_type["Little Kid"]["avg_diners_pct"]).to be_within(0.01).of(0)
+        end
+      end
     end
   end
 end

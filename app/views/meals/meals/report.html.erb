@@ -45,44 +45,43 @@
 
     <div class="row">
       <div class="col-sm-12">
-      <h2><%= range %></h2>
+        <h2><%= range %></h2>
 
-      <div id="charts">
-        <div class="row">
-          <div id="chart1" class="col-sm-4"><svg></svg></div>
-          <div id="chart2" class="col-sm-4"><svg></svg></div>
-          <div id="chart3" class="col-sm-4"><svg></svg></div>
+        <div id="charts">
+          <div class="row">
+            <div id="chart1" class="col-sm-4"><svg></svg></div>
+            <div id="chart2" class="col-sm-4"><svg></svg></div>
+            <div id="chart3" class="col-sm-4"><svg></svg></div>
+          </div>
+          <div class="row">
+            <div id="chart4" class="col-sm-4"><svg></svg></div>
+            <div id="chart5" class="col-sm-4"><svg></svg></div>
+            <div id="chart6" class="col-sm-4"><svg></svg></div>
+          </div>
         </div>
-        <div class="row">
-          <div id="chart4" class="col-sm-4"><svg></svg></div>
-          <div id="chart5" class="col-sm-4"><svg></svg></div>
-          <div id="chart6" class="col-sm-4"><svg></svg></div>
+
+        <% this_cmty_only = multi_community? ? ", #{@community.name} meals only" : "" %>
+
+        <h2 class="with-subhead">By Month</h2>
+        <small><%= range %><%= this_cmty_only %></small>
+        <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
+
+        <h2 class="with-subhead">By Weekday</h2>
+        <small><%= range %><%= this_cmty_only %></small>
+        <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
+
+        <% if multi_community? %>
+          <h2 class="with-subhead">By Community</h2>
+          <small><%= range %></small>
+          <%= render("report_main_table", name: "by-community", data: @report.by_community,
+            highlight: @community.name) %>
+        <% end %>
+
+        <div class="footnote">
+          The above statistics include finalized, non-cancelled meals only.
+          There were <%= @report.cancelled %> cancelled meals
+          <%= multi_community? ? "at #{@community.name} " : "" %>in this period.
         </div>
-      </div>
-
-      <% this_cmty_only = multi_community? ? ", #{@community.name} meals only" : "" %>
-
-      <h2 class="with-subhead">By Month</h2>
-      <small>
-        <%= range %><%= this_cmty_only %></small>
-      <%= render("report_main_table", name: "by-month", data: @report.by_month, period_format: :month_yr) %>
-
-      <h2 class="with-subhead">By Weekday</h2>
-      <small>
-        <%= range %><%= this_cmty_only %></small>
-      <%= render("report_main_table", name: "by-weekday", data: @report.by_weekday, period_format: :weekday) %>
-
-      <% if multi_community? %>
-        <h2 class="with-subhead">By Community</h2>
-        <small><%= range %></small>
-        <%= render("report_main_table", name: "by-community", data: @report.by_community,
-          highlight: @community.name) %>
-      <% end %>
-
-      <div class="footnote">
-        The above statistics include finalized, non-cancelled meals only.
-        There were <%= @report.cancelled %> cancelled meals
-        <%= multi_community? ? "at #{@community.name} " : "" %>in this period.
       </div>
     </div>
   </div>

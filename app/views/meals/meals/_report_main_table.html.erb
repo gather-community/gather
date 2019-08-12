@@ -1,5 +1,5 @@
 <% highlight = :all if local_assigns[:highlight].nil? %>
-<% num_cols = 7 + @report.diner_types.size + (multi_community? ? @communities.size : 0) %>
+<% num_cols = 7 + (multi_community? ? @communities.size : 0) %>
 
 <table class="<%= name %> stats <%= multi_community? ? 'multi-community' : '' %>">
   <tr class="surheader">
@@ -9,7 +9,6 @@
     <% if multi_community? %>
       <th colspan="<%= @communities.size %>" class="cmty-rep">Avg. Community Representation</th>
     <% end %>
-    <th colspan="<%= @report.diner_types.size %>" class="diner-types">Avg. Diner Types</th>
   </tr>
   <tr class="header">
     <th></th>
@@ -22,9 +21,6 @@
       <% @communities.each do |community| %>
         <th class="cmty-rep"><%= community.name %></th>
       <% end %>
-    <% end %>
-    <% @report.diner_types.each do |dt| %>
-      <th class="diner-types"><%= I18n.t("signups.diner_types.#{dt}", count: 2) %></th>
     <% end %>
   </tr>
   <% data.each do |period, cols| %>
@@ -55,13 +51,6 @@
               </span>
             </td>
           <% end %>
-        <% end %>
-        <% @report.diner_types.each do |dt| %>
-          <td class="diner-types">
-            <span title="<%= number_with_precision(cols["avg_#{dt}"], precision: 1) %>">
-              <%= number_to_percentage(cols["avg_#{dt}_pct"], precision: 0) %>
-            </span>
-          </td>
         <% end %>
       <% end %>
     </tr>

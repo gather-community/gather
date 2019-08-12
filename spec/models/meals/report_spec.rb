@@ -9,10 +9,10 @@ describe(Meals::Report) do
   let(:range) { nil }
   let(:formula) do
     create(:meal_formula, parts_attrs: [
-      {type: "Adult", share: "100%", portion: 1},
-      {type: "Teen", share: "75%", portion: 0.75},
-      {type: "Kid", share: "50%", portion: 0.5},
-      {type: "Little Kid", share: "0%", portion: 0.25}
+      {type: "Adult", share: "100%", category: "Green", portion: 1},
+      {type: "Teen", share: "75%", category: "Blue", portion: 0.75},
+      {type: "Kid", share: "50%", category: "Red", portion: 0.5},
+      {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
     ])
   end
   let!(:report) { Meals::Report.new(community, range: range) }
@@ -142,7 +142,7 @@ describe(Meals::Report) do
                                            served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
-        counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
+        counts = [[5, 1, 2, 0], [7, 3, 5, 0], [4, 2, 1, 1], [8, 1, 0, 0]]
         meals.each_with_index do |m, i|
           # Assigns adult meals cost of $2.10, $4.20, $6.30, and $8.40, respectively.
           m.cost.parts[0].update!(value: 2.1 * (i + 1))
@@ -150,10 +150,10 @@ describe(Meals::Report) do
           # Assigns teen meals cost of 1.88. Serves as a decoy since we only check adult costs.
           m.cost.parts.create!(value: 1.88, type: m.formula.types[1])
 
-          m.signups << build(:meal_signup, meal: m, diner_counts: [counts[i][0], 0, 0, 0],
-                                           household: hholds[0])
-          m.signups << build(:meal_signup, meal: m, diner_counts: [0, counts[i][1], 0, 0],
-                                           household: hholds[1])
+          m.signups << build(:meal_signup, meal: m, household: hholds[0],
+                                           diner_counts: [counts[i][0], 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, household: hholds[1],
+                                           diner_counts: [0, counts[i][1], counts[i][2], counts[i][3]])
           m.save!
         end
 
@@ -201,27 +201,27 @@ describe(Meals::Report) do
           expect(jan["avg_max_cost"]).to be_within(0.01).of(2.10)
 
           expect(feb["ttl_meals"]).to eq(2)
-          expect(feb["ttl_diners"]).to eq(16)
+          expect(feb["ttl_diners"]).to eq(23)
           expect(feb["ttl_cost"]).to be_within(0.01).of(24)
           expect(feb["avg_max_cost"]).to be_within(0.01).of(5.25)
-          expect(feb["avg_diners"]).to be_within(0.01).of(8.0)
+          expect(feb["avg_diners"]).to be_within(0.01).of(11.5)
           expect(feb["avg_from_#{community.id}"]).to be_within(0.01).of(5.5)
-          expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(68.75)
-          expect(feb["avg_from_#{community2.id}"]).to be_within(0.01).of(2.5)
-          expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of(31.25)
+          expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(47.82)
+          expect(feb["avg_from_#{community2.id}"]).to be_within(0.01).of(6.0)
+          expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of(52.17)
 
           expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq(1)
-          expect(apr["ttl_diners"]).to eq(9)
+          expect(apr["ttl_diners"]).to eq(12)
           expect(apr["ttl_cost"]).to be_within(0.01).of(12)
           expect(apr["avg_max_cost"]).to be_within(0.01).of(8.40)
 
           expect(all["ttl_meals"]).to eq(4)
-          expect(all["ttl_diners"]).to eq(31)
+          expect(all["ttl_diners"]).to eq(40)
           expect(all["ttl_cost"]).to be_within(0.01).of(48)
           expect(all["avg_max_cost"]).to be_within(0.01).of(5.25)
-          expect(all["avg_diners"]).to eq(7.75)
+          expect(all["avg_diners"]).to eq(10.0)
         end
 
         context "with explicit range" do
@@ -267,14 +267,14 @@ describe(Meals::Report) do
         it "should have correct data" do
           expect(report.by_type.size).to eq(4)
           expect(report.by_type.keys).to eq(["Adult", "Teen", "Kid", "Little Kid"])
-          expect(report.by_type["Adult"]["avg_diners"]).to be_within(0.01).of(24.0 / 4.0)
-          expect(report.by_type["Adult"]["avg_diners_pct"]).to be_within(0.01).of(100 * (24.0 / 4.0) / 7.75)
-          expect(report.by_type["Teen"]["avg_diners"]).to be_within(0.01).of(7.0 / 4.0)
-          expect(report.by_type["Teen"]["avg_diners_pct"]).to be_within(0.01).of(100 * (7.0 / 4.0) / 7.75)
-          expect(report.by_type["Kid"]["avg_diners"]).to be_within(0.01).of(0)
-          expect(report.by_type["Kid"]["avg_diners_pct"]).to be_within(0.01).of(0)
-          expect(report.by_type["Little Kid"]["avg_diners"]).to be_within(0.01).of(0)
-          expect(report.by_type["Little Kid"]["avg_diners_pct"]).to be_within(0.01).of(0)
+          expect(report.by_type["Adult"]["avg_diners"]).to be_within(0.01).of(6.0)
+          expect(report.by_type["Adult"]["avg_diners_pct"]).to be_within(0.01).of(60.0)
+          expect(report.by_type["Teen"]["avg_diners"]).to be_within(0.01).of(1.75)
+          expect(report.by_type["Teen"]["avg_diners_pct"]).to be_within(0.01).of(17.50)
+          expect(report.by_type["Kid"]["avg_diners"]).to be_within(0.01).of(2.0)
+          expect(report.by_type["Kid"]["avg_diners_pct"]).to be_within(0.01).of(20.0)
+          expect(report.by_type["Little Kid"]["avg_diners"]).to be_within(0.01).of(0.25)
+          expect(report.by_type["Little Kid"]["avg_diners_pct"]).to be_within(0.01).of(2.5)
         end
       end
     end

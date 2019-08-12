@@ -106,10 +106,10 @@ describe(Meals::Report) do
 
       it "should have correct data from cluster" do
         expect(report.overview[community.id]["ttl_meals"]).to eq(2)
-        expect(report.overview[community.id]["ttl_diners"]).to eq(6)
+        expect(report.overview[community.id]["ttl_servings"]).to eq(6)
         expect(report.overview[community.id]["ttl_cost"]).to eq(24)
         expect(report.overview[:all]["ttl_meals"]).to eq(3)
-        expect(report.overview[:all]["ttl_diners"]).to eq(9)
+        expect(report.overview[:all]["ttl_servings"]).to eq(9)
         expect(report.overview[:all]["ttl_cost"]).to eq(36)
       end
     end
@@ -196,15 +196,15 @@ describe(Meals::Report) do
           all = report.by_month[:all]
 
           expect(jan["ttl_meals"]).to eq(1)
-          expect(jan["ttl_diners"]).to eq(8)
+          expect(jan["ttl_servings"]).to eq(8)
           expect(jan["ttl_cost"]).to be_within(0.01).of(12)
           expect(jan["avg_max_cost"]).to be_within(0.01).of(2.10)
 
           expect(feb["ttl_meals"]).to eq(2)
-          expect(feb["ttl_diners"]).to eq(23)
+          expect(feb["ttl_servings"]).to eq(23)
           expect(feb["ttl_cost"]).to be_within(0.01).of(24)
           expect(feb["avg_max_cost"]).to be_within(0.01).of(5.25)
-          expect(feb["avg_diners"]).to be_within(0.01).of(11.5)
+          expect(feb["avg_servings"]).to be_within(0.01).of(11.5)
           expect(feb["avg_from_#{community.id}"]).to be_within(0.01).of(5.5)
           expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(47.82)
           expect(feb["avg_from_#{community2.id}"]).to be_within(0.01).of(6.0)
@@ -213,15 +213,15 @@ describe(Meals::Report) do
           expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq(1)
-          expect(apr["ttl_diners"]).to eq(9)
+          expect(apr["ttl_servings"]).to eq(9)
           expect(apr["ttl_cost"]).to be_within(0.01).of(12)
           expect(apr["avg_max_cost"]).to be_within(0.01).of(8.40)
 
           expect(all["ttl_meals"]).to eq(4)
-          expect(all["ttl_diners"]).to eq(40)
+          expect(all["ttl_servings"]).to eq(40)
           expect(all["ttl_cost"]).to be_within(0.01).of(48)
           expect(all["avg_max_cost"]).to be_within(0.01).of(5.25)
-          expect(all["avg_diners"]).to eq(10.0)
+          expect(all["avg_servings"]).to eq(10.0)
         end
 
         context "with explicit range" do
@@ -267,14 +267,14 @@ describe(Meals::Report) do
         it "should have correct data" do
           expect(report.by_type.size).to eq(4)
           expect(report.by_type.keys).to eq(["Adult", "Teen", "Kid", "Little Kid"])
-          expect(report.by_type["Adult"]["avg_diners"]).to be_within(0.01).of(6.0)
-          expect(report.by_type["Adult"]["avg_diners_pct"]).to be_within(0.01).of(60.0)
-          expect(report.by_type["Teen"]["avg_diners"]).to be_within(0.01).of(1.75)
-          expect(report.by_type["Teen"]["avg_diners_pct"]).to be_within(0.01).of(17.50)
-          expect(report.by_type["Kid"]["avg_diners"]).to be_within(0.01).of(2.0)
-          expect(report.by_type["Kid"]["avg_diners_pct"]).to be_within(0.01).of(20.0)
-          expect(report.by_type["Little Kid"]["avg_diners"]).to be_within(0.01).of(0.25)
-          expect(report.by_type["Little Kid"]["avg_diners_pct"]).to be_within(0.01).of(2.5)
+          expect(report.by_type["Adult"]["avg_servings"]).to be_within(0.01).of(6.0)
+          expect(report.by_type["Adult"]["avg_servings_pct"]).to be_within(0.01).of(60.0)
+          expect(report.by_type["Teen"]["avg_servings"]).to be_within(0.01).of(1.75)
+          expect(report.by_type["Teen"]["avg_servings_pct"]).to be_within(0.01).of(17.50)
+          expect(report.by_type["Kid"]["avg_servings"]).to be_within(0.01).of(2.0)
+          expect(report.by_type["Kid"]["avg_servings_pct"]).to be_within(0.01).of(20.0)
+          expect(report.by_type["Little Kid"]["avg_servings"]).to be_within(0.01).of(0.25)
+          expect(report.by_type["Little Kid"]["avg_servings_pct"]).to be_within(0.01).of(2.5)
         end
       end
 
@@ -282,12 +282,12 @@ describe(Meals::Report) do
         it "should have correct data" do
           expect(report.by_category.size).to eq(3)
           expect(report.by_category.keys).to eq(%w[Green Blue] << nil)
-          expect(report.by_category["Green"]["avg_diners"]).to be_within(0.01).of(8.0)
-          expect(report.by_category["Green"]["avg_diners_pct"]).to be_within(0.01).of(80.0)
-          expect(report.by_category["Blue"]["avg_diners"]).to be_within(0.01).of(1.75)
-          expect(report.by_category["Blue"]["avg_diners_pct"]).to be_within(0.01).of(17.5)
-          expect(report.by_category[nil]["avg_diners"]).to be_within(0.01).of(0.25)
-          expect(report.by_category[nil]["avg_diners_pct"]).to be_within(0.01).of(2.5)
+          expect(report.by_category["Green"]["avg_servings"]).to be_within(0.01).of(8.0)
+          expect(report.by_category["Green"]["avg_servings_pct"]).to be_within(0.01).of(80.0)
+          expect(report.by_category["Blue"]["avg_servings"]).to be_within(0.01).of(1.75)
+          expect(report.by_category["Blue"]["avg_servings_pct"]).to be_within(0.01).of(17.5)
+          expect(report.by_category[nil]["avg_servings"]).to be_within(0.01).of(0.25)
+          expect(report.by_category[nil]["avg_servings_pct"]).to be_within(0.01).of(2.5)
         end
       end
     end

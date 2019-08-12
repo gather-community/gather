@@ -39,10 +39,10 @@
         <%= (num_cols - 1).times.map { content_tag(:td, "-") }.reduce(:<<) %>
       <% else %>
         <td class="totals"><%= number_with_delimiter(cols["ttl_meals"]) %></td>
-        <td class="totals"><%= number_with_delimiter(cols["ttl_diners"]) %></td>
+        <td class="totals"><%= number_with_delimiter(cols["ttl_servings"]) %></td>
         <td class="totals"><%= number_to_currency(cols["ttl_cost"]) %></td>
         <td class="general-avg"><%= number_to_currency(cols["avg_max_cost"]) %></td>
-        <td class="general-avg"><%= number_with_precision(cols["avg_diners"], precision: 1) %></td>
+        <td class="general-avg"><%= number_with_precision(cols["avg_servings"], precision: 1) %></td>
         <% if multi_community? %>
           <% @communities.each do |c| %>
             <td class="cmty-rep">

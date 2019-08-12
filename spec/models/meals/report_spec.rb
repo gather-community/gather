@@ -11,7 +11,7 @@ describe(Meals::Report) do
     create(:meal_formula, parts_attrs: [
       {type: "Adult", share: "100%", category: "Green", portion: 1},
       {type: "Teen", share: "75%", category: "Blue", portion: 0.75},
-      {type: "Kid", share: "50%", category: "Red", portion: 0.5},
+      {type: "Kid", share: "50%", category: "Green", portion: 0.5},
       {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
     ])
   end
@@ -196,7 +196,7 @@ describe(Meals::Report) do
           all = report.by_month[:all]
 
           expect(jan["ttl_meals"]).to eq(1)
-          expect(jan["ttl_diners"]).to eq(6)
+          expect(jan["ttl_diners"]).to eq(8)
           expect(jan["ttl_cost"]).to be_within(0.01).of(12)
           expect(jan["avg_max_cost"]).to be_within(0.01).of(2.10)
 
@@ -213,7 +213,7 @@ describe(Meals::Report) do
           expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq(1)
-          expect(apr["ttl_diners"]).to eq(12)
+          expect(apr["ttl_diners"]).to eq(9)
           expect(apr["ttl_cost"]).to be_within(0.01).of(12)
           expect(apr["avg_max_cost"]).to be_within(0.01).of(8.40)
 
@@ -275,6 +275,19 @@ describe(Meals::Report) do
           expect(report.by_type["Kid"]["avg_diners_pct"]).to be_within(0.01).of(20.0)
           expect(report.by_type["Little Kid"]["avg_diners"]).to be_within(0.01).of(0.25)
           expect(report.by_type["Little Kid"]["avg_diners_pct"]).to be_within(0.01).of(2.5)
+        end
+      end
+
+      describe "by_category" do
+        it "should have correct data" do
+          expect(report.by_category.size).to eq(3)
+          expect(report.by_category.keys).to eq(%w[Green Blue] << nil)
+          expect(report.by_category["Green"]["avg_diners"]).to be_within(0.01).of(8.0)
+          expect(report.by_category["Green"]["avg_diners_pct"]).to be_within(0.01).of(80.0)
+          expect(report.by_category["Blue"]["avg_diners"]).to be_within(0.01).of(1.75)
+          expect(report.by_category["Blue"]["avg_diners_pct"]).to be_within(0.01).of(17.5)
+          expect(report.by_category[nil]["avg_diners"]).to be_within(0.01).of(0.25)
+          expect(report.by_category[nil]["avg_diners_pct"]).to be_within(0.01).of(2.5)
         end
       end
     end

@@ -64,6 +64,10 @@ module Meals
       @by_type ||= types_query
     end
 
+    def by_category
+      @by_category ||= categories_query
+    end
+
     def chart_data
       @chart_data ||= {}.tap do |data|
         data[:diners_by_month] = [
@@ -236,6 +240,58 @@ module Meals
         GROUP BY meal_types.id, meal_types.name, meal_signup_totals.total
         ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
       ), *(vars * 2).flatten).to_a.index_by { |row| row["name"] }
+    end
+
+    def categories_query(breakout_expr: nil, all_communities: false, ignore_range: false)
+      breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
+      breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
+
+      wheres = []
+      vars = []
+
+      wheres << "meals.status = 'finalized'"
+
+      unless all_communities
+        wheres << "meals.community_id = ?"
+        vars << community.id
+      end
+
+      unless ignore_range
+        wheres << "served_at >= ?" << "served_at < ?"
+        vars << range.first << range.last
+      end
+
+      # Scope to community cluster
+      wheres << "communities.cluster_id = ?"
+      vars << community.cluster_id
+
+      query(%(
+        SELECT
+          meal_types.category,
+          COALESCE(SUM(meal_signup_totals.total::real) / 4, 0) AS avg_diners,
+          COALESCE(100 * SUM(meal_signup_totals.total::real) / 4 / 10.0, 0) AS avg_diners_pct
+        FROM meal_types
+          LEFT OUTER JOIN (
+            SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total
+              FROM meal_signup_parts
+                INNER JOIN meal_signups ON meal_signup_parts.signup_id = meal_signups.id
+                INNER JOIN meals ON meal_signups.meal_id = meals.id
+                INNER JOIN communities ON meals.community_id = communities.id
+              WHERE #{wheres.join(' AND ')}
+              GROUP BY meal_signup_parts.type_id
+          ) meal_signup_totals ON meal_signup_totals.type_id = meal_types.id
+        INNER JOIN meal_formula_parts ON meal_formula_parts.type_id = meal_types.id
+        WHERE meal_types.id IN (
+          SELECT type_id
+            FROM meal_formula_parts
+              INNER JOIN meal_formulas ON meal_formula_parts.formula_id = meal_formulas.id
+              INNER JOIN meals ON meal_formulas.id = meals.formula_id
+              INNER JOIN communities ON meals.community_id = communities.id
+            WHERE #{wheres.join(' AND ')}
+        )
+        GROUP BY meal_types.category
+        ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
+      ), *(vars * 2).flatten).to_a.index_by { |row| row["category"] }
     end
 
     def community_avg_exprs

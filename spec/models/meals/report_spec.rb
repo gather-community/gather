@@ -15,6 +15,11 @@ describe(Meals::Report) do
       {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
     ])
   end
+  let(:formula2) do
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", category: "Green", portion: 1}
+    ])
+  end
   let!(:report) { Meals::Report.new(community, range: range) }
 
   around do |example|
@@ -157,10 +162,10 @@ describe(Meals::Report) do
           m.save!
         end
 
-        # Cancelled meal, should be ignored.
-        m = create(:meal, :cancelled, formula: formula, community: community, served_at: "2016-04-12 18:00")
-        m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0], household: hholds[0])
-        m.signups << build(:meal_signup, meal: m, diner_counts: [0, 2, 0, 0], household: hholds[1])
+        # Cancelled meal on formula2, should be ignored.
+        m = create(:meal, :cancelled, formula: formula2, community: community, served_at: "2016-04-12 18:00")
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2], household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [1], household: hholds[1])
         m.save!
 
         # Cancelled meal in other community, should be ignored.

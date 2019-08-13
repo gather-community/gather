@@ -69,36 +69,39 @@ module Meals
     end
 
     def chart_data # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      return @chart_data if defined?(@chart_data)
-      @chart_data[:diners_by_month] = [
-        by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_servings"] || 0, l: k_v[0].strftime("%b")}
+      @chart_data ||= {
+        servings_by_month: [
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_servings"] || 0, l: k_v[0].strftime("%b")}
+          end
+        ],
+        cost_by_month: [
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_max_cost"] || 0, l: k_v[0].strftime("%b")}
+          end
+        ],
+        meals_by_month: [
+          by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
+          end
+        ],
+        servings_by_weekday: [
+          (by_weekday || {}).each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_servings"], l: k_v[0].strftime("%a")}
+          end
+        ],
+        cost_by_weekday: [
+          (by_weekday || {}).each_with_index.map do |k_v, i|
+            {x: i, y: k_v[1]["avg_max_cost"], l: k_v[0].strftime("%a")}
+          end
+        ],
+        meal_types: (by_type || {}).map do |k_v|
+          {key: k_v[0], y: k_v[1]["avg_servings"]}
+        end,
+        community_rep: communities.map do |c|
+          by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.id}"]} : {}
         end
-      ]
-      @chart_data[:cost_by_month] = [
-        by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_max_cost"] || 0, l: k_v[0].strftime("%b")}
-        end
-      ]
-      @chart_data[:meals_by_month] = [
-        by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
-        end
-      ]
-      @chart_data[:diners_by_weekday] = [
-        (by_weekday || {}).each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_servings"], l: k_v[0].strftime("%a")}
-        end
-      ]
-      @chart_data[:cost_by_weekday] = [
-        (by_weekday || {}).each_with_index.map do |k_v, i|
-          {x: i, y: k_v[1]["avg_max_cost"], l: k_v[0].strftime("%a")}
-        end
-      ]
-      @chart_data[:community_rep] = communities.map do |c|
-        by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.id}"]} : {}
-      end
-      @chart_data
+      }
     end
 
     def cancelled

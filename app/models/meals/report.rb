@@ -191,12 +191,22 @@ module Meals
       where_expr, vars = meal_cmty_where_expr
       ttl_meals = by_month[:all]["ttl_meals"]
       avg_servings = by_month[:all]["avg_servings"]
+
+      # Sorting by the minimum associated formula part ID and rank means that types and categories
+      # will appear in familiar orders.
       sql = <<-SQL
         SELECT
           meal_types.#{col_name},
           COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_servings,
           COALESCE(100 * SUM(meal_signup_totals.total::real) / ? / ?, 0) AS avg_servings_pct
         FROM meal_types
+          INNER JOIN (
+            SELECT type_id,
+                MIN(meal_formula_parts.formula_id) AS min_id,
+                MIN(meal_formula_parts.rank) AS min_rank
+              FROM meal_formula_parts
+              GROUP BY type_id
+          ) formula_part_ranks ON meal_types.id = formula_part_ranks.type_id
           LEFT OUTER JOIN (
             SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total
               FROM meal_signup_parts
@@ -206,7 +216,6 @@ module Meals
               WHERE #{where_expr}
               GROUP BY meal_signup_parts.type_id
           ) meal_signup_totals ON meal_signup_totals.type_id = meal_types.id
-        INNER JOIN meal_formula_parts ON meal_formula_parts.type_id = meal_types.id
         WHERE meal_types.id IN (
           SELECT type_id
             FROM meal_formula_parts
@@ -216,7 +225,7 @@ module Meals
             WHERE #{where_expr}
         )
         GROUP BY meal_types.#{col_name}
-        ORDER BY MIN(meal_formula_parts.formula_id), MIN(meal_formula_parts.rank)
+        ORDER BY MIN(formula_part_ranks.min_id), MIN(formula_part_ranks.min_rank)
       SQL
       query(sql, *[ttl_meals, ttl_meals, avg_servings, vars * 2].flatten).to_a
     end

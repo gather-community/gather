@@ -13,7 +13,7 @@ module Meals
 
     def empty?
       # We don't check overview because that ignores the range.
-      by_month.nil?
+      by_month.empty?
     end
 
     def overview
@@ -35,7 +35,7 @@ module Meals
 
     def by_month_no_totals_or_gaps
       @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
-        if by_month
+        if by_month.present?
           months = by_month.keys - [:all]
           month, max = months.minmax
           while month <= max
@@ -133,11 +133,12 @@ module Meals
       # Get main rows.
       result = meals_query(sql_options).index_by(&key_func)
 
+      return {} if result.values.all?(&:empty?)
+
       # Get totals.
       result[:all] = meals_query(sql_options.except(:breakout_expr)).first if totals
 
-      # Return nil if no results.
-      result.except(:all).reject { |_k, v| v == {} }.empty? ? nil : result
+      result
     end
 
     def types_query
@@ -188,6 +189,7 @@ module Meals
 
     # rubocop:disable Metrics/MethodLength
     def type_or_category_query(col_name:)
+      return [] if empty?
       where_expr, vars = meal_cmty_where_expr
       ttl_meals = by_month[:all]["ttl_meals"]
       avg_servings = by_month[:all]["avg_servings"]

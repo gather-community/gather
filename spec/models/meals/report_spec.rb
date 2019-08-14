@@ -130,14 +130,17 @@ describe(Meals::Report) do
 
   describe "disaggregated" do
     context "without finalized meals" do
-      describe "by_month" do
-        before do
-          create(:meal, formula: formula, community: community)
-        end
+      before do
+        create(:meal, formula: formula, community: community)
+      end
 
-        it "should return nil" do
-          expect(report.by_month).to be_nil
-        end
+      it "all should return empty" do
+        expect(report.by_month).to be_empty
+        expect(report.by_month_no_totals_or_gaps).to be_empty
+        expect(report.by_community).to be_empty
+        expect(report.by_weekday).to be_empty
+        expect(report.by_type).to be_empty
+        expect(report.by_category).to be_empty
       end
     end
 

@@ -15,7 +15,15 @@ describe(Meals::Report) do
       {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
     ])
   end
-  let(:formula2) do
+  let(:formula2) do # Same types but different shares. Ensures types not double counted.
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", category: "Green", portion: 1},
+      {type: "Teen", share: "70%", category: "Blue", portion: 0.75},
+      {type: "Kid", share: "20%", category: "Green", portion: 0.5},
+      {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
+    ])
+  end
+  let(:formula3) do # Decoy
     create(:meal_formula, parts_attrs: [
       {type: "Adult", share: "100%", category: "Green", portion: 1}
     ])
@@ -143,7 +151,7 @@ describe(Meals::Report) do
                                            served_at: "2016-02-10 18:00") # Wed
         meals << create(:meal, :finalized, formula: formula, community: community,
                                            served_at: "2016-02-12 18:00") # Fri
-        meals << create(:meal, :finalized, formula: formula, community: community,
+        meals << create(:meal, :finalized, formula: formula2, community: community,
                                            served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
@@ -162,8 +170,8 @@ describe(Meals::Report) do
           m.save!
         end
 
-        # Cancelled meal on formula2, should be ignored.
-        m = create(:meal, :cancelled, formula: formula2, community: community, served_at: "2016-04-12 18:00")
+        # Cancelled meal on formula3, should be ignored.
+        m = create(:meal, :cancelled, formula: formula3, community: community, served_at: "2016-04-12 18:00")
         m.signups << build(:meal_signup, meal: m, diner_counts: [2], household: hholds[0])
         m.signups << build(:meal_signup, meal: m, diner_counts: [1], household: hholds[1])
         m.save!

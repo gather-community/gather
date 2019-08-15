@@ -282,7 +282,7 @@ describe(Meals::Report) do
       describe "by_type" do
         it "should have correct data" do
           expect(report.by_type.size).to eq(4)
-          expect(report.by_type.keys).to eq(["Adult", "Teen", "Kid", "Little Kid"])
+          expect(report.by_type.keys).to eq(["Adult", "Kid", "Teen", "Little Kid"])
           expect(report.by_type["Adult"]["avg_servings"]).to be_within(0.01).of(6.0)
           expect(report.by_type["Adult"]["avg_servings_pct"]).to be_within(0.01).of(60.0)
           expect(report.by_type["Teen"]["avg_servings"]).to be_within(0.01).of(1.75)

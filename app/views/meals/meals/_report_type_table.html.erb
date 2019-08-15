@@ -6,7 +6,7 @@
   </tr>
   <% data.each do |key, cols| %>
     <tr>
-      <td><%= key %></td>
+      <td><%= key || "[None]" %></td>
       <td class="totals"><%= number_with_precision(cols["avg_servings"], precision: 1) %></td>
       <td class="totals"><%= number_to_percentage(cols["avg_servings_pct"], precision: 0) %></td>
     </tr>

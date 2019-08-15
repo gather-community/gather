@@ -82,7 +82,7 @@ module Meals
     # Pundit built-in helper doesn't work due to namespacing
     def formula_params
       permitted = params.require(:meals_formula).permit(policy(@formula).permitted_attributes)
-      permitted[:parts_attributes].each do |_, parts_attribs|
+      (permitted[:parts_attributes] || []).each do |_, parts_attribs|
         if parts_attribs[:type_id].present?
           parts_attribs.delete(:type_attributes)
         else

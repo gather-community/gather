@@ -7,6 +7,8 @@ module Meals
 
     belongs_to :community
 
+    validates :name, presence: true, length: {maximum: 32}
+
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_name, -> { alpha_order(:name) }
     scope :matching, ->(q) { where("name ILIKE ?", "%#{q}%") }

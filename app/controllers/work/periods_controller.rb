@@ -9,6 +9,8 @@ module Work
     before_action -> { nav_context(:work, :report) }, only: :report
 
     decorates_assigned :period, :periods
+
+    # decorates_assigned :report collides with action method
     helper_method :work_report
 
     def index

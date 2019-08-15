@@ -5,7 +5,10 @@ module Meals
     include Lensable
     include MealShowable
 
-    decorates_assigned :meals, :meal_summary
+    decorates_assigned :meals, :meal_summary, :report
+
+    # decorates_assigned :report collides with action method
+    helper_method :meals_report
 
     before_action :create_worker_change_notifier, only: :update
     before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
@@ -47,7 +50,7 @@ module Meals
       @community = current_community
       nav_context(:meals, :report)
       prepare_lenses(*report_lenses)
-      @report = Report.new(@community, range: lenses[:dates].range)
+      @meals_report = Report.new(@community, range: lenses[:dates].range)
       @communities = Community.by_name_with_first(@community).to_a
     end
 
@@ -147,6 +150,10 @@ module Meals
     end
 
     protected
+
+    def meals_report
+      @meals_report_decorated ||= ReportDecorator.new(@meals_report)
+    end
 
     def default_url_options
       {mode: params[:mode]}

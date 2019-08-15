@@ -1,0 +1,14 @@
+<table class="by-<%= name %> stats">
+  <tr class="header">
+    <th><%= t("meals.#{name}") %></th>
+    <th class="totals">Avg. Servings</th>
+    <th class="totals">Percent</th>
+  </tr>
+  <% data.each do |key, cols| %>
+    <tr>
+      <td><%= key %></td>
+      <td class="totals"><%= number_with_precision(cols["avg_servings"], precision: 1) %></td>
+      <td class="totals"><%= number_to_percentage(cols["avg_servings_pct"], precision: 0) %></td>
+    </tr>
+  <% end %>
+</table>

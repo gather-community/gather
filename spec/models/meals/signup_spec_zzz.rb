@@ -138,4 +138,69 @@ describe Meals::Signup do
       end
     end
   end
+
+  describe "no_dupe_types" do
+    let(:formula) { create(:meal_formula, parts_attrs: [1, 0.5]) }
+    let(:meal) { create(:meal, formula: formula) }
+    subject(:signup) { build(:meal_signup, meal: meal, parts_attributes: parts_attributes, flag_zzz: true) }
+
+    context "without dupe types" do
+      let(:parts_attributes) do
+        [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 3}]
+      end
+
+      it { is_expected.to be_valid }
+    end
+
+    context "with dupe types" do
+      let(:parts_attributes) do
+        [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[0].id, count: 3}]
+      end
+
+      it { is_expected.to have_errors(base: "Please sign up each type only once") }
+    end
+  end
+
+  describe "deletion on zero" do
+    let(:formula) { create(:meal_formula, parts_attrs: [1, 0.5]) }
+    let(:meal) { create(:meal, formula: formula) }
+    subject(:signup) do
+      create(:meal_signup, meal: meal, parts_attributes: parts_attributes, flag_zzz: true)
+    end
+
+    context "on create" do
+      # All zero case triggers validation, see above
+      context "partial zero" do
+        let(:parts_attributes) do
+          [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 0}]
+        end
+
+        it "doesn't save zero part" do
+          expect(Meals::Signup.find(signup.id).parts.map(&:count)).to eq([2])
+        end
+      end
+    end
+
+    context "on update" do
+      let(:parts_attributes) do
+        [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 3}]
+      end
+
+      context "partial zero" do
+        it "destroys zero part" do
+          signup.reload.update!(parts_attributes:
+            [{id: signup.parts[0].id, count: 0}, {id: signup.parts[1].id, count: 4}])
+          expect(Meals::Signup.find(signup.id).parts.map(&:count)).to eq([4])
+        end
+      end
+
+      context "all zero" do
+        it "destroys signup" do
+          signup.reload.update!(parts_attributes:
+            [{id: signup.parts[0].id, count: 0}, {id: signup.parts[1].id, count: 0}])
+          expect { signup.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+  end
 end

@@ -64,8 +64,7 @@ module Meals
     delegate :name, to: :community, prefix: true
     delegate :name, to: :head_cook, prefix: true, allow_nil: true
     delegate :name, to: :formula, prefix: true, allow_nil: true
-    delegate :head_cook_role, :types, :allowed_diner_types,
-      :allowed_signup_types, :portion_factors, to: :formula
+    delegate :head_cook_role, :types, to: :formula
     delegate :build_reservations, to: :reservation_handler
     delegate :close!, :reopen!, :cancel!, :finalize!,
       :closed?, :finalized?, :open?, :cancelled?,
@@ -175,10 +174,6 @@ module Meals
 
     def spots_left
       @spots_left ||= [capacity - signup_count, 0].max
-    end
-
-    def portions(food_type)
-      Signup.portions_for_meal(self, food_type)
     end
 
     def menu_posted?

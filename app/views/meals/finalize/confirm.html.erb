@@ -2,9 +2,7 @@
 
 <%= render("meals/meals/time_cook") %>
 
-<%= gather_form_for(@meal, width: :full, name: "finalize",
-  url: meal_finalize_path, method: :post) do |f| %>
-
+<%= gather_form_for(@meal, width: :full, name: "finalize", url: meal_finalize_path, method: :post) do |f| %>
   <%= hidden_field_tag :confirmed, "1" %>
 
   <table class="index confirm">

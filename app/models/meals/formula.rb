@@ -5,8 +5,6 @@ module Meals
   class Formula < ApplicationRecord
     include Deactivatable
 
-    attr_accessor :signup_types # For validation error setting only
-
     MEAL_CALC_TYPES = %i[fixed share].freeze
     PANTRY_CALC_TYPES = %i[fixed percent].freeze
 
@@ -38,24 +36,11 @@ module Meals
 
     accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 
-    # 73 TODO: Remove
-    Signup::SIGNUP_TYPES.each do |st|
-      validates st, numericality: {greater_than_or_equal_to: 0}, if: -> { self[st].present? }
-    end
-
     after_save :ensure_unique_default
     after_update { RoleReminderMaintainer.instance.formula_saved(meals, roles) }
 
     def self.default_for(community)
       in_community(community).find_by(is_default: true)
-    end
-
-    def [](key)
-      if key.is_a?(Meals::Type)
-        parts_by_type[key].share
-      else # 73 TODO: remove
-        read_attribute(key)
-      end
     end
 
     def parts_by_type
@@ -66,39 +51,8 @@ module Meals
       @types ||= parts.map(&:type)
     end
 
-    # 73 TODO: Remove
-    def defined_signup_types
-      Signup::SIGNUP_TYPES.select { |st| self[st].present? }
-    end
-
     def meals?
       meals.any?
-    end
-
-    # 73 TODO: Remove
-    def allowed_diner_types
-      @allowed_diner_types ||= Signup::DINER_TYPES.select { |dt| allows_diner_type?(dt) }
-    end
-
-    # 73 TODO: Remove
-    def allowed_signup_types
-      @allowed_signup_types ||= Signup::SIGNUP_TYPES.select { |st| allows_signup_type?(st) }
-    end
-
-    # 73 TODO: Remove
-    def allows_diner_type?(diner_type)
-      Signup::SIGNUP_TYPES.any? { |st| st =~ /\A#{diner_type}_/ && self[st].present? }
-    end
-
-    # 73 TODO: Remove
-    def allows_signup_type?(diner_type_or_both, meal_type = nil)
-      attrib = meal_type.present? ? "#{diner_type_or_both}_#{meal_type}" : diner_type_or_both
-      !self[attrib].nil?
-    end
-
-    # 73 TODO: Remove
-    def portion_factors
-      allowed_diner_types.map { |dt| [dt, Signup::PORTION_FACTORS[dt.to_sym]] }.to_h
     end
 
     def fixed_meal?

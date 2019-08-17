@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190720205637) do
+ActiveRecord::Schema.define(version: 20190817215354) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -116,25 +116,15 @@ ActiveRecord::Schema.define(version: 20190720205637) do
   end
 
   create_table "meal_costs", id: :serial, force: :cascade do |t|
-    t.decimal "adult_meat", precision: 10, scale: 2
-    t.decimal "adult_veg", precision: 10, scale: 2
-    t.decimal "big_kid_meat", precision: 10, scale: 2
-    t.decimal "big_kid_veg", precision: 10, scale: 2
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.decimal "ingredient_cost", precision: 10, scale: 2, null: false
-    t.decimal "little_kid_meat", precision: 10, scale: 2
-    t.decimal "little_kid_veg", precision: 10, scale: 2
     t.string "meal_calc_type"
     t.integer "meal_id", null: false
     t.string "pantry_calc_type"
     t.decimal "pantry_cost", precision: 10, scale: 2, null: false
     t.decimal "pantry_fee", precision: 10, scale: 2
     t.string "payment_method", null: false
-    t.decimal "senior_meat", precision: 10, scale: 2
-    t.decimal "senior_veg", precision: 10, scale: 2
-    t.decimal "teen_meat", precision: 10, scale: 2
-    t.decimal "teen_veg", precision: 10, scale: 2
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_costs_on_cluster_id"
     t.index ["meal_id"], name: "index_meal_costs_on_meal_id"
@@ -165,26 +155,16 @@ ActiveRecord::Schema.define(version: 20190720205637) do
   end
 
   create_table "meal_formulas", id: :serial, force: :cascade do |t|
-    t.decimal "adult_meat", precision: 10, scale: 4
-    t.decimal "adult_veg", precision: 10, scale: 4
-    t.decimal "big_kid_meat", precision: 10, scale: 4
-    t.decimal "big_kid_veg", precision: 10, scale: 4
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.boolean "is_default", default: false, null: false
-    t.decimal "little_kid_meat", precision: 10, scale: 4
-    t.decimal "little_kid_veg", precision: 10, scale: 4
     t.string "meal_calc_type", null: false
     t.string "name", null: false
     t.string "pantry_calc_type", null: false
     t.decimal "pantry_fee", precision: 10, scale: 4, null: false
     t.boolean "pantry_reimbursement", default: false
-    t.decimal "senior_meat", precision: 10, scale: 4
-    t.decimal "senior_veg", precision: 10, scale: 4
-    t.decimal "teen_meat", precision: 10, scale: 4
-    t.decimal "teen_veg", precision: 10, scale: 4
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_formulas_on_cluster_id"
     t.index ["community_id"], name: "index_meal_formulas_on_community_id"
@@ -244,22 +224,12 @@ ActiveRecord::Schema.define(version: 20190720205637) do
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|
-    t.integer "adult_meat", default: 0, null: false
-    t.integer "adult_veg", default: 0, null: false
-    t.integer "big_kid_meat", default: 0, null: false
-    t.integer "big_kid_veg", default: 0, null: false
     t.integer "cluster_id", null: false
     t.text "comments"
     t.datetime "created_at", null: false
     t.integer "household_id", null: false
-    t.integer "little_kid_meat", default: 0, null: false
-    t.integer "little_kid_veg", default: 0, null: false
     t.integer "meal_id", null: false
     t.boolean "notified", default: false, null: false
-    t.integer "senior_meat", default: 0, null: false
-    t.integer "senior_veg", default: 0, null: false
-    t.integer "teen_meat", default: 0, null: false
-    t.integer "teen_veg", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_signups_on_cluster_id"
     t.index ["household_id", "meal_id"], name: "index_meal_signups_on_household_id_and_meal_id", unique: true

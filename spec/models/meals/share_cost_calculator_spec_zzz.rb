@@ -14,7 +14,7 @@ describe Meals::ShareCostCalculator do
   before do
     meal.build_cost
     # 11.25 adult equivalents
-    allow(meal).to receive(:signup_totals_zzz).and_return(types[0] => 9, types[1] => 3, types[2] => 2)
+    allow(meal).to receive(:signup_totals).and_return(types[0] => 9, types[1] => 3, types[2] => 2)
   end
 
   context "with regular meal" do
@@ -71,7 +71,7 @@ describe Meals::ShareCostCalculator do
     before { meal.cost = build(:meal_cost, meal: meal, ingredient_cost: 0, pantry_cost: 15) }
 
     before do
-      allow(meal).to receive(:signup_totals_zzz).and_return(types[0] => 0)
+      allow(meal).to receive(:signup_totals).and_return(types[0] => 0)
     end
 
     describe "price_for" do

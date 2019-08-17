@@ -163,10 +163,6 @@ module Meals
     end
 
     def signup_totals
-      @signup_totals = Signup.totals_for_meal(self)
-    end
-
-    def signup_totals_zzz
       @signup_totals = formula.parts.map { |p| [p.type, 0] }.to_h.tap do |totals|
         signups.each do |signup|
           next if signup.marked_for_destruction?

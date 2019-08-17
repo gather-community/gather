@@ -13,7 +13,7 @@ describe Meals::FixedCostCalculator do
 
   before do
     meal.build_cost
-    allow(meal).to receive(:signup_totals_zzz).and_return(types[0] => 9, types[1] => 3, types[2] => 2)
+    allow(meal).to receive(:signup_totals).and_return(types[0] => 9, types[1] => 3, types[2] => 2)
   end
 
   context "with fixed pantry_calc_type" do

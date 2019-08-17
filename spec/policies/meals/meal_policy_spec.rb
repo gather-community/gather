@@ -178,7 +178,7 @@ describe Meals::MealPolicy do
     let!(:meal4) { create(:meal, communities: [communityB]) } # None of the above
 
     before do
-      meal3.signups.create!(household: actor.household, adult_meat: 2)
+      meal3.signups << create(:meal_signup, meal: meal3, household: actor.household, diner_counts: [2])
     end
 
     context "as regular user" do

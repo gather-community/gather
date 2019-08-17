@@ -29,6 +29,7 @@ FactoryBot.define do
       else
         # Create types and parts for the given share values.
         evaluator.diner_counts.each_with_index do |count, index|
+          break if index >= signup.types.size
           next if count.zero?
           signup.parts.build(count: count, type: signup.types[index])
 
@@ -40,8 +41,7 @@ FactoryBot.define do
     end
 
     trait :with_nums do
-      adult_meat { 2 }
-      little_kid_veg { 1 }
+      diner_counts { [1, 2] }
     end
   end
 end

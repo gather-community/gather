@@ -7,7 +7,7 @@ describe Meals::SignupPolicy do
     include_context "policy permissions"
 
     let(:meal) { create(:meal, communities: [community, communityC]) }
-    let(:signup) { create(:meal_signup, :with_nums, meal: meal) }
+    let(:signup) { create(:meal_signup, meal: meal, diner_counts: [2, 1]) }
 
     shared_examples_for "must be invited, open, and in future" do
       context "in future and open" do

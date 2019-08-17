@@ -63,7 +63,9 @@ feature "meal signups", js: true do
 
   context "with previous signup under current formula" do
     let!(:older_meal) { create(:meal, formula: formula, served_at: Time.current - 20.days) }
-    let!(:older_signup) { create(:meal_signup, meal: older_meal, household: user.household, adult_meat: 3) }
+    let!(:older_signup) do
+      create(:meal_signup, meal: older_meal, household: user.household, diner_counts: [3])
+    end
     let!(:old_meal) { create(:meal, formula: formula, served_at: Time.current - 10.days) }
     let!(:old_signup) do
       create(:meal_signup, meal: old_meal, household: user.household, diner_counts: [4, 3])

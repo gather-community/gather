@@ -171,7 +171,7 @@ module Meals
         signups.each do |signup|
           next if signup.marked_for_destruction?
           formula.parts.each do |part|
-            totals[part.type] += signup[part.legacy_type]
+            totals[part.type] += signup.parts_by_type[part.type]&.count || 0
           end
         end
       end

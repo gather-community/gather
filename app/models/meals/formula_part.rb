@@ -35,11 +35,6 @@ module Meals
       @share_formatted = value
     end
 
-    # 73 TODO: Remove
-    def legacy_type
-      name.downcase.gsub(" ", "_")
-    end
-
     private
 
     def set_share_form_formatted

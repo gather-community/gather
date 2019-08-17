@@ -32,7 +32,7 @@
       <tr class="total">
         <td colspan="<%= multi_community? ? 2 : 1 %>">Total</td>
         <% @meal.types.each do |type| %>
-          <td><%= @meal.signup_totals_zzz[type] %></td>
+          <td><%= @meal.signup_totals[type] %></td>
         <% end %>
         <td><%= @meal.signup_count %></td>
       </tr>

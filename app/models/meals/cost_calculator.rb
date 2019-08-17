@@ -41,7 +41,7 @@ module Meals
     end
 
     def sum_product_zzz
-      @sum_product_zzz ||= meal.signup_totals_zzz.map do |type, count|
+      @sum_product_zzz ||= meal.signup_totals.map do |type, count|
         (formula[type] || 0) * count
       end.reduce(:+)
     end

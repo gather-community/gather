@@ -7,9 +7,6 @@ FactoryBot.define do
     pantry_cost { 2.00 }
     payment_method { "check" }
 
-    # 73 TODO: Remove
-    adult_meat { 3.56 }
-
     after(:build) do |cost|
       formula = cost.meal.formula
       cost.parts.build(type: formula.types.first, value: 3.56)

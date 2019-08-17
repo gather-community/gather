@@ -17,8 +17,6 @@ module Meals
       little_kid: 0
     }.freeze
 
-    attr_accessor :flag_zzz
-
     acts_as_tenant :cluster
 
     attr_accessor :signup # Dummy used only in form construction.
@@ -89,25 +87,12 @@ module Meals
       parts.build(type: meal.types[0], count: 1)
     end
 
-    # 73 TODO: Remove
-    def count_for(diner_type, food_type)
-      self["#{diner_type}_#{food_type}"]
-    end
-
     def total
-      if flag_zzz
-        parts.reject(&:marked_for_destruction?).sum(&:count)
-      else
-        SIGNUP_TYPES.sum { |t| send(t) || 0 }
-      end
+      parts.reject(&:marked_for_destruction?).sum(&:count)
     end
 
     def total_was
-      if flag_zzz
-        parts.map(&:count_was).compact.sum # Deliberately including those marked_for_destruction
-      else
-        SIGNUP_TYPES.sum { |t| send("#{t}_was") || 0 }
-      end
+      parts.map(&:count_was).compact.sum # Deliberately including those marked_for_destruction
     end
 
     def parts_by_type
@@ -117,11 +102,7 @@ module Meals
     private
 
     def all_zero?
-      if flag_zzz
-        parts.all?(&:zero?)
-      else
-        SIGNUP_TYPES.all? { |t| self[t].zero? }
-      end
+      parts.all?(&:zero?)
     end
 
     def max_signups_per_type
@@ -150,7 +131,7 @@ module Meals
     end
 
     def destroy_if_all_zero
-      destroy if parts.any? && all_zero? # 73 TODO: Remove parts.any?
+      destroy if all_zero?
     end
   end
 end

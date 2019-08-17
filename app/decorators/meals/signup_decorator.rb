@@ -14,7 +14,6 @@ module Meals
     end
 
     def total_diners_formatted
-      self.flag_zzz = true
       h.icon_tag("check") << " #{total}"
     end
 

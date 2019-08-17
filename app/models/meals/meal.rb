@@ -216,7 +216,8 @@ module Meals
 
     def title_and_entree_if_other_menu_items
       %w[title entrees].each do |attrib|
-        errors.add(attrib, "can't be blank if other menu items entered") if self[attrib].blank? && menu_posted?
+        next unless self[attrib].blank? && menu_posted?
+        errors.add(attrib, "can't be blank if other menu items entered")
       end
     end
 

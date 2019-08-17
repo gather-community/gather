@@ -21,7 +21,9 @@ describe MealMailer do
     let(:users) { create_list(:user, 2) }
     let(:fake_user) { create(:user, fake: true) }
     let(:household) { create(:household, users: users + [fake_user]) }
-    let(:signup) { create(:meal_signup, :with_nums, household: household, meal: meal, comments: "Foo\nBar") }
+    let(:signup) do
+      create(:meal_signup, household: household, meal: meal, comments: "Foo\nBar", diner_counts: [2, 1])
+    end
     let(:mail) { described_class.meal_reminder(signup).deliver_now }
 
     it "sets the right recipient" do

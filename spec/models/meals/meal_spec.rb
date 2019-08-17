@@ -34,8 +34,8 @@ describe Meals::Meal do
       context "with unique signups" do
         let(:signups) do
           [
-            build(:meal_signup, :with_nums, household_id: hholds[0].id),
-            build(:meal_signup, :with_nums, household_id: hholds[1].id)
+            build(:meal_signup, household_id: hholds[0].id, diner_counts: [2, 1]),
+            build(:meal_signup, household_id: hholds[1].id, diner_counts: [2, 1])
           ]
         end
         it { is_expected.to be_valid }
@@ -44,10 +44,10 @@ describe Meals::Meal do
       context "with duplicate signups" do
         let(:signups) do
           [
-            build(:meal_signup, :with_nums, household_id: hholds[0].id),
-            build(:meal_signup, :with_nums, household_id: hholds[1].id),
-            build(:meal_signup, :with_nums, household_id: hholds[0].id),
-            build(:meal_signup, :with_nums, household_id: hholds[0].id)
+            build(:meal_signup, household_id: hholds[0].id, diner_counts: [2, 1]),
+            build(:meal_signup, household_id: hholds[1].id, diner_counts: [2, 1]),
+            build(:meal_signup, household_id: hholds[0].id, diner_counts: [2, 1]),
+            build(:meal_signup, household_id: hholds[0].id, diner_counts: [2, 1])
           ]
         end
 
@@ -62,7 +62,7 @@ describe Meals::Meal do
     end
 
     describe "enough capacity" do
-      let!(:signup) { create(:meal_signup, diner_count: 5) }
+      let!(:signup) { create(:meal_signup, diner_counts: [5]) }
       let(:meal) { signup.meal.tap { |m| m.signups.reload } }
 
       it "saves cleanly with enough capacity" do

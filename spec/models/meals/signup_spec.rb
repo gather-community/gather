@@ -48,14 +48,14 @@ describe Meals::Signup do
         end
 
         context "with nonzero signups" do
-          subject(:signup) { build(:meal_signup, diner_count: 1) }
+          subject(:signup) { build(:meal_signup, diner_counts: [1]) }
           it { is_expected.to be_valid }
         end
       end
 
       # In this case the record will get destroyed so we don't worry about validations.
       context "with existing record being modified and zero signups" do
-        subject(:signup) { create(:meal_signup, diner_count: 1).tap { |s| s.parts[0].update!(count: 0) } }
+        subject(:signup) { create(:meal_signup, diner_counts: [1]).tap { |s| s.parts[0].update!(count: 0) } }
         context "with zero signups" do
           it { is_expected.to be_valid }
         end
@@ -65,11 +65,11 @@ describe Meals::Signup do
     describe "dont_exceed_spots" do
       let(:meal) { create(:meal, capacity: 5) }
       # Need to use meal.id so that this instance of meal doesn't memoize spots_left.
-      let!(:previous_signup) { create(:meal_signup, meal_id: meal.id, diner_count: 2) }
+      let!(:previous_signup) { create(:meal_signup, meal_id: meal.id, diner_counts: [2]) }
 
       context "with new record" do
         # Need to reload meal because otherwise it doesn't know about previous_signup.
-        subject(:signup) { build(:meal_signup, meal: meal.reload, diner_count: new_count) }
+        subject(:signup) { build(:meal_signup, meal: meal.reload, diner_counts: [new_count]) }
 
         context "with just the right number" do
           let(:new_count) { 3 }
@@ -86,7 +86,7 @@ describe Meals::Signup do
       end
 
       context "with existing record being modified" do
-        subject(:signup) { create(:meal_signup, meal: meal.reload, diner_count: 1) }
+        subject(:signup) { create(:meal_signup, meal: meal.reload, diner_counts: [1]) }
 
         before do
           signup.parts[0].count = new_count
@@ -106,7 +106,7 @@ describe Meals::Signup do
         end
 
         context "with capacity being previously exceeded somehow" do
-          subject(:signup) { create(:meal_signup, meal: meal.reload, diner_count: 3) }
+          subject(:signup) { create(:meal_signup, meal: meal.reload, diner_counts: [3]) }
 
           before do
             # This change will put total at 8 despite capacity being 5.

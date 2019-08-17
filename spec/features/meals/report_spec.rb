@@ -5,6 +5,12 @@ require "rails_helper"
 feature "meal report", js: true do
   let(:user) { create(:user) }
   let(:community) { user.community }
+  let(:formula) do
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", portion: 1},
+      {type: "Teen", share: "75%", portion: 0.75}
+    ])
+  end
 
   around do |example|
     with_user_home_subdomain(user) { example.run }
@@ -24,11 +30,11 @@ feature "meal report", js: true do
 
   context "with data" do
     before do
-      meals = create_list(:meal, 2, :finalized, community: community,
+      meals = create_list(:meal, 2, :finalized, community: community, formula: formula,
                                                 served_at: Time.zone.today - 3.months)
       meals.each do |m|
-        m.signups << build(:meal_signup, meal: m, adult_meat: 2)
-        m.signups << build(:meal_signup, meal: m, adult_veg: 1)
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1])
         m.save!
       end
     end

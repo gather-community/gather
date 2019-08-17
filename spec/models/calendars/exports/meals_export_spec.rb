@@ -20,7 +20,7 @@ describe "meals exports" do
                               communities: [meal1.community, communityB])
   end
   let!(:signup) do
-    create(:meal_signup, meal: meal1, household: user.household, comments: "Foo\nBar", diner_count: 2)
+    create(:meal_signup, meal: meal1, household: user.household, comments: "Foo\nBar", diner_counts: [2])
   end
 
   context "your meals" do

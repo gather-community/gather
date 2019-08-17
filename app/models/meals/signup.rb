@@ -3,19 +3,7 @@
 module Meals
   # Models information about one household's attendance at a meal.
   class Signup < ApplicationRecord
-    MAX_PEOPLE_PER_TYPE = 10
     MAX_COMMENT_LENGTH = 500
-    DINER_TYPES = %w[adult senior teen big_kid little_kid].freeze
-    FOOD_TYPES = %w[meat veg].freeze
-    SIGNUP_TYPES = DINER_TYPES.map { |dt| FOOD_TYPES.map { |ft| "#{dt}_#{ft}" } }.flatten
-    VEG_SIGNUP_TYPES = DINER_TYPES.map { |dt| "#{dt}_veg" }
-    PORTION_FACTORS = {
-      senior: 0.75,
-      adult: 1,
-      teen: 0.75,
-      big_kid: 0.5,
-      little_kid: 0
-    }.freeze
 
     acts_as_tenant :cluster
 
@@ -37,7 +25,6 @@ module Meals
 
     validates :household_id, presence: true, uniqueness: {scope: :meal_id}
     validates :comments, length: {maximum: MAX_COMMENT_LENGTH}
-    validate :max_signups_per_type
     validate :dont_exceed_spots
     validate :nonzero_signups_if_new
     validate :no_dupe_types
@@ -61,27 +48,6 @@ module Meals
       end
     end
 
-    # 73 TODO: Remove
-    def self.totals_for_meal(meal)
-      SIGNUP_TYPES.map { |st| [st, 0] }.to_h.tap do |totals|
-        meal.signups.each do |signup|
-          next if signup.marked_for_destruction?
-          SIGNUP_TYPES.each do |st|
-            totals[st] += signup[st]
-          end
-        end
-      end
-    end
-
-    def self.portions_for_meal(meal, food_type)
-      totals = totals_for_meal(meal)
-      DINER_TYPES.map { |dt| totals["#{dt}_#{food_type}"] * PORTION_FACTORS[dt.to_sym] }.reduce(:+)
-    end
-
-    def self.all_zero_attribs?(attribs)
-      attribs.slice(*SIGNUP_TYPES).values.map(&:to_i).uniq == [0]
-    end
-
     # Sets some default part data.
     def init_default
       parts.build(type: meal.types[0], count: 1)
@@ -103,12 +69,6 @@ module Meals
 
     def all_zero?
       parts.all?(&:zero?)
-    end
-
-    def max_signups_per_type
-      SIGNUP_TYPES.each do |t|
-        errors.add(t, "maximum of #{MAX_PEOPLE_PER_TYPE}") if send(t) > MAX_PEOPLE_PER_TYPE
-      end
     end
 
     def dont_exceed_spots

@@ -36,7 +36,7 @@ module Meals
 
     def sum_product
       @sum_product ||= meal.signup_totals.map do |type, count|
-        (formula[type] || 0) * count
+        (formula.parts_by_type[type]&.share || 0) * count
       end.reduce(:+)
     end
 

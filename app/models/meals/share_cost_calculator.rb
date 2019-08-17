@@ -23,7 +23,8 @@ module Meals
       raise "ingredient_cost must be set to calculate base price" if meal.cost.ingredient_cost.blank?
       return 0 if full_price_equivs.zero?
       full_price = meal.cost.ingredient_cost / full_price_equivs
-      formula[type] ? formula[type] * full_price : nil
+      share = formula.parts_by_type[type]&.share
+      share ? share * full_price : nil
     end
 
     def full_price_equivs

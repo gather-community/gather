@@ -16,7 +16,7 @@ module Meals
     protected
 
     def base_price_for(type)
-      formula[type]
+      formula.parts_by_type[type]&.share
     end
   end
 end

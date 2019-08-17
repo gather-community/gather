@@ -175,7 +175,6 @@ module Meals
     def meal_params
       params.require(:meals_meal).permit(policy(@meal).permitted_attributes).tap do |permitted|
         permitted["allergens"] ||= [] if @meal.new_record?
-        (permitted["signups_attributes"] || []).each { |_, attrs| attrs.merge!("flag_zzz": true) }
       end
     end
 

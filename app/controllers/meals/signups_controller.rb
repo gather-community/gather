@@ -33,7 +33,7 @@ module Meals
 
     # Pundit built-in helper doesn't work due to namespacing
     def signup_params
-      params.require(:meals_signup).permit(policy(@signup).permitted_attributes).merge(flag_zzz: true)
+      params.require(:meals_signup).permit(policy(@signup).permitted_attributes)
     end
 
     def redirect_after_save

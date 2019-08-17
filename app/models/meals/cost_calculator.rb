@@ -35,13 +35,7 @@ module Meals
     attr_accessor :meal, :formula, :prices
 
     def sum_product
-      @sum_product ||= Signup.totals_for_meal(meal).map do |signup_type, count|
-        (formula[signup_type] || 0) * count
-      end.reduce(:+)
-    end
-
-    def sum_product_zzz
-      @sum_product_zzz ||= meal.signup_totals.map do |type, count|
+      @sum_product ||= meal.signup_totals.map do |type, count|
         (formula[type] || 0) * count
       end.reduce(:+)
     end

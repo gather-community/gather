@@ -32,12 +32,12 @@ describe Meals::ShareCostCalculator do
         end
       end
 
-      describe "max_ingredient_cost_for_full_price_of_zzz" do
+      describe "max_ingredient_cost_for_full_price_of" do
         it "should be correct" do
           # 7.00 = (ingredient_cost / full_price) + 0.50
           # 6.50 * full_price = ingredient_cost
-          expect(calculator.max_ingredient_cost_for_full_price_of_zzz(7)).to be_within(0.005).of(73.13)
-          expect(calculator.max_ingredient_cost_for_full_price_of_zzz(8)).to be_within(0.005).of(84.38)
+          expect(calculator.max_ingredient_cost_for_full_price_of(7)).to be_within(0.005).of(73.13)
+          expect(calculator.max_ingredient_cost_for_full_price_of(8)).to be_within(0.005).of(84.38)
         end
       end
     end
@@ -54,12 +54,12 @@ describe Meals::ShareCostCalculator do
         end
       end
 
-      describe "max_ingredient_cost_for_full_price_of_zzz" do
+      describe "max_ingredient_cost_for_full_price_of" do
         it "should be correct for target price of 4.50" do
           # 4.50 = (ingredient_cost / full_price) * 1.1
           # (4.50 / 1.1) * full_price = ingredient_cost
-          expect(calculator.max_ingredient_cost_for_full_price_of_zzz(4.50)).to be_within(0.005).of(46.02)
-          expect(calculator.max_ingredient_cost_for_full_price_of_zzz(3.50)).to be_within(0.005).of(35.80)
+          expect(calculator.max_ingredient_cost_for_full_price_of(4.50)).to be_within(0.005).of(46.02)
+          expect(calculator.max_ingredient_cost_for_full_price_of(3.50)).to be_within(0.005).of(35.80)
         end
       end
     end

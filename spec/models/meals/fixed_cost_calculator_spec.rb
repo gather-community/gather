@@ -30,7 +30,7 @@ describe Meals::FixedCostCalculator do
 
     describe "max_ingredient_cost" do
       it "should be correct" do
-        expect(calculator.max_ingredient_cost_zzz).to be_within(0.005).of(45)
+        expect(calculator.max_ingredient_cost).to be_within(0.005).of(45)
       end
     end
   end

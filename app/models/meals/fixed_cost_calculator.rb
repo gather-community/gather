@@ -13,10 +13,6 @@ module Meals
       sum_product
     end
 
-    def max_ingredient_cost_zzz
-      sum_product_zzz
-    end
-
     protected
 
     def base_price_for(type)

@@ -27,7 +27,7 @@ feature "formulas", js: true do
     check("Default")
     select2("Stumbler", from: "#meals_formula_role_ids", multiple: true)
     find("#meals_formula_meal_calc_type").select("Fixed")
-    expect(page).to have_content("Add each meal type and its price")
+    expect(page).to have_content("Add each meal type, its price")
     click_link("Add Meal Type")
     within(all(".meals_formula_parts .nested-fields")[0]) do
       select2("Adults", from: "select[id$=_type_id]")

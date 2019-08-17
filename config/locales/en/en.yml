@@ -242,44 +242,6 @@ en:
     your_reservations: "Your Reservations"
     your_jobs: "Your Jobs"
 
-  signups:
-    tooltips:
-      senior: "Ages 70+."
-      adult: "People not in any other category."
-      teen: "Ages 13-17."
-      big_kid: "Ages 7-12."
-      little_kid: "Ages 1-6."
-    diner_types:
-      senior:
-        one: Senior
-        other: Seniors
-      adult:
-        one: Adult
-        other: Adults
-      teen:
-        one: Teen
-        other: Teens
-      big_kid:
-        one: Big Kid
-        other: Big Kids
-      little_kid:
-        one: Little Kid
-        other: Little Kids
-    food_types:
-      veg: "Veg"
-      meat: "Meat"
-    types:
-      senior_meat: "Senior (Meat)"
-      adult_meat: "Adult (Meat)"
-      teen_meat: "Teen (Meat)"
-      big_kid_meat: "Big Kid (Meat)"
-      little_kid_meat: "Little Kid (Meat)"
-      senior_veg: "Senior (Veg)"
-      adult_veg: "Adult (Veg)"
-      teen_veg: "Teen (Veg)"
-      big_kid_veg: "Big Kid (Veg)"
-      little_kid_veg: "Little Kid (Veg)"
-
   titles:
     meals/messages: "Send Meal Message"
 

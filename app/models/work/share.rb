@@ -5,6 +5,8 @@ module Work
   class Share < ApplicationRecord
     acts_as_tenant :cluster
 
+    attr_accessor :rounds_completed, :current_min_need, :num_rounds, :hours_per_round
+
     belongs_to :period, inverse_of: :shares
     belongs_to :user
 
@@ -19,6 +21,10 @@ module Work
 
     def adjusted_quota
       period.quota.nil? ? nil : period.quota * portion
+    end
+
+    def finished_computing?
+      rounds_completed.positive? && current_min_need.abs < 0.001
     end
   end
 end

@@ -16,17 +16,15 @@
 
     .part-fields {
       display: flex;
-    }
 
-    .control-wrapper.meals_signup_parts_count,
-    .control-wrapper.meals_meal_signups_parts_count {
-      width: 60px;
-    }
+      div:first-child { // count dropdown
+        width: 60px;
+      }
 
-    .control-wrapper.meals_signup_parts_type_id,
-    .control-wrapper.meals_meal_signups_parts_type_id {
-      width: 100%;
-      max-width: 200px;
+      div:last-child { // meal type dropdown
+        width: 100%;
+        max-width: 200px;
+      }
     }
 
     .nested-fields.subfields.no-inner-labels {

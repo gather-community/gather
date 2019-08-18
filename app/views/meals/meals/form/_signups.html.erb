@@ -1,0 +1,21 @@
+<%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
+<% if policy(meal).change_signups? %>
+  <%= meal.form_section(:signups, expanded: local_assigns[:expanded]) do %>
+    <div class="signup-fields">
+      <%= f.simple_fields_for(:signups) do |signup_form| %>
+        <%= render("meals/meals/form/signup_fields", f: signup_form, nested: true) %>
+      <% end %>
+    </div>
+    <%= link_to_add_association_with_icon(t("cocoon.add_links.signups"), f, :signups,
+          partial: "meals/meals/form/signup_fields",
+          "data-association-insertion-node": ".signup-fields",
+          "data-association-insertion-method": "append",
+          wrap_object: ->(signup) { signup.tap(&:init_default) }) %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Meals.SignupView({el: '.signup-fields'});
+  });
+<% end %>

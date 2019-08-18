@@ -1,7 +1,7 @@
 en:
   activerecord:
     models:
-      meal: "Meal"
+      meals/meal: "Meal"
     attributes:
       user:
         first_name: "First Name"
@@ -31,7 +31,7 @@ en:
         keyholders: "Extra Unit Keyholders"
         emergency_contacts: "Emergency Contacts"
         garage_nums: "Garage Number(s)"
-      meal:
+      meals/meal:
         no_allergens: "None of these"
         community_id: "Host Community"
         served_at: "Date/Time"
@@ -58,10 +58,14 @@ en:
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
         is_default: "Default Formula?"
-        signup_types: "Signup Types"
-        pantry_fee_nice: "Pantry Fee"
+        parts: "Meal Types"
+        pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow Pantry Reimbursement?"
         role_ids: "Roles"
+      meals/formula_part:
+        type_id: "Type"
+        share_formatted: "Price/Share"
+        portion_size: "Portion Size"
       meals/role:
         title: "Job Title"
         time_type: "Times"
@@ -74,7 +78,7 @@ en:
       meals/role_reminder:
         rel_magnitude: "Send Time"
         note: "Note (optional)"
-      signup:
+      meals/signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
       billing/transaction:
@@ -178,11 +182,13 @@ en:
         household:
           name:
             taken: "There is already a household with this name at this community"
-        signup:
+        meals/formula_part:
+          negative: "Must be non-negative"
+        meals/signup:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
-        meal:
+        meals/meal:
           need_location: "You must choose at least one location"
         reservations/reservation:
           attributes:
@@ -203,8 +209,8 @@ en:
             abbrv:
               blank: "can't be blank if resource can host meals"
         meals/formula:
-          at_least_one_signup_type: "You must specify a value for at least one signup type."
-          at_least_one_nonzero_signup_type: "You must specify a non-zero value for at least one signup type if the calculation type is proportional."
+          at_least_one_type: "You must include at least one meal type."
+          at_least_one_nonzero_type: "You must include at least one non-zero meal type if the calculation type is proportional."
           attributes:
             is_default:
               cant_unset: "You can't unset default. Set another formula to default instead."

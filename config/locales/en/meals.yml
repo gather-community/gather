@@ -3,6 +3,8 @@ en:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
     cancelled_notice: "This meal has been cancelled."
     menu_posted_at: "Menu posted on %{time}."
+    type: "Type"
+    category: "Category"
     spots_left:
       one: "1 spot left"
       other: "%{count} spots left"
@@ -58,9 +60,20 @@ en:
     hints:
       meal: "Meal costs can be calculated as a fixed cost or proportionally based on the ingredient cost."
       pantry: "A pantry fee is a charge billed to each diner to cover the cost of purchasing staples for the kitchen. It can be calculated as a fixed amount or as a percentage of the diner's meal cost."
-      signup_type:
-        fixed: "Enter the price diners of each type should be billed for each meal. Enter prices only for types you want to allow, leaving the others blank."
-        share: "Enter the percentage of an equal meal share that diners of each type should be billed for. For example, if seniors should pay half price, enter 50%. An entry of 100% represents a full, equal share of the ingredient cost. Enter percentages only for types you want to allow, leaving the others blank."
+      meal_type:
+        fixed: "Add each meal type, its price, and relative portion size. Portion sizes are used for helping cooks shop for groceries."
+        share: "Add each meal type, its percentage share, and relative portion size.\n\nPercentage shares are used to determine cost. For example, if one meal type should have a 1/4 discount, enter 75%. An entry of 100% represents a full, equal share of the ingredient cost, while 0% implies no charge.\n\nPortion sizes are used for helping cooks shop for groceries."
     cant_edit_notice: "This formula is tied to existing meals so you can't edit the calculations."
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ Portion"
+      half: "½ Portion"
+      three_qtr: "¾ Portion"
+      full: "Full Portion"
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Full"
   meals/messages:
     cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."

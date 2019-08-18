@@ -23,7 +23,7 @@ describe Meals::FormulaPolicy do
     end
 
     context "with existing meals" do
-      before { allow(formula).to receive(:has_meals?).and_return(true) }
+      before { allow(formula).to receive(:meals?).and_return(true) }
 
       permissions :deactivate?, :edit?, :update? do
         it "permits" do
@@ -118,12 +118,14 @@ describe Meals::FormulaPolicy do
     context "with no meals" do
       it "should allow all attribs" do
         expect(subject).to contain_exactly(:meal_calc_type, :pantry_calc_type,
-          :pantry_fee_nice, *base_attribs, *Signup::SIGNUP_TYPES.map { |st| "#{st}_nice".to_sym })
+          :pantry_fee_formatted, *base_attribs,
+          parts_attributes: [:id, :type_id, :share_formatted, :portion_size,
+                             :_destroy, type_attributes: %i[name]])
       end
     end
 
     context "with existing meals" do
-      before { allow(formula).to receive(:has_meals?).and_return(true) }
+      before { allow(formula).to receive(:meals?).and_return(true) }
 
       it "should not allow restricted attribs" do
         expect(subject).to contain_exactly(*base_attribs)

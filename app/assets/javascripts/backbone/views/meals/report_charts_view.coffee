@@ -5,29 +5,29 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
     @data = options.data
     @cmty = if options.multiCommunity then "#{options.cmty} " else ''
 
-    @addDinersByMonth(1)
+    @addServingsByMonth(1)
     @addCostByMonth(2)
     @addMealsByMonth(3)
-    @addDinersByWeekday(4)
+    @addServingsByWeekday(4)
     if options.multiCommunity
       @addCommunityRep(5)
     else
       @addCostByWeekday(5)
-    @addDinerTypes(6)
+    @addMealTypes(6)
 
-  addDinersByMonth: (num) ->
-    data = [{key: 'Avg. Diners', values: @data.diners_by_month[0]}]
+  addServingsByMonth: (num) ->
+    data = [{key: 'Avg. Servings', values: @data.servings_by_month[0]}]
     chart = @lineChart().forceY([0,40])
     @setMonthXAxis(chart, data)
-    chart.yAxis.axisLabel('Avg. Diners per Meal').tickFormat(d3.format(',.1f'))
-    @addChart(num, chart, data, "Avg. Diners per #{@cmty}Meal by Month")
+    chart.yAxis.axisLabel('Avg. Servings per Meal').tickFormat(d3.format(',.1f'))
+    @addChart(num, chart, data, "Avg. Servings per #{@cmty}Meal by Month")
 
   addCostByMonth: (num) ->
     data = [{key: 'Avg. Cost', values: @data.cost_by_month[0]}]
     chart = @lineChart().forceY([0,8])
     @setMonthXAxis(chart, data)
-    chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickFormat(d3.format('$.2f'))
-    @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Month")
+    chart.yAxis.axisLabel('Avg. Full Meal Price').tickFormat(d3.format('$.2f'))
+    @addChart(num, chart, data, "Avg. Full #{@cmty}Meal Price by Month")
 
   addMealsByMonth: (num) ->
     data = [{key: 'Meals', values: @data.meals_by_month[0]}]
@@ -36,29 +36,31 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend
     chart.yAxis.axisLabel('Number of Meals').tickFormat(d3.format(',f'))
     @addChart(num, chart, data, "Number of #{@cmty}Meals by Month")
 
-  addDinersByWeekday: (num) ->
-    data = [{values: @data.diners_by_weekday[0]}]
+  addServingsByWeekday: (num) ->
+    data = [{values: @data.servings_by_weekday[0]}]
     chart = @barChart().forceY([0,40])
     chart.xAxis.axisLabel('Weekday').tickFormat (d) => @tickFormat(data, d)
-    chart.yAxis.axisLabel('Avg. Diners per Meal').tickValues([10,20,30,40]).tickFormat(d3.format(',.1f'))
-    @addChart(num, chart, data, "Avg. Diners per #{@cmty}Meal by Weekday")
+    chart.yAxis.axisLabel('Avg. Servings per Meal').tickValues([10,20,30,40]).tickFormat(d3.format(',.1f'))
+    @addChart(num, chart, data, "Avg. Servings per #{@cmty}Meal by Weekday")
 
   addCostByWeekday: (num) ->
     data = [{values: @data.cost_by_weekday[0]}]
     chart = @barChart().forceY([0,8])
     chart.xAxis.axisLabel('Weekday').tickFormat (d) => @tickFormat(data, d)
-    chart.yAxis.axisLabel('Avg. Adult Cost per Meal').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
-    @addChart(num, chart, data, "Avg. Adult Cost per #{@cmty}Meal by Weekday")
+    chart.yAxis.axisLabel('Avg. Full Meal Price').tickValues([2,4,6,8]).tickFormat(d3.format('$,.2f'))
+    @addChart(num, chart, data, "Avg. Full #{@cmty}Meal Price by Weekday")
 
   addCommunityRep: (num) ->
     data = @data.community_rep
+    console.log(data)
     chart = @pieChart()
     @addChart(num, chart, data, "Avg. Community Representation at #{@cmty}Meals")
 
-  addDinerTypes: (num) ->
-    data = @data.diner_types
+  addMealTypes: (num) ->
+    data = @data.meal_types
     chart = @pieChart()
-    @addChart(num, chart, data, "Avg. Diner Types at #{@cmty}Meals")
+    console.log(data)
+    @addChart(num, chart, data, "Avg. Meal Types at #{@cmty}Meals")
 
   addChart: (num, chart, data, title) ->
     $('<h4>').text(title).prependTo(@$("#chart#{num}"))

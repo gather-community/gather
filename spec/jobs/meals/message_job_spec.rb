@@ -4,7 +4,7 @@ describe Meals::MessageJob do
   include_context "jobs"
 
   let!(:meal) { create(:meal, asst_cooks: [create(:user)], cleaners: [create(:user)]) }
-  let!(:signups) { create_list(:signup, 2, :with_nums, meal: meal) }
+  let!(:signups) { create_list(:meal_signup, 2, meal: meal, diner_counts: [2, 1]) }
   let!(:hholds) { signups.map(&:household) }
 
   describe "normal messages" do

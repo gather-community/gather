@@ -7,6 +7,27 @@ describe(Meals::Report) do
   let!(:community2) { create(:community, name: "Community 2", abbrv: "C2") }
   let!(:communityX) { with_tenant(create(:cluster)) { create(:community, name: "Community X", abbrv: "CX") } }
   let(:range) { nil }
+  let(:formula) do
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", category: "Green", portion: 1},
+      {type: "Teen", share: "75%", category: "Blue", portion: 0.75},
+      {type: "Kid", share: "50%", category: "Green", portion: 0.5},
+      {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
+    ])
+  end
+  let(:formula2) do # Same types but different shares. Ensures types not double counted.
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", category: "Green", portion: 1},
+      {type: "Teen", share: "70%", category: "Blue", portion: 0.75},
+      {type: "Kid", share: "20%", category: "Green", portion: 0.5},
+      {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
+    ])
+  end
+  let(:formula3) do # Decoy
+    create(:meal_formula, parts_attrs: [
+      {type: "Adult", share: "100%", category: "Green", portion: 1}
+    ])
+  end
   let!(:report) { Meals::Report.new(community, range: range) }
 
   around do |example|
@@ -24,8 +45,8 @@ describe(Meals::Report) do
 
     context "with previous month having unfinalized meals" do
       before do
-        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
-        create(:meal, community: community, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, formula: formula, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -35,8 +56,8 @@ describe(Meals::Report) do
 
     context "with previous month having all finalized meals" do
       before do
-        create(:meal, :finalized, community: community, served_at: "2016-08-15 17:00")
-        create(:meal, :finalized, community: community, served_at: "2016-09-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-08-15 17:00")
+        create(:meal, :finalized, formula: formula, community: community, served_at: "2016-09-15 17:00")
       end
 
       it "should end on month before previous month" do
@@ -45,25 +66,10 @@ describe(Meals::Report) do
     end
   end
 
-  describe "diner_types" do
-    before do
-      meals = create_list(:meal, 2, :finalized, community: community, served_at: 2.months.ago)
-      meals.each do |m|
-        m.signups << build(:signup, meal: m, adult_meat: 1)
-        m.signups << build(:signup, meal: m, senior_veg: 1, little_kid_meat: 1)
-        m.save!
-      end
-    end
-
-    it "should return all diner types in results" do
-      expect(report.diner_types).to eq(%w[adult senior little_kid])
-    end
-  end
-
   describe "#empty?" do
     context "without finalized meals" do
       before do
-        create(:meal, community: community)
+        create(:meal, formula: formula, community: community)
       end
 
       it "should be empty" do
@@ -73,15 +79,16 @@ describe(Meals::Report) do
 
     context "with only finalized meals not in range" do
       before do
-        meals = create_list(:meal, 2, :finalized, community: community, served_at: 1.day.ago)
+        meals = create_list(:meal, 2, :finalized, formula: formula, community: community,
+                                                  served_at: 1.day.ago)
         meals.each do |m|
-          m.signups << build(:signup, meal: m, adult_meat: 2)
-          m.signups << build(:signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1, 0, 0])
           m.save!
         end
 
         # The report range won't include these meals because one is unfinalized and they're on the same day.
-        create(:meal, community: community, served_at: 1.day.ago)
+        create(:meal, formula: formula, community: community, served_at: 1.day.ago)
       end
 
       it "should be empty" do
@@ -94,28 +101,28 @@ describe(Meals::Report) do
     context "with finalized meals" do
       before do
         meals = []
-        meals << create(:meal, :finalized, community: community, served_at: 1.month.ago)
-        meals << create(:meal, :finalized, community: community, served_at: 6.months.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community, served_at: 1.month.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community, served_at: 6.months.ago)
 
         # Very old meal in different community.
-        meals << create(:meal, :finalized, community: community2, served_at: 2.years.ago)
+        meals << create(:meal, :finalized, formula: formula, community: community2, served_at: 2.years.ago)
 
         # Meal in communityX. Should not show in results.
-        meals << create(:meal, :finalized, community: communityX)
+        meals << create(:meal, :finalized, formula: formula, community: communityX)
 
         meals.each do |m|
-          m.signups << build(:signup, meal: m, adult_meat: 2)
-          m.signups << build(:signup, meal: m, adult_veg: 1)
+          m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1, 0, 0])
           m.save!
         end
       end
 
       it "should have correct data from cluster" do
         expect(report.overview[community.id]["ttl_meals"]).to eq(2)
-        expect(report.overview[community.id]["ttl_diners"]).to eq(6)
+        expect(report.overview[community.id]["ttl_servings"]).to eq(6)
         expect(report.overview[community.id]["ttl_cost"]).to eq(24)
         expect(report.overview[:all]["ttl_meals"]).to eq(3)
-        expect(report.overview[:all]["ttl_diners"]).to eq(9)
+        expect(report.overview[:all]["ttl_servings"]).to eq(9)
         expect(report.overview[:all]["ttl_cost"]).to eq(36)
       end
     end
@@ -123,14 +130,17 @@ describe(Meals::Report) do
 
   describe "disaggregated" do
     context "without finalized meals" do
-      describe "by_month" do
-        before do
-          create(:meal, community: community)
-        end
+      before do
+        create(:meal, formula: formula, community: community)
+      end
 
-        it "should return nil" do
-          expect(report.by_month).to be_nil
-        end
+      it "all should return empty" do
+        expect(report.by_month).to be_empty
+        expect(report.by_month_no_totals_or_gaps).to be_empty
+        expect(report.by_community).to be_empty
+        expect(report.by_weekday).to be_empty
+        expect(report.by_type).to be_empty
+        expect(report.by_category).to be_empty
       end
     end
 
@@ -138,43 +148,55 @@ describe(Meals::Report) do
       before do
         meals = []
         hholds = []
-        meals << create(:meal, :finalized, community: community, served_at: "2016-01-01 18:00") # Fri
-        meals << create(:meal, :finalized, community: community, served_at: "2016-02-10 18:00") # Wed
-        meals << create(:meal, :finalized, community: community, served_at: "2016-02-12 18:00") # Fri
-        meals << create(:meal, :finalized, community: community, served_at: "2016-04-05 18:00") # Tue
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-01-01 18:00") # Fri
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-02-10 18:00") # Wed
+        meals << create(:meal, :finalized, formula: formula, community: community,
+                                           served_at: "2016-02-12 18:00") # Fri
+        meals << create(:meal, :finalized, formula: formula2, community: community,
+                                           served_at: "2016-04-05 18:00") # Tue
         hholds << create(:household, community: community)
         hholds << create(:household, community: community2)
-        counts = [[5, 1], [7, 3], [4, 2], [8, 1]]
+        counts = [[5, 1, 2, 0], [7, 3, 5, 0], [4, 2, 1, 1], [8, 1, 0, 0]]
         meals.each_with_index do |m, i|
-          m.cost.adult_meat = i + 1
-          m.signups << build(:signup, meal: m, adult_meat: counts[i][0], household: hholds[0])
-          m.signups << build(:signup, meal: m, senior_veg: counts[i][1], household: hholds[1])
+          # Assigns adult meals cost of $2.10, $4.20, $6.30, and $8.40, respectively.
+          m.cost.parts[0].update!(value: 2.1 * (i + 1))
+
+          # Assigns teen meals cost of 1.88. Serves as a decoy since we only check adult costs.
+          m.cost.parts.create!(value: 1.88, type: m.formula.types[1])
+
+          m.signups << build(:meal_signup, meal: m, household: hholds[0],
+                                           diner_counts: [counts[i][0], 0, 0, 0])
+          m.signups << build(:meal_signup, meal: m, household: hholds[1],
+                                           diner_counts: [0, counts[i][1], counts[i][2], counts[i][3]])
           m.save!
         end
 
-        # Cancelled meal, should be ignored.
-        m = create(:meal, :cancelled, community: community, served_at: "2016-04-12 18:00")
-        m.signups << build(:signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:signup, meal: m, senior_veg: 2, household: hholds[1])
+        # Cancelled meal on formula3, should be ignored.
+        m = create(:meal, :cancelled, formula: formula3, community: community, served_at: "2016-04-12 18:00")
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2], household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [1], household: hholds[1])
         m.save!
 
         # Cancelled meal in other community, should be ignored.
-        m = create(:meal, :cancelled, community: community2, served_at: "2016-04-12 18:00")
-        m.signups << build(:signup, meal: m, adult_meat: 2, household: hholds[0])
-        m.signups << build(:signup, meal: m, senior_veg: 2, household: hholds[1])
+        m = create(:meal, :cancelled, formula: formula, community: community2, served_at: "2016-04-12 18:00")
+        m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0], household: hholds[0])
+        m.signups << build(:meal_signup, meal: m, diner_counts: [0, 2, 0, 0], household: hholds[1])
         m.save!
 
         # Very old meal, should be ignored.
-        create(:meal, :finalized, community: community, served_at: 2.years.ago)
+        create(:meal, :finalized, formula: formula, community: community, served_at: 2.years.ago)
 
         # Meals from community 2 and X
-        meals2 = create_list(:meal, 2, :finalized, community: community2, served_at: 2.months.ago)
+        meals2 = create_list(:meal, 2, :finalized, formula: formula, community: community2,
+                                                   served_at: 2.months.ago)
         meals2.each do |meal|
-          meal.signups << build(:signup, meal: meal, adult_meat: 2)
+          meal.signups << build(:meal_signup, meal: meal, diner_counts: [2, 0, 0, 0])
           meal.save!
         end
-        meal3 = create(:meal, :finalized, community: communityX, served_at: 2.months.ago)
-        meal3.signups << build(:signup, meal: meal3, adult_meat: 2)
+        meal3 = create(:meal, :finalized, formula: formula, community: communityX, served_at: 2.months.ago)
+        meal3.signups << build(:meal_signup, meal: meal3, diner_counts: [2, 0, 0, 0])
         meal3.save!
       end
 
@@ -190,39 +212,32 @@ describe(Meals::Report) do
           all = report.by_month[:all]
 
           expect(jan["ttl_meals"]).to eq(1)
-          expect(jan["ttl_diners"]).to eq(6)
-          expect(jan["ttl_cost"]).to eq(12)
+          expect(jan["ttl_servings"]).to eq(8)
+          expect(jan["ttl_cost"]).to be_within(0.01).of(12)
+          expect(jan["avg_max_cost"]).to be_within(0.01).of(2.10)
 
           expect(feb["ttl_meals"]).to eq(2)
-          expect(feb["ttl_diners"]).to eq(16)
-          expect(feb["ttl_cost"]).to eq(24)
-          expect(feb["avg_adult_cost"]).to eq(2.50)
-          expect(feb["avg_diners"]).to eq(8.0)
-          expect(feb["avg_veg"]).to eq(2.5)
-          expect(feb["avg_veg_pct"]).to be_within(0.1).of(31.25)
-          expect(feb["avg_adult"]).to eq(5.5)
-          expect(feb["avg_adult_pct"]).to be_within(0.1).of(68.75)
-          expect(feb["avg_from_#{community.id}"]).to eq(5.5)
-          expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(68.75)
-          expect(feb["avg_from_#{community2.id}"]).to eq(2.5)
-          expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of(31.25)
+          expect(feb["ttl_servings"]).to eq(23)
+          expect(feb["ttl_cost"]).to be_within(0.01).of(24)
+          expect(feb["avg_max_cost"]).to be_within(0.01).of(5.25)
+          expect(feb["avg_servings"]).to be_within(0.01).of(11.5)
+          expect(feb["avg_from_#{community.id}"]).to be_within(0.01).of(5.5)
+          expect(feb["avg_from_#{community.id}_pct"]).to be_within(0.1).of(47.82)
+          expect(feb["avg_from_#{community2.id}"]).to be_within(0.01).of(6.0)
+          expect(feb["avg_from_#{community2.id}_pct"]).to be_within(0.1).of(52.17)
 
           expect(mar).to be_nil
 
           expect(apr["ttl_meals"]).to eq(1)
-          expect(apr["ttl_diners"]).to eq(9)
-          expect(apr["ttl_cost"]).to eq(12)
-          expect(apr["avg_adult_cost"]).to eq(4.00)
+          expect(apr["ttl_servings"]).to eq(9)
+          expect(apr["ttl_cost"]).to be_within(0.01).of(12)
+          expect(apr["avg_max_cost"]).to be_within(0.01).of(8.40)
 
           expect(all["ttl_meals"]).to eq(4)
-          expect(all["ttl_diners"]).to eq(31)
-          expect(all["ttl_cost"]).to eq(48)
-          expect(all["avg_adult_cost"]).to eq(2.50)
-          expect(all["avg_diners"]).to eq(7.75)
-          expect(all["avg_veg"]).to eq(1.75)
-          expect(all["avg_veg_pct"]).to be_within(0.1).of(22.58)
-          expect(all["avg_adult"]).to eq(6)
-          expect(all["avg_adult_pct"]).to be_within(0.1).of(77.4)
+          expect(all["ttl_servings"]).to eq(40)
+          expect(all["ttl_cost"]).to be_within(0.01).of(48)
+          expect(all["avg_max_cost"]).to be_within(0.01).of(5.25)
+          expect(all["avg_servings"]).to eq(10.0)
         end
 
         context "with explicit range" do
@@ -261,6 +276,34 @@ describe(Meals::Report) do
         it "should have correct data" do
           expect(report.by_community.size).to eq(2)
           expect(report.by_community.keys).to eq(["Community 1", "Community 2"])
+        end
+      end
+
+      describe "by_type" do
+        it "should have correct data" do
+          expect(report.by_type.size).to eq(4)
+          expect(report.by_type.keys).to eq(["Adult", "Kid", "Teen", "Little Kid"])
+          expect(report.by_type["Adult"]["avg_servings"]).to be_within(0.01).of(6.0)
+          expect(report.by_type["Adult"]["avg_servings_pct"]).to be_within(0.01).of(60.0)
+          expect(report.by_type["Teen"]["avg_servings"]).to be_within(0.01).of(1.75)
+          expect(report.by_type["Teen"]["avg_servings_pct"]).to be_within(0.01).of(17.50)
+          expect(report.by_type["Kid"]["avg_servings"]).to be_within(0.01).of(2.0)
+          expect(report.by_type["Kid"]["avg_servings_pct"]).to be_within(0.01).of(20.0)
+          expect(report.by_type["Little Kid"]["avg_servings"]).to be_within(0.01).of(0.25)
+          expect(report.by_type["Little Kid"]["avg_servings_pct"]).to be_within(0.01).of(2.5)
+        end
+      end
+
+      describe "by_category" do
+        it "should have correct data" do
+          expect(report.by_category.size).to eq(3)
+          expect(report.by_category.keys).to eq(%w[Green Blue] << nil)
+          expect(report.by_category["Green"]["avg_servings"]).to be_within(0.01).of(8.0)
+          expect(report.by_category["Green"]["avg_servings_pct"]).to be_within(0.01).of(80.0)
+          expect(report.by_category["Blue"]["avg_servings"]).to be_within(0.01).of(1.75)
+          expect(report.by_category["Blue"]["avg_servings_pct"]).to be_within(0.01).of(17.5)
+          expect(report.by_category[nil]["avg_servings"]).to be_within(0.01).of(0.25)
+          expect(report.by_category[nil]["avg_servings_pct"]).to be_within(0.01).of(2.5)
         end
       end
     end

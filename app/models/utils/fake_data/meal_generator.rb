@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Utils
   module FakeData
+    # Generates fake meal data
     class MealGenerator < Generator
       attr_accessor :community, :data, :formula, :statement_gen, :locations, :creator, :households, :adults
 
@@ -11,9 +14,49 @@ module Utils
         self.data = load_yaml("meals/meals.yml")
       end
 
-      def generate
+      def generate_formula_and_roles
+        roles = [
+          Meals::Role.create!(
+            community: community,
+            count_per_meal: 1,
+            title: "Head Cook",
+            special: "head_cook",
+            description: "Plans and supervises meal prep.",
+            time_type: "date_only",
+            reminders_attributes: [{rel_magnitude: 3, rel_unit_sign: "days_before"}]
+          ),
+          Meals::Role.create!(
+            community: community,
+            count_per_meal: 2,
+            title: "Assistant Cook",
+            description: "Helps with meal prep as directed by the head cook.",
+            time_type: "date_time",
+            shift_start: -120,
+            shift_end: 0,
+            reminders_attributes: [{rel_magnitude: 1, rel_unit_sign: "days_before"}]
+          ),
+          Meals::Role.create!(
+            community: community,
+            count_per_meal: 3,
+            title: "Cleaner",
+            description: "Cleans up after the meal.",
+            time_type: "date_time",
+            shift_start: 60,
+            shift_end: 150,
+            reminders_attributes: [{rel_magnitude: 1, rel_unit_sign: "days_before"}]
+          )
+        ]
+        self.formula = create(:meal_formula,
+          community: community, roles: roles, is_default: true,
+          name: "Default Formula", meal_calc_type: "share",
+          parts_attrs: [{type: "Adult", share: "100%", portion: 1},
+                        {type: "Teen", share: "75%", portion: 0.75},
+                        {type: "Kid", share: "50%", portion: 0.5},
+                        {type: "Little Kid", share: "0%", portion: 0.25}])
+      end
+
+      def generate_samples
         load_objs
-        self.formula = create(:meal_formula, community: community)
         create_meals
       end
 
@@ -36,7 +79,7 @@ module Utils
         Timecop.freeze(((MONTHS - 1) * 30).days.ago.beginning_of_week.midnight) do
           MONTHS.times do |month|
             Timecop.freeze(month.months) do
-              finalize_and_run_statements if month > 0 && Time.zone.now < real_now
+              finalize_and_run_statements if month.positive? && Time.zone.now < real_now
               4.times do |week|
                 create_meals_and_signups_for_week(week)
               end
@@ -46,16 +89,16 @@ module Utils
       end
 
       def finalize_and_run_statements
-        Meal.where.not(status: "finalized").each do |meal|
+        Meals::Meal.where.not(status: "finalized").find_each do |meal|
           meal.status = "finalized"
           meal.build_cost(
-            ingredient_cost: rand(10000) / 100.0 + 32,
+            ingredient_cost: rand(10_000) / 100.0 + 32,
             pantry_cost: rand(1000) / 100.0,
             payment_method: Meals::Cost::PAYMENT_METHODS.sample
           )
           Meals::Finalizer.new(meal).finalize!
         end
-        statement_gen.generate
+        statement_gen.generate_samples
       end
 
       def create_meals_and_signups_for_week(week)
@@ -68,6 +111,7 @@ module Utils
             formula: formula,
             resources: locations,
             community: community,
+            capacity: 80,
             head_cook: staff[0],
             asst_cooks: staff[1..2],
             cleaners: staff[3..4],
@@ -82,18 +126,22 @@ module Utils
           num_households = 5 + rand(households.size - 5)
           households.shuffle[0...num_households].each do |household|
             members = household.users.to_a
-            type = bool_prob(70) ? "meat" : "veg"
-            create(:signup,
-              meal: meal,
-              household: household,
-              "senior_#{type}" => members.count { |u| u.age && u.age >= 65 },
-              "adult_#{type}" => members.count { |u| u.age.nil? || (u.age < 65 && u.age >= 18) },
-              "big_kid_#{type}" => members.count { |u| u.age && u.age < 18 && u.age >= 5 },
-              "little_kid_#{type}" => members.count { |u| u.age && u.age < 5 }
-            )
+            create(:meal_signup, meal: meal, household: household,
+                                 diner_counts: distribute_diners([members.size - rand(3), 1].max))
             break if meal.reload.full?
           end
         end
+      end
+
+      def distribute_diners(count)
+        result = []
+        left = count
+        (formula.types.size - 1).times do
+          result << rand(left + 1)
+          left -= result.last
+        end
+        result << left
+        result
       end
     end
   end

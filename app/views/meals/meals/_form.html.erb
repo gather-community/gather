@@ -1,0 +1,27 @@
+<%= gather_form_for(meal, url: meal.new_record? ? meals_path : meal_path(meal)) do |f| %>
+  <%= render("meals/meals/form/general", f: f) %>
+  <%= render("meals/meals/form/workers", f: f) %>
+  <%= render("meals/meals/form/menu", f: f) %>
+  <% unless meal.new_record? %>
+    <%= render("meals/meals/form/signups", f: f) %>
+    <%= render("meals/meals/form/expenses", f: f) %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    // DirtyChecker comes first so that it receives events about new fields /after/ AjaxSelect2
+    // sets up select2s in them.
+    new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
+    new Gather.Views.AjaxSelect2({el: '.meals--meal-form'});
+    new Gather.Views.MealWorkerFormView(<%=json(
+      el: ".meals--meal-form",
+      notifyOnWorkerChange: policy(meal).change_workers_without_notification?,
+      newRecord: meal.new_record?
+    )%>);
+  });
+<% end %>

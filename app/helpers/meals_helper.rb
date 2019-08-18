@@ -14,10 +14,6 @@ module MealsHelper
       spacer << content_tag(:span, l(meal.served_at, format: :time_only), class: "time")
   end
 
-  def signup_info(signup)
-    icon_tag("check") << " #{signup.total}"
-  end
-
   def signup_link(meal)
     link_to(current_user.credit_exceeded?(meal.community) ? icon_tag("ban") : "Sign Up",
       meal_url(meal, signup: 1, anchor: "signup"))

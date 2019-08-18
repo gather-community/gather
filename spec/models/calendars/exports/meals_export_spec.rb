@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "meals exports" do
   include_context "calendar exports"
-  
+
   let(:resource) { create(:resource, name: "Dining Room") }
   let(:meal1_time) { Time.current.midnight + 18.hours }
   let!(:meal1) do
@@ -20,7 +20,7 @@ describe "meals exports" do
                               communities: [meal1.community, communityB])
   end
   let!(:signup) do
-    create(:signup, meal: meal1, household: user.household, adult_meat: 2, comments: "Foo\nBar")
+    create(:meal_signup, meal: meal1, household: user.household, comments: "Foo\nBar", diner_counts: [2])
   end
 
   context "your meals" do

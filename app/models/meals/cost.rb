@@ -7,6 +7,8 @@ module Meals
 
     PAYMENT_METHODS = %i[check credit].freeze
 
+    has_many :parts, -> { includes(:type).by_rank },
+      class_name: "Meals::CostPart", inverse_of: :cost, dependent: :destroy
     belongs_to :meal, inverse_of: :cost
 
     validates :ingredient_cost, presence: true, numericality: {greater_than_or_equal_to: 0}
@@ -19,6 +21,10 @@ module Meals
 
     def blank?
       ingredient_cost.blank? && pantry_cost.blank? && payment_method.blank?
+    end
+
+    def parts_by_type
+      @parts_by_type ||= parts.index_by(&:type)
     end
   end
 end

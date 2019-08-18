@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   config.before(:suite) do
     if config.use_transactional_fixtures?
@@ -47,6 +49,8 @@ RSpec.configure do |config|
   end
 
   config.append_after(:each) do
+    # Note that if there is an error in a let! block, this line may never be reached, causing bewildering
+    # errors resulting from the DB not being cleaned for subsequent test runs. Focus on fixing the let! error.
     DatabaseCleaner.clean
   end
 end

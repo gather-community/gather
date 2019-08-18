@@ -1,6 +1,0 @@
-<% @signup.lines.each do |line| %>
-  <%= Meals::LineDecorator.new(line) %><br/>
-<% end %>
-<% if @signup.comments.present? %>
-  <em>"<%= @signup.comments %>"</em>
-<% end %>

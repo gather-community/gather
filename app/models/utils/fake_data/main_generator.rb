@@ -2,15 +2,18 @@ module Utils
   module FakeData
     # Generates fake data for a single community for demo purposes.
     class MainGenerator < Generator
-      attr_accessor :community, :households, :users, :photos
+      attr_accessor :community, :households, :users, :sample_data, :photos
 
-      def initialize(community:, photos: false)
+      def initialize(community:, sample_data: true, photos: false)
         self.community = community
+        self.sample_data = sample_data
         self.photos = photos
       end
 
       def generate
-        raise "Data present. Please run `rake fake:clear_data[#{community.cluster_id}]` first." if Meal.any?
+        if Meals::Meal.any?
+          raise "Data present. Please run `rake fake:clear_data[#{community.cluster_id}]` first."
+        end
 
         ActionMailer::Base.perform_deliveries = false
 
@@ -24,10 +27,16 @@ module Utils
         ActiveRecord::Base.transaction do
           in_community_timezone do
             begin
-              people_gen.generate
-              resource_gen.generate
-              reservation_gen.generate
-              meal_gen.generate
+              # We need to create these no matter what.
+              meal_gen.generate_formula_and_roles
+
+              # Sample data is stuff that will get deleted later.
+              if sample_data
+                people_gen.generate_samples
+                resource_gen.generate_samples
+                reservation_gen.generate_samples
+                meal_gen.generate_samples
+              end
             rescue
               people_gen.users.each { |u| u.photo.destroy }
               resource_gen.resources.each { |r| r.photo.destroy }

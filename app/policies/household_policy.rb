@@ -75,7 +75,7 @@ class HouseholdPolicy < ApplicationPolicy
 
   def destroy?
     active_admin? && destroy_users? &&
-      Signup.where(household: household).none? &&
+      Meals::Signup.where(household: household).none? &&
       Billing::Account.where(household: household).none?
   end
 

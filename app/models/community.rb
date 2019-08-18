@@ -11,9 +11,10 @@ class Community < ApplicationRecord
 
   # The order of these matters for destruction.
   belongs_to :cluster, inverse_of: :communities
-  has_many :meals, inverse_of: :community, dependent: :destroy
+  has_many :meals, class_name: "Meals::Meal", inverse_of: :community, dependent: :destroy
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
   has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
+  has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
   has_many :reservation_protocols, class_name: "Reservations::Protocol",
                                    inverse_of: :community, dependent: :destroy
   has_many :reservation_shared_guidelines, class_name: "Reservations::SharedGuidelines",

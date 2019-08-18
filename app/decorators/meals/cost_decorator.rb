@@ -5,7 +5,7 @@ module Meals
     delegate_all
 
     %i[ingredient_cost pantry_cost].each do |attrib|
-      define_method("#{attrib}_nice") do
+      define_method("#{attrib}_formatted") do
         (num = self[attrib]).blank? ? "?" : h.number_to_currency(num)
       end
 
@@ -14,8 +14,14 @@ module Meals
       end
     end
 
-    def payment_method_nice
-      t("simple_form.options.meal.cost.payment_method.#{payment_method}")
+    def payment_method_formatted
+      t("simple_form.options.meals_meal.cost.payment_method.#{payment_method}")
+    end
+
+    # Calculates price temporarily with given calculator if not yet calculated. Else just looks it up.
+    def formatted_price_for_type(type:, calculator:)
+      price = blank? ? calculator.price_for(type) : parts_by_type[type]&.value
+      h.number_to_currency(price)
     end
   end
 end

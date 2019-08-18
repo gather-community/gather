@@ -11,7 +11,7 @@
     font-weight: bold;
   }
 
-  #portion-counts {
+  .portion-counts {
     font-size: 130%;
     margin-bottom: 10px;
   }
@@ -57,12 +57,11 @@
         }
 
         &.count {
-          width: 35px;
+          width: 40px;
         }
       }
 
       th.count {
-        font-weight: normal;
         font-size: 11px;
       }
     }

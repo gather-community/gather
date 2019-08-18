@@ -5,7 +5,7 @@ require "rails_helper"
 feature "finalize meal", js: true do
   let!(:actor) { create(:admin) }
   let!(:meal) { create(:meal, :with_menu, served_at: Time.current - 3.days) }
-  let!(:signups) { create_list(:signup, 3, meal: meal, adult_veg: 1) }
+  let!(:signups) { create_list(:meal_signup, 3, meal: meal, diner_counts: [1]) }
   let!(:late_add) { create(:household) }
 
   around do |example|
@@ -22,7 +22,7 @@ feature "finalize meal", js: true do
     click_link("Add Household")
 
     # Zero out first household
-    all("select[id$=_quantity]").first.select("0")
+    all("select[id$=_count]").first.select("0")
 
     # Add a new household
     select2(late_add.name, from: all("select[id$=_household_id]").last)
@@ -39,7 +39,7 @@ feature "finalize meal", js: true do
 
     # Go back and add 4 more diners to the late add
     expect(page).to have_content("was not finalized")
-    all("select[id$=_quantity]").last.select("5")
+    all("select[id$=_count]").last.select("5")
     click_button("Continue")
 
     click_button("Confirm")

@@ -4,7 +4,7 @@ module Meals
   class FormulaPolicy < ApplicationPolicy
     alias formula record
 
-    delegate :has_meals?, :is_default?, to: :formula
+    delegate :meals?, :is_default?, to: :formula
 
     class Scope < Scope
       def resolve
@@ -33,7 +33,7 @@ module Meals
     end
 
     def update_calcs?
-      !has_meals? && active_admin_or?(:meals_coordinator)
+      !meals? && active_admin_or?(:meals_coordinator)
     end
 
     def activate?
@@ -51,8 +51,9 @@ module Meals
     def permitted_attributes
       attrs = %i[name is_default pantry_reimbursement] << {role_ids: []}
       if update_calcs?
-        attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_nice)
-        Signup::SIGNUP_TYPES.map { |st| attrs << :"#{st}_nice" }
+        attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_formatted)
+        attrs.push(parts_attributes: [:id, :type_id, :share_formatted, :portion_size,
+                                      :_destroy, type_attributes: %i[name]])
       end
       attrs
     end

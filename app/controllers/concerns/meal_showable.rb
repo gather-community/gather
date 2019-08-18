@@ -12,19 +12,19 @@ module MealShowable
   def prep_show_meal_vars
     @next_meal = policy_scope(@meal.following_meals).future.oldest_first.first
     @prev_meal = policy_scope(@meal.previous_meals).future.newest_first.first
-    @cost = @meal.cost
+    @cost = @meal.cost || @meal.build_cost
     @formula = @meal.formula
-    @calculator = MealCostCalculator.build(@meal)
+    @calculator = Meals::CostCalculator.build(@meal)
     @household = current_user.household
     @account = current_user.account_for(@meal.community)
     load_signups
   end
 
   def load_signups
-    @signups = @meal.signups.community_first(@meal.community).sorted
+    @signups = @meal.signups.community_first(@meal.community).sorted.includes(parts: :type)
   end
 
   def sample_meal
-    Meal.new(community: current_community)
+    Meals::Meal.new(community: current_community)
   end
 end

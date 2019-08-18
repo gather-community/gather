@@ -29,6 +29,10 @@
   display: flex;
   margin-bottom: 20px;
 
+  &.single-row {
+    margin-bottom: 10px;
+  }
+
   &.no-inner-labels {
     margin-bottom: 10px;
   }

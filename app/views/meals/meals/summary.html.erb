@@ -1,0 +1,107 @@
+<% content_for(:title, @meal.title || "Untitled Meal") %>
+
+<% content_for(:top_buttons) do %>
+  <%= print_button %>
+<% end %>
+
+<div class="row">
+  <div class="col-sm-12">
+    <%= render("menu") %>
+  </div>
+</div>
+
+<div id="signups" class="row">
+  <div class="col-sm-12">
+    <%= generated_time %>
+    <h2>Signups</h2>
+    <%= @portion_count_builder.portion_counts %>
+    <table class="compact">
+      <%= render("summary_signups_header") %>
+      <% @signups.each do |signup| %>
+        <tr>
+          <% if multi_community? %>
+            <td class="cmty"><%= signup.community_abbrv %></td>
+          <% end %>
+          <td class="hhld"><%= signup.household_name %></td>
+          <% @meal.types.each do |type| %>
+            <td><%= signup.parts_by_type[type]&.count %></td>
+          <% end %>
+          <td><%= signup.comments %></td>
+        </tr>
+      <% end %>
+      <tr class="total">
+        <td colspan="<%= multi_community? ? 2 : 1 %>">Total</td>
+        <% @meal.types.each do |type| %>
+          <td><%= @meal.signup_totals[type] %></td>
+        <% end %>
+        <td><%= @meal.signup_count %></td>
+      </tr>
+      <% cols = @meal.types.size + (multi_community? ? 3 : 2) %>
+      <tr class="late-signups-header">
+        <td colspan="<%= cols %>">
+          Late Signups
+        </td>
+      </tr>
+      <%= render("summary_signups_header") %>
+      <% 8.times do %>
+        <tr class="late-signup">
+          <% cols.times do %><td>&nbsp;</td><% end %>
+        </tr>
+      <% end %>
+    </table>
+    <small id="portion-formula">
+      * Total portions calculated using portion size values in <%= link_to("meal formula", @meal.formula) %>.
+    </small>
+  </div>
+</div>
+
+<div id="groc-calc" class="row">
+  <div class="col-sm-12">
+    <h2>Grocery Calculator</h2>
+    <% if @cost_calculator.type == :fixed %>
+      Based on the fixed cost of this meal, ingredients should cost no more than
+      <strong><%= number_to_currency(@cost_calculator.max_ingredient_cost) %></strong>,
+      not including pantry/staple items (see your community's meals guidelines
+      for a list of qualifying staple items).
+    <% else %>
+      Based on the cost-sharing formula of this meal, the below table shows how
+      much can be spent on ingredients depending on the desired meal price.
+      Spending limits don't include pantry/staple items (see your community's
+      meals guidelines for a list of qualifying staple items).
+      <table id="cost-table" class="compact">
+        <tr>
+          <% 2.times do %>
+            <th>Meal Price</th>
+            <th>Max Ingredient Cost</th>
+            <th></th>
+          <% end %>
+        </tr>
+        <% [3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 8, 9, 10, 11].each_slice(2).to_a.each do |costs| %>
+          <tr>
+            <% 2.times do |i| %>
+              <td><%= number_to_currency(costs[i]) %></td>
+              <td><%= number_to_currency(@cost_calculator.max_ingredient_cost_for_full_price_of(costs[i])) %></td>
+              <td>&nbsp;&nbsp;&nbsp;</td>
+            <% end %>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+<% if @meal_summary.reimbursement? %>
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Cook Reimbursement</h2>
+      <%= @meal_summary.formatted_reimb_instructions %>
+      <%= render("reimb_form") if @meal_summary.show_reimb_form? %>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.PrintView();
+  });
+<% end %>

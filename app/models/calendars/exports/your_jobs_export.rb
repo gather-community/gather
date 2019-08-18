@@ -83,7 +83,7 @@ module Calendars
       end
 
       def meal_assignments
-        MealPolicy::Scope.new(user, Meal).resolve
+        Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
           .includes(:resources, assignments: :role, work_shifts: :job)
           .with_max_age(MAX_EVENT_AGE)
           .oldest_first

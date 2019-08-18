@@ -17,7 +17,7 @@ module Work
     # We set touch: true so that shift changes will update the job updated_at stamp, which
     # we use in a cache key.
     belongs_to :job, class_name: "Work::Job", inverse_of: :shifts, touch: true
-    belongs_to :meal
+    belongs_to :meal, class_name: "Meals::Meal"
     has_many :assignments, -> { by_user_name }, class_name: "Work::Assignment",
                                                 inverse_of: :shift, dependent: :destroy
     has_many :reminder_deliveries, class_name: "Work::JobReminderDelivery", inverse_of: :shift,

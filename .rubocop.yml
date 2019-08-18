@@ -65,6 +65,9 @@ Metrics/MethodLength:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
+Rails/NotNullColumn:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Enabled: false
 
@@ -77,8 +80,9 @@ Style/BracesAroundHashParameters:
 Style/Documentation:
   Exclude:
     - "app/controllers/**/*"
-    - "app/policies/**/*"
     - "app/decorators/**/*"
+    - "app/policies/**/*"
+    - "app/serializers/**/*"
     - "db/migrate/*.rb"
 
 Style/EmptyLineAfterGuardClause:

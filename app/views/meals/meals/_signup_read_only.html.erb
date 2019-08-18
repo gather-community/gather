@@ -1,0 +1,6 @@
+<% @signup_parts.each do |part| %>
+  <%= part.count %> <%= part.type_name %><br/>
+<% end %>
+<% if @signup.comments.present? %>
+  <em>"<%= @signup.comments %>"</em>
+<% end %>

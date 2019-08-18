@@ -2,7 +2,7 @@
 
 module Meals
   # Calculates a bunch of statistics about the meals system.
-  class Report
+  class Report # rubocop:disable Metrics/ClassLength
     attr_accessor :type_map, :community, :range
     SUNDAY = Date.parse("Sunday")
 
@@ -11,14 +11,9 @@ module Meals
       self.range = range || default_range
     end
 
-    # Returns all diner types that appear in range-constrained results.
-    def diner_types
-      by_month ? Signup::DINER_TYPES.select { |dt| by_month[:all]["avg_#{dt}"].positive? } : []
-    end
-
     def empty?
       # We don't check overview because that ignores the range.
-      by_month.nil?
+      by_month.empty?
     end
 
     def overview
@@ -40,7 +35,7 @@ module Meals
 
     def by_month_no_totals_or_gaps
       @by_month_no_totals_or_gaps ||= ActiveSupport::OrderedHash.new.tap do |result|
-        if by_month
+        if by_month.present?
           months = by_month.keys - [:all]
           month, max = months.minmax
           while month <= max
@@ -65,40 +60,48 @@ module Meals
       )
     end
 
-    def chart_data
-      @chart_data ||= {}.tap do |data|
-        data[:diners_by_month] = [
+    def by_type
+      @by_type ||= types_query.index_by { |row| row["name"] }
+    end
+
+    def by_category
+      @by_category ||= categories_query.index_by { |row| row["category"] }
+    end
+
+    def chart_data # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      @chart_data ||= {
+        servings_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_diners"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_servings"] || 0, l: k_v[0].strftime("%b")}
           end
-        ]
-        data[:cost_by_month] = [
+        ],
+        cost_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_adult_cost"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_max_cost"] || 0, l: k_v[0].strftime("%b")}
           end
-        ]
-        data[:meals_by_month] = [
+        ],
+        meals_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
             {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
           end
-        ]
-        data[:diners_by_weekday] = [
+        ],
+        servings_by_weekday: [
           (by_weekday || {}).each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_diners"], l: k_v[0].strftime("%a")}
+            {x: i, y: k_v[1]["avg_servings"], l: k_v[0].strftime("%a")}
           end
-        ]
-        data[:cost_by_weekday] = [
+        ],
+        cost_by_weekday: [
           (by_weekday || {}).each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_adult_cost"], l: k_v[0].strftime("%a")}
+            {x: i, y: k_v[1]["avg_max_cost"], l: k_v[0].strftime("%a")}
           end
-        ]
-        data[:community_rep] = communities.map do |c|
+        ],
+        meal_types: (by_type || {}).map do |k_v|
+          {key: k_v[0], y: k_v[1]["avg_servings"]}
+        end,
+        community_rep: communities.map do |c|
           by_month ? {key: c.name, y: by_month[:all]["avg_from_#{c.id}"]} : {}
         end
-        data[:diner_types] = diner_types.map do |dt|
-          by_month ? {key: I18n.t("signups.diner_types.#{dt}", count: 2), y: by_month[:all]["avg_#{dt}"]} : {}
-        end
-      end
+      }
     end
 
     def cancelled
@@ -130,107 +133,125 @@ module Meals
       # Get main rows.
       result = meals_query(sql_options).index_by(&key_func)
 
+      return {} if result.values.all?(&:empty?)
+
       # Get totals.
       result[:all] = meals_query(sql_options.except(:breakout_expr)).first if totals
 
-      # Return nil if no results.
-      result.except(:all).reject { |_k, v| v == {} }.empty? ? nil : result
+      result
     end
 
-    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
+    def types_query
+      type_or_category_query(col_name: "name")
+    end
 
+    def categories_query
+      type_or_category_query(col_name: "category")
+    end
+
+    # rubocop:disable Metrics/MethodLength
+    def meals_query(breakout_expr: nil, all_communities: false, ignore_range: false)
       breakout_select = breakout_expr ? "#{breakout_expr} AS breakout_expr," : ""
       breakout_group_order = breakout_expr ? "GROUP BY #{breakout_expr} ORDER BY breakout_expr" : ""
+      where_expr, vars = meal_cmty_where_expr(all_communities: all_communities, ignore_range: ignore_range)
 
-      wheres = []
-      vars = []
-
-      wheres << "meals.status = 'finalized'"
-
-      unless all_communities
-        wheres << "meals.community_id = ?"
-        vars << community.id
-      end
-
-      unless ignore_range
-        wheres << "served_at >= ?" << "served_at < ?"
-        vars << range.first << range.last
-      end
-
-      community_join = "INNER JOIN communities ON meals.community_id = communities.id"
-
-      # Scope to community cluster
-      wheres << "communities.cluster_id = ?"
-      vars << community.cluster_id
-
-      query("
+      sql = <<-SQL
         SELECT
           #{breakout_select}
           COUNT(*)::integer AS ttl_meals,
           SUM(ingredient_cost + pantry_cost)::real AS ttl_cost,
-          AVG(meal_costs.adult_meat)::real AS avg_adult_cost,
-          SUM(signup_ttls.ttl_diners)::integer AS ttl_diners,
-          AVG(signup_ttls.ttl_diners)::real AS avg_diners,
-          AVG(signup_ttls.ttl_veg)::real AS avg_veg,
-          (AVG(signup_ttls.ttl_veg) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_veg_pct,
-          #{diner_type_avg_exprs},
+          AVG(max_meal_costs.max_serving_cost)::real AS avg_max_cost,
+          SUM(signup_ttls.ttl_servings)::integer AS ttl_servings,
+          AVG(signup_ttls.ttl_servings)::real AS avg_servings,
           #{community_avg_exprs}
         FROM meals
-          INNER JOIN meal_costs ON meals.id = meal_costs.meal_id
-          #{community_join}
+          INNER JOIN communities ON meals.community_id = communities.id
+          INNER JOIN (
+            SELECT mc.meal_id, ingredient_cost, pantry_cost, MAX(value) AS max_serving_cost
+              FROM meal_cost_parts mcp INNER JOIN meal_costs mc ON mcp.cost_id = mc.id
+              GROUP BY mc.meal_id, mc.ingredient_cost, mc.pantry_cost
+          ) max_meal_costs ON max_meal_costs.meal_id = meals.id
           INNER JOIN (
             SELECT
-              signups.meal_id,
-              SUM(#{full_signup_col_sum_expr}) AS ttl_diners,
-              SUM(#{signup_col_sum_expr(food_types: ['veg'])}) AS ttl_veg,
-              #{diner_type_sum_exprs},
+              ms.meal_id,
+              SUM(msp.count) AS ttl_servings,
               #{community_sum_exprs}
-            FROM signups
-              INNER JOIN households ON households.id = signups.household_id
-            GROUP BY signups.meal_id
+            FROM meal_signup_parts msp INNER JOIN meal_signups ms ON msp.signup_id = ms.id
+              INNER JOIN households ON households.id = ms.household_id
+            GROUP BY ms.meal_id
           ) signup_ttls ON signup_ttls.meal_id = meals.id
-        WHERE #{wheres.join(' AND ')}
+        WHERE #{where_expr}
         #{breakout_group_order}
-      ", *vars).to_a
+      SQL
+      query(sql, *vars).to_a
     end
+    # rubocop:enable Metrics/MethodLength
 
-    def diner_type_avg_exprs
-      Signup::DINER_TYPES.map do |dt|
-        "AVG(ttl_#{dt})::real AS avg_#{dt}, "\
-        "(AVG(ttl_#{dt}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_#{dt}_pct"
-      end.join(",\n")
+    # rubocop:disable Metrics/MethodLength
+    def type_or_category_query(col_name:)
+      return [] if empty?
+      where_expr, vars = meal_cmty_where_expr
+      ttl_meals = by_month[:all]["ttl_meals"]
+      avg_servings = by_month[:all]["avg_servings"]
+
+      # Sorting by the minimum associated formula part ID and rank means that types and categories
+      # will appear in familiar orders.
+      sql = <<-SQL
+        SELECT
+          meal_types.#{col_name},
+          COALESCE(SUM(meal_signup_totals.total::real) / ?, 0) AS avg_servings,
+          COALESCE(100 * SUM(meal_signup_totals.total::real) / ? / ?, 0) AS avg_servings_pct
+        FROM meal_types
+          LEFT OUTER JOIN (
+            SELECT meal_signup_parts.type_id, SUM(meal_signup_parts.count) AS total
+              FROM meal_signup_parts
+                INNER JOIN meal_signups ON meal_signup_parts.signup_id = meal_signups.id
+                INNER JOIN meals ON meal_signups.meal_id = meals.id
+                INNER JOIN communities ON meals.community_id = communities.id
+              WHERE #{where_expr}
+              GROUP BY meal_signup_parts.type_id
+          ) meal_signup_totals ON meal_signup_totals.type_id = meal_types.id
+        WHERE meal_types.id IN (
+          SELECT type_id
+            FROM meal_formula_parts
+              INNER JOIN meal_formulas ON meal_formula_parts.formula_id = meal_formulas.id
+              INNER JOIN meals ON meal_formulas.id = meals.formula_id
+              INNER JOIN communities ON meals.community_id = communities.id
+            WHERE #{where_expr}
+        )
+        GROUP BY meal_types.#{col_name}
+        ORDER BY SUM(meal_signup_totals.total) DESC
+      SQL
+      query(sql, *[ttl_meals, ttl_meals, avg_servings, vars * 2].flatten).to_a
     end
+    # rubocop:enable Metrics/MethodLength
 
-    def diner_type_sum_exprs
-      Signup::DINER_TYPES.map do |dt|
-        expr = signup_col_sum_expr(diner_types: [dt])
-        "SUM(#{expr}) AS ttl_#{dt}"
-      end.join(",\n")
+    def meal_cmty_where_expr(ignore_range: false, all_communities: false)
+      return @meal_cmty_where_expr if defined?(@meal_cmty_where_expr)
+
+      wheres = ["meals.status = 'finalized'", "communities.cluster_id = ?"]
+      wheres << "served_at >= ?" << "served_at < ?" unless ignore_range
+      wheres << "meals.community_id = ?" unless all_communities
+
+      vars = [community.cluster_id]
+      vars << range.first << range.last unless ignore_range
+      vars << community.id unless all_communities
+
+      [wheres.join(" AND "), vars]
     end
 
     def community_avg_exprs
       communities.map do |c|
         "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, "\
-        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_diners))::real AS avg_from_#{c.id}_pct"
+        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_servings))::real AS avg_from_#{c.id}_pct"
       end.join(",\n")
     end
 
     def community_sum_exprs
       communities.map do |c|
-        expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN #{full_signup_col_sum_expr} ELSE 0 END)"
+        expr = "SUM(CASE WHEN households.community_id = #{c.id} THEN msp.count ELSE 0 END)"
         "#{expr} AS ttl_from_#{c.id}"
       end.join(",\n")
-    end
-
-    def full_signup_col_sum_expr
-      @full_signup_col_sum_expr ||= signup_col_sum_expr
-    end
-
-    def signup_col_sum_expr(tbl = "signups", prefix: "", diner_types: nil, food_types: nil)
-      diner_types ||= Signup::DINER_TYPES
-      food_types ||= Signup::FOOD_TYPES
-      types = diner_types.map { |dt| food_types.map { |ft| "#{prefix}#{dt}_#{ft}" } }.flatten
-      types.map { |c| "#{tbl}.#{c}" }.join("+")
     end
 
     def communities

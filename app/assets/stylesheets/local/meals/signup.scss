@@ -14,12 +14,17 @@
       display: inline-block;
     }
 
-    select[name$="[quantity]"] {
-      width: 60px;
-    }
+    .part-fields {
+      display: flex;
 
-    select[name$="[item_id]"] {
-      width: 200px;
+      div:first-child { // count dropdown
+        width: 60px;
+      }
+
+      div:last-child { // meal type dropdown
+        width: 100%;
+        max-width: 200px;
+      }
     }
 
     .nested-fields.subfields.no-inner-labels {
@@ -35,7 +40,7 @@
 }
 
 form.gather-form.narrow-label-layout.finalize-form,
-form.gather-form.narrow-label-layout.meal-form {
+form.gather-form.narrow-label-layout.meals--meal-form {
   // A single signup row.
   .signup-fields .form-group {
     margin-bottom: 0;
@@ -53,13 +58,13 @@ form.gather-form.narrow-label-layout.meal-form {
     margin-left: 5px;
   }
 
-  .form-group.meal_signups_lines {
+  .form-group.meals_meal_signups_parts {
     @include signup-form-control-wrapper;
   }
 }
 
-form.gather-form.signup-form {
-  .form-group.signup_lines {
+form.gather-form.meals--signup-form {
+  .form-group.meals_signup_parts {
     @include signup-form-control-wrapper;
   }
 }

@@ -14,8 +14,8 @@ module NavHelper
         icon: "users"
       }, {
         name: :meals,
-        path: lens_path_if_present("meals"),
-        permitted: policy(Meal.new(community: current_community)).index?,
+        path: lens_path_if_present("meals/meals", index_path: meals_path),
+        permitted: policy(Meals::Meal.new(community: current_community)).index?,
         icon: "cutlery"
       }, {
         name: :work,
@@ -43,7 +43,7 @@ module NavHelper
     items =
       case main
       when :meals
-        policy = policy(Meal.new(community: current_community))
+        policy = policy(Meals::Meal.new(community: current_community))
         [
           {
             name: :meals,
@@ -255,9 +255,9 @@ module NavHelper
     link_to(icon.dup << " #{name}", item[:path], params)
   end
 
-  def lens_path_if_present(controller)
+  def lens_path_if_present(controller, index_path: nil)
     storage = Lens::Storage.new(session: session, community_id: current_community.id,
                                 controller_path: controller, action_name: "index")
-    Lens::PathSaver.new(storage: storage).read || send("#{controller.tr('/', '_')}_path")
+    Lens::PathSaver.new(storage: storage).read || index_path || send("#{controller.tr('/', '_')}_path")
   end
 end

@@ -5,7 +5,7 @@ require "rails_helper"
 feature "meal messages" do
   let!(:meal) { create(:meal, asst_cooks: [create(:user)]) }
   let!(:user) { meal.head_cook }
-  let!(:signup) { create(:signup, :with_nums, meal: meal) }
+  let!(:signup) { create(:meal_signup, meal: meal, diner_counts: [2, 1]) }
   let(:email_sent) { email_sent_by { process_queued_job } }
 
   around do |example|

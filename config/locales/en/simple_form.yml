@@ -11,7 +11,7 @@ en:
     error_notification:
       default_message: "Please review the problems below:"
     placeholders:
-      meal:
+      meals_meal:
         title: "e.g. Southern Red Beans and Rice"
         entrees: "e.g. Red beans, rice, and smoked pork sausage. Meat free version available. Mild spice!"
         side: "e.g. Braised collard greens with butter and shallots"
@@ -45,7 +45,7 @@ en:
         comment: "A comment about this change."
     hints:
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>Markdown formatting</a>."
-      meal:
+      meals_meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
         capacity: "How many people can the meal accommodate?"
       billing_account:
@@ -75,7 +75,7 @@ en:
         google_email: "The email address tied to the Google account used for sign-in. Not displayed in the directory. Ask an <a href='/roles'>admin</a> if you need this changed."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
-        pantry_fee_nice: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
+        pantry_fee_formatted: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
         pantry_reimbursement: "If checked, cooks are allowed to purchase pantry items and submit them for reimbursement."
         role_ids: "Which roles are needed for meals under this formula?"
       meals_role:
@@ -100,7 +100,7 @@ en:
         workers_per_round: "How many workers should be choosing jobs in a given round? More workers means more hectic choosing. Fewer workers means more rounds so the job choosing event takes longer."
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
     options:
-      meal:
+      meals_meal:
         time:
           past: "Past"
           finalizable: "Finalizable"

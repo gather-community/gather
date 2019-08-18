@@ -28,7 +28,7 @@ feature "meal crud", js: true do
 
       # Create with no menu
       click_on("Create Meal")
-      select2(location.name, from: "#meal_resource_ids", multiple: true)
+      select2(location.name, from: "#meals_meal_resource_ids", multiple: true)
 
       # Formula change changes worker roles
       select("Formula 2", from: "Formula")

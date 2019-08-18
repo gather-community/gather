@@ -6,40 +6,38 @@
   table.key-value {
     margin-bottom: 20px;
 
-    div.signup-type {
-      display: table-row;
+    div.formula-parts {
+      div.header {
+        color: $medium-gray;
+        font-size: 12px;
+      }
 
-      div {
-        display: table-cell;
+      div.formula-part, div.header {
+        display: table-row;
 
-        &:first-child {
-          padding-right: 20px;
+        div {
+          display: table-cell;
+          padding-right: 10px;
+
+          &:last-child {
+            padding-right: 0;
+          }
         }
       }
     }
   }
 
   form {
-    .meals_formula_signup_types {
-      div.signup-type-hints p {
+    .meals_formula_parts {
+      div.formula-part-hints div.hint {
         display: none;
       }
 
-      div.fields {
-        @media screen and (min-width: $screen-md-min) {
-          column-count: 2;
+      .subfields .fields-col {
+        display: flex;
 
-          // Inner signup type control.
-          .form-group {
-            label {
-              width: 50%;
-            }
-
-            div {
-              width: 50%;
-              padding-right: 20px;
-            }
-          }
+        > * {
+          flex: 1;
         }
       }
     }

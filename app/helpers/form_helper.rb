@@ -65,6 +65,21 @@ module FormHelper
   # Renders a set of nested fields handled by cocoon. Assumes:
   # - Partial at parentmodels/_childmodel_fields.html.erb
   # - Parent model has accepts_nested_attributes_for :childmodels
+  #
+  # Options
+  # - objects - The objects array passed to simple_form_for. Optional, just as with simple_fields_for.
+  # - required - Whether the field should be marked required. Passed to f.input.
+  # - label - The outer field label. Passed to f.input.
+  # - multiple - Whether multiple items can be added. Defaults to true.
+  # - inner_partial - The path to the partial rendered for each item. Guessed if not provided.
+  # - inner_labels - Whether to display labels on fields inside each item. Defaults to true.
+  # - wrap_object - Passed to link_to_add_association.
+  # - top_hint - Path to a partial that will be rendered inside the wrapper above the fields.
+  # - decorate - Whether the nested objects should have `decorate` called on them. Requires `objects` to
+  #     be specified explicitly.
+  # - single_row - Set to true if the fields are just a single row. Affects only styles.
+  #
+  # Any other options given are passed to the inner partial.
   def nested_field_set(f, assoc, options = {})
     wrapper_partial = "shared/nested_fields_wrapper"
     wrap_object_proc = options.delete(:wrap_object) # Used for messing with template object.
@@ -74,16 +89,29 @@ module FormHelper
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
     wrapper_classes << "multiple" if options[:multiple]
+    wrapper_classes << "single-row" if options[:single_row]
+
+    if options[:decorate]
+      options[:objects] ||= f.object.send(assoc)
+      options[:objects] = options[:objects].map(&:decorate) # .decorate on the relation doesn't work
+
+      # Wrap the existing wrap_object_proc (if one is given)
+      old_wrap_object = wrap_object_proc
+      wrap_object_proc = ->(object) { (old_wrap_object ? old_wrap_object.call(object) : object).decorate }
+    end
 
     f.input(assoc, options.slice(:required, :label)) do
       content_tag(:div, class: "nested-field-set") do
         fields_for_args = [assoc, options[:objects]].compact
-        f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
-          render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
-        end <<
+        (options[:top_hint] ? render(options[:top_hint]) : safe_str) <<
+          f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
+            render(wrapper_partial, f: f2, options: options, classes: wrapper_classes)
+          end <<
           if options[:multiple]
+            link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{assoc}",
+              default: I18n.t("cocoon.add_links.#{assoc}"))
             content_tag(:span, class: "add-link-wrapper") do
-              link_to_add_association_with_icon(t("cocoon.add_links.#{assoc}"), f, assoc,
+              link_to_add_association_with_icon(link_text, f, assoc,
                 partial: wrapper_partial,
                 wrap_object: wrap_object_proc,
                 render_options: {

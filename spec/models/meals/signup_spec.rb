@@ -168,8 +168,14 @@ describe Meals::Signup do
     context "on create" do
       # All zero case triggers validation, see above
       context "partial zero" do
+        # Deliberately including same type_id twice.
+        # Second should get ignored and not trigger unique validation.
         let(:parts_attributes) do
-          [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 0}]
+          [
+            {type_id: formula.types[0].id, count: 2},
+            {type_id: formula.types[1].id, count: 0},
+            {type_id: formula.types[0].id, count: 0}
+          ]
         end
 
         it "doesn't save zero part" do

@@ -21,6 +21,7 @@ module Meals
 
     normalize_attributes :comments
 
+    before_save :remove_zero_parts
     after_update :destroy_if_all_zero
 
     validates :household_id, presence: true, uniqueness: {scope: :meal_id}
@@ -54,7 +55,7 @@ module Meals
     end
 
     def total
-      parts.reject(&:marked_for_destruction?).sum(&:count)
+      non_zero_non_destroyed_parts.sum(&:count)
     end
 
     def total_was
@@ -66,6 +67,14 @@ module Meals
     end
 
     private
+
+    def non_zero_non_destroyed_parts
+      parts.reject { |p| p.marked_for_destruction? || p.zero? }
+    end
+
+    def remove_zero_parts
+      parts.each { |p| p.mark_for_destruction if p.zero? }
+    end
 
     def all_zero?
       parts.all?(&:zero?)
@@ -85,7 +94,7 @@ module Meals
     end
 
     def no_dupe_types
-      type_ids = parts.map(&:type_id)
+      type_ids = non_zero_non_destroyed_parts.map(&:type_id)
       return if type_ids.uniq.size == type_ids.size
       errors.add(:base, "Please sign up each type only once")
     end

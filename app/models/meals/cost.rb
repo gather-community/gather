@@ -9,7 +9,7 @@ module Meals
 
     has_many :parts, -> { includes(:type).by_rank },
       class_name: "Meals::CostPart", inverse_of: :cost, dependent: :destroy
-    belongs_to :meal, inverse_of: :cost
+    belongs_to :meal, class_name: "Meals::Meal", inverse_of: :cost
 
     validates :ingredient_cost, presence: true, numericality: {greater_than_or_equal_to: 0}
     validates :pantry_cost, presence: true, numericality: {greater_than_or_equal_to: 0}

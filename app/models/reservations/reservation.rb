@@ -12,7 +12,7 @@ module Reservations
     belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :resource
-    belongs_to :meal
+    belongs_to :meal, class_name: "Meals::Meal"
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }

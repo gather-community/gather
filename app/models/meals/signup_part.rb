@@ -6,7 +6,7 @@ module Meals
     acts_as_tenant :cluster
 
     belongs_to :type
-    belongs_to :signup, inverse_of: :parts
+    belongs_to :signup, class_name: "Meals::Signup", inverse_of: :parts
 
     delegate :zero?, to: :count
     delegate :name, to: :type, prefix: true

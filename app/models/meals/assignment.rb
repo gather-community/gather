@@ -16,7 +16,7 @@ module Meals
     scope :head_cook_role, -> { merge(Meals::Role.head_cook) }
 
     belongs_to :user, inverse_of: :meal_assignments
-    belongs_to :meal, inverse_of: :assignments
+    belongs_to :meal, class_name: "Meals::Meal", inverse_of: :assignments
     belongs_to :role, class_name: "Meals::Role"
 
     delegate :head_cook?, :date_time?, to: :role

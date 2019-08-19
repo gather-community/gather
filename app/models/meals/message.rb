@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Meals
   # A message sent to meal team or diners.
   class Message < ApplicationRecord
     acts_as_tenant :cluster
 
-    RECIPIENT_TYPES = %i(team diners all)
+    RECIPIENT_TYPES = %i[team diners all].freeze
 
     belongs_to :sender, class_name: "User"
-    belongs_to :meal
+    belongs_to :meal, class_name: "Meals::Meal"
 
     validates :recipient_type, :body, presence: true
 

@@ -99,7 +99,7 @@ module Work
     end
 
     def meal_icon_link
-      h.link_to(meal_icon, meal)
+      h.link_to(meal_icon, h.meal_path(meal))
     end
 
     def meal_icon

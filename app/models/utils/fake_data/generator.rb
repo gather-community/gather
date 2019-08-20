@@ -1,7 +1,17 @@
+# frozen_string_literal: true
+
 module Utils
   module FakeData
     class Generator
       include FactoryBot::Syntax::Methods
+
+      def generate_samples
+        # Implemented optionally by subclasses
+      end
+
+      def cleanup_on_error
+        # Implemented optionally by subclasses
+      end
 
       protected
 

@@ -1,52 +1,55 @@
+# frozen_string_literal: true
+
 module Utils
   module FakeData
-    # Generates fake data for a single community for demo purposes.
+    # Generates a single cluster and community for demo purposes.
+    # Creates and sets its own tenant.
     class MainGenerator < Generator
-      attr_accessor :community, :households, :users, :sample_data, :photos
+      include ActiveModel::Model
 
-      def initialize(community:, sample_data: true, photos: false)
-        self.community = community
-        self.sample_data = sample_data
-        self.photos = photos
-      end
+      attr_accessor :cmty_name, :slug, :admin_attrs, :sample_data, :photos, :cluster, :community, :generators
 
       def generate
-        if Meals::Meal.any?
-          raise "Data present. Please run `rake fake:clear_data[#{community.cluster_id}]` first."
-        end
-
         ActionMailer::Base.perform_deliveries = false
-
-        people_gen = PeopleGenerator.new(community: community, photos: photos)
-        resource_gen = ResourceGenerator.new(community: community, photos: photos)
-        reservation_gen = ReservationGenerator.new(community: community,
-                                                   resource_map: resource_gen.resource_map)
-        statement_gen = StatementGenerator.new(community: community)
-        meal_gen = MealGenerator.new(community: community, statement_gen: statement_gen)
-
         ActiveRecord::Base.transaction do
-          in_community_timezone do
-            begin
-              # We need to create these no matter what.
-              meal_gen.generate_formula_and_roles
-
-              # Sample data is stuff that will get deleted later.
-              if sample_data
-                people_gen.generate_samples
-                resource_gen.generate_samples
-                reservation_gen.generate_samples
-                meal_gen.generate_samples
-              end
-            rescue
-              people_gen.users.each { |u| u.photo.destroy }
-              resource_gen.resources.each { |r| r.photo.destroy }
-              raise $!
-            end
+          ActsAsTenant.with_tenant(self.cluster = Cluster.create!(name: cmty_name)) do
+            self.community = Community.create!(name: cmty_name, slug: slug)
+            in_community_timezone { generate_data_and_handle_errors }
           end
         end
+        ActionMailer::Base.perform_deliveries = true
+        cluster
       end
 
       private
+
+      def generate_data_and_handle_errors
+        create_admin
+        build_generators
+        generators[:meals].generate_formula_and_roles # We need these even if not doing sample data.
+        generators.each_value(&:generate_samples) if sample_data
+      rescue StandardError => error
+        generators.each_value(&:cleanup_on_error)
+        raise error
+      end
+
+      def create_admin
+        household = Household.create!(community: community, name: admin_attrs[:last_name])
+        super_admin = admin_attrs.delete(:super_admin)
+        admin = User.create!(admin_attrs.merge(household: household, dont_require_phone: true))
+        admin.add_role(super_admin ? :super_admin : :admin)
+      end
+
+      def build_generators
+        self.generators = ActiveSupport::OrderedHash.new
+        generators[:people] = PeopleGenerator.new(community: community, photos: photos)
+        generators[:resources] = ResourceGenerator.new(community: community, photos: photos)
+        generators[:reservations] = ReservationGenerator.new(
+          community: community, resource_map: generators[:resources].resource_map
+        )
+        generators[:statements] = StatementGenerator.new(community: community)
+        generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements])
+      end
 
       def in_community_timezone
         tz = Time.zone

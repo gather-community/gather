@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Utils
   module FakeData
     class StatementGenerator < Generator
@@ -27,7 +29,7 @@ module Utils
               amount: acct.balance_due,
               code: "payment",
               incurred_on: Date.today,
-              description: "Check ##{rand(10000)}",
+              description: "Check ##{rand(10_000)}",
               created_at: community.created_at,
               updated_at: community.updated_at
             )

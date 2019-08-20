@@ -1,5 +1,3 @@
-admin_google_id: somebody@gmail.com
-
 oauth:
   google:
     client_id: 8047175263225-j9942fn33blvb1o7hg7pq9rv778g3blb.apps.googleusercontent.com

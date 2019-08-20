@@ -2,9 +2,6 @@
 # Note: For a production environment, it is better to use environment variables to set these settings.
 # e.g. `export SETTINGS__OAUTH__GOOGLE__CLIENT_ID=you@gmail.com`
 
-# Google account email to be used when creating initial admin user.
-admin_google_id: <you>@gmail.com
-
 # Uncomment and enter tag if you want to include google analytics (production only)
 # google_analytics_tag: UA-123456789-1
 

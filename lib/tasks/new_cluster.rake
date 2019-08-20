@@ -21,8 +21,7 @@ namespace :db do
           last_name: args.last_name,
           google_email: args.google_id,
           email: args.google_id,
-          household: admin_hhold,
-          mobile_phone: "5555551212"
+          household: admin_hhold
         )
         admin.add_role(:admin)
         sample_data = args.sample_data.casecmp("y").zero?

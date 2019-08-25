@@ -46,6 +46,7 @@ Metrics/PerceivedComplexity:
 Metrics/BlockLength:
   Enabled: true
   Exclude:
+    - lib/**/*.rake
     - spec/**/*
     - config/routes.rb
     - config/initializers/simple_form_bootstrap.rb

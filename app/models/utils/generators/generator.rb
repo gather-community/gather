@@ -45,6 +45,13 @@ module Utils
         end
         hash.keys
       end
+
+      def in_community_timezone
+        tz = Time.zone
+        Time.zone = community.settings.time_zone
+        yield
+        Time.zone = tz
+      end
     end
   end
 end

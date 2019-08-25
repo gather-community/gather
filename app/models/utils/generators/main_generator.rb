@@ -7,7 +7,7 @@ module Utils
     class MainGenerator < Generator
       include ActiveModel::Model
 
-      attr_accessor :cmty_name, :slug, :admin_attrs, :sample_data, :photos, :cluster, :community, :generators
+      attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators
 
       def generate
         ActionMailer::Base.perform_deliveries = false
@@ -24,20 +24,12 @@ module Utils
       private
 
       def generate_data_and_handle_errors
-        create_admin
         build_generators
         generators[:meals].generate_formula_and_roles # We need these even if not doing sample data.
         generators.each_value(&:generate_samples) if sample_data
       rescue StandardError => error
         generators.each_value(&:cleanup_on_error)
         raise error
-      end
-
-      def create_admin
-        household = Household.create!(community: community, name: admin_attrs[:last_name])
-        super_admin = admin_attrs.delete(:super_admin)
-        admin = User.create!(admin_attrs.merge(household: household, dont_require_phone: true))
-        admin.add_role(super_admin ? :super_admin : :admin)
       end
 
       def build_generators
@@ -49,13 +41,6 @@ module Utils
         )
         generators[:statements] = StatementGenerator.new(community: community)
         generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements])
-      end
-
-      def in_community_timezone
-        tz = Time.zone
-        Time.zone = community.settings.time_zone
-        yield
-        Time.zone = tz
       end
     end
   end

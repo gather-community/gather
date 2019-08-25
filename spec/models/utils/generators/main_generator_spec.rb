@@ -16,9 +16,8 @@ describe Utils::Generators::MainGenerator do
       cluster = described_class.new(
         cmty_name: "Foo Community",
         slug: "foo",
-        admin_attrs: {email: "admin@example.com", first_name: "John", last_name: "Doe", super_admin: false},
         sample_data: true,
-        photos: false
+        photos: true
       ).generate
     end.to change { ActionMailer::Base.deliveries.size }.by(0)
 
@@ -31,8 +30,8 @@ describe Utils::Generators::MainGenerator do
       community = cluster.communities[0]
       expect(cluster.name).to eq("Foo Community")
       expect(community.name).to eq("Foo Community")
-      expect(User.with_role(:admin).count).to eq(1)
-      expect(User.with_role(:super_admin).count).to eq(0)
+      expect(User.with_role(:admin).count).to be_zero
+      expect(User.with_role(:super_admin).count).to be_zero
       expect(User.count).to be > 10
       expect(Dir[Rails.root.join("public", "system", "test", "**", "*.jpg")].size).to be > 10
 

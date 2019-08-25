@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Utils
-  module FakeData
+  module Generators
     class PeopleGenerator < Generator
       attr_accessor :community, :households, :users, :photos
 

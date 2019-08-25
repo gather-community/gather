@@ -2,7 +2,7 @@
 
 namespace :db do
   task new_cluster: :environment do
-    Utils::FakeData::MainGenerator.new(
+    Utils::Generators::MainGenerator.new(
       cmty_name: ENV["CLUSTER"] || "Foo Community",
       slug: ENV["SLUG"] || "foo",
       admin_attrs: {

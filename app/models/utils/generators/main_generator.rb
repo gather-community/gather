@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Utils
-  module FakeData
+  module Generators
     # Generates a single cluster and community for demo purposes.
     # Creates and sets its own tenant.
     class MainGenerator < Generator

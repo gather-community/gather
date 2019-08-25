@@ -3,7 +3,7 @@
 require "rails_helper"
 require "fileutils"
 
-describe Utils::FakeData::MainGenerator do
+describe Utils::Generators::MainGenerator do
   before do
     FileUtils.rm_rf(Rails.root.join("public", "system", "test"))
   end

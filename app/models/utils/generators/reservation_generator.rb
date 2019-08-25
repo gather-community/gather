@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Utils
-  module FakeData
+  module Generators
     class ReservationGenerator < Generator
       attr_accessor :resource_map, :community, :data
 

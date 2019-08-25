@@ -51,6 +51,7 @@ module Utils
             email = "#{first_name}#{rand(10_000_000..99_999_999)}@example.com"
 
             build(:user,
+              :with_random_password,
               fake: true,
               household: household,
               first_name: first_name,
@@ -74,7 +75,7 @@ module Utils
             age = File.basename(path, ".jpg").to_i
             next if age >= 16
             bday = Faker::Date.birthday(age, age + 1)
-            build(:user, :child,
+            build(:user, :child, :with_random_password,
               fake: true,
               household: household,
               first_name: Faker::Name.unisex_name,

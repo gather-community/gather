@@ -62,5 +62,10 @@ FactoryBot.define do
     trait :pending_reconfirmation do
       unconfirmed_email { "newemail@example.com" }
     end
+
+    trait :with_random_password do
+      password { People::PasswordGenerator.instance.generate }
+      password_confirmation { password }
+    end
   end
 end

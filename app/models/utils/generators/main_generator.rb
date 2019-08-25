@@ -3,7 +3,7 @@
 module Utils
   module Generators
     # Generates a single cluster and community for demo purposes.
-    # Creates and sets its own tenant.
+    # Creates and sets its own tenant. Suppresses all emails.
     class MainGenerator < Generator
       include ActiveModel::Model
 

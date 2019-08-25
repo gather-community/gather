@@ -8,14 +8,19 @@ describe Utils::Generators::MainGenerator do
     FileUtils.rm_rf(Rails.root.join("public", "system", "test"))
   end
 
-  it "should run and destroy cleanly", :without_tenant do
-    cluster = described_class.new(
-      cmty_name: "Foo Community",
-      slug: "foo",
-      admin_attrs: {email: "admin@example.com", first_name: "John", last_name: "Doe", super_admin: false},
-      sample_data: true,
-      photos: true
-    ).generate
+  # Don't delay jobs so that any mails would get sent immediately
+  it "should run and destroy cleanly", :without_tenant, :dont_delay_jobs do
+    cluster = nil
+
+    expect do
+      cluster = described_class.new(
+        cmty_name: "Foo Community",
+        slug: "foo",
+        admin_attrs: {email: "admin@example.com", first_name: "John", last_name: "Doe", super_admin: false},
+        sample_data: true,
+        photos: false
+      ).generate
+    end.to change { ActionMailer::Base.deliveries.size }.by(0)
 
     expect(Cluster.count).to eq(1)
 

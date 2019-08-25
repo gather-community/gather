@@ -17,9 +17,10 @@ describe Utils::Generators::AdminGenerator, :without_tenant, :dont_delay_jobs do
       # admin generation should handle its own tenant setting so do it outside of block
       expect(admin.roles.map(&:name)).to include("super_admin")
       ActsAsTenant.with_tenant(cluster) do
+        expect(admin.password).not_to be_blank
+        expect(admin).to be_confirmed
         expect(User.with_role(:admin).count).to eq(0)
         expect(User.with_role(:super_admin).count).to eq(1)
-        expect(admin.password).not_to be_blank
       end
     end
   end
@@ -33,6 +34,7 @@ describe Utils::Generators::AdminGenerator, :without_tenant, :dont_delay_jobs do
       ActsAsTenant.with_tenant(cluster) do
         expect(ActionMailer::Base.deliveries.last.subject).to eq("Instructions for Signing in to Gather")
         expect(admin.roles.map(&:name)).not_to include("super_admin")
+        expect(admin).not_to be_confirmed
         expect(User.with_role(:admin).count).to eq(1)
         expect(User.with_role(:super_admin).count).to eq(0)
       end

@@ -60,6 +60,11 @@ describe Billing::StatementPolicy do
       end
     end
 
+    context "cluster_admin" do
+      let(:actor) { cluster_admin }
+      it { is_expected.to contain_exactly(statement1, statement2, statement3, statement4) }
+    end
+
     context "admin" do
       let(:actor) { admin }
       it_behaves_like "returns statements from community or household"

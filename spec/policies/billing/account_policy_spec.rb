@@ -64,6 +64,11 @@ describe Billing::AccountPolicy do
       end
     end
 
+    context "cluster_admin" do
+      let(:actor) { cluster_admin }
+      it { is_expected.to contain_exactly(account1, account2, account3, account4) }
+    end
+
     context "admin" do
       let(:actor) { admin }
       it_behaves_like :admin_or_biller

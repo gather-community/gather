@@ -4,7 +4,9 @@ module Billing
   class BillingPolicy < ApplicationPolicy
     class Scope < Scope
       def resolve
-        if active_admin_or?(:biller)
+        if active_cluster_admin?
+          scope
+        elsif active_admin_or?(:biller)
           scope.for_community_or_household(user.community, user.household)
         else
           scope.for_household(user.household)

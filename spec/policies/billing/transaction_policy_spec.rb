@@ -44,6 +44,11 @@ describe Billing::TransactionPolicy do
       end
     end
 
+    context "cluster_admin" do
+      let(:actor) { cluster_admin }
+      it { is_expected.to contain_exactly(transaction1, transaction2, transaction3, transaction4) }
+    end
+
     context "admin" do
       let(:actor) { admin }
       it_behaves_like :admin_or_biller

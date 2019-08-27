@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Utils
-  module FakeData
+  module Generators
     # Generates fake meal data
     class MealGenerator < Generator
       attr_accessor :community, :data, :formula, :statement_gen, :locations, :creator, :households, :adults

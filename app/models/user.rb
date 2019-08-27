@@ -16,7 +16,7 @@ class User < ApplicationRecord
   acts_as_tenant :cluster
   rolify
 
-  attr_accessor :changing_password
+  attr_accessor :changing_password, :dont_require_phone
   alias changing_password? changing_password
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
@@ -94,7 +94,7 @@ class User < ApplicationRecord
 
   validates :password, confirmation: true
   validate :household_present
-  validate :at_least_one_phone, if: ->(u) { u.new_record? }
+  validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
 
   has_attached_file :photo,

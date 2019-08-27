@@ -54,7 +54,9 @@ Follow these steps to setup a development environment for Gather.
     1. Run `rake db:create` to create `gather_development` and `gather_test` databases.
     1. Run `rake db:schema:load` to create the schema in both databases.
 1. Create some fake data and a user so you can sign in
-    1. Run `rake fake:data` to add one cluster, one community, and a full complement of fake data. This command will also add a user with superadmin privileges with the Gmail address you entered in `settings.local.yml`.
+    1. Run:
+            rake db:new_cluster ADMIN_FNAME="Your" ADMIN_LNAME="Name" ADMIN_EMAIL="you@example.com" SUPER_ADMIN=y
+        to add one cluster, one community, and a full complement of fake data. This command will also add a user with superadmin privileges with the Gmail address you entered in `settings.local.yml`.
 1. Run the tests
     1. Run `bundle exec rspec`.
     1. All tests should pass.

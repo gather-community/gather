@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Utils
-  module FakeData
+  module Generators
     class ResourceGenerator < Generator
       attr_accessor :community, :resource_data, :resource_map, :photos
 
@@ -17,6 +19,10 @@ module Utils
 
       def resources
         resource_map.values
+      end
+
+      def cleanup_on_error
+        resources&.each { |u| u.photo&.destroy }
       end
 
       private

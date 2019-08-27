@@ -1,7 +1,17 @@
+# frozen_string_literal: true
+
 module Utils
-  module FakeData
+  module Generators
     class Generator
       include FactoryBot::Syntax::Methods
+
+      def generate_samples
+        # Implemented optionally by subclasses
+      end
+
+      def cleanup_on_error
+        # Implemented optionally by subclasses
+      end
 
       protected
 
@@ -34,6 +44,13 @@ module Utils
           break if hash.size == size
         end
         hash.keys
+      end
+
+      def in_community_timezone
+        tz = Time.zone
+        Time.zone = community.settings.time_zone
+        yield
+        Time.zone = tz
       end
     end
   end

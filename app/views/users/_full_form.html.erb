@@ -103,7 +103,7 @@
     <% end %>
 
     <%= form_actions do %>
-      <% if @user.new_record? %>
+      <% if @user.new_record? && @user.adult? %>
         <%= f.button :secondary %>
         <%= f.button :primary, :save_and_invite, name: "save_and_invite" %>
       <% else %>

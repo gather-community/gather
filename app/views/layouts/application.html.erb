@@ -141,7 +141,7 @@
 
   <%= javascript_tag do %>
     $(function() {
-      new Gather.Views.AddToHomeScreenView({el: '.add-to-home'});
+      new Gather.Views.AddToHomeScreenView({el: '.add-to-home', host: <%=json Settings.url.host %>});
     });
   <% end %>
 </body>

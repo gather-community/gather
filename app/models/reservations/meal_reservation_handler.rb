@@ -14,32 +14,16 @@ module Reservations
     # Builds the reservation associated with the meal. Deletes any previous reservations.
     # Builds, not creates, because we want to see if validation passes first.
     def build_reservations
-      dirty = meal.new_record? || meal.will_save_change_to_served_at? || meal.will_save_change_to_title?
-      prefix = "Meal:"
-      title = truncate(meal.decorate.title_or_no_title,
-        length: ::Reservations::Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
-
       current_reservations = []
-
       meal.resourcings.each do |resourcing|
         reservation = meal.reservations.detect { |r| r.resource == resourcing.resource }
-
         # Don't adjust existing reservations unless something important has changed.
-        if reservation.nil? || dirty
+        if reservation.nil? || meal_dirty?
           reservation ||= meal.reservations.build(resource: resourcing.resource)
-          reservation.assign_attributes(
-            reserver: meal.creator,
-            name: "#{prefix} #{title}",
-            kind: "_meal",
-            starts_at: starts_at = meal.served_at - resourcing.prep_time.minutes,
-            ends_at: starts_at + resourcing.total_time.minutes,
-            guidelines_ok: "1"
-          )
-
+          reservation.assign_attributes(reservation_attributes(resourcing))
         end
         current_reservations << reservation
       end
-
       meal.reservations.destroy(*(meal.reservations - current_reservations))
     end
 
@@ -49,11 +33,7 @@ module Reservations
       meal.reservations.each do |reservation|
         next if reservation.valid?
         errors = reservation.errors.map do |attrib, msg|
-          if attrib == :base
-            msg
-          else
-            "#{Reservation.human_attribute_name(attrib)}: #{msg}"
-          end
+          attrib == :base ? msg : "#{Reservation.human_attribute_name(attrib)}: #{msg}"
         end.join(", ")
         meal.errors.add(:base,
           "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
@@ -64,9 +44,9 @@ module Reservations
     # Validates that changes to the reservation are valid with respect to the meal.
     def validate_reservation(reservation)
       return if meal.served_at.nil?
-      if reservation.starts_at.try(:>, meal.served_at)
+      if reservation.starts_at&.>(meal.served_at)
         reservation.errors.add(:starts_at, :after_meal_time, time: meal_time)
-      elsif reservation.ends_at.try(:<, meal.served_at)
+      elsif reservation.ends_at&.<(meal.served_at)
         reservation.errors.add(:ends_at, :before_meal_time, time: meal_time)
       end
     end
@@ -83,6 +63,30 @@ module Reservations
     end
 
     private
+
+    def reservation_attributes(resourcing)
+      starts_at = meal.served_at - resourcing.prep_time.minutes
+      {
+        reserver: meal.creator,
+        name: reservation_name,
+        kind: "_meal",
+        starts_at: starts_at,
+        ends_at: starts_at + resourcing.total_time.minutes,
+        guidelines_ok: "1"
+      }
+    end
+
+    def meal_dirty?
+      @meal_dirty ||= meal.new_record? || meal.will_save_change_to_served_at? ||
+        meal.will_save_change_to_title?
+    end
+
+    def reservation_name
+      prefix = "Meal:"
+      title = truncate(meal.decorate.title_or_no_title,
+        length: Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+      "#{prefix} #{title}"
+    end
 
     def settings
       @settings ||= meal.community.settings.reservations.meals

@@ -16,13 +16,15 @@ module Calendars
         work?(assignment) ? "Work_Assignment" : "Meals_Assignment"
       end
 
-      def events_for_object(assignment)
-        if assignment.date_time? || assignment.elapsed_time <= 1.day
-          super
-        else
-          # For multi-day date_only shifts, we include two all-day events,
-          # one for the start of the interval and one for the end.
-          [multi_day_start_event(assignment), multi_day_end_event(assignment)]
+      def events_for_objects(assignments)
+        assignments.flat_map do |assignment|
+          if assignment.date_time? || assignment.elapsed_time <= 1.day
+            super([assignment])
+          else
+            # For multi-day date_only shifts, we include two all-day events,
+            # one for the start of the interval and one for the end.
+            [multi_day_start_event(assignment), multi_day_end_event(assignment)]
+          end
         end
       end
 

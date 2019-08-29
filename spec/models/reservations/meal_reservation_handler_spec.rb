@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Reservations::MealReservationHandler do
   let(:community) { Defaults.community }
   let(:resources) { create_list(:resource, 2) }
-  let(:meal) { build(:meal, :with_menu, community: community, title: "A very very very long title",
-    resources: resources, served_at: "2017-01-01 12:00") }
+  let(:meal) do
+    build(:meal, :with_menu, community: community, title: "A very very very long title",
+                             resources: resources, served_at: "2017-01-01 12:00")
+  end
   let(:handler) { described_class.new(meal) }
   let(:handler2) { described_class.new(meal) }
 
@@ -15,34 +19,37 @@ describe Reservations::MealReservationHandler do
   end
 
   describe "build_reservations" do
-    before do
-      # Set custom times for second resourcing.
-      meal.resourcings[1].prep_time = 60
-      meal.resourcings[1].total_time = 90
-      handler.build_reservations
-    end
+    describe "on create" do
+      before do
+        # Set custom times for second resourcing.
+        meal.resourcings[1].prep_time = 60
+        meal.resourcings[1].total_time = 90
+        handler.build_reservations
+      end
 
-    context "with clear calendars" do
-      it "should initialize reservations on both resources" do
-        reservations = meal.reservations
-        expect(reservations.map(&:resource)).to contain_exactly(*resources)
-        expect(reservations.map(&:starts_at)).to eq [
-          Time.zone.parse("2017-01-01 10:30"),
-          Time.zone.parse("2017-01-01 11:00")
-        ]
-        expect(reservations.map(&:ends_at)).to eq [
-          Time.zone.parse("2017-01-01 14:00"),
-          Time.zone.parse("2017-01-01 12:30")
-        ]
-        expect(reservations.map(&:kind).uniq).to eq ["_meal"]
-        expect(reservations.map(&:guidelines_ok).uniq).to eq ["1"]
-        expect(reservations.map(&:reserver).uniq).to eq [meal.creator]
-        expect(reservations[0].name).to eq "Meal: A very very ver..."
+      context "with clear calendars" do
+        it "should initialize reservations on both resources" do
+          reservations = meal.reservations
+          expect(reservations.map(&:resource)).to contain_exactly(*resources)
+          expect(reservations.map(&:starts_at)).to eq([
+            Time.zone.parse("2017-01-01 10:30"),
+            Time.zone.parse("2017-01-01 11:00")
+          ])
+          expect(reservations.map(&:ends_at)).to eq([
+            Time.zone.parse("2017-01-01 14:00"),
+            Time.zone.parse("2017-01-01 12:30")
+          ])
+          expect(reservations.map(&:kind).uniq).to eq(["_meal"])
+          expect(reservations.map(&:guidelines_ok).uniq).to eq(["1"])
+          expect(reservations.map(&:reserver).uniq).to eq([meal.creator])
+          expect(reservations[0].name).to eq("Meal: A very very ver...")
+        end
       end
     end
 
     context "on update" do
       before do
+        meal.build_reservations
         meal.save!
       end
 
@@ -53,15 +60,15 @@ describe Reservations::MealReservationHandler do
           meal.resources = [resource2]
           handler.build_reservations
           meal.save!
-          expect(meal.reservations.reload.first.resource).to eq resource2
-          expect(meal.reservations.size).to eq 1
+          expect(meal.reservations.reload.first.resource).to eq(resource2)
+          expect(meal.reservations.size).to eq(1)
         end
 
         it "should handle validation errors" do
           # Create reservation that will conflict when meal resource changes
           meal_time = meal.served_at
           create(:reservation, resource: resource2,
-            starts_at: meal_time, ends_at: meal_time + 30.minutes)
+                               starts_at: meal_time, ends_at: meal_time + 30.minutes)
 
           meal.resources = [resource2]
           handler.build_reservations
@@ -79,8 +86,8 @@ describe Reservations::MealReservationHandler do
           meal.title = "Nosh time"
           handler.build_reservations
           meal.save!
-          expect(meal.reservations.reload.first.name).to eq "Meal: Nosh time"
-          expect(meal.reservations.first.note).to eq "Foo"
+          expect(meal.reservations.reload.first.name).to eq("Meal: Nosh time")
+          expect(meal.reservations.first.note).to eq("Foo")
         end
       end
 
@@ -93,11 +100,11 @@ describe Reservations::MealReservationHandler do
           end
 
           it "should delete and replace previous reservations" do
-            expect(Reservations::Reservation.count).to eq 2
-            expect(meal.reservations.map(&:starts_at)).to eq [
-              Time.zone.parse("2017-01-01 11:30"),
-              Time.zone.parse("2017-01-01 12:00")
-            ]
+            expect(Reservations::Reservation.count).to eq(2)
+            expect(meal.reservations.map(&:starts_at)).to eq([
+              Time.zone.parse("2017-01-01 10:30"),
+              Time.zone.parse("2017-01-01 10:30")
+            ])
           end
         end
 
@@ -105,7 +112,7 @@ describe Reservations::MealReservationHandler do
           before do
             new_meal_time = meal.served_at + 1.day
             create(:reservation, resource: resources[1],
-              starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
+                                 starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
             meal.served_at = new_meal_time
             handler.build_reservations
           end
@@ -116,12 +123,30 @@ describe Reservations::MealReservationHandler do
           end
         end
       end
+
+      context "with no meal time or title change or resource change" do
+        let!(:new_time) { Time.zone.parse("2017-01-01 10:40") }
+
+        before do
+          # Perturb to non-default time so we can test that reservations are not rebuilt.
+          meal.reservations[0].update!(starts_at: new_time)
+        end
+
+        it "should not rebuild reservations" do
+          meal.capacity += 1
+          handler.build_reservations
+          meal.save!
+          expect(meal.reservations[0].reload.starts_at).to eq(new_time)
+        end
+      end
     end
   end
 
   describe "validate_meal" do
-    let!(:conflicting_reservation) { create(:reservation, resource: resources[0],
-      starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00") }
+    let!(:conflicting_reservation) do
+      create(:reservation, resource: resources[0],
+                           starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00")
+    end
 
     before do
       handler.build_reservations
@@ -149,7 +174,7 @@ describe Reservations::MealReservationHandler do
       end
 
       it "should not set error" do
-        expect(reservation.errors.any?).to be false
+        expect(reservation.errors.any?).to be(false)
       end
     end
 
@@ -160,8 +185,8 @@ describe Reservations::MealReservationHandler do
       end
 
       it "should set error" do
-        expect(reservation.errors[:starts_at]).to eq ["must be at or before the meal time (12:00pm)"]
-        expect(reservation.errors[:ends_at]).to eq []
+        expect(reservation.errors[:starts_at]).to eq(["must be at or before the meal time (12:00pm)"])
+        expect(reservation.errors[:ends_at]).to eq([])
       end
     end
 
@@ -172,8 +197,8 @@ describe Reservations::MealReservationHandler do
       end
 
       it "should set error" do
-        expect(reservation.errors[:starts_at]).to eq []
-        expect(reservation.errors[:ends_at]).to eq ["must be after the meal time (12:00pm)"]
+        expect(reservation.errors[:starts_at]).to eq([])
+        expect(reservation.errors[:ends_at]).to eq(["must be after the meal time (12:00pm)"])
       end
     end
 
@@ -212,14 +237,14 @@ describe Reservations::MealReservationHandler do
 
     it "should change the resourcing's prep time and total time" do
       rsng = meal.resourcings[0].reload
-      expect(rsng.prep_time).to eq 60
-      expect(rsng.total_time).to eq 195
+      expect(rsng.prep_time).to eq(60)
+      expect(rsng.total_time).to eq(195)
     end
   end
 
   def expect_overlap_error(resource)
     expect(meal).not_to be_valid
-    expect(meal.errors[:base]).to eq ["The following error(s) occurred in making a #{resource.name} "\
-      "reservation for this meal: This reservation overlaps an existing one."]
+    expect(meal.errors[:base]).to eq(["The following error(s) occurred in making a #{resource.name} "\
+      "reservation for this meal: This reservation overlaps an existing one."])
   end
 end

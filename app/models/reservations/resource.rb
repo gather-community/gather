@@ -15,7 +15,8 @@ module Reservations
     belongs_to :community
     has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
-    has_many :reservations, class_name: "Reservations::Reservation", dependent: :destroy
+    has_many :reservations, inverse_of: :resource, class_name: "Reservations::Reservation",
+                            dependent: :destroy
 
     has_attached_file :photo,
       styles: {thumb: "220x165#"},

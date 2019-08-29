@@ -11,8 +11,8 @@ module Reservations
 
     belongs_to :reserver, class_name: "User"
     belongs_to :sponsor, class_name: "User"
-    belongs_to :resource
-    belongs_to :meal, class_name: "Meals::Meal"
+    belongs_to :resource, inverse_of: :reservations
+    belongs_to :meal, class_name: "Meals::Meal", inverse_of: :reservations
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }

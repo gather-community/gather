@@ -30,9 +30,11 @@ module Meals
                                    dependent: :destroy
 
     # Resources are chosen by the user. Reservations are then automatically created.
+    # Deterministic orderings are for specs.
     has_many :resourcings, class_name: "Reservations::Resourcing", dependent: :destroy
-    has_many :resources, class_name: "Reservations::Resource", through: :resourcings
-    has_many :reservations, class_name: "Reservations::Reservation", autosave: true, dependent: :destroy
+    has_many :resources, -> { order(:id) }, class_name: "Reservations::Resource", through: :resourcings
+    has_many :reservations, -> { order(:id) }, class_name: "Reservations::Reservation", autosave: true,
+                                               dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
     scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }

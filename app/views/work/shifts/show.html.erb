@@ -11,7 +11,7 @@
     <dt><%= icon_tag("home") %></dt><dd><%= shift.requester_name %></dd><br/>
   <% end %>
   <% if shift.meal? %>
-    <dt><%= icon_tag("cutlery") %></dt><dd><%= link_to(meal.title_or_no_title, meal.object) %></dd><br/>
+    <dt><%= icon_tag("cutlery") %></dt><dd><%= link_to(meal.title_or_no_title, meal_path(meal.object)) %></dd><br/>
   <% end %>
   <dt><%= icon_tag("user") %></dt><dd><%= shift.assginees_with_empty_slots(style: :comma_sep) %></dd><br/>
   <% shift.reminders.each do |reminder| %>

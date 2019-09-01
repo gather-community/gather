@@ -33,7 +33,7 @@ Gather.Views.AddToHomeScreenView = Backbone.View.extend
   optOut: (event) ->
     event.preventDefault()
     @$el.hide()
-    document.cookie += "dontAddToHomeScreen=1;domain=.#{@options.host};" +
+    document.cookie = "dontAddToHomeScreen=1;domain=.#{@options.host};" +
       "path=/;expires=Tue, 19 Jan 2038 03:14:07 UTC;"
 
   optedOut: ->

@@ -12,7 +12,7 @@ module Calendars
       MAX_EVENT_AGE = 1.year
 
       attr_accessor :user, :events
-      
+
       delegate :community, to: :user
       delegate :calendar_token, to: :community, prefix: true
 
@@ -28,14 +28,16 @@ module Calendars
       end
 
       def generate
-        self.events = objects.flat_map { |o| events_for_object(o) }
+        self.events = events_for_objects(objects)
         IcalGenerator.new(self).generate
       end
 
       protected
 
-      def events_for_object(object)
-        [Event.new(basic_event_attribs(object))]
+      def events_for_objects(objects)
+        objects.map do |object|
+          Event.new(basic_event_attribs(object))
+        end
       end
 
       def basic_event_attribs(object)

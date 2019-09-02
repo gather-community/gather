@@ -1,0 +1,3 @@
+<% content_for(:title, "Terms & Conditions") %>
+
+<%= safe_render_markdown(File.read(Rails.root.join("config/locales/en/terms.md")), autolink: false) %>

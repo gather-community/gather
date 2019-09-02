@@ -29,7 +29,7 @@ class LandingController < ApplicationController
   end
 
   def public_static
-    render_not_found unless %w[privacy-policy markdown].include?(params[:page])
+    render_not_found unless %w[privacy-policy markdown terms].include?(params[:page])
     render(params[:page].tr("-", "_"))
   end
 end

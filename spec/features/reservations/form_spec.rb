@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "reservation form" do
   let(:user) { create(:user) }
-  let(:resource) { create(:resource) }
 
   around { |ex| with_user_home_subdomain(user) { ex.run } }
 
@@ -11,6 +12,7 @@ feature "reservation form" do
   end
 
   context "with pre_notice" do
+    let(:resource) { create(:resource) }
     let!(:protocol) { create(:reservation_protocol, resources: [resource], pre_notice: "May be bed bugs!") }
 
     scenario "should show warning" do

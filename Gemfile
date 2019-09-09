@@ -37,6 +37,7 @@ gem "kaminari", "~> 0.16"
 gem "momentjs-rails", "~> 2.9", git: "https://github.com/derekprior/momentjs-rails"
 gem "mustache", "~> 1.0"
 gem "omniauth-google-oauth2", "~> 0.6"
+gem "omniauth-rails_csrf_protection", "~> 0.1" # Related to CVE 2015 9284
 gem "paperclip", git: "https://github.com/sassafrastech/paperclip", branch: "tmp_uploads"
 gem "pg", "~> 0.18"
 gem "phony_rails", "~> 0.12"

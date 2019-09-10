@@ -11,18 +11,28 @@ describe AccountMailer do
   let!(:billers) { create_list(:biller, 2, community: community) }
 
   shared_examples_for "statement email" do
-    it "sets the right recipients" do
-      expect(mail.to).to match_array(users.map(&:email))
+    context "with active users" do
+      it "sets the right recipients" do
+        expect(mail.to).to match_array(users.map(&:email))
+      end
+
+      it "sets the right reply to" do
+        expect(mail.reply_to).to match_array(billers.map(&:email))
+      end
+
+      it "renders the correct name and URL in the body" do
+        expect(mail.body.encoded).to match("Dear #{household.name} Household,")
+        expect(mail.body.encoded).to include("The amount due is $9.99.")
+        expect(mail.body.encoded).to contain_community_url(statement.community, "/statements/#{statement.id}")
+      end
     end
 
-    it "sets the right reply to" do
-      expect(mail.reply_to).to match_array(billers.map(&:email))
-    end
+    context "with inactive user" do
+      before { users[0].deactivate }
 
-    it "renders the correct name and URL in the body" do
-      expect(mail.body.encoded).to match("Dear #{household.name} Household,")
-      expect(mail.body.encoded).to include("The amount due is $9.99.")
-      expect(mail.body.encoded).to contain_community_url(statement.community, "/statements/#{statement.id}")
+      it "sends to same recipients anyway unlike most emails" do
+        expect(mail.to).to match_array(users.map(&:email))
+      end
     end
   end
 

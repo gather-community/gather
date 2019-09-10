@@ -16,6 +16,17 @@ describe "general mailer" do
     end
   end
 
+  describe "mail to inactive user in active household" do
+    let(:statement) { create(:statement, total_due: 9.99) }
+    let(:user) { create(:user).tap(&:deactivate) }
+    let(:meal) { create(:meal, head_cook: user) }
+    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
+
+    it "doesn't send" do
+      expect(mail).to be_nil
+    end
+  end
+
   describe "mail to child" do
     let(:guardians) { create_list(:user, 2) }
     let(:meal) { create(:meal, head_cook: teen) }

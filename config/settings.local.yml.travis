@@ -7,4 +7,5 @@ secret_key_base: 64a09c05e3fcbc96c7d4fc35d83b1c6edb272e1ab7232c8f6332d560652409d
 
 email:
   from: Gather <gather@gather.localhost.tv>
+  no_reply: No-Reply <noreply@gather.localhost.tv>
   webmaster: someone@example.com

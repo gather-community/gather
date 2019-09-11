@@ -48,4 +48,15 @@ describe "general mailer" do
       end
     end
   end
+
+  describe "mail with no reply_to" do
+    let(:cook) { create(:user) }
+    let(:meal) { create(:meal, head_cook: cook) }
+    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
+
+    it "sets reply_to to no reply address" do
+      expect(mail.reply_to).to include(Settings.email.no_reply.match(/<(.+)>/)[1])
+      expect(mail.from).to include(Settings.email.from.match(/<(.+)>/)[1])
+    end
+  end
 end

@@ -21,6 +21,11 @@ describe AuthMailer do
     context "with regular user" do
       let(:user) { create(:user) }
 
+      it "sets the right from and reply_to" do
+        expect(mail.reply_to).to include(Settings.email.no_reply.match(/<(.+)>/)[1])
+        expect(mail.from).to include(Settings.email.from.match(/<(.+)>/)[1])
+      end
+
       it "sets the right recipients" do
         expect(mail.to).to eq([user.email])
       end

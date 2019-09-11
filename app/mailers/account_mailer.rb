@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Sends emails related to billing/accounts.
 class AccountMailer < ApplicationMailer
   attr_reader :community
 
@@ -14,7 +17,7 @@ class AccountMailer < ApplicationMailer
   private
 
   def statement_mail(params)
-    mail(params.merge(to: @household, reply_to: biller_emails))
+    mail(params.merge(to: @household, reply_to: biller_emails, include_inactive: true))
   end
 
   def biller_emails

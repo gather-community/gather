@@ -7,6 +7,8 @@
 # * User must have email unless child or inactive
 # * Email changes must be reconfirmed if user is already confirmed
 # * Signing in with invitation code counts as confirmation since it proves email ownership
+# * Children can have emails (for e.g. reminders) but can't be confirmed
+#   (this implies childrens' emails are NOT secure, but that should be OK)
 #
 # Sample Flows:
 # 1. Adult created with unconfirmed email, signs in with invite, is confirmed

@@ -11,6 +11,7 @@ feature "user show" do
     login_as(actor, scope: :user)
   end
 
+  # See the User class for more documentation on email confirmation.
   context "pending reconfirmation" do
     let(:actor) { create(:user, :pending_reconfirmation) }
 

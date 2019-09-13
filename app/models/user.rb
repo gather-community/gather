@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
 # Users are the key to the whole thing!
+
+# Email confirmation info:
+# Rules:
+# * User must have email unless child or inactive
+# * Email changes must be reconfirmed if user is already confirmed
+# * Signing in with invitation code counts as confirmation since it proves email ownership
+#
+# Sample Flows:
+# 1. Adult created with unconfirmed email, signs in with invite, is confirmed
+# 2. Adult created with unconfirmed email, admin changes email before sign-in, email change doesn't need
+#    reconfirmation because not confirmed yet, user later signs in with invite, is confirmed
+# 3. Confirmed adult deactivated, email removed (this unsets confirmation flag), new email added, user
+#    reactivated, sent sign in invite, signs in, is confirmed
+# 4. Unconfirmed adult deactivated, email removed, same as above
+# 5. Unconfirmed adult deactivated, email stays in place, reactivated, same as above
+# 6. Child created with no email, not confirmed, can't sign in, later converted to adult, email must
+#    be added, still unconfirmed, sent sign in invite, etc.
+# 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
+#    sign in invite, signs in, is confirmed
 class User < ApplicationRecord
   include PhotoDestroyable
   include Phoneable

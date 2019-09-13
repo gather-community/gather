@@ -2,6 +2,7 @@
 
 require "rails_helper"
 
+# See the User class for more documentation on email confirmation.
 feature "email reconfirmation", js: true do
   let(:actor) { create(:user, email: "old@example.com") }
 

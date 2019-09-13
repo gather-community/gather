@@ -264,6 +264,7 @@ class UsersController < ApplicationController
     # However, on update, there is no need to reconfirm (storing new email in unconfirmed_email), and doing so
     # will result in the invite going to the wrong email if e.g. the admin makes a mistake entering the
     # email of a new user and then goes back and corrects it.
+    # See the User class for more documentation on email confirmation.
     return if @user.confirmed?
     @user.skip_confirmation_notification!
     @user.skip_reconfirmation!

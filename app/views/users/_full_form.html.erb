@@ -17,7 +17,7 @@
 
     <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) if @user.child? %>
 
-    <%= f.input :email, required: @user.adult? %>
+    <%= f.input :email, required: @user.email_required? %>
     <%= f.input :google_email, disabled: !policy(@user).administer? %>
     <%= f.input :phone, required: @user.adult? do %>
       <div class="nested-fields subfields">

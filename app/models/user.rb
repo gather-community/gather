@@ -102,7 +102,7 @@ class User < ApplicationRecord
 
   # Contact email does not have to be unique because some people share them (grrr!)
   validates :email, format: Devise.email_regexp, allow_blank: true
-  validates :email, presence: true, if: :adult?
+  validates :email, presence: true, if: :email_required?
   validates :email, uniqueness: true, allow_nil: true
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
                            unless: ->(u) { u.google_email.blank? }
@@ -242,6 +242,10 @@ class User < ApplicationRecord
 
   def adult?
     !child?
+  end
+
+  def email_required?
+    adult?
   end
 
   # Devise method, instantly signs out user if returns false.

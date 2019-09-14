@@ -72,4 +72,27 @@ feature "email reconfirmation", js: true do
       expect(page).not_to have_content("Pending confirmation")
     end
   end
+
+  context "when editing child" do
+    let!(:child) { create(:user, :child, email: "kid@example.com", guardians: [actor]) }
+
+    around do |example|
+      with_user_home_subdomain(actor) { example.run }
+    end
+
+    before do
+      login_as(actor, scope: :user)
+    end
+
+    scenario "should allow change without reconfirmation" do
+      expect do
+        visit(edit_user_path(child))
+        fill_in("Email", with: "kid2@example.com")
+        click_on("Save")
+        expect(page).to have_content("kid2@example.com")
+        expect(page).not_to have_content("kid@example.com")
+        expect(page).not_to have_content("Pending confirmation")
+      end.not_to(change { ActionMailer::Base.deliveries.size })
+    end
+  end
 end

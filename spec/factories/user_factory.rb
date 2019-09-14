@@ -45,6 +45,7 @@ FactoryBot.define do
         guardians { nil }
       end
       child { true }
+      confirmed_at { nil } # Children can't be confirmed.
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

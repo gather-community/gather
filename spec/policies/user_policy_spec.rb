@@ -270,7 +270,7 @@ describe UserPolicy do
       end
 
       context "with guardian" do
-        before { record.update!(child: true, guardians: [create(:user)]) }
+        let(:record) { create(:user, :child) }
         it_behaves_like "forbids all"
       end
 

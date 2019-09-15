@@ -139,7 +139,8 @@ en:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
     reservations/protocol:
-      destroy: "Protocol deleted successfully."
+      success:
+        destroy: "Protocol deleted successfully."
     reservations/resource:
       success:
         activate: "Resource activated successfully."

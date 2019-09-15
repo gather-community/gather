@@ -115,6 +115,23 @@ describe User do
     end
 
     describe "email" do
+      describe "presence" do
+        context "adult" do
+          subject(:user) { build(:user, email: nil) }
+          it { is_expected.to have_errors(email: "can't be blank") }
+        end
+
+        context "child" do
+          subject(:user) { build(:user, :child, email: nil) }
+          it { is_expected.to be_valid }
+        end
+
+        context "inactive adult" do
+          subject(:user) { build(:user, :inactive, email: nil) }
+          it { is_expected.to be_valid }
+        end
+      end
+
       describe "uniqueness" do
         let(:user) { build(:user, email: email).tap(&:validate) }
 

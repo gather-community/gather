@@ -245,7 +245,7 @@ class User < ApplicationRecord
   end
 
   def email_required?
-    adult?
+    adult? && active?
   end
 
   # Devise method, instantly signs out user if returns false.

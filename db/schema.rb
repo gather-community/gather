@@ -582,7 +582,7 @@ ActiveRecord::Schema.define(version: 20190913130403) do
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.check_constraint :users_21791000, "((child = false) OR (confirmed_at IS NULL))"
+    t.check_constraint :children_not_confirmed, "((child = false) OR (confirmed_at IS NULL))"
     t.check_constraint :users_email_presence, "((NOT (child = false)) OR ((email IS NOT NULL) AND ((email)::text !~ '^\\s*$'::text)))"
   end
 

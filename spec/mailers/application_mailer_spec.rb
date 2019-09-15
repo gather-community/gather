@@ -25,16 +25,17 @@ describe ApplicationMailer do
       end
     end
 
-    context "with unconfirmed users" do
+    context "with unconfirmed adults" do
       let(:unconfirmed1) { create(:user, :unconfirmed) }
       let(:unconfirmed2) { create(:user, :unconfirmed) }
       let(:confirmed1) { create(:user) }
       let(:confirmed2) { create(:user) }
+      let(:unconfirmed_child) { create(:user, :child) }
       let(:household) { create(:household, users: [unconfirmed2, confirmed2]) }
-      let(:mail) { SampleMailer.sample([unconfirmed1, confirmed1, household]).deliver_now }
+      let(:mail) { SampleMailer.sample([unconfirmed1, confirmed1, household, unconfirmed_child]).deliver_now }
 
       it "sets the right recipients" do
-        expect(mail.to).to match_array([confirmed1, confirmed2].map(&:email))
+        expect(mail.to).to match_array([confirmed1, confirmed2, unconfirmed_child].map(&:email))
       end
     end
 

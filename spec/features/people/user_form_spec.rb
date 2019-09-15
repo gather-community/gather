@@ -143,9 +143,21 @@ feature "user form", js: true do
       end
     end
 
-    scenario "deactivate/activate/delete" do
+    scenario "deactivate/activate/delete with and without email" do
       visit(edit_path)
       accept_confirm { click_on("Deactivate") }
+      expect_success
+
+      visit(edit_path)
+      fill_in("Email Address", with: "")
+      click_button("Save")
+      expect_success
+
+      visit(edit_path)
+      click_link("reactivate")
+      expect_error("Error during activation: Email Address can't be blank")
+      fill_in("Email Address", with: "foobar@example.com")
+      click_button("Save")
       expect_success
 
       visit(edit_path)

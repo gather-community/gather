@@ -123,33 +123,43 @@ en:
       two_html: "You can %{link}."
       three: "reactivate it"
 
-  successes:
+  deactivatable:
     household:
-      activate: "Household activated successfully."
-      deactivate: "Household deactivated successfully."
-      destroy: "Household deleted successfully."
+      success:
+        activate: "Household activated successfully."
+        deactivate: "Household deactivated successfully."
+        destroy: "Household deleted successfully."
     user:
-      activate: "User activated successfully."
-      deactivate: "User deactivated successfully."
-      destroy: "User deleted successfully."
+      success:
+        activate: "User activated successfully."
+        deactivate: "User deactivated successfully."
+        destroy: "User deleted successfully."
+      error:
+        activate: "Error during activation: %{message}"
+        deactivate: "Error during deactivation: %{message}"
     reservations/protocol:
       destroy: "Protocol deleted successfully."
     reservations/resource:
-      activate: "Resource activated successfully."
-      deactivate: "Resource deactivated successfully."
-      destroy: "Resource deleted successfully."
+      success:
+        activate: "Resource activated successfully."
+        deactivate: "Resource deactivated successfully."
+        destroy: "Resource deleted successfully."
     meals/formula:
-      activate: "Formula activated successfully."
-      deactivate: "Formula deactivated successfully."
-      destroy: "Formula deleted successfully."
+      success:
+        activate: "Formula activated successfully."
+        deactivate: "Formula deactivated successfully."
+        destroy: "Formula deleted successfully."
     meals/role:
-      activate: "Role activated successfully."
-      deactivate: "Role deactivated successfully."
-      destroy: "Role deleted successfully."
+      success:
+        activate: "Role activated successfully."
+        deactivate: "Role deactivated successfully."
+        destroy: "Role deleted successfully."
     work/job:
-      destroy: "Job deleted successfully."
+      success:
+        destroy: "Job deleted successfully."
     work/period:
-      destroy: "Period deleted successfully."
+      success:
+        destroy: "Period deleted successfully."
 
   cocoon:
     add_links:

@@ -132,6 +132,7 @@ en:
     user:
       success:
         activate: "User activated successfully."
+        activate_unconfirmed: "User activated successfully, but they will need an invitation to sign in. Click 'Invite' below to invite them."
         deactivate: "User deactivated successfully."
         destroy: "User deleted successfully."
       error:

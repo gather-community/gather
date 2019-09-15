@@ -143,7 +143,24 @@ feature "user form", js: true do
       end
     end
 
-    scenario "deactivate/activate/delete with and without email" do
+    scenario "deactivate/activate/delete with email" do
+      visit(edit_path)
+      accept_confirm { click_on("Deactivate") }
+      expect_success
+
+      visit(edit_path)
+      click_link("reactivate")
+      expect_success("User activated successfully.")
+
+      visit(edit_path)
+      expect(page).not_to have_content("reactivate")
+      accept_confirm { click_on("Delete") }
+      expect_success
+
+      expect { user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    scenario "deactivate, remove email, add email, reactivate" do
       visit(edit_path)
       accept_confirm { click_on("Deactivate") }
       expect_success
@@ -162,14 +179,8 @@ feature "user form", js: true do
 
       visit(edit_path)
       click_link("reactivate")
-      expect_success
-
-      visit(edit_path)
-      expect(page).not_to have_content("reactivate")
-      accept_confirm { click_on("Delete") }
-      expect_success
-
-      expect { user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect_alert("User activated successfully, but they will need an invitation to sign in. "\
+        "Click 'Invite' below to invite them.")
     end
   end
 

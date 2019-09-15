@@ -277,6 +277,21 @@ describe User do
     end
   end
 
+  describe "confirmation" do
+    # For coverage of most of confirmation behavior, we rely on Devise's tests.
+    # Here we only test things that are non-standard.
+    # A lot of confirmation-related stuff is handled at the controller level and covered in feature specs.
+    describe "unsetting email on confirmed user" do
+      # Only way to unset email on confirmed user is if they're inactive.
+      let(:user) { create(:user, :inactive) }
+
+      it "unsets confirmed flag" do
+        user.update!(email: nil)
+        expect(user.reload).not_to be_confirmed
+      end
+    end
+  end
+
   # Our approach to destruction is to:
   # - Set the policy to only disallow deletions based on what users of various roles should be able
   #   to destroy given various combinations of existing associations.

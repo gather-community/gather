@@ -119,6 +119,7 @@ Devise.setup do |config|
   # before confirming their account.
   #
   # NOTE: We only use the confirmation token for reconfirmation.
+  # See the User class for more documentation on email confirmation.
   config.confirm_within = 1.week
 
   # If true, requires any email changes to be confirmed (exactly the same way as

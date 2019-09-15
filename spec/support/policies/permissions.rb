@@ -27,21 +27,18 @@ shared_context "policy permissions" do
   end
   let(:account) { create(:account, household: create(:household, community: community)) }
   let(:guardian) { user }
-  let(:child) { create(:user, child: true, guardians: [guardian], first_name: "child") }
-  let(:other_child) { create(:user, child: true, guardians: [other_user], first_name: "other_child") }
+  let(:child) { create(:user, :child, guardians: [guardian], first_name: "child") }
+  let(:other_child) { create(:user, :child, guardians: [other_user], first_name: "other_child") }
   let(:child_cmtyB) do
-    create(:user, community: communityB, child: true,
-                  guardians: [user_cmtyB], first_name: "child_cmtyB")
+    create(:user, :child, community: communityB, guardians: [user_cmtyB], first_name: "child_cmtyB")
   end
   let(:child_cmtyX) do
     with_tenant(clusterB) do
-      create(:user, community: communityX, child: true,
-                    guardians: [user_cmtyX], first_name: "child_cmtyX")
+      create(:user, :child, community: communityX, guardians: [user_cmtyX], first_name: "child_cmtyX")
     end
   end
   let(:inactive_child) do
-    create(:user, child: true, guardians: [inactive_user],
-                  deactivated_at: Time.current, first_name: "inactive_child")
+    create(:user, :child, :inactive, guardians: [inactive_user], first_name: "inactive_child")
   end
   let(:admin) { create(:admin, first_name: "admin") }
   let(:admin2) { create(:admin, first_name: "admin2") }

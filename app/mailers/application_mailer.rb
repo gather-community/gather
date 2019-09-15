@@ -52,6 +52,8 @@ class ApplicationMailer < ActionMailer::Base
     # It's ok to send emails to unconfirmed children because they can't log in, and children may still want
     # to get emails.
     # It would probably even be ok to send to unconfirmed adults but just to be safe we don't.
+    # Inactive users may have blank emails, but if they do, they can't be confirmed,
+    # so we exclude them anyway.
     if user.fake? || (user.adult? && !user.confirmed?) || (user.inactive? && !include_inactive)
       nil
     elsif user.child? && user.email.blank? && !via_household

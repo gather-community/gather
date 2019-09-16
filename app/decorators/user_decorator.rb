@@ -7,8 +7,11 @@ class UserDecorator < ApplicationDecorator
     I18n.t("users.greeting", name: name)
   end
 
-  def link(show_inactive: false)
-    h.link_to(full_name(show_inactive: show_inactive), object)
+  def link(highlight: nil, show_cmty_if_foreign: false, show_inactive: false)
+    name = full_name(show_inactive: show_inactive)
+    name << " (#{community_name})" if show_cmty_if_foreign && community != h.current_community
+    name = content_tag(:mark, name) if id == highlight.to_i
+    h.link_to(name, h.user_url(object), class: "user-link")
   end
 
   def full_name(show_inactive: false)

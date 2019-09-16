@@ -15,7 +15,7 @@
         <%= role.title %>
         <%= "[None]" if assignments.empty? %>
         <% assignments.each do |a| %>
-          <div class="job"><%= user_link(a.user) %></div>
+          <div class="job"><%= a.user.decorate.link %></div>
         <% end %>
       </div>
     <% end %>

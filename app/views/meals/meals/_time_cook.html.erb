@@ -6,7 +6,7 @@
   <% if @meal.head_cook.present? %>
     <span class="chunk">
       <%= image_tag("chef-hat.png") %>
-      <%= user_link(@meal.head_cook) %>
+      <%= @meal.head_cook.decorate.link %>
     </span>
   <% end %>
 </div>

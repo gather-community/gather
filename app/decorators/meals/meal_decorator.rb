@@ -83,7 +83,7 @@ module Meals
 
     def worker_links_for_role(role)
       assignments = assignments_by_role[role] || []
-      links = assignments.map { |a| h.user_link(a.user, highlight: h.lenses[:user].value) }
+      links = assignments.map { |a| a.user.decorate.link(highlight: h.lenses[:user].value) }
       links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
     end
 

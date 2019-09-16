@@ -37,7 +37,7 @@
           <%= household.unit_num_and_suffix %>
         </td>
         <td>
-          <%= load_showable_users_and_children_in(household).map{ |u| user_link(u) }.reduce(&sep(", ")) %>
+          <%= load_showable_users_and_children_in(household).map(&:link).reduce(&sep(", ")) %>
         </td>
       </tr>
     <% end %>

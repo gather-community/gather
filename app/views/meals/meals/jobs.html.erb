@@ -13,7 +13,7 @@
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes %>">
         <h4><%= meal_date_time(meal) %></h4>
-        <div><%= meal_link(meal) %> at <%= meal.location_abbrv %></div>
+        <div><%= meal.link %> at <%= meal.location_abbrv %></div>
         <% meal.roles.each do |role| %>
           <div><%= role.title %>: <%= meal.worker_links_for_role(role) %></div>
         <% end %>

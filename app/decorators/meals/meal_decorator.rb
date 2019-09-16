@@ -8,6 +8,10 @@ module Meals
       title || "[No Menu]"
     end
 
+    def link(*url_args)
+      h.link_to(title_or_no_title, h.meal_url(object, *url_args))
+    end
+
     def form_section(section, **options, &block)
       Meals::FormSection.new(self, section, **options, &block).html
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Billing
   class TransactionDecorator < ApplicationDecorator
     delegate_all
@@ -7,9 +9,7 @@ module Billing
     end
 
     def statementable_path
-      if statementable.is_a?(Meals::Meal)
-        h.meal_path(statementable)
-      end
+      h.meal_url(statementable) if statementable.is_a?(Meals::Meal)
     end
   end
 end

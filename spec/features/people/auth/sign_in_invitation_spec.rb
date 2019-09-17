@@ -111,10 +111,10 @@ feature "sign in invitations", js: true do
       click_on("Invite To Sign In")
 
       # Expect question icons on correct users.
-      within(find(:xpath, "//label[text()[contains(., '#{invitee2.name}')]]")) do
+      within(find(:xpath, %(//label[text()[contains(., "#{invitee2.name}")]]))) do
         expect(page).to have_css("i.fa-question-circle")
       end
-      within(find(:xpath, "//label[text()[contains(., '#{invitee1.name}')]]")) do
+      within(find(:xpath, %(//label[text()[contains(., "#{invitee1.name}")]]))) do
         expect(page).not_to have_css("i.fa-question-circle")
       end
 

@@ -130,6 +130,7 @@ class User < ApplicationRecord
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
+  before_save :unconfirm_if_no_email
   before_destroy { photo.destroy }
   after_update { Work::ShiftIndexUpdater.new(self).update }
 
@@ -245,7 +246,7 @@ class User < ApplicationRecord
   end
 
   def email_required?
-    adult?
+    adult? && active?
   end
 
   # Devise method, instantly signs out user if returns false.
@@ -281,5 +282,10 @@ class User < ApplicationRecord
 
   def password_required_and_not_blank?
     password_required? && password.present?
+  end
+
+  def unconfirm_if_no_email
+    # This is currently only applicable if the user is inactive.
+    self.confirmed_at = nil if email.blank?
   end
 end

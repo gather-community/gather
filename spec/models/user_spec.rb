@@ -115,6 +115,23 @@ describe User do
     end
 
     describe "email" do
+      describe "presence" do
+        context "adult" do
+          subject(:user) { build(:user, email: nil) }
+          it { is_expected.to have_errors(email: "can't be blank") }
+        end
+
+        context "child" do
+          subject(:user) { build(:user, :child, email: nil) }
+          it { is_expected.to be_valid }
+        end
+
+        context "inactive adult" do
+          subject(:user) { build(:user, :inactive, email: nil) }
+          it { is_expected.to be_valid }
+        end
+      end
+
       describe "uniqueness" do
         let(:user) { build(:user, email: email).tap(&:validate) }
 
@@ -257,6 +274,21 @@ describe User do
       end
 
       it { is_expected.not_to be_nil }
+    end
+  end
+
+  describe "confirmation" do
+    # For coverage of most of confirmation behavior, we rely on Devise's tests.
+    # Here we only test things that are non-standard.
+    # A lot of confirmation-related stuff is handled at the controller level and covered in feature specs.
+    describe "unsetting email on confirmed user" do
+      # Only way to unset email on confirmed user is if they're inactive.
+      let(:user) { create(:user, :inactive) }
+
+      it "unsets confirmed flag" do
+        user.update!(email: nil)
+        expect(user.reload).not_to be_confirmed
+      end
     end
   end
 

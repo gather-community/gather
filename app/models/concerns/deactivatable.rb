@@ -8,11 +8,11 @@ module Deactivatable
   end
 
   def activate
-    update_attribute(:deactivated_at, nil)
+    update!(deactivated_at: nil)
   end
 
   def deactivate(options = {})
-    update_attribute(:deactivated_at, Time.current)
+    update!(deactivated_at: Time.current)
     after_deactivate if respond_to?(:after_deactivate) && !options[:skip_callback]
   end
 

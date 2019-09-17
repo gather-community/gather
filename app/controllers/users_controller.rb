@@ -164,6 +164,12 @@ class UsersController < ApplicationController
     end
   end
 
+  # Overrides default behavior in Deactivatable concern.
+  def after_activate(user)
+    return super if user.confirmed?
+    flash[:alert] = I18n.t("deactivatable.#{user.model_name.i18n_key}.success.activate_unconfirmed")
+  end
+
   private
 
   def load_users

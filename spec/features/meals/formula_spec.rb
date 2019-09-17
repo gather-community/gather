@@ -71,15 +71,16 @@ feature "formulas", js: true do
     visit(edit_meals_formula_path(formulas.first))
     accept_confirm { click_on("Deactivate") }
     expect_success
-    click_link("#{formulas.first.name} (Inactive)")
+
     click_link("Edit")
     click_link("reactivate it")
     expect_success
+
     expect(page).not_to have_content("#{formulas.first.name} (Inactive)")
-    click_link(formulas.first.name)
     click_link("Edit")
     accept_confirm { click_on("Delete") }
     expect_success
+
     expect(page).not_to have_content(formulas.first.name)
   end
 end

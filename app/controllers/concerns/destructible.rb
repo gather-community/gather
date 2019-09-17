@@ -37,15 +37,23 @@ module Destructible
     begin
       object.send(action)
       send("after_#{action}", object)
-      if action == :destroy
-        redirect_to(send("#{object.model_name.route_key}_path"))
-      else
-        redirect_to(send("#{object.model_name.singular_route_key}_path", object))
-      end
+      redirect_appropriately(action, object)
     rescue ActiveRecord::RecordInvalid
       message = object.errors.full_messages.join("; ")
       flash[:error] = I18n.t("deactivatable.#{object.model_name.i18n_key}.error.#{action}", message: message)
       redirect_to(send("edit_#{object.model_name.singular_route_key}_path", object))
     end
+  end
+
+  def redirect_appropriately(action, object)
+    redirect_to(action == :destroy || !respond_to?(:show) ? collection_path(object) : member_path(object))
+  end
+
+  def collection_path(object)
+    send("#{object.model_name.route_key}_path")
+  end
+
+  def member_path(object)
+    send("#{object.model_name.singular_route_key}_path", object)
   end
 end

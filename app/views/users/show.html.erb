@@ -88,7 +88,7 @@
                   <%= l(meal.served_at.to_date, format: :short_date) %>
                 </td>
                 <td class="col-md-3">
-                  <%= link_to(meal.title_or_no_title, meal_path(meal)) %>
+                  <%= link_to(meal.title_or_no_title, meal_url(meal)) %>
                 </td>
                 <td class="col-md-1">
                   <%= meal.signup_count %>

@@ -16,25 +16,25 @@ end %>
   <a name="signup"></a>
   <div class="signup col-sm-4">
     <div class="row">
-      <div class="prev-meal col-sm-6">
+      <div class="prev-meal col-xs-6">
         <% if prev_meal.present? %>
-          <%= link_to(icon_tag("angle-left"), meal_path(prev_meal)) %>
+          <% url = meal_url(prev_meal, anchor: "signup") %>
+          <%= link_to(icon_tag("angle-left"), url) %>
           <div>
-            <%= link_to(content_tag(:small, "Previous Meal"), meal_path(prev_meal, anchor: "signup")) %>
-            <%= meal_link(prev_meal, anchor: "signup") %>
-            <%= link_to(content_tag(:small, meal_date_time(prev_meal)),
-                  meal_path(prev_meal, anchor: "signup")) %>
+            <%= link_to(content_tag(:small, "Previous Meal"), url) %>
+            <%= prev_meal.link(anchor: "signup") %>
+            <%= link_to(content_tag(:small, meal_date_time(prev_meal)), url) %>
           </div>
         <% end %>
       </div>
-      <div class="next-meal col-sm-6">
+      <div class="next-meal col-xs-6">
         <% if next_meal.present? %>
-          <%= link_to(icon_tag("angle-right"), meal_path(next_meal)) %>
+          <% url = meal_url(next_meal, anchor: "signup") %>
+          <%= link_to(icon_tag("angle-right"), url) %>
           <div>
-            <%= link_to(content_tag(:small, "Next Meal"), meal_path(next_meal, anchor: "signup")) %>
-            <%= meal_link(next_meal, anchor: "signup") %>
-            <%= link_to(content_tag(:small, meal_date_time(next_meal)),
-                  meal_path(next_meal, anchor: "signup")) %>
+            <%= link_to(content_tag(:small, "Next Meal"), url) %>
+            <%= next_meal.link(anchor: "signup") %>
+            <%= link_to(content_tag(:small, meal_date_time(next_meal)), url) %>
           </div>
         <% end %>
       </div>

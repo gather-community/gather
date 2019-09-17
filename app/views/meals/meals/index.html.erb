@@ -29,7 +29,7 @@
           <td><%= meal.location_abbrv %></td>
           <td><%= meal.head_cook_name %></td>
           <td>
-            <%= meal_link(meal) %>
+            <%= meal.link %>
             <%= icon_tag("lock") if meal.closed? %>
             <%= icon_tag("ban") if meal.cancelled? %>
             <%= icon_tag("certificate") if meal.finalized? %>
@@ -59,7 +59,7 @@
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes %>">
         <h4 class="top">
-          <%= meal_link(meal) %>
+          <%= meal.link %>
           <% if meal.head_cook.present? %>
             by <%= meal.head_cook_name %>
           <% end %>

@@ -27,13 +27,13 @@
   <% else %>
     <tr>
       <td>Reserved By</td>
-      <td><%= user_link(reservation.reserver, show_cmty_if_foreign: true) %></td>
+      <td><%= reservation.reserver.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
   <% if reservation.sponsor %>
     <tr>
       <td>Sponsor</td>
-      <td><%= user_link(reservation.sponsor, show_cmty_if_foreign: true) %></td>
+      <td><%= reservation.sponsor.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
   <% if reservation.displayable_kind? %>

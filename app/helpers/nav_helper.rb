@@ -179,7 +179,7 @@ module NavHelper
       [
         {
           name: :profile,
-          path: user_path(current_user),
+          path: user_url(current_user),
           permitted: policy(current_user).show?,
           icon: "vcard"
         }, {

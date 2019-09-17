@@ -82,6 +82,7 @@ Style/Documentation:
   Exclude:
     - "app/controllers/**/*"
     - "app/decorators/**/*"
+    - "app/helpers/**/*"
     - "app/policies/**/*"
     - "app/serializers/**/*"
     - "db/migrate/*.rb"

@@ -11,6 +11,21 @@ feature "user show" do
     login_as(actor, scope: :user)
   end
 
+  context "with past meals" do
+    let(:user) { create(:user) }
+    let!(:meal) do
+      create(:meal, :with_menu, title: "Foodz", head_cook: user, served_at: Time.current - 4.months)
+    end
+
+    scenario do
+      visit(user_path(user))
+      expect(page).to have_title(user.decorate.full_name)
+      expect(page).to have_content(user.email)
+      expect(page).to have_content("Past Head Cook Meals")
+      expect(page).to have_content("Foodz")
+    end
+  end
+
   # See the User class for more documentation on email confirmation.
   context "pending reconfirmation" do
     let(:actor) { create(:user, :pending_reconfirmation) }

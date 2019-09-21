@@ -46,6 +46,10 @@ feature "signups", js: true do
         select_lens(:shift, "All Jobs")
         expect_jobs(*jobs[0..3])
 
+        # Check for fork/knife icon
+        expect(page).to have_content("Cook")
+        expect(page).to have_css("i.fa-cutlery")
+
         fill_in_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
@@ -104,7 +108,7 @@ feature "signups", js: true do
         end
 
         # Unsignup via #show page
-        click_on("Knembler")
+        click_on("Cook")
         expect(page).to have_content(jobs[0].description)
         accept_confirm { click_on("Remove Signup") }
 

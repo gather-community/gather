@@ -41,9 +41,11 @@ shared_context "work" do
       ]
     end
     let!(:group) { create(:people_group, name: "Pants") }
+    let!(:meal) { create(:meal, head_cook: false) }
     let!(:jobs) do
       [
-        create(:work_job, period: periods[0], title: "Knembler", shift_count: 1, shift_slots: 1),
+        create(:work_job, period: periods[0], title: "Cook", shift_count: 1, shift_slots: 1,
+                          meal_role: meal.formula.head_cook_role, meals: [meal]),
         create(:work_job, period: periods[0], title: "Fruct Coordinator", shift_count: 2, requester: group),
         create(:work_job, period: periods[0], title: "Whippersnapper", shift_count: 2),
         create(:work_job, period: periods[0], title: "Krusketarian", shift_count: 1, requester: group),

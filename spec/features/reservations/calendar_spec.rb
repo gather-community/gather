@@ -11,7 +11,7 @@ feature "reservation calendar", js: true do
     login_as(actor, scope: :user)
   end
 
-  context "with pre_notice" do
+  context "with a meal event and a non-meal event" do
     let(:resource) { create(:resource) }
     let(:time) { Time.current.midnight + 9.hours }
     let!(:meal) { create(:meal, :with_menu, title: "Yum", served_at: time + 9.hours, resources: [resource]) }
@@ -25,7 +25,7 @@ feature "reservation calendar", js: true do
     end
 
     scenario "should show two events" do
-      visit reservations_path(resource_id: resource.id)
+      visit(reservations_path(resource_id: resource.id))
       expect(page).to have_content("Yum")
       expect(page).to have_content("Funtimes")
     end

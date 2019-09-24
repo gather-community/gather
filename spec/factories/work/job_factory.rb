@@ -8,6 +8,7 @@ FactoryBot.define do
       shift_hours { nil }
       shift_starts { [] }
       shift_ends { [] }
+      meals { [] }
     end
 
     association :period, factory: :work_period
@@ -21,7 +22,8 @@ FactoryBot.define do
           attribs = {
             job: job,
             hours: hours,
-            slots: ev.shift_slots
+            slots: ev.shift_slots,
+            meal: ev.meals[i]
           }
           if job.full_period?
             attribs[:starts_at] = Time.zone.parse(job.period.starts_on.to_s)

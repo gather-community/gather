@@ -33,6 +33,8 @@ feature "jobs", js: true do
       visit(work_jobs_path)
       expect(page).to have_title("Jobs")
       expect_jobs(*jobs[0..3])
+      expect(page).to have_content("Cook")
+      expect(page).to have_css("i.fa-cutlery")
 
       select_lens(:requester, group.name)
       expect_jobs(jobs[1], jobs[3])

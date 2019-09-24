@@ -186,20 +186,6 @@ feature "lenses", js: true do
     end
   end
 
-  describe "my accounts lens" do
-    before do
-      [community1, community2, community3].each do |c|
-        create(:account, community: c, household: user.household)
-      end
-    end
-
-    scenario "community" do
-      visit(yours_accounts_path)
-      # This kind of community drop-down does not change the subdomain.
-      expect_community_dropdown(subdomain: false)
-    end
-  end
-
   def expect_select_lens(param_name:, default_opt:, opt2:, path:, nav_link:)
     # Nothing should be initially selected, so the default option should be showing.
     expect_unselected_option(lens_selector(param_name), default_opt)
@@ -227,7 +213,7 @@ feature "lenses", js: true do
     lens_field(:community).select("Community 2")
 
     # If the lens changes the subdomain, check for that.
-    # Else check for QS param.
+    # Else check for QS param so that we know page has loaded.
     if subdomain
       expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
     else
@@ -247,11 +233,13 @@ feature "lenses", js: true do
       expect(page).not_to have_css(".lens-bar a.clear")
     end
 
-    # Direct path visit should maintain value in subdomain mode only.
-    unless subdomain
-      visit(orig_url)
-      expect(page).to have_echoed_url(orig_url)
-      expect(lens_selected_option(:community).text).to eq("Community 2")
+    # Should remember selected value except in subdomain mode (I think? A bit sketchy...)
+    visit(orig_url)
+    expect(page).to have_echoed_url(orig_url)
+    if all_option && subdomain
+      expect_unselected_option(lens_selector(:community), "All Communities")
+    else
+      expect(lens_selected_option(:community).text).to eq(subdomain ? "Community 3" : "Community 2")
     end
   end
 
@@ -277,17 +265,5 @@ feature "lenses", js: true do
     visit(path)
     expect(page).to have_echoed_url(/#{path}\z/)
     yield
-  end
-
-  def lens_selected_option(param_name)
-    lens_field(param_name).find("option[selected]")
-  end
-
-  def lens_field(param_name)
-    first(lens_selector(param_name))
-  end
-
-  def lens_selector(param_name)
-    ".#{param_name.to_s.dasherize}-lens"
   end
 end

@@ -333,13 +333,29 @@ module FeatureSpecHelpers
     expect(lens_node(param_name).value).to eq(value)
   end
 
-  def match_and_visit_url(str, regex)
-    expect(str).to match(regex)
-    visit(str.match(regex)[0].strip)
+  def lens_selected_option(param_name)
+    lens_field(param_name).find("option[selected]")
+  end
+
+  def lens_field(param_name)
+    first(lens_selector(param_name))
+  end
+
+  def lens_selector(param_name)
+    ".#{param_name.to_s.dasherize}-lens"
   end
 
   def clear_lenses
     find(".lens-bar a.clear").click
+  end
+
+  def have_lens_clear_link
+    have_css(".lens-bar a.clear")
+  end
+
+  def match_and_visit_url(str, regex)
+    expect(str).to match(regex)
+    visit(str.match(regex)[0].strip)
   end
 
   def click_delete_link

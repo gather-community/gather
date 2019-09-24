@@ -20,8 +20,10 @@ FactoryBot.define do
     after(:build) do |meal, evaluator|
       meal.communities += evaluator.communities.presence || [meal.community]
 
-      head_cook = evaluator.head_cook || create(:user, community: meal.community)
-      build_assignment(meal, "Head Cook", head_cook)
+      unless evaluator.head_cook == false
+        head_cook = evaluator.head_cook || create(:user, community: meal.community)
+        build_assignment(meal, "Head Cook", head_cook)
+      end
       evaluator.asst_cooks.each { |user| build_assignment(meal, "Assistant Cook", user) }
       evaluator.cleaners.each { |user| build_assignment(meal, "Cleaner", user) }
 

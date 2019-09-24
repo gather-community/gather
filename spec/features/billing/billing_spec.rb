@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "accounts", js: true do
+feature "billing", js: true do
   around { |ex| with_user_home_subdomain(actor) { ex.run } }
 
   before do

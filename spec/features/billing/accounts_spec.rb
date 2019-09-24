@@ -69,7 +69,51 @@ feature "accounts", js: true do
       process_queued_job
 
       click_link(account1.household.name)
-      expect(page).to have_css("table.statements tbody tr", count: 3) # Header plus 2 statements
+      expect(page).to have_statement_rows(2, more: false)
     end
+  end
+
+  describe "user view" do
+    let(:actor) { create(:user) }
+    let(:household) { actor.household }
+    let(:community1) { actor.community }
+    let!(:community2) { create(:community) }
+    let!(:account1) { create(:account, :with_statement, :with_transactions, household: household) }
+    let!(:account2) { create(:account, :with_transactions, community: community2, household: household) }
+    let!(:past_statements) do
+      # Create lots of old statements so we can test pagination
+      10.times do |i|
+        Timecop.freeze(-i.weeks) do
+          create(:statement, account: account1, prev_balance: 3.50, total_due: i.to_f + 0.25)
+        end
+      end
+    end
+
+    scenario "page view and load more statements" do
+      visit(root_path)
+      click_on_personal_nav("Accounts")
+      expect(page).to have_content("Your #{community1.name} Account")
+
+      expect(page).to have_statement_rows(5, more: true)
+      click_link("Load More...")
+      expect(page).to have_statement_rows(10, more: true)
+    end
+
+    scenario "lens" do
+      visit(yours_accounts_path)
+      expect(lens_selected_option(:community).text).to eq(community1.name)
+      select_lens(:community, community2.name)
+      expect(page).to have_content("Your #{community2.name} Account")
+      expect(lens_selected_option(:community).text).to eq(community2.name)
+      expect(page).not_to have_lens_clear_link
+
+      # Should remember selected community.
+      visit(yours_accounts_path)
+      expect(page).to have_content("Your #{community2.name} Account")
+    end
+  end
+
+  def have_statement_rows(count, more:)
+    have_css("table.statements tbody tr", count: count + (more ? 2 : 1)) # Account for header row and more link
   end
 end

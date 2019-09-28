@@ -4,6 +4,13 @@ module Meals
   class TypeDecorator < ApplicationDecorator
     delegate_all
 
+    def name_with_suffix
+      safe_str.tap do |str|
+        str << name
+        str << " (#{t('common.inactive')})" if inactive?
+      end
+    end
+
     def tr_classes
       active? ? "" : "inactive"
     end

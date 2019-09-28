@@ -28,7 +28,7 @@
       <% types.each do |type| %>
         <tr class="<%= type.tr_classes %>">
           <td class="name">
-            <%= link_to(type.name, edit_meals_type_path(type)) %>
+            <%= link_to(type.name_with_suffix, edit_meals_type_path(type)) %>
           </td>
           <td class="category"><%= type.category %></td>
         </tr>

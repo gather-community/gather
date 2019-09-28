@@ -11,6 +11,8 @@ module Meals
 
     belongs_to :community
 
+    normalize_attribute :name, :category
+
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
 
     scope :in_community, ->(c) { where(community_id: c.id) }

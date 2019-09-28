@@ -1,0 +1,13 @@
+<%= gather_form_for(type) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :category %>
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.meals--type-form'});
+  });
+<% end %>

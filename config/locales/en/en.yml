@@ -92,6 +92,9 @@ en:
     meals/role:
       destroy: "Are you sure you want to delete the role '%{title}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the role '%{title}'?"
+    meals/type:
+      destroy: "Are you sure you want to delete the type '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the type '%{name}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
     work/job:
@@ -120,6 +123,10 @@ en:
       three: "reactivate it"
     meals/role:
       one_html: "This role was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+    meals/type:
+      one_html: "This type was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
 
@@ -156,6 +163,11 @@ en:
         activate: "Role activated successfully."
         deactivate: "Role deactivated successfully."
         destroy: "Role deleted successfully."
+    meals/type:
+      success:
+        activate: "Type activated successfully."
+        deactivate: "Type deactivated successfully."
+        destroy: "Type deleted successfully."
     work/job:
       success:
         destroy: "Job deleted successfully."

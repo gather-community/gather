@@ -48,7 +48,12 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
-    resources :types, only: :index
+    resources :types, except: :show do
+      member do
+        put :activate
+        put :deactivate
+      end
+    end
   end
 
   get "/meals/reports", to: redirect("/meals/report") # Legacy path

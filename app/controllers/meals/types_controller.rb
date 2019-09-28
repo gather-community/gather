@@ -60,6 +60,13 @@ module Meals
       end
     end
 
+    def categories
+      authorize(sample_type, :index?)
+      categories = policy_scope(Meals::Type).in_community(current_community)
+        .where("category ILIKE ?", "%#{params[:search]}%").pluck(:category).uniq
+      render(json: categories.map { |c| {id: c, name: c} }, root: "results")
+    end
+
     protected
 
     def klass

@@ -49,6 +49,9 @@ Rails.application.routes.draw do
       end
     end
     resources :types, except: :show do
+      collection do
+        get :categories
+      end
       member do
         put :activate
         put :deactivate

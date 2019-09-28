@@ -84,6 +84,9 @@ en:
         shift_start: "Number of minutes before/after the start of the meal that people should show up. Negatives represent times prior to the meal start."
         shift_end: "Number of minutes before/after the start of the meal that this role ends. Negatives represent times prior to the meal start."
         count_per_meal: "How many people are typically needed for this role for a given meal?"
+      meals_type:
+        name: "A short, descriptive name for the type."
+        category: "Categories are used for calculating portion counts and for reporting."
       wiki_page:
         content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."

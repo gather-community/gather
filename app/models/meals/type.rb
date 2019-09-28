@@ -5,11 +5,13 @@ module Meals
   class Type < ApplicationRecord
     include Deactivatable
 
+    NAME_MAX_LENGTH = 32
+
     acts_as_tenant :cluster
 
     belongs_to :community
 
-    validates :name, presence: true, length: {maximum: 32}
+    validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_name, -> { alpha_order(:name) }

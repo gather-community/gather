@@ -8,7 +8,12 @@ describe Meals::RolePolicy do
     let(:role) { create(:meal_role) }
     let(:record) { role }
 
-    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :activate?, :deactivate?, :destroy? do
+    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :deactivate?, :destroy? do
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+    end
+
+    permissions :activate? do
+      before { record.deactivate }
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 

@@ -8,8 +8,36 @@ describe Meals::TypePolicy do
     let(:type) { create(:meal_type) }
     let(:record) { type }
 
-    permissions :index? do
+    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :deactivate?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+    end
+
+    permissions :activate? do
+      before { record.deactivate }
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+    end
+
+    permissions :destroy? do
+      context "with associated cost part" do
+        let!(:cost) { create(:meal_cost) }
+        let(:type) { cost.parts[0].type }
+
+        it_behaves_like "forbids all"
+      end
+
+      context "with associated signup part" do
+        let!(:signup) { create(:meal_signup, diner_counts: [1]) }
+        let(:type) { signup.parts[0].type }
+
+        it_behaves_like "forbids all"
+      end
+
+      context "with associated formula part" do
+        let!(:formula) { create(:meal_formula) }
+        let(:type) { formula.parts[0].type }
+
+        it_behaves_like "forbids all"
+      end
     end
   end
 

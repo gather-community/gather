@@ -5,7 +5,8 @@ module Meals
     # Only AJAX/JSON for now
     def index
       authorize(sample_type)
-      types = policy_scope(Meals::Type).in_community(current_community).matching(params[:search]).by_name
+      types = policy_scope(Meals::Type).in_community(current_community)
+        .matching(params[:search]).active.by_name
       render(json: types, root: "results")
     end
 

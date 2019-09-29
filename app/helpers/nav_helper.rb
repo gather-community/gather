@@ -70,6 +70,12 @@ module NavHelper
             permitted: policy(Meals::Formula.new(community: current_community)).index?,
             icon: "calculator"
           }, {
+            name: :types,
+            parent: :meals,
+            path: meals_types_path,
+            permitted: policy(Meals::Type.new(community: current_community)).index?,
+            icon: "cubes"
+          }, {
             name: :roles,
             parent: :meals,
             path: meals_roles_path,

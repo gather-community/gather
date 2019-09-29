@@ -20,14 +20,13 @@
   </div>
 <% else %>
   <p class="subtitle">
-    <ul>
-      <li><%= t(".summary", count: @active_accounts) %></li>
-      <% if @last_statement_run.present? %>
-        <li><%= t(".last_statement_run", date: l(@last_statement_run, format: :short_date)) %></li>
-      <% else %>
-        <li><%= t(".statements_never_run") %></li>
-      <% end %>
-    </ul>
+    <%= icon_tag("info-circle") %>
+    <%= t(".summary", count: @active_accounts) %>
+    <% if @last_statement_run.present? %>
+      <%= t(".last_statement_run", date: l(@last_statement_run, format: :short_date)) %>
+    <% else %>
+      <%= t(".statements_never_run") %>
+    <% end %>
   </p>
 
   <table class="index">

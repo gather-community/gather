@@ -1,0 +1,14 @@
+<%= gather_form_for(type) do |f| %>
+  <%= f.input(:name, maxlength: Meals::Type::NAME_MAX_LENGTH) %>
+  <%= f.input(:category, as: :assoc_select2, tags: true, src: "/meals/types/categories") %>
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.meals--type-form'});
+    new Gather.Views.AjaxSelect2({el: '.meals--type-form'});
+  });
+<% end %>

@@ -1,0 +1,38 @@
+<% content_for(:title, "Meal Types") %>
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_type).create? %>
+    <%= link_to(icon_tag("plus") << " Create Type",
+      new_meals_type_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<p class="subtitle">
+  <%= icon_tag("info-circle") %>
+  Meal types give diners different options when signing up for a meal and can be assigned
+  different costs and portion sizes in meal formulas.
+</p>
+
+<% if types.empty? %>
+  <div class="center-notice">
+    No types found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th><%= Meals::Type.human_attribute_name(:name) %></th>
+        <th><%= Meals::Type.human_attribute_name(:category) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% types.each do |type| %>
+        <tr class="<%= type.tr_classes %>">
+          <td class="name">
+            <%= link_to(type.name_with_suffix, edit_meals_type_path(type)) %>
+          </td>
+          <td class="category"><%= type.category %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

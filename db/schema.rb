@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190915200016) do
+ActiveRecord::Schema.define(version: 20190928024442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 20190915200016) do
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
     t.string "name", limit: 32, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_types_on_cluster_id"

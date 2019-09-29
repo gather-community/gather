@@ -35,7 +35,7 @@ module Meals
     end
 
     def activate?
-      index? && Role.where(title: role.title).where.not(id: role.id).active.none?
+      index? && role.inactive? && Role.where(title: role.title).where.not(id: role.id).active.none?
     end
 
     def deactivate?

@@ -92,6 +92,9 @@ en:
     meals/role:
       destroy: "Are you sure you want to delete the role '%{title}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the role '%{title}'?"
+    meals/type:
+      destroy: "Are you sure you want to delete the type '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the type '%{name}'?"
     wiki/page:
       destroy: "Are you sure you want to delete the wiki page '%{title}'? This action cannot be undone."
     work/job:
@@ -120,6 +123,10 @@ en:
       three: "reactivate it"
     meals/role:
       one_html: "This role was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
+    meals/type:
+      one_html: "This type was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
 
@@ -156,6 +163,11 @@ en:
         activate: "Role activated successfully."
         deactivate: "Role deactivated successfully."
         destroy: "Role deleted successfully."
+    meals/type:
+      success:
+        activate: "Type activated successfully."
+        deactivate: "Type deactivated successfully."
+        destroy: "Type deleted successfully."
     work/job:
       success:
         destroy: "Job deleted successfully."
@@ -187,6 +199,7 @@ en:
       user: "Please type a few letters of the user's name."
       job_choosing_proxy: "Please type a few letters of the user's name."
       type: "Please type a few letters of the meal type's name, or enter the full name to add a new type."
+      category: "Please type a few letters of the category, or enter the full category to add a new one."
     placeholders:
       reserver: "Choose Reserver ..."
       sponsor: "Choose Sponsor ..."
@@ -195,6 +208,7 @@ en:
       user: "Choose User ..."
       job_choosing_proxy: "Choose User ..."
       type: "Choose or Enter Type ..."
+      category: "Choose or Enter Category ..."
 
   csv:
     headers:

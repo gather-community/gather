@@ -116,12 +116,4 @@ feature "pages", js: true do
       expect(page).not_to have_content("The Description:")
     end
   end
-
-  scenario "with safe and unsafe HTML" do
-    visit("/wiki/new")
-    fill_in("Title", with: "Boring Page")
-    fill_in("Content", with: "apple **banana** <em>bold</em> <script>foo</script>")
-    click_button("Save")
-    expect(page.body).to include("apple <strong>banana</strong> <em>bold</em> foo")
-  end
 end

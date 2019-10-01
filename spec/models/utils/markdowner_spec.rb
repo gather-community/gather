@@ -22,15 +22,15 @@ describe Utils::Markdowner do
     it { is_expected.to eq(%(<p><a href="/xyz" target="_blank">Foo</a></p>\n)) }
   end
 
-  describe "line breaks" do
+  describe "hard line breaks" do
     context "simple" do
       let(:input) { "A\nB" }
-      it { is_expected.to eq("<p>A\nB</p>\n") }
+      it { is_expected.to eq("<p>A<br>\nB</p>\n") }
     end
 
     context "with html block" do
-      let(:input) { "A\nB\n\n<div>C\nD</div>\n\nE\n\nF" }
-      it { is_expected.to eq("<p>A\nB</p>\n\n<div>C\nD</div>\n\n<p>E</p>\n\n<p>F</p>\n") }
+      let(:input) { "Foo\nbar\n\n<ul>\n<li>x</li>\n</ul>\n\nmore\nstuff" }
+      it { is_expected.to eq("<p>Foo<br>\nbar</p>\n\n<ul>\n<li>x</li>\n</ul>\n\n<p>more<br>\nstuff</p>\n") }
     end
   end
 

@@ -33,4 +33,22 @@ describe Utils::Markdowner do
       it { is_expected.to eq("<p>A\nB</p>\n\n<div>C\nD</div>\n\n<p>E</p>\n\n<p>F</p>\n") }
     end
   end
+
+  describe "autolink" do
+    let(:input) { "Foo https://bar.com Bar" }
+    it { is_expected.to eq(%(<p>Foo <a href="https://bar.com">https://bar.com</a> Bar</p>\n)) }
+  end
+
+  describe "tables" do
+    let(:input) { "|A|B|C|\n|---|---|---|\n|1|2|3|\n" }
+    it do
+      is_expected.to eq(%(<table>\n<thead>\n<tr>\n<th>A</th>\n<th>B</th>\n<th>C</th>\n</tr>\n</thead>) +
+        %(\n<tbody>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>3</td>\n</tr>\n</tbody>\n</table>\n))
+    end
+  end
+
+  describe "strikethrough" do
+    let(:input) { "Foo ~~Bar~~" }
+    it { is_expected.to eq(%(<p>Foo <del>Bar</del></p>\n)) }
+  end
 end

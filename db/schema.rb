@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191004162106) do
+ActiveRecord::Schema.define(version: 20191004162542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -602,7 +602,7 @@ ActiveRecord::Schema.define(version: 20191004162106) do
     t.integer "page_id", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.integer "updator_id", null: false
+    t.integer "updator_id"
     t.index ["cluster_id"], name: "index_wiki_page_versions_on_cluster_id"
     t.index ["page_id", "number"], name: "index_wiki_page_versions_on_page_id_and_number", unique: true
     t.index ["page_id"], name: "index_wiki_page_versions_on_page_id"
@@ -614,14 +614,14 @@ ActiveRecord::Schema.define(version: 20191004162106) do
     t.integer "community_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
-    t.integer "creator_id", null: false
+    t.integer "creator_id"
     t.text "data_source"
     t.string "editable_by", default: "everyone", null: false
     t.string "role"
     t.string "slug", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.integer "updator_id", null: false
+    t.integer "updator_id"
     t.index ["cluster_id"], name: "index_wiki_pages_on_cluster_id"
     t.index ["community_id", "slug"], name: "index_wiki_pages_on_community_id_and_slug", unique: true
     t.index ["community_id", "title"], name: "index_wiki_pages_on_community_id_and_title", unique: true

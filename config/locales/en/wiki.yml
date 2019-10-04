@@ -3,6 +3,7 @@ en:
     not_found_create: "There is no wiki page named '%{title}'. You can create it below!"
     preview_notice: "This is a preview. To save or further edit the page, use the form below."
     revision_info: "Page revised on %{time} by %{user}"
+    revision_info_no_by: "Page revised on %{time}"
     special_pages:
       home:
         title: "Wiki Home Page"

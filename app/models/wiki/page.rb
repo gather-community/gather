@@ -1,18 +1,21 @@
-require 'open-uri'
+# frozen_string_literal: true
+
+require "open-uri"
 
 module Wiki
+  # Models a single wiki page.
   class Page < ApplicationRecord
     acts_as_tenant :cluster
 
-    RESERVED_SLUGS = Set.new(%w(new all home sample notfound)).freeze
-    EDITABLE_BY_OPTIONS = %i(everyone wikiist)
+    RESERVED_SLUGS = Set.new(%w[new all home sample notfound]).freeze
+    EDITABLE_BY_OPTIONS = %i[everyone wikiist].freeze
 
     attr_accessor :comment
 
     belongs_to :community
     belongs_to :creator, class_name: "User"
     belongs_to :updator, class_name: "User"
-    has_many :versions, -> { order('number DESC') }, class_name: "Wiki::PageVersion", dependent: :destroy
+    has_many :versions, -> { order("number DESC") }, class_name: "Wiki::PageVersion", dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { alpha_order(:title) }
@@ -35,11 +38,9 @@ module Wiki
       role.to_s
     end
 
-    def self.create_special_page(role, community:, creator:)
+    def self.create_special_page(role, community:)
       create!(
         community: community,
-        creator: creator,
-        updator: creator,
         content: I18n.t("wiki.special_pages.#{role}.content"),
         role: role,
         title: I18n.t("wiki.special_pages.#{role}.title"),
@@ -73,7 +74,7 @@ module Wiki
       return unless saved_change_to_title? || saved_change_to_content? || comment.present?
       n = last_version_number
       v = versions.build
-      v.attributes = attributes.slice(*(v.attribute_names - ['id']))
+      v.attributes = attributes.slice(*(v.attribute_names - ["id"]))
       v.comment = comment
       v.number = n + 1
       v.save!
@@ -109,9 +110,7 @@ module Wiki
       # We use title_to_slug and not title_to_slug_without_dupes here so that a page title of
       # 'Home' will raise a validation error.
       naive_slug = title_to_slug(title)
-      if RESERVED_SLUGS.include?(naive_slug) && role != naive_slug
-        errors.add(:title, :reserved_slug)
-      end
+      errors.add(:title, :reserved_slug) if RESERVED_SLUGS.include?(naive_slug) && role != naive_slug
     end
 
     def template_error
@@ -121,9 +120,7 @@ module Wiki
     end
 
     def sample_not_editable
-      if sample? && persisted?
-        errors.add(:base, :sample_not_editable)
-      end
+      errors.add(:base, :sample_not_editable) if sample? && persisted?
     end
   end
 end

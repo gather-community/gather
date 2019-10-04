@@ -30,7 +30,11 @@ module Wiki
 
     def revision_info
       h.content_tag(:span, class: "wiki-page-revision-info") do
-        h.t("wiki.revision_info", time: h.l(updated_at), user: updator.decorate.name_with_inactive)
+        if updator
+          h.t("wiki.revision_info", time: h.l(updated_at), user: updator.decorate.name_with_inactive)
+        else
+          h.t("wiki.revision_info_no_by", time: h.l(updated_at))
+        end
       end
     end
 

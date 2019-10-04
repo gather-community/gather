@@ -3,7 +3,7 @@ module Wiki
     delegate_all
 
     def updator_name
-      updator.name
+      updator&.name
     end
   end
 end

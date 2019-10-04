@@ -52,7 +52,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   # We don't allow destroy if the user referred to from an independent record in the community, such
-  # as a child (guardian), reservation (reserver, sponsor), wiki page (creator, updator), etc.
+  # as a child (guardian), reservation (reserver, sponsor), wiki page (creator, updater), etc.
   # Records that are not independent, i.e., that make no sense without the user (e.g. work share,
   # job choosing proxy), can be dependendly destroyed or nullified.
   def destroy?
@@ -62,7 +62,7 @@ class UserPolicy < ApplicationPolicy
       People::Guardianship.related_to(record).none? &&
       Reservations::Reservation.related_to(record).none? &&
       Wiki::Page.related_to(record).none? &&
-      Wiki::PageVersion.where(updator: record).none? &&
+      Wiki::PageVersion.where(updater: record).none? &&
       Work::Assignment.where(user: record).none?
   end
 

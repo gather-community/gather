@@ -125,7 +125,7 @@ feature "pages", js: true do
       create(:super_admin, community: outside_community, first_name: "Jane", last_name: "Doe")
     end
 
-    scenario "does not record updator" do
+    scenario "does not record updater" do
       visit("/wiki")
       expect(page).not_to have_content(/Page revised on .+ by Jane Doe/)
       click_link("Edit")

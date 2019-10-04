@@ -14,12 +14,12 @@ module Wiki
 
     belongs_to :community
     belongs_to :creator, class_name: "User"
-    belongs_to :updator, class_name: "User"
+    belongs_to :updater, class_name: "User"
     has_many :versions, -> { order("number DESC") }, class_name: "Wiki::PageVersion", dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_title, -> { alpha_order(:title) }
-    scope :related_to, ->(user) { where(creator: user).or(where(updator: user)) }
+    scope :related_to, ->(user) { where(creator: user).or(where(updater: user)) }
 
     validates :title, presence: true, uniqueness: {scope: :community}
     validate :slug_not_reserved

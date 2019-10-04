@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191004162542) do
+ActiveRecord::Schema.define(version: 20191004165521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -602,11 +602,11 @@ ActiveRecord::Schema.define(version: 20191004162542) do
     t.integer "page_id", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.integer "updator_id"
+    t.integer "updater_id"
     t.index ["cluster_id"], name: "index_wiki_page_versions_on_cluster_id"
     t.index ["page_id", "number"], name: "index_wiki_page_versions_on_page_id_and_number", unique: true
     t.index ["page_id"], name: "index_wiki_page_versions_on_page_id"
-    t.index ["updator_id"], name: "index_wiki_page_versions_on_updator_id"
+    t.index ["updater_id"], name: "index_wiki_page_versions_on_updater_id"
   end
 
   create_table "wiki_pages", id: :serial, force: :cascade do |t|
@@ -621,13 +621,13 @@ ActiveRecord::Schema.define(version: 20191004162542) do
     t.string "slug", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.integer "updator_id"
+    t.integer "updater_id"
     t.index ["cluster_id"], name: "index_wiki_pages_on_cluster_id"
     t.index ["community_id", "slug"], name: "index_wiki_pages_on_community_id_and_slug", unique: true
     t.index ["community_id", "title"], name: "index_wiki_pages_on_community_id_and_title", unique: true
     t.index ["community_id"], name: "index_wiki_pages_on_community_id"
     t.index ["creator_id"], name: "index_wiki_pages_on_creator_id"
-    t.index ["updator_id"], name: "index_wiki_pages_on_updator_id"
+    t.index ["updater_id"], name: "index_wiki_pages_on_updater_id"
   end
 
   create_table "work_assignments", force: :cascade do |t|
@@ -804,12 +804,12 @@ ActiveRecord::Schema.define(version: 20191004162542) do
   add_foreign_key "users_roles", "roles"
   add_foreign_key "users_roles", "users"
   add_foreign_key "wiki_page_versions", "clusters"
-  add_foreign_key "wiki_page_versions", "users", column: "updator_id"
+  add_foreign_key "wiki_page_versions", "users", column: "updater_id"
   add_foreign_key "wiki_page_versions", "wiki_pages", column: "page_id"
   add_foreign_key "wiki_pages", "clusters"
   add_foreign_key "wiki_pages", "communities"
   add_foreign_key "wiki_pages", "users", column: "creator_id"
-  add_foreign_key "wiki_pages", "users", column: "updator_id"
+  add_foreign_key "wiki_pages", "users", column: "updater_id"
   add_foreign_key "work_assignments", "clusters"
   add_foreign_key "work_assignments", "users"
   add_foreign_key "work_assignments", "work_shifts", column: "shift_id"

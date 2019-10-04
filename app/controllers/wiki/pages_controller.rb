@@ -39,13 +39,13 @@ module Wiki
       @page = Page.new(community: current_community)
       authorize(@page)
       @page.assign_attributes(page_params)
-      @page.creator = @page.updator = actor
+      @page.creator = @page.updater = actor
       redirect_on_success_or_rerender_on_error_or_preview(:new)
     end
 
     def update
       authorize(@page)
-      @page.assign_attributes(page_params.merge(updator: actor))
+      @page.assign_attributes(page_params.merge(updater: actor))
       redirect_on_success_or_rerender_on_error_or_preview(:edit)
     end
 
@@ -106,7 +106,7 @@ module Wiki
       Page.new(community: current_community)
     end
 
-    # Returns the current user for use in updator/creator fields unless they're not from this cluster.
+    # Returns the current user for use in updater/creator fields unless they're not from this cluster.
     def actor
       current_user.cluster == current_cluster ? current_user : nil
     end

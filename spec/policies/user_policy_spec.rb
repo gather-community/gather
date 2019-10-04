@@ -295,7 +295,7 @@ describe UserPolicy do
       end
 
       context "with wiki page update" do
-        let!(:page) { create(:wiki_page, updator: record) }
+        let!(:page) { create(:wiki_page, updater: record) }
         it_behaves_like "forbids all"
       end
 
@@ -303,8 +303,8 @@ describe UserPolicy do
         let!(:page) { create(:wiki_page) }
 
         before do
-          page.update!(content: "x", updator: record)
-          page.update!(content: "y", updator: create(:user))
+          page.update!(content: "x", updater: record)
+          page.update!(content: "y", updater: create(:user))
           # Only relation at this point should be to second page version
         end
 

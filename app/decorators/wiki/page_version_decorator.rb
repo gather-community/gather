@@ -2,8 +2,8 @@ module Wiki
   class PageVersionDecorator < ApplicationDecorator
     delegate_all
 
-    def updator_name
-      updator&.name
+    def updater_name
+      updater&.name
     end
   end
 end

@@ -24,7 +24,7 @@ div.title-and-buttons div.top-buttons a.calendar-export {
       margin-bottom: 10px;
 
       i.fa {
-        color: $gray-text;
+        color: $text-muted;
         margin: 0 10px 0 20px;
       }
     }
@@ -32,7 +32,7 @@ div.title-and-buttons div.top-buttons a.calendar-export {
     a.copy {
       display: inline-block;
       margin-left: 49px;
-      color: $gray-text;
+      color: $text-muted;
       font-size: 0.7em;
     }
   }

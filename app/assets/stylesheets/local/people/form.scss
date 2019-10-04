@@ -19,7 +19,7 @@
     }
 
     .role.disabled {
-      color: $gray-text;
+      color: $text-muted;
     }
 
     .user_privacy_settings {
@@ -29,7 +29,7 @@
     }
 
     #household-fields {
-      background-color: $fainter-gray;
+      background-color: $gray-lighterer;
       padding: 15px;
       margin: 15px -15px;
 

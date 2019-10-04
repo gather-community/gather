@@ -25,13 +25,13 @@
 
   tr.cancelled,
   div.meals-list div.meal.cancelled {
-    background-color: $fainter-gray;
-    color: $gray-text;
+    background-color: $gray-lighterer;
+    color: $text-muted;
     text-decoration: line-through;
 
     * {
       text-decoration: line-through;
-      color: $gray-text;
+      color: $text-muted;
     }
   }
 
@@ -42,7 +42,7 @@
   // For mobile devices in meals index, or all devices for meal jobs list.
   div.meals-list {
     div.meal {
-      background-color: $fainter-gray;
+      background-color: $gray-lighterer;
       margin-bottom: 20px;
       padding: 10px;
 

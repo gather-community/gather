@@ -7,7 +7,7 @@
   a.delete {
     float: right;
     font-size: 18px;
-    color: $gray-text;
+    color: $text-muted;
   }
 
   img.existing {
@@ -40,7 +40,7 @@
   .dz-preview.dz-error {
     .dz-image {
       height: $thumb-height;
-      background-color: $faint-gray;
+      background-color: $gray-lighter;
     }
   }
 
@@ -58,7 +58,7 @@
   }
 
   &.dz-drag-hover .dz-message {
-    border: 3px solid $medium-gray;
+    border: 3px solid $light-border-color;
   }
 
   .dz-error-message {

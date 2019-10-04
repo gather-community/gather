@@ -1,15 +1,15 @@
 #global-footer-wrapper {
-  background-color: $faint-gray;
+  background-color: $gray-lighterer;
 }
 
 #global-footer, #local-footer {
-  font-size: 12px;
-  color: $gray-text;
+  font-size: 13px;
+  color: $text-muted;
   padding: 10px 20px;
   width: 100%;
 
   a, a:visited, a:active, a:hover {
-    color: $gray-text;
+    color: $text-muted;
     text-decoration: underline;
   }
 

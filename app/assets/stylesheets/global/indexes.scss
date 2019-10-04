@@ -17,7 +17,7 @@ table.index {
     }
 
     td, td a {
-      color: $inactive-color;
+      color: $text-muted;
     }
   }
 
@@ -68,7 +68,7 @@ table.index {
     }
 
     a {
-      color: $gray-text;
+      color: $text-muted;
     }
   }
 }

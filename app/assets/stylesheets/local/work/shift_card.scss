@@ -1,7 +1,7 @@
 // A card on the signups screen.
 .shift-card {
   margin-bottom: 20px;
-  background-color: $fainter-gray;
+  background-color: $gray-lighterer;
   padding: 10px;
 
   &.mine {
@@ -31,7 +31,7 @@
   }
 
   .title-cell i {
-    color: $medium-gray;
+    color: $text-muted;
   }
 
   .title {
@@ -67,12 +67,12 @@
     }
 
     a {
-      color: $main-text-color;
+      color: $text-color;
     }
   }
 
   .open-slots {
-    color: $gray-text;
+    color: $text-muted;
   }
 
   .signup-link {

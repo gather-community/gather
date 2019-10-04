@@ -4,17 +4,38 @@
 // Variables
 // --------------------------------------------------
 
+//== Custom vars
+
+$light-border-color: #ccc;
+$light-border: 1px solid $light-border-color;
+$theme-main: #3a3e5d;
+$theme-main-lighter: lighten($theme-main, 10%);
+$theme-main-lightest: lighten($theme-main, 62%);
+$theme-accent: #64944a;
+$theme-accent-lightest: lighten($theme-accent, 45%);
+$theme-accent-light: lighten($theme-accent, 20%);
+$theme-accent-intense: saturate($theme-accent, 20%);
+$highlight-color: #F4E4F5;
+$highlight-color2: #fcf8e3;
+$medium-bold: 500;
+
+// Metrics
+$large-margin: 20px;
+$content-max-width: 1200px;
+$content-line-height: 180%;
 
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
 
-// $gray-base:              #000
-// $gray-darker:            lighten($gray-base, 13.5%) // #222
-// $gray-dark:              lighten($gray-base, 20%)   // #333
-// $gray:                   lighten($gray-base, 33.5%) // #555
-// $gray-light:             lighten($gray-base, 46.7%) // #777
-// $gray-lighter:           lighten($gray-base, 93.5%) // #eee
+// These grays should not be used for text. Use $text-color and $text-muted.
+$gray-base:              #000;
+$gray-darker:            #222;
+$gray-dark:              #333;
+$gray:                   #555;
+$gray-light:             #777;
+$gray-lighter:           #eee;
+$gray-lighterer:         #f6f6f6;
 
 $brand-primary:            $theme-main;
 // $brand-success:         #5cb85c
@@ -29,13 +50,19 @@ $brand-danger:             #a94442;
 
 //** Background color for `<body>`.
 // $body-bg:               #fff
+
 //** Global text color on `<body>`.
-$text-color:               $main-text-color;
+$text-color:               $gray-darker;
+
+// This meets standards for visible contrast against an #f6f6f6 ($gray-lighterer) BG.
+// $text-muted shouldn't be used against anything darker than $gray-lighterer.
+// Anywhere muted text is desired, this should be used.
+$text-muted:             #717171;
 
 //** Global textual link color.
-$link-color:               $link-color;
+$link-color:               #2b6db3;
 //** Link hover color set via `darken()` function.
-$link-hover-color:         $link-active-color;
+$link-hover-color:         $theme-accent-intense;
 //** Link hover decoration.
 // $link-hover-decoration: underline
 
@@ -151,8 +178,8 @@ $font-family-sans-serif:     Ubuntu, sans-serif;
 // $btn-font-weight:                normal
 
 $btn-default-color:                 #666;
-$btn-default-bg:                    $faint-gray;
-$btn-default-border:                $faint-gray;
+$btn-default-bg:                    $gray-lighter;
+$btn-default-border:                $gray-lighter;
 
 $btn-primary-color:                 #fff;
 $btn-primary-bg:                    $theme-accent;
@@ -209,7 +236,7 @@ $btn-border-radius-small:           0;
 // $input-border-focus:             #66afe9
 
 //** Placeholder text color
-// $input-color-placeholder:        #999
+$input-color-placeholder:        $text-muted;
 
 //** Default `.form-control` height
 // $input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 2)
@@ -259,10 +286,10 @@ $btn-border-radius-small:           0;
 // $dropdown-link-active-bg:        $component-active-bg
 
 //** Disabled dropdown menu item background color.
-// $dropdown-link-disabled-color:   $gray-light
+$dropdown-link-disabled-color:   $text-muted;
 
 //** Text color for headers within dropdown menus.
-// $dropdown-header-color:          $gray-light
+$dropdown-header-color:          $text-muted;
 
 //** Deprecated `$dropdown-caret-color` as of v3.1.0
 // $dropdown-caret-color:           #000
@@ -428,8 +455,8 @@ $grid-gutter-width:         20px;
 // $nav-link-padding:                          10px 15px
 // $nav-link-hover-bg:                         $gray-lighter
 
-// $nav-disabled-link-color:                   $gray-light
-// $nav-disabled-link-hover-color:             $gray-light
+$nav-disabled-link-color:                   $text-muted;
+$nav-disabled-link-hover-color:             $text-muted;
 
 //== Tabs
 // $nav-tabs-border-color:                     #ddd
@@ -465,7 +492,7 @@ $grid-gutter-width:         20px;
 // $pagination-active-bg:                 $brand-primary
 // $pagination-active-border:             $brand-primary
 
-// $pagination-disabled-color:            $gray-light
+$pagination-disabled-color:            $text-muted;
 // $pagination-disabled-bg:               #fff
 // $pagination-disabled-border:           #ddd
 
@@ -693,7 +720,7 @@ $alert-border-radius:            0;
 // $list-group-active-text-color:  lighten($list-group-active-bg, 40%)
 
 //** Text color of disabled list items
-// $list-group-disabled-color:      $gray-light
+$list-group-disabled-color:      $text-muted;
 //** Background color of disabled list items
 // $list-group-disabled-bg:         $gray-lighter
 //** Text color for content within disabled list items
@@ -800,7 +827,7 @@ $alert-border-radius:            0;
 //** Breadcrumb text color
 // $breadcrumb-color:              #ccc
 //** Text color of current page in the breadcrumb
-// $breadcrumb-active-color:       $gray-light
+$breadcrumb-active-color:       $text-muted;
 //** Textual separator for between breadcrumb elements
 // $breadcrumb-separator:          "/"
 
@@ -853,14 +880,12 @@ $alert-border-radius:            0;
 
 //** Horizontal offset for forms and lists.
 // $component-offset-horizontal: 180px
-//** Text muted color
-// $text-muted:                  $gray-light
 //** Abbreviations and acronyms border color
 // $abbr-border-color:           $gray-light
 //** Headings small color
-// $headings-small-color:        $gray-light
+$headings-small-color:        $text-muted;
 //** Blockquote small color
-// $blockquote-small-color:      $gray-light
+$blockquote-small-color:      $text-muted;
 //** Blockquote font size
 // $blockquote-font-size:        ($font-size-base * 1.25)
 //** Blockquote border color

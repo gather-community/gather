@@ -2,14 +2,14 @@
   table.stats {
     th, td {
       &.totals, &.diner-types {
-        background-color: $faint-gray;
+        background-color: $gray-lighter;
       }
     }
 
     &.multi-community {
       th, td {
         &.cmty-rep {
-          background-color: $faint-gray;
+          background-color: $gray-lighter;
         }
 
         &.diner-types {

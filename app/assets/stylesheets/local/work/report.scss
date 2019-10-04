@@ -1,14 +1,14 @@
 .work--periods.action-report {
   table.stats {
     tr.surheader th:nth-child(even) {
-      background-color: $faint-gray;
+      background-color: $gray-lighter;
     }
 
     tr.header, tbody tr:not(.highlight) {
       th, td {
         // Shade cols 3, 4, 7, 8, ...
         &:nth-child(4n+2), &:nth-child(4n+3) {
-          background-color: $faint-gray;
+          background-color: $gray-lighter;
         }
       }
     }

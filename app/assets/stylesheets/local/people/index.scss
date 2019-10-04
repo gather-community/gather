@@ -10,7 +10,7 @@
 #directory-album {
   .user {
     margin-bottom: 20px;
-    background-color: $fainter-gray;
+    background-color: $gray-lighterer;
 
     // This trick prevents the layout from collapsing while the images are loading.
     .photo-wrapper {
@@ -35,16 +35,16 @@
 
       i.preferred-contact {
         float: right;
-        color: $gray-text;
+        color: $text-muted;
       }
 
       a {
-        color: $main-text-color;
+        color: $text-color;
       }
 
       .email, .unit-phone {
         &, a {
-          color: $gray-text;
+          color: $text-muted;
         }
       }
     }
@@ -56,7 +56,7 @@
 
       .info {
         &, a {
-          color: $gray-text;
+          color: $text-muted;
         }
       }
     }

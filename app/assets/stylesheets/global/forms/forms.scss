@@ -57,17 +57,17 @@ form {
   }
 
   .hint {
-    color: $gray-text;
+    color: $text-muted;
     margin: 3px 0 0 0;
     line-height: 140%;
 
     a {
-      color: $gray-text;
+      color: $text-muted;
       text-decoration: underline;
     }
 
     code {
-      color: $gray-text;
+      color: $text-muted;
       background-color: transparent;
       padding: 0;
     }
@@ -79,7 +79,7 @@ form {
   }
 
   select.prompt-selected {
-    color: $placeholder-color;
+    color: $input-color-placeholder;
   }
 
   // Allow hiding the time picker switch with special class.

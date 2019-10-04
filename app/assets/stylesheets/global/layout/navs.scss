@@ -89,7 +89,7 @@ ul.nav {
           }
 
           a, .active a {
-            color: $main-text-color;
+            color: $text-color;
           }
         }
       }
@@ -130,7 +130,7 @@ ul.nav {
     .nav > li {
       a {
         padding: 5px 15px;
-        color: $gray-text;
+        color: $text-muted;
 
         i {
           margin-right: 5px;
@@ -138,7 +138,7 @@ ul.nav {
       }
 
       &.active a {
-        color: $main-text-color;
+        color: $text-color;
       }
     }
   }

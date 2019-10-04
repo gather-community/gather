@@ -40,9 +40,9 @@ module Wiki
         community: community,
         creator: creator,
         updator: creator,
-        content: File.read(Rails.root.join("config/locales/en/wiki_pages/#{role}.md")),
+        content: I18n.t("wiki.special_pages.#{role}.content"),
         role: role,
-        title: I18n.t("wiki.special_pages.#{role}"),
+        title: I18n.t("wiki.special_pages.#{role}.title"),
         slug: reserved_slug(role)
       )
     end

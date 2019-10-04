@@ -10,7 +10,6 @@
   <footer id="global-footer" class="hidden-print">
     v<%= app_version %> &nbsp;&bull;&nbsp;
     <%= link_to("Privacy Policy", "/about/privacy-policy") %> &nbsp;&bull;&nbsp;
-    A project of <%= link_to("Sassafras Tech Collective", "http://sassafras.coop") %> &nbsp;&bull;&nbsp;
     <%= link_to("Credits", "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
     <% if current_user && current_community %>
       <% if policy(current_community).update? %>

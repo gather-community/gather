@@ -6,15 +6,15 @@ describe Utils::Markdowner do
   let(:options) { {} }
   subject(:output) { described_class.instance.render(input, **options) }
 
-  context "with safe and unsafe tags" do
-    let(:input) { "apple **banana** <em>bold</em> <script>foo</script> <iframe>bar</iframe>" }
-    it { is_expected.to eq("<p>apple <strong>banana</strong> <em>bold</em> foo bar</p>\n") }
-  end
-
   context "with extra allowed tags" do
     let(:options) { {extra_allowed_tags: %w[iframe]} }
     let(:input) { "apple **banana** <em>bold</em> <script>foo</script> <iframe>bar</iframe>" }
     it { is_expected.to eq("<p>apple <strong>banana</strong> <em>bold</em> foo <iframe>bar</iframe></p>\n") }
+  end
+
+  context "with safe and unsafe tags" do
+    let(:input) { "apple **banana** <em>bold</em> <script>foo</script> <iframe>bar</iframe>" }
+    it { is_expected.to eq("<p>apple <strong>banana</strong> <em>bold</em> foo bar</p>\n") }
   end
 
   context "with link target" do

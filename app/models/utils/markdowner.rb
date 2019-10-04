@@ -8,8 +8,8 @@ module Utils
 
     def render(str, extra_allowed_tags: [])
       return "" if str.blank?
-      tags = Rails::Html::WhiteListSanitizer.allowed_tags.merge(extra_allowed_tags)
-      attributes = Rails::Html::WhiteListSanitizer.allowed_attributes.merge(%w[target])
+      tags = Rails::Html::WhiteListSanitizer.allowed_tags + extra_allowed_tags
+      attributes = Rails::Html::WhiteListSanitizer.allowed_attributes + %w[target]
       renderer = Redcarpet::Render::HTML.new(hard_wrap: true)
       markdown = Redcarpet::Markdown.new(renderer, autolink: true, space_after_headers: true,
                                                    tables: true, strikethrough: true)

@@ -3,6 +3,33 @@ en:
     not_found_create: "There is no wiki page named '%{title}'. You can create it below!"
     preview_notice: "This is a preview. To save or further edit the page, use the form below."
     revision_info: "Page revised on %{time} by %{user}"
+    revision_info_no_by: "Page revised on %{time}"
     special_pages:
-      home: "Wiki Home Page"
-      sample: "Sample Page"
+      home:
+        title: "Wiki Home Page"
+        content: |-
+          This is your **wiki home page**!
+
+          See the [[Sample Page]] for tips on how to fill it with useful information!
+      sample:
+        title: "Sample Page"
+        content: |-
+          This is a sample wiki page.
+
+          Click **Edit** above to see how this page works! And don't worry, you can't break anything!
+
+          ## Formatting
+
+          To edit a Wiki page, you use **Markdown**, which is a simple way of creating clean, nice-looking content without needing to learn a special language. To learn more about Markdown, see the [Markdown Formatting Guide](/about/markdown).
+
+          ## Links
+
+          Links to other pages are very important! You can link to other **wiki pages** like this: [[Fun Page]].
+
+          Note that the above link is (probably) red. That's because the page doesn't exist yet. If you click the link, you will have a chance to create the page. The link will then become blue!
+
+          If you want to use something other than the page's title as the link text, you can [[Fun Page|do this]].
+
+          Links to external pages look [like this](http://example.com).
+
+          A URL in plain text will be automatically recognized and converted to a link: https://gather.coop

@@ -3,7 +3,7 @@ module Wiki
     acts_as_tenant :cluster
 
     belongs_to :page, class_name: "Wiki::Page"
-    belongs_to :updator, class_name: "User"
+    belongs_to :updater, class_name: "User"
 
     before_update :raise_on_update
 

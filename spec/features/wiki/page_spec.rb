@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "pages", js: true do
-  let(:actor) { create(:user) }
+  let(:actor) { create(:user, first_name: "Jane", last_name: "Doe") }
   let(:other_community) { create(:community, cluster: actor.cluster) }
   let!(:decoy_page) { create(:wiki_page, community: other_community, title: "Another Page") }
 
@@ -22,6 +22,7 @@ feature "pages", js: true do
     click_link("Edit")
     fill_in("Content", with: "Here is a link to [[Another Page]]")
     click_button("Save")
+    expect(page).to have_content(/Page revised on .+ by Jane Doe/)
 
     click_on("Another Page")
     expect(page).to have_content("There is no wiki page named 'Another Page'")
@@ -49,6 +50,7 @@ feature "pages", js: true do
     click_button("Save")
 
     click_on("History")
+    expect(page).to have_css("td.updater", text: "Jane Doe")
     click_on("Compare Selected")
     expect(page).to have_css("del", text: "Version one")
     expect(page).to have_css("ins", text: "Version two")
@@ -117,11 +119,21 @@ feature "pages", js: true do
     end
   end
 
-  scenario "with safe and unsafe HTML" do
-    visit("/wiki/new")
-    fill_in("Title", with: "Boring Page")
-    fill_in("Content", with: "apple **banana** <em>bold</em> <script>foo</script>")
-    click_button("Save")
-    expect(page.body).to include("apple <strong>banana</strong> <em>bold</em> foo")
+  context "as superadmin from other cluster" do
+    let(:outside_community) { ActsAsTenant.with_tenant(create(:cluster)) { create(:community) } }
+    let(:actor) do
+      create(:super_admin, community: outside_community, first_name: "Jane", last_name: "Doe")
+    end
+
+    scenario "does not record updater" do
+      visit("/wiki")
+      expect(page).not_to have_content(/Page revised on .+ by Jane Doe/)
+      click_link("Edit")
+      fill_in("Content", with: "Filth")
+      click_button("Save")
+      expect(page).not_to have_content(/Page revised on .+ by Jane Doe/)
+      click_link("History")
+      expect(page).not_to have_css("td.updater", text: "Jane Doe")
+    end
   end
 end

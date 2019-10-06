@@ -379,8 +379,8 @@ describe User do
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 
-    context "with wiki page updator record" do
-      let!(:wiki_page) { create(:wiki_page, updator: user) }
+    context "with wiki page updater record" do
+      let!(:wiki_page) { create(:wiki_page, updater: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
   end

@@ -1,6 +1,6 @@
-.markdown-demo {  
+.markdown-demo {
   .row {
-    max-width: 900px;
+    margin-bottom: 30px;
   }
 
   .html, .markdown {
@@ -14,6 +14,7 @@
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
     word-break: keep-all;
+    margin-bottom: 0;
   }
 
   .html {

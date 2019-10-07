@@ -32,7 +32,7 @@ module People
     end
 
     def row_for(user)
-      user = Csv::UserDecorator.new(user)
+      user = People::UserCsvDecorator.new(user)
       columns.map { |c| user.send(c) }
     end
   end

@@ -232,6 +232,19 @@ en:
         keyholders: "Keyholders"
         emergency_contacts: "Emergency Contacts"
         pets: "Pets"
+      billing/account:
+        number: "Number"
+        household_id: "Household ID"
+        household_name: "Household Name"
+        balance_due: "Balance Due"
+        current_balance: "Current Balance"
+        credit_limit: "Credit Limit"
+        last_statement_id: "Last Statement ID"
+        last_statement_on: "Last Statement Date"
+        due_last_statement: "Due Last Statement"
+        total_new_charges: "Total New Charges"
+        total_new_credits: "Total New Credits"
+        created_at: "Creation Date"
 
   action_names:
     common:

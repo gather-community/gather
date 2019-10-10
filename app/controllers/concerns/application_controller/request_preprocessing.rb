@@ -148,7 +148,11 @@ module Concerns::ApplicationController::RequestPreprocessing
   # Renders 403 if community not permitted.
   def check_community_permissions
     return unless current_user.present? && current_community.present?
-    render_error_page(:forbidden) unless policy(current_community).show?
+
+    # It's important that we not use the `policy` helper here or anywhere else before impersonation handling
+    # is done, because Pundit caches the policy objects and if impersonation changes current_user,
+    # the wrong policy object will be in the cache.
+    render_error_page(:forbidden) unless CommunityPolicy.new(current_user, current_community).show?
   end
 
   # Set the current tenant (cluster). If current_community is not set, does nothing.

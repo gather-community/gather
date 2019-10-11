@@ -5,8 +5,6 @@ module People
   class UserCsvDecorator < ::UserDecorator
     include CsvDecorable
 
-    delegate_all
-
     delegate :unit_num, :unit_suffix, :garage_nums, :keyholders, to: :household
 
     def birthdate
@@ -19,11 +17,11 @@ module People
     end
 
     def joined_on
-      l(object.joined_on)
+      csv_localize(object.joined_on)
     end
 
     def child
-      bool(object.child?)
+      csv_bool(object.child?)
     end
 
     def vehicles

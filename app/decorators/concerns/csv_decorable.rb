@@ -5,12 +5,18 @@ module CsvDecorable
 
   private
 
-  def l(date_or_time)
+  def csv_localize(date_or_time)
     return nil if date_or_time.nil?
     I18n.l(date_or_time, format: :csv_full)
   end
 
-  def bool(val)
+  def csv_bool(val)
     I18n.t("common.#{val ? 'true' : 'false'}")
+  end
+
+  # We don't include the currency symbol b/c that can interfere with reading in a spreadsheet.
+  # Currencies should not vary within a community.
+  def csv_currency(val)
+    h.number_with_precision(val, precision: 2)
   end
 end

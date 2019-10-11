@@ -25,6 +25,7 @@ en:
       full_date: "%b %d %Y"
       url_date: "%Y-%m-%d"
       iso: "%Y%m%dT%H%M%S"
+      csv_full: "%Y-%m-%d %H:%M"
   datepicker:
     dformat: '%b %d %Y'
     pformat: 'MMM D YYYY'

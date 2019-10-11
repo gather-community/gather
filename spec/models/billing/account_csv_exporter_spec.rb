@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-describe Billing::AccountExporter do
+describe Billing::AccountCsvExporter do
   let(:actor) { create(:biller) }
   let(:policy) do
     Billing::AccountPolicy.new(actor, Billing::Account.new(community: actor.community))
   end
-  let(:exporter) { described_class.new(Billing::Account.all, policy: policy) }
+  let(:exporter) { described_class.new(Billing::Account.by_cmty_and_household_name, policy: policy) }
 
   describe "to_csv" do
     context "with no accounts" do
@@ -19,9 +19,22 @@ describe Billing::AccountExporter do
     end
 
     context "with accounts" do
+      # Deliberately make first community come lexically second to test sort is respected.
+      let!(:communities) { [create(:community, name: "Bravo", abbrv: "BR"), create(:community, name: "Alpha", abbrv: "AL")] }
+      let!(:households) do
+        Timecop.freeze("2018-09-22 9:00") do
+          [
+            create(:household, community: communities[0], name: "Smith"),
+            create(:household, community: communities[1], name: "Li")
+          ]
+        end
+      end
       let!(:accounts) do
         Timecop.freeze("2018-09-23 10:00") do
-          [create(:account), create(:account, credit_limit: 50)]
+          [
+            create(:account, household: households[0]),
+            create(:account, household: households[1], credit_limit: 50)
+          ]
         end
       end
 
@@ -42,9 +55,7 @@ describe Billing::AccountExporter do
         expect(exporter.to_csv).to eq(prepare_expectation("accounts.csv",
           number: accounts.map { |a| a.id.to_s.rjust(6, "0") },
           household_id: accounts.map(&:household_id),
-          household_name: accounts.map(&:household_name),
-          last_statement_id: accounts.map(&:last_statement_id)
-        ))
+          last_statement_id: accounts.map(&:last_statement_id)))
       end
     end
   end

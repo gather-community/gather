@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe People::Exporter do
+describe People::CsvExporter do
   let(:actor) { create(:user) }
   let(:policy) { UserPolicy.new(actor, User.new(household: Household.new(community: actor.community))) }
   let(:exporter) { described_class.new(User.by_name.active.where.not(id: actor.id), policy: policy) }
@@ -49,6 +49,8 @@ describe People::Exporter do
       end
       let!(:pet1) { create(:pet, household: household1, name: "Po", color: "Blue", species: "Snake") }
       let!(:pet2) { create(:pet, household: household1, name: "Wu", color: "Green", species: "Bird") }
+
+      # Deliberately make first user lexically last to ensure sort respected.
       let!(:adult1) do
         create(:user, household: household1, first_name: "Ron", last_name: "South", email: "a@b.com",
                       birthdate: "1980/07/20", joined_on: "2016/03/12", preferred_contact: "email",

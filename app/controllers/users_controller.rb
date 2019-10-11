@@ -60,7 +60,7 @@ class UsersController < ApplicationController
         load_users
         @users = @users.active # No inactve users in CSV
         filename = csv_filename(:community, "directory", :date)
-        csv = People::Exporter.new(@users, policy: policy(sample_user)).to_csv
+        csv = People::CsvExporter.new(@users, policy: policy(sample_user)).to_csv
         send_data(csv, filename: filename, type: :csv)
       end
     end

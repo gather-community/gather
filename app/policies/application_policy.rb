@@ -7,6 +7,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), "application_policy_s
 class ApplicationPolicy
   class CommunityNotSetError < StandardError; end
 
+  include MultiCommunityCheck
+
   attr_reader :user, :record
 
   def initialize(user, record)

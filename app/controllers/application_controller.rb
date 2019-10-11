@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include Concerns::ApplicationController::Loaders
   include Concerns::ApplicationController::UrlHelpers
   include Concerns::ApplicationController::Users
-  include Utilities
+  include MultiCommunityCheck
 
   # Verify that controller actions are authorized.
   after_action :verify_authorized,  except: :index, unless: :devise_controller?

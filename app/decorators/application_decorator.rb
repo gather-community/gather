@@ -1,5 +1,5 @@
 class ApplicationDecorator < Draper::Decorator
-  include Utilities
+  include MultiCommunityCheck
 
   delegate :t, :safe_str, to: :h # I18n helper
 

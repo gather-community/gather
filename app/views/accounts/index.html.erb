@@ -78,4 +78,10 @@
       </tr>
     <% end %>
   </table>
+
+  <div class="index-footer row">
+    <div class="links col-sm-12">
+      <%= link_to(icon_tag("download") << " Download as CSV", accounts_path(format: :csv)) %>
+    </div>
+  </div>
 <% end %>

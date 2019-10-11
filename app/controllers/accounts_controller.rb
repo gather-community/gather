@@ -7,30 +7,40 @@ class AccountsController < ApplicationController
   decorates_assigned :accounts, :account, :last_statement, :community, :statements
 
   def index
-    @community = current_community
-    authorize(sample_account)
-    @accounts = policy_scope(Billing::Account)
-    @accounts = @accounts.where(community: @community)
-      .includes(:last_statement, household: %i[users community])
-      .with_any_activity(@community)
-      .by_cmty_and_household_name
-      .decorate
+    respond_to do |format|
+      @community = current_community
+      @accounts = policy_scope(Billing::Account)
+      @accounts = @accounts.where(community: @community)
+        .includes(:last_statement, household: %i[users community])
+        .with_any_activity(@community)
+        .by_cmty_and_household_name
 
-    @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
-    @active_accounts = Billing::Account.with_activity(@community).count
-    @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
-    @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
+      format.html do
+        authorize(sample_account)
+        @accounts = @accounts.decorate
 
-    last_statement = Billing::Statement.in_community(@community).order(:created_at).last
-    @last_statement_run = last_statement.try(:created_on)
+        @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
+        @active_accounts = Billing::Account.with_activity(@community).count
+        @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
+        @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
 
-    @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
+        last_statement = Billing::Statement.in_community(@community).order(:created_at).last
+        @last_statement_run = last_statement.try(:created_on)
 
-    last_fee = Billing::Transaction.joins(:account)
-      .where(code: "late_fee", accounts: {community_id: @community.id})
-      .order(:incurred_on).last
+        @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
 
-    @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
+        last_fee = Billing::Transaction.joins(:account)
+          .where(code: "late_fee", accounts: {community_id: @community.id})
+          .order(:incurred_on).last
+
+        @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
+      end
+      format.csv do
+        filename = csv_filename(:community, "accounts", :date)
+        csv = Billing::AccountCsvExporter.new(@accounts, policy: policy(sample_account)).to_csv
+        send_data(csv, filename: filename, type: :csv)
+      end
+    end
   end
 
   def yours

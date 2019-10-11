@@ -23,7 +23,7 @@ feature "billing", js: true do
       actor.community.save!
     end
 
-    scenario do
+    scenario "main path" do
       visit(accounts_path)
       expect(page).to have_content(account1.household.name)
       expect(page).to have_content(account2.household.name)
@@ -70,6 +70,16 @@ feature "billing", js: true do
 
       click_link(account1.household.name)
       expect(page).to have_statement_rows(2, more: false)
+    end
+
+    scenario "download account csv" do
+      Timecop.freeze("2017-04-15 12:00pm") do
+        visit(accounts_path)
+        click_link("Download as CSV")
+        filename = "#{account1.community.slug}-accounts-2017-04-15.csv"
+        expect(page.response_headers["Content-Disposition"]).to eq(%(attachment; filename="#{filename}"))
+        expect(page).to have_content(account1.household_name)
+      end
     end
   end
 

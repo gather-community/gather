@@ -33,7 +33,7 @@ module Billing
     end
 
     def exportable_attributes
-      %i[number household_id household_name balance_due current_balance credit_limit
+      %i[number community_id community_name household_id household_name balance_due current_balance credit_limit
          last_statement_id last_statement_on due_last_statement total_new_charges
          total_new_credits created_at]
     end

@@ -234,8 +234,10 @@ en:
         pets: "Pets"
       billing/account:
         number: "Number"
+        community_id: "Community ID"
+        community_name: "Community"
         household_id: "Household ID"
-        household_name: "Household Name"
+        household_name: "Household"
         balance_due: "Balance Due"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"

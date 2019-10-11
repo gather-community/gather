@@ -27,7 +27,7 @@ module Billing
     end
 
     def self.by_cmty_and_household_name
-      joins(household: :community).order("communities.abbrv, households.name")
+      joins(household: :community).order("communities.name, households.name")
     end
 
     def self.with_recent_activity

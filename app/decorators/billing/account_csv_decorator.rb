@@ -7,6 +7,10 @@ module Billing
 
     alias number number_padded
 
+    # Bypass the main decorator method which adds a community prefix
+    # since we are including that info in separate columns.
+    delegate :household_name, to: :object
+
     def balance_due
       csv_currency(object.balance_due)
     end

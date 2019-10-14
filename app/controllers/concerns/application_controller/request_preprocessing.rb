@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles the processing of requests before they reach the controller action method itself.
 # All global before_actions should go here.
 # The basic flow is:
@@ -41,10 +43,10 @@ module Concerns::ApplicationController::RequestPreprocessing
 
   # Currently we are only checking for calendar_token, but could add others later.
   def authenticate_user_from_token!
-    if params[:calendar_token] && (user = User.find_by_calendar_token(params[:calendar_token]))
+    if params[:calendar_token] && (user = User.find_by(calendar_token: params[:calendar_token]))
       # We are passing store false, so the user is not
       # actually stored in the session and a token is needed for every request.
-      sign_in user, store: false
+      sign_in(user, store: false)
     else
       render_error_page(:unauthorized)
     end
@@ -54,6 +56,16 @@ module Concerns::ApplicationController::RequestPreprocessing
     skip_authorization # We are doing this manually so need to skip the check.
     return if policy_object.send(query)
     raise Pundit::NotAuthorizedError, query: query, record: record, policy: policy_object
+  end
+
+  # Redirects to the apex domain. Requested at the controller level if the apex domain is required.
+  # Not run on every request.
+  def ensure_apex_domain
+    return if subdomain.blank?
+    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+    url_params = Settings.url.to_h
+    url_params[:path], url_params[:query] = request.fullpath.split("?")
+    redirect_to(url_builder.build(url_params).to_s)
   end
 
   def log_full_url
@@ -100,7 +112,7 @@ module Concerns::ApplicationController::RequestPreprocessing
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.
-      redirect_to sign_in_url, notice: I18n.t("devise.failure.unauthenticated") unless devise_controller?
+      redirect_to(sign_in_url, notice: I18n.t("devise.failure.unauthenticated")) unless devise_controller?
     end
   end
 
@@ -137,7 +149,7 @@ module Concerns::ApplicationController::RequestPreprocessing
       url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
       url_params = Settings.url.to_h.merge(host: host)
       url_params[:path], url_params[:query] = request.fullpath.split("?")
-      redirect_to url_builder.build(url_params).to_s
+      redirect_to(url_builder.build(url_params).to_s)
     else
       render_error_page(:not_found)
     end
@@ -159,7 +171,7 @@ module Concerns::ApplicationController::RequestPreprocessing
   # Assumes that current_community would be set by now if one is required for this route.
   # If a tenant is not set and query is attempted on a tenant-scoped model, an error will result.
   def set_tenant
-    return unless current_community.present?
+    return if current_community.blank?
     set_current_tenant(current_community.cluster)
 
     # Scoping is turned off temporarily in a rack middleware to prevent NoTenantSet errors in preprocessing.
@@ -172,15 +184,14 @@ module Concerns::ApplicationController::RequestPreprocessing
   end
 
   def handle_impersonation
-    if session[:impersonating_id] && user = User.find_by(id: session[:impersonating_id])
-      @real_current_user = current_user
-      @current_user = @impersonated_user = user
-    end
+    return unless session[:impersonating_id] && (user = User.find_by(id: session[:impersonating_id]))
+    @real_current_user = current_user
+    @current_user = @impersonated_user = user
   end
 
   # Redirects to inactive page when user is inactive.
   def handle_unauthorized(exception)
-    if current_user.try(:inactive?)
+    if current_user&.inactive?
       redirect_to(inactive_path)
     else
       raise exception

@@ -5,10 +5,6 @@ module People
   class CsvExporter < ::CsvExporter
     protected
 
-    def scope(initial_scope)
-      initial_scope.includes(household: :vehicles)
-    end
-
     def klass
       User
     end

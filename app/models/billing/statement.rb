@@ -18,7 +18,7 @@ module Billing
     scope :reminder_not_sent, -> { where(reminder_sent: false) }
     scope :with_balance_owing, -> { joins(:account).merge(Billing::Account.with_balance_owing) }
     scope :is_latest, -> { joins(:account).where("accounts.last_statement_id = statements.id") }
-    scope :latest_first, -> { order(created_at: :desc) }
+    scope :newest_first, -> { order(created_at: :desc) }
 
     delegate :community, :community_id, :household, :household_id, to: :account
 

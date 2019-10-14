@@ -15,7 +15,7 @@ module Work
 
     def index
       authorize(sample_period)
-      @periods = policy_scope(Period).in_community(current_community).latest_first.page(params[:page])
+      @periods = policy_scope(Period).in_community(current_community).newest_first.page(params[:page])
     end
 
     def new

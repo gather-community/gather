@@ -246,7 +246,20 @@ en:
         due_last_statement: "Due Last Statement"
         total_new_charges: "Total New Charges"
         total_new_credits: "Total New Credits"
-        created_at: "Creation Date"
+        created_at: "Creation Time"
+      billing/transaction:
+        id: "ID"
+        incurred_on: "Date"
+        code: "Code"
+        chg_crd: "Type"
+        description: "Description"
+        quantity: "Quantity"
+        unit_price: "Unit Price"
+        amount: "Amount"
+        created_at: "Creation Time"
+        account_id: "Account ID"
+        statement_id: "Statement ID"
+        meal_id: "Meal ID"
 
   action_names:
     common:

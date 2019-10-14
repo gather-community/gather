@@ -19,5 +19,10 @@ module Billing
     def permitted_attributes
       %i[incurred_on code description amount]
     end
+
+    def exportable_attributes
+      %i[id incurred_on code chg_crd description quantity unit_price amount created_at
+         account_id statement_id meal_id]
+    end
   end
 end

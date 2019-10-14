@@ -2,7 +2,7 @@ module Billing
   class Transaction < ApplicationRecord
     TYPES = [
       OpenStruct.new(code: "meal", charge?: true),
-      OpenStruct.new(code: "oldbal", charge?: true, credit?: true),
+      OpenStruct.new(code: "oldbal", charge?: true, manual?: false),
       OpenStruct.new(code: "payment", credit?: true, manual?: true),
       OpenStruct.new(code: "reimb", credit?: true, manual?: true),
       OpenStruct.new(code: "othcrd", credit?: true, manual?: true),

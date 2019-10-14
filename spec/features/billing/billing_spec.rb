@@ -124,6 +124,7 @@ feature "billing", js: true do
   end
 
   def have_statement_rows(count, more:)
-    have_css("table.statements tbody tr", count: count + (more ? 2 : 1)) # Account for header row and more link
+    # Account for header row and more link
+    have_css("table.statements tbody tr", count: count + (more ? 2 : 1))
   end
 end

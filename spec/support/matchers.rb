@@ -1,20 +1,28 @@
-require 'rspec/expectations'
+# frozen_string_literal: true
 
-RSpec::Matchers.define :have_subdomain do |subdomain|
+require "rspec/expectations"
+
+RSpec::Matchers.define(:have_apex_domain) do |subdomain|
+  match do |url|
+    url =~ %r{\Ahttp://#{Settings.url.host}}
+  end
+end
+
+RSpec::Matchers.define(:have_subdomain) do |subdomain|
   match do |url|
     subdomain += "." unless subdomain.nil?
     url =~ %r{\Ahttp://#{subdomain}#{Settings.url.host}}
   end
 end
 
-RSpec::Matchers.define :have_subdomain_and_path do |subdomain, path|
+RSpec::Matchers.define(:have_subdomain_and_path) do |subdomain, path|
   match do |url|
     subdomain += "." unless subdomain.nil?
     url =~ %r{\Ahttp://#{subdomain}#{Settings.url.host}(:#{Settings.url.port})?#{Regexp.escape(path)}\z}
   end
 end
 
-RSpec::Matchers.define :have_errors do |errors|
+RSpec::Matchers.define(:have_errors) do |errors|
   match do |object|
     object.invalid? && errors.all? do |field, pattern|
       object.errors[field].join.match?(pattern)

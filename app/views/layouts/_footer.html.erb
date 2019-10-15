@@ -18,6 +18,9 @@
       <% if policy(Billing::Account.new(community: current_community)).index? %>
       &nbsp;&bull;&nbsp; <%= link_to("Accounts", lens_path_if_present("accounts")) %>
       <% end %>
+      <% if policy(Community.new).index? %>
+      &nbsp;&bull;&nbsp; <%= link_to("Communities", communities_path) %>
+      <% end %>
     <% end %>
 
     <%# For test purposes only. Security risk otherwise. %>

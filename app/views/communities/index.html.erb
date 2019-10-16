@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <td>ID</td>
+      <td>CL</td>
       <td>Name</td>
       <td>Created</td>
       <td>Login?</td>
@@ -18,6 +19,7 @@
     <% communities.each do |community| %>
       <tr>
         <td><%= community.id %></td>
+        <td><%= community.cluster_id %></td>
         <td><%= link_to(community.name, url_in_community(community)) %></td>
         <td><%= l(community.created_at, format: :url_date) %></td>
         <td>

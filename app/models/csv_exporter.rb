@@ -20,7 +20,7 @@ class CsvExporter
     end
 
     # Fix Excel issue where file is interpreted as SYLK file by quoting first column header if it's ID
-    str.sub!(/\AID(?=(,|\z))/, %("ID"))
+    str.sub(/\AID(?=(,|\z))/, %("ID"))
   end
 
   protected

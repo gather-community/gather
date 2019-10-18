@@ -11,7 +11,7 @@ describe People::CsvExporter do
     context "with no users" do
       it "should return valid csv" do
         # Full headers are tested below.
-        expect(exporter.to_csv).to match(/\AID,/)
+        expect(exporter.to_csv).to match(/\A"ID",/)
       end
 
       context "with other locale" do

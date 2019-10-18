@@ -48,27 +48,3 @@ table.index {
     text-align: right;
   }
 }
-
-.index-footer {
-  // Leave the left/right margins alone for column stuff.
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  .pagination {
-    margin: 0;
-  }
-
-  .links {
-    @media screen and (min-width: $screen-sm-min) {
-      text-align: right;
-    }
-
-    @media screen and (max-width: $screen-xs-max) {
-      margin-top: 10px;
-    }
-
-    a {
-      color: $text-muted;
-    }
-  }
-}

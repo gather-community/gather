@@ -15,6 +15,10 @@ p.inner {
 
 mark {
   background-color: $highlight-color;
+
+  @media print {
+    text-decoration: underline;
+  }
 }
 
 .alert {

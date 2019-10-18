@@ -6,7 +6,7 @@ module Meals
     def initialize(meal, section, expanded:, &block)
       self.meal = meal
       self.section = section
-      self.expanded = expanded
+      self.expanded = true # Trying this without collapsing for now.
       self.block = block
     end
 

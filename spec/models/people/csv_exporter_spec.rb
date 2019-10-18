@@ -25,8 +25,8 @@ describe People::CsvExporter do
 
     context "with users" do
       let!(:household1) do
-        create(:household, with_members: false, unit_num: "20", unit_suffix: "3A", garage_nums: "4,9",
-                           keyholders: "Sally, Muhammad")
+        create(:household, name: "Fun", with_members: false, unit_num: "20", unit_suffix: "3A",
+                           garage_nums: "4,9", keyholders: "Sally, Muhammad")
       end
       let!(:vehicle1) do
         create(:vehicle, household: household1, color: "Blue", make: "Ford",
@@ -68,7 +68,7 @@ describe People::CsvExporter do
                               guardians: [adult1, adult2, inactive])
       end
 
-      let!(:household2) { create(:household, with_members: false) }
+      let!(:household2) { create(:household, name: "Blip", with_members: false) }
       let!(:adult3) do
         create(:user, household: household2, first_name: "Zorgon", last_name: "Puzt",
                       email: "g@h.com", mobile_phone: "+17345558788")
@@ -76,7 +76,8 @@ describe People::CsvExporter do
 
       it "should return valid csv" do
         expect(exporter.to_csv).to eq(prepare_expectation("users.csv",
-          id: [child, adult2, adult1, adult3].map(&:id)))
+          id: [child, adult2, adult1, adult3].map(&:id),
+          household_id: [household1, household2].map(&:id)))
       end
     end
   end

@@ -82,7 +82,7 @@ module Meals
     end
 
     def change_formula?
-      !meal.finalized? && active_admin_or?(:meals_coordinator, :biller)
+      !meal.finalized? && admin_coord_or_head_cook?
     end
 
     def change_capacity?

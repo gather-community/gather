@@ -5,7 +5,7 @@
 <% if @txn_years %>
   <footer id="local-footer" class="footer-links">
     <div class="export-link-with-form">
-      <%= link_to(icon_tag("download") << " Download Transactions as CSV", "#",
+      <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
             onclick: "$(this).closest('.export-link-with-form')
               .find('form').css({display: 'inline-block'}); return false;") %>
       &nbsp;

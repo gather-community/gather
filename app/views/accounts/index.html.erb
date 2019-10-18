@@ -80,11 +80,11 @@
   </table>
 
   <footer id="local-footer" class="footer-links">
-    <%= link_to(icon_tag("download") << " Download Accounts as CSV", accounts_path(format: :csv)) %>
+    <%= icon_tag("download") %> <%= link_to("Download Accounts as CSV", accounts_path(format: :csv)) %>
     &nbsp;&nbsp;
     <% if @txn_years %>
       <div class="export-link-with-form">
-        <%= link_to(icon_tag("download") << " Download Transactions as CSV", "#",
+        <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
               onclick: "$(this).closest('.export-link-with-form')
                 .find('form').css({display: 'inline-block'}); return false;") %>
         &nbsp;

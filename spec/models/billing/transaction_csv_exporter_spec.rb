@@ -12,7 +12,8 @@ describe Billing::TransactionCsvExporter do
   describe "to_csv" do
     context "with no transactions" do
       it "returns valid csv" do
-        expect(exporter.to_csv).to match(/\AID,/)
+        # Full headers are tested below.
+        expect(exporter.to_csv).to match(/\A"ID",/)
       end
     end
 

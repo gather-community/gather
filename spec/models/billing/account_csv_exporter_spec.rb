@@ -12,6 +12,7 @@ describe Billing::AccountCsvExporter do
   describe "to_csv" do
     context "with no accounts" do
       it "returns valid csv" do
+        # Full headers are tested below.
         expect(exporter.to_csv).to match(/\ANumber,/)
       end
     end

@@ -12,12 +12,15 @@ class CsvExporter
   end
 
   def to_csv
-    CSV.generate do |csv|
+    str = CSV.generate do |csv|
       csv << headers
       scope(initial_scope).each do |object|
         csv << row_for(object)
       end
     end
+
+    # Fix Excel issue where file is interpreted as SYLK file by quoting first column header if it's ID
+    str.sub!(/\AID(?=(,|\z))/, %("ID"))
   end
 
   protected

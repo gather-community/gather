@@ -81,7 +81,7 @@
 
   <footer id="local-footer" class="footer-links">
     <%= link_to(icon_tag("download") << " Download Accounts as CSV", accounts_path(format: :csv)) %>
-    &nbsp;&bull;&nbsp;
+    &nbsp;&nbsp;
     <% if @txn_years %>
       <div class="export-link-with-form">
         <%= link_to(icon_tag("download") << " Download Transactions as CSV", "#",

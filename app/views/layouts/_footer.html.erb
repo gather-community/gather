@@ -2,15 +2,15 @@
   while the footer content maxes out at 1200px. %>
 <div id="global-footer-wrapper">
   <footer id="global-footer" class="hidden-print footer-links">
-    v<%= app_version %> &nbsp;&bull;&nbsp;
-    <%= link_to("Privacy Policy", "/about/privacy-policy") %> &nbsp;&bull;&nbsp;
+    v<%= app_version %>&nbsp;
+    <%= link_to("Privacy Policy", "/about/privacy-policy") %>&nbsp;&nbsp;
     <%= link_to("Credits", "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
     <% if current_user && current_community %>
       <% if policy(current_community).update? %>
-        &nbsp;&bull;&nbsp; <%= link_to("Settings", admin_settings_path(type: "community")) %>
+        &nbsp;&nbsp;<%= link_to("Settings", admin_settings_path(type: "community")) %>
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
-      &nbsp;&bull;&nbsp; <%= link_to("Accounts", lens_path_if_present("accounts")) %>
+      &nbsp;&nbsp;<%= link_to("Accounts", lens_path_if_present("accounts")) %>
       <% end %>
     <% end %>
 

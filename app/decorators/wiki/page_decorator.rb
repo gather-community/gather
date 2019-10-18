@@ -44,7 +44,7 @@ module Wiki
       bits << h.link_to("Wiki Page Listing", h.all_wiki_pages_path) if h.policy(sample_page).all?
       bits << h.link_to("New Wiki Page", h.new_wiki_page_path) if h.policy(sample_page).create?
       bits << revision_info
-      bits.reduce(&sep(" &nbsp;&bull;&nbsp; "))
+      bits.reduce(&sep("&nbsp;&nbsp;&nbsp;"))
     end
 
     def show_action_link_set

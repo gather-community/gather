@@ -37,7 +37,3 @@ en:
       calendars: "Calendars"
       change_passwd: "Change Password"
       sign_out: "Sign Out"
-    footer:
-      wiki:
-        all: "Wiki Page Listing"
-        new: "New Wiki Page"

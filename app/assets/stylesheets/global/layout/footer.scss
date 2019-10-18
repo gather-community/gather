@@ -5,7 +5,6 @@
 #global-footer, #local-footer {
   font-size: 13px;
   color: $text-muted;
-  padding: 10px 20px;
   width: 100%;
 
   a, a:visited, a:active, a:hover {
@@ -21,7 +20,7 @@
 }
 
 #local-footer {
-  padding: 20px;
+  padding-top: 20px;
 }
 
 #global-footer {

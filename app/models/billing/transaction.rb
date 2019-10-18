@@ -4,8 +4,8 @@ module Billing
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     TYPES = [
-      OpenStruct.new(code: "meal", charge?: true),
-      OpenStruct.new(code: "oldbal", charge?: true, manual?: false),
+      OpenStruct.new(code: "meal", charge?: true, manual?: false),
+      OpenStruct.new(code: "oldbal", charge?: true, manual?: true),
       OpenStruct.new(code: "payment", credit?: true, manual?: true),
       OpenStruct.new(code: "reimb", credit?: true, manual?: true),
       OpenStruct.new(code: "othcrd", credit?: true, manual?: true),

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "subdomain handling" do
@@ -16,21 +18,23 @@ feature "subdomain handling" do
   end
 
   context "when not signed in" do
-    scenario "visiting subdomain and signing in should redirect back to that subdomain" do
-      with_subdomain("bar") do
-        visit root_path
+    scenario "visiting root on subdomain and signing in with google should redirect to apex and back" do
+      with_subdomain("foo") do
+        visit(root_path) # This will go to root with subomain, but should redirect to apex.
         expect(page).not_to have_content("Please sign in to view that page")
-        expect(current_url).to have_subdomain("bar")
+        expect(current_url).to have_apex_domain
         expect_sign_in_with_google_link_and_click
         expect(page).to have_content(user.name)
-        expect(current_url).to have_subdomain("bar")
+        expect(current_url).to have_subdomain("foo")
       end
     end
 
     scenario "visiting subdomain with path and signing in should return you to path after sign in" do
+      # Note that this is not the user's home subdomain, but we respect it anyway after sign in.
       with_subdomain("bar") do
-        visit meals_path
+        visit(meals_path) # This will go to meals page with subomain, but should redirect to apex.
         expect(page).to have_content("Please sign in to view that page")
+        expect(current_url).to have_apex_domain
         expect_sign_in_with_google_link_and_click
         expect(current_url).to have_subdomain_and_path("bar", "/meals")
       end
@@ -38,13 +42,13 @@ feature "subdomain handling" do
 
     scenario "visiting invalid subdomain should 404" do
       with_subdomain("invalid") do
-        visit root_path
+        visit(root_path)
         expect(page).to be_not_found
       end
     end
 
     scenario "visiting apex domain root and signing in should take you to community root" do
-      visit "/"
+      visit("/")
       expect_sign_in_with_google_link_and_click
       expect(page).to have_content(user.name)
       expect(current_url).to have_subdomain_and_path("foo", "/users")
@@ -60,19 +64,19 @@ feature "subdomain handling" do
       around { |ex| with_subdomain("foo") { ex.run } }
 
       scenario "visiting root should work" do
-        visit "/"
+        visit("/")
         expect(current_url).to have_subdomain_and_path("foo", "/users")
         expect(page).to be_signed_in_root
       end
 
       scenario "visiting path should work" do
-        visit "/meals"
+        visit("/meals")
         expect(current_url).to have_subdomain_and_path("foo", "/meals")
         expect(page).to have_title("Meals")
       end
 
       scenario "signing out should redirect back to apex domain", js: true do
-        visit "/meals"
+        visit("/meals")
         click_on_personal_nav("Sign Out")
         expect(page).to have_content("You are now signed out")
         expect(current_url).to have_subdomain_and_path(nil, "/people/users/signed-out")
@@ -84,13 +88,13 @@ feature "subdomain handling" do
         around { |ex| with_subdomain("bar") { ex.run } }
 
         scenario "visiting root should work" do
-          visit "/"
+          visit("/")
           expect(current_url).to have_subdomain_and_path("bar", "/users")
           expect(page).to have_title("Directory")
         end
 
         scenario "visiting path should work" do
-          visit "/meals"
+          visit("/meals")
           expect(current_url).to have_subdomain_and_path("bar", "/meals")
           expect(page).to have_title("Meals")
         end
@@ -100,12 +104,12 @@ feature "subdomain handling" do
         around { |ex| with_subdomain("qux") { ex.run } }
 
         scenario "visiting root should 403" do
-          visit "/"
+          visit("/")
           expect(page).to be_forbidden
         end
 
         scenario "visiting path should 403" do
-          visit "/meals"
+          visit("/meals")
           expect(page).to be_forbidden
         end
       end
@@ -113,22 +117,22 @@ feature "subdomain handling" do
 
     context "with apex domain" do
       scenario "visiting root should redirect to home community root" do
-        visit "/"
+        visit("/")
         expect(current_url).to have_subdomain_and_path("foo", "/users")
       end
 
       scenario "visiting URL with query string should also redirect" do
-        visit "/meals?bar=123"
+        visit("/meals?bar=123")
         expect(current_url).to have_subdomain_and_path("foo", "/meals?bar=123")
       end
 
       scenario "visiting supported collection route should redirect to home community route" do
-        visit "/meals"
+        visit("/meals")
         expect(current_url).to have_subdomain_and_path("foo", "/meals")
       end
 
       scenario "visiting unsupported collection route should 404" do
-        visit "/users/invite"
+        visit("/users/invite")
         expect(page).to be_not_found
       end
 
@@ -137,18 +141,18 @@ feature "subdomain handling" do
       let(:meal) { create(:meal, community: neighbor_cmty, communities: [home_cmty, neighbor_cmty]) }
 
       scenario "visiting supported member route should redirect to appropriate community route" do
-        visit "/meals/#{meal.id}"
+        visit("/meals/#{meal.id}")
         expect(current_url).to have_subdomain_and_path("bar", "/meals/#{meal.id}")
       end
 
       scenario "visiting unsupported member route should 404" do
-        visit "/meals/#{meal.id}/edit"
+        visit("/meals/#{meal.id}/edit")
         expect(page).to be_not_found
       end
 
       context "with non-existent object" do
         scenario "visiting unsupported member route should 404" do
-          visit "/meals/2372944"
+          visit("/meals/2372944")
           expect(page).to be_not_found
         end
       end

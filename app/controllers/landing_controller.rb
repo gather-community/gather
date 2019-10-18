@@ -5,6 +5,11 @@ class LandingController < ApplicationController
   skip_before_action :authenticate_user!
   skip_after_action :verify_authorized
   skip_after_action :verify_policy_scoped
+  before_action :ensure_apex_domain, only: :index
+
+  # We have to be on apex domain for index page because otherwise the CSRF system doesn't work
+  # with the sign-in-with-google link because it's a cross-domain request.
+  # The sign-in-with-google flow has to happen on the apex domain.
 
   def index
     if (@invite_token = params[:token])

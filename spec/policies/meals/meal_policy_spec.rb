@@ -58,7 +58,7 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
+    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       context "head cook" do
@@ -260,7 +260,7 @@ describe Meals::MealPolicy do
 
       it "should allow more stuff" do
         expect(subject).to match_array(menu_attribs + worker_attribs +
-          signup_attribs + expense_attribs + [:capacity])
+          signup_attribs + expense_attribs + %i[capacity formula_id])
       end
     end
 

@@ -11,12 +11,9 @@
     No households found.
   </div>
 <% else %>
-  <table class="index">
+  <table class="index part-width">
     <tr>
       <th>Name</th>
-      <% if multi_community? %>
-        <th>Community</th>
-      <% end %>
       <th>Unit #</th>
       <th>Users</th>
       <th></th>
@@ -30,9 +27,6 @@
             <%= household.name %>
           <% end %>
         </td>
-        <% if multi_community? %>
-          <td><%= household.community_name %></td>
-        <% end %>
         <td>
           <%= household.unit_num_and_suffix %>
         </td>

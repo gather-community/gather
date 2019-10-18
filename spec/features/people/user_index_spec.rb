@@ -20,9 +20,7 @@ feature "user index" do
       Timecop.freeze("2017-04-15 12:00pm") do
         visit("/users")
         click_link("Download as CSV")
-        filename = "#{user.community.slug}-directory-2017-04-15.csv"
-        expect(page.response_headers["Content-Disposition"]).to eq(%(attachment; filename="#{filename}"))
-        expect(page).to have_content(user.first_name)
+        expect(page).to have_download_filename("#{user.community.slug}-directory-2017-04-15.csv")
       end
     end
 

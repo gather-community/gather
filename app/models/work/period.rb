@@ -16,7 +16,7 @@ module Work
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
-    scope :latest_first, -> { order(starts_on: :desc, ends_on: :desc) }
+    scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc) }
     scope :oldest_first, -> { order(:starts_on, :ends_on) }
 
     before_validation :normalize

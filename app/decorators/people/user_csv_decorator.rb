@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Csv
+module People
   # Decorates User for CSV export
-  class UserDecorator < ::UserDecorator
-    delegate_all
+  class UserCsvDecorator < ::UserDecorator
+    include CsvDecorable
 
     delegate :unit_num, :unit_suffix, :garage_nums, :keyholders, to: :household
 
@@ -17,11 +17,11 @@ module Csv
     end
 
     def joined_on
-      l(object.joined_on)
+      csv_localize(object.joined_on)
     end
 
     def child
-      bool(object.child?)
+      csv_bool(object.child?)
     end
 
     def vehicles
@@ -43,17 +43,6 @@ module Csv
         "#{pet.name} (#{pet.color} #{pet.species})"
       end
       chunks.sort.join("; ")
-    end
-
-    private
-
-    def l(date_or_time)
-      return nil if date_or_time.nil?
-      I18n.l(date_or_time, format: :csv_full)
-    end
-
-    def bool(val)
-      I18n.t("common.#{val ? 'true' : 'false'}")
     end
   end
 end

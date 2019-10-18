@@ -9,7 +9,7 @@ module Billing
     acts_as_tenant :cluster
 
     belongs_to :account, inverse_of: :statements
-    has_many :transactions, -> { order(:incurred_on) }, dependent: :nullify
+    has_many :transactions, -> { oldest_first }, dependent: :nullify
 
     scope :in_community, ->(c) { joins(:account).where(accounts: {community_id: c.id}) }
     scope :for_household, ->(h) { joins(:account).where(accounts: {household_id: h.id}) }
@@ -18,7 +18,7 @@ module Billing
     scope :reminder_not_sent, -> { where(reminder_sent: false) }
     scope :with_balance_owing, -> { joins(:account).merge(Billing::Account.with_balance_owing) }
     scope :is_latest, -> { joins(:account).where("accounts.last_statement_id = statements.id") }
-    scope :latest_first, -> { order(created_at: :desc) }
+    scope :newest_first, -> { order(created_at: :desc) }
 
     delegate :community, :community_id, :household, :household_id, to: :account
 

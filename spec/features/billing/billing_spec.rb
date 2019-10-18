@@ -23,7 +23,7 @@ feature "billing", js: true do
       actor.community.save!
     end
 
-    scenario do
+    scenario "main path" do
       visit(accounts_path)
       expect(page).to have_content(account1.household.name)
       expect(page).to have_content(account2.household.name)
@@ -71,6 +71,30 @@ feature "billing", js: true do
       click_link(account1.household.name)
       expect(page).to have_statement_rows(2, more: false)
     end
+
+    scenario "download account csv" do
+      Timecop.freeze("2017-04-15 12:00pm") do
+        visit(accounts_path)
+        click_link("Download Accounts as CSV")
+        expect(page).to have_download_filename("#{account1.community.slug}-accounts-2017-04-15.csv")
+      end
+    end
+
+    scenario "download all transaction csv" do
+      visit(accounts_path)
+      click_link("Download Transactions as CSV")
+      year = account1.transactions[0].incurred_on.year
+      select(year, from: "year")
+      expect(page).to have_download_filename("#{account1.community.slug}-transactions-#{year}.csv")
+    end
+
+    scenario "download account transaction csv" do
+      visit(account_path(account1))
+      click_link("Download Transactions as CSV")
+      year = account1.transactions[0].incurred_on.year
+      select(year, from: "year")
+      expect(page).to have_download_filename("account-#{account1.id}-transactions-#{year}.csv")
+    end
   end
 
   describe "user view" do
@@ -114,6 +138,7 @@ feature "billing", js: true do
   end
 
   def have_statement_rows(count, more:)
-    have_css("table.statements tbody tr", count: count + (more ? 2 : 1)) # Account for header row and more link
+    # Account for header row and more link
+    have_css("table.statements tbody tr", count: count + (more ? 2 : 1))
   end
 end

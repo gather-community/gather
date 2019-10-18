@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 module Billing
+  # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     TYPES = [
-      OpenStruct.new(code: "meal", charge?: true),
-      OpenStruct.new(code: "oldbal", charge?: true, credit?: true),
+      OpenStruct.new(code: "meal", charge?: true, manual?: false),
+      OpenStruct.new(code: "oldbal", charge?: true, manual?: true),
       OpenStruct.new(code: "payment", credit?: true, manual?: true),
       OpenStruct.new(code: "reimb", credit?: true, manual?: true),
       OpenStruct.new(code: "othcrd", credit?: true, manual?: true),
       OpenStruct.new(code: "late", charge?: true, manual?: false),
       OpenStruct.new(code: "othchg", charge?: true, manual?: true)
-    ]
+    ].freeze
     TYPES_BY_CODE = TYPES.index_by(&:code)
     MANUALLY_ADDABLE_TYPES = TYPES.select(&:manual?)
 
@@ -18,22 +21,23 @@ module Billing
     belongs_to :statement
     belongs_to :statementable, polymorphic: true
 
-    scope :for_household, ->(h){ joins(account: :household).where("households.id = ?", h.id) }
+    scope :in_community, ->(c) { joins(:account).merge(Billing::Account.in_community(c)) }
+    scope :for_household, ->(h) { joins(account: :household).where("households.id = ?", h.id) }
     scope :for_community_or_household,
-      ->(c,h){ joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
-    scope :incurred_between, ->(a,b){ where("incurred_on >= ? AND incurred_on <= ?", a, b) }
-    scope :no_statement, ->{ where(statement_id: nil) }
-    scope :credit, ->{ where("amount < 0") }
-    scope :charge, ->{ where("amount > 0") }
-    scope :latest_first, ->{ order(incurred_on: :desc) }
+      ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
+    scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
+    scope :no_statement, -> { where(statement_id: nil) }
+    scope :credit, -> { where("amount < 0") }
+    scope :charge, -> { where("amount > 0") }
+    scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
+    scope :oldest_first, -> { order(:incurred_on, :created_at) }
+    scope :incurred_in_year, ->(year) { where("EXTRACT(year FROM incurred_on) = ?", year) }
 
     delegate :household_id, :community_id, :community, to: :account
 
     before_validation do
       # Respect qty and unit price
-      if quantity.present? && unit_price.present?
-        self.amount = quantity * unit_price
-      end
+      self.amount = quantity * unit_price if quantity.present? && unit_price.present?
       # Ensure correct sign for item type
       if amount.present? && code.present?
         self.amount = (type.credit? ? -1 : 1) * amount.to_f.abs
@@ -52,16 +56,24 @@ module Billing
     validates :code, presence: true
     validates :description, presence: true
     validates :amount, presence: true
-    validates :abs_amount, numericality: { minimum: 0 }, if: ->(a){ a.present? }
+    validates :abs_amount, numericality: {minimum: 0}, if: ->(a) { a.present? }
     validate :nonzero
     validate :quantity_and_unit_price
 
+    def self.year_range(account: nil, community: nil)
+      txns = order(:incurred_on)
+      txns = txns.where(account: account) unless account.nil?
+      txns = txns.in_community(community) unless community.nil?
+      return nil if txns.none?
+      txns.first.incurred_on.year..txns.last.incurred_on.year
+    end
+
     def charge?
-      amount > 0
+      amount.positive?
     end
 
     def credit?
-      amount < 0
+      amount.negative?
     end
 
     def chg_crd
@@ -74,6 +86,10 @@ module Billing
 
     def type
       TYPES_BY_CODE[code]
+    end
+
+    def meal_id
+      statementable_type == "Meals::Meal" ? statementable_id : nil
     end
 
     private

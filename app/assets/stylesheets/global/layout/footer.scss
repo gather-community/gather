@@ -5,23 +5,44 @@
 #global-footer, #local-footer {
   font-size: 13px;
   color: $text-muted;
-  padding: 10px 20px;
   width: 100%;
 
-  a, a:visited, a:active, a:hover {
-    color: $text-muted;
-    text-decoration: underline;
+  // A wrapping .footer-links tag is required so that we don't apply this link style to things like
+  // pagination which can also appear in the footer.
+  &.footer-links, .footer-links {
+    a, a:visited, a:active, a:hover {
+      color: $text-muted;
+      text-decoration: underline;
+    }
   }
 
-  div:last-child {
+  .pagination {
+    margin: 0;
+  }
+
+  // A second column of things in the footer that should be right aligned on large screens
+  // and nicely spaced on small screens.
+  .footer-2nd-col {
     @media screen and (min-width: $screen-sm-min) {
       text-align: right;
+    }
+
+    @media screen and (max-width: $screen-xs-max) {
+      margin-top: 10px;
     }
   }
 }
 
 #local-footer {
-  padding: 20px;
+  padding-top: 20px;
+
+  .export-link-with-form {
+    display: inline-block;
+
+    form {
+      display: none;
+    }
+  }
 }
 
 #global-footer {

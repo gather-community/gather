@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "user index" do
@@ -15,20 +17,16 @@ feature "user index" do
     let(:actor) { user }
 
     scenario "download csv" do
-      users = create_list(:user, 4)
       Timecop.freeze("2017-04-15 12:00pm") do
-        visit "/users"
-        expect(page).to have_css("a", text: "Download as CSV")
-        click_on("Download as CSV")
-        filename = "#{user.community.slug}-directory-2017-04-15.csv"
-        expect(page.response_headers["Content-Disposition"]).to eq %Q{attachment; filename="#{filename}"}
-        expect(page).to have_content(/#{users[0].first_name}/)
+        visit("/users")
+        click_link("Download as CSV")
+        expect(page).to have_download_filename("#{user.community.slug}-directory-2017-04-15.csv")
       end
     end
 
     scenario "album view", js: true do
       inactive.save!
-      visit "/users"
+      visit("/users")
       select_lens(:view, "Album")
       expect(page).to have_content(user.name)
       expect(page).not_to have_content("Longgone")
@@ -36,14 +34,14 @@ feature "user index" do
 
     scenario "table view", js: true do
       inactive.save!
-      visit "/users"
+      visit("/users")
       select_lens(:view, "Table")
       expect(page).to have_css("table.index tr td", text: user.name)
       expect(page).not_to have_content("Longgone")
     end
 
     scenario "printing album view", js: true do
-      visit "/users"
+      visit("/users")
       expect(page).not_to have_css("#printable-directory-album table", visible: false)
       click_print_button
       # Should load the full directory, but hidden.
@@ -56,7 +54,7 @@ feature "user index" do
 
     scenario "table with inactive view", js: true do
       inactive.save!
-      visit "/users"
+      visit("/users")
       select_lens(:view, "Table w/ Inactive")
       expect(page).to have_css("table.index tr td", text: user.name)
       expect(page).to have_content("Longgone")

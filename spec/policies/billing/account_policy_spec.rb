@@ -93,4 +93,34 @@ describe Billing::AccountPolicy do
       expect(policy.permitted_attributes).to contain_exactly(:credit_limit)
     end
   end
+
+  describe "#exportable_attributes" do
+    include_context "policy permissions"
+
+    let(:actor) { create(:biller) }
+    let(:sample_account) { double(community: community) }
+    subject(:exportable) { described_class.new(actor, sample_account).exportable_attributes }
+
+    context "with single community" do
+      it do
+        is_expected.to match_array(
+          %i[number household_id household_name balance_due current_balance credit_limit
+             last_statement_id last_statement_on due_last_statement total_new_charges
+             total_new_credits created_at]
+        )
+      end
+    end
+
+    context "with multiple communities" do
+      let!(:community2) { create(:community) }
+      it do
+        is_expected.to match_array(
+          %i[number community_id community_name
+             household_id household_name balance_due current_balance credit_limit
+             last_statement_id last_statement_on due_last_statement total_new_charges
+             total_new_credits created_at]
+        )
+      end
+    end
+  end
 end

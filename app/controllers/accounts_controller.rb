@@ -1,57 +1,32 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-
   before_action -> { nav_context(:accounts) }
 
   decorates_assigned :accounts, :account, :last_statement, :community, :statements
 
   def index
-    @community = current_community
     authorize(sample_account)
+    @community = current_community
     @accounts = policy_scope(Billing::Account)
     @accounts = @accounts.where(community: @community)
       .includes(:last_statement, household: %i[users community])
       .with_any_activity(@community)
       .by_cmty_and_household_name
-      .decorate
+    @txn_years = Billing::Transaction.year_range(community: @community)&.to_a&.reverse
 
-    @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
-    @active_accounts = Billing::Account.with_activity(@community).count
-    @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
-    @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
-
-    last_statement = Billing::Statement.in_community(@community).order(:created_at).last
-    @last_statement_run = last_statement.try(:created_on)
-
-    @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
-
-    last_fee = Billing::Transaction.joins(:account)
-      .where(code: "late_fee", accounts: {community_id: @community.id})
-      .order(:incurred_on).last
-
-    @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
+    respond_to do |format|
+      format.html { index_html }
+      format.csv { index_csv }
+    end
   end
 
   def yours
-    @household = current_user.household
     authorize(sample_account)
-
+    @household = current_user.household
     @accounts = policy_scope(@household.accounts).includes(:community).to_a
-
-    if @accounts.size > 1
-      prepare_lenses(community: {required: true, subdomain: false})
-      @community = if lenses[:community].value.try(:match, Community::SLUG_REGEX)
-                     Community.find_by(slug: lenses[:community].value)
-                   elsif lenses[:community].value.try(:match, /\d+/)
-                     Community.find(lenses[:community].value)
-                   end
-    end
-
-    @community ||= current_user.community
-    @communities = @accounts.map(&:community)
-    @account = @accounts.detect { |a| a.community_id == @community.id } || @accounts.first
-
+    @community = prepare_lens_and_get_community
+    @account = @accounts.detect { |a| a.community == @community } || @accounts.first
     prep_account_vars if @account
   end
 
@@ -59,6 +34,7 @@ class AccountsController < ApplicationController
     @account = Billing::Account.find(params[:id]).decorate
     @community = @account.community
     authorize(@account)
+    @txn_years = Billing::Transaction.year_range(account: @account)&.to_a&.reverse
     prep_account_vars
   end
 
@@ -86,6 +62,41 @@ class AccountsController < ApplicationController
   end
 
   private
+
+  def index_html
+    @accounts = @accounts.decorate
+    @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
+    @active_accounts = Billing::Account.with_activity(@community).count
+    @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
+    @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
+
+    last_statement = Billing::Statement.in_community(@community).order(:created_at).last
+    @last_statement_run = last_statement&.created_on
+
+    last_fee = Billing::Transaction.joins(:account)
+      .where(code: "late_fee", accounts: {community_id: @community.id})
+      .order(:incurred_on).last
+    @late_fee_days_ago = last_fee.nil? ? nil : (Time.zone.today - last_fee.incurred_on).to_i
+    @late_fee_count = late_fee_applier.policy? ? late_fee_applier.late_accounts.count : 0
+  end
+
+  def index_csv
+    filename = csv_filename(:community, "accounts", :date)
+    csv = Billing::AccountCsvExporter.new(@accounts, policy: policy(sample_account)).to_csv
+    send_data(csv, filename: filename, type: :csv)
+  end
+
+  def prepare_lens_and_get_community
+    return current_user.community unless @accounts.many?
+    prepare_lenses(community: {required: true, subdomain: false})
+    if lenses[:community].value&.match(Community::SLUG_REGEX)
+      Community.find_by(slug: lenses[:community].value)
+    elsif lenses[:community].value&.match(/\d+/)
+      Community.find(lenses[:community].value)
+    else
+      current_user.community
+    end
+  end
 
   def sample_account
     Billing::Account.new(community: current_community)

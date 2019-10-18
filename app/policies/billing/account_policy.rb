@@ -31,5 +31,13 @@ module Billing
     def permitted_attributes
       [:credit_limit]
     end
+
+    def exportable_attributes
+      attrs = %i[number]
+      attrs.concat(%i[community_id community_name]) if multi_community?
+      attrs.concat(%i[household_id household_name balance_due current_balance credit_limit
+                      last_statement_id last_statement_on due_last_statement total_new_charges
+                      total_new_credits created_at])
+    end
   end
 end

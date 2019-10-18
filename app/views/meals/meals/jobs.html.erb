@@ -1,4 +1,4 @@
-<% content_for(:title, "Meal Jobs") %>
+<% content_for(:title, ["Meal Jobs", (user.full_name if user)].compact.join(": ")) %>
 
 <% content_for(:top_buttons) do %>
   <%= calendar_exports_link %>

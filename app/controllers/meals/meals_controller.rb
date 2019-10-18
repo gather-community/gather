@@ -5,7 +5,7 @@ module Meals
     include Lensable
     include MealShowable
 
-    decorates_assigned :meals, :meal_summary, :report
+    decorates_assigned :meals, :meal_summary, :report, :user
 
     # decorates_assigned :report collides with action method
     helper_method :meals_report

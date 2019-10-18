@@ -78,7 +78,7 @@ feature "meal crud", js: true do
       # Update to add expenses
       click_link("Southern Beans")
       click_link("Edit")
-      click_link("Edit Expenses")
+      # click_link("Edit Expenses")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
       choose("Balance Credit")
@@ -86,7 +86,7 @@ feature "meal crud", js: true do
       expect_success
       click_link("Southern Beans")
       click_link("Edit")
-      click_link("Edit Expenses")
+      # click_link("Edit Expenses")
       expect(page).to have_field("Ingredient Cost", with: "125.66")
       click_button("Save")
 
@@ -111,7 +111,7 @@ feature "meal crud", js: true do
       find("tr", text: meals[4].head_cook.name).find("a", text: "[No Menu]").click
       click_link("Edit")
       expect(page).not_to have_content("Delete Meal")
-      click_link("Edit Workers")
+      # click_link("Edit Workers")
       add_worker_field(role: ac_role)
       select_worker(actor.name, role: ac_role)
       click_button("Save")
@@ -149,7 +149,7 @@ feature "meal crud", js: true do
   end
 
   def fill_in_menu
-    click_link("Edit Menu")
+    # click_link("Edit Menu")
     fill_in("Title", with: "Southern Beans and Rice")
     fill_in("Entrees", with: "Beans, rice, sausage")
     fill_in("Side", with: "Collards")

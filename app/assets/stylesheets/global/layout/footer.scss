@@ -35,6 +35,14 @@
 
 #local-footer {
   padding-top: 20px;
+
+  .export-link-with-form {
+    display: inline-block;
+
+    form {
+      display: none;
+    }
+  }
 }
 
 #global-footer {

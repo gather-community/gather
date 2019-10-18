@@ -21,6 +21,7 @@ module Billing
     belongs_to :statement
     belongs_to :statementable, polymorphic: true
 
+    scope :in_community, ->(c) { joins(:account).merge(Billing::Account.in_community(c)) }
     scope :for_household, ->(h) { joins(account: :household).where("households.id = ?", h.id) }
     scope :for_community_or_household,
       ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
@@ -30,6 +31,7 @@ module Billing
     scope :charge, -> { where("amount > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
+    scope :incurred_in_year, ->(year) { where("EXTRACT(year FROM incurred_on) = ?", year) }
 
     delegate :household_id, :community_id, :community, to: :account
 
@@ -57,6 +59,14 @@ module Billing
     validates :abs_amount, numericality: {minimum: 0}, if: ->(a) { a.present? }
     validate :nonzero
     validate :quantity_and_unit_price
+
+    def self.year_range(account: nil, community: nil)
+      txns = order(:incurred_on)
+      txns = txns.where(account: account) unless account.nil?
+      txns = txns.in_community(community) unless community.nil?
+      return nil if txns.none?
+      txns.first.incurred_on.year..txns.last.incurred_on.year
+    end
 
     def charge?
       amount.positive?

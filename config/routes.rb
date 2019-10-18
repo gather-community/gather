@@ -142,6 +142,8 @@ Rails.application.routes.draw do
     resources :transactions, only: %i[index new create]
   end
 
+  resources :transactions, only: :index
+
   resources :statements, only: [:show] do
     collection do
       post :generate

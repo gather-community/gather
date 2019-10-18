@@ -79,9 +79,20 @@
     <% end %>
   </table>
 
-  <div class="index-footer row">
-    <div class="links col-sm-12">
-      <%= link_to(icon_tag("download") << " Download as CSV", accounts_path(format: :csv)) %>
-    </div>
-  </div>
+  <footer id="local-footer" class="footer-links">
+    <%= link_to(icon_tag("download") << " Download Accounts as CSV", accounts_path(format: :csv)) %>
+    &nbsp;&bull;&nbsp;
+    <% if @txn_years %>
+      <div class="export-link-with-form">
+        <%= link_to(icon_tag("download") << " Download Transactions as CSV", "#",
+              onclick: "$(this).closest('.export-link-with-form')
+                .find('form').css({display: 'inline-block'}); return false;") %>
+        &nbsp;
+        <%= form_tag(transactions_path(format: :csv), method: :get) do %>
+          <%= select_tag(:year, options_for_select([["Select Year", nil]].concat(@txn_years)),
+                onchange: "this.form.submit()") %>
+        <% end %>
+      </div>
+    <% end %>
+  </footer>
 <% end %>

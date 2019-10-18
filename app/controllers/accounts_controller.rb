@@ -13,6 +13,7 @@ class AccountsController < ApplicationController
       .includes(:last_statement, household: %i[users community])
       .with_any_activity(@community)
       .by_cmty_and_household_name
+    @txn_years = Billing::Transaction.year_range(community: @community)&.to_a&.reverse
 
     respond_to do |format|
       format.html { index_html }
@@ -33,6 +34,7 @@ class AccountsController < ApplicationController
     @account = Billing::Account.find(params[:id]).decorate
     @community = @account.community
     authorize(@account)
+    @txn_years = Billing::Transaction.year_range(account: @account)&.to_a&.reverse
     prep_account_vars
   end
 

@@ -41,7 +41,8 @@ module Reservations
           if @rule_set.access_level(current_community) == "read_only"
             flash.now[:notice] = "Only #{@resource.community_name} residents may reserve this resource."
           end
-
+          @rule_set_serializer = ReservationRuleSetSerializer.new(@rule_set,
+            reserver_community: current_community)
           @other_resources = policy_scope(Resource)
             .where(community_id: @resource.community_id)
             .where("id != ?", @resource.id)

@@ -33,10 +33,10 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
         right: 'today prev,next'
       select: @onSelect.bind(this)
       windowResize: @onWindowResize.bind(this)
-      viewRender: @onViewRender.bind(this)
       loading: @onLoading.bind(this)
       eventDrop: @onEventChange.bind(this)
       eventResize: @onEventChange.bind(this)
+      eventAfterAllRender: @onViewRender.bind(this)
 
   events:
     'click .modal .btn-primary': 'create'

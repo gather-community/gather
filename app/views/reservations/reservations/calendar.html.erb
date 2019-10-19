@@ -13,7 +13,7 @@
   <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
     <footer>
-      <a href="#" id="permalink">Permalink</a> &nbsp;
+      <%= link_to("Permalink", reservations_path(resource_id: @resource.id), id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
@@ -77,7 +77,6 @@
     });
     var linkManager = new Gather.Views.CalendarLinkManager({
       el: '.calendar-and-links',
-      baseUrl: <%= json(reservations_path(resource_id: @resource.id, placeholder: "xxx")) %>,
       calendarView: calendarView
     });
   });

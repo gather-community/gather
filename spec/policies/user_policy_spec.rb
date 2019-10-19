@@ -429,7 +429,7 @@ describe UserPolicy do
 
     shared_examples_for "normal user" do
       it "should allow normal user attribs" do
-        expect(subject).to contain_exactly(*normal_user_attribs)
+        expect(subject).to match_array(normal_user_attribs)
       end
     end
 
@@ -441,7 +441,7 @@ describe UserPolicy do
       let(:user) { photographer }
 
       it "should allow photographer attribs only" do
-        expect(subject).to contain_exactly(*photographer_attribs)
+        expect(subject).to match_array(photographer_attribs)
       end
     end
 
@@ -449,7 +449,7 @@ describe UserPolicy do
       let(:user) { admin }
 
       it "should allow admin attribs" do
-        expect(subject).to contain_exactly(*admin_attribs)
+        expect(subject).to match_array(admin_attribs)
       end
     end
 
@@ -462,7 +462,7 @@ describe UserPolicy do
       let(:user) { cluster_admin }
 
       it "should allow cluster admin attribs" do
-        expect(subject).to contain_exactly(*cluster_admin_attribs)
+        expect(subject).to match_array(cluster_admin_attribs)
       end
     end
 
@@ -470,7 +470,7 @@ describe UserPolicy do
       let(:user) { super_admin }
 
       it "should allow super admin attribs" do
-        expect(subject).to contain_exactly(*(cluster_admin_attribs << :role_super_admin))
+        expect(subject).to match_array(cluster_admin_attribs << :role_super_admin)
       end
     end
   end
@@ -479,28 +479,21 @@ describe UserPolicy do
     include_context "policy permissions"
 
     let(:sample_user) { double(community: community) }
+    let(:base_attribs) do
+      %i[id first_name last_name unit_num unit_suffix birthdate email child household_id household_name
+         guardian_names mobile_phone home_phone work_phone joined_on preferred_contact
+         garage_nums vehicles keyholders emergency_contacts pets]
+    end
     subject(:exportable) { described_class.new(actor, sample_user).exportable_attributes }
 
     context "for regular user" do
       let(:actor) { user }
-      it do
-        is_expected.to match_array(
-          %i[id first_name last_name unit_num unit_suffix birthdate email child guardian_names
-             mobile_phone home_phone work_phone joined_on preferred_contact
-             garage_nums vehicles keyholders emergency_contacts pets]
-        )
-      end
+      it { is_expected.to match_array(base_attribs) }
     end
 
     context "for admin" do
       let(:actor) { admin }
-      it do
-        is_expected.to match_array(
-          %i[id first_name last_name unit_num unit_suffix birthdate email child guardian_names google_email
-             mobile_phone home_phone work_phone joined_on preferred_contact
-             garage_nums vehicles keyholders emergency_contacts pets]
-        )
-      end
+      it { is_expected.to match_array(base_attribs << :google_email) }
     end
   end
 end

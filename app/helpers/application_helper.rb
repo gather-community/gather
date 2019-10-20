@@ -50,7 +50,7 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{I18n.l(Time.current)}", id: "gen-time")
+    content_tag(:div, "Generated: #{l(Time.current)}", id: "gen-time")
   end
 
   def print_button

@@ -215,29 +215,6 @@ module NavHelper
     filter_and_set_active_nav_items(items, type: :personal)
   end
 
-  def footer_items
-    items =
-      case @context[:section]
-      when :wiki
-        [
-          {
-            name: :all,
-            parent: :wiki,
-            path: all_wiki_pages_path,
-            permitted: policy(Wiki::Page.new(community: current_community)).all?
-          }, {
-            name: :new,
-            parent: :wiki,
-            path: new_wiki_page_path,
-            permitted: policy(Wiki::Page.new(community: current_community)).create?
-          }
-        ]
-      else
-        []
-      end
-    filter_and_set_active_nav_items(items, type: :footer)
-  end
-
   def filter_and_set_active_nav_items(items, type:, active: nil)
     items.select! { |i| i[:permitted] }
     items.each do |i|

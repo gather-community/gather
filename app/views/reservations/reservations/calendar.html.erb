@@ -9,12 +9,11 @@
   <% end %>
 <% end %>
 
-<div class="row">
-
+<div class="row calendar-and-links">
   <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
     <footer>
-      <a href="#" id="permalink">Permalink</a> &nbsp;
+      <%= link_to("Permalink", reservations_path(resource_id: @resource.id), id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
@@ -36,7 +35,6 @@
       </div>
     </div>
   </div>
-
   <div class="col-md-2 col-sm-3 sidebar">
     <%= image_tag(@resource.photo.url(:thumb)) %><br/><br/>
     <% if @other_resources.any? %>
@@ -44,7 +42,10 @@
         <small>Other Resources</small>
         <ul class="no-marker">
           <% @other_resources.each do |resource| %>
-            <li><%= link_to(resource.name, reservations_path(resource_id: resource.id)) %></li>
+            <li>
+              <%= link_to(resource.name,
+                    reservations_path(resource_id: resource.id), class: "resource-link") %>
+            </li>
           <% end %>
         </ul>
       </div>
@@ -64,16 +65,19 @@
 
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.ReservationCalendarView(<%=json(
+    var calendarView = new Gather.Views.ReservationCalendarView({
       el: '#calendar-col',
-      resourceId: @resource.id,
-      feedUrl: reservations_path(resource_id: @resource.id),
-      baseUrl: reservations_path(resource_id: @resource.id, placeholder: "xxx"),
-      newUrl: new_reservation_path(resource_id: @resource.id),
-      focusDate: params[:date],
-      viewType: params[:view],
-      defaultViewType: @resource.default_calendar_view,
-      ruleSet: ReservationRuleSetSerializer.new(@rule_set, reserver_community: current_community)
-    )%>);
+      resourceId: <%= json(@resource.id) %>,
+      feedUrl: <%= json(reservations_path(resource_id: @resource.id)) %>,
+      newUrl: <%= json(new_reservation_path(resource_id: @resource.id)) %>,
+      focusDate: <%= json(params[:date]) %>,
+      viewType: <%= json(params[:view]) %>,
+      defaultViewType: <%= json(@resource.default_calendar_view) %>,
+      ruleSet: <%= json(@rule_set_serializer) %>
+    });
+    var linkManager = new Gather.Views.CalendarLinkManager({
+      el: '.calendar-and-links',
+      calendarView: calendarView
+    });
   });
 <% end %>

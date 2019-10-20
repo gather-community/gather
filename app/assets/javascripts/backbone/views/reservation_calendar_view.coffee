@@ -1,3 +1,5 @@
+# Ultimately this class should just wrap the calendar plugin and serve events.
+# Most other heavy lifting should be done by other classes like CalendarLinkManager.
 Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   URL_PARAMS_TO_VIEW_TYPES:
@@ -7,7 +9,6 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   initialize: (options) ->
     @newUrl = options.newUrl
-    @baseUrl = options.baseUrl
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
     @resourceId = options.resourceId
@@ -32,10 +33,10 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
         right: 'today prev,next'
       select: @onSelect.bind(this)
       windowResize: @onWindowResize.bind(this)
-      viewRender: @onViewRender.bind(this)
       loading: @onLoading.bind(this)
       eventDrop: @onEventChange.bind(this)
       eventResize: @onEventChange.bind(this)
+      eventAfterAllRender: @onViewRender.bind(this)
 
   events:
     'click .modal .btn-primary': 'create'
@@ -90,7 +91,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @setViewForWidth()
 
   onViewRender: ->
-    @updatePermalink()
+    @trigger('viewRender')
     @saveSettings()
 
   onLoading: (isLoading) ->
@@ -105,12 +106,9 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
         reservations_reservation:
           starts_at: event.start.format()
           ends_at: event.end.format()
-      error: (xhr) =>
+      error: (xhr) ->
         revertFunc()
         Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
-
-  updatePermalink: ->
-    @$('#permalink').attr('href', @permalink())
 
   setViewForWidth: ->
     @calendar.fullCalendar('changeView', 'agendaDay') if @forceDay()
@@ -128,9 +126,6 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   minTime: ->
     if @savedSettings.earlyMorning then '00:00:00' else '06:00:00'
-
-  permalink: ->
-    @baseUrl.replace("placeholder=xxx", "view=#{@viewType()}&date=#{@currentDate()}")
 
   viewType: ->
     @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()

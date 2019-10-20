@@ -20,7 +20,7 @@ module People
       object.birthdate = d
     end
 
-    def str(formats: [:month_day, :default])
+    def str(formats: [:short_birthday, :default])
       if invalid?
         @str
       elsif date.nil?
@@ -68,7 +68,7 @@ module People
     end
 
     def format
-      full? ? :default : :month_day
+      full? ? :default : :short_birthday
     end
 
     def validate

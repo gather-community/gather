@@ -2,7 +2,7 @@ en:
   date:
     formats:
       default: "%b %d %Y"
-      month_day: "%b %d"
+      short_birthday: "%b %d"
       month_yr: "%B %Y"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
@@ -10,7 +10,7 @@ en:
       weekday: "%A"
       filename: "%Y-%m-%d"
       csv_full: "%Y-%m-%d"
-      csv_month_day: "%m-%d"
+      csv_short_birthday: "%m-%d"
       iso: "%Y%m%d"
   time:
     formats:

@@ -8,7 +8,7 @@ module People
     delegate :unit_num, :unit_suffix, :garage_nums, :keyholders, to: :household
 
     def birthdate
-      object.birthday.str(formats: %i[csv_month_day csv_full])
+      object.birthday.str(formats: %i[csv_short_birthday csv_full])
     end
 
     def guardian_names

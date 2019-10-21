@@ -6,25 +6,18 @@ en:
       month_yr: "%B %Y"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
-      url_date: "%Y-%m-%d"
+      shorter_date: "%b %d"
+      full_date: "%b %d %Y"
       weekday: "%A"
-      filename: "%Y-%m-%d"
-      csv_full: "%Y-%m-%d"
-      csv_short_birthday: "%m-%d"
-      iso: "%Y%m%d"
   time:
     formats:
       default: "%a %b %d %Y %l:%M%P"
       datetime_no_yr: "%a %b %d %l:%M%P"
-      machine_readable: "%Y-%m-%d %H:%M"
       time_only: "%l:%M%P"
       short_date: "%a %b %d"
       short_date_with_yr: "%a %b %d %Y"
       shorter_date: "%b %d"
       full_date: "%b %d %Y"
-      url_date: "%Y-%m-%d"
-      iso: "%Y%m%dT%H%M%S"
-      csv_full: "%Y-%m-%d %H:%M"
   datepicker:
     dformat: '%b %d %Y'
     pformat: 'MMM D YYYY'

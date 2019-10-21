@@ -7,7 +7,7 @@ module CsvDecorable
 
   def csv_localize(date_or_time)
     return nil if date_or_time.nil?
-    l(date_or_time, format: :csv_full)
+    date_or_time.to_s(:iso8601)
   end
 
   def csv_bool(val)

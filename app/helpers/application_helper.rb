@@ -11,7 +11,7 @@ module ApplicationHelper
   # are not assuming nil checking.
   def l(date_or_time, *args)
     return nil if date_or_time.nil?
-    I18n.l(date_or_time, *args)
+    I18n.l(date_or_time, *args).sub("  ", " ")
   end
 
   def bootstrap_class_for(flash_type)

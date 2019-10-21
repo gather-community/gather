@@ -14,11 +14,11 @@ class ReservationRuleSetSerializer < ApplicationSerializer
   end
 
   def fixed_start_time
-    object.fixed_start_time && I18n.l(object.fixed_start_time, format: :machine_readable)
+    object.fixed_start_time&.to_s(:iso8601)
   end
 
   def fixed_end_time
-    object.fixed_end_time && I18n.l(object.fixed_end_time, format: :machine_readable)
+    object.fixed_end_time&.to_s(:iso8601)
   end
 
   private

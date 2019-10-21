@@ -20,13 +20,13 @@ module People
       object.birthdate = d
     end
 
-    def str(formats: [:short_birthday, :default])
+    def str
       if invalid?
         @str
       elsif date.nil?
         nil
       else
-        I18n.l(date, format: date.year == NO_YEAR ? formats[0] : formats[1]).sub("  ", " ")
+        I18n.l(date, format: full? ? :default : :short_birthday)
       end
     end
 

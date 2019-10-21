@@ -32,8 +32,8 @@ describe "meals exports" do
         summary: "Meal1",
         description: /By #{user.name}\s+2 diners from your household\s+Signup comments:\s+Foo\s+Bar/,
         location: "#{user.community_abbrv} Dining Room",
-        "DTSTART;TZID=Etc/UTC" => I18n.l(meal1_time, format: :iso),
-        "DTEND;TZID=Etc/UTC" => I18n.l(meal1_time + 1.hour, format: :iso)
+        "DTSTART;TZID=Etc/UTC" => meal1_time.to_s(:iso8601),
+        "DTEND;TZID=Etc/UTC" => (meal1_time + 1.hour).to_s(:iso8601)
       )
       expect(ical_data).not_to match("Meal2")
       expect(ical_data).not_to match("Other Cmty Meal")

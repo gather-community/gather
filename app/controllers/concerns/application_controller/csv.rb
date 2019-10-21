@@ -8,7 +8,7 @@ module Concerns::ApplicationController::Csv
       if p == :community
         current_community.slug
       elsif p == :date
-        l(Date.today, format: :filename)
+        Time.current.to_s(:iso8601_date)
       else
         p
       end

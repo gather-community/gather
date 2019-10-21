@@ -1,7 +1,7 @@
 <div id="time-cook">
   <span class="chunk">
     <%= icon_tag("calendar") %>
-    <strong><%= meal.served_at_datetime_no_yr %></strong>
+    <strong><%= meal.served_at_datetime %></strong>
   </span>
   <% if meal.head_cook.present? %>
     <span class="chunk">

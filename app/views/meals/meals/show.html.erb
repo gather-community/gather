@@ -23,7 +23,7 @@ end %>
           <div>
             <%= link_to(content_tag(:small, "Previous Meal"), url) %>
             <%= prev_meal.link(anchor: "signup") %>
-            <%= link_to(content_tag(:small, meal_date_time(prev_meal)), url) %>
+            <%= link_to(content_tag(:small, prev_meal.served_at_datetime_no_yr), url) %>
           </div>
         <% end %>
       </div>
@@ -34,7 +34,7 @@ end %>
           <div>
             <%= link_to(content_tag(:small, "Next Meal"), url) %>
             <%= next_meal.link(anchor: "signup") %>
-            <%= link_to(content_tag(:small, meal_date_time(next_meal)), url) %>
+            <%= link_to(content_tag(:small, next_meal.served_at_datetime_no_yr), url) %>
           </div>
         <% end %>
       </div>

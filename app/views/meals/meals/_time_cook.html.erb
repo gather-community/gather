@@ -1,12 +1,12 @@
 <div id="time-cook">
   <span class="chunk">
     <%= icon_tag("calendar") %>
-    <strong><%= meal_date_time(@meal) %></strong>
+    <strong><%= meal.served_at_datetime_no_yr %></strong>
   </span>
-  <% if @meal.head_cook.present? %>
+  <% if meal.head_cook.present? %>
     <span class="chunk">
       <%= image_tag("chef-hat.png") %>
-      <%= @meal.head_cook.decorate.link %>
+      <%= meal.head_cook.decorate.link %>
     </span>
   <% end %>
 </div>

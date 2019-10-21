@@ -25,7 +25,7 @@
     <tbody>
       <% meals.each do |meal| %>
         <tr class="<%= meal.css_classes %>">
-          <td class="nowrap"><%= meal_date_time(meal) %></td>
+          <td class="nowrap"><%= meal.served_at_datetime_no_yr %></td>
           <td><%= meal.location_abbrv %></td>
           <td><%= meal.head_cook_name %></td>
           <td>
@@ -67,7 +67,7 @@
           <%= icon_tag("certificate") if meal.finalized? %>
           <%= icon_tag("ban") if meal.cancelled? %>
         </h4>
-        <div><%= icon_tag("calendar") %> <%= meal_date_time(meal) %> at <%= meal.location_abbrv %></div>
+        <div><%= icon_tag("calendar") %> <%= meal.served_at_datetime_no_yr %> at <%= meal.location_abbrv %></div>
         <div><%= signup_count(meal) %> signed up</div>
         <% if (signup = meal.current_signup) %>
           <div class="signed-up">

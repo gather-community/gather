@@ -85,7 +85,7 @@
             <% head_cook_meals.each do |meal| %>
               <tr>
                 <td class="col-md-1">
-                  <%= l(meal.served_at.to_date, format: :short_date) %>
+                  <%= l(meal.served_at.to_date) %>
                 </td>
                 <td class="col-md-3">
                   <%= link_to(meal.title_or_no_title, meal_url(meal)) %>

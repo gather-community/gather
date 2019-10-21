@@ -1,3 +1,5 @@
+# Time formats in this file should only be those that may reasonably change depending on locale.
+# Locale-independent formats like iso8601 are defined in config/initializers/time_formats.rb.
 en:
   date:
     formats:

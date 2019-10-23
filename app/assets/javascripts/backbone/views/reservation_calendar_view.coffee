@@ -32,7 +32,6 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
         center: 'agendaDay,agendaWeek,month'
         right: 'today prev,next'
       select: @onSelect.bind(this)
-      windowResize: @onWindowResize.bind(this)
       loading: @onLoading.bind(this)
       eventDrop: @onEventChange.bind(this)
       eventResize: @onEventChange.bind(this)
@@ -87,9 +86,6 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
     modal.modal('show')
 
-  onWindowResize: ->
-    @setViewForWidth()
-
   onViewRender: ->
     @trigger('viewRender')
     @saveSettings()
@@ -110,18 +106,12 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
         revertFunc()
         Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
-  setViewForWidth: ->
-    @calendar.fullCalendar('changeView', 'agendaDay') if @forceDay()
-
-  forceDay: ->
-    $(window).width() < 640
-
   create: ->
     # newUrl includes a QS param already so we use '&'
     window.location.href = "#{@newUrl}&#{$.param(@selection)}"
 
   initialViewType: (linkParam, defaultType) ->
-    type = @forceDay() && 'day' || linkParam || @savedSettings.viewType || defaultType || 'week'
+    type = linkParam || @savedSettings.viewType || defaultType || 'week'
     @URL_PARAMS_TO_VIEW_TYPES[type]
 
   minTime: ->

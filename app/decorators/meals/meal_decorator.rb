@@ -68,10 +68,6 @@ module Meals
       l(served_at, format: :short_date)
     end
 
-    def served_at_shorter_date
-      l(served_at, format: :shorter_date)
-    end
-
     # We should disable the "own" community checkbox for most users.
     def disable_community_checkbox?(community)
       disable = (object.community == community && community_invited?(community))

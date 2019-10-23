@@ -151,7 +151,7 @@ describe MealMailer do
       end
 
       it "renders the subject" do
-        expect(mail.subject).to eq("Message about Meal on Jan 01")
+        expect(mail.subject).to eq("Message about Meal on Sun Jan 01")
       end
 
       it "renders the correct name and URL in the body" do
@@ -182,7 +182,7 @@ describe MealMailer do
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Meal on Jan 01 CANCELLED")
+      expect(mail.subject).to eq("Meal on Sun Jan 01 CANCELLED")
     end
 
     it "renders the correct name and URL in the body" do

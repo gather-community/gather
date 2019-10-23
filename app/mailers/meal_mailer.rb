@@ -67,7 +67,7 @@ class MealMailer < ApplicationMailer
     @recipient = recipient.decorate
     @meal = @message.meal.decorate
     mail(to: @recipient, reply_to: [message.sender_email],
-         subject: default_i18n_subject(datetime: @meal.served_at_shorter_date))
+         subject: default_i18n_subject(datetime: @meal.served_at_short_date))
   end
 
   def community

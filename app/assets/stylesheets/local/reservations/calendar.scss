@@ -13,22 +13,17 @@
   }
 
   #calendar {
-    .fc-toolbar h2 {
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
+    // Hacky way to get the day/month/year buttons to look decent.
+    // Will probably go away when upgrading to Fullcalendar v4.
+    @media (max-width: 600px) {
+      .fc-toolbar {
+        text-align: left;
 
-    .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
-      display: none;
-    }
-
-    @media (min-width: 640px) {
-      .fc-toolbar h2 {
-        margin-bottom: 0;
-      }
-
-      .fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button {
-        display: inherit;
+        h2 {
+          margin-bottom: 10px;
+          margin-right: 20px;
+          font-size: 18px;
+        }
       }
     }
   }

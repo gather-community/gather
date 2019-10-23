@@ -23,7 +23,7 @@
     <%= icon_tag("info-circle") %>
     <%= t(".summary", count: @active_accounts) %>
     <% if @last_statement_run.present? %>
-      <%= t(".last_statement_run", date: l(@last_statement_run, format: :short_date)) %>
+      <%= t(".last_statement_run", date: l(@last_statement_run)) %>
     <% else %>
       <%= t(".statements_never_run") %>
     <% end %>
@@ -52,7 +52,7 @@
             account_path(account)) %>
         </td>
         <td class="amount">
-          <%= l(account.last_statement_on, format: :short_date) || "N/A" %>
+          <%= l(account.last_statement_on) || "N/A" %>
         </td>
         <td class="amount">
           <%= statement_amount(account.last_statement) %>

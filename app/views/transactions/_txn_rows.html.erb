@@ -10,7 +10,7 @@
 <% else %>
   <% transactions.each do |txn| %>
     <tr>
-      <td><%= l(txn.incurred_on, format: :short_date) %></td>
+      <td><%= l(txn.incurred_on) %></td>
       <td><%= t("transaction_codes.#{txn.code}") %></td>
       <td>
         <% if txn.statementable.present? %>

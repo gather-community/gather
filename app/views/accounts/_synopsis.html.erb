@@ -4,7 +4,7 @@
     <%= icon_tag("warning") %> Please pay
     <% if statement.due_on.present? %>
       <%= number_to_currency(account.balance_due) %> by
-      <%= l(statement.due_on, format: :short_date) %>. Thanks!
+      <%= l(statement.due_on) %>. Thanks!
     <% else %>
       <%= number_to_currency(account.balance_due) %>. Thanks!
     <% end %>

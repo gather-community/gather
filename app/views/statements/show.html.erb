@@ -18,7 +18,7 @@
 
 <%= render(layout: "transactions/txn_table") do %>
   <tr>
-    <td><%= l(statement.prev_stmt_on, format: :short_date) %></td>
+    <td><%= l(statement.prev_stmt_on) %></td>
     <td></td>
     <td>Previous balance</td>
     <td></td>
@@ -27,7 +27,7 @@
   </tr>
   <%= render("transactions/txn_rows", transactions: statement.transactions.decorate) %>
   <tr class="total">
-    <td><%= l(statement.created_on, format: :short_date) %></td>
+    <td><%= l(statement.created_on) %></td>
     <td></td>
     <td>Statement balance</td>
     <td></td>

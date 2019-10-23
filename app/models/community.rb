@@ -33,6 +33,7 @@ class Community < ApplicationRecord
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
     {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
      default: "directory", required: true},
+    {key: :main_nav_customizations, type: :text},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},
       {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},

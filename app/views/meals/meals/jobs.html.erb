@@ -12,7 +12,7 @@
   <div class="meals-list">
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes %>">
-        <h4><%= meal.served_at_datetime_no_yr %></h4>
+        <h4><%= meal.served_at_lens_dependent(lenses[:time]) %></h4>
         <div><%= meal.link %> at <%= meal.location_abbrv %></div>
         <% meal.roles.each do |role| %>
           <div><%= role.title %>: <%= meal.worker_links_for_role(role) %></div>

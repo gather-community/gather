@@ -55,6 +55,11 @@ module Meals
       l(served_at, format: :time_only)
     end
 
+    def served_at_lens_dependent(time_lens)
+      format = time_lens.upcoming? ? :datetime_no_yr : :default
+      l(served_at, format: format)
+    end
+
     def served_at_datetime_no_yr
       l(served_at, format: :datetime_no_yr)
     end

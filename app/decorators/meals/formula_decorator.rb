@@ -19,7 +19,7 @@ module Meals
     end
 
     def created_on
-      l(created_at, format: :full_date)
+      l(created_at.to_date)
     end
 
     def tr_classes

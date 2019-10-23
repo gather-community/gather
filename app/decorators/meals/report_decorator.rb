@@ -5,7 +5,7 @@ module Meals
     delegate_all
 
     def range_formatted
-      %w[first last].map { |m| l(range.send(m), format: :month_yr) }.join(" - ")
+      %w[first last].map { |m| l(range.send(m), format: :full_month_year) }.join(" - ")
     end
 
     def subhead(current_cmty_only: true)

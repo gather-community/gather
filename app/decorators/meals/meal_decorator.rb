@@ -56,16 +56,16 @@ module Meals
     end
 
     def served_at_lens_dependent(time_lens)
-      format = time_lens.upcoming? ? :datetime_no_yr : :default
+      format = time_lens.upcoming? ? :wday_no_year : :default
       l(served_at, format: format)
     end
 
-    def served_at_datetime_no_yr
-      l(served_at, format: :datetime_no_yr)
+    def served_at_wday_no_year
+      l(served_at, format: :wday_no_year)
     end
 
-    def served_at_short_date
-      l(served_at, format: :short_date)
+    def served_on_no_yr
+      l(served_at.to_date, format: :wday_no_year)
     end
 
     # We should disable the "own" community checkbox for most users.

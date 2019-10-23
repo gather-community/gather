@@ -95,7 +95,7 @@ module Work
     private
 
     def time_format
-      @time_format ||= job_date_time? ? :datetime_no_yr : :short_date
+      @time_format ||= job_date_time? ? :wday_no_year : :wday_no_year_no_time
     end
 
     def meal_icon_link

@@ -74,7 +74,7 @@ module Work
     def next_round_time(preposition: nil)
       return if staggering[:next_starts_at].nil?
       preposition ||= staggering[:next_starts_at].today? ? "at" : "on"
-      format = preposition == "on" ? :datetime_no_yr : :time_only
+      format = preposition == "on" ? :wday_no_year : :time_only
       time = h.l(staggering[:next_starts_at], format: format)
       h.t("common.time_with_preposition.#{preposition}", t: time).strip.gsub("  ", " ")
     end

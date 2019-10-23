@@ -10,7 +10,7 @@ class MealMailer < ApplicationMailer
 
     mail(to: @household, subject: default_i18n_subject(
       title: @meal.title_or_no_title,
-      datetime: @meal.served_at_datetime_no_yr,
+      datetime: @meal.served_at_wday_no_year,
       location: @meal.location_abbrv
     ))
   end
@@ -49,7 +49,7 @@ class MealMailer < ApplicationMailer
     @meal = assignment.meal.decorate
     @type = assignment.cook_menu_reminder_count.zero? ? :first : :second
 
-    mail(to: @user, subject: default_i18n_subject(date: @meal.served_at_short_date))
+    mail(to: @user, subject: default_i18n_subject(date: @meal.served_on_no_yr))
   end
 
   def normal_message(message, recipient)
@@ -67,7 +67,7 @@ class MealMailer < ApplicationMailer
     @recipient = recipient.decorate
     @meal = @message.meal.decorate
     mail(to: @recipient, reply_to: [message.sender_email],
-         subject: default_i18n_subject(datetime: @meal.served_at_short_date))
+         subject: default_i18n_subject(datetime: @meal.served_on_no_yr))
   end
 
   def community

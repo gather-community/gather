@@ -47,6 +47,10 @@ en:
       wiki_page:
         preview: "Preview"
 
+  errors:
+    messages:
+      no_semicolons: "Semicolons not allowed"
+
   button_labels:
     reservations/reservation:
       destroy: "Delete Reservation"

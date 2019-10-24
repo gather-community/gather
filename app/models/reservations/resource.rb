@@ -5,6 +5,7 @@ module Reservations
   class Resource < ApplicationRecord
     include Deactivatable
     include AttachmentFormable
+    include SemicolonDisallowable
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
 
@@ -24,6 +25,8 @@ module Reservations
 
     validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?
+
+    disallow_semicolons :name
 
     scope :in_community, ->(c) { where(community: c) }
     scope :meal_hostable, -> { where(meal_hostable: true) }

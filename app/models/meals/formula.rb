@@ -4,6 +4,7 @@ module Meals
   # Describes a meal system.
   class Formula < ApplicationRecord
     include Deactivatable
+    include SemicolonDisallowable
 
     MEAL_CALC_TYPES = %i[fixed share].freeze
     PANTRY_CALC_TYPES = %i[fixed percent].freeze
@@ -33,6 +34,8 @@ module Meals
     validate :at_least_one_type
     validate :cant_unset_default
     validate :must_have_head_cook_role
+
+    disallow_semicolons :name
 
     accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 

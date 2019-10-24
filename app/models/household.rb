@@ -3,6 +3,7 @@
 # A single cohesive household group, not necessarily one-to-one with a unit.
 class Household < ApplicationRecord
   include Deactivatable
+  include SemicolonDisallowable
 
   acts_as_tenant :cluster
 
@@ -30,6 +31,8 @@ class Household < ApplicationRecord
   validates :name, presence: true, length: {maximum: 32}, uniqueness: {scope: :community_id}
   validates :community_id, presence: true
   validates :unit_num_and_suffix, length: {maximum: 16}, allow_nil: true
+
+  disallow_semicolons :name
 
   before_validation :split_unit_num_and_suffix
 

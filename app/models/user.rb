@@ -26,6 +26,7 @@ class User < ApplicationRecord
   include AttachmentFormable
   include Phoneable
   include Deactivatable
+  include SemicolonDisallowable
 
   ROLES = %i[super_admin cluster_admin admin biller photographer
              meals_coordinator wikiist work_coordinator].freeze
@@ -116,6 +117,8 @@ class User < ApplicationRecord
   validate :household_present
   validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
+
+  disallow_semicolons :first_name, :last_name
 
   has_one_attached :photo
   validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]

@@ -1,7 +1,7 @@
 class ApplicationDecorator < Draper::Decorator
   include MultiCommunityCheck
 
-  delegate :t, :safe_str, to: :h # I18n helper
+  delegate :t, :l, :safe_str, to: :h
 
   def self.collection_decorator_class
     PaginatingDecorator
@@ -13,11 +13,6 @@ class ApplicationDecorator < Draper::Decorator
 
   def cmty_prefix_no_colon
     @cmty_prefix_no_colon ||= multi_community? ? "#{community.abbrv} " : ""
-  end
-
-  def l(*args)
-    return nil if args.first.nil?
-    I18n.l(*args).gsub("  ", " ").strip
   end
 
   # Returns a Proc that inserts the given separator, to be passed to array.reduce.

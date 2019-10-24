@@ -30,7 +30,7 @@
         <%=
           case period
           when :all then "Total"
-          when Date then I18n.l(period, format: period_format)
+          when Date then l(period, format: period_format)
           else period
           end %>
       </td>

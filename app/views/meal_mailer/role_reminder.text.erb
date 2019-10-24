@@ -1,6 +1,6 @@
 <%= @user.greeting %>
 
-This is a reminder that you are scheduled as <%= @assignment.role_title %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_short_date %>.
+This is a reminder that you are scheduled as <%= @assignment.role_title %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_on_no_yr %>.
 
 Your shift is on <%= @assignment.date_or_times %> at <%= @meal.location_name %>. The meal is scheduled to be served at <%= @meal.served_at_time_only %>.
 <% if @reminder.note? %>

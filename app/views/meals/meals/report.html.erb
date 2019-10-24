@@ -62,12 +62,12 @@
         <h2 class="with-subhead">By Month</h2>
         <%= meals_report.subhead %>
         <%= render("report_main_table", name: "month",
-                                        data: meals_report.by_month, period_format: :month_yr) %>
+                                        data: meals_report.by_month, period_format: :full_month_year) %>
 
         <h2 class="with-subhead">By Weekday</h2>
         <%= meals_report.subhead %>
         <%= render("report_main_table", name: "weekday",
-                                        data: meals_report.by_weekday, period_format: :weekday) %>
+                                        data: meals_report.by_weekday, period_format: :full_wday_only) %>
 
         <% if multi_community? %>
           <h2 class="with-subhead">By Community</h2>

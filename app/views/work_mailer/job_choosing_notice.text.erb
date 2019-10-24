@@ -1,7 +1,7 @@
 <%= @user.greeting %>
 
 <% if @period.auto_open_time %>
-Job choosing is coming up on <%= l(@period.auto_open_time, format: :short_date) %>!
+Job choosing is coming up on <%= l(@period.auto_open_time.to_date, format: :wday_no_year) %>!
 <% else %>
 Job choosing is coming up soon!
 <% end %>

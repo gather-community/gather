@@ -28,7 +28,7 @@
 <% else %>
   <%= render(layout: "txn_table") do %>
     <tr>
-      <td><%= l(last_statement&.created_on, format: :short_date) %></td>
+      <td><%= l(last_statement&.created_on) %></td>
       <td></td>
       <td>Last statement balance</td>
       <td></td>

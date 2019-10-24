@@ -150,7 +150,7 @@ feature "signups", js: true do
 
       scenario do
         visit(page_path)
-        time = I18n.l(open_time, format: :datetime_no_yr)
+        time = I18n.l(open_time, format: :wday_no_year)
         expect(page).to have_content("You have signed up for 0/32 hours. "\
           "You can start choosing jobs on #{time}")
         Timecop.freeze(open_time + 2.minutes) do

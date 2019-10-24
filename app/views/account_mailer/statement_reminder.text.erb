@@ -1,6 +1,6 @@
 <%= @household.greeting %>
 
-This is a reminder that payment for a Gather statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{I18n.l(d, format: :short_date)}" : "soon" %>.
+This is a reminder that payment for a Gather statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{l(d, format: :wday_no_year)}" : "soon" %>.
 
 The amount due is <%= number_to_currency(@statement.total_due) %>. Please visit the link below to see the details:
 

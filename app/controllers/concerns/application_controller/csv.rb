@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns::ApplicationController::Csv
   extend ActiveSupport::Concern
 
@@ -6,7 +8,7 @@ module Concerns::ApplicationController::Csv
       if p == :community
         current_community.slug
       elsif p == :date
-        I18n.l(Date.today, format: :filename)
+        Time.current.to_s(:iso8601_date)
       else
         p
       end

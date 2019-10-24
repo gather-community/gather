@@ -39,8 +39,8 @@ describe "reservations exports" do
         summary: "Games (#{user.name})",
         location: "Fun Room",
         description: %r{http://.+/reservations/},
-        "DTSTART;TZID=Etc/UTC" => I18n.l(time + 1.hour, format: :iso),
-        "DTEND;TZID=Etc/UTC" => I18n.l(time + 90.minutes, format: :iso)
+        "DTSTART;TZID=Etc/UTC" => (time + 1.hour).to_s(:iso8601_no_sep),
+        "DTEND;TZID=Etc/UTC" => (time + 90.minutes).to_s(:iso8601_no_sep)
       )
       expect(ical_data).not_to match("Dance")
     end

@@ -6,9 +6,12 @@ module ApplicationHelper
     notice: "alert-info"
   }.freeze
 
+  # `l` without the `I18n.` should be used everywhere possible including decorators, views, controllers.
+  # Models, inputs, serializers, and specs can use the I18n version but should be careful that they
+  # are not assuming nil checking.
   def l(date_or_time, *args)
     return nil if date_or_time.nil?
-    I18n.l(date_or_time, *args)
+    I18n.l(date_or_time, *args).gsub("  ", " ").strip
   end
 
   def bootstrap_class_for(flash_type)
@@ -50,7 +53,7 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{I18n.l(Time.current)}", id: "gen-time")
+    content_tag(:div, "Generated: #{l(Time.current)}", id: "gen-time")
   end
 
   def print_button

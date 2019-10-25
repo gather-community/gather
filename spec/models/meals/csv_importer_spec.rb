@@ -13,6 +13,14 @@ describe Meals::CsvImporter do
     end
   end
 
+  context "with headers but no data" do
+    let(:file) { prepare_expectation("meals/import/no_data.csv") }
+
+    it "returns error" do
+      expect(importer.errors).to eq(0 => ["File is empty"])
+    end
+  end
+
   context "with unrecognized headers including valid headers in other locale" do
     let!(:roles) { create_list(:meal_role, 2) }
     let(:file) { prepare_expectation("meals/import/bad_headers.csv", role_id: roles.map(&:id)) }

@@ -16,7 +16,7 @@ module Meals
 
     def import
       rows = CSV.new(file, converters: ->(f) { f&.strip }).read
-      if rows.empty?
+      if rows.size < 2
         errors[0] = ["File is empty"]
         return
       else

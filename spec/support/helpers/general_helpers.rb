@@ -12,7 +12,7 @@ module GeneralHelpers
   # `substitutions` should be a hash of arrays.
   # For each hash pair, e.g. `grp: groups_ids`, the method substitutes
   # e.g. `*grp8*` in the file with `groups_ids[7]`.
-  def prepare_expectation(filename, substitutions)
+  def prepare_expectation(filename, substitutions = {})
     expectation_file(filename).tap do |contents|
       substitutions.each do |key, values|
         values.each_with_index do |value, i|

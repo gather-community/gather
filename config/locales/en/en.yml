@@ -269,6 +269,12 @@ en:
         account_id: "Account ID"
         statement_id: "Statement ID"
         meal_id: "Meal ID"
+      meal:
+        served_at: "Time"
+        resource_ids: "Resources"
+        formula_id: "Formula"
+        community_ids: "Communities"
+        role: "Role"
 
   action_names:
     common:

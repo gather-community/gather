@@ -4,3 +4,5 @@ fr:
       user:
         id: "ID"
         first_name: "Prénom"
+      meal:
+        served_at: "Heure"

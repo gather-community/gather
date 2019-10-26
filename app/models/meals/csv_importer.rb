@@ -6,7 +6,7 @@ module Meals
   # Imports meals from CSV.
   class CsvImporter
     BASIC_HEADERS = %i[served_at resources formula communities].freeze
-    DB_ID_REGEX = /\A\d+\z/
+    DB_ID_REGEX = /\A\d+\z/.freeze
 
     attr_accessor :file, :errors, :community, :row_pointer, :header_map, :current_meal
 
@@ -24,19 +24,23 @@ module Meals
         add_error("File is empty")
         return
       else
-        rows.each do |row|
-          self.row_pointer += 1
-          next if row.empty?
-          (parse_headers(row) ? next : break) if row_pointer == 1
-          self.current_meal = Meal.new
-          header_map.each do |col_index, attrib|
-            parse_attrib(attrib, row[col_index])
-          end
-        end
+        parse_rows(rows)
       end
     end
 
     private
+
+    def parse_rows(rows)
+      rows.each do |row|
+        self.row_pointer += 1
+        next if row.empty?
+        (parse_headers(row) ? next : break) if row_pointer == 1
+        self.current_meal = Meal.new
+        header_map.each do |col_index, attrib|
+          parse_attrib(attrib, row[col_index])
+        end
+      end
+    end
 
     def parse_headers(row)
       bad_headers = []
@@ -65,14 +69,8 @@ module Meals
 
     def parse_attrib(attrib, str)
       case attrib
-      when :served_at
-        parse_served_at(str)
-      when :resources
-        parse_resources(str)
-      when :formula
-        parse_formula(str)
-      when :communities
-        parse_communities(str)
+      when :served_at, :resources, :formula, :communities
+        send("parse_#{attrib}", str)
       when Meals::Role
         parse_role(attrib, str)
       end
@@ -122,26 +120,26 @@ module Meals
     end
 
     def find_resource(str)
-      col = is_id?(str) ? :name : :id
+      col = id?(str) ? :name : :id
       Reservations::Resource.in_community(community).find_by(col => str)
     end
 
     def find_formula(str)
-      col = is_id?(str) ? :name : :id
+      col = id?(str) ? :name : :id
       Meals::Formula.in_community(community).find_by(col => str)
     end
 
     def find_community(str)
-      col = is_id?(str) ? :name : :id
+      col = id?(str) ? :name : :id
       Community.find_by(col => str)
     end
 
     def find_user(str)
       scope = User.in_community(community)
-      is_id?(str) ? scope.find_by(id: str) : scope.with_full_name(str).first
+      id?(str) ? scope.find_by(id: str) : scope.with_full_name(str).first
     end
 
-    def is_id?(str)
+    def id?(str)
       str.match?(DB_ID_REGEX)
     end
   end

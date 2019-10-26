@@ -7,11 +7,12 @@ module Meals
   class CsvImporter
     BASIC_HEADERS = %i[served_at resource_ids formula_id community_ids].freeze
 
-    attr_accessor :file, :errors
+    attr_accessor :file, :errors, :community
 
-    def initialize(file)
+    def initialize(file, community:)
       self.file = file
       self.errors = {}
+      self.community = community
     end
 
     def import
@@ -31,7 +32,7 @@ module Meals
       row.each do |cell|
         next if header_dict[cell]
         if (match_data = cell.match(/\A#{I18n.t("csv.headers.meal.role")}(\d+)\z/))
-          next if Role.find_by(id: match_data[1])
+          next if Role.in_community(community).find_by(id: match_data[1])
         end
         bad_headers << cell
       end

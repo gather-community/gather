@@ -58,11 +58,11 @@ module Meals
 
     # Looking up a header symbol based on the provided human-readable string.
     def untranslate_header(str)
-      (@untranslate_dict ||= BASIC_HEADERS.map { |h| [I18n.t("csv.headers.meal.#{h}"), h] }.to_h)[str]
+      (@untranslate_dict ||= BASIC_HEADERS.map { |h| [I18n.t("csv.headers.meals/meal.#{h}"), h] }.to_h)[str]
     end
 
     def role_from_header(cell)
-      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meal.role")}(\d+)\z/))
+      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
         Role.in_community(community).find_by(id: match_data[1])
       else
         Role.in_community(community).find_by(title: cell)
@@ -89,29 +89,26 @@ module Meals
     def parse_resources(str)
       return add_error("Resource(s) are required") if str.blank?
       current_meal.resources = str.split(/\s*;\s*/).map do |substr|
-        find_resource(substr) || add_error("Could not find a resource matching '#{substr}'")
+        find_resource(substr)
       end.compact
     end
 
     def parse_formula(str)
       return if str.blank?
-      current_meal.formula = find_formula(str) || add_error("Could not find a meal formula matching '#{str}'")
+      current_meal.formula = find_formula(str)
     end
 
     def parse_communities(str)
       return if str.blank?
       current_meal.communities = str.split(/\s*;\s*/).map do |substr|
-        find_community(substr) || add_error("Could not find a community matching '#{substr}'")
+        find_community(substr)
       end.compact
     end
 
     def parse_role(role, str)
       return if str.blank?
       str.split(/\s*;\s*/).each do |substr|
-        unless (user = find_user(substr))
-          add_error("Could not find a user matching '#{substr}'")
-          next
-        end
+        next unless (user = find_user(substr))
         current_meal.assignments.build(role: role, user: user)
       end
     end
@@ -122,23 +119,28 @@ module Meals
     end
 
     def find_resource(str)
-      col = id?(str) ? :name : :id
-      Reservations::Resource.in_community(community).find_by(col => str)
+      col = id?(str) ? :id : :name
+      Reservations::Resource.in_community(community).find_by(col => str) ||
+        add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{col}", str: str))
     end
 
     def find_formula(str)
-      col = id?(str) ? :name : :id
-      Meals::Formula.in_community(community).find_by(col => str)
+      col = id?(str) ? :id : :name
+      Meals::Formula.in_community(community).find_by(col => str) ||
+        add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{col}", str: str))
     end
 
     def find_community(str)
-      col = id?(str) ? :name : :id
-      Community.find_by(col => str)
+      col = id?(str) ? :id : :name
+      Community.find_by(col => str) ||
+        add_error(I18n.t("csv.errors.meals/meal.community.bad_#{col}", str: str))
     end
 
     def find_user(str)
+      col = id?(str) ? :id : :name
       scope = User.in_community(community)
-      id?(str) ? scope.find_by(id: str) : scope.with_full_name(str).first
+      (col == :id ? scope.find_by(id: str) : scope.with_full_name(str).first) ||
+        add_error(I18n.t("csv.errors.meals/meal.user.bad_#{col}", str: str))
     end
 
     def id?(str)

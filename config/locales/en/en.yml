@@ -269,12 +269,26 @@ en:
         account_id: "Account ID"
         statement_id: "Statement ID"
         meal_id: "Meal ID"
-      meal:
+      meals/meal:
         served_at: "Date/Time"
         resources: "Resources"
         formula: "Formula"
         communities: "Communities"
         role: "Role"
+    errors:
+      meals/meal:
+        resource:
+          bad_id: "Could not find a resource with ID %{str}"
+          bad_name: "Could not find a resource named '%{str}'"
+        formula:
+          bad_id: "Could not find a meal formula with ID %{str}"
+          bad_name: "Could not find a meal formula named '%{str}'"
+        community:
+          bad_id: "Could not find a community with ID %{str}"
+          bad_name: "Could not find a community named '%{str}'"
+        user:
+          bad_id: "Could not find a user with ID %{str}"
+          bad_name: "Could not find a user named '%{str}'"
 
   action_names:
     common:

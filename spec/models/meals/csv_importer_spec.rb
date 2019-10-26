@@ -58,23 +58,23 @@ describe Meals::CsvImporter do
       expect(importer.errors).to eq(
         2 => [
           "'notadate' is not a valid date/time",
-          "Could not find a resource matching '#{outside_resource.id}'",
-          "Could not find a resource matching '18249187214'",
-          "Could not find a meal formula matching '#{outside_formula.id}'",
-          "Could not find a community matching '#{outside_community.id}'",
-          "Could not find a community matching '6822411'",
-          "Could not find a user matching '#{outside_user.id}'",
-          "Could not find a user matching '818181731'"
+          "Could not find a resource with ID #{outside_resource.id}",
+          "Could not find a resource with ID 18249187214",
+          "Could not find a meal formula with ID #{outside_formula.id}",
+          "Could not find a community with ID #{outside_community.id}",
+          "Could not find a community with ID 6822411",
+          "Could not find a user with ID #{outside_user.id}",
+          "Could not find a user with ID 818181731"
         ],
         3 => [
           "'2019-01-32 12:43' is not a valid date/time",
-          "Could not find a resource matching 'Plizz'",
-          "Could not find a resource matching 'Pants Room'",
-          "Could not find a meal formula matching 'Blorph'",
-          "Could not find a community matching 'Saucy Community'",
-          "Could not find a community matching 'Sooville'",
-          "Could not find a user matching 'James Smith, Jr.'",
-          "Could not find a user matching 'X Q'"
+          "Could not find a resource named 'Plizz'",
+          "Could not find a resource named 'Pants Room'",
+          "Could not find a meal formula named 'Blorph'",
+          "Could not find a community named 'Saucy Community'",
+          "Could not find a community named 'Sooville'",
+          "Could not find a user named 'James Smith, Jr.'",
+          "Could not find a user named 'X Q'"
         ],
         5 => [
           "Date/time is required",

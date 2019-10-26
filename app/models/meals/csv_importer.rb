@@ -62,9 +62,11 @@ module Meals
     end
 
     def role_from_header(cell)
-      match_data = cell.match(/\A#{I18n.t("csv.headers.meal.role")}(\d+)\z/)
-      return nil unless match_data
-      Role.in_community(community).find_by(id: match_data[1])
+      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meal.role")}(\d+)\z/))
+        Role.in_community(community).find_by(id: match_data[1])
+      else
+        Role.in_community(community).find_by(title: cell)
+      end
     end
 
     def parse_attrib(attrib, str)

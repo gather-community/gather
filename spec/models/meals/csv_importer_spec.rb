@@ -25,9 +25,11 @@ describe Meals::CsvImporter do
   end
 
   context "with unrecognized headers including valid headers in other locale" do
+    let!(:real_role) { create(:meal_role, community: community, title: "Head Cook") }
     let(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
     let(:file) do
-      prepare_expectation("meals/import/bad_headers.csv", role_id: (roles << outside_role).map(&:id))
+      prepare_expectation("meals/import/bad_headers.csv",
+        role_id: (roles << outside_role).map(&:id))
     end
 
     it "returns error listing all bad headers" do

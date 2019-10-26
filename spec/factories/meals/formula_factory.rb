@@ -32,5 +32,9 @@ FactoryBot.define do
     trait :with_asst_cook_role do
       asst_cook_role { create(:meal_role, title: "Assistant Cook", community: community) }
     end
+
+    trait :inactive do
+      deactivated_at { Time.current - 1 }
+    end
   end
 end

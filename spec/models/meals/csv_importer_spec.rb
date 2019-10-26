@@ -26,7 +26,8 @@ describe Meals::CsvImporter do
 
   context "with unrecognized headers including valid headers in other locale" do
     let!(:real_role) { create(:meal_role, community: community, title: "Head Cook") }
-    let(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
+    let!(:inactive_role) { create(:meal_role, :inactive, community: community, title: "Inacto") }
+    let!(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
     let(:file) do
       prepare_expectation("meals/import/bad_headers.csv",
         role_id: (roles << outside_role).map(&:id))
@@ -34,16 +35,19 @@ describe Meals::CsvImporter do
 
     it "returns error listing all bad headers" do
       expect(importer.errors).to eq(
-        1 => ["Invalid column headers: Junk, Heure, Role999999999999, Vulpt, Role#{outside_role.id}"]
+        1 => ["Invalid column headers: Junk, Heure, Role999999999999, Vulpt, Role#{outside_role.id}, Inacto"]
       )
     end
   end
 
   context "with bad data" do
-    let(:outside_resource) { create(:resource, community: other_community, name: "Plizz") }
-    let(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
-    let(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }
-    let(:outside_community) do
+    let!(:inactive_resource) { create(:resource, :inactive, community: community, name: "Inacto") }
+    let!(:inactive_formula) { create(:meal_formula, :inactive, community: community, name: "Inacto") }
+    let!(:inactive_user) { create(:user, :inactive, community: community, first_name: "I", last_name: "J") }
+    let!(:outside_resource) { create(:resource, community: other_community, name: "Plizz") }
+    let!(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
+    let!(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }
+    let!(:outside_community) do
       ActsAsTenant.with_tenant(create(:cluster)) { create(:community, name: "Sooville") }
     end
     let(:file) do
@@ -79,6 +83,12 @@ describe Meals::CsvImporter do
         5 => [
           "Date/time is required",
           "Resource(s) are required"
+        ],
+        6 => [
+          "Date/time is required",
+          "Could not find a resource named 'Inacto'",
+          "Could not find a meal formula named 'Inacto'",
+          "Could not find a user named 'I J'"
         ]
       )
     end

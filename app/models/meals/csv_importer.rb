@@ -63,9 +63,9 @@ module Meals
 
     def role_from_header(cell)
       if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
-        Role.in_community(community).find_by(id: match_data[1])
+        Role.in_community(community).active.find_by(id: match_data[1])
       else
-        Role.in_community(community).find_by(title: cell)
+        Role.in_community(community).active.find_by(title: cell)
       end
     end
 
@@ -120,13 +120,13 @@ module Meals
 
     def find_resource(str)
       col = id?(str) ? :id : :name
-      Reservations::Resource.in_community(community).find_by(col => str) ||
+      Reservations::Resource.in_community(community).active.find_by(col => str) ||
         add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{col}", str: str))
     end
 
     def find_formula(str)
       col = id?(str) ? :id : :name
-      Meals::Formula.in_community(community).find_by(col => str) ||
+      Meals::Formula.in_community(community).active.find_by(col => str) ||
         add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{col}", str: str))
     end
 
@@ -138,7 +138,7 @@ module Meals
 
     def find_user(str)
       col = id?(str) ? :id : :name
-      scope = User.in_community(community)
+      scope = User.in_community(community).active
       (col == :id ? scope.find_by(id: str) : scope.with_full_name(str).first) ||
         add_error(I18n.t("csv.errors.meals/meal.user.bad_#{col}", str: str))
     end

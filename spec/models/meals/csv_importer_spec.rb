@@ -36,4 +36,49 @@ describe Meals::CsvImporter do
       )
     end
   end
+
+  context "with bad data" do
+    let(:outside_resource) { create(:resource, community: other_community, name: "Plizz") }
+    let(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
+    let(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }
+    let(:outside_community) do
+      ActsAsTenant.with_tenant(create(:cluster)) { create(:community, name: "Sooville") }
+    end
+    let(:file) do
+      prepare_expectation("meals/import/bad_data.csv", role_id: roles.map(&:id),
+                                                       resource_id: [outside_resource.id],
+                                                       formula_id: [outside_formula.id],
+                                                       user_id: [outside_user.id],
+                                                       community_id: [outside_community.id])
+    end
+
+    it "returns all errors" do
+      expect(importer.errors).to eq(
+        2 => [
+          "'notadate' is not a valid date/time",
+          "Could not find a resource matching '#{outside_resource.id}'",
+          "Could not find a resource matching '18249187214'",
+          "Could not find a meal formula matching '#{outside_formula.id}'",
+          "Could not find a community matching '#{outside_community.id}'",
+          "Could not find a community matching '6822411'",
+          "Could not find a user matching '#{outside_user.id}'",
+          "Could not find a user matching '818181731'"
+        ],
+        3 => [
+          "'2019-01-32 12:43' is not a valid date/time",
+          "Could not find a resource matching 'Plizz'",
+          "Could not find a resource matching 'Pants Room'",
+          "Could not find a meal formula matching 'Blorph'",
+          "Could not find a community matching 'Saucy Community'",
+          "Could not find a community matching 'Sooville'",
+          "Could not find a user matching 'James Smith, Jr.'",
+          "Could not find a user matching 'X Q'"
+        ],
+        5 => [
+          "Date/time is required",
+          "Resource(s) are required"
+        ]
+      )
+    end
+  end
 end

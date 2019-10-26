@@ -77,6 +77,7 @@ class User < ApplicationRecord
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
+  scope :with_full_name, ->(n) { where("(first_name || ' ' || last_name) = ?", n) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }

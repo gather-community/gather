@@ -270,10 +270,10 @@ en:
         statement_id: "Statement ID"
         meal_id: "Meal ID"
       meal:
-        served_at: "Time"
-        resource_ids: "Resources"
-        formula_id: "Formula"
-        community_ids: "Communities"
+        served_at: "Date/Time"
+        resources: "Resources"
+        formula: "Formula"
+        communities: "Communities"
         role: "Role"
 
   action_names:

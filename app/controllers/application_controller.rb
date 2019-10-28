@@ -14,12 +14,17 @@ class ApplicationController < ActionController::Base
 
   attr_accessor :current_community
 
-  helper_method :current_community, :current_cluster, :multi_community?, :app_version
+  helper_method :current_community, :current_cluster, :multi_community?, :app_version, :nav_link_builder
+
+  def nav_link_builder
+    @nav_link_builder ||= Nav::LinkBuilder.new
+  end
 
   protected
 
   def nav_context(section, subsection = nil)
     @context = {section: section, subsection: subsection}
+    nav_link_builder.context = {section: section, subsection: subsection}
   end
 
   def app_version

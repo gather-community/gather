@@ -54,4 +54,40 @@ describe Meals::Assignment do
       end
     end
   end
+
+  describe "validation" do
+    describe "role" do
+      let(:formula) { create(:meal_formula, :with_asst_cook_role) }
+
+      context "on create" do
+        let(:meal) { build(:meal, formula: formula, head_cook: false) }
+        subject(:assignment) { build(:meal_assignment, meal: meal, role: role, user: create(:user)) }
+
+        context "with valid role" do
+          let(:role) { formula.head_cook_role }
+          it { is_expected.to be_valid }
+        end
+
+        context "with invalid role" do
+          let(:role) { create(:meal_role, title: "Foo") }
+          it { is_expected.to have_errors(user_id: /Role 'Foo' does not match the selected formula/) }
+        end
+      end
+
+      context "on update" do
+        let!(:meal) { create(:meal, formula: formula, head_cook: create(:user), asst_cooks: [create(:user)]) }
+        subject(:assignment) { meal.assignments[1] }
+
+        before do
+          formula.roles.delete(formula.roles.detect { |r| r.title == "Assistant Cook" })
+        end
+
+        context "with now-invalid role" do
+          it "does not error on update!" do
+            assignment.update!(user: create(:user))
+          end
+        end
+      end
+    end
+  end
 end

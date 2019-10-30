@@ -20,6 +20,8 @@ module Meals
     delegate :title, to: :role, prefix: true
     delegate :community, to: :meal
 
+    validate :role_matches_formula
+
     def empty?
       user_id.blank?
     end
@@ -61,6 +63,12 @@ module Meals
 
     def shift_time_offset(start_or_end)
       community.settings.meals.default_shift_times[start_or_end][role].minutes
+    end
+
+    def role_matches_formula
+      return if persisted? || meal.nil? || meal.formula.role_ids.include?(role_id)
+      # We add the error on user_id b/c that's what's shown in the form.
+      errors.add(:user_id, "Role '#{role.title}' does not match the selected formula")
     end
   end
 end

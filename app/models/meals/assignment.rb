@@ -3,9 +3,6 @@
 module Meals
   # Models an assignment of a worker to a meal for a meal role.
   class Assignment < ApplicationRecord
-    ROLES = %w[head_cook asst_cook table_setter cleaner].freeze # In order
-    ALL_EXTRA_ROLES = %i[asst_cook table_setter cleaner].freeze
-
     acts_as_tenant :cluster
 
     scope :oldest_first, -> { joins(:meal).order("meals.served_at") }

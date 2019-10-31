@@ -27,12 +27,12 @@ module Meals
       else
         ActiveRecord::Base.transaction do
           parse_rows(rows)
-          raise ActiveRecord::Rollback unless success?
+          raise ActiveRecord::Rollback unless successful?
         end
       end
     end
 
-    def success?
+    def successful?
       return @success if defined?(@success)
       @success = errors.values.none?(&:any?)
     end

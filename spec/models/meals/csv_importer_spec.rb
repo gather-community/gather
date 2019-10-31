@@ -97,7 +97,7 @@ describe Meals::CsvImporter do
 
   context "with data causing validation errors" do
     let!(:formula) { create(:meal_formula, is_default: true) }
-    let(:resource) { create(:resource) }
+    let(:resources) { create_list(:resource, 2) }
     let(:file) do
       prepare_expectation("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
     end
@@ -110,6 +110,56 @@ describe Meals::CsvImporter do
         4 => ["Could not find a meal formula with ID 1234"]
       )
       expect(Meals::Meal.count).to be_zero
+    end
+  end
+
+  context "with successful data" do
+    let!(:default_formula) { create(:meal_formula, :with_two_roles, is_default: true) }
+    let(:asst_cook_role) { default_formula.roles[1] }
+    let(:other_formula) { create(:meal_formula) }
+    let(:resources) { create_list(:resource, 2) }
+    let(:users) do
+      [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
+    end
+    let(:communities) { [community, other_community, create(:community)] }
+    let(:file) do
+      prepare_expectation("meals/import/successful_data.csv",
+        resource_id: resources.map(&:id),
+        role_id: [asst_cook_role.id],
+        user_id: users.map(&:id),
+        community_id: communities.map(&:id),
+        formula_id: [other_formula.id])
+    end
+    let(:meals) { Meals::Meal.order(:served_at).to_a }
+
+    before do
+      community.settings.meals.default_capacity = 42
+      community.save!
+    end
+
+    it "returns errors on valid rows and saves no meals" do
+      expect(importer).to be_successful
+      expect(meals.size).to eq(2)
+
+      expect(meals[0].served_at).to eq(Time.zone.parse("2019-01-31 12:00"))
+      expect(meals[0].resources).to match_array(resources)
+      expect(meals[0].formula).to eq(default_formula)
+      expect(meals[0].communities).to match_array(communities)
+      expect(meals[0].community).to eq(community)
+      expect(meals[0].head_cook).to eq(users[0])
+      expect(meals[0].assignments_by_role[asst_cook_role].map(&:user)).to contain_exactly(users[1], users[2])
+      expect(meals[0].creator).to eq(user)
+      expect(meals[0].capacity).to eq(42)
+
+      expect(meals[1].served_at).to eq(Time.zone.parse("2019-02-01 13:00"))
+      expect(meals[1].resources).to eq([resources[0]])
+      expect(meals[1].formula).to eq(other_formula)
+      expect(meals[1].communities).to match_array(communities[0..1])
+      expect(meals[1].community).to eq(community)
+      expect(meals[1].head_cook).to be_nil
+      expect(meals[1].assignments_by_role).to be_empty
+      expect(meals[1].creator).to eq(user)
+      expect(meals[1].capacity).to eq(42)
     end
   end
 end

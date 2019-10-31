@@ -52,7 +52,9 @@ describe Meals::RolePolicy do
       end
 
       context "with associated meal assignment" do
-        let!(:meal_assignment) { create(:meal_assignment, role: role) }
+        let(:formula) { create(:meal_formula, roles: [create(:meal_role, :head_cook), role]) }
+        let(:meal) { create(:meal, formula: formula) }
+        let!(:meal_assignment) { create(:meal_assignment, role: role, meal: meal) }
         it_behaves_like "forbids all"
       end
     end

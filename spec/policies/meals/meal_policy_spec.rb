@@ -6,7 +6,9 @@ describe Meals::MealPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:head_cook) { create(:user) }
-    let(:meal) { create(:meal, communities: [community, communityC], head_cook: head_cook) }
+    let(:formula) { create(:meal_formula, :with_two_roles) }
+    let(:ac_role) { formula.roles[1] }
+    let(:meal) { create(:meal, formula: formula, communities: [community, communityC], head_cook: head_cook) }
     let(:record) { meal }
 
     permissions :index?, :report? do
@@ -23,7 +25,7 @@ describe Meals::MealPolicy do
       end
 
       it "permits non-invited workers" do
-        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB)
+        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB, role: ac_role)
         expect(subject).to permit(user_cmtyB, meal)
       end
 
@@ -44,7 +46,7 @@ describe Meals::MealPolicy do
       it_behaves_like "permits users in community only"
 
       it "permits non-invited workers" do
-        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB)
+        meal.assignments << create(:meal_assignment, meal: meal, user: user_cmtyB, role: ac_role)
         expect(subject).to permit(user_cmtyB, meal)
       end
     end
@@ -163,7 +165,7 @@ describe Meals::MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
 
       it "permits team members" do
-        meal.assignments << create(:meal_assignment, meal: meal, user: user)
+        meal.assignments << create(:meal_assignment, meal: meal, user: user, role: ac_role)
         expect(subject).to permit(user, meal)
       end
     end
@@ -172,10 +174,11 @@ describe Meals::MealPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Meals::Meal }
-    let!(:meal1) { create(:meal, communities: [user.community]) } # Invited
-    let!(:meal2) { create(:meal, cleaners: [actor], communities: [communityB]) } # Assigned
-    let!(:meal3) { create(:meal, communities: [communityB]) } # Signed up
-    let!(:meal4) { create(:meal, communities: [communityB]) } # None of the above
+    let(:formula) { create(:meal_formula, :with_two_roles) }
+    let!(:meal1) { create(:meal, formula: formula, communities: [user.community]) } # Invited
+    let!(:meal2) { create(:meal, formula: formula, asst_cooks: [actor], communities: [communityB]) } # Assgned
+    let!(:meal3) { create(:meal, formula: formula, communities: [communityB]) } # Signed up
+    let!(:meal4) { create(:meal, formula: formula, communities: [communityB]) } # None of the above
 
     before do
       meal3.signups << create(:meal_signup, meal: meal3, household: actor.household, diner_counts: [2])

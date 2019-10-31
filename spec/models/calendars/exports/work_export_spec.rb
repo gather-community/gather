@@ -10,7 +10,8 @@ describe "work exports" do
     create(:meal_role, title: "Assistant Cook", time_type: "date_time",
                        shift_start: -90, shift_end: 0, description: "Assist the wise cook")
   end
-  let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role]) }
+  let(:cleaner_role) { create(:meal_role, title: "Cleaner") }
+  let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role, cleaner_role]) }
 
   let(:meal1_time) { Time.current.midnight + 3.days + 18.hours }
   let(:meal2_time) { Time.current.midnight + 7.days + 18.hours }

@@ -97,7 +97,7 @@ describe Meals::CsvImporter do
 
   context "with data causing validation errors" do
     let!(:formula) { create(:meal_formula, is_default: true) }
-    let(:resources) { create_list(:resource, 2) }
+    let(:resource) { create(:resource) }
     let(:file) do
       prepare_expectation("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
     end

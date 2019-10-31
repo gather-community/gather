@@ -85,4 +85,8 @@ module GeneralHelpers
   def process_queued_job
     Delayed::Worker.new.work_off
   end
+
+  # Does nothing. Just a nice way to indicate why a let block is being called.
+  def run_let_blocks(*objects)
+  end
 end

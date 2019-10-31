@@ -6,7 +6,8 @@ describe Meals::CsvImporter do
   let!(:community) { Defaults.community }
   let!(:other_community) { create(:community) }
   let(:roles) { create_list(:meal_role, 2) }
-  subject(:importer) { described_class.new(file, community: community).tap(&:import) }
+  let(:user) { create(:meals_coordinator) }
+  subject(:importer) { described_class.new(file, community: community, user: user).tap(&:import) }
 
   context "with empty file" do
     let(:file) { prepare_expectation("empty.csv") }
@@ -91,6 +92,24 @@ describe Meals::CsvImporter do
           "Could not find a user named 'I J'"
         ]
       )
+    end
+  end
+
+  context "with data causing validation errors" do
+    let!(:formula) { create(:meal_formula, is_default: true) }
+    let(:resource) { create(:resource) }
+    let(:file) do
+      prepare_expectation("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
+    end
+
+    it "returns errors on valid rows and saves no meals" do
+      expect(importer.errors).to eq(
+        2 => [],
+        3 => ["The following error(s) occurred in making a Resource 1 reservation for this meal: "\
+          "This reservation overlaps an existing one."],
+        4 => ["Could not find a meal formula with ID 1234"]
+      )
+      expect(Meals::Meal.count).to be_zero
     end
   end
 end

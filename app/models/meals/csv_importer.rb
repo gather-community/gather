@@ -8,14 +8,15 @@ module Meals
     BASIC_HEADERS = %i[served_at resources formula communities].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
-    attr_accessor :file, :errors, :community, :row_pointer, :header_map, :current_meal
+    attr_accessor :file, :errors, :community, :user, :row_pointer, :header_map, :current_meal
 
-    def initialize(file, community:)
+    def initialize(file, community:, user:)
       self.file = file
       self.errors = Hash.new { |h, k| h[k] = [] }
       self.community = community
       self.row_pointer = 0
       self.header_map = {}
+      self.user = user
     end
 
     def import
@@ -24,8 +25,16 @@ module Meals
         add_error("File is empty")
         return
       else
-        parse_rows(rows)
+        ActiveRecord::Base.transaction do
+          parse_rows(rows)
+          raise ActiveRecord::Rollback unless success?
+        end
       end
+    end
+
+    def success?
+      return @success if defined?(@success)
+      @success = errors.values.none?(&:any?)
     end
 
     private
@@ -39,7 +48,19 @@ module Meals
         header_map.each do |col_index, attrib|
           parse_attrib(attrib, row[col_index])
         end
+        next if current_row_errors?
+        assign_meal_defaults
+        current_meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
       end
+    end
+
+    def assign_meal_defaults
+      current_meal.formula ||= Formula.default_for(community)
+      current_meal.community = community
+      current_meal.communities = Community.all if current_meal.communities.none?
+      current_meal.creator = user
+      current_meal.capacity = community.settings.meals.default_capacity
+      current_meal.build_reservations
     end
 
     def parse_headers(row)
@@ -116,6 +137,10 @@ module Meals
     def add_error(msg)
       errors[row_pointer] << msg
       nil
+    end
+
+    def current_row_errors?
+      errors[row_pointer].any?
     end
 
     def find_resource(str)

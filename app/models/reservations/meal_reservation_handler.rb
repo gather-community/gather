@@ -39,6 +39,10 @@ module Reservations
                         "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
                         "for this meal: #{errors}.")
       end
+
+      # Since we are copying these errors to the meal base, we don't need them in the
+      # reservations base anymore.
+      meal.errors.delete(:"reservations.base")
     end
 
     # Validates that changes to the reservation are valid with respect to the meal.

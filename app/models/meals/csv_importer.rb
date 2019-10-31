@@ -39,6 +39,34 @@ module Meals
 
     private
 
+    def parse_headers(row)
+      bad_headers = []
+      row.each_with_index do |cell, col_index|
+        if (attrib = untranslate_header(cell) || role_from_header(cell))
+          header_map[col_index] = attrib
+        else
+          bad_headers << cell
+        end
+      end
+      return true if bad_headers.empty?
+      add_error("Invalid column headers: #{bad_headers.join(', ')}")
+      false
+    end
+
+    # Looking up a header symbol based on the provided human-readable string.
+    def untranslate_header(str)
+      @untranslate_dict ||= BASIC_HEADERS.map { |h| [I18n.t("csv.headers.meals/meal.#{h}").downcase, h] }.to_h
+      @untranslate_dict[str.downcase]
+    end
+
+    def role_from_header(cell)
+      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
+        Role.in_community(community).active.find_by(id: match_data[1])
+      else
+        Role.in_community(community).active.find_by(title: cell)
+      end
+    end
+
     def parse_rows(rows)
       rows.each do |row|
         self.row_pointer += 1
@@ -61,33 +89,6 @@ module Meals
       current_meal.creator = user
       current_meal.capacity = community.settings.meals.default_capacity
       current_meal.build_reservations
-    end
-
-    def parse_headers(row)
-      bad_headers = []
-      row.each_with_index do |cell, col_index|
-        if (attrib = untranslate_header(cell) || role_from_header(cell))
-          header_map[col_index] = attrib
-        else
-          bad_headers << cell
-        end
-      end
-      return true if bad_headers.empty?
-      add_error("Invalid column headers: #{bad_headers.join(', ')}")
-      false
-    end
-
-    # Looking up a header symbol based on the provided human-readable string.
-    def untranslate_header(str)
-      (@untranslate_dict ||= BASIC_HEADERS.map { |h| [I18n.t("csv.headers.meals/meal.#{h}"), h] }.to_h)[str]
-    end
-
-    def role_from_header(cell)
-      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
-        Role.in_community(community).active.find_by(id: match_data[1])
-      else
-        Role.in_community(community).active.find_by(title: cell)
-      end
     end
 
     def parse_attrib(attrib, str)

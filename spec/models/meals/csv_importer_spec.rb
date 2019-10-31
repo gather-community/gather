@@ -34,7 +34,7 @@ describe Meals::CsvImporter do
         role_id: (roles << outside_role).map(&:id))
     end
 
-    it "returns error listing all bad headers" do
+    it "returns error listing all bad headers, case insensitive" do
       expect(importer.errors).to eq(
         1 => ["Invalid column headers: Junk, Heure, Role999999999999, Vulpt, Role#{outside_role.id}, Inacto"]
       )

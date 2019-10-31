@@ -4,7 +4,10 @@ require "rails_helper"
 
 describe Meals::WorkerChangeNotifier do
   let(:actor) { create(:user) }
-  let(:meal) { create(:meal, head_cook: create(:user), asst_cooks: [create(:user), create(:user)]) }
+  let(:formula) { create(:meal_formula, :with_two_roles) }
+  let(:meal) do
+    create(:meal, formula: formula, head_cook: create(:user), asst_cooks: [create(:user), create(:user)])
+  end
   let(:notifier) { described_class.new(actor, meal) }
 
   context "with no change" do

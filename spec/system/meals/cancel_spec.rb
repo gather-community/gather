@@ -2,8 +2,9 @@
 
 require "rails_helper"
 
-describe "meal messages" do
-  let!(:meal) { create(:meal, asst_cooks: [create(:user)]) }
+feature "meal messages" do
+  let(:formula) { create(:meal_formula, :with_two_roles) }
+  let!(:meal) { create(:meal, formula: formula, asst_cooks: [create(:user)]) }
   let!(:user) { meal.head_cook }
   let!(:signup) { create_list(:meal_signup, 2, meal: meal, diner_counts: [2, 1]) }
   let(:email_sent) { email_sent_by { process_queued_job } }

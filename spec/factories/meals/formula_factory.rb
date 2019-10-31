@@ -7,7 +7,6 @@ FactoryBot.define do
         Meals::Role.find_by(community_id: community.id, special: "head_cook") ||
           create(:meal_role, :head_cook, community: community)
       end
-      asst_cook_role { nil }
       parts_attrs { [{type: "Adult", share: "100%"}, {type: "Teen", share: "75%"}] }
     end
 
@@ -16,7 +15,7 @@ FactoryBot.define do
     meal_calc_type { "share" }
     pantry_calc_type { "percent" }
     pantry_fee { 0.10 }
-    roles { [head_cook_role, asst_cook_role].compact }
+    roles { [head_cook_role] }
 
     after(:build) do |formula, evaluator|
       # Create types and parts for the given share values.
@@ -33,8 +32,23 @@ FactoryBot.define do
       roles { [head_cook_role] }
     end
 
-    trait :with_asst_cook_role do
-      asst_cook_role { create(:meal_role, title: "Assistant Cook", community: community) }
+    trait :with_two_roles do
+      roles do
+        [
+          head_cook_role,
+          create(:meal_role, title: "Assistant Cook", community: community),
+        ]
+      end
+    end
+
+    trait :with_three_roles do
+      roles do
+        [
+          head_cook_role,
+          create(:meal_role, title: "Assistant Cook", community: community),
+          create(:meal_role, title: "Cleaner", community: community)
+        ]
+      end
     end
 
     trait :inactive do

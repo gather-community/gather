@@ -57,7 +57,7 @@ describe Meals::Assignment do
 
   describe "validation" do
     describe "role" do
-      let(:formula) { create(:meal_formula, :with_asst_cook_role) }
+      let(:formula) { create(:meal_formula, :with_two_roles) }
 
       context "on create" do
         let(:meal) { build(:meal, formula: formula, head_cook: false) }

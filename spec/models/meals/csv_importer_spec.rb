@@ -3,9 +3,9 @@
 require "rails_helper"
 
 describe Meals::CsvImporter do
-  let(:community) { create(:community) }
-  let(:other_community) { create(:community) }
-  let(:roles) { create_list(:meal_role, 2, community: community) }
+  let!(:community) { Defaults.community }
+  let!(:other_community) { create(:community) }
+  let(:roles) { create_list(:meal_role, 2) }
   subject(:importer) { described_class.new(file, community: community).tap(&:import) }
 
   context "with empty file" do
@@ -25,8 +25,8 @@ describe Meals::CsvImporter do
   end
 
   context "with unrecognized headers including valid headers in other locale" do
-    let!(:real_role) { create(:meal_role, community: community, title: "Head Cook") }
-    let!(:inactive_role) { create(:meal_role, :inactive, community: community, title: "Inacto") }
+    let!(:real_role) { create(:meal_role, title: "Head Cook") }
+    let!(:inactive_role) { create(:meal_role, :inactive, title: "Inacto") }
     let!(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
     let(:file) do
       prepare_expectation("meals/import/bad_headers.csv",
@@ -41,9 +41,9 @@ describe Meals::CsvImporter do
   end
 
   context "with bad data" do
-    let!(:inactive_resource) { create(:resource, :inactive, community: community, name: "Inacto") }
-    let!(:inactive_formula) { create(:meal_formula, :inactive, community: community, name: "Inacto") }
-    let!(:inactive_user) { create(:user, :inactive, community: community, first_name: "I", last_name: "J") }
+    let!(:inactive_resource) { create(:resource, :inactive, name: "Inacto") }
+    let!(:inactive_formula) { create(:meal_formula, :inactive, name: "Inacto") }
+    let!(:inactive_user) { create(:user, :inactive, first_name: "I", last_name: "J") }
     let!(:outside_resource) { create(:resource, community: other_community, name: "Plizz") }
     let!(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
     let!(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }

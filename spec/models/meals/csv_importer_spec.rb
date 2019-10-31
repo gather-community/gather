@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Meals::CsvImporter do
   let!(:community) { Defaults.community }
-  let!(:other_community) { create(:community) }
+  let!(:other_community) { create(:community, name: "Barville", abbrv: "BV") }
   let(:roles) { create_list(:meal_role, 2) }
   let(:user) { create(:meals_coordinator) }
   subject(:importer) { described_class.new(file, community: community, user: user).tap(&:import) }
@@ -117,7 +117,7 @@ describe Meals::CsvImporter do
     let!(:default_formula) { create(:meal_formula, :with_two_roles, is_default: true) }
     let(:asst_cook_role) { default_formula.roles[1] }
     let(:other_formula) { create(:meal_formula) }
-    let(:resources) { create_list(:resource, 2) }
+    let(:resources) { [create(:resource), create(:resource, name: "Foo")] }
     let(:users) do
       [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
     end
@@ -137,7 +137,7 @@ describe Meals::CsvImporter do
       community.save!
     end
 
-    it "returns errors on valid rows and saves no meals" do
+    it "creates meals with expected attributes" do
       expect(importer).to be_successful
       expect(meals.size).to eq(2)
 

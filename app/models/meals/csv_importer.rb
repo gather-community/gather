@@ -157,7 +157,7 @@ module Meals
 
     def find_community(str)
       col = id?(str) ? :id : :name
-      Community.find_by(col => str) ||
+      Community.find_by(col => str) || Community.find_by(abbrv: str) ||
         add_error(I18n.t("csv.errors.meals/meal.community.bad_#{col}", str: str))
     end
 

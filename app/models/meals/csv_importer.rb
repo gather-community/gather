@@ -5,11 +5,11 @@ require "csv"
 module Meals
   # Imports meals from CSV.
   class CsvImporter
-    BASIC_HEADERS = %i[served_at resources formula communities].freeze
+    BASIC_HEADERS = %i[served_at resources formula communities action].freeze
     REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
-    attr_accessor :file, :errors, :community, :user, :row_pointer, :header_map, :current_meal
+    attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map, :current_meal
 
     def initialize(file, community:, user:)
       self.file = file
@@ -28,6 +28,7 @@ module Meals
       else
         ActiveRecord::Base.transaction do
           parse_rows(rows)
+          errors.each { |k, v| errors.delete(k) if v.empty? } # Clear empties
           raise ActiveRecord::Rollback unless successful?
         end
       end
@@ -43,6 +44,7 @@ module Meals
     def parse_rows(rows)
       rows.each do |row|
         self.row_pointer += 1
+        self.row_action = :create
         next if row.empty?
         (parse_headers(row) ? next : break) if row_pointer == 1
         self.current_meal = Meal.new
@@ -50,9 +52,39 @@ module Meals
           parse_attrib(attrib, row[col_index])
         end
         next if current_row_errors?
-        assign_meal_defaults
-        current_meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
+        create_update_or_destroy
       end
+    end
+
+    def create_update_or_destroy
+      meal = row_action == :create ? current_meal : find_matching_meal
+      return unless meal
+      return destroy(meal) if row_action == :destroy
+
+      assign_meal_defaults(meal) if row_action == :create
+
+      if row_action == :update
+        # Currently not allowing updates to formula via CSV due to policy complications.
+        meal.assign_attributes(
+          current_meal.attributes.slice(:served_at, :resources, :communities, :assignments)
+        )
+      end
+      meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
+    end
+
+    def destroy(meal)
+      meal.destroy
+    rescue StandardError => error
+      add_error("Error deleting meal #{meal.id}: '#{error}'")
+    end
+
+    def find_matching_meal
+      candidates = Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
+        .where(served_at: current_meal.served_at)
+      meal = candidates.detect { |m| m.resources.to_set == current_meal.resources.to_set }
+      return meal if meal.present?
+      add_error("Could not find meal served at #{I18n.l(current_meal.served_at).gsub('  ', ' ')} at "\
+        "locations: #{current_meal.resources.map(&:name).join(', ')}")
     end
 
     def parse_headers(row)
@@ -76,14 +108,18 @@ module Meals
     def check_for_missing_headers
       missing = REQUIRED_HEADERS - header_map.values
       return true if missing.none?
-      names = missing.map { |h| I18n.t("csv.headers.meals/meal.#{h}") }.join(", ")
+      names = missing.map { |h| translate_header(h) }.join(", ")
       add_error("Missing columns: #{names}")
     end
 
     # Looking up a header symbol based on the provided human-readable string.
     def untranslate_header(str)
-      @untranslate_dict ||= BASIC_HEADERS.map { |h| [I18n.t("csv.headers.meals/meal.#{h}").downcase, h] }.to_h
+      @untranslate_dict ||= BASIC_HEADERS.map { |h| [translate_header(h).downcase, h] }.to_h
       @untranslate_dict[str.downcase]
+    end
+
+    def translate_header(h)
+      I18n.t("csv.headers.meals/meal.#{h}", default: :"csv.headers.common.#{h}")
     end
 
     def role_from_header(cell)
@@ -95,22 +131,28 @@ module Meals
       end
     end
 
-    def assign_meal_defaults
-      current_meal.formula ||= Formula.default_for(community)
-      current_meal.community = community
-      current_meal.communities = Community.all if current_meal.communities.none?
-      current_meal.creator = user
-      current_meal.capacity = community.settings.meals.default_capacity
-      current_meal.build_reservations
+    def assign_meal_defaults(meal)
+      meal.formula ||= Formula.default_for(community)
+      meal.community = community
+      meal.communities = Community.all if meal.communities.none?
+      meal.creator = user
+      meal.capacity = community.settings.meals.default_capacity
+      meal.build_reservations
     end
 
     def parse_attrib(attrib, str)
       case attrib
-      when :served_at, :resources, :formula, :communities
+      when :action, :served_at, :resources, :formula, :communities
         send("parse_#{attrib}", str)
       when Meals::Role
         parse_role(attrib, str)
       end
+    end
+
+    def parse_action(str)
+      return :create if str.blank?
+      return add_error("Invalid action: #{str}") unless %w[create update delete].include?(str.downcase)
+      self.row_action = str.downcase.to_sym
     end
 
     def parse_served_at(str)

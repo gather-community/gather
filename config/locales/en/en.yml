@@ -275,6 +275,8 @@ en:
         formula: "Formula"
         communities: "Communities"
         role: "Role"
+      common:
+        action: "Action"
     errors:
       meals/meal:
         resource:

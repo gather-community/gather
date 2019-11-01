@@ -115,7 +115,6 @@ describe Meals::CsvImporter do
 
     it "returns errors on valid rows and saves no meals" do
       expect(importer.errors).to eq(
-        2 => [],
         3 => ["The following error(s) occurred in making a Resource 1 reservation for this meal: "\
           "This reservation overlaps an existing one."],
         4 => ["Could not find a meal formula with ID 1234"]
@@ -170,6 +169,25 @@ describe Meals::CsvImporter do
       expect(meals[1].assignments_by_role).to be_empty
       expect(meals[1].creator).to eq(user)
       expect(meals[1].capacity).to eq(42)
+    end
+  end
+
+  context "with action column" do
+    let!(:formula) { create(:meal_formula, is_default: true) }
+    let!(:resource) { create(:resource, name: "Foo") }
+
+    context "when can't find existing meal for update or delete" do
+      let(:file) { prepare_expectation("meals/import/missing_existing_meals.csv") }
+
+      it "fails and doesn't save valid meal" do
+        expect(importer.errors).to eq(
+          2 => ["Could not find a resource named 'Blah'"],
+          3 => ["Could not find meal served at Thu Jan 31 2019 12:00pm at locations: Foo"],
+          4 => ["Could not find meal served at Fri Feb 01 2019 1:00pm at locations: Foo"],
+          6 => ["Invalid action: baloney"]
+        )
+        expect(Meals::Meal.count).to be_zero
+      end
     end
   end
 end

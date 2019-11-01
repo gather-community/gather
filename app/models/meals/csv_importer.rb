@@ -159,20 +159,21 @@ module Meals
     def find_resource(str)
       attrib = id?(str) ? :id : :name
       scope = Reservations::Resource.in_community(community).active
-      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str) ||
+      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
         add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{attrib}", str: str))
     end
 
     def find_formula(str)
       attrib = id?(str) ? :id : :name
       scope = Meals::Formula.in_community(community).active
-      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str) ||
+      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
         add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{attrib}", str: str))
     end
 
     def find_community(str)
       attrib = id?(str) ? :id : :name
-      Community.find_by(id: str) || Community.find_by("LOWER(name) = ? OR LOWER(abbrv) = ?", str, str) ||
+      strd = str.downcase
+      Community.find_by(id: str) || Community.find_by("LOWER(name) = ? OR LOWER(abbrv) = ?", strd, strd) ||
         add_error(I18n.t("csv.errors.meals/meal.community.bad_#{attrib}", str: str))
     end
 

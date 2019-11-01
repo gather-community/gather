@@ -128,7 +128,7 @@ describe Meals::CsvImporter do
     let!(:default_formula) { create(:meal_formula, :with_two_roles, is_default: true) }
     let!(:asst_cook_role) { default_formula.roles[1] }
     let!(:other_formula) { create(:meal_formula, name: "Qux") }
-    let!(:resources) { [create(:resource), create(:resource, name: "Foo")] }
+    let!(:resources) { [create(:resource, name: "Large"), create(:resource, name: "Foo")] }
     let!(:users) do
       [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
     end

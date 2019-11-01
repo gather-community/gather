@@ -11,6 +11,13 @@ describe Meals::MealPolicy do
     let(:meal) { create(:meal, formula: formula, communities: [community, communityC], head_cook: head_cook) }
     let(:record) { meal }
 
+    shared_examples_for "forbids if finalized" do
+      it do
+        stub_status("finalized")
+        expect(subject).not_to permit(admin, meal)
+      end
+    end
+
     permissions :index?, :report? do
       it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in cluster"
@@ -35,9 +42,14 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :destroy?, :change_date_loc_invites?, :change_formula?,
+    permissions :new?, :create?, :change_date_loc_invites?, :change_formula?,
                 :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+    end
+
+    permissions :destroy? do
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+      it_behaves_like "forbids if finalized"
     end
 
     permissions :edit?, :update?, :change_workers? do
@@ -53,24 +65,16 @@ describe Meals::MealPolicy do
 
     permissions :change_formula?, :change_signups?, :change_expenses? do
       it_behaves_like "permits admins or special role but not regular users", :biller
-
-      it "forbids if finalized" do
-        stub_status("finalized")
-        expect(subject).not_to permit(admin, meal)
-      end
+      it_behaves_like "forbids if finalized"
     end
 
     permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+      it_behaves_like "forbids if finalized"
 
       context "head cook" do
         let(:head_cook) { user }
         it { is_expected.to permit(user, meal) }
-      end
-
-      it "forbids if finalized" do
-        stub_status("finalized")
-        expect(subject).not_to permit(admin, meal)
       end
     end
 

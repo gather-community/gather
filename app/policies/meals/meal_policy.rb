@@ -49,7 +49,7 @@ module Meals
     end
 
     def destroy?
-      active_admin_or?(:meals_coordinator)
+      active_admin_or?(:meals_coordinator) && !meal.finalized?
     end
 
     def summary?

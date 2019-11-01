@@ -115,20 +115,19 @@ describe Meals::CsvImporter do
 
   context "with successful data" do
     let!(:default_formula) { create(:meal_formula, :with_two_roles, is_default: true) }
-    let(:asst_cook_role) { default_formula.roles[1] }
-    let(:other_formula) { create(:meal_formula) }
-    let(:resources) { [create(:resource), create(:resource, name: "Foo")] }
-    let(:users) do
+    let!(:asst_cook_role) { default_formula.roles[1] }
+    let!(:other_formula) { create(:meal_formula, name: "Qux") }
+    let!(:resources) { [create(:resource), create(:resource, name: "Foo")] }
+    let!(:users) do
       [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
     end
-    let(:communities) { [community, other_community, create(:community)] }
+    let!(:communities) { [community, other_community, create(:community)] }
     let(:file) do
       prepare_expectation("meals/import/successful_data.csv",
         resource_id: resources.map(&:id),
         role_id: [asst_cook_role.id],
         user_id: users.map(&:id),
-        community_id: communities.map(&:id),
-        formula_id: [other_formula.id])
+        community_id: communities.map(&:id))
     end
     let(:meals) { Meals::Meal.order(:served_at).to_a }
 
@@ -137,7 +136,7 @@ describe Meals::CsvImporter do
       community.save!
     end
 
-    it "creates meals with expected attributes" do
+    it "creates meals with expected attributes, ignoring case" do
       expect(importer).to be_successful
       expect(meals.size).to eq(2)
 

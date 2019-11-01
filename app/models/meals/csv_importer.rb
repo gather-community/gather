@@ -145,28 +145,30 @@ module Meals
     end
 
     def find_resource(str)
-      col = id?(str) ? :id : :name
-      Reservations::Resource.in_community(community).active.find_by(col => str) ||
-        add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{col}", str: str))
+      attrib = id?(str) ? :id : :name
+      scope = Reservations::Resource.in_community(community).active
+      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str) ||
+        add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{attrib}", str: str))
     end
 
     def find_formula(str)
-      col = id?(str) ? :id : :name
-      Meals::Formula.in_community(community).active.find_by(col => str) ||
-        add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{col}", str: str))
+      attrib = id?(str) ? :id : :name
+      scope = Meals::Formula.in_community(community).active
+      scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str) ||
+        add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{attrib}", str: str))
     end
 
     def find_community(str)
-      col = id?(str) ? :id : :name
-      Community.find_by(col => str) || Community.find_by(abbrv: str) ||
-        add_error(I18n.t("csv.errors.meals/meal.community.bad_#{col}", str: str))
+      attrib = id?(str) ? :id : :name
+      Community.find_by(id: str) || Community.find_by("LOWER(name) = ? OR LOWER(abbrv) = ?", str, str) ||
+        add_error(I18n.t("csv.errors.meals/meal.community.bad_#{attrib}", str: str))
     end
 
     def find_user(str)
-      col = id?(str) ? :id : :name
+      attrib = id?(str) ? :id : :name
       scope = User.in_community(community).active
-      (col == :id ? scope.find_by(id: str) : scope.with_full_name(str).first) ||
-        add_error(I18n.t("csv.errors.meals/meal.user.bad_#{col}", str: str))
+      scope.find_by(id: str) || scope.with_full_name(str).first ||
+        add_error(I18n.t("csv.errors.meals/meal.user.bad_#{attrib}", str: str))
     end
 
     def id?(str)

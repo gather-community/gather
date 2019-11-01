@@ -6,6 +6,7 @@ module Meals
   # Imports meals from CSV.
   class CsvImporter
     BASIC_HEADERS = %i[served_at resources formula communities].freeze
+    REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
     attr_accessor :file, :errors, :community, :user, :row_pointer, :header_map, :current_meal
@@ -39,7 +40,28 @@ module Meals
 
     private
 
+    def parse_rows(rows)
+      rows.each do |row|
+        self.row_pointer += 1
+        next if row.empty?
+        (parse_headers(row) ? next : break) if row_pointer == 1
+        self.current_meal = Meal.new
+        header_map.each do |col_index, attrib|
+          parse_attrib(attrib, row[col_index])
+        end
+        next if current_row_errors?
+        assign_meal_defaults
+        current_meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
+      end
+    end
+
     def parse_headers(row)
+      scan_and_validate_headers(row)
+      check_for_missing_headers
+      errors.none?
+    end
+
+    def scan_and_validate_headers(row)
       bad_headers = []
       row.each_with_index do |cell, col_index|
         if (attrib = untranslate_header(cell) || role_from_header(cell))
@@ -48,9 +70,14 @@ module Meals
           bad_headers << cell
         end
       end
-      return true if bad_headers.empty?
-      add_error("Invalid column headers: #{bad_headers.join(', ')}")
-      false
+      add_error("Invalid column headers: #{bad_headers.join(', ')}") if bad_headers.any?
+    end
+
+    def check_for_missing_headers
+      missing = REQUIRED_HEADERS - header_map.values
+      return true if missing.none?
+      names = missing.map { |h| I18n.t("csv.headers.meals/meal.#{h}") }.join(", ")
+      add_error("Missing columns: #{names}")
     end
 
     # Looking up a header symbol based on the provided human-readable string.
@@ -64,21 +91,6 @@ module Meals
         Role.in_community(community).active.find_by(id: match_data[1])
       else
         Role.in_community(community).active.find_by(title: cell)
-      end
-    end
-
-    def parse_rows(rows)
-      rows.each do |row|
-        self.row_pointer += 1
-        next if row.empty?
-        (parse_headers(row) ? next : break) if row_pointer == 1
-        self.current_meal = Meal.new
-        header_map.each do |col_index, attrib|
-          parse_attrib(attrib, row[col_index])
-        end
-        next if current_row_errors?
-        assign_meal_defaults
-        current_meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
       end
     end
 

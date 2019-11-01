@@ -41,6 +41,17 @@ describe Meals::CsvImporter do
     end
   end
 
+  context "with missing required headers" do
+    let!(:formula) { create(:meal_formula, name: "Foo") }
+    let(:file) { prepare_expectation("meals/import/missing_required_headers.csv") }
+
+    it "returns error" do
+      expect(importer.errors).to eq(
+        1 => ["Missing columns: Date/Time, Resources"]
+      )
+    end
+  end
+
   context "with bad data" do
     let!(:inactive_resource) { create(:resource, :inactive, name: "Inacto") }
     let!(:inactive_formula) { create(:meal_formula, :inactive, name: "Inacto") }

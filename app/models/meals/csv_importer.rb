@@ -87,10 +87,11 @@ module Meals
     end
 
     def role_from_header(cell)
+      scope = Meals::Role.in_community(community).active
       if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
-        Role.in_community(community).active.find_by(id: match_data[1])
+        scope.find_by(id: match_data[1])
       else
-        Role.in_community(community).active.find_by(title: cell)
+        scope.find_by(title: cell)
       end
     end
 

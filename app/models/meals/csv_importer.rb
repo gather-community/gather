@@ -87,7 +87,7 @@ module Meals
     end
 
     def role_from_header(cell)
-      scope = Meals::Role.in_community(community).active
+      scope = Meals::RolePolicy::Scope.new(user, Meals::Role).resolve.in_community(community).active
       if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
         scope.find_by(id: match_data[1])
       else
@@ -159,14 +159,16 @@ module Meals
 
     def find_resource(str)
       attrib = id?(str) ? :id : :name
-      scope = Reservations::Resource.in_community(community).active
+      scope = Reservations::ResourcePolicy::Scope.new(user, Reservations::Resource).resolve
+        .in_community(community).active
       scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
         add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{attrib}", str: str))
     end
 
     def find_formula(str)
       attrib = id?(str) ? :id : :name
-      scope = Meals::Formula.in_community(community).active
+      scope = Meals::FormulaPolicy::Scope.new(user, Meals::Formula).resolve
+        .in_community(community).active
       scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
         add_error(I18n.t("csv.errors.meals/meal.formula.bad_#{attrib}", str: str))
     end
@@ -174,13 +176,14 @@ module Meals
     def find_community(str)
       attrib = id?(str) ? :id : :name
       strd = str.downcase
-      Community.find_by(id: str) || Community.find_by("LOWER(name) = ? OR LOWER(abbrv) = ?", strd, strd) ||
+      scope = CommunityPolicy::Scope.new(user, Community).resolve
+      scope.find_by(id: str) || scope.find_by("LOWER(name) = ? OR LOWER(abbrv) = ?", strd, strd) ||
         add_error(I18n.t("csv.errors.meals/meal.community.bad_#{attrib}", str: str))
     end
 
     def find_user(str)
       attrib = id?(str) ? :id : :name
-      scope = User.in_community(community).active
+      scope = UserPolicy::Scope.new(user, User).resolve.in_community(community).active
       scope.find_by(id: str) || scope.with_full_name(str).first ||
         add_error(I18n.t("csv.errors.meals/meal.user.bad_#{attrib}", str: str))
     end

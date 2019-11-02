@@ -234,5 +234,29 @@ describe Meals::CsvImporter do
         expect(meal3.communities).to contain_exactly(community, other_community)
       end
     end
+
+    context "with optional ID column" do
+      let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
+
+      context "with correct data" do
+        let(:file) { prepare_expectation("meals/import/actions_with_id_column.csv", meal_id: [meal1.id]) }
+
+        it "succeeds with update and ignores for create" do
+          expect(importer).to be_successful
+          meal1.reload
+          expect(meal1.served_at).to eq(Time.zone.parse("2019-02-01 12:00"))
+          expect(meal1.resources).to contain_exactly(resources[1])
+          expect(Meals::Meal.count).to eq(2)
+        end
+      end
+
+      context "with invalid ID for update" do
+        let(:file) { prepare_expectation("meals/import/actions_with_invalid_id.csv") }
+
+        it "errors" do
+          expect(importer.errors).to eq(2 => ["Could not find meal with ID '1827648312341'"])
+        end
+      end
+    end
   end
 end

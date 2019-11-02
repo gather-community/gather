@@ -276,6 +276,7 @@ en:
         communities: "Communities"
         role: "Role"
       common:
+        id: "ID"
         action: "Action"
     errors:
       meals/meal:

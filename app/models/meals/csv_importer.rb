@@ -5,12 +5,12 @@ require "csv"
 module Meals
   # Imports meals from CSV.
   class CsvImporter
-    BASIC_HEADERS = %i[served_at resources formula communities action].freeze
+    BASIC_HEADERS = %i[served_at resources formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
     attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map,
-      :new_meal, :target_meal, :row_policy
+      :new_meal, :target_meal, :row_policy, :parsed_id
 
     def initialize(file, community:, user:)
       self.file = file
@@ -92,12 +92,16 @@ module Meals
     end
 
     def find_matching_meal
-      candidates = Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
-        .where(served_at: new_meal.served_at)
-      meal = candidates.detect { |m| m.resources.to_set == new_meal.resources.to_set }
-      return meal if meal.present?
-      add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at "\
-        "locations: #{new_meal.resources.map(&:name).join(', ')}")
+      scope = Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
+      if parsed_id
+        scope.find_by(id: parsed_id) || add_error("Could not find meal with ID '#{parsed_id}'")
+      else
+        candidates = scope.where(served_at: new_meal.served_at)
+        meal = candidates.detect { |m| m.resources.to_set == new_meal.resources.to_set }
+        return meal if meal.present?
+        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at "\
+          "locations: #{new_meal.resources.map(&:name).join(', ')}")
+      end
     end
 
     def parse_headers(row)
@@ -148,6 +152,8 @@ module Meals
       case attrib
       when :action, :served_at, :resources, :formula, :communities
         send("parse_#{attrib}", str)
+      when :id
+        self.parsed_id = str
       when Meals::Role
         parse_role(attrib, str)
       end

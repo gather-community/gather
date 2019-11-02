@@ -174,9 +174,10 @@ describe Meals::CsvImporter do
 
   context "with action column" do
     let!(:formula) { create(:meal_formula, is_default: true) }
-    let!(:resource) { create(:resource, name: "Foo") }
+    let!(:formula2) { create(:meal_formula, name: "Pizza") }
+    let!(:resources) { [create(:resource, name: "Foo"), create(:resource, name: "Bar")] }
 
-    context "when can't find existing meal for update or delete" do
+    context "when can't find existing meal for update or destroy" do
       let(:file) { prepare_expectation("meals/import/missing_existing_meals.csv") }
 
       it "fails and doesn't save valid meal" do
@@ -187,6 +188,16 @@ describe Meals::CsvImporter do
           6 => ["Invalid action: baloney"]
         )
         expect(Meals::Meal.count).to be_zero
+      end
+    end
+
+    # Create and update are not interesting
+    context "with destroy permission issues" do
+      let!(:meal) { create(:meal, :finalized, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
+      let(:file) { prepare_expectation("meals/import/destroy_permission_errors.csv") }
+
+      it "fails with correct errors" do
+        expect(importer.errors).to eq(2 => ["Action not permitted (destroy)"])
       end
     end
   end

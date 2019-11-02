@@ -9,7 +9,8 @@ module Meals
     REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
-    attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map, :current_meal
+    attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map,
+      :new_meal, :target_meal
 
     def initialize(file, community:, user:)
       self.file = file
@@ -47,7 +48,7 @@ module Meals
         self.row_action = :create
         next if row.empty?
         (parse_headers(row) ? next : break) if row_pointer == 1
-        self.current_meal = Meal.new
+        self.new_meal = Meal.new
         header_map.each do |col_index, attrib|
           parse_attrib(attrib, row[col_index])
         end
@@ -57,34 +58,45 @@ module Meals
     end
 
     def create_update_or_destroy
-      meal = row_action == :create ? current_meal : find_matching_meal
-      return unless meal
-      return destroy(meal) if row_action == :destroy
-
-      assign_meal_defaults(meal) if row_action == :create
-
-      if row_action == :update
-        # Currently not allowing updates to formula via CSV due to policy complications.
-        meal.assign_attributes(
-          current_meal.attributes.slice(:served_at, :resources, :communities, :assignments)
-        )
-      end
-      meal.errors.full_messages.each { |e| add_error(e) } unless current_meal.save
+      self.target_meal = row_action == :create ? new_meal : find_matching_meal
+      return unless target_meal
+      target_meal.community = community # May be redundant, needed for permission check
+      return add_error("Action not permitted (#{row_action})") unless policy.send("#{row_action}?")
+      return destroy_target_meal if row_action == :destroy
+      assign_defaults_to_new_meal
+      copy_attribs_to_target_meal if row_action == :update
+      target_meal.errors.full_messages.each { |e| add_error(e) } unless target_meal.save
     end
 
-    def destroy(meal)
-      meal.destroy
+    def assign_defaults_to_new_meal
+      new_meal.formula ||= Formula.default_for(community)
+      new_meal.communities = Community.all if new_meal.communities.none?
+      new_meal.creator = user
+      new_meal.capacity = community.settings.meals.default_capacity
+      new_meal.build_reservations
+    end
+
+    def copy_attribs_to_target_meal
+      attribs = []
+      attribs << %i[served_at resources communities] if policy.change_date_loc_invites?
+      attribs << [:formula] if policy.change_formula?
+      attribs << [:assignments] if policy.change_workers?
+      target_meal.assign_attributes(new_meal.attributes.slice(attribs))
+    end
+
+    def destroy_target_meal
+      target_meal.destroy
     rescue StandardError => error
-      add_error("Error deleting meal #{meal.id}: '#{error}'")
+      add_error("Error deleting meal #{target_meal.id}: '#{error}'")
     end
 
     def find_matching_meal
       candidates = Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
-        .where(served_at: current_meal.served_at)
-      meal = candidates.detect { |m| m.resources.to_set == current_meal.resources.to_set }
+        .where(served_at: new_meal.served_at)
+      meal = candidates.detect { |m| m.resources.to_set == new_meal.resources.to_set }
       return meal if meal.present?
-      add_error("Could not find meal served at #{I18n.l(current_meal.served_at).gsub('  ', ' ')} at "\
-        "locations: #{current_meal.resources.map(&:name).join(', ')}")
+      add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at "\
+        "locations: #{new_meal.resources.map(&:name).join(', ')}")
     end
 
     def parse_headers(row)
@@ -118,8 +130,8 @@ module Meals
       @untranslate_dict[str.downcase]
     end
 
-    def translate_header(h)
-      I18n.t("csv.headers.meals/meal.#{h}", default: :"csv.headers.common.#{h}")
+    def translate_header(header)
+      I18n.t("csv.headers.meals/meal.#{header}", default: :"csv.headers.common.#{header}")
     end
 
     def role_from_header(cell)
@@ -129,15 +141,6 @@ module Meals
       else
         scope.find_by(title: cell)
       end
-    end
-
-    def assign_meal_defaults(meal)
-      meal.formula ||= Formula.default_for(community)
-      meal.community = community
-      meal.communities = Community.all if meal.communities.none?
-      meal.creator = user
-      meal.capacity = community.settings.meals.default_capacity
-      meal.build_reservations
     end
 
     def parse_attrib(attrib, str)
@@ -151,33 +154,33 @@ module Meals
 
     def parse_action(str)
       return :create if str.blank?
-      return add_error("Invalid action: #{str}") unless %w[create update delete].include?(str.downcase)
+      return add_error("Invalid action: #{str}") unless %w[create update destroy].include?(str.downcase)
       self.row_action = str.downcase.to_sym
     end
 
     def parse_served_at(str)
       return add_error("Date/time is required") if str.blank?
-      current_meal.served_at = Time.zone.parse(str)
-      raise ArgumentError if current_meal.served_at.nil?
+      new_meal.served_at = Time.zone.parse(str)
+      raise ArgumentError if new_meal.served_at.nil?
     rescue ArgumentError, TypeError
       add_error("'#{str}' is not a valid date/time")
     end
 
     def parse_resources(str)
       return add_error("Resource(s) are required") if str.blank?
-      current_meal.resources = str.split(/\s*;\s*/).map do |substr|
+      new_meal.resources = str.split(/\s*;\s*/).map do |substr|
         find_resource(substr)
       end.compact
     end
 
     def parse_formula(str)
       return if str.blank?
-      current_meal.formula = find_formula(str)
+      new_meal.formula = find_formula(str)
     end
 
     def parse_communities(str)
       return if str.blank?
-      current_meal.communities = str.split(/\s*;\s*/).map do |substr|
+      new_meal.communities = str.split(/\s*;\s*/).map do |substr|
         find_community(substr)
       end.compact
     end
@@ -186,7 +189,7 @@ module Meals
       return if str.blank?
       str.split(/\s*;\s*/).each do |substr|
         next unless (user = find_user(substr))
-        current_meal.assignments.build(role: role, user: user)
+        new_meal.assignments.build(role: role, user: user)
       end
     end
 
@@ -232,6 +235,10 @@ module Meals
 
     def id?(str)
       str.match?(DB_ID_REGEX)
+    end
+
+    def policy
+      @policy ||= Meals::MealPolicy.new(user, target_meal)
     end
   end
 end

@@ -10,7 +10,7 @@ module Meals
     DB_ID_REGEX = /\A\d+\z/.freeze
 
     attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map,
-      :new_meal, :target_meal
+      :new_meal, :target_meal, :row_policy
 
     def initialize(file, community:, user:)
       self.file = file
@@ -61,7 +61,8 @@ module Meals
       self.target_meal = row_action == :create ? new_meal : find_matching_meal
       return unless target_meal
       target_meal.community = community # May be redundant, needed for permission check
-      return add_error("Action not permitted (#{row_action})") unless policy.send("#{row_action}?")
+      self.row_policy = Meals::MealPolicy.new(user, target_meal)
+      return add_error("Action not permitted (#{row_action})") unless row_policy.send("#{row_action}?")
       return destroy_target_meal if row_action == :destroy
       assign_defaults_to_new_meal
       copy_attribs_to_target_meal if row_action == :update
@@ -78,10 +79,10 @@ module Meals
 
     def copy_attribs_to_target_meal
       attribs = []
-      attribs << %i[served_at resources communities] if policy.change_date_loc_invites?
-      attribs << [:formula] if policy.change_formula?
-      attribs << [:assignments] if policy.change_workers?
-      target_meal.assign_attributes(new_meal.attributes.slice(attribs))
+      attribs.concat(%i[served_at resources communities]) if row_policy.change_date_loc_invites?
+      attribs << :formula if row_policy.change_formula?
+      attribs << :assignments if row_policy.change_workers?
+      attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
     end
 
     def destroy_target_meal
@@ -235,10 +236,6 @@ module Meals
 
     def id?(str)
       str.match?(DB_ID_REGEX)
-    end
-
-    def policy
-      @policy ||= Meals::MealPolicy.new(user, target_meal)
     end
   end
 end

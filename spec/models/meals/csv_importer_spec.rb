@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Meals::CsvImporter do
   let!(:community) { Defaults.community }
-  let!(:other_community) { create(:community, name: "Barville", abbrv: "BV") }
+  let!(:other_community) { create(:community, name: "Barville", abbrv: "bv") }
   let(:roles) { create_list(:meal_role, 2) }
   let(:user) { create(:meals_coordinator) }
   subject(:importer) { described_class.new(file, community: community, user: user).tap(&:import) }
@@ -198,6 +198,40 @@ describe Meals::CsvImporter do
 
       it "fails with correct errors" do
         expect(importer.errors).to eq(2 => ["Action not permitted (destroy)"])
+      end
+    end
+
+    context "with valid data" do
+      let!(:user1) { create(:user, first_name: "Pol", last_name: "Pum") }
+      let!(:user2) { create(:user, first_name: "Bil", last_name: "Bip") }
+      let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", resources: resources) }
+      let!(:meal2) do
+        create(:meal, served_at: "2019-02-01 12:00", resources: resources,
+                      formula: formula, head_cook: user1, communities: [community])
+      end
+      let!(:meal3) do
+        create(:meal, :finalized, served_at: "2019-02-02 12:00", resources: resources,
+                                  formula: formula, head_cook: user1, communities: [community])
+      end
+      let(:file) { prepare_expectation("meals/import/successful_data_with_actions.csv") }
+
+      it "succeeds, ignoring case for action, ignoring resource order, ignoring unpermitted fields" do
+        expect(importer).to be_successful
+        expect { meal1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+        # meal2 formula should have changed b/c it's not finalized
+        meal2.reload
+        expect(meal2.resources).to match_array(resources)
+        expect(meal2.formula).to eq(formula2)
+        expect(meal2.head_cook).to eq(user2)
+        expect(meal2.communities).to contain_exactly(community, other_community)
+
+        # meal3 formula should not have changed b/c it's finalized
+        meal3.reload
+        expect(meal3.resources).to match_array(resources)
+        expect(meal3.formula).to eq(formula)
+        expect(meal3.head_cook).to eq(user2)
+        expect(meal3.communities).to contain_exactly(community, other_community)
       end
     end
   end

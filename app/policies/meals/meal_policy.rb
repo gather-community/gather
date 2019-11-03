@@ -44,6 +44,10 @@ module Meals
       active_admin_or?(:meals_coordinator)
     end
 
+    def import?
+      active_admin_or?(:meals_coordinator)
+    end
+
     def update?
       change_date_loc_invites? || change_formula? || change_menu? || change_workers?
     end

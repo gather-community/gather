@@ -42,7 +42,7 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :change_date_loc_invites?, :change_formula?,
+    permissions :new?, :create?, :import?, :change_date_loc_invites?, :change_formula?,
                 :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end

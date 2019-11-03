@@ -271,7 +271,7 @@ en:
         meal_id: "Meal ID"
       meals/meal:
         served_at: "Date/Time"
-        resources: "Resources"
+        resources: "Locations"
         formula: "Formula"
         communities: "Communities"
         role: "Role"

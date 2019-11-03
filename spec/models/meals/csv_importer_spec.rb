@@ -47,7 +47,7 @@ describe Meals::CsvImporter do
 
     it "returns error" do
       expect(importer.errors).to eq(
-        1 => ["Missing columns: Date/Time, Resources"]
+        1 => ["Missing columns: Date/Time, Locations"]
       )
     end
   end

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-class ApplicationJob
-  def error(_job, exception)
+# Base job class.
+class ApplicationJob < ActiveJob::Base
+  queue_as :default
+
+  rescue_from(StandardError) do |exception|
     ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 

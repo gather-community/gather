@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
-# Sends just-created meal message to appropriate recipients.
 module Meals
+  # Sends just-created meal message to appropriate recipients.
   class MessageJob < ReminderJob
-    attr_reader :message_id
+    attr_accessor :message_id
 
     delegate :community, to: :message
 
-    def initialize(message_id)
-      @message_id = message_id
-    end
-
-    def perform
+    def perform(message_id)
+      self.message_id = message_id
       with_community(community) do
         message.recipients.each do |recipient|
           MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now

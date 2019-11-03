@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Base class for all reminder jobs
 class ReminderJob < ApplicationJob
   def max_attempts
     1

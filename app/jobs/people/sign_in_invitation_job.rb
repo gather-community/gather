@@ -5,12 +5,10 @@ module People
   class SignInInvitationJob < ApplicationJob
     attr_reader :community_id, :user_ids
 
-    def initialize(community_id, user_ids)
+    def perform(community_id, user_ids)
       @community_id = community_id
       @user_ids = user_ids
-    end
 
-    def perform
       with_community(community) do
         # Need to scope to community so folks can't invite users in communities in other clusters.
         # (ActsAsTenant prevents other clusters).

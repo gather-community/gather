@@ -21,7 +21,8 @@ module MealShowable
   end
 
   def load_signups
-    @signups = @meal.signups.community_first(@meal.community).sorted.includes(parts: :type)
+    @signups = @meal.signups.by_one_cmty_first(@meal.community).sorted
+      .includes(parts: :type, household: :community)
   end
 
   def sample_meal

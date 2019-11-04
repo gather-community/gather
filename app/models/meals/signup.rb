@@ -14,8 +14,8 @@ module Meals
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :signups
     belongs_to :household
 
-    scope :community_first, lambda { |c|
-      includes(household: :community).order("CASE WHEN communities.id = #{c.id} THEN 0 ELSE 1 END")
+    scope :by_one_cmty_first, lambda { |c|
+      joins(household: :community).order(Community.arel_table[:id].not_eq(c.id))
     }
     scope :sorted, -> { joins(household: :community).order("communities.abbrv, households.name") }
 

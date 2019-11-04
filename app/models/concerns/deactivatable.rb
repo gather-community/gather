@@ -4,7 +4,7 @@ module Deactivatable
   included do
     scope :active, -> { where(deactivated_at: nil) }
     scope :active_or_selected, ->(ids) { where(deactivated_at: nil).or(where(id: Array.wrap(ids))) }
-    scope :deactivated_last, -> { order("COALESCE(deactivated_at, '0001-01-01 00:00:00')") }
+    scope :deactivated_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   end
 
   def activate

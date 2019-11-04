@@ -25,7 +25,8 @@ class Community < ApplicationRecord
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
-  scope :by_name_with_first, ->(c) { order("CASE WHEN communities.id = #{c.id} THEN 1 ELSE 2 END, name") }
+  scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
+  scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
   before_create :generate_calendar_token
 

@@ -16,7 +16,7 @@ class ApplicationRecord < ActiveRecord::Base
         "LOWER(#{arg})"
       end
     end
-    order(cols.join(", "))
+    order(Arel.sql(cols.join(", ")))
   end
 
   protected

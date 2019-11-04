@@ -23,7 +23,7 @@ module Meals
                                            dependent: :destroy, inverse_of: :meal
     has_many :invitations, class_name: "Meals::Invitation", dependent: :destroy
     has_many :communities, through: :invitations
-    has_many :signups, -> { sorted }, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
+    has_many :signups, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
     has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,

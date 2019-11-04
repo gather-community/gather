@@ -81,7 +81,7 @@ class HouseholdsController < ApplicationController
   def index_html
     prepare_lenses({community: {required: true}}, :"people/sort", :search)
     @households = @households.includes(users: :children)
-    @households = @households.by_active.ordered_by(lenses[:sort].value)
+    @households = @households.deactivated_last.ordered_by(lenses[:sort].value)
     @households = @households.in_community(current_community)
     @households = @households.matching(lenses[:search].value) if lenses[:search].present?
     @households = @households.page(params[:page])

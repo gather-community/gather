@@ -20,7 +20,6 @@ class Household < ApplicationRecord
   scope :active, -> { where("deactivated_at IS NULL") }
   scope :by_name, -> { alpha_order(households: :name) }
   scope :by_unit, -> { order(:unit_num, :unit_suffix) }
-  scope :by_active, -> { order("(CASE WHEN deactivated_at IS NULL THEN 0 ELSE 1 END)") }
   scope :ordered_by, ->(col) { col == "unit" ? by_unit : by_name }
   scope :by_commty_and_name, -> { joins(:community).alpha_order(communities: :abbrv).by_name }
   scope :in_community, ->(c) { where(community_id: c.id) }

@@ -31,7 +31,6 @@ class User < ApplicationRecord
              meals_coordinator wikiist work_coordinator].freeze
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze
-  NAME_ORDER = "LOWER(first_name), LOWER(last_name)"
   PASSWORD_MIN_ENTROPY = 16
 
   acts_as_tenant :cluster
@@ -65,16 +64,16 @@ class User < ApplicationRecord
       .where("communities.cluster_id = ?", c.cluster_id)
   }
   scope :in_community, ->(id) { joins(:household).where(households: {community_id: id}) }
-  scope :by_name, -> { order(NAME_ORDER) }
+  scope :by_name, -> { alpha_order(:first_name).alpha_order(:last_name) }
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
-  scope :by_active, -> { order("users.deactivated_at IS NOT NULL") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
-  scope :by_name_adults_first, -> { order("CASE WHEN child = 't' THEN 1 ELSE 0 END, #{NAME_ORDER}") }
+  scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
   scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
-  scope :by_birthday, -> { order(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")) }
+  scope :by_birthday, lambda {
+    order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
+  }
   scope :active_or_assigned_to, lambda { |meal|
-    t = arel_table
-    where(t[:deactivated_at].eq(nil).or(t[:id].in(meal.assignments.map(&:user_id))))
+    where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
   scope :can_be_guardian, -> { active.where(child: false) }

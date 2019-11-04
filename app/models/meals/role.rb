@@ -16,7 +16,7 @@ module Meals
     has_many :formula_roles, inverse_of: :role
     has_many :formulas, through: :formula_roles
 
-    scope :by_title, -> { order("special = 'head_cook'").alpha_order(:title) }
+    scope :by_title, -> { order(arel_table[:special].not_eq("head_cook")).alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :head_cook, -> { where(special: "head_cook") }
 

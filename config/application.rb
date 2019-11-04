@@ -26,12 +26,18 @@ module Gather
     config.time_zone = "UTC"
 
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}")]
-    config.autoload_paths += [
+    extra_paths = [
       Rails.root.join("app", "decorators", "concerns"),
       Rails.root.join("app", "mailers", "concerns"),
       Rails.root.join("app", "search_configs"),
       Rails.root.join("lib")
     ]
+    config.autoload_paths += extra_paths
+    config.eager_load_paths += extra_paths
+
+    # Don't autoload these directories.
+    Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
+    Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
     config.active_job.queue_adapter = :delayed_job
 

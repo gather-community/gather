@@ -280,6 +280,9 @@ GEM
       activesupport (>= 3.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    listen (3.2.0)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -550,6 +553,7 @@ DEPENDENCIES
   inline_svg (~> 0.6)
   jquery-rails (~> 4.3)
   kaminari (~> 0.16)
+  listen (~> 3.2)
   momentjs-rails (~> 2.9)!
   mustache (~> 1.0)
   omniauth-google-oauth2 (~> 0.6)

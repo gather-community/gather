@@ -82,3 +82,7 @@ group :development, :test do
   gem "vcr", "~> 4.0"
   gem "webmock", "~> 3.1"
 end
+
+group :development do
+  gem "listen", "~> 3.2"
+end

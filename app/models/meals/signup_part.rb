@@ -15,9 +15,9 @@ module Meals
     # Sorts by rank of the associated meal_formula_part
     def self.by_rank
       joins(signup: :meal)
-        # .joins("LEFT JOIN meal_formula_parts ON meal_formula_parts.formula_id = meals.formula_id
-        #   AND meal_formula_parts.type_id = meal_signup_parts.type_id")
-        # .order("meal_formula_parts.rank")
+        .joins(Arel.sql("LEFT JOIN meal_formula_parts ON meal_formula_parts.formula_id = meals.formula_id
+          AND meal_formula_parts.type_id = meal_signup_parts.type_id"))
+        .order(FormulaPart.arel_table[:rank])
     end
   end
 end

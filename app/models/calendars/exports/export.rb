@@ -42,7 +42,7 @@ module Calendars
 
       def basic_event_attribs(object)
         {
-          object_id: object.id,
+          obj_id: object.id,
           starts_at: starts_at(object),
           ends_at: ends_at(object),
           location: location(object),

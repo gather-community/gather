@@ -19,7 +19,8 @@ module Phoneable
     self.class.class_variable_get("@@phone_types")
   end
 
-  def phone(kind)
+  def phone(kind = nil)
+    kind ||= phone_types[0]
     People::PhoneNumber.new(self, kind)
   end
 

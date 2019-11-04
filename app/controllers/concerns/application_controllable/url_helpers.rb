@@ -1,4 +1,4 @@
-module Concerns::ApplicationController::UrlHelpers
+module ApplicationControllable::UrlHelpers
   extend ActiveSupport::Concern
 
   included do

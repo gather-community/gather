@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Concerns::ApplicationController::Csv
+module ApplicationControllable::Csv
   extend ActiveSupport::Concern
 
   def csv_filename(*parts)

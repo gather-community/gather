@@ -1,4 +1,4 @@
-module Concerns::ApplicationController::Loaders
+module ApplicationControllable::Loaders
   extend ActiveSupport::Concern
 
   included do

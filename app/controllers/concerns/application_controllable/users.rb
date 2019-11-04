@@ -1,4 +1,4 @@
-module Concerns::ApplicationController::Users
+module ApplicationControllable::Users
   extend ActiveSupport::Concern
 
   included do

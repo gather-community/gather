@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   include Pundit, Lensable
-  include Concerns::ApplicationController::Csv
-  include Concerns::ApplicationController::RequestPreprocessing
-  include Concerns::ApplicationController::Setters
-  include Concerns::ApplicationController::Loaders
-  include Concerns::ApplicationController::UrlHelpers
-  include Concerns::ApplicationController::Users
+  include ApplicationControllable::Csv
+  include ApplicationControllable::RequestPreprocessing
+  include ApplicationControllable::Setters
+  include ApplicationControllable::Loaders
+  include ApplicationControllable::UrlHelpers
+  include ApplicationControllable::Users
   include MultiCommunityCheck
 
   # Verify that controller actions are authorized.

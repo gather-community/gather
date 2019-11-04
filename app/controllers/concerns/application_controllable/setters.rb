@@ -1,4 +1,4 @@
-module Concerns::ApplicationController::Setters
+module ApplicationControllable::Setters
   extend ActiveSupport::Concern
 
   protected

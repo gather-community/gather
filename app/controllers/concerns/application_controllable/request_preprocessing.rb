@@ -11,7 +11,7 @@
 # - Redirect to an appropriate subdomain or 404 if subdomain missing and this filter not skipped.
 # - Ensure the current_user has access to the current_community if both set.
 # - Set the current tenant (cluster) based on the current community.
-module Concerns::ApplicationController::RequestPreprocessing
+module ApplicationControllable::RequestPreprocessing
   extend ActiveSupport::Concern
 
   included do

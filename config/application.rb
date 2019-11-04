@@ -27,6 +27,7 @@ module Gather
 
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}")]
     config.autoload_paths += [
+      Rails.root.join("app", "decorators", "concerns"),
       Rails.root.join("app", "mailers", "concerns"),
       Rails.root.join("app", "search_configs"),
       Rails.root.join("lib")

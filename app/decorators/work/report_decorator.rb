@@ -21,11 +21,13 @@ module Work
     end
 
     def preassigned_hours_for(entity)
-      entity.users.sum { |u| by_user.dig(u.id, :preassigned) || 0 }.round(1)
+      num = entity.users.sum { |u| by_user.dig(u.id, :preassigned) || 0 }.round(1)
+      h.number_with_precision(num,  precision: 1)
     end
 
     def regular_hours_for(entity)
-      entity.users.sum { |u| by_user.dig(u.id, :fixed_slot) || 0 }.round(1)
+      num = entity.users.sum { |u| by_user.dig(u.id, :fixed_slot) || 0 }.round(1)
+      h.number_with_precision(num,  precision: 1)
     end
 
     def regular_pct_for(entity)
@@ -36,7 +38,8 @@ module Work
     end
 
     def fc_job_hours_for(fcjob, entity)
-      entity.users.sum { |u| by_user.dig(u.id, fcjob) || 0 }.round(1)
+      num = entity.users.sum { |u| by_user.dig(u.id, fcjob) || 0 }.round(1)
+      h.number_with_precision(num,  precision: 1)
     end
 
     def fc_job_pct_for(fcjob, entity)

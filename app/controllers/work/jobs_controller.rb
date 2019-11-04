@@ -76,7 +76,7 @@ module Work
     private
 
     def scope_jobs
-      @jobs = @jobs.in_period(@period).includes(shifts: :assignments).by_title
+      @jobs = @jobs.in_period(@period).by_title
       if lenses[:requester] == "none"
         @jobs = @jobs.from_requester(nil)
       elsif lenses[:requester].present?

@@ -22,7 +22,7 @@ module People
     end
 
     def strength
-      bits = StrongPassword::StrengthChecker.new(params[:password]).calculate_entropy(use_dictionary: true)
+      bits = StrongPassword::StrengthChecker.new(use_dictionary: true).calculate_entropy(params[:password])
       bits = [0, bits].max.round
       category = if bits < User::PASSWORD_MIN_ENTROPY then :weak
                  elsif bits < User::PASSWORD_MIN_ENTROPY + 6 then :good

@@ -40,7 +40,7 @@ gem "mustache", "~> 1.0"
 gem "omniauth-google-oauth2", "~> 0.6"
 gem "omniauth-rails_csrf_protection", "~> 0.1" # Related to CVE 2015 9284
 gem "paperclip", git: "https://github.com/sassafrastech/paperclip", branch: "tmp_uploads"
-gem "pg", "~> 0.18"
+gem "pg", "~> 1.1"
 gem "phony_rails", "~> 0.12"
 gem "pundit", "~> 2.0"
 gem "rails", "6.0.0"

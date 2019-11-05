@@ -345,7 +345,7 @@ GEM
     parallel (1.18.0)
     parser (2.6.5.0)
       ast (~> 2.4.0)
-    pg (0.21.0)
+    pg (1.1.4)
     phony (2.18.8)
     phony_rails (0.14.13)
       activesupport (>= 3.0)
@@ -575,7 +575,7 @@ DEPENDENCIES
   omniauth-google-oauth2 (~> 0.6)
   omniauth-rails_csrf_protection (~> 0.1)
   paperclip!
-  pg (~> 0.18)
+  pg (~> 1.1)
   phony_rails (~> 0.12)
   poltergeist (~> 1.0)
   pry (~> 0.10)

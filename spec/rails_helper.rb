@@ -56,7 +56,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
-  config.include FeatureSpecHelpers, type: :feature
+  config.include SystemSpecHelpers, type: :system
   config.include RequestSpecHelpers, type: :request
   config.include GeneralHelpers
 

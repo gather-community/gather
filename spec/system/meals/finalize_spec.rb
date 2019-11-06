@@ -8,11 +8,8 @@ describe "finalize meal", js: true do
   let!(:signups) { create_list(:meal_signup, 3, meal: meal, diner_counts: [1]) }
   let!(:late_add) { create(:household) }
 
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     meal.close!
     login_as(actor, scope: :user)
   end

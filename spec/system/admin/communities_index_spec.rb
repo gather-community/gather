@@ -6,9 +6,8 @@ describe "communities index" do
   let!(:communityB) { create(:community, name: "Other Community") }
   let!(:actor) { create(:super_admin) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     # Generate some fake data to exercise the queries.
     create(:meal)
     create(:reservation)

@@ -4,8 +4,6 @@ describe "time zones" do
   let!(:meal) { create(:meal, served_at: "2017-01-01 18:00 UTC") }
   let(:actor) { create(:admin) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   around do |example|
     # Freeze to a time on the morning of the meal.
     Timecop.freeze(Time.zone.parse("2017-01-01 9:00 UTC")) do
@@ -14,6 +12,7 @@ describe "time zones" do
   end
 
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

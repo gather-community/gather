@@ -6,11 +6,8 @@ describe "meals" do
   let(:friend_cmty) { create(:community) }
   let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
 
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

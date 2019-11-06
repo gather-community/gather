@@ -8,9 +8,8 @@ describe "report", js: true do
   let(:actor) { create(:user, first_name: "Donnell", last_name: "Corkery") }
   let(:page_path) { work_report_path(period: periods[0].try(:id)) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

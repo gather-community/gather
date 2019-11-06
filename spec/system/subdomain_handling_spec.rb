@@ -11,10 +11,8 @@ describe "subdomain handling" do
   let!(:outside_cmty) { with_tenant(cluster2) { create(:community, slug: "qux") } }
   let(:user) { create(:user, community: home_cmty) }
 
-  around do |example|
-    stub_omniauth(google_oauth2: {email: user.google_email}) do
-      example.run
-    end
+  before do
+    stub_omniauth(google_oauth2: {email: user.google_email})
   end
 
   context "when not signed in" do
@@ -61,7 +59,9 @@ describe "subdomain handling" do
     end
 
     context "with own subdomain" do
-      around { |ex| with_subdomain("foo") { ex.run } }
+      before do
+        use_subdomain("foo")
+      end
 
       scenario "visiting root should work" do
         visit("/")
@@ -85,7 +85,9 @@ describe "subdomain handling" do
 
     context "with other community subdomain as normal user" do
       context "in cluster" do
-        around { |ex| with_subdomain("bar") { ex.run } }
+        before do
+          use_subdomain("bar")
+        end
 
         scenario "visiting root should work" do
           visit("/")
@@ -101,7 +103,9 @@ describe "subdomain handling" do
       end
 
       context "outside of cluster" do
-        around { |ex| with_subdomain("qux") { ex.run } }
+        before do
+          use_subdomain("qux")
+        end
 
         scenario "visiting root should 403" do
           visit("/")

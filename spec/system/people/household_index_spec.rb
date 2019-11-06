@@ -3,11 +3,8 @@
 require "rails_helper"
 
 describe "household index", js: true do
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

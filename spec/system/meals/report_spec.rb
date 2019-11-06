@@ -12,11 +12,8 @@ describe "meal report", js: true do
     ])
   end
 
-  around do |example|
-    with_user_home_subdomain(user) { example.run }
-  end
-
   before do
+    use_user_subdomain(user)
     login_as(user, scope: :user)
   end
 

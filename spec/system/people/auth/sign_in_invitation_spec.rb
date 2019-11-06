@@ -6,13 +6,15 @@ describe "sign in invitations", js: true do
   let(:actor) { create(:admin) }
   let(:email_sent) { email_sent_by { process_queued_job } }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
+  before do
+    use_user_subdomain(actor)
+  end
 
   describe "google oauth" do
     let!(:decoy) { create(:user) }
 
-    around do |example|
-      stub_omniauth(google_oauth2: {email: "bob1234flob@gmail.com"}) { example.run }
+    before do
+      stub_omniauth(google_oauth2: {email: "bob1234flob@gmail.com"})
     end
 
     shared_examples_for "successful google sign in" do

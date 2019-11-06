@@ -27,9 +27,8 @@ describe "periods", js: true do
   let!(:user2) { create(:user, first_name: "Churl", last_name: "Rox") }
   let!(:user3) { create(:user, :child, first_name: "Kid", last_name: "Knelt") }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

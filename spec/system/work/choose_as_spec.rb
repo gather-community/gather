@@ -13,9 +13,8 @@ describe "signups", js: true, database_cleaner: :truncate do
   let!(:job) { create(:work_job, period: periods[0], shift_slots: 3) }
   let!(:shares) { [actor, partner, friend].each { |u| periods[0].shares.create!(user: u, portion: 1) } }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

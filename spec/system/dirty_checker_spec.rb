@@ -7,9 +7,8 @@ require "rails_helper"
 #   let!(:meal_location) { create(:resource, name: "Dining Room", abbrv: "DR") }
 #   let!(:formula) { create(:meal_formula) }
 #
-#   around { |ex| with_user_home_subdomain(admin) { ex.run } }
-#
 #   before do
+#     use_user_subdomain(admin)
 #     login_as(admin, scope: :user)
 #   end
 #

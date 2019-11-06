@@ -8,8 +8,8 @@ describe "google oauth" do
   let(:existing_google_id) { nil }
 
   context "with oauth stubbed" do
-    around do |example|
-      stub_omniauth(google_oauth2: {email: oauth_google_id}) { example.run }
+    before do
+      stub_omniauth(google_oauth2: {email: oauth_google_id})
     end
 
     context "with null email from google" do

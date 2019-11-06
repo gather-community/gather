@@ -43,7 +43,9 @@ describe "calendar export" do
 
   describe "show" do
     context "with user subdomain" do
-      around { |ex| with_user_home_subdomain(user) { ex.run } }
+      before do
+        use_user_subdomain(user)
+      end
 
       describe "general" do
         let!(:meal) { create(:meal) }

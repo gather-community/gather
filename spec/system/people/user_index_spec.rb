@@ -7,9 +7,8 @@ describe "user index" do
   let(:admin) { create(:admin) }
   let(:inactive) { create(:user, :inactive, first_name: "Longgone") }
 
-  around { |ex| with_user_home_subdomain(user) { ex.run } }
-
   before do
+    use_user_subdomain(user)
     login_as(actor, scope: :user)
   end
 

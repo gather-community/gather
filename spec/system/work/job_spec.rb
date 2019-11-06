@@ -8,9 +8,8 @@ describe "jobs", js: true do
   let(:actor) { create(:work_coordinator) }
   let(:page_path) { work_jobs_path }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

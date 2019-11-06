@@ -214,8 +214,6 @@ module SystemSpecHelpers
     params.each do |key, hash|
       OmniAuth.config.mock_auth[key] = OmniAuth::AuthHash.new(info: hash)
     end
-    yield
-    OmniAuth.config.test_mode = false
   end
 
   def inject_session(hash)

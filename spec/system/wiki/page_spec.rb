@@ -5,9 +5,8 @@ describe "pages", js: true do
   let(:other_community) { create(:community, cluster: actor.cluster) }
   let!(:decoy_page) { create(:wiki_page, community: other_community, title: "Another Page") }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

@@ -5,9 +5,8 @@ require "rails_helper"
 describe "reservation form" do
   let(:user) { create(:user) }
 
-  around { |ex| with_user_home_subdomain(user) { ex.run } }
-
   before do
+    use_user_subdomain(user)
     login_as(user, scope: :user)
   end
 

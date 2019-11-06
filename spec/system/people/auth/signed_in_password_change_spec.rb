@@ -5,7 +5,9 @@ require "rails_helper"
 describe "changing password when already signed in", js: true do
   let(:actor) { create(:user, password: "ga4893d4bXq;", password_confirmation: "ga4893d4bXq;") }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
+  before do
+    use_user_subdomain(actor)
+  end
 
   scenario "validation errors and happy path" do
     full_sign_in_as(actor)

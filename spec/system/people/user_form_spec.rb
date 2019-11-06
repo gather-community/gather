@@ -12,9 +12,8 @@ describe "user form", js: true do
   let!(:household2) { create(:household, name: "Potatoheads") }
   let(:edit_path) { edit_user_path(user) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

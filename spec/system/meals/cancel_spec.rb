@@ -8,11 +8,8 @@ describe "meal messages" do
   let!(:signup) { create_list(:meal_signup, 2, meal: meal, diner_counts: [2, 1]) }
   let(:email_sent) { email_sent_by { process_queued_job } }
 
-  around do |example|
-    with_user_home_subdomain(user) { example.run }
-  end
-
   before do
+    use_user_subdomain(user)
     login_as(meal.head_cook, scope: :user)
   end
 

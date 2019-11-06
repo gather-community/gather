@@ -12,11 +12,8 @@ describe "meal crud", js: true do
   let!(:meals) { create_list(:meal, 5, formula: formula, resources: [location]) }
   let!(:meal) { meals.first }
 
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

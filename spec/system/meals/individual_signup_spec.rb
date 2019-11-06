@@ -9,11 +9,8 @@ describe "meal signups", js: true do
     create(:meal, :with_menu, formula: formula, title: "Burgers", served_at: Time.current + 7.days)
   end
 
-  around do |example|
-    with_user_home_subdomain(user) { example.run }
-  end
-
   before do
+    use_user_subdomain(user)
     login_as(user, scope: :user)
   end
 

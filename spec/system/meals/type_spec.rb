@@ -6,9 +6,8 @@ describe "types", js: true do
   let(:actor) { create(:meals_coordinator) }
   let!(:types) { create_list(:meal_type, 2) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

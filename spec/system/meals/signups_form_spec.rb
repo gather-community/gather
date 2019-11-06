@@ -8,11 +8,8 @@ describe "meal signups form", js: true do
   let!(:meal) { create(:meal, formula: formula, served_at: Time.current + 7.days) }
   let!(:households) { create_list(:household, 2) }
 
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

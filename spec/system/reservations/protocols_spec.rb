@@ -6,9 +6,8 @@ describe "protocols", js: true do
   let(:community) { create(:community, settings: {reservations: {kinds: "Official,Personal"}}) }
   let(:actor) { create(:admin, community: community) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

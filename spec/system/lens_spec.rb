@@ -8,9 +8,8 @@ describe "lenses", js: true do
   let!(:community3) { create(:community, name: "Community 3", slug: "community3") }
   let!(:user) { create(:user, community: community3) }
 
-  around { |ex| with_user_home_subdomain(user) { ex.run } }
-
   before do
+    use_user_subdomain(user)
     login_as(user, scope: :user)
   end
 

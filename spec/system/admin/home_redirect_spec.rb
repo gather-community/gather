@@ -2,9 +2,8 @@ require "rails_helper"
 
 describe "home redirect" do
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

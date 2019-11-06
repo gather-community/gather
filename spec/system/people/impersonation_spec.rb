@@ -4,11 +4,8 @@ describe "user impersonation" do
   let(:actor) { create(:admin, first_name: "Lod", last_name: "Prod") }
   let(:impersonatee) { create(:user, first_name: "Flo", last_name: "Flim") }
 
-  around do |example|
-    with_user_home_subdomain(actor) { example.run }
-  end
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

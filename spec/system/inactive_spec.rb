@@ -4,10 +4,8 @@ describe "inactive user" do
   let(:user) { create(:user, :inactive) }
   let!(:account) { create(:account, household: user.household) }
 
-  around do |example|
-    stub_omniauth(google_oauth2: {email: user.google_email}) do
-      example.run
-    end
+  before do
+    stub_omniauth(google_oauth2: {email: user.google_email})
   end
 
   scenario "visiting page as inactive", js: true do

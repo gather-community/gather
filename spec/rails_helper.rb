@@ -73,11 +73,4 @@ RSpec.configure do |config|
     c.ignore_localhost = true
     c.configure_rspec_metadata!
   end
-
-  # We use an around block here because we are using around blocks to set
-  # subdomain and this needs to run first.
-  config.around type: :request do |example|
-    host!(Settings.url.host)
-    example.run
-  end
 end

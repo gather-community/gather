@@ -76,11 +76,8 @@ describe "email reconfirmation", js: true do
   context "when editing child" do
     let!(:child) { create(:user, :child, email: "kid@example.com", guardians: [actor]) }
 
-    around do |example|
-      with_user_home_subdomain(actor) { example.run }
-    end
-
     before do
+      use_user_subdomain(user)
       login_as(actor, scope: :user)
     end
 

@@ -6,9 +6,8 @@ describe "roles", js: true do
   let(:actor) { create(:meals_coordinator) }
   let!(:roles) { create_list(:meal_role, 2) }
 
-  around { |ex| with_user_home_subdomain(actor) { ex.run } }
-
   before do
+    use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 

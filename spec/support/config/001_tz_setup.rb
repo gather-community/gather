@@ -2,8 +2,7 @@
 
 RSpec.configure do |config|
   # Reset TZ to default in case previous spec changed it.
-  config.around do |example|
+  config.before do
     Time.zone = "UTC"
-    example.run
   end
 end

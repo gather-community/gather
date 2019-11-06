@@ -8,8 +8,9 @@ require "rspec/rails"
 
 # Add additional requires below this line. Rails is not loaded until this point!
 require "pundit/rspec"
+require "capybara/rails"
+require "capybara/rspec"
 require "capybara-screenshot/rspec"
-require "capybara/poltergeist"
 require "vcr"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -36,8 +37,10 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # We manage this with DatabaseCleaner.
-  config.use_transactional_fixtures = false
+  # If you're not using ActiveRecord, or you'd prefer not to run each of your
+  # examples within a transaction, remove the following line or assign false
+  # instead of true.
+  config.use_transactional_fixtures = true
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -60,18 +63,15 @@ RSpec.configure do |config|
   config.include RequestSpecHelpers, type: :request
   config.include GeneralHelpers
 
+  Capybara.always_include_port = true
+  Capybara.server_port = Settings.url.port
+  Capybara.app_host = "http://#{Settings.url.host}"
+
   VCR.configure do |c|
     c.cassette_library_dir = 'spec/cassettes'
     c.hook_into :webmock
     c.ignore_localhost = true
     c.configure_rspec_metadata!
-  end
-
-  Capybara.configure do |config|
-    config.always_include_port = true
-    config.javascript_driver = :poltergeist
-    config.app_host = "http://#{Settings.url.host}"
-    config.server_port = Settings.url.port
   end
 
   # We use an around block here because we are using around blocks to set

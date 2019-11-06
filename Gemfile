@@ -43,6 +43,7 @@ gem "paperclip", git: "https://github.com/sassafrastech/paperclip", branch: "tmp
 gem "pg", "~> 1.1"
 gem "phony_rails", "~> 0.12"
 gem "pundit", "~> 2.0"
+gem "puma", "~> 3.11"
 gem "rails", "6.0.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.3"
@@ -65,18 +66,16 @@ group :development, :test do
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
-  gem "capybara", git: "https://github.com/smoyth/capybara", branch: "2.18_stable"
+  gem "capybara", '>= 2.15'
   gem "capybara-screenshot", "~> 1.0"
-  gem "database_cleaner", "~> 1.6"
   gem "fix-db-schema-conflicts", "~> 3.0"
   # gem "i18n-debug", "~> 1.1" # Great for debugging i18n paths. Uncomment temporarily when neeeded.
-  gem "poltergeist", "~> 1.0"
   gem "pry", "~> 0.10"
   gem "pry-nav", "~> 0.2"
   gem "pry-rails", "~> 0.3"
   gem "rspec-rails", "~> 3.0"
   gem "rubocop", "0.54.0" # Should match Hound. See: http://help.houndci.com/configuration/rubocop
-  gem "selenium-webdriver", "~> 2.0"
+  gem "selenium-webdriver", "~> 3.0"
   gem "spring", "~> 1.3"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] ||= "test"
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
@@ -27,7 +29,7 @@ require "vcr"
 # require only the support files necessary.
 #
 # We sort the result of the glob so we can control the order of things like `around` blocks.
-Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -57,19 +59,19 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  config.include FactoryBot::Syntax::Methods
-  config.include Warden::Test::Helpers
-  config.include SystemSpecHelpers, type: :system
-  config.include RequestSpecHelpers, type: :request
-  config.include GeneralHelpers
+  config.include(FactoryBot::Syntax::Methods)
+  config.include(Warden::Test::Helpers)
+  config.include(SystemSpecHelpers, type: :system)
+  config.include(RequestSpecHelpers, type: :request)
+  config.include(GeneralHelpers)
 
   Capybara.always_include_port = true
   Capybara.server_port = Settings.url.port
   Capybara.app_host = "http://#{Settings.url.host}"
 
   VCR.configure do |c|
-    c.cassette_library_dir = 'spec/cassettes'
-    c.hook_into :webmock
+    c.cassette_library_dir = "spec/cassettes"
+    c.hook_into(:webmock)
     c.ignore_localhost = true
     c.configure_rspec_metadata!
   end

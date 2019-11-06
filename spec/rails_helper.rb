@@ -69,6 +69,14 @@ RSpec.configure do |config|
   Capybara.server_port = Settings.url.port
   Capybara.app_host = "http://#{Settings.url.host}"
 
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium_chrome_headless
+  end
+
   VCR.configure do |c|
     c.cassette_library_dir = "spec/cassettes"
     c.hook_into(:webmock)

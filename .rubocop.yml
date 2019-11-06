@@ -16,13 +16,16 @@ Layout/AlignParameters:
 Layout/CaseIndentation:
   EnforcedStyle: end
 
-Layout/FirstParameterIndentation:
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/IndentFirstArgument:
   EnforcedStyle: consistent
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
@@ -86,9 +89,6 @@ Style/Documentation:
     - "app/policies/**/*"
     - "app/serializers/**/*"
     - "db/migrate/*.rb"
-
-Style/EmptyLineAfterGuardClause:
-  Enabled: false
 
 Style/EmptyMethod:
   EnforcedStyle: expanded

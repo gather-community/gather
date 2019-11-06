@@ -13,3 +13,5 @@ scss:
   config_file: .scss-lint.yml
 jshint:
   enabled: false
+rubocop:
+  version: 0.75.0

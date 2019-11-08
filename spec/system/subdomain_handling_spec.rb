@@ -17,32 +17,29 @@ describe "subdomain handling" do
 
   context "when not signed in" do
     scenario "visiting root on subdomain and signing in with google should redirect to apex and back" do
-      with_subdomain("foo") do
-        visit(root_path) # This will go to root with subomain, but should redirect to apex.
-        expect(page).not_to have_content("Please sign in to view that page")
-        expect(current_url).to have_apex_domain
-        expect_sign_in_with_google_link_and_click
-        expect(page).to have_content(user.name)
-        expect(current_url).to have_subdomain("foo")
-      end
+      use_subdomain("foo")
+      visit(root_path) # This will go to root with subomain, but should redirect to apex.
+      expect(page).not_to have_content("Please sign in to view that page")
+      expect(current_url).to have_apex_domain
+      expect_sign_in_with_google_link_and_click
+      expect(page).to have_content(user.name)
+      expect(current_url).to have_subdomain("foo")
     end
 
     scenario "visiting subdomain with path and signing in should return you to path after sign in" do
       # Note that this is not the user's home subdomain, but we respect it anyway after sign in.
-      with_subdomain("bar") do
-        visit(meals_path) # This will go to meals page with subomain, but should redirect to apex.
-        expect(page).to have_content("Please sign in to view that page")
-        expect(current_url).to have_apex_domain
-        expect_sign_in_with_google_link_and_click
-        expect(current_url).to have_subdomain_and_path("bar", "/meals")
-      end
+      use_subdomain("bar")
+      visit(meals_path) # This will go to meals page with subomain, but should redirect to apex.
+      expect(page).to have_content("Please sign in to view that page")
+      expect(current_url).to have_apex_domain
+      expect_sign_in_with_google_link_and_click
+      expect(current_url).to have_subdomain_and_path("bar", "/meals")
     end
 
     scenario "visiting invalid subdomain should 404" do
-      with_subdomain("invalid") do
-        visit(root_path)
-        expect(page).to be_not_found
-      end
+      use_subdomain("invalid")
+      visit(root_path)
+      expect(page).to be_not_found
     end
 
     scenario "visiting apex domain root and signing in should take you to community root" do

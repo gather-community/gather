@@ -130,10 +130,9 @@ describe "lenses", js: true do
     scenario "separate lenses per-community" do
       visit(users_path) # community3
       fill_in_lens_and_wait(:search, "foo")
-      with_subdomain("default") do
-        visit(users_path)
-        expect_lens_value(:search, "")
-      end
+      use_subdomain("default")
+      visit(users_path)
+      expect_lens_value(:search, "")
     end
   end
 

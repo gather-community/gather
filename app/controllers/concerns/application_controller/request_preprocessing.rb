@@ -72,9 +72,7 @@ module Concerns::ApplicationController::RequestPreprocessing
     Rails.logger.info("Request URL: #{request.url}")
   end
 
-  # deletable
   def set_default_nav_context
-    @context = {}
     nav_link_builder.context = {}
   end
 

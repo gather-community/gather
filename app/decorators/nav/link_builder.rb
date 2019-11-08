@@ -3,13 +3,12 @@
 # Defines nav menus and related helper methods.
 module Nav
   class LinkBuilder < ApplicationDecorator
-
     delegate_all
 
     attr_accessor :context
 
-    def initialize()
-      context = {}
+    def initialize
+      self.context = {}
     end
 
     def nav_items
@@ -45,11 +44,11 @@ module Nav
           icon: "info-circle"
         }
       ]
-      filter_and_set_active_nav_items(items, type: :main, active: @context[:section])
+      filter_and_set_active_nav_items(items, type: :main, active: context[:section])
     end
 
     def subnav_items(main = nil)
-      main ||= @context[:section]
+      main ||= context[:section]
       items =
         case main
         when :meals
@@ -186,7 +185,7 @@ module Nav
         else
           []
         end
-      filter_and_set_active_nav_items(items, type: :sub, active: @context[:subsection])
+      filter_and_set_active_nav_items(items, type: :sub, active: context[:subsection])
     end
 
     def personal_nav_items
@@ -227,7 +226,7 @@ module Nav
 
     def footer_items
       items =
-        case @context[:section]
+        case context[:section]
         when :wiki
           [
             {
@@ -248,15 +247,6 @@ module Nav
       filter_and_set_active_nav_items(items, type: :footer)
     end
 
-    def filter_and_set_active_nav_items(items, type:, active: nil)
-      items.select! { |i| i[:permitted] }
-      items.each do |i|
-        i[:type] = type
-        i[:active] = true if active && i[:name] == active
-      end
-      items
-    end
-
     def nav_link(item, tab: false)
       params = {}
       params[:method] = item[:method]
@@ -275,6 +265,15 @@ module Nav
       storage = Lens::Storage.new(session: h.session, community_id: h.current_community.id,
                                   controller_path: controller, action_name: "index")
       Lens::PathSaver.new(storage: storage).read || index_path || send("h.#{controller.tr('/', '_')}_path")
+    end
+
+    def filter_and_set_active_nav_items(items, type:, active: nil)
+      items.select! { |i| i[:permitted] }
+      items.each do |i|
+        i[:type] = type
+        i[:active] = true if active && i[:name] == active
+      end
+      items
     end
   end
 end

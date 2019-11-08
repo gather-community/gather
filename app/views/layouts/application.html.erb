@@ -45,7 +45,7 @@
         </tr>
       </table>
     </nav>
-    <% if @context[:subsection] && (items = nav_link_builder.subnav_items).size > 1 %>
+    <% if nav_link_builder.context[:subsection] && (items = nav_link_builder.subnav_items).size > 1 %>
       <nav class="subnav hidden-xs">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>

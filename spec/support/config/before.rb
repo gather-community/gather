@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
+# Miscellaneous things that need to run before each spec.
 RSpec.configure do |config|
-  # There are many places where we Timecop.freeze in an around block, and this should happen first.
+  # Time zone. There are many places where we Timecop.freeze in an around block, and this should happen first.
   config.around do |example|
     Time.zone = "UTC"
-    clear_downloads if respond_to?(:clear_downloads)
     example.run
-    clear_downloads if respond_to?(:clear_downloads)
   end
 
   config.before do |example|
-    # Reset TZ to default in case previous spec changed it.
     Delayed::Worker.delay_jobs = example.metadata[:dont_delay_jobs] != true
+  end
 
+  config.before do |example|
     Defaults.reset
     if example.metadata[:without_tenant]
       ActsAsTenant.current_tenant = nil
@@ -20,9 +20,19 @@ RSpec.configure do |config|
       ActsAsTenant.current_tenant = Defaults.cluster
       Defaults.community
     end
+  end
 
-    set_host(Settings.url.host) if respond_to?(:set_host)
-
+  config.before(type: :system) do
     OmniAuth.config.test_mode = false
+  end
+
+  config.before(type: :system) do
+    clear_downloads
+    set_host(Settings.url.host)
+  end
+
+  config.before(type: :request) do
+    # Request specs may also use set_host, but not downloads.
+    set_host(Settings.url.host)
   end
 end

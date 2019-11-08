@@ -20,34 +20,6 @@ if (typeof(module) !== 'undefined' && typeof(exports) !== 'undefined' && typeof(
 
 nv.dispatch = d3.dispatch('render_start', 'render_end');
 
-// Function bind polyfill
-// Needed ONLY for phantomJS as it's missing until version 2.0 which is unreleased as of this comment
-// https://github.com/ariya/phantomjs/issues/10522
-// http://kangax.github.io/compat-table/es5/#Function.prototype.bind
-// phantomJS is used for running the test suite
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function (oThis) {
-        if (typeof this !== "function") {
-            // closest thing possible to the ECMAScript 5 internal IsCallable function
-            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-        }
-
-        var aArgs = Array.prototype.slice.call(arguments, 1),
-            fToBind = this,
-            fNOP = function () {},
-            fBound = function () {
-                return fToBind.apply(this instanceof fNOP && oThis
-                        ? this
-                        : oThis,
-                    aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-        fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP();
-        return fBound;
-    };
-}
-
 //  Development render timers - disabled if dev = false
 if (nv.dev) {
     nv.dispatch.on('render_start', function(e) {

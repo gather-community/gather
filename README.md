@@ -26,10 +26,6 @@ For both production and development environments:
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
 1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).
 
-For development environments:
-
-1. PhantomJS v2.1+
-
 ## Development Environment Setup
 Follow these steps to setup a development environment for Gather.
 

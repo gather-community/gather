@@ -19,7 +19,7 @@ RSpec.configure do |config|
       Defaults.community
     end
 
-    set_host(Settings.url.host)
+    set_host(Settings.url.host) if respond_to?(:set_host)
 
     OmniAuth.config.test_mode = false
   end

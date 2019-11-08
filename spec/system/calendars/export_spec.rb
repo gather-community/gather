@@ -49,19 +49,20 @@ describe "calendar export" do
 
       describe "general" do
         let!(:meal) { create(:meal) }
+        let(:ical_code) do
+          "BEGIN:VCALENDAR\r VERSION:2.0\r PRODID:icalendar-ruby\r CALSCALE:GREGORIAN\r METHOD:PUBLISH"
+        end
 
         scenario "happy path (personalized)" do
           visit("/calendars/exports/all-meals/#{user_token}.ics")
-          expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-            "CALSCALE:GREGORIAN METHOD:PUBLISH")
+          expect(page).to have_content(ical_code)
           # Ensure correct subdomain for links (not https b/c test mode)
           expect(page).to have_content("http://#{user.subdomain}.#{Settings.url.host}")
         end
 
         scenario "happy path (not personalized)" do
           visit("/calendars/exports/all-meals/+#{cmty_token}.ics")
-          expect(page).to have_content("BEGIN:VCALENDAR VERSION:2.0 PRODID:icalendar-ruby "\
-            "CALSCALE:GREGORIAN METHOD:PUBLISH")
+          expect(page).to have_content(ical_code)
         end
 
         scenario "bad calendar type" do

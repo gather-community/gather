@@ -75,7 +75,9 @@ describe "billing", js: true do
       Timecop.freeze("2017-04-15 12:00pm") do
         visit(accounts_path)
         click_link("Download Accounts as CSV")
-        expect(page).to have_download_filename("#{account1.community.slug}-accounts-2017-04-15.csv")
+        wait_for_download
+        expect(download_content).to match(/Number,Household ID/)
+        expect(download_filename).to eq("#{account1.community.slug}-accounts-2017-04-15.csv")
       end
     end
 
@@ -84,7 +86,9 @@ describe "billing", js: true do
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
       select(year, from: "year")
-      expect(page).to have_download_filename("#{account1.community.slug}-transactions-#{year}.csv")
+      wait_for_download
+      expect(download_content).to match(/"ID",Date/)
+      expect(download_filename).to eq("#{account1.community.slug}-transactions-#{year}.csv")
     end
 
     scenario "download account transaction csv" do
@@ -92,7 +96,9 @@ describe "billing", js: true do
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
       select(year, from: "year")
-      expect(page).to have_download_filename("account-#{account1.id}-transactions-#{year}.csv")
+      wait_for_download
+      expect(download_content).to match(/"ID",Date/)
+      expect(download_filename).to eq("account-#{account1.id}-transactions-#{year}.csv")
     end
   end
 

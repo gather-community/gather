@@ -4,7 +4,9 @@ RSpec.configure do |config|
   # There are many places where we Timecop.freeze in an around block, and this should happen first.
   config.around do |example|
     Time.zone = "UTC"
+    clear_downloads if respond_to?(:clear_downloads)
     example.run
+    clear_downloads if respond_to?(:clear_downloads)
   end
 
   config.before do |example|

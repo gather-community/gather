@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "user index" do
+describe "user index", js: true do
   let(:user) { create(:user) }
   let(:admin) { create(:admin) }
   let(:inactive) { create(:user, :inactive, first_name: "Longgone") }
@@ -19,11 +19,13 @@ describe "user index" do
       Timecop.freeze("2017-04-15 12:00pm") do
         visit("/users")
         click_link("Download as CSV")
-        expect(page).to have_download_filename("#{user.community.slug}-directory-2017-04-15.csv")
+        wait_for_download
+        expect(download_content).to match(/"ID",First Name,Last Name/)
+        expect(download_filename).to eq("#{user.community.slug}-directory-2017-04-15.csv")
       end
     end
 
-    scenario "album view", js: true do
+    scenario "album view" do
       inactive.save!
       visit("/users")
       select_lens(:view, "Album")
@@ -31,7 +33,7 @@ describe "user index" do
       expect(page).not_to have_content("Longgone")
     end
 
-    scenario "table view", js: true do
+    scenario "table view" do
       inactive.save!
       visit("/users")
       select_lens(:view, "Table")
@@ -39,7 +41,7 @@ describe "user index" do
       expect(page).not_to have_content("Longgone")
     end
 
-    scenario "printing album view", js: true do
+    scenario "printing album view" do
       visit("/users")
       expect(page).not_to have_css("#printable-directory-album table", visible: false)
       click_print_button
@@ -51,7 +53,7 @@ describe "user index" do
   context "as admin" do
     let(:actor) { admin }
 
-    scenario "table with inactive view", js: true do
+    scenario "table with inactive view" do
       inactive.save!
       visit("/users")
       select_lens(:view, "Table w/ Inactive")

@@ -38,12 +38,3 @@ RSpec::Matchers.define(:have_errors) do |errors|
     end
   end
 end
-
-RSpec::Matchers.define(:have_download_filename) do |filename|
-  match do |page|
-    # TODO: when we switch to Chrome headless make this better by avoiding sleep and matching on content
-    # as well as filename (this isn't possible with Poltergeist)/
-    sleep(3)
-    page.response_headers["Content-Disposition"] == %(attachment; filename="#{filename}")
-  end
-end

@@ -79,6 +79,7 @@ group :development, :test do
   gem "spring", "~> 1.3"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
+  gem "webdrivers", "~> 4.0"
   gem "webmock", "~> 3.1"
 end
 

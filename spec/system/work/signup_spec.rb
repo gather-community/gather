@@ -76,7 +76,7 @@ describe "signups", js: true do
       end
     end
 
-    describe "signup, show, unsignup, autorefresh", database_cleaner: :truncate do
+    describe "signup, show, unsignup, autorefresh", clean_with_transaction: false do
       before do
         periods[0].update!(phase: "open")
       end

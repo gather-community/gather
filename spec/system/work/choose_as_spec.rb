@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "signups", js: true, database_cleaner: :truncate do
+describe "signups", js: true, clean_with_transaction: false do
   include_context "work"
   include_context "with jobs"
 

@@ -209,7 +209,7 @@ describe Work::Shift do
 
   # Need to clean with truncation because we are doing stuff with txn isolation which is forbidden
   # inside nested transactions.
-  describe "#signup_user", database_cleaner: :truncate do
+  describe "#signup_user", clean_with_transaction: false do
     let(:phase) { "open" }
     let(:period) { create(:work_period, phase: phase) }
     let(:double_signups) { false }
@@ -265,11 +265,12 @@ describe Work::Shift do
         end
 
         def insert_assignment_via_second_db_connection
-          db = ApplicationRecord.establish_connection.connection
+          db = ActiveRecord::Base.connection_pool.checkout
           db.execute("INSERT INTO work_assignments (user_id, shift_id, cluster_id, created_at, updated_at)
             VALUES (#{user2.id}, #{shift.id}, #{shift.cluster_id}, NOW(), NOW())")
           db.execute("UPDATE work_shifts SET assignments_count = COALESCE(assignments_count, 0) + 1
             WHERE id = #{shift.id}")
+          ActiveRecord::Base.connection_pool.checkin(db)
         end
       end
     end

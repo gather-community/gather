@@ -4,6 +4,7 @@ module Meals
   class MealsController < ApplicationController
     include Lensable
     include MealShowable
+    include Destructible
 
     decorates_assigned :meals, :meal_summary, :report, :user
 
@@ -138,18 +139,11 @@ module Meals
       render(partial: "meals/meals/form/single_section", layout: false, locals: {section: "workers"})
     end
 
-    def destroy
-      @meal = Meal.find(params[:id])
-      authorize(@meal)
-      if @meal.destroy
-        flash[:success] = "Meal deleted successfully."
-      else
-        flash[:error] = "Meal deletion failed."
-      end
-      redirect_to(meals_path)
-    end
-
     protected
+
+    def klass
+      Meal
+    end
 
     def meals_report
       @meals_report_decorated ||= ReportDecorator.new(@meals_report)

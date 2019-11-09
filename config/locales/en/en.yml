@@ -153,6 +153,9 @@ en:
         activate: "Resource activated successfully."
         deactivate: "Resource deactivated successfully."
         destroy: "Resource deleted successfully."
+    meals/meal:
+      success:
+        destroy: "Meal deleted successfully."
     meals/formula:
       success:
         activate: "Formula activated successfully."

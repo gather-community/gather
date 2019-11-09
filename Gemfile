@@ -66,7 +66,7 @@ group :development, :test do
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
-  gem "capybara", '>= 2.15'
+  gem "capybara", '~> 3.29'
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 1.7"
   gem "fix-db-schema-conflicts", "~> 3.0"

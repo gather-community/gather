@@ -536,7 +536,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.1)
   capistrano3-delayed-job (~> 1.0)
-  capybara (>= 2.15)
+  capybara (~> 3.29)
   capybara-screenshot (~> 1.0)
   cocoon (~> 1.2)
   coffee-rails (~> 5.0)

@@ -116,11 +116,11 @@
         <%= yield(:print_title).presence || @title %> <%= title_icons %>
       </h1>
       <div class="top-buttons hidden-print">
-        <%= lenses.bar(position: "upper") if lenses.try(:visible?) %>
+        <%= lenses.html(position: "upper") if lenses&.visible? %>
         <%= yield(:top_buttons) %>
       </div>
     </div>
-    <%= lenses.bar(position: "lower") if lenses.try(:visible?) %>
+    <%= lenses.html(position: "lower") if lenses&.visible? %>
 
     <%= yield %>
   </div>

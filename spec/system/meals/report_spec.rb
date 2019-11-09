@@ -26,6 +26,10 @@ describe "meal report", js: true do
   end
 
   context "with data" do
+    around do |example|
+      Timecop.freeze("2019-11-08 12:00") { example.run }
+    end
+
     before do
       meals = create_list(:meal, 2, :finalized, community: community, formula: formula,
                                                 served_at: Time.zone.today - 3.months)
@@ -36,21 +40,17 @@ describe "meal report", js: true do
       end
     end
 
-    scenario "it works", ignore_js_errors: true do
-      # There is a weird NVD3 error that I don't have time to debug as things work fine.
-      ignore_js_errors do
-        visit report_meals_path
-        expect(page).to have_content("Meals Report")
-        expect(page).to have_content("By Month")
+    scenario "it works" do
+      visit report_meals_path
+      expect(page).to have_content("Meals Report")
+      expect(page).to have_content("By Month")
 
-        # This hopefully will test that charts are getting rendered
-        # and thus catch any regressions.
-        expect(page).to have_css("svg.nvd3-svg")
+      # This hopefully will test that charts are getting rendered
+      # and thus catch any regressions.
+      expect(page).to have_css("svg.nvd3-svg")
 
-        select_lens(:dates, "This Year")
-        year = Time.zone.today.year
-        expect(page).to have_content("January #{year}-December #{year}")
-      end
+      select_lens(:dates, "This Year")
+      expect(page).to have_content("January 2019 - November 2019")
     end
   end
 end

@@ -6,6 +6,8 @@ module Lens
     attr_accessor :storage, :lenses, :route_params, :context, :visible
     alias visible? visible
 
+    delegate :html, to: :bar
+
     # `context` - The calling controller.
     # `lens_names` - The names of the lenses that make up the set, e.g. [:community, :search].
     #    Can be a hash or an array. If a hash, the values are hashes of options.
@@ -21,10 +23,6 @@ module Lens
       storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
       PathSaver.new(storage: storage).write(lenses: lenses, path: request_path, params: route_params)
-    end
-
-    def bar(options = {})
-      Bar.new(context: context, set: self, options: options)
     end
 
     def blank?
@@ -112,6 +110,10 @@ module Lens
 
     def lenses_by_param_name
       @lenses_by_param_name ||= lenses.index_by(&:param_name)
+    end
+
+    def bar
+      @bar ||= Bar.new(context: context, set: self)
     end
 
     def view

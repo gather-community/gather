@@ -77,7 +77,7 @@ describe "email reconfirmation", js: true do
     let!(:child) { create(:user, :child, email: "kid@example.com", guardians: [actor]) }
 
     before do
-      use_user_subdomain(user)
+      use_user_subdomain(child)
       login_as(actor, scope: :user)
     end
 

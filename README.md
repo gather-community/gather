@@ -125,7 +125,7 @@ As part of an effort to clean up old code, you should try to resolve any linter 
 If the Elasticsearch index is returning 403 errors, try the following to reset the index (assumes development environment is where the problem is ocurring):
 
 ```
-rails console development
+rails console -e development
 Work::Shift.__elasticsearch__.create_index!(force: true)
 ```
 

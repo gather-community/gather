@@ -12,7 +12,6 @@ require "rspec/rails"
 require "pundit/rspec"
 require "capybara/rails"
 require "capybara/rspec"
-require "capybara-screenshot/rspec"
 require "vcr"
 
 # Automatically downloads chromedriver, which is used use for JS feature specs

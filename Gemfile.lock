@@ -282,6 +282,8 @@ GEM
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     listen (3.2.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -556,6 +558,7 @@ DEPENDENCIES
   inline_svg (~> 0.6)
   jquery-rails (~> 4.3)
   kaminari (~> 0.16)
+  launchy (~> 2.4)
   listen (~> 3.2)
   momentjs-rails (~> 2.9)!
   mustache (~> 1.0)

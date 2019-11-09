@@ -70,6 +70,7 @@ group :development, :test do
   gem "database_cleaner", "~> 1.7"
   gem "fix-db-schema-conflicts", "~> 3.0"
   # gem "i18n-debug", "~> 1.1" # Great for debugging i18n paths. Uncomment temporarily when neeeded.
+  gem "launchy", "~> 2.4" # For opening screenshots
   gem "pry", "~> 0.10"
   gem "pry-nav", "~> 0.2"
   gem "pry-rails", "~> 0.3"

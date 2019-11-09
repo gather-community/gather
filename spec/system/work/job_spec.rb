@@ -167,7 +167,7 @@ describe "jobs", js: true do
         visit(work_jobs_path)
         click_on(job.title)
         expect(page).to have_content(job.title)
-        expect(page).to have_content("At #{I18n.l(one_week_hence)}")
+        expect(page).to have_content("At #{I18n.l(one_week_hence).gsub('  ', ' ')}")
         expect(page).to have_content(/1 day before: Sharpen the knife/)
         (assignments1 + assignments2).map(&:user).each do |user|
           expect(page).to have_content(user.name)

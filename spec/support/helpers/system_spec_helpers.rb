@@ -229,13 +229,6 @@ module SystemSpecHelpers
     end
   end
 
-  def ignore_js_errors
-    begin
-      yield
-    rescue Capybara::Poltergeist::JavascriptError
-    end
-  end
-
   def expect_sign_in_with_google_link_and_click
     # Should point to apex domain
     expect(page).to have_css("a[href^='http://#{Settings.url.host}:31337']", text: "Sign in with Google")

@@ -57,7 +57,7 @@ shared_context "work" do
   shared_context "with assignments" do
     before do
       periods[0].update!(phase: "draft")
-      jobs[0].shifts[0].assignments.create(user: users[0]) # preassigned
+      jobs[0].shifts[0].assignments.create(user: users[1]) # preassigned
       periods[0].update!(phase: "open")
       jobs[1].shifts[1].assignments.create(user: actor)
       jobs[2].shifts[0].assignments.create(user: actor)

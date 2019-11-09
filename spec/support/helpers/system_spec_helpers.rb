@@ -5,6 +5,11 @@ module SystemSpecHelpers
     page.evaluate_script("window.location.reload()")
   end
 
+  # Temporarily undoes any within scopes.
+  def with_top_level_scope
+    within(Capybara::Node::Document.new(page, page.driver)) { yield }
+  end
+
   # Fills in the given value into the given select (a Node::Element or CSS selector),
   # then selects the first matching option.
   # If a Node::Element object is provided, it must have a unique ID.
@@ -26,7 +31,7 @@ module SystemSpecHelpers
       span_el.find(".select2-selection__clear").click
     else
       # Several of the elements selected below are inserted at the bottom of the DOM so we can't scope them.
-      without do
+      with_top_level_scope do
         if multiple
           span_el.find(".select2-search__field").click
         else

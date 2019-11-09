@@ -53,7 +53,7 @@ describe "meal crud", js: true do
       # Delete
       find("a", text: "Southern Beans").click
       click_link("Edit")
-      click_on("Delete")
+      accept_confirm { click_on("Delete") }
       expect_success
       expect(page).not_to have_content("Southern Beans and Rice")
     end
@@ -110,7 +110,7 @@ describe "meal crud", js: true do
       expect(page).not_to have_content("Delete Meal")
       # click_link("Edit Workers")
       add_worker_field(role: ac_role)
-      select_worker(actor.name, role: ac_role)
+      accept_confirm { select_worker(actor.name, role: ac_role) }
       click_button("Save")
       expect_success
 
@@ -166,10 +166,10 @@ describe "meal crud", js: true do
     page.driver.go_back
 
     # Close/reopen
-    click_link("Close")
+    accept_confirm { click_link("Close") }
     expect_success
     click_link("Southern Beans")
-    click_link("Reopen")
+    accept_confirm { click_link("Reopen") }
     expect_success
   end
 end

@@ -55,7 +55,7 @@ describe "password auth" do
       submit_email_and_visit_new_password_entry_page
 
       click_on("Set Password")
-      expect_validation_message(/Can't be blank/)
+      expect_validation_message(/can't be blank/)
 
       fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)
       fill_in("Re-type New Password", with: "x")

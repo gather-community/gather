@@ -14,7 +14,7 @@ describe "changing password when already signed in", js: true do
     visit(people_password_change_path)
 
     click_on("Save")
-    expect_validation_message(/Can't be blank/)
+    expect_validation_message(/can't be blank/)
 
     fill_in("New Password", with: "foo")
     expect_validation_message(/Too weak/)

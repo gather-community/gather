@@ -20,7 +20,7 @@ describe "report", js: true do
 
     scenario "index" do
       visit(page_path)
-      expect(page).to have_content("0 0 0 Total Hours Jobs People")
+      expect(page).to have_content("0 0 0\nTotal Hours Jobs People")
     end
   end
 
@@ -37,7 +37,7 @@ describe "report", js: true do
 
       scenario "index" do
         visit(page_path)
-        expect(page).to have_content("32 16 4 8 Total Hours Jobs People Quota")
+        expect(page).to have_content("32 16 4 8\nTotal Hours Jobs People Quota")
         expect(page).to have_content("Donnell Corkery 6.0 75% 2.0")
         expect(page).to have_content("Churl Rox 0.0 0%")
         expect(page).to have_content(/Household\d+ 6.0 38% 2.0/)

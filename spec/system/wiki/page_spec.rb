@@ -92,7 +92,7 @@ describe "pages", js: true do
     # Should not render preview
     fill_in("Content", with: "**bold text**")
     click_on("Preview")
-    expect(page).to have_css(".wiki_page_title .error", text: "Can't be blank")
+    expect(page).to have_css(".wiki_page_title .error", text: "can't be blank")
     expect(page).not_to have_css("b", text: "bold text")
   end
 

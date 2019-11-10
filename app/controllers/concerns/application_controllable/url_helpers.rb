@@ -7,6 +7,10 @@ module ApplicationControllable::UrlHelpers
 
   protected
 
+  def meals_meals_path(*args)
+    meals_path(*args)
+  end
+
   def default_url_options
     Settings.url.to_h.slice(:protocol, :host, :port).tap do |options|
       # Preserve the current subdomain if present.

@@ -39,7 +39,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   def initial_value
     # This value is used for dirty checking.
     # The moment library requires a standardized format.
-    value&.to_s(:iso8601)
+    value&.to_s
   end
 
   def set_value_html_option

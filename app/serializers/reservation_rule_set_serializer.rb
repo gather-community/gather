@@ -14,11 +14,11 @@ class ReservationRuleSetSerializer < ApplicationSerializer
   end
 
   def fixed_start_time
-    object.fixed_start_time&.to_s(:iso8601)
+    object.fixed_start_time&.to_s
   end
 
   def fixed_end_time
-    object.fixed_end_time&.to_s(:iso8601)
+    object.fixed_end_time&.to_s
   end
 
   private

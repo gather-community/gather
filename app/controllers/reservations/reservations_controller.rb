@@ -171,7 +171,7 @@ module Reservations
 
     def redirect_to_reservation_in_context(reservation)
       redirect_to(reservations_path(resource_id: reservation.resource_id,
-                                    date: reservation.starts_at&.to_s(:iso8601_date)))
+                                    date: reservation.starts_at&.to_s(:no_time)))
     end
   end
 end

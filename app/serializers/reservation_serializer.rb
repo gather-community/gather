@@ -18,12 +18,12 @@ class ReservationSerializer < ApplicationSerializer
     # assume all incoming events are in the community's zone. The only reason we'd need
     # zone is if we someday wanted to mix times from several zones on the calendar but
     # we don't and can't foresee needing to.
-    object.starts_at.to_s(:iso8601)
+    object.starts_at.to_s
   end
 
   # end is a reserved word
   define_method("end") do
-    object.ends_at.to_s(:iso8601)
+    object.ends_at.to_s
   end
 
   def editable

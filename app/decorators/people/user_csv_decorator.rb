@@ -8,7 +8,7 @@ module People
     delegate :unit_num, :unit_suffix, :garage_nums, :keyholders, to: :household
 
     def birthdate
-      object.birthday&.date&.to_s(object.birthday&.full? ? :iso8601 : :iso8601_month_day)
+      object.birthday&.date&.to_s(object.birthday&.full? ? :default : :no_year)
     end
 
     def guardian_names

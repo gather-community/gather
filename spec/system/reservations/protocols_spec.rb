@@ -52,7 +52,7 @@ describe "protocols", js: true do
       pick_time(".reservations_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm)
       pick_time(".reservations_protocol_fixed_end_time", hour: 1, min: 30, ampm: :pm)
       fill_in("Max. Advance Time", with: "30")
-      click_on("Save")
+      click_button("Save")
 
       click_link("Stuff")
       expect(page).to have_field("Name", with: "Stuff")
@@ -63,7 +63,7 @@ describe "protocols", js: true do
       expect(page).to have_field("Fixed End Time", with: "1:30pm")
       expect(page).to have_field("Max. Advance Time", with: "30")
       fill_in("Max. Duration", with: "18000")
-      click_on("Save")
+      click_button("Save")
 
       click_link("Stuff")
       expect(page).to have_field("Max. Duration", with: "18000")

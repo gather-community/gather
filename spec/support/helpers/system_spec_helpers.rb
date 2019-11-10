@@ -75,7 +75,13 @@ module SystemSpecHelpers
       sleep(0.25)
       find(".timepicker-minutes td", text: min.to_s.rjust(2, "0")).click
       sleep(0.25)
-      first(".btn-primary", text: ampm == :pm ? "AM" : "PM")&.click
+
+      # If the opposite AM/PM button to what we want is visible, we have to click it to
+      # change it to what we want.
+      begin
+        first(".btn-primary", text: ampm == :pm ? "AM" : "PM")&.click
+      rescue Capybara::ExpectationNotMet # rubocop:disable Lint/HandleExceptions
+      end
     end
     find(next_click).click # Get out of the picker.
   end

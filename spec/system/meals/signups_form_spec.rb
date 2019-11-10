@@ -20,7 +20,7 @@ describe "meal signups form", js: true do
     enter_signup(household: households[0], quantities: {"Fmla A Type 1": 2, "Fmla A Type 2": 3})
     enter_signup(household: households[0], quantities: {"Fmla A Type 3": 4})
     click_button("Save")
-    expect(page).to have_content("Has already been taken")
+    expect(page).to have_content("has already been taken")
 
     # Spot check one line
     expect(page).to have_select(all("select[id$=_count]")[2][:id], selected: "4")

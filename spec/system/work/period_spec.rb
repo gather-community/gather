@@ -87,7 +87,7 @@ describe "periods", js: true do
   scenario "destroy" do
     visit(work_periods_path)
     click_on("Baz")
-    click_on("Delete")
+    accept_confirm { click_on("Delete") }
     expect(page).to have_content("deleted successfully")
   end
 end

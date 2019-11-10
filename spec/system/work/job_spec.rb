@@ -50,10 +50,7 @@ describe "jobs", js: true do
       expect_jobs(jobs[4])
     end
 
-    # TODO: THIS SPEC IS NOT WORKING ON TRAVIS DUE TO PICK_DATETIME METHOD.
-    # SWITCHING TO CHROME HEADLESS MAY FIX IT, AND WE NEED TO DO THAT ANYWAY.
-    # FOR NOW, SKIPPING IT. BUT THIS SHOULD GET FIXED.
-    scenario "create, show, and update", :notravis do
+    scenario "create, show, and update" do
       visit(work_jobs_path)
       click_link("Create")
       fill_in("Title", with: "AAA Painter")

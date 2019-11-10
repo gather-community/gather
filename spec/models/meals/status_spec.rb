@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Meals::Status do
+describe Meals::Meal do
   let(:meal) { create(:meal) }
 
   describe "close!" do

@@ -6,6 +6,7 @@ module Meals
     self.table_name = "meals" # Override suffix
 
     include TimeCalculable
+    include Statusable
 
     DEFAULT_TIME = 18.hours + 15.minutes
     DEFAULT_CAPACITY = 64
@@ -54,8 +55,6 @@ module Meals
     }
     scope :attended_by, ->(household) { includes(:signups).where(meal_signups: {household_id: household.id}) }
 
-    Meals::Status.define_scopes(self)
-
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
@@ -68,9 +67,6 @@ module Meals
     delegate :name, to: :formula, prefix: true, allow_nil: true
     delegate :head_cook_role, :types, to: :formula
     delegate :build_reservations, to: :reservation_handler
-    delegate :close!, :reopen!, :cancel!, :finalize!,
-      :closed?, :finalized?, :open?, :cancelled?,
-      :full?, :in_past?, :day_in_past?, to: :status_obj
 
     after_validation :copy_resource_errors
     before_save :set_menu_timestamp
@@ -105,10 +101,6 @@ module Meals
 
     def head_cook
       assignments.detect(&:head_cook?)&.user
-    end
-
-    def status_obj
-      @status_obj ||= Meals::Status.new(self)
     end
 
     def workers

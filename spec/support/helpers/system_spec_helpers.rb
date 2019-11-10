@@ -286,9 +286,7 @@ module SystemSpecHelpers
 
   def clear_cookie(name)
     browser = Capybara.current_session.driver.browser
-    if browser.respond_to?(:remove_cookie) # Poltergeist
-      browser.remove_cookie(name)
-    elsif browser.respond_to?(:manage) # Selenium
+    if browser.respond_to?(:manage) # Selenium
       browser.manage.delete_cookie(name)
     elsif browser.respond_to?(:set_cookie) # Rack::Test
       browser.set_cookie(name, nil)

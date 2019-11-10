@@ -39,7 +39,7 @@ module Meals
     def self.for(user, meal)
       find_or_initialize_by(household_id: user.household_id, meal_id: meal.id) do |signup|
         # For new signup, build parts similar to the most recently used for the given household/formula pair.
-        recent = joins(:meal).where(household: user.household).includes(parts: :type)
+        recent = unscoped.joins(:meal).where(household: user.household).includes(parts: :type)
           .where(meals: {formula_id: meal.formula_id}).order(created_at: :desc).first
         if recent
           recent.parts.map { |p| signup.parts.build(type: p.type, count: p.count) }

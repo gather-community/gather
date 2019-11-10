@@ -6,4 +6,15 @@ RSpec.configure do |config|
     # Clear these again after example so we don't leave junk in there after the suite is run.
     clear_downloads
   end
+
+  # Print browser logs to console if they are non-empty.
+  # You MUST use console.warn or console.error for this to work.
+  config.after(:each, type: :system, js: true) do
+    logs = page.driver.browser.manage.logs.get(:browser).join("\n")
+    unless logs.strip.empty?
+      puts("------------ BROWSER LOGS -------------")
+      puts(logs)
+      puts("---------------------------------------")
+    end
+  end
 end

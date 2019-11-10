@@ -20,12 +20,12 @@ shared_context "photo uploads" do
       delete_from_dropzone
 
       # Delete existing photo without saving -- should still stay cooper
-      visit(edit_path)
+      accept_alert { visit(edit_path) }
       expect_image_upload(mode: :existing, path: /cooper/)
       delete_from_dropzone
 
       # Delete existing AND saving -- should really delete
-      visit(edit_path)
+      accept_alert { visit(edit_path) }
       expect_image_upload(mode: :existing, path: /cooper/)
       delete_from_dropzone
       click_button("Save")

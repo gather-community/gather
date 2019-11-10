@@ -117,7 +117,7 @@ describe "signups", js: true do
           expect(page).to have_content(actor.name)
 
           # Unsignup via 'x' link
-          find(".cancel-link a").click
+          accept_confirm { find(".cancel-link a").click }
           expect(page).not_to have_content(actor.name)
         end
 

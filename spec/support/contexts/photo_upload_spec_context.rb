@@ -19,12 +19,14 @@ shared_context "photo uploads" do
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       delete_from_dropzone
 
-      # Delete existing photo without saving -- should still stay cooper
+      # Delete existing photo without saving -- should still stay cooper.
+      # Visiting new page will trigger onbeforeunload alert.
       accept_alert { visit(edit_path) }
       expect_image_upload(mode: :existing, path: /cooper/)
       delete_from_dropzone
 
-      # Delete existing AND saving -- should really delete
+      # Delete existing AND saving -- should really delete.
+      # Visiting new page will trigger onbeforeunload alert.
       accept_alert { visit(edit_path) }
       expect_image_upload(mode: :existing, path: /cooper/)
       delete_from_dropzone

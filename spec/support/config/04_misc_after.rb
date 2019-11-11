@@ -9,12 +9,15 @@ RSpec.configure do |config|
 
   # Print browser logs to console if they are non-empty.
   # You MUST use console.warn or console.error for this to work.
-  config.after(:each, type: :system, js: true) do
-    logs = page.driver.browser.manage.logs.get(:browser).join("\n")
-    unless logs.strip.empty?
-      puts("------------ BROWSER LOGS -------------")
-      puts(logs)
-      puts("---------------------------------------")
+  # This produces Selenium::WebDriver::Error::WebDriverError "unknown command" on Travis for some reason.
+  unless ENV["TRAVIS"]
+    config.after(:each, type: :system, js: true) do
+      logs = page.driver.browser.manage.logs.get(:browser).join("\n")
+      unless logs.strip.empty?
+        puts("------------ BROWSER LOGS -------------")
+        puts(logs)
+        puts("---------------------------------------")
+      end
     end
   end
 end

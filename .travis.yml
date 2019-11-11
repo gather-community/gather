@@ -36,4 +36,4 @@ before_script:
 script:
   - bundle exec rake db:schema:load
   - bundle exec rake db:test:prepare
-  - bundle exec rspec --tag ~notravis
+  - TRAVIS=1 bundle exec rspec --tag ~notravis

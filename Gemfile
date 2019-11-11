@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "active_model_serializers", "~> 0.9.3"
+gem "active_model_serializers", "~> 0.10.0"
 gem "active_record-postgres-constraints", "~> 0.1"
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"

@@ -2,6 +2,8 @@
 
 # For calendars.
 class ReservationSerializer < ApplicationSerializer
+  include Rails.application.routes.url_helpers
+
   attributes :id, :url, :title, :start, :end, :editable, :className
 
   def url

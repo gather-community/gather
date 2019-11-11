@@ -6,8 +6,6 @@ module Reservations
     # Represents the unification of one or more protocols.
     # Knows how to aggregate multiple rules where necessary.
     class RuleSet
-      include ActiveModel::SerializerSupport
-
       # Finds all matching protocols and unions them into one.
       # Raises an error if any two protocols have non-nil values for the same attrib.
       def self.build_for(resource:, kind:)

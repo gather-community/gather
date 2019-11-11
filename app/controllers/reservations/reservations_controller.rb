@@ -29,7 +29,7 @@ module Reservations
             .where(resource_id: params[:resource_id])
             .where("starts_at < ? AND ends_at > ?",
               Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
-          render(json: @reservations)
+          render(json: @reservations, adapter: :attributes) # The adapter option removes the root.
 
         # Main reservation pages
         else

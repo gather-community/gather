@@ -35,6 +35,8 @@ module Gather
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
+    config.add_autoload_paths_to_load_path = false
+
     # Don't autoload these directories.
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))

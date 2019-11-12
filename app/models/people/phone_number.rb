@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module People
   class PhoneNumber
     attr_reader :model, :kind
@@ -7,9 +9,7 @@ module People
       @kind = kind
     end
 
-    def blank?
-      raw.blank?
-    end
+    delegate :blank?, to: :raw
 
     def raw
       model.read_attribute(attrib)
@@ -17,9 +17,9 @@ module People
 
     def formatted(options = {})
       result = if errors.any?
-        raw.try(:sub, /\A\+/, "")
-      else
-        raw.try(:phony_formatted, format: :national)
+                 raw.try(:sub, /\A\+/, "")
+               else
+                 raw.try(:phony_formatted, format: :national)
       end
 
       if options[:kind_abbrv] && result

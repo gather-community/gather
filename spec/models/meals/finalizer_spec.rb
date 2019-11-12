@@ -6,8 +6,8 @@ describe Meals::Finalizer do
   let(:formula) { create(:meal_formula, parts_attrs: [{type: "Adult"}, {type: "Teen"}, {type: "Kid"}]) }
   let(:meal) do
     create(:meal, :with_menu,
-      formula: formula,
-      cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"})
+           formula: formula,
+           cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11, payment_method: "credit"})
   end
   let(:households) { create_list(:household, 2) }
   let(:finalizer) { Meals::Finalizer.new(meal) }

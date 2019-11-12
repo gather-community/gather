@@ -1,10 +1,12 @@
-if Rails.env.development? || ENV['QUERY_TRACE']
+# frozen_string_literal: true
+
+if Rails.env.development? || ENV["QUERY_TRACE"]
   # yeilds a stacktrace for each SQL query
   # put this file in config/initializers
   class QueryTrace < ActiveSupport::LogSubscriber
     attr_accessor :trace_queries
 
-    def sql(event)  #:nodoc:
+    def sql(_event) #:nodoc:
       return unless QueryTrace.enabled? && logger.debug?
       stack = Rails.backtrace_cleaner.clean(caller)
       first_line = stack.shift
@@ -12,7 +14,7 @@ if Rails.env.development? || ENV['QUERY_TRACE']
 
       msg = prefix + "#{first_line}\n"
       msg += stack.join("\n")
-      debug msg
+      debug(msg)
     end
 
     # :call-seq:
@@ -30,7 +32,7 @@ if Rails.env.development? || ENV['QUERY_TRACE']
     # yields text if QueryTrace has been enabled or not
 
     def self.status
-      QueryTrace.enabled? ? 'enabled' : 'disabled'
+      QueryTrace.enabled? ? "enabled" : "disabled"
     end
 
     # :call-seq:
@@ -62,16 +64,16 @@ if Rails.env.development? || ENV['QUERY_TRACE']
       enabled?
     end
 
-  protected
+    protected
 
-    def prefix  #:nodoc:
-      'Called from: '
+    def prefix #:nodoc:
+      "Called from: "
     end
   end
 
-  QueryTrace.attach_to :active_record
+  QueryTrace.attach_to(:active_record)
 
-  trap('QUIT') do
+  trap("QUIT") do
     # Sending 2 backspace characters removes the ^\ that is
     # printed to the console.
     rm_noise = "\b\b"
@@ -80,6 +82,6 @@ if Rails.env.development? || ENV['QUERY_TRACE']
     puts "#{rm_noise}=> QueryTrace #{QueryTrace.status}"
   end
 
-  QueryTrace.enable! if ENV['QUERY_TRACE']
-  puts "=> QueryTrace #{QueryTrace.status}; CTRL-\\ to toggle"
+  QueryTrace.enable! if ENV["QUERY_TRACE"]
+  puts("=> QueryTrace #{QueryTrace.status}; CTRL-\\ to toggle")
 end

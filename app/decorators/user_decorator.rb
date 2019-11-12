@@ -99,7 +99,7 @@ class UserDecorator < ApplicationDecorator
 
   def photo_if_permitted(format)
     h.image_tag(h.policy(object).show_photo? ? photo.url(format) : "missing/users/#{format}.png",
-      class: "photo")
+                class: "photo")
   end
 
   def show_action_link_set
@@ -109,11 +109,11 @@ class UserDecorator < ApplicationDecorator
       ActionLink.new(object, :impersonate, icon: "user-circle-o", path: h.impersonate_user_path(object),
                                            method: :post),
       ActionLink.new(object, :invite,
-        icon: "life-ring",
-        method: :post,
-        path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
-        confirm: {name: name},
-        permitted: People::SignInInvitationsPolicy.new(h.current_user, community).create?)
+                     icon: "life-ring",
+                     method: :post,
+                     path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
+                     confirm: {name: name},
+                     permitted: People::SignInInvitationsPolicy.new(h.current_user, community).create?)
     )
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GeneralHelpers
   def fixture_file_path(name)
     Rails.root.join("spec", "fixtures", name)
@@ -24,7 +26,7 @@ module GeneralHelpers
     original_translate = I18n.method(:translate)
     allow(I18n).to receive(:translate) do |key_arg, options|
       if key == key_arg
-        expect(options[:default]).to eq expect_defaults if expect_defaults
+        expect(options[:default]).to eq(expect_defaults) if expect_defaults
         msg
       else
         original_translate.call(key_arg, options)

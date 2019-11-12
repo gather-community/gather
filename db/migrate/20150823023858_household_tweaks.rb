@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HouseholdTweaks < ActiveRecord::Migration[4.2]
   def change
     remove_column :households, :suffix, :string

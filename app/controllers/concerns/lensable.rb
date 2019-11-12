@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A lens is a set of parameters that scope an index listing, e.g. search, filter, pagination.
 module Lensable
   extend ActiveSupport::Concern

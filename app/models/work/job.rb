@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Work
   class Job < ApplicationRecord
     TIMES_OPTIONS = %i[date_time date_only full_period].freeze
     SLOT_TYPE_OPTIONS = %i[fixed full_single full_multiple].freeze
     WITH_PREASSIGN_SQL = "EXISTS (SELECT ws.id FROM work_shifts ws
       INNER JOIN work_assignments wa ON wa.shift_id = ws.id
-      WHERE ws.job_id = work_jobs.id AND wa.preassigned = 't')".freeze
+      WHERE ws.job_id = work_jobs.id AND wa.preassigned = 't')"
 
     acts_as_tenant :cluster
 
@@ -48,7 +50,7 @@ module Work
 
     delegate :community, to: :period
     delegate :starts_on, :ends_on, :name, :draft?, :pre_open?, :open?, :published?, :archived?,
-      to: :period, prefix: true
+             to: :period, prefix: true
 
     def full_period?
       time_type == "full_period"

@@ -11,11 +11,11 @@ describe Meals::MealReminderJob do
   let!(:meal2) { create(:meal, :with_menu, title: "Meal 2", served_at: "2017-01-01 18:15", community: c2) }
   let!(:meal3) { create(:meal, :with_menu, title: "Meal 3", served_at: "2017-01-02 18:15") }
   let!(:meal4) { create(:meal, :with_menu, :cancelled, title: "Meal 4", served_at: "2017-01-01 18:15") }
-  let!(:signup1) { create(:meal_signup,meal: meal1, diner_counts: [2, 1]) }
-  let!(:signup2) { create(:meal_signup,meal: meal2, diner_counts: [2, 1]) }
-  let!(:signup3) { create(:meal_signup,meal: meal2, diner_counts: [2, 1]) }
-  let!(:signup4) { create(:meal_signup,meal: meal3, diner_counts: [2, 1]) }
-  let!(:signup5) { create(:meal_signup,meal: meal1, diner_counts: [2, 1], notified: true) }
+  let!(:signup1) { create(:meal_signup, meal: meal1, diner_counts: [2, 1]) }
+  let!(:signup2) { create(:meal_signup, meal: meal2, diner_counts: [2, 1]) }
+  let!(:signup3) { create(:meal_signup, meal: meal2, diner_counts: [2, 1]) }
+  let!(:signup4) { create(:meal_signup, meal: meal3, diner_counts: [2, 1]) }
+  let!(:signup5) { create(:meal_signup, meal: meal1, diner_counts: [2, 1], notified: true) }
   let(:strlen) { "Meal Reminder: Meal X".size }
 
   it "sends the right number of emails" do
@@ -32,7 +32,7 @@ describe Meals::MealReminderJob do
 
   it "sets notified flag" do
     perform_job
-    expect([signup1, signup2, signup3].map(&:reload).map(&:notified?)).to eq [true, true, true]
-    expect(signup4.reload.notified?).to be false
+    expect([signup1, signup2, signup3].map(&:reload).map(&:notified?)).to eq([true, true, true])
+    expect(signup4.reload.notified?).to be(false)
   end
 end

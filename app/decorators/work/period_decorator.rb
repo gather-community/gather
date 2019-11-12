@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Work
   class PeriodDecorator < ApplicationDecorator
     delegate_all
@@ -9,7 +11,7 @@ module Work
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :destroy, icon: "trash", path: h.work_period_path(object),
-          method: :delete, confirm: {name: name})
+                                         method: :delete, confirm: {name: name})
       )
     end
   end

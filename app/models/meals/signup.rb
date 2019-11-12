@@ -10,7 +10,7 @@ module Meals
     attr_accessor :signup # Dummy used only in form construction.
 
     has_many :parts, -> { includes(:type).by_rank },
-      class_name: "Meals::SignupPart", inverse_of: :signup, dependent: :destroy
+             class_name: "Meals::SignupPart", inverse_of: :signup, dependent: :destroy
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :signups
     belongs_to :household
 

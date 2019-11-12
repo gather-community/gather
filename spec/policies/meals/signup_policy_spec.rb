@@ -97,7 +97,7 @@ describe Meals::SignupPolicy do
 
     it "should allow basic attribs" do
       expect(subject).to contain_exactly(:id, :household_id, :comments, :meal_id,
-        parts_attributes: %i[id type_id count _destroy])
+                                         parts_attributes: %i[id type_id count _destroy])
     end
   end
 end

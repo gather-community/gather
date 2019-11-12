@@ -21,8 +21,8 @@ describe Work::PeriodShareBuilder do
     end
 
     it "builds shares with the appropriate default portion" do
-      expect(shares_by_user_id[adult1.id].portion).to eq 1
-      expect(shares_by_user_id[child.id].portion).to eq 0
+      expect(shares_by_user_id[adult1.id].portion).to eq(1)
+      expect(shares_by_user_id[child.id].portion).to eq(0)
     end
   end
 

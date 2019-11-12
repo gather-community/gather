@@ -38,13 +38,13 @@ describe People::CsvExporter do
       end
       let!(:contact1) do
         create(:emergency_contact,
-          household: household1, alt_phone: "+17895550099", email: "j@k.com", location: "Anchorage",
-          main_phone: "+15456736543", name: "Wei Lu", relationship: "Ron's Mother")
+               household: household1, alt_phone: "+17895550099", email: "j@k.com", location: "Anchorage",
+               main_phone: "+15456736543", name: "Wei Lu", relationship: "Ron's Mother")
       end
       let!(:contact2) do
         create(:emergency_contact,
-          household: household1, email: "l@n.com", location: "King's Landing", main_phone: "+15456736543",
-          alt_phone: nil, name: "Spin Lok", relationship: "Close friend")
+               household: household1, email: "l@n.com", location: "King's Landing", main_phone: "+15456736543",
+               alt_phone: nil, name: "Spin Lok", relationship: "Close friend")
       end
       let!(:pet1) { create(:pet, household: household1, name: "Po", color: "Blue", species: "Snake") }
       let!(:pet2) { create(:pet, household: household1, name: "Wu", color: "Green", species: "Bird") }
@@ -76,8 +76,8 @@ describe People::CsvExporter do
 
       it "should return valid csv" do
         expect(exporter.to_csv).to eq(prepare_expectation("users.csv",
-          id: [child, adult2, adult1, adult3].map(&:id),
-          household_id: [household1, household2].map(&:id)))
+                                                          id: [child, adult2, adult1, adult3].map(&:id),
+                                                          household_id: [household1, household2].map(&:id)))
       end
     end
   end

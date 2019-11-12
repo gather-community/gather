@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_context "photo uploads" do
   shared_examples_for "photo upload widget" do
     scenario "delete photo" do

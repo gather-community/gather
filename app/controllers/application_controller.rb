@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
-  include Pundit, Lensable
+  include Lensable
+  include Pundit
   include ApplicationControllable::Csv
   include ApplicationControllable::RequestPreprocessing
   include ApplicationControllable::Setters
@@ -9,7 +12,7 @@ class ApplicationController < ActionController::Base
   include MultiCommunityCheck
 
   # Verify that controller actions are authorized.
-  after_action :verify_authorized,  except: :index, unless: :devise_controller?
+  after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
   attr_accessor :current_community

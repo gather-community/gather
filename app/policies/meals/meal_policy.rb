@@ -17,7 +17,7 @@ module Meals
           scope
         elsif user.active?
           scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
-            user.id, user.community_id, user.household_id)
+                      user.id, user.community_id, user.household_id)
         else
           scope.where(SIGNED_UP, user.household_id)
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 # TODO: This spec is flaky, gives false negatives, and is not working properly on Travis.

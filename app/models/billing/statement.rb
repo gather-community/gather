@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Billing
   class Statement < ApplicationRecord
     include TimeCalculable
@@ -14,7 +16,7 @@ module Billing
     scope :in_community, ->(c) { joins(:account).where(accounts: {community_id: c.id}) }
     scope :for_household, ->(h) { joins(:account).where(accounts: {household_id: h.id}) }
     scope :for_community_or_household,
-      ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
+          ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :reminder_not_sent, -> { where(reminder_sent: false) }
     scope :with_balance_owing, -> { joins(:account).merge(Billing::Account.with_balance_owing) }
     scope :is_latest, -> { joins(:account).where("accounts.last_statement_id = statements.id") }
@@ -52,7 +54,7 @@ module Billing
       self.due_on = terms > 0 ? (Time.current + terms.days).to_date : nil
 
       if transactions.empty? && total_due.abs < 0.01
-        raise StatementError.new("Must have line items or a total due.")
+        raise StatementError, "Must have line items or a total due."
       else
         save!
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Closes past meals after a certain delay period.
 module Meals
   class ClosePastMealsJob < ApplicationJob

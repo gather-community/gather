@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWorkShares < ActiveRecord::Migration[5.1]
   def change
     create_table :work_shares do |t|
@@ -9,7 +11,7 @@ class CreateWorkShares < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_index :work_shares, %i(period_id user_id), unique: true
+    add_index :work_shares, %i[period_id user_id], unique: true
     add_index :work_shares, :period_id
     add_index :work_shares, :user_id
 

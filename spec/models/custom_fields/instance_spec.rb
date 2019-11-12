@@ -1,33 +1,39 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe CustomFields::Instance do
-  let(:spec_data) { [
-    {key: "fruit", type: "enum", options: %w(apple banana peach), required: true, default: "peach"},
-    {key: "info", type: "group", fields: [
-      {key: "complete", type: "boolean", default: true},
-      {key: "comment", type: "string"}
-    ]}
-  ] }
+  let(:spec_data) do
+    [
+      {key: "fruit", type: "enum", options: %w[apple banana peach], required: true, default: "peach"},
+      {key: "info", type: "group", fields: [
+        {key: "complete", type: "boolean", default: true},
+        {key: "comment", type: "string"}
+      ]}
+    ]
+  end
   let(:spec) { CustomFields::Spec.new(spec_data) }
-  let(:instance) { described_class.new(
-    host: Object.new,
-    spec: spec,
-    instance_data: instance_data,
-    model_i18n_key: "mod",
-    attrib_name: "att"
-  ) }
+  let(:instance) do
+    described_class.new(
+      host: Object.new,
+      spec: spec,
+      instance_data: instance_data,
+      model_i18n_key: "mod",
+      attrib_name: "att"
+    )
+  end
   let(:instance_data) { {"fruit" => "peach", "info" => {"complete" => true, "comment" => "hi!"}} }
 
   describe "constructor" do
     context "with initial instance data" do
       it "should create entries with appropriate data in order of spec" do
-        expect(instance.entries[0].key).to eq :fruit
-        expect(instance.entries[0].value).to eq "peach"
-        expect(instance.entries[1].key).to eq :info
-        expect(instance.entries[1].entries[0].key).to eq :complete
-        expect(instance.entries[1].entries[0].value).to be true
-        expect(instance.entries[1].entries[1].key).to eq :comment
-        expect(instance.entries[1].entries[1].value).to eq "hi!"
+        expect(instance.entries[0].key).to eq(:fruit)
+        expect(instance.entries[0].value).to eq("peach")
+        expect(instance.entries[1].key).to eq(:info)
+        expect(instance.entries[1].entries[0].key).to eq(:complete)
+        expect(instance.entries[1].entries[0].value).to be(true)
+        expect(instance.entries[1].entries[1].key).to eq(:comment)
+        expect(instance.entries[1].entries[1].value).to eq("hi!")
       end
     end
 
@@ -35,13 +41,13 @@ describe CustomFields::Instance do
       let(:instance_data) { {} }
 
       it "should work and have default values" do
-        expect(instance.entries.size).to eq 2
-        expect(instance.entries[0].key).to eq :fruit
-        expect(instance.entries[0].value).to eq "peach"
-        expect(instance.entries[1].key).to eq :info
-        expect(instance.entries[1].entries[0].key).to eq :complete
-        expect(instance.entries[1].entries[0].value).to be true
-        expect(instance.entries[1].entries[1].key).to eq :comment
+        expect(instance.entries.size).to eq(2)
+        expect(instance.entries[0].key).to eq(:fruit)
+        expect(instance.entries[0].value).to eq("peach")
+        expect(instance.entries[1].key).to eq(:info)
+        expect(instance.entries[1].entries[0].key).to eq(:complete)
+        expect(instance.entries[1].entries[0].value).to be(true)
+        expect(instance.entries[1].entries[1].key).to eq(:comment)
         expect(instance.entries[1].entries[1].value).to be_nil
       end
     end
@@ -75,8 +81,8 @@ describe CustomFields::Instance do
   describe "getters" do
     describe "method call style" do
       it "should work for valid key" do
-        expect(instance.fruit).to eq "peach"
-        expect(instance.info.comment).to eq "hi!"
+        expect(instance.fruit).to eq("peach")
+        expect(instance.info.comment).to eq("hi!")
         expect(instance.info.complete?).to be(true)
       end
 
@@ -87,8 +93,8 @@ describe CustomFields::Instance do
 
     describe "[] style" do
       it "should work for valid key" do
-        expect(instance["fruit"]).to eq "peach"
-        expect(instance["info"][:complete]).to be true
+        expect(instance["fruit"]).to eq("peach")
+        expect(instance["info"][:complete]).to be(true)
       end
 
       it "should return nil for invalid key" do
@@ -101,13 +107,13 @@ describe CustomFields::Instance do
     describe "method call style" do
       it "should work for valid key" do
         instance.fruit = "apple"
-        expect(instance.fruit).to eq "apple"
-        expect(instance.info.comment).to eq "hi!"
+        expect(instance.fruit).to eq("apple")
+        expect(instance.info.comment).to eq("hi!")
       end
 
       it "should work for group with hash" do
         instance.info = {comment: "yo"}
-        expect(instance.info.comment).to eq "yo"
+        expect(instance.info.comment).to eq("yo")
       end
 
       it "should raise NoMethodError for invalid key" do
@@ -118,14 +124,14 @@ describe CustomFields::Instance do
     describe "[] style" do
       it "should work for valid key" do
         instance["fruit"] = "apple"
-        expect(instance["fruit"]).to eq "apple"
-        expect(instance["info"][:complete]).to be true
+        expect(instance["fruit"]).to eq("apple")
+        expect(instance["info"][:complete]).to be(true)
       end
 
       it "should work for group with hash" do
         instance["info"] = {comment: "yo", complete: false}
-        expect(instance["info"][:comment]).to eq "yo"
-        expect(instance["info"][:complete]).to be false
+        expect(instance["info"][:comment]).to eq("yo")
+        expect(instance["info"][:complete]).to be(false)
       end
 
       it "should not successfully set value invalid key" do
@@ -139,33 +145,33 @@ describe CustomFields::Instance do
     context "with initial instance data" do
       it "should update entries AND original hash" do
         instance.update(fruit: "apple", info: {complete: false, comment: "bye!"})
-        expect(instance.fruit).to eq "apple"
-        expect(instance.info.complete).to be false
-        expect(instance.info.comment).to eq "bye!"
-        expect(instance_data).to eq({fruit: "apple", info: {comment: "bye!", complete: false}})
+        expect(instance.fruit).to eq("apple")
+        expect(instance.info.complete).to be(false)
+        expect(instance.info.comment).to eq("bye!")
+        expect(instance_data).to eq(fruit: "apple", info: {comment: "bye!", complete: false})
       end
 
       it "should work with partial updates" do
         instance.update(fruit: "apple")
-        expect(instance.fruit).to eq "apple"
-        expect(instance.info.complete).to be true
-        expect(instance.info.comment).to eq "hi!"
-        expect(instance_data).to eq({fruit: "apple", info: {comment: "hi!", complete: true}})
+        expect(instance.fruit).to eq("apple")
+        expect(instance.info.complete).to be(true)
+        expect(instance.info.comment).to eq("hi!")
+        expect(instance_data).to eq(fruit: "apple", info: {comment: "hi!", complete: true})
       end
 
       it "should work with string keys" do
         instance.update("fruit" => "apple", "info" => {"complete" => false, "comment" => "bye!"})
-        expect(instance.fruit).to eq "apple"
-        expect(instance.info.complete).to be false
-        expect(instance.info.comment).to eq "bye!"
-        expect(instance_data).to eq({fruit: "apple", info: {comment: "bye!", complete: false}})
+        expect(instance.fruit).to eq("apple")
+        expect(instance.info.complete).to be(false)
+        expect(instance.info.comment).to eq("bye!")
+        expect(instance_data).to eq(fruit: "apple", info: {comment: "bye!", complete: false})
       end
 
       it "should ignore irrelevant keys" do
         instance.update(fruit: "apple", qux: "junk")
-        expect(instance.fruit).to eq "apple"
+        expect(instance.fruit).to eq("apple")
         expect { instance.qux }.to raise_error(NoMethodError)
-        expect(instance_data).to eq({fruit: "apple", info: {comment: "hi!", complete: true}})
+        expect(instance_data).to eq(fruit: "apple", info: {comment: "hi!", complete: true})
       end
 
       it "should handle malformed data" do
@@ -179,8 +185,8 @@ describe CustomFields::Instance do
 
       it "should still update original hash" do
         instance.update(fruit: "apple")
-        expect(instance_data).to eq({fruit: "apple", info: {comment: nil, complete: true}})
-        expect(instance.fruit).to eq "apple"
+        expect(instance_data).to eq(fruit: "apple", info: {comment: nil, complete: true})
+        expect(instance.fruit).to eq("apple")
       end
     end
   end

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Faker
   class PhoneNumber
     def self.simple
-      "+1" <<
+      +"+1" <<
         (2..8).to_a.sample.to_s <<
-        [0,1].sample.to_s <<
+        [0, 1].sample.to_s <<
         (2..8).to_a.sample.to_s <<
         7.times.map { (0..9).to_a.sample }.join
     end
@@ -22,8 +24,8 @@ module Faker
   end
 
   class Car
-    MAKES = %w(Ford GMC Chevy Chrysler Buick Honda Toyota Opel Suzuki Subaru Hyundai)
-    MODELS = %w(Speeder Go Vroomy Perambulator Carcar Haulor Laser Zoomex Horsey)
+    MAKES = %w[Ford GMC Chevy Chrysler Buick Honda Toyota Opel Suzuki Subaru Hyundai].freeze
+    MODELS = %w[Speeder Go Vroomy Perambulator Carcar Haulor Laser Zoomex Horsey].freeze
 
     def self.make
       MAKES.sample

@@ -42,8 +42,8 @@ gem "omniauth-rails_csrf_protection", "~> 0.1" # Related to CVE 2015 9284
 gem "paperclip", git: "https://github.com/sassafrastech/paperclip", branch: "tmp_uploads"
 gem "pg", "~> 1.1"
 gem "phony_rails", "~> 0.12"
-gem "pundit", "~> 2.0"
 gem "puma", "~> 3.11"
+gem "pundit", "~> 2.0"
 gem "rails", "6.0.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.3"
@@ -66,7 +66,7 @@ group :development, :test do
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
-  gem "capybara", '~> 3.29'
+  gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
   gem "fix-db-schema-conflicts", "~> 3.0"
   # gem "i18n-debug", "~> 1.1" # Great for debugging i18n paths. Uncomment temporarily when neeeded.

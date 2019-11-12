@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :meal_assignment, class: "Meals::Assignment" do
     meal

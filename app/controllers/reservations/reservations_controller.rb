@@ -28,7 +28,7 @@ module Reservations
           @reservations = policy_scope(Reservation)
             .where(resource_id: params[:resource_id])
             .where("starts_at < ? AND ends_at > ?",
-              Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
+                   Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
           render(json: @reservations, adapter: :attributes) # The adapter option removes the root.
 
         # Main reservation pages
@@ -42,7 +42,7 @@ module Reservations
             flash.now[:notice] = "Only #{@resource.community_name} residents may reserve this resource."
           end
           @rule_set_serializer = ReservationRuleSetSerializer.new(@rule_set,
-            reserver_community: current_community)
+                                                                  reserver_community: current_community)
           @other_resources = policy_scope(Resource)
             .where(community_id: @resource.community_id)
             .where("id != ?", @resource.id)

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Wiki
   def self.table_name_prefix
-    'wiki_'
+    "wiki_"
   end
 end

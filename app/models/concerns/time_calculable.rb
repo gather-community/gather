@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Methods for time calculations
 module TimeCalculable
   extend ActiveSupport::Concern

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class People::Group < ApplicationRecord
   acts_as_tenant :cluster
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActionLinkSet < ApplicationDecorator
   attr_accessor :links_by_action, :actions
 

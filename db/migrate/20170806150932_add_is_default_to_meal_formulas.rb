@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIsDefaultToMealFormulas < ActiveRecord::Migration[4.2]
   def up
     add_column :meal_formulas, :is_default, :boolean, default: false, null: false

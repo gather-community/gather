@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe CustomFields::Fields::TimeZoneField do
@@ -19,7 +21,7 @@ describe CustomFields::Fields::TimeZoneField do
 
   describe "value_input_param" do
     it "should return input_param hash" do
-      expect(field.value_input_param { "Saskatchewan" }).to eq({selected: "Saskatchewan"})
+      expect(field.value_input_param { "Saskatchewan" }).to eq(selected: "Saskatchewan")
     end
   end
 end

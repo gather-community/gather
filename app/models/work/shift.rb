@@ -25,9 +25,9 @@ module Work
 
     delegate :title, :hours, :requester, :description, :date_time?, :date_only?, to: :job, prefix: true
     delegate :community, :period, :period_name, :full_period?, :fixed_slot?, :full_community?,
-      :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
-      :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
-      :double_signups_allowed?, :meal_role_id, to: :job
+             :period_draft?, :period_open?, :period_pre_open?, :period_published?, :period_archived?,
+             :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
+             :double_signups_allowed?, :meal_role_id, to: :job
 
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where(work_periods: {community_id: c.id}) }
@@ -44,7 +44,7 @@ module Work
     scope :with_user, lambda { |users|
       where("EXISTS (SELECT id FROM work_assignments
         WHERE work_assignments.shift_id = work_shifts.id AND work_assignments.user_id IN (?))",
-        Array.wrap(users).map(&:id))
+            Array.wrap(users).map(&:id))
     }
     scope :with_non_preassigned_or_empty_slots, lambda {
       where("(SELECT COUNT(id) FROM work_assignments

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetTimeZoneForExistingCommunities < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do

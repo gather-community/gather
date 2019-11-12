@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClusterIdToWorkShifts < ActiveRecord::Migration[5.1]
   def change
     add_reference :work_shifts, :cluster, index: true, foreign_key: true

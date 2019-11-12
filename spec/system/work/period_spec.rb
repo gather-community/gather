@@ -1,27 +1,29 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "periods", js: true do
   let(:actor) { create(:work_coordinator) }
   let!(:period1) do
     create(:work_period,
-      name: "Foo",
-      starts_on: "2017-01-01",
-      ends_on: "2017-04-30",
-      phase: "archived")
+           name: "Foo",
+           starts_on: "2017-01-01",
+           ends_on: "2017-04-30",
+           phase: "archived")
   end
   let!(:period2) do
     create(:work_period,
-      name: "Bar",
-      starts_on: "2017-05-01",
-      ends_on: "2017-08-31",
-      phase: "active")
+           name: "Bar",
+           starts_on: "2017-05-01",
+           ends_on: "2017-08-31",
+           phase: "active")
   end
   let!(:period3) do
     create(:work_period,
-      name: "Baz",
-      starts_on: "2017-09-01",
-      ends_on: "2017-12-31",
-      phase: "draft")
+           name: "Baz",
+           starts_on: "2017-09-01",
+           ends_on: "2017-12-31",
+           phase: "draft")
   end
   let!(:user1) { create(:user, first_name: "Jane", last_name: "Picard") }
   let!(:user2) { create(:user, first_name: "Churl", last_name: "Rox") }

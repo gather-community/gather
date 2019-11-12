@@ -11,10 +11,7 @@ module Meals
       self.range = range || default_range
     end
 
-    def empty?
-      # We don't check overview because that ignores the range.
-      by_month.empty?
-    end
+    delegate :empty?, to: :by_month
 
     def overview
       @overview ||= breakout(

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RequestSpecHelpers
   def sign_in(resource_or_scope, resource = nil)
     resource ||= resource_or_scope

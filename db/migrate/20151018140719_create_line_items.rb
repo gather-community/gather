@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLineItems < ActiveRecord::Migration[4.2]
   def change
     create_table :line_items do |t|
@@ -14,6 +16,6 @@ class CreateLineItems < ActiveRecord::Migration[4.2]
     add_index :line_items, :incurred_on
     add_index :line_items, :code
     add_index :line_items, :household_id
-    add_index :line_items, [:invoiceable_id, :invoiceable_type]
+    add_index :line_items, %i[invoiceable_id invoiceable_type]
   end
 end

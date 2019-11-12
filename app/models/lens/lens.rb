@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Lens
   class Lens
     attr_accessor :options, :context, :store, :route_params, :set
 
     delegate :blank?, :present?, to: :value
-    alias_method :active?, :present?
+    alias active? present?
 
     VALUE_CHAR_LIMIT = 32
 

@@ -9,12 +9,12 @@ describe Reservations::Rules::FixedEndTimeRule do
 
     it "passes on match" do
       reservation.ends_at = Time.zone.parse("2016-01-01 6:00pm")
-      expect(rule.check(reservation)).to be true
+      expect(rule.check(reservation)).to be(true)
     end
 
     it "fails on no match" do
       reservation.ends_at = Time.zone.parse("2016-01-01 6:01pm")
-      expect(rule.check(reservation)).to eq [:ends_at, "Must be  6:00pm"]
+      expect(rule.check(reservation)).to eq([:ends_at, "Must be  6:00pm"])
     end
   end
 end

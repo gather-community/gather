@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Entries
     # Models a concrete choice made by the user for a particular config Field.
@@ -25,11 +27,11 @@ module CustomFields
         raise NotImplementedError
       end
 
-      def update(value, notify: false)
+      def update(_value, notify: false)
         raise NotImplementedError
       end
 
-      def do_validation(parent)
+      def do_validation(_parent)
         raise NotImplementedError
       end
 
@@ -51,7 +53,7 @@ module CustomFields
       protected
 
       def check_hash(hash)
-        raise ArgumentError.new("Malformed data: #{hash}") unless hash.is_a?(Hash)
+        raise ArgumentError, "Malformed data: #{hash}" unless hash.is_a?(Hash)
       end
     end
   end

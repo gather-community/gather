@@ -48,7 +48,7 @@ describe Work::SynopsisDecorator do
         let(:attribs) do
           {for_user: [{bucket: regular, got: 0, ttl: 28.43, ok: false},
                       {bucket: job, got: 0, ttl: 6, ok: false}],
-           done:     false}
+           done: false}
         end
         it do
           is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours "\
@@ -60,7 +60,7 @@ describe Work::SynopsisDecorator do
         let(:attribs) do
           {for_user: [{bucket: regular, got: 28.21, ttl: 28.43, ok: true},
                       {bucket: job, got: 2, ttl: 6, ok: false}],
-           done:     false}
+           done: false}
         end
         it do
           is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours "\
@@ -72,7 +72,7 @@ describe Work::SynopsisDecorator do
         let(:attribs) do
           {for_user: [{bucket: regular, got: 28.21, ttl: 28.43, ok: true},
                       {bucket: job, got: 6, ttl: 6, ok: true}],
-           done:     true}
+           done: true}
         end
         it do
           is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours "\
@@ -106,11 +106,11 @@ describe Work::SynopsisDecorator do
 
     context "zero signups" do
       let(:attribs) do
-        {for_user:      [{bucket: regular, got: 0, ttl: 28.43, ok: false},
-                         {bucket: job, got: 0, ttl: 6, ok: false}],
+        {for_user: [{bucket: regular, got: 0, ttl: 28.43, ok: false},
+                    {bucket: job, got: 0, ttl: 6, ok: false}],
          for_household: [{bucket: regular, got: 0, ttl: 56.86, ok: false},
                          {bucket: job, got: 0, ttl: 12, ok: false}],
-         done:          false}
+         done: false}
       end
       it do
         is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours "\
@@ -121,11 +121,11 @@ describe Work::SynopsisDecorator do
 
     context "partially complete" do
       let(:attribs) do
-        {for_user:      [{bucket: regular, got: 4.2, ttl: 28.43, ok: false},
-                         {bucket: job, got: 6, ttl: 6, ok: true}],
+        {for_user: [{bucket: regular, got: 4.2, ttl: 28.43, ok: false},
+                    {bucket: job, got: 6, ttl: 6, ok: true}],
          for_household: [{bucket: regular, got: 4.2, ttl: 56.86, ok: false},
                          {bucket: job, got: 6, ttl: 12, ok: false}],
-         done:          false}
+         done: false}
       end
       it do
         is_expected.to eq("You have signed up for <b>4.5/28.5</b> regular hours "\
@@ -136,11 +136,11 @@ describe Work::SynopsisDecorator do
 
     context "household complete even though user not" do
       let(:attribs) do
-        {for_user:      [{bucket: regular, got: 25, ttl: 28.43, ok: true},
-                         {bucket: job, got: 6, ttl: 6, ok: true}],
+        {for_user: [{bucket: regular, got: 25, ttl: 28.43, ok: true},
+                    {bucket: job, got: 6, ttl: 6, ok: true}],
          for_household: [{bucket: regular, got: 58, ttl: 56.86, ok: true},
                          {bucket: job, got: 12, ttl: 12, ok: true}],
-         done:          true}
+         done: true}
       end
       it do
         is_expected.to eq("You have signed up for <i>25/28.5</i> regular hours "\

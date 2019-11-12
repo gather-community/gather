@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveStartedOnAndEndedOnFromInvoices < ActiveRecord::Migration[4.2]
   def change
     remove_column :invoices, :started_on, :date

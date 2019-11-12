@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 module Billing
@@ -46,9 +48,9 @@ module Billing
           if amt == 0
             expect(accounts[i].transactions).to be_empty
           else
-            expect(accounts[i].transactions.last.incurred_on).to eq Time.zone.today
-            expect(accounts[i].transactions.last.code).to eq "late"
-            expect(accounts[i].transactions.last.amount).to eq amt
+            expect(accounts[i].transactions.last.incurred_on).to eq(Time.zone.today)
+            expect(accounts[i].transactions.last.code).to eq("late")
+            expect(accounts[i].transactions.last.amount).to eq(amt)
           end
         end
       end

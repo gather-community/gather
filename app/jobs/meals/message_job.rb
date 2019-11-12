@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Sends just-created meal message to appropriate recipients.
 module Meals
   class MessageJob < ReminderJob

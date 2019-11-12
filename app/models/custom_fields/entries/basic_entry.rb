@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Entries
     class BasicEntry < Entry
@@ -56,7 +58,7 @@ module CustomFields
             params[:value_method] = :first
             params[:label_method] = :last
           end
-          params.merge!(%i(label hint placeholder).map { |t| i18n_pair(t) }.compact.to_h)
+          params.merge!(%i[label hint placeholder].map { |t| i18n_pair(t) }.compact.to_h)
           params.merge!(field.value_input_param { value })
         end
       end
@@ -67,9 +69,7 @@ module CustomFields
       def i18n_pair(type)
         result = translate(type)
         return nil if result.nil?
-        if type == :hint && "".respond_to?(:html_safe)
-          result = result.html_safe
-        end
+        result = result.html_safe if type == :hint && "".respond_to?(:html_safe)
         [type, result]
       end
 

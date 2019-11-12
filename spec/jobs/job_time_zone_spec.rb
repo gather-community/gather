@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# A dummy reminder job class for use in the spec. 
+# A dummy reminder job class for use in the spec.
 class SomeReminderJob < ReminderJob
   def self.do_stuff(community)
   end

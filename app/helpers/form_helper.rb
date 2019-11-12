@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FormHelper
   # Gather forms are setup with a nested grid.
   # Outer Grid:
@@ -109,15 +111,15 @@ module FormHelper
           end <<
           if options[:multiple]
             link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{assoc}",
-              default: I18n.t("cocoon.add_links.#{assoc}"))
+                               default: I18n.t("cocoon.add_links.#{assoc}"))
             content_tag(:span, class: "add-link-wrapper") do
               link_to_add_association_with_icon(link_text, f, assoc,
-                partial: wrapper_partial,
-                wrap_object: wrap_object_proc,
-                render_options: {
-                  wrapper: :nested_fields, # Simple form wrapper
-                  locals: {options: options, classes: wrapper_classes}
-                })
+                                                partial: wrapper_partial,
+                                                wrap_object: wrap_object_proc,
+                                                render_options: {
+                                                  wrapper: :nested_fields, # Simple form wrapper
+                                                  locals: {options: options, classes: wrapper_classes}
+                                                })
             end
           end
       end

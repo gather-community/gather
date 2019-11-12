@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWorkJobs < ActiveRecord::Migration[5.1]
   def change
     create_table :work_jobs do |t|
@@ -18,8 +20,8 @@ class CreateWorkJobs < ActiveRecord::Migration[5.1]
     add_index :work_jobs, :requester_id
     add_index :work_jobs, :community_id
     add_index :work_jobs, :cluster_id
-    add_index :work_jobs, [:cluster_id, :community_id, :period_id, :title], unique: true,
-      name: :index_work_jobs_title_unique
+    add_index :work_jobs, %i[cluster_id community_id period_id title], unique: true,
+                                                                       name: :index_work_jobs_title_unique
 
     add_foreign_key :work_jobs, :work_periods, column: "period_id"
     add_foreign_key :work_jobs, :people_groups, column: "requester_id"

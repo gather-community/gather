@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe CustomFields::Spec do
@@ -11,12 +13,12 @@ describe CustomFields::Spec do
   describe "keys" do
     let(:spec) do
       described_class.new([
-        {"key" => "fruit", "type" => "enum", "options" => %w(apple banana peach), "required" => true},
+        {"key" => "fruit", "type" => "enum", "options" => %w[apple banana peach], "required" => true},
         {"key" => "info", "type" => "group", "fields" => [
           {"key" => "complete", "type" => "boolean", "default" => true},
           {"key" => "comment", "type" => "string", "default" => "foo"},
           {"key" => "tree", "type" => "group", "fields" => [
-            {"key" => "species", "type" => "enum", "options" => %w(spruce pine)},
+            {"key" => "species", "type" => "enum", "options" => %w[spruce pine]},
             {"key" => "height", "type" => "integer", "required" => true}
           ]},
           {"key" => "count", "type" => "integer"}
@@ -26,15 +28,15 @@ describe CustomFields::Spec do
     end
 
     it "should create fields and sub specs" do
-      expect(spec.fields[0].key).to eq :fruit
-      expect(spec.fields[1].fields[0].key).to eq :complete
-      expect(spec.fields[1].fields[0].default).to be true
-      expect(spec.fields[1].fields[1].key).to eq :comment
-      expect(spec.fields[1].fields[1].default).to eq "foo"
-      expect(spec.fields[1].fields[2].fields[0].key).to eq :species
-      expect(spec.fields[1].fields[2].fields[1].key).to eq :height
-      expect(spec.fields[1].fields[3].key).to eq :count
-      expect(spec.fields[2].key).to eq :bar
+      expect(spec.fields[0].key).to eq(:fruit)
+      expect(spec.fields[1].fields[0].key).to eq(:complete)
+      expect(spec.fields[1].fields[0].default).to be(true)
+      expect(spec.fields[1].fields[1].key).to eq(:comment)
+      expect(spec.fields[1].fields[1].default).to eq("foo")
+      expect(spec.fields[1].fields[2].fields[0].key).to eq(:species)
+      expect(spec.fields[1].fields[2].fields[1].key).to eq(:height)
+      expect(spec.fields[1].fields[3].key).to eq(:count)
+      expect(spec.fields[2].key).to eq(:bar)
     end
   end
 
@@ -48,7 +50,7 @@ describe CustomFields::Spec do
       end
 
       it "should be correct" do
-        expect(spec.permitted).to eq [:alpha, :bravo]
+        expect(spec.permitted).to eq(%i[alpha bravo])
       end
     end
 
@@ -77,8 +79,8 @@ describe CustomFields::Spec do
         expect(spec.permitted).to eq([
           :alpha,
           :bravo,
-          {charlie: [:delta, :echo, {foxtrot: [:golf, :hotel]}]},
-          {india: [:juliet, :kilo]},
+          {charlie: [:delta, :echo, {foxtrot: %i[golf hotel]}]},
+          {india: %i[juliet kilo]},
           :lima
         ])
       end

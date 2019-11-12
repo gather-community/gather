@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddQuantityAndUnitPriceToLineItems < ActiveRecord::Migration[4.2]
   def change
     add_column :line_items, :quantity, :integer

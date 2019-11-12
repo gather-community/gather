@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToCommunities < ActiveRecord::Migration[4.2]
   def up
     add_column :communities, :slug, :string, unique: true

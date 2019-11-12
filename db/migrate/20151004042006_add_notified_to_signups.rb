@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddNotifiedToSignups < ActiveRecord::Migration[4.2]
   def change
     add_column :signups, :notified, :boolean, null: false, default: false

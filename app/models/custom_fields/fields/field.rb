@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Fields
     # Models the definition of single field in a config.
     class Field
       attr_accessor :key, :required, :options, :validation, :default, :extra_params
 
-      TYPES = %i(string text boolean enum integer group)
+      TYPES = %i[string text boolean enum integer group].freeze
 
       def initialize(key:, required: false, options: nil, validation: nil, default: nil, **extra_params)
         self.key = key = key.to_sym
@@ -12,7 +14,7 @@ module CustomFields
         # Any methods of the GroupEntry class can't be used as keys as they would
         # interfere with its functioning.
         if Entries::GroupEntry.reserved_keys.include?(key)
-          raise ReservedKeyError.new("`#{key}` is a reserved word, please choose a different key.")
+          raise ReservedKeyError, "`#{key}` is a reserved word, please choose a different key."
         end
 
         self.required = required
@@ -27,7 +29,7 @@ module CustomFields
         raise NotImplementedError
       end
 
-      def normalize(value)
+      def normalize(_value)
         raise NotImplementedError
       end
 
@@ -56,9 +58,7 @@ module CustomFields
 
       # Sets validations implied by the field type and params
       def set_implicit_validations
-        if required && !validation[:presence]
-          validation[:presence] = true
-        end
+        validation[:presence] = true if required && !validation[:presence]
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Work::Shift do
@@ -95,13 +97,13 @@ describe Work::Shift do
       it "adds error when times equal" do
         shift = build(:work_shift, job: job, starts_at: "2018-01-01 12:30", ends_at: "2018-01-01 12:30")
         expect(shift).not_to be_valid
-        expect(shift.errors[:ends_at].join).to match /must be after start time/
+        expect(shift.errors[:ends_at].join).to match(/must be after start time/)
       end
 
       it "adds error when start after end" do
         shift = build(:work_shift, job: job, starts_at: "2018-01-01 13:30", ends_at: "2018-01-01 12:30")
         expect(shift).not_to be_valid
-        expect(shift.errors[:ends_at].join).to match /must be after start time/
+        expect(shift.errors[:ends_at].join).to match(/must be after start time/)
       end
     end
 
@@ -119,7 +121,7 @@ describe Work::Shift do
         it "is invalid with incorrect elapsed time" do
           shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 12:01")
           expect(shift).not_to be_valid
-          expect(shift.errors[:starts_at].join).to eq "Shift must last for 1.5 hours"
+          expect(shift.errors[:starts_at].join).to eq("Shift must last for 1.5 hours")
         end
       end
 
@@ -169,7 +171,7 @@ describe Work::Shift do
           it "is invalid if elapsed time doesn't evenly divide job hours" do
             shift.assign_attributes(starts_at: "2018-01-01 10:30", ends_at: "2018-01-01 11:30")
             expect(shift).not_to be_valid
-            expect(shift.errors[:starts_at].join).to eq "Shift length must equal or evenly divide 1.5 hours"
+            expect(shift.errors[:starts_at].join).to eq("Shift length must equal or evenly divide 1.5 hours")
           end
         end
       end
@@ -199,7 +201,7 @@ describe Work::Shift do
           context "when double signups not allowed" do
             it "should be invalid" do
               expect(shift).not_to be_valid
-              expect(shift.errors[:assignments].join).to eq "Duplicate assignees not allowed"
+              expect(shift.errors[:assignments].join).to eq("Duplicate assignees not allowed")
             end
           end
         end
@@ -224,8 +226,8 @@ describe Work::Shift do
       context "normal conditions" do
         it "creates assignment and updates counter cache" do
           shift.signup_user(user2)
-          expect(shift.reload.assignments.count).to eq 2
-          expect(shift.assignments_count).to eq 2
+          expect(shift.reload.assignments.count).to eq(2)
+          expect(shift.assignments_count).to eq(2)
         end
       end
 
@@ -309,14 +311,14 @@ describe Work::Shift do
 
     context "with regular job" do
       let(:job) { create(:work_job, hours: 3.2) }
-      it { is_expected.to eq 3.2 }
+      it { is_expected.to eq(3.2) }
     end
 
     context "with date-only full single job" do
       let(:job) do
         create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_single")
       end
-      it { is_expected.to eq 3.2 }
+      it { is_expected.to eq(3.2) }
     end
 
     context "with date-only full multiple job" do
@@ -324,7 +326,7 @@ describe Work::Shift do
         create(:work_job, hours: 3.2, time_type: "date_only", slot_type: "full_multiple",
                           hours_per_shift: 1.6)
       end
-      it { is_expected.to eq 1.6 }
+      it { is_expected.to eq(1.6) }
     end
 
     context "with date-time full multiple job" do
@@ -332,7 +334,7 @@ describe Work::Shift do
         create(:work_job, hours: 3.2, time_type: "date_time", slot_type: "full_multiple",
                           shift_hours: [0.8, 0.8])
       end
-      it { is_expected.to eq 0.8 }
+      it { is_expected.to eq(0.8) }
     end
   end
 end

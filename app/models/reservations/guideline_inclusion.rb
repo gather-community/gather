@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Join class for Resource and SharedGuidelines
 module Reservations
   class GuidelineInclusion < ApplicationRecord

@@ -16,13 +16,13 @@ describe Work::ShiftDecorator do
       context "start/end on same day" do
         let(:starts_at) { "2018-01-05 10:00" }
         let(:ends_at) { "2018-01-05 12:00" }
-        it { is_expected.to eq "Fri Jan 05 10:00am–12:00pm" }
+        it { is_expected.to eq("Fri Jan 05 10:00am–12:00pm") }
       end
 
       context "start/end on different day" do
         let(:starts_at) { "2018-01-05 10:00" }
         let(:ends_at) { "2018-01-06 11:00" }
-        it { is_expected.to eq "Fri Jan 05 10:00am–Sat Jan 06 11:00am" }
+        it { is_expected.to eq("Fri Jan 05 10:00am–Sat Jan 06 11:00am") }
       end
     end
 
@@ -32,25 +32,25 @@ describe Work::ShiftDecorator do
       context "start/end on same month boundaries" do
         let(:starts_at) { "2018-01-01 00:00" }
         let(:ends_at) { "2018-01-31 23:59" }
-        it { is_expected.to eq "January" }
+        it { is_expected.to eq("January") }
       end
 
       context "start/end on different month boundaries" do
         let(:starts_at) { "2018-01-01 00:00" }
         let(:ends_at) { "2018-02-28 23:59" }
-        it { is_expected.to eq "January–February" }
+        it { is_expected.to eq("January–February") }
       end
 
       context "start/end on same day" do
         let(:starts_at) { "2018-01-01 00:00" }
         let(:ends_at) { "2018-01-01 23:59" }
-        it { is_expected.to eq "Mon Jan 01" }
+        it { is_expected.to eq("Mon Jan 01") }
       end
 
       context "start/end not on month boundaries" do
         let(:starts_at) { "2018-01-01 00:00" }
         let(:ends_at) { "2018-02-27 23:59" }
-        it { is_expected.to eq "Mon Jan 01–Tue Feb 27" }
+        it { is_expected.to eq("Mon Jan 01–Tue Feb 27") }
       end
     end
   end

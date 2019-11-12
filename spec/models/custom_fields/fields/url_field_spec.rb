@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe CustomFields::Fields::UrlField do
@@ -11,7 +13,7 @@ describe CustomFields::Fields::UrlField do
     it "should leave other stuff alone" do
       # Invalid email should be caught by validation
       expect(field.normalize(nil)).to be_nil
-      expect(field.normalize("pants")).to eq "pants"
+      expect(field.normalize("pants")).to eq("pants")
     end
   end
 

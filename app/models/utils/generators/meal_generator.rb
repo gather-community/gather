@@ -47,12 +47,12 @@ module Utils
           )
         ]
         self.formula = create(:meal_formula,
-          community: community, roles: roles, is_default: true,
-          name: "Default Formula", meal_calc_type: "share",
-          parts_attrs: [{type: "Adult", share: "100%", portion: 1},
-                        {type: "Teen", share: "75%", portion: 0.75},
-                        {type: "Kid", share: "50%", portion: 0.5},
-                        {type: "Little Kid", share: "0%", portion: 0.25}])
+                              community: community, roles: roles, is_default: true,
+                              name: "Default Formula", meal_calc_type: "share",
+                              parts_attrs: [{type: "Adult", share: "100%", portion: 1},
+                                            {type: "Teen", share: "75%", portion: 0.75},
+                                            {type: "Kid", share: "50%", portion: 0.5},
+                                            {type: "Little Kid", share: "0%", portion: 0.25}])
       end
 
       def generate_samples

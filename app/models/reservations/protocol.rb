@@ -29,7 +29,7 @@ module Reservations
 
     validates :name, presence: true, length: {maximum: 64}
     validates :max_lead_days, :max_length_minutes, :max_days_per_year, :max_minutes_per_year,
-      numericality: {greater_than: 0}, allow_nil: true
+              numericality: {greater_than: 0}, allow_nil: true
 
     # Finds all matching protocols for the given resource and kind.
     # If kind is given, matches protocols with given kind or with nil kind.

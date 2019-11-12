@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   def self.included(base)
     base.extend(ClassMethods)
@@ -29,16 +31,14 @@ module CustomFields
         # If working with AR, ensure we have some kind of hash to start with.
         # If we create our own here using a literal and don't store it using `write_attribute`,
         # it won't be accessible by AR when persisting to the DB.
-        if respond_to?(:read_attribute) && read_attribute(attrib_name).nil?
-          write_attribute(attrib_name, {})
-        end
+        self[attrib_name] = {} if respond_to?(:read_attribute) && self[attrib_name].nil?
 
         # If no instance exists in inst var, create an empty one.
         if cur_instance.nil?
           instance_variable_set("@#{attrib_name}", Instance.new(
             host: self,
             spec: spec,
-            instance_data: respond_to?(:read_attribute) ? read_attribute(attrib_name) : {},
+            instance_data: respond_to?(:read_attribute) ? self[attrib_name] : {},
             model_i18n_key: i18n_key,
             attrib_name: attrib_name
           ))
@@ -67,7 +67,7 @@ module CustomFields
       # So we need to intercept and run update manually.
       define_method("reload") do |options = nil|
         super(options)
-        send("#{attrib_name}=", read_attribute(attrib_name))
+        send("#{attrib_name}=", self[attrib_name])
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddJobChoosingProxyIdToUsers < ActiveRecord::Migration[5.1]
   def change
     add_column :users, :job_choosing_proxy_id, :integer, index: true

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddReservationSponsorStuff < ActiveRecord::Migration[4.2]
   def change
     rename_column :reservations, :user_id, :reserver_id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWorkShifts < ActiveRecord::Migration[5.1]
   def change
     create_table :work_shifts do |t|
@@ -10,7 +12,7 @@ class CreateWorkShifts < ActiveRecord::Migration[5.1]
     end
 
     add_index :work_shifts, :job_id
-    add_index :work_shifts, %i(job_id starts_at ends_at), unique: true
+    add_index :work_shifts, %i[job_id starts_at ends_at], unique: true
 
     add_foreign_key :work_shifts, :work_jobs, column: "job_id"
   end

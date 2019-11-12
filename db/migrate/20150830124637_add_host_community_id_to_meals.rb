@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddHostCommunityIdToMeals < ActiveRecord::Migration[4.2]
   def change
     add_column :meals, :community_id, :integer, index: true

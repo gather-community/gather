@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeactivatedAtToHouseholds < ActiveRecord::Migration[4.2]
   def change
     add_column :households, :deactivated_at, :datetime

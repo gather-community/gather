@@ -31,12 +31,12 @@ module Utils
 
         self.households = 24.times.map do |i|
           household = create(:household, :with_vehicles, :with_emerg_contacts, :with_pets,
-            community: community,
-            unit_num: i + 1,
-            garage_nums: garages[i].to_s,
-            with_members: false,
-            created_at: community.created_at,
-            updated_at: community.updated_at)
+                             community: community,
+                             unit_num: i + 1,
+                             garage_nums: garages[i].to_s,
+                             with_members: false,
+                             created_at: community.created_at,
+                             updated_at: community.updated_at)
 
           dir = resource_path("photos/people/households/#{i.to_s.rjust(2, '0')}/*.jpg")
           joined = Faker::Date.birthday(1, 15)
@@ -51,22 +51,22 @@ module Utils
             email = "#{first_name}#{rand(10_000_000..99_999_999)}@example.com"
 
             build(:user,
-              :with_random_password,
-              fake: true,
-              household: household,
-              first_name: first_name,
-              last_name: bool_prob(70) ? last_name : last_names.pop,
-              birthdate: bday,
-              email: email,
-              google_email: email,
-              mobile_phone: Faker::PhoneNumber.simple,
-              home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
-              work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
-              joined_on: joined,
-              preferred_contact: %w[phone email text].sample,
-              photo: photos ? File.open(path) : nil,
-              created_at: community.created_at,
-              updated_at: community.updated_at)
+                  :with_random_password,
+                  fake: true,
+                  household: household,
+                  first_name: first_name,
+                  last_name: bool_prob(70) ? last_name : last_names.pop,
+                  birthdate: bday,
+                  email: email,
+                  google_email: email,
+                  mobile_phone: Faker::PhoneNumber.simple,
+                  home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
+                  work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
+                  joined_on: joined,
+                  preferred_contact: %w[phone email text].sample,
+                  photo: photos ? File.open(path) : nil,
+                  created_at: community.created_at,
+                  updated_at: community.updated_at)
           end.compact
 
           adults.first.add_role(:work_coordinator) if i < 6
@@ -76,19 +76,19 @@ module Utils
             next if age >= 16
             bday = Faker::Date.birthday(age, age + 1)
             build(:user, :child, :with_random_password,
-              fake: true,
-              household: household,
-              first_name: Faker::Name.unisex_name,
-              last_name: bool_prob(90) ? last_name : last_names.pop,
-              email: nil,
-              google_email: nil,
-              mobile_phone: nil,
-              guardians: adults,
-              birthdate: bday,
-              photo: photos ? File.open(path) : nil,
-              joined_on: [bday, joined].max,
-              created_at: community.created_at,
-              updated_at: community.updated_at)
+                  fake: true,
+                  household: household,
+                  first_name: Faker::Name.unisex_name,
+                  last_name: bool_prob(90) ? last_name : last_names.pop,
+                  email: nil,
+                  google_email: nil,
+                  mobile_phone: nil,
+                  guardians: adults,
+                  birthdate: bday,
+                  photo: photos ? File.open(path) : nil,
+                  joined_on: [bday, joined].max,
+                  created_at: community.created_at,
+                  updated_at: community.updated_at)
           end.compact
 
           users.concat(adults)

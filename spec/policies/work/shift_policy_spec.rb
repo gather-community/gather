@@ -54,29 +54,29 @@ describe Work::ShiftPolicy do
         context "with no limit" do
           let(:picked) { 5 }
           let(:limit) { nil }
-          it { is_expected.to be true }
+          it { is_expected.to be(true) }
         end
 
         context "with no picked hours" do
           let(:picked) { 0 }
           let(:limit) { 15 }
-          it { is_expected.to be true }
+          it { is_expected.to be(true) }
         end
 
         context "with picked hours equal to limit plus job hours" do
           let(:picked) { 11 }
           let(:limit) { 14 }
-          it { is_expected.to be true }
+          it { is_expected.to be(true) }
         end
 
         context "with picked hours over limit plus job hours" do
           let(:picked) { 11 }
           let(:limit) { 12 }
-          it { is_expected.to be false }
+          it { is_expected.to be(false) }
 
           context "with full community job" do
             let(:slot_type) { "full_single" }
-            it { is_expected.to be true }
+            it { is_expected.to be(true) }
           end
         end
       end

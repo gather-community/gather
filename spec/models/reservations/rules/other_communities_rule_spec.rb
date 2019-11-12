@@ -15,14 +15,14 @@ describe Reservations::Rules::OtherCommunitiesRule do
     shared_examples_for "insiders only" do
       it "should pass for insider" do
         reservation.reserver = insider
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
       end
 
       it "should fail for outsider even with sponsor" do
         reservation.reserver = outsider
         reservation.sponsor = insider
-        expect(rule.check(reservation)).to eq [:base,
-                                               "Residents from other communities may not make reservations"]
+        expect(rule.check(reservation)).to eq([:base,
+                                               "Residents from other communities may not make reservations"])
       end
     end
 
@@ -41,26 +41,26 @@ describe Reservations::Rules::OtherCommunitiesRule do
 
       it "should pass if insider has no sponsor" do
         reservation.reserver = insider
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
       end
 
       it "should pass if outsider has sponsor from community" do
         reservation.reserver = outsider
         reservation.sponsor = insider
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
       end
 
       it "should fail if outsider has sponsor from outside community" do
         reservation.reserver = outsider
         reservation.sponsor = outsider2
-        expect(rule.check(reservation)).to eq [:sponsor_id,
-                                               "You must have a sponsor from #{resource.community.name}"]
+        expect(rule.check(reservation)).to eq([:sponsor_id,
+                                               "You must have a sponsor from #{resource.community.name}"])
       end
 
       it "should fail if outsider has no sponsor" do
         reservation.reserver = outsider
-        expect(rule.check(reservation)).to eq [:sponsor_id,
-                                               "You must have a sponsor from #{resource.community.name}"]
+        expect(rule.check(reservation)).to eq([:sponsor_id,
+                                               "You must have a sponsor from #{resource.community.name}"])
       end
     end
   end

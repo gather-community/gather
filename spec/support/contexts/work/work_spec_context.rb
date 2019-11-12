@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_context "work" do
   shared_examples "handles no periods" do
     context "with no period" do

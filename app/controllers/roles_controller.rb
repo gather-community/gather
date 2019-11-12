@@ -5,7 +5,7 @@ class RolesController < ApplicationController
   before_action -> { nav_context(:people, :roles) }
 
   def index
-    authorize User
+    authorize(User)
     @users_by_role = Hash.new { |h, k| h[k] = [] }
     policy_scope(User).in_community(current_community).includes(:roles).active.by_name.each do |u|
       role_names = u.roles.map { |r| r.name.to_sym }

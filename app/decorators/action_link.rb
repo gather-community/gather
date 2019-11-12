@@ -4,7 +4,7 @@ class ActionLink < ApplicationDecorator
   attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class, :permitted
 
   def initialize(object, action, icon:, path:, btn_class: :default,
-                                 method: :get, permitted: nil, confirm: false)
+    method: :get, permitted: nil, confirm: false)
     self.object = object
     self.action = action
     self.icon = icon

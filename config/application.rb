@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "boot"
+require_relative("boot")
 require "rails/all"
-require_relative "../lib/disable_tenant_scoping"
+require_relative("../lib/disable_tenant_scoping")
 
 # Adds search info to log file.
 require "elasticsearch/rails/instrumentation"
@@ -43,21 +43,21 @@ module Gather
 
     config.active_job.queue_adapter = :delayed_job
 
-    config.middleware.use ExceptionNotification::Rack,
-      email: {
-        email_prefix: "[Gather ERROR] ",
-        sender_address: Settings.email.from,
-        exception_recipients: Settings.email.webmaster
-      }
+    config.middleware.use(ExceptionNotification::Rack,
+                          email: {
+                            email_prefix: "[Gather ERROR] ",
+                            sender_address: Settings.email.from,
+                            exception_recipients: Settings.email.webmaster
+                          })
 
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
-    config.middleware.insert_before Warden::Manager, DisableTenantScoping
+    config.middleware.insert_before(Warden::Manager, DisableTenantScoping)
 
-    config.middleware.use I18n::JS::Middleware
+    config.middleware.use(I18n::JS::Middleware)
 
     Devise.setup do |config|
-      config.omniauth :google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret
+      config.omniauth(:google_oauth2, Settings.oauth.google.client_id, Settings.oauth.google.client_secret)
     end
 
     config.secret_key_base = Settings.secret_key_base

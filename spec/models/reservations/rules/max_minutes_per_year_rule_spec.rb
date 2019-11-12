@@ -44,13 +44,13 @@ describe Reservations::Rules::MaxMinutesPerYearRule do
 
     it "should work for event 1 hour long" do
       reservation.ends_at = Time.zone.parse("2016-01-30 7:00pm")
-      expect(rule.check(reservation)).to be true
+      expect(rule.check(reservation)).to be(true)
     end
 
     it "should fail for event 2 hours long" do
       reservation.ends_at = Time.zone.parse("2016-01-30 8:00pm")
-      expect(rule.check(reservation)).to eq [:base, "You can book at most 3 hours of Personal/Special "\
-        "Foo Room/Bar Room events per year and you have already booked 2 hours"]
+      expect(rule.check(reservation)).to eq([:base, "You can book at most 3 hours of Personal/Special "\
+        "Foo Room/Bar Room events per year and you have already booked 2 hours"])
     end
 
     context "with persisted event" do
@@ -63,10 +63,10 @@ describe Reservations::Rules::MaxMinutesPerYearRule do
         # Assume we are actually shortening this reservation.
         # It only be a problem if it goes to more than an hour.
         reservation.ends_at = "2016-01-30 6:50pm"
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
         reservation.ends_at = "2016-01-30 7:10pm"
-        expect(rule.check(reservation)).to eq [:base, "You can book at most 3 hours of Personal/Special "\
-          "Foo Room/Bar Room events per year and you have already booked 2 hours"]
+        expect(rule.check(reservation)).to eq([:base, "You can book at most 3 hours of Personal/Special "\
+          "Foo Room/Bar Room events per year and you have already booked 2 hours"])
       end
     end
   end

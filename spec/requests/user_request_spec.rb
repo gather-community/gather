@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "user request" do
@@ -60,7 +62,7 @@ describe "user request" do
             first_name: "Jorpo"
           }}
           expect_successful_create_or_update
-          expect(user.reload.first_name).to eq "Jorpo"
+          expect(user.reload.first_name).to eq("Jorpo")
         end
       end
 
@@ -89,7 +91,7 @@ describe "user request" do
             id: new_household.id
           }
         }}
-        expect(user.reload.household_id).not_to eq new_household.id
+        expect(user.reload.household_id).not_to eq(new_household.id)
       end
     end
   end

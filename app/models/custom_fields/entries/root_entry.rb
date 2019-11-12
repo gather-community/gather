@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Entries
     class RootEntry < GroupEntry
@@ -11,7 +13,7 @@ module CustomFields
 
       # Returns an i18n_key of the given type (e.g. `errors`, `placeholders`).
       def i18n_key(type, suffix: true)
-        ("custom_fields.#{type}.#{model_i18n_key}.#{attrib_name}" << (suffix ? "._self" : "")).to_sym
+        (+"custom_fields.#{type}.#{model_i18n_key}.#{attrib_name}" << (suffix ? "._self" : "")).to_sym
       end
 
       private

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AccountsHelper
   def statement_amount(statement)
     statement.nil? ? "N/A" : link_to(currency_with_cr(statement.total_due), statement_path(statement))
@@ -23,7 +25,7 @@ module AccountsHelper
   end
 
   def late_fee_confirm
-    "Are you sure? Fees will be charged to #{@late_fee_count} households. " <<
+    +"Are you sure? Fees will be charged to #{@late_fee_count} households. " <<
       if @late_fee_days_ago.nil?
         ""
       else
@@ -40,13 +42,9 @@ module AccountsHelper
   end
 
   def statement_confirm_msg
-    msg = "Are you sure? Statements will be sent out to #{@statement_accounts} households."
-    if @no_user_accounts > 0
-      msg << "\n\n" << t(".no_users", count: @no_user_accounts)
-    end
-    if @recent_stmt_accounts > 0
-      msg << "\n\n" << t(".recent_statements", count: @recent_stmt_accounts)
-    end
+    msg = +"Are you sure? Statements will be sent out to #{@statement_accounts} households."
+    msg << "\n\n" << t(".no_users", count: @no_user_accounts) if @no_user_accounts > 0
+    msg << "\n\n" << t(".recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
     msg
   end
 end

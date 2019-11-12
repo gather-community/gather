@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClusterIdToWikiTables < ActiveRecord::Migration[4.2]
   def change
     add_reference :wiki_pages, :cluster, index: true, foreign_key: true, null: false

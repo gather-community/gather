@@ -76,7 +76,7 @@ describe Wiki::PageDecorator do
 
         it "returns normal content" do
           expect(decorator.formatted_content.delete("\n"))
-            .to eq '<div class="wiki-content"><ul><li>Normal stuff</li></ul></div>'
+            .to eq('<div class="wiki-content"><ul><li>Normal stuff</li></ul></div>')
         end
       end
 
@@ -86,7 +86,7 @@ describe Wiki::PageDecorator do
 
         it "returns normal content" do
           expect(decorator.formatted_content.delete("\n"))
-            .to eq '<div class="wiki-content"><p>Hello {{myvar}}</p></div>'
+            .to eq('<div class="wiki-content"><p>Hello {{myvar}}</p></div>')
         end
       end
 
@@ -95,7 +95,7 @@ describe Wiki::PageDecorator do
 
         it "returns normal content with markdown converted" do
           expect(decorator.formatted_content.delete("\n"))
-            .to eq '<div class="wiki-content"><p>Rolph: <em>jeans</em><em>cords</em></p></div>'
+            .to eq('<div class="wiki-content"><p>Rolph: <em>jeans</em><em>cords</em></p></div>')
         end
       end
     end
@@ -108,7 +108,7 @@ describe Wiki::PageDecorator do
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq "Couldn't connect to server"
+          expect(decorator.data_fetch_error).to eq("Couldn't connect to server")
         end
       end
 
@@ -119,7 +119,7 @@ describe Wiki::PageDecorator do
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq "404 Not Found"
+          expect(decorator.data_fetch_error).to eq("404 Not Found")
         end
       end
 
@@ -130,7 +130,7 @@ describe Wiki::PageDecorator do
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq "Invalid JSON"
+          expect(decorator.data_fetch_error).to eq("Invalid JSON")
         end
       end
 
@@ -143,7 +143,7 @@ describe Wiki::PageDecorator do
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq "Template Error: Unclosed tag, Line 1"
+          expect(decorator.data_fetch_error).to eq("Template Error: Unclosed tag, Line 1")
         end
       end
 
@@ -168,7 +168,7 @@ describe Wiki::PageDecorator do
       let(:content) { "{{1&na.me}}" }
 
       it "returns error" do
-        expect(decorator.template_error).to eq "Template Error: Unclosed tag, Line 1"
+        expect(decorator.template_error).to eq("Template Error: Unclosed tag, Line 1")
       end
     end
   end

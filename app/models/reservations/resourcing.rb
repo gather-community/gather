@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reservations
   class Resourcing < ApplicationRecord
     acts_as_tenant :cluster

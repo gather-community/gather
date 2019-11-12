@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reservations
   class Reservation < ApplicationRecord
     NAME_MAX_LENGTH = 24
@@ -31,16 +33,27 @@ module Reservations
     delegate :name, to: :resource, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-    validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
+    validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
     validates :resource_id, :reserver_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted
     validate :start_before_end
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
-    validate ->(r) { meal.reservation_handler.validate_reservation(r) if meal }
+    validate lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+               # and sponsor_community for other uses.
+               # Set fixed start/end time
+               # We add an underscore to differentiate from user-specified kinds
+               meal&.reservation_handler&.validate_reservation(r)
+             }
 
-    before_save ->(r) { meal.reservation_handler.sync_resourcings(r) if meal }
+    before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+                  # and sponsor_community for other uses.
+                  # Set fixed start/end time
+                  # We add an underscore to differentiate from user-specified kinds
+                  # rubocop:disable Style/GuardClause # || structure
+                  meal&.reservation_handler&.sync_resourcings(r)
+                }
 
     normalize_attributes :kind, :note
 
@@ -58,9 +71,7 @@ module Reservations
       if fet = rule_set.fixed_end_time
         reservation.ends_at = reservation.ends_at.change(hour: fet.hour, min: fet.min)
       end
-      if reservation.starts_at >= reservation.ends_at
-        reservation.ends_at += 1.day
-      end
+      reservation.ends_at += 1.day if reservation.starts_at >= reservation.ends_at
 
       reservation
     end

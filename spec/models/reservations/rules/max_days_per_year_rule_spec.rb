@@ -48,13 +48,13 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
       it "should work for event 1 hour long" do
         reservation.ends_at = Time.zone.parse("2016-01-30 7:00pm")
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
       end
 
       it "should fail for event 2 days long" do
         reservation.ends_at = Time.zone.parse("2016-01-31 9:00pm")
-        expect(rule.check(reservation)).to eq [:base, "You can book at most 4 days of Personal/Special "\
-          "Foo Room/Bar Room events per year and you have already booked 3 days"]
+        expect(rule.check(reservation)).to eq([:base, "You can book at most 4 days of Personal/Special "\
+          "Foo Room/Bar Room events per year and you have already booked 3 days"])
       end
     end
 
@@ -68,13 +68,13 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
         it "should work for event 2 days long" do
           reservation.ends_at = Time.zone.parse("2016-02-01 12:00pm")
-          expect(rule.check(reservation)).to be true
+          expect(rule.check(reservation)).to be(true)
         end
 
         it "should fail for event 3 days long" do
           reservation.ends_at = Time.zone.parse("2016-02-01 7:30pm")
-          expect(rule.check(reservation)).to eq [:base, "You can book at most 9 days "\
-            "of Foo Room/Bar Room events per year and you have already booked 7 days"]
+          expect(rule.check(reservation)).to eq([:base, "You can book at most 9 days "\
+            "of Foo Room/Bar Room events per year and you have already booked 7 days"])
         end
       end
 
@@ -83,8 +83,8 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
         it "should fail for even very short event" do
           reservation.ends_at = Time.zone.parse("2016-01-30 6:30pm")
-          expect(rule.check(reservation)).to eq [:base, "You can book at most 7 days "\
-            "of Foo Room/Bar Room events per year and you have already booked 7 days"]
+          expect(rule.check(reservation)).to eq([:base, "You can book at most 7 days "\
+            "of Foo Room/Bar Room events per year and you have already booked 7 days"])
         end
       end
     end
@@ -96,13 +96,13 @@ describe Reservations::Rules::MaxDaysPerYearRule do
 
       it "should work for event 1 hour long" do
         reservation.ends_at = Time.zone.parse("2016-01-30 7:00pm")
-        expect(rule.check(reservation)).to be true
+        expect(rule.check(reservation)).to be(true)
       end
 
       it "should fail for event 2 days long" do
         reservation.ends_at = Time.zone.parse("2016-01-31 9:00pm")
-        expect(rule.check(reservation)).to eq [:base, "You can book at most 9 days of events "\
-          "per year and you have already booked 8 days"]
+        expect(rule.check(reservation)).to eq([:base, "You can book at most 9 days of events "\
+          "per year and you have already booked 8 days"])
       end
     end
   end

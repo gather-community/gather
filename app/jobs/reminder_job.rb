@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReminderJob < ApplicationJob
   def max_attempts
     1
@@ -7,9 +9,7 @@ class ReminderJob < ApplicationJob
 
   def each_community_at_correct_hour
     each_community do |community|
-      if correct_hour?
-        yield(community)
-      end
+      yield(community) if correct_hour?
     end
   end
 

@@ -175,7 +175,7 @@ class UsersController < ApplicationController
 
   def load_users
     prepare_lenses({community: {required: true}}, :"people/life_stage", :"people/sort",
-      :"people/view", :search)
+                   :"people/view", :search)
     @community = current_community
     load_communities_in_cluster
     unless policy(sample_user).index_children_for_community?(@community)

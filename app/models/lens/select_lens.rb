@@ -39,10 +39,10 @@ module Lens
 
     def select_tag
       h.select_tag(select_input_name, option_tags,
-        prompt: translated_select_prompt,
-        class: css_classes,
-        onchange: onchange,
-        "data-param-name": param_name)
+                   prompt: translated_select_prompt,
+                   class: css_classes,
+                   onchange: onchange,
+                   "data-param-name": param_name)
     end
 
     def select_input_name

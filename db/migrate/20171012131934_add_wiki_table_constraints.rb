@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddWikiTableConstraints < ActiveRecord::Migration[4.2]
   def change
     change_column_null :wiki_pages, :creator_id, false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "admin hierarchy" do
@@ -15,7 +17,8 @@ describe "admin hierarchy" do
       it "should error unless user is superadmin" do
         unless user.global_role?(:super_admin)
           expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }.to raise_error(
-            ApplicationPolicy::CommunityNotSetError)
+            ApplicationPolicy::CommunityNotSetError
+          )
         end
       end
     end
@@ -28,12 +31,12 @@ describe "admin hierarchy" do
       end
 
       it "should be admin for class" do
-        expect(policy.send(:active_admin?)).to be true
+        expect(policy.send(:active_admin?)).to be(true)
       end
     end
 
     it "should be admin for scope" do
-      expect(ApplicationPolicy::Scope.new(user, nil).send(:active_admin?)).to be true
+      expect(ApplicationPolicy::Scope.new(user, nil).send(:active_admin?)).to be(true)
     end
   end
 
@@ -43,16 +46,17 @@ describe "admin hierarchy" do
     it_behaves_like "admin for class and scope"
 
     it "should be be admin for record in different community but same cluster" do
-      expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be true
+      expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be(true)
     end
 
     it "should not be admin for record outside cluster" do
-      expect(ApplicationPolicy.new(user, recordB).send(:active_admin?)).to be false
+      expect(ApplicationPolicy.new(user, recordB).send(:active_admin?)).to be(false)
     end
 
     it "should raise error if record has no community set" do
       expect { ApplicationPolicy.new(user, recordC).send(:active_admin?) }.to raise_error(
-        ApplicationPolicy::CommunityNotSetError)
+        ApplicationPolicy::CommunityNotSetError
+      )
     end
   end
 
@@ -62,11 +66,11 @@ describe "admin hierarchy" do
     it_behaves_like "admin for class and scope"
 
     it "should be be admin for record in same cluster" do
-      expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be true
+      expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be(true)
     end
 
     it "should be be admin for record in different cluster" do
-      expect(ApplicationPolicy.new(user, recordB).send(:active_admin?)).to be true
+      expect(ApplicationPolicy.new(user, recordB).send(:active_admin?)).to be(true)
     end
   end
 end

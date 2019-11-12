@@ -91,14 +91,14 @@ Rails.application.routes.draw do
 
   # Legacy calendar routes
   get "calendars/:id/:calendar_token",
-    to: "calendars/exports#personalized",
-    constraints: {
-      # These are the original calendar export types. Only these need to work for legacy URLs.
-      id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
-      # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
-      # Enforcing this will make it easier to distinguish from other calendars routes in future.
-      calendar_token: /[A-Za-z0-9_\-]{20}/
-    }
+      to: "calendars/exports#personalized",
+      constraints: {
+        # These are the original calendar export types. Only these need to work for legacy URLs.
+        id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
+        # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
+        # Enforcing this will make it easier to distinguish from other calendars routes in future.
+        calendar_token: /[A-Za-z0-9_\-]{20}/
+      }
 
   namespace :calendars do
     # index - The calendar export page

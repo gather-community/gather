@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetMealAdmins < ActiveRecord::Migration[4.2]
   def up
     Community.all.each do |c|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMaxlengthForCommunityAndClusterNames < ActiveRecord::Migration[5.1]
   def up
     change_column :clusters, :name, :string, limit: 20

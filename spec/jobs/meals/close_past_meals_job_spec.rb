@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Meals::ClosePastMealsJob do
@@ -9,8 +11,8 @@ describe Meals::ClosePastMealsJob do
 
   it "closes meals more than 3 hours in the past" do
     perform_job
-    expect(meal1.reload.closed?).to be true
-    expect(meal2.reload.open?).to be true
-    expect(meal3.reload.open?).to be true
+    expect(meal1.reload.closed?).to be(true)
+    expect(meal2.reload.open?).to be(true)
+    expect(meal3.reload.open?).to be(true)
   end
 end

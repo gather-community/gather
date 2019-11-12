@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
-    :confirmable, omniauth_providers: [:google_oauth2]
+         :confirmable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
@@ -88,7 +88,7 @@ class User < ApplicationRecord
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv, :cluster,
-    :unit_num, :unit_num_and_suffix, :vehicles, to: :household
+           :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
   delegate :age, to: :birthday
@@ -118,8 +118,8 @@ class User < ApplicationRecord
   validate { birthday.validate }
 
   has_attached_file :photo,
-    styles: {thumb: "150x150#", medium: "300x300#"},
-    default_url: "missing/users/:style.png"
+                    styles: {thumb: "150x150#", medium: "300x300#"},
+                    default_url: "missing/users/:style.png"
   validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
   validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
 

@@ -112,18 +112,18 @@ describe Reservations::Rules::RuleSet do
       let!(:p2) do
         create(:reservation_protocol, resources: [resource1], requires_kind: true)
       end
-      it { is_expected.to be true }
+      it { is_expected.to be(true) }
     end
 
     context "with one nil rule" do
       let!(:p1) do
         create(:reservation_protocol, resources: [resource1], requires_kind: nil)
       end
-      it { is_expected.to be false }
+      it { is_expected.to be(false) }
     end
 
     context "with no rules" do
-      it { is_expected.to be false }
+      it { is_expected.to be(false) }
     end
   end
 end

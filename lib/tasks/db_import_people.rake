@@ -1,4 +1,6 @@
-require 'csv'
+# frozen_string_literal: true
+
+require "csv"
 
 namespace :db do
   task import_people: :environment do
@@ -7,7 +9,7 @@ namespace :db do
     @errors = false
 
     def print_error(msg)
-      puts msg
+      puts(msg)
       @errors = true
       true
     end
@@ -15,8 +17,8 @@ namespace :db do
     CSV.foreach("tmp/go-people/member_directory.csv", headers: true, header_converters: :symbol) do |row|
       photo = begin
         File.open("tmp/go-people/#{row[:photo_path]}", "r")
-      rescue
-        nil
+              rescue StandardError
+                nil
       end
 
       first_name = row[:first_name]
@@ -92,30 +94,28 @@ namespace :db do
     raise "errors were raised" if @errors
 
     User.transaction do
-      begin
-        adults.each do |user|
-          attribs = [:first_name, :last_name, :birthdate]
-          attribs << :photo unless user[:user].photo.present?
-          user[:user].update_attributes!(user.slice(*attribs))
-        end
-        kids.each do |kid|
-          if User.find_by(kid.slice(:first_name, :last_name)).nil?
-            User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo, :household).
-              merge(child: true))
-          end
-        end
-        households.each do |household, attribs|
-          household.update_attributes!(
-            garage_nums: attribs[:garages].join(", ")
-          )
-          attribs[:vehicles].each do |v|
-            household.vehicles.find_or_create_by!(v)
-          end
-        end
-      rescue ActiveRecord::RecordInvalid
-        p $!.record
-        p $!.record.errors
+      adults.each do |user|
+        attribs = %i[first_name last_name birthdate]
+        attribs << :photo if user[:user].photo.blank?
+        user[:user].update_attributes!(user.slice(*attribs))
       end
+      kids.each do |kid|
+        if User.find_by(kid.slice(:first_name, :last_name)).nil?
+          User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo, :household)
+            .merge(child: true))
+        end
+      end
+      households.each do |household, attribs|
+        household.update_attributes!(
+          garage_nums: attribs[:garages].join(", ")
+        )
+        attribs[:vehicles].each do |v|
+          household.vehicles.find_or_create_by!(v)
+        end
+      end
+    rescue ActiveRecord::RecordInvalid
+      p($!.record)
+      p($!.record.errors)
     end
   end
 end

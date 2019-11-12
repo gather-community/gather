@@ -8,7 +8,7 @@ module Reservations
         booked = booked_time_for_year(reservation, unit)
         if booked + reservation.send(unit) > value
           msg = I18n.t("reservations/protocol.exceeded_time",
-            kind_resource: kind_resource_str, max: interval(value), booked: interval(booked)).gsub("  ", " ")
+                       kind_resource: kind_resource_str, max: interval(value), booked: interval(booked)).gsub("  ", " ")
           [:base, msg]
         else
           true

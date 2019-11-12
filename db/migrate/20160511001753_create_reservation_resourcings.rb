@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateReservationResourcings < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_resourcings do |t|
@@ -5,6 +7,6 @@ class CreateReservationResourcings < ActiveRecord::Migration[4.2]
       t.references :resource, foreign_key: true, null: false
     end
 
-    add_index :reservation_resourcings, [:meal_id, :resource_id], unique: true
+    add_index :reservation_resourcings, %i[meal_id resource_id], unique: true
   end
 end

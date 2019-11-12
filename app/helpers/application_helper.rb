@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   FLASH_TYPE_TO_CSS = {
     success: "alert-success",
@@ -18,7 +20,7 @@ module ApplicationHelper
     FLASH_TYPE_TO_CSS[flash_type.to_sym] || flash_type.to_s
   end
 
-  def flash_messages(opts = {})
+  def flash_messages(_opts = {})
     flash.each do |type, messages|
       Array.wrap(messages).each { |m| concat(flash_message(type, m)) }
     end
@@ -27,7 +29,7 @@ module ApplicationHelper
 
   def flash_message(type, text)
     content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
-      content_tag(:button, 'x', class: "close", data: {dismiss: 'alert'}) << text
+      content_tag(:button, "x", class: "close", data: {dismiss: "alert"}) << text
     end
   end
 
@@ -38,12 +40,12 @@ module ApplicationHelper
 
   # Sets twitter-bootstrap theme as default for pagination.
   def paginate(objects, options = {})
-    options.reverse_merge!(theme: 'twitter-bootstrap-3')
+    options.reverse_merge!(theme: "twitter-bootstrap-3")
     super(objects, options)
   end
 
   def sep(separator)
-    ->(a, b){ a << separator.html_safe << b }
+    ->(a, b) { a << separator.html_safe << b }
   end
 
   # Converts given object/value to json and runs through html_safe.
@@ -85,6 +87,6 @@ module ApplicationHelper
   end
 
   def safe_str
-    "".html_safe # rubocop:disable Rails/OutputSafety # It's just an empty string!
+    "".html_safe
   end
 end

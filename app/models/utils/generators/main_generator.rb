@@ -27,9 +27,9 @@ module Utils
         build_generators
         generators[:meals].generate_formula_and_roles # We need these even if not doing sample data.
         generators.each_value(&:generate_samples) if sample_data
-      rescue StandardError => error
+      rescue StandardError => e
         generators.each_value(&:cleanup_on_error)
-        raise error
+        raise e
       end
 
       def build_generators

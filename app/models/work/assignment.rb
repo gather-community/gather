@@ -17,7 +17,7 @@ module Work
     scope :by_user_name, -> { joins(:user).alpha_order("users.first_name").alpha_order("users.last_name") }
 
     delegate :job, :community, :period_pre_open?, :fixed_slot?, :full_community?,
-      :date_time?, :elapsed_time, :starts_at, :ends_at, :job_title, :job_description, :meal, to: :shift
+             :date_time?, :elapsed_time, :starts_at, :ends_at, :job_title, :job_description, :meal, to: :shift
     delegate :hours, to: :shift, prefix: true
 
     before_save do

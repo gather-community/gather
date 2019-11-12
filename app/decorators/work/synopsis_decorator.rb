@@ -45,7 +45,7 @@ module Work
       ttl = round_next_half(item[:ttl])
       fraction = h.content_tag(item[:ok] ? :i : :b, "#{got}/#{ttl}")
       h.t("work.synopsis.chunk.#{item_count}_html",
-        title: h.sanitize(item[:bucket].title), fraction: fraction)
+          title: h.sanitize(item[:bucket].title), fraction: fraction)
     end
 
     def join_chunks(chunks)
@@ -64,10 +64,10 @@ module Work
         h.t("work.synopsis.start_choosing", at_or_on_time: next_round_time)
       elsif staggering[:next_limit].nil?
         h.t("work.synopsis.round_limit_until",
-          prev: staggering[:prev_limit], until_time: next_round_time(preposition: "until"))
+            prev: staggering[:prev_limit], until_time: next_round_time(preposition: "until"))
       else # prev_limit and next_limit both present
         h.t("work.synopsis.round_limit_with_next",
-          prev: staggering[:prev_limit], next: staggering[:next_limit], at_or_on_time: next_round_time)
+            prev: staggering[:prev_limit], next: staggering[:next_limit], at_or_on_time: next_round_time)
       end
     end
 

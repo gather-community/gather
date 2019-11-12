@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixMealTitleNull < ActiveRecord::Migration[4.2]
   def change
     change_column_null :meals, :title, true

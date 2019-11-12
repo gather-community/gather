@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module People
   class Vehicle < ApplicationRecord
     acts_as_tenant :cluster
@@ -18,9 +20,9 @@ module People
     delegate :name, to: :household, prefix: true
 
     def to_s
-      "#{color} #{make} #{model}".tap do |str|
-        str << " (#{plate})" if plate.present?
-      end
+      str = +"#{color} #{make} #{model}"
+      str << " (#{plate})" if plate.present?
+      str
     end
   end
 end

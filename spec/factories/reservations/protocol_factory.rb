@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :reservation_protocol, class: "Reservations::Protocol" do
     transient do

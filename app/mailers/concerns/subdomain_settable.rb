@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Holds method for setting subdomain via default_url_options.
 # In concern so can be included in AuthMailer as well as ApplicationMailer
 module SubdomainSettable

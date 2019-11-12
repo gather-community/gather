@@ -19,8 +19,8 @@ module Reservations
                             dependent: :destroy
 
     has_attached_file :photo,
-      styles: {thumb: "220x165#"},
-      default_url: "missing/reservations/resources/:style.png"
+                      styles: {thumb: "220x165#"},
+                      default_url: "missing/reservations/resources/:style.png"
     validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
     validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
 

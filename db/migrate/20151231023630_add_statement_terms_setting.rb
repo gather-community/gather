@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStatementTermsSetting < ActiveRecord::Migration[4.2]
   def up
     c = Community.find_by!(name: "Touchstone")

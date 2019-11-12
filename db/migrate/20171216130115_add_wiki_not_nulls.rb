@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddWikiNotNulls < ActiveRecord::Migration[4.2]
   def change
     change_column_null :wiki_pages, :created_at, false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePeopleGuardianships < ActiveRecord::Migration[4.2]
   def change
     create_table :people_guardianships do |t|

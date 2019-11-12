@@ -1,8 +1,10 @@
-class FakeCustomFieldActiveRecordModel < ActiveRecord::Base
+# frozen_string_literal: true
+
+class FakeCustomFieldActiveRecordModel < ApplicationRecord
   include CustomFields
 
   custom_fields :settings, spec: [
-    {key: "fruit", type: "enum", options: %w(apple banana peach), required: true},
+    {key: "fruit", type: "enum", options: %w[apple banana peach], required: true},
     {key: "info", type: "group", fields: [
       {key: "complete", type: "boolean"},
       {key: "comment", type: "string"}
@@ -11,8 +13,8 @@ class FakeCustomFieldActiveRecordModel < ActiveRecord::Base
 
   def self.create_table
     ActiveRecord::Base.connection.create_table(table_name, force: true) do |t|
-      t.column :foo, :string
-      t.column :settings, :jsonb
+      t.column(:foo, :string)
+      t.column(:settings, :jsonb)
     end
   end
 

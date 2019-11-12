@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # DEPRECATED: See ExportDecorator instead
 module Calendars
   module ExportsHelper
@@ -6,7 +8,7 @@ module Calendars
       link_to(url, class: "btn btn-default calendar-export") do
         content_tag(:span, class: "fa-stack") do
           icon_tag("calendar-o", class: "fa-stack-2x") <<
-          icon_tag("arrow-down", class: "fa-stack-1x")
+            icon_tag("arrow-down", class: "fa-stack-1x")
         end
       end
     end

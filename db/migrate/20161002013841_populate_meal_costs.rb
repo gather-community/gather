@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Meals::Cost < ApplicationRecord
   self.table_name = "meal_costs"
   belongs_to :meal, inverse_of: :cost

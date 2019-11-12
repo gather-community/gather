@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Meals::Meal do
@@ -28,7 +30,7 @@ describe Meals::Meal do
       expect(meal.reservations.count).to be > 0
       meal.cancel!
       expect(meal.reload).to be_cancelled
-      expect(meal.reservations.count).to eq 0
+      expect(meal.reservations.count).to eq(0)
     end
   end
 

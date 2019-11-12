@@ -124,14 +124,14 @@ module SystemSpecHelpers
     case mode
     when :dz_preview
       expect(page).to have_css("form.dropzone img[data-dz-thumbnail]", visible: true)
-      expect(page.find("form.dropzone img[data-dz-thumbnail]")["src"]).to match /base64/
+      expect(page.find("form.dropzone img[data-dz-thumbnail]")["src"]).to match(/base64/)
       expect(page).to have_no_css("form.dropzone img.existing", visible: true)
       expect(page).to have_css("form.dropzone a.delete", visible: true)
       expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
     when :existing
       expect(page).not_to have_css("form.dropzone img[data-dz-thumbnail]")
       expect(page).to have_css("form.dropzone img.existing", visible: true)
-      expect(page.find("form.dropzone img.existing")["src"]).to match path
+      expect(page.find("form.dropzone img.existing")["src"]).to match(path)
       expect(page).to have_css("form.dropzone a.delete", visible: true)
       expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
     when :upload_message
@@ -150,7 +150,7 @@ module SystemSpecHelpers
 
   def drop_in_dropzone(file_path)
     # Generate a fake input selector
-    page.execute_script <<-JS
+    page.execute_script(<<-JS)
       fakeFileInput = window.$('<input/>').attr(
         {id: 'fakeFileInput', type:'file'}
       ).appendTo('body');
@@ -158,7 +158,7 @@ module SystemSpecHelpers
     # Attach the file to the fake input selector with Capybara
     attach_file("fakeFileInput", file_path)
     # Trigger the fake drop event
-    page.execute_script <<-JS
+    page.execute_script(<<-JS)
       var e = jQuery.Event('drop', { dataTransfer : { files : [fakeFileInput.get(0).files[0]] } });
       $('.dropzone')[0].dropzone.listeners[0].events.drop(e);
     JS
@@ -170,7 +170,7 @@ module SystemSpecHelpers
 
   def wait_for_dropzone_upload
     Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until page.evaluate_script('!window.uploadView.isUploading()')
+      loop until page.evaluate_script("!window.uploadView.isUploading()")
     end
   end
 
@@ -205,19 +205,15 @@ module SystemSpecHelpers
   end
 
   def expect_confirm_on_reload
-    begin
-      accept_confirm { reload_page }
-    rescue Capybara::ModalNotFound
-      fail("Confirm dialog expected but not shown")
-    end
+    accept_confirm { reload_page }
+  rescue Capybara::ModalNotFound
+    raise("Confirm dialog expected but not shown")
   end
 
   def expect_no_confirm_on_reload
-    begin
-      accept_confirm { reload_page }
-      fail("Confirm dialog not expected but one was shown")
-    rescue Capybara::ModalNotFound
-    end
+    accept_confirm { reload_page }
+    raise("Confirm dialog not expected but one was shown")
+  rescue Capybara::ModalNotFound
   end
 
   def stub_omniauth(params)

@@ -27,7 +27,7 @@ module Billing
 
     def payment_badge(type)
       image = h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
-        class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
+                          class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
       link_method = "#{type}_link"
       respond_to?(link_method) ? send(link_method, image) : image
     end

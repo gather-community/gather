@@ -96,7 +96,7 @@ describe Reservations::Protocol do
       end
 
       it "does not apply timezone on retrieval" do
-        expect(p1.reload.fixed_start_time.hour).to eq 13
+        expect(p1.reload.fixed_start_time.hour).to eq(13)
       end
     end
 
@@ -104,7 +104,7 @@ describe Reservations::Protocol do
       let!(:p1) { create(:reservation_protocol, resources: [resource1], fixed_start_time: "13:00") }
 
       it "returns correct time" do
-        expect(p1.reload.fixed_start_time.hour).to eq 13
+        expect(p1.reload.fixed_start_time.hour).to eq(13)
       end
     end
   end

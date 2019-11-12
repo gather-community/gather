@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWorkAssignments < ActiveRecord::Migration[5.1]
   def change
     create_table :work_assignments do |t|

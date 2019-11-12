@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationControllable::Users
   extend ActiveSupport::Concern
 
@@ -9,7 +11,6 @@ module ApplicationControllable::Users
   def real_current_user
     @real_current_user || current_user
   end
-
 
   # alias_method :devise_current_user, :current_user
 

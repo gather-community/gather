@@ -36,8 +36,8 @@ module Reservations
           attrib == :base ? msg : "#{Reservation.human_attribute_name(attrib)}: #{msg}"
         end.join(", ")
         meal.errors.add(:base,
-          "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
-          "for this meal: #{errors}.")
+                        "The following error(s) occurred in making a #{reservation.resource_name} reservation "\
+                        "for this meal: #{errors}.")
       end
     end
 
@@ -84,7 +84,7 @@ module Reservations
     def reservation_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-        length: Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+                       length: Reservation::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

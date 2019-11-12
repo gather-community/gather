@@ -1,5 +1,6 @@
-class CreateWikiPages < ActiveRecord::Migration[4.2]
+# frozen_string_literal: true
 
+class CreateWikiPages < ActiveRecord::Migration[4.2]
   def self.up
     create_table :wiki_pages do |t|
       t.integer :creator_id
@@ -14,10 +15,10 @@ class CreateWikiPages < ActiveRecord::Migration[4.2]
     end
 
     add_index :wiki_pages, :creator_id
-    add_index :wiki_pages, :path, :unique => true
+    add_index :wiki_pages, :path, unique: true
 
     create_table :wiki_page_versions do |t|
-      t.integer :page_id, :null => false # Reference to page
+      t.integer :page_id, null: false # Reference to page
       t.integer :updator_id # Reference to user, updated page
 
       t.integer :number # Version number
@@ -40,5 +41,4 @@ class CreateWikiPages < ActiveRecord::Migration[4.2]
     drop_table :wiki_page_versions
     drop_table :wiki_pages
   end
-
 end

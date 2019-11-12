@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ApplicationJob
-  def error(job, exception)
+  def error(_job, exception)
     ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 
@@ -27,12 +29,10 @@ class ApplicationJob
   end
 
   def with_community_timezone(community)
-    begin
-      Time.zone = community.settings.time_zone
-      yield
-    ensure
-      Time.zone = "UTC"
-    end
+    Time.zone = community.settings.time_zone
+    yield
+  ensure
+    Time.zone = "UTC"
   end
 
   # Assumes there is a community_id instance variable on the object.

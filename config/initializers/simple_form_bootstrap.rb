@@ -23,7 +23,7 @@ module ButtonComponents
     submit(*args, &block)
   end
 end
-SimpleForm::FormBuilder.send :include, ButtonComponents
+SimpleForm::FormBuilder.include ButtonComponents
 
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationControllable::Loaders
   extend ActiveSupport::Concern
 

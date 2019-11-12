@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeliverAtToWorkReminderDeliveries < ActiveRecord::Migration[5.1]
   def change
     add_column :work_reminder_deliveries, :deliver_at, :datetime, null: false

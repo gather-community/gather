@@ -24,7 +24,7 @@ module Billing
     scope :in_community, ->(c) { joins(:account).merge(Billing::Account.in_community(c)) }
     scope :for_household, ->(h) { joins(account: :household).where("households.id = ?", h.id) }
     scope :for_community_or_household,
-      ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
+          ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
     scope :credit, -> { where("amount < 0") }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateReservationSharedGuidelines < ActiveRecord::Migration[4.2]
   def change
     create_table :reservation_shared_guidelines do |t|

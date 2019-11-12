@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class AddClusterIdCols < ActiveRecord::Migration[4.2]
-  TABLES = %w(accounts assignments formulas households invitations meals meals_costs
-    people_emergency_contacts people_guardianships people_vehicles reservation_guideline_inclusions
-    reservation_protocolings reservation_protocols reservation_resourcings reservation_shared_guidelines
-    reservations resources signups statements transactions users users_roles)
+  TABLES = %w[accounts assignments formulas households invitations meals meals_costs
+              people_emergency_contacts people_guardianships people_vehicles reservation_guideline_inclusions
+              reservation_protocolings reservation_protocols reservation_resourcings reservation_shared_guidelines
+              reservations resources signups statements transactions users users_roles].freeze
 
   def up
     initial_cluster_id = Cluster.first.id

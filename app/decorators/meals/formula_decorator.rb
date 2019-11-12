@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Meals
   class FormulaDecorator < ApplicationDecorator
     delegate_all
@@ -5,8 +7,8 @@ module Meals
     def name_with_suffix
       "".html_safe.tap do |str|
         str << name
-        str << " (#{t("common.default")})" if is_default?
-        str << " (#{t("common.inactive")})" if inactive?
+        str << " (#{t('common.default')})" if is_default?
+        str << " (#{t('common.inactive')})" if inactive?
       end
     end
 
@@ -39,9 +41,9 @@ module Meals
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_meals_formula_path(object),
-          method: :put, confirm: {name: name}),
+                                            method: :put, confirm: {name: name}),
         ActionLink.new(object, :destroy, icon: "trash", path: h.meals_formula_path(object),
-          method: :delete, confirm: {name: name})
+                                         method: :delete, confirm: {name: name})
       )
     end
   end

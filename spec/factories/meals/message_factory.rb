@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :meal_message, class: "Meals::Message" do
     meal

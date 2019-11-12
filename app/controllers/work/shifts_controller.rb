@@ -42,7 +42,7 @@ module Work
 
     def show
       @shift = Shift.find(params[:id])
-      authorize @shift
+      authorize(@shift)
       @meal = @shift.meal
     end
 
@@ -80,7 +80,7 @@ module Work
     def unsignup
       prepare_lenses_and_set_contextual_vars
       @shift = Shift.find(params[:id])
-      authorize @shift
+      authorize(@shift)
 
       if request.xhr?
         begin
@@ -119,19 +119,19 @@ module Work
     end
 
     def render_shift_and_synopsis_json
-      render json: {
+      render(json: {
         shift: render_to_string(partial: "shift", locals: {shift: shift}),
         synopsis: render_to_string(partial: "synopsis")
-      }
+      })
     end
 
     # We render shifts and pagination separately so we don't have to render the "choose as" dropdown
     # every refresh (saving a few database hits).
     def render_shifts_and_pagination_json
-      render json: {
+      render(json: {
         shifts: render_to_string(partial: "shifts"),
         pagination: render_to_string(partial: "pagination")
-      }
+      })
     end
 
     def sample_shift

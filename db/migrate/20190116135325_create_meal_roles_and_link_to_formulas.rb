@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Meals::RoleReminder < ActiveRecord::Base
+class Meals::RoleReminder < ApplicationRecord
   self.table_name = "meal_role_reminders"
   acts_as_tenant :cluster
 end

@@ -56,7 +56,7 @@ describe Meals::RoleReminderMaintainer do
           silly_reminder
           formula.update!(role_ids: formula.role_ids << silly_role.id)
           expect(deliveries.map(&:reminder)).to contain_exactly(hc_reminder, ac_reminder1,
-            ac_reminder2, silly_reminder)
+                                                                ac_reminder2, silly_reminder)
         end
       end
 

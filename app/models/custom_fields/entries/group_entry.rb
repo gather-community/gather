@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Entries
     # A set of Entrys corresponding to a GroupField in the Spec.
@@ -29,9 +31,7 @@ module CustomFields
         @model_name ||= ActiveModel::Name.new(self.class, nil, key.to_s)
       end
 
-      def keys
-        entries_by_key.keys
-      end
+      delegate :keys, to: :entries_by_key
 
       def value
         self
@@ -56,16 +56,12 @@ module CustomFields
         check_hash(new_hash)
         new_hash = new_hash.with_indifferent_access
         entries.each do |entry|
-          if new_hash.has_key?(entry.key)
-            entry.update(new_hash[entry.key], notify: false)
-          end
+          entry.update(new_hash[entry.key], notify: false) if new_hash.key?(entry.key)
         end
         notify_of_update if notify
       end
 
-      def notify_of_update
-        parent.notify_of_update
-      end
+      delegate :notify_of_update, to: :parent
 
       # Runs validations and sets error on parent GroupEntry if invalid
       def do_validation(parent)

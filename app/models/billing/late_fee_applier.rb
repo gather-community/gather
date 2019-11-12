@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Applies late fees to a given community based on a policy.
 module Billing
   class LateFeeApplier

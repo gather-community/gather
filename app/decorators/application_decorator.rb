@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationDecorator < Draper::Decorator
   include MultiCommunityCheck
 
@@ -34,7 +36,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def to_int_if_no_fractional_part(num)
     # Convert to integer if no fractional part so that .0 doesn't show.
-    (num - num.to_i < 0.0001) ? num.to_i : num
+    num - num.to_i < 0.0001 ? num.to_i : num
   end
 
   def join_icons(icons)

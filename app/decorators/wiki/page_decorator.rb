@@ -61,7 +61,7 @@ module Wiki
     end
 
     def history(versions)
-      h.render "history_table", page: self, versions: versions, with_form: versions.size > 1
+      h.render("history_table", page: self, versions: versions, with_form: versions.size > 1)
     end
 
     def data_fetch_error?
@@ -135,7 +135,7 @@ module Wiki
                   error.to_s.gsub(/\s*\^\s*\z/m, "")
                 end
       I18n.t("activerecord.errors.models.wiki/page.data_fetch.template_error",
-        details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
+             details: details.gsub("\n", ", ").gsub(/\s\s+/, " "))
     end
 
     def sample_page

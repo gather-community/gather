@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module People
   # Represents a birthday with an optional year. As opposed to user.birthdate, which is a regular date object.
   # Birthdays with no year have their years stored as 0004.
@@ -6,7 +8,7 @@ module People
     NO_YEAR = 4
 
     attr_accessor :invalid, :object
-    alias_method :invalid?, :invalid
+    alias invalid? invalid
 
     def initialize(object)
       self.object = object
@@ -39,8 +41,8 @@ module People
         year = nil
         begin
           # We pretend it's 2000 when we parse to that Feb 29 will parse properly
-          time = Timecop.freeze(Time.parse("2000-01-01")) do
-            Time.parse(@str) { |y| year = y } # Extract year if given.
+          time = Timecop.freeze(Time.parse("2000-01-01").utc) do
+            Time.parse(@str) { |y| year = y }.utc # rubocop:disable Rails/TimeZone
           end
           if year.nil?
             year = NO_YEAR
@@ -58,8 +60,6 @@ module People
     def age
       if full?
         today.year - date.year - (bday_this_year > today ? 1 : 0)
-      else
-        nil
       end
     end
 

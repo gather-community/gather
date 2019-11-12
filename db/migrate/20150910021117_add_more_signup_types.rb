@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMoreSignupTypes < ActiveRecord::Migration[4.2]
   def change
     rename_column :signups, :big_kid, :big_kid_meat

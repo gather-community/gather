@@ -9,11 +9,11 @@ describe Reservations::Rules::RequiresKindRule do
 
     it "should pass if reservation has kind" do
       reservation.kind = "personal"
-      expect(rule.check(reservation)).to be true
+      expect(rule.check(reservation)).to be(true)
     end
 
     it "should fail if reservation has no kind" do
-      expect(rule.check(reservation)).to eq [:kind, "can't be blank"]
+      expect(rule.check(reservation)).to eq([:kind, "can't be blank"])
     end
   end
 end

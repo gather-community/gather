@@ -1,6 +1,7 @@
-# Disable defaults
+require: rubocop-rails
+
 AllCops:
-  TargetRailsVersion: 4.2
+  TargetRailsVersion: 6.0
   Exclude:
     - "bin/**/*"
     - "db/schema.rb"

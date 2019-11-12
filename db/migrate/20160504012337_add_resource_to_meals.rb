@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class AddResourceToMeals < ActiveRecord::Migration[4.2]
   ID_MAP = {
     1 => 5,
     2 => 11,
     3 => 16,
     4 => 15
-  }
+  }.freeze
 
   def up
     add_reference :meals, :resource, index: true, foreign_key: true

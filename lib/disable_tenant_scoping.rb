@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Temporarily disables ActsAsTenant scoping.
 class DisableTenantScoping
   def initialize(app)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HouseholdDecorator < ApplicationDecorator
   delegate_all
 
@@ -6,7 +8,7 @@ class HouseholdDecorator < ApplicationDecorator
   end
 
   def name_with_prefix
-    suffix = "#{active? ? '' : ' (Inactive)'}"
+    suffix = (active? ? "" : " (Inactive)").to_s
     "#{cmty_prefix}#{object.name}#{suffix}"
   end
 
@@ -32,9 +34,7 @@ class HouseholdDecorator < ApplicationDecorator
       h.content_tag(:div, class: "pet") do
         lines = []
         lines << "#{pet.name} (#{pet.color} #{pet.species})"
-        if pet.vet.present?
-          lines << (h.content_tag(:span, "Vet", class: "inner-label") << pet.vet)
-        end
+        lines << (h.content_tag(:span, "Vet", class: "inner-label") << pet.vet) if pet.vet.present?
         if pet.caregivers.present?
           lines << (h.content_tag(:span, "Caregivers", class: "inner-label") << pet.caregivers)
         end
@@ -56,9 +56,9 @@ class HouseholdDecorator < ApplicationDecorator
   def edit_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_household_path(object),
-        method: :put, confirm: {name: name}),
+                                          method: :put, confirm: {name: name}),
       ActionLink.new(object, :destroy, icon: "trash", path: h.household_path(object), method: :delete,
-        confirm: {name: name})
+                                       confirm: {name: name})
     )
   end
 end

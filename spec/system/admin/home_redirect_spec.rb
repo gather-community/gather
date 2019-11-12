@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "home redirect" do
-
   before do
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
@@ -38,7 +39,7 @@ describe "home redirect" do
   end
 
   def change_default_home(new_default)
-    visit "/admin/settings/community"
+    visit("/admin/settings/community")
     select(new_default, from: "Default Landing Page")
     click_button("Save")
     expect(page).to have_content("Settings updated successfully.")

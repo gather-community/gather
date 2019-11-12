@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeWorkAssignmentsToAssociateToShifts < ActiveRecord::Migration[5.1]
   def change
     drop_table :work_assignments

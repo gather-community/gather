@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Utils
   # Removes all data from the current cluster, except for non-fake users and their households.
   class DataRemover
@@ -7,7 +9,7 @@ module Utils
 
     def remove
       to_destroy_all = [Billing::Account, Meals::Meal, Meals::Formula, Reservations::Reservation,
-        Reservations::Protocol, Reservations::Resource, Reservations::SharedGuidelines]
+                        Reservations::Protocol, Reservations::Resource, Reservations::SharedGuidelines]
       to_destroy_all.each { |c| c.destroy_all }
 
       non_fake_household_ids = User.where(fake: false).pluck(:household_id)

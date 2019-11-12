@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMealFkToReservations < ActiveRecord::Migration[4.2]
   def up
     add_reference :reservations, :meal, foreign_key: true, index: true

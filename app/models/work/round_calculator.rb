@@ -36,7 +36,7 @@ module Work
 
     delegate :period, to: :target_share
     delegate :shares, :quota, :auto_open_time, :workers_per_round,
-      :round_duration, :max_rounds_per_worker, to: :period
+             :round_duration, :max_rounds_per_worker, to: :period
 
     def ensure_key_params
       if auto_open_time.blank? || workers_per_round.blank? ||

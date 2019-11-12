@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module Meals
   module Statusable
     extend ActiveSupport::Concern
 
     AUTO_CLOSE_LEAD_TIME = 1.day
-    STATUSES = %i(open closed finalized cancelled)
+    STATUSES = %i[open closed finalized cancelled].freeze
 
     included do
       scope :open, -> { where(status: "open") }
       scope :not_cancelled, -> { where.not(status: "cancelled") }
-      scope :finalizable, -> { past.where.not(status: ["finalized", "cancelled"]) }
+      scope :finalizable, -> { past.where.not(status: %w[finalized cancelled]) }
       scope :past, -> { where("served_at <= ?", Time.current.midnight) }
       scope :future, -> { where("served_at >= ?", Time.current.midnight) }
       scope :future_or_recent, ->(t) { where("served_at >= ?", Time.current.midnight - t) }

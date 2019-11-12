@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe People::Guardianship do
@@ -5,12 +7,12 @@ describe People::Guardianship do
     context "child user" do
       it "works with one guardian" do
         child = build(:user, :child, guardians: [create(:user)])
-        expect(child.valid?).to be true
+        expect(child.valid?).to be(true)
       end
 
       it "works with two guardians" do
         child = build(:user, :child, guardians: create_list(:user, 2))
-        expect(child.valid?).to be true
+        expect(child.valid?).to be(true)
       end
 
       it "fails with zero guardians" do
@@ -22,12 +24,12 @@ describe People::Guardianship do
     context "adult user" do
       it "works with children" do
         adult = build(:user, children: create_list(:user, 2, :child))
-        expect(adult.valid?).to be true
+        expect(adult.valid?).to be(true)
       end
 
       it "works with no children" do
         adult = build(:user, children: [])
-        expect(adult.valid?).to be true
+        expect(adult.valid?).to be(true)
       end
 
       it "raises error if has guardians" do

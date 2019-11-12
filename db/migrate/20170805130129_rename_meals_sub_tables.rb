@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameMealsSubTables < ActiveRecord::Migration[4.2]
   def change
     rename_table :meals_formulas, :meal_formulas

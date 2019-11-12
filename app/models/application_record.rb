@@ -28,15 +28,13 @@ class ApplicationRecord < ActiveRecord::Base
   def repeatable_read_transaction_with_retries(max_tries: 10)
     tries = 0
     loop do
-      begin
-        transaction(isolation: :repeatable_read) do
-          yield
-        end
-        break
-      rescue ActiveRecord::SerializationFailure => ex
-        tries += 1
-        raise ex if tries >= max_tries
+      transaction(isolation: :repeatable_read) do
+        yield
       end
+      break
+    rescue ActiveRecord::SerializationFailure => e
+      tries += 1
+      raise e if tries >= max_tries
     end
   end
 end

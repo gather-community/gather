@@ -2,7 +2,7 @@
 
 require "rspec/expectations"
 
-RSpec::Matchers.define(:have_apex_domain) do |subdomain|
+RSpec::Matchers.define(:have_apex_domain) do |_subdomain|
   match do |url|
     url =~ %r{\Ahttp://#{Settings.url.host}}
   end

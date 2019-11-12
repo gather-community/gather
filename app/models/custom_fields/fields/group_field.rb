@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Fields
     # Models the definition of single group field, which is a field composed of sub-fields.

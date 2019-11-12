@@ -13,6 +13,6 @@ class UnifyReminderTables < ActiveRecord::Migration[5.1]
 
     # Add check constraint to require exactly one of role_id or job_id.
     add_check_constraint :reminders,
-      "(role_id IS NOT NULL AND job_id is NULL) OR (job_id IS NOT NULL AND role_id is NULL)"
+                         "(role_id IS NOT NULL AND job_id is NULL) OR (job_id IS NOT NULL AND role_id is NULL)"
   end
 end

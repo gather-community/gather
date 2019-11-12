@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   module Fields
     class BooleanField < Field
@@ -8,12 +10,10 @@ module CustomFields
       def normalize(value)
         if value == true || value == false
           value
-        elsif %w(1 true).include?(value.to_s)
+        elsif %w[1 true].include?(value.to_s)
           true
-        elsif %w(0 false).include?(value.to_s)
+        elsif %w[0 false].include?(value.to_s)
           false
-        else
-          nil
         end
       end
 

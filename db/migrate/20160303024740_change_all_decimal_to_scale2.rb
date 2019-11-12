@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeAllDecimalToScale2 < ActiveRecord::Migration[4.2]
   def up
     change_column :accounts, :balance_due, :decimal, precision: 10, scale: 2

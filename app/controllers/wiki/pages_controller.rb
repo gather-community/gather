@@ -132,7 +132,7 @@ module Wiki
       page.formatted_content
       return unless page.data_fetch_error?
       flash.now[:error] = I18n.t("activerecord.errors.models.wiki/page.data_fetch.main",
-        error: page.data_fetch_error)
+                                 error: page.data_fetch_error)
       params.delete(:preview)
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMealHostableToResources < ActiveRecord::Migration[4.2]
   def change
     add_column :resources, :meal_hostable, :boolean, null: false, default: false

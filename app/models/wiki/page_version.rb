@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wiki
   class PageVersion < ApplicationRecord
     acts_as_tenant :cluster
@@ -11,15 +13,15 @@ module Wiki
       first = first.to_i
       last = last.to_i
       first, last = last, first if last < first
-      where('number >= ? AND number <= ?', first, last)
+      where("number >= ? AND number <= ?", first, last)
     end
 
     def next
-      self.class.first conditions: ["id > ? AND page_id = ?", id, page_id], order: 'id ASC'
+      self.class.first(conditions: ["id > ? AND page_id = ?", id, page_id], order: "id ASC")
     end
 
     def previous
-      self.class.first conditions: ["id < ? AND page_id = ?", id, page_id], order: 'id DESC'
+      self.class.first(conditions: ["id < ? AND page_id = ?", id, page_id], order: "id DESC")
     end
 
     private

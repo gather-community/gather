@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomFields
   # Abstract class. Models a concrete set of chosen config values for a given ConfigSpec.
   class Instance
@@ -7,10 +9,10 @@ module CustomFields
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :[], :[]=,
-      :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
+             :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
-      raise ArgumentError.new("instance_data is required") if instance_data.nil?
+      raise ArgumentError, "instance_data is required" if instance_data.nil?
       self.spec = spec
       self.host = host
       self.root = Entries::RootEntry.new(
@@ -51,9 +53,7 @@ module CustomFields
     # passed down. If we are on an AR model though, we need to explicitly call write_attribute when
     # the hash is updated b/c AR seems to store a copy of the hash, not the referenced one.
     def notify_of_update
-      if host.respond_to?(:write_attribute)
-        host.write_attribute(attrib_name, hash)
-      end
+      host.write_attribute(attrib_name, hash) if host.respond_to?(:write_attribute)
     end
 
     # This is so that form point to update instead of create

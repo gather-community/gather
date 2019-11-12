@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePeopleGroups < ActiveRecord::Migration[5.1]
   def change
     create_table :people_groups do |t|
@@ -10,7 +12,7 @@ class CreatePeopleGroups < ActiveRecord::Migration[5.1]
 
     add_index :people_groups, :community_id
     add_index :people_groups, :cluster_id
-    add_index :people_groups, [:cluster_id, :community_id, :name], unique: true
+    add_index :people_groups, %i[cluster_id community_id name], unique: true
     add_foreign_key :people_groups, :communities
     add_foreign_key :people_groups, :clusters
   end

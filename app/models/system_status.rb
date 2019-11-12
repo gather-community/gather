@@ -21,8 +21,8 @@ class SystemStatus
     return @database_up if defined?(@database_up)
     @database_up = begin
       Cluster.count && true
-    rescue ActiveRecord::StatementInvalid
-      false
+                   rescue ActiveRecord::StatementInvalid
+                     false
     end
   end
 

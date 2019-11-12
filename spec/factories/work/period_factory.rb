@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :work_period, class: "Work::Period" do
     sequence(:name) { |n| "#{Faker::Lorem.word.capitalize} #{n}" }

@@ -25,12 +25,12 @@ module Meals
 
       else
         form.select(:household_id, household&.decorate&.selected_option_tag || "", {},
-          class: "form-control", data: {"select2-src" => h.households_path,
-                                        "select2-label-attr" => "name_with_prefix",
-                                        "select2-prompt" => t("select2.prompts.household"),
-                                        "select2-placeholder" => t("select2.placeholders.household"),
-                                        "select2-context" => "meal_form",
-                                        "select2-allow-clear" => true}) <<
+                    {class: "form-control", data: {"select2-src" => h.households_path,
+                                                   "select2-label-attr" => "name_with_prefix",
+                                                   "select2-prompt" => t("select2.prompts.household"),
+                                                   "select2-placeholder" => t("select2.placeholders.household"),
+                                                   "select2-context" => "meal_form",
+                                                   "select2-allow-clear" => true}}) <<
           (form.error(:household_id) || "")
       end
     end

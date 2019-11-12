@@ -1,24 +1,26 @@
+# frozen_string_literal: true
+
 class UploadsController < ApplicationController
-  UPLOADABLES = {user: [:photo], "reservations/resource": [:photo]}
+  UPLOADABLES = {user: [:photo], "reservations/resource": [:photo]}.freeze
 
   def create
-    authorize Upload
+    authorize(Upload)
     if object = build_tmp_object
       object.send("#{params[:attribute]}=", params[:file])
       if (errors = object.errors.full_messages_for(params[:attribute].to_sym)).any?
-        render plain: errors.join(", "), status: 422
+        render(plain: errors.join(", "), status: :unprocessable_entity)
       else
         object.send(params[:attribute]).save_tmp
-        head :ok
+        head(:ok)
       end
     end
   end
 
   def destroy
-    authorize Upload
+    authorize(Upload)
     object = build_tmp_object
     object.send(params[:attribute]).destroy
-    head :ok
+    head(:ok)
   end
 
   private
@@ -26,10 +28,10 @@ class UploadsController < ApplicationController
   def verify_params
     uploadable_attrs = UPLOADABLES[params[:model].to_sym]
     if uploadable_attrs.nil?
-      render plain: 'Invalid model', status: 403
+      render(plain: "Invalid model", status: :forbidden)
       false
     elsif !uploadable_attrs.include?(params[:attribute].to_sym)
-      render plain: 'Invalid attribute', status: 403
+      render(plain: "Invalid attribute", status: :forbidden)
       false
     else
       true

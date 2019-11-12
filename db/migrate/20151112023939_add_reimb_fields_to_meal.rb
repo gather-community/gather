@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddReimbFieldsToMeal < ActiveRecord::Migration[4.2]
   def change
     add_column :meals, :ingredient_cost, :decimal, precision: 10, scale: 3

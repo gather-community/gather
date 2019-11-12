@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCreditCols < ActiveRecord::Migration[4.2]
   def change
     unless column_exists?(:households, :credit_limit)

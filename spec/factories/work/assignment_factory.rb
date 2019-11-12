@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-  factory :work_assignment, class: 'Work::Assignment' do
+  factory :work_assignment, class: "Work::Assignment" do
     association :shift, factory: :work_shift
     user
   end

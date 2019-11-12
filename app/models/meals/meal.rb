@@ -180,7 +180,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at > ? OR served_at = ? AND
           (communities.name > ? OR communities.name = ? AND meals.id > ?)",
-          served_at, served_at, community_name, community_name, id)
+               served_at, served_at, community_name, community_name, id)
     end
 
     # Returns a relation for all meals before the current one.
@@ -189,7 +189,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at < ? OR served_at = ? AND
           (communities.name < ? OR communities.name = ? AND meals.id < ?)",
-          served_at, served_at, community_name, community_name, id)
+               served_at, served_at, community_name, community_name, id)
     end
 
     def allergen?(allergen)

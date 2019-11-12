@@ -5,8 +5,8 @@ module Billing
     delegate_all
 
     delegate :paypal_me, :paypal_email, :paypal_friend?,
-      :check_payee, :check_address, :check_dropoff, :cash_dropoff, :additional_info,
-      :show_billing_contact, to: :payment_settings
+             :check_payee, :check_address, :check_dropoff, :cash_dropoff, :additional_info,
+             :show_billing_contact, to: :payment_settings
 
     def payment_settings
       community.settings.billing.payment_methods
@@ -15,7 +15,7 @@ module Billing
     def payment_badge(type)
       return unless send("pay_with_#{type}?")
       image = h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
-        class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
+                          class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
       payment_link(type, image)
     end
 

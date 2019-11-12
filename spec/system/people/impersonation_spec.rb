@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "user impersonation" do
@@ -25,7 +27,6 @@ describe "user impersonation" do
     expect(page).not_to have_impersonation_header
     expect(page).to have_signed_in_user(actor)
   end
-
 
   def have_impersonation_header
     have_content("You are impersonating Flo Flim.")

@@ -79,6 +79,8 @@ module Gather
 
     config.active_record.belongs_to_required_by_default = false
 
+    config.active_storage.variant_processor = :vips
+
     config.cache_store = :redis_cache_store, {url: "redis://localhost:6379/0"}
 
     config.hosts << /([a-z0-9\-]+\.)?#{Settings.url.host}/

@@ -53,7 +53,9 @@ FactoryBot.define do
     end
 
     trait :with_photo do
-      photo { File.open("#{Rails.root}/spec/fixtures/cooper.jpg") }
+      after(:build) do |user|
+        user.photo.attach(io: File.open("#{Rails.root}/spec/fixtures/cooper.jpg"),
+                          filename: "cooper.jpg")
     end
 
     trait :unconfirmed do

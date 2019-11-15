@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock "3.11.0"
+lock "3.11.2"
 
 abort("Please set REV environment variable to indicate the git revision you want to deploy") unless ENV["REV"]
 set :branch, ENV["REV"]

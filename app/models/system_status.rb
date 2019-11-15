@@ -51,7 +51,8 @@ class SystemStatus
     return @redis_up if defined?(@redis_up)
     @redis_up =
       begin
-        Rails.cache.stats && true
+        Rails.cache.redis.get("__foo__") # Force connection to be established
+        Rails.cache.redis.connected?
       rescue Redis::CannotConnectError
         false
       end

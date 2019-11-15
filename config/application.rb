@@ -79,7 +79,7 @@ module Gather
 
     config.active_record.belongs_to_required_by_default = false
 
-    config.cache_store = :redis_store, "redis://localhost:6379/0/cache", {expires_in: 90.minutes}
+    config.cache_store = :redis_cache_store, {url: "redis://localhost:6379/0"}
 
     config.hosts << /([a-z0-9\-]+\.)?#{Settings.url.host}/
 

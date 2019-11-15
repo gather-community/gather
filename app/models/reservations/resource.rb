@@ -18,11 +18,7 @@ module Reservations
     has_many :reservations, inverse_of: :resource, class_name: "Reservations::Reservation",
                             dependent: :destroy
 
-    has_attached_file :photo,
-                      styles: {thumb: "220x165#"},
-                      default_url: "missing/reservations/resources/:style.png"
-    validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
-    validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
+    has_one_attached :photo
 
     validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?

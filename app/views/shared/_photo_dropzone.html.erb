@@ -1,6 +1,5 @@
-<% photo_path = obj.photo.url(format, allow_tmp: true) %>
 <% hide_existing = local_assigns[:hide_existing] %>
-<% photo_present = !hide_existing && photo_path !~ %r{^missing/} %>
+<% photo_present = !hide_existing && obj.photo.attached? %>
 <%= form_tag "/uploads", data: {width: width, height: height}, class: "dropzone
     #{photo_present ? 'has-existing' : ''}
     #{obj.photo_destroy? ? 'existing-deleted' : ''}" do %>
@@ -9,7 +8,7 @@
   <%= hidden_field_tag(:tmp_id, obj.photo_tmp_id) %>
   <%= hidden_field_tag(:id, obj.id) %>
   <%= link_to(icon_tag("trash"), "#", class: "delete") %>
-  <%= image_tag(photo_path, class: "existing") %>
+  <%= image_tag(obj.photo_variant(format), class: "existing") %>
   <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
   <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
     <span>Click or Drag<br/>Photo Here</span>

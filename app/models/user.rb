@@ -117,11 +117,7 @@ class User < ApplicationRecord
   validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
 
-  has_attached_file :photo,
-                    styles: {thumb: "150x150#", medium: "300x300#"},
-                    default_url: "missing/users/:style.png"
-  validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
-  validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
+  has_one_attached :photo
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true

@@ -17,7 +17,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
     # Should match $thumbnail-size in dropzone.scss
     width = @dzForm.data('width')
     height = @dzForm.data('height')
-    view = @
+    view = this
     @dropzone = new Dropzone @dzForm.get(0),
       maxFiles: 1
       maxFilesize: @params.maxFilesize
@@ -26,6 +26,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
       init: ->
         dz = this
         dz.on 'addedfile', (file) -> view.fileAdded.apply(view, [file, dz])
+        dz.on 'success', (file, response) -> view.fileUploaded.apply(view, [file, response, dz])
 
   events:
     'click a.delete': 'delete'
@@ -35,20 +36,16 @@ Gather.Views.FileUploadView = Backbone.View.extend
     @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
     @setMainPhotoDestroyFlag(false)
 
+  fileUploaded: (file, response, dz) ->
+    @mainForm.find('[id$=_photo_new_signed_id]').val(response.blob_id)
+    @mainForm.find('[id$=_photo_destroy]').val('')
+
   delete: (e) ->
     e.preventDefault()
-    @deleteTmpFile()
-    @setMainPhotoDestroyFlag(true)
+    @mainForm.find('[id$=_photo_new_signed_id]').val('')
+    @mainForm.find('[id$=_photo_destroy]').val('1')
     @dzForm.addClass('existing-deleted')
-
-  deleteTmpFile: ->
-    if @hasNewFile()
-      @dropzone.removeFile(@dropzone.files[0])
-      $.post "/uploads/#{@tmpId}",
-        _method: "DELETE"
-        model: @model
-        attribute: @attribute
-        tmp_id: @tmpId
+    @dropzone.removeFile(@dropzone.files[0]) if @hasNewFile()
 
   hasNewFile: ->
     !!@dropzone.files[0]

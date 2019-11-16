@@ -1,52 +1,11 @@
 # frozen_string_literal: true
 
 class UploadsController < ApplicationController
-  UPLOADABLES = {user: [:photo], "reservations/resource": [:photo]}.freeze
-
+  # Accepts uploaded files and stores them as Blobs, returning the signed_id for use in forms.
   def create
-    authorize(Upload)
-    if object = build_tmp_object
-      object.send("#{params[:attribute]}=", params[:file])
-      if (errors = object.errors.full_messages_for(params[:attribute].to_sym)).any?
-        render(plain: errors.join(", "), status: :unprocessable_entity)
-      else
-        object.send(params[:attribute]).save_tmp
-        head(:ok)
-      end
-    end
-  end
-
-  def destroy
-    authorize(Upload)
-    object = build_tmp_object
-    object.send(params[:attribute]).destroy
-    head(:ok)
-  end
-
-  private
-
-  def verify_params
-    uploadable_attrs = UPLOADABLES[params[:model].to_sym]
-    if uploadable_attrs.nil?
-      render(plain: "Invalid model", status: :forbidden)
-      false
-    elsif !uploadable_attrs.include?(params[:attribute].to_sym)
-      render(plain: "Invalid attribute", status: :forbidden)
-      false
-    else
-      true
-    end
-  end
-
-  def build_tmp_object
-    if verify_params
-      object = params[:model].camelize.constantize.new
-      set_tmp_id_on(object)
-    end
-  end
-
-  def set_tmp_id_on(object)
-    object.send("#{params[:attribute]}_tmp_id=", params[:tmp_id])
-    object
+    authorize(Upload.new)
+    blob = ActiveStorage::Blob.create_after_upload!(io: params[:file].open,
+                                                    filename: params[:file].original_filename)
+    render(json: {blob_id: blob.signed_id}, status: :created)
   end
 end

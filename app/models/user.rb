@@ -23,7 +23,7 @@
 # 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
 #    sign in invite, signs in, is confirmed
 class User < ApplicationRecord
-  include PhotoDestroyable
+  include AttachmentFormable
   include Phoneable
   include Deactivatable
 

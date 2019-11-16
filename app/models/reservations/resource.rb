@@ -4,7 +4,7 @@ module Reservations
   # Something that can be reserved.
   class Resource < ApplicationRecord
     include Deactivatable
-    include PhotoDestroyable
+    include AttachmentFormable
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
 

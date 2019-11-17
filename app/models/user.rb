@@ -118,6 +118,8 @@ class User < ApplicationRecord
   validate { birthday.validate }
 
   has_one_attached :photo
+  validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
+  validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true

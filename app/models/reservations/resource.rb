@@ -19,6 +19,8 @@ module Reservations
                             dependent: :destroy
 
     has_one_attached :photo
+    validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
+    validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
 
     validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?

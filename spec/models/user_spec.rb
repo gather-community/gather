@@ -232,11 +232,7 @@ describe User do
 
   describe "photo" do
     it "should be created by factory when requested" do
-      expect(create(:user, :with_photo).photo.size).to be > 0
-    end
-
-    it "should return missing image when no photo" do
-      expect(create(:user).photo(:medium)).to eq("missing/users/medium.png")
+      expect(create(:user, :with_photo).photo).to be_attached
     end
   end
 

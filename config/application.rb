@@ -79,7 +79,8 @@ module Gather
 
     config.active_record.belongs_to_required_by_default = false
 
-    config.active_storage.variant_processor = :vips
+    # Ubuntu Xenial doesn't have a new enough libvips package and don't want to compile everytime.
+    config.active_storage.variant_processor = ENV["TRAVIS"] ? :mini_magick : :vips
 
     config.cache_store = :redis_cache_store, {url: "redis://localhost:6379/0"}
 

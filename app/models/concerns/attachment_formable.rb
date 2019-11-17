@@ -10,7 +10,7 @@ module AttachmentFormable
     attr_reader :photo_new_signed_id
 
     before_save do
-      photo.destroy if photo_destroy? && photo.attached?
+      photo.purge if photo_destroy? && photo.attached?
     end
   end
 

@@ -400,7 +400,7 @@ describe UserPolicy do
           .concat(nested_hhold_attribs)}
       ]
     end
-    let(:photographer_attribs) { %i[photo photo_tmp_id] }
+    let(:photographer_attribs) { %i[photo_new_signed_id photo_destroy] }
     let(:admin_attribs) do
       base_attribs + [
         :google_email, :role_admin, :role_biller, :role_photographer,

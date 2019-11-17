@@ -126,7 +126,6 @@ class User < ApplicationRecord
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
-  before_destroy { photo.destroy }
   after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)

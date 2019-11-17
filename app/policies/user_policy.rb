@@ -110,7 +110,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    return %i[photo photo_tmp_id] if update_photo? && !update_info?
+    return %i[photo_new_signed_id photo_destroy] if update_photo? && !update_info?
 
     # We don't include household_id here because that must be set explicitly because the admin
     # community check relies on it.

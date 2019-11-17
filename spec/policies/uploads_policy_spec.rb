@@ -6,7 +6,7 @@ describe UploadPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    permissions :create?, :destroy? do
+    permissions :create? do
       it "permits active users" do
         expect(subject).to permit(user, Upload)
       end

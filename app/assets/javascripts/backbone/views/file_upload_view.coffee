@@ -42,6 +42,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
 
   delete: (e) ->
     e.preventDefault()
+    @setMainPhotoDestroyFlag(true)
     @mainForm.find('[id$=_photo_new_signed_id]').val('')
     @mainForm.find('[id$=_photo_destroy]').val('1')
     @dzForm.addClass('existing-deleted')

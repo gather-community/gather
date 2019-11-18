@@ -6,7 +6,7 @@ FactoryBot.define do
   factory :user do
     transient do
       community { nil }
-      photo_path { fixture_file_path("cooper.jpg") }
+      photo_path { Rails.root.join("spec", "fixtures", "cooper.jpg") }
     end
 
     first_name { Faker::Name.first_name }

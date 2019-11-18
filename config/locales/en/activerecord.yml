@@ -179,8 +179,8 @@ en:
         data_source: "Data Source"
     errors:
       messages:
-        invalid_content_type: "has incorrect type"
-        too_big: "is too big"
+        invalid_content_type: "File is incorrect type"
+        too_big: "File is too big (maximum %{max} MiB)"
       models:
         household:
           name:

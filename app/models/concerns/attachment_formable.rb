@@ -52,7 +52,7 @@ module AttachmentFormable
     self.class.attachment_size_limits.each do |attrib, limit|
       next unless send(attrib).attached?
       next if send(attrib).blob.byte_size < limit
-      errors.add(attrib, :too_big)
+      errors.add(attrib, :too_big, max: limit / 1.megabyte)
     end
   end
 end

@@ -103,7 +103,7 @@ class UserDecorator < ApplicationDecorator
   end
 
   def photo_variant(format, suppress: false)
-    return "missing/users/#{format}.png" if suppress || !photo.attached?
+    return "missing/users/#{format}.png" if suppress || !photo.attached? || !photo.variable?
     case format
     when :thumb then photo.variant(resize_to_fill: [150, 150])
     when :medium then photo.variant(resize_to_fill: [300, 300])

@@ -1,12 +1,17 @@
 <% hide_existing = local_assigns[:hide_existing] %>
 <% photo_present = !hide_existing && obj.photo.attached? %>
-<%= form_tag(uploads_path, data: {width: width, height: height}, class: "dropzone
-    #{photo_present ? 'has-existing' : ''}
-    #{obj.photo_destroy? ? 'existing-deleted' : ''}") do %>
-  <%= link_to(icon_tag("trash"), "#", class: "delete") %>
-  <%= image_tag(obj.photo_variant(format), class: "existing") %>
-  <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
-  <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
-    <span>Click or Drag<br/>Photo Here</span>
-  </div>
+<%= content_tag(:div, data: {width: width, height: height}, class: "dropzone") do %>
+  <%= form_tag(uploads_path, class: "dropzone-form #{photo_present ? 'has-existing' : ''}
+        #{obj.photo_destroy? ? 'existing-deleted' : ''}") do %>
+    <%= link_to(icon_tag("trash"), "#", class: "delete") %>
+    <%= image_tag(obj.photo_variant(format), class: "existing") %>
+    <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
+    <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
+      <span>Click or Drag<br/>Photo Here</span>
+    </div>
+  <% end %>
+  <%= gather_form_for(obj, width: :full, top_error_notification: false,
+                           html: {class: "dropzone-error-form"}) do |f| %>
+    <%= f.error(:photo) %>
+  <% end %>
 <% end %>

@@ -23,10 +23,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    window.uploadView = new Gather.Views.FileUploadView(<%=json(
-      el: '#resource-forms',
-      maxFilesize: Settings.photos.max_size_mb / 1
-    )%>);
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#resource-forms')%>);
     new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});
   });
 <% end %>

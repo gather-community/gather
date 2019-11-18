@@ -1,8 +1,9 @@
 Gather.Views.FileUploadView = Backbone.View.extend
 
   initialize: (params) ->
-    @dzForm = @$('.dropzone')
-    @mainForm = @$('form:not(.dropzone)')
+    @dzForm = @$('.dropzone-form')
+    @mainForm = @$('form:not(.dropzone-form):not(.dropzone-error-form)')
+    @errorForm = @$('.dropzone-error-form')
     @params = params
     @mainPhotoDestroy = false
 
@@ -20,7 +21,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
     view = this
     @dropzone = new Dropzone @dzForm.get(0),
       maxFiles: 1
-      maxFilesize: @params.maxFilesize
+      maxFilesize: null # Handle this on the server side. Was not working properly on client side.
       thumbnailWidth: width
       thumbnailHeight: height
       init: ->
@@ -39,6 +40,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
   fileUploaded: (file, response, dz) ->
     @mainForm.find('[id$=_photo_new_signed_id]').val(response.blob_id)
     @mainForm.find('[id$=_photo_destroy]').val('')
+    @errorForm.hide()
 
   delete: (e) ->
     e.preventDefault()

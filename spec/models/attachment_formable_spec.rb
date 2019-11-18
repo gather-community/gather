@@ -14,7 +14,7 @@ describe AttachmentFormable do
 
       context "with invalid type" do
         let(:path) { fixture_file_path("article.pdf") }
-        it { is_expected.to have_errors(photo: "has incorrect type") }
+        it { is_expected.to have_errors(photo: "File is incorrect type") }
       end
 
       context "with no attachment" do
@@ -31,7 +31,7 @@ describe AttachmentFormable do
 
       context "with too big file" do
         let(:path) { fixture_file_path("9mb.jpg") }
-        it { is_expected.to have_errors(photo: "is too big") }
+        it { is_expected.to have_errors(photo: "File is too big \\(maximum 8 MiB\\)") }
       end
 
       context "with no attachment" do

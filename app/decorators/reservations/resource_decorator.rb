@@ -21,7 +21,7 @@ module Reservations
     end
 
     def photo_variant(format)
-      return "missing/reservations/resources/#{format}.png" unless photo.attached?
+      return "missing/reservations/resources/#{format}.png" unless photo.attached? && photo.variable?
       case format
       when :thumb then photo.variant(resize_to_fill: [220, 165])
       else raise "Unknown photo format #{format}"

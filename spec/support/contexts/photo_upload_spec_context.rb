@@ -43,7 +43,7 @@ shared_context "photo uploads" do
       scenario "wrong format", js: true do
         visit(edit_path)
         drop_in_dropzone(fixture_file_path("article.pdf"))
-        expect(page).to have_css("form.dropzone .dz-error-message", text: /Photo has incorrect type/)
+        expect(page).to have_css("form.dropzone .dz-error-message", text: /File is incorrect type/)
       end
     end
   end

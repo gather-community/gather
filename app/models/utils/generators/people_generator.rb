@@ -72,20 +72,21 @@ module Utils
             age = File.basename(path, ".jpg").to_i
             next if age >= 16
             bday = Faker::Date.birthday(age, age + 1)
-            build(:user, :child, :with_random_password,
-                  fake: true,
-                  household: household,
-                  first_name: Faker::Name.unisex_name,
-                  last_name: bool_prob(90) ? last_name : last_names.pop,
-                  email: nil,
-                  google_email: nil,
-                  mobile_phone: nil,
-                  guardians: adults,
-                  birthdate: bday,
-                  photo: photos ? File.open(path) : nil,
-                  joined_on: [bday, joined].max,
-                  created_at: community.created_at,
-                  updated_at: community.updated_at)
+            kid = build(:user, :child, :with_random_password,
+              fake: true,
+              household: household,
+              first_name: Faker::Name.unisex_name,
+              last_name: bool_prob(90) ? last_name : last_names.pop,
+              email: nil,
+              google_email: nil,
+              mobile_phone: nil,
+              guardians: adults,
+              birthdate: bday,
+              joined_on: [bday, joined].max,
+              created_at: community.created_at,
+              updated_at: community.updated_at)
+            kid.photo.attach(io: File.open(path), filename: File.basename(path)) if photos
+            kid
           end.compact
 
           users.concat(adults)

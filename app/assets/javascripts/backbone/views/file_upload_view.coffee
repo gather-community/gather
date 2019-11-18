@@ -1,8 +1,8 @@
 Gather.Views.FileUploadView = Backbone.View.extend
 
   initialize: (params) ->
-    @dzForm = @$('.dropzone-form')
-    @mainForm = @$('form:not(.dropzone-form):not(.dropzone-error-form)')
+    @dzForm = @$('.dropzone')
+    @mainForm = @$('form:not(.dropzone):not(.dropzone-error-form)')
     @errorForm = @$('.dropzone-error-form')
     @params = params
     @mainPhotoDestroy = false

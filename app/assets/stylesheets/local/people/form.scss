@@ -1,9 +1,9 @@
 .users {
-  .dropzone[data-width="150"] {
+  .dropzone-wrapper[data-width="150"] {
     @include dropzone(150px, 150px);
   }
 
-  .dropzone[data-width="300"] {
+  .dropzone-wrapper[data-width="300"] {
     @include dropzone(300px, 300px);
   }
 

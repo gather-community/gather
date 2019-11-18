@@ -68,13 +68,13 @@
   /////////////////////////////////////////////////////////////////////////////////////
   // Show and hide message, existing thumbnail, and delete link depending on state
 
-  .dropzone-form.has-existing {
+  .dropzone.has-existing {
     img.existing {
       display: block;
     }
   }
 
-  .dropzone-form, .dropzone-form.has-existing.existing-deleted {
+  .dropzone, .dropzone.has-existing.existing-deleted {
     .dz-message {
       display: block;
     }
@@ -86,7 +86,7 @@
     }
   }
 
-  .dropzone-form.has-existing, .dropzone-form.dz-started, .dropzone-form.has-existing.dz-started {
+  .dropzone.has-existing, .dropzone.dz-started, .dropzone.has-existing.dz-started {
     .dz-message {
       display: none;
     }

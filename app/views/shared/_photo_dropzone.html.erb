@@ -1,7 +1,7 @@
 <% hide_existing = local_assigns[:hide_existing] %>
 <% photo_present = !hide_existing && obj.photo.attached? %>
-<%= content_tag(:div, data: {width: width, height: height}, class: "dropzone") do %>
-  <%= form_tag(uploads_path, class: "dropzone-form #{photo_present ? 'has-existing' : ''}
+<%= content_tag(:div, data: {width: width, height: height}, class: "dropzone-wrapper") do %>
+  <%= form_tag(uploads_path, class: "dropzone #{photo_present ? 'has-existing' : ''}
         #{obj.photo_destroy? ? 'existing-deleted' : ''}") do %>
     <%= link_to(icon_tag("trash"), "#", class: "delete") %>
     <%= image_tag(obj.photo_variant(format), class: "existing") %>

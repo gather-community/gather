@@ -6,6 +6,8 @@ class Cluster < ApplicationRecord
 
   def self.cluster_based_models
     Rails.application.eager_load! if Rails.env.development?
-    ApplicationRecord.descendants.select { |c| c.column_names.include?("cluster_id") }
+
+    # table_exists? required because some fake models shouldn't be included.
+    ApplicationRecord.descendants.select { |c| c.table_exists? && c.column_names.include?("cluster_id") }
   end
 end

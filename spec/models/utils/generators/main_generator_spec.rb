@@ -33,7 +33,7 @@ describe Utils::Generators::MainGenerator do
       expect(User.with_role(:admin).count).to be_zero
       expect(User.with_role(:super_admin).count).to be_zero
       expect(User.count).to be > 10
-      expect(Dir[Rails.root.join("public", "system", "test", "**", "*.jpg")].size).to be > 10
+      expect(ActiveStorage::Blob.count).to be > 10
 
       # Destroy and check
       Utils::DataRemover.new(cluster.id).remove
@@ -41,7 +41,8 @@ describe Utils::Generators::MainGenerator do
       Cluster.cluster_based_models.each do |klass|
         expect(klass.count).to eq(0), "Expected to find no #{klass.name.pluralize}"
       end
-      expect(Dir[Rails.root.join("public", "system", "test", "**", "*.*")].size).to eq(0)
+      process_queued_job
+      expect(ActiveStorage::Blob.count).to eq(0)
     end
   end
 end

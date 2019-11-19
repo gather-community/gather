@@ -40,25 +40,13 @@ shared_context "photo uploads" do
     end
 
     describe "upload validations" do
-      context "with smaller size limit" do
-        around do |example|
-          size = Settings.photos.max_size_mb
-          Settings.photos.max_size_mb = 1
-          example.run
-          Settings.photos.max_size_mb = size
-        end
-
-        scenario "too big", js: true do
-          visit(edit_path)
-          drop_in_dropzone(fixture_file_path("large.jpg"))
-          expect(page).to have_css("form.dropzone .dz-error-message", text: /too big/)
-        end
-      end
-
       scenario "wrong format", js: true do
         visit(edit_path)
         drop_in_dropzone(fixture_file_path("article.pdf"))
-        expect(page).to have_css("form.dropzone .dz-error-message", text: /Photo has incorrect type/)
+        wait_for_dropzone_upload
+        click_button("Save")
+        save_and_open_screenshot
+        expect(page).to have_css("form.dropzone-error-form .error", text: /File is incorrect type/)
       end
     end
   end

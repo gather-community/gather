@@ -23,7 +23,7 @@
 # 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
 #    sign in invite, signs in, is confirmed
 class User < ApplicationRecord
-  include PhotoDestroyable
+  include AttachmentFormable
   include Phoneable
   include Deactivatable
 
@@ -117,11 +117,9 @@ class User < ApplicationRecord
   validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
 
-  has_attached_file :photo,
-                    styles: {thumb: "150x150#", medium: "300x300#"},
-                    default_url: "missing/users/:style.png"
+  has_one_attached :photo
   validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
-  validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
+  validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
@@ -130,7 +128,6 @@ class User < ApplicationRecord
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
-  before_destroy { photo.destroy }
   after_update { Work::ShiftIndexUpdater.new(self).update }
 
   def self.from_omniauth(auth)

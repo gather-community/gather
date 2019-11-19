@@ -174,7 +174,7 @@ Rails.application.routes.draw do
     get "/", to: redirect("/work/signups")
   end
 
-  resources :uploads, only: %i[create destroy]
+  resources :uploads, only: :create
 
   namespace :admin do
     get "settings/:type", to: "settings#edit", as: :settings

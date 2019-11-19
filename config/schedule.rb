@@ -7,11 +7,15 @@ env(:GEM_HOME, ENV["GEM_HOME"])
 job_type(:enqueue, "cd :path && RAILS_ENV=:environment bundle exec rake jobs:enqueue[:task] :output")
 
 every 5.minutes do
-  enqueue %w[
+  enqueue(%w[
     Billing::StatementReminderJob
     Meals::MealReminderJob
     Meals::CookMenuReminderJob
     Meals::ClosePastMealsJob
     CustomReminderJob
-  ].join(",")
+  ].join(","))
+end
+
+every 1.day, at: "4:30 am" do
+  enqeue("CleanupJob")
 end

@@ -9,6 +9,9 @@ branches:
   - /^deploy-.*$/ # These are always just reset --hard's to other branches
   - /^v[\d\.]+$/ # No need to test version tags as they are tested as part of their branch
 addons:
+  apt:
+    packages:
+      - libvips
   postgresql: "9.4"
   artifacts:
     debug: true

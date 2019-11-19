@@ -3,7 +3,7 @@
 
   <%= f.hidden_field :resource_id %>
   <%= f.input :resource do %>
-    <%= image_tag(resource.photo.url(:thumb)) %><br/>
+    <%= image_tag(resource.photo_variant(:thumb)) %><br/>
     <%= resource.name_with_prefix %>
   <% end %>
 

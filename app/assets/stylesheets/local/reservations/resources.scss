@@ -9,7 +9,7 @@
     }
   }
 
-  .dropzone {
+  .dropzone-wrapper {
     @include dropzone(220px, 165px);
   }
 

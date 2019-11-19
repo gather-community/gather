@@ -15,10 +15,6 @@ module Utils
         deactivate_households
       end
 
-      def cleanup_on_error
-        users&.each { |u| u.photo&.destroy }
-      end
-
       private
 
       # Creates 24 households (3 inactive) with random vehicles and emergency contacts.
@@ -50,7 +46,7 @@ module Utils
 
             email = "#{first_name}#{rand(10_000_000..99_999_999)}@example.com"
 
-            build(:user,
+            user = build(:user,
                   :with_random_password,
                   fake: true,
                   household: household,
@@ -64,9 +60,10 @@ module Utils
                   work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
                   joined_on: joined,
                   preferred_contact: %w[phone email text].sample,
-                  photo: photos ? File.open(path) : nil,
                   created_at: community.created_at,
                   updated_at: community.updated_at)
+            user.photo.attach(io: File.open(path), filename: File.basename(path)) if photos
+            user
           end.compact
 
           adults.first.add_role(:work_coordinator) if i < 6
@@ -75,20 +72,21 @@ module Utils
             age = File.basename(path, ".jpg").to_i
             next if age >= 16
             bday = Faker::Date.birthday(age, age + 1)
-            build(:user, :child, :with_random_password,
-                  fake: true,
-                  household: household,
-                  first_name: Faker::Name.unisex_name,
-                  last_name: bool_prob(90) ? last_name : last_names.pop,
-                  email: nil,
-                  google_email: nil,
-                  mobile_phone: nil,
-                  guardians: adults,
-                  birthdate: bday,
-                  photo: photos ? File.open(path) : nil,
-                  joined_on: [bday, joined].max,
-                  created_at: community.created_at,
-                  updated_at: community.updated_at)
+            kid = build(:user, :child, :with_random_password,
+              fake: true,
+              household: household,
+              first_name: Faker::Name.unisex_name,
+              last_name: bool_prob(90) ? last_name : last_names.pop,
+              email: nil,
+              google_email: nil,
+              mobile_phone: nil,
+              guardians: adults,
+              birthdate: bday,
+              joined_on: [bday, joined].max,
+              created_at: community.created_at,
+              updated_at: community.updated_at)
+            kid.photo.attach(io: File.open(path), filename: File.basename(path)) if photos
+            kid
           end.compact
 
           users.concat(adults)

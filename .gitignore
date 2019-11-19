@@ -17,14 +17,15 @@
 /tmp
 
 # i18n.js stuff
-app/assets/javascripts/i18n/translations.js
-public/javascripts/i18n.js
+/app/assets/javascripts/i18n/translations.js
+/public/javascripts/i18n.js
 
-config/database.yml
-config/settings.local.yml
-config/settings/*.local.yml
-config/environments/*.local.yml
-public/system
+/config/database.yml
+/config/settings.local.yml
+/config/settings/*.local.yml
+/config/environments/*.local.yml
+/public/system
+/storage
 
 # Rubymine
 /.idea

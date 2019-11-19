@@ -11,7 +11,7 @@ set :pty, true
 set :repo_url, "git@github.com:sassafrastech/gather.git"
 set :linked_files, fetch(:linked_files, []).push("config/database.yml")
 set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "tmp/cache", "tmp/sockets",
-                                               "vendor/bundle", "public/system")
+                                               "vendor/bundle", "public/system", "storage")
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 # Ensure specified revision is pushed to remote.

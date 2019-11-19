@@ -12,7 +12,7 @@
   <% resources.each do |resource| %>
     <div class="resource">
       <%= link_to(reservations_path(resource_id: resource.id)) do %>
-        <%= image_tag(resource.photo.url(:thumb)) %>
+        <%= image_tag(resource.photo_variant(:thumb)) %>
         <%= resource.name_with_inactive %>
       <% end %>
     </div>

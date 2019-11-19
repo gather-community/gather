@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_210414) do
+ActiveRecord::Schema.define(version: 2019_11_19_032723) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +34,27 @@ ActiveRecord::Schema.define(version: 2019_11_04_210414) do
     t.index ["community_id", "household_id"], name: "index_accounts_on_community_id_and_household_id", unique: true
     t.index ["community_id"], name: "index_accounts_on_community_id"
     t.index ["household_id"], name: "index_accounts_on_household_id"
+  end
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "clusters", id: :serial, force: :cascade do |t|
@@ -471,10 +494,6 @@ ActiveRecord::Schema.define(version: 2019_11_04_210414) do
     t.text "guidelines"
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
-    t.string "photo_content_type"
-    t.string "photo_file_name"
-    t.integer "photo_file_size"
-    t.datetime "photo_updated_at"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_resources_on_cluster_id"
     t.index ["community_id", "name"], name: "index_resources_on_community_id_and_name", unique: true
@@ -558,10 +577,6 @@ ActiveRecord::Schema.define(version: 2019_11_04_210414) do
     t.inet "last_sign_in_ip"
     t.text "medical"
     t.string "mobile_phone"
-    t.string "photo_content_type"
-    t.string "photo_file_name"
-    t.integer "photo_file_size"
-    t.datetime "photo_updated_at"
     t.string "preferred_contact"
     t.jsonb "privacy_settings", default: {}, null: false
     t.string "provider"
@@ -719,6 +734,7 @@ ActiveRecord::Schema.define(version: 2019_11_04_210414) do
   add_foreign_key "accounts", "communities"
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "statements", column: "last_statement_id"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"

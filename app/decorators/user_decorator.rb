@@ -98,8 +98,17 @@ class UserDecorator < ApplicationDecorator
   end
 
   def photo_if_permitted(format)
-    h.image_tag(h.policy(object).show_photo? ? photo.url(format) : "missing/users/#{format}.png",
-                class: "photo")
+    image = photo_variant(format, suppress: !h.policy(object).show_photo?)
+    h.image_tag(image, class: "photo")
+  end
+
+  def photo_variant(format, suppress: false)
+    return "missing/users/#{format}.png" if suppress || !photo.attached? || !photo.variable?
+    case format
+    when :thumb then photo.variant(resize_to_fill: [150, 150])
+    when :medium then photo.variant(resize_to_fill: [300, 300])
+    else raise "Unknown photo format #{format}"
+    end
   end
 
   def show_action_link_set

@@ -20,6 +20,14 @@ module Reservations
       active? ? "" : "inactive"
     end
 
+    def photo_variant(format)
+      return "missing/reservations/resources/#{format}.png" unless photo.attached? && photo.variable?
+      case format
+      when :thumb then photo.variant(resize_to_fill: [220, 165])
+      else raise "Unknown photo format #{format}"
+      end
+    end
+
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :deactivate, icon: "times-circle", method: :put, confirm: {name: name},

@@ -21,7 +21,7 @@ For both production and development environments:
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
 1. Elasticsearch 6.2+ (search engine)
-1. ImageMagick v6.8+ (image manipulation)
+1. libvips v8.8+ (image manipulation; PNG, JPG, and GIF support needed)
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
 1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).

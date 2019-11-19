@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :user do
     transient do
       community { nil }
+      photo_path { Rails.root.join("spec", "fixtures", "cooper.jpg") }
     end
 
     first_name { Faker::Name.first_name }
@@ -53,7 +54,9 @@ FactoryBot.define do
     end
 
     trait :with_photo do
-      photo { File.open("#{Rails.root}/spec/fixtures/cooper.jpg") }
+      after(:build) do |user, evaluator|
+        user.photo.attach(io: File.open(evaluator.photo_path), filename: File.basename(evaluator.photo_path))
+      end
     end
 
     trait :unconfirmed do

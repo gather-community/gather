@@ -4,7 +4,7 @@ module Reservations
   # Something that can be reserved.
   class Resource < ApplicationRecord
     include Deactivatable
-    include PhotoDestroyable
+    include AttachmentFormable
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
 
@@ -18,11 +18,9 @@ module Reservations
     has_many :reservations, inverse_of: :resource, class_name: "Reservations::Reservation",
                             dependent: :destroy
 
-    has_attached_file :photo,
-                      styles: {thumb: "220x165#"},
-                      default_url: "missing/reservations/resources/:style.png"
+    has_one_attached :photo
     validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
-    validates_attachment_size :photo, less_than: (Settings.photos.max_size_mb || 8).megabytes
+    validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
 
     validates :name, presence: true, uniqueness: {scope: :community_id}
     validates :abbrv, presence: true, if: :meal_hostable?
@@ -37,10 +35,6 @@ module Reservations
     }
 
     delegate :name, to: :community, prefix: true
-
-    before_destroy do
-      photo.destroy
-    end
 
     # Available reservation kinds. Returns nil if none are defined.
     def kinds

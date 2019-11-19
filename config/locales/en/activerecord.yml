@@ -178,6 +178,9 @@ en:
         editable_by: "Editable By"
         data_source: "Data Source"
     errors:
+      messages:
+        invalid_content_type: "File is incorrect type"
+        too_big: "File is too big (maximum %{max} MiB)"
       models:
         household:
           name:
@@ -197,15 +200,10 @@ en:
             ends_at:
               before_meal_time: "must be after the meal time (%{time})"
         user:
-          attributes:
-            photo_content_type:
-              invalid: "has incorrect type"
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
         reservations/resource:
           attributes:
-            photo_content_type:
-              invalid: "has incorrect type"
             abbrv:
               blank: "can't be blank if resource can host meals"
         meals/formula:

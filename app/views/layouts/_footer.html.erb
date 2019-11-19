@@ -1,4 +1,4 @@
-<% local_items = [yield(:local_footer).presence].compact + footer_items.map { |i| nav_link(i) } %>
+<% local_items = [yield(:local_footer).presence].compact + nav_link_builder.footer_items.map { |i| nav_link_builder.nav_link(i) } %>
 <% if local_items.any? %>
   <footer id="local-footer" class="hidden-print">
     <%= local_items.reduce(&sep(" &nbsp;&bull;&nbsp; ")) %>
@@ -16,7 +16,7 @@
         &nbsp;&bull;&nbsp; <%= link_to("Settings", admin_settings_path(type: "community")) %>
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
-      &nbsp;&bull;&nbsp; <%= link_to("Accounts", lens_path_if_present("accounts")) %>
+      &nbsp;&bull;&nbsp; <%= link_to("Accounts", nav_link_builder.lens_path_if_present("accounts", index_path: accounts_path)) %>
       <% end %>
       <% if policy(Community.new).index? %>
       &nbsp;&bull;&nbsp; <%= link_to("Communities", communities_path) %>

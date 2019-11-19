@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_032618) do
+ActiveRecord::Schema.define(version: 2019_11_19_032723) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -494,10 +494,6 @@ ActiveRecord::Schema.define(version: 2019_11_15_032618) do
     t.text "guidelines"
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
-    t.string "photo_content_type"
-    t.string "photo_file_name"
-    t.integer "photo_file_size"
-    t.datetime "photo_updated_at"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_resources_on_cluster_id"
     t.index ["community_id", "name"], name: "index_resources_on_community_id_and_name", unique: true
@@ -581,10 +577,6 @@ ActiveRecord::Schema.define(version: 2019_11_15_032618) do
     t.inet "last_sign_in_ip"
     t.text "medical"
     t.string "mobile_phone"
-    t.string "photo_content_type"
-    t.string "photo_file_name"
-    t.integer "photo_file_size"
-    t.datetime "photo_updated_at"
     t.string "preferred_contact"
     t.jsonb "privacy_settings", default: {}, null: false
     t.string "provider"

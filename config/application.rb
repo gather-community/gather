@@ -82,6 +82,9 @@ module Gather
     # Ubuntu Xenial doesn't have a new enough libvips package and don't want to compile everytime.
     config.active_storage.variant_processor = ENV["TRAVIS"] ? :mini_magick : :vips
 
+    # Allow enough time for folks to fill in and submit forms with attachments.
+    config.active_storage.service_urls_expire_in = 15.minutes
+
     config.cache_store = :redis_cache_store, {url: "redis://localhost:6379/0"}
 
     config.hosts << /([a-z0-9\-]+\.)?#{Settings.url.host}/

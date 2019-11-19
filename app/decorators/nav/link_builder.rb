@@ -15,10 +15,12 @@ module Nav
       sample_period = Work::Period.new(community: h.current_community)
       sample_job = Work::Job.new(period: sample_period)
       sample_shift = Work::Shift.new(job: sample_job)
+      sample_resource = Reservations::Resource.new(community: h.current_community)
+      sample_reservation = Reservations::Reservation.new(resource: sample_resource)
       items = [
         {
           name: :people,
-          path: lens_path_if_present("users", index_path: h.users_path),
+          path: lens_path_if_present("users"),
           permitted: h.policy(User).index?,
           icon: "users"
         }, {
@@ -33,9 +35,8 @@ module Nav
           icon: "wrench"
         }, {
           name: :reservations,
-          path: lens_path_if_present("reservations", index_path: h.reservations_path),
-          permitted: h.policy(Reservations::Reservation.new(resource:
-                                                            Reservations::Resource.new(community: h.current_community))).index?,
+          path: lens_path_if_present("reservations"),
+          permitted: h.policy(sample_reservation).index?,
           icon: "book"
         }, {
           name: :wiki,
@@ -264,8 +265,10 @@ module Nav
     def lens_path_if_present(controller, index_path: nil)
       storage = Lens::Storage.new(session: h.session, community_id: h.current_community.id,
                                   controller_path: controller, action_name: "index")
-      Lens::PathSaver.new(storage: storage).read || index_path || send("h.#{controller.tr('/', '_')}_path")
+      Lens::PathSaver.new(storage: storage).read || index_path || h.send("#{controller.tr('/', '_')}_path")
     end
+
+    protected
 
     def filter_and_set_active_nav_items(items, type:, active: nil)
       items.select! { |i| i[:permitted] }

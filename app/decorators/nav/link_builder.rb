@@ -173,7 +173,7 @@ module Nav
               name: :jobs,
               parent: :work,
               path: h.work_jobs_path,
-              permitted: h.policy(Work::Job.new(period: sample_period)).index?,
+              permitted: h.policy(sample_job).index?,
               icon: "wrench"
             }, {
               name: :periods,

@@ -19,15 +19,11 @@ module Meals
     has_one_attached :file
 
     def import
+      update!(status: "running")
       self.row_pointer = 0
       self.errors_by_row ||= {}
-      rows = CSV.new(file.download, converters: ->(f) { f&.strip }).read
-      return add_error("File is empty") if rows.size < 2
-      ActiveRecord::Base.transaction do
-        parse_rows(rows)
-        errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
-        raise ActiveRecord::Rollback unless successful?
-      end
+      process
+      update!(status: "finished")
     end
 
     def successful?
@@ -36,6 +32,19 @@ module Meals
     end
 
     private
+
+    def process
+      rows = CSV.new(file.download, converters: ->(f) { f&.strip }).read
+      if rows.size < 2
+        add_error("File is empty")
+      else
+        ActiveRecord::Base.transaction do
+          parse_rows(rows)
+          errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
+          raise ActiveRecord::Rollback unless successful?
+        end
+      end
+    end
 
     def parse_rows(rows)
       rows.each do |row|

@@ -14,6 +14,19 @@ class ApplicationJob < ActiveJob::Base
 
   protected
 
+  # Loads the specified object and sets up the community context. Assumes
+  # the class is cluster-based and responds to `community`.
+  def with_object_in_community_context(class_or_class_name, id)
+    klass = class_or_class_name.is_a?(String) ? class_or_class_name.constantize : class_or_class_name
+
+    # Load the object and call community while still inside the
+    # without_tenant block to preload the association.
+    # Else we get a no tenant error when calling community later.
+    object = ActsAsTenant.without_tenant { klass.find(id).tap(&:community) }
+
+    with_community(object.community) { yield(object) }
+  end
+
   def each_community
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do

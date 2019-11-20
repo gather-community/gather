@@ -2,26 +2,33 @@
 
 require "rails_helper"
 
-describe Meals::CsvImporter do
+describe Meals::CsvImport do
   let!(:community) { Defaults.community }
   let!(:other_community) { create(:community, name: "Barville", abbrv: "bv") }
   let(:roles) { create_list(:meal_role, 2) }
   let(:user) { create(:meals_coordinator) }
-  subject(:importer) { described_class.new(file, community: community, user: user).tap(&:import) }
+  subject(:importer) do
+    described_class.create!(community: community, user: user).tap do |imp|
+      imp.file.attach(io: StringIO.new(csv), filename: "input.csv")
+      imp.import
+      imp.save!
+      imp.reload # Ensure errors are correct after deserialization.
+    end
+  end
 
   context "with empty file" do
-    let(:file) { prepare_expectation("empty.csv") }
+    let(:csv) { prepare_expectation("empty.csv") }
 
     it "returns error" do
-      expect(importer.errors).to eq(0 => ["File is empty"])
+      expect(importer.errors_by_row).to eq("0" => ["File is empty"])
     end
   end
 
   context "with headers but no data" do
-    let(:file) { prepare_expectation("meals/import/no_data.csv") }
+    let(:csv) { prepare_expectation("meals/import/no_data.csv") }
 
     it "returns error" do
-      expect(importer.errors).to eq(0 => ["File is empty"])
+      expect(importer.errors_by_row).to eq("0" => ["File is empty"])
     end
   end
 
@@ -29,25 +36,26 @@ describe Meals::CsvImporter do
     let!(:real_role) { create(:meal_role, title: "Head Cook") }
     let!(:inactive_role) { create(:meal_role, :inactive, title: "Inacto") }
     let!(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
-    let(:file) do
+    let(:csv) do
       prepare_expectation("meals/import/bad_headers.csv",
-        role_id: (roles << outside_role).map(&:id))
+                          role_id: (roles << outside_role).map(&:id))
     end
 
     it "returns error listing all bad headers, case insensitive" do
-      expect(importer.errors).to eq(
-        1 => ["Invalid column headers: Junk, Heure, Role999999999999, Vulpt, Role#{outside_role.id}, Inacto"]
+      expect(importer.errors_by_row).to eq(
+        "1" => ["Invalid column headers: Junk, Heure, Role999999999999, "\
+          "Vulpt, Role#{outside_role.id}, Inacto"]
       )
     end
   end
 
   context "with missing required headers" do
     let!(:formula) { create(:meal_formula, name: "Foo") }
-    let(:file) { prepare_expectation("meals/import/missing_required_headers.csv") }
+    let(:csv) { prepare_expectation("meals/import/missing_required_headers.csv") }
 
     it "returns error" do
-      expect(importer.errors).to eq(
-        1 => ["Missing columns: Date/Time, Locations"]
+      expect(importer.errors_by_row).to eq(
+        "1" => ["Missing columns: Date/Time, Locations"]
       )
     end
   end
@@ -62,7 +70,7 @@ describe Meals::CsvImporter do
     let!(:outside_community) do
       ActsAsTenant.with_tenant(create(:cluster)) { create(:community, name: "Sooville") }
     end
-    let(:file) do
+    let(:csv) do
       prepare_expectation("meals/import/bad_data.csv", role_id: roles.map(&:id),
                                                        resource_id: [outside_resource.id],
                                                        formula_id: [outside_formula.id],
@@ -71,8 +79,8 @@ describe Meals::CsvImporter do
     end
 
     it "returns all errors" do
-      expect(importer.errors).to eq(
-        2 => [
+      expect(importer.errors_by_row).to eq(
+        "2" => [
           "'notadate' is not a valid date/time",
           "Could not find a resource with ID #{outside_resource.id}",
           "Could not find a resource with ID 18249187214",
@@ -82,7 +90,7 @@ describe Meals::CsvImporter do
           "Could not find a user with ID #{outside_user.id}",
           "Could not find a user with ID 818181731"
         ],
-        3 => [
+        "3" => [
           "'2019-01-32 12:43' is not a valid date/time",
           "Could not find a resource named 'Plizz'",
           "Could not find a resource named 'Pants Room'",
@@ -92,11 +100,11 @@ describe Meals::CsvImporter do
           "Could not find a user named 'James Smith, Jr.'",
           "Could not find a user named 'X Q'"
         ],
-        5 => [
+        "5" => [
           "Date/time is required",
           "Resource(s) are required"
         ],
-        6 => [
+        "6" => [
           "Date/time is required",
           "Could not find a resource named 'Inacto'",
           "Could not find a meal formula named 'Inacto'",
@@ -109,15 +117,15 @@ describe Meals::CsvImporter do
   context "with data causing validation errors" do
     let!(:formula) { create(:meal_formula, is_default: true) }
     let(:resource) { create(:resource) }
-    let(:file) do
+    let(:csv) do
       prepare_expectation("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
     end
 
     it "returns errors on valid rows and saves no meals" do
-      expect(importer.errors).to eq(
-        3 => ["The following error(s) occurred in making a Resource 1 reservation for this meal: "\
+      expect(importer.errors_by_row).to eq(
+        "3" => ["The following error(s) occurred in making a Resource 1 reservation for this meal: "\
           "This reservation overlaps an existing one."],
-        4 => ["Could not find a meal formula with ID 1234"]
+        "4" => ["Could not find a meal formula with ID 1234"]
       )
       expect(Meals::Meal.count).to be_zero
     end
@@ -132,12 +140,12 @@ describe Meals::CsvImporter do
       [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
     end
     let!(:communities) { [community, other_community, create(:community)] }
-    let(:file) do
+    let(:csv) do
       prepare_expectation("meals/import/successful_data.csv",
-        resource_id: resources.map(&:id),
-        role_id: [asst_cook_role.id],
-        user_id: users.map(&:id),
-        community_id: communities.map(&:id))
+                          resource_id: resources.map(&:id),
+                          role_id: [asst_cook_role.id],
+                          user_id: users.map(&:id),
+                          community_id: communities.map(&:id))
     end
     let(:meals) { Meals::Meal.order(:served_at).to_a }
 
@@ -178,14 +186,14 @@ describe Meals::CsvImporter do
     let!(:resources) { [create(:resource, name: "Foo"), create(:resource, name: "Bar")] }
 
     context "when can't find existing meal for update or destroy" do
-      let(:file) { prepare_expectation("meals/import/missing_existing_meals.csv") }
+      let(:csv) { prepare_expectation("meals/import/missing_existing_meals.csv") }
 
       it "fails and doesn't save valid meal" do
-        expect(importer.errors).to eq(
-          2 => ["Could not find a resource named 'Blah'"],
-          3 => ["Could not find meal served at Thu Jan 31 2019 12:00pm at locations: Foo"],
-          4 => ["Could not find meal served at Fri Feb 01 2019 1:00pm at locations: Foo"],
-          6 => ["Invalid action: baloney"]
+        expect(importer.errors_by_row).to eq(
+          "2" => ["Could not find a resource named 'Blah'"],
+          "3" => ["Could not find meal served at Thu Jan 31 2019 12:00pm at locations: Foo"],
+          "4" => ["Could not find meal served at Fri Feb 01 2019 1:00pm at locations: Foo"],
+          "6" => ["Invalid action: baloney"]
         )
         expect(Meals::Meal.count).to be_zero
       end
@@ -194,10 +202,10 @@ describe Meals::CsvImporter do
     # Create and update are not interesting
     context "with destroy permission issues" do
       let!(:meal) { create(:meal, :finalized, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
-      let(:file) { prepare_expectation("meals/import/destroy_permission_errors.csv") }
+      let(:csv) { prepare_expectation("meals/import/destroy_permission_errors.csv") }
 
       it "fails with correct errors" do
-        expect(importer.errors).to eq(2 => ["Action not permitted (destroy)"])
+        expect(importer.errors_by_row).to eq("2" => ["Action not permitted (destroy)"])
       end
     end
 
@@ -213,7 +221,7 @@ describe Meals::CsvImporter do
         create(:meal, :finalized, served_at: "2019-02-02 12:00", resources: resources,
                                   formula: formula, head_cook: user1, communities: [community])
       end
-      let(:file) { prepare_expectation("meals/import/successful_data_with_actions.csv") }
+      let(:csv) { prepare_expectation("meals/import/successful_data_with_actions.csv") }
 
       it "succeeds, ignoring case for action, ignoring resource order, ignoring unpermitted fields" do
         expect(importer).to be_successful
@@ -239,7 +247,7 @@ describe Meals::CsvImporter do
       let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
 
       context "with correct data" do
-        let(:file) { prepare_expectation("meals/import/actions_with_id_column.csv", meal_id: [meal1.id]) }
+        let(:csv) { prepare_expectation("meals/import/actions_with_id_column.csv", meal_id: [meal1.id]) }
 
         it "succeeds with update and ignores for create" do
           expect(importer).to be_successful
@@ -251,10 +259,10 @@ describe Meals::CsvImporter do
       end
 
       context "with invalid ID for update" do
-        let(:file) { prepare_expectation("meals/import/actions_with_invalid_id.csv") }
+        let(:csv) { prepare_expectation("meals/import/actions_with_invalid_id.csv") }
 
         it "errors" do
-          expect(importer.errors).to eq(2 => ["Could not find meal with ID '1827648312341'"])
+          expect(importer.errors_by_row).to eq("2" => ["Could not find meal with ID '1827648312341'"])
         end
       end
     end

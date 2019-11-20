@@ -4,40 +4,35 @@ require "csv"
 
 module Meals
   # Imports meals from CSV.
-  class CsvImporter
+  class CsvImport < ApplicationRecord
     BASIC_HEADERS = %i[served_at resources formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
-    attr_accessor :file, :errors, :community, :user, :row_pointer, :row_action, :header_map,
-      :new_meal, :target_meal, :row_policy, :parsed_id
+    acts_as_tenant :cluster
 
-    def initialize(file, community:, user:)
-      self.file = file
-      self.errors = Hash.new { |h, k| h[k] = [] }
-      self.community = community
-      self.row_pointer = 0
-      self.header_map = {}
-      self.user = user
-    end
+    attr_accessor :row_pointer, :row_action, :header_map, :new_meal, :target_meal, :row_policy, :parsed_id
+
+    belongs_to :community
+    belongs_to :user
+
+    has_one_attached :file
 
     def import
-      rows = CSV.new(file, converters: ->(f) { f&.strip }).read
-      if rows.size < 2
-        add_error("File is empty")
-        return
-      else
-        ActiveRecord::Base.transaction do
-          parse_rows(rows)
-          errors.each { |k, v| errors.delete(k) if v.empty? } # Clear empties
-          raise ActiveRecord::Rollback unless successful?
-        end
+      self.row_pointer = 0
+      self.errors_by_row ||= {}
+      rows = CSV.new(file.download, converters: ->(f) { f&.strip }).read
+      return add_error("File is empty") if rows.size < 2
+      ActiveRecord::Base.transaction do
+        parse_rows(rows)
+        errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
+        raise ActiveRecord::Rollback unless successful?
       end
     end
 
     def successful?
       return @success if defined?(@success)
-      @success = errors.values.none?(&:any?)
+      @success = errors_by_row.values.none?(&:any?)
     end
 
     private
@@ -107,10 +102,11 @@ module Meals
     def parse_headers(row)
       scan_and_validate_headers(row)
       check_for_missing_headers
-      errors.none?
+      errors_by_row.none?
     end
 
     def scan_and_validate_headers(row)
+      self.header_map = {}
       bad_headers = []
       row.each_with_index do |cell, col_index|
         if (attrib = untranslate_header(cell) || role_from_header(cell))
@@ -201,12 +197,13 @@ module Meals
     end
 
     def add_error(msg)
-      errors[row_pointer] << msg
+      errors_by_row[row_pointer] ||= []
+      errors_by_row[row_pointer] << msg
       nil
     end
 
     def current_row_errors?
-      errors[row_pointer].any?
+      errors_by_row[row_pointer].present?
     end
 
     def find_resource(str)

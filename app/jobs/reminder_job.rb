@@ -2,10 +2,6 @@
 
 # Base class for all reminder jobs
 class ReminderJob < ApplicationJob
-  def max_attempts
-    1
-  end
-
   protected
 
   def each_community_at_correct_hour

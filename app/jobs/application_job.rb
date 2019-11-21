@@ -8,10 +8,6 @@ class ApplicationJob < ActiveJob::Base
     ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 
-  def max_attempts
-    1
-  end
-
   protected
 
   # Loads the specified object and sets up the community context. Assumes

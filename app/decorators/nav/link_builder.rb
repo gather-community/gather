@@ -17,34 +17,52 @@ module Nav
       sample_shift = Work::Shift.new(job: sample_job)
       sample_resource = Reservations::Resource.new(community: h.current_community)
       sample_reservation = Reservations::Reservation.new(resource: sample_resource)
-      items = [
-        {
-          name: :people,
-          path: lens_path_if_present("users"),
-          permitted: h.policy(User).index?,
-          icon: "users"
-        }, {
-          name: :meals,
-          path: lens_path_if_present("meals/meals", index_path: h.meals_path),
-          permitted: h.policy(Meals::Meal.new(community: h.current_community)).index?,
-          icon: "cutlery"
-        }, {
-          name: :work,
-          path: lens_path_if_present("work/shifts", index_path: h.work_shifts_path),
-          permitted: h.policy(sample_shift).index_wrapper?,
-          icon: "wrench"
-        }, {
-          name: :reservations,
-          path: lens_path_if_present("reservations"),
-          permitted: h.policy(sample_reservation).index?,
-          icon: "book"
-        }, {
-          name: :wiki,
-          path: "/wiki",
-          permitted: h.policy(Wiki::Page.new(community: h.current_community)).show?,
-          icon: "info-circle"
-        }
-      ]
+      customizer = Utils::Nav::CustomizationParser.new(h.current_community.settings.main_nav_customizations)
+
+      items = []
+      # Run each hard-coded menu item through the customization filter
+      # and then add it to the list.
+      menu_item = customizer.filter_item(
+        name: :people,
+        path: lens_path_if_present("users"),
+        permitted: h.policy(User).index?,
+        icon: "users"
+      )
+      items << menu_item unless menu_item.nil?
+
+      menu_item = customizer.filter_item(
+        name: :meals,
+        path: lens_path_if_present("meals/meals", index_path: h.meals_path),
+        permitted: h.policy(Meals::Meal.new(community: h.current_community)).index?,
+        icon: "cutlery"
+      )
+      items << menu_item unless menu_item.nil?
+
+      menu_item = customizer.filter_item(
+        name: :work,
+        path: lens_path_if_present("work/shifts", index_path: h.work_shifts_path),
+        permitted: h.policy(sample_shift).index_wrapper?,
+        icon: "wrench"
+      )
+      items << menu_item unless menu_item.nil?
+
+      menu_item = customizer.filter_item(
+        name: :reservations,
+        path: lens_path_if_present("reservations"),
+        permitted: h.policy(sample_reservation).index?,
+        icon: "book"
+      )
+      items << menu_item unless menu_item.nil?
+
+      menu_item = customizer.filter_item(
+        name: :wiki,
+        path: "/wiki",
+        permitted: h.policy(Wiki::Page.new(community: h.current_community)).show?,
+        icon: "info-circle"
+      )
+      items << menu_item unless menu_item.nil?
+      # add all the new menu items defined as customizations
+      customizer.each { |custom_item| items << custom_item }
       filter_and_set_active_nav_items(items, type: :main, active: context[:section])
     end
 

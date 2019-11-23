@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateMealsCsvImports < ActiveRecord::Migration[6.0]
+class CreateMealsImports < ActiveRecord::Migration[6.0]
   def change
-    create_table :meal_csv_imports do |t|
+    create_table :meal_imports do |t|
       t.references :cluster, foreign_key: true, index: true, null: false
       t.references :community, foreign_key: true, index: true, null: false
       t.references :user, foreign_key: true, index: true, null: false

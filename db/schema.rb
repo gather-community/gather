@@ -153,19 +153,6 @@ ActiveRecord::Schema.define(version: 2019_11_19_222123) do
     t.index ["meal_id"], name: "index_meal_costs_on_meal_id"
   end
 
-  create_table "meal_csv_imports", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.bigint "community_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.jsonb "errors_by_row"
-    t.string "status", default: "queued", null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "user_id", null: false
-    t.index ["cluster_id"], name: "index_meal_csv_imports_on_cluster_id"
-    t.index ["community_id"], name: "index_meal_csv_imports_on_community_id"
-    t.index ["user_id"], name: "index_meal_csv_imports_on_user_id"
-  end
-
   create_table "meal_formula_parts", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -205,6 +192,19 @@ ActiveRecord::Schema.define(version: 2019_11_19_222123) do
     t.index ["cluster_id"], name: "index_meal_formulas_on_cluster_id"
     t.index ["community_id"], name: "index_meal_formulas_on_community_id"
     t.index ["deactivated_at"], name: "index_meal_formulas_on_deactivated_at"
+  end
+
+  create_table "meal_imports", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.jsonb "errors_by_row"
+    t.string "status", default: "queued", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["cluster_id"], name: "index_meal_imports_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_imports_on_community_id"
+    t.index ["user_id"], name: "index_meal_imports_on_user_id"
   end
 
   create_table "meal_invitations", id: :serial, force: :cascade do |t|
@@ -760,9 +760,6 @@ ActiveRecord::Schema.define(version: 2019_11_19_222123) do
   add_foreign_key "meal_cost_parts", "meal_types", column: "type_id"
   add_foreign_key "meal_costs", "clusters"
   add_foreign_key "meal_costs", "meals"
-  add_foreign_key "meal_csv_imports", "clusters"
-  add_foreign_key "meal_csv_imports", "communities"
-  add_foreign_key "meal_csv_imports", "users"
   add_foreign_key "meal_formula_parts", "clusters"
   add_foreign_key "meal_formula_parts", "meal_formulas", column: "formula_id"
   add_foreign_key "meal_formula_parts", "meal_types", column: "type_id"
@@ -770,6 +767,9 @@ ActiveRecord::Schema.define(version: 2019_11_19_222123) do
   add_foreign_key "meal_formula_roles", "meal_roles", column: "role_id"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
+  add_foreign_key "meal_imports", "clusters"
+  add_foreign_key "meal_imports", "communities"
+  add_foreign_key "meal_imports", "users"
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"

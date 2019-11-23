@@ -1,11 +1,11 @@
 Gather.Views.FileUploadView = Backbone.View.extend
 
-  initialize: (params) ->
+  initialize: (options) ->
     @dzForm = @$('.dropzone')
     @mainForm = @$('form:not(.dropzone):not(.dropzone-error-form)')
     @errorForm = @$('.dropzone-error-form')
-    @params = params
-    @mainPhotoDestroy = false
+    @attrib = options.attrib
+    @destroyFlag = false
 
     @tmpId = @dzForm.find('[name=tmp_id]').val()
     @model = @dzForm.find('[name=model]').val()
@@ -35,28 +35,28 @@ Gather.Views.FileUploadView = Backbone.View.extend
   fileAdded: (file, dz) ->
     dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
     @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
-    @setMainPhotoDestroyFlag(false)
+    @setDestroyFlag(false)
 
   fileUploaded: (file, response, dz) ->
-    @mainForm.find('[id$=_photo_new_signed_id]').val(response.blob_id)
-    @mainForm.find('[id$=_photo_destroy]').val('')
+    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val(response.blob_id)
+    @mainForm.find("[id$=_#{@attrib}_destroy]").val('')
     @errorForm.hide()
 
   delete: (e) ->
     e.preventDefault()
-    @setMainPhotoDestroyFlag(true)
-    @mainForm.find('[id$=_photo_new_signed_id]').val('')
-    @mainForm.find('[id$=_photo_destroy]').val('1')
+    @setDestroyFlag(true)
+    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val('')
+    @mainForm.find("[id$=_#{@attrib}_destroy]").val('1')
     @dzForm.addClass('existing-deleted')
     @dropzone.removeFile(@dropzone.files[0]) if @hasNewFile()
 
   hasNewFile: ->
     !!@dropzone.files[0]
 
-  setMainPhotoDestroyFlag: (bool) ->
+  setDestroyFlag: (bool) ->
     if @dzForm.is('.has-existing')
-      @mainPhotoDestroy = bool
-      @mainForm.find('[id$=_photo_destroy]').val(if bool then '1' else '0')
+      @destroyFlag = bool
+      @mainForm.find("[id$=_#{@attrib}_destroy]").val(if bool then '1' else '0')
 
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()
@@ -69,4 +69,4 @@ Gather.Views.FileUploadView = Backbone.View.extend
   # or if the existing file has been marked for deletion.
   isDirty: (node) ->
     if node.get(0) == @mainForm.get(0)
-      @hasNewFile() || @mainPhotoDestroy
+      @hasNewFile() || @destroyFlag

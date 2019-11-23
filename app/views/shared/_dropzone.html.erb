@@ -1,0 +1,22 @@
+<% hide_existing = local_assigns[:hide_existing] %>
+<% attachment = obj.send(attrib) %>
+<% has_existing = !hide_existing && attachment.attached? %>
+<%= content_tag(:div, data: {width: width, height: height}, class: "dropzone-wrapper") do %>
+  <%= form_tag(uploads_path, class: "dropzone #{has_existing ? 'has-existing' : ''}
+        #{obj.send("#{attrib}_destroy?") ? 'existing-deleted' : ''}") do %>
+    <%= link_to(icon_tag("trash"), "#", class: "delete") %>
+    <% if attachment.attached? && attachment.variable? %>
+      <%= image_tag(obj.send("#{attrib}_variant", format), class: "existing") %>
+      <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
+    <% else %>
+      <% bg_path = nil %>
+    <% end %>
+    <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
+      <div>Click or Drag Photo Here</div>
+    </div>
+  <% end %>
+  <%= gather_form_for(obj, width: :full, top_error_notification: false,
+                           html: {class: "dropzone-error-form"}) do |f| %>
+    <%= f.error(attrib) %>
+  <% end %>
+<% end %>

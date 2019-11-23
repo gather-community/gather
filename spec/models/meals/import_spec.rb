@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Meals::CsvImport do
+describe Meals::Import do
   let!(:community) { Defaults.community }
   let!(:other_community) { create(:community, name: "Barville", abbrv: "bv") }
   let(:roles) { create_list(:meal_role, 2) }

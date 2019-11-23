@@ -101,3 +101,20 @@
     </tr>
   </tbody>
 </table>
+
+<div id="import-forms">
+  <%= render("shared/dropzone", obj: @import, attrib: :file, width: 150, height: 150) %>
+  <%= gather_form_for(@import, width: :full) do |f| %>
+    <%= f.hidden_field :file_new_signed_id %>
+    <%= f.hidden_field :file_destroy %>
+    <%= f.button :primary %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  $(function() {
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#import-forms', attrib: 'file')%>);
+    new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
+    new Gather.Views.UserFormView({el: '.user-form'});
+  });
+<% end %>

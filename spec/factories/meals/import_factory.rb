@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :meal_csv_import, class: "Meals::CsvImport" do
+  factory :meal_import, class: "Meals::Import" do
     transient do
       csv { "" }
     end

@@ -52,7 +52,9 @@
     background-size: $thumb-width - 20px $thumb-height - 20px;
     background-repeat: no-repeat;
     text-align: center;
-    padding: ($thumb-height / 2px - 25px) 10px 10px 10px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     border: 3px dashed $light-border-color;
   }
@@ -76,7 +78,7 @@
 
   .dropzone, .dropzone.has-existing.existing-deleted {
     .dz-message {
-      display: block;
+      display: flex;
     }
     a.delete {
       display: none;

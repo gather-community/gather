@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Meals
-  # Handles meal CSV imports.
+  # Handles meal imports.
   class ImportsController < ApplicationController
     before_action :authorize_import
     before_action -> { nav_context(:meals, :meals) }
@@ -13,6 +13,7 @@ module Meals
     private
 
     def prep_form_vars
+      @import = Import.new
       @roles = Meals::Role.in_community(current_community).by_title
       @sample_times = [Time.current.midnight + 7.days, Time.current.midnight + 10.days].map do |t|
         (t + 18.hours).to_s(:no_sec_no_t)

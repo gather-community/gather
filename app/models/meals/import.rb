@@ -4,7 +4,9 @@ require "csv"
 
 module Meals
   # Imports meals from CSV.
-  class CsvImport < ApplicationRecord
+  class Import < ApplicationRecord
+    include AttachmentFormable
+
     BASIC_HEADERS = %i[served_at resources formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at resources].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
@@ -17,6 +19,9 @@ module Meals
     belongs_to :user
 
     has_one_attached :file
+
+    accepts_attachment_via_form :file
+    validates_attachment_content_type :photo, content_type: %w[text/plain text/csv]
 
     def import
       update!(status: "running")

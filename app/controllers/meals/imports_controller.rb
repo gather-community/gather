@@ -10,6 +10,12 @@ module Meals
       prep_form_vars
     end
 
+    def create
+      import = Import.create!(import_params.merge(community: current_community, user: current_user))
+      ImportJob.perform_later(class_name: "Meals::Import", id: import.id)
+      redirect_to(meals_import_path(import))
+    end
+
     private
 
     def prep_form_vars
@@ -29,6 +35,10 @@ module Meals
 
     def authorize_import
       authorize(Meal.new(community: current_community), :import?, policy_class: Meals::MealPolicy)
+    end
+
+    def import_params
+      params.require(:meals_import).permit(:file_new_signed_id)
     end
   end
 end

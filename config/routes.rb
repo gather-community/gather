@@ -42,7 +42,7 @@ Rails.application.routes.draw do
         put :deactivate
       end
     end
-    resources :imports, only: %i[new create]
+    resources :imports, only: %i[show new create]
     resources :roles, except: :show do
       member do
         put :activate

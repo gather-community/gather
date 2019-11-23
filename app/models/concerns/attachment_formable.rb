@@ -47,7 +47,7 @@ module AttachmentFormable
   private
 
   def valid_attachment_content_types
-    self.class.attachment_content_types.each do |attrib, types|
+    (self.class.attachment_content_types || {}).each do |attrib, types|
       next unless send(attrib).attached?
       next if types.include?(send(attrib).blob.content_type)
       errors.add(attrib, :invalid_content_type)
@@ -55,7 +55,7 @@ module AttachmentFormable
   end
 
   def valid_attachment_size
-    self.class.attachment_size_limits.each do |attrib, limit|
+    (self.class.attachment_size_limits || {}).each do |attrib, limit|
       next unless send(attrib).attached?
       next if send(attrib).blob.byte_size < limit
       errors.add(attrib, :too_big, max: limit / 1.megabyte)

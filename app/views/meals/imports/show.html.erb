@@ -1,0 +1,11 @@
+<% content_for(:title, "Import Meals") %>
+<div id="results"><%= render("results") if @import.complete? %></div>
+
+<%# Create view to poll for results %>
+<% unless @import.complete? %>
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.Meals.ImportResultsView({el: '#results'});
+    });
+  <% end %>
+<% end %>

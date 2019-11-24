@@ -1,0 +1,26 @@
+<% if @import.crashed? %>
+  <h2>Unexpected Error</h2>
+  We encountered an unexpected error during import.
+  Please <strong><%= link_to("try again", new_meals_import_path) %></strong>,
+  and contact your administrator if the error persists.
+<% elsif @import.successful? %>
+  <h2>Success!</h2>
+  Your import succeeded! Check out the <%= link_to("meals page", meals_path) %>
+  to see your imported meals.
+<% else %>
+  <h2>Data Error</h2>
+  Your meals data has one or more issues. Please resolve the issues below and
+  <strong><%= link_to("try again", new_meals_import_path) %></strong>.
+  <ul>
+    <% @import.sorted_errors_by_row.each do |row_number, errors| %>
+      <li>
+        <strong>Row <%= row_number %></strong>
+        <ul>
+          <% errors.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

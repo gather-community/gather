@@ -6,6 +6,17 @@ module Meals
     before_action :authorize_import
     before_action -> { nav_context(:meals, :meals) }
 
+    def show
+      @import = Import.find(params[:id])
+      if request.xhr?
+        if @import.complete?
+          render(partial: "results")
+        else
+          head(:no_content)
+        end
+      end
+    end
+
     def new
       prep_form_vars
     end

@@ -31,9 +31,22 @@ module Meals
       update!(status: "finished")
     end
 
+    # crashed status indicates an unexpected error
+    def crashed?
+      status == "crashed"
+    end
+
     def successful?
       return @success if defined?(@success)
       @success = errors_by_row.values.none?(&:any?)
+    end
+
+    def complete?
+      %w[finished crashed].include?(status)
+    end
+
+    def sorted_errors_by_row
+      errors_by_row.keys.sort_by { |k| k.to_i }.map { |k| [k, errors_by_row[k]] }.to_h
     end
 
     private

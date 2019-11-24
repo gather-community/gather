@@ -1,9 +1,11 @@
 <% content_for(:title, "Import Meals") %>
 
+<h2>Data Format</h2>
+
 <p>
   You can import meals using CSV format. Spreadsheet applications like Excel or Google Spreadsheets
   can export to CSV format, which you can then import to Gather.
-  Construct your imort file using the following columns:
+  Construct your import file using the following columns:
 </p>
 
 <table class="key-value">
@@ -60,7 +62,7 @@
   </tr>
 </table>
 
-<p>Example:</p>
+<h2>Example Data</h2>
 
 <table>
   <thead>
@@ -102,12 +104,14 @@
   </tbody>
 </table>
 
+<h2>Upload File</h2>
+
 <div id="import-forms">
   <%= render("shared/dropzone", obj: @import, attrib: :file, width: 150, height: 150) %>
   <%= gather_form_for(@import, width: :full) do |f| %>
-    <%= f.hidden_field :file_new_signed_id %>
-    <%= f.hidden_field :file_destroy %>
-    <%= f.button :primary %>
+    <%= f.hidden_field(:file_new_signed_id) %>
+    <%= f.hidden_field(:file_destroy) %>
+    <%= f.button(:primary, :import) %>
   <% end %>
 </div>
 

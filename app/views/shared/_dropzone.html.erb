@@ -12,7 +12,9 @@
       <% bg_path = nil %>
     <% end %>
     <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
-      <div>Click or Drag Photo Here</div>
+      <div>
+        <%= t("dropzone.prompts.models.#{obj.model_name.i18n_key}", default: :"dropzone.prompts.default") %>
+      </div>
     </div>
   <% end %>
   <%= gather_form_for(obj, width: :full, top_error_notification: false,

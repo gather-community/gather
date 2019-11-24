@@ -1,5 +1,6 @@
 .meals--imports {
   .dropzone-wrapper {
+    margin-top: 20px;
     @include dropzone(500px, 100px);
   }
 }

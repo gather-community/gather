@@ -35,6 +35,7 @@ en:
       continue: "Continue"
       create: "Save"
       go_back: "Go Back"
+      import: "Import"
       update: "Save"
       save_and_invite: "Save & Invite"
       sign_in: "Sign In"
@@ -319,6 +320,14 @@ en:
       edit_job: "Edit Job"
       signup: "Sign Up"
       unsignup: "Remove Signup"
+
+  dropzone:
+    prompts:
+      default: "Click or Drag File Here"
+      models:
+        user: "Click or Drag Photo Here"
+        reservations/resource: "Click or Drag Photo Here"
+
 
   calendars:
     your_meals: "Meals You're Attending"

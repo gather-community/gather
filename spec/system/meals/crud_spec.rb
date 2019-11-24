@@ -24,6 +24,7 @@ describe "meal crud", js: true do
       test_index
 
       # Create with no menu
+      find("button.dropdown-toggle").click
       click_on("Create Meal")
       select2(location.name, from: "#meals_meal_resource_ids", multiple: true)
 

@@ -37,8 +37,7 @@ module Meals
     end
 
     def successful?
-      return @success if defined?(@success)
-      @success = errors_by_row.values.none?(&:any?)
+      complete? && error_free?
     end
 
     def complete?
@@ -46,7 +45,7 @@ module Meals
     end
 
     def sorted_errors_by_row
-      errors_by_row.keys.sort_by { |k| k.to_i }.map { |k| [k, errors_by_row[k]] }.to_h
+      errors_by_row.keys.sort_by(&:to_i).map { |k| [k, errors_by_row[k]] }.to_h
     end
 
     private
@@ -59,9 +58,14 @@ module Meals
         ActiveRecord::Base.transaction do
           parse_rows(rows)
           errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
-          raise ActiveRecord::Rollback unless successful?
+          raise ActiveRecord::Rollback unless error_free?
         end
       end
+    end
+
+    def error_free?
+      return @error_free if defined?(@error_free)
+      @error_free = errors_by_row.values.all?(&:empty?)
     end
 
     def parse_rows(rows)

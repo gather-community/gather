@@ -1,0 +1,9 @@
+en:
+  dropzone:
+    dictFileTooBig: "File is too big ({{filesize}} MiB). Max size is {{maxFilesize}} MiB."
+    dictFileSizeUnits:
+      tb: "TiB"
+      gb: "GiB"
+      mb: "MiB"
+      kb: "KiB"
+      b: "B"

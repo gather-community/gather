@@ -7,5 +7,6 @@ translations:
       "*.datepicker.*",
       "*.timepicker.*",
       "*.password.strength.*",
-      "*.errors.messages.doesnt_match"
+      "*.errors.messages.doesnt_match",
+      "*.dropzone.*"
     ]

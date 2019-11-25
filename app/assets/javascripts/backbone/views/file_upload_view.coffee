@@ -5,6 +5,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
     @mainForm = @$('form:not(.dropzone):not(.dropzone-error-form)')
     @errorForm = @$('.dropzone-error-form')
     @attrib = options.attrib
+    @maxSize = options.maxSize
     @destroyFlag = false
 
     @tmpId = @dzForm.find('[name=tmp_id]').val()
@@ -19,15 +20,18 @@ Gather.Views.FileUploadView = Backbone.View.extend
     width = @dzForm.data('width')
     height = @dzForm.data('height')
     view = this
-    @dropzone = new Dropzone @dzForm.get(0),
+    options =
       maxFiles: 1
-      maxFilesize: null # Handle this on the server side. Was not working properly on client side.
+      maxFilesize: if @maxSize then @maxSize / 1024 / 1024
+      filesizeBase: 1024
       thumbnailWidth: width
       thumbnailHeight: height
       init: ->
         dz = this
         dz.on 'addedfile', (file) -> view.fileAdded.apply(view, [file, dz])
         dz.on 'success', (file, response) -> view.fileUploaded.apply(view, [file, response, dz])
+    options = Object.assign(options, I18n.t("dropzone")) # Add translations
+    @dropzone = new Dropzone @dzForm.get(0), options
 
   events:
     'click a.delete': 'delete'

@@ -36,19 +36,17 @@ Gather.Views.FileUploadView = Backbone.View.extend
   fileAdded: (file, dz) ->
     dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
     @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
-    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val('') # Will be set when upload finished
+    @setSignedId('') # Will be set when upload finished
     @setDestroyFlag(false)
 
   fileUploaded: (file, response, dz) ->
-    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val(response.blob_id)
-    @mainForm.find("[id$=_#{@attrib}_destroy]").val('')
+    @setSignedId(response.blob_id)
     @errorForm.hide()
 
   delete: (e) ->
     e.preventDefault()
     @setDestroyFlag(true)
-    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val('')
-    @mainForm.find("[id$=_#{@attrib}_destroy]").val('1')
+    @setSignedId('')
     @dzForm.addClass('existing-deleted')
     @dropzone.removeFile(@dropzone.files[0]) if @hasNewFile()
 
@@ -56,9 +54,11 @@ Gather.Views.FileUploadView = Backbone.View.extend
     !!@dropzone.files[0]
 
   setDestroyFlag: (bool) ->
-    if @dzForm.is('.has-existing')
-      @destroyFlag = bool
-      @mainForm.find("[id$=_#{@attrib}_destroy]").val(if bool then '1' else '0')
+    @destroyFlag = bool
+    @mainForm.find("[id$=_#{@attrib}_destroy]").val(if bool then '1' else '0')
+
+  setSignedId: (id) ->
+    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val(id)
 
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()

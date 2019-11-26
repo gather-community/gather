@@ -1,16 +1,25 @@
-<% hide_existing = local_assigns[:hide_existing] %>
-<% attachment = obj.send(attrib) %>
-<% has_existing = !hide_existing && attachment.attached? %>
+<%
+  hide_existing = local_assigns[:hide_existing]
+  attachment = obj.send(attrib)
+  classes = ["dropzone"]
+  classes << "has-existing" if !hide_existing && attachment.attached?
+  classes << "existing-deleted" if obj.send("#{attrib}_destroy?")
+%>
 <%= content_tag(:div, data: {width: width, height: height}, class: "dropzone-wrapper") do %>
-  <%= form_tag(uploads_path, class: "dropzone #{has_existing ? 'has-existing' : ''}
-        #{obj.send("#{attrib}_destroy?") ? 'existing-deleted' : ''}") do %>
+  <%= form_tag(uploads_path, class: classes.join(" ")) do %>
+
+    <%= hidden_field_tag(:class_name, obj.class_name) %>
+    <%= hidden_field_tag(:attrib, attrib) %>
+
     <%= link_to(icon_tag("trash"), "#", class: "delete") %>
+
     <% if attachment.attached? && attachment.variable? %>
       <%= image_tag(obj.send("#{attrib}_variant", format), class: "existing") %>
       <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
     <% else %>
       <% bg_path = nil %>
     <% end %>
+
     <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
       <div>
         <%= t("dropzone.prompts.models.#{obj.model_name.i18n_key}", default: :"dropzone.prompts.default") %>

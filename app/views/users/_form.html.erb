@@ -11,7 +11,6 @@
     new Gather.Views.AjaxSelect2({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#user-forms',
-      attrib: 'photo',
       maxSize: User.attachment_size_limits[:photo]
     )%>);
     new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});

@@ -113,7 +113,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#import-forms', attrib: 'file')%>);
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#import-forms')%>);
     new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
     new Gather.Views.UserFormView({el: '.user-form'});
   });

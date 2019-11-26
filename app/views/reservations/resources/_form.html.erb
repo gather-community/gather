@@ -25,7 +25,6 @@
   $(function() {
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
       el: '#resource-forms',
-      attrib: 'photo',
       maxSize: Reservations::Resource.attachment_size_limits[:photo]
     )%>);
     new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});

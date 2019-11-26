@@ -4,14 +4,11 @@ Gather.Views.FileUploadView = Backbone.View.extend
     @dzForm = @$('.dropzone')
     @mainForm = @$('form:not(.dropzone):not(.dropzone-error-form)')
     @errorForm = @$('.dropzone-error-form')
-    @attrib = options.attrib
+
     @maxSize = options.maxSize
     @destroyFlag = false
 
-    @tmpId = @dzForm.find('[name=tmp_id]').val()
-    @model = @dzForm.find('[name=model]').val()
-    @attribute = @dzForm.find('[name=attribute]').val()
-    @id = @dzForm.find('[name=id]').val()
+    @attrib = @dzForm.find('[name=attrib]').val()
 
     @initDropzone()
 
@@ -39,6 +36,7 @@ Gather.Views.FileUploadView = Backbone.View.extend
   fileAdded: (file, dz) ->
     dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
     @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
+    @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val('') # Will be set when upload finished
     @setDestroyFlag(false)
 
   fileUploaded: (file, response, dz) ->

@@ -127,14 +127,14 @@ describe Meals::Import do
 
     context "with data causing validation errors" do
       let!(:formula) { create(:meal_formula, is_default: true) }
-      let(:resource) { create(:resource) }
+      let(:resource) { create(:resource, name: "Kitchen") }
       let(:csv) do
         prepare_expectation("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
       end
 
       it "returns errors on valid rows and saves no meals" do
         expect(import.errors_by_row).to eq(
-          "3" => ["The following error(s) occurred in making a Resource 1 reservation for this meal: "\
+          "3" => ["The following error(s) occurred in making a Kitchen reservation for this meal: "\
             "This reservation overlaps an existing one."],
           "4" => ["Could not find a meal formula with ID 1234"]
         )

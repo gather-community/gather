@@ -38,7 +38,7 @@ module Utils
       end
 
       def invite
-        People::SignInInvitationJob.new(community.id, [admin.id]).perform
+        People::SignInInvitationJob.perform_now(community.id, [admin.id])
       end
     end
   end

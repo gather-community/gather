@@ -39,7 +39,7 @@ describe "resources", js: true do
       click_button("Save")
 
       expect_validation_error
-      expect_image_upload(mode: :existing, path: /cooper/)
+      expect_image_upload(state: :existing, path: /cooper/)
       fill_in("Name", with: "Foo Bar")
       fill_in("Abbreviation", with: "Bar")
       select("Yes", from: "Can Host Meals?")
@@ -50,9 +50,9 @@ describe "resources", js: true do
 
       click_link("Foo Bar")
       expect(page).to have_title("Resource: Foo Bar")
-      expect_image_upload(mode: :existing, path: /cooper/)
+      expect_image_upload(state: :existing, path: /cooper/)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
-      expect_image_upload(mode: :dz_preview)
+      expect_image_upload(state: :new)
       fill_in("Name", with: "Baz Qux")
       click_button("Save")
 

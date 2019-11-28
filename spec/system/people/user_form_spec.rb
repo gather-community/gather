@@ -20,9 +20,9 @@ describe "user form", js: true do
   shared_examples_for "editing user" do
     scenario "edit user without changing email" do
       visit(edit_path)
-      expect_image_upload(mode: :existing, path: /cooper/)
+      expect_image_upload(state: :existing, path: /cooper/)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
-      expect_image_upload(mode: :dz_preview)
+      expect_image_upload(state: :new)
       fill_in("First Name", with: "Zoor")
       emails = email_sent_by do
         click_button("Save")
@@ -62,7 +62,7 @@ describe "user form", js: true do
         click_button("Save")
 
         expect_validation_error
-        expect_image_upload(mode: :existing, path: /cooper/)
+        expect_image_upload(state: :existing, path: /cooper/)
         fill_in("First Name", with: "Foo")
         fill_in("Last Name", with: "Barre")
         fill_in("Email", with: "foo@example.com")
@@ -189,9 +189,9 @@ describe "user form", js: true do
     scenario "update photo" do
       visit(user_path(user))
       click_on("Edit Photo")
-      expect_image_upload(mode: :upload_message)
+      expect_image_upload(state: :empty)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
-      expect_image_upload(mode: :dz_preview)
+      expect_image_upload(state: :new)
       click_button("Save")
       expect_success
       expect_photo(/chomsky/)

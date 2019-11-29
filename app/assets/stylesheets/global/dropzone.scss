@@ -1,30 +1,43 @@
 // Doing it this way to enable different thumbnail sizes based on class
 @mixin dropzone($thumb-width, $thumb-height) {
-  width: $thumb-width + 20px;
+  display: flex;
   line-height: 140%;
   margin-bottom: 20px;
+  max-width: $thumb-width + 20px;
 
   a.delete {
-    float: right;
     font-size: 18px;
     color: $text-muted;
+    margin-left: 5px;
+  }
+
+  .dropzone {
+    width: calc(100% - 20px);
   }
 
   img.existing {
-    width: $thumb-width;
+    width: 100%;
   }
 
   .dz-preview {
     margin: 0;
-    width: $thumb-width;
+    width: 100%;
 
     .dz-success-mark, .dz-error-mark {
       top: $thumb-height / 2px - 28px;
     }
   }
 
-  .dz-image img {
-    width: $thumb-width;
+  .dz-image {
+    max-height: $thumb-height;
+    display: flex;
+    align-items: center;
+    background-color: $gray-lighter;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+    }
   }
 
   .dz-details {
@@ -37,19 +50,24 @@
     }
   }
 
-  .dz-preview.dz-error {
-    .dz-image img {
-      height: $thumb-height;
-      background-color: $gray-lighter;
-    }
+  .dropzone .dz-preview .dz-progress .dz-upload {
+    background: $theme-main-lighter;
+  }
+
+  .dz-error-message {
+    @include error;
+  }
+
+  .dropzone .dz-preview.dz-success .dz-success-mark,
+  .dropzone .dz-preview.dz-error .dz-error-mark {
+    display: none; // The error message is enough of a signal and this is hard to position.
   }
 
   .dz-message {
-    width: $thumb-width;
     height: $thumb-height;
     // background-image is set inline in the partial since it depends on the model
     background-position: center center;
-    background-size: $thumb-width - 20px $thumb-height - 20px;
+    background-size: calc(100% - 20px) $thumb-height - 20px;
     background-repeat: no-repeat;
     text-align: center;
     padding: 20px;
@@ -70,30 +88,48 @@
   /////////////////////////////////////////////////////////////////////////////////////
   // Show and hide message, existing thumbnail, and delete link depending on state
 
-  .dropzone.has-existing {
+  &.state-existing {
     img.existing {
+      display: block;
+    }
+    .dz-message {
+      display: none;
+    }
+    .dz-preview {
+      display: none;
+    }
+    a.delete {
       display: block;
     }
   }
 
-  .dropzone, .dropzone.has-existing.existing-deleted {
+  &.state-empty {
+    img.existing {
+      display: none;
+    }
     .dz-message {
       display: flex;
     }
-    a.delete {
+    .dz-preview {
       display: none;
     }
-    img.existing {
+    a.delete {
       display: none;
     }
   }
 
-  .dropzone.has-existing, .dropzone.dz-started, .dropzone.has-existing.dz-started {
+  &.state-new {
+    img.existing {
+      display: none;
+    }
     .dz-message {
       display: none;
     }
+    .dz-preview {
+      display: block;
+    }
     a.delete {
-      display: inline;
+      display: block;
     }
   }
 }

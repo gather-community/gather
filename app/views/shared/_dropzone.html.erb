@@ -1,33 +1,41 @@
 <%
   hide_existing = local_assigns[:hide_existing]
   attachment = obj.send(attrib)
-  classes = ["dropzone"]
-  classes << "has-existing" if !hide_existing && attachment.attached?
-  classes << "existing-deleted" if obj.send("#{attrib}_destroy?")
+  bg_path = if local_assigns[:format]
+              image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png")
+            end
+  wrapper_classes = ["dropzone-wrapper"]
+  wrapper_classes <<
+    if hide_existing || !attachment.attached? || obj.send("#{attrib}_destroy?")
+      "state-empty"
+    else
+      "state-existing"
+    end
 %>
-<%= content_tag(:div, data: {width: width, height: height}, class: "dropzone-wrapper") do %>
-  <%= form_tag(uploads_path, class: classes.join(" ")) do %>
-
+<%= content_tag(:div, data: {width: width, height: height}, class: wrapper_classes.join(" ")) do %>
+  <%= form_tag(uploads_path, class: "dropzone") do %>
     <%= hidden_field_tag(:class_name, obj.class_name) %>
     <%= hidden_field_tag(:attrib, attrib) %>
 
-    <%= link_to(icon_tag("trash"), "#", class: "delete") %>
-
-    <% if attachment.attached? && attachment.variable? %>
+    <%# Existing image on object (may or may not be persisted as an attachment-could be just a blob.) %>
+    <% if attachment.attached? %>
       <%= image_tag(obj.send("#{attrib}_variant", format), class: "existing") %>
-      <% bg_path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png") %>
-    <% else %>
-      <% bg_path = nil %>
     <% end %>
 
+    <%# Drop area with the dashed border. %>
     <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
       <div>
         <%= t("dropzone.prompts.models.#{obj.model_name.i18n_key}", default: :"dropzone.prompts.default") %>
       </div>
     </div>
+
+    <%# Show any errors on this field that were set during create/update on the server. %>
+    <%# These errors should typically not be possible since we are checking them on the dropzone upload. %>
+    <% if obj.errors[attrib].any? %>
+      <div class="main-request-errors error"><%= obj.errors[attrib].join(", ") %></div>
+    <% end %>
+
+    <%# The dz-preview element will be inserted here, at the end of the form tag. %>
   <% end %>
-  <%= gather_form_for(obj, width: :full, top_error_notification: false,
-                           html: {class: "dropzone-error-form"}) do |f| %>
-    <%= f.error(attrib) %>
-  <% end %>
+  <%= link_to(icon_tag("trash"), "#", class: "delete") %>
 <% end %>

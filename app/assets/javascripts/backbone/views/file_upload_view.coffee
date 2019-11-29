@@ -1,9 +1,9 @@
 Gather.Views.FileUploadView = Backbone.View.extend
 
   initialize: (options) ->
+    @wrapper = @$('.dropzone-wrapper')
     @dzForm = @$('.dropzone')
     @mainForm = @$('form:not(.dropzone):not(.dropzone-error-form)')
-    @errorForm = @$('.dropzone-error-form')
 
     @maxSize = options.maxSize
     @destroyFlag = false
@@ -35,19 +35,20 @@ Gather.Views.FileUploadView = Backbone.View.extend
 
   fileAdded: (file, dz) ->
     dz.removeFile(dz.files[0]) if dz.files[1] # Replace existing dragged file if present
-    @dzForm.addClass('existing-deleted') if @dzForm.is('.has-existing')
+    @setViewState('new')
     @setSignedId('') # Will be set when upload finished
+    @hideMainRequestErrors()
     @setDestroyFlag(false)
 
   fileUploaded: (file, response, dz) ->
     @setSignedId(response.blob_id)
-    @errorForm.hide()
 
   delete: (e) ->
     e.preventDefault()
     @setDestroyFlag(true)
     @setSignedId('')
-    @dzForm.addClass('existing-deleted')
+    @hideMainRequestErrors()
+    @setViewState('empty')
     @dropzone.removeFile(@dropzone.files[0]) if @hasNewFile()
 
   hasNewFile: ->
@@ -60,8 +61,17 @@ Gather.Views.FileUploadView = Backbone.View.extend
   setSignedId: (id) ->
     @mainForm.find("[id$=_#{@attrib}_new_signed_id]").val(id)
 
+  hideMainRequestErrors: ->
+    @dzForm.find('.main-request-errors').hide()
+
   showExisting: (bool) ->
     @dzForm.find('.existing')[if bool then 'show' else 'hide']()
+
+  setViewState: (state) ->
+    @wrapper.removeClass('state-new')
+    @wrapper.removeClass('state-empty')
+    @wrapper.removeClass('state-existing')
+    @wrapper.addClass("state-#{state}")
 
   isUploading: ->
     @dropzone.getUploadingFiles().length > 0 || @dropzone.getQueuedFiles().length > 0;

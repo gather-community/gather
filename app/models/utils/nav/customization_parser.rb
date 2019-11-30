@@ -11,39 +11,33 @@ module Utils
         # a nil input is stored as an empty string
         self.markdown = markdown || ""
         self.customizations = parse
-        @done = []
       end
 
-      def filter_item(name:, path:, permitted:, icon:)
+      def filter_item(item_hash)
         # check to see if this item has been customized
-        result = {}
-        result[:name] = name
-        translated_name = I18n.t("nav_links.main.#{name}")
-        if @customizations[translated_name]
-          result[:path] = @customizations[translated_name]
-          @done << translated_name
-        else
-          result[:path] = path
+        translated_name = I18n.t("nav_links.main.#{item_hash[:name]}")
+        if customizations[translated_name]
+          item_hash[:path] = customizations[translated_name]
+          customizations.delete(translated_name)
         end
-        result[:permitted] = permitted
-        result[:icon] = icon
-        if result[:path] == "none"
+        if item_hash[:path] == "none"
           nil
         else
-          result
+          item_hash
         end
       end
 
-      def each
-        @customizations.each do |c|
-          next if @done.include?(c[0])
-          result = {}
-          result[:name] = c[0]
-          result[:path] = c[1]
-          result[:permitted] = true
-          result[:icon] = "info-circle"
-          yield(result)
+      def extra_items
+        result = []
+        customizations.each do |c|
+          result << {
+            name: c[0],
+            path: c[1],
+            permitted: true,
+            icon: "info-circle"
+          }
         end
+        result
       end
 
       def parse

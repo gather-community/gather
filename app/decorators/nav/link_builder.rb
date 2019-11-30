@@ -62,7 +62,7 @@ module Nav
       )
       items << menu_item unless menu_item.nil?
       # add all the new menu items defined as customizations
-      customizer.each { |custom_item| items << custom_item }
+      items.concat(customizer.extra_items)
       filter_and_set_active_nav_items(items, type: :main, active: context[:section])
     end
 

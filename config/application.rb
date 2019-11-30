@@ -41,8 +41,6 @@ module Gather
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
-    config.active_job.queue_adapter = :delayed_job
-
     config.middleware.use(ExceptionNotification::Rack,
                           email: {
                             email_prefix: "[Gather ERROR] ",

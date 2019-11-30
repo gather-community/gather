@@ -2,12 +2,11 @@
 
 require "rails_helper"
 
-feature "meal messages" do
+describe "meal messages", :perform_jobs do
   let(:formula) { create(:meal_formula, :with_two_roles) }
   let!(:meal) { create(:meal, formula: formula, asst_cooks: [create(:user)]) }
   let!(:user) { meal.head_cook }
   let!(:signup) { create(:meal_signup, meal: meal, diner_counts: [2, 1]) }
-  let(:email_sent) { email_sent_by { process_queued_job } }
 
   before do
     use_user_subdomain(user)
@@ -16,12 +15,14 @@ feature "meal messages" do
 
   shared_examples_for "sends message" do |recipient_type, email_count|
     scenario do
-      visit meal_path(meal)
-      click_link "Message"
-      select recipient_type, from: "Recipients"
-      fill_in "Message", with: "Foo bar"
-      click_button "Send Message"
-      expect(page).to have_content("Message sent successfully")
+      email_sent = email_sent_by do
+        visit meal_path(meal)
+        click_link "Message"
+        select recipient_type, from: "Recipients"
+        fill_in "Message", with: "Foo bar"
+        click_button "Send Message"
+        expect(page).to have_content("Message sent successfully")
+      end
       expect(email_sent.size).to eq(email_count)
     end
   end

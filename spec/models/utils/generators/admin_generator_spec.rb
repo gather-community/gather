@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Utils::Generators::AdminGenerator, :without_tenant, :dont_delay_jobs do
+describe Utils::Generators::AdminGenerator, :without_tenant, :perform_jobs do
   let(:cluster) { create(:cluster) }
   let!(:community) { ActsAsTenant.with_tenant(cluster) { create(:community) } }
   let(:admin) do

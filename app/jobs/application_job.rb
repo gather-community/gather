@@ -4,10 +4,8 @@
 class ApplicationJob < ActiveJob::Base
   queue_as :default
 
-  unless Rails.env.test?
-    rescue_from(StandardError) do |exception|
-      ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
-    end
+  rescue_from(StandardError) do |exception|
+    ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 
   protected

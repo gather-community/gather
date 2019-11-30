@@ -2,9 +2,8 @@
 
 require "rails_helper"
 
-describe "sign in invitations", js: true do
+describe "sign in invitations", js: true, perform_jobs: true do
   let(:actor) { create(:admin) }
-  let(:email_sent) { email_sent_by { process_queued_job } }
 
   before do
     use_user_subdomain(actor)
@@ -19,12 +18,14 @@ describe "sign in invitations", js: true do
 
     shared_examples_for "successful google sign in" do
       it do
-        expect(invitee).not_to be_confirmed
-        full_sign_in_as(actor)
-        visit(user_path(invitee))
-        accept_confirm { click_on("Invite") }
-        expect_success(/Invitation sent./)
-        full_sign_out
+        email_sent = email_sent_by do
+          expect(invitee).not_to be_confirmed
+          full_sign_in_as(actor)
+          visit(user_path(invitee))
+          accept_confirm { click_on("Invite") }
+          expect_success(/Invitation sent./)
+          full_sign_out
+        end
 
         # Get the link from the email and visit it.
         expect(email_sent.size).to eq(1)
@@ -62,12 +63,14 @@ describe "sign in invitations", js: true do
 
     shared_examples_for "successful password set" do
       it do
-        expect(invitee).not_to be_confirmed
-        full_sign_in_as(actor)
-        visit(user_path(invitee))
-        accept_confirm { click_on("Invite") }
-        expect_success(/Invitation sent./)
-        full_sign_out
+        email_sent = email_sent_by do
+          expect(invitee).not_to be_confirmed
+          full_sign_in_as(actor)
+          visit(user_path(invitee))
+          accept_confirm { click_on("Invite") }
+          expect_success(/Invitation sent./)
+          full_sign_out
+        end
 
         # Get the link from the email and visit it.
         expect(email_sent.size).to eq(1)
@@ -120,9 +123,11 @@ describe "sign in invitations", js: true do
         expect(page).not_to have_css("i.fa-question-circle")
       end
 
-      click_on("Select All No-Sign-Ins")
-      click_button("Send Invitations")
-      expect_success(/Invitations sent./)
+      email_sent = email_sent_by do
+        click_on("Select All No-Sign-Ins")
+        click_button("Send Invitations")
+        expect_success(/Invitations sent./)
+      end
 
       expect(email_sent.size).to eq(2)
       expect(email_sent.map(&:to)).to contain_exactly([invitee2.email], [invitee3.email])

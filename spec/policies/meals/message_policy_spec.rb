@@ -6,7 +6,8 @@ describe Meals::MessagePolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:meal) { create(:meal, cleaners: [user]) }
+    let(:formula) { create(:meal_formula, :with_two_roles) }
+    let(:meal) { create(:meal, formula: formula, asst_cooks: [user]) }
     let(:record) { message }
 
     context "with meal set" do

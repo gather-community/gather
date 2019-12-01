@@ -1,0 +1,4 @@
+Date/Time,Locations,Formula,Communities,Head Cook,Action
+2019-01-31 12:00,Foo;Bar,,,,DESTROY
+2019-02-01 12:00,Bar;Foo,Pizza,df;bv,Bil Bip,update
+2019-02-02 12:00,Foo;Bar,Pizza,df;bv,Bil Bip,update

@@ -29,6 +29,8 @@ module Meals
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
                                    dependent: :destroy
+    has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
+                            dependent: :restrict_with_exception, inverse_of: :statementable
 
     # Resources are chosen by the user. Reservations are then automatically created.
     # Deterministic orderings are for specs.

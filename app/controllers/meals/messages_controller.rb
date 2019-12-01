@@ -25,7 +25,7 @@ module Meals
       if @message.save
         @meal.cancel! if @message.cancellation?
         flash[:success] = "Message sent successfully."
-        Delayed::Job.enqueue(MessageJob.new(@message.id))
+        MessageJob.perform_later(@message.id)
         redirect_to(meal_path(@meal))
       else
         show_cancel_notice_if_appropriate

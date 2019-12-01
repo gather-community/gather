@@ -4,6 +4,7 @@ module Meals
   # Meal roles are types of jobs for meals like head cook, assistant cook, etc.
   class Role < ApplicationRecord
     include Deactivatable
+    include SemicolonDisallowable
 
     TIMES_OPTIONS = %i[date_time date_only].freeze
 
@@ -33,6 +34,8 @@ module Meals
     validates :shift_start, presence: true, if: :date_time?
     validates :shift_end, presence: true, if: :date_time?
     validate :shift_time_positive
+
+    disallow_semicolons :title
 
     accepts_nested_attributes_for :reminders, reject_if: :all_blank, allow_destroy: true
 

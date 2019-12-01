@@ -35,6 +35,7 @@ en:
       continue: "Continue"
       create: "Save"
       go_back: "Go Back"
+      import: "Import"
       update: "Save"
       save_and_invite: "Save & Invite"
       sign_in: "Sign In"
@@ -46,6 +47,10 @@ en:
         save_and_next: "Save & Go To Next Meal"
       wiki_page:
         preview: "Preview"
+
+  errors:
+    messages:
+      no_semicolons: "Semicolons not allowed"
 
   button_labels:
     reservations/reservation:
@@ -265,6 +270,29 @@ en:
         account_id: "Account ID"
         statement_id: "Statement ID"
         meal_id: "Meal ID"
+      meals/meal:
+        served_at: "Date/Time"
+        resources: "Locations"
+        formula: "Formula"
+        communities: "Communities"
+        role: "Role"
+      common:
+        id: "ID"
+        action: "Action"
+    errors:
+      meals/meal:
+        resource:
+          bad_id: "Could not find a resource with ID %{str}"
+          bad_name: "Could not find a resource named '%{str}'"
+        formula:
+          bad_id: "Could not find a meal formula with ID %{str}"
+          bad_name: "Could not find a meal formula named '%{str}'"
+        community:
+          bad_id: "Could not find a community with ID %{str}"
+          bad_name: "Could not find a community named '%{str}'"
+        user:
+          bad_id: "Could not find a user with ID %{str}"
+          bad_name: "Could not find a user named '%{str}'"
 
   action_names:
     common:
@@ -292,6 +320,14 @@ en:
       edit_job: "Edit Job"
       signup: "Sign Up"
       unsignup: "Remove Signup"
+
+  dropzone:
+    prompts:
+      default: "Click or Drag File Here"
+      models:
+        user: "Click or Drag Photo Here"
+        reservations/resource: "Click or Drag Photo Here"
+
 
   calendars:
     your_meals: "Meals You're Attending"

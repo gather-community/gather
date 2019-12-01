@@ -19,7 +19,7 @@ describe Meals::TypePolicy do
 
     permissions :destroy? do
       context "with associated cost part" do
-        let!(:cost) { create(:meal_cost) }
+        let!(:cost) { create(:meal_cost, :with_parts) }
         let(:type) { cost.parts[0].type }
 
         it_behaves_like "forbids all"

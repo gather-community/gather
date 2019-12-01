@@ -1,0 +1,26 @@
+<% if @import.successful? %>
+  <div class="alert alert-success">Your import succeeded!</div>
+  Check out the <%= link_to("meals page", meals_path) %>
+  to see your imported meals.
+<% elsif @import.crashed? %>
+  <div class="alert alert-danger">We encountered an unexpected error during import.</div>
+  Please <%= link_to("try again below", "#upload") %>,
+  and contact your administrator if the error persists.
+  <%= render("instructions_and_form") %>
+<% else %>
+  <div class="alert alert-danger">There were one or more issues with your meal data.</div>
+  Please resolve the issues below and <%= link_to("try again", "#upload") %>.
+  <ul>
+    <% @import.sorted_errors_by_row.each do |row_number, errors| %>
+      <li>
+        <strong>Row <%= row_number %></strong>
+        <ul>
+          <% errors.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+  <%= render("instructions_and_form") %>
+<% end %>

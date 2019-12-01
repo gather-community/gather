@@ -7,6 +7,7 @@
 Time::DATE_FORMATS[:default] = "%Y-%m-%dT%H:%M:%S"
 Time::DATE_FORMATS[:no_sep] = "%Y%m%dT%H%M%S"
 Time::DATE_FORMATS[:no_time] = "%Y-%m-%d"
+Time::DATE_FORMATS[:no_sec_no_t] = "%Y-%m-%d %H:%M"
 Date::DATE_FORMATS[:default] = "%Y-%m-%d"
 Date::DATE_FORMATS[:no_sep] = "%Y%m%d"
 Date::DATE_FORMATS[:no_year] = "%m-%d"

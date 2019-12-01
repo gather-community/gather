@@ -279,7 +279,7 @@ class UsersController < ApplicationController
 
   def send_invite_and_flash_on_create
     if params[:save_and_invite]
-      Delayed::Job.enqueue(People::SignInInvitationJob.new(current_community.id, [@user.id]))
+      People::SignInInvitationJob.perform_later(current_community.id, [@user.id])
       flash[:success] = "User created and invited successfully."
     else
       flash[:success] = "User created successfully."

@@ -7,9 +7,11 @@ FactoryBot.define do
     pantry_cost { 2.00 }
     payment_method { "check" }
 
-    after(:build) do |cost|
-      formula = cost.meal.formula
-      cost.parts.build(type: formula.types.first, value: 3.56)
+    trait :with_parts do
+      after(:build) do |cost|
+        formula = cost.meal.formula
+        cost.parts.build(type: formula.types.first, value: 3.56)
+      end
     end
   end
 end

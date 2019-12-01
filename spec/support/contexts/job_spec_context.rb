@@ -7,7 +7,7 @@ shared_context "jobs" do
   # Runs job with nil tenant to ensure that job sets tenant itself.
   def perform_job(*args)
     ActsAsTenant.with_tenant(nil) do
-      described_class.new(*args).perform
+      described_class.perform_now(*args)
     end
   end
 end

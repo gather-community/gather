@@ -1,3 +1,20 @@
+@mixin form-message-block {
+  display: block;
+  padding: 0 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+
+@mixin error {
+  @include form-message-block;
+  color: $brand-danger;
+  background-color: $state-danger-bg;
+}
+
 form {
   // Overriding error message style
   .has-error {
@@ -11,24 +28,17 @@ form {
   }
 
   .success {
+    @include form-message-block;
     color: $brand-success;
     background-color: $state-success-bg;
   }
 
-  .error {
-    color: $brand-danger;
-    background-color: $state-danger-bg;
+  .warning {
+    @include form-message-block;
   }
 
-  .error, .warning, .success {
-    display: block;
-    padding: 0 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    &:first-letter {
-      text-transform: uppercase;
-    }
+  .error {
+    @include error;
   }
 
   label .error {

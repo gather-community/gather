@@ -9,7 +9,7 @@ describe Utils::Generators::MainGenerator do
   end
 
   # Don't delay jobs so that any mails would get sent immediately
-  it "should run and destroy cleanly", :without_tenant, :dont_delay_jobs do
+  it "should run and destroy cleanly", :without_tenant, :perform_jobs do
     cluster = nil
 
     expect do
@@ -41,7 +41,6 @@ describe Utils::Generators::MainGenerator do
       Cluster.cluster_based_models.each do |klass|
         expect(klass.count).to eq(0), "Expected to find no #{klass.name.pluralize}"
       end
-      process_queued_job
       expect(ActiveStorage::Blob.count).to eq(0)
     end
   end

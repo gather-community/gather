@@ -1,0 +1,6 @@
+Date/Time,Locations,Action
+2019-01-31 12:00,Blah,update
+2019-01-31 12:00,Foo,update
+2019-02-01 13:00,Foo,destroy
+2019-02-01 13:00,Foo,create
+2019-02-01 13:00,Foo,baloney

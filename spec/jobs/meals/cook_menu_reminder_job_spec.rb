@@ -10,11 +10,22 @@ describe Meals::CookMenuReminderJob do
   let(:user2) { create(:user) }
   let(:user3) { create(:user) }
   let(:user4) { create(:user) }
-  let!(:meal1) { create(:meal, *meal1_trait, head_cook: user1, served_at: "2017-01-05") }
-  let!(:meal2) { create(:meal, *meal2_trait, head_cook: user2, served_at: "2017-01-10") }
-  let!(:meal3) { create(:meal, head_cook: user2, cleaners: [user1], served_at: "2017-01-14") }
-  let!(:meal4) { create(:meal, head_cook: user3, served_at: "2017-01-05", status: "cancelled") }
-  let!(:meal5) { create(:meal, head_cook: user4, served_at: "2017-01-10", status: "cancelled") }
+  let(:formula) { create(:meal_formula, :with_three_roles) }
+  let!(:meal1) do
+    create(:meal, *meal1_trait, formula: formula, head_cook: user1, served_at: "2017-01-05")
+  end
+  let!(:meal2) do
+    create(:meal, *meal2_trait, formula: formula, head_cook: user2, served_at: "2017-01-10")
+  end
+  let!(:meal3) do
+    create(:meal, formula: formula, head_cook: user2, cleaners: [user1], served_at: "2017-01-14")
+  end
+  let!(:meal4) do
+    create(:meal, formula: formula, head_cook: user3, served_at: "2017-01-05", status: "cancelled")
+  end
+  let!(:meal5) do
+    create(:meal, formula: formula, head_cook: user4, served_at: "2017-01-10", status: "cancelled")
+  end
   subject(:email_sent) { email_sent_by { perform_job } }
 
   # reminder jobs shared context sets correct time by default

@@ -1,24 +1,37 @@
 # frozen_string_literal: true
 
 # Methods allowing editing attachments via forms.
-# Currently just for attribs named 'photo', but could/should be generalized.
 module AttachmentFormable
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :photo_destroy
-    attr_reader :photo_new_signed_id
-
     validate :valid_attachment_content_types
     validate :valid_attachment_size
-
-    before_save do
-      photo.purge if photo_destroy? && photo.attached?
-    end
+    before_save :destroy_attachments_if_requested
   end
 
   class_methods do
-    attr_accessor :attachment_content_types, :attachment_size_limits
+    attr_accessor :attachment_attribs, :attachment_content_types, :attachment_size_limits
+
+    def accepts_attachment_via_form(*attribs)
+      self.attachment_attribs ||= []
+
+      attribs.each do |attrib|
+        attachment_attribs << attrib
+
+        attr_accessor :"#{attrib}_destroy"
+        attr_reader :"#{attrib}_new_signed_id"
+
+        define_method(:"#{attrib}_new_signed_id=") do |signed_id|
+          instance_variable_set("@#{attrib}_new_signed_id", signed_id)
+          send("#{attrib}=", signed_id) if signed_id.present?
+        end
+
+        define_method(:"#{attrib}_destroy?") do
+          send("#{attrib}_destroy")&.to_i == 1
+        end
+      end
+    end
 
     def validates_attachment_content_type(attrib, content_type:)
       self.attachment_content_types ||= {}
@@ -31,17 +44,10 @@ module AttachmentFormable
     end
   end
 
-  def photo_new_signed_id=(signed_id)
-    @photo_new_signed_id = signed_id
-    self.photo = signed_id if signed_id.present?
-  end
-
-  def photo_destroy?
-    photo_destroy.to_i == 1
-  end
+  private
 
   def valid_attachment_content_types
-    self.class.attachment_content_types.each do |attrib, types|
+    (self.class.attachment_content_types || {}).each do |attrib, types|
       next unless send(attrib).attached?
       next if types.include?(send(attrib).blob.content_type)
       errors.add(attrib, :invalid_content_type)
@@ -49,10 +55,17 @@ module AttachmentFormable
   end
 
   def valid_attachment_size
-    self.class.attachment_size_limits.each do |attrib, limit|
+    (self.class.attachment_size_limits || {}).each do |attrib, limit|
       next unless send(attrib).attached?
       next if send(attrib).blob.byte_size < limit
       errors.add(attrib, :too_big, max: limit / 1.megabyte)
+    end
+  end
+
+  def destroy_attachments_if_requested
+    self.class.attachment_attribs.each do |attrib|
+      attachment = send(attrib)
+      attachment.purge if send("#{attrib}_destroy?") && attachment.attached?
     end
   end
 end

@@ -81,7 +81,7 @@ describe "password auth" do
       fill_in("Password", with: FactoryBot::DEFAULT_PASSWORD)
       click_button("Sign In")
       expect(page).not_to have_signed_in_user(user)
-      expect(page).to have_alert("You must use an invititation when first signing in.")
+      expect(page).to have_alert("You must use an invitation when first signing in.")
     end
   end
 

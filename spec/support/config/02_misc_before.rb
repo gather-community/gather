@@ -2,14 +2,17 @@
 
 # Miscellaneous things that need to run before each spec.
 RSpec.configure do |config|
+  include ActiveJob::TestHelper
+
   # Time zone. There are many places where we Timecop.freeze in an around block, and this should happen first.
   config.around do |example|
     Time.zone = "UTC"
     example.run
   end
 
-  config.before do |example|
-    Delayed::Worker.delay_jobs = example.metadata[:dont_delay_jobs] != true
+  config.around(perform_jobs: true) do |example|
+    perform_enqueued_jobs { example.run }
+    clear_enqueued_jobs
   end
 
   config.before do |example|

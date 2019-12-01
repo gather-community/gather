@@ -98,4 +98,41 @@ describe Meals::Meal do
       end
     end
   end
+
+  # Our approach to destruction is to:
+  # - Set the policy to only disallow deletions based on what users of various roles should be able
+  #   to destroy given various combinations of existing associations.
+  # - Set association `dependent` options to avoid DB constraint errors UNLESS the destroy is never allowed.
+  # - In the model spec, assume destroy has been called and test for the appropriate behavior
+  #   (dependent destruction, nullification, or error) for each foreign key.
+  # - In the policy spec, test for the appropriate restrictions on destroy.
+  # - In the feature spec, test the destruction/deactivation/activation happy paths.
+  describe "destruction" do
+    let!(:meal) { create(:meal) }
+    let!(:signups) { create_list(:meal_signup, 2, meal: meal, diner_counts: [2, 1]) }
+    let!(:cost) { create(:meal_cost, meal: meal) }
+
+    before do
+      meal.reload # Force associations to be recognized.
+      meal.build_reservations
+      meal.save!
+    end
+
+    context "unfinalized" do
+      it "deletes cleanly" do
+        meal.destroy
+        expect { meal.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "finalized with transactions" do
+      before do
+        Meals::Finalizer.new(meal).finalize!
+      end
+
+      it "raises error" do
+        expect { meal.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      end
+    end
+  end
 end

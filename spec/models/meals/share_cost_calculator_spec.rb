@@ -18,7 +18,7 @@ describe Meals::ShareCostCalculator do
   end
 
   context "with regular meal" do
-    before { meal.cost = build(:meal_cost, meal: meal, ingredient_cost: 100, pantry_cost: 15) }
+    before { meal.cost = build(:meal_cost, :with_parts, meal: meal, ingredient_cost: 100, pantry_cost: 15) }
 
     context "with fixed pantry_calc_type" do
       let(:pantry_calc_type) { "fixed" }
@@ -68,7 +68,7 @@ describe Meals::ShareCostCalculator do
   context "with zero dollar ingredient and zero signup meal" do
     let(:pantry_calc_type) { "fixed" }
     let(:pantry_fee) { 0.5 }
-    before { meal.cost = build(:meal_cost, meal: meal, ingredient_cost: 0, pantry_cost: 15) }
+    before { meal.cost = build(:meal_cost, :with_parts, meal: meal, ingredient_cost: 0, pantry_cost: 15) }
 
     before do
       allow(meal).to receive(:signup_totals).and_return(types[0] => 0)

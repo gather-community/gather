@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_19_032723) do
+ActiveRecord::Schema.define(version: 2019_11_19_222123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -192,6 +192,19 @@ ActiveRecord::Schema.define(version: 2019_11_19_032723) do
     t.index ["cluster_id"], name: "index_meal_formulas_on_cluster_id"
     t.index ["community_id"], name: "index_meal_formulas_on_community_id"
     t.index ["deactivated_at"], name: "index_meal_formulas_on_deactivated_at"
+  end
+
+  create_table "meal_imports", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.jsonb "errors_by_row"
+    t.string "status", default: "queued", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["cluster_id"], name: "index_meal_imports_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_imports_on_community_id"
+    t.index ["user_id"], name: "index_meal_imports_on_user_id"
   end
 
   create_table "meal_invitations", id: :serial, force: :cascade do |t|
@@ -754,6 +767,9 @@ ActiveRecord::Schema.define(version: 2019_11_19_032723) do
   add_foreign_key "meal_formula_roles", "meal_roles", column: "role_id"
   add_foreign_key "meal_formulas", "clusters"
   add_foreign_key "meal_formulas", "communities"
+  add_foreign_key "meal_imports", "clusters"
+  add_foreign_key "meal_imports", "communities"
+  add_foreign_key "meal_imports", "users"
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"

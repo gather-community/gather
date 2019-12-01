@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "user form", js: true do
+describe "user form", js: true, perform_jobs: true do
   include_context "photo uploads"
 
   let(:admin) { create(:admin) }
@@ -20,16 +20,16 @@ describe "user form", js: true do
   shared_examples_for "editing user" do
     scenario "edit user without changing email" do
       visit(edit_path)
-      expect_image_upload(mode: :existing, path: /cooper/)
+      expect_image_upload(state: :existing, path: /cooper/)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
-      expect_image_upload(mode: :dz_preview)
+      expect_image_upload(state: :new)
       fill_in("First Name", with: "Zoor")
-      emails = email_sent_by do
+      email_sent = email_sent_by do
         click_button("Save")
         expect(page).to have_alert(/updated successfully/)
       end
 
-      expect(emails).to be_empty
+      expect(email_sent).to be_empty
       expect(page).to have_title(/Zoor/)
       expect_photo(/chomsky/)
       expect(user.reload.unconfirmed_email).to be_nil
@@ -38,13 +38,13 @@ describe "user form", js: true do
     scenario "edit user email" do
       visit(edit_path)
       fill_in("Email Address", with: "newone@example.com")
-      emails = email_sent_by do
+      email_sent = email_sent_by do
         click_button("Save")
         expect(page).to have_alert(/confirm (your|their) new email address/)
       end
 
-      expect(emails.map(&:subject)).to eq(["Please Confirm Your Email Address"])
-      expect(emails[0].body.encoded).to match(/security measure/)
+      expect(email_sent.map(&:subject)).to eq(["Please Confirm Your Email Address"])
+      expect(email_sent[0].body.encoded).to match(/security measure/)
       expect(user.reload).to be_confirmed
       expect(user.unconfirmed_email).to eq("newone@example.com")
     end
@@ -61,36 +61,39 @@ describe "user form", js: true do
         expect_no_image_and_drop_file("cooper.jpg")
         click_button("Save")
 
-        expect_validation_error
-        expect_image_upload(mode: :existing, path: /cooper/)
-        fill_in("First Name", with: "Foo")
-        fill_in("Last Name", with: "Barre")
-        fill_in("Email", with: "foo@example.com")
-        select2("Ginger", from: "#user_household_id")
-        fill_in("Mobile", with: "5556667777")
-        click_button("Save")
+        email_sent = email_sent_by do
+          expect_validation_error
+          expect_image_upload(state: :existing, path: /cooper/)
+          fill_in("First Name", with: "Foo")
+          fill_in("Last Name", with: "Barre")
+          fill_in("Email", with: "foo@example.com")
+          select2("Ginger", from: "#user_household_id")
+          fill_in("Mobile", with: "5556667777")
+          click_button("Save")
 
-        expect(page).to have_alert("User created successfully.")
-        expect(page).to have_title(/Foo Barre/)
-        expect_photo(/cooper/)
+          expect(page).to have_alert("User created successfully.")
+          expect(page).to have_title(/Foo Barre/)
+          expect_photo(/cooper/)
+        end
 
-        expect(email_sent_by { process_queued_job }).to be_empty
+        expect(email_sent).to be_empty
         expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
       end
 
       scenario "new user with invite" do
-        visit(new_user_path)
-        fill_in("First Name", with: "Foo")
-        fill_in("Last Name", with: "Barre")
-        fill_in("Email", with: "foo@example.com")
-        select2("Ginger", from: "#user_household_id")
-        fill_in("Mobile", with: "5556667777")
-        click_on("Save & Invite")
+        email_sent = email_sent_by do
+          visit(new_user_path)
+          fill_in("First Name", with: "Foo")
+          fill_in("Last Name", with: "Barre")
+          fill_in("Email", with: "foo@example.com")
+          select2("Ginger", from: "#user_household_id")
+          fill_in("Mobile", with: "5556667777")
+          click_on("Save & Invite")
 
-        expect(page).to have_alert("User created and invited successfully.")
+          expect(page).to have_alert("User created and invited successfully.")
+        end
 
-        emails = email_sent_by { process_queued_job }
-        expect(emails.map(&:subject)).to eq(["Instructions for Signing in to Gather"])
+        expect(email_sent.map(&:subject)).to eq(["Instructions for Signing in to Gather"])
         expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
       end
     end
@@ -115,12 +118,12 @@ describe "user form", js: true do
           scenario do
             visit(edit_path)
             fill_in("Email Address", with: "newone@example.com")
-            emails = email_sent_by do
+            email_sent = email_sent_by do
               click_button("Save")
               expect(page).to have_alert(alert)
             end
 
-            expect(emails).to be_empty
+            expect(email_sent).to be_empty
             expect(user.reload).not_to be_confirmed
             expect(user.unconfirmed_email).to be_nil
           end
@@ -189,9 +192,9 @@ describe "user form", js: true do
     scenario "update photo" do
       visit(user_path(user))
       click_on("Edit Photo")
-      expect_image_upload(mode: :upload_message)
+      expect_image_upload(state: :empty)
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
-      expect_image_upload(mode: :dz_preview)
+      expect_image_upload(state: :new)
       click_button("Save")
       expect_success
       expect_photo(/chomsky/)

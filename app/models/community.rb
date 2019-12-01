@@ -3,6 +3,7 @@
 # This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields
+  include SemicolonDisallowable
 
   SLUG_REGEX = /[a-z][a-z\-]*/.freeze
 
@@ -27,6 +28,8 @@ class Community < ApplicationRecord
   scope :by_name, -> { order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
+
+  disallow_semicolons :name
 
   before_create :generate_calendar_token
 

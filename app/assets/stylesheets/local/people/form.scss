@@ -1,9 +1,9 @@
 .users {
-  .dropzone-wrapper[data-width="150"] {
+  .full-form-dropzone .dropzone-wrapper {
     @include dropzone(150px, 150px);
   }
 
-  .dropzone-wrapper[data-width="300"] {
+  .photo-only-form-dropzone .dropzone-wrapper {
     @include dropzone(300px, 300px);
   }
 

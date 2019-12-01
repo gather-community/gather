@@ -1,15 +1,27 @@
 # frozen_string_literal: true
 
-class ApplicationJob
-  def error(_job, exception)
+# Base job class.
+class ApplicationJob < ActiveJob::Base
+  queue_as :default
+
+  rescue_from(StandardError) do |exception|
     ExceptionNotifier.notify_exception(exception, data: {job: to_yaml})
   end
 
-  def max_attempts
-    1
-  end
-
   protected
+
+  # Loads the specified object and sets up the community context. Assumes
+  # the class is cluster-based and responds to `community`.
+  def with_object_in_community_context(class_or_class_name, id)
+    klass = class_or_class_name.is_a?(String) ? class_or_class_name.constantize : class_or_class_name
+
+    # Load the object and call community while still inside the
+    # without_tenant block to preload the association.
+    # Else we get a no tenant error when calling community later.
+    object = ActsAsTenant.without_tenant { klass.find(id).tap(&:community) }
+
+    with_community(object.community) { yield(object) }
+  end
 
   def each_community
     Cluster.all.each do |cluster|

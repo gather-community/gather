@@ -22,7 +22,7 @@ describe "billing", js: true do
       actor.community.save!
     end
 
-    scenario "main path" do
+    scenario "main path", :perform_jobs do
       visit(accounts_path)
       expect(page).to have_content(account1.household.name)
       expect(page).to have_content(account2.household.name)
@@ -65,7 +65,6 @@ describe "billing", js: true do
       message = accept_confirm { click_link("Send Statements") }
       expect(message).to include("Are you sure? Statements will be sent out to 2 households.")
       expect_success("Statement generation started.")
-      process_queued_job
 
       click_link(account1.household.name)
       expect(page).to have_statement_rows(2, more: false)

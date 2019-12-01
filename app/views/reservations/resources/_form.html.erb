@@ -1,6 +1,6 @@
 <div class="row" id="resource-forms">
   <div class="col-sm-3 col-sm-push-9">
-    <%= render("shared/photo_dropzone", obj: resource, format: :thumb, width: 220, height: 165) %>
+    <%= render("shared/dropzone", obj: resource, attrib: :photo, format: :thumb) %>
   </div>
 
   <div class="col-sm-9 col-sm-pull-3">
@@ -23,7 +23,10 @@
 
 <%= javascript_tag do %>
   $(function() {
-    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#resource-forms')%>);
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(
+      el: '#resource-forms',
+      maxSize: Reservations::Resource.attachment_size_limits[:photo]
+    )%>);
     new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});
   });
 <% end %>

@@ -44,12 +44,16 @@ module Meals
       active_admin_or?(:meals_coordinator)
     end
 
+    def import?
+      active_admin_or?(:meals_coordinator)
+    end
+
     def update?
       change_date_loc_invites? || change_formula? || change_menu? || change_workers?
     end
 
     def destroy?
-      active_admin_or?(:meals_coordinator)
+      active_admin_or?(:meals_coordinator) && !meal.finalized?
     end
 
     def summary?
@@ -82,7 +86,7 @@ module Meals
     end
 
     def change_formula?
-      !meal.finalized? && active_admin_or?(:meals_coordinator, :biller) || head_cook?
+      not_finalized_and_admin_coord_head_cook_or_biller?
     end
 
     def change_capacity?

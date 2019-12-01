@@ -17,7 +17,7 @@ module Utils
       private
 
       def make_statements
-        Billing::StatementJob.new(community.id, no_mail: true).perform
+        Billing::StatementJob.perform_now(community.id, no_mail: true)
       end
 
       def pay_bills

@@ -26,6 +26,7 @@ class User < ApplicationRecord
   include AttachmentFormable
   include Phoneable
   include Deactivatable
+  include SemicolonDisallowable
 
   ROLES = %i[super_admin cluster_admin admin biller photographer
              meals_coordinator wikiist work_coordinator].freeze
@@ -76,6 +77,7 @@ class User < ApplicationRecord
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
   scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
+  scope :with_full_name, ->(n) { where("LOWER(first_name || ' ' || last_name) = ?", n.downcase) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
@@ -117,7 +119,10 @@ class User < ApplicationRecord
   validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
 
+  disallow_semicolons :first_name, :last_name
+
   has_one_attached :photo
+  accepts_attachment_via_form :photo
   validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
   validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
 

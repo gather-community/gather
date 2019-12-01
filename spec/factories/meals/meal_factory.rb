@@ -43,7 +43,7 @@ FactoryBot.define do
       status { "finalized" }
 
       after(:build) do |meal|
-        meal.cost = build(:meal_cost)
+        meal.cost = build(:meal_cost, :with_parts)
       end
     end
 

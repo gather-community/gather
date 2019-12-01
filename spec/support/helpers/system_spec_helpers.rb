@@ -120,24 +120,26 @@ module SystemSpecHelpers
   end
   alias expect_validation_message expect_validation_error
 
-  def expect_image_upload(mode:, path: nil)
-    case mode
-    when :dz_preview
-      expect(page).to have_css("form.dropzone img[data-dz-thumbnail]", visible: true)
-      expect(page.find("form.dropzone img[data-dz-thumbnail]")["src"]).to match(/base64/)
-      expect(page).to have_no_css("form.dropzone img.existing", visible: true)
-      expect(page).to have_css("form.dropzone a.delete", visible: true)
-      expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
-    when :existing
-      expect(page).not_to have_css("form.dropzone img[data-dz-thumbnail]")
-      expect(page).to have_css("form.dropzone img.existing", visible: true)
-      expect(page.find("form.dropzone img.existing")["src"]).to match(path)
-      expect(page).to have_css("form.dropzone a.delete", visible: true)
-      expect(page).to have_no_css("form.dropzone .dz-message", visible: true)
-    when :upload_message
-      expect(page).to have_no_css("form.dropzone img[data-dz-thumbnail]", visible: true)
-      expect(page).to have_no_css("form.dropzone img.existing", visible: true)
-      expect(page).to have_css("form.dropzone .dz-message", visible: true)
+  def expect_image_upload(state:, path: nil)
+    within(".dropzone-wrapper") do
+      case state
+      when :new
+        expect(page).to have_css("img[data-dz-thumbnail]", visible: true)
+        expect(page.find("img[data-dz-thumbnail]")["src"]).to match(/base64/)
+        expect(page).to have_no_css("img.existing", visible: true)
+        expect(page).to have_css("a.delete", visible: true)
+        expect(page).to have_no_css(".dz-message", visible: true)
+      when :existing
+        expect(page).not_to have_css("img[data-dz-thumbnail]")
+        expect(page).to have_css("img.existing", visible: true)
+        expect(page.find("img.existing")["src"]).to match(path)
+        expect(page).to have_css("a.delete", visible: true)
+        expect(page).to have_no_css(".dz-message", visible: true)
+      when :upload_message
+        expect(page).to have_no_css("img[data-dz-thumbnail]", visible: true)
+        expect(page).to have_no_css("img.existing", visible: true)
+        expect(page).to have_css(".dz-message", visible: true)
+      end
     end
   end
 
@@ -175,14 +177,14 @@ module SystemSpecHelpers
   end
 
   def delete_from_dropzone
-    find(:css, "form.dropzone a.delete").click
+    find(:css, ".dropzone-wrapper a.delete").click
     expect_no_image_upload
   end
 
   def expect_no_image_and_drop_file(filename)
     expect_no_image_upload
     drop_in_dropzone(fixture_file_path(filename))
-    expect_image_upload(mode: :dz_preview)
+    expect_image_upload(state: :new)
   end
 
   # Signs in to the app by filling in the password form instead of using the faster Warden helper login_as.

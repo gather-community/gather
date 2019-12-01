@@ -42,11 +42,6 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :import?, :change_date_loc_invites?, :change_formula?,
-                :change_workers_without_notification? do
-      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
-    end
-
     permissions :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
@@ -63,12 +58,17 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :change_formula?, :change_signups?, :change_expenses? do
-      it_behaves_like "permits admins or special role but not regular users", :biller
-      it_behaves_like "forbids if finalized"
+    permissions :new?, :create?, :import?, :change_date_loc_invites?,
+                :change_workers_without_notification? do
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
-    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
+    permissions :change_formula?, :change_signups?, :change_expenses? do
+      it_behaves_like "permits admins or special role but not regular users", :biller
+    end
+
+    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :change_expenses?,
+                :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
 

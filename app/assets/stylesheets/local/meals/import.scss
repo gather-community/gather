@@ -3,4 +3,15 @@
     margin-top: 20px;
     @include dropzone(300px, 100px);
   }
+
+  #example-csv {
+    thead {
+      font-weight: bold;
+    }
+
+    td {
+      border: $light-border;
+      padding: 3px 7px;
+    }
+  }
 }

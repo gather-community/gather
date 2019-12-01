@@ -103,11 +103,13 @@
 <h2>Upload File<a name="upload"></a></h2>
 
 <div id="import-forms">
-  <%= render("shared/dropzone", obj: @new_import, attrib: :file, width: 300, height: 100) %>
+  <%= render("shared/dropzone", obj: @new_import, attrib: :file) %>
   <%= gather_form_for(@new_import, width: :full) do |f| %>
     <%= f.hidden_field(:file_new_signed_id) %>
     <%= f.hidden_field(:file_destroy) %>
-    <%= f.button(:primary, :import) %>
+    <%= form_actions do %>
+      <%= f.button(:primary, :import) %>
+    <% end %>
   <% end %>
 </div>
 

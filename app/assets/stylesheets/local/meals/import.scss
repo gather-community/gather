@@ -1,7 +1,7 @@
 .meals--imports {
   .dropzone-wrapper {
     margin-top: 20px;
-    @include dropzone(300px, 100px);
+    @include dropzone(100%, 100px);
   }
 
   #example-csv {

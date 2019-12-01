@@ -13,16 +13,11 @@ Gather.Views.FileUploadView = Backbone.View.extend
     @initDropzone()
 
   initDropzone: ->
-    # Should match $thumbnail-size in dropzone.scss
-    width = @dzForm.data('width')
-    height = @dzForm.data('height')
     view = this
     options =
       maxFiles: 1
       maxFilesize: if @maxSize then @maxSize / 1024 / 1024
       filesizeBase: 1024
-      thumbnailWidth: width
-      thumbnailHeight: height
       init: ->
         dz = this
         dz.on 'addedfile', (file) -> view.fileAdded.apply(view, [file, dz])

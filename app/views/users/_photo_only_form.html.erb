@@ -1,6 +1,5 @@
-<div class="col-sm-12">
-  <%= render("shared/dropzone", obj: user, attrib: :photo, format: :medium, width: 300, height: 300,
-                                hide_existing: true) %>
+<div class="col-sm-12 photo-only-form-dropzone">
+  <%= render("shared/dropzone", obj: user, attrib: :photo, format: :medium, hide_existing: true) %>
   <%= gather_form_for(user, width: :full) do |f| %>
     <%= f.hidden_field :photo_new_signed_id %>
     <%= f.hidden_field :photo_destroy %>

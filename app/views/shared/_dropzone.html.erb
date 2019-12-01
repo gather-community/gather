@@ -12,7 +12,7 @@
       "state-existing"
     end
 %>
-<%= content_tag(:div, data: {width: width, height: height}, class: wrapper_classes.join(" ")) do %>
+<%= content_tag(:div, class: wrapper_classes.join(" ")) do %>
   <%= form_tag(uploads_path, class: "dropzone") do %>
     <%= hidden_field_tag(:class_name, obj.class_name) %>
     <%= hidden_field_tag(:attrib, attrib) %>

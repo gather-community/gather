@@ -42,11 +42,6 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :import?, :change_date_loc_invites?, :change_formula?,
-                :change_workers_without_notification? do
-      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
-    end
-
     permissions :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
@@ -63,18 +58,30 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :change_formula?, :change_signups?, :change_expenses? do
-      it_behaves_like "permits admins or special role but not regular users", :biller
-      it_behaves_like "forbids if finalized"
+    permissions :new?, :create?, :import?, :change_date_loc_invites?,
+                :change_workers_without_notification? do
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
-    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :close?, :cancel? do
+    permissions :change_formula?, :change_signups?, :change_expenses? do
+      it_behaves_like "permits admins or special role but not regular users", :biller
+    end
+
+    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :change_expenses?,
+                :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
 
       context "head cook" do
         let(:head_cook) { user }
         it { is_expected.to permit(user, meal) }
+      end
+    end
+
+    permissions :change_formula? do
+      context "with existing signups" do
+        let!(:signup) { create(:meal_signup, meal: meal, diner_counts: [1]) }
+        it { is_expected.not_to permit(admin, meal.reload) }
       end
     end
 
@@ -250,6 +257,14 @@ describe Meals::MealPolicy do
         stub_status("finalized")
         expect(subject).not_to include(:formula_id)
         expect(subject).not_to include(:capacity)
+      end
+
+      context "with signups" do
+        let!(:signup) { meal.signups << create(:meal_signup, meal: meal, diner_counts: [1]) }
+
+        it "should not allow formula_id if meal has signups" do
+          expect(subject).not_to include(:formula_id)
+        end
       end
     end
 

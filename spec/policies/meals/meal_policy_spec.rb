@@ -78,6 +78,13 @@ describe Meals::MealPolicy do
       end
     end
 
+    permissions :change_formula? do
+      context "with existing signups" do
+        let!(:signup) { create(:meal_signup, meal: meal, diner_counts: [1]) }
+        it { is_expected.not_to permit(admin, meal.reload) }
+      end
+    end
+
     permissions :close?, :reopen? do
       it "forbids if meal cancelled" do
         stub_status("cancelled")
@@ -250,6 +257,14 @@ describe Meals::MealPolicy do
         stub_status("finalized")
         expect(subject).not_to include(:formula_id)
         expect(subject).not_to include(:capacity)
+      end
+
+      context "with signups" do
+        let!(:signup) { meal.signups << create(:meal_signup, meal: meal, diner_counts: [1]) }
+
+        it "should not allow formula_id if meal has signups" do
+          expect(subject).not_to include(:formula_id)
+        end
       end
     end
 

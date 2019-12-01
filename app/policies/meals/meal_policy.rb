@@ -86,7 +86,7 @@ module Meals
     end
 
     def change_formula?
-      not_finalized_and_admin_coord_head_cook_or_biller?
+      meal.signups.none? && not_finalized_and_admin_coord_head_cook_or_biller?
     end
 
     def change_capacity?

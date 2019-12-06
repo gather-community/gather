@@ -37,7 +37,7 @@ module Meals
     end
 
     def successful?
-      complete? && error_free?
+      complete? && !crashed? && error_free?
     end
 
     def complete?

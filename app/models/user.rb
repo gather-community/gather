@@ -123,8 +123,8 @@ class User < ApplicationRecord
 
   has_one_attached :photo
   accepts_attachment_via_form :photo
-  validates_attachment_content_type :photo, content_type: %w[image/jpg image/jpeg image/png image/gif]
-  validates_attachment_size :photo, less_than: Settings.photos.max_size_mb.megabytes
+  validates :photo, content_type: {in: %w[image/jpg image/jpeg image/png image/gif]},
+                    file_size: {max: Settings.photos.max_size_mb.megabytes}
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true

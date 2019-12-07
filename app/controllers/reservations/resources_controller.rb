@@ -18,11 +18,13 @@ module Reservations
     def new
       @resource = sample_resource
       authorize(@resource)
+      prep_form_vars
     end
 
     def edit
       @resource = Resource.find(params[:id])
       authorize(@resource)
+      prep_form_vars
     end
 
     def create
@@ -33,6 +35,7 @@ module Reservations
         flash[:success] = "Resource created successfully."
         redirect_to(reservations_resources_path)
       else
+        prep_form_vars
         render(:new)
       end
     end
@@ -44,6 +47,7 @@ module Reservations
         flash[:success] = "Resource updated successfully."
         redirect_to(reservations_resources_path)
       else
+        prep_form_vars
         render(:edit)
       end
     end
@@ -58,6 +62,10 @@ module Reservations
 
     def sample_resource
       @sample_resource ||= Resource.new(community: current_community)
+    end
+
+    def prep_form_vars
+      @max_photo_size = Resource.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
     end
 
     # Pundit built-in helper doesn't work due to namespacing

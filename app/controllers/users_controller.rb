@@ -256,6 +256,7 @@ class UsersController < ApplicationController
     @user.build_household if @user.household.nil?
     @user.household.build_blank_associations
     @user.household = @user.household.decorate
+    @max_photo_size = User.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
   end
 
   def sample_user

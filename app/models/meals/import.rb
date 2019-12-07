@@ -21,8 +21,7 @@ module Meals
     has_one_attached :file
 
     accepts_attachment_via_form :file
-    validates :file, presence: true
-    validates_attachment_content_type :file, content_type: %w[text/plain text/csv]
+    validates :file, presence: true, content_type: {in: %w[text/plain text/csv]}
 
     def import
       update!(status: "running")

@@ -51,11 +51,12 @@ describe Billing::AccountCsvExporter do
       end
 
       it "returns valid csv" do
-        expect(exporter.to_csv).to eq(prepare_expectation("accounts.csv",
-                                                          number: accounts.map { |a| a.id.to_s.rjust(6, "0") },
-                                                          household_id: accounts.map(&:household_id),
-                                                          community_id: accounts.map(&:community_id),
-                                                          last_statement_id: accounts.map(&:last_statement_id)))
+        expect(exporter.to_csv)
+          .to eq(prepare_fixture("billing/accounts.csv",
+                                 number: accounts.map { |a| a.id.to_s.rjust(6, "0") },
+                                 household_id: accounts.map(&:household_id),
+                                 community_id: accounts.map(&:community_id),
+                                 last_statement_id: accounts.map(&:last_statement_id)))
       end
     end
   end

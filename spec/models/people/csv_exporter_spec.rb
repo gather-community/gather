@@ -75,7 +75,7 @@ describe People::CsvExporter do
       end
 
       it "should return valid csv" do
-        expect(exporter.to_csv).to eq(prepare_expectation("users.csv",
+        expect(exporter.to_csv).to eq(prepare_fixture("users.csv",
                                                           id: [child, adult2, adult1, adult3].map(&:id),
                                                           household_id: [household1, household2].map(&:id)))
       end

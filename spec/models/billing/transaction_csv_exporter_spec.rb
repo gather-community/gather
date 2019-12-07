@@ -36,11 +36,11 @@ describe Billing::TransactionCsvExporter do
       end
 
       it "returns valid csv" do
-        expect(exporter.to_csv).to eq(prepare_expectation("transactions.csv",
-                                                          id: transactions.map(&:id),
-                                                          account_id: [account.id],
-                                                          statement_id: [statement.id],
-                                                          meal_id: [meal.id]))
+        expect(exporter.to_csv).to eq(prepare_fixture("billing/transactions.csv",
+                                                      id: transactions.map(&:id),
+                                                      account_id: [account.id],
+                                                      statement_id: [statement.id],
+                                                      meal_id: [meal.id]))
       end
     end
   end

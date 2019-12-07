@@ -6,6 +6,7 @@ class ImportJob < ApplicationJob
   # `community` and `import` methods.
   def perform(class_name:, id:)
     with_object_in_community_context(class_name, id) do |object|
+      raise StandardError(ENV["STUB_IMPORT_ERROR"]) if Rails.env.test? && ENV["STUB_IMPORT_ERROR"]
       object.import
     rescue StandardError => e
       object.update!(status: "crashed")

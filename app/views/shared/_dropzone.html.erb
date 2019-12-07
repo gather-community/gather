@@ -1,9 +1,10 @@
 <%
   hide_existing = local_assigns[:hide_existing]
   attachment = obj.send(attrib)
-  bg_path = if local_assigns[:format]
-              image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png")
-            end
+  bg_style = if local_assigns[:format]
+               path = image_path("missing/#{obj.model_name.i18n_key.to_s.pluralize}/#{format}.png")
+               "background-image: url(#{path})"
+             end
   wrapper_classes = ["dropzone-wrapper"]
   wrapper_classes <<
     if hide_existing || !attachment.attached? || obj.send("#{attrib}_destroy?")
@@ -23,11 +24,11 @@
     <% end %>
 
     <%# Drop area with the dashed border. %>
-    <div class="dz-message" data-dz-message style="background-image: url(<%= bg_path %>)">
+    <%= content_tag(:div, class: "dz-message", style: bg_style, data: {dz_message: ""}) do %>
       <div>
         <%= t("dropzone.prompts.models.#{obj.model_name.i18n_key}", default: :"dropzone.prompts.default") %>
       </div>
-    </div>
+    <% end %>
 
     <%# Show any errors on this field that were set during create/update on the server. %>
     <%# These errors should typically not be possible since we are checking them on the dropzone upload. %>

@@ -1,0 +1,20 @@
+<h2>Upload File<a name="upload"></a></h2>
+
+<div id="import-forms">
+  <%= render("shared/dropzone", obj: @new_import, attrib: :file) %>
+  <%= gather_form_for(@new_import, width: :full, top_error_notification: false) do |f| %>
+    <%= f.hidden_field(:file_new_signed_id) %>
+    <%= f.hidden_field(:file_destroy) %>
+    <%= form_actions do %>
+      <%= f.button(:primary, :import) %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  $(function() {
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#import-forms')%>);
+    new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
+    new Gather.Views.UserFormView({el: '.user-form'});
+  });
+<% end %>

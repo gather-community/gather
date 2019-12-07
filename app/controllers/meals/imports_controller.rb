@@ -22,15 +22,20 @@ module Meals
     end
 
     def create
-      import = Import.create!(import_params.merge(community: current_community, user: current_user))
-      ImportJob.perform_later(class_name: "Meals::Import", id: import.id)
-      redirect_to(meals_import_path(import))
+      @new_import = Import.create(import_params.merge(community: current_community, user: current_user))
+      if @new_import.valid?
+        ImportJob.perform_later(class_name: "Meals::Import", id: @new_import.id)
+        redirect_to(meals_import_path(@new_import))
+      else
+        prep_form_vars
+        render(:new)
+      end
     end
 
     private
 
     def prep_form_vars
-      @new_import = Import.new
+      @new_import ||= Import.new
       @roles = Meals::Role.in_community(current_community).by_title
       @sample_times = [Time.current.midnight + 7.days, Time.current.midnight + 10.days].map do |t|
         (t + 18.hours).to_s(:no_sec_no_t)

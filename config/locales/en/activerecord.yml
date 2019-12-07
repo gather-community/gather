@@ -181,6 +181,7 @@ en:
       messages:
         invalid_content_type: "File is incorrect type"
         too_big: "File is too big (maximum %{max} MiB)"
+        attached: "File is missing"
       models:
         household:
           name:

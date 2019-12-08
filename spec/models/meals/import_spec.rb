@@ -7,11 +7,7 @@ describe Meals::Import do
   let!(:other_community) { create(:community, name: "Barville", abbrv: "bv") }
   let(:roles) { create_list(:meal_role, 2) }
   let(:user) { create(:meals_coordinator) }
-  let(:import_object) do
-    described_class.create!(community: community, user: user).tap do |object|
-      object.file.attach(io: StringIO.new(csv), filename: "input.csv")
-    end
-  end
+  let(:import_object) { create(:meal_import, community: community, user: user, csv: csv) }
 
   context "before run" do
     let(:import) { import_object }

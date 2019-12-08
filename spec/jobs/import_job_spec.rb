@@ -7,10 +7,9 @@ describe ImportJob do
   include_context "jobs"
 
   let(:community) { Defaults.community }
+  let(:meal_import) { create(:meal_import, community: community, csv: "") }
 
   context "happy path" do
-    let(:meal_import) { create(:meal_import, community: community, csv: "") }
-
     it "calls import" do
       perform_job(class_name: "Meals::Import", id: meal_import.id)
       expect(meal_import.reload.errors_by_row).to eq("0" => ["File is empty"])
@@ -18,15 +17,14 @@ describe ImportJob do
   end
 
   context "with unhandled error" do
-    # nil CSV will raise error b/c no file will be attached in factory
-    let(:meal_import) { create(:meal_import, community: community, csv: nil) }
-
     it "sets crashed status and sends error notification" do
-      emails = email_sent_by do
-        perform_job(class_name: "Meals::Import", id: meal_import.id)
+      with_env("STUB_IMPORT_ERROR" => "Unhandled error") do
+        emails = email_sent_by do
+          perform_job(class_name: "Meals::Import", id: meal_import.id)
+        end
+        expect(meal_import.reload.status).to eq("crashed")
+        expect(emails[0].body.encoded).to match(/Unhandled error/)
       end
-      expect(meal_import.reload.status).to eq("crashed")
-      expect(emails[0].body.encoded).to match(/DelegationError/)
     end
   end
 end

@@ -82,4 +82,11 @@ module GeneralHelpers
   # Does nothing. Just a nice way to indicate why a let block is being called.
   def run_let_blocks(*objects)
   end
+
+  def with_env(vars)
+    vars.each_pair { |k, v| ENV[k] = v }
+    yield
+  ensure
+    vars.each_pair { |k, _| ENV.delete(k) }
+  end
 end

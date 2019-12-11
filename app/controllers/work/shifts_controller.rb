@@ -220,6 +220,8 @@ module Work
       # may change things just with the passage of time. We know things only change this way at 5-minute
       # increments though.
       chunks << (Time.current.seconds_since_midnight / 300).floor if @period.staggered?
+
+      chunks
     end
   end
 end

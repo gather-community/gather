@@ -21,6 +21,19 @@ module Groups
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
 
+    normalize_attributes :kind, :name, :slug
+
+    before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
+
+    def broadcast?
+      kind == "broadcast"
+    end
+
+    private
+
+    def normalize
+      memberships.delete(memberships.to_a.select(&:member?)) if broadcast?
+    end
   end
 end

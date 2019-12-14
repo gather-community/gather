@@ -52,6 +52,10 @@ module Work
     delegate :starts_on, :ends_on, :name, :draft?, :pre_open?, :open?, :published?, :archived?,
              to: :period, prefix: true
 
+    def self.requester_options(community:)
+      People::Group.in_community(community).can_request_jobs.by_name
+    end
+
     def full_period?
       time_type == "full_period"
     end

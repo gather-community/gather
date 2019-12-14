@@ -95,7 +95,7 @@ module Work
     end
 
     def prep_form_vars
-      @requesters = People::Group.in_community(current_community).can_request_jobs.by_name
+      @requesters = Job.requester_options(community: current_community)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

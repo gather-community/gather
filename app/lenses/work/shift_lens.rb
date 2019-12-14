@@ -31,7 +31,7 @@ module Work
     end
 
     def requester_options
-      requesters = People::Group.all.to_a
+      requesters = Job.requester_options(community: context.current_community)
       id_proc = ->(group) { "#{REQUESTER_PREFIX}#{group.id}" }
       h.options_from_collection_for_select(requesters, id_proc, :name, value)
     end

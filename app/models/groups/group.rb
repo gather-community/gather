@@ -7,9 +7,14 @@ module Groups
 
     acts_as_tenant :cluster
 
-    belongs_to :community
+    has_many :affiliations, class_name: "Groups::Affiliation", foreign_key: :group_id, dependent: :destroy,
+                            inverse_of: :group
+    has_many :communities, through: :affiliations
 
-    scope :in_community, ->(c) { where(community_id: c.id) }
+    scope :in_community, lambda { |c|
+      where("EXISTS(SELECT id FROM group_affiliations
+        WHERE group_id = groups.id AND community_id = ?)", c.id)
+    }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
 

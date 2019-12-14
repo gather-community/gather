@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_021231) do
+ActiveRecord::Schema.define(version: 2019_12_14_030902) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,16 @@ ActiveRecord::Schema.define(version: 2019_12_14_021231) do
     t.datetime "run_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "group_affiliations", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.bigint "group_id", null: false
+    t.index ["cluster_id"], name: "index_group_affiliations_on_cluster_id"
+    t.index ["community_id", "group_id"], name: "index_group_affiliations_on_community_id_and_group_id", unique: true
+    t.index ["community_id"], name: "index_group_affiliations_on_community_id"
+    t.index ["group_id"], name: "index_group_affiliations_on_group_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -752,6 +762,9 @@ ActiveRecord::Schema.define(version: 2019_12_14_021231) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "group_affiliations", "clusters"
+  add_foreign_key "group_affiliations", "communities"
+  add_foreign_key "group_affiliations", "groups"
   add_foreign_key "groups", "clusters"
   add_foreign_key "groups", "communities"
   add_foreign_key "households", "clusters"

@@ -20,7 +20,7 @@ module Work
       reindex(source.shifts.includes(assignments: :user))
     end
 
-    def process_people_group
+    def process_groups_group
       return unless source.saved_change_to_name?
       jobs = Job.where(requester: source).includes(:requester, shifts: {assignments: :user})
       jobs.each { |j| reindex(j.shifts) }

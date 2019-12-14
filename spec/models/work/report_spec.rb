@@ -30,7 +30,7 @@ describe Work::Report do
   end
 
   context "with lots of jobs" do
-    let(:groups) { create_list(:people_group, 2) }
+    let(:groups) { create_list(:group, 2) }
     let(:jobs) do
       [
         create(:work_job, period: period, requester: groups[0],

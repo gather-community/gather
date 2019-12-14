@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_014952) do
+ActiveRecord::Schema.define(version: 2019_12_14_020529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,18 @@ ActiveRecord::Schema.define(version: 2019_12_14_014952) do
     t.datetime "run_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.boolean "can_request_jobs", default: false, null: false
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id", "community_id", "name"], name: "index_groups_on_cluster_id_and_community_id_and_name", unique: true
+    t.index ["cluster_id"], name: "index_groups_on_cluster_id"
+    t.index ["community_id"], name: "index_groups_on_community_id"
   end
 
   create_table "households", id: :serial, force: :cascade do |t|
@@ -332,18 +344,6 @@ ActiveRecord::Schema.define(version: 2019_12_14_014952) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_people_emergency_contacts_on_cluster_id"
     t.index ["household_id"], name: "index_people_emergency_contacts_on_household_id"
-  end
-
-  create_table "people_groups", force: :cascade do |t|
-    t.boolean "can_request_jobs", default: false, null: false
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id", "community_id", "name"], name: "index_people_groups_on_cluster_id_and_community_id_and_name", unique: true
-    t.index ["cluster_id"], name: "index_people_groups_on_cluster_id"
-    t.index ["community_id"], name: "index_people_groups_on_community_id"
   end
 
   create_table "people_guardianships", id: :serial, force: :cascade do |t|
@@ -750,6 +750,8 @@ ActiveRecord::Schema.define(version: 2019_12_14_014952) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "groups", "clusters"
+  add_foreign_key "groups", "communities"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
   add_foreign_key "meal_assignments", "clusters"
@@ -790,8 +792,6 @@ ActiveRecord::Schema.define(version: 2019_12_14_014952) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
-  add_foreign_key "people_groups", "clusters"
-  add_foreign_key "people_groups", "communities"
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_guardianships", "users", column: "child_id"
   add_foreign_key "people_guardianships", "users", column: "guardian_id"
@@ -847,8 +847,8 @@ ActiveRecord::Schema.define(version: 2019_12_14_014952) do
   add_foreign_key "work_assignments", "users"
   add_foreign_key "work_assignments", "work_shifts", column: "shift_id"
   add_foreign_key "work_jobs", "clusters"
+  add_foreign_key "work_jobs", "groups", column: "requester_id"
   add_foreign_key "work_jobs", "meal_roles"
-  add_foreign_key "work_jobs", "people_groups", column: "requester_id"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"

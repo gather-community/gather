@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_034232) do
+ActiveRecord::Schema.define(version: 2019_12_14_151952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(version: 2019_12_14_034232) do
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
-    t.string "membership", limit: 10, default: "closed", null: false
+    t.string "kind", limit: 10, default: "closed", null: false
     t.string "name", null: false
     t.string "slug", limit: 32, null: false
     t.datetime "updated_at", null: false

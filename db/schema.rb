@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_19_222123) do
+ActiveRecord::Schema.define(version: 2019_12_14_014952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -335,6 +335,7 @@ ActiveRecord::Schema.define(version: 2019_11_19_222123) do
   end
 
   create_table "people_groups", force: :cascade do |t|
+    t.boolean "can_request_jobs", default: false, null: false
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
     t.datetime "created_at", null: false

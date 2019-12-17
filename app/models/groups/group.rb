@@ -23,10 +23,14 @@ module Groups
 
     normalize_attributes :kind, :name, :slug
 
+    accepts_nested_attributes_for :affiliations
+    accepts_nested_attributes_for :memberships
+
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
 
     validate :name_unique_in_all_communities
+    validate :at_least_one_affiliation
 
     def broadcast?
       kind == "broadcast"
@@ -44,6 +48,11 @@ module Groups
       scope = scope.where.not(id: id) if persisted?
       return if (communities & scope.to_a.flat_map(&:communities)).none?
       errors.add(:name, :taken)
+    end
+
+    def at_least_one_affiliation
+      return if affiliations.reject(&:marked_for_destruction?).any?
+      errors.add(:base, :at_least_one_affiliation)
     end
   end
 end

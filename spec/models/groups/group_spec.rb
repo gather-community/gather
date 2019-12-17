@@ -60,6 +60,27 @@ describe Groups::Group do
       end
     end
 
+    describe "at least one affiliation" do
+      let(:community1) { create(:community) }
+
+      context "with one affiliation" do
+        subject(:group) { build(:group, communities: [community1]) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with no affiliations" do
+        let(:group) { create(:group, communities: [community1]) }
+
+        before do
+          # Delete affiliation with _destroy so we know it doesn't count those marked for destruction.
+          group.assign_attributes(affiliations_attributes:
+            {"0" => {id: group.affiliations[0].id, _destroy: "1"}})
+        end
+
+        it { is_expected.to have_errors(base: "Please select at least one community") }
+      end
+    end
+
     describe "no members from non-affiliated communities" do
       let(:community1) { create(:community) }
       let(:community2) { create(:community) }

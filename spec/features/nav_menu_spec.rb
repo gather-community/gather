@@ -16,6 +16,7 @@ feature "nav menu" do
 
   context "basic" do
     let(:setting) { "" }
+
     scenario "no customizations" do
       main_nav_test(match: [["People", "/users"],
                             ["Meals", "/meals"],
@@ -26,6 +27,7 @@ feature "nav menu" do
   end
   context "changes" do
     let(:setting) { "[Reservations](none)[Wiki](http://wikipedia.org) [google](http://google.com)" }
+
     scenario "change one link, disable one, add another" do
       main_nav_test(match: [["People", "/users"],
                             ["Meals", "/meals"],
@@ -41,6 +43,6 @@ feature "nav menu" do
     # Get all of the links in the main nav menu
     # map them into an array of arrays
     # and compare them with what they are supposed to be
-    expect(match).to eql(all("td.main-nav ul.nav li a").map { |element| [element.text, element["href"]] })
+    expect(all("td.main-nav ul.nav li a").map { |e| [e.text, e["href"]] }).to eql(match)
   end
 end

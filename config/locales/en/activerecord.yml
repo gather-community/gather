@@ -183,6 +183,10 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Not from an affiliated community"
         household:
           name:
             taken: "There is already a household with this name at this community"

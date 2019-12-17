@@ -59,5 +59,27 @@ describe Groups::Group do
         it { is_expected.to have_errors(name: "has already been taken") }
       end
     end
+
+    describe "no members from non-affiliated communities" do
+      let(:community1) { create(:community) }
+      let(:community2) { create(:community) }
+      let(:user1) { create(:user, community: community1) }
+      let(:user2) { create(:user, community: community2) }
+
+      context "with no members" do
+        subject(:group) { build(:group, communities: [community1], users: []) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with members from affiliated communities only" do
+        subject(:group) { build(:group, communities: [community1, community2], users: [user1, user2]) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with member from non-affiliated community" do
+        subject(:group) { build(:group, communities: [community1], users: [user1, user2]) }
+        it { expect(group.memberships[1]).to have_errors(user_id: "Not from an affiliated community") }
+      end
+    end
   end
 end

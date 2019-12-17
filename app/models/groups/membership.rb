@@ -10,12 +10,21 @@ module Groups
 
     normalize_attributes :kind
 
+    validate :from_affiliated_community
+
     def member?
       kind == "member"
     end
 
     def manager?
       kind == "manager"
+    end
+
+    private
+
+    def from_affiliated_community
+      return if group.communities.empty?
+      errors.add(:user_id, :unaffiliated) unless group.communities.include?(user.community)
     end
   end
 end

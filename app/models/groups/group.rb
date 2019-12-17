@@ -26,6 +26,8 @@ module Groups
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
 
+    validate :name_unique_in_all_communities
+
     def broadcast?
       kind == "broadcast"
     end
@@ -34,6 +36,14 @@ module Groups
 
     def normalize
       memberships.delete(memberships.to_a.select(&:member?)) if broadcast?
+    end
+
+    def name_unique_in_all_communities
+      return if name.blank?
+      scope = self.class.where(name: name)
+      scope = scope.where.not(id: id) if persisted?
+      return if (communities & scope.to_a.flat_map(&:communities)).none?
+      errors.add(:name, :taken)
     end
   end
 end

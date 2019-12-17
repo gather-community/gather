@@ -30,4 +30,34 @@ describe Groups::Group do
       end
     end
   end
+
+  describe "validation" do
+    describe "name uniqueness in all relevant communities" do
+      let(:community1) { create(:community) }
+      let(:community2) { create(:community) }
+
+      context "with no existing groups" do
+        subject(:group) { build(:group, communities: [community1], name: "Foo") }
+        it { is_expected.to be_valid }
+      end
+
+      context "with same names and single community groups" do
+        let!(:existing) { create(:group, communities: [community1], name: "Foo") }
+        subject(:group) { build(:group, communities: [community1], name: "Foo") }
+        it { is_expected.to have_errors(name: "has already been taken") }
+      end
+
+      context "with same names in cluster but separate communities" do
+        let!(:existing) { create(:group, communities: [community1], name: "Foo") }
+        subject(:group) { build(:group, communities: [community2], name: "Foo") }
+        it { is_expected.to be_valid }
+      end
+
+      context "with single community group and multi community group" do
+        let!(:existing) { create(:group, communities: [community1], name: "Foo") }
+        subject(:group) { build(:group, communities: [community1, community2], name: "Foo") }
+        it { is_expected.to have_errors(name: "has already been taken") }
+      end
+    end
+  end
 end

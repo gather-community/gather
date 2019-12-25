@@ -24,7 +24,7 @@ module Groups
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
 
-    normalize_attributes :kind, :availability, :name, :slug
+    normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :affiliations
     accepts_nested_attributes_for :memberships

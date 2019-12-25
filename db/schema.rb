@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_152344) do
+ActiveRecord::Schema.define(version: 2019_12_25_160302) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -92,6 +92,37 @@ ActiveRecord::Schema.define(version: 2019_12_14_152344) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "gdrive_configs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.jsonb "credentials", null: false
+    t.datetime "last_scanned_at"
+    t.string "owner_email", limit: 128, null: false
+    t.string "root_folder_id", limit: 128, null: false
+    t.jsonb "token"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
+    t.index ["community_id"], name: "index_gdrive_configs_on_community_id"
+  end
+
+  create_table "gdrive_stray_files", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "file_id", limit: 128, null: false
+    t.string "mime_type", limit: 128, null: false
+    t.string "owner_email", limit: 128, null: false
+    t.string "parent_id", limit: 128, null: false
+    t.text "path", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id", "community_id", "file_id"], name: "unique_by_cmty_and_file", unique: true
+    t.index ["cluster_id"], name: "index_gdrive_stray_files_on_cluster_id"
+    t.index ["community_id"], name: "index_gdrive_stray_files_on_community_id"
+    t.index ["mime_type"], name: "index_gdrive_stray_files_on_mime_type"
+    t.index ["owner_email"], name: "index_gdrive_stray_files_on_owner_email"
+  end
+
   create_table "group_affiliations", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -119,6 +150,7 @@ ActiveRecord::Schema.define(version: 2019_12_14_152344) do
     t.boolean "can_request_jobs", default: false, null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.string "description", limit: 255
     t.string "kind", limit: 10, default: "closed", null: false
     t.string "name", null: false
     t.string "slug", limit: 32, null: false
@@ -772,6 +804,10 @@ ActiveRecord::Schema.define(version: 2019_12_14_152344) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "gdrive_configs", "clusters"
+  add_foreign_key "gdrive_configs", "communities"
+  add_foreign_key "gdrive_stray_files", "clusters"
+  add_foreign_key "gdrive_stray_files", "communities"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

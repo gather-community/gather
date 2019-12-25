@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_25_164253) do
+ActiveRecord::Schema.define(version: 2019_12_25_183248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2019_12_25_164253) do
     t.boolean "can_request_jobs", default: false, null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
     t.string "description", limit: 255
     t.string "kind", limit: 32, default: "committee", null: false
     t.string "name", null: false

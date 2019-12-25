@@ -3,6 +3,8 @@
 module Groups
   # A group of users.
   class Group < ApplicationRecord
+    include Deactivatable
+
     KINDS = %i[committee subcommittee team task_force club crew squad gang group everybody].freeze
     AVAILABILITIES = %i[open closed hidden].freeze
 

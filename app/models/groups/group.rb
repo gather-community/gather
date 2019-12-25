@@ -3,6 +3,9 @@
 module Groups
   # A group of users.
   class Group < ApplicationRecord
+    KINDS = %i[committee subcommittee team task_force club crew squad gang group everybody].freeze
+    AVAILABILITIES = %i[open closed hidden].freeze
+
     self.table_name = "groups"
 
     acts_as_tenant :cluster
@@ -21,7 +24,7 @@ module Groups
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
 
-    normalize_attributes :kind, :name, :slug
+    normalize_attributes :kind, :availability, :name, :slug
 
     accepts_nested_attributes_for :affiliations
     accepts_nested_attributes_for :memberships
@@ -32,14 +35,27 @@ module Groups
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
 
-    def broadcast?
-      kind == "broadcast"
+    def everybody?
+      kind == "everybody"
+    end
+
+    def closed?
+      availability == "closed"
+    end
+
+    def open?
+      availability == "open"
+    end
+
+    def hidden?
+      availability == "hidden"
     end
 
     private
 
     def normalize
-      memberships.delete(memberships.to_a.select(&:member?)) if broadcast?
+      memberships.delete(memberships.to_a.select(&:member?)) if everybody?
+      self.availability = "open" if everybody?
     end
 
     def name_unique_in_all_communities

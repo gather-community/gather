@@ -8,24 +8,26 @@ describe Groups::Group do
   end
 
   describe "normalization" do
-    describe "memberships" do
+    describe "memberships and availability" do
       let(:memberships) do
         [build(:group_membership, kind: "member"), build(:group_membership, kind: "manager")]
       end
-      let(:group) { create(:group, memberships: memberships) }
+      let(:group) { create(:group, memberships: memberships, availability: "closed") }
 
       context "for normal group" do
-        it "is expected to have saved memberships" do
+        it "is expected to have saved memberships and stayed closed" do
           expect(group.memberships.map(&:kind)).to eq(%w[member manager])
           expect(Groups::Membership.count).to eq(2)
+          expect(group).to be_closed
         end
       end
 
-      context "for broadcast group" do
-        it "is expected to delete non-manager memberships" do
-          group.update!(kind: "broadcast")
+      context "for everybody group" do
+        it "is expected to delete non-manager memberships and be open" do
+          group.update!(kind: "everybody")
           expect(group.memberships.map(&:kind)).to eq(["manager"])
           expect(Groups::Membership.count).to eq(1)
+          expect(group).to be_open
         end
       end
     end

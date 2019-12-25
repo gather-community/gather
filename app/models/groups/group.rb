@@ -10,12 +10,12 @@ module Groups
 
     acts_as_tenant :cluster
 
-    has_many :affiliations, class_name: "Groups::Affiliation", foreign_key: :group_id, dependent: :destroy,
-                            inverse_of: :group
+    has_many :affiliations, class_name: "Groups::Affiliation", dependent: :destroy, inverse_of: :group
     has_many :communities, through: :affiliations
-    has_many :memberships, class_name: "Groups::Membership", foreign_key: :group_id, dependent: :destroy,
-                           inverse_of: :group
+    has_many :memberships, class_name: "Groups::Membership", dependent: :destroy, inverse_of: :group
     has_many :users, through: :memberships
+    has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
+                         inverse_of: :requester
 
     scope :in_community, lambda { |c|
       where("EXISTS(SELECT id FROM group_affiliations

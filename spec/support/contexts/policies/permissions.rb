@@ -44,6 +44,9 @@ shared_context "policy permissions" do
   let(:admin2) { create(:admin, first_name: "admin2") }
   let(:cluster_admin) { create(:cluster_admin, first_name: "cluster_admin") }
   let(:cluster_admin2) { create(:cluster_admin, first_name: "cluster_admin2") }
+  let(:cluster_admin_cmtyB) do
+    create(:cluster_admin, community: communityB, first_name: "cluster_admin_cmtyB")
+  end
   let(:cluster_admin_cmtyX) do
     create(:cluster_admin, community: communityB, first_name: "cluster_admin_cmtyX")
   end

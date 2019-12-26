@@ -56,8 +56,9 @@ module Groups
     private
 
     def appropriate_admin?
-      user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
-        !group.multi_community? && user.global_role?(:admin) && user_in_any_community?
+      user.global_role?(:super_admin) ||
+        user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
+        user.global_role?(:admin) && !group.multi_community? && user_in_any_community?
     end
 
     def user_in_any_community?

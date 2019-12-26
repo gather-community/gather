@@ -25,6 +25,10 @@ describe Groups::GroupPolicy do
         it "permits cluster admins in any community in cluster" do
           expect(subject).to permit(cluster_admin_cmtyB, group)
         end
+
+        it "permits super admins" do
+          expect(subject).to permit(super_admin_cmtyX, group)
+        end
       end
 
       context "with multi-community group" do
@@ -34,6 +38,10 @@ describe Groups::GroupPolicy do
 
         it "permits cluster admins in any community in cluster" do
           expect(subject).to permit(cluster_admin_cmtyB, group)
+        end
+
+        it "permits super admins" do
+          expect(subject).to permit(super_admin_cmtyX, group)
         end
       end
 

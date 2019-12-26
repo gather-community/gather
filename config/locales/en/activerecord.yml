@@ -90,6 +90,12 @@ en:
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
+      groups/group:
+        availability: "Availability"
+        can_request_jobs: "Can Request Jobs?"
+        description: "Description"
+        kind: "Type"
+        name: "Name"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"

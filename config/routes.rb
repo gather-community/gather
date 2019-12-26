@@ -88,6 +88,13 @@ Rails.application.routes.draw do
     resources :protocols
   end
 
+  resources :groups, controller: "groups/groups" do
+    member do
+      put :activate
+      put :deactivate
+    end
+  end
+
   resources :reservations, controller: "reservations/reservations"
 
   # Legacy calendar routes

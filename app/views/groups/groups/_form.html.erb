@@ -1,0 +1,18 @@
+<%= gather_form_for(group, url: group.new_record? ? groups_path : group_path(group)) do |f| %>
+  <%= f.input :name, maxlength: Groups::Group.columns_hash["name"].limit %>
+  <%= f.input :description, as: :text, maxlength: Groups::Group.columns_hash["description"].limit %>
+  <%= f.input :kind, collection: Groups::Group::KINDS, include_blank: false %>
+  <%= f.input :availability, collection: Groups::Group::AVAILABILITIES, include_blank: false %>
+  <%= f.input :can_request_jobs %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.groups--group-form'});
+    new Gather.Views.AjaxSelect2({el: '.groups--group-form'});
+  });
+<% end %>

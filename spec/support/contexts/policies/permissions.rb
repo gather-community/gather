@@ -58,6 +58,7 @@ shared_context "policy permissions" do
     end
   end
   let(:admin_cmtyB) { create(:admin, community: communityB, first_name: "admin_cmtyB") }
+  let(:inactive_admin) { create(:admin, :inactive, first_name: "inactive_admin") }
   let(:biller) { create(:biller, first_name: "biller") }
   let(:biller_cmtyB) { create(:biller, community: communityB, first_name: "biller_cmtyB") }
   let(:photographer) { create(:photographer, first_name: "photographer") }

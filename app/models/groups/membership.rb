@@ -8,6 +8,8 @@ module Groups
     belongs_to :group, inverse_of: :memberships
     belongs_to :user
 
+    scope :managers, -> { where(kind: "manager") }
+
     normalize_attributes :kind
 
     validate :from_affiliated_community

@@ -84,4 +84,32 @@ describe Groups::GroupPolicy do
       it_behaves_like "permits active admins in group's communities but not regular users"
     end
   end
+
+  describe "scope" do
+    include_context "policy scopes"
+    let(:klass) { Groups::Group }
+    let!(:cluster_group) { create(:group, communities: [communityB]) }
+    let!(:cmty_group) { create(:group, communities: [community, communityB]) }
+    let!(:hidden_group) { create(:group, communities: [community], availability: "hidden") }
+
+    context "for cluster admin" do
+      let(:actor) { cluster_admin }
+      it { is_expected.to contain_exactly(cluster_group, cmty_group, hidden_group) }
+    end
+
+    context "for admin" do
+      let(:actor) { admin }
+      it { is_expected.to contain_exactly(cmty_group, hidden_group) }
+    end
+
+    context "for regular user" do
+      let(:actor) { user }
+      it { is_expected.to contain_exactly(cmty_group) }
+    end
+
+    context "for inactive user" do
+      let(:actor) { inactive_user }
+      it { is_expected.to be_empty }
+    end
+  end
 end

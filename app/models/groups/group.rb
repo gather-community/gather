@@ -25,6 +25,7 @@ module Groups
     }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
+    scope :visible, -> { where.not(availability: "hidden") }
 
     normalize_attributes :kind, :availability, :name
 

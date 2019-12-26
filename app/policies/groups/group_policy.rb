@@ -4,6 +4,20 @@ module Groups
   class GroupPolicy < ApplicationPolicy
     alias group record
 
+    class Scope < Scope
+      def resolve
+        if active_cluster_admin?
+          scope
+        elsif active_admin?
+          scope.in_community(user.community)
+        elsif active?
+          scope.in_community(user.community).visible
+        else
+          scope.none
+        end
+      end
+    end
+
     def index?
       active?
     end

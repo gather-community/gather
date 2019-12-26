@@ -34,6 +34,14 @@ module Groups
       active? && (appropriate_admin? || group.memberships.managers.pluck(:user_id).include?(user.id))
     end
 
+    def activate?
+      active? && group.inactive? && appropriate_admin?
+    end
+
+    def deactivate?
+      active? && group.active? && appropriate_admin?
+    end
+
     def destroy?
       active? && appropriate_admin?
     end

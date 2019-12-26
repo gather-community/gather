@@ -80,7 +80,12 @@ describe Groups::GroupPolicy do
       end
     end
 
-    permissions :destroy? do
+    permissions :deactivate?, :destroy? do
+      it_behaves_like "permits active admins in group's communities but not regular users"
+    end
+
+    permissions :activate? do
+      let(:group) { create(:group, :inactive, availability: availability, communities: communities) }
       it_behaves_like "permits active admins in group's communities but not regular users"
     end
   end

@@ -112,4 +112,29 @@ describe Groups::GroupPolicy do
       it { is_expected.to be_empty }
     end
   end
+
+  describe "permitted attributes" do
+    include_context "policy permissions"
+
+    let(:base_attribs) do
+      %i[availability can_request_jobs description kind name] << {memberships_attributes: %i[kind user_id]}
+    end
+    let(:group) { create(:group) }
+    subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }
+
+    context "with cluster admin" do
+      let(:actor) { cluster_admin }
+      it { is_expected.to match_array(base_attribs << {community_ids: []}) }
+    end
+
+    context "with admin" do
+      let(:actor) { admin }
+      it { is_expected.to match_array(base_attribs) }
+    end
+
+    context "with manager" do
+      let(:actor) { create(:group_membership, group: group, kind: "manager").user }
+      it { is_expected.to match_array(base_attribs) }
+    end
+  end
 end

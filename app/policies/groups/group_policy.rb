@@ -9,26 +9,26 @@ module Groups
     end
 
     def show?
-      active? && (admin_in_any_community? || !group.hidden? && user_in_any_community?)
+      active? && (appropriate_admin? || !group.hidden? && user_in_any_community?)
     end
 
     def create?
-      active? && admin_in_any_community?
+      active? && appropriate_admin?
     end
 
     def update?
-      active? && (admin_in_any_community? || group.memberships.managers.pluck(:user_id).include?(user.id))
+      active? && (appropriate_admin? || group.memberships.managers.pluck(:user_id).include?(user.id))
     end
 
     def destroy?
-      active? && admin_in_any_community?
+      active? && appropriate_admin?
     end
 
     private
 
-    def admin_in_any_community?
-      user.global_role?(:admin) && user_in_any_community? ||
-        user.global_role?(:cluster_admin) && group.cluster == user.cluster
+    def appropriate_admin?
+      user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
+        !group.multi_community? && user.global_role?(:admin) && user_in_any_community?
     end
 
     def user_in_any_community?

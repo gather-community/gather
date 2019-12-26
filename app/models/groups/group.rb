@@ -53,6 +53,10 @@ module Groups
       availability == "hidden"
     end
 
+    def multi_community?
+      communities.size > 1
+    end
+
     private
 
     def normalize

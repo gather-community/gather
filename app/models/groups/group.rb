@@ -29,8 +29,7 @@ module Groups
 
     normalize_attributes :kind, :availability, :name
 
-    accepts_nested_attributes_for :affiliations
-    accepts_nested_attributes_for :memberships
+    accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
 
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }

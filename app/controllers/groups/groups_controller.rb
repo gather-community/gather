@@ -15,11 +15,13 @@ module Groups
     def new
       @group = Group.new(communities: [current_community], kind: "committee", availability: "open")
       authorize(@group)
+      prep_form_vars
     end
 
     def edit
       @group = Group.find(params[:id])
       authorize(@group)
+      prep_form_vars
     end
 
     def create
@@ -30,6 +32,7 @@ module Groups
         flash[:success] = "Group created successfully."
         redirect_to(groups_path)
       else
+        prep_form_vars
         render(:new)
       end
     end
@@ -41,6 +44,7 @@ module Groups
         flash[:success] = "Group updated successfully."
         redirect_to(groups_path)
       else
+        prep_form_vars
         render(:edit)
       end
     end
@@ -52,6 +56,11 @@ module Groups
     end
 
     private
+
+    def prep_form_vars
+      return unless policy(@group).permitted_attributes.include?(community_ids: [])
+      @community_options = Community.by_name_with_first(current_community)
+    end
 
     def sample_group
       @sample_group ||= Group.new(communities: [current_community])

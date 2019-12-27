@@ -96,6 +96,8 @@ en:
         description: "Description"
         kind: "Type"
         name: "Name"
+        communities: "Communities"
+        memberships: "Members"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"

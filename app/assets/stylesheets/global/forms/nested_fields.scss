@@ -35,6 +35,10 @@
 
   &.no-inner-labels {
     margin-bottom: 10px;
+
+    label {
+      display: none;
+    }
   }
 
   &:last-of-type, &.no-inner-labels:last-of-type {

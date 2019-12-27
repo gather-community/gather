@@ -1,0 +1,18 @@
+.groups--groups {
+  form {
+    .groups_group_communities .checkbox {
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    .groups_group_memberships {
+      .subfields .fields-col {
+        display: flex;
+
+        > * {
+          flex: 1;
+        }
+      }
+    }
+  }
+}

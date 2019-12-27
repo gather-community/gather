@@ -3,6 +3,8 @@
 module Groups
   # Joins a user to a group.
   class Membership < ApplicationRecord
+    KINDS = %i[member manager].freeze
+
     acts_as_tenant :cluster
 
     belongs_to :group, inverse_of: :memberships

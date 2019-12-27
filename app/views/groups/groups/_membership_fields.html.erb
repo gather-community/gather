@@ -1,0 +1,2 @@
+<%= f.input(:user_id, as: :assoc_select2, required: true, src: "/users", context: "group_memberships") %>
+<%= f.input(:kind, collection: Groups::Membership::KINDS) %>

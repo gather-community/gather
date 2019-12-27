@@ -130,10 +130,16 @@ describe Groups::GroupPolicy do
     include_context "policy permissions"
 
     let(:base_attribs) do
-      %i[availability can_request_jobs description kind name] << {memberships_attributes: %i[kind user_id]}
+      %i[availability can_request_jobs description kind name] <<
+        {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:group) { create(:group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }
+
+    context "with super admin" do
+      let(:actor) { super_admin }
+      it { is_expected.to match_array(base_attribs << {community_ids: []}) }
+    end
 
     context "with cluster admin" do
       let(:actor) { cluster_admin }

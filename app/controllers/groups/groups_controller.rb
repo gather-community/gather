@@ -19,7 +19,7 @@ module Groups
     end
 
     def edit
-      @group = Group.find(params[:id])
+      @group = Group.includes(:communities).find(params[:id])
       authorize(@group)
       prep_form_vars
     end
@@ -38,7 +38,7 @@ module Groups
     end
 
     def update
-      @group = Group.find(params[:id])
+      @group = Group.includes(:communities).find(params[:id])
       authorize(@group)
       if @group.update(group_params)
         flash[:success] = "Group updated successfully."

@@ -14,7 +14,8 @@ module Groups
 
     has_many :affiliations, class_name: "Groups::Affiliation", dependent: :destroy, inverse_of: :group
     has_many :communities, through: :affiliations
-    has_many :memberships, class_name: "Groups::Membership", dependent: :destroy, inverse_of: :group
+    has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
+                                                         dependent: :destroy, inverse_of: :group
     has_many :users, through: :memberships
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester

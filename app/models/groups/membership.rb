@@ -12,6 +12,9 @@ module Groups
 
     scope :managers, -> { where(kind: "manager") }
 
+    # Kind alpha order of manager, member happens to work nicely
+    scope :by_kind_and_user_name, -> { joins(:user).order(:kind).merge(User.by_name) }
+
     normalize_attributes :kind
 
     validate :from_affiliated_community

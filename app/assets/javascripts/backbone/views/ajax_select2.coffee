@@ -34,7 +34,12 @@ Gather.Views.AjaxSelect2 = Backbone.View.extend
       width: if !!$select.data('select2-variable-width') then null else '100%'
 
   buildGetParams: (params, $select) ->
-    $.extend @options.extraData,
+    # If extraData is a function, call it.
+    # If extraData is an array, JSONify it and make an object.
+    extraData = @options.extraData
+    extraData = extraData.call() if typeof(extraData) == 'function'
+    extraData = {data: JSON.stringify(extraData)} if extraData instanceof Array
+    $.extend extraData,
       search: params.term
       page: params.page
       context: $select.data('select2-context')

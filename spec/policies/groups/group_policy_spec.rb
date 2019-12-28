@@ -11,38 +11,24 @@ describe Groups::GroupPolicy do
     let(:record) { group }
 
     shared_examples_for "permits active admins in group's communities but not regular users" do
-      context "with single-community group" do
-        let(:communities) { [community] }
-
-        it "permits admin in community" do
-          expect(subject).to permit(admin, group)
-        end
-
-        it "forbids inactive admins" do
-          expect(subject).not_to permit(inactive_admin, group)
-        end
-
-        it "permits cluster admins in any community in cluster" do
-          expect(subject).to permit(cluster_admin_cmtyB, group)
-        end
-
-        it "permits super admins" do
-          expect(subject).to permit(super_admin_cmtyX, group)
-        end
+      it "permits admins in selected communities" do
+        expect(subject).to permit(admin, group)
       end
 
-      context "with multi-community group" do
-        it "forbids regular admins" do
-          expect(subject).not_to permit(admin, group)
-        end
+      it "forbids admin in outside commmunity" do
+        expect(subject).not_to permit(admin_cmtyB, group)
+      end
 
-        it "permits cluster admins in any community in cluster" do
-          expect(subject).to permit(cluster_admin_cmtyB, group)
-        end
+      it "forbids inactive admins" do
+        expect(subject).not_to permit(inactive_admin, group)
+      end
 
-        it "permits super admins" do
-          expect(subject).to permit(super_admin_cmtyX, group)
-        end
+      it "permits cluster admins in any community in cluster" do
+        expect(subject).to permit(cluster_admin_cmtyB, group)
+      end
+
+      it "permits super admins" do
+        expect(subject).to permit(super_admin_cmtyX, group)
       end
 
       it "forbids regular users" do

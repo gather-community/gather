@@ -73,7 +73,7 @@ module ApplicationControllable::RequestPreprocessing
   end
 
   def set_default_nav_context
-    @context = {}
+    nav_builder.context = {}
   end
 
   # Checks that the subdomain's community exists and sets current_community.

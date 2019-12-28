@@ -4,8 +4,8 @@
       <%= icon_tag("user") << " " << current_user.name %> <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
-    <% personal_nav_items.each do |item| %>
-      <li><%= nav_link(item) %></li>
+    <% nav_builder.personal_items.each do |item| %>
+      <li><%= nav_builder.link(item) %></li>
     <% end %>
   </ul>
 </li>

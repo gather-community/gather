@@ -33,10 +33,9 @@
           <td class="main-nav">
             <% if user_signed_in? %>
               <ul class="nav">
-                <% nav_items.each do |item| %>
-                  <li class="<%= item[:active] ? 'active' : '' %>">
-                    <%= link_to(t("nav_links.main.#{item[:name]}"),
-                      item[:path], class: "icon-bar") %>
+                <% nav_builder.main_items.each do |item| %>
+                  <li class="<%= "active" if item[:active] %>">
+                    <%= nav_builder.link(item, icon: false) %>
                   </li>
                 <% end %>
               </ul>
@@ -45,12 +44,12 @@
         </tr>
       </table>
     </nav>
-    <% if @context[:subsection] && (items = subnav_items).size > 1 %>
+    <% if nav_builder.context[:subsection] && (items = nav_builder.sub_items).size > 1 %>
       <nav class="subnav hidden-xs">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>
             <li role="presentation" class="<%= item[:active] ? 'active' : '' %>">
-              <%= nav_link(item, tab: true) %>
+              <%= nav_builder.link(item, tab: true) %>
             </li>
           <% end %>
         </ul>
@@ -74,8 +73,8 @@
         <% if user_signed_in? %>
           <div class="collapse navbar-collapse" id="mobile-nav">
             <ul class="nav navbar-nav mobile-nav">
-              <% nav_items.each do |item| %>
-                <% if (sub_items = subnav_items(item[:name])).size > 1 %>
+              <% nav_builder.main_items.each do |item| %>
+                <% if (sub_items = nav_builder.sub_items(item[:name])).size > 1 %>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                       aria-haspopup="true" aria-expanded="false">
@@ -85,12 +84,12 @@
                     </a>
                     <ul class="dropdown-menu">
                       <% sub_items.each do |sub_item| %>
-                        <li><%= nav_link(sub_item) %></li>
+                        <li><%= nav_builder.link(sub_item) %></li>
                       <% end %>
                     </ul>
                   </li>
                 <% else %>
-                  <li><%= nav_link(item) %></li>
+                  <li><%= nav_builder.link(item) %></li>
                 <% end %>
               <% end %>
               <%= render("layouts/personal_dropdown") %>

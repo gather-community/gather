@@ -30,6 +30,10 @@ module Groups
     scope :with_member_counts, lambda {
       select("groups.*, (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id) AS member_count")
     }
+    scope :with_user, lambda { |user|
+      subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ?)"
+      where("kind = 'everybody' OR EXISTS #{subq}", user)
+    }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {
       # Translate the possible type values and use these to sort in the DB.

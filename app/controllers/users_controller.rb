@@ -42,12 +42,12 @@ class UsersController < ApplicationController
         @users = case params[:context]
         when "res_sponsor", "reserver_this_cmty", "guardian", "job_choosing_proxy"
           @users.in_community(current_community).adults
-        when "reserver_any_cmty"
+        when "reserver_any_cmty", "group_lens"
           @users.adults
         when "group_memberships"
           community_ids = JSON.parse(params[:data]).presence || current_community.id
           @users.adults.in_community(community_ids)
-        when "lens", "meal_assign", "work_assign"
+        when "meal_job_lens", "meal_assign", "work_assign"
           @users.in_community(current_community)
         else
           raise "invalid select2 context"

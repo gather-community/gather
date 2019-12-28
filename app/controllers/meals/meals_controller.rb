@@ -25,8 +25,8 @@ module Meals
     def jobs
       authorize(sample_meal)
       nav_context(:meals, :jobs)
-      prepare_lenses(:"people/user", :"meals/time")
-      @user = User.find(lenses[:user].value) if lenses[:user].present?
+      prepare_lenses(:"meals/job_user", :"meals/time")
+      @user = lenses[:user].user
       load_meals(:jobs)
       load_communities_in_cluster
     end

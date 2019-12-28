@@ -8,7 +8,7 @@
 
 <% if groups.empty? %>
   <div class="center-notice">
-    No groups found.
+    No groups found. <%= lenses.no_result_clear_filter_link %>
   </div>
 <% else %>
   <table class="index">
@@ -33,4 +33,8 @@
       <% end %>
     </tbody>
   </table>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() { new Gather.Views.AjaxSelect2({el: '.lens-bar'}); });
 <% end %>

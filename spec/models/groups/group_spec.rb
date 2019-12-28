@@ -8,25 +8,33 @@ describe Groups::Group do
   end
 
   describe "normalization" do
-    describe "memberships and availability" do
+    describe "memberships, opt-outs, kind, and availability" do
+      let(:opt_outs) { build_list(:group_opt_out, 2) }
       let(:memberships) do
         [build(:group_membership, kind: "member"), build(:group_membership, kind: "manager")]
       end
-      let(:group) { create(:group, memberships: memberships, availability: "closed") }
+      let(:group) do
+        create(:group, memberships: memberships, opt_outs: opt_outs, kind: kind, availability: "closed")
+      end
 
       context "for normal group" do
-        it "is expected to have saved memberships and stayed closed" do
+        let(:kind) { "committee" }
+
+        it "is expected to save memberships, delete opt-outs, and stay closed" do
           expect(group.memberships.map(&:kind)).to eq(%w[member manager])
           expect(Groups::Membership.count).to eq(2)
+          expect(Groups::OptOut.count).to eq(0)
           expect(group).to be_closed
         end
       end
 
       context "for everybody group" do
+        let(:kind) { "everybody" }
+
         it "is expected to delete non-manager memberships and be open" do
-          group.update!(kind: "everybody")
           expect(group.memberships.map(&:kind)).to eq(["manager"])
           expect(Groups::Membership.count).to eq(1)
+          expect(Groups::OptOut.count).to eq(2)
           expect(group).to be_open
         end
       end

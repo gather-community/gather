@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_27_183340) do
+ActiveRecord::Schema.define(version: 2019_12_28_213700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -144,6 +144,18 @@ ActiveRecord::Schema.define(version: 2019_12_27_183340) do
     t.index ["group_id", "user_id"], name: "index_group_memberships_on_group_id_and_user_id", unique: true
     t.index ["group_id"], name: "index_group_memberships_on_group_id"
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
+  end
+
+  create_table "group_opt_outs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "group_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["cluster_id"], name: "index_group_opt_outs_on_cluster_id"
+    t.index ["group_id", "user_id"], name: "index_group_opt_outs_on_group_id_and_user_id", unique: true
+    t.index ["group_id"], name: "index_group_opt_outs_on_group_id"
+    t.index ["user_id"], name: "index_group_opt_outs_on_user_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -815,6 +827,9 @@ ActiveRecord::Schema.define(version: 2019_12_27_183340) do
   add_foreign_key "group_memberships", "clusters"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "group_opt_outs", "clusters"
+  add_foreign_key "group_opt_outs", "groups"
+  add_foreign_key "group_opt_outs", "users"
   add_foreign_key "groups", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"

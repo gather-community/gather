@@ -16,6 +16,7 @@ module Groups
     has_many :communities, through: :affiliations
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
                                                          dependent: :destroy, inverse_of: :group
+    has_many :opt_outs, class_name: "Groups::OptOut", dependent: :destroy, inverse_of: :group
     has_many :users, through: :memberships
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
@@ -79,6 +80,7 @@ module Groups
 
     def normalize
       memberships.delete(memberships.to_a.select(&:member?)) if everybody?
+      opt_outs.delete_all unless everybody?
       self.availability = "open" if everybody?
     end
 

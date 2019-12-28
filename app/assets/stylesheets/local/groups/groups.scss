@@ -1,4 +1,10 @@
 .groups--groups {
+  table.index {
+    .name, .kind {
+      white-space: nowrap;
+    }
+  }
+
   form {
     .groups_group_communities .checkbox {
       display: inline-block;

@@ -9,7 +9,8 @@ module Groups
 
     def index
       authorize(sample_group)
-      @groups = policy_scope(Group).in_community(current_community).deactivated_last.by_name
+      @groups = policy_scope(Group).with_member_counts
+        .in_community(current_community).deactivated_last.hidden_last.by_name
     end
 
     def new

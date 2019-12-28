@@ -4,8 +4,12 @@ module Groups
   class GroupDecorator < ApplicationDecorator
     delegate_all
 
-    def name_with_prefix
-      "#{cmty_prefix_no_colon}#{name}"
+    def name_with_suffix
+      suffixes = []
+      suffixes << t("common.hidden") if hidden?
+      suffixes << t("common.inactive") if inactive?
+      suffixes = suffixes.empty? ? "" : " (#{suffixes.join(', ')})"
+      "#{name}#{suffixes}"
     end
 
     def name_with_inactive

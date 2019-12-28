@@ -13,6 +13,7 @@ en:
     default: "Default"
     edit: "Edit"
     "false": "False"
+    hidden: "Hidden"
     inactive: "Inactive"
     max: "Max"
     no_result_clear_filter_link_html: "You can try %{link}."

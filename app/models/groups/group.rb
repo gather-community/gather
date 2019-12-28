@@ -27,6 +27,11 @@ module Groups
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :by_name, -> { alpha_order(:name) }
     scope :visible, -> { where.not(availability: "hidden") }
+    scope :hidden_last, -> { order(arel_table[:availability].eq("hidden")) }
+    scope :with_member_counts, lambda {
+                                 select("groups.*, (SELECT COUNT(id) FROM group_memberships "\
+                                   "WHERE group_id = groups.id) AS member_count")
+                               }
 
     normalize_attributes :kind, :availability, :name
 

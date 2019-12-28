@@ -11,7 +11,8 @@ table.index {
     min-width: 500px;
   }
 
-  tr.inactive {
+  tr.inactive,
+  tr.muted {
     img {
       filter: grayscale(100%);
     }

@@ -17,6 +17,7 @@ en:
         types: "Types"
       people:
         directory: "Directory"
+        groups: "Groups"
         households: "Households"
         roles: "Roles"
         birthdays: "Birthdays"

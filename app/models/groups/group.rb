@@ -25,13 +25,20 @@ module Groups
         WHERE group_id = groups.id AND community_id = ?)", c.id)
     }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
-    scope :by_name, -> { alpha_order(:name) }
     scope :visible, -> { where.not(availability: "hidden") }
     scope :hidden_last, -> { order(arel_table[:availability].eq("hidden")) }
     scope :with_member_counts, lambda {
-                                 select("groups.*, (SELECT COUNT(id) FROM group_memberships "\
-                                   "WHERE group_id = groups.id) AS member_count")
-                               }
+      select("groups.*, (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id) AS member_count")
+    }
+    scope :by_name, -> { alpha_order(:name) }
+    scope :by_type, lambda {
+      # Translate the possible type values and use these to sort in the DB.
+      whens = KINDS.map do |kind|
+        translated = I18n.t("simple_form.options.groups_group.kind.#{kind}")
+        "WHEN '#{kind}' THEN '#{translated}'"
+      end
+      order("LOWER(CASE kind #{whens.join(' ')} END)")
+    }
 
     normalize_attributes :kind, :availability, :name
 
@@ -42,6 +49,7 @@ module Groups
 
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
+
 
     def everybody?
       kind == "everybody"

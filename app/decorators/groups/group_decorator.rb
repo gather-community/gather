@@ -6,8 +6,8 @@ module Groups
 
     def name_with_suffix
       suffixes = []
-      suffixes << t("common.hidden") if hidden?
       suffixes << t("common.inactive") if inactive?
+      suffixes << t("common.hidden") if hidden?
       suffixes = suffixes.empty? ? "" : " (#{suffixes.join(', ')})"
       "#{name}#{suffixes}"
     end
@@ -17,7 +17,7 @@ module Groups
     end
 
     def tr_classes
-      active? ? "" : "inactive"
+      [active? ? nil : "inactive", hidden? ? "muted" : nil].compact.join(" ")
     end
 
     def edit_action_link_set

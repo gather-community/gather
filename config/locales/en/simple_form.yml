@@ -129,6 +129,9 @@ en:
           kind:
             member: "Member"
             manager: "Manager"
+        sort:
+          name: "By Name"
+          type: "By Type"
       meals_meal:
         time:
           past: "Past"

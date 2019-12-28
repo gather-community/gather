@@ -4,13 +4,16 @@ module Groups
   class GroupsController < ApplicationController
     include Destructible
 
+    before_action -> { nav_context(:people, :groups) }
     decorates_assigned :group, :groups
     helper_method :sample_group
 
     def index
       authorize(sample_group)
+      prepare_lenses(:"groups/sort")
       @groups = policy_scope(Group).with_member_counts
-        .in_community(current_community).deactivated_last.hidden_last.by_name
+        .in_community(current_community).deactivated_last.hidden_last
+      @groups = lenses[:sort].by_type? ? @groups.by_type : @groups.by_name
     end
 
     def new

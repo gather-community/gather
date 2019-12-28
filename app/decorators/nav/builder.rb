@@ -106,6 +106,7 @@ module Nav
         when :people
           sample_household = Household.new(community: h.current_community)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: h.current_community))
+          sample_group = Groups::Group.new(communities: [h.current_community])
           [
             {
               name: :directory,
@@ -113,6 +114,12 @@ module Nav
               path: h.users_path,
               permitted: h.policy(User).index?,
               icon: "address-book"
+            }, {
+              name: :groups,
+              parent: :people,
+              path: h.groups_path,
+              permitted: h.policy(sample_group).index?,
+              icon: "users"
             }, {
               name: :households,
               parent: :people,

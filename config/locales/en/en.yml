@@ -196,6 +196,7 @@ en:
       signups: "Add Household"
       groups/group:
         memberships: "Add Member"
+        opt_outs: "Add Opt Out"
       meals/signup:
         parts: "Add Item"
       meals/formula:

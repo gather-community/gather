@@ -16,8 +16,9 @@ module Groups
     has_many :communities, through: :affiliations
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
                                                          dependent: :destroy, inverse_of: :group
-    has_many :opt_outs, class_name: "Groups::OptOut", dependent: :destroy, inverse_of: :group
     has_many :users, through: :memberships
+    has_many :opt_outs, class_name: "Groups::OptOut", dependent: :destroy, inverse_of: :group
+    has_many :opt_outers, through: :opt_outs, source: :user
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
 
@@ -32,8 +33,10 @@ module Groups
       select("groups.*, (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id) AS member_count")
     }
     scope :with_user, lambda { |user|
-      subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ?)"
-      where("kind = 'everybody' OR EXISTS #{subq}", user)
+      subq1 = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ?)"
+      subq2 = "(SELECT id FROM group_opt_outs WHERE group_id = groups.id AND user_id = ?)"
+      clause = "(kind != 'everybody' AND EXISTS #{subq1}) OR( kind = 'everybody' AND NOT EXISTS #{subq2})"
+      where(clause, user, user)
     }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {
@@ -48,13 +51,13 @@ module Groups
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :opt_outs, reject_if: :all_blank, allow_destroy: true
 
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
 
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
-
 
     def everybody?
       kind == "everybody"

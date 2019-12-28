@@ -91,7 +91,7 @@ describe Groups::Group do
       end
     end
 
-    describe "no members from non-affiliated communities" do
+    describe "no members or opt-outs from non-affiliated communities" do
       let(:community1) { create(:community) }
       let(:community2) { create(:community) }
       let(:user1) { create(:user, community: community1) }
@@ -110,6 +110,16 @@ describe Groups::Group do
       context "with member from non-affiliated community" do
         subject(:group) { build(:group, communities: [community1], users: [user1, user2]) }
         it { expect(group.memberships[1]).to have_errors(user_id: "Not from an affiliated community") }
+      end
+
+      context "with opt-outs from affiliated communities only" do
+        subject(:group) { build(:group, communities: [community1, community2], opt_outers: [user1, user2]) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with opt-out from non-affiliated community" do
+        subject(:group) { build(:group, communities: [community1], opt_outers: [user1, user2]) }
+        it { expect(group.opt_outs[1]).to have_errors(user_id: "Not from an affiliated community") }
       end
     end
   end

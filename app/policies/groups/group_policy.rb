@@ -49,6 +49,7 @@ module Groups
     def permitted_attributes
       permitted = %i[availability can_request_jobs description kind name]
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}
+      permitted << {opt_outs_attributes: %i[id user_id _destroy]}
       permitted << {community_ids: []} if user.global_role?(:cluster_admin) || user.global_role?(:super_admin)
       permitted
     end

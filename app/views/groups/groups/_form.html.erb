@@ -17,6 +17,7 @@
   <%= f.input(:kind, collection: Groups::Group::KINDS, include_blank: false) %>
   <%= f.input(:availability, collection: Groups::Group::AVAILABILITIES, include_blank: false) %>
   <%= nested_field_set(f, :memberships, single_row: true, inner_labels: false) %>
+  <%= nested_field_set(f, :opt_outs, single_row: true, inner_labels: false) %>
   <%= f.input(:can_request_jobs) %>
 
   <%= form_actions do %>
@@ -26,6 +27,7 @@
 
 <%= javascript_tag do %>
   $(function() {
+    new Gather.Views.Groups.GroupFormView({el: '.groups--group-form'});
     new Gather.Views.DirtyChecker({el: '.groups--group-form'});
     new Gather.Views.AjaxSelect2({
       el: '.groups--group-form',

@@ -11,13 +11,12 @@
       margin-right: 15px;
     }
 
-    .groups_group_memberships {
-      .user-and-kind {
-        display: flex;
+    .groups_group_memberships .user-and-kind,
+    .groups_group_opt_outs .user {
+      display: flex;
 
-        > * {
-          flex: 1;
-        }
+      > * {
+        flex: 1;
       }
     }
   }

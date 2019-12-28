@@ -1,0 +1,4 @@
+<%= f.error(:user_id) %>
+<div class="user">
+  <%= f.input(:user_id, as: :assoc_select2, error: false, src: "/users", context: "group_memberships") %>
+</div>

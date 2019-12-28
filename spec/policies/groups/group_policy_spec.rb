@@ -90,15 +90,16 @@ describe Groups::GroupPolicy do
     let!(:cluster_group) { create(:group, communities: [communityB]) }
     let!(:cmty_group) { create(:group, communities: [community, communityB]) }
     let!(:hidden_group) { create(:group, communities: [community], availability: "hidden") }
+    let!(:inactive_group) { create(:group, :inactive, communities: [community]) }
 
     context "for cluster admin" do
       let(:actor) { cluster_admin }
-      it { is_expected.to contain_exactly(cluster_group, cmty_group, hidden_group) }
+      it { is_expected.to contain_exactly(cluster_group, cmty_group, hidden_group, inactive_group) }
     end
 
     context "for admin" do
       let(:actor) { admin }
-      it { is_expected.to contain_exactly(cmty_group, hidden_group) }
+      it { is_expected.to contain_exactly(cmty_group, hidden_group, inactive_group) }
     end
 
     context "for regular user" do

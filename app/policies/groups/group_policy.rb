@@ -11,7 +11,7 @@ module Groups
         elsif active_admin?
           scope.in_community(user.community)
         elsif active?
-          scope.in_community(user.community).visible
+          scope.in_community(user.community).visible.active
         else
           scope.none
         end

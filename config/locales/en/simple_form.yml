@@ -113,6 +113,7 @@ en:
           open: "Open"
           closed: "Closed"
           hidden: "Hidden"
+          everybody: "Everybody"
         kind:
           committee: "Committee"
           subcommittee: "Subcommittee"
@@ -124,7 +125,6 @@ en:
           gang: "Gang"
           group: "Group"
           other: "Other"
-          everybody: "Everybody"
         memberships:
           kind:
             member: "Member"

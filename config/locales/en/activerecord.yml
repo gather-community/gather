@@ -98,7 +98,7 @@ en:
         name: "Name"
         communities: "Communities"
         memberships: "Members"
-        opt_outs: "Opt Outs"
+        opt_outs: "Opt-Outs"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"

@@ -5,8 +5,8 @@ module Groups
   class Group < ApplicationRecord
     include Deactivatable
 
-    KINDS = %i[committee subcommittee team task_force club crew squad gang group everybody].freeze
-    AVAILABILITIES = %i[open closed hidden].freeze
+    KINDS = %i[committee subcommittee team task_force club crew squad gang group].freeze
+    AVAILABILITIES = %i[open closed everybody hidden].freeze
 
     self.table_name = "groups"
 
@@ -35,7 +35,8 @@ module Groups
     scope :with_user, lambda { |user|
       subq1 = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ?)"
       subq2 = "(SELECT id FROM group_opt_outs WHERE group_id = groups.id AND user_id = ?)"
-      clause = "(kind != 'everybody' AND EXISTS #{subq1}) OR( kind = 'everybody' AND NOT EXISTS #{subq2})"
+      clause = "(availability != 'everybody' AND EXISTS #{subq1}) OR "\
+        "(availability = 'everybody' AND NOT EXISTS #{subq2})"
       where(clause, user, user)
     }
     scope :by_name, -> { alpha_order(:name) }
@@ -60,7 +61,7 @@ module Groups
     validate :at_least_one_affiliation
 
     def everybody?
-      kind == "everybody"
+      availability == "everybody"
     end
 
     def closed?
@@ -84,7 +85,6 @@ module Groups
     def normalize
       memberships.delete(memberships.to_a.select(&:member?)) if everybody?
       opt_outs.delete_all unless everybody?
-      self.availability = "open" if everybody?
     end
 
     def name_unique_in_all_communities

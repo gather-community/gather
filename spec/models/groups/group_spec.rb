@@ -14,13 +14,13 @@ describe Groups::Group do
         [build(:group_membership, kind: "member"), build(:group_membership, kind: "manager")]
       end
       let(:group) do
-        create(:group, memberships: memberships, opt_outs: opt_outs, kind: kind, availability: "closed")
+        create(:group, memberships: memberships, opt_outs: opt_outs, availability: availability)
       end
 
-      context "for normal group" do
-        let(:kind) { "committee" }
+      context "for closed group" do
+        let(:availability) { "closed" }
 
-        it "is expected to save memberships, delete opt-outs, and stay closed" do
+        it "is expected to save memberships, delete opt-outs" do
           expect(group.memberships.map(&:kind)).to eq(%w[member manager])
           expect(Groups::Membership.count).to eq(2)
           expect(Groups::OptOut.count).to eq(0)
@@ -29,13 +29,13 @@ describe Groups::Group do
       end
 
       context "for everybody group" do
-        let(:kind) { "everybody" }
+        let(:availability) { "everybody" }
 
-        it "is expected to delete non-manager memberships and be open" do
+        it "is expected to delete non-manager memberships" do
           expect(group.memberships.map(&:kind)).to eq(["manager"])
           expect(Groups::Membership.count).to eq(1)
           expect(Groups::OptOut.count).to eq(2)
-          expect(group).to be_open
+          expect(group).to be_everybody
         end
       end
     end
@@ -82,9 +82,7 @@ describe Groups::Group do
         let(:group) { create(:group, communities: [community1]) }
 
         before do
-          # Delete affiliation with _destroy so we know it doesn't count those marked for destruction.
-          group.assign_attributes(affiliations_attributes:
-            {"0" => {id: group.affiliations[0].id, _destroy: "1"}})
+          group.assign_attributes(community_ids: [])
         end
 
         it { is_expected.to have_errors(base: "Please select at least one community") }

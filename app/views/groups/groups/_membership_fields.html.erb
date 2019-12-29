@@ -2,5 +2,5 @@
 <div class="user-and-kind">
   <%= f.input(:user_id, as: :assoc_select2, error: false,
                         src: "/users", context: "group_memberships") %>
-  <%= f.input(:kind, collection: Groups::Membership::KINDS) %>
+  <%= f.input(:kind, collection: Groups::Membership::KINDS, include_blank: false) %>
 </div>

@@ -127,8 +127,9 @@ en:
           other: "Other"
         memberships:
           kind:
-            member: "Member"
+            joiner: "Member"
             manager: "Manager"
+            opt_out: "Opt Out"
         sort:
           name: "By Name"
           type: "By Type"

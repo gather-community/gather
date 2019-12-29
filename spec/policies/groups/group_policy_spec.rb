@@ -119,7 +119,6 @@ describe Groups::GroupPolicy do
     let(:base_attribs) do
       %i[availability can_request_jobs description kind name] <<
         {memberships_attributes: %i[id kind user_id _destroy]} <<
-        {opt_outs_attributes: %i[id user_id _destroy]}
     end
     let(:group) { create(:group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }

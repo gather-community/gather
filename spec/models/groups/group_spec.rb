@@ -8,22 +8,23 @@ describe Groups::Group do
   end
 
   describe "normalization" do
-    describe "memberships, opt-outs, kind, and availability" do
-      let(:opt_outs) { build_list(:group_opt_out, 2) }
+    describe "memberships, kind, and availability" do
       let(:memberships) do
-        [build(:group_membership, kind: "member"), build(:group_membership, kind: "manager")]
+        [
+          build(:group_membership, kind: "joiner"),
+          build(:group_membership, kind: "manager"),
+          build(:group_membership, kind: "opt_out")
+        ]
       end
       let(:group) do
-        create(:group, memberships: memberships, opt_outs: opt_outs, availability: availability)
+        create(:group, memberships: memberships, availability: availability)
       end
 
       context "for closed group" do
         let(:availability) { "closed" }
 
-        it "is expected to save memberships, delete opt-outs" do
-          expect(group.memberships.map(&:kind)).to eq(%w[member manager])
-          expect(Groups::Membership.count).to eq(2)
-          expect(Groups::OptOut.count).to eq(0)
+        it "is expected to delete opt-outs" do
+          expect(group.memberships.map(&:kind)).to match_array(%w[joiner manager])
           expect(group).to be_closed
         end
       end
@@ -31,10 +32,8 @@ describe Groups::Group do
       context "for everybody group" do
         let(:availability) { "everybody" }
 
-        it "is expected to delete non-manager memberships" do
-          expect(group.memberships.map(&:kind)).to eq(["manager"])
-          expect(Groups::Membership.count).to eq(1)
-          expect(Groups::OptOut.count).to eq(2)
+        it "is expected to delete joiner-type memberships" do
+          expect(group.memberships.map(&:kind)).to match_array(%w[manager opt_out])
           expect(group).to be_everybody
         end
       end
@@ -89,7 +88,7 @@ describe Groups::Group do
       end
     end
 
-    describe "no members or opt-outs from non-affiliated communities" do
+    describe "no members from non-affiliated communities" do
       let(:community1) { create(:community) }
       let(:community2) { create(:community) }
       let(:user1) { create(:user, community: community1) }
@@ -108,16 +107,6 @@ describe Groups::Group do
       context "with member from non-affiliated community" do
         subject(:group) { build(:group, communities: [community1], users: [user1, user2]) }
         it { expect(group.memberships[1]).to have_errors(user_id: "Not from an affiliated community") }
-      end
-
-      context "with opt-outs from affiliated communities only" do
-        subject(:group) { build(:group, communities: [community1, community2], opt_outers: [user1, user2]) }
-        it { is_expected.to be_valid }
-      end
-
-      context "with opt-out from non-affiliated community" do
-        subject(:group) { build(:group, communities: [community1], opt_outers: [user1, user2]) }
-        it { expect(group.opt_outs[1]).to have_errors(user_id: "Not from an affiliated community") }
       end
     end
   end

@@ -98,7 +98,6 @@ en:
         name: "Name"
         communities: "Communities"
         memberships: "Members"
-        opt_outs: "Opt-Outs"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"
@@ -197,10 +196,6 @@ en:
             base:
               at_least_one_affiliation: "Please select at least one community"
         groups/membership:
-          attributes:
-            user_id:
-              unaffiliated: "Not from an affiliated community"
-        groups/opt_out:
           attributes:
             user_id:
               unaffiliated: "Not from an affiliated community"

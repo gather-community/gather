@@ -17,8 +17,6 @@ module Groups
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
                                                          dependent: :destroy, inverse_of: :group
     has_many :users, through: :memberships
-    has_many :opt_outs, class_name: "Groups::OptOut", dependent: :destroy, inverse_of: :group
-    has_many :opt_outers, through: :opt_outs, source: :user
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
 
@@ -30,14 +28,14 @@ module Groups
     scope :visible, -> { where.not(availability: "hidden") }
     scope :hidden_last, -> { order(arel_table[:availability].eq("hidden")) }
     scope :with_member_counts, lambda {
-      select("groups.*, (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id) AS member_count")
+      select("groups.*, (SELECT COUNT(id) FROM group_memberships
+        WHERE group_id = groups.id AND kind != 'opt_out') AS member_count")
     }
     scope :with_user, lambda { |user|
-      subq1 = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ?)"
-      subq2 = "(SELECT id FROM group_opt_outs WHERE group_id = groups.id AND user_id = ?)"
-      clause = "(availability != 'everybody' AND EXISTS #{subq1}) OR "\
-        "(availability = 'everybody' AND NOT EXISTS #{subq2})"
-      where(clause, user, user)
+      subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN ?)"
+      clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
+        "(availability = 'everybody' AND NOT EXISTS #{subq})"
+      where(clause, user, %w[joiner manager], user %w[opt_out])
     }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {
@@ -52,7 +50,6 @@ module Groups
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
-    accepts_nested_attributes_for :opt_outs, reject_if: :all_blank, allow_destroy: true
 
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
@@ -83,8 +80,8 @@ module Groups
     private
 
     def normalize
-      memberships.delete(memberships.to_a.select(&:member?)) if everybody?
-      opt_outs.delete_all unless everybody?
+      memberships.delete(memberships.to_a.select(&:joiner?)) if everybody?
+      memberships.delete(memberships.to_a.select(&:opt_out?)) unless everybody?
     end
 
     def name_unique_in_all_communities

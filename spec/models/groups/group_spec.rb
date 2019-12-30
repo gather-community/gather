@@ -124,26 +124,17 @@ describe Groups::Group do
 
         context "with user with no membership" do
           let(:mbr_kind) { nil }
-
-          it "does nothing" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
 
         context "with user with manager membership" do
           let(:mbr_kind) { "manager" }
-
-          it "does nothing" do
-            expect_single_membership(user, group, "manager")
-          end
+          it { expect_single_membership(user, group, "manager") }
         end
 
         context "with user with opt-out membership" do
           let(:mbr_kind) { "opt_out" }
-
-          it "destroys membership" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
       end
 
@@ -152,26 +143,17 @@ describe Groups::Group do
 
         context "with user with no membership" do
           let(:mbr_kind) { nil }
-
-          it "adds membership" do
-            expect_single_membership(user, group, "joiner")
-          end
+          it { expect_single_membership(user, group, "joiner") }
         end
 
         context "with user with manager membership" do
           let(:mbr_kind) { "manager" }
-
-          it "does nothing" do
-            expect_single_membership(user, group, "manager")
-          end
+          it { expect_single_membership(user, group, "manager") }
         end
 
         context "with user with joiner membership" do
           let(:mbr_kind) { "joiner" }
-
-          it "does nothing" do
-            expect_single_membership(user, group, "joiner")
-          end
+          it { expect_single_membership(user, group, "joiner") }
         end
       end
     end
@@ -190,26 +172,17 @@ describe Groups::Group do
 
         context "with user with no membership" do
           let(:mbr_kind) { nil }
-
-          it "adds opt-out" do
-            expect_single_membership(user, group, "opt_out")
-          end
+          it { expect_single_membership(user, group, "opt_out") }
         end
 
         context "with user with manager membership" do
           let(:mbr_kind) { "manager" }
-
-          it "destroys membership" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
 
         context "with user with opt-out membership" do
           let(:mbr_kind) { "opt_out" }
-
-          it "does nothing" do
-            expect_single_membership(user, group, "opt_out")
-          end
+          it { expect_single_membership(user, group, "opt_out") }
         end
       end
 
@@ -218,29 +191,24 @@ describe Groups::Group do
 
         context "with user with no membership" do
           let(:mbr_kind) { nil }
-
-          it "does nothing" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
 
         context "with user with manager membership" do
           let(:mbr_kind) { "manager" }
-
-          it "destroys membership" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
 
         context "with user with joiner membership" do
           let(:mbr_kind) { "joiner" }
-
-          it "destroys membership" do
-            expect(Groups::Membership.count).to eq(0)
-          end
+          it { expect_no_membership }
         end
       end
     end
+  end
+
+  def expect_no_membership
+    expect_no_membership
   end
 
   def expect_single_membership(user, group, kind)

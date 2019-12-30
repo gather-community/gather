@@ -82,6 +82,134 @@ describe Groups::GroupPolicy do
       let(:group) { create(:group, :inactive, availability: availability, communities: communities) }
       it_behaves_like "permits active admins in group's communities but not regular users"
     end
+
+    # This permission does not depend on user role. It just depends on the user's membership type
+    # and group availability. An admin can technically add themselves to a closed list, but that would
+    # be via the edit screen, and not via this permission.
+    permissions :join? do
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+
+      context "with everybody group" do
+        let(:availability) { "everybody" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with opt-out membership" do
+          let(:mbr_kind) { "opt_out" }
+          it { expect(subject).to permit(user, group) }
+        end
+      end
+
+      context "with closed/hidden group" do
+        let(:availability) { "closed" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+      end
+
+      context "with open group" do
+        let(:availability) { "open" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+      end
+    end
+
+    # This permission does not depend on user role. It just depends on the user's membership type
+    # and group availability. An admin can technically add themselves to a closed list, but that would
+    # be via the edit screen, and not via this permission.
+    permissions :leave? do
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+
+      context "with everybody group" do
+        let(:availability) { "everybody" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).to permit(user, group) }
+        end
+
+        context "with user with opt-out membership" do
+          let(:mbr_kind) { "opt_out" }
+          it { expect(subject).not_to permit(user, group) }
+        end
+      end
+
+      context "with closed/hidden group" do
+        let(:availability) { "closed" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).to permit(user, group) }
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+          it { expect(subject).to permit(user, group) }
+        end
+      end
+
+      context "with open group" do
+        let(:availability) { "open" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { expect(subject).not_to permit(user, group) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { expect(subject).to permit(user, group) }
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+          it { expect(subject).to permit(user, group) }
+        end
+      end
+    end
   end
 
   describe "scope" do
@@ -118,7 +246,7 @@ describe Groups::GroupPolicy do
 
     let(:base_attribs) do
       %i[availability can_request_jobs description kind name] <<
-        {memberships_attributes: %i[id kind user_id _destroy]} <<
+        {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:group) { create(:group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }

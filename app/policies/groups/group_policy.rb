@@ -42,6 +42,14 @@ module Groups
       active? && group.active? && appropriate_admin?
     end
 
+    def join?
+      group.everybody? && membership&.opt_out? || group.open? && membership.nil?
+    end
+
+    def leave?
+      group.everybody? && (membership.nil? || !membership.opt_out?) || !group.everybody? && !membership.nil?
+    end
+
     def destroy?
       active? && appropriate_admin?
     end
@@ -63,6 +71,10 @@ module Groups
 
     def user_in_any_community?
       group.communities.include?(user.community)
+    end
+
+    def membership
+      @membership ||= group.membership_for(user)
     end
   end
 end

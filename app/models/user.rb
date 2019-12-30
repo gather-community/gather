@@ -69,7 +69,8 @@ class User < ApplicationRecord
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
-  scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
+  scope :including_communities, -> { includes(household: :community) }
+  scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
   scope :by_birthday, lambda {
     order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
   }

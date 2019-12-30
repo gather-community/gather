@@ -207,6 +207,33 @@ describe Groups::Group do
     end
   end
 
+  describe "#members and .with_member_counts" do
+    let!(:users) { create_list(:user, 8) }
+    let!(:child) { create(:user, :child, guardians: [users[0]]) }
+    let!(:regular_group) do
+      create(:group, name: "Alpha", availability: "open", memberships: [
+        build(:group_membership, user: users[0], kind: "joiner"),
+        build(:group_membership, user: users[1], kind: "joiner"),
+        build(:group_membership, user: users[2], kind: "manager")
+      ])
+    end
+    let!(:everybody_group) do
+      create(:group, name: "Bravo", availability: "everybody", memberships: [
+        build(:group_membership, user: users[0], kind: "opt_out"),
+        build(:group_membership, user: users[4], kind: "opt_out"),
+        build(:group_membership, user: users[5], kind: "manager")
+      ])
+    end
+
+    it "is correct" do
+      groups = described_class.by_name.with_member_counts.to_a
+      expect(groups[0].member_count).to eq(3)
+      expect(groups[0].members).to contain_exactly(users[0], users[1], users[2])
+      expect(groups[1].member_count).to eq(6)
+      expect(groups[1].members).to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
+    end
+  end
+
   def expect_no_membership
     expect_no_membership
   end

@@ -27,14 +27,24 @@ module Groups
     scope :visible, -> { where.not(availability: "hidden") }
     scope :hidden_last, -> { order(arel_table[:availability].eq("hidden")) }
     scope :with_member_counts, lambda {
-      select("groups.*, (SELECT COUNT(id) FROM group_memberships
-        WHERE group_id = groups.id AND kind != 'opt_out') AS member_count")
+      select("groups.*, (SELECT
+        CASE availability
+        WHEN 'everybody' THEN
+          (SELECT COUNT(users.id)
+            FROM users INNER JOIN households ON users.household_id = households.id
+            WHERE users.cluster_id = groups.cluster_id AND users.deactivated_at IS NULL AND child = 'f'
+              AND households.community_id IN
+              (SELECT community_id FROM group_affiliations WHERE group_id = groups.id))
+          - (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id AND kind = 'opt_out')
+        ELSE (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id AND kind != 'opt_out')
+        END
+      ) AS member_count")
     }
     scope :with_user, lambda { |user|
       subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN ?)"
       clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
         "(availability = 'everybody' AND NOT EXISTS #{subq})"
-      where(clause, user, %w[joiner manager], user %w[opt_out])
+      where(clause, user, %w[joiner manager], user, %w[opt_out])
     }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {
@@ -77,21 +87,23 @@ module Groups
     end
 
     def managers
-      @managers ||= memberships.managers.includes(:user).map(&:user)
+      @managers ||= memberships.managers.including_users_and_communities.map(&:user)
     end
 
     def joiners
-      @joiners ||= memberships.joiners.includes(:user).map(&:user)
+      @joiners ||= memberships.joiners.including_users_and_communities.map(&:user)
     end
 
     def opt_outs
-      @opt_outs ||= memberships.opt_outs.includes(:user).map(&:user)
+      @opt_outs ||= memberships.opt_outs.including_users_and_communities.map(&:user)
     end
 
     # members = managers + (everybody ? all active adults : joiners) - opt outs
     def members
       if everybody?
-        User.active.adults.in_community(communities).by_name - opt_outs + managers
+        # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
+        # They should be consistent.
+        User.active.adults.in_community(communities).including_communities.by_name - opt_outs
       else
         managers + joiners
       end

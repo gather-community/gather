@@ -97,6 +97,32 @@ module Groups
       end
     end
 
+    # Assumes membership records persisted. Assumes used only O(1) times. Use other methods for O(n).
+    # Returns nil if user not a member.
+    def membership_for(user)
+      memberships.find_by(user_id: user)
+    end
+
+    def join(user)
+      membership = membership_for(user)
+      if everybody? && membership&.opt_out?
+        membership.destroy
+      elsif !everybody? && membership.nil?
+        memberships.create!(user: user, kind: "joiner")
+      end
+    end
+
+    def leave(user)
+      membership = membership_for(user)
+      if everybody? && !membership.nil? && !membership&.opt_out?
+        membership.destroy
+      elsif everybody? && membership.nil?
+        memberships.create!(user: user, kind: "opt_out")
+      elsif !everybody? && !membership.nil?
+        membership.destroy
+      end
+    end
+
     private
 
     def normalize

@@ -109,5 +109,142 @@ describe Groups::Group do
         it { expect(group.memberships[1]).to have_errors(user_id: "Not from an affiliated community") }
       end
     end
+
+    describe "#join" do
+      let(:group) { create(:group, availability: availability) }
+      let!(:user) { create(:user) }
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+
+      before do
+        group.join(user)
+      end
+
+      context "with everybody group" do
+        let(:availability) { "everybody" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+
+          it "does nothing" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+
+          it "does nothing" do
+            expect_single_membership(user, group, "manager")
+          end
+        end
+
+        context "with user with opt-out membership" do
+          let(:mbr_kind) { "opt_out" }
+
+          it "destroys membership" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+      end
+
+      context "with non-everybody group" do
+        let(:availability) { "closed" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+
+          it "adds membership" do
+            expect_single_membership(user, group, "joiner")
+          end
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+
+          it "does nothing" do
+            expect_single_membership(user, group, "manager")
+          end
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+
+          it "does nothing" do
+            expect_single_membership(user, group, "joiner")
+          end
+        end
+      end
+    end
+
+    describe "#leave" do
+      let(:group) { create(:group, availability: availability) }
+      let!(:user) { create(:user) }
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+
+      before do
+        group.leave(user)
+      end
+
+      context "with everybody group" do
+        let(:availability) { "everybody" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+
+          it "adds opt-out" do
+            expect_single_membership(user, group, "opt_out")
+          end
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+
+          it "destroys membership" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+
+        context "with user with opt-out membership" do
+          let(:mbr_kind) { "opt_out" }
+
+          it "does nothing" do
+            expect_single_membership(user, group, "opt_out")
+          end
+        end
+      end
+
+      context "with non-everybody group" do
+        let(:availability) { "closed" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+
+          it "does nothing" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+
+          it "destroys membership" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+
+          it "destroys membership" do
+            expect(Groups::Membership.count).to eq(0)
+          end
+        end
+      end
+    end
+  end
+
+  def expect_single_membership(user, group, kind)
+    expect(Groups::Membership.count).to eq(1)
+    expect(Groups::Membership.first).to have_attributes(user: user, group: group, kind: kind)
   end
 end

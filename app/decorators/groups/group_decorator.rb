@@ -20,6 +20,28 @@ module Groups
       [active? ? nil : "inactive", hidden? ? "muted" : nil].compact.join(" ")
     end
 
+    def availability_hint
+      cmtys = single_community? ? "single_community" : "multi_community"
+      I18n.t("groups.availability_hints.#{cmtys}.#{availability}")
+    end
+
+    def user_list(which_users, show_none: true)
+      users = case which_users
+              when :manager then managers
+              when :member then members
+              when :opt_out then opt_outs
+              end
+      return show_none ? "[#{t('common.none')}]" : "" if users.empty?
+      items = h.safe_join(users.map { |u| h.content_tag(:li, u.decorate.link(show_cmty_if_foreign: true)) })
+      h.content_tag(:ul, items, class: "user-list user-list-#{which_users.to_s.dasherize}")
+    end
+
+    def show_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_group_path(object))
+      )
+    end
+
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :deactivate, icon: "times-circle", method: :put, confirm: {name: name},

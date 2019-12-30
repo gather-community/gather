@@ -1,0 +1,13 @@
+en:
+  groups:
+    availability_hints:
+      single_community:
+        open: "Anybody in the community can see and join this group."
+        closed: "Anybody in the community can see this group but only community admins and the group's managers can add people to it."
+        hidden: "Only community admins and the group's managers can see and add people to this group."
+        "everybody": "Everybody in the community can see this group, and is a member by default. People can chose to opt out if they wish."
+      multi_community:
+        open: "Anybody in the above communities can see and join this group."
+        closed: "Anybody in the above communities can see this group but only admins and the group's managers can add people to it."
+        hidden: "Only the group's managers and admins for the above communities and can see and add people to this group."
+        everybody: "Everybody in the above communities can see this group, and is a member by default. People can chose to opt out if they wish."

@@ -17,6 +17,12 @@ module Groups
       @groups = @groups.with_user(lenses[:user].user) if lenses[:user].user
     end
 
+    def show
+      @group = Group.includes(:communities).find(params[:id])
+      @communities = @group.communities.by_name_with_first(current_community)
+      authorize(@group)
+    end
+
     def new
       @group = Group.new(communities: [current_community], kind: "committee", availability: "open")
       authorize(@group)

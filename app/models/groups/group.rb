@@ -16,7 +16,6 @@ module Groups
     has_many :communities, through: :affiliations
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
                                                          dependent: :destroy, inverse_of: :group
-    has_many :users, through: :memberships
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
 
@@ -73,8 +72,29 @@ module Groups
       availability == "hidden"
     end
 
-    def multi_community?
-      communities.size > 1
+    def single_community?
+      communities.size == 1
+    end
+
+    def managers
+      @managers ||= memberships.managers.includes(:user).map(&:user)
+    end
+
+    def joiners
+      @joiners ||= memberships.joiners.includes(:user).map(&:user)
+    end
+
+    def opt_outs
+      @opt_outs ||= memberships.opt_outs.includes(:user).map(&:user)
+    end
+
+    # members = managers + (everybody ? all active adults : joiners) - opt outs
+    def members
+      if everybody?
+        User.active.adults.in_community(communities).by_name - opt_outs + managers
+      else
+        managers + joiners
+      end
     end
 
     private

@@ -5,6 +5,18 @@
     }
   }
 
+  table.key-value {
+    .user-list {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 0;
+
+      &.user-list-opt-out a {
+        text-decoration: line-through;
+      }
+    }
+  }
+
   form {
     .groups_group_communities .checkbox {
       display: inline-block;

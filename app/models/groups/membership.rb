@@ -11,6 +11,8 @@ module Groups
     belongs_to :user
 
     scope :managers, -> { where(kind: "manager") }
+    scope :joiners, -> { where(kind: "joiner") }
+    scope :opt_outs, -> { where(kind: "opt_out") }
 
     scope :by_kind_and_user_name, lambda {
       whens = KINDS.each_with_index.map { |k, i| "WHEN '#{k}' THEN #{i}" }.join(" ")

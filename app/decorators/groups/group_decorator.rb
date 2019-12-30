@@ -38,6 +38,10 @@ module Groups
 
     def show_action_link_set
       ActionLinkSet.new(
+        ActionLink.new(object, :join, icon: "user-plus", path: h.join_group_path(object), method: :put,
+                                      label_symbol: everybody? ? :rejoin : :join),
+        ActionLink.new(object, :leave, icon: "user-times", path: h.leave_group_path(object), method: :put,
+                                       label_symbol: everybody? ? :opt_out : :leave),
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_group_path(object))
       )
     end

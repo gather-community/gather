@@ -60,6 +60,22 @@ module Groups
       end
     end
 
+    def join
+      @group = Group.find(params[:id])
+      authorize(@group)
+      @group.join(current_user)
+      flash[:success] = %(You have successfully joined the group "#{@group.name}".)
+      redirect_to(group_path(@group))
+    end
+
+    def leave
+      @group = Group.find(params[:id])
+      authorize(@group)
+      @group.leave(current_user)
+      flash[:success] = %(You have successfully left the group "#{@group.name}".)
+      redirect_to(group_path(@group))
+    end
+
     protected
 
     def klass

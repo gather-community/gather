@@ -92,6 +92,8 @@ Rails.application.routes.draw do
     member do
       put :activate
       put :deactivate
+      put :join
+      put :leave
     end
   end
 

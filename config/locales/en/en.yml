@@ -297,13 +297,17 @@ en:
           bad_id: "Could not find a user with ID %{str}"
           bad_name: "Could not find a user named '%{str}'"
 
-  action_names:
+  action_labels:
     common:
       new: "Add"
       edit: "Edit"
       deactivate: "Deactivate"
       destroy: "Delete"
       close: "Close"
+      join: "Join"
+      leave: "Leave"
+      opt_out: "Opt-Out"
+      rejoin: "Re-Join"
       reopen: "Reopen"
       summary: "Summary"
       finalize: "Finalize"

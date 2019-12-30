@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ActionLink < ApplicationDecorator
-  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class, :permitted
+  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class, :permitted, :label_symbol
 
-  def initialize(object, action, icon:, path:, btn_class: :default,
+  def initialize(object, action, icon:, path:, btn_class: :default, label_symbol: action,
     method: :get, permitted: nil, confirm: false)
     self.object = object
     self.action = action
@@ -12,6 +12,7 @@ class ActionLink < ApplicationDecorator
     self.method = method
     self.confirm = confirm
     self.btn_class = btn_class
+    self.label_symbol = label_symbol
     self.permitted = permitted
   end
 
@@ -19,9 +20,9 @@ class ActionLink < ApplicationDecorator
     return @rendered if defined?(@rendered)
     @rendered =
       if permitted || permitted.nil? && h.policy(object).send("#{action}?")
-        params = {title: name, method: method, class: "btn btn-#{btn_class}"}
+        params = {title: label, method: method, class: "btn btn-#{btn_class}"}
         params[:data] = {confirm: confirm_msg} if confirm_msg
-        h.link_to(icon_tag << name_tag, path, params)
+        h.link_to(icon_tag << label_tag, path, params)
       end
   end
 
@@ -31,12 +32,12 @@ class ActionLink < ApplicationDecorator
     h.icon_tag(icon)
   end
 
-  def name_tag
-    h.content_tag(:span, name, class: "action-name")
+  def label_tag
+    h.content_tag(:span, label, class: "action-label")
   end
 
-  def name
-    t(:"action_names.#{i18n_key}.#{action}", default: :"action_names.common.#{action}")
+  def label
+    t(:"action_labels.#{i18n_key}.#{label_symbol}", default: :"action_labels.common.#{label_symbol}")
   end
 
   def i18n_key

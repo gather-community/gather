@@ -25,7 +25,7 @@ describe People::CsvExporter do
 
     context "with users" do
       let!(:household1) do
-        create(:household, name: "Fun", with_members: false, unit_num: "20", unit_suffix: "3A",
+        create(:household, name: "Fun", member_count: 0, unit_num: "20", unit_suffix: "3A",
                            garage_nums: "4,9", keyholders: "Sally, Muhammad")
       end
       let!(:vehicle1) do
@@ -68,7 +68,7 @@ describe People::CsvExporter do
                               guardians: [adult1, adult2, inactive])
       end
 
-      let!(:household2) { create(:household, name: "Blip", with_members: false) }
+      let!(:household2) { create(:household, name: "Blip", member_count: 0) }
       let!(:adult3) do
         create(:user, household: household2, first_name: "Zorgon", last_name: "Puzt",
                       email: "g@h.com", mobile_phone: "+17345558788")

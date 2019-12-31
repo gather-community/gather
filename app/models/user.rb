@@ -136,6 +136,7 @@ class User < ApplicationRecord
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
   after_update { Work::ShiftIndexUpdater.new(self).update }
+  after_deactivate { group_memberships.destroy_all }
 
   def self.from_omniauth(auth)
     return nil if auth.info[:email].blank?

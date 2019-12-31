@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :household do
     transient do
-      with_members { true }
+      member_count { 1 }
     end
 
     community { Defaults.community }
@@ -30,8 +30,10 @@ FactoryBot.define do
     # NOTE: Don't try to assign FactoryBot created users directly to households as they already
     # have households and it doesn't work. Instead, create households first and then assign them to users.
     after(:create) do |household, evaluator|
-      if household.users.empty? && evaluator.with_members
-        household.users << create(:user, household: household)
+      if household.users.empty?
+        evaluator.member_count.times do
+          household.users << create(:user, household: household)
+        end
       end
     end
   end

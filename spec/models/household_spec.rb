@@ -110,6 +110,16 @@ describe Household do
     end
   end
 
+  describe "deactivation" do
+    let(:household) { create(:household, member_count: 2) }
+
+    it "deactivates users" do
+      expect(household.users.map(&:active?)).to eq([true, true])
+      household.deactivate
+      expect(household.users.map(&:active?)).to eq([false, false])
+    end
+  end
+
   describe "destruction" do
     let!(:household) { create(:household) }
 

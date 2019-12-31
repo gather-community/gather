@@ -35,6 +35,7 @@ class Household < ApplicationRecord
   disallow_semicolons :name
 
   before_validation :split_unit_num_and_suffix
+  after_deactivate { users.each(&:deactivate) }
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
@@ -77,10 +78,6 @@ class Household < ApplicationRecord
 
   def garage_nums=(str)
     self[:garage_nums] = str.strip.blank? ? nil : str.split(/\s*,\s*/).join(", ")
-  end
-
-  def after_deactivate
-    users.each(&:deactivate)
   end
 
   def user_activated

@@ -305,7 +305,7 @@ describe User do
     context "with meal assignment" do
       let!(:meal) { create(:meal, head_cook: user) }
 
-      it "destroys user cleanly but not meal" do
+      it "destroys user and assignment cleanly but not meal" do
         user.destroy
         expect(Meals::Assignment.count).to be_zero
         expect(meal.reload.head_cook).to be_nil
@@ -318,11 +318,20 @@ describe User do
       let!(:job) { create(:work_job, period: period) }
       let!(:assignment) { create(:work_assignment, user: user, shift: job.shifts[0]) }
 
-      it "destroys cleanly" do
+      it "destroys cleanly and cascades" do
         user.destroy
         expect { job.reload }.not_to raise_error
         expect { share.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect { assignment.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with group membership" do
+      let!(:membership) { create(:group_membership, user: user) }
+
+      it "destroys cleanly and cascades" do
+        user.destroy
+        expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

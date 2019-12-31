@@ -54,6 +54,7 @@ class User < ApplicationRecord
                                 dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
+  has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy

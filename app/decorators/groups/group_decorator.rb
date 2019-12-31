@@ -32,7 +32,7 @@ module Groups
               when :opt_out then opt_outs
               end
       return show_none ? "[#{t('common.none')}]" : "" if users.empty?
-      items = h.safe_join(users.map { |u| h.content_tag(:li, u.decorate.link(show_cmty_if_foreign: true)) })
+      items = h.safe_join(users.map { |u| h.content_tag(:li, u.decorate.link(show_cmty_if_foreign: :abbrv)) })
       h.content_tag(:ul, items, class: "user-list user-list-#{which_users.to_s.dasherize}")
     end
 

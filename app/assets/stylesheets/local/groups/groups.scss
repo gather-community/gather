@@ -8,8 +8,9 @@
   table.key-value {
     .user-list {
       list-style-type: none;
-      padding-left: 0;
       margin-bottom: 0;
+      padding-left: 0.5em;
+      text-indent: -0.5em;
 
       &.user-list-opt-out a {
         text-decoration: line-through;

@@ -11,7 +11,7 @@ module Groups
         elsif active_admin?
           scope.in_community(user.community)
         elsif active?
-          scope.in_community(user.community).visible.active
+          scope.in_community(user.community).visible_or_managed_by(user).active
         else
           scope.none
         end
@@ -23,7 +23,7 @@ module Groups
     end
 
     def show?
-      active? && (appropriate_admin? || !group.hidden? && user_in_any_community?)
+      active? && (appropriate_admin? || manager? || !group.hidden? && user_in_any_community?)
     end
 
     def create?
@@ -31,7 +31,7 @@ module Groups
     end
 
     def update?
-      active? && (appropriate_admin? || group.memberships.managers.pluck(:user_id).include?(user.id))
+      active? && (appropriate_admin? || manager?)
     end
 
     def activate?
@@ -75,6 +75,10 @@ module Groups
 
     def membership
       @membership ||= group.membership_for(user)
+    end
+
+    def manager?
+      @manager ||= group.memberships.managers.pluck(:user_id).include?(user.id)
     end
   end
 end

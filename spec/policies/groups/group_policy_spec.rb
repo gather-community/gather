@@ -9,31 +9,29 @@ describe Groups::GroupPolicy do
     let(:communities) { [community, communityC] }
     let(:group) { create(:group, availability: availability, communities: communities) }
     let(:record) { group }
+    let(:manager) { create(:group_membership, group: group, kind: "manager").user }
+    let(:other_group_manager) { create(:group_membership, kind: "manager").user }
+    let(:joiner) { create(:group_membership, group: group, kind: "joiner").user }
+    let(:opt_out) { create(:group_membership, group: group, kind: "opt_out").user }
 
     shared_examples_for "permits active admins in group's communities but not regular users" do
-      it "permits admins in selected communities" do
+      it do
         expect(subject).to permit(admin, group)
-      end
-
-      it "forbids admin in outside commmunity" do
         expect(subject).not_to permit(admin_cmtyB, group)
-      end
-
-      it "forbids inactive admins" do
         expect(subject).not_to permit(inactive_admin, group)
-      end
-
-      it "permits cluster admins in any community in cluster" do
         expect(subject).to permit(cluster_admin_cmtyB, group)
-      end
-
-      it "permits super admins" do
         expect(subject).to permit(super_admin_cmtyX, group)
-      end
-
-      it "forbids regular users" do
         expect(subject).not_to permit(user, group)
         expect(subject).not_to permit(user_cmtyC, group)
+      end
+    end
+
+    shared_examples_for "permits managers but not joiners or opt outs" do
+      it do
+        expect(subject).to permit(manager, group)
+        expect(subject).not_to permit(other_group_manager, group)
+        expect(subject).not_to permit(joiner, group)
+        expect(subject).not_to permit(opt_out, group)
       end
     end
 
@@ -45,7 +43,7 @@ describe Groups::GroupPolicy do
       context "for closed group" do
         let(:availability) { "closed" }
 
-        it "permits users in any of the group's communities" do
+        it "permits any user in any of the group's communities" do
           expect(subject).to permit(user, group)
           expect(subject).to permit(user_cmtyC, group)
           expect(subject).not_to permit(user_cmtyB, group)
@@ -55,6 +53,7 @@ describe Groups::GroupPolicy do
       context "for hidden group" do
         let(:availability) { "hidden" }
         it_behaves_like "permits active admins in group's communities but not regular users"
+        it_behaves_like "permits managers but not joiners or opt outs"
       end
     end
 
@@ -63,24 +62,19 @@ describe Groups::GroupPolicy do
     end
 
     permissions :edit?, :update? do
-      let!(:manager) { create(:group_membership, group: group, kind: "manager").user }
-      let!(:member) { create(:group_membership, group: group, kind: "member").user }
-
       it_behaves_like "permits active admins in group's communities but not regular users"
-
-      it "permits managers" do
-        expect(subject).to permit(manager, group)
-        expect(subject).not_to permit(member, group)
-      end
+      it_behaves_like "permits managers but not joiners or opt outs"
     end
 
     permissions :deactivate?, :destroy? do
       it_behaves_like "permits active admins in group's communities but not regular users"
+      it { is_expected.not_to permit(manager, group) }
     end
 
     permissions :activate? do
       let(:group) { create(:group, :inactive, availability: availability, communities: communities) }
       it_behaves_like "permits active admins in group's communities but not regular users"
+      it { is_expected.not_to permit(manager, group) }
     end
 
     # This permission does not depend on user role. It just depends on the user's membership type
@@ -228,6 +222,16 @@ describe Groups::GroupPolicy do
     context "for admin" do
       let(:actor) { admin }
       it { is_expected.to contain_exactly(cmty_group, hidden_group, inactive_group) }
+    end
+
+    context "for manager of hidden group" do
+      let!(:actor) { create(:group_membership, group: hidden_group, kind: "manager").user }
+      it { is_expected.to contain_exactly(cmty_group, hidden_group) }
+    end
+
+    context "for joiner of hidden group" do
+      let!(:actor) { create(:group_membership, group: hidden_group, kind: "joiner").user }
+      it { is_expected.to contain_exactly(cmty_group) }
     end
 
     context "for regular user" do

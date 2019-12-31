@@ -41,7 +41,7 @@ module Groups
       authorize(@group)
       if @group.save
         flash[:success] = "Group created successfully."
-        redirect_to(groups_path)
+        redirect_to(group_path(@group))
       else
         prep_form_vars
         render(:new)
@@ -53,7 +53,7 @@ module Groups
       authorize(@group)
       if @group.update(group_params)
         flash[:success] = "Group updated successfully."
-        redirect_to(groups_path)
+        redirect_to(group_path(@group))
       else
         prep_form_vars
         render(:edit)

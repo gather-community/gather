@@ -2,7 +2,7 @@
 
 <% content_for(:top_buttons) do %>
   <% if policy(sample_group).create? %>
-    <%= link_to(icon_tag("plus") << " Create Group", new_group_path, class: "btn btn-primary") %>
+    <%= link_to(icon_tag("plus") << " Create Group", new_groups_group_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
@@ -23,7 +23,7 @@
     <tbody>
       <% groups.each do |group| %>
         <tr class="<%= group.tr_classes %>">
-          <td class="name"><%= link_to(group.name_with_suffix, group_path(group)) %></td>
+          <td class="name"><%= link_to(group.name_with_suffix, groups_group_path(group)) %></td>
           <td class="kind">
             <%= t("simple_form.options.groups_group.kind.#{group.kind}") %>
           </td>

@@ -1,4 +1,4 @@
-<%= gather_form_for(group, url: group.new_record? ? groups_path : group_path(group)) do |f| %>
+<%= gather_form_for(group, url: group.new_record? ? groups_groups_path : groups_group_path(group)) do |f| %>
   <%= f.input(:name, maxlength: Groups::Group.columns_hash["name"].limit) %>
   <% if @community_options %>
     <%= f.input(:communities) do %>

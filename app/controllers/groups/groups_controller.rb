@@ -41,7 +41,7 @@ module Groups
       authorize(@group)
       if @group.save
         flash[:success] = "Group created successfully."
-        redirect_to(group_path(@group))
+        redirect_to(groups_group_path(@group))
       else
         prep_form_vars
         render(:new)
@@ -53,7 +53,7 @@ module Groups
       authorize(@group)
       if @group.update(group_params)
         flash[:success] = "Group updated successfully."
-        redirect_to(group_path(@group))
+        redirect_to(groups_group_path(@group))
       else
         prep_form_vars
         render(:edit)
@@ -65,7 +65,7 @@ module Groups
       authorize(@group)
       @group.join(current_user)
       flash[:success] = %(You have successfully joined the group "#{@group.name}".)
-      redirect_to(group_path(@group))
+      redirect_to(groups_group_path(@group))
     end
 
     def leave
@@ -73,7 +73,7 @@ module Groups
       authorize(@group)
       @group.leave(current_user)
       flash[:success] = %(You have successfully left the group "#{@group.name}".)
-      redirect_to(group_path(@group))
+      redirect_to(groups_group_path(@group))
     end
 
     protected

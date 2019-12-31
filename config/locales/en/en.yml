@@ -74,6 +74,9 @@ en:
       destroy: "Delete Job"
 
   confirmations:
+    groups/group:
+      destroy: "Are you sure you want to delete the group '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the group '%{name}'?"
     household:
       destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
@@ -119,6 +122,10 @@ en:
       one_html: "This household was marked inactive at %{time}."
       two_html: "You can %{link}. <strong>Note:</strong> You will need to reactivate the user(s) of the household separately."
       three: "reactivate it"
+    groups/group:
+      one_html: "This group was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
     reservations/resource:
       one_html: "This resource was marked inactive at %{time}."
       two_html: "You can %{link}."
@@ -151,6 +158,11 @@ en:
       error:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
+    groups/group:
+      success:
+        deactivate: "Group deactivated successfully."
+        activate: "Group activated successfully."
+        destroy: "Group deleted successfully."
     reservations/protocol:
       success:
         destroy: "Protocol deleted successfully."

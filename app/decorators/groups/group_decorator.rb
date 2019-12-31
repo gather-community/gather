@@ -38,20 +38,20 @@ module Groups
 
     def show_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :join, icon: "user-plus", path: h.join_group_path(object), method: :put,
-                                      label_symbol: everybody? ? :rejoin : :join),
-        ActionLink.new(object, :leave, icon: "user-times", path: h.leave_group_path(object), method: :put,
-                                       label_symbol: everybody? ? :opt_out : :leave),
-        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_group_path(object))
+        ActionLink.new(object, :join, icon: "user-plus", path: h.join_groups_group_path(object),
+                                      method: :put, label_symbol: everybody? ? :rejoin : :join),
+        ActionLink.new(object, :leave, icon: "user-times", path: h.leave_groups_group_path(object),
+                                       method: :put, label_symbol: everybody? ? :opt_out : :leave),
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_groups_group_path(object))
       )
     end
 
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :deactivate, icon: "times-circle", method: :put, confirm: {name: name},
-                                            path: h.deactivate_group_path(object)),
+                                            path: h.deactivate_groups_group_path(object)),
         ActionLink.new(object, :destroy, icon: "trash", method: :delete, confirm: {name: name},
-                                         path: h.group_path(object))
+                                         path: h.groups_group_path(object))
       )
     end
   end

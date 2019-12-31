@@ -6,6 +6,10 @@ module Groups
     acts_as_tenant :cluster
 
     belongs_to :group, inverse_of: :affiliations
-    belongs_to :community
+    belongs_to :community, inverse_of: :group_affiliations
+
+    after_destroy do
+      group.destroy if group.affiliations.reload.none?
+    end
   end
 end

@@ -14,6 +14,8 @@ module SystemSpecHelpers
   # then selects the first matching option.
   # If a Node::Element object is provided, it must have a unique ID.
   # Works with single and multiple style select2 boxes. Works with a remote data source.
+  # Use a Node::Element argument if calling from a within block.
+  # The CSS variant may select the wrong element.
   def select2(value, from:, multiple: false)
     if from.is_a?(Capybara::Node::Element)
       select_el = from
@@ -311,10 +313,19 @@ module SystemSpecHelpers
     lens_node(param_name).select(label)
   end
 
+  def select2_lens(param_name, label)
+    select2(label, from: lens_node(param_name))
+  end
+
   def select_lens_and_wait(param_name, label)
     select_lens(param_name, label)
     value = first(:xpath, "//select[@data-param-name='#{param_name}']/option[.='#{label}']")["value"]
     expect(page).to have_echoed_url_param(param_name, value)
+  end
+
+  def select2_lens_and_wait(param_name, label, url_value:)
+    select2_lens(param_name, label)
+    expect(page).to have_echoed_url_param(param_name, url_value)
   end
 
   def fill_in_lens(param_name, value)

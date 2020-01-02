@@ -4,6 +4,6 @@ FactoryBot.define do
   factory :group_membership, class: "Groups::Membership" do
     user
     group
-    kind { "member" }
+    kind { "joiner" }
   end
 end

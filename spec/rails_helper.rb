@@ -74,6 +74,7 @@ RSpec.configure do |config|
       loggingPrefs: {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options).tap do |driver|
+      driver.browser.manage.window.size = Selenium::WebDriver::Dimension.new(1280, 2048)
       # Tell chrome headless how to download files.
       bridge = driver.browser.send(:bridge)
       path = "/session/#{bridge.session_id}/chromium/send_command"

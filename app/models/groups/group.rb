@@ -45,7 +45,7 @@ module Groups
       ) AS member_count")
     }
     scope :with_user, lambda { |user|
-      subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN ?)"
+      subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN (?))"
       clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
         "(availability = 'everybody' AND NOT EXISTS #{subq})"
       where(clause, user, %w[joiner manager], user, %w[opt_out])
@@ -67,6 +67,7 @@ module Groups
     before_validation :normalize
     after_update { Work::ShiftIndexUpdater.new(self).update }
 
+    validates :name, presence: true
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
 

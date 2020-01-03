@@ -95,17 +95,17 @@ describe Groups::Group do
       let(:user2) { create(:user, community: community2) }
 
       context "with no members" do
-        subject(:group) { build(:group, communities: [community1], users: []) }
+        subject(:group) { build(:group, communities: [community1], joiners: []) }
         it { is_expected.to be_valid }
       end
 
       context "with members from affiliated communities only" do
-        subject(:group) { build(:group, communities: [community1, community2], users: [user1, user2]) }
+        subject(:group) { build(:group, communities: [community1, community2], joiners: [user1, user2]) }
         it { is_expected.to be_valid }
       end
 
       context "with member from non-affiliated community" do
-        subject(:group) { build(:group, communities: [community1], users: [user1, user2]) }
+        subject(:group) { build(:group, communities: [community1], joiners: [user1, user2]) }
         it { expect(group.memberships[1]).to have_errors(user_id: "Not from an affiliated community") }
       end
     end
@@ -235,7 +235,7 @@ describe Groups::Group do
   end
 
   def expect_no_membership
-    expect_no_membership
+    expect(Groups::Membership.count).to eq(0)
   end
 
   def expect_single_membership(user, group, kind)

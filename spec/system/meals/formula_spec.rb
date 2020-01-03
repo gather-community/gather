@@ -7,7 +7,6 @@ describe "formulas", js: true do
   let!(:head_cook_role) { create(:meal_role, :head_cook) }
   let!(:other_role) { create(:meal_role, title: "Stumbler") }
   let!(:formulas) { create_list(:meal_formula, 2, roles: [head_cook_role]) }
-  let!(:adult_type) { create(:meal_type, name: "Adult") }
 
   before do
     use_user_subdomain(actor)
@@ -31,12 +30,12 @@ describe "formulas", js: true do
     expect(page).to have_content("Add each meal type, its price")
     click_link("Add Meal Type")
     within(all(".meals_formula_parts .nested-fields")[0]) do
-      select2("Adults", from: "select[id$=_type_id]")
+      select2("Adult", from: find("select[id$=_type_id]"))
       fill_in("Price/Share", with: "2")
     end
     click_link("Add Meal Type")
     within(all(".meals_formula_parts .nested-fields")[1]) do
-      select2("Newtype", from: "select[id$=_type_id]")
+      select2("Newtype", from: find("select[id$=_type_id]"))
       fill_in("Price/Share", with: "$2.50")
     end
     find("#meals_formula_pantry_calc_type").select("Percentage")
@@ -46,7 +45,7 @@ describe "formulas", js: true do
 
     click_link("Free Meal")
     expect(page).to have_content("Head Cook, Stumbler")
-    expect(page).to have_content("Adults")
+    expect(page).to have_content("Adult")
     expect(page).to have_content("Newtype")
     expect(page).to have_content("$2.00")
     expect(page).to have_content("10.2%")

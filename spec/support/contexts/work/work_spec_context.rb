@@ -42,7 +42,7 @@ shared_context "work" do
         create(:user, :child, first_name: "Kid", last_name: "Knelt")
       ]
     end
-    let!(:group) { create(:group, name: "Pants") }
+    let!(:group) { create(:group, name: "Pants", can_request_jobs: true) }
     let!(:meal) { create(:meal, head_cook: false) }
     let!(:jobs) do
       [

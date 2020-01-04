@@ -3,9 +3,8 @@
 require "rails_helper"
 
 describe Utils::Generators::GroupGenerator do
-  let(:community) { create(:community) }
   let!(:users) { create_list(:user, 12) }
-  let(:generator) { described_class.new(community: community) }
+  let(:generator) { described_class.new(community: Defaults.community) }
 
   it "generates everyone group" do
     generator.generate_everybody_group

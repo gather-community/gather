@@ -29,19 +29,19 @@ module Utils
       def generate_and_populate_everybody_group
         generate_everybody_group unless Groups::Group.where(availability: "everybody").exists?
         group = Groups::Group.find_by(availability: "everybody")
-        group.memberships.create(user: users[user_index], kind: "manager")
-        group.memberships.create(user: users[user_index + 1], kind: "opt_out")
-        group.memberships.create(user: users[user_index + 2], kind: "opt_out")
+        group.memberships.create!(user: users[user_index], kind: "manager")
+        group.memberships.create!(user: users[user_index + 1], kind: "opt_out")
+        group.memberships.create!(user: users[user_index + 2], kind: "opt_out")
         self.user_index += 3
       end
 
       def generate_and_populate_closed_group
         group = create(:group, communities: [community], availability: "closed", name: "Meals Committee",
                                kind: "committee", description: "Runs the meals program!")
-        group.memberships.create(user: users[user_index], kind: "manager")
-        group.memberships.create(user: users[user_index + 1], kind: "joiner")
-        group.memberships.create(user: users[user_index + 2], kind: "joiner")
-        group.memberships.create(user: users[user_index + 3], kind: "joiner")
+        group.memberships.create!(user: users[user_index], kind: "manager")
+        group.memberships.create!(user: users[user_index + 1], kind: "joiner")
+        group.memberships.create!(user: users[user_index + 2], kind: "joiner")
+        group.memberships.create!(user: users[user_index + 3], kind: "joiner")
         self.user_index += 4
       end
 
@@ -49,11 +49,11 @@ module Utils
         group = create(:group, communities: [community], availability: "open",
                                name: "Knitting Club", kind: "club",
                                description: "Knitting for beginners to experts! Meets Sundays at 2pm.")
-        group.memberships.create(user: users[user_index], kind: "manager")
-        group.memberships.create(user: users[user_index + 1], kind: "manager")
-        group.memberships.create(user: users[user_index + 2], kind: "joiner")
-        group.memberships.create(user: users[user_index + 3], kind: "joiner")
-        group.memberships.create(user: users[user_index + 4], kind: "joiner")
+        group.memberships.create!(user: users[user_index], kind: "manager")
+        group.memberships.create!(user: users[user_index + 1], kind: "manager")
+        group.memberships.create!(user: users[user_index + 2], kind: "joiner")
+        group.memberships.create!(user: users[user_index + 3], kind: "joiner")
+        group.memberships.create!(user: users[user_index + 4], kind: "joiner")
         self.user_index += 5
       end
     end

@@ -18,7 +18,7 @@ module Meals
         end
         format.json do
           @types = @types.matching(params[:search]).active.by_name
-          render(json: types, root: "results")
+          render(json: types, each_serializer: TypeSerializer, root: "results")
         end
       end
     end
@@ -60,7 +60,8 @@ module Meals
       authorize(sample_type, :index?)
       categories = policy_scope(Meals::Type).in_community(current_community)
         .where("category ILIKE ?", "%#{params[:search]}%").pluck(:category).uniq
-      render(json: categories.map { |c| {id: c, name: c} }, root: "results")
+        .map { |c| TypeCategory.new(name: c) }
+      render(json: categories, each_serializer: TypeCategorySerializer, root: "results")
     end
 
     protected

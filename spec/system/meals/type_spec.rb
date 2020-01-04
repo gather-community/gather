@@ -25,6 +25,12 @@ describe "types", js: true do
     click_button("Save")
     expect_success
 
+    click_link("Create Type")
+    fill_in("Name", with: "Large")
+    select2("New Category", from: "select[id$=_category]")
+    click_button("Save")
+    expect_success
+
     click_link("Extra Large")
     fill_in("Name", with: "Exxtra Large")
     click_button("Save")

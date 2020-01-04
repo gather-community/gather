@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_29_163906) do
+ActiveRecord::Schema.define(version: 2019_12_31_040536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -376,14 +376,6 @@ ActiveRecord::Schema.define(version: 2019_12_29_163906) do
     t.index ["creator_id"], name: "index_meals_on_creator_id"
     t.index ["formula_id"], name: "index_meals_on_formula_id"
     t.index ["served_at"], name: "index_meals_on_served_at"
-  end
-
-  create_table "old_credit_balances", id: false, force: :cascade do |t|
-    t.decimal "balance", precision: 5, scale: 2
-    t.integer "community_program_id", default: 2
-    t.string "name", limit: 65
-    t.integer "new_id"
-    t.decimal "old_id", precision: 6
   end
 
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|

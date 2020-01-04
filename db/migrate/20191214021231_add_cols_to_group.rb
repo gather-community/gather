@@ -6,7 +6,7 @@ class AddColsToGroup < ActiveRecord::Migration[6.0]
     add_column(:groups, :slug, :string, limit: 32)
     ActsAsTenant.without_tenant do
       Groups::Group.all.each do |group|
-        group.update!(slug: group.name.gsub(/(^[0-9]|[^A-za-z0-9])/, "").downcase)
+        group.update_column(:slug, group.name.gsub(/(^[0-9]|[^A-za-z0-9])/, "").downcase)
       end
     end
     change_column_null(:groups, :slug, false)

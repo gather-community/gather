@@ -17,3 +17,11 @@ select.form-control {
   // select padding seems to have no effect on Mac.
   padding: 6px;
 }
+
+.form-horizontal .checkbox {
+  padding-top: 0;
+}
+
+input[type=checkbox] {
+  margin-top: 6px;
+}

@@ -32,7 +32,7 @@ describe Work::ShiftIndexUpdater do
   end
 
   describe "requester name update" do
-    let(:group) { create(:people_group) }
+    let(:group) { create(:group) }
     let(:job1) { create(:work_job, shift_count: 2, requester: group) }
     let(:job2) { create(:work_job, shift_count: 3, requester: group) }
     let(:job3) { create(:work_job, shift_count: 1) }

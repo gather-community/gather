@@ -1,0 +1,37 @@
+<% content_for(:title, group.name_with_suffix) %>
+<% content_for(:top_buttons, group.action_links) %>
+
+<%= simple_format(group.description) %>
+
+<table class="key-value key-value-full">
+  <tr>
+    <td><%= Groups::Group.human_attribute_name(:kind) %></td>
+    <td><%= I18n.t("simple_form.options.groups_group.kind.#{group.kind}") %></td>
+  </tr>
+  <% if group.multi_community? %>
+    <tr>
+      <td><%= Groups::Group.human_attribute_name(:communities) %></td>
+      <td><%= @communities.map(&:name).join(", ") %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= Groups::Group.human_attribute_name(:availability) %></td>
+    <td>
+      <strong><%= I18n.t("simple_form.options.groups_group.availability.#{group.availability}") %></strong>
+      <p><%= group.availability_hint %></p>
+    </td>
+  </tr>
+  <tr>
+    <td><%= Groups::Group.human_attribute_name(:managers) %></td>
+    <td><%= group.user_list(:manager) %></td>
+  </tr>
+  <tr>
+    <td><%= Groups::Group.human_attribute_name(:members) %></td>
+    <td>
+      <div class="flowing-columns-max-4">
+        <%= group.user_list(:member) %>
+        <%= group.user_list(:opt_out, show_none: false) %>
+      </div>
+    </td>
+  </tr>
+</table>

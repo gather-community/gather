@@ -1,0 +1,40 @@
+<% content_for(:title, "Groups") %>
+
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_group).create? %>
+    <%= link_to(icon_tag("plus") << " Create Group", new_groups_group_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if groups.empty? %>
+  <div class="center-notice">
+    No groups found. <%= lenses.no_result_clear_filter_link %>
+  </div>
+<% else %>
+  <table class="index">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Members</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% groups.each do |group| %>
+        <tr class="<%= group.tr_classes %>">
+          <td class="name"><%= link_to(group.name_with_suffix, groups_group_path(group)) %></td>
+          <td class="kind">
+            <%= t("simple_form.options.groups_group.kind.#{group.kind}") %>
+          </td>
+          <td class="description"><%= group.description %></td>
+          <td class="member-count"><%= group.member_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() { new Gather.Views.AjaxSelect2({el: '.lens-bar'}); });
+<% end %>

@@ -88,6 +88,22 @@ Rails.application.routes.draw do
     resources :protocols
   end
 
+  # `namespace :x` is just a shorthand for scope :x, module: :x, as: :x
+  # scope :x adds /x/ as a URL prefix
+  # scope module: :x adds /x as a controller prefix (controllers will be fetched under controllers/x/foo.rb)
+  # scope as: :x adds the x as a prefix for path helpers
+  # We just want controller and path helper prefixes
+  scope as: :groups, module: :groups do
+    resources :groups do
+      member do
+        put :activate
+        put :deactivate
+        put :join
+        put :leave
+      end
+    end
+  end
+
   resources :reservations, controller: "reservations/reservations"
 
   # Legacy calendar routes

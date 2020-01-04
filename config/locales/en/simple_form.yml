@@ -50,6 +50,11 @@ en:
         capacity: "How many people can the meal accommodate?"
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
+      groups_group:
+        availability: "Whether people can join this group on their own."
+        can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."
+        kind: "What kind of group this is. 'Everybody' groups automatically include all adult users."
+        communities: "What communities this group is available/visible to."
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
         resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."
@@ -103,6 +108,30 @@ en:
         workers_per_round: "How many workers should be choosing jobs in a given round? More workers means more hectic choosing. Fewer workers means more rounds so the job choosing event takes longer."
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
     options:
+      groups_group:
+        availability:
+          open: "Open"
+          closed: "Closed"
+          hidden: "Hidden"
+          everybody: "Everybody"
+        kind:
+          committee: "Committee"
+          subcommittee: "Subcommittee"
+          team: "Team"
+          task_force: "Task Force"
+          club: "Club"
+          crew: "Crew"
+          squad: "Squad"
+          group: "Group"
+          other: "Other"
+        memberships:
+          kind:
+            joiner: "Member"
+            manager: "Manager"
+            opt_out: "Opt Out"
+        sort:
+          name: "By Name"
+          type: "By Type"
       meals_meal:
         time:
           past: "Past"

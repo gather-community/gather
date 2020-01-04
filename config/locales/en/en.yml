@@ -13,6 +13,7 @@ en:
     default: "Default"
     edit: "Edit"
     "false": "False"
+    hidden: "Hidden"
     inactive: "Inactive"
     max: "Max"
     no_result_clear_filter_link_html: "You can try %{link}."
@@ -73,6 +74,9 @@ en:
       destroy: "Delete Job"
 
   confirmations:
+    groups/group:
+      destroy: "Are you sure you want to delete the group '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the group '%{name}'?"
     household:
       destroy: "Are you sure you want to delete the household '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the household '%{name}'? This will deactivate all users in the household."
@@ -82,7 +86,7 @@ en:
       reopen: "Are you sure you want to reopen this meal? New signups will be allowed."
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
-      deactivate: "Are you sure you want to deactivate the user '%{name}'?"
+      deactivate: "Are you sure you want to deactivate the user '%{name}'? This will remove them from any groups they are in."
       invite: "This will send an email to '%{name}' with instructions on how to sign in. Proceed?"
     reservations/protocol:
       destroy: "Are you sure you want to delete the protocol '%{name}'? This action cannot be undone."
@@ -118,6 +122,10 @@ en:
       one_html: "This household was marked inactive at %{time}."
       two_html: "You can %{link}. <strong>Note:</strong> You will need to reactivate the user(s) of the household separately."
       three: "reactivate it"
+    groups/group:
+      one_html: "This group was marked inactive at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
     reservations/resource:
       one_html: "This resource was marked inactive at %{time}."
       two_html: "You can %{link}."
@@ -150,6 +158,11 @@ en:
       error:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
+    groups/group:
+      success:
+        deactivate: "Group deactivated successfully."
+        activate: "Group activated successfully."
+        destroy: "Group deleted successfully."
     reservations/protocol:
       success:
         destroy: "Protocol deleted successfully."
@@ -193,6 +206,8 @@ en:
       assignments: "Add Worker"
       reminders: "Add Reminder"
       signups: "Add Household"
+      groups/group:
+        memberships: "Add Member"
       meals/signup:
         parts: "Add Item"
       meals/formula:
@@ -294,13 +309,17 @@ en:
           bad_id: "Could not find a user with ID %{str}"
           bad_name: "Could not find a user named '%{str}'"
 
-  action_names:
+  action_labels:
     common:
       new: "Add"
       edit: "Edit"
       deactivate: "Deactivate"
       destroy: "Delete"
       close: "Close"
+      join: "Join"
+      leave: "Leave"
+      opt_out: "Opt-Out"
+      rejoin: "Re-Join"
       reopen: "Reopen"
       summary: "Summary"
       finalize: "Finalize"

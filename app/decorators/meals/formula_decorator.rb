@@ -40,7 +40,8 @@ module Meals
 
     def edit_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_meals_formula_path(object),
+        ActionLink.new(object, :deactivate, icon: "times-circle",
+                                            path: h.deactivate_meals_formula_path(object),
                                             method: :put, confirm: {name: name}),
         ActionLink.new(object, :destroy, icon: "trash", path: h.meals_formula_path(object),
                                          method: :delete, confirm: {name: name})

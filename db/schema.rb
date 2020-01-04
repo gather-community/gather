@@ -92,6 +92,73 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "gdrive_configs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.jsonb "credentials", null: false
+    t.datetime "last_scanned_at"
+    t.string "owner_email", limit: 128, null: false
+    t.string "root_folder_id", limit: 128, null: false
+    t.jsonb "token"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
+    t.index ["community_id"], name: "index_gdrive_configs_on_community_id"
+  end
+
+  create_table "gdrive_stray_files", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "file_id", limit: 128, null: false
+    t.string "mime_type", limit: 128, null: false
+    t.string "owner_email", limit: 128, null: false
+    t.string "parent_id", limit: 128, null: false
+    t.text "path", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id", "community_id", "file_id"], name: "unique_by_cmty_and_file", unique: true
+    t.index ["cluster_id"], name: "index_gdrive_stray_files_on_cluster_id"
+    t.index ["community_id"], name: "index_gdrive_stray_files_on_community_id"
+    t.index ["mime_type"], name: "index_gdrive_stray_files_on_mime_type"
+    t.index ["owner_email"], name: "index_gdrive_stray_files_on_owner_email"
+  end
+
+  create_table "group_affiliations", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.bigint "group_id", null: false
+    t.index ["cluster_id"], name: "index_group_affiliations_on_cluster_id"
+    t.index ["community_id", "group_id"], name: "index_group_affiliations_on_community_id_and_group_id", unique: true
+    t.index ["community_id"], name: "index_group_affiliations_on_community_id"
+    t.index ["group_id"], name: "index_group_affiliations_on_group_id"
+  end
+
+  create_table "group_memberships", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "group_id", null: false
+    t.string "kind", limit: 32, default: "joiner", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["cluster_id"], name: "index_group_memberships_on_cluster_id"
+    t.index ["group_id", "user_id"], name: "index_group_memberships_on_group_id_and_user_id", unique: true
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+    t.index ["user_id"], name: "index_group_memberships_on_user_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "availability", limit: 10, default: "closed", null: false
+    t.boolean "can_request_jobs", default: false, null: false
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
+    t.string "description", limit: 255
+    t.string "kind", limit: 32, default: "committee", null: false
+    t.string "name", limit: 64, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_groups_on_cluster_id"
+  end
+
   create_table "households", id: :serial, force: :cascade do |t|
     t.string "alternate_id"
     t.integer "cluster_id", null: false
@@ -324,17 +391,6 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_people_emergency_contacts_on_cluster_id"
     t.index ["household_id"], name: "index_people_emergency_contacts_on_household_id"
-  end
-
-  create_table "people_groups", force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id", "community_id", "name"], name: "index_people_groups_on_cluster_id_and_community_id_and_name", unique: true
-    t.index ["cluster_id"], name: "index_people_groups_on_cluster_id"
-    t.index ["community_id"], name: "index_people_groups_on_community_id"
   end
 
   create_table "people_guardianships", id: :serial, force: :cascade do |t|
@@ -741,6 +797,17 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "gdrive_configs", "clusters"
+  add_foreign_key "gdrive_configs", "communities"
+  add_foreign_key "gdrive_stray_files", "clusters"
+  add_foreign_key "gdrive_stray_files", "communities"
+  add_foreign_key "group_affiliations", "clusters"
+  add_foreign_key "group_affiliations", "communities"
+  add_foreign_key "group_affiliations", "groups"
+  add_foreign_key "group_memberships", "clusters"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users"
+  add_foreign_key "groups", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
   add_foreign_key "meal_assignments", "clusters"
@@ -781,8 +848,6 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
-  add_foreign_key "people_groups", "clusters"
-  add_foreign_key "people_groups", "communities"
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_guardianships", "users", column: "child_id"
   add_foreign_key "people_guardianships", "users", column: "guardian_id"
@@ -838,8 +903,8 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
   add_foreign_key "work_assignments", "users"
   add_foreign_key "work_assignments", "work_shifts", column: "shift_id"
   add_foreign_key "work_jobs", "clusters"
+  add_foreign_key "work_jobs", "groups", column: "requester_id"
   add_foreign_key "work_jobs", "meal_roles"
-  add_foreign_key "work_jobs", "people_groups", column: "requester_id"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"

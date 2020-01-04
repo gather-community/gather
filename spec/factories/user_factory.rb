@@ -20,7 +20,7 @@ FactoryBot.define do
     confirmation_sent_at { nil }
 
     household do
-      attribs = {with_members: false} # Don't want to create extra users.
+      attribs = {member_count: 0} # Don't want to create extra users.
       attribs[:community] = community if community
       build(:household, attribs)
     end

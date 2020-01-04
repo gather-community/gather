@@ -7,6 +7,15 @@ module Deactivatable
     scope :active, -> { where(deactivated_at: nil) }
     scope :active_or_selected, ->(ids) { where(deactivated_at: nil).or(where(id: Array.wrap(ids))) }
     scope :deactivated_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
+
+    def self.after_deactivate(&block)
+      class_variable_set("@@after_deactivate_callbacks", after_deactivate_callbacks << block)
+    end
+
+    def self.after_deactivate_callbacks
+      return [] unless class_variable_defined?("@@after_deactivate_callbacks")
+      class_variable_get("@@after_deactivate_callbacks")
+    end
   end
 
   def activate
@@ -15,7 +24,7 @@ module Deactivatable
 
   def deactivate(options = {})
     update!(deactivated_at: Time.current)
-    after_deactivate if respond_to?(:after_deactivate) && !options[:skip_callback]
+    self.class.after_deactivate_callbacks.each { |c| instance_eval(&c) } unless options[:skip_callback]
   end
 
   def active?

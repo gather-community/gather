@@ -11,7 +11,7 @@ module Work
     acts_as_tenant :cluster
 
     belongs_to :period, class_name: "Work::Period", inverse_of: :jobs
-    belongs_to :requester, class_name: "People::Group"
+    belongs_to :requester, class_name: "Groups::Group"
     belongs_to :meal_role, class_name: "Meals::Role"
 
     has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
@@ -51,6 +51,10 @@ module Work
     delegate :community, to: :period
     delegate :starts_on, :ends_on, :name, :draft?, :pre_open?, :open?, :published?, :archived?,
              to: :period, prefix: true
+
+    def self.requester_options(community:)
+      Groups::Group.in_community(community).can_request_jobs.by_name
+    end
 
     def full_period?
       time_type == "full_period"

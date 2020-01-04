@@ -9,7 +9,10 @@ class UserDecorator < ApplicationDecorator
 
   def link(highlight: nil, show_cmty_if_foreign: false, show_inactive: false)
     name = full_name(show_inactive: show_inactive)
-    name = "#{name} (#{community_name})" if show_cmty_if_foreign && community != h.current_community
+    if show_cmty_if_foreign && community != h.current_community
+      suffix = show_cmty_if_foreign == :abbrv ? community_abbrv : community_name
+      name = "#{name} (#{suffix})"
+    end
     name = h.content_tag(:mark, name) if id == highlight.to_i
     h.link_to(name, h.user_url(object), class: "user-link")
   end

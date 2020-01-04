@@ -255,6 +255,7 @@ describe UserPolicy do
       context "with non-restricted associations" do
         let!(:proxier) { create(:user, job_choosing_proxy: record) }
         let!(:share) { create(:work_share, user: record) }
+        let!(:membership) { create(:group_membership, user: record) }
 
         it_behaves_like "permits admins but not regular users"
       end

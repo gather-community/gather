@@ -54,6 +54,7 @@ class User < ApplicationRecord
                                 dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
+  has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
@@ -69,7 +70,8 @@ class User < ApplicationRecord
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
-  scope :by_community_and_name, -> { includes(household: :community).order("communities.name").by_name }
+  scope :including_communities, -> { includes(household: :community) }
+  scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
   scope :by_birthday, lambda {
     order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
   }
@@ -134,6 +136,7 @@ class User < ApplicationRecord
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
   after_update { Work::ShiftIndexUpdater.new(self).update }
+  after_deactivate { group_memberships.destroy_all }
 
   def self.from_omniauth(auth)
     return nil if auth.info[:email].blank?

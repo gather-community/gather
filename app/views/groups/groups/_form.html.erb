@@ -1,0 +1,40 @@
+<%= gather_form_for(group, url: group.new_record? ? groups_groups_path : groups_group_path(group)) do |f| %>
+  <%= f.input(:name, maxlength: Groups::Group.columns_hash["name"].limit) %>
+  <% if @community_options %>
+    <%= f.input(:communities) do %>
+      <% @community_options.each do |community| %>
+        <div class="checkbox">
+          <label>
+            <%= check_box_tag("groups_group[community_ids][]", community.id,
+                  group.communities.include?(community)) %>
+            <%= community.name %>
+          </label>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= f.input(:description, as: :text, maxlength: Groups::Group.columns_hash["description"].limit) %>
+  <%= f.input(:kind, collection: Groups::Group::KINDS, include_blank: false) %>
+  <%= f.input(:availability, collection: Groups::Group::AVAILABILITIES, include_blank: false) %>
+  <%= nested_field_set(f, :memberships, single_row: true, inner_labels: false) %>
+  <%= f.input(:can_request_jobs) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Groups.GroupFormView({el: '.groups--group-form'});
+    new Gather.Views.DirtyChecker({el: '.groups--group-form'});
+    new Gather.Views.AjaxSelect2({
+      el: '.groups--group-form',
+      extraData: function() {
+        // Get an array of selected community IDs
+        return $("[name='groups_group[community_ids][]']:checked")
+          .map(function() { return this.value; }).get();
+      }
+    });
+  });
+<% end %>

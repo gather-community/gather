@@ -14,7 +14,8 @@ module Work
     end
 
     def requesters
-      People::Group.all.to_a << OpenStruct.new(id: "none", name: I18n.t("#{i18n_key}.none"))
+      Job.requester_options(community: context.current_community).to_a <<
+        OpenStruct.new(id: "none", name: I18n.t("#{i18n_key}.none"))
     end
   end
 end

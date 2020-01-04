@@ -25,7 +25,11 @@ module Utils
 
       def generate_data_and_handle_errors
         build_generators
-        generators[:meals].generate_formula_and_roles # We need these even if not doing sample data.
+
+        # We need these even if not doing sample data.
+        generators[:meals].generate_formula_and_roles
+        generators[:groups].generate_everybody_group
+
         generators.each_value(&:generate_samples) if sample_data
       rescue StandardError => e
         generators.each_value(&:cleanup_on_error)
@@ -35,6 +39,7 @@ module Utils
       def build_generators
         self.generators = ActiveSupport::OrderedHash.new
         generators[:people] = PeopleGenerator.new(community: community, photos: photos)
+        generators[:groups] = GroupGenerator.new(community: community)
         generators[:resources] = ResourceGenerator.new(community: community, photos: photos)
         generators[:reservations] = ReservationGenerator.new(
           community: community, resource_map: generators[:resources].resource_map

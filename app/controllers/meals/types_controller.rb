@@ -26,13 +26,11 @@ module Meals
     def new
       @type = Meals::Type.new(community: current_community)
       authorize(@type)
-      prep_form_vars
     end
 
     def edit
       @type = Meals::Type.find(params[:id])
       authorize(@type)
-      prep_form_vars
     end
 
     def create
@@ -43,7 +41,6 @@ module Meals
         flash[:success] = "Type created successfully."
         redirect_to(meals_types_path)
       else
-        prep_form_vars
         render(:new)
       end
     end
@@ -55,7 +52,6 @@ module Meals
         flash[:success] = "Type updated successfully."
         redirect_to(meals_types_path)
       else
-        prep_form_vars
         render(:edit)
       end
     end
@@ -75,10 +71,6 @@ module Meals
     end
 
     private
-
-    def prep_form_vars
-      @requesters = People::Group.in_community(current_community).by_name
-    end
 
     def sample_type
       Meals::Type.new(community: current_community)

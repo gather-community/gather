@@ -30,7 +30,7 @@ module Utils
                              community: community,
                              unit_num: i + 1,
                              garage_nums: garages[i].to_s,
-                             with_members: false,
+                             member_count: 0,
                              created_at: community.created_at,
                              updated_at: community.updated_at)
 

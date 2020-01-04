@@ -90,6 +90,14 @@ en:
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
+      groups/group:
+        availability: "Availability"
+        can_request_jobs: "Can Request Jobs?"
+        description: "Description"
+        kind: "Type"
+        name: "Name"
+        communities: "Communities"
+        memberships: "Members"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"
@@ -183,6 +191,14 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        groups/group:
+          attributes:
+            base:
+              at_least_one_affiliation: "Please select at least one community"
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Not from an affiliated community"
         household:
           name:
             taken: "There is already a household with this name at this community"

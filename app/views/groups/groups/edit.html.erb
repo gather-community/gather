@@ -1,0 +1,4 @@
+<% content_for(:flashes, inactive_notice(group)) if group.inactive? %>
+<% content_for(:title, "Edit Group: #{group.name}") %>
+<% content_for(:top_buttons, group.action_links(:edit)) %>
+<%= render("form") %>

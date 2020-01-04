@@ -18,13 +18,11 @@ module Meals
       @role = Meals::Role.new(community: current_community)
       authorize(@role)
       @role.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
-      prep_form_vars
     end
 
     def edit
       @role = Meals::Role.find(params[:id])
       authorize(@role)
-      prep_form_vars
     end
 
     def create
@@ -35,7 +33,6 @@ module Meals
         flash[:success] = "Role created successfully."
         redirect_to(meals_roles_path)
       else
-        prep_form_vars
         render(:new)
       end
     end
@@ -47,7 +44,6 @@ module Meals
         flash[:success] = "Role updated successfully."
         redirect_to(meals_roles_path)
       else
-        prep_form_vars
         render(:edit)
       end
     end
@@ -59,10 +55,6 @@ module Meals
     end
 
     private
-
-    def prep_form_vars
-      @requesters = People::Group.in_community(current_community).by_name
-    end
 
     def sample_role
       Meals::Role.new(community: current_community)

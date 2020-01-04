@@ -5,7 +5,7 @@ module Groups
   class Group < ApplicationRecord
     include Deactivatable
 
-    KINDS = %i[committee subcommittee team task_force club crew squad gang group].freeze
+    KINDS = %i[committee subcommittee team task_force club crew squad group].freeze
     AVAILABILITIES = %i[open closed everybody hidden].freeze
 
     self.table_name = "groups"

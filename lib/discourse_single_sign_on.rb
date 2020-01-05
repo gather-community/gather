@@ -24,37 +24,14 @@ class DiscourseSingleSignOn
     self.secret = secret
     self.return_url = return_url
 
-    decoded = Base64.decode64(payload)
-    decoded_hash = Rack::Utils.parse_query(decoded)
+    check_signature(payload, signature)
 
-    if sign(payload) != signature
-      if payload =~ %r{[^a-zA-Z0-9=\r\n/+]}m
-        diags = "\n\npayload: #{payload}"
-        raise ParseError, "Invalid chars in SSO field.#{diags}"
-      else
-        diags = "\n\npayload: #{payload}\n\nsig: #{signature}\n\nexpected sig: #{sign(payload)}"
-        raise ParseError, "Bad signature for payload.#{diags}"
-      end
-    end
-
-    ACCESSORS.each do |k|
-      next if public_send(k)
-      val = decoded_hash[k.to_s]
-      val = val.to_i if FIXNUMS.include?(k)
-      if BOOLS.include?(k)
-        val = %w[true false].include?(val) ? val == "true" : nil
-      end
-      public_send("#{k}=", val)
-    end
+    decoded_hash = Rack::Utils.parse_query(Base64.decode64(payload))
+    assign_fields(decoded_hash)
+    assign_custom_fields(decoded_hash)
 
     # Override the given return URL if one is provided in the payload.
     self.return_url = return_sso_url if return_sso_url.present?
-
-    decoded_hash.each do |k, v|
-      if (field = k[/^custom\.(.+)$/, 1])
-        custom_fields[field] = v
-      end
-    end
   end
 
   def custom_fields
@@ -66,6 +43,35 @@ class DiscourseSingleSignOn
   end
 
   private
+
+  def check_signature(payload, signature)
+    return if sign(payload) == signature
+    if payload =~ %r{[^a-zA-Z0-9=\r\n/+]}m
+      diags = "\n\npayload: #{payload}"
+      raise ParseError, "Invalid chars in SSO field.#{diags}"
+    else
+      diags = "\n\npayload: #{payload}\n\nsig: #{signature}\n\nexpected sig: #{sign(payload)}"
+      raise ParseError, "Bad signature for payload.#{diags}"
+    end
+  end
+
+  def assign_fields(decoded_hash)
+    ACCESSORS.each do |k|
+      next if public_send(k)
+      val = decoded_hash[k.to_s]
+      val = val.to_i if FIXNUMS.include?(k)
+      val = %w[true false].include?(val) ? val == "true" : nil if BOOLS.include?(k)
+      public_send("#{k}=", val)
+    end
+  end
+
+  def assign_custom_fields(decoded_hash)
+    decoded_hash.each do |k, v|
+      if (field = k[/^custom\.(.+)$/, 1])
+        custom_fields[field] = v
+      end
+    end
+  end
 
   def sign(payload)
     OpenSSL::HMAC.hexdigest("sha256", secret, payload)

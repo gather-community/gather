@@ -198,6 +198,8 @@ Rails.application.routes.draw do
     patch "settings/:type", to: "settings#update"
   end
 
+  get "sso", to: "single_sign_on#sign_on"
+
   get "ping", to: "landing#ping"
   get "inactive", to: "home#inactive"
   get "about/:page", to: "landing#public_static"

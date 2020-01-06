@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-describe UploadPolicy do
+describe SingleSignOnPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    permissions :create? do
+    permissions :sign_on? do
       it "permits active users" do
         expect(subject).to permit(user, Upload)
       end

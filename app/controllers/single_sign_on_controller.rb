@@ -4,6 +4,12 @@ class SingleSignOnController < ApplicationController
   # sso requests will always be to the apex domain. Requiring a subdomain would add unnecessary complexity.
   skip_before_action :ensure_subdomain, only: :sign_on
 
+  # Impersonation doesn't make sense for SSO since you can't see the impersonation banner
+  # and you may arrive at the Mailman UI from a different path and forget that you are impersonating someone.
+  # In future we could present a confirmation screen before continuing with login, but for now it's simpler
+  # to just ignore impersonation.
+  skip_before_action :handle_impersonation, only: :sign_on
+
   def sign_on
     authorize(:single_sign_on)
     # Expects client to specify return URL.

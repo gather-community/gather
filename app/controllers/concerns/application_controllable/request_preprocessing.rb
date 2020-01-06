@@ -183,6 +183,7 @@ module ApplicationControllable::RequestPreprocessing
     Time.zone = current_community.settings.time_zone if current_community
   end
 
+  # Skip this before_action to not respect impersonation for a given controller action.
   def handle_impersonation
     return unless session[:impersonating_id] && (user = User.find_by(id: session[:impersonating_id]))
     @real_current_user = current_user

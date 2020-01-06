@@ -2,3 +2,6 @@ url:
   host: gather.localhost.tv
   protocol: http
   port: 31337
+single_sign_on:
+  # Not a real secret, ok to check in
+  secret: ea3805afe17b6bae08fb2c056f1fdf632ac13960a9ef78bedfedadea1a108da6

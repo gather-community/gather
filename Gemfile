@@ -58,6 +58,8 @@ gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.8"
 gem "uglifier", ">= 1.3.0"
 gem "whenever", "~> 0.9"
+gem "wisper", "~> 2.0"
+gem "wisper-activerecord", "~> 1.0"
 
 group :development, :test do
   gem "awesome_print", "~> 1.6"

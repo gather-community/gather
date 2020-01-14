@@ -4,7 +4,8 @@
 class ReminderMaintainer
   include Singleton
 
-  def reminder_saved(reminder, deliveries)
+  def reminder_committed(reminder)
+    deliveries = reminder.deliveries
     # Run callbacks on existing deliveries to ensure recomputation.
     deliveries_by_event = deliveries.includes(eager_loads).group_by(&:event)
     deliveries_by_event.each { |_, ds| ds.each(&:calculate_and_save) }

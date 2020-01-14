@@ -2,6 +2,8 @@
 
 module Work
   class Job < ApplicationRecord
+    include Wisper.model
+
     TIMES_OPTIONS = %i[date_time date_only full_period].freeze
     SLOT_TYPE_OPTIONS = %i[fixed full_single full_multiple].freeze
     WITH_PREASSIGN_SQL = "EXISTS (SELECT ws.id FROM work_shifts ws
@@ -31,7 +33,6 @@ module Work
 
     before_validation :normalize
     after_update { ShiftIndexUpdater.new(self).update }
-    after_save { JobReminderMaintainer.instance.job_saved(shifts, reminders) }
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}

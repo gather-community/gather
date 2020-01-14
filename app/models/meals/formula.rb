@@ -3,6 +3,7 @@
 module Meals
   # Describes a meal system.
   class Formula < ApplicationRecord
+    include Wisper.model
     include Deactivatable
     include SemicolonDisallowable
 
@@ -40,7 +41,6 @@ module Meals
     accepts_nested_attributes_for :parts, reject_if: :all_blank, allow_destroy: true
 
     after_save :ensure_unique_default
-    after_update { RoleReminderMaintainer.instance.formula_saved(meals, roles) }
 
     def self.default_for(community)
       in_community(community).find_by(is_default: true)

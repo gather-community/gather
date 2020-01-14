@@ -5,6 +5,7 @@ module Meals
   class Meal < ApplicationRecord
     self.table_name = "meals" # Override suffix
 
+    include Wisper.model
     include TimeCalculable
     include Statusable
 
@@ -72,11 +73,6 @@ module Meals
 
     after_validation :copy_resource_errors
     before_save :set_menu_timestamp
-    after_save do
-      if saved_change_to_served_at?
-        Meals::RoleReminderMaintainer.instance.meal_saved(roles, reminder_deliveries)
-      end
-    end
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 

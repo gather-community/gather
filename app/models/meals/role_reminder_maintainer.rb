@@ -3,9 +3,11 @@
 module Meals
   # Updates RoleReminderDeliverys for various events
   class RoleReminderMaintainer < ReminderMaintainer
-    include Singleton
+    alias meals_role_reminder_committed reminder_committed
 
-    def formula_saved(meals, roles)
+    def meals_formula_committed(formula)
+      meals = formula.meals
+      roles = formula.roles
       # We have to iterate over each pair of 1. reminders associated with this formula and
       # 2. meals associated with this formula and ensure that a RoleReminderDelivery exists for each pair.
       # If a role is removed from the formula, the role doesn't get removed from the meal, so we don't
@@ -24,7 +26,10 @@ module Meals
       end
     end
 
-    def meal_saved(roles, deliveries)
+    def meals_meal_committed(meal)
+      return unless meal.saved_change_to_served_at?
+      roles = meal.roles
+      deliveries = meal.reminder_deliveries
       # Run callbacks on existing deliveries to ensure recomputation.
       deliveries.includes(reminder: :role).find_each(&:calculate_and_save)
 
@@ -34,8 +39,8 @@ module Meals
       end
     end
 
-    def role_saved(reminders)
-      RoleReminderDelivery.where(reminder_id: reminders.pluck(:id))
+    def meals_role_committed(role)
+      RoleReminderDelivery.where(reminder_id: role.reminders.pluck(:id))
         .includes(:meal, :reminder).find_each(&:calculate_and_save)
     end
 

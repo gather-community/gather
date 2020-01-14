@@ -3,6 +3,7 @@
 module Meals
   # Meal roles are types of jobs for meals like head cook, assistant cook, etc.
   class Role < ApplicationRecord
+    include Wisper.model
     include Deactivatable
     include SemicolonDisallowable
 
@@ -24,7 +25,6 @@ module Meals
     normalize_attributes :title, :description
 
     before_validation :normalize
-    after_update { RoleReminderMaintainer.instance.role_saved(reminders) }
 
     validates :title, presence: true, length: {maximum: 128},
                       uniqueness: {scope: %i[community_id deactivated_at]}

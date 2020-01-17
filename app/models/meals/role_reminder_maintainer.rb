@@ -3,9 +3,10 @@
 module Meals
   # Updates RoleReminderDeliverys for various events
   class RoleReminderMaintainer < ReminderMaintainer
-    alias meals_role_reminder_committed reminder_committed
+    alias create_meals_role_reminder_successful create_or_update_reminder_successful
+    alias update_meals_role_reminder_successful create_or_update_reminder_successful
 
-    def meals_formula_committed(formula)
+    def create_or_update_meals_formula_successful(formula)
       meals = formula.meals
       roles = formula.roles
       # We have to iterate over each pair of 1. reminders associated with this formula and
@@ -25,8 +26,10 @@ module Meals
         end
       end
     end
+    alias create_meals_formula_successful create_or_update_meals_formula_successful
+    alias update_meals_formula_successful create_or_update_meals_formula_successful
 
-    def meals_meal_committed(meal)
+    def create_or_update_meals_meal_successful(meal)
       return unless meal.saved_change_to_served_at?
       roles = meal.roles
       deliveries = meal.reminder_deliveries
@@ -38,8 +41,10 @@ module Meals
         deliveries.find_or_initialize_by(reminder: reminder).calculate_and_save
       end
     end
+    alias create_meals_meal_successful create_or_update_meals_meal_successful
+    alias update_meals_meal_successful create_or_update_meals_meal_successful
 
-    def meals_role_committed(role)
+    def update_meals_role_successful(role)
       RoleReminderDelivery.where(reminder_id: role.reminders.pluck(:id))
         .includes(:meal, :reminder).find_each(&:calculate_and_save)
     end

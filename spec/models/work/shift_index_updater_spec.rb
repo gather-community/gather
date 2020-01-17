@@ -5,6 +5,15 @@ require "rails_helper"
 describe Work::ShiftIndexUpdater do
   let(:updater) { described_class.instance }
 
+  describe "job creation" do
+    let!(:job) { build(:work_job, shift_count: 2) }
+
+    it "indexes shifts" do
+      expect(updater).to receive(:reindex).with(job.shifts)
+      job.save!
+    end
+  end
+
   describe "job title update" do
     let!(:job) { create(:work_job, shift_count: 2) }
 

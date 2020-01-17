@@ -5,7 +5,7 @@ module Groups
   class MembershipMaintainer
     include Singleton
 
-    def user_committed(user)
+    def update_user_successful(user)
       return unless user.saved_change_to_deactivated_at? && user.inactive?
       user.group_memberships.destroy_all
     end

@@ -3,10 +3,11 @@
 module Work
   # Updates JobReminderDeliverys for various events
   class JobReminderMaintainer < ReminderMaintainer
-    alias work_job_reminder_committed reminder_committed
+    alias create_work_job_reminder_successful create_or_update_reminder_successful
+    alias update_work_job_reminder_successful create_or_update_reminder_successful
 
     # You currently can't change a shift without also saving its job so we only need to handle job saves.
-    def work_job_committed(job)
+    def create_or_update_work_job_successful(job)
       shifts = job.shifts
       reminders = job.reminders
       # Run callbacks on existing deliveries to ensure recomputation.
@@ -20,6 +21,8 @@ module Work
         end
       end
     end
+    alias create_work_job_successful create_or_update_work_job_successful
+    alias update_work_job_successful create_or_update_work_job_successful
 
     protected
 

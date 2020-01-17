@@ -16,7 +16,7 @@ FactoryBot.define do
     hours { 2 }
     description { Faker::Lorem.paragraph }
 
-    before(:create) do |job, ev|
+    after(:build) do |job, ev|
       if job.shifts.empty?
         (ev.shift_hours || [ev.hours_per_shift || ev.hours] * ev.shift_count).each_with_index do |hours, i|
           attribs = {

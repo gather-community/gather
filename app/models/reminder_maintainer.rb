@@ -4,7 +4,7 @@
 class ReminderMaintainer
   include Singleton
 
-  def reminder_committed(reminder)
+  def create_or_update_reminder_successful(reminder)
     deliveries = reminder.deliveries
     # Run callbacks on existing deliveries to ensure recomputation.
     deliveries_by_event = deliveries.includes(eager_loads).group_by(&:event)

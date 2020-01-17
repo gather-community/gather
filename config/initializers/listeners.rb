@@ -14,4 +14,5 @@ Rails.application.config.after_initialize do
   Work::Job.subscribe(Work::ShiftIndexUpdater.instance)
 
   User.subscribe(Groups::MembershipMaintainer.instance)
+  Groups::Affiliation.subscribe(Groups::MembershipMaintainer.instance)
 end

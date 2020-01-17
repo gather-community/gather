@@ -22,4 +22,17 @@ describe Groups::MembershipMaintainer do
       end
     end
   end
+
+  context "on affiliation destroy" do
+    let!(:community1) { Defaults.community }
+    let!(:community2) { create(:community) }
+    let!(:user1) { create(:user, community: community1) }
+    let!(:user2) { create(:user, community: community2) }
+    let!(:group) { create(:group, communities: [community1, community2], joiners: [user1, user2]) }
+
+    it "destroys appropriate memberships" do
+      group.affiliations.detect { |a| a.community == community2 }.destroy
+      expect(group.reload.memberships.map(&:user)).to eq([user1])
+    end
+  end
 end

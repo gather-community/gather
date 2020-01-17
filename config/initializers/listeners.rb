@@ -15,4 +15,5 @@ Rails.application.config.after_initialize do
 
   User.subscribe(Groups::MembershipMaintainer.instance)
   Groups::Affiliation.subscribe(Groups::MembershipMaintainer.instance)
+  Household.subscribe(Groups::MembershipMaintainer.instance)
 end

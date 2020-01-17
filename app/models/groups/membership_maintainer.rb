@@ -11,8 +11,20 @@ module Groups
     end
 
     def destroy_groups_affiliation_successful(affiliation)
-      Membership.joins(:user).merge(User.in_community(affiliation.community_id))
-        .where(group_id: affiliation.group_id).destroy_all
+      Membership
+        .joins(:user)
+        .merge(User.in_community(affiliation.community_id))
+        .where(group_id: affiliation.group_id)
+        .destroy_all
+    end
+
+    def update_household_successful(household)
+      return unless household.saved_change_to_community_id?
+      Membership
+        .where(user: household.users.pluck(:id))
+        .where("NOT EXISTS(SELECT id FROM group_affiliations
+           WHERE group_id = group_memberships.group_id AND community_id = ?)", household.community_id)
+        .destroy_all
     end
   end
 end

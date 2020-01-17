@@ -35,4 +35,30 @@ describe Groups::MembershipMaintainer do
       expect(group.reload.memberships.map(&:user)).to eq([user1])
     end
   end
+
+  context "on household community change" do
+    let!(:community1) { Defaults.community }
+    let!(:community2) { create(:community) }
+    let!(:household) { create(:household, member_count: 2, community: community1) }
+    let!(:user) { create(:user) }
+    let!(:group) do
+      create(:group, communities: [community1, community2], joiners: household.users + [user])
+    end
+
+    context "when changing to other community within in group" do
+      it "preserves memberships" do
+        household.update!(community: community2)
+        expect(group.reload.memberships.map(&:user)).to match_array(household.users + [user])
+      end
+    end
+
+    context "when changing to community not in group" do
+      let!(:community3) { create(:community) }
+
+      it "destroys appropriate memberships" do
+        household.update!(community: community3)
+        expect(group.reload.memberships.map(&:user)).to eq([user])
+      end
+    end
+  end
 end

@@ -12,4 +12,6 @@ Rails.application.config.after_initialize do
   User.subscribe(Work::ShiftIndexUpdater.instance)
   Groups::Group.subscribe(Work::ShiftIndexUpdater.instance)
   Work::Job.subscribe(Work::ShiftIndexUpdater.instance)
+
+  User.subscribe(Groups::MembershipMaintainer.instance)
 end

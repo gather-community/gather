@@ -3,6 +3,7 @@
 module Groups
   # A group of users.
   class Group < ApplicationRecord
+    include Wisper.model
     include Deactivatable
 
     KINDS = %i[committee subcommittee team task_force club crew squad group].freeze
@@ -65,7 +66,6 @@ module Groups
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
 
     before_validation :normalize
-    after_update { Work::ShiftIndexUpdater.new(self).update }
 
     validates :name, presence: true
     validate :name_unique_in_all_communities

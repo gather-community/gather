@@ -32,7 +32,6 @@ module Work
     normalize_attributes :title, :description
 
     before_validation :normalize
-    after_update { ShiftIndexUpdater.new(self).update }
 
     validates :period, presence: true
     validates :title, presence: true, length: {maximum: 128}, uniqueness: {scope: :period_id}

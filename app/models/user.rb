@@ -23,6 +23,7 @@
 # 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
 #    sign in invite, signs in, is confirmed
 class User < ApplicationRecord
+  include Wisper.model
   include AttachmentFormable
   include Phoneable
   include Deactivatable
@@ -135,7 +136,6 @@ class User < ApplicationRecord
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
-  after_update { Work::ShiftIndexUpdater.new(self).update }
   after_deactivate { group_memberships.destroy_all }
 
   def self.from_omniauth(auth)

@@ -51,9 +51,9 @@ en:
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       groups_group:
-        availability: "Whether people can join this group on their own."
+        availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."
-        kind: "What kind of group this is. 'Everybody' groups automatically include all adult users."
+        kind: "What kind of group this is. Used only for display purposes. No other significance."
         communities: "What communities this group is available/visible to."
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."

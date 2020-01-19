@@ -40,6 +40,10 @@ function onActivate(event) {
 
 // Borrowed from https://github.com/TalAter/UpUp
 function onFetch(event) {
+  // Chrome bug
+  if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+    return;
+  }
   event.respondWith(
     // try to return untouched request from network first
     fetch(event.request).catch(function() {

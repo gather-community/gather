@@ -17,7 +17,12 @@
   <%= f.input(:kind, collection: Groups::Group::KINDS, include_blank: false) %>
   <%= f.input(:availability, collection: Groups::Group::AVAILABILITIES, include_blank: false) %>
   <%= nested_field_set(f, :memberships, single_row: true, inner_labels: false) %>
-  <%= f.input(:can_request_jobs) %>
+
+  <% if policy(group).change_permissions? %>
+    <%= f.input(:can_request_jobs) %>
+    <%= f.input(:can_administer_email_lists) %>
+    <%= f.input(:can_moderate_email_lists) %>
+  <% end %>
 
   <%= form_actions do %>
     <%= f.button :primary %>

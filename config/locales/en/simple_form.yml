@@ -53,6 +53,8 @@ en:
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."
+        can_administer_email_lists: "Whether users in this group should be able to change settings for email lists in the community."
+        can_moderate_email_lists: "Whether users in this group should serve as moderators for email lists in the community."
         kind: "What kind of group this is. Used only for display purposes. No other significance."
         communities: "What communities this group is available/visible to."
       reservations_protocol:

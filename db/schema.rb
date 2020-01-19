@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_31_040536) do
+ActiveRecord::Schema.define(version: 2020_01_17_030142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(version: 2019_12_31_040536) do
 
   create_table "groups", force: :cascade do |t|
     t.string "availability", limit: 10, default: "closed", null: false
+    t.boolean "can_administer_email_lists", default: false, null: false
+    t.boolean "can_moderate_email_lists", default: false, null: false
     t.boolean "can_request_jobs", default: false, null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false

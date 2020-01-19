@@ -66,7 +66,7 @@ describe Groups::GroupPolicy do
       it_behaves_like "permits managers but not joiners or opt outs"
     end
 
-    permissions :deactivate?, :destroy? do
+    permissions :deactivate?, :destroy?, :change_permissions? do
       it_behaves_like "permits active admins in group's communities but not regular users"
       it { is_expected.not_to permit(manager, group) }
     end
@@ -249,25 +249,27 @@ describe Groups::GroupPolicy do
     include_context "policy permissions"
 
     let(:base_attribs) do
-      %i[availability can_request_jobs description kind name] <<
+      %i[availability description kind name] <<
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
+    let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
+    let(:base_admin_attribs) { base_attribs.concat(permission_attribs) }
     let(:group) { create(:group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }
 
     context "with super admin" do
       let(:actor) { super_admin }
-      it { is_expected.to match_array(base_attribs << {community_ids: []}) }
+      it { is_expected.to match_array(base_admin_attribs << {community_ids: []}) }
     end
 
     context "with cluster admin" do
       let(:actor) { cluster_admin }
-      it { is_expected.to match_array(base_attribs << {community_ids: []}) }
+      it { is_expected.to match_array(base_admin_attribs << {community_ids: []}) }
     end
 
     context "with admin" do
       let(:actor) { admin }
-      it { is_expected.to match_array(base_attribs) }
+      it { is_expected.to match_array(base_admin_attribs) }
     end
 
     context "with manager" do

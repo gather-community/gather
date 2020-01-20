@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_030142) do
+ActiveRecord::Schema.define(version: 2020_01_20_031912) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,27 @@ ActiveRecord::Schema.define(version: 2020_01_17_030142) do
     t.datetime "run_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "domain_ownerships", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "domain_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id", "community_id", "domain_id"], name: "index_domain_ownerships_unique", unique: true
+    t.index ["cluster_id"], name: "index_domain_ownerships_on_cluster_id"
+    t.index ["community_id"], name: "index_domain_ownerships_on_community_id"
+    t.index ["domain_id"], name: "index_domain_ownerships_on_domain_id"
+  end
+
+  create_table "domains", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "name", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_domains_on_cluster_id"
+    t.index ["name"], name: "index_domains_on_name", unique: true
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
@@ -799,6 +820,10 @@ ActiveRecord::Schema.define(version: 2020_01_17_030142) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "domain_ownerships", "clusters"
+  add_foreign_key "domain_ownerships", "communities"
+  add_foreign_key "domain_ownerships", "domains"
+  add_foreign_key "domains", "clusters"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
   add_foreign_key "gdrive_stray_files", "clusters"

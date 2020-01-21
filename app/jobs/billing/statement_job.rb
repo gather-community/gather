@@ -15,7 +15,7 @@ module Billing
 
     def send_statements
       with_community(community) do
-        Account.with_activity_and_users_and_no_recent_statement(community).each do |account|
+        Account.in_community(community).with_activity_and_users_and_no_recent_statement.each do |account|
           # Run in a transaction so that if there is an issue sending the statement,
           # it gets rolled back.
           Statement.transaction do

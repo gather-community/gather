@@ -22,6 +22,10 @@
   <p class="subtitle">
     <%= icon_tag("info-circle") %>
     <%= t(".summary", count: @active_accounts) %>
+    <%= t(".active_account_definition", count: @active_accounts) %>
+  </p>
+  <p class="subtitle">
+    <%= icon_tag("info-circle") %>
     <% if @last_statement_run.present? %>
       <%= t(".last_statement_run", date: l(@last_statement_run)) %>
     <% else %>

@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
     @accounts = policy_scope(Billing::Account)
     @accounts = @accounts.where(community: @community)
       .includes(:last_statement, household: %i[users community])
-      .with_any_activity(@community)
+      .relevant
       .by_cmty_and_household_name
     @txn_years = Billing::Transaction.year_range(community: @community)&.to_a&.reverse
 
@@ -65,10 +65,11 @@ class AccountsController < ApplicationController
 
   def index_html
     @accounts = @accounts.decorate
-    @statement_accounts = Billing::Account.with_activity_and_users_and_no_recent_statement(@community).count
-    @active_accounts = Billing::Account.with_activity(@community).count
-    @no_user_accounts = Billing::Account.with_activity_but_no_users(@community).count
-    @recent_stmt_accounts = Billing::Account.with_recent_statement(@community).count
+    community_accounts = Billing::Account.in_community(@community)
+    @active_accounts = community_accounts.active.count
+    @statement_accounts = community_accounts.with_activity_and_users_and_no_recent_statement.count
+    @no_user_accounts = community_accounts.with_activity_but_no_users.count
+    @recent_stmt_accounts = community_accounts.with_recent_statement.count
 
     last_statement = Billing::Statement.in_community(@community).order(:created_at).last
     @last_statement_run = last_statement&.created_on

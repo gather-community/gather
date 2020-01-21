@@ -371,8 +371,9 @@ en:
   accounts:
     index:
       summary:
-        one: "There is 1 account with current activity and/or a non-zero current balance."
-        other: "There are %{count} accounts with current activity and/or a non-zero current balance."
+        one: "There is 1 active account."
+        other: "There are %{count} active accounts."
+      active_account_definition: "An active account is one having current activity or a non-zero current balance."
       last_statement_run: "Statements were last sent out on %{date}."
       statements_never_run: "Statements have never been sent out."
       no_users:

@@ -17,6 +17,18 @@ module Billing
     scope :for_community_or_household,
           ->(c, h) { where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
     scope :with_balance_owing, -> { where("accounts.balance_due > 0") }
+    scope :by_cmty_and_household_name, lambda {
+      joins(household: :community).order("communities.name, households.name")
+    }
+    scope :active, lambda { # Active means having new activity.
+      where("total_new_credits >= 0.01 OR total_new_charges >= 0.01 OR ABS(current_balance) >= 0.01")
+        .includes(:last_statement, household: %i[users community])
+    }
+    scope :with_recent_statement, lambda {
+      joins(:last_statement).where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
+    }
+    # Relevant means active OR belonging to an active household.
+    scope :relevant, -> { joins(:household).active.or(joins(:household).merge(Household.active)) }
 
     delegate :name, :no_users?, to: :household, prefix: true
     delegate :name, :abbrv, to: :community, prefix: true
@@ -28,43 +40,18 @@ module Billing
       self.current_balance = balance_due + total_new_charges
     end
 
-    def self.by_cmty_and_household_name
-      joins(household: :community).order("communities.name, households.name")
-    end
-
-    def self.with_recent_activity
-      where("total_new_credits >= 0.01 OR total_new_charges >= 0.01
-        OR ABS(current_balance) >= 0.01")
-    end
-
     def self.for(household_id, community_id)
       find_or_create_by!(household_id: household_id, community_id: community_id)
     end
 
-    def self.with_activity_and_users_and_no_recent_statement(community)
-      with_activity(community).joins("LEFT JOIN statements ON statements.id = accounts.last_statement_id")
+    def self.with_activity_and_users_and_no_recent_statement
+      active.joins("LEFT JOIN statements ON statements.id = accounts.last_statement_id")
         .where("statements.created_at <= ? OR statements.created_at IS NULL", RECENT_STATEMENT_WINDOW.ago)
         .reject(&:household_no_users?)
     end
 
-    def self.with_activity_but_no_users(community)
-      with_activity(community).select(&:household_no_users?)
-    end
-
-    def self.with_activity(community)
-      in_community(community).includes(:last_statement, household: %i[users community]).with_recent_activity
-    end
-
-    def self.with_recent_statement(community)
-      in_community(community).joins(:last_statement)
-        .where("statements.created_at > ?", RECENT_STATEMENT_WINDOW.ago)
-    end
-
-    # Returns accounts that have a balance OR a past statement AND an active household
-    def self.with_any_activity(community)
-      in_community(community).joins(:household)
-      where("ABS(balance_due) >= 0.01 OR ABS(current_balance) >= 0.01 OR
-          last_statement_id IS NOT NULL AND households.deactivated_at IS NULL")
+    def self.with_activity_but_no_users
+      active.select(&:household_no_users?)
     end
 
     # Updates account for latest statement. Assumes statement is latest one since the UI enforces this.

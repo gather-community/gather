@@ -21,7 +21,8 @@ class StatementsController < ApplicationController
     flash[:success] = "Statement generation started. Please try refreshing "\
       "the page in a moment to see updated account statuses."
 
-    with_no_users = Billing::Account.includes(:household).with_activity_but_no_users(current_community)
+    with_no_users = Billing::Account.in_community(current_community)
+      .includes(:household).with_activity_but_no_users
 
     if with_no_users.any?
       who = with_no_users.map { |a| a.decorate.household_name }.join(", ")

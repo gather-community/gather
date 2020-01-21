@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_20_031912) do
+ActiveRecord::Schema.define(version: 2020_01_20_033423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -152,6 +152,20 @@ ActiveRecord::Schema.define(version: 2020_01_20_031912) do
     t.index ["community_id", "group_id"], name: "index_group_affiliations_on_community_id_and_group_id", unique: true
     t.index ["community_id"], name: "index_group_affiliations_on_community_id"
     t.index ["group_id"], name: "index_group_affiliations_on_group_id"
+  end
+
+  create_table "group_mailman_lists", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "domain_id", null: false
+    t.string "name", null: false
+    t.text "outside_members"
+    t.text "outside_senders"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_group_mailman_lists_on_cluster_id"
+    t.index ["domain_id"], name: "index_group_mailman_lists_on_domain_id"
+    t.index ["name", "domain_id"], name: "index_group_mailman_lists_on_name_and_domain_id", unique: true
+    t.index ["name"], name: "index_group_mailman_lists_on_name"
   end
 
   create_table "group_memberships", force: :cascade do |t|
@@ -831,6 +845,8 @@ ActiveRecord::Schema.define(version: 2020_01_20_031912) do
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"
+  add_foreign_key "group_mailman_lists", "clusters"
+  add_foreign_key "group_mailman_lists", "domains"
   add_foreign_key "group_memberships", "clusters"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"

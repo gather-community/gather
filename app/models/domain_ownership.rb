@@ -5,5 +5,5 @@ class DomainOwnership < ApplicationRecord
   acts_as_tenant :cluster
 
   belongs_to :community
-  belongs_to :domain, inverse_of: :domain_ownerships
+  belongs_to :domain, inverse_of: :ownerships
 end

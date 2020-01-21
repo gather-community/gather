@@ -4,6 +4,7 @@
 class Domain < ApplicationRecord
   acts_as_tenant :cluster
 
-  has_many :domain_ownerships
-  has_many :communities, through: :domain_ownerships
+  has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy
+  has_many :communities, through: :ownerships
+  has_many :group_mailman_lists, class_name: "Groups::Mailman::List", dependent: :destroy
 end

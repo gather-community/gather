@@ -12,6 +12,8 @@ module Groups
 
       validate :check_outside_addresses
 
+      before_save :clean_outside_addresses
+
       private
 
       def check_outside_addresses
@@ -25,6 +27,14 @@ module Groups
             errors.add(attrib, "Error on line #{number + 1} (#{line})")
             break
           end
+        end
+      end
+
+      def clean_outside_addresses
+        %i[outside_members outside_senders].each do |attrib|
+          next if self[attrib].blank?
+          cleaned = self[attrib].split("\n").map { |l| Mail::Address.new(l).to_s unless l.strip.empty? }
+          send("#{attrib}=", cleaned.compact.join("\n"))
         end
       end
     end

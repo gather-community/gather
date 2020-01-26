@@ -335,6 +335,15 @@ describe User do
       end
     end
 
+    context "with group mailman user" do
+      let!(:mailman_user) { create(:group_mailman_user, user: user) }
+
+      it "destroys cleanly and cascades" do
+        user.destroy
+        expect { mailman_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     context "with parent" do
       let!(:child) { create(:user, :child, guardians: [user]) }
 

@@ -40,7 +40,7 @@ describe "meal import", :js, :perform_jobs do
   end
 
   scenario "crash" do
-    with_env("STUB_IMPORT_ERROR" => "Unexpected error") do
+    with_env("STUB_IMPORT_ERROR" => "Unexpected error", "RESCUE_FROM_JOB_EXCEPTIONS" => "true") do
       visit(new_meals_import_path)
       drop_in_dropzone(fixture_file_path("meals/import/simple_data.csv"))
       click_button("Import")

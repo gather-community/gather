@@ -18,7 +18,7 @@ describe ImportJob do
 
   context "with unhandled error" do
     it "sets crashed status and sends error notification" do
-      with_env("STUB_IMPORT_ERROR" => "Unhandled error") do
+      with_env("STUB_IMPORT_ERROR" => "Unhandled error", "RESCUE_FROM_JOB_EXCEPTIONS" => "true") do
         emails = email_sent_by do
           perform_job(class_name: "Meals::Import", id: meal_import.id)
         end

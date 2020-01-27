@@ -22,7 +22,7 @@ module Groups
           self[attrib].split("\n").each_with_index do |line, number|
             next if line.strip.empty?
             address = Mail::Address.new(line)
-            raise Mail::Field::FieldError unless address.address.match?(User::EMAIL_REGEXP)
+            raise Mail::Field::FieldError unless address.address.match?(::User::EMAIL_REGEXP)
           rescue Mail::UnknownEncodingType, Mail::Field::FieldError
             errors.add(attrib, "Error on line #{number + 1} (#{line})")
             break

@@ -87,6 +87,11 @@ module Groups
       availability == "hidden"
     end
 
+    # Checks if associated with no communities. Hits the DB every time on purpose.
+    def no_communities?
+      communities.count.zero?
+    end
+
     def single_community?
       communities.size == 1
     end

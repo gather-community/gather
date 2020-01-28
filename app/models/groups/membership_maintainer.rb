@@ -16,6 +16,7 @@ module Groups
         .merge(User.in_community(affiliation.community_id))
         .where(group_id: affiliation.group_id)
         .destroy_all
+      affiliation.group.destroy if Group.exists?(affiliation.group_id) && affiliation.group.no_communities?
     end
 
     def update_household_successful(household)

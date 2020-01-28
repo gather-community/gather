@@ -34,6 +34,13 @@ describe Groups::MembershipMaintainer do
       group.affiliations.detect { |a| a.community == community2 }.destroy
       expect(group.reload.memberships.map(&:user)).to eq([user1])
     end
+
+    context "when no affiliations left" do
+      it "destroys group" do
+        group.affiliations.each(&:destroy)
+        expect { group.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   context "on household community change" do

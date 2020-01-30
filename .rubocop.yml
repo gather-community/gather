@@ -61,7 +61,7 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Enabled: true
-  Max: 12
+  Max: 15
   Exclude:
     - db/migrate/*.rb
 

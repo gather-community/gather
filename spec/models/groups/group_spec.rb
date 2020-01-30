@@ -234,6 +234,22 @@ describe Groups::Group do
     end
   end
 
+  describe "destroy" do
+    let!(:group) { create(:group) }
+    let!(:membership) { create(:group_membership, group: group) }
+    let!(:affiliation) { group.affiliations.first }
+    let!(:job) { create(:work_job, requester: group) }
+    let!(:mailman_list) { create(:group_mailman_list, group: group) }
+
+    it "cascades and nullifies appropriately" do
+      group.reload.destroy
+      expect(Groups::Membership.exists?(membership.id)).to be(false)
+      expect(Groups::Affiliation.exists?(affiliation.id)).to be(false)
+      expect(job.reload.requester).to be_nil
+      expect(Groups::Mailman::List.exists?(mailman_list.id)).to be(false)
+    end
+  end
+
   def expect_no_membership
     expect(Groups::Membership.count).to eq(0)
   end

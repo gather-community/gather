@@ -7,6 +7,7 @@ module Groups
       acts_as_tenant :cluster
 
       belongs_to :domain
+      belongs_to :group
 
       normalize_attributes :name
 

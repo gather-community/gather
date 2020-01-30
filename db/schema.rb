@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_24_035935) do
+ActiveRecord::Schema.define(version: 2020_01_30_025218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -158,12 +158,14 @@ ActiveRecord::Schema.define(version: 2020_01_24_035935) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.bigint "domain_id", null: false
+    t.bigint "group_id", null: false
     t.string "name", null: false
     t.text "outside_members"
     t.text "outside_senders"
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_group_mailman_lists_on_cluster_id"
     t.index ["domain_id"], name: "index_group_mailman_lists_on_domain_id"
+    t.index ["group_id"], name: "index_group_mailman_lists_on_group_id"
     t.index ["name", "domain_id"], name: "index_group_mailman_lists_on_name_and_domain_id", unique: true
     t.index ["name"], name: "index_group_mailman_lists_on_name"
   end
@@ -858,6 +860,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_035935) do
   add_foreign_key "group_affiliations", "groups"
   add_foreign_key "group_mailman_lists", "clusters"
   add_foreign_key "group_mailman_lists", "domains"
+  add_foreign_key "group_mailman_lists", "groups"
   add_foreign_key "group_mailman_users", "clusters"
   add_foreign_key "group_mailman_users", "users"
   add_foreign_key "group_memberships", "clusters"

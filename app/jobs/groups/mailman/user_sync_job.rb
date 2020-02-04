@@ -6,6 +6,16 @@ module Groups
     class UserSyncJob < SyncJob
       attr_accessor :user
 
+      # Stubbable in tests
+      def self.find_mailman_user(user:)
+        Groups::Mailman::User.find_by(user: user)
+      end
+
+      # Stubbable in tests
+      def self.build_mailman_user(user:)
+        Groups::Mailman::User.new(user: user)
+      end
+
       def perform(user)
         # A note on error handling: Generally in this class we have tried to make it so that it is highly
         # unlikely that we would encounter 4xx-type errors (invalid input). We have done this by e.g.
@@ -15,7 +25,7 @@ module Groups
         # also want to see those errors.
         self.user = user
         with_community(user.community) do
-          if (mm_user = Groups::Mailman::User.find_by(user: user))
+          if (mm_user = self.class.find_mailman_user(user: user))
             sync_with_stored_mailman_user(mm_user)
           else
             sync_without_stored_mailman_user
@@ -25,40 +35,34 @@ module Groups
 
       private
 
-      def api
-        Api.instance
-      end
-
       def sync_with_stored_mailman_user(mm_user)
         if mm_user.syncable?
-          if api.user_exists?(id: mm_user.mailman_id)
+          if api.user_exists?(mm_user)
             update_user_and_memberships(mm_user)
           else
             mm_user.destroy
             self.class.perform_later(user)
           end
         else
-          api.delete_user(id: mm_user.mailman_id)
+          api.delete_user(mm_user)
         end
       end
 
       def sync_without_stored_mailman_user
-        mm_user = Groups::Mailman::User.new(user: user)
-        mailman_id = api.find_user_id(email: user.email)
+        mm_user = self.class.build_mailman_user(user: user)
+        mm_user.mailman_id = api.user_id_for_email(mm_user)
         if mm_user.syncable?
           # If user already exists with local user's email, unify them and update
-          if mailman_id
-            ensure_no_duplicate_user(mailman_id)
-            mm_user.update!(mailman_id: mailman_id)
+          if mm_user.mailman_id?
+            ensure_no_duplicate_user(mm_user.mailman_id)
             update_user_and_memberships(mm_user)
           else
-            mm_user.update!(mailman_id: api.create_user(base_attributes))
-            UserMembershipSyncJob.perform_later(mm_user)
+            create_user_and_memberships(mm_user)
           end
         # If there is a remote user with a matching email and the local user is not syncable, we need
         # to delete that remote user.
-        elsif mailman_id.present?
-          api.delete_user(id: mailman_id)
+        elsif mm_user.mailman_id?
+          api.delete_user(mm_user)
         end
       end
 
@@ -68,13 +72,15 @@ module Groups
       end
 
       def update_user_and_memberships(mm_user)
-        attribs = base_attributes.merge(id: mm_user.mailman_id)
-        api.update_user(attribs)
+        mm_user.save!
+        api.update_user(mm_user)
         UserMembershipSyncJob.perform_later(mm_user)
       end
 
-      def base_attributes
-        user.attributes.symbolize_keys.slice(:first_name, :last_name, :email)
+      def create_user_and_memberships(mm_user)
+        new_mailman_id = api.create_user(mm_user)
+        mm_user.update!(mailman_id: new_mailman_id)
+        UserMembershipSyncJob.perform_later(mm_user)
       end
     end
   end

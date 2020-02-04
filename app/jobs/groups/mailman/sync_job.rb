@@ -7,6 +7,12 @@ module Groups
       class SyncError < StandardError; end
 
       queue_as :mailman_sync
+
+      private
+
+      def api
+        Api.instance
+      end
     end
   end
 end

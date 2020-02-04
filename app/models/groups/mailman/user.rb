@@ -6,7 +6,13 @@ module Groups
     class User < ApplicationRecord
       acts_as_tenant :cluster
 
+      delegate :first_name, :last_name, :email, to: :user
+
       belongs_to :user, class_name: "::User", inverse_of: :group_mailman_user
+
+      def mailman_id?
+        mailman_id.present?
+      end
 
       # Whether this user needs an account on the Mailman server.
       def syncable?

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_30_025218) do
+ActiveRecord::Schema.define(version: 2020_02_05_004633) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 2020_01_30_025218) do
     t.datetime "created_at", precision: 6, null: false
     t.bigint "domain_id", null: false
     t.bigint "group_id", null: false
+    t.string "mailman_id", null: false
     t.string "name", null: false
     t.text "outside_members"
     t.text "outside_senders"

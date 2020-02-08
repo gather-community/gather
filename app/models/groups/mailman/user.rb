@@ -2,7 +2,7 @@
 
 module Groups
   module Mailman
-    # Links a mailman user to a Gather user
+    # Wrapper class that links a mailman user to a Gather user
     class User < ApplicationRecord
       acts_as_tenant :cluster
 

@@ -114,7 +114,7 @@ module Groups
       if everybody?
         # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
         # They should be consistent.
-        User.active.adults.in_community(communities).including_communities.by_name - opt_outs
+        ::User.active.adults.in_community(communities).including_communities.by_name - opt_outs
       else
         managers + joiners
       end

@@ -13,7 +13,7 @@ module Groups
     def destroy_groups_affiliation_successful(affiliation)
       Membership
         .joins(:user)
-        .merge(User.in_community(affiliation.community_id))
+        .merge(::User.in_community(affiliation.community_id))
         .where(group_id: affiliation.group_id)
         .destroy_all
       affiliation.group.destroy if Group.exists?(affiliation.group_id) && affiliation.group.no_communities?

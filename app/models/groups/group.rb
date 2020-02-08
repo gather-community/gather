@@ -19,7 +19,7 @@ module Groups
                                                          dependent: :destroy, inverse_of: :group
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
-    has_many :mailman_lists, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
+    has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
     scope :in_community, lambda { |c|
       where("EXISTS(SELECT id FROM group_affiliations

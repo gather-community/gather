@@ -7,7 +7,7 @@ module Groups
       acts_as_tenant :cluster
 
       belongs_to :domain
-      belongs_to :group, inverse_of: :mailman_lists
+      belongs_to :group, inverse_of: :mailman_list
 
       normalize_attributes :name
 

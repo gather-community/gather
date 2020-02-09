@@ -10,8 +10,8 @@ module Groups
 
       belongs_to :user, class_name: "::User", inverse_of: :group_mailman_user
 
-      def mailman_id?
-        mailman_id.present?
+      def remote_id?
+        remote_id.present?
       end
 
       # Whether this user needs an account on the Mailman server.
@@ -26,7 +26,7 @@ module Groups
         Groups::User.new(user: user).computed_memberships.map do |mship|
           next if mship.opt_out?
           next unless (list = mship.group.mailman_list)
-          ListMembership.new(mailman_user: self, list_id: list.mailman_id, role: kind_to_role(mship.kind))
+          ListMembership.new(mailman_user: self, list_id: list.remote_id, role: kind_to_role(mship.kind))
         end.compact
       end
 

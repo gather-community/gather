@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_05_004633) do
+ActiveRecord::Schema.define(version: 2020_02_09_033245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -159,10 +159,10 @@ ActiveRecord::Schema.define(version: 2020_02_05_004633) do
     t.datetime "created_at", precision: 6, null: false
     t.bigint "domain_id", null: false
     t.bigint "group_id", null: false
-    t.string "mailman_id", null: false
     t.string "name", null: false
     t.text "outside_members"
     t.text "outside_senders"
+    t.string "remote_id", null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_group_mailman_lists_on_cluster_id"
     t.index ["domain_id"], name: "index_group_mailman_lists_on_domain_id"
@@ -174,11 +174,11 @@ ActiveRecord::Schema.define(version: 2020_02_05_004633) do
   create_table "group_mailman_users", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", precision: 6, null: false
-    t.string "mailman_id", null: false
+    t.string "remote_id", null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
     t.index ["cluster_id"], name: "index_group_mailman_users_on_cluster_id"
-    t.index ["mailman_id"], name: "index_group_mailman_users_on_mailman_id", unique: true
+    t.index ["remote_id"], name: "index_group_mailman_users_on_remote_id", unique: true
     t.index ["user_id"], name: "index_group_mailman_users_on_user_id", unique: true
   end
 

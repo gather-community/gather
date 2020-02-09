@@ -50,25 +50,25 @@ module Groups
 
       def sync_without_stored_mailman_user
         mm_user = self.class.build_mailman_user(user: user)
-        mm_user.mailman_id = api.user_id_for_email(mm_user)
+        mm_user.remote_id = api.user_id_for_email(mm_user)
         if mm_user.syncable?
           # If user already exists with local user's email, unify them and update
-          if mm_user.mailman_id?
-            ensure_no_duplicate_user(mm_user.mailman_id)
+          if mm_user.remote_id?
+            ensure_no_duplicate_user(mm_user.remote_id)
             update_user_and_memberships(mm_user)
           else
             create_user_and_memberships(mm_user)
           end
         # If there is a remote user with a matching email and the local user is not syncable, we need
         # to delete that remote user.
-        elsif mm_user.mailman_id?
+        elsif mm_user.remote_id?
           api.delete_user(mm_user)
         end
       end
 
-      def ensure_no_duplicate_user(mailman_id)
-        return unless Groups::Mailman::User.find_by(mailman_id: mailman_id)
-        raise SyncError, "duplicate mailman user found for mailman ID #{mailman_id}"
+      def ensure_no_duplicate_user(remote_id)
+        return unless Groups::Mailman::User.find_by(remote_id: remote_id)
+        raise SyncError, "duplicate mailman user found for mailman ID #{remote_id}"
       end
 
       def update_user_and_memberships(mm_user)
@@ -78,8 +78,8 @@ module Groups
       end
 
       def create_user_and_memberships(mm_user)
-        new_mailman_id = api.create_user(mm_user)
-        mm_user.update!(mailman_id: new_mailman_id)
+        new_remote_id = api.create_user(mm_user)
+        mm_user.update!(remote_id: new_remote_id)
         UserMembershipSyncJob.perform_later(mm_user)
       end
     end

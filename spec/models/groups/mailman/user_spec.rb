@@ -63,10 +63,10 @@ describe Groups::Mailman::User do
 
     it "returns correct results" do
       expect(list_memberships.size).to eq(2)
-      expect(list_memberships_by_list_id[list1.mailman_id].mailman_user).to eq(mm_user)
-      expect(list_memberships_by_list_id[list1.mailman_id].role).to eq("member")
-      expect(list_memberships_by_list_id[list2.mailman_id].mailman_user).to eq(mm_user)
-      expect(list_memberships_by_list_id[list2.mailman_id].role).to eq("owner")
+      expect(list_memberships_by_list_id[list1.remote_id].mailman_user).to eq(mm_user)
+      expect(list_memberships_by_list_id[list1.remote_id].role).to eq("member")
+      expect(list_memberships_by_list_id[list2.remote_id].mailman_user).to eq(mm_user)
+      expect(list_memberships_by_list_id[list2.remote_id].role).to eq("owner")
     end
   end
 end

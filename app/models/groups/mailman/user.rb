@@ -21,6 +21,23 @@ module Groups
         with_mailman = List.all.pluck(:group_id)
         (with_user & with_mailman).any?
       end
+
+      def list_memberships
+        Groups::User.new(user: user).computed_memberships.map do |mship|
+          next if mship.opt_out?
+          next unless (list = mship.group.mailman_list)
+          ListMembership.new(mailman_user: self, list_id: list.mailman_id, role: kind_to_role(mship.kind))
+        end.compact
+      end
+
+      private
+
+      def kind_to_role(kind)
+        case kind
+        when "joiner" then "member"
+        when "manager" then "owner"
+        end
+      end
     end
   end
 end

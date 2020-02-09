@@ -16,15 +16,14 @@ module Groups
         Groups::Mailman::User.new(user: user)
       end
 
-      def perform(user)
+      def perform(user_id)
         # A note on error handling: Generally in this class we have tried to make it so that it is highly
         # unlikely that we would encounter 4xx-type errors (invalid input). We have done this by e.g.
         # checking for the existence of a remote user before attempting to update it. So if those
         # kind of errors occur, we'd want them to be handled by the job system and reported to admins.
         # We are never immune to 5xx, of course, if e.g. the Mailman server is down. In that case, we would
         # also want to see those errors.
-        self.user = user
-        with_community(user.community) do
+        with_object_in_community_context(::User, user_id) do |user|
           if (mm_user = self.class.find_mailman_user(user: user))
             sync_with_stored_mailman_user(mm_user)
           else
@@ -41,7 +40,7 @@ module Groups
             update_user_and_memberships(mm_user)
           else
             mm_user.destroy
-            self.class.perform_later(user)
+            self.class.perform_later(mm_user.user_id)
           end
         else
           api.delete_user(mm_user)

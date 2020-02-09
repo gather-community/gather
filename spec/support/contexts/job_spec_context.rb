@@ -7,6 +7,9 @@ shared_context "jobs" do
   # Runs job with nil tenant to ensure that job sets tenant itself.
   def perform_job(*args)
     ActsAsTenant.with_tenant(nil) do
+      # Simulate ActiveRecord objects being reloaded in the job process.
+      # This should almost always cause cluster errors unless the object is a Cluster.
+      args = args.map { |a| a.is_a?(ApplicationRecord) ? a.class.find(a.id) : a }
       described_class.perform_now(*args)
     end
   end

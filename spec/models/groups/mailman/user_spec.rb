@@ -11,19 +11,21 @@ describe Groups::Mailman::User do
 
   describe "#syncable?" do
     let(:fake) { false }
-    let(:mm_list_present) { true }
+    let(:any_memberships) { true }
     let(:user) { create(:user, fake: fake) }
     let!(:mm_user) { create(:group_mailman_user, user: user) }
-    let!(:group) { create(:group, availability: "everybody") }
-    let!(:mm_list) { create(:group_mailman_list, group: group) if mm_list_present }
     subject(:syncable) { mm_user.syncable? }
+
+    before do
+      allow(mm_user).to receive(:list_memberships).and_return(any_memberships ? [1] : [])
+    end
 
     context "with valid memberships and associated mailman list" do
       it { is_expected.to be(true) }
     end
 
     context "with valid memberships but not for groups with mailman lists" do
-      let(:mm_list_present) { false }
+      let(:any_memberships) { false }
       it { is_expected.to be(false) }
     end
 

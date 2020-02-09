@@ -16,14 +16,11 @@ module Groups
 
       # Whether this user needs an account on the Mailman server.
       def syncable?
-        return false if user.fake?
-        with_user = Groups::Group.with_user(user).pluck(:id)
-        with_mailman = List.all.pluck(:group_id)
-        (with_user & with_mailman).any?
+        !user.fake? && list_memberships.any?
       end
 
       def list_memberships
-        Groups::User.new(user: user).computed_memberships.map do |mship|
+        @list_memberships ||= Groups::User.new(user: user).computed_memberships.map do |mship|
           next if mship.opt_out?
           next unless (list = mship.group.mailman_list)
           ListMembership.new(mailman_user: self, list_id: list.remote_id, role: kind_to_role(mship.kind))

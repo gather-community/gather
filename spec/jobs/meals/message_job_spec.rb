@@ -9,6 +9,7 @@ describe Meals::MessageJob do
   let!(:meal) { create(:meal, formula: formula, asst_cooks: [create(:user)], cleaners: [create(:user)]) }
   let!(:signups) { create_list(:meal_signup, 2, meal: meal, diner_counts: [2, 1]) }
   let!(:hholds) { signups.map(&:household) }
+  subject(:job) { described_class.new(message.id) }
 
   describe "normal messages" do
     describe "message to diners" do
@@ -16,12 +17,12 @@ describe Meals::MessageJob do
 
       it "should send correct number of emails" do
         expect(MealMailer).to receive(:normal_message).exactly(2).times.and_return(mlrdbl)
-        perform_job(message.id)
+        perform_job
       end
 
       it "should send message to correct households" do
         expect_households
-        perform_job(message.id)
+        perform_job
       end
     end
 
@@ -30,12 +31,12 @@ describe Meals::MessageJob do
 
       it "should send correct number of emails" do
         expect(MealMailer).to receive(:normal_message).exactly(3).times.and_return(mlrdbl)
-        perform_job(message.id)
+        perform_job
       end
 
       it "should send message to correct workers" do
         expect_workers
-        perform_job(message.id)
+        perform_job
       end
     end
 
@@ -44,13 +45,13 @@ describe Meals::MessageJob do
 
       it "should send correct number of emails" do
         expect(MealMailer).to receive(:normal_message).exactly(5).times.and_return(mlrdbl)
-        perform_job(message.id)
+        perform_job
       end
 
       it "should send message to correct households and users" do
         expect_workers
         expect_households
-        perform_job(message.id)
+        perform_job
       end
     end
   end

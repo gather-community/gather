@@ -7,6 +7,7 @@ describe Groups::Mailman::UserSyncJob do
 
   let(:user) { create(:user) }
   let(:api) { double }
+  subject(:job) { described_class.new(user.id) }
 
   before do
     allow(Groups::Mailman::Api).to receive(:instance).and_return(api)
@@ -34,7 +35,7 @@ describe Groups::Mailman::UserSyncJob do
           expect(api).to receive(:update_user,
                                  &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
                                                    last_name: user.last_name, email: user.email))
-          expect { perform_job(user.id) }.to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob)
+          expect { perform_job }.to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob)
             .with(mailman_user)
         end
       end
@@ -43,7 +44,7 @@ describe Groups::Mailman::UserSyncJob do
         let(:remote_user_exists) { false }
 
         it "deletes mailman_user record and re-enqueues job" do
-          expect { perform_job(user.id) }.to have_enqueued_job(described_class).with(user.id)
+          expect { perform_job }.to have_enqueued_job(described_class).with(user.id)
           expect { mailman_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
@@ -54,7 +55,7 @@ describe Groups::Mailman::UserSyncJob do
 
       it "deletes remote user" do
         expect(api).to receive(:delete_user, &with_obj_attribs(remote_id: "abcd"))
-        expect { perform_job(user.id) }.not_to have_enqueued_job
+        expect { perform_job }.not_to have_enqueued_job
       end
     end
   end
@@ -79,7 +80,7 @@ describe Groups::Mailman::UserSyncJob do
           let!(:duplicate_mm_user) { create(:group_mailman_user, remote_id: "abcd") }
 
           it "raises error" do
-            expect { perform_job(user.id) }.to raise_error(Groups::Mailman::SyncJob::SyncError)
+            expect { perform_job }.to raise_error(Groups::Mailman::SyncJob::SyncError)
           end
         end
 
@@ -88,7 +89,7 @@ describe Groups::Mailman::UserSyncJob do
             expect(api).to receive(:update_user,
                                    &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
                                                      last_name: user.last_name, email: user.email))
-            expect { perform_job(user.id) }
+            expect { perform_job }
               .to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob).with(mailman_user)
             expect(mailman_user).to be_persisted
             expect(mailman_user.remote_id).to eq("abcd")
@@ -106,7 +107,7 @@ describe Groups::Mailman::UserSyncJob do
                                  &with_obj_attribs(first_name: user.first_name, last_name: user.last_name,
                                                    email: user.email))
             .and_return("abcd")
-          expect { perform_job(user.id) }
+          expect { perform_job }
             .to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob).with(mailman_user)
           mm_user = Groups::Mailman::User.find_by(user: user)
           expect(mm_user.remote_id).to eq("abcd")
@@ -124,7 +125,7 @@ describe Groups::Mailman::UserSyncJob do
 
         it "deletes remote user" do
           expect(api).to receive(:delete_user, &with_obj_attribs(remote_id: "abcd"))
-          expect { perform_job(user.id) }.not_to have_enqueued_job
+          expect { perform_job }.not_to have_enqueued_job
         end
       end
 
@@ -135,7 +136,7 @@ describe Groups::Mailman::UserSyncJob do
 
         it "does nothing" do
           expect(api).not_to receive(:delete_user)
-          expect { perform_job(user.id) }.not_to have_enqueued_job
+          expect { perform_job }.not_to have_enqueued_job
         end
       end
     end

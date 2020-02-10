@@ -3,6 +3,7 @@
 shared_context "jobs" do
   # Mailer double to be returned when stubbing mailer.
   let(:mlrdbl) { double(deliver_now: nil) }
+  subject(:job) { described_class.new }
 
   # Runs job with nil tenant to ensure that job sets tenant itself.
   def perform_job(*args)
@@ -10,7 +11,7 @@ shared_context "jobs" do
       # Simulate ActiveRecord objects being reloaded in the job process.
       # This should almost always cause cluster errors unless the object is a Cluster.
       args = args.map { |a| a.is_a?(ApplicationRecord) ? a.class.find(a.id) : a }
-      described_class.perform_now(*args)
+      job.perform_now(*args)
     end
   end
 end

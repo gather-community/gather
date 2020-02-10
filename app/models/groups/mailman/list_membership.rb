@@ -10,7 +10,15 @@ module Groups
       attr_accessor :mailman_user, :list_id, :role
 
       def ==(other)
-        list_id == other.list_id
+        mailman_user == other.mailman_user && list_id == other.list_id
+      end
+
+      def eql?(other)
+        self == other
+      end
+
+      def hash
+        [mailman_user, list_id].hash
       end
     end
   end

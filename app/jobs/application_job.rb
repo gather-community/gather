@@ -17,13 +17,15 @@ class ApplicationJob < ActiveJob::Base
   # the class is cluster-based and responds to `community`.
   def with_object_in_community_context(class_or_class_name, id)
     klass = class_or_class_name.is_a?(String) ? class_or_class_name.constantize : class_or_class_name
-
-    # Load the object and call community while still inside the
-    # without_tenant block to preload the association.
-    # Else we get a no tenant error when calling community later.
-    object = ActsAsTenant.without_tenant { klass.find(id).tap(&:community) }
-
+    object = load_object_without_tenant(klass, id)
     with_community(object.community) { yield(object) }
+  end
+
+  # Load the object and call community while still inside the
+  # without_tenant block to preload the association.
+  # Else we get a no tenant error when calling community later.
+  def load_object_without_tenant(klass, id)
+    ActsAsTenant.without_tenant { klass.find(id).tap(&:community) }
   end
 
   def each_community

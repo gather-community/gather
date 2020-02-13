@@ -33,12 +33,12 @@ email:
 # replacing the to and from email addresses with valid ones.
 #
 # smtp:
-#   address: "example.com"
+#   address: example.com
 #   port: 587
-#   domain: "example.org"
+#   domain: example.org
 #   authentication: :plain
-#   user_name: "user"
-#   password: "xxx"
+#   user_name: user
+#   password: xxxx
 
 # These options are passed directly to the Elasticsearch::Client initializer.
 # See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
@@ -46,3 +46,10 @@ email:
 elasticsearch:
   host: localhost
   port: 9200
+
+mailman:
+  api:
+    # No trailing slash, no API version. API version gets appended to this.
+    base_url: https://mail.example.coop:8001
+    username: restadmin
+    password: xxxx

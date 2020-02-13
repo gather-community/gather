@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://mail.gather.coop:8443/3.1/users/tom@pork.org
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Thu, 13 Feb 2020 02:52:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '424'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2019-04-26T20:51:55.396139", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/4b74b333dcaa4789044a7aee79563b24",
+        "user_id": "4b74b333dcaa4789044a7aee79563b24", "password": "$6$rounds=656000$hvjXePjxHmh81PRj$VM/dEpv4nieuwdUvV/agadGhtF23W8aBCRWoB9pzL65623hHI7sXPjcR9hOibj8AY/9N52g.r.wF93MkWWO5r/",
+        "display_name": "Tom Smyth", "http_etag": "\"060dec9c8c5fbae4d4dbe01ff6672bff74870f92\""}'
+    http_version:
+  recorded_at: Thu, 13 Feb 2020 02:53:19 GMT
+recorded_with: VCR 4.0.0

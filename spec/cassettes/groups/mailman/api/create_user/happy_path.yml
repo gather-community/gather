@@ -1,0 +1,237 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://mail.gather.coop:8443/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:48:38 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '0'
+      Location:
+      - https://mail.gather.coop:8443/3.1/users/be045234ee894ae4a825642e08885db2
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
+- request:
+    method: patch
+    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Lo"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:48:38 GMT
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
+- request:
+    method: post
+    uri: https://mail.gather.coop:8443/3.1/addresses/jen@example.com/verify
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:48:39 GMT
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
+- request:
+    method: post
+    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:48:39 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '0'
+      Location:
+      - https://mail.gather.coop:8443/3.1/addresses/jen@example.com
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
+- request:
+    method: get
+    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:48:39 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '421'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-02-14T04:48:38.139965", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
+        "user_id": "be045234ee894ae4a825642e08885db2", "password": "$6$rounds=656000$rr41baXwWdYJl1Rn$0CwvldrWEglvISr3XYhPfgkpIRXlxg6PG7vlH7uoAPvDomqLf6tKso.KOmSBjjc9qzzihNamCYU.u01wZB0qh0",
+        "display_name": "Jen Lo", "http_etag": "\"c20170652c68262cb1543846bd84b562667135db\""}'
+    http_version: 
+  recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
+recorded_with: VCR 4.0.0

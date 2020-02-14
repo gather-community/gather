@@ -8,7 +8,7 @@ module Groups
 
       # Assumes mm_user.remote_id is set.
       def user_exists?(mm_user)
-        call_endpoint("users/#{mm_user.remote_id}")
+        request("users/#{mm_user.remote_id}")
         true
       rescue RequestError => e
         e.http_response.is_a?(Net::HTTPNotFound) ? false : (raise e)
@@ -16,26 +16,51 @@ module Groups
 
       # Assumes mm_user.email is set.
       def user_id_for_email(mm_user)
-        res = call_endpoint("users/#{mm_user.email}")
-        JSON.parse(res.body)["user_id"]
+        request("users/#{mm_user.email}")["user_id"]
       rescue RequestError => e
         e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
+      def create_user(mm_user)
+        # We set the display name in a separate patch request so it doesn't get copied redundantly to the
+        # address record.
+        request("users", :post, email: mm_user.email)
+        request("users/#{mm_user.email}", :patch, display_name: mm_user.display_name)
+        verify_address_and_set_verified(mm_user)
+        user_id_for_email(mm_user)
+      end
+
+      def update_user(mm_user)
+        remote_email = request("users/#{mm_user.remote_id}/preferred_address")["email"]
+        request("users/#{mm_user.remote_id}", :patch, display_name: mm_user.display_name)
+
+        return if remote_email == mm_user.email
+
+        request("users/#{mm_user.remote_id}/addresses", :post, email: mm_user.email)
+        verify_address_and_set_verified(mm_user)
+        request("addresses/#{remote_email}", :delete)
+      end
+
       private
 
-      def call_endpoint(endpoint, method: "GET", data: nil)
+      def verify_address_and_set_verified(mm_user)
+        request("addresses/#{mm_user.email}/verify", :post)
+        request("users/#{mm_user.email}/preferred_address", :post, email: mm_user.email)
+      end
+
+      def request(endpoint, method = :get, **data)
         url = URI.parse("#{base_url}/#{endpoint}")
         raise "HTTPS only" unless url.scheme == "https"
 
-        req = "Net::HTTP::#{method.capitalize}".constantize.new(url)
+        req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
         req.body = data.to_json unless data.nil?
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
           http.request(req)
         end
-        res.is_a?(Net::HTTPSuccess) ? res : (raise RequestError.new(http_response: res))
+        raise RequestError.new(http_response: res) unless res.is_a?(Net::HTTPSuccess)
+        res.body.presence && JSON.parse(res.body)
       end
 
       def base_url

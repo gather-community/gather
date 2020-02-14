@@ -10,6 +10,10 @@ module Groups
 
       belongs_to :user, class_name: "::User", inverse_of: :group_mailman_user
 
+      def display_name
+        "#{first_name} #{last_name}"
+      end
+
       def remote_id?
         remote_id.present?
       end

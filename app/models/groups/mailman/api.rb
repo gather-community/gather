@@ -41,6 +41,12 @@ module Groups
         request("addresses/#{remote_email}", :delete)
       end
 
+      def delete_user(mm_user)
+        request("users/#{mm_user.remote_id}", :delete)
+      rescue RequestError => e
+        e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+      end
+
       private
 
       def verify_address_and_set_verified(mm_user)

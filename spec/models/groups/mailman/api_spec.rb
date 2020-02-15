@@ -112,6 +112,25 @@ describe Groups::Mailman::Api do
   end
 
   describe "#delete_user" do
+    context "with matching user" do
+      let(:mm_user) { double(remote_id: "15daec2599b2478d8491b95a2ee7eecc") }
+
+      it "deletes user" do
+        VCR.use_cassette("groups/mailman/api/delete_user/matching_user") do
+          api.delete_user(mm_user)
+        end
+      end
+    end
+
+    context "without matching user" do
+      let(:mm_user) { double(remote_id: "000aec2599b2478d8491b95a2ee7eecc") }
+
+      it "does not raise error" do
+        VCR.use_cassette("groups/mailman/api/delete_user/no_matching_user") do
+          api.delete_user(mm_user)
+        end
+      end
+    end
   end
 
   describe "#create_membership" do

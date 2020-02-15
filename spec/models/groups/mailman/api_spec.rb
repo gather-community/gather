@@ -213,6 +213,19 @@ describe Groups::Mailman::Api do
   end
 
   describe "#delete_membership" do
+    let(:mm_user) { double(email: "jen@example.com") }
+    let(:list_mship) do
+      Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
+    end
+
+    context "with matching membership" do
+      it "deletes it" do
+        VCR.use_cassette("groups/mailman/api/delete_membership/happy_path") do
+          api.delete_membership(list_mship)
+          expect { api.populate_membership(list_mship) }.to raise_error(Groups::Mailman::Api::RequestError)
+        end
+      end
+    end
   end
 
   describe "#memberships_for" do

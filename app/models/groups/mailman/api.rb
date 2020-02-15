@@ -63,12 +63,15 @@ module Groups
 
       def update_membership(list_mship)
         new_role = list_mship.role
-        populate_membership(list_mship) # Get the ID.
-        request("members/#{list_mship.id}", :delete)
+        delete_membership(list_mship)
         request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
                                   role: new_role, pre_confirmed: "true", pre_approved: "true")
-                                  # Add this once it's released:
-                                  # send_welcome_message: false
+                                  # Add this once it's released: send_welcome_message: false
+      end
+
+      def delete_membership(list_mship)
+        populate_membership(list_mship) # Get the ID.
+        request("members/#{list_mship.id}", :delete)
       end
 
       private

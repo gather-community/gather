@@ -24,9 +24,9 @@ describe Groups::Mailman::UserMembershipSyncJob do
     end
     let(:remote_mships) do
       [
-        {list_id: "list2.blah", role: "member"},
-        {list_id: "list3.blah", role: "owner"},
-        {list_id: "list4.blah", role: "member"}
+        Groups::Mailman::ListMembership.new(mailman_user: mm_user, list_id: "list2.blah", role: "member"),
+        Groups::Mailman::ListMembership.new(mailman_user: mm_user, list_id: "list3.blah", role: "owner"),
+        Groups::Mailman::ListMembership.new(mailman_user: mm_user, list_id: "list4.blah", role: "member")
       ]
     end
 

@@ -25,9 +25,7 @@ module Groups
       end
 
       def remote_memberships
-        api.memberships_for(user_id: mailman_user.remote_id).map do |m|
-          ListMembership.new(mailman_user: mailman_user, list_id: m[:list_id], role: m[:role])
-        end
+        api.user_memberships(mailman_user)
       end
     end
   end

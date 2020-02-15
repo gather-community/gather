@@ -47,6 +47,30 @@ module Groups
         e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
+      # Loads membership ID and role based on given list_id and remote member id
+      def populate_membership(list_mship)
+        found = request("members/find", :post, subscriber: list_mship.email,
+                                               list_id: list_mship.list_id)
+        raise RequestError, "Membership not found" if found["total_size"].zero?
+        list_mship.id = found["entries"][0]["member_id"]
+        list_mship.role = found["entries"][0]["role"]
+      end
+
+      def create_membership(list_mship)
+        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
+                                  role: list_mship.role, pre_confirmed: "true", pre_approved: "true")
+      end
+
+      def update_membership(list_mship)
+        new_role = list_mship.role
+        populate_membership(list_mship) # Get the ID.
+        request("members/#{list_mship.id}", :delete)
+        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
+                                  role: new_role, pre_confirmed: "true", pre_approved: "true")
+                                  # Add this once it's released:
+                                  # send_welcome_message: false
+      end
+
       private
 
       def verify_address_and_set_verified(mm_user)
@@ -65,7 +89,7 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
           http.request(req)
         end
-        raise RequestError.new(http_response: res) unless res.is_a?(Net::HTTPSuccess)
+        raise RequestError.new("Request error", http_response: res) unless res.is_a?(Net::HTTPSuccess)
         res.body.presence && JSON.parse(res.body)
       end
 
@@ -81,8 +105,9 @@ module Groups
       class RequestError < StandardError
         attr_accessor :http_response
 
-        def initialize(http_response:)
+        def initialize(message, http_response: nil)
           self.http_response = http_response
+          super(message)
         end
 
         def to_s

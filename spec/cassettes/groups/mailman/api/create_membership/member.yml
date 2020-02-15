@@ -1,0 +1,105 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://mail.gather.coop:8443/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"ping.tscoho.org","subscriber":"be045234ee894ae4a825642e08885db2","role":"member","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Sat, 15 Feb 2020 15:54:37 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '0'
+      Location:
+      - https://mail.gather.coop:8443/3.1/members/3b9965bde17847e38dbe941d070f5c04
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 15 Feb 2020 15:55:51 GMT
+- request:
+    method: post
+    uri: https://mail.gather.coop:8443/3.1/members/find
+    body:
+      encoding: UTF-8
+      string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - mail.gather.coop:8443
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Sat, 15 Feb 2020 15:54:37 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '570'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
+        "member_id": "3b9965bde17847e38dbe941d070f5c04", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/3b9965bde17847e38dbe941d070f5c04", "display_name":
+        "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
+        "http_etag": "\"9e4848f183cf8b1d7eee2de2a5321c31f90184c7\""}], "http_etag":
+        "\"9e2ea484cc50c62fcf0e206da2ec73ec44c191e2\""}'
+    http_version: 
+  recorded_at: Sat, 15 Feb 2020 15:55:51 GMT
+recorded_with: VCR 4.0.0

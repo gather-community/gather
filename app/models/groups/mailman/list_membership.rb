@@ -7,7 +7,12 @@ module Groups
     class ListMembership
       include ActiveModel::Model
 
-      attr_accessor :mailman_user, :list_id, :role
+      attr_accessor :id, :mailman_user, :list_id, :role
+      delegate :email, to: :mailman_user
+
+      def user_remote_id
+        mailman_user.remote_id
+      end
 
       def ==(other)
         mailman_user == other.mailman_user && list_id == other.list_id

@@ -133,10 +133,83 @@ describe Groups::Mailman::Api do
     end
   end
 
+  describe "#populate_membership" do
+    let(:list_mship) do
+      Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
+    end
+
+    context "with matching membership" do
+      let(:mm_user) { double(email: "jen@example.com") }
+
+      it "gets data" do
+        VCR.use_cassette("groups/mailman/api/populate_membership/matching") do
+          api.populate_membership(list_mship)
+          expect(list_mship.id).to eq("164e3ba080a148768c24961c638d6915")
+          expect(list_mship.role).to eq("owner")
+        end
+      end
+    end
+
+    context "with no matching membership" do
+      let(:mm_user) { double(email: "jen@example.org") }
+
+      it "raises error" do
+        VCR.use_cassette("groups/mailman/api/populate_membership/no_matching") do
+          expect { api.populate_membership(list_mship) }.to raise_error(Groups::Mailman::Api::RequestError)
+        end
+      end
+    end
+  end
+
   describe "#create_membership" do
+    let(:mm_user) { double(remote_id: "be045234ee894ae4a825642e08885db2", email: "jen@example.com") }
+    let(:list_mship) do
+      Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user, role: role)
+    end
+
+    context "with member role" do
+      let(:role) { "member" }
+
+      it "creates membership" do
+        VCR.use_cassette("groups/mailman/api/create_membership/member") do
+          api.create_membership(list_mship)
+          api.populate_membership(list_mship)
+          expect(list_mship.id).to eq("3b9965bde17847e38dbe941d070f5c04")
+          expect(list_mship.role).to eq("member")
+        end
+      end
+    end
+
+    context "with owner role" do
+      let(:role) { "owner" }
+
+      it "creates membership" do
+        VCR.use_cassette("groups/mailman/api/create_membership/owner") do
+          api.create_membership(list_mship)
+          api.populate_membership(list_mship)
+          expect(list_mship.id).to eq("1b6670a93cc34204a993aa3a54ad870c")
+          expect(list_mship.role).to eq("owner")
+        end
+      end
+    end
   end
 
   describe "#update_membership" do
+    let(:mm_user) { double(remote_id: "be045234ee894ae4a825642e08885db2", email: "jen@example.com") }
+    let(:list_mship) do
+      Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
+    end
+
+    it "changes role" do
+      VCR.use_cassette("groups/mailman/api/update_membership/happy_path") do
+        api.populate_membership(list_mship)
+        expect(list_mship.role).to eq("owner")
+        list_mship.role = "member"
+        api.update_membership(list_mship)
+        api.populate_membership(list_mship)
+        expect(list_mship.role).to eq("member")
+      end
+    end
   end
 
   describe "#delete_membership" do

@@ -96,11 +96,11 @@ module Groups
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
-        req.body = data.to_json unless data.nil?
+        req.body = data.to_json if data.present?
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
           http.request(req)
         end
-        raise RequestError.new("Request error", http_response: res) unless res.is_a?(Net::HTTPSuccess)
+        raise RequestError, res unless res.is_a?(Net::HTTPSuccess)
         res.body.presence && JSON.parse(res.body)
       end
 
@@ -116,13 +116,13 @@ module Groups
       class RequestError < StandardError
         attr_accessor :http_response
 
-        def initialize(message, http_response: nil)
-          self.http_response = http_response
-          super(message)
-        end
-
-        def to_s
-          http_response.inspect
+        def initialize(message)
+          if message.is_a?(Net::HTTPResponse)
+            self.http_response = message
+            super("#{message.class.name}: #{message.body}")
+          else
+            super(message)
+          end
         end
       end
     end

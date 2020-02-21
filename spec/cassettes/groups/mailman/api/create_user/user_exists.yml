@@ -5,7 +5,7 @@ http_interactions:
     uri: https://mail.gather.coop:8443/3.1/users
     body:
       encoding: UTF-8
-      string: '{"display_name":"Jen Lo","email":"jen@example.com"}'
+      string: '{"email":"jen@example.com"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Fri, 14 Feb 2020 03:38:15 GMT
+      - Sat, 15 Feb 2020 21:05:57 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
@@ -38,5 +38,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"title": "400 Bad Request", "description": "User already exists: jen@example.com"}'
     http_version: 
-  recorded_at: Fri, 14 Feb 2020 03:39:26 GMT
+  recorded_at: Sat, 15 Feb 2020 21:07:13 GMT
 recorded_with: VCR 4.0.0

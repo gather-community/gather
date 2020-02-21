@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Sat, 15 Feb 2020 16:21:35 GMT
+      - Sat, 15 Feb 2020 21:09:00 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -46,13 +46,13 @@ http_interactions:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
         "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "84cba40adbef4b8798024640b798f967", "role": "owner", "self_link":
-        "http://localhost:8001/3.1/members/84cba40adbef4b8798024640b798f967", "moderation_action":
+        "member_id": "b36b417e123649f2a60f76478009870a", "role": "owner", "self_link":
+        "http://localhost:8001/3.1/members/b36b417e123649f2a60f76478009870a", "moderation_action":
         "accept", "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
-        "http_etag": "\"fb9078943b9f50d89e08d8ab05c184796cfc0d09\""}], "http_etag":
-        "\"70c7f0c6ce2e5afd31634614cb60d1f3686074a2\""}'
+        "http_etag": "\"b2c19413fd88eef308019256042e30324a718967\""}], "http_etag":
+        "\"8c3faddf9beb8d09cbafb5d324264d7961d10d23\""}'
     http_version: 
-  recorded_at: Sat, 15 Feb 2020 16:22:49 GMT
+  recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: post
     uri: https://mail.gather.coop:8443/3.1/members/find
@@ -80,7 +80,7 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Sat, 15 Feb 2020 16:21:35 GMT
+      - Sat, 15 Feb 2020 21:09:00 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -99,19 +99,19 @@ http_interactions:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
         "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "84cba40adbef4b8798024640b798f967", "role": "owner", "self_link":
-        "http://localhost:8001/3.1/members/84cba40adbef4b8798024640b798f967", "moderation_action":
+        "member_id": "b36b417e123649f2a60f76478009870a", "role": "owner", "self_link":
+        "http://localhost:8001/3.1/members/b36b417e123649f2a60f76478009870a", "moderation_action":
         "accept", "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
-        "http_etag": "\"fb9078943b9f50d89e08d8ab05c184796cfc0d09\""}], "http_etag":
-        "\"70c7f0c6ce2e5afd31634614cb60d1f3686074a2\""}'
+        "http_etag": "\"b2c19413fd88eef308019256042e30324a718967\""}], "http_etag":
+        "\"8c3faddf9beb8d09cbafb5d324264d7961d10d23\""}'
     http_version: 
-  recorded_at: Sat, 15 Feb 2020 16:22:49 GMT
+  recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: delete
-    uri: https://mail.gather.coop:8443/3.1/members/84cba40adbef4b8798024640b798f967
+    uri: https://mail.gather.coop:8443/3.1/members/b36b417e123649f2a60f76478009870a
     body:
-      encoding: UTF-8
-      string: "{}"
+      encoding: US-ASCII
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -133,7 +133,7 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Sat, 15 Feb 2020 16:21:35 GMT
+      - Sat, 15 Feb 2020 21:09:00 GMT
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -148,13 +148,13 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 15 Feb 2020 16:22:50 GMT
+  recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: post
     uri: https://mail.gather.coop:8443/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"be045234ee894ae4a825642e08885db2","role":"member","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"be045234ee894ae4a825642e08885db2","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -176,13 +176,13 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Sat, 15 Feb 2020 16:21:35 GMT
+      - Sat, 15 Feb 2020 21:09:01 GMT
       Content-Type:
       - application/json
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/members/cc06af5b452641d39ee78e1a3ed51833
+      - https://mail.gather.coop:8443/3.1/members/4eb53e10d59b432aa0817046e82b8201
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -197,7 +197,7 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 15 Feb 2020 16:22:50 GMT
+  recorded_at: Sat, 15 Feb 2020 21:10:17 GMT
 - request:
     method: post
     uri: https://mail.gather.coop:8443/3.1/members/find
@@ -225,7 +225,7 @@ http_interactions:
       Server:
       - nginx/1.14.0 (Ubuntu)
       Date:
-      - Sat, 15 Feb 2020 16:21:36 GMT
+      - Sat, 15 Feb 2020 21:09:01 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -244,11 +244,11 @@ http_interactions:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
         "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "cc06af5b452641d39ee78e1a3ed51833", "role": "member", "self_link":
-        "http://localhost:8001/3.1/members/cc06af5b452641d39ee78e1a3ed51833", "display_name":
+        "member_id": "4eb53e10d59b432aa0817046e82b8201", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/4eb53e10d59b432aa0817046e82b8201", "display_name":
         "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
-        "http_etag": "\"f95ca4f386ea3a9c30a289c533d67c55e03281b8\""}], "http_etag":
-        "\"132e3c029f9b6d44e033b56a0a04c6587cd33ae5\""}'
+        "http_etag": "\"a666193a5e8837e6ad4fbf96f08aff636b101283\""}], "http_etag":
+        "\"427a58f24e01062ca51909f50d86f64d0e4c3217\""}'
     http_version: 
-  recorded_at: Sat, 15 Feb 2020 16:22:50 GMT
+  recorded_at: Sat, 15 Feb 2020 21:10:17 GMT
 recorded_with: VCR 4.0.0

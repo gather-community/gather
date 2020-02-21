@@ -15,7 +15,9 @@ describe Groups::Mailman::Api do
 
       it "raises error" do
         VCR.use_cassette("groups/mailman/auth/invalid") do
-          expect { api.user_exists?(mm_user) }.to raise_error(Groups::Mailman::Api::RequestError)
+          expect { api.user_exists?(mm_user) }
+            .to raise_error(Groups::Mailman::Api::RequestError, "Net::HTTPUnauthorized: "\
+              "{\"title\": \"401 Unauthorized\", \"description\": \"REST API authorization failed\"}")
         end
       end
     end
@@ -79,7 +81,9 @@ describe Groups::Mailman::Api do
     context "when email already exists in mailman" do
       it "raises error" do
         VCR.use_cassette("groups/mailman/api/create_user/user_exists") do
-          expect { api.create_user(mm_user) }.to raise_error(Groups::Mailman::Api::RequestError)
+          expect { api.create_user(mm_user) }
+            .to raise_error(Groups::Mailman::Api::RequestError, "Net::HTTPBadRequest: "\
+              "{\"title\": \"400 Bad Request\", \"description\": \"User already exists: jen@example.com\"}")
         end
       end
     end
@@ -155,7 +159,8 @@ describe Groups::Mailman::Api do
 
       it "raises error" do
         VCR.use_cassette("groups/mailman/api/populate_membership/no_matching") do
-          expect { api.populate_membership(list_mship) }.to raise_error(Groups::Mailman::Api::RequestError)
+          expect { api.populate_membership(list_mship) }
+            .to raise_error(Groups::Mailman::Api::RequestError, "Membership not found")
         end
       end
     end
@@ -163,12 +168,12 @@ describe Groups::Mailman::Api do
 
   describe "#create_membership" do
     let(:mm_user) { double(remote_id: "be045234ee894ae4a825642e08885db2", email: "jen@example.com") }
-    let(:list_mship) do
-      Groups::Mailman::ListMembership.new(list_id: "ping.mail.gather.coop", mailman_user: mm_user, role: role)
-    end
 
     context "with member role" do
-      let(:role) { "member" }
+      let(:list_mship) do
+        Groups::Mailman::ListMembership.new(list_id: "ping.mail.gather.coop",
+                                            mailman_user: mm_user, role: "member")
+      end
 
       it "creates membership" do
         VCR.use_cassette("groups/mailman/api/create_membership/member") do
@@ -181,7 +186,10 @@ describe Groups::Mailman::Api do
     end
 
     context "with owner role" do
-      let(:role) { "owner" }
+      let(:list_mship) do
+        Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
+                                            mailman_user: mm_user, role: "owner")
+      end
 
       it "creates membership" do
         VCR.use_cassette("groups/mailman/api/create_membership/owner") do
@@ -222,7 +230,8 @@ describe Groups::Mailman::Api do
       it "deletes it" do
         VCR.use_cassette("groups/mailman/api/delete_membership/happy_path") do
           api.delete_membership(list_mship)
-          expect { api.populate_membership(list_mship) }.to raise_error(Groups::Mailman::Api::RequestError)
+          expect { api.populate_membership(list_mship) }
+            .to raise_error(Groups::Mailman::Api::RequestError, "Membership not found")
         end
       end
     end

@@ -5,7 +5,7 @@ http_interactions:
     uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
     body:
       encoding: UTF-8
-      string: "{}"
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3

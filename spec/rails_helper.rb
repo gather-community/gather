@@ -99,6 +99,7 @@ RSpec.configure do |config|
     c.cassette_library_dir = "spec/cassettes"
     c.hook_into(:webmock)
     c.ignore_localhost = true
+    c.default_cassette_options = {match_requests_on: %i[method uri host path body]}
 
     # Make VCR ignore download of chromedriver by webdrivers gem.
     c.ignore_hosts("chromedriver.storage.googleapis.com")

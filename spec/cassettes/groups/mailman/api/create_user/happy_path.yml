@@ -47,7 +47,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: patch
@@ -90,14 +90,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
     uri: https://mail.gather.coop:8443/3.1/addresses/jen@example.com/verify
     body:
       encoding: UTF-8
-      string: "{}"
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -133,7 +133,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
@@ -182,14 +182,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: get
     uri: https://mail.gather.coop:8443/3.1/users/jen@example.com
     body:
       encoding: UTF-8
-      string: "{}"
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -232,6 +232,6 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
         "user_id": "be045234ee894ae4a825642e08885db2", "password": "$6$rounds=656000$rr41baXwWdYJl1Rn$0CwvldrWEglvISr3XYhPfgkpIRXlxg6PG7vlH7uoAPvDomqLf6tKso.KOmSBjjc9qzzihNamCYU.u01wZB0qh0",
         "display_name": "Jen Lo", "http_etag": "\"c20170652c68262cb1543846bd84b562667135db\""}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 recorded_with: VCR 4.0.0

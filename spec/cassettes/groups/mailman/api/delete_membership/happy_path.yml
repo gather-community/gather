@@ -58,7 +58,7 @@ http_interactions:
     uri: https://mail.gather.coop:8443/3.1/members/cc06af5b452641d39ee78e1a3ed51833
     body:
       encoding: UTF-8
-      string: "{}"
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3

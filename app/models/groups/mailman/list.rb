@@ -6,6 +6,8 @@ module Groups
     class List < ApplicationRecord
       acts_as_tenant :cluster
 
+      attr_accessor :config
+
       belongs_to :domain
       belongs_to :group, inverse_of: :mailman_list
 
@@ -14,6 +16,12 @@ module Groups
       validate :check_outside_addresses
 
       before_save :clean_outside_addresses
+
+      delegate :name, to: :domain, prefix: true
+
+      def fqdn_listname
+        "#{name}@#{domain_name}"
+      end
 
       private
 

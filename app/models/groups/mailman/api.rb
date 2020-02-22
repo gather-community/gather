@@ -82,6 +82,30 @@ module Groups
         end
       end
 
+      def create_list(list)
+        response = request("lists", :post, fqdn_listname: list.fqdn_listname)
+        response.header("Location").split("/")[-1]
+      rescue RequestError => e
+        e.http_response.body =~ /Mailing list exists/ ? nil : (raise e)
+      end
+
+      def configure_list(list)
+        raise ArgumentError, "No config given" if list.config.blank?
+        config = list.config.dup
+        config.each { |k, v| config[k] = v.to_s if [true, false].include?(v) }
+        request("lists/#{list.fqdn_listname}/config", :patch, config)
+      end
+
+      def list_config(list)
+        request("lists/#{list.fqdn_listname}/config")
+      end
+
+      def delete_list(list)
+        request("lists/#{list.remote_id}", :delete)
+      rescue RequestError => e
+        e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+      end
+
       private
 
       def verify_address_and_set_verified(mm_user)
@@ -101,7 +125,7 @@ module Groups
           http.request(req)
         end
         raise RequestError, res unless res.is_a?(Net::HTTPSuccess)
-        res.body.presence && JSON.parse(res.body)
+        ApiJsonResponse.new(res)
       end
 
       def base_url

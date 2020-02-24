@@ -225,12 +225,16 @@ describe Groups::Group do
       ])
     end
 
-    it "is correct" do
+    it "is correct with and without user_eager_load" do
       groups = described_class.by_name.with_member_counts.to_a
       expect(groups[0].member_count).to eq(3)
       expect(groups[0].members).to contain_exactly(users[0], users[1], users[2])
+      expect(groups[0].members(user_eager_load: :group_mailman_user))
+        .to contain_exactly(users[0], users[1], users[2])
       expect(groups[1].member_count).to eq(6)
       expect(groups[1].members).to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
+      expect(groups[1].members(user_eager_load: :group_mailman_user))
+        .to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
     end
   end
 

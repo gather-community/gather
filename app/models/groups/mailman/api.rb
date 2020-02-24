@@ -49,8 +49,7 @@ module Groups
 
       # Loads membership ID and role based on given list_id and remote member id
       def populate_membership(list_mship)
-        found = request("members/find", :post, subscriber: list_mship.email,
-                                               list_id: list_mship.list_id)
+        found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
         raise RequestError, "Membership not found" if found["total_size"].zero?
         list_mship.id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]

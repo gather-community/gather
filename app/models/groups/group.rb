@@ -25,6 +25,7 @@ module Groups
       where("EXISTS(SELECT id FROM group_affiliations
         WHERE group_id = groups.id AND community_id = ?)", c.id)
     }
+    scope :in_communities, ->(cmtys) { cmtys.inject(all) { |rel, c| rel.in_community(c) } }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :visible, -> { where.not(availability: "hidden") }
     scope :visible_or_managed_by, lambda { |user|
@@ -110,13 +111,19 @@ module Groups
     end
 
     # members = managers + (everybody ? all active adults : joiners) - opt outs
-    def members
+    def members(user_eager_load: nil)
+      kinds = everybody? ? %i[opt_out] : %i[joiner manager]
+      matching_mships = memberships.where(kind: kinds).including_users_and_communities
+      matching_mships = matching_mships.includes(user: user_eager_load) unless user_eager_load.nil?
+      matching_users = matching_mships.map(&:user)
       if everybody?
         # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
         # They should be consistent.
-        ::User.active.adults.in_community(communities).including_communities.by_name - opt_outs
+        all_users = ::User.active.adults.in_community(communities).including_communities.by_name
+        all_users = all_users.includes(user_eager_load) unless user_eager_load.nil?
+        all_users - matching_users
       else
-        managers + joiners
+        matching_users
       end
     end
 

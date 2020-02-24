@@ -6,12 +6,18 @@ module Groups
     class User < ApplicationRecord
       acts_as_tenant :cluster
 
-      delegate :first_name, :last_name, :email, :community, to: :user
+      attr_writer :display_name, :email
+
+      delegate :community, to: :user
 
       belongs_to :user, class_name: "::User", inverse_of: :group_mailman_user
 
       def display_name
-        "#{first_name} #{last_name}"
+        user.present? ? "#{user.first_name} #{user.last_name}" : @display_name
+      end
+
+      def email
+        user.present? ? user.email : @email
       end
 
       def remote_id?

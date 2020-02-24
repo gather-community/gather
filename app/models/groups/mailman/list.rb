@@ -23,6 +23,10 @@ module Groups
         "#{name}@#{domain_name}"
       end
 
+      def memberships
+        outside_memberships + owner_moderator_memberships + normal_memberships
+      end
+
       private
 
       def check_outside_addresses
@@ -44,6 +48,37 @@ module Groups
           next if self[attrib].blank?
           cleaned = self[attrib].split("\n").map { |l| Mail::Address.new(l).to_s unless l.strip.empty? }
           send("#{attrib}=", cleaned.compact.join("\n"))
+        end
+      end
+
+      def outside_memberships
+        %i[outside_members outside_senders].flat_map do |attrib|
+          role = attrib == :outside_members ? "member" : "nonmember"
+          self[attrib].split("\n").map do |str|
+            address = Mail::Address.new(str)
+            mm_user = Mailman::User.new(display_name: address.display_name, email: address.address)
+            ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
+          end
+        end
+      end
+
+      def owner_moderator_memberships
+        ability_groups = Group.in_communities(group.communities)
+        %i[administer moderate].flat_map do |ability|
+          role = ability == :administer ? "owner" : "moderator"
+          ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
+            ability_group.members.map do |member|
+              mm_user = Mailman::User.find_or_initialize_by(user: member)
+              ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
+            end
+          end
+        end
+      end
+
+      def normal_memberships
+        group.members(user_eager_load: :group_mailman_user).map do |user|
+          mm_user = user.group_mailman_user || user.build_group_mailman_user
+          ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: "member")
         end
       end
     end

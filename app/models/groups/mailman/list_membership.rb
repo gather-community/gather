@@ -8,14 +8,20 @@ module Groups
       include ActiveModel::Model
 
       attr_accessor :id, :mailman_user, :list_id, :role
-      delegate :email, to: :mailman_user
+      attr_writer :email
 
-      def user_remote_id
-        mailman_user.remote_id
+      def email
+        mailman_user.present? ? mailman_user.email : @email
       end
 
+      def user_remote_id
+        mailman_user&.remote_id
+      end
+
+      # We compare based on email and list_id because those are the two key pieces.
+      # user_remote_id may or may not be available depending on what this ListMembership was built from.
       def ==(other)
-        mailman_user == other.mailman_user && list_id == other.list_id
+        email == other.email && list_id == other.list_id
       end
 
       def eql?(other)
@@ -23,7 +29,7 @@ module Groups
       end
 
       def hash
-        [mailman_user, list_id].hash
+        [email, list_id].hash
       end
     end
   end

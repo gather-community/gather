@@ -11,22 +11,12 @@ describe Groups::Mailman::User do
 
   describe "#syncable?" do
     let(:fake) { false }
-    let(:any_memberships) { true }
     let(:user) { create(:user, fake: fake) }
     let!(:mm_user) { create(:group_mailman_user, user: user) }
     subject(:syncable) { mm_user.syncable? }
 
-    before do
-      allow(mm_user).to receive(:list_memberships).and_return(any_memberships ? [1] : [])
-    end
-
-    context "with valid memberships and associated mailman list" do
+    context "with non-fake user" do
       it { is_expected.to be(true) }
-    end
-
-    context "with valid memberships but not for groups with mailman lists" do
-      let(:any_memberships) { false }
-      it { is_expected.to be(false) }
     end
 
     context "when user is fake" do

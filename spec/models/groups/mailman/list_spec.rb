@@ -66,7 +66,7 @@ describe Groups::Mailman::List do
     end
   end
 
-  describe "#memberships" do
+  describe "#list_memberships" do
     let!(:mod1) { create(:user, email: "e@e.com", first_name: "Eu", last_name: "Smith") }
     let!(:mod2) { create(:user, email: "f@f.com", first_name: "Fu", last_name: "Smith") }
     let!(:owner1) { create(:user, email: "g@g.com", first_name: "Gu", last_name: "Smith") }
@@ -95,8 +95,8 @@ describe Groups::Mailman::List do
     end
 
     it "returns correct list" do
-      expect(list.memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])
-      actual = list.memberships.map do |mship|
+      expect(list.list_memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])
+      actual = list.list_memberships.map do |mship|
         mm_user = mship.mailman_user
         [mm_user.persisted?, mm_user.user, mm_user.remote_id,
          mm_user.email, mm_user.display_name, mship.role]

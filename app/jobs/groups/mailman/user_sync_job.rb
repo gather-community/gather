@@ -73,13 +73,13 @@ module Groups
       def update_user_and_memberships(mm_user)
         mm_user.save!
         api.update_user(mm_user)
-        UserMembershipSyncJob.perform_later(mm_user)
+        MembershipSyncJob.perform_later(Mailman::User, mm_user)
       end
 
       def create_user_and_memberships(mm_user)
         new_remote_id = api.create_user(mm_user)
         mm_user.update!(remote_id: new_remote_id)
-        UserMembershipSyncJob.perform_later(mm_user)
+        MembershipSyncJob.perform_later(Mailman::User, mm_user)
       end
     end
   end

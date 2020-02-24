@@ -240,13 +240,13 @@ describe Groups::Mailman::Api do
       end
     end
 
-    describe "#user_memberships" do
+    describe "#memberships" do
       context "with matching" do
         let(:mm_user) { double(email: "jen@example.com") }
 
         it "gets memberships" do
-          VCR.use_cassette("groups/mailman/api/user_memberships/happy_path") do
-            mships = api.user_memberships(mm_user).sort_by(&:list_id)
+          VCR.use_cassette("groups/mailman/api/memberships/happy_path") do
+            mships = api.memberships(mm_user).sort_by(&:list_id)
             expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
             expect(mships.map(&:list_id)).to eq(%w[ping.mail.gather.coop ping.tscoho.org])
             expect(mships.map(&:id))
@@ -260,8 +260,8 @@ describe Groups::Mailman::Api do
         let(:mm_user) { double(email: "jen@example.org") }
 
         it "gets memberships" do
-          VCR.use_cassette("groups/mailman/api/user_memberships/no_matching") do
-            expect(api.user_memberships(mm_user).sort_by(&:list_id)).to eq([])
+          VCR.use_cassette("groups/mailman/api/memberships/no_matching") do
+            expect(api.memberships(mm_user).sort_by(&:list_id)).to eq([])
           end
         end
       end

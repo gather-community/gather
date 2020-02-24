@@ -35,8 +35,8 @@ describe Groups::Mailman::UserSyncJob do
           expect(api).to receive(:update_user,
                                  &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
                                                    last_name: user.last_name, email: user.email))
-          expect { perform_job }.to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob)
-            .with(mailman_user)
+          expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+            .with(Groups::Mailman::User, mailman_user)
         end
       end
 
@@ -90,7 +90,8 @@ describe Groups::Mailman::UserSyncJob do
                                    &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
                                                      last_name: user.last_name, email: user.email))
             expect { perform_job }
-              .to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob).with(mailman_user)
+              .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+              .with(Groups::Mailman::User, mailman_user)
             expect(mailman_user).to be_persisted
             expect(mailman_user.remote_id).to eq("abcd")
           end
@@ -108,7 +109,8 @@ describe Groups::Mailman::UserSyncJob do
                                                    email: user.email))
             .and_return("abcd")
           expect { perform_job }
-            .to have_enqueued_job(Groups::Mailman::UserMembershipSyncJob).with(mailman_user)
+            .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+            .with(Groups::Mailman::User, mailman_user)
           mm_user = Groups::Mailman::User.find_by(user: user)
           expect(mm_user.remote_id).to eq("abcd")
         end

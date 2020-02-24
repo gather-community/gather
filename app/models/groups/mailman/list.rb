@@ -23,7 +23,7 @@ module Groups
         "#{name}@#{domain_name}"
       end
 
-      def memberships
+      def list_memberships
         outside_memberships + owner_moderator_memberships + normal_memberships
       end
 

@@ -56,6 +56,8 @@ module Groups
       end
 
       def create_membership(list_mship)
+        # We subscribe by user_id so that we are subscribing via preferred address.
+        # Then when we change the user's preferred address, we don't have to change all their memberships.
         request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
                                   role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
                                   pre_approved: "true")
@@ -74,7 +76,7 @@ module Groups
         request("members/#{list_mship.id}", :delete)
       end
 
-      def user_memberships(mm_user)
+      def memberships(mm_user)
         (request("members/find", :post, subscriber: mm_user.email)["entries"] || []).map do |entry|
           ListMembership.new(mailman_user: mm_user, list_id: entry["list_id"],
                              role: entry["role"], id: entry["member_id"])

@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-describe Groups::Mailman::UserMembershipSyncJob do
+describe Groups::Mailman::MembershipSyncJob do
   include_context "jobs"
 
   let(:user) { create(:user) }
   let!(:mm_user) { create(:group_mailman_user, remote_id: "xyz") }
   let(:api) { double }
-  subject(:job) { described_class.new(mm_user.id) }
+  subject(:job) { described_class.new(Groups::Mailman::User, mm_user.id) }
 
   before do
     allow(Groups::Mailman::Api).to receive(:instance).and_return(api)
@@ -31,7 +31,7 @@ describe Groups::Mailman::UserMembershipSyncJob do
     end
 
     before do
-      expect(api).to receive(:memberships_for).and_return(remote_mships)
+      expect(api).to receive(:memberships).and_return(remote_mships)
       expect(job).to receive(:load_object_without_tenant).and_return(mm_user)
       expect(mm_user).to receive(:list_memberships).and_return(local_mships)
     end

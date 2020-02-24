@@ -5,7 +5,7 @@ require "rails_helper"
 describe Groups::Mailman::UserSyncJob do
   include_context "jobs"
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, first_name: "John", last_name: "Bing") }
   let(:api) { double }
   subject(:job) { described_class.new(user.id) }
 
@@ -33,10 +33,10 @@ describe Groups::Mailman::UserSyncJob do
       context "with valid mailman ID" do
         it "syncs user info and enqueues membership sync" do
           expect(api).to receive(:update_user,
-                                 &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
-                                                   last_name: user.last_name, email: user.email))
+                                 &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
+                                                   email: user.email))
           expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
-            .with(Groups::Mailman::User, mailman_user)
+            .with("Groups::Mailman::User", mailman_user.id)
         end
       end
 
@@ -87,11 +87,10 @@ describe Groups::Mailman::UserSyncJob do
         context "normal case" do
           it "saves and updates user and enqueues job" do
             expect(api).to receive(:update_user,
-                                   &with_obj_attribs(remote_id: "abcd", first_name: user.first_name,
-                                                     last_name: user.last_name, email: user.email))
+                                   &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
+                                                     email: user.email))
             expect { perform_job }
               .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
-              .with(Groups::Mailman::User, mailman_user)
             expect(mailman_user).to be_persisted
             expect(mailman_user.remote_id).to eq("abcd")
           end
@@ -105,12 +104,10 @@ describe Groups::Mailman::UserSyncJob do
 
         it "creates mm user and enqueues membership sync" do
           expect(api).to receive(:create_user,
-                                 &with_obj_attribs(first_name: user.first_name, last_name: user.last_name,
-                                                   email: user.email))
+                                 &with_obj_attribs(display_name: "John Bing", email: user.email))
             .and_return("abcd")
           expect { perform_job }
             .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
-            .with(Groups::Mailman::User, mailman_user)
           mm_user = Groups::Mailman::User.find_by(user: user)
           expect(mm_user.remote_id).to eq("abcd")
         end

@@ -8,7 +8,7 @@ describe Groups::Mailman::MembershipSyncJob do
   let(:user) { create(:user) }
   let!(:mm_user) { create(:group_mailman_user, remote_id: "xyz") }
   let(:api) { double }
-  subject(:job) { described_class.new(Groups::Mailman::User, mm_user.id) }
+  subject(:job) { described_class.new("Groups::Mailman::User", mm_user.id) }
 
   before do
     allow(Groups::Mailman::Api).to receive(:instance).and_return(api)

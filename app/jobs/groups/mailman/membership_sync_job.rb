@@ -7,7 +7,7 @@ module Groups
       attr_accessor :source
 
       def perform(source_class, source_id)
-        with_object_in_community_context(source_class, source_id) do |source|
+        with_object_in_community_context(source_class.constantize, source_id) do |source|
           self.source = source
           missing, existing, obsolete = membership_diff
           missing.each { |m| api.create_membership(m) }

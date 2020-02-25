@@ -7,7 +7,7 @@ class CustomReminderJob < ReminderJob
     ActsAsTenant.without_tenant do
       clean_old_deliveries
       scheduled_deliveries_by_community.each do |community, deliveries|
-        with_community(community) do
+        with_cluster(community.cluster) do
           deliveries.each(&:deliver!)
         end
       end

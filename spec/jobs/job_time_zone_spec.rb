@@ -19,11 +19,13 @@ describe SomeReminderJob do
   include_context "reminder jobs"
 
   let(:cmty1) { Defaults.community } # Defaults to UTC
-  let(:cmty2) { create(:community) }
-
-  before do
-    cmty2.settings.time_zone = "Newfoundland"
-    cmty2.save!
+  let(:cmty2) do
+    ActsAsTenant.with_tenant(create(:cluster)) do
+      create(:community).tap do |cmty|
+        cmty.settings.time_zone = "Newfoundland"
+        cmty.save!
+      end
+    end
   end
 
   context "at correct hour for cmty1" do

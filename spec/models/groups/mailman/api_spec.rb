@@ -151,7 +151,7 @@ describe Groups::Mailman::Api do
         it "gets data" do
           VCR.use_cassette("groups/mailman/api/populate_membership/matching") do
             api.populate_membership(list_mship)
-            expect(list_mship.id).to eq("164e3ba080a148768c24961c638d6915")
+            expect(list_mship.remote_id).to eq("164e3ba080a148768c24961c638d6915")
             expect(list_mship.role).to eq("owner")
           end
         end
@@ -182,7 +182,7 @@ describe Groups::Mailman::Api do
           VCR.use_cassette("groups/mailman/api/create_membership/member") do
             api.create_membership(list_mship)
             api.populate_membership(list_mship)
-            expect(list_mship.id).to eq("332bf64159b34efc8fd7d6583e8a0e85")
+            expect(list_mship.remote_id).to eq("332bf64159b34efc8fd7d6583e8a0e85")
             expect(list_mship.role).to eq("member")
           end
         end
@@ -198,7 +198,7 @@ describe Groups::Mailman::Api do
           VCR.use_cassette("groups/mailman/api/create_membership/owner") do
             api.create_membership(list_mship)
             api.populate_membership(list_mship)
-            expect(list_mship.id).to eq("b36b417e123649f2a60f76478009870a")
+            expect(list_mship.remote_id).to eq("b36b417e123649f2a60f76478009870a")
             expect(list_mship.role).to eq("owner")
           end
         end
@@ -249,7 +249,7 @@ describe Groups::Mailman::Api do
             mships = api.memberships(mm_user).sort_by(&:list_id)
             expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
             expect(mships.map(&:list_id)).to eq(%w[ping.mail.gather.coop ping.tscoho.org])
-            expect(mships.map(&:id))
+            expect(mships.map(&:remote_id))
               .to eq(%w[332bf64159b34efc8fd7d6583e8a0e85 b36b417e123649f2a60f76478009870a])
             expect(mships.map(&:role)).to eq(%w[member owner])
           end

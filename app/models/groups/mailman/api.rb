@@ -51,7 +51,7 @@ module Groups
       def populate_membership(list_mship)
         found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
         raise RequestError, "Membership not found" if found["total_size"].zero?
-        list_mship.id = found["entries"][0]["member_id"]
+        list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
       end
 
@@ -73,13 +73,13 @@ module Groups
 
       def delete_membership(list_mship)
         populate_membership(list_mship) # Get the ID.
-        request("members/#{list_mship.id}", :delete)
+        request("members/#{list_mship.remote_id}", :delete)
       end
 
       def memberships(mm_user)
         (request("members/find", :post, subscriber: mm_user.email)["entries"] || []).map do |entry|
           ListMembership.new(mailman_user: mm_user, list_id: entry["list_id"],
-                             role: entry["role"], id: entry["member_id"])
+                             role: entry["role"], remote_id: entry["member_id"])
         end
       end
 

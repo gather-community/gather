@@ -55,6 +55,7 @@ module Groups
         list_mship.role = found["entries"][0]["role"]
       end
 
+      # Assumes list_mship has an associated user remote_id.
       def create_membership(list_mship)
         # We subscribe by user_id so that we are subscribing via preferred address.
         # Then when we change the user's preferred address, we don't have to change all their memberships.
@@ -63,6 +64,7 @@ module Groups
                                   pre_approved: "true")
       end
 
+      # Assumes list_mship has an associated user remote_id.
       def update_membership(list_mship)
         new_role = list_mship.role
         populate_membership(list_mship) # Get the membership remote ID.

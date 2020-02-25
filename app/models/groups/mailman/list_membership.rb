@@ -8,15 +8,8 @@ module Groups
       include ActiveModel::Model
 
       attr_accessor :remote_id, :mailman_user, :list_id, :role
-      attr_writer :email
-
-      def email
-        mailman_user.present? ? mailman_user.email : @email
-      end
-
-      def user_remote_id
-        mailman_user&.remote_id
-      end
+      delegate :email, to: :mailman_user
+      delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 
       # We compare based on email and list_id because those are the two key pieces.
       # user_remote_id may or may not be available depending on what this ListMembership was built from.

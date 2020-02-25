@@ -26,7 +26,7 @@ module Groups
 
       # Whether this user needs an account on the Mailman server.
       def syncable?
-        !user.fake?
+        user.nil? || !user.fake?
       end
 
       def list_memberships

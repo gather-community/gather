@@ -224,9 +224,10 @@ describe Groups::Mailman::Api do
     end
 
     describe "#delete_membership" do
-      let(:mm_user) { double(email: "jen@example.com") }
+      # We assume remote_id is already set on the object, since we set it when we fetch the remote mship list.
       let(:list_mship) do
-        Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
+        Groups::Mailman::ListMembership.new(remote_id: "cc06af5b452641d39ee78e1a3ed51833",
+                                            list_id: "ping.tscoho.org", email: "jen@example.com")
       end
 
       context "with matching membership" do

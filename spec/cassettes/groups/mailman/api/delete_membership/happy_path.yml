@@ -1,59 +1,6 @@
 ---
 http_interactions:
 - request:
-    method: post
-    uri: https://mail.gather.coop:8443/3.1/members/find
-    body:
-      encoding: UTF-8
-      string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Host:
-      - mail.gather.coop:8443
-      Content-Type:
-      - application/json
-      Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx/1.14.0 (Ubuntu)
-      Date:
-      - Sat, 15 Feb 2020 20:07:17 GMT
-      Content-Type:
-      - application/json
-      Content-Length:
-      - '570'
-      Connection:
-      - keep-alive
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains; preload
-      X-Frame-Options:
-      - DENY
-      X-Content-Type-Options:
-      - nosniff
-      X-Xss-Protection:
-      - 1; mode=block
-    body:
-      encoding: UTF-8
-      string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
-        "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "cc06af5b452641d39ee78e1a3ed51833", "role": "member", "self_link":
-        "http://localhost:8001/3.1/members/cc06af5b452641d39ee78e1a3ed51833", "display_name":
-        "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
-        "http_etag": "\"f95ca4f386ea3a9c30a289c533d67c55e03281b8\""}], "http_etag":
-        "\"132e3c029f9b6d44e033b56a0a04c6587cd33ae5\""}'
-    http_version: 
-  recorded_at: Sat, 15 Feb 2020 20:08:33 GMT
-- request:
     method: delete
     uri: https://mail.gather.coop:8443/3.1/members/cc06af5b452641d39ee78e1a3ed51833
     body:
@@ -94,7 +41,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 15 Feb 2020 20:08:33 GMT
 - request:
     method: post
@@ -141,6 +88,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 0, "http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 15 Feb 2020 20:08:34 GMT
 recorded_with: VCR 4.0.0

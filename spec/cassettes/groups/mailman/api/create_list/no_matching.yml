@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/lists
+    uri: https://mail.gather.localhost.tv:8443/3.1/lists
     body:
       encoding: UTF-8
       string: '{"fqdn_listname":"foo@tscoho.org"}'
@@ -33,7 +33,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/lists/foo.tscoho.org
+      - https://mail.gather.localhost.tv:8443/3.1/lists/foo.tscoho.org
       Connection:
       - keep-alive
       Strict-Transport-Security:

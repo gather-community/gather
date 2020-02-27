@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/lists
+    uri: https://mail.gather.localhost.tv:8443/3.1/lists
     body:
       encoding: UTF-8
       string: '{"fqdn_listname":"ping@tscoho.org"}'

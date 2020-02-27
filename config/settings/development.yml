@@ -6,6 +6,3 @@ url:
   host: gather.localhost.tv
   port: 3000
   protocol: https
-single_sign_on:
-  # Not a real secret, ok to check in
-  secret: ssosecret

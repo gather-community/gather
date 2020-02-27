@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
     body:
       encoding: UTF-8
       string: ''
@@ -53,7 +53,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:41:33 GMT
 - request:
     method: patch
-    uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc
     body:
       encoding: UTF-8
       string: '{"display_name":"Jen Cho"}'
@@ -96,7 +96,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:41:33 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/addresses
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/addresses
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.org"}'
@@ -127,7 +127,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/addresses/jen@example.org
+      - https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.org
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -145,7 +145,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:41:33 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/addresses/jen@example.org/verify
+    uri: https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.org/verify
     body:
       encoding: UTF-8
       string: ''
@@ -188,7 +188,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:41:33 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/users/jen@example.org/preferred_address
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.org/preferred_address
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.org"}'
@@ -219,7 +219,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/addresses/jen@example.org
+      - https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.org
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -237,7 +237,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:41:34 GMT
 - request:
     method: delete
-    uri: https://mail.gather.coop:8443/3.1/addresses/jen@example.com
+    uri: https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.com
     body:
       encoding: UTF-8
       string: ''

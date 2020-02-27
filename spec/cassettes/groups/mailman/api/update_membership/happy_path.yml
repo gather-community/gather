@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/members/find
+    uri: https://mail.gather.localhost.tv:8443/3.1/members/find
     body:
       encoding: UTF-8
       string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
@@ -55,7 +55,7 @@ http_interactions:
   recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/members/find
+    uri: https://mail.gather.localhost.tv:8443/3.1/members/find
     body:
       encoding: UTF-8
       string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
@@ -108,7 +108,7 @@ http_interactions:
   recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: delete
-    uri: https://mail.gather.coop:8443/3.1/members/b36b417e123649f2a60f76478009870a
+    uri: https://mail.gather.localhost.tv:8443/3.1/members/b36b417e123649f2a60f76478009870a
     body:
       encoding: US-ASCII
       string: ''
@@ -151,7 +151,7 @@ http_interactions:
   recorded_at: Sat, 15 Feb 2020 21:10:16 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/members
+    uri: https://mail.gather.localhost.tv:8443/3.1/members
     body:
       encoding: UTF-8
       string: '{"list_id":"ping.tscoho.org","subscriber":"be045234ee894ae4a825642e08885db2","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
@@ -182,7 +182,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/members/4eb53e10d59b432aa0817046e82b8201
+      - https://mail.gather.localhost.tv:8443/3.1/members/4eb53e10d59b432aa0817046e82b8201
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -200,7 +200,7 @@ http_interactions:
   recorded_at: Sat, 15 Feb 2020 21:10:17 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/members/find
+    uri: https://mail.gather.localhost.tv:8443/3.1/members/find
     body:
       encoding: UTF-8
       string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'

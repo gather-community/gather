@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: https://mail.gather.coop:8443/3.1/lists/foo.tscoho.org
+    uri: https://mail.gather.localhost.tv:8443/3.1/lists/foo.tscoho.org
     body:
       encoding: US-ASCII
       string: ''

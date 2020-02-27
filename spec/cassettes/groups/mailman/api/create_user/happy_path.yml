@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/users
+    uri: https://mail.gather.localhost.tv:8443/3.1/users
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.com"}'
@@ -33,7 +33,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/users/be045234ee894ae4a825642e08885db2
+      - https://mail.gather.localhost.tv:8443/3.1/users/be045234ee894ae4a825642e08885db2
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -51,7 +51,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: patch
-    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com
     body:
       encoding: UTF-8
       string: '{"display_name":"Jen Lo"}'
@@ -94,7 +94,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/addresses/jen@example.com/verify
+    uri: https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.com/verify
     body:
       encoding: UTF-8
       string: ''
@@ -137,7 +137,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com/preferred_address
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com/preferred_address
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.com"}'
@@ -168,7 +168,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.coop:8443/3.1/addresses/jen@example.com
+      - https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.com
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -186,7 +186,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: get
-    uri: https://mail.gather.coop:8443/3.1/users/jen@example.com
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com
     body:
       encoding: UTF-8
       string: ''

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
     body:
       encoding: UTF-8
       string: ''
@@ -53,7 +53,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:25:34 GMT
 - request:
     method: patch
-    uri: https://mail.gather.coop:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc
+    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc
     body:
       encoding: UTF-8
       string: '{"display_name":"Jen Cho"}'

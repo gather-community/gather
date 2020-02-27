@@ -6,3 +6,18 @@ photos:
   max_size_mb: 8
 work:
   min_age: 5
+
+###########################################################################
+# These settings are for development/testing only, should be overridden in
+# production.
+single_sign_on:
+  # Not a real secret, ok to check in
+  secret: ssosecret
+mailman:
+  api:
+    # No trailing slash, no API version. API version gets appended to this.
+    base_url: https://mail.gather.localhost.tv:8443
+    port: 8443
+    username: restadmin
+    # Not a real secret, ok to check in
+    password: y4nDPinkfciH9moWU3eMwfvNtZcdJASM8

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.coop:8443/3.1/members/find
+    uri: https://mail.gather.localhost.tv:8443/3.1/members/find
     body:
       encoding: UTF-8
       string: '{"subscriber":"jen@example.org"}'

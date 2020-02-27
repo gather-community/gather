@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: patch
-    uri: https://mail.gather.coop:8443/3.1/lists/baz@tscoho.org/config
+    uri: https://mail.gather.localhost.tv:8443/3.1/lists/baz@tscoho.org/config
     body:
       encoding: UTF-8
       string: '{"display_name":"Stuff"}'

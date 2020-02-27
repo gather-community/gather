@@ -46,10 +46,3 @@ email:
 elasticsearch:
   host: localhost
   port: 9200
-
-mailman:
-  api:
-    # No trailing slash, no API version. API version gets appended to this.
-    base_url: https://mail.example.coop:8001
-    username: restadmin
-    password: xxxx

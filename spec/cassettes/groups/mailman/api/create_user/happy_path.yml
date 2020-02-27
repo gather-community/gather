@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mail.gather.localhost.tv:8443/3.1/users
+    uri: http://localhost:8001/3.1/users
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.com"}'
@@ -14,11 +14,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 201
@@ -33,7 +33,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.localhost.tv:8443/3.1/users/be045234ee894ae4a825642e08885db2
+      - http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -51,7 +51,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: patch
-    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com
+    uri: http://localhost:8001/3.1/users/jen@example.com
     body:
       encoding: UTF-8
       string: '{"display_name":"Jen Lo"}'
@@ -63,11 +63,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -94,7 +94,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
-    uri: https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.com/verify
+    uri: http://localhost:8001/3.1/addresses/jen@example.com/verify
     body:
       encoding: UTF-8
       string: ''
@@ -106,11 +106,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -137,7 +137,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: post
-    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com/preferred_address
+    uri: http://localhost:8001/3.1/users/jen@example.com/preferred_address
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.com"}'
@@ -149,11 +149,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 201
@@ -168,7 +168,7 @@ http_interactions:
       Content-Length:
       - '0'
       Location:
-      - https://mail.gather.localhost.tv:8443/3.1/addresses/jen@example.com
+      - http://localhost:8001/3.1/addresses/jen@example.com
       Connection:
       - keep-alive
       Strict-Transport-Security:
@@ -186,7 +186,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:49:49 GMT
 - request:
     method: get
-    uri: https://mail.gather.localhost.tv:8443/3.1/users/jen@example.com
+    uri: http://localhost:8001/3.1/users/jen@example.com
     body:
       encoding: UTF-8
       string: ''
@@ -198,11 +198,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 200

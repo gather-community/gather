@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: https://mail.gather.localhost.tv:8443/3.1/members/cc06af5b452641d39ee78e1a3ed51833
+    uri: http://localhost:8001/3.1/members/cc06af5b452641d39ee78e1a3ed51833
     body:
       encoding: UTF-8
       string: ''
@@ -14,11 +14,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -45,7 +45,7 @@ http_interactions:
   recorded_at: Sat, 15 Feb 2020 20:08:33 GMT
 - request:
     method: post
-    uri: https://mail.gather.localhost.tv:8443/3.1/members/find
+    uri: http://localhost:8001/3.1/members/find
     body:
       encoding: UTF-8
       string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
@@ -57,11 +57,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 200

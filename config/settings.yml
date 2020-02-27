@@ -16,8 +16,8 @@ single_sign_on:
 mailman:
   api:
     # No trailing slash, no API version. API version gets appended to this.
-    base_url: https://mail.gather.localhost.tv:8443
-    port: 8443
+    base_url: http://localhost:8001
+    port: 8001
     username: restadmin
     # Not a real secret, ok to check in
-    password: y4nDPinkfciH9moWU3eMwfvNtZcdJASM8
+    password: restpass

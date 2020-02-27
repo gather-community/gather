@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: patch
-    uri: https://mail.gather.localhost.tv:8443/3.1/lists/ping@tscoho.org/config
+    uri: http://localhost:8001/3.1/lists/ping@tscoho.org/config
     body:
       encoding: UTF-8
       string: '{"display_name":"Stuff","advertised":"false"}'
@@ -14,11 +14,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -45,7 +45,7 @@ http_interactions:
   recorded_at: Sat, 22 Feb 2020 15:48:30 GMT
 - request:
     method: get
-    uri: https://mail.gather.localhost.tv:8443/3.1/lists/ping@tscoho.org/config
+    uri: http://localhost:8001/3.1/lists/ping@tscoho.org/config
     body:
       encoding: US-ASCII
       string: ''
@@ -57,11 +57,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 200
@@ -117,7 +117,7 @@ http_interactions:
   recorded_at: Sat, 22 Feb 2020 15:48:30 GMT
 - request:
     method: patch
-    uri: https://mail.gather.localhost.tv:8443/3.1/lists/ping@tscoho.org/config
+    uri: http://localhost:8001/3.1/lists/ping@tscoho.org/config
     body:
       encoding: UTF-8
       string: '{"display_name":"Things","advertised":"true"}'
@@ -129,11 +129,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -160,7 +160,7 @@ http_interactions:
   recorded_at: Sat, 22 Feb 2020 15:48:30 GMT
 - request:
     method: get
-    uri: https://mail.gather.localhost.tv:8443/3.1/lists/ping@tscoho.org/config
+    uri: http://localhost:8001/3.1/lists/ping@tscoho.org/config
     body:
       encoding: US-ASCII
       string: ''
@@ -172,11 +172,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 200

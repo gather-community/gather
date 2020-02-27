@@ -25,12 +25,21 @@ For both production and development environments:
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
 1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).
+1. Mailman 3 (see instructions below).
 
 ## Development Environment Setup
 Follow these steps to setup a development environment for Gather.
 
 1. Install all above dependencies
     1. **Note:** For Elasticsearch, we recommend setting the maximum heap size to 200m unless you have lots of memory on your development machine. To do so, edit the `jvm.options` file. [See here for instructions](https://stackoverflow.com/a/40333263/2066866).
+    1. For Mailman 3:
+      1. Mailman is only required if you're working on the Mailman API integration. If so...
+      1. `mkdir ../mailman && cd ../mailman`
+      1. `python3 -m venv venv`
+      1. `source venv/bin/activate`
+      1. `pip install mailman`
+      1. `mailman start`
+      1. `curl -v http://restadmin:restpass@localhost:8001/3.1/lists`
 1. Retrieve project files using Git
         git clone https://github.com/sassafrastech/gather.git
         cd gather

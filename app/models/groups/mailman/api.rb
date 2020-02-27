@@ -119,13 +119,13 @@ module Groups
 
       def request(endpoint, method = :get, **data)
         url = URI.parse("#{base_url}/#{endpoint}")
-        raise "HTTPS only" unless url.scheme == "https"
+        raise "HTTPS only in production" if Rails.env.production? && url.scheme != "https"
 
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
         req.body = data.to_json if data.present?
-        res = Net::HTTP.start(url.hostname, url.port, use_ssl: true) do |http|
+        res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
         raise RequestError, res unless res.is_a?(Net::HTTPSuccess)

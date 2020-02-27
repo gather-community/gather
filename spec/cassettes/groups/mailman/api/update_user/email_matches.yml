@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
+    uri: http://localhost:8001/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
     body:
       encoding: UTF-8
       string: ''
@@ -14,11 +14,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 200
@@ -53,7 +53,7 @@ http_interactions:
   recorded_at: Fri, 14 Feb 2020 04:25:34 GMT
 - request:
     method: patch
-    uri: https://mail.gather.localhost.tv:8443/3.1/users/15daec2599b2478d8491b95a2ee7eecc
+    uri: http://localhost:8001/3.1/users/15daec2599b2478d8491b95a2ee7eecc
     body:
       encoding: UTF-8
       string: '{"display_name":"Jen Cho"}'
@@ -65,11 +65,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204

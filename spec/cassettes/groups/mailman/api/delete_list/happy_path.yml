@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: https://mail.gather.localhost.tv:8443/3.1/lists/foo.tscoho.org
+    uri: http://localhost:8001/3.1/lists/foo.tscoho.org
     body:
       encoding: US-ASCII
       string: ''
@@ -14,11 +14,11 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mail.gather.coop:8443
+      - localhost:8001
       Content-Type:
       - application/json
       Authorization:
-      - Basic cmVzdGFkbWluOnk0bkRQaW5rZmNpSDltb1dVM2VNd2Z2TnRaY2RKQVNNOA==
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
       code: 204
@@ -41,6 +41,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 22 Feb 2020 15:59:11 GMT
 recorded_with: VCR 4.0.0

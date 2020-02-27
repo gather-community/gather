@@ -35,7 +35,7 @@ module Groups
       private
 
       def sync_with_stored_mailman_user(mm_user)
-        if mm_user.syncable? && mm_user.list_memberships.any?
+        if mm_user.syncable_with_memberships?
           if api.user_exists?(mm_user)
             update_user_and_memberships(mm_user)
           else
@@ -50,7 +50,7 @@ module Groups
       def sync_without_stored_mailman_user
         mm_user = self.class.build_mailman_user(user: user)
         mm_user.remote_id = api.user_id_for_email(mm_user)
-        if mm_user.syncable? && mm_user.list_memberships.any?
+        if mm_user.syncable_with_memberships?
           # If user already exists with local user's email, unify them and update
           if mm_user.remote_id?
             ensure_no_duplicate_user(mm_user.remote_id)

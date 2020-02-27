@@ -29,6 +29,10 @@ module Groups
         user.nil? || !user.fake?
       end
 
+      def syncable_with_memberships?
+        syncable? && list_memberships.any?
+      end
+
       def list_memberships
         @list_memberships ||= Groups::User.new(user: user).computed_memberships.map do |mship|
           next if mship.opt_out?

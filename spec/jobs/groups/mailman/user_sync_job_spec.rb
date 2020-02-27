@@ -19,11 +19,11 @@ describe Groups::Mailman::UserSyncJob do
 
     before do
       expect(described_class).to receive(:find_mailman_user).and_return(mailman_user)
-      expect(mailman_user).to receive(:syncable?).and_return(syncable)
+      expect(mailman_user).to receive(:syncable_with_memberships?).and_return(syncable_with_memberships)
     end
 
     context "when user is syncable" do
-      let(:syncable) { true }
+      let(:syncable_with_memberships) { true }
 
       before do
         expect(api).to receive(:user_exists?, &with_obj_attribs(remote_id: "abcd"))
@@ -50,8 +50,8 @@ describe Groups::Mailman::UserSyncJob do
       end
     end
 
-    context "when user is not syncable" do
-      let(:syncable) { false }
+    context "when user is not syncable_with_memberships" do
+      let(:syncable_with_memberships) { false }
 
       it "deletes remote user" do
         expect(api).to receive(:delete_user, &with_obj_attribs(remote_id: "abcd"))
@@ -65,11 +65,11 @@ describe Groups::Mailman::UserSyncJob do
 
     before do
       allow(described_class).to receive(:build_mailman_user).and_return(mailman_user)
-      expect(mailman_user).to receive(:syncable?).and_return(syncable)
+      expect(mailman_user).to receive(:syncable_with_memberships?).and_return(syncable_with_memberships)
     end
 
-    context "when user is syncable" do
-      let(:syncable) { true }
+    context "when user is syncable_with_memberships" do
+      let(:syncable_with_memberships) { true }
 
       context "with matching email on mailman side" do
         before do
@@ -114,8 +114,8 @@ describe Groups::Mailman::UserSyncJob do
       end
     end
 
-    context "when user is not syncable" do
-      let(:syncable) { false }
+    context "when user is not syncable_with_memberships" do
+      let(:syncable_with_memberships) { false }
 
       context "with matching email on mailman side" do
         before do

@@ -243,27 +243,47 @@ describe Groups::Mailman::Api do
     end
 
     describe "#memberships" do
-      context "with matching" do
-        let(:mm_user) { double(email: "jen@example.com") }
+      context "for user" do
+        context "with matching" do
+          let(:mm_user) { double(email: "jen@example.com") }
 
-        it "gets memberships" do
-          VCR.use_cassette("groups/mailman/api/memberships/happy_path") do
-            mships = api.memberships(mm_user).sort_by(&:list_id)
-            expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
-            expect(mships.map(&:list_id)).to eq(%w[ping.mail.gather.coop ping.tscoho.org])
-            expect(mships.map(&:remote_id))
-              .to eq(%w[332bf64159b34efc8fd7d6583e8a0e85 b36b417e123649f2a60f76478009870a])
-            expect(mships.map(&:role)).to eq(%w[member owner])
+          it "gets memberships" do
+            VCR.use_cassette("groups/mailman/api/memberships/for_user/happy_path") do
+              mships = api.memberships(mm_user: mm_user).sort_by(&:list_id)
+              expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
+              expect(mships.map(&:list_id)).to eq(%w[ping.mail.gather.coop ping.tscoho.org])
+              expect(mships.map(&:remote_id))
+                .to eq(%w[332bf64159b34efc8fd7d6583e8a0e85 b36b417e123649f2a60f76478009870a])
+              expect(mships.map(&:role)).to eq(%w[member owner])
+            end
+          end
+        end
+
+        context "with no matching" do
+          let(:mm_user) { double(email: "jen@example.org") }
+
+          it "gets memberships" do
+            VCR.use_cassette("groups/mailman/api/memberships/for_user/no_matching") do
+              expect(api.memberships(mm_user: mm_user).sort_by(&:list_id)).to eq([])
+            end
           end
         end
       end
 
-      context "with no matching" do
-        let(:mm_user) { double(email: "jen@example.org") }
+      context "for list" do
+        context "with matching" do
+          let(:list) { double(remote_id: "ping.tscoho.org") }
 
-        it "gets memberships" do
-          VCR.use_cassette("groups/mailman/api/memberships/no_matching") do
-            expect(api.memberships(mm_user).sort_by(&:list_id)).to eq([])
+          it "gets memberships" do
+            VCR.use_cassette("groups/mailman/api/memberships/for_list/happy_path") do
+              mships = api.memberships(list: list).sort_by(&:email)
+              expect(mships.map(&:email)).to eq(%w[jen@example.org phil@example.org zar@example.org])
+              expect(mships.map(&:list_id)).to eq(%w[ping.tscoho.org ping.tscoho.org ping.tscoho.org])
+              expect(mships.map(&:remote_id))
+                .to eq(%w[038e0a7bc4a64361af750dddcee505c1 8dedfbda9a5a4d24aab619588531426e
+                          8a64fa55d1a34220bb3aa7c274617ff1])
+              expect(mships.map(&:role)).to eq(%w[member member member])
+            end
           end
         end
       end

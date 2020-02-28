@@ -6,8 +6,8 @@ module Groups
     class MembershipSyncJob < SyncJob
       attr_accessor :source
 
-      def perform(source_class, source_id)
-        with_object_in_cluster_context(source_class.constantize, source_id) do |source|
+      def perform(source_class_name, source_id)
+        with_object_in_cluster_context(class_name: source_class_name, id: source_id) do |source|
           self.source = source
           missing, existing, obsolete = membership_diff
           missing.each { |m| create_membership(m) }

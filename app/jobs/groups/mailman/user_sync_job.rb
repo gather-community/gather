@@ -17,13 +17,7 @@ module Groups
       end
 
       def perform(user_id)
-        # A note on error handling: Generally in this class we have tried to make it so that it is highly
-        # unlikely that we would encounter 4xx-type errors (invalid input). We have done this by e.g.
-        # checking for the existence of a remote user before attempting to update it. So if those
-        # kind of errors occur, we'd want them to be handled by the job system and reported to admins.
-        # We are never immune to 5xx, of course, if e.g. the Mailman server is down. In that case, we would
-        # also want to see those errors.
-        with_object_in_cluster_context(::User, user_id) do |user|
+        with_object_in_cluster_context(klass: ::User, id: user_id) do |user|
           if (mm_user = self.class.find_mailman_user(user: user))
             sync_with_stored_mailman_user(mm_user)
           else

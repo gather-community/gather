@@ -4,6 +4,30 @@ module Groups
   module Mailman
     # Models a Mailman list.
     class List < ApplicationRecord
+      # Good initial settings for a lits.
+      DEFAULT_SETTINGS = {
+        advertised: false,
+        dmarc_mitigate_action: "munge_from",
+        archive_policy: "private",
+
+        # Max size in kilobytes
+        max_message_size: 5_000,
+
+        # People shouldn't be subscribing to lists directly as their subscription won't be sync'd back
+        # to Gather. Also, lists won't be advertised so this should be rare.
+        # So at least this way the moderators will be able to tell them not to do that.
+        subscription_policy: "moderate",
+
+        # "defer" means default processing
+        default_member_action: "defer",
+
+        # "hold" means send to moderators
+        default_nonmember_action: "hold"
+      }.freeze
+
+      # Settings that will get reset on each sync.
+      ENFORCED_SETTINGS = %i[advertised max_message_size subscription_policy].freeze
+
       acts_as_tenant :cluster
 
       attr_accessor :config

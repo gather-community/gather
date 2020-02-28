@@ -14,15 +14,23 @@ class ApplicationJob < ActiveJob::Base
   protected
 
   # Loads the specified object and sets up the cluster context. Assumes
-  # the class is cluster-based and responds to `cluster`.
-  def with_object_in_cluster_context(class_or_class_name, id)
-    klass = class_or_class_name.is_a?(String) ? class_or_class_name.constantize : class_or_class_name
-    object = load_object_without_tenant(klass, id)
+  # the object is cluster-based and responds to `cluster`.
+  def with_object_in_cluster_context(klass: nil, class_name: nil, id: nil, attribs: nil)
+    klass ||= class_name.constantize
+    object = if id
+               load_object_without_tenant(klass, id)
+             else
+               build_object_without_tenant(klass, attribs)
+             end
     with_cluster(object.cluster) { yield(object) }
   end
 
   def load_object_without_tenant(klass, id)
     ActsAsTenant.without_tenant { klass.find(id).tap(&:cluster) }
+  end
+
+  def build_object_without_tenant(klass, attribs)
+    ActsAsTenant.with_tenant(Cluster.find(attribs["cluster_id"])) { klass.new(attribs) }
   end
 
   def each_community

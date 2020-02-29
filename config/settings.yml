@@ -21,3 +21,9 @@ mailman:
     username: restadmin
     # Not a real secret, ok to check in
     password: restpass
+# These options are passed directly to the Elasticsearch::Client initializer.
+# See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
+# The default settings should work in most cases.
+elasticsearch:
+  host: 127.0.0.1 # This IP is ignored by VCR, but localhost isn't.
+  port: 9200

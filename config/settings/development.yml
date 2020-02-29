@@ -1,5 +1,5 @@
 smtp:
-  address: "localhost"
+  address: localhost
   port: 1025
 url:
   # localhost.tv is a public domain that resolves to 127.0.0.1 for all subdomains.

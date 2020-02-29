@@ -11,14 +11,14 @@ module Groups
         request("users/#{mm_user.remote_id}")
         true
       rescue RequestError => e
-        e.http_response.is_a?(Net::HTTPNotFound) ? false : (raise e)
+        e.response.is_a?(Net::HTTPNotFound) ? false : (raise e)
       end
 
       # Assumes mm_user.email is set.
       def user_id_for_email(mm_user)
         request("users/#{mm_user.email}")["user_id"]
       rescue RequestError => e
-        e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
       def create_user(mm_user)
@@ -44,7 +44,7 @@ module Groups
       def delete_user(mm_user)
         request("users/#{mm_user.remote_id}", :delete)
       rescue RequestError => e
-        e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
       # Loads membership ID and role based on given list_id and remote member id
@@ -93,7 +93,7 @@ module Groups
         response = request("lists", :post, fqdn_listname: list.fqdn_listname)
         response.header("Location").split("/")[-1]
       rescue RequestError => e
-        e.http_response.body =~ /Mailing list exists/ ? nil : (raise e)
+        e.response.body =~ /Mailing list exists/ ? nil : (raise e)
       end
 
       def configure_list(list)
@@ -110,7 +110,13 @@ module Groups
       def delete_list(list)
         request("lists/#{list.remote_id}", :delete)
       rescue RequestError => e
-        e.http_response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+      end
+
+      def create_domain(domain)
+        request("domains", :post, mail_host: domain.name)
+      rescue RequestError => e
+        e.response.body =~ /Duplicate email host/ ? nil : (raise e)
       end
 
       private
@@ -145,11 +151,11 @@ module Groups
 
       # Unexpected error in a http request.
       class RequestError < StandardError
-        attr_accessor :http_response
+        attr_accessor :response
 
         def initialize(message)
           if message.is_a?(Net::HTTPResponse)
-            self.http_response = message
+            self.response = message
             super("#{message.class.name}: #{message.body}")
           else
             super(message)

@@ -379,5 +379,27 @@ describe Groups::Mailman::Api do
         end
       end
     end
+
+    describe "#create_domain" do
+      context "happy path" do
+        let(:domain) { create(:domain, name: "tscoho.com") }
+
+        it "creates domain" do
+          VCR.use_cassette("groups/mailman/api/create_domain/happy_path") do
+            expect(api.create_domain(domain).response)
+          end
+        end
+      end
+
+      context "with existing domain" do
+        let(:domain) { create(:domain, name: "tscoho.com") }
+
+        it "does nothing" do
+          VCR.use_cassette("groups/mailman/api/create_domain/exists") do
+            expect(api.create_domain(domain)).to be_nil
+          end
+        end
+      end
+    end
   end
 end

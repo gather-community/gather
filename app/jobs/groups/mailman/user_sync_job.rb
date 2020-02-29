@@ -16,12 +16,23 @@ module Groups
         Groups::Mailman::User.new(user: user)
       end
 
-      def perform(user_id)
-        with_object_in_cluster_context(klass: ::User, id: user_id) do |user|
-          if (mm_user = self.class.find_mailman_user(user: user))
-            sync_with_stored_mailman_user(mm_user)
-          else
-            sync_without_stored_mailman_user
+      def perform(user_id: nil, mm_user_attribs: nil, destroyed: false)
+        if destroyed
+          # If the user was destroyed, build a temporary Mailman::User with the given attribs,
+          # which should include remote_id and cluster_id.
+          with_object_in_cluster_context(klass: Mailman::User, attribs: mm_user_attribs) do |mm_user|
+            api.delete_user(mm_user)
+          end
+        else
+          # We look up the User object, even though we don't really need it, so that we
+          # can establish the cluster with it. We can't use Mailman::User because one doesn't always exist
+          # yet when we call the job.
+          with_object_in_cluster_context(klass: ::User, id: user_id) do |user|
+            if (mm_user = self.class.find_mailman_user(user: user))
+              sync_with_stored_mailman_user(mm_user)
+            else
+              sync_without_stored_mailman_user
+            end
           end
         end
       end

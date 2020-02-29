@@ -20,7 +20,7 @@ describe Groups::Mailman::UserSyncJob do
       let(:remote_user_exists) { true }
 
       before do
-        expect(described_class).to receive(:find_mailman_user).and_return(mailman_user)
+        expect(job).to receive(:find_mailman_user).and_return(mailman_user)
         expect(mailman_user).to receive(:syncable_with_memberships?).and_return(syncable_with_memberships)
       end
 
@@ -66,7 +66,7 @@ describe Groups::Mailman::UserSyncJob do
       let(:mailman_user) { Groups::Mailman::User.new(user: user) }
 
       before do
-        allow(described_class).to receive(:build_mailman_user).and_return(mailman_user)
+        expect(job).to receive(:build_mailman_user).with(user: user).and_return(mailman_user)
         expect(mailman_user).to receive(:syncable_with_memberships?).and_return(syncable_with_memberships)
       end
 
@@ -75,7 +75,8 @@ describe Groups::Mailman::UserSyncJob do
 
         context "with matching email on mailman side" do
           before do
-            expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: user.email)).and_return("abcd")
+            expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: user.email))
+              .and_return("abcd")
           end
 
           context "if returned mm ID exists in local DB" do

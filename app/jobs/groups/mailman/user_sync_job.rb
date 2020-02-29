@@ -6,16 +6,6 @@ module Groups
     class UserSyncJob < SyncJob
       attr_accessor :user
 
-      # Stubbable in tests
-      def self.find_mailman_user(user:)
-        Groups::Mailman::User.find_by(user: user)
-      end
-
-      # Stubbable in tests
-      def self.build_mailman_user(user:)
-        Groups::Mailman::User.new(user: user)
-      end
-
       def perform(user_id: nil, mm_user_attribs: nil, destroyed: false)
         if destroyed
           # If the user was destroyed, build a temporary Mailman::User with the given attribs,
@@ -28,16 +18,26 @@ module Groups
           # can establish the cluster with it. We can't use Mailman::User because one doesn't always exist
           # yet when we call the job.
           with_object_in_cluster_context(klass: ::User, id: user_id) do |user|
-            if (mm_user = self.class.find_mailman_user(user: user))
+            if (mm_user = find_mailman_user(user: user))
               sync_with_stored_mailman_user(mm_user)
             else
-              sync_without_stored_mailman_user
+              sync_without_stored_mailman_user(user)
             end
           end
         end
       end
 
       private
+
+      # Stubbable in tests
+      def find_mailman_user(user:)
+        Groups::Mailman::User.find_by(user: user)
+      end
+
+      # Stubbable in tests
+      def build_mailman_user(user:)
+        Groups::Mailman::User.new(user: user)
+      end
 
       def sync_with_stored_mailman_user(mm_user)
         if mm_user.syncable_with_memberships?
@@ -52,8 +52,8 @@ module Groups
         end
       end
 
-      def sync_without_stored_mailman_user
-        mm_user = self.class.build_mailman_user(user: user)
+      def sync_without_stored_mailman_user(user)
+        mm_user = build_mailman_user(user: user)
         mm_user.remote_id = api.user_id_for_email(mm_user)
         if mm_user.syncable_with_memberships?
           # If user already exists with local user's email, unify them and update

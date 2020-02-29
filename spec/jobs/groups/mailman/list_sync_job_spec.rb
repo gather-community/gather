@@ -15,7 +15,10 @@ describe Groups::Mailman::ListSyncJob do
 
   context "when list just destroyed" do
     let!(:job_args) do
-      [{"cluster_id" => ActsAsTenant.current_tenant.id, "remote_id" => "ping.tscoho.org"}, destroyed: true]
+      [
+        list_attribs: {"cluster_id" => ActsAsTenant.current_tenant.id, "remote_id" => "ping.tscoho.org"},
+        destroyed: true
+      ]
     end
 
     it "deletes list" do
@@ -26,7 +29,7 @@ describe Groups::Mailman::ListSyncJob do
 
   context "when list not just destroyed" do
     let(:list) { create(:group_mailman_list, name: "foo", domain: domain, remote_id: initial_remote_id) }
-    let!(:job_args) { [list.id] }
+    let!(:job_args) { [list_id: list.id] }
 
     context "when remote list doesn't exist" do
       let(:initial_remote_id) { nil }

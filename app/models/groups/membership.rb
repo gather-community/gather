@@ -3,6 +3,8 @@
 module Groups
   # Joins a user to a group.
   class Membership < ApplicationRecord
+    include Wisper.model
+
     KINDS = %i[manager joiner opt_out].freeze
 
     acts_as_tenant :cluster

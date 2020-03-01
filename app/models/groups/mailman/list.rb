@@ -4,6 +4,8 @@ module Groups
   module Mailman
     # Models a Mailman list.
     class List < ApplicationRecord
+      include Wisper.model
+
       # Good initial settings for a lits.
       DEFAULT_SETTINGS = {
         advertised: false,

@@ -14,7 +14,7 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "with no lists" do
-      it "enqueues nothing" do
+      it "doesn't enqueue job" do
         expect { create(:user) }.not_to have_enqueued_user_sync_job
       end
     end
@@ -55,7 +55,7 @@ describe Groups::Mailman::SyncListener do
     context "when changing to household in same community" do
       let!(:household) { create(:household) }
 
-      it "enqueues nothing" do
+      it "doesn't enqueue job" do
         expect { user.update!(household: household) }.not_to have_enqueued_user_sync_job
       end
     end
@@ -69,13 +69,22 @@ describe Groups::Mailman::SyncListener do
       it "enqueues user sync job with destroyed flag" do
         expect { user.destroy }.to have_enqueued_user_sync_job_with_destroy_flag
       end
+
+      it "enqueues single sign on job with sign_out action" do
+        expect { user.destroy }
+          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :sign_out)
+      end
     end
 
     context "when user has no mailman user" do
       let!(:user) { create(:user) }
 
-      it "enqueues nothing" do
+      it "doesn't enqueue user sync" do
         expect { user.destroy }.not_to have_enqueued_user_sync_job
+      end
+
+      it "doesn't enqueue single sign on" do
+        expect { user.destroy }.not_to have_enqueued_job(Groups::Mailman::SingleSignOnJob)
       end
     end
   end
@@ -113,7 +122,7 @@ describe Groups::Mailman::SyncListener do
       context "when changing other attribute" do
         let!(:list) { create(:group_mailman_list, group: group) }
 
-        it "enqueues nothing" do
+        it "doesn't enqueue job" do
           expect { group.update!(kind: "squad") }.not_to have_enqueued_list_sync_job
         end
       end
@@ -131,7 +140,7 @@ describe Groups::Mailman::SyncListener do
 
     context "without associated list" do
       context "when changing regular attribute" do
-        it "enqueues nothing" do
+        it "doesn't enqueue job" do
           expect { group.update!(name: "Tubstompers!") }.not_to have_enqueued_list_sync_job
         end
       end
@@ -183,7 +192,7 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "without attached list" do
-      it "enqueues nothing" do
+      it "doesn't enqueue job" do
         expect { create(:group_membership, group: group) }.not_to have_enqueued_membership_sync_job
       end
     end
@@ -202,7 +211,7 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "without attached list" do
-      it "enqueues nothing" do
+      it "doesn't enqueue job" do
         expect { group.communities << create(:community) }.not_to have_enqueued_membership_sync_job
       end
     end

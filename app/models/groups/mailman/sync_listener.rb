@@ -41,6 +41,8 @@ module Groups
           mm_user_attribs: {remote_id: mm_user.remote_id, cluster_id: user.cluster_id},
           destroyed: true
         )
+
+        SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out) if user.group_mailman_user.present?
       end
 
       def update_household_successful(household)

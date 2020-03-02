@@ -26,7 +26,9 @@ module Groups
 
       # Whether this user needs an account on the Mailman server.
       def syncable?
-        user.nil? || !user.fake?
+        # If user is nil, this is a non-persisted instance so it must be syncable, else it wouldn't
+        # have been built.
+        user.nil? || (!user.fake? && user.active?)
       end
 
       def syncable_with_memberships?

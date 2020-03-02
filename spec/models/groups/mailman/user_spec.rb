@@ -10,18 +10,34 @@ describe Groups::Mailman::User do
   end
 
   describe "#syncable?" do
-    let(:fake) { false }
-    let(:user) { create(:user, fake: fake) }
-    let!(:mm_user) { create(:group_mailman_user, user: user) }
     subject(:syncable) { mm_user.syncable? }
 
-    context "with non-fake user" do
-      it { is_expected.to be(true) }
+    context "with user record" do
+      let(:fake) { false }
+      let(:active) { true }
+      let(:user) { create(:user, active ? :active : :inactive, fake: fake) }
+      let(:mm_user) { build(:group_mailman_user, user: user) }
+
+      context "with non-fake user" do
+        context "with active user" do
+          it { is_expected.to be(true) }
+        end
+
+        context "with inactive user" do
+          let(:active) { false }
+          it { is_expected.to be(false) }
+        end
+      end
+
+      context "when user is fake" do
+        let(:fake) { true }
+        it { is_expected.to be(false) }
+      end
     end
 
-    context "when user is fake" do
-      let(:fake) { true }
-      it { is_expected.to be(false) }
+    context "without user record" do
+      let(:mm_user) { build(:group_mailman_user, user: nil) }
+      it { is_expected.to be(true) }
     end
   end
 

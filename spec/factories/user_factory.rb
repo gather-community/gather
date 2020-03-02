@@ -33,6 +33,9 @@ FactoryBot.define do
       end
     end
 
+    trait :active do
+    end
+
     trait :inactive do
       deactivated_at { Time.current - 1 }
 

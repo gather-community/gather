@@ -58,6 +58,9 @@ module Groups
       end
 
       def update_groups_mailman_list_successful(list)
+        # The only place where remote_id gets saved is in the ListSyncJob and we don't want
+        # to enqueue the MembershipSyncJob in that case because then it will get enqueued twice.
+        return if list.saved_change_to_remote_id?
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 

@@ -9,13 +9,12 @@ module Groups
       def perform(list_id: nil, list_attribs: nil, destroyed: false)
         # If the list was destroyed, build a temporary one with the passed attributes.
         # Otherwise, load the persisted one.
-        params = if destroyed
-                   {klass: Mailman::List, attribs: list_attribs}
-                 else
-                   {klass: Mailman::List, id: list_id}
-                 end
+        params = {klass: Mailman::List}.merge(destroyed ? {attribs: list_attribs} : {id: list_id})
         with_object_in_cluster_context(**params) do |list|
-          return api.delete_list(list) if destroyed
+          if destroyed || !list.syncable?
+            api.delete_list(list) if list.remote_id?
+            return
+          end
           api.create_domain(list.domain)
           create_or_update_list(list)
           api.configure_list(list)

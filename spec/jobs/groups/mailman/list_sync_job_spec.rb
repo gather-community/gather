@@ -13,6 +13,13 @@ describe Groups::Mailman::ListSyncJob do
     allow(Groups::Mailman::Api).to receive(:instance).and_return(api)
   end
 
+  shared_examples_for "deletes list" do
+    it do
+      expect(api).to receive(:delete_list, &with_obj_attribs(remote_id: "ping.tscoho.org"))
+      expect { perform_job }.not_to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+    end
+  end
+
   context "when list just destroyed" do
     let!(:job_args) do
       [
@@ -21,9 +28,29 @@ describe Groups::Mailman::ListSyncJob do
       ]
     end
 
-    it "deletes list" do
-      expect(api).to receive(:delete_list, &with_obj_attribs(remote_id: "ping.tscoho.org"))
-      expect { perform_job }.not_to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+    it_behaves_like "deletes list"
+  end
+
+  context "when not syncable" do
+    let(:list) { create(:group_mailman_list, name: "foo", domain: domain, remote_id: initial_remote_id) }
+    let!(:job_args) { [list_id: list.id] }
+
+    before do
+      list.group.deactivate
+    end
+
+    context "when remote list doesn't exist" do
+      let(:initial_remote_id) { nil }
+
+      it "does nothing" do
+        expect(api).not_to receive(:delete_list)
+        expect { perform_job }.not_to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
+      end
+    end
+
+    context "when remote list exists" do
+      let(:initial_remote_id) { "ping.tscoho.org" }
+      it_behaves_like "deletes list"
     end
   end
 
@@ -37,18 +64,18 @@ describe Groups::Mailman::ListSyncJob do
       it "creates and configures list with full settings and enqueues list membership update" do
         expect(api).to receive(:create_domain, &with_obj_attribs(name: "tscoho.org")).ordered
         expect(api).to receive(:create_list, &with_obj_attribs(fqdn_listname: "foo@tscoho.org")).ordered
-          .and_return("a1b2c3")
+          .and_return("foo.tscoho.org")
         expect(api).to receive(:configure_list,
                                &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
                                                  config: Groups::Mailman::List::DEFAULT_SETTINGS)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
-        expect(list.reload.remote_id).to eq("a1b2c3")
+        expect(list.reload.remote_id).to eq("foo.tscoho.org")
       end
     end
 
     context "when remote list exists" do
-      let(:initial_remote_id) { "bbccdd" }
+      let(:initial_remote_id) { "foo.tscoho.org" }
 
       it "configures list with sticky settings and enqueues list membership update" do
         expect(api).to receive(:create_domain, &with_obj_attribs(name: "tscoho.org")).ordered
@@ -63,7 +90,7 @@ describe Groups::Mailman::ListSyncJob do
                                                  config: expected_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
-        expect(list.reload.remote_id).to eq("bbccdd")
+        expect(list.reload.remote_id).to eq("foo.tscoho.org")
       end
     end
   end

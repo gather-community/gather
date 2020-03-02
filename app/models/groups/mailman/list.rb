@@ -53,6 +53,14 @@ module Groups
         outside_memberships + owner_moderator_memberships + normal_memberships
       end
 
+      def syncable?
+        group&.active?
+      end
+
+      def remote_id?
+        remote_id.present?
+      end
+
       private
 
       def check_outside_addresses

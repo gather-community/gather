@@ -15,7 +15,8 @@ describe Groups::Mailman::User do
     context "with user record" do
       let(:fake) { false }
       let(:active) { true }
-      let(:user) { create(:user, active ? :active : :inactive, fake: fake) }
+      let(:child) { false }
+      let(:user) { create(:user, active ? :active : :inactive, child ? :child : :adult, fake: fake) }
       let(:mm_user) { build(:group_mailman_user, user: user) }
 
       context "with non-fake user" do
@@ -25,6 +26,11 @@ describe Groups::Mailman::User do
 
         context "with inactive user" do
           let(:active) { false }
+          it { is_expected.to be(false) }
+        end
+
+        context "with child user" do
+          let(:child) { true }
           it { is_expected.to be(false) }
         end
       end

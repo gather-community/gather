@@ -24,11 +24,11 @@ module Groups
         remote_id.present?
       end
 
-      # Whether this user needs an account on the Mailman server.
+      # Whether this user is eligible for an account on the Mailman server.
       def syncable?
         # If user is nil, this is a non-persisted instance so it must be syncable, else it wouldn't
         # have been built.
-        user.nil? || (!user.fake? && user.active?)
+        user.nil? || (!user.fake? && user.active? && user.adult?)
       end
 
       def syncable_with_memberships?

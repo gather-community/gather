@@ -16,7 +16,7 @@ describe Groups::Mailman::Api do
       it "raises error" do
         VCR.use_cassette("groups/mailman/auth/invalid") do
           expect { api.user_exists?(mm_user) }
-            .to raise_error(Groups::Mailman::Api::RequestError, "Net::HTTPUnauthorized: "\
+            .to raise_error(ApiRequestError, "Net::HTTPUnauthorized: "\
               "{\"title\": \"401 Unauthorized\", \"description\": \"REST API authorization failed\"}")
         end
       end
@@ -83,7 +83,7 @@ describe Groups::Mailman::Api do
         it "raises error" do
           VCR.use_cassette("groups/mailman/api/create_user/user_exists") do
             expect { api.create_user(mm_user) }
-              .to raise_error(Groups::Mailman::Api::RequestError, "Net::HTTPBadRequest: "\
+              .to raise_error(ApiRequestError, "Net::HTTPBadRequest: "\
                 "{\"title\": \"400 Bad Request\", \"description\": \"User already exists: jen@example.com\"}")
           end
         end
@@ -163,7 +163,7 @@ describe Groups::Mailman::Api do
         it "raises error" do
           VCR.use_cassette("groups/mailman/api/populate_membership/no_matching") do
             expect { api.populate_membership(list_mship) }
-              .to raise_error(Groups::Mailman::Api::RequestError, "Membership not found")
+              .to raise_error(ApiRequestError, "Membership not found")
           end
         end
       end
@@ -236,7 +236,7 @@ describe Groups::Mailman::Api do
           VCR.use_cassette("groups/mailman/api/delete_membership/happy_path") do
             api.delete_membership(list_mship)
             expect { api.populate_membership(list_mship) }
-              .to raise_error(Groups::Mailman::Api::RequestError, "Membership not found")
+              .to raise_error(ApiRequestError, "Membership not found")
           end
         end
       end
@@ -351,7 +351,7 @@ describe Groups::Mailman::Api do
         it "raises error" do
           VCR.use_cassette("groups/mailman/api/configure_list/no_matching_list") do
             expect { api.configure_list(list) }
-              .to raise_error(Groups::Mailman::Api::RequestError, "Net::HTTPNotFound: "\
+              .to raise_error(ApiRequestError, "Net::HTTPNotFound: "\
                 "{\"title\": \"404 Not Found\"}")
           end
         end

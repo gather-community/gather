@@ -21,7 +21,7 @@ module Groups
           return_url: Settings.mailman.single_sign_on.update_url
         )
         sso.email = user.email
-        sso.external_id = 2540
+        sso.external_id = user.id
         sso.name = user.decorate.full_name
         sso.username = sso.name
         sso.custom_fields[:first_name] = user.first_name
@@ -34,8 +34,12 @@ module Groups
           secret: Settings.single_sign_on.secret,
           return_url: Settings.mailman.single_sign_on.sign_out_url
         )
-        sso.external_id = 2540
+        sso.external_id = user.id
         do_request(sso)
+      rescue ApiRequestError => e
+        # We don't care about user_not_found errors because we don't need to sign out someone
+        # if they don't exist.
+        e.to_s =~ /user_not_found/ ? nil : (raise e)
       end
 
       def do_request(sso)
@@ -45,6 +49,7 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
+        raise ApiRequestError, res unless res.is_a?(Net::HTTPSuccess)
       end
     end
   end

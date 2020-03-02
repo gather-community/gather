@@ -10,14 +10,14 @@ module Groups
       def user_exists?(mm_user)
         request("users/#{mm_user.remote_id}")
         true
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.is_a?(Net::HTTPNotFound) ? false : (raise e)
       end
 
       # Assumes mm_user.email is set.
       def user_id_for_email(mm_user)
         request("users/#{mm_user.email}")["user_id"]
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
@@ -43,14 +43,14 @@ module Groups
 
       def delete_user(mm_user)
         request("users/#{mm_user.remote_id}", :delete)
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
       # Loads membership ID and role based on given list_id and remote member id
       def populate_membership(list_mship)
         found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
-        raise RequestError, "Membership not found" if found["total_size"].zero?
+        raise ApiRequestError, "Membership not found" if found["total_size"].zero?
         list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
       end
@@ -92,7 +92,7 @@ module Groups
       def create_list(list)
         response = request("lists", :post, fqdn_listname: list.fqdn_listname)
         response.header("Location").split("/")[-1]
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.body =~ /Mailing list exists/ ? nil : (raise e)
       end
 
@@ -109,13 +109,13 @@ module Groups
 
       def delete_list(list)
         request("lists/#{list.remote_id}", :delete)
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
       def create_domain(domain)
         request("domains", :post, mail_host: domain.name)
-      rescue RequestError => e
+      rescue ApiRequestError => e
         e.response.body =~ /Duplicate email host/ ? nil : (raise e)
       end
 
@@ -137,7 +137,7 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
-        raise RequestError, res unless res.is_a?(Net::HTTPSuccess)
+        raise ApiRequestError, res unless res.is_a?(Net::HTTPSuccess)
         ApiJsonResponse.new(res)
       end
 
@@ -147,20 +147,6 @@ module Groups
 
       def credentials
         @credentials ||= [Settings.mailman.api.username, Settings.mailman.api.password]
-      end
-
-      # Unexpected error in a http request.
-      class RequestError < StandardError
-        attr_accessor :response
-
-        def initialize(message)
-          if message.is_a?(Net::HTTPResponse)
-            self.response = message
-            super("#{message.class.name}: #{message.body}")
-          else
-            super(message)
-          end
-        end
       end
     end
   end

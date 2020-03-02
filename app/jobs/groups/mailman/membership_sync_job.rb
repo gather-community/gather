@@ -9,6 +9,7 @@ module Groups
       def perform(source_class_name, source_id)
         with_object_in_cluster_context(class_name: source_class_name, id: source_id) do |source|
           self.source = source
+          return unless source.syncable?
           missing, existing, obsolete = membership_diff
           missing.each { |m| create_membership(m) }
           existing.each { |m| update_membership(m) }

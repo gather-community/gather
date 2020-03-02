@@ -71,7 +71,11 @@ describe Groups::Mailman::List do
     let!(:mod2) { create(:user, email: "f@f.com", first_name: "Fu", last_name: "Smith") }
     let!(:owner1) { create(:user, email: "g@g.com", first_name: "Gu", last_name: "Smith") }
     let!(:owner2) { create(:user, email: "h@h.com", first_name: "Hu", last_name: "Smith") }
+    let!(:ownerX) { create(:user, email: "n@n.com", first_name: "Nu", last_name: "Smith") }
     let!(:owner_group) { create(:group, joiners: [owner1, owner2], can_administer_email_lists: true) }
+    let!(:inactive_owner_group) do
+      create(:group, :inactive, joiners: [ownerX], can_administer_email_lists: true)
+    end
     let!(:moderator_group) { create(:group, joiners: [mod1, mod2], can_moderate_email_lists: true) }
     let!(:joiner1) { create(:user, email: "j@j.com", first_name: "Ju", last_name: "Smith") }
     let!(:joiner2) { create(:user, email: "k@k.com", first_name: "Ku", last_name: "Smith") }

@@ -97,7 +97,7 @@ module Groups
       end
 
       def owner_moderator_memberships
-        ability_groups = Group.in_communities(group.communities)
+        ability_groups = Group.active.in_communities(group.communities)
         %i[administer moderate].flat_map do |ability|
           role = ability == :administer ? "owner" : "moderator"
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|

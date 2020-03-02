@@ -21,6 +21,9 @@ mailman:
     username: restadmin
     # Not a real secret, ok to check in
     password: restpass
+  single_sign_on:
+    update_url: https://localhost:8002/sso/update
+    sign_out_url: https://localhost:8002/sso/logout
 # These options are passed directly to the Elasticsearch::Client initializer.
 # See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
 # The default settings should work in most cases.

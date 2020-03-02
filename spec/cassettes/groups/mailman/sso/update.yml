@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://localhost:8002/sso/update?sig=0a3129833b4709fda4afacf0d913496a5c40de901758b0141fdac63e2cbc6077&sso=ZW1haWw9eCU0MHkuY29tJmV4dGVybmFsX2lkPTI1NDAmbmFtZT1YK0x1JnVzZXJuYW1lPVgrTHUmY3VzdG9tLmZpcnN0X25hbWU9WCZjdXN0b20ubGFzdF9uYW1lPUx1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8002
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Mon, 02 Mar 2020 14:53:25 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Language, Cookie
+      Content-Language:
+      - en
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Mon, 02 Mar 2020 14:54:09 GMT
+recorded_with: VCR 4.0.0

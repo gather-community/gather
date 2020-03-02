@@ -30,6 +30,20 @@ describe Groups::Mailman::SyncListener do
       end
     end
 
+    context "when changing name or email" do
+      it "enqueues user sync job" do
+        expect { user.update!(last_name: "Bostich") }
+          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :update)
+      end
+    end
+
+    context "when changing deactivated_at or adult" do
+      it "enqueues user sync job" do
+        expect { user.deactivate }
+          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :sign_out)
+      end
+    end
+
     context "when changing to household in different community" do
       let!(:household) { create(:household, community: create(:community)) }
 

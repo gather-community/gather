@@ -21,6 +21,7 @@ describe Groups::Mailman::SyncListener do
   end
 
   describe "update user" do
+    let!(:list) { create(:group_mailman_list) } # Must be present to pass guard.
     let!(:user) { create(:user) }
 
     context "when changing key attribute" do

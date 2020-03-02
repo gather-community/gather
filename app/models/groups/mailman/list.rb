@@ -111,7 +111,7 @@ module Groups
 
       def normal_memberships
         group.members(user_eager_load: :group_mailman_user).map do |user|
-          mm_user = user.group_mailman_user || user.build_group_mailman_user
+          mm_user = user.group_mailman_user || Mailman::User.new(user: user)
           ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: "member")
         end
       end

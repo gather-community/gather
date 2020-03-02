@@ -11,14 +11,13 @@ module Groups
       # * On User logout -- queue sso logout
 
       def create_user_successful(user)
-        # First check if there are any lists before doing the more expensive check of memberships.
-        # In specs, there will almost never be any lists.
-        return unless any_mailman_lists_in_cluster?
+        return if no_need_to_create_or_update?(user)
         return unless Mailman::User.new(user: user).syncable_with_memberships?
         UserSyncJob.perform_later(user_id: user.id)
       end
 
       def update_user_successful(user)
+        return if no_need_to_create_or_update?(user)
         attribs = %w[email first_name last_name deactivated_at adult]
         return unless attribs_changed?(user, attribs) || user_community_changed?(user)
         UserSyncJob.perform_later(user_id: user.id)
@@ -83,9 +82,11 @@ module Groups
 
       private
 
-      # Provides a useful guard clause for methods above that don't have other low-cost guards.
-      def any_mailman_lists_in_cluster?
-        Mailman::List.any?
+      def no_need_to_create_or_update?(user)
+        # If there are currently no sync'd lists and the user doesn't have a sync'd mailman user,
+        # there can't be any reason to create a remote user for them, so we can quit early.
+        # This is a useful guard to prevent unnecessary HTTP calls, especially in specs.
+        Mailman::List.none? # && user.group_mailman_user.nil?
       end
 
       def attribs_changed?(object, attribs)

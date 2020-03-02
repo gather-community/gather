@@ -18,20 +18,15 @@ class DiscourseSingleSignOn
   attr_accessor(*ACCESSORS)
   attr_accessor :secret, :return_url
 
-  def initialize(payload:, signature:, secret:, return_url: nil)
-    raise ParseError, "Payload and signature are required" if payload.blank? || signature.blank?
+  def initialize(payload: nil, signature: nil, secret:, return_url: nil)
+    if payload.blank? ^ signature.blank?
+      raise ParseError, "Payload and signature both required if either given"
+    end
 
     self.secret = secret
     self.return_url = return_url
 
-    check_signature(payload, signature)
-
-    decoded_hash = Rack::Utils.parse_query(Base64.decode64(payload))
-    assign_fields(decoded_hash)
-    assign_custom_fields(decoded_hash)
-
-    # Override the given return URL if one is provided in the payload.
-    self.return_url = return_sso_url if return_sso_url.present?
+    process_payload(payload, signature) if payload.present?
   end
 
   def custom_fields
@@ -43,6 +38,17 @@ class DiscourseSingleSignOn
   end
 
   private
+
+  def process_payload(payload, signature)
+    check_signature(payload, signature)
+
+    decoded_hash = Rack::Utils.parse_query(Base64.decode64(payload))
+    assign_fields(decoded_hash)
+    assign_custom_fields(decoded_hash)
+
+    # Override the given return URL if one is provided in the payload.
+    self.return_url = return_sso_url if return_sso_url.present?
+  end
 
   def check_signature(payload, signature)
     return if sign(payload) == signature

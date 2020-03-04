@@ -97,7 +97,7 @@ module Groups
         # If there are currently no sync'd lists and the user doesn't have a sync'd mailman user,
         # there can't be any reason to create a remote user for them, so we can quit early.
         # This is a useful guard to prevent unnecessary HTTP calls, especially in specs.
-        Mailman::List.none? # && user.group_mailman_user.nil?
+        Mailman::List.none? && user.group_mailman_user.nil?
       end
 
       def attribs_changed?(object, attribs)

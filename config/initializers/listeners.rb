@@ -19,6 +19,7 @@ Rails.application.config.after_initialize do
 
   # SyncListener must come after MembershipMaintainer because the former
   # relies on the latter having removed a user's memberships after e.g. they are deactivated.
+  Wisper.subscribe(Groups::Mailman::SyncListener.instance, on: :user_signed_out)
   User.subscribe(Groups::Mailman::SyncListener.instance)
   Household.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Group.subscribe(Groups::Mailman::SyncListener.instance)

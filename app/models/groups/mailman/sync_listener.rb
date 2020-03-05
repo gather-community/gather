@@ -6,10 +6,6 @@ module Groups
     class SyncListener
       include Singleton
 
-      # * On User update (email, name) -- queue user sso update if ever logged in
-      # * On User update (deactivate_at, adult), destroy -- queue user sso logout if not eligible (membership deletion will happen via cascading destroy)
-      # * On User logout -- queue sso logout
-
       def create_user_successful(user)
         return if no_need_to_create_or_update?(user)
         return unless Mailman::User.new(user: user).syncable_with_memberships?
@@ -43,6 +39,11 @@ module Groups
         )
 
         SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out) if user.group_mailman_user.present?
+      end
+
+      def user_signed_out(user)
+        return if no_need_to_create_or_update?(user)
+        SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)
       end
 
       def update_household_successful(household)

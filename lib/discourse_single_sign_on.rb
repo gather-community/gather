@@ -34,6 +34,7 @@ class DiscourseSingleSignOn
   end
 
   def to_url
+    raise ParseError, "Return URL not given" unless return_url.present?
     "#{return_url}#{return_url.include?('?') ? '&' : '?'}#{return_payload}"
   end
 

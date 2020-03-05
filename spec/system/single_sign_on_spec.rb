@@ -51,7 +51,7 @@ describe "single sign on" do
     context "with errant data" do
       scenario "returns error" do
         visit("/sso?sso=&sig=")
-        expect(page.body).to eq("Payload and signature are required")
+        expect(page.body).to eq("Return URL not given")
       end
     end
 

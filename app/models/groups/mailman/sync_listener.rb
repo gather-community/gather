@@ -67,7 +67,7 @@ module Groups
           sync_list_memberships_for_groups_in_same_communities(group)
         end
 
-        return unless attribs_changed?(group, %w[name description availability deactivated_at])
+        return unless attribs_changed?(group, %w[availability deactivated_at])
         return if group.mailman_list.nil?
         ListSyncJob.perform_later(list_id: group.mailman_list.id)
       end

@@ -72,11 +72,13 @@ describe Groups::Mailman::List do
     let!(:owner1) { create(:user, email: "g@g.com", first_name: "Gu", last_name: "Smith") }
     let!(:owner2) { create(:user, email: "h@h.com", first_name: "Hu", last_name: "Smith") }
     let!(:ownerX) { create(:user, email: "n@n.com", first_name: "Nu", last_name: "Smith") }
-    let!(:owner_group) { create(:group, joiners: [owner1, owner2], can_administer_email_lists: true) }
-    let!(:inactive_owner_group) do
+    let!(:own_group) { create(:group, joiners: [owner1, owner2], can_administer_email_lists: true) }
+    let!(:inactive_own_group) do
       create(:group, :inactive, joiners: [ownerX], can_administer_email_lists: true)
     end
-    let!(:moderator_group) { create(:group, joiners: [mod1, mod2], can_moderate_email_lists: true) }
+    let!(:own_mod_group) do
+      create(:group, joiners: [mod1, mod2], can_administer_email_lists: true, can_moderate_email_lists: true)
+    end
     let!(:joiner1) { create(:user, email: "j@j.com", first_name: "Ju", last_name: "Smith") }
     let!(:joiner2) { create(:user, email: "k@k.com", first_name: "Ku", last_name: "Smith") }
     let!(:manager1) { create(:user, email: "l@l.com", first_name: "Lu", last_name: "Smith") }
@@ -100,16 +102,14 @@ describe Groups::Mailman::List do
 
     it "returns correct list" do
       expect(list.list_memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])
-      actual = list.list_memberships.map do |mship|
-        mm_user = mship.mailman_user
-        [mm_user.persisted?, mm_user.user, mm_user.remote_id,
-         mm_user.email, mm_user.display_name, mship.role]
-      end
+      actual = summaries(list.list_memberships)
       expect(actual).to contain_exactly(
         [false, nil, nil, "a@a.com", "Al Smith", "nonmember"],
         [false, nil, nil, "b@b.com", nil, "nonmember"],
         [false, nil, nil, "c@c.com", nil, "member"],
         [false, nil, nil, "d@d.com", nil, "member"],
+        [false, mod1, nil, "e@e.com", "Eu Smith", "owner"],
+        [false, mod2, nil, "f@f.com", "Fu Smith", "owner"],
         [false, mod1, nil, "e@e.com", "Eu Smith", "moderator"],
         [false, mod2, nil, "f@f.com", "Fu Smith", "moderator"],
         [false, owner1, nil, "g@g.com", "Gu Smith", "owner"],
@@ -119,6 +119,13 @@ describe Groups::Mailman::List do
         [false, manager1, nil, "l@l.com", "Lu Smith", "member"],
         [false, manager2, nil, "m@m.com", "Mu Smith", "member"]
       )
+    end
+
+    def summaries(memberships)
+      memberships.map do |mship|
+        mm_user = mship.mailman_user
+        [mm_user.persisted?, mm_user.user, mm_user.remote_id, mm_user.email, mm_user.display_name, mship.role]
+      end
     end
   end
 end

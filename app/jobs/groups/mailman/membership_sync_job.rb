@@ -10,9 +10,8 @@ module Groups
         with_object_in_cluster_context(class_name: source_class_name, id: source_id) do |source|
           self.source = source
           return unless source.syncable?
-          missing, existing, obsolete = membership_diff
+          missing, obsolete = membership_diff
           missing.each { |m| create_membership(m) }
-          existing.each { |m| update_membership(m) }
           obsolete.each { |m| api.delete_membership(m) }
         end
       end
@@ -22,7 +21,7 @@ module Groups
       def membership_diff
         local = source.list_memberships
         remote = api.memberships(source)
-        [local - remote, local & remote, remote - local]
+        [local - remote, remote - local]
       end
 
       def create_membership(mship)
@@ -33,12 +32,6 @@ module Groups
 
         create_or_capture_mailman_user(mship) unless mship.user_remote_id?
         api.create_membership(mship)
-      end
-
-      def update_membership(mship)
-        # No need to check fakeness here if there is already a matching membership on the server.
-        create_or_capture_mailman_user(mship) unless mship.user_remote_id?
-        api.update_membership(mship)
       end
 
       # Checks if a mailman user exists with the email contained in mship.

@@ -14,7 +14,7 @@ module Groups
       # We compare based on email and list_id because those are the two key pieces.
       # user_remote_id may or may not be available depending on what this ListMembership was built from.
       def ==(other)
-        email == other.email && list_id == other.list_id
+        email == other.email && list_id == other.list_id && role == other.role
       end
 
       def eql?(other)

@@ -26,21 +26,21 @@ describe Groups::Mailman::MembershipSyncJob do
     let!(:mm_user1) { create(:group_mailman_user, remote_id: "111", user: create(:user)) }
     let(:local_mships) do
       [
-        # This should get created since no matching mship in remote.
+        # These should get created since no matching mships in remote.
         build_mship(mailman_user: mm_user1, list_id: "list1.blah", role: "member"),
-
-        # These should get updated with new role.
         build_mship(mailman_user: mm_user1, list_id: "list2.blah", role: "owner"),
-        build_mship(mailman_user: mm_user1, list_id: "list3.blah", role: "member")
+
+        # These should not get touched since they already exist on remote.
+        build_mship(mailman_user: mm_user1, list_id: "list2.blah", role: "member")
       ]
     end
     let(:remote_mships) do
       [
-        # These will get updated since they match local ones.
+        # This matches local.
         build_mship(remote_id: "f11", mailman_user: mm_user1, list_id: "list2.blah", role: "member"),
-        build_mship(remote_id: "f22", mailman_user: mm_user1, list_id: "list3.blah", role: "owner"),
 
-        # This will get deleted because it doesn't match anything above.
+        # These will get deleted because they don't match anything above.
+        build_mship(remote_id: "f33", mailman_user: mm_user1, list_id: "list2.blah", role: "moderator"),
         build_mship(remote_id: "f33", mailman_user: mm_user1, list_id: "list4.blah", role: "member")
       ]
     end
@@ -55,11 +55,11 @@ describe Groups::Mailman::MembershipSyncJob do
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
                                                                    list_id: "list1.blah", role: "member"))
 
-      expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "111",
+      expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
                                                                    list_id: "list2.blah", role: "owner"))
 
-      expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list3.blah", role: "member"))
+      expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
+                                                                   list_id: "list2.blah", role: "moderator"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
                                                                    list_id: "list4.blah", role: "member"))
@@ -83,11 +83,11 @@ describe Groups::Mailman::MembershipSyncJob do
         # This should get created since no matching mship in remote.
         build_mship(mailman_user: mm_user1, list_id: "list3.blah", role: "member"),
 
-        # This should get updated with new role.
-        build_mship(mailman_user: mm_user2, list_id: "list3.blah", role: "member"),
+        # This should not be touched b/c matches server.
+        build_mship(mailman_user: mm_user2, list_id: "list3.blah", role: "owner"),
 
-        # This should also get updated with new role. user7's remote_id will need to be fetched.
-        build_mship(mailman_user: mm_user8, list_id: "list3.blah", role: "member"),
+        # This should also not be touched since email matches.
+        build_mship(mailman_user: mm_user8, list_id: "list3.blah", role: "moderator"),
 
         # This should get skipped b/c fake user.
         build_mship(mailman_user: mm_user3, list_id: "list3.blah", role: "member"),
@@ -106,11 +106,11 @@ describe Groups::Mailman::MembershipSyncJob do
     end
     let(:remote_mships) do
       [
-        # This will get updated since it matches a local one by email.
+        # This will say since it matches a local one by email.
         build_mship(remote_id: "f11", mailman_user: mm_user2, list_id: "list3.blah", role: "owner"),
 
-        # This should also get updated. See above.
-        build_mship(remote_id: "f22", mailman_user: mm_user9, list_id: "list3.blah", role: "owner"),
+        # This should also stay. See above.
+        build_mship(remote_id: "f22", mailman_user: mm_user9, list_id: "list3.blah", role: "moderator"),
 
         # This will get deleted because it doesn't match anything above.
         build_mship(remote_id: "f33", mailman_user: mm_user7, list_id: "list3.blah", role: "member")
@@ -119,7 +119,6 @@ describe Groups::Mailman::MembershipSyncJob do
     subject(:job) { described_class.new("Groups::Mailman::List", mm_list.id) }
 
     before do
-      # TODO: TRY WITHOUT THIS OR COMMENT
       expect(job).to receive(:load_object_without_tenant).and_return(mm_list)
       expect(mm_list).to receive(:list_memberships).and_return(local_mships)
     end
@@ -139,13 +138,6 @@ describe Groups::Mailman::MembershipSyncJob do
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "c@c.com")).and_return("444")
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "444",
-                                                                   list_id: "list3.blah", role: "member"))
-
-      expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list3.blah", role: "member"))
-
-      expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "e@e.com")).and_return("555")
-      expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "555",
                                                                    list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(remote_id: "f33"))

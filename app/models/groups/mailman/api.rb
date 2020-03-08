@@ -64,16 +64,6 @@ module Groups
                                   pre_approved: "true")
       end
 
-      # Assumes list_mship has an associated user remote_id.
-      def update_membership(list_mship)
-        new_role = list_mship.role
-        populate_membership(list_mship) # Get the membership remote ID.
-        delete_membership(list_mship)
-        list_mship.role = new_role
-        create_membership(list_mship)
-        # TODO: Add this once it's released: send_welcome_message: false
-      end
-
       # Assumes remote_id is set on list_mship
       def delete_membership(list_mship)
         request("members/#{list_mship.remote_id}", :delete)

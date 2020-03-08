@@ -51,12 +51,15 @@ module Groups
         household.users.each { |u| UserSyncJob.perform_later(user_id: u.id) }
       end
 
+      def create_groups_group_successful(group)
+        return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
+        sync_list_memberships_for_groups_in_same_communities(group)
+      end
+      alias destroy_groups_group_successful create_groups_group_successful
+
       def update_groups_group_successful(group)
         if attribs_changed?(group, %w[can_administer_email_lists can_moderate_email_lists])
-          group_ids = Group.in_communities(group.communities).pluck(:id)
-          Mailman::List.where(group_id: group_ids).pluck(:id).each do |list_id|
-            MembershipSyncJob.perform_later("Groups::Mailman::List", list_id)
-          end
+          sync_list_memberships_for_groups_in_same_communities(group)
         end
 
         return unless attribs_changed?(group, %w[name description availability deactivated_at])
@@ -93,6 +96,13 @@ module Groups
       end
 
       private
+
+      def sync_list_memberships_for_groups_in_same_communities(group)
+        group_ids = Group.in_communities(group.communities).pluck(:id)
+        Mailman::List.where(group_id: group_ids).pluck(:id).each do |list_id|
+          MembershipSyncJob.perform_later("Groups::Mailman::List", list_id)
+        end
+      end
 
       def no_need_to_create_or_update?(user)
         # If there are currently no sync'd lists and the user doesn't have a sync'd mailman user,

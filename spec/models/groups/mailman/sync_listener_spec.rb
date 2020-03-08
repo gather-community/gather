@@ -107,6 +107,25 @@ describe Groups::Mailman::SyncListener do
     end
   end
 
+  describe "create group" do
+    let!(:other_list1) { create(:group_mailman_list) }
+    let!(:other_list2) { create(:group_mailman_list) }
+
+    context "with admin/mod attrib" do
+      it "enqueues membership sync job for all lists in same communities" do
+        expect { create(:group, can_administer_email_lists: true) }
+          .to have_enqueued_membership_sync_job_with_list.twice
+      end
+    end
+
+    context "without admin/mod attrib" do
+      it "doesn't enqueue job" do
+        expect { create(:group, can_administer_email_lists: false) }
+          .not_to have_enqueued_membership_sync_job
+      end
+    end
+  end
+
   describe "update group" do
     let!(:group) { create(:group) }
 
@@ -131,7 +150,7 @@ describe Groups::Mailman::SyncListener do
         let!(:other_list1) { create(:group_mailman_list) }
         let!(:other_list2) { create(:group_mailman_list) }
 
-        it "enqueues membership sync job for all lists" do
+        it "enqueues membership sync job for all lists in same communities" do
           expect { group.update!(can_administer_email_lists: true) }
             .to have_enqueued_membership_sync_job_with_list.thrice
         end
@@ -149,10 +168,32 @@ describe Groups::Mailman::SyncListener do
         let!(:other_list1) { create(:group_mailman_list) }
         let!(:other_list2) { create(:group_mailman_list) }
 
-        it "enqueues list sync job for all lists" do
+        it "enqueues list sync job for all lists in same communities" do
           expect { group.update!(can_administer_email_lists: true) }
             .to have_enqueued_membership_sync_job_with_list.twice
         end
+      end
+    end
+  end
+
+  describe "destroy group" do
+    let!(:other_list1) { create(:group_mailman_list) }
+    let!(:other_list2) { create(:group_mailman_list) }
+    let!(:group) { create(:group, can_administer_email_lists: can_admin) }
+
+    context "with admin/mod attrib" do
+      let(:can_admin) { true }
+
+      it "enqueues membership sync job for all lists in same communities" do
+        expect { group.destroy }.to have_enqueued_membership_sync_job_with_list.twice
+      end
+    end
+
+    context "without admin/mod attrib" do
+      let(:can_admin) { false }
+
+      it "doesn't enqueue job" do
+        expect { group.destroy }.not_to have_enqueued_membership_sync_job
       end
     end
   end

@@ -22,8 +22,8 @@ mailman:
     # Not a real secret, ok to check in
     password: restpass
   single_sign_on:
-    update_url: https://localhost:8002/sso/update
-    sign_out_url: https://localhost:8002/sso/logout
+    update_url: http://localhost:8000/sso/update
+    sign_out_url: http://localhost:8000/sso/logout
 # These options are passed directly to the Elasticsearch::Client initializer.
 # See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
 # The default settings should work in most cases.

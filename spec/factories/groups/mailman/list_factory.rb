@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :group_mailman_list, class: "Groups::Mailman::List" do
     group
     sequence(:name) { |i| "list#{i}" }
-    sequence(:remote_id) { |i| "list#{i}.something.gather.coop" }
+    remote_id { nil }
     outside_members { "foo@example.com" }
     outside_senders { "bar@example.com" }
     domain

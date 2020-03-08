@@ -79,10 +79,11 @@ module Groups
         request("members/#{list_mship.remote_id}", :delete)
       end
 
-      def memberships(mm_user: nil, list: nil)
-        criterion = mm_user ? {subscriber: mm_user.email} : {list_id: list.remote_id}
+      def memberships(source)
+        criterion = source.respond_to?(:email) ? {subscriber: source.email} : {list_id: source.remote_id}
         (request("members/find", :post, **criterion)["entries"] || []).map do |entry|
-          ListMembership.new(mailman_user: mm_user || Mailman::User.new(email: entry["email"]),
+          mm_user = source.respond_to?(:email) ? source : Mailman::User.new(email: entry["email"])
+          ListMembership.new(mailman_user: mm_user,
                              list_id: entry["list_id"],
                              role: entry["role"],
                              remote_id: entry["member_id"])

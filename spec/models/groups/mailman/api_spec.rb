@@ -249,7 +249,7 @@ describe Groups::Mailman::Api do
 
           it "gets memberships" do
             VCR.use_cassette("groups/mailman/api/memberships/for_user/happy_path") do
-              mships = api.memberships(mm_user: mm_user).sort_by(&:list_id)
+              mships = api.memberships(mm_user).sort_by(&:list_id)
               expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
               expect(mships.map(&:list_id)).to eq(%w[ping.mail.gather.coop ping.tscoho.org])
               expect(mships.map(&:remote_id))
@@ -264,7 +264,7 @@ describe Groups::Mailman::Api do
 
           it "gets memberships" do
             VCR.use_cassette("groups/mailman/api/memberships/for_user/no_matching") do
-              expect(api.memberships(mm_user: mm_user).sort_by(&:list_id)).to eq([])
+              expect(api.memberships(mm_user).sort_by(&:list_id)).to eq([])
             end
           end
         end
@@ -276,7 +276,7 @@ describe Groups::Mailman::Api do
 
           it "gets memberships" do
             VCR.use_cassette("groups/mailman/api/memberships/for_list/happy_path") do
-              mships = api.memberships(list: list).sort_by(&:email)
+              mships = api.memberships(list).sort_by(&:email)
               expect(mships.map(&:email)).to eq(%w[jen@example.org phil@example.org zar@example.org])
               expect(mships.map(&:list_id)).to eq(%w[ping.tscoho.org ping.tscoho.org ping.tscoho.org])
               expect(mships.map(&:remote_id))

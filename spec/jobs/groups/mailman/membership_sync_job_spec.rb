@@ -128,23 +128,23 @@ describe Groups::Mailman::MembershipSyncJob do
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "000",
                                                                    list_id: "list3.blah", role: "member"))
 
-      expect(api).to receive(:user_id_for_email).with("a@a.com").and_return("222")
+      expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "a@a.com")).and_return("222")
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "222",
                                                                    list_id: "list3.blah", role: "member"))
 
-      expect(api).to receive(:user_id_for_email).with("b@b.com").and_return(nil)
+      expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "b@b.com")).and_return(nil)
       expect(api).to receive(:create_user).with(mm_user5).and_return("333")
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "333",
                                                                    list_id: "list3.blah", role: "member"))
 
-      expect(api).to receive(:user_id_for_email).with("c@c.com").and_return("444")
+      expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "c@c.com")).and_return("444")
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "444",
                                                                    list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "111",
                                                                    list_id: "list3.blah", role: "member"))
 
-      expect(api).to receive(:user_id_for_email).with("e@e.com").and_return("555")
+      expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "e@e.com")).and_return("555")
       expect(api).to receive(:update_membership, &with_obj_attribs(user_remote_id: "555",
                                                                    list_id: "list3.blah", role: "member"))
 

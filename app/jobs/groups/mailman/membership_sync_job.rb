@@ -45,7 +45,7 @@ module Groups
       # If one does, stores the remote_id. Otherwise, creates it and stores remote_id.
       def create_or_capture_mailman_user(mship)
         mm_user = mship.mailman_user
-        mm_user.remote_id = api.user_id_for_email(mm_user.email) || api.create_user(mm_user)
+        mm_user.remote_id = api.user_id_for_email(mm_user) || api.create_user(mm_user)
 
         # If the mm_user has a Gather user object assigned, we want to associate the remote_id we just got
         # with it in the database for future API calls, so we save the mm_user. If there is no

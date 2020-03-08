@@ -181,6 +181,10 @@ describe Groups::Mailman::SyncListener do
     let!(:other_list2) { create(:group_mailman_list) }
     let!(:group) { create(:group, can_administer_email_lists: can_admin) }
 
+    before do
+      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
+    end
+
     context "with admin/mod attrib" do
       let(:can_admin) { true }
 
@@ -213,7 +217,7 @@ describe Groups::Mailman::SyncListener do
   end
 
   describe "destroy mailman list" do
-    let!(:list) { create(:group_mailman_list) }
+    let!(:list) { create(:group_mailman_list, remote_id: "something") }
 
     it "enqueues list sync job with destroyed flag" do
       expect { list.destroy }.to have_enqueued_list_sync_job_with_destroy_flag
@@ -224,6 +228,10 @@ describe Groups::Mailman::SyncListener do
   describe "create/update/destroy group membership" do
     let!(:group) { create(:group) }
 
+    before do
+      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
+    end
+
     context "with attached list" do
       let!(:list) { create(:group_mailman_list, group: group) }
 
@@ -233,8 +241,21 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "without attached list" do
+      let!(:decoy_list) { create(:group_mailman_list) }
+
       it "doesn't enqueue job" do
         expect { create(:group_membership, group: group) }.not_to have_enqueued_membership_sync_job
+      end
+    end
+
+    context "with admin perm" do
+      let!(:group) { create(:group, can_administer_email_lists: true) }
+      let!(:other_list1) { create(:group_mailman_list) }
+      let!(:other_list2) { create(:group_mailman_list) }
+
+      it "enqueues membership sync job for all lists in same communities" do
+        expect { create(:group_membership, group: group) }
+          .to have_enqueued_membership_sync_job_with_list.twice
       end
     end
   end
@@ -242,6 +263,10 @@ describe Groups::Mailman::SyncListener do
   # We only test create here b/c we are using Wisper's _committed callback so we trust it to handle all 2.
   describe "create/destroy group affilitation" do
     let!(:group) { create(:group) }
+
+    before do
+      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
+    end
 
     context "with attached list" do
       let!(:list) { create(:group_mailman_list, group: group) }
@@ -252,8 +277,21 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "without attached list" do
+      let!(:decoy_list) { create(:group_mailman_list) }
+
       it "doesn't enqueue job" do
         expect { group.communities << create(:community) }.not_to have_enqueued_membership_sync_job
+      end
+    end
+
+    context "with mod perm" do
+      let!(:group) { create(:group, can_moderate_email_lists: true) }
+      let!(:other_list1) { create(:group_mailman_list) }
+      let!(:other_list2) { create(:group_mailman_list) }
+
+      it "enqueues membership sync job for all lists in same communities" do
+        expect { group.communities << create(:community) }
+          .to have_enqueued_membership_sync_job_with_list.twice
       end
     end
   end

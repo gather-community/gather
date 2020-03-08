@@ -6,6 +6,13 @@ module Groups
     class SyncListener
       include Singleton
 
+      attr_accessor :last_method_txn_ids
+
+      # For use in tests.
+      def reset_duplicate_tracking!
+        self.last_method_txn_ids = {}
+      end
+
       def create_user_successful(user)
         return if no_need_to_create_or_update?(user)
         return unless Mailman::User.new(user: user).syncable_with_memberships?
@@ -52,10 +59,8 @@ module Groups
       end
 
       def create_groups_group_successful(group)
-        return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
-        sync_list_memberships_for_groups_in_same_communities(group)
+        sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
       end
-      alias destroy_groups_group_successful create_groups_group_successful
 
       def update_groups_group_successful(group)
         if attribs_changed?(group, %w[can_administer_email_lists can_moderate_email_lists])
@@ -65,6 +70,10 @@ module Groups
         return unless attribs_changed?(group, %w[name description availability deactivated_at])
         return if group.mailman_list.nil?
         ListSyncJob.perform_later(list_id: group.mailman_list.id)
+      end
+
+      def destroy_groups_group_successful(group)
+        sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
       end
 
       def create_groups_mailman_list_successful(list)
@@ -88,17 +97,37 @@ module Groups
       end
 
       def groups_membership_committed(membership)
-        enqueue_membership_sync_job_if_associated_group_has_list(membership)
+        sync_memberships_for_group_list(membership.group)
+        sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(membership.group)
       end
 
       def groups_affiliation_committed(affiliation)
-        enqueue_membership_sync_job_if_associated_group_has_list(affiliation)
+        sync_memberships_for_group_list(affiliation.group)
+        sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(affiliation.group)
       end
 
       private
 
+      def sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
+        return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
+        sync_list_memberships_for_groups_in_same_communities(group)
+      end
+
+      def sync_memberships_for_group_list(group)
+        return if method_already_ran_this_transaction?(__method__)
+        list = group&.mailman_list
+        return if list.nil?
+        MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
+      end
+
       def sync_list_memberships_for_groups_in_same_communities(group)
-        group_ids = Group.in_communities(group.communities).pluck(:id)
+        return if method_already_ran_this_transaction?(__method__)
+
+        # We use in_community since we want to err on the side of syncing more lists than few.
+        # Technically if a list has cmtys A & B and the given group has cmty B only, then we will
+        # sync the list even though this group doesn't affect that list. But computing it exactly
+        # is tricky and this is an edge case and no harm done.
+        group_ids = Group.in_community(group.communities).pluck(:id)
         Mailman::List.where(group_id: group_ids).pluck(:id).each do |list_id|
           MembershipSyncJob.perform_later("Groups::Mailman::List", list_id)
         end
@@ -121,10 +150,11 @@ module Groups
         user.community_id != old_community_id
       end
 
-      def enqueue_membership_sync_job_if_associated_group_has_list(object)
-        list = object.group&.mailman_list
-        return if list.nil?
-        MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
+      def method_already_ran_this_transaction?(method_name)
+        self.last_method_txn_ids ||= {}
+        return true if last_method_txn_ids[method_name] == ApplicationRecord.txn_id
+        last_method_txn_ids[method_name] = ApplicationRecord.txn_id
+        false
       end
     end
   end

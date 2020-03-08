@@ -23,8 +23,9 @@ module Groups
 
     scope :in_community, lambda { |c|
       where("EXISTS(SELECT id FROM group_affiliations
-        WHERE group_id = groups.id AND community_id = ?)", c.id)
+        WHERE group_id = groups.id AND community_id IN (?))", Array.wrap(c).map(&:id))
     }
+    # Matches groups that are in AT LEAST ALL the same communities as the passed array.
     scope :in_communities, ->(cmtys) { cmtys.inject(all) { |rel, c| rel.in_community(c) } }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :visible, -> { where.not(availability: "hidden") }

@@ -97,6 +97,7 @@ module Groups
       end
 
       def owner_moderator_memberships
+        # Groups that can administer this group must have at least the same communities if not more.
         ability_groups = Group.active.in_communities(group.communities)
         %i[administer moderate].flat_map do |ability|
           role = ability == :administer ? "owner" : "moderator"

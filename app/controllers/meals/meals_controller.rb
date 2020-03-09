@@ -167,9 +167,12 @@ module Meals
 
     # Pundit built-in helper doesn't work due to namespacing
     def meal_params
-      params.require(:meals_meal).permit(policy(@meal).permitted_attributes).tap do |permitted|
+      permitted = policy(@meal).permitted_attributes
+      params.require(:meals_meal).permit(permitted).tap do |permitted|
         # If no allergen boxes are checked, this param won't exist at all, so old value won't get overwritten
-        permitted["allergens"] ||= []
+        # We check if no_allergens is permitted to see if the user can edit allergen info. Otherwise,
+        # if we add this field it causes weird errors.
+        permitted["allergens"] ||= [] if permitted.include?(:no_allergens)
       end
     end
 

@@ -76,7 +76,6 @@ describe "meal crud", js: true do
       # Update to add expenses
       click_link("Southern Beans")
       click_link("Edit")
-      # click_link("Edit Expenses")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
       choose("Balance Credit")
@@ -84,7 +83,6 @@ describe "meal crud", js: true do
       expect_success
       click_link("Southern Beans")
       click_link("Edit")
-      # click_link("Edit Expenses")
       expect(page).to have_field("Ingredient Cost", with: "125.66")
       click_button("Save")
 
@@ -101,29 +99,43 @@ describe "meal crud", js: true do
   context "as regular user" do
     let!(:actor) { create(:user) }
 
-    scenario do
-      test_index
-      expect(page).not_to have_content("Create Meal")
+    shared_examples_for "allows show, summary, and edit to workers" do
+      scenario do
+        test_index
+        expect(page).not_to have_content("Create Meal")
 
-      # Update to change assignment
-      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Menu]").click
-      click_link("Edit")
-      expect(page).not_to have_content("Delete Meal")
-      # click_link("Edit Workers")
-      add_worker_field(role: ac_role)
-      accept_confirm { select_worker(actor.name, role: ac_role) }
-      click_button("Save")
-      expect_success
+        # Update to change assignment
+        find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click
+        click_link("Edit")
+        expect(page).not_to have_content("Delete Meal")
+        add_worker_field(role: ac_role)
+        accept_confirm { select_worker(actor.name, role: ac_role) }
+        click_button("Save")
 
-      # Show
-      find("tr", text: meals[4].head_cook.name).find("a", text: "[No Menu]").click
-      expect(page).to have_css("#meal-menu", text: actor.name)
+        expect_success
 
-      # Summary
-      click_link("Summary")
-      expect(page).to have_content("This meal will require")
-      expect(page).to have_css("#meal-menu", text: actor.name)
-      expect(page).not_to have_css("a", text: "Close")
+        # Show
+        find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click
+        expect(page).to have_css("#meal-menu", text: actor.name)
+
+        # Summary
+        click_link("Summary")
+        expect(page).to have_content("This meal will require")
+        expect(page).to have_css("#meal-menu", text: actor.name)
+        expect(page).not_to have_css("a", text: "Close")
+      end
+    end
+
+    context "without menu" do
+      it_behaves_like "allows show, summary, and edit to workers"
+    end
+
+    context "with menu" do
+      before do
+        meals[4].update!(title: "Foo", entrees: "Foo + eggs", allergens: ["Eggs"])
+      end
+
+      it_behaves_like "allows show, summary, and edit to workers"
     end
   end
 
@@ -147,7 +159,6 @@ describe "meal crud", js: true do
   end
 
   def fill_in_menu
-    # click_link("Edit Menu")
     fill_in("Title", with: "Southern Beans and Rice")
     fill_in("Entrees", with: "Beans, rice, sausage")
     fill_in("Side", with: "Collards")

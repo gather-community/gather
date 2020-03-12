@@ -111,21 +111,29 @@ module Groups
       @opt_outs ||= memberships.opt_outs.including_users_and_communities.map(&:user)
     end
 
-    # members = managers + (everybody ? all active adults : joiners) - opt outs
-    def members(user_eager_load: nil)
-      kinds = everybody? ? %i[opt_out] : %i[joiner manager]
+    # computed_memberships = persisted_memberships + (ephemeral memberships for all other active adults)
+    def computed_memberships(user_eager_load: nil)
+      kinds = everybody? ? %i[opt_out manager] : %i[joiner manager]
       matching_mships = memberships.where(kind: kinds).including_users_and_communities
       matching_mships = matching_mships.includes(user: user_eager_load) unless user_eager_load.nil?
-      matching_users = matching_mships.map(&:user)
+      matching_mships = matching_mships.to_a
       if everybody?
         # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
         # They should be consistent.
         all_users = ::User.active.adults.in_community(communities).including_communities.by_name
         all_users = all_users.includes(user_eager_load) unless user_eager_load.nil?
-        all_users - matching_users
-      else
-        matching_users
+        mships_by_user = matching_mships.index_by(&:user)
+        all_users.each do |user|
+          next if mships_by_user.key?(user)
+          matching_mships << Membership.new(group: self, user: user, kind: "joiner")
+        end
       end
+      matching_mships
+    end
+
+    # members = managers + (everybody ? all active adults : joiners) - opt outs
+    def members(*args)
+      computed_memberships(*args).map { |mship| mship.opt_out? ? nil : mship.user }.compact
     end
 
     # Assumes membership records persisted. Assumes used only O(1) times. Use other methods for O(n).

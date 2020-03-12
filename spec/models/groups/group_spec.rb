@@ -207,7 +207,7 @@ describe Groups::Group do
     end
   end
 
-  describe "#members and .with_member_counts" do
+  describe "#members, #computed_memberships, and .with_member_counts" do
     let!(:users) { create_list(:user, 8) }
     let!(:child) { create(:user, :child, guardians: [users[0]]) }
     let!(:regular_group) do
@@ -231,10 +231,34 @@ describe Groups::Group do
       expect(groups[0].members).to contain_exactly(users[0], users[1], users[2])
       expect(groups[0].members(user_eager_load: :group_mailman_user))
         .to contain_exactly(users[0], users[1], users[2])
+      expect(groups[0].computed_memberships.size).to eq(3)
+      summary = groups[0].computed_memberships(user_eager_load: :group_mailman_user).map do |m|
+        [m.user_id, m.group_id, m.kind]
+      end
+      expect(summary).to contain_exactly(
+        [users[0].id, groups[0].id, "joiner"],
+        [users[1].id, groups[0].id, "joiner"],
+        [users[2].id, groups[0].id, "manager"]
+      )
+
       expect(groups[1].member_count).to eq(6)
       expect(groups[1].members).to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
       expect(groups[1].members(user_eager_load: :group_mailman_user))
         .to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
+      expect(groups[1].computed_memberships.size).to eq(8)
+      summary = groups[1].computed_memberships(user_eager_load: :group_mailman_user).map do |m|
+        [m.user_id, m.group_id, m.kind]
+      end
+      expect(summary).to contain_exactly(
+        [users[0].id, groups[1].id, "opt_out"],
+        [users[1].id, groups[1].id, "joiner"],
+        [users[2].id, groups[1].id, "joiner"],
+        [users[3].id, groups[1].id, "joiner"],
+        [users[4].id, groups[1].id, "opt_out"],
+        [users[5].id, groups[1].id, "manager"],
+        [users[6].id, groups[1].id, "joiner"],
+        [users[7].id, groups[1].id, "joiner"]
+      )
     end
   end
 

@@ -111,9 +111,15 @@ module Groups
       end
 
       def normal_memberships
-        group.members(user_eager_load: :group_mailman_user).map do |user|
+        group.computed_memberships(user_eager_load: :group_mailman_user).flat_map do |mship|
+          user = mship.user
           mm_user = user.group_mailman_user || Mailman::User.new(user: user)
-          ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: "member")
+          roles = ["member"]
+          if mship.manager?
+            roles << "owner" if managers_can_administer?
+            roles << "moderator" if managers_can_moderate?
+          end
+          roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
         end
       end
     end

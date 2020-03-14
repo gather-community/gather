@@ -4,8 +4,13 @@ module Groups
   module Mailman
     # Handles calls asynchronous calls out to the mailman SSO system such as update and sign out.
     class SingleSignOnJob < ApplicationJob
-      def perform(user_id:, action:)
-        with_object_in_cluster_context(klass: ::User, id: user_id) do |user|
+      def perform(user_id:, action:, cluster_id: nil, destroyed: false)
+        params = if destroyed
+                   {klass: ::User, attribs: {id: user_id, cluster_id: cluster_id}}
+                 else
+                   {klass: ::User, id: user_id}
+                 end
+        with_object_in_cluster_context(**params) do |user|
           case action
           when :update then update(user)
           when :sign_out then sign_out(user)

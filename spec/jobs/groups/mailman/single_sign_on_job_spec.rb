@@ -38,5 +38,18 @@ describe Groups::Mailman::SingleSignOnJob do
         end
       end
     end
+
+    context "with destroyed user" do
+      let(:cluster) { Defaults.cluster }
+      subject!(:job) do
+        described_class.new(user_id: 2540, cluster_id: cluster.id, action: :sign_out, destroyed: true)
+      end
+
+      it "calls appropriate url" do
+        VCR.use_cassette("groups/mailman/sso/sign_out/deleted") do
+          perform_job
+        end
+      end
+    end
   end
 end

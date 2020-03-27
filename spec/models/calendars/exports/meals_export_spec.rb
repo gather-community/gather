@@ -19,8 +19,14 @@ describe "meals exports" do
                               served_at: Time.current + 3.days,
                               communities: [meal1.community, communityB])
   end
-  let!(:signup) do
+  let!(:cancelled_meal) do
+    create(:meal, :cancelled)
+  end
+  let!(:signup1) do
     create(:meal_signup, meal: meal1, household: user.household, comments: "Foo\nBar", diner_counts: [2])
+  end
+  let!(:signup2) do
+    create(:meal_signup, meal: cancelled_meal, household: user.household, diner_counts: [2])
   end
 
   context "your meals" do

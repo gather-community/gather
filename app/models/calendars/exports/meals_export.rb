@@ -15,6 +15,7 @@ module Calendars
         Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
           .includes(:resources)
           .with_max_age(MAX_EVENT_AGE)
+          .not_cancelled
           .oldest_first
       end
 

@@ -4,6 +4,7 @@
 # the means to encode, decode, and sign the URLs and payloads required.
 class DiscourseSingleSignOn
   class ParseError < RuntimeError; end
+  class SignatureError < RuntimeError; end
 
   ACCESSORS = %i[add_groups admin moderator avatar_force_update avatar_url bio card_background_url
                  email external_id groups locale locale_force_update name nonce profile_background_url
@@ -51,7 +52,7 @@ class DiscourseSingleSignOn
       raise ParseError, "Invalid chars in SSO field.#{diags}"
     else
       diags = "\n\npayload: #{payload}\n\nsig: #{signature}\n\nexpected sig: #{sign(payload)}"
-      raise ParseError, "Bad signature for payload.#{diags}"
+      raise SignatureError, "Bad signature for payload.#{diags}"
     end
   end
 

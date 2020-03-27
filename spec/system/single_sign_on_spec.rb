@@ -5,17 +5,28 @@ require "rails_helper"
 describe "single sign on" do
   # We create an admin so they can impersonate. Otherwise behavior should be the same.
   let!(:actor) { create(:admin, id: 1234, first_name: "Tom", last_name: "Smyth", email: "tom@example.com") }
+  let(:subdomain) { nil }
+  let(:cluster) { Defaults.cluster }
+  let(:community) { Defaults.community }
+  let(:secret) { Settings.single_sign_on.secret }
   let(:valid_incoming_url) do
     qs = Rack::Utils.build_query(return_sso_url: "https://example.com/sso/login", nonce: "xyz")
     payload = Base64.strict_encode64(qs)
-    sig = OpenSSL::HMAC.hexdigest("sha256", Settings.single_sign_on.secret, payload)
-    "/sso?sso=#{CGI.escape(payload)}&sig=#{sig}"
+    sig = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
+    host = [subdomain, Settings.url.host].compact.join(".")
+    "#{Settings.url.protocol}://#{host}:#{Settings.url.port}/sso?sso=#{CGI.escape(payload)}&sig=#{sig}"
   end
   let(:valid_redirect) do
-    "https://example.com/sso/login?sso=ZW1haWw9dG9tJTQwZXhhbXBsZS5jb20mZXh0ZXJuYWxfaW"\
-      "Q9MTIzNCZuYW1lPVRvbStTbXl0aCZub25jZT14eXomcmV0dXJuX3Nzb191cmw9aHR0cHMlM0ElMkYlMkZleGFtcGx"\
-      "lLmNvbSUyRnNzbyUyRmxvZ2luJnVzZXJuYW1lPVRvbStTbXl0aCZjdXN0b20uZmlyc3RfbmFtZT1Ub20mY3VzdG9t"\
-      "Lmxhc3RfbmFtZT1TbXl0aA%3D%3D&sig=5e92db782d30080166aa52a145cb5d5f8210a9eba7a3e1af6bd157f954ddc2fe"
+    payload = "ZW1haWw9dG9tJTQwZXhhbXBsZS5jb20mZXh0ZXJuYWxfaWQ9MTIzNCZuYW1lPVRvbStTbXl0aCZub25jZT14eXomc"\
+      "mV0dXJuX3Nzb191cmw9aHR0cHMlM0ElMkYlMkZleGFtcGxlLmNvbSUyRnNzbyUyRmxvZ2luJnVzZXJuYW1lPVRvbS"\
+      "tTbXl0aCZjdXN0b20uZmlyc3RfbmFtZT1Ub20mY3VzdG9tLmxhc3RfbmFtZT1TbXl0aA=="
+    sig = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
+    "https://example.com/sso/login?sso=#{CGI.escape(payload)}&sig=#{sig}"
+  end
+
+  before do
+    cluster.update!(sso_secret: "clustersecret")
+    community.update!(sso_secret: "communitysecret")
   end
 
   context "with signed in user" do
@@ -31,9 +42,51 @@ describe "single sign on" do
       end
     end
 
+    shared_examples_for "fails with bad signature" do
+      scenario do
+        visit(valid_incoming_url)
+        expect(page).to have_content("Bad signature for payload.")
+      end
+    end
+
     context "with valid data" do
       context "when not impersonating" do
-        it_behaves_like "redirects appropriately"
+        context "with global secret and apex domain" do
+          let(:secret) { Settings.single_sign_on.secret }
+          let(:subdomain) { nil }
+          it_behaves_like "redirects appropriately"
+        end
+
+        context "with cluster secret and subdomain from that cluster" do
+          let(:secret) { "clustersecret" }
+          let(:subdomain) { community.slug }
+          it_behaves_like "redirects appropriately"
+        end
+
+        context "with community secret and subdomain for that community" do
+          let(:secret) { "communitysecret" }
+          let(:subdomain) { community.slug }
+          it_behaves_like "redirects appropriately"
+        end
+
+        context "with global secret and subdomain for a community" do
+          let(:secret) { Settings.single_sign_on.secret }
+          let(:subdomain) { community.slug }
+          it_behaves_like "fails with bad signature"
+        end
+
+        context "with cluster secret and apex domain" do
+          let(:secret) { "clustersecret" }
+          let(:subdomain) { nil }
+          it_behaves_like "fails with bad signature"
+        end
+
+        context "with community secret and subdomain for a different community in the cluster" do
+          let(:secret) { "communitysecret" }
+          let(:community2) { create(:community) }
+          let(:subdomain) { community2.slug }
+          it_behaves_like "fails with bad signature"
+        end
       end
 
       context "when impersonating" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SingleSignOnController < ApplicationController
-  # sso requests will always be to the apex domain. Requiring a subdomain would add unnecessary complexity.
+  # sso requests may be to the apex domain or subdomain.
   skip_before_action :ensure_subdomain, only: :sign_on
 
   # Impersonation doesn't make sense for SSO since you can't see the impersonation banner
@@ -12,9 +12,7 @@ class SingleSignOnController < ApplicationController
 
   def sign_on
     authorize(:single_sign_on)
-    # Expects client to specify return URL.
-    handler = DiscourseSingleSignOn.new(payload: params[:sso], signature: params[:sig],
-                                        secret: Settings.single_sign_on.secret)
+    handler = build_handler
     handler.email = current_user.email
     handler.external_id = current_user.id
     handler.name = current_user.decorate.full_name
@@ -25,7 +23,26 @@ class SingleSignOnController < ApplicationController
     redirect_to(handler.to_url)
   rescue Pundit::NotAuthorizedError
     render_forbidden
-  rescue DiscourseSingleSignOn::ParseError => e
+  rescue DiscourseSingleSignOn::ParseError, DiscourseSingleSignOn::SignatureError => e
     render(plain: e, status: :unprocessable_entity)
+  end
+
+  private
+
+  def build_handler
+    if current_community.nil?
+      build_handler_with_secret(Settings.single_sign_on.secret)
+    else
+      begin
+        build_handler_with_secret(current_community.sso_secret || "")
+      rescue DiscourseSingleSignOn::SignatureError
+        build_handler_with_secret(current_community.cluster.sso_secret || "")
+      end
+    end
+  end
+
+  def build_handler_with_secret(secret)
+    # Expects client to specify return URL.
+    DiscourseSingleSignOn.new(payload: params[:sso], signature: params[:sig], secret: secret)
   end
 end

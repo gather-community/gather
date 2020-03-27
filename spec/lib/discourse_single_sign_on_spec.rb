@@ -101,7 +101,7 @@ describe DiscourseSingleSignOn do
 
     it "raises error" do
       expect { sso }.to raise_error(
-        DiscourseSingleSignOn::ParseError,
+        DiscourseSingleSignOn::SignatureError,
         "Bad signature for payload.\n\n"\
           "payload: bm9uY2U9Y2I2ODI1MWVlZmI1MjExZTU4YzAwZmYxMzk1ZjBjMGI=\n\n"\
           "sig: aaaaaa29899722b35a2f191d34ef9b3ce695e0e6eeec47deb46d588d70c7cb56\n\n"\

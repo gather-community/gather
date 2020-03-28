@@ -24,7 +24,9 @@ module Meals
       end
     end
 
-    def meal_saved(roles, deliveries)
+    def meal_saved(meal, roles, deliveries)
+      return deliveries.destroy_all if meal.cancelled?
+
       # Run callbacks on existing deliveries to ensure recomputation.
       deliveries.includes(reminder: :role).find_each(&:calculate_and_save)
 
@@ -46,7 +48,7 @@ module Meals
     end
 
     def current_meals(meals)
-      meals.future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
+      meals.not_cancelled.future_or_recent(RoleReminder::MAX_FUTURE_DISTANCE)
     end
 
     def meal_reminder_pairs_with_deliveries(reminders)

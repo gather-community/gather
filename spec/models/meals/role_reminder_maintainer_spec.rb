@@ -11,6 +11,7 @@ describe Meals::RoleReminderMaintainer do
   let!(:decoy) { create(:meal_role) }
   let!(:formula) { create(:meal_formula, roles: [hc_role, ac_role]) }
   let(:meal) { create(:meal, formula: formula, served_at: "#{yr_mo}-04 12:00") }
+  let!(:cancelled_decoy) { create(:meal, :cancelled, formula: formula, served_at: "#{yr_mo}-05 12:00") }
   let(:hc_reminder) { create_meal_role_reminder(hc_role, 2.5, "hours_before") }
   let(:ac_reminder1) { create_meal_role_reminder(ac_role, 2, "hours_before") }
   let(:ac_reminder2) { create_meal_role_reminder(ac_role, 2, "days_before") }
@@ -44,6 +45,16 @@ describe Meals::RoleReminderMaintainer do
       it "updates delivery" do
         expect(deliveries.size).to eq(3)
         expect(hc_delivery.deliver_at.iso8601).to eq("#{yr_mo}-05T09:20:00Z")
+      end
+    end
+
+    context "on meal cancel" do
+      before do
+        meal.cancel!
+      end
+
+      it "destroys deliveries" do
+        expect(deliveries.size).to eq(0)
       end
     end
 

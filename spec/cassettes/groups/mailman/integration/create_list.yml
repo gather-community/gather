@@ -1,0 +1,1529 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/domains
+    body:
+      encoding: UTF-8
+      string: '{"mail_host":"foo.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:11 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/domains/foo.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:11 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/lists
+    body:
+      encoding: UTF-8
+      string: '{"fqdn_listname":"zulu@foo.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:11 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/lists/zulu.foo.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:11 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/lists/zulu@foo.com/config
+    body:
+      encoding: UTF-8
+      string: '{"advertised":"false","dmarc_mitigate_action":"munge_from","archive_policy":"private","max_message_size":5000,"subscription_policy":"moderate","default_member_action":"defer","default_nonmember_action":"hold"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:11 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:11 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members/find
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:12 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 0, "http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:12 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/d@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:12 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
+    body:
+      encoding: UTF-8
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:12 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"d@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/4787bad7db3e48bf8be97c274803232c
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/d@x.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Delta Smith"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/d@x.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/d@x.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"d@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/d@x.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/d@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '426'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-03-21T21:26:12.107361", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/4787bad7db3e48bf8be97c274803232c",
+        "user_id": "4787bad7db3e48bf8be97c274803232c", "password": "$6$rounds=656000$2TvHFDT0G8OcdQ95$aRWJzXAQHZwV8V/8AIo2/.rzxGkC7p3Et7UmSil6SaGiMaoD56zBOKBMCAVbYjR9xYWx9qy/sA7qrr2bJ6Lfw0",
+        "display_name": "Delta Smith", "http_etag": "\"a06f7e6c382f4bc32e4d77ef3a0ccf2e486bb0b6\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com","subscriber":"4787bad7db3e48bf8be97c274803232c","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/members/28b2e110c4ed45689e2e05331c5245b8
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/e@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:13 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
+    body:
+      encoding: UTF-8
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"e@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/0da25fb4844b4497ae6110eb8924c411
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/e@x.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":null}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/e@x.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/e@x.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"e@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/e@x.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/e@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '419'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-03-21T21:26:13.298820", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/0da25fb4844b4497ae6110eb8924c411",
+        "user_id": "0da25fb4844b4497ae6110eb8924c411", "password": "$6$rounds=656000$Rk2q1eRjbGJLuB.s$LCzYaFUbw3n2K/mqt2o5b15WJURXS9igwaG0UzjI6IJPKw1afJqjQlcG6y0bCwmkAJDxQkAaHA8da5MzZyb2s1",
+        "display_name": "None", "http_etag": "\"b692edb5bcd80296ba5e36e9c8ff0b9a4dc18640\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com","subscriber":"0da25fb4844b4497ae6110eb8924c411","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/members/866796e7e34b4d33971943f7b332bc9b
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/f@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:14 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
+    body:
+      encoding: UTF-8
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"f@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/3957068761d3481ba982e8d1245fd995
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/f@x.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":null}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/f@x.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/f@x.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"f@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/f@x.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/f@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '419'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-03-21T21:26:14.571782", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/3957068761d3481ba982e8d1245fd995",
+        "user_id": "3957068761d3481ba982e8d1245fd995", "password": "$6$rounds=656000$vwcHtYgR6Z3LIhIQ$nEHIuAWY7rIY6o6Os7NjU7kdaAxI8lSSO9ZDeCqeSCtB7KkpL0o39Y93/zxtD1maI2YB8P1zIIKPQCm/JIW/u1",
+        "display_name": "None", "http_etag": "\"32b70ecb49d82ea4ca73f7e85c9fd3e2fce72733\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com","subscriber":"3957068761d3481ba982e8d1245fd995","role":"nonmember","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/members/1c4bc31e379b42ce9dc37c7b798330a8
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/a@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:15 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
+    body:
+      encoding: UTF-8
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"a@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/74b10a7c0dcf41ca9741bd740f2dcd1a
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/a@x.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Alpha Smith"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/a@x.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/a@x.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"a@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/a@x.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/a@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '426'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-03-21T21:26:15.763974", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/74b10a7c0dcf41ca9741bd740f2dcd1a",
+        "user_id": "74b10a7c0dcf41ca9741bd740f2dcd1a", "password": "$6$rounds=656000$xJ./Xfb5yQ2PQISb$hNZyqAFbpoBgdHPdzb/Sr6f1175hKB38HlPkOi2AUetPtzMNAC94BBPUwOFgYW1AyZYNaveLboQAhQO.sfTDW.",
+        "display_name": "Alpha Smith", "http_etag": "\"e2a362642281b251e435bbd324b1a00f13f9d8b9\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com","subscriber":"74b10a7c0dcf41ca9741bd740f2dcd1a","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/members/634fc67c91e34aabae4e1cff27c5c9e3
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/b@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:16 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
+    body:
+      encoding: UTF-8
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"b@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:17 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/75fa099f8d454120833ee38f52112564
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/b@x.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Bravo Smith"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:17 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/b@x.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:17 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/b@x.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"b@x.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:17 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/b@x.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/b@x.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:17 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '426'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2020-03-21T21:26:16.931926", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/75fa099f8d454120833ee38f52112564",
+        "user_id": "75fa099f8d454120833ee38f52112564", "password": "$6$rounds=656000$w8tITbDvHLsReKzH$RMjd0gr3FKWtvgNf1oIvgkFZpqZAogSNwWZQfItx1PIyFSU9ZJLFcW3kZod7ogAcnbMNOZygRQPdl4mldA6Va.",
+        "display_name": "Bravo Smith", "http_etag": "\"7e740a4d75bb8a16a86915d10f6bf3b7b08c1c49\""}'
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"zulu.foo.com","subscriber":"75fa099f8d454120833ee38f52112564","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 21 Mar 2020 21:26:18 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/members/51ac562cb65b4d6a949f16e592be0280
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 21 Mar 2020 21:26:18 GMT
+recorded_with: VCR 4.0.0

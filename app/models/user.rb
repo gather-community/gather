@@ -95,7 +95,7 @@ class User < ApplicationRecord
 
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
-  delegate :community_id, :community_name, :community_abbrv, :cluster,
+  delegate :community_id, :community_name, :community_abbrv,
            :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday

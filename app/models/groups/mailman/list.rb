@@ -88,7 +88,7 @@ module Groups
       def outside_memberships
         %i[outside_members outside_senders].flat_map do |attrib|
           role = attrib == :outside_members ? "member" : "nonmember"
-          self[attrib].split("\n").map do |str|
+          (self[attrib] || "").split("\n").map do |str|
             address = Mail::Address.new(str)
             mm_user = Mailman::User.new(display_name: address.display_name, email: address.address)
             ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
@@ -103,7 +103,7 @@ module Groups
           role = ability == :administer ? "owner" : "moderator"
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
             ability_group.members.map do |member|
-              mm_user = Mailman::User.find_or_initialize_by(user: member)
+              mm_user = find_or_initialize_mm_user_for(member)
               ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
             end
           end
@@ -112,8 +112,7 @@ module Groups
 
       def normal_memberships
         group.computed_memberships(user_eager_load: :group_mailman_user).flat_map do |mship|
-          user = mship.user
-          mm_user = user.group_mailman_user || Mailman::User.new(user: user)
+          mm_user = find_or_initialize_mm_user_for(mship.user)
           roles = ["member"]
           if mship.manager?
             roles << "owner" if managers_can_administer?
@@ -121,6 +120,13 @@ module Groups
           end
           roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
         end
+      end
+
+      # Keeps a local hash to prevent initializing multiple Mailman::User objs for the same user.
+      def find_or_initialize_mm_user_for(user)
+        @mm_users_by_user ||= {}
+        return @mm_users_by_user[user] if @mm_users_by_user.key?(user)
+        @mm_users_by_user[user] = Mailman::User.find_or_initialize_by(user: user)
       end
     end
   end

@@ -30,7 +30,7 @@ class ApplicationJob < ActiveJob::Base
   end
 
   def build_object_without_tenant(klass, attribs)
-    ActsAsTenant.with_tenant(Cluster.find(attribs["cluster_id"])) { klass.new(attribs) }
+    ActsAsTenant.with_tenant(Cluster.find(attribs[:cluster_id])) { klass.new(attribs) }
   end
 
   def each_community

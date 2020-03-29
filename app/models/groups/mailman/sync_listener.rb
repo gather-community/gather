@@ -22,17 +22,16 @@ module Groups
       def update_user_successful(user)
         return if no_need_to_create_or_update?(user)
         attribs = %w[email first_name last_name deactivated_at adult]
-        if attribs_changed?(user, attribs) || user_community_changed?(user)
-          UserSyncJob.perform_later(user_id: user.id)
-        end
-        if attribs_changed?(user, %w[email first_name last_name])
-          SingleSignOnJob.perform_later(user_id: user.id, action: :update)
-        end
-        if attribs_changed?(user, %w[deactivated_at adult]) # rubocop:disable Style/GuardClause
+        if attribs_changed?(user, %w[deactivated_at adult])
           if (mm_user = user.group_mailman_user).present? && !mm_user.syncable?
             SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)
           end
         end
+        if attribs_changed?(user, %w[email first_name last_name])
+          SingleSignOnJob.perform_later(user_id: user.id, action: :update)
+        end
+        return unless attribs_changed?(user, attribs) || user_community_changed?(user)
+        UserSyncJob.perform_later(user_id: user.id)
       end
 
       def destroy_user_successful(user)
@@ -45,7 +44,9 @@ module Groups
           destroyed: true
         )
 
-        SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out) if user.group_mailman_user.present?
+        return if user.group_mailman_user.nil?
+        SingleSignOnJob.perform_later(user_id: user.id, cluster_id: user.cluster_id,
+                                      action: :sign_out, destroyed: true)
       end
 
       def user_signed_out(user)

@@ -149,7 +149,7 @@ describe Groups::Mailman::UserSyncJob do
   context "When user was just destroyed" do
     let(:cluster_id) { ActsAsTenant.current_tenant.id }
     subject!(:job) do
-      described_class.new(mm_user_attribs: {"remote_id" => "ab12cd", "cluster_id" => cluster_id},
+      described_class.new(mm_user_attribs: {remote_id: "ab12cd", cluster_id: cluster_id},
                           destroyed: true)
     end
 

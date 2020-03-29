@@ -38,6 +38,8 @@ Follow these steps to setup a development environment for Gather.
         python3 -m venv venv
         source venv/bin/activate
         pip install mailman
+        mailman start
+        curl -v http://restadmin:restpass@localhost:8001/3.1/lists
         pip install postorius
         pip install hyperkitty
         pip install whoosh
@@ -46,8 +48,8 @@ Follow these steps to setup a development environment for Gather.
         git clone https://github.com/gather-community/discoursessoclient.git
         python3 manage.py migrate
         python3 manage.py collectstatic
-        mailman start
-        curl -v http://restadmin:restpass@localhost:8001/3.1/lists
+        python3 manage.py runserver
+        curl -v http://localhost:8000 # In new tab.
 1. Retrieve project files using Git
         git clone https://github.com/gather-community/gather.git
         cd gather

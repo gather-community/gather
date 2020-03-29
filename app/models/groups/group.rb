@@ -50,9 +50,11 @@ module Groups
     }
     scope :with_user, lambda { |user|
       subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN (?))"
-      clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
+      memb_clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
         "(availability = 'everybody' AND NOT EXISTS #{subq})"
-      where(clause, user, %w[joiner manager], user, %w[opt_out])
+      affil_clause = "? IN (SELECT community_id FROM group_affiliations WHERE group_id = groups.id)"
+      where(memb_clause, user, %w[joiner manager], user, %w[opt_out])
+        .where(affil_clause, user.community_id)
     }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {

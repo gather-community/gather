@@ -209,6 +209,7 @@ describe Groups::Group do
 
   describe "#members, #computed_memberships, and .with_member_counts" do
     let!(:users) { create_list(:user, 8) }
+    let!(:external_decoy_user) { create(:user, community: create(:community)) }
     let!(:child) { create(:user, :child, guardians: [users[0]]) }
     let!(:regular_group) do
       create(:group, name: "Alpha", availability: "open", memberships: [

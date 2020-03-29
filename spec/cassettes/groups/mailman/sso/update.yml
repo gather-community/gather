@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://localhost:8002/sso/update?sig=0a3129833b4709fda4afacf0d913496a5c40de901758b0141fdac63e2cbc6077&sso=ZW1haWw9eCU0MHkuY29tJmV4dGVybmFsX2lkPTI1NDAmbmFtZT1YK0x1JnVzZXJuYW1lPVgrTHUmY3VzdG9tLmZpcnN0X25hbWU9WCZjdXN0b20ubGFzdF9uYW1lPUx1
+    uri: http://localhost:8000/sso/update?sig=0a3129833b4709fda4afacf0d913496a5c40de901758b0141fdac63e2cbc6077&sso=ZW1haWw9eCU0MHkuY29tJmV4dGVybmFsX2lkPTI1NDAmbmFtZT1YK0x1JnVzZXJuYW1lPVgrTHUmY3VzdG9tLmZpcnN0X25hbWU9WCZjdXN0b20ubGFzdF9uYW1lPUx1
     body:
       encoding: US-ASCII
       string: ''
@@ -14,7 +14,7 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - localhost:8002
+      - localhost:8000
   response:
     status:
       code: 204

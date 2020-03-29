@@ -205,24 +205,6 @@ describe Groups::Mailman::Api do
       end
     end
 
-    describe "#update_membership" do
-      let(:mm_user) { double(remote_id: "be045234ee894ae4a825642e08885db2", email: "jen@example.com") }
-      let(:list_mship) do
-        Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
-      end
-
-      it "changes role" do
-        VCR.use_cassette("groups/mailman/api/update_membership/happy_path") do
-          api.populate_membership(list_mship)
-          expect(list_mship.role).to eq("owner")
-          list_mship.role = "member"
-          api.update_membership(list_mship)
-          api.populate_membership(list_mship)
-          expect(list_mship.role).to eq("member")
-        end
-      end
-    end
-
     describe "#delete_membership" do
       # We assume remote_id is already set on the object, since we set it when we fetch the remote mship list.
       let(:list_mship) do

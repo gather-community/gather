@@ -36,10 +36,10 @@ module Groups
       end
 
       def list_memberships
-        @list_memberships ||= Groups::User.new(user: user).computed_memberships.map do |mship|
+        @list_memberships ||= Groups::User.new(user: user).computed_memberships.flat_map do |mship|
           next if mship.opt_out?
           next unless (list = mship.group.mailman_list)
-          ListMembership.new(mailman_user: self, list_id: list.remote_id, role: kind_to_role(mship.kind))
+          list.list_memberships_for_group_membership_and_mm_user(mship, self)
         end.compact
       end
 

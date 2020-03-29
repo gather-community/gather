@@ -57,30 +57,37 @@ describe Groups::Mailman::User do
 
     # Included as member
     let!(:group2) { create(:group, availability: "open") }
-    let!(:list1) { create(:group_mailman_list, group: group2) }
+    let!(:list1) { create(:group_mailman_list, remote_id: "a", group: group2) }
     let!(:membership2) { create(:group_membership, group: group2, user: user, kind: "joiner") }
 
-    # Included as owner
+    # Manager but no admin privs
     let!(:group3) { create(:group, availability: "open") }
-    let!(:list2) { create(:group_mailman_list, group: group3) }
+    let!(:list2) { create(:group_mailman_list, remote_id: "b", group: group3) }
     let!(:membership3) { create(:group_membership, group: group3, user: user, kind: "manager") }
 
     # Not included b/c no list
     let!(:group4) { create(:group, availability: "open") }
     let!(:membership4) { create(:group_membership, group: group4, user: user) }
 
+    # Manager with admin privs
+    let!(:group5) { create(:group, availability: "open") }
+    let!(:list3) { create(:group_mailman_list, remote_id: "c", group: group5, managers_can_administer: true) }
+    let!(:membership5) { create(:group_membership, group: group5, user: user, kind: "manager") }
+
     # Not included b/c different user
     let!(:decoy) { create(:group_membership, group: group3) }
 
     let!(:list_memberships) { mm_user.list_memberships }
-    let!(:list_memberships_by_list_id) { list_memberships.index_by(&:list_id) }
+    let!(:list_memberships_by_list_id) { list_memberships.group_by(&:list_id) }
 
     it "returns correct results" do
-      expect(list_memberships.size).to eq(2)
-      expect(list_memberships_by_list_id[list1.remote_id].mailman_user).to eq(mm_user)
-      expect(list_memberships_by_list_id[list1.remote_id].role).to eq("member")
-      expect(list_memberships_by_list_id[list2.remote_id].mailman_user).to eq(mm_user)
-      expect(list_memberships_by_list_id[list2.remote_id].role).to eq("owner")
+      expect(list_memberships.size).to eq(4)
+      expect(list_memberships_by_list_id[list1.remote_id].map(&:mailman_user).uniq).to eq([mm_user])
+      expect(list_memberships_by_list_id[list1.remote_id].map(&:role)).to contain_exactly("member")
+      expect(list_memberships_by_list_id[list2.remote_id].map(&:mailman_user).uniq).to eq([mm_user])
+      expect(list_memberships_by_list_id[list2.remote_id].map(&:role)).to contain_exactly("member")
+      expect(list_memberships_by_list_id[list3.remote_id].map(&:mailman_user).uniq).to eq([mm_user])
+      expect(list_memberships_by_list_id[list3.remote_id].map(&:role)).to match_array(%w[owner member])
     end
   end
 end

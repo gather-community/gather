@@ -23,7 +23,7 @@ describe Groups::Mailman::ListSyncJob do
   context "when list just destroyed" do
     let!(:job_args) do
       [
-        list_attribs: {"cluster_id" => ActsAsTenant.current_tenant.id, "remote_id" => "ping.tscoho.org"},
+        list_attribs: {cluster_id: Defaults.cluster.id, remote_id: "ping.tscoho.org"},
         destroyed: true
       ]
     end

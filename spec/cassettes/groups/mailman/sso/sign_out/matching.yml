@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://localhost:8002/sso/logout?sig=c186719bc11624767daa93b876be10c1ff5d061e37e30827a8a50d30d550cb0a&sso=ZXh0ZXJuYWxfaWQ9MjU0MA==
+    uri: http://localhost:8000/sso/logout?sig=c186719bc11624767daa93b876be10c1ff5d061e37e30827a8a50d30d550cb0a&sso=ZXh0ZXJuYWxfaWQ9MjU0MA==
     body:
       encoding: US-ASCII
       string: ''
@@ -14,7 +14,7 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - localhost:8002
+      - localhost:8000
   response:
     status:
       code: 204

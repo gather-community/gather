@@ -20,18 +20,18 @@ describe Groups::User do
           create(:group_membership, group: group4, user: user, kind: "manager")
         ]
       end
-      subject(:computed_memberships_by_group) { computed_memberships.index_by(&:group) }
+      subject(:computed_memberships_by_group) { computed_memberships.group_by(&:group) }
 
       it "returns correct list" do
         expect(computed_memberships.size).to eq(4)
-        expect(computed_memberships_by_group[group1].kind).to eq("joiner")
-        expect(computed_memberships_by_group[group2].kind).to eq("manager")
-        expect(computed_memberships_by_group[group3].kind).to eq("opt_out")
-        expect(computed_memberships_by_group[group4].kind).to eq("manager")
-        expect(computed_memberships_by_group[group1].persisted?).to be(false)
-        expect(computed_memberships_by_group[group2].persisted?).to be(true)
-        expect(computed_memberships_by_group[group3].persisted?).to be(true)
-        expect(computed_memberships_by_group[group4].persisted?).to be(true)
+        expect(computed_memberships_by_group[group1].map(&:kind).uniq).to eq(["joiner"])
+        expect(computed_memberships_by_group[group2].map(&:kind).uniq).to eq(["manager"])
+        expect(computed_memberships_by_group[group3].map(&:kind).uniq).to eq(["opt_out"])
+        expect(computed_memberships_by_group[group4].map(&:kind).uniq).to eq(["manager"])
+        expect(computed_memberships_by_group[group1].map(&:persisted?).uniq).to eq([false])
+        expect(computed_memberships_by_group[group2].map(&:persisted?).uniq).to eq([true])
+        expect(computed_memberships_by_group[group3].map(&:persisted?).uniq).to eq([true])
+        expect(computed_memberships_by_group[group4].map(&:persisted?).uniq).to eq([true])
       end
     end
 

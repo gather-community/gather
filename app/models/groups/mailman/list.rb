@@ -61,6 +61,15 @@ module Groups
         remote_id.present?
       end
 
+      def list_memberships_for_group_membership_and_mm_user(mship, mm_user)
+        roles = ["member"]
+        if mship.manager?
+          roles << "owner" if managers_can_administer?
+          roles << "moderator" if managers_can_moderate?
+        end
+        roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
+      end
+
       private
 
       def check_outside_addresses
@@ -113,12 +122,7 @@ module Groups
       def normal_memberships
         group.computed_memberships(user_eager_load: :group_mailman_user).flat_map do |mship|
           mm_user = find_or_initialize_mm_user_for(mship.user)
-          roles = ["member"]
-          if mship.manager?
-            roles << "owner" if managers_can_administer?
-            roles << "moderator" if managers_can_moderate?
-          end
-          roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
+          list_memberships_for_group_membership_and_mm_user(mship, mm_user)
         end
       end
 

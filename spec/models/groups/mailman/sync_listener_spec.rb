@@ -72,7 +72,7 @@ describe Groups::Mailman::SyncListener do
 
       it "enqueues single sign on job with sign_out action" do
         expect { user.destroy }
-          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :sign_out)
+          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob)
       end
     end
 

@@ -44,12 +44,7 @@ describe "periods", js: true do
   scenario "create, update" do
     visit(work_periods_path)
     click_on("Create Period")
-
-    # Fill in basic attribs
-    select("Open", from: "Phase")
-    pick_date(".work_period_starts_on", day: 15)
-    pick_date(".work_period_ends_on", day: 20)
-    fill_in("Name", with: "Qux")
+    fill_basic_fields
 
     # Set quota attrib and choose share values
     expect(page).not_to have_content("Pick Type")
@@ -86,10 +81,33 @@ describe "periods", js: true do
     expect(page).to have_select("Blep Cruller", selected: "½ Share")
   end
 
+  scenario "priority star works and persisted after save" do
+    visit(work_periods_path)
+    click_on("Create Period")
+    fill_basic_fields
+    select("By Household", from: "Quota")
+    expect(page).not_to have_css(".priority-icon")
+    pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
+    select("Groups of workers take turns choosing", from: "Pick Type")
+    expect(page).to have_css(".priority-icon")
+    all(".priority-icon")[0].click
+    click_button("Save")
+    click_on("Qux")
+    expect(all(".priority-icon")[0][:class].split(" ")).to include("fa-star")
+    expect(all(".priority-icon")[1][:class].split(" ")).to include("fa-star-o")
+  end
+
   scenario "destroy" do
     visit(work_periods_path)
     click_on("Baz")
     accept_confirm { click_on("Delete") }
     expect(page).to have_content("deleted successfully")
+  end
+
+  def fill_basic_fields
+    select("Open", from: "Phase")
+    pick_date(".work_period_starts_on", day: 15)
+    pick_date(".work_period_ends_on", day: 20)
+    fill_in("Name", with: "Qux")
   end
 end

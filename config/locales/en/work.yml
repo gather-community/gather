@@ -49,6 +49,7 @@ en:
       three_qtr: "¾ Share"
       full: "Full Share"
     intro: "How should the community's work be divided? Most people should get a full share, but in some cases exceptions are needed. A half share means the person will do half as many hours as a person with a full share, etc."
+    priority_hint_html: "The system automatically computes who chooses first based on number of hours needed. People with <i class='fa fa-star'></i>'s go before those without."
     change_warning: "This period is currently active. Changing shares or quota type will affect quota calcuations. Proceed with caution!"
   work/shift:
     choosing_as: "Choosing as %{name}"

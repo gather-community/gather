@@ -42,7 +42,7 @@ describe Work::PeriodPolicy do
       expect(subject).to match_array(
         %i[starts_on ends_on name phase quota_type
            auto_open_time pick_type max_rounds_per_worker workers_per_round round_duration] <<
-        {shares_attributes: %i[id user_id portion]}
+        {shares_attributes: %i[id user_id portion priority]}
       )
     end
   end

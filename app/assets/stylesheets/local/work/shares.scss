@@ -25,12 +25,21 @@
   label {
     font-weight: normal;
     margin-bottom: 0;
-    margin-right: 15px;
+    margin-right: 0.5em;
     overflow-x: hidden;
     text-align: right;
     vertical-align: middle;
     white-space: nowrap;
     width: 50%;
+  }
+
+  .priority-icon {
+    vertical-align: middle;
+    font-size: 1.1em;
+    margin-top: 0.3em;
+    margin-right: 0.5em;
+    cursor: pointer;
+    color: $link-color;
   }
 
   select {

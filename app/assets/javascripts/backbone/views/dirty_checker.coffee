@@ -3,11 +3,11 @@ Gather.Views.DirtyChecker = Backbone.View.extend
   initialize: (params) ->
     params.helpers = params.helpers || []
     params.helpers.push(@datetimePickerHelper)
+    params.helpers.push(@hiddenInputHelper)
     @$el.dirtyForms
       helpers: params.helpers
 
   events:
-    'dp.change': 'datetimePickerChanged'
     'cocoon:after-insert': 'rescan'
     'cocoon:after-remove': 'rescan'
     'gather:select2inserted': 'rescan'
@@ -22,16 +22,28 @@ Gather.Views.DirtyChecker = Backbone.View.extend
     setClean: ($node) ->
       $node.removeClass('dirty-flag') if $node.is('form')
 
-  # A helper that checks datetimepickers for dirtiness. Works in conjunction with event above.
+  # A helper that checks datetimepickers for dirtiness.
   datetimePickerHelper:
     isDirty: ($node) ->
-      isDirty = false
+      dirty = false
       $node.find('.input-group.datetimepicker').each ->
         orig = moment($(this).find('input').data('initial-value'))
         current = $(this).data('DateTimePicker').date()
         if orig && current && !orig.isSame(current) || (!orig && !current)
           if $.DirtyForms.debug
             console.warn('[DirtyFormDateTimePickerHelper] Found dirty picker ', this)
-          isDirty = true
+          dirty = true
           return false
-      isDirty
+      dirty
+
+  # Checks hidden inputs with the data-orig-val attribute to see if they have changed.
+  hiddenInputHelper:
+    isDirty: ($node) ->
+      dirty = false
+      $node.find('input[type=hidden][data-orig-val]').each ->
+        console.log($(this).val())
+        console.log($(this).data('orig-val'))
+        if $(this).val().toString() != $(this).data('orig-val').toString()
+          dirty = true
+          return false
+      dirty

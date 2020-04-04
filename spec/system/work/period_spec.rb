@@ -95,6 +95,14 @@ describe "periods", js: true do
     click_on("Qux")
     expect(all(".priority-icon")[0][:class].split(" ")).to include("fa-star")
     expect(all(".priority-icon")[1][:class].split(" ")).to include("fa-star-o")
+
+    # Test dirty check
+    page.go_back
+    click_on("Qux")
+    all(".priority-icon")[0].click
+    dismiss_confirm { page.go_back }
+    all(".priority-icon")[0].click
+    page.go_back
   end
 
   scenario "destroy" do

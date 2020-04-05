@@ -16,6 +16,13 @@ module Work
       )
     end
 
+    def notices_action_link_set
+      ActionLinkSet.new(
+        ActionLink.new(object, :send_notices, icon: "send", method: :post, btn_class: :primary,
+                                              path: h.send_notices_work_period_path(object))
+      )
+    end
+
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :destroy, icon: "trash", path: h.work_period_path(object),

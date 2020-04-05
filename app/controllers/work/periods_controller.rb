@@ -76,6 +76,28 @@ module Work
       end
     end
 
+    def review_notices
+      @period = Period.find(params[:id])
+      authorize(@period)
+      if !(@period.ready? || @period.open?)
+        @error = "Notices can't be sent because the period is not in the 'ready' or 'open' phase."
+      elsif @period.quota_none?
+        @error = "Notices can't be sent because this period doesn't have a quota."
+      else
+        @notices = Work::Share.for_period(period).nonzero.by_user_name.map do |share|
+          WorkMailer.job_choosing_notice(share).body.encoded
+        end
+      end
+    end
+
+    def send_notices
+      @period = Period.find(params[:id])
+      authorize(@period)
+      JobChoosingNoticeJob.perform_later(@period.id)
+      flash[:success] = "Notices are on the way!"
+      redirect_to(work_period_path(@period))
+    end
+
     protected
 
     def klass

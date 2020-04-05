@@ -339,6 +339,8 @@ en:
       edit_job: "Edit Job"
       signup: "Sign Up"
       unsignup: "Remove Signup"
+    work/period:
+      review_notices: "Send Notices"
 
   dropzone:
     prompts:

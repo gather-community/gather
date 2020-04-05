@@ -186,7 +186,12 @@ Rails.application.routes.draw do
       end
     end
     resources :jobs
-    resources :periods
+    resources :periods do
+      member do
+        get :review_notices
+        post :send_notices
+      end
+    end
     get "report", to: "periods#report", as: :report
     get "/", to: redirect("/work/signups")
   end

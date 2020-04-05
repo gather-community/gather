@@ -38,6 +38,14 @@ module Work
       index? && !period.jobs?
     end
 
+    def review_notices?
+      index?
+    end
+
+    def send_notices?
+      index? && (period.open? || period.ready?) && !period.quota_none?
+    end
+
     # Controls whether we can see the report page outer wrapper including the period lens.
     def report_wrapper?
       active_in_community?

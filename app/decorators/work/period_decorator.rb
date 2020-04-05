@@ -10,6 +10,8 @@ module Work
 
     def show_action_link_set
       ActionLinkSet.new(
+        ActionLink.new(object, :review_notices, icon: "bullhorn",
+                                                path: h.review_notices_work_period_path(object)),
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_work_period_path(object))
       )
     end

@@ -27,7 +27,7 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
   priorityChanged: (e) ->
     icon = @$(e.currentTarget)
     newVal = icon.is(".fa-star-o")
-    icon.closest(".work-share-selector").find("input[id$=_priority]").val(if newVal then "true" else "false")
+    icon.closest(".work-share").find("input[id$=_priority]").val(if newVal then "true" else "false")
     oldClass = if newVal then "fa-star-o" else "fa-star"
     newClass = if newVal then "fa-star" else "fa-star-o"
     icon.removeClass(oldClass).addClass(newClass)

@@ -24,6 +24,12 @@ module Work
       prep_form_vars
     end
 
+    def show
+      @period = Period.find(params[:id])
+      authorize(@period)
+      prep_form_vars
+    end
+
     def edit
       @period = Period.find(params[:id])
       authorize(@period)

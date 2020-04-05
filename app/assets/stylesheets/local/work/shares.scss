@@ -15,14 +15,14 @@
   }
 }
 
-.work-share-selector {
+.work-share {
   display: flex;
   margin-bottom: 10px;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
 
-  label {
+  label, .user-name {
     font-weight: normal;
     margin-bottom: 0;
     margin-right: 0.5em;
@@ -42,7 +42,7 @@
     color: $link-color;
   }
 
-  select {
+  select, .portion {
     width: 50%;
   }
 }

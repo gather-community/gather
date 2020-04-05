@@ -9,5 +9,9 @@ module Work
     def select_options
       SELECT_OPTIONS.map { |n, p| [I18n.t("work/shares.portion_options.#{n}"), p.to_s] }
     end
+
+    def selected_portion_option
+      (select_options.detect { |o| o[1] == portion.to_s } || [t("common.none")])[0]
+    end
   end
 end

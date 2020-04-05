@@ -186,7 +186,7 @@ Rails.application.routes.draw do
       end
     end
     resources :jobs
-    resources :periods, except: :show
+    resources :periods
     get "report", to: "periods#report", as: :report
     get "/", to: redirect("/work/signups")
   end

@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="shares">
+  <div class="shares hiding">
     <h2>Shares</h2>
     <p class="intro"><%= t("work/shares.intro") %></p>
     <p class="priority-hint"><%= t("work/shares.priority_hint_html") %></p>
@@ -30,7 +30,7 @@
         <% users.each do |user| %>
           <% share = @shares_by_user[user.id].decorate %>
           <%= f.simple_fields_for(:shares_attributes, share, index: user.id) do |share_fields| %>
-            <div class="work-share-selector">
+            <div class="work-share">
               <%= share_fields.hidden_field :id %>
               <%= share_fields.hidden_field :user_id %>
               <%= share_fields.hidden_field :priority, data: {"orig-val": share.priority} %>

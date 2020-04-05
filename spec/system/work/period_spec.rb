@@ -41,7 +41,7 @@ describe "periods", js: true do
     expect(page).to have_css("table.index tr td.name", text: "Foo")
   end
 
-  scenario "create, update" do
+  scenario "create, show, update" do
     visit(work_periods_path)
     click_on("Create Period")
     fill_basic_fields
@@ -70,6 +70,11 @@ describe "periods", js: true do
     create(:user, first_name: "Blep", last_name: "Cruller")
 
     click_on("Qux")
+    expect(page).to have_content("By Household")
+    expect(page).to have_content("Churl Rox")
+    expect(page).to have_content("½ Share")
+
+    click_on("Edit")
     expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
     expect(page).to have_select("Pick Type", selected: "Groups of workers take turns choosing")
@@ -78,6 +83,7 @@ describe "periods", js: true do
     click_button("Save")
 
     click_on("Qux")
+    click_on("Edit")
     expect(page).to have_select("Blep Cruller", selected: "½ Share")
   end
 
@@ -93,12 +99,13 @@ describe "periods", js: true do
     all(".priority-icon")[0].click
     click_button("Save")
     click_on("Qux")
+    click_on("Edit")
     expect(all(".priority-icon")[0][:class].split(" ")).to include("fa-star")
     expect(all(".priority-icon")[1][:class].split(" ")).to include("fa-star-o")
 
     # Test dirty check
     page.go_back
-    click_on("Qux")
+    click_on("Edit")
     all(".priority-icon")[0].click
     dismiss_confirm { page.go_back }
     all(".priority-icon")[0].click
@@ -108,6 +115,7 @@ describe "periods", js: true do
   scenario "destroy" do
     visit(work_periods_path)
     click_on("Baz")
+    click_on("Edit")
     accept_confirm { click_on("Delete") }
     expect(page).to have_content("deleted successfully")
   end

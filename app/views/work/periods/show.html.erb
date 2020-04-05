@@ -1,0 +1,63 @@
+<% content_for(:title, "Period: #{period.name}") %>
+<% content_for(:top_buttons, period.action_links) %>
+
+<table class="key-value">
+  <tr>
+    <td><%= Work::Period.human_attribute_name(:phase) %></td>
+    <td><%= t("simple_form.options.work_period.phase.#{period.phase}") %></td>
+  </tr>
+  <tr>
+    <td>Date</td>
+    <td><%= l(period.starts_on) %>–<%= l(period.ends_on) %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Period.human_attribute_name(:quota_type) %></td>
+    <td><%= t("simple_form.options.work_period.quota_type.#{period.quota_type}") %></td>
+  </tr>
+  <tr>
+    <td><%= Work::Period.human_attribute_name(:auto_open_time) %></td>
+    <td><%= period.auto_open_time ? l(period.auto_open_time) : t("common.none") %></td>
+  </tr>
+  <% unless period.quota_none? %>
+    <tr>
+      <td><%= Work::Period.human_attribute_name(:pick_type) %></td>
+      <td>
+        <%= t("simple_form.options.work_period.pick_type.#{period.pick_type}") %>
+        <% if period.staggered? %>
+          <ul>
+            <li><%= period.max_rounds_per_worker %> max. rounds per worker</li>
+            <li><%= period.workers_per_round %> workers per round</li>
+            <li><%= period.round_duration %> minutes per round</li>
+          </ul>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<% unless period.quota_none? %>
+  <div class="shares">
+    <h2>Shares</h2>
+    <% @users_by_kind.each do |kind, users| %>
+      <% if @users_by_kind.size > 1 %>
+        <h3><%= t("common.#{kind.pluralize}") %></h3>
+      <% end %>
+      <div class="work-share-section">
+        <% users.each do |user| %>
+          <div class="work-share">
+            <% share = @shares_by_user[user.id].decorate %>
+            <div class="user-name">
+              <%= link_to(user.full_name, user_path(user)) %>
+            </div>
+            <% if period.staggered? %>
+              <%= icon_tag(share.priority? ? "star" : "star-o", class: "priority-icon") %>
+            <% end %>
+            <div class="portion">
+              <%= share.selected_portion_option %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

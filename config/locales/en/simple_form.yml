@@ -57,6 +57,8 @@ en:
         can_moderate_email_lists: "Whether users in this group should serve as moderators for email lists in the community."
         kind: "What kind of group this is. Used only for display purposes. No other significance."
         communities: "What communities this group is available/visible to."
+      groups_mailman_list:
+        name: "Can only include letters, numbers, or the characters . = + - _"
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
         resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."

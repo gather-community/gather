@@ -197,6 +197,10 @@ en:
           attributes:
             base:
               at_least_one_affiliation: "Please select at least one community"
+        groups/mailman/list:
+          attributes:
+            name:
+              invalid: "Contains invalid characters"
         groups/membership:
           attributes:
             user_id:

@@ -25,7 +25,7 @@ class UserPolicy < ApplicationPolicy
 
   def show?
     self? || active_admin? ||
-      (active? && ((record.adult? && own_cluster_record?) || own_community_record?))
+      (active? && ((record.adult? && record_tied_to_user_cluster?) || record_tied_to_user_community?))
   end
 
   def show_inactive?
@@ -38,8 +38,8 @@ class UserPolicy < ApplicationPolicy
 
   def show_photo?
     self? || active_admin? || (active? && (
-      own_community_record? ||
-      (record.adult? && own_cluster_record? && !record.privacy_settings["hide_photo_from_cluster"])
+      record_tied_to_user_community? ||
+      (record.adult? && record_tied_to_user_cluster? && !record.privacy_settings["hide_photo_from_cluster"])
     ))
   end
 

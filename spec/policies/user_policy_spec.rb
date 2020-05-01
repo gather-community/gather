@@ -387,7 +387,10 @@ describe UserPolicy do
 
   describe "permitted attributes" do
     include_context "policy permissions"
-    let(:user2) { double(community: community, guardians: [], household: double(community: community)) }
+    let(:user2) do
+      double(community: community, cluster: cluster, guardians: [],
+             household: double(community: community, cluster: cluster))
+    end
     let(:base_attribs) do
       [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
        :photo_new_signed_id, :photo_destroy, :birthday_str, :child, :joined_on, :preferred_contact,

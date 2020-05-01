@@ -23,7 +23,7 @@ module Groups
     end
 
     def show?
-      active? && (appropriate_admin? || manager? || !group.hidden? && user_in_any_community?)
+      active? && (appropriate_admin? || manager? || !group.hidden? && record_tied_to_user_community?)
     end
 
     def create?
@@ -73,11 +73,7 @@ module Groups
     def appropriate_admin?
       user.global_role?(:super_admin) ||
         user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
-        user.global_role?(:admin) && user_in_any_community?
-    end
-
-    def user_in_any_community?
-      group.communities.include?(user.community)
+        user.global_role?(:admin) && record_tied_to_user_community?
     end
 
     def membership

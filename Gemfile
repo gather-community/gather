@@ -72,7 +72,6 @@ group :development, :test do
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
   gem "fix-db-schema-conflicts", "~> 3.0"
-  # gem "i18n-debug", "~> 1.1" # Great for debugging i18n paths. Uncomment temporarily when neeeded.
   gem "launchy", "~> 2.4" # For opening screenshots
   gem "pry", "~> 0.10"
   gem "pry-nav", "~> 0.2"
@@ -85,6 +84,10 @@ group :development, :test do
   gem "vcr", "~> 4.0"
   gem "webdrivers", "~> 4.0"
   gem "webmock", "~> 3.1"
+
+  # Great for debugging i18n paths. Uncomment temporarily when neeeded.
+  # Adds a lot of junk to the log when not needed, so only uncomment if needed.
+  # gem "i18n-debug", "~> 1.1"
 end
 
 group :development do

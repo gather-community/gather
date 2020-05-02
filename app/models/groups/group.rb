@@ -69,6 +69,8 @@ module Groups
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :mailman_list, reject_if: ->(attribs) { attribs[:name].blank? },
+                                                 allow_destroy: true
 
     before_validation :normalize
 

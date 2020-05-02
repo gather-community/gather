@@ -40,6 +40,7 @@ module Groups
       normalize_attributes :name
 
       validates :name, format: {with: /\A[-+_.=a-z0-9]+\z/i}
+      validates :domain_id, presence: true
       validate :check_outside_addresses
 
       before_save :clean_outside_addresses

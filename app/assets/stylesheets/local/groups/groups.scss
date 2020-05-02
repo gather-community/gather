@@ -31,5 +31,17 @@
         flex: 1;
       }
     }
+
+    .groups_group_mailman_list_address > .control-wrapper {
+      display: flex;
+
+      > div {
+        flex: 1;
+      }
+
+      .control-wrapper {
+        width: 100%;
+      }
+    }
   }
 }

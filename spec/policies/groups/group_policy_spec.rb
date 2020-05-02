@@ -66,7 +66,7 @@ describe Groups::GroupPolicy do
       it_behaves_like "permits managers but not joiners or opt outs"
     end
 
-    permissions :deactivate?, :destroy?, :change_permissions? do
+    permissions :deactivate?, :destroy?, :change_permissions?, :edit_list? do
       it_behaves_like "permits active admins in group's communities but not regular users"
       it { is_expected.not_to permit(manager, group) }
     end
@@ -252,8 +252,12 @@ describe Groups::GroupPolicy do
       %i[availability description kind name] <<
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
+    let(:list_attribs) do
+      [mailman_list_attributes: %i[name domain_id outside_members outside_senders
+                                   managers_can_administer managers_can_moderate]]
+    end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
-    let(:base_admin_attribs) { base_attribs.concat(permission_attribs) }
+    let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }
     let(:group) { create(:group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }
 

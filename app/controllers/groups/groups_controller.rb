@@ -86,7 +86,11 @@ module Groups
 
     def prep_form_vars
       return unless policy(@group).permitted_attributes.include?(community_ids: [])
+      @group.build_mailman_list if @group.mailman_list.nil?
       @community_options = Community.by_name_with_first(current_community)
+      @domain_options = Domain.by_name.select { |d| policy(d).attach_to? }
+      @domain_options << @group.mailman_list.domain if @group.mailman_list.persisted?
+      @domain_options.uniq!
     end
 
     def sample_group

@@ -93,13 +93,20 @@ en:
       groups/group:
         availability: "Availability"
         can_request_jobs: "Can Request Jobs?"
-        can_administer_email_lists: "Can Administer Email Lists?"
-        can_moderate_email_lists: "Can Moderate Email Lists?"
+        can_administer_email_lists: "Can Administer All Email Lists?"
+        can_moderate_email_lists: "Can Moderate All Email Lists?"
         description: "Description"
         kind: "Type"
         name: "Name"
         communities: "Communities"
         memberships: "Members"
+      groups/mailman/list:
+        domain_id: "Domain"
+        managers_can_administer: "Managers Can Administer List?"
+        managers_can_moderate: "Managers Can Moderate List?"
+        address: "List Address"
+        outside_members: "Outside Members"
+        outside_senders: "Outside Senders"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"

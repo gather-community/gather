@@ -16,6 +16,11 @@ describe Groups::Mailman::List do
         it { is_expected.to be_valid }
       end
 
+      context "with valid lines and windows line break" do
+        let(:addresses) { "foo@example.com\r\nbaz@example.com" }
+        it { is_expected.to be_valid }
+      end
+
       context "with format error" do
         let(:addresses) { "foo@example.com\nBar Q. <bar@example.com" }
         it { is_expected.to have_errors(attrib => /Error on line 2 \(Bar Q. <bar@example.com\)/) }
@@ -47,11 +52,11 @@ describe Groups::Mailman::List do
   end
 
   describe "outside address cleanup" do
-    let(:addresses) { " a@b.com  \n\n  Jo Bol <c@d.com>\nPhil Plomp (Junk) <e@f.com>" }
+    let(:addresses) { " t@b.com  \n\n  Zo Bol <c@d.com>\r\nPhil Plomp (Junk) <e@f.com>" }
 
     shared_examples_for "cleans up addresses" do |attrib|
       it do
-        expect(list[attrib]).to eq("a@b.com\nJo Bol <c@d.com>\nPhil Plomp <e@f.com> (Junk)")
+        expect(list[attrib]).to eq("Phil Plomp <e@f.com> (Junk)\nt@b.com\nZo Bol <c@d.com>")
       end
     end
 

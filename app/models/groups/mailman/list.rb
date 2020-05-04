@@ -77,7 +77,7 @@ module Groups
       def check_outside_addresses
         %i[outside_members outside_senders].each do |attrib|
           next if self[attrib].blank?
-          self[attrib].split("\n").each_with_index do |line, number|
+          self[attrib].split(/\r?\n/).each_with_index do |line, number|
             next if line.strip.empty?
             address = Mail::Address.new(line)
             raise Mail::Field::FieldError unless address.address.match?(::User::EMAIL_REGEXP)
@@ -91,8 +91,8 @@ module Groups
       def clean_outside_addresses
         %i[outside_members outside_senders].each do |attrib|
           next if self[attrib].blank?
-          cleaned = self[attrib].split("\n").map { |l| Mail::Address.new(l).to_s unless l.strip.empty? }
-          send("#{attrib}=", cleaned.compact.join("\n"))
+          cleaned = self[attrib].split(/\r?\n/).map { |l| Mail::Address.new(l).to_s unless l.strip.empty? }
+          send("#{attrib}=", cleaned.compact.sort_by(&:downcase).join("\n"))
         end
       end
 

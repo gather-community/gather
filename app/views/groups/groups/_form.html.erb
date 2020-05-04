@@ -46,6 +46,7 @@
         <%= list_form.input(:outside_senders) %>
         <%= list_form.input(:managers_can_administer) %>
         <%= list_form.input(:managers_can_moderate) %>
+        <%= list_form.input(:_destroy, as: :boolean) if list_form.object.persisted? %>
       <% end %>
     <% end %>
   <% end %>

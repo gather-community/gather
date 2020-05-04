@@ -6,6 +6,7 @@ Gather.Views.Groups.GroupFormView = Backbone.View.extend
   events:
     'change #groups_group_availability': 'handleAvailabilityChanged'
     'cocoon:after-insert .groups_group_memberships': 'handleMembershipRowInserted'
+    'submit': 'handleSubmit'
 
   handleAvailabilityChanged: ->
     everybody = @everybody()
@@ -21,3 +22,14 @@ Gather.Views.Groups.GroupFormView = Backbone.View.extend
 
   everybody: ->
     everybody = @$('.groups_group_availability select').val() == 'everybody'
+
+  handleSubmit: (event) ->
+    if @$('#groups_group_mailman_list_attributes__destroy').is(':checked')
+      if confirm("Are you sure you want to delete the email list?")
+        true
+      else
+        @$el.data('submitted', false)
+        false
+    else
+      alert("submitting")
+      true

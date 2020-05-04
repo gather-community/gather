@@ -92,9 +92,9 @@ en:
         credit_limit: "Credit Limit"
       groups/group:
         availability: "Availability"
-        can_request_jobs: "Can Request Jobs?"
-        can_administer_email_lists: "Can Administer All Email Lists?"
-        can_moderate_email_lists: "Can Moderate All Email Lists?"
+        can_request_jobs: "Can request jobs?"
+        can_administer_email_lists: "Can administer all email lists?"
+        can_moderate_email_lists: "Can moderate all email lists?"
         description: "Description"
         kind: "Type"
         name: "Name"
@@ -102,11 +102,12 @@ en:
         memberships: "Members"
       groups/mailman/list:
         domain_id: "Domain"
-        managers_can_administer: "Managers Can Administer List?"
-        managers_can_moderate: "Managers Can Moderate List?"
+        managers_can_administer: "Managers can administer list?"
+        managers_can_moderate: "Managers can moderate list?"
         address: "List Address"
         outside_members: "Outside Members"
         outside_senders: "Outside Senders"
+        _destroy: "Delete this list?"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"
@@ -134,7 +135,7 @@ en:
         hidden: "Hidden"
         abbrv: "Abbreviation"
         default_calendar_view: "Calendar View"
-        meal_hostable: "Can Host Meals?"
+        meal_hostable: "Can host meals?"
       people/emergency_contact:
         name: "Name"
         relationship: "Relationship to Household"

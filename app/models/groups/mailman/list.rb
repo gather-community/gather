@@ -12,8 +12,8 @@ module Groups
         dmarc_mitigate_action: "munge_from",
         archive_policy: "private",
 
-        # Max size in kilobytes
-        max_message_size: 5_000,
+        # Max size in kilobytes, so this is 5 MiB
+        max_message_size: 5 * 1_024,
 
         # People shouldn't be subscribing to lists directly as their subscription won't be sync'd back
         # to Gather. Also, lists won't be advertised so this should be rare.

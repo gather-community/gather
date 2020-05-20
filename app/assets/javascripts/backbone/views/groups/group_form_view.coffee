@@ -31,5 +31,4 @@ Gather.Views.Groups.GroupFormView = Backbone.View.extend
         @$el.data('submitted', false)
         false
     else
-      alert("submitting")
       true

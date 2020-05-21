@@ -46,6 +46,7 @@ module Groups
       before_save :clean_outside_addresses
 
       delegate :name, to: :domain, prefix: true
+      delegate :communities, to: :group
 
       def fqdn_listname
         "#{name}@#{domain_name}"

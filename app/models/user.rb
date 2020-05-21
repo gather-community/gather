@@ -64,6 +64,7 @@ class User < ApplicationRecord
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
+  scope :real, -> { where(fake: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
       .where("communities.id = ? OR users.child = 'f'", c.id)

@@ -10,9 +10,14 @@ module Groups
         with_object_in_cluster_context(class_name: source_class_name, id: source_id) do |source|
           self.source = source
           return unless source.syncable?
-          missing, obsolete = membership_diff
-          missing.each { |m| create_membership(m) }
-          obsolete.each { |m| api.delete_membership(m) }
+          missing_on_remote, missing_on_local = membership_diff
+
+          # Create any memberships that exist locally but not remotely.
+          missing_on_remote.each { |m| create_membership(m) }
+
+          # Delete memberships that match emails of Gather users but don't exist locally.
+          # This allows remote memberships for non-Gather users to be managed using the Mailman UI.
+          missing_on_local.each { |m| api.delete_membership(m) if email_exists_locally?(m.email) }
         end
       end
 
@@ -22,6 +27,18 @@ module Groups
         local = source.list_memberships
         remote = api.memberships(source)
         [local - remote, remote - local]
+      end
+
+      def email_exists_locally?(email)
+        # If we're syncing a user we know they exist locally.
+        return true if source.is_a?(Groups::Mailman::User)
+        local_email_hash.key?(email)
+      end
+
+      # Should only be called if source is a list
+      def local_email_hash
+        @local_email_hash ||= ::User.active.real.in_community(source.communities)
+          .pluck(:email).index_by(&:itself)
       end
 
       def create_membership(mship)

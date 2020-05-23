@@ -62,8 +62,6 @@ en:
           domain: "The domain for the list."
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list."
           managers_can_moderate: "Whether managers of this group should be able to serve as moderators for this email list."
-          outside_members: "A list of email addresses outside the community that should receive email from this list. One address per line."
-          outside_senders: "A list of email addresses outside the community that should be able to send email to this, but not receive email from it. One address per line."
           _destroy: "Check this box to shut down the email list."
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."

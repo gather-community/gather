@@ -42,8 +42,6 @@
           <span><strong>&nbsp;@&nbsp;</strong></span>
           <%= list_form.input(:domain_id, collection: @domain_options, label: false) %>
         <% end %>
-        <%= list_form.input(:outside_members) %>
-        <%= list_form.input(:outside_senders) %>
         <%= list_form.input(:managers_can_administer) %>
         <%= list_form.input(:managers_can_moderate) %>
         <%= list_form.input(:_destroy, as: :boolean) if list_form.object.persisted? %>

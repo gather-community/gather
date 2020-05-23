@@ -41,9 +41,6 @@ module Groups
 
       validates :name, format: {with: /\A[-+_.=a-z0-9]+\z/i}
       validates :domain_id, presence: true
-      validate :check_outside_addresses
-
-      before_save :clean_outside_addresses
 
       delegate :name, to: :domain, prefix: true
       delegate :communities, to: :group
@@ -53,7 +50,7 @@ module Groups
       end
 
       def list_memberships
-        outside_memberships + owner_moderator_memberships + normal_memberships
+        owner_moderator_memberships + normal_memberships
       end
 
       def syncable?
@@ -74,39 +71,6 @@ module Groups
       end
 
       private
-
-      def check_outside_addresses
-        %i[outside_members outside_senders].each do |attrib|
-          next if self[attrib].blank?
-          self[attrib].split(/\r?\n/).each_with_index do |line, number|
-            next if line.strip.empty?
-            address = Mail::Address.new(line)
-            raise Mail::Field::FieldError unless address.address.match?(::User::EMAIL_REGEXP)
-          rescue Mail::UnknownEncodingType, Mail::Field::FieldError
-            errors.add(attrib, "Error on line #{number + 1} (#{line})")
-            break
-          end
-        end
-      end
-
-      def clean_outside_addresses
-        %i[outside_members outside_senders].each do |attrib|
-          next if self[attrib].blank?
-          cleaned = self[attrib].split(/\r?\n/).map { |l| Mail::Address.new(l).to_s unless l.strip.empty? }
-          send("#{attrib}=", cleaned.compact.sort_by(&:downcase).join("\n"))
-        end
-      end
-
-      def outside_memberships
-        %i[outside_members outside_senders].flat_map do |attrib|
-          role = attrib == :outside_members ? "member" : "nonmember"
-          (self[attrib] || "").split("\n").map do |str|
-            address = Mail::Address.new(str)
-            mm_user = Mailman::User.new(display_name: address.display_name, email: address.address)
-            ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
-          end
-        end
-      end
 
       def owner_moderator_memberships
         # Groups that can administer this group must have at least the same communities if not more.

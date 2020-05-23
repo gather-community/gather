@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_21_133430) do
+ActiveRecord::Schema.define(version: 2020_05_23_034331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -162,8 +162,6 @@ ActiveRecord::Schema.define(version: 2020_05_21_133430) do
     t.boolean "managers_can_administer", default: false, null: false
     t.boolean "managers_can_moderate", default: false, null: false
     t.string "name", null: false
-    t.text "outside_members"
-    t.text "outside_senders"
     t.string "remote_id"
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_group_mailman_lists_on_cluster_id"

@@ -39,7 +39,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:11 GMT
 - request:
     method: post
@@ -115,7 +115,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:11 GMT
 - request:
     method: post
@@ -154,7 +154,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 0, "http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:12 GMT
 - request:
     method: get
@@ -193,7 +193,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:12 GMT
 - request:
     method: post
@@ -234,7 +234,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: patch
@@ -269,7 +269,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: post
@@ -304,7 +304,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: post
@@ -345,7 +345,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: get
@@ -387,7 +387,7 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/4787bad7db3e48bf8be97c274803232c",
         "user_id": "4787bad7db3e48bf8be97c274803232c", "password": "$6$rounds=656000$2TvHFDT0G8OcdQ95$aRWJzXAQHZwV8V/8AIo2/.rzxGkC7p3Et7UmSil6SaGiMaoD56zBOKBMCAVbYjR9xYWx9qy/sA7qrr2bJ6Lfw0",
         "display_name": "Delta Smith", "http_etag": "\"a06f7e6c382f4bc32e4d77ef3a0ccf2e486bb0b6\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: post
@@ -428,7 +428,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: get
@@ -467,7 +467,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:13 GMT
 - request:
     method: post
@@ -508,7 +508,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: patch
@@ -543,7 +543,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: post
@@ -578,7 +578,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: post
@@ -619,7 +619,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: get
@@ -661,7 +661,7 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/0da25fb4844b4497ae6110eb8924c411",
         "user_id": "0da25fb4844b4497ae6110eb8924c411", "password": "$6$rounds=656000$Rk2q1eRjbGJLuB.s$LCzYaFUbw3n2K/mqt2o5b15WJURXS9igwaG0UzjI6IJPKw1afJqjQlcG6y0bCwmkAJDxQkAaHA8da5MzZyb2s1",
         "display_name": "None", "http_etag": "\"b692edb5bcd80296ba5e36e9c8ff0b9a4dc18640\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: post
@@ -702,7 +702,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: get
@@ -741,7 +741,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:14 GMT
 - request:
     method: post
@@ -782,7 +782,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: patch
@@ -817,7 +817,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: post
@@ -852,7 +852,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: post
@@ -893,7 +893,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: get
@@ -935,7 +935,7 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/3957068761d3481ba982e8d1245fd995",
         "user_id": "3957068761d3481ba982e8d1245fd995", "password": "$6$rounds=656000$vwcHtYgR6Z3LIhIQ$nEHIuAWY7rIY6o6Os7NjU7kdaAxI8lSSO9ZDeCqeSCtB7KkpL0o39Y93/zxtD1maI2YB8P1zIIKPQCm/JIW/u1",
         "display_name": "None", "http_etag": "\"32b70ecb49d82ea4ca73f7e85c9fd3e2fce72733\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: post
@@ -976,7 +976,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: get
@@ -1015,7 +1015,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:15 GMT
 - request:
     method: post
@@ -1056,7 +1056,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: patch
@@ -1091,7 +1091,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: post
@@ -1126,7 +1126,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: post
@@ -1167,7 +1167,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: get
@@ -1209,7 +1209,7 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/74b10a7c0dcf41ca9741bd740f2dcd1a",
         "user_id": "74b10a7c0dcf41ca9741bd740f2dcd1a", "password": "$6$rounds=656000$xJ./Xfb5yQ2PQISb$hNZyqAFbpoBgdHPdzb/Sr6f1175hKB38HlPkOi2AUetPtzMNAC94BBPUwOFgYW1AyZYNaveLboQAhQO.sfTDW.",
         "display_name": "Alpha Smith", "http_etag": "\"e2a362642281b251e435bbd324b1a00f13f9d8b9\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: post
@@ -1250,7 +1250,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: get
@@ -1289,7 +1289,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:16 GMT
 - request:
     method: post
@@ -1330,7 +1330,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
 - request:
     method: patch
@@ -1365,7 +1365,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
 - request:
     method: post
@@ -1400,7 +1400,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
 - request:
     method: post
@@ -1441,7 +1441,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
 - request:
     method: get
@@ -1483,7 +1483,7 @@ http_interactions:
         "self_link": "http://localhost:8001/3.1/users/75fa099f8d454120833ee38f52112564",
         "user_id": "75fa099f8d454120833ee38f52112564", "password": "$6$rounds=656000$w8tITbDvHLsReKzH$RMjd0gr3FKWtvgNf1oIvgkFZpqZAogSNwWZQfItx1PIyFSU9ZJLFcW3kZod7ogAcnbMNOZygRQPdl4mldA6Va.",
         "display_name": "Bravo Smith", "http_etag": "\"7e740a4d75bb8a16a86915d10f6bf3b7b08c1c49\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:17 GMT
 - request:
     method: post
@@ -1524,6 +1524,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:18 GMT
 recorded_with: VCR 4.0.0

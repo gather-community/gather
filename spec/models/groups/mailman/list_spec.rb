@@ -9,68 +9,6 @@ describe Groups::Mailman::List do
     end
   end
 
-  describe "validation" do
-    shared_examples_for "validates addresses" do |attrib|
-      context "with valid lines and one blank line" do
-        let(:addresses) { "foo@example.com\n   \n  Bar Q. <bar@example.com>\nbaz@example.com" }
-        it { is_expected.to be_valid }
-      end
-
-      context "with valid lines and windows line break" do
-        let(:addresses) { "foo@example.com\r\nbaz@example.com" }
-        it { is_expected.to be_valid }
-      end
-
-      context "with format error" do
-        let(:addresses) { "foo@example.com\nBar Q. <bar@example.com" }
-        it { is_expected.to have_errors(attrib => /Error on line 2 \(Bar Q. <bar@example.com\)/) }
-      end
-
-      context "with invalid address" do
-        let(:addresses) { "fooexample.com\nBar Q. <bar@example.com>" }
-        it { is_expected.to have_errors(attrib => /Error on line 1 \(fooexample.com\)/) }
-      end
-
-      context "with multiple errors" do
-        let(:addresses) { "fooexample.com\nbarexample.com" }
-
-        it "just shows the first" do
-          is_expected.to have_errors(attrib => /Error on line 1 \(fooexample.com\)/)
-        end
-      end
-    end
-
-    describe "outside_members" do
-      subject(:list) { build(:group_mailman_list, outside_members: addresses) }
-      it_behaves_like "validates addresses", :outside_members
-    end
-
-    describe "outside_senders" do
-      subject(:list) { build(:group_mailman_list, outside_senders: addresses) }
-      it_behaves_like "validates addresses", :outside_senders
-    end
-  end
-
-  describe "outside address cleanup" do
-    let(:addresses) { " t@b.com  \n\n  Zo Bol <c@d.com>\r\nPhil Plomp (Junk) <e@f.com>" }
-
-    shared_examples_for "cleans up addresses" do |attrib|
-      it do
-        expect(list[attrib]).to eq("Phil Plomp <e@f.com> (Junk)\nt@b.com\nZo Bol <c@d.com>")
-      end
-    end
-
-    describe "outside_members" do
-      subject(:list) { create(:group_mailman_list, outside_members: addresses) }
-      it_behaves_like "cleans up addresses", :outside_members
-    end
-
-    describe "outside_senders" do
-      subject(:list) { create(:group_mailman_list, outside_senders: addresses) }
-      it_behaves_like "cleans up addresses", :outside_senders
-    end
-  end
-
   describe "#list_memberships" do
     let!(:mod1) { create(:user, email: "e@e.com", first_name: "Eu", last_name: "Smith") }
     let!(:mod2) { create(:user, email: "f@f.com", first_name: "Fu", last_name: "Smith") }
@@ -95,9 +33,7 @@ describe Groups::Mailman::List do
       build(:group_mailman_list, group: group,
                                  managers_can_administer: managers_can_admin_mod,
                                  managers_can_moderate: managers_can_admin_mod,
-                                 remote_id: "foo.bar.com",
-                                 outside_senders: "Al Smith <a@a.com>\nb@b.com",
-                                 outside_members: "c@c.com\nd@d.com")
+                                 remote_id: "foo.bar.com")
     end
 
     before do
@@ -113,10 +49,6 @@ describe Groups::Mailman::List do
       it "returns correct list" do
         expect(list.list_memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])
         expect(summaries(list.list_memberships)).to contain_exactly(
-          [false, nil, nil, "a@a.com", "Al Smith", "nonmember"],
-          [false, nil, nil, "b@b.com", nil, "nonmember"],
-          [false, nil, nil, "c@c.com", nil, "member"],
-          [false, nil, nil, "d@d.com", nil, "member"],
           [false, mod1.id, nil, "e@e.com", "Eu Smith", "owner"],
           [false, mod2.id, nil, "f@f.com", "Fu Smith", "owner"],
           [false, mod1.id, nil, "e@e.com", "Eu Smith", "moderator"],
@@ -136,10 +68,6 @@ describe Groups::Mailman::List do
         it "returns correct list" do
           expect(list.list_memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])
           expect(summaries(list.list_memberships)).to contain_exactly(
-            [false, nil, nil, "a@a.com", "Al Smith", "nonmember"],
-            [false, nil, nil, "b@b.com", nil, "nonmember"],
-            [false, nil, nil, "c@c.com", nil, "member"],
-            [false, nil, nil, "d@d.com", nil, "member"],
             [false, mod1.id, nil, "e@e.com", "Eu Smith", "owner"],
             [false, mod2.id, nil, "f@f.com", "Fu Smith", "owner"],
             [false, mod1.id, nil, "e@e.com", "Eu Smith", "moderator"],

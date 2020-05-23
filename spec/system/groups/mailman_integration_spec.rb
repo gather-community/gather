@@ -28,9 +28,7 @@ describe "mailman integration" do
         group = create(:group, availability: "open", joiners: [user1, user2])
       end
       step("create_list") do
-        list = create(:group_mailman_list, name: "zulu", group: group, domain: domain,
-                                           outside_members: "Delta Smith <d@x.com>\ne@x.com",
-                                           outside_senders: "f@x.com")
+        list = create(:group_mailman_list, name: "zulu", group: group, domain: domain)
       end
       step("add_member") do
         membership = group.memberships.create!(user: user3, kind: "manager")
@@ -46,11 +44,6 @@ describe "mailman integration" do
       end
       step("deactivate_member") do
         user2.deactivate
-      end
-      step("change_outside_senders_and_members") do
-        list.outside_members = "e@x.com"
-        list.outside_senders = "f@x.com\ng@x.com"
-        list.save!
       end
       step("create_admin_group") do
         admin_group = create(:group, joiners: [user3], can_administer_email_lists: true)
@@ -73,8 +66,7 @@ describe "mailman integration" do
         group.update!(availability: "everybody")
       end
       step("create_list_for_everybody_group") do
-        list = create(:group_mailman_list, name: "yankee", group: group, domain: domain,
-                                           outside_members: nil, outside_senders: nil)
+        list = create(:group_mailman_list, name: "yankee", group: group, domain: domain)
       end
       step("create_user_and_ensure_added") do
         create(:user, id: 104, first_name: "Indigo", last_name: "Smith", email: "i@x.com")

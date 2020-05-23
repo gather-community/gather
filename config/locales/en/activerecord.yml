@@ -105,8 +105,6 @@ en:
         managers_can_administer: "Managers can administer list?"
         managers_can_moderate: "Managers can moderate list?"
         address: "List Address"
-        outside_members: "Outside Members"
-        outside_senders: "Outside Senders"
         _destroy: "Delete this list?"
       reservations/protocol:
         fixed_end_time: "Fixed End Time"

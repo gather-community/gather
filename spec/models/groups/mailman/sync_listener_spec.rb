@@ -209,10 +209,10 @@ describe Groups::Mailman::SyncListener do
   end
 
   describe "update mailman list" do
-    let!(:list) { create(:group_mailman_list) }
+    let!(:list) { create(:group_mailman_list, managers_can_administer: false) }
 
     it "enqueues membership sync job" do
-      expect { list.update!(outside_members: "a@b.co") }.to have_enqueued_membership_sync_job_with_list
+      expect { list.update!(managers_can_administer: true) }.to have_enqueued_membership_sync_job_with_list
     end
   end
 

@@ -38,7 +38,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"title": "400 Bad Request", "description": "Duplicate email host:
         foo.com"}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:26 GMT
 - request:
     method: post
@@ -114,7 +114,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:26 GMT
 - request:
     method: post
@@ -153,7 +153,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 0, "http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\""}'
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
 - request:
     method: post
@@ -194,7 +194,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
 - request:
     method: post
@@ -235,6 +235,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
 recorded_with: VCR 4.0.0

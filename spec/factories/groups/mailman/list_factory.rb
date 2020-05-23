@@ -5,8 +5,6 @@ FactoryBot.define do
     group
     sequence(:name) { |i| "list#{i}" }
     remote_id { nil }
-    outside_members { "foo@example.com" }
-    outside_senders { "bar@example.com" }
     domain
   end
 end

@@ -104,7 +104,7 @@ http_interactions:
         true, "info": "", "join_address": "ping-join@tscoho.org", "last_post_at":
         "2020-02-11T12:40:27.425319", "leave_address": "ping-leave@tscoho.org", "list_name":
         "ping", "linked_newsgroup": "", "mail_host": "tscoho.org", "moderator_password":
-        null, "max_message_size": 5000, "member_roster_visibility": "moderators",
+        null, "max_message_size": 5120, "member_roster_visibility": "moderators",
         "newsgroup_moderation": "none", "next_digest_number": 2, "nntp_prefix_subject_too":
         true, "no_reply_address": "noreply@tscoho.org", "owner_address": "ping-owner@tscoho.org",
         "post_id": 24, "posting_address": "ping@tscoho.org", "posting_pipeline": "default-posting-pipeline",
@@ -219,7 +219,7 @@ http_interactions:
         true, "info": "", "join_address": "ping-join@tscoho.org", "last_post_at":
         "2020-02-11T12:40:27.425319", "leave_address": "ping-leave@tscoho.org", "list_name":
         "ping", "linked_newsgroup": "", "mail_host": "tscoho.org", "moderator_password":
-        null, "max_message_size": 5000, "member_roster_visibility": "moderators",
+        null, "max_message_size": 5120, "member_roster_visibility": "moderators",
         "newsgroup_moderation": "none", "next_digest_number": 2, "nntp_prefix_subject_too":
         true, "no_reply_address": "noreply@tscoho.org", "owner_address": "ping-owner@tscoho.org",
         "post_id": 24, "posting_address": "ping@tscoho.org", "posting_pipeline": "default-posting-pipeline",

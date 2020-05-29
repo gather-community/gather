@@ -22,6 +22,7 @@ mailman:
     # Not a real secret, ok to check in
     password: restpass
   single_sign_on:
+    init_url: http://localhost:8000/sso/init?next=
     update_url: http://localhost:8000/sso/update
     sign_out_url: http://localhost:8000/sso/logout
 # These options are passed directly to the Elasticsearch::Client initializer.

@@ -59,7 +59,7 @@ en:
         communities: "What communities this group is available/visible to."
         mailman_list:
           name: "The first part of the address. Can only include letters, numbers, or the characters . = + - _."
-          domain: "The domain for the list."
+          domain_id: "The domain name for the list address."
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list."
           managers_can_moderate: "Whether managers of this group should be able to serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."

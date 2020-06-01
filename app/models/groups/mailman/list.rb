@@ -53,6 +53,20 @@ module Groups
         owner_moderator_memberships + normal_memberships
       end
 
+      # Additional members are members on the list that don't match group memberships.
+      def additional_members
+        @additional_members ||= (remote_memberships - normal_memberships).select do |membership|
+          membership.role == "member"
+        end
+      end
+
+      # Additional senders are nonmembers on the list with moderation actions other than reject/discard
+      def additional_senders
+        @additional_senders ||= remote_memberships.select do |membership|
+          membership.role == "nonmember" && !%w[reject discard].include?(membership.moderation_action)
+        end
+      end
+
       def syncable?
         group&.active?
       end
@@ -91,6 +105,11 @@ module Groups
           mm_user = find_or_initialize_mm_user_for(mship.user)
           list_memberships_for_group_membership_and_mm_user(mship, mm_user)
         end
+      end
+
+      # Fetches memberships stored on the Mailman server via the API.
+      def remote_memberships
+        @remote_memberships ||= Api.instance.memberships(self)
       end
 
       # Keeps a local hash to prevent initializing multiple Mailman::User objs for the same user.

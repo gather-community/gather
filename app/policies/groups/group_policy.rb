@@ -68,7 +68,7 @@ module Groups
         permitted.concat(%i[can_request_jobs can_administer_email_lists can_moderate_email_lists])
       end
       if edit_list?
-        permitted.concat([mailman_list_attributes: %i[name domain_id
+        permitted.concat([mailman_list_attributes: %i[id name domain_id _destroy
                                                       managers_can_administer managers_can_moderate]])
       end
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}

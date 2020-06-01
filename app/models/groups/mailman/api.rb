@@ -76,6 +76,8 @@ module Groups
           ListMembership.new(mailman_user: mm_user,
                              list_id: entry["list_id"],
                              role: entry["role"],
+                             moderation_action: entry["moderation_action"],
+                             display_name: entry["display_name"],
                              remote_id: entry["member_id"])
         end
       end

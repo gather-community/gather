@@ -105,6 +105,8 @@ en:
         managers_can_administer: "Managers can administer list?"
         managers_can_moderate: "Managers can moderate list?"
         members: "List Members"
+        additional_members: "Additional Members"
+        additional_senders: "Additional Senders"
         settings: "List Settings"
         address: "List Address"
         _destroy: "Delete this list?"

@@ -6,15 +6,8 @@
   }
 
   table.key-value {
-    .user-list {
-      list-style-type: none;
-      margin-bottom: 0;
-      padding-left: 0.5em;
-      text-indent: -0.5em;
-
-      &.user-list-opt-out a {
-        text-decoration: line-through;
-      }
+    &.user-list-opt-out a {
+      text-decoration: line-through;
     }
   }
 

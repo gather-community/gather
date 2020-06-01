@@ -5,7 +5,7 @@ module Groups
     include Destructible
 
     before_action -> { nav_context(:people, :groups) }
-    decorates_assigned :group, :groups
+    decorates_assigned :group, :groups, :mailman_list
     helper_method :sample_group
 
     def index
@@ -21,6 +21,7 @@ module Groups
       @group = Group.includes(:communities).find(params[:id])
       @communities = @group.communities.by_name_with_first(current_community)
       authorize(@group)
+      @mailman_list = @group.mailman_list
     end
 
     def new

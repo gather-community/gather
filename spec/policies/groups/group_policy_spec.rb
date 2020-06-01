@@ -253,7 +253,7 @@ describe Groups::GroupPolicy do
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:list_attribs) do
-      [mailman_list_attributes: %i[name domain_id managers_can_administer managers_can_moderate]]
+      [mailman_list_attributes: %i[id name domain_id managers_can_administer managers_can_moderate _destroy]]
     end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
     let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }

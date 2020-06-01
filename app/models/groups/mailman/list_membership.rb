@@ -7,7 +7,7 @@ module Groups
     class ListMembership
       include ActiveModel::Model
 
-      attr_accessor :remote_id, :mailman_user, :list_id, :role
+      attr_accessor :remote_id, :mailman_user, :list_id, :role, :moderation_action, :display_name
       delegate :email, to: :mailman_user
       delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 
@@ -22,7 +22,11 @@ module Groups
       end
 
       def hash
-        [email, list_id].hash
+        [email, list_id, role].hash
+      end
+
+      def name_or_email
+        @name_or_email ||= display_name.presence || email
       end
     end
   end

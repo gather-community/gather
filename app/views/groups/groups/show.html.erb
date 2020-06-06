@@ -36,8 +36,8 @@
   </tr>
 </table>
 
+<h2>Email List</h2>
 <% if mailman_list %>
-  <h2>Mailman List</h2>
   <table class="key-value key-value-full">
     <tr>
       <td><%= Groups::Mailman::List.human_attribute_name(:address) %></td>
@@ -72,4 +72,6 @@
       </tr>
     <% end %>
   </table>
+<% else %>
+  This group has no attached email list.
 <% end %>

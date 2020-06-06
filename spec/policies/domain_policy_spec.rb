@@ -9,7 +9,15 @@ describe DomainPolicy do
     let(:record) { community }
 
     permissions :attach_to? do
-      context "domain belonging to own community" do
+      shared_examples_for "permits cluster admins but not admins or regular users" do
+        it do
+          expect(subject).to permit(cluster_admin, record)
+          expect(subject).not_to permit(admin, record)
+          expect(subject).not_to permit(user, record)
+        end
+      end
+
+      context "domain belonging only to own community" do
         let(:record) { create(:domain, communities: [community]) }
 
         it "permits admins and regular users" do
@@ -18,14 +26,14 @@ describe DomainPolicy do
         end
       end
 
-      context "domain belonging to other community in cluster" do
+      context "domain belonging only to other community in cluster" do
         let(:record) { create(:domain, communities: [communityB]) }
+        it_behaves_like "permits cluster admins but not admins or regular users"
+      end
 
-        it "permits cluster admins but not admins or regular users" do
-          expect(subject).to permit(cluster_admin, record)
-          expect(subject).not_to permit(admin, record)
-          expect(subject).not_to permit(user, record)
-        end
+      context "domain belonging to both own community other community in cluster" do
+        let(:record) { create(:domain, communities: [community, communityB]) }
+        it_behaves_like "permits cluster admins but not admins or regular users"
       end
     end
   end

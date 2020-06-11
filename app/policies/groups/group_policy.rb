@@ -68,8 +68,9 @@ module Groups
         permitted.concat(%i[can_request_jobs can_administer_email_lists can_moderate_email_lists])
       end
       if edit_list?
-        permitted.concat([mailman_list_attributes: %i[id name domain_id _destroy
-                                                      managers_can_administer managers_can_moderate]])
+        permitted.concat([mailman_list_attributes: %i[id name domain_id
+                                                      managers_can_administer managers_can_moderate
+                                                      _destroy]])
       end
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}
       permitted << {community_ids: []} if user.global_role?(:cluster_admin) || user.global_role?(:super_admin)

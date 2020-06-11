@@ -28,6 +28,7 @@ For both production and development environments:
 1. Mailman 3 (see instructions below).
 
 ## Development Environment Setup
+
 Follow these steps to setup a development environment for Gather.
 
 1. Install all above dependencies
@@ -93,7 +94,22 @@ Follow these steps to setup a development environment for Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
 
+Later, to re-start your development environment, the following should be sufficient:
+
+    bundle install
+    bundle exec rake db:migrate
+    brew services start redis
+
+And if working with Mailman, in a separate terminal:
+
+    cd ../mailman
+    source venv/bin/activate
+    mailman start
+    cd mailman-suite/mailman-suite_project/
+    python3 manage.py runserver
+
 ## Caching
+
 Caching is off by default in development mode since it can lead to confusing issues where changes to views don't show up.
 
 If you are testing some caching behavior you can enable it temporarily by doing:
@@ -103,9 +119,11 @@ CACHE=1 rails server
 ```
 
 ## Linters
+
 Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer.
 
 ### Setup
+
 Several linters require `npm` to install. We recommend [using `nvm`](https://github.com/creationix/nvm#installation) to manage your Node/npm versions. Note that `nvm` does NOT shim Node executables so `nvm use` is required to load the right Node versions in each new shell session.
 
 The below assume you have installed the Ruby and Node versions specified in `.ruby-version` and `.nvmrc` files, respectively.
@@ -121,6 +139,7 @@ gem install scss_lint -v 0.56.0
 ```
 
 ### Running
+
 To lint your code, simply run:
 
 ```

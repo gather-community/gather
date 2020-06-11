@@ -120,6 +120,7 @@ module Groups
       end
 
       def request(endpoint, method = :get, **data)
+        return stubbed_response if Rails.env.test? && ENV["STUB_MAILMAN"]
         url = URI.parse("#{base_url}/#{endpoint}")
         raise "HTTPS only in production" if Rails.env.production? && url.scheme != "https"
 
@@ -132,6 +133,11 @@ module Groups
         end
         raise ApiRequestError, res unless res.is_a?(Net::HTTPSuccess)
         ApiJsonResponse.new(res)
+      end
+
+      def stubbed_response
+        response = OpenStruct.new(body: ENV["STUB_MAILMAN"])
+        ApiJsonResponse.new(response)
       end
 
       def base_url

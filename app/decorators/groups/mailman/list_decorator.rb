@@ -5,10 +5,6 @@ module Groups
     class ListDecorator < ApplicationDecorator
       delegate_all
 
-      def address
-        "#{name}@#{domain_name}"
-      end
-
       def additional_members_ul
         membership_ul(additional_members)
       end

@@ -6,3 +6,28 @@ photos:
   max_size_mb: 8
 work:
   min_age: 5
+
+###########################################################################
+# These settings are for development/testing only, should be overridden in
+# production.
+single_sign_on:
+  # Not a real secret, ok to check in
+  secret: ssosecret
+mailman:
+  api:
+    # No trailing slash, no API version. API version gets appended to this.
+    base_url: http://localhost:8001
+    port: 8001
+    username: restadmin
+    # Not a real secret, ok to check in
+    password: restpass
+  single_sign_on:
+    init_url: http://localhost:8000/sso/init?next=
+    update_url: http://localhost:8000/sso/update
+    sign_out_url: http://localhost:8000/sso/logout
+# These options are passed directly to the Elasticsearch::Client initializer.
+# See https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport for details.
+# The default settings should work in most cases.
+elasticsearch:
+  host: 127.0.0.1 # This IP is ignored by VCR, but localhost isn't.
+  port: 9200

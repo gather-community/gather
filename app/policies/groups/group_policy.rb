@@ -23,7 +23,7 @@ module Groups
     end
 
     def show?
-      active? && (appropriate_admin? || manager? || !group.hidden? && user_in_any_community?)
+      active? && (appropriate_admin? || manager? || !group.hidden? && record_tied_to_user_community?)
     end
 
     def create?
@@ -54,8 +54,24 @@ module Groups
       active? && appropriate_admin?
     end
 
+    def change_permissions?
+      active? && appropriate_admin?
+    end
+
+    def edit_list?
+      active? && appropriate_admin?
+    end
+
     def permitted_attributes
-      permitted = %i[availability can_request_jobs description kind name]
+      permitted = %i[availability description kind name]
+      if change_permissions?
+        permitted.concat(%i[can_request_jobs can_administer_email_lists can_moderate_email_lists])
+      end
+      if edit_list?
+        permitted.concat([mailman_list_attributes: %i[id name domain_id
+                                                      managers_can_administer managers_can_moderate
+                                                      _destroy]])
+      end
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}
       permitted << {community_ids: []} if user.global_role?(:cluster_admin) || user.global_role?(:super_admin)
       permitted
@@ -66,11 +82,7 @@ module Groups
     def appropriate_admin?
       user.global_role?(:super_admin) ||
         user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
-        user.global_role?(:admin) && user_in_any_community?
-    end
-
-    def user_in_any_community?
-      group.communities.include?(user.community)
+        user.global_role?(:admin) && record_tied_to_user_community?
     end
 
     def membership

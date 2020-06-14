@@ -3,6 +3,7 @@
 module Groups
   # A group of users.
   class Group < ApplicationRecord
+    include Wisper.model
     include Deactivatable
 
     KINDS = %i[committee subcommittee team task_force club crew squad group].freeze
@@ -18,11 +19,14 @@ module Groups
                                                          dependent: :destroy, inverse_of: :group
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
+    has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
     scope :in_community, lambda { |c|
       where("EXISTS(SELECT id FROM group_affiliations
-        WHERE group_id = groups.id AND community_id = ?)", c.id)
+        WHERE group_id = groups.id AND community_id IN (?))", Array.wrap(c).map(&:id))
     }
+    # Matches groups that are in AT LEAST ALL the same communities as the passed array.
+    scope :in_communities, ->(cmtys) { cmtys.inject(all) { |rel, c| rel.in_community(c) } }
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :visible, -> { where.not(availability: "hidden") }
     scope :visible_or_managed_by, lambda { |user|
@@ -46,9 +50,11 @@ module Groups
     }
     scope :with_user, lambda { |user|
       subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN (?))"
-      clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
+      memb_clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
         "(availability = 'everybody' AND NOT EXISTS #{subq})"
-      where(clause, user, %w[joiner manager], user, %w[opt_out])
+      affil_clause = "? IN (SELECT community_id FROM group_affiliations WHERE group_id = groups.id)"
+      where(memb_clause, user, %w[joiner manager], user, %w[opt_out])
+        .where(affil_clause, user.community_id)
     }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_type, lambda {
@@ -63,9 +69,10 @@ module Groups
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :mailman_list, reject_if: ->(attribs) { attribs[:name].blank? },
+                                                 allow_destroy: true
 
     before_validation :normalize
-    after_update { Work::ShiftIndexUpdater.new(self).update }
 
     validates :name, presence: true
     validate :name_unique_in_all_communities
@@ -87,6 +94,11 @@ module Groups
       availability == "hidden"
     end
 
+    # Checks if associated with no communities. Hits the DB every time on purpose.
+    def no_communities?
+      communities.count.zero?
+    end
+
     def single_community?
       communities.size == 1
     end
@@ -103,15 +115,29 @@ module Groups
       @opt_outs ||= memberships.opt_outs.including_users_and_communities.map(&:user)
     end
 
-    # members = managers + (everybody ? all active adults : joiners) - opt outs
-    def members
+    # computed_memberships = persisted_memberships + (ephemeral memberships for all other active adults)
+    def computed_memberships(user_eager_load: nil)
+      kinds = everybody? ? %i[opt_out manager] : %i[joiner manager]
+      matching_mships = memberships.where(kind: kinds).including_users_and_communities
+      matching_mships = matching_mships.includes(user: user_eager_load) unless user_eager_load.nil?
+      matching_mships = matching_mships.to_a
       if everybody?
         # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
         # They should be consistent.
-        User.active.adults.in_community(communities).including_communities.by_name - opt_outs
-      else
-        managers + joiners
+        all_users = ::User.active.adults.in_community(communities).including_communities.by_name
+        all_users = all_users.includes(user_eager_load) unless user_eager_load.nil?
+        mships_by_user = matching_mships.index_by(&:user)
+        all_users.each do |user|
+          next if mships_by_user.key?(user)
+          matching_mships << Membership.new(group: self, user: user, kind: "joiner")
+        end
       end
+      matching_mships
+    end
+
+    # members = managers + (everybody ? all active adults : joiners) - opt outs
+    def members(*args)
+      computed_memberships(*args).map { |mship| mship.opt_out? ? nil : mship.user }.compact
     end
 
     # Assumes membership records persisted. Assumes used only O(1) times. Use other methods for O(n).

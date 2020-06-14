@@ -1,0 +1,7 @@
+.no-bullets,
+table.key-value .no-bullets /* specificity */ {
+  list-style-type: none;
+  margin-bottom: 0;
+  padding-left: 0.5em;
+  text-indent: -0.5em;
+}

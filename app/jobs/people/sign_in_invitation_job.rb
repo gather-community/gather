@@ -9,7 +9,7 @@ module People
       @community_id = community_id
       @user_ids = user_ids
 
-      with_community(community) do
+      with_cluster(community.cluster) do
         # Need to scope to community so folks can't invite users in communities in other clusters.
         # (ActsAsTenant prevents other clusters).
         User.in_community(community).where(id: user_ids).each do |user|

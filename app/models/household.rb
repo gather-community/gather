@@ -2,6 +2,7 @@
 
 # A single cohesive household group, not necessarily one-to-one with a unit.
 class Household < ApplicationRecord
+  include Wisper.model
   include Deactivatable
   include SemicolonDisallowable
 

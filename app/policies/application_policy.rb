@@ -3,6 +3,8 @@
 # Parent policy for all policies.
 class ApplicationPolicy
   class CommunityNotSetError < StandardError; end
+  class ClusterNotSetError < StandardError; end
+
   # Note: It is not a Policy scope's job to:
   # - Restrict the results to the current community (controller should do that where appropriate)
   #   (Note this is not the same as restricting results to the user's community in cases
@@ -137,20 +139,20 @@ class ApplicationPolicy
   delegate :active?, to: :user
 
   def active_in_community?
-    active? && own_community_record? || active_admin?
+    active? && record_tied_to_user_community? || active_admin?
   end
 
   def active_in_cluster?
-    active? && own_cluster_record? || active_admin?
+    active? && record_tied_to_user_cluster? || active_admin?
   end
 
   def active_admin?
-    active? && user.global_role?(:admin) && own_community_record? ||
+    active? && user.global_role?(:admin) && record_tied_to_user_community? ||
       active_cluster_admin? || active_super_admin?
   end
 
   def active_cluster_admin?
-    active? && user.global_role?(:cluster_admin) && own_cluster_record? || active_super_admin?
+    active? && user.global_role?(:cluster_admin) && record_tied_to_user_cluster? || active_super_admin?
   end
 
   def active_super_admin?
@@ -158,32 +160,46 @@ class ApplicationPolicy
   end
 
   def active_with_community_role?(role)
-    active? && user.global_role?(role) && own_community_record?
+    active? && user.global_role?(role) && record_tied_to_user_community?
   end
 
   def active_admin_or?(*roles)
     active_admin? || roles.any? { |role| active_with_community_role?(role) }
   end
 
-  def own_community_record?
-    !required_community || user.community == required_community
+  def record_tied_to_user_community?
+    record_communities.nil? || record_communities.include?(user.community)
   end
 
-  def own_cluster_record?
-    !required_community || required_community.cluster == user.community.cluster
+  def record_tied_to_user_cluster?
+    record_cluster.nil? || record_cluster == user.cluster
   end
 
-  # Gets the community associated with `record`.
+  # Gets the community (or communities if no `community` ass'n exists) associated with `record`.
   # Returns nil if record is a class and allow_class_based_auth? is true.
-  # Raises CommunityNotSetError if record has no community or not specific
+  # Raises CommunityNotSetError if record has no community/ or not specific
   # record and allow_class_based_auth is false.
-  def required_community
+  def record_communities
     if not_specific_record?
       return nil if allow_class_based_auth?
-      raise CommunityNotSetError, "community must be set via dummy record for this check"
+      raise CommunityNotSetError, "community/communities must be set via dummy record for this check"
     else
-      return record.community if record.community.present?
-      raise CommunityNotSetError, "community must be set on record for this check"
+      if record.respond_to?(:community)
+        return [record.community] if record.community.present?
+      elsif record.respond_to?(:communities)
+        return record.communities if record.communities.any?
+      end
+      raise CommunityNotSetError, "community/communities must be set on record for this check"
+    end
+  end
+
+  def record_cluster
+    if not_specific_record?
+      return nil if allow_class_based_auth?
+      raise ClusterNotSetError, "cluster must be set via dummy record for this check"
+    else
+      return record.cluster if record.cluster.present?
+      raise CommunityNotSetError, "cluster must be set on record for this check"
     end
   end
 

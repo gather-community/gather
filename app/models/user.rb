@@ -23,6 +23,7 @@
 # 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
 #    sign in invite, signs in, is confirmed
 class User < ApplicationRecord
+  include Wisper.model
   include AttachmentFormable
   include Phoneable
   include Deactivatable
@@ -33,6 +34,7 @@ class User < ApplicationRecord
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze
   PASSWORD_MIN_ENTROPY = 16
+  EMAIL_REGEXP = Devise.email_regexp
 
   acts_as_tenant :cluster
   rolify
@@ -55,11 +57,14 @@ class User < ApplicationRecord
   has_many :guardians, through: :up_guardianships
   has_many :children, through: :down_guardianships
   has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
+  has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,
+                               autosave: false
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
   scope :active, -> { where(deactivated_at: nil) }
+  scope :real, -> { where(fake: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
       .where("communities.id = ? OR users.child = 'f'", c.id)
@@ -91,7 +96,7 @@ class User < ApplicationRecord
 
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
-  delegate :community_id, :community_name, :community_abbrv, :cluster,
+  delegate :community_id, :community_name, :community_abbrv,
            :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
@@ -104,7 +109,7 @@ class User < ApplicationRecord
   handle_phone_types :mobile, :home, :work # In order of general preference
 
   # Contact email does not have to be unique because some people share them (grrr!)
-  validates :email, format: Devise.email_regexp, allow_blank: true
+  validates :email, format: EMAIL_REGEXP, allow_blank: true
   validates :email, presence: true, if: :email_required?
   validates :email, uniqueness: true, allow_nil: true
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
@@ -135,8 +140,6 @@ class User < ApplicationRecord
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
-  after_update { Work::ShiftIndexUpdater.new(self).update }
-  after_deactivate { group_memberships.destroy_all }
 
   def self.from_omniauth(auth)
     return nil if auth.info[:email].blank?

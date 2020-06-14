@@ -171,6 +171,10 @@ module ApplicationControllable::RequestPreprocessing
   # Assumes that current_community would be set by now if one is required for this route.
   # If a tenant is not set and query is attempted on a tenant-scoped model, an error will result.
   def set_tenant
+    # Ensure the community of the current_user (if present) is loaded before we set the tenant.
+    # Otherwise, if the user is a super admin from another cluster, weird errors may result.
+    current_user&.community
+
     return if current_community.blank?
     set_current_tenant(current_community.cluster)
 

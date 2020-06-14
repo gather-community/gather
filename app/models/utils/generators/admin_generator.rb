@@ -10,8 +10,8 @@ module Utils
 
       def generate
         admin = nil
-        ActiveRecord::Base.transaction do
-          ActsAsTenant.with_tenant(cluster) do
+        ActsAsTenant.with_tenant(cluster) do
+          ActiveRecord::Base.transaction do
             self.community = cluster.communities[0]
             in_community_timezone { admin = generate_admin }
           end

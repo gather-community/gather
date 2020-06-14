@@ -33,12 +33,20 @@ FactoryBot.define do
       end
     end
 
+    trait :active do
+      # active is default
+    end
+
     trait :inactive do
       deactivated_at { Time.current - 1 }
 
       after(:build) do |user|
         user.household.deactivated_at = Time.current - 1
       end
+    end
+
+    trait :adult do
+      # adult is default
     end
 
     trait :child do

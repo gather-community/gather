@@ -5,7 +5,7 @@ module Groups
     include Destructible
 
     before_action -> { nav_context(:people, :groups) }
-    decorates_assigned :group, :groups
+    decorates_assigned :group, :groups, :mailman_list
     helper_method :sample_group
 
     def index
@@ -21,6 +21,7 @@ module Groups
       @group = Group.includes(:communities).find(params[:id])
       @communities = @group.communities.by_name_with_first(current_community)
       authorize(@group)
+      @mailman_list = @group.mailman_list
     end
 
     def new
@@ -85,8 +86,19 @@ module Groups
     private
 
     def prep_form_vars
-      return unless policy(@group).permitted_attributes.include?(community_ids: [])
-      @community_options = Community.by_name_with_first(current_community)
+      @group.build_mailman_list if @group.mailman_list.nil?
+
+      if policy(@group).permitted_attributes.include?(community_ids: [])
+        @community_options = Community.by_name_with_first(current_community)
+      end
+
+      @domain_options = Domain.by_name.select { |d| policy(d).attach_to? }
+      @domain_options << @group.mailman_list.domain if @group.mailman_list.persisted?
+      @domain_options.uniq!
+
+      list_remote_id = @group.mailman_list.remote_id
+      mailman_admin_path = list_remote_id ? "/postorius/lists/#{list_remote_id}/" : "/postorius/lists/"
+      @mailman_admin_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(mailman_admin_path)}"
     end
 
     def sample_group

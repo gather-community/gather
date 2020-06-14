@@ -8,21 +8,11 @@ describe "admin hierarchy" do
   let(:cmtyA1) { with_tenant(clusterA) { create(:community) } }
   let(:cmtyA2) { with_tenant(clusterA) { create(:community) } }
   let(:cmtyB) { with_tenant(clusterB) { create(:community) } }
-  let(:recordA) { double(community: cmtyA2) }
-  let(:recordB) { double(community: cmtyB) }
-  let(:recordC) { double(community: nil) }
+  let(:recordA) { double(community: cmtyA2, cluster: clusterA) }
+  let(:recordB) { double(community: cmtyB, cluster: clusterB) }
+  let(:recordC) { double(community: nil, cluster: nil) }
 
-  shared_examples_for "admin for class and scope" do
-    context "default" do
-      it "should error unless user is superadmin" do
-        unless user.global_role?(:super_admin)
-          expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }.to raise_error(
-            ApplicationPolicy::CommunityNotSetError
-          )
-        end
-      end
-    end
-
+  shared_examples_for "allows class-based auth if permitted and allows admin for scope" do
     context "when allowing class-based auth" do
       let(:policy) { ApplicationPolicy.new(user, Object) }
 
@@ -41,11 +31,18 @@ describe "admin hierarchy" do
   end
 
   describe "cluster_admin" do
-    let(:user) { create(:cluster_admin, household: create(:household, community: cmtyA1)) }
+    let(:user) do
+      with_tenant(clusterA) { create(:cluster_admin, household: create(:household, community: cmtyA1)) }
+    end
 
-    it_behaves_like "admin for class and scope"
+    it_behaves_like "allows class-based auth if permitted and allows admin for scope"
 
-    it "should be be admin for record in different community but same cluster" do
+    it "should error with class-based auth if not allowed" do
+      expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }
+        .to raise_error(ApplicationPolicy::ClusterNotSetError)
+    end
+
+    it "should be admin for record in different community but same cluster" do
       expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be(true)
     end
 
@@ -61,9 +58,16 @@ describe "admin hierarchy" do
   end
 
   describe "super_admin" do
-    let(:user) { create(:super_admin, household: create(:household, community: cmtyA1)) }
+    let(:user) do
+      with_tenant(clusterA) { create(:super_admin, household: create(:household, community: cmtyA1)) }
+    end
 
-    it_behaves_like "admin for class and scope"
+    it_behaves_like "allows class-based auth if permitted and allows admin for scope"
+
+    it "should not error with class-based auth even if not explicitly permitted" do
+      expect { ApplicationPolicy.new(user, Object).send(:active_admin?) }
+        .not_to raise_error
+    end
 
     it "should be be admin for record in same cluster" do
       expect(ApplicationPolicy.new(user, recordA).send(:active_admin?)).to be(true)

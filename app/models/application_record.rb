@@ -19,6 +19,10 @@ class ApplicationRecord < ActiveRecord::Base
     order(Arel.sql(cols.join(", ")))
   end
 
+  def self.txn_id
+    connection.execute("SELECT txid_current()").to_a[0]["txid_current"]
+  end
+
   # Useful when trying to get the class name of a decorated object.
   def class_name
     self.class.name

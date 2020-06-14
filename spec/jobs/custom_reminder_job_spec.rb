@@ -40,18 +40,18 @@ describe CustomReminderJob do
     let(:periodB) { create(:work_period, community: cmtyB) }
 
     context "with multiple matching reminders in different clusters" do
-      let(:jobA) { create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3) }
-      let(:jobB1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-      let(:jobB2) { create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1) }
-      let!(:assignA1) { jobA.shifts[0].assignments.create!(user: userA1) }
-      let!(:assignA2) { jobA.shifts[0].assignments.create!(user: userA2) }
-      let!(:assignB1) { jobB1.shifts[0].assignments.create!(user: userB1) }
-      let!(:assignB2) { jobB2.shifts[0].assignments.create!(user: userB1) }
-      let!(:reminderA1) { create_work_job_reminder(jobA, "2018-01-01 6:00") }
-      let!(:reminderB1) { create_work_job_reminder(jobB1, "2018-01-01 6:00") }
-      let!(:reminderB2) { create_work_job_reminder(jobB2, "2018-01-01 6:00") }
-      let!(:decoy) { create_work_job_reminder(jobB1, "2018-01-01 10:00") }
-      let!(:other_reminder) { create_work_job_reminder(jobB1, "2018-01-01 8:00") }
+      let(:work_jobA) { create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3) }
+      let(:work_jobB1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
+      let(:work_jobB2) { create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1) }
+      let!(:assignA1) { work_jobA.shifts[0].assignments.create!(user: userA1) }
+      let!(:assignA2) { work_jobA.shifts[0].assignments.create!(user: userA2) }
+      let!(:assignB1) { work_jobB1.shifts[0].assignments.create!(user: userB1) }
+      let!(:assignB2) { work_jobB2.shifts[0].assignments.create!(user: userB1) }
+      let!(:reminderA1) { create_work_job_reminder(work_jobA, "2018-01-01 6:00") }
+      let!(:reminderB1) { create_work_job_reminder(work_jobB1, "2018-01-01 6:00") }
+      let!(:reminderB2) { create_work_job_reminder(work_jobB2, "2018-01-01 6:00") }
+      let!(:decoy) { create_work_job_reminder(work_jobB1, "2018-01-01 10:00") }
+      let!(:other_reminder) { create_work_job_reminder(work_jobB1, "2018-01-01 8:00") }
       let!(:old_stray_delivery) do
         other_reminder.deliveries[0].tap { |d| d.update!(deliver_at: 1.day.ago) }
       end
@@ -81,21 +81,23 @@ describe CustomReminderJob do
     end
 
     context "with one reminder already sent and one too far in past" do
-      let(:job1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-      let(:job2) do
+      let(:work_job1) do
+        create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)
+      end
+      let(:work_job2) do
         create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00", "2018-01-03 13:00"],
                           shift_count: 2, shift_slots: 1)
       end
-      let!(:assign1) { job1.shifts[0].assignments.create!(user: userB1) }
-      let!(:assign2) { job2.shifts[0].assignments.create!(user: userB1) }
-      let!(:assign3) { job2.shifts[-1].assignments.create!(user: userB1) }
-      let!(:reminder1) { create_work_job_reminder(job1, "2018-01-01 6:00") }
-      let!(:reminder2) { create_work_job_reminder(job2, "2018-01-01 6:00") }
-      let!(:reminder3) { create_work_job_reminder(job1, "2018-01-01 5:30") }
-      let!(:reminder4) { create_work_job_reminder(job1, "2018-01-01 3:00") } # Too early
+      let!(:assign1) { work_job1.shifts[0].assignments.create!(user: userB1) }
+      let!(:assign2) { work_job2.shifts[0].assignments.create!(user: userB1) }
+      let!(:assign3) { work_job2.shifts[-1].assignments.create!(user: userB1) }
+      let!(:reminder1) { create_work_job_reminder(work_job1, "2018-01-01 6:00") }
+      let!(:reminder2) { create_work_job_reminder(work_job2, "2018-01-01 6:00") }
+      let!(:reminder3) { create_work_job_reminder(work_job1, "2018-01-01 5:30") }
+      let!(:reminder4) { create_work_job_reminder(work_job1, "2018-01-01 3:00") } # Too early
 
       before do
-        job2.shifts[0].reminder_deliveries.index_by(&:reminder)[reminder2].destroy
+        work_job2.shifts[0].reminder_deliveries.index_by(&:reminder)[reminder2].destroy
       end
 
       it_behaves_like "sends correct number of emails", 3
@@ -112,9 +114,9 @@ describe CustomReminderJob do
 
   describe "multiple reminder types" do
     let(:period) { create(:work_period, community: cmtyB) }
-    let(:job) { create(:work_job, period: period, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-    let!(:shift_assignment) { job.shifts[0].assignments.create!(user: userB1) }
-    let!(:job_reminder) { create_work_job_reminder(job, "2018-01-01 6:00") }
+    let(:work_job) { create(:work_job, period: period, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
+    let!(:shift_assignment) { work_job.shifts[0].assignments.create!(user: userB1) }
+    let!(:job_reminder) { create_work_job_reminder(work_job, "2018-01-01 6:00") }
 
     let(:role) { create(:meal_role, :head_cook, community: cmtyA) }
     let(:formula) { create(:meal_formula, community: cmtyA, roles: [role]) }

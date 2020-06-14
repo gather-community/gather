@@ -51,10 +51,18 @@ en:
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       groups_group:
-        availability: "Whether people can join this group on their own."
+        availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."
-        kind: "What kind of group this is. 'Everybody' groups automatically include all adult users."
+        can_administer_email_lists: "Whether users in this group should be able to change settings for all email lists in the community via the Mailman admin panel."
+        can_moderate_email_lists: "Whether users in this group should serve as moderators for all email lists in the community."
+        kind: "What kind of group this is. Used only for display purposes. No other significance."
         communities: "What communities this group is available/visible to."
+        mailman_list:
+          name: "The first part of the address. Can only include letters, numbers, or the characters . = + - _."
+          domain_id: "The domain name for the list address."
+          managers_can_administer: "Whether managers of this group should be able to change settings for this email list via the Mailman admin panel."
+          managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
+          _destroy: "Check this box to shut down the email list."
       reservations_protocol:
         kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
         resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."

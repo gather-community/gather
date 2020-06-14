@@ -25,14 +25,34 @@ For both production and development environments:
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
 1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).
+1. Mailman 3 (see instructions below).
 
 ## Development Environment Setup
+
 Follow these steps to setup a development environment for Gather.
 
 1. Install all above dependencies
     1. **Note:** For Elasticsearch, we recommend setting the maximum heap size to 200m unless you have lots of memory on your development machine. To do so, edit the `jvm.options` file. [See here for instructions](https://stackoverflow.com/a/40333263/2066866).
+    1. For Mailman 3:
+      1. Mailman is only required if you're working on the Mailman API integration. If so...
+        mkdir ../mailman && cd ../mailman
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install mailman
+        mailman start
+        curl -v http://restadmin:restpass@localhost:8001/3.1/lists
+        pip install postorius
+        pip install hyperkitty
+        pip install whoosh
+        git clone https://github.com/gather-community/mailman-suite.git
+        cd mailman-suite/mailman-suite_project/
+        git clone https://github.com/gather-community/discoursessoclient.git
+        python3 manage.py migrate
+        python3 manage.py collectstatic
+        python3 manage.py runserver
+        curl -v http://localhost:8000 # In new tab.
 1. Retrieve project files using Git
-        git clone https://github.com/sassafrastech/gather.git
+        git clone https://github.com/gather-community/gather.git
         cd gather
 
     If developing, it's best to work off the development branch:
@@ -74,7 +94,22 @@ Follow these steps to setup a development environment for Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
 
+Later, to re-start your development environment, the following should be sufficient:
+
+    bundle install
+    bundle exec rake db:migrate
+    brew services start redis
+
+And if working with Mailman, in a separate terminal:
+
+    cd ../mailman
+    source venv/bin/activate
+    mailman start
+    cd mailman-suite/mailman-suite_project/
+    python3 manage.py runserver
+
 ## Caching
+
 Caching is off by default in development mode since it can lead to confusing issues where changes to views don't show up.
 
 If you are testing some caching behavior you can enable it temporarily by doing:
@@ -84,9 +119,11 @@ CACHE=1 rails server
 ```
 
 ## Linters
+
 Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer.
 
 ### Setup
+
 Several linters require `npm` to install. We recommend [using `nvm`](https://github.com/creationix/nvm#installation) to manage your Node/npm versions. Note that `nvm` does NOT shim Node executables so `nvm use` is required to load the right Node versions in each new shell session.
 
 The below assume you have installed the Ruby and Node versions specified in `.ruby-version` and `.nvmrc` files, respectively.
@@ -102,6 +139,7 @@ gem install scss_lint -v 0.56.0
 ```
 
 ### Running
+
 To lint your code, simply run:
 
 ```

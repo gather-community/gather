@@ -98,7 +98,7 @@ module Meals
     end
 
     def change_workers?
-      active_admin_or?(:meals_coordinator) || (active? && (own_community_record? || assigned?))
+      active_admin_or?(:meals_coordinator) || (active? && (record_tied_to_user_community? || assigned?))
     end
 
     def change_workers_without_notification?

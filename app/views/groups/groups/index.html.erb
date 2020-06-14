@@ -23,7 +23,13 @@
     <tbody>
       <% groups.each do |group| %>
         <tr class="<%= group.tr_classes %>">
-          <td class="name"><%= link_to(group.name_with_suffix, groups_group_path(group)) %></td>
+          <td class="name">
+            <%= link_to(group.name_with_suffix, groups_group_path(group)) %>
+            <% if group.mailman_list %>
+              &nbsp;
+              <%= link_to(icon_tag("envelope"), "mailto:#{group.mailman_list.fqdn_listname}")%>
+            <% end %>
+          </td>
           <td class="kind">
             <%= t("simple_form.options.groups_group.kind.#{group.kind}") %>
           </td>

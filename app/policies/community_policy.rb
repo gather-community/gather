@@ -6,7 +6,7 @@ class CommunityPolicy < ApplicationPolicy
   end
 
   def show?
-    own_cluster_record? || active_super_admin?
+    record_tied_to_user_cluster? || active_super_admin?
   end
 
   def update?

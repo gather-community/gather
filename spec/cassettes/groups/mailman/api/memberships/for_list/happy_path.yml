@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members/find
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"ping.tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Thu, 27 Feb 2020 20:49:31 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '1506'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 3, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.org",
+        "delivery_mode": "regular", "email": "jen@example.org", "list_id": "ping.tscoho.org",
+        "member_id": "038e0a7bc4a64361af750dddcee505c1", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/038e0a7bc4a64361af750dddcee505c1", "display_name":
+        "Jen An", "user": "http://localhost:8001/3.1/users/3a730d1d376e4e3b83198de53d5f04e1",
+        "http_etag": "\"a92b7be7f6da5df636de7d28d632b09f5d1e024f\""}, {"address":
+        "http://localhost:8001/3.1/addresses/phil@example.org", "delivery_mode": "regular",
+        "email": "phil@example.org", "list_id": "ping.tscoho.org", "member_id": "8dedfbda9a5a4d24aab619588531426e",
+        "role": "member", "self_link": "http://localhost:8001/3.1/members/8dedfbda9a5a4d24aab619588531426e",
+        "display_name": "Phil Lo", "user": "http://localhost:8001/3.1/users/f7b0be0b56ff47e183e17236d3452c8f",
+        "http_etag": "\"1aa846b15b70ed0818aadb7854d9fce6c8353362\""}, {"address":
+        "http://localhost:8001/3.1/addresses/zar@example.org", "delivery_mode": "regular",
+        "email": "zar@example.org", "list_id": "ping.tscoho.org", "member_id": "8a64fa55d1a34220bb3aa7c274617ff1",
+        "role": "member", "self_link": "http://localhost:8001/3.1/members/8a64fa55d1a34220bb3aa7c274617ff1",
+        "display_name": "Zar O", "user": "http://localhost:8001/3.1/users/8fcdcba6f3604de48b2862d216de25f7",
+        "http_etag": "\"d6c900314e2c287a0ba74777e52d75aad57d255c\""}], "http_etag":
+        "\"cc4d1f8cb7906ea3e3d02083a3bc52bf4f311223\""}'
+    http_version: 
+  recorded_at: Thu, 27 Feb 2020 20:49:31 GMT
+recorded_with: VCR 4.0.0

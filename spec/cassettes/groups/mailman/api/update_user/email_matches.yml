@@ -1,0 +1,97 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/15daec2599b2478d8491b95a2ee7eecc/preferred_address
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:24:24 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '388'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: '{"email": "jen@example.com", "original_email": "jen@example.com", "registered_on":
+        "2020-02-14T04:00:05.992087", "self_link": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "display_name": "Jen Lo", "verified_on": "2020-02-14T04:00:07.059236", "user":
+        "http://localhost:8001/3.1/users/15daec2599b2478d8491b95a2ee7eecc", "http_etag":
+        "\"9b811da1bcb891591ea4afbf80bfca640a4726b9\""}'
+    http_version:
+  recorded_at: Fri, 14 Feb 2020 04:25:34 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/15daec2599b2478d8491b95a2ee7eecc
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Cho"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Fri, 14 Feb 2020 04:24:24 GMT
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Fri, 14 Feb 2020 04:25:34 GMT
+recorded_with: VCR 4.0.0

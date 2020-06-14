@@ -4,10 +4,18 @@ shared_context "jobs" do
   # Mailer double to be returned when stubbing mailer.
   let(:mlrdbl) { double(deliver_now: nil) }
 
-  # Runs job with nil tenant to ensure that job sets tenant itself.
-  def perform_job(*args)
-    ActsAsTenant.with_tenant(nil) do
-      described_class.perform_now(*args)
+  # We instantiate an instance of the job class instead of using perform_later so that we have
+  # a reference on which we can stub things.
+  # But this means we're not directly using the serialize/deserialize code of ActiveJob.
+  # So we test that separately below.
+  subject(:job) { described_class.new }
+
+  # Runs job without tenant to ensure that job sets tenant itself.
+  def perform_job
+    ActsAsTenant.without_tenant do
+      # Serializing and deserializing to simulate calling perform_later.
+      job.deserialize(job.serialize)
+      job.perform_now
     end
   end
 end

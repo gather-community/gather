@@ -67,7 +67,6 @@ describe DiscourseSingleSignOn do
         "m5fc3NvX3VybD1odHRwcyUzQSUyRiUyRm1haWwuZ2F0aGVyLmNvb3AlMkZzc28lMkZsb2dpbiZ1c2VybmFtZT1Ub20rU215dG"\
         "gmY3VzdG9tLm5leHQ9JTJGcG9zdG9yaXVzJTJGbGlzdHMlMkYmY3VzdG9tLmZpcnN0X25hbWU9VG9tJmN1c3RvbS5sYXN0X25"\
         "hbWU9U215dGg%3D&sig=340d7ed7d718b5b15350d9d3fccbb542e7918632567929dcc3b92edb8ff50b7e")
-
     end
   end
 
@@ -122,7 +121,7 @@ describe DiscourseSingleSignOn do
 
     it "raises error" do
       expect { sso }.to raise_error(
-        DiscourseSingleSignOn::ParseError, "Payload and signature are required"
+        DiscourseSingleSignOn::ParseError, "Payload and signature both required if either given"
       )
     end
   end
@@ -139,8 +138,26 @@ describe DiscourseSingleSignOn do
 
     it "raises error" do
       expect { sso }.to raise_error(
-        DiscourseSingleSignOn::ParseError, "Payload and signature are required"
+        DiscourseSingleSignOn::ParseError, "Payload and signature both required if either given"
       )
+    end
+  end
+
+  context "with no payload or signature and manually set attributes" do
+    let(:sso) do
+      described_class.new(secret: secret, return_url: "https://x.co/sso_update")
+    end
+
+    it "generates correct URL" do
+      sso.email = "phil@thesphinx.net"
+      sso.external_id = "1234"
+      sso.name = "Phil Borx"
+      expect(decode(sso.to_url)).to eq("email" => ["phil@thesphinx.net"],
+                                       "external_id" => ["1234"],
+                                       "name" => ["Phil Borx"])
+      expect(sso.to_url).to eq("https://x.co/sso_update?sso=ZW1haWw9cGhpbCU0MHRoZXNwaGlueC5uZXQmZXh0ZXJu"\
+        "YWxfaWQ9MTIzNCZuYW1lPVBoaWwrQm9yeA%3D%3D&sig=2025743556c46a691d73a7493e6e303bd0f346a414255c5729"\
+        "2181571bd3ebc9")
     end
   end
 

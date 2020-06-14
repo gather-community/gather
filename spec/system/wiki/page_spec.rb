@@ -121,9 +121,16 @@ describe "pages", js: true do
   end
 
   context "as superadmin from other cluster" do
-    let(:outside_community) { ActsAsTenant.with_tenant(create(:cluster)) { create(:community) } }
+    let(:other_cluster) { create(:cluster) }
+    let(:outside_community) { ActsAsTenant.with_tenant(other_cluster) { create(:community) } }
     let(:actor) do
-      create(:super_admin, community: outside_community, first_name: "Jane", last_name: "Doe")
+      ActsAsTenant.with_tenant(other_cluster) do
+        create(:super_admin, community: outside_community, first_name: "Jane", last_name: "Doe")
+      end
+    end
+
+    before do
+      use_subdomain(Defaults.community.slug)
     end
 
     scenario "does not record updater" do

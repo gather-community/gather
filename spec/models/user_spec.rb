@@ -288,28 +288,6 @@ describe User do
     end
   end
 
-  describe "deactivation" do
-    let(:user) { create(:user) }
-
-    context "with unaffected association" do
-      let!(:meal) { create(:meal, head_cook: user) }
-
-      it "leaves associated object alone" do
-        user.deactivate
-        expect(Meals::Assignment.count).to eq(1)
-      end
-    end
-
-    context "with group membership" do
-      let!(:membership) { create(:group_membership, user: user) }
-
-      it "destroys memberships" do
-        user.deactivate
-        expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
-
   # Our approach to destruction is to:
   # - Set the policy to only disallow deletions based on what users of various roles should be able
   #   to destroy given various combinations of existing associations.
@@ -354,6 +332,15 @@ describe User do
       it "destroys cleanly and cascades" do
         user.destroy
         expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with group mailman user" do
+      let!(:mailman_user) { create(:group_mailman_user, user: user) }
+
+      it "destroys cleanly and cascades" do
+        user.destroy
+        expect { mailman_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

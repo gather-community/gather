@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_26_010123) do
+ActiveRecord::Schema.define(version: 2020_05_23_034331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,27 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "domain_ownerships", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "domain_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id", "community_id", "domain_id"], name: "index_domain_ownerships_unique", unique: true
+    t.index ["cluster_id"], name: "index_domain_ownerships_on_cluster_id"
+    t.index ["community_id"], name: "index_domain_ownerships_on_community_id"
+    t.index ["domain_id"], name: "index_domain_ownerships_on_domain_id"
+  end
+
+  create_table "domains", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "name", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_domains_on_cluster_id"
+    t.index ["name"], name: "index_domains_on_name", unique: true
+  end
+
   create_table "gdrive_configs", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -135,6 +156,34 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
     t.index ["group_id"], name: "index_group_affiliations_on_group_id"
   end
 
+  create_table "group_mailman_lists", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "domain_id", null: false
+    t.bigint "group_id", null: false
+    t.boolean "managers_can_administer", default: false, null: false
+    t.boolean "managers_can_moderate", default: false, null: false
+    t.string "name", null: false
+    t.string "remote_id"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_group_mailman_lists_on_cluster_id"
+    t.index ["domain_id"], name: "index_group_mailman_lists_on_domain_id"
+    t.index ["group_id"], name: "index_group_mailman_lists_on_group_id"
+    t.index ["name", "domain_id"], name: "index_group_mailman_lists_on_name_and_domain_id", unique: true
+    t.index ["name"], name: "index_group_mailman_lists_on_name"
+  end
+
+  create_table "group_mailman_users", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "remote_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["cluster_id"], name: "index_group_mailman_users_on_cluster_id"
+    t.index ["remote_id"], name: "index_group_mailman_users_on_remote_id", unique: true
+    t.index ["user_id"], name: "index_group_mailman_users_on_user_id", unique: true
+  end
+
   create_table "group_memberships", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -150,6 +199,8 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
 
   create_table "groups", force: :cascade do |t|
     t.string "availability", limit: 10, default: "closed", null: false
+    t.boolean "can_administer_email_lists", default: false, null: false
+    t.boolean "can_moderate_email_lists", default: false, null: false
     t.boolean "can_request_jobs", default: false, null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -628,7 +679,7 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
     t.string "doctor"
     t.string "email"
     t.string "encrypted_password", default: "", null: false
-    t.boolean "fake", default: false
+    t.boolean "fake", default: false, null: false
     t.string "first_name", null: false
     t.string "google_email"
     t.string "home_phone"
@@ -799,6 +850,10 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "domain_ownerships", "clusters"
+  add_foreign_key "domain_ownerships", "communities"
+  add_foreign_key "domain_ownerships", "domains"
+  add_foreign_key "domains", "clusters"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
   add_foreign_key "gdrive_stray_files", "clusters"
@@ -806,6 +861,11 @@ ActiveRecord::Schema.define(version: 2020_03_26_010123) do
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"
+  add_foreign_key "group_mailman_lists", "clusters"
+  add_foreign_key "group_mailman_lists", "domains"
+  add_foreign_key "group_mailman_lists", "groups"
+  add_foreign_key "group_mailman_users", "clusters"
+  add_foreign_key "group_mailman_users", "users"
   add_foreign_key "group_memberships", "clusters"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"

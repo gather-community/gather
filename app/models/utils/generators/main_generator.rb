@@ -11,14 +11,21 @@ module Utils
 
       def generate
         ActionMailer::Base.perform_deliveries = false
-        ActiveRecord::Base.transaction do
-          ActsAsTenant.with_tenant(self.cluster = Cluster.create!(name: cmty_name)) do
+        self.cluster = Cluster.create!(name: cmty_name)
+        # ActsAsTenant has to be outside the transaction because some callbacks run after_commit.
+        # So the tenant still needs to be set at that point or we get errors.
+        ActsAsTenant.with_tenant(cluster) do
+          ActiveRecord::Base.transaction do
             self.community = Community.create!(name: cmty_name, slug: slug)
             in_community_timezone { generate_data_and_handle_errors }
           end
         end
         ActionMailer::Base.perform_deliveries = true
         cluster
+      rescue StandardError
+        # Can't create the cluster inside the transaction (see above). So we need to clean up in here instead
+        # in case of error.
+        cluster.destroy
       end
 
       private

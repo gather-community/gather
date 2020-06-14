@@ -207,8 +207,9 @@ describe Groups::Group do
     end
   end
 
-  describe "#members and .with_member_counts" do
+  describe "#members, #computed_memberships, and .with_member_counts" do
     let!(:users) { create_list(:user, 8) }
+    let!(:external_decoy_user) { create(:user, community: create(:community)) }
     let!(:child) { create(:user, :child, guardians: [users[0]]) }
     let!(:regular_group) do
       create(:group, name: "Alpha", availability: "open", memberships: [
@@ -225,12 +226,56 @@ describe Groups::Group do
       ])
     end
 
-    it "is correct" do
+    it "is correct with and without user_eager_load" do
       groups = described_class.by_name.with_member_counts.to_a
       expect(groups[0].member_count).to eq(3)
       expect(groups[0].members).to contain_exactly(users[0], users[1], users[2])
+      expect(groups[0].members(user_eager_load: :group_mailman_user))
+        .to contain_exactly(users[0], users[1], users[2])
+      expect(groups[0].computed_memberships.size).to eq(3)
+      summary = groups[0].computed_memberships(user_eager_load: :group_mailman_user).map do |m|
+        [m.user_id, m.group_id, m.kind]
+      end
+      expect(summary).to contain_exactly(
+        [users[0].id, groups[0].id, "joiner"],
+        [users[1].id, groups[0].id, "joiner"],
+        [users[2].id, groups[0].id, "manager"]
+      )
+
       expect(groups[1].member_count).to eq(6)
       expect(groups[1].members).to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
+      expect(groups[1].members(user_eager_load: :group_mailman_user))
+        .to contain_exactly(users[1], users[2], users[3], users[5], users[6], users[7])
+      expect(groups[1].computed_memberships.size).to eq(8)
+      summary = groups[1].computed_memberships(user_eager_load: :group_mailman_user).map do |m|
+        [m.user_id, m.group_id, m.kind]
+      end
+      expect(summary).to contain_exactly(
+        [users[0].id, groups[1].id, "opt_out"],
+        [users[1].id, groups[1].id, "joiner"],
+        [users[2].id, groups[1].id, "joiner"],
+        [users[3].id, groups[1].id, "joiner"],
+        [users[4].id, groups[1].id, "opt_out"],
+        [users[5].id, groups[1].id, "manager"],
+        [users[6].id, groups[1].id, "joiner"],
+        [users[7].id, groups[1].id, "joiner"]
+      )
+    end
+  end
+
+  describe "destroy" do
+    let!(:group) { create(:group) }
+    let!(:membership) { create(:group_membership, group: group) }
+    let!(:affiliation) { group.affiliations.first }
+    let!(:job) { create(:work_job, requester: group) }
+    let!(:mailman_list) { create(:group_mailman_list, group: group) }
+
+    it "cascades and nullifies appropriately" do
+      group.reload.destroy
+      expect(Groups::Membership.exists?(membership.id)).to be(false)
+      expect(Groups::Affiliation.exists?(affiliation.id)).to be(false)
+      expect(job.reload.requester).to be_nil
+      expect(Groups::Mailman::List.exists?(mailman_list.id)).to be(false)
     end
   end
 

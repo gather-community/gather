@@ -61,7 +61,7 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Enabled: true
-  Max: 12
+  Max: 15
   Exclude:
     - db/migrate/*.rb
 
@@ -80,7 +80,8 @@ Style/AsciiComments:
   Enabled: false
 
 Style/BracesAroundHashParameters:
-  EnforcedStyle: context_dependent
+  # Sometimes it was telling me to put braces on named params.
+  EnforcedStyle: no_braces
 
 Style/Documentation:
   Exclude:

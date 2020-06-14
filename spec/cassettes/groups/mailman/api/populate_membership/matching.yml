@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members/find
+    body:
+      encoding: UTF-8
+      string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.14.0 (Ubuntu)
+      Date:
+      - Sat, 15 Feb 2020 15:38:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '600'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
+        "member_id": "164e3ba080a148768c24961c638d6915", "role": "owner", "self_link":
+        "http://localhost:8001/3.1/members/164e3ba080a148768c24961c638d6915", "moderation_action":
+        "accept", "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/be045234ee894ae4a825642e08885db2",
+        "http_etag": "\"3edcbc118bbdd75d69059e5f3feb0975558f8e55\""}], "http_etag":
+        "\"ca3d8f242b3d8e75dec34bda0fe593290259d33b\""}'
+    http_version: 
+  recorded_at: Sat, 15 Feb 2020 15:39:26 GMT
+recorded_with: VCR 4.0.0

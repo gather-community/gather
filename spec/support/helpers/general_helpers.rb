@@ -89,4 +89,14 @@ module GeneralHelpers
   ensure
     vars.each_pair { |k, _| ENV.delete(k) }
   end
+
+  # Returns a proc that checks whether the object passed to the stub has a specified set of attributes.
+  def with_obj_attribs(attribs)
+    proc { |object|
+      attribs.each do |key, expected|
+        actual = object.send(key)
+        expect(actual).to eq(expected), "expected #{key} to be #{expected.inspect} but was #{actual.inspect}"
+      end
+    }
+  end
 end

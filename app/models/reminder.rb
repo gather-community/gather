@@ -2,6 +2,8 @@
 
 # Models a reminder. Abstract class.
 class Reminder < ApplicationRecord
+  include Wisper.model
+
   ABS_REL_OPTIONS = %i[relative absolute].freeze
   REL_UNIT_SIGN_OPTIONS = %i[days_before days_after hours_before hours_after].freeze
 
@@ -13,7 +15,6 @@ class Reminder < ApplicationRecord
   scope :canonical_order, -> { order(:abs_rel, :abs_time, :rel_unit_sign, :rel_magnitude, :note) }
 
   before_validation :normalize
-  after_save { delivery_maintainer.reminder_saved(self, deliveries) }
 
   validates :rel_magnitude, presence: true, if: :rel_time?
   validates :abs_time, presence: true, if: :abs_time?

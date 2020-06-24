@@ -24,7 +24,11 @@ module Groups
         default_member_action: "defer",
 
         # "hold" means send to moderators
-        default_nonmember_action: "hold"
+        default_nonmember_action: "hold",
+
+        # Disabling welcome messages for now because they are gross looking and probably not necessary
+        # and they tend to be problematic when first migrating lists into the system.
+        send_welcome_message: false
       }.freeze
 
       # Settings that will get reset on each sync.

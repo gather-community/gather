@@ -13,6 +13,21 @@ describe "mailman templates" do
       expect(page).to have_content("To unsubscribe, visit the Group page and leave or opt-out.")
       expect(page).to have_content("http://gather.localhost.tv:31337/groups/#{list.group_id}")
     end
+
+    context "visiting group when logged in but with no subdomain" do
+      let(:actor) { create(:user) }
+
+      before do
+        login_as(actor, scope: :user)
+      end
+
+      scenario "successfully redirects to page with subdomain" do
+        with_env("STUB_MAILMAN" => {"entries" => []}.to_json) do
+          visit("/groups/#{list.group_id}")
+          expect(page).to have_content(list.group.name)
+        end
+      end
+    end
   end
 
   context "no matching list" do

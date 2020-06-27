@@ -83,6 +83,13 @@ module Groups
       Group
     end
 
+    # We permit links for show route to not have subdomain to support footer links in mailman.
+    # See Groups::Mailman::TemplatesController for more.
+    def community_for_route
+      return nil unless params[:action] == "show"
+      current_user.community
+    end
+
     private
 
     def prep_form_vars

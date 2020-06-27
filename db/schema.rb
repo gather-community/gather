@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_23_034331) do
+ActiveRecord::Schema.define(version: 2020_06_27_171001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_034331) do
     t.index ["group_id"], name: "index_group_mailman_lists_on_group_id"
     t.index ["name", "domain_id"], name: "index_group_mailman_lists_on_name_and_domain_id", unique: true
     t.index ["name"], name: "index_group_mailman_lists_on_name"
+    t.index ["remote_id"], name: "index_group_mailman_lists_on_remote_id", unique: true
   end
 
   create_table "group_mailman_users", force: :cascade do |t|

@@ -104,6 +104,13 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :groups do
+    namespace :mailman do
+      get "templates/:template_name/:list_id/:locale",
+        to: "templates#show", constraints: { list_id: /.*/ }, defaults: {format: "text"}
+    end
+  end
+
   resources :reservations, controller: "reservations/reservations"
 
   # Legacy calendar routes

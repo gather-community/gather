@@ -2,14 +2,12 @@
 
 namespace :db do
   task new_cluster: :environment do
-    ActiveRecord::Base.transaction do
-      cluster = generate_cluster
-      admin = generate_admin(cluster)
-      if ENV["SUPER_ADMIN"]
-        puts("Generation complete. Admin credentials: #{admin.email}, #{admin.password}")
-      else
-        puts("Generation complete. Admin invitation sent.")
-      end
+    cluster = generate_cluster
+    admin = generate_admin(cluster)
+    if ENV["SUPER_ADMIN"]
+      puts("Generation complete. Admin credentials: #{admin.email}, #{admin.password}")
+    else
+      puts("Generation complete. Admin invitation sent.")
     end
   end
 

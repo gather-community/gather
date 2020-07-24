@@ -15,7 +15,7 @@ describe Work::PeriodPolicy do
     end
     let(:record) { period }
 
-    permissions :index?, :show?, :new?, :edit?, :review_notices?, :send_notices?,
+    permissions :index?, :show?, :new?, :edit?, :review_notices?,
                 :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end
@@ -27,19 +27,18 @@ describe Work::PeriodPolicy do
     permissions :send_notices? do
       context "when not ready or open phase" do
         let(:phase) { "draft" }
-        it { is_expected.not_to permit(work_coordinator, record) }
+        it_behaves_like "forbids all"
       end
 
       context "when quota none" do
         let(:quota_type) { "none" }
-        it { is_expected.not_to permit(work_coordinator, record) }
+        it_behaves_like "forbids all"
       end
 
       context "when quota not none and period ready" do
         let(:phase) { "ready" }
         let(:quota_type) { "by_person" }
-
-        it { is_expected.to permit(work_coordinator, record) }
+        it_behaves_like "permits admins or special role but not regular users", :work_coordinator
       end
     end
 

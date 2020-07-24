@@ -32,10 +32,10 @@ module Groups
 
           # `config` is an ephemeral attribute just used for passing things to the api adapter.
           # Since we just created this list, we send our full default set.
-          list.config = List::DEFAULT_SETTINGS
+          list.config = list.default_config
         # Otherwise, the list must already exist, so we just load an abbreviated config that we enforce.
         else
-          list.config = List::DEFAULT_SETTINGS.slice(*List::ENFORCED_SETTINGS)
+          list.config = list.default_config.slice(*List::ENFORCED_SETTINGS)
         end
       end
     end

@@ -67,7 +67,7 @@ describe Groups::Mailman::ListSyncJob do
           .and_return("foo.tscoho.org")
         expect(api).to receive(:configure_list,
                                &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
-                                                 config: Groups::Mailman::List::DEFAULT_SETTINGS)).ordered
+                                                 config: list.default_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
         expect(list.reload.remote_id).to eq("foo.tscoho.org")

@@ -86,7 +86,7 @@ http_interactions:
     uri: http://localhost:8001/3.1/lists/yankee@foo.com/config
     body:
       encoding: UTF-8
-      string: '{"advertised":"false","dmarc_mitigate_action":"munge_from","archive_policy":"private","max_message_size":5120,"subscription_policy":"moderate","default_member_action":"defer","default_nonmember_action":"hold","send_welcome_message":"false"}'
+      string: '{"advertised":"false","dmarc_mitigate_action":"munge_from","archive_policy":"private","max_message_size":5120,"subscription_policy":"moderate","default_member_action":"defer","default_nonmember_action":"hold","send_welcome_message":"false","display_name":"Regular","subject_prefix":"[yankee]"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3

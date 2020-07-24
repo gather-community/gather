@@ -25,7 +25,7 @@ describe "mailman integration" do
       list = nil
       membership = nil
       step("create_regular_group") do
-        group = create(:group, availability: "open", joiners: [user1, user2])
+        group = create(:group, name: "Regular", availability: "open", joiners: [user1, user2])
       end
       step("create_list") do
         list = create(:group_mailman_list, name: "zulu", group: group, domain: domain)
@@ -46,7 +46,7 @@ describe "mailman integration" do
         user2.deactivate
       end
       step("create_admin_group") do
-        admin_group = create(:group, joiners: [user3], can_administer_email_lists: true)
+        admin_group = create(:group, name: "Admins Only", joiners: [user3], can_administer_email_lists: true)
       end
       step("add_moderate_permission") do
         admin_group.update!(can_moderate_email_lists: true)

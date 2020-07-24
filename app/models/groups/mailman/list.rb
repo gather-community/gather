@@ -48,6 +48,7 @@ module Groups
 
       delegate :name, to: :domain, prefix: true
       delegate :communities, to: :group
+      delegate :name, to: :group, prefix: true
 
       def fqdn_listname
         "#{name}@#{domain_name}"
@@ -86,6 +87,13 @@ module Groups
           roles << "moderator" if managers_can_moderate?
         end
         roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
+      end
+
+      def default_config
+        DEFAULT_SETTINGS.merge(
+          display_name: group_name,
+          subject_prefix: "[#{name}]"
+        )
       end
 
       private

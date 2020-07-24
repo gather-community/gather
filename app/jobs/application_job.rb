@@ -15,6 +15,8 @@ class ApplicationJob < ActiveJob::Base
 
   # Loads the specified object and sets up the cluster context. Assumes
   # the object is cluster-based and responds to `cluster`.
+  # Specify either klass or class_name to indicate the class.
+  # Specify either id or attribs to populate the object (the latter builds a new one)
   def with_object_in_cluster_context(klass: nil, class_name: nil, id: nil, attribs: nil)
     klass ||= class_name.constantize
     object = if id

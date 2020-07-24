@@ -11,6 +11,8 @@ shared_context "jobs" do
   subject(:job) { described_class.new }
 
   # Runs job without tenant to ensure that job sets tenant itself.
+  # Does not take any arguments. If job requires arguments, override subject(:job) to instantiate
+  # an instance of the job with the desired arguments.
   def perform_job
     ActsAsTenant.without_tenant do
       # Serializing and deserializing to simulate calling perform_later.

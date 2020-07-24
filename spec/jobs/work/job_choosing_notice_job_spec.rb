@@ -22,9 +22,10 @@ describe Work::JobChoosingNoticeJob do
   let!(:decoy_shares) do
     [0, 0.5, 1].each_with_index { |p, i| create(:work_share, user: users[i], period: period2, portion: p) }
   end
+  subject(:job) { described_class.new(period.id) }
 
   it "sends emails to those with nonzero periods" do
     expect(WorkMailer).to receive(:job_choosing_notice).exactly(2).times.and_return(mlrdbl)
-    perform_job(period.id)
+    perform_job
   end
 end

@@ -70,17 +70,13 @@ RSpec.configure do |config|
 
   Capybara.register_driver(:selenium_chrome_headless) do |app|
     options = Selenium::WebDriver::Chrome::Options.new(
-      args: %w[disable-gpu no-sandbox headless],
+      args: %w[disable-gpu no-sandbox headless disable-site-isolation-trials window-size=1280x2048],
       loggingPrefs: {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options).tap do |driver|
-      driver.browser.manage.window.size = Selenium::WebDriver::Dimension.new(1280, 2048)
-      # Tell chrome headless how to download files.
-      bridge = driver.browser.send(:bridge)
-      path = "/session/#{bridge.session_id}/chromium/send_command"
-      bridge.http.call(:post, path, cmd: "Page.setDownloadBehavior",
-                                    params: {behavior: "allow", downloadPath: DownloadHelpers::PATH})
-    end
+    options.add_preference(:download, prompt_for_download: false,
+                                      default_directory: DownloadHelpers::PATH.to_s)
+    options.add_preference(:browser, set_download_behavior: {behavior: 'allow'})
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
 
   Capybara.always_include_port = true

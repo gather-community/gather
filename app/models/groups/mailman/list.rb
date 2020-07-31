@@ -92,7 +92,7 @@ module Groups
       def default_config
         DEFAULT_SETTINGS.merge(
           display_name: group_name,
-          subject_prefix: "[#{name}]"
+          subject_prefix: "[#{name}] "
         )
       end
 

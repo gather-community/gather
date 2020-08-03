@@ -118,7 +118,7 @@ module Nav
               name: :groups,
               parent: :people,
               path: h.groups_groups_path,
-              permitted: h.policy(sample_group).index? && !Settings.disable_groups,
+              permitted: h.policy(sample_group).index?,
               icon: "users"
             }, {
               name: :households,

@@ -85,7 +85,9 @@ module Work
         @error = "Notices can't be sent because this period doesn't have a quota."
       else
         @notices = Work::Share.for_period(period).nonzero.by_user_name.map do |share|
-          WorkMailer.job_choosing_notice(share).body.encoded
+          # .body was sometimes returning an empty String object.
+          body = WorkMailer.job_choosing_notice(share).body
+          body.is_a?(Mail::Body) ? body.encoded : body
         end
       end
     end

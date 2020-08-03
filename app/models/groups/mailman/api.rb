@@ -25,14 +25,21 @@ module Groups
         # We set the display name in a separate patch request so it doesn't get copied redundantly to the
         # address record.
         request("users", :post, email: mm_user.email)
-        request("users/#{mm_user.email}", :patch, display_name: mm_user.display_name)
+        unless mm_user.display_name.nil?
+          request("users/#{mm_user.email}", :patch, display_name: mm_user.display_name)
+        end
         verify_address_and_set_verified(mm_user)
         user_id_for_email(mm_user)
       end
 
       def update_user(mm_user)
         remote_email = request("users/#{mm_user.remote_id}/preferred_address")["email"]
-        request("users/#{mm_user.remote_id}", :patch, display_name: mm_user.display_name)
+
+        # display_name should never change from nil to non-nil.
+        # It's only nil for ephemeral User objects for nonmember accounts.
+        unless mm_user.display_name.nil?
+          request("users/#{mm_user.remote_id}", :patch, display_name: mm_user.display_name)
+        end
 
         return if remote_email == mm_user.email
 

@@ -69,6 +69,9 @@ module Groups
         request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
                                   role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
                                   pre_approved: "true")
+      rescue ApiRequestError => e
+        # If we get 'is already' error, that's fine, swallow it.
+        e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/ ? nil : (raise e)
       end
 
       # Assumes remote_id is set on list_mship

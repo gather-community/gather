@@ -34,13 +34,20 @@
       <%= f.simple_fields_for(:mailman_list) do |list_form| %>
         <p>
           Email lists are provided through the Mailman mailing list software.
-          Leave these fields blank if you don't need an email list for this group.
+          <% if list_form.object.new_record? %>
+            Leave these fields blank if you don't need an email list for this group.
+          <% else %>
+            List name and domain can't be edited once the list is created. If you need to change them,
+            delete and recreate the list or contact Gather staff.
+          <% end %>
         </p>
 
         <%= list_form.input(:address) do %>
-          <%= list_form.input(:name, label: false) %>
+          <%= list_form.input(:name, label: false, disabled: !policy(group).edit_list_name?) %>
           <span><strong>&nbsp;@&nbsp;</strong></span>
-          <%= list_form.input(:domain_id, collection: @domain_options, label: false, include_blank: false) %>
+          <%= list_form.input(:domain_id, collection: @domain_options,
+                                          disabled: !policy(group).edit_list_name?,
+                                          label: false, include_blank: false) %>
         <% end %>
 
         <div class="list-form-details hiding">

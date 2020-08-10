@@ -253,7 +253,7 @@ describe Groups::GroupPolicy do
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:list_attribs) do
-      [mailman_list_attributes: %i[id name domain_id managers_can_administer managers_can_moderate _destroy]]
+      [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate _destroy]]
     end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
     let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }
@@ -272,7 +272,20 @@ describe Groups::GroupPolicy do
 
     context "with admin" do
       let(:actor) { admin }
-      it { is_expected.to match_array(base_admin_attribs) }
+
+      context "with persisted record" do
+        it { is_expected.to match_array(base_admin_attribs) }
+      end
+
+      context "with new record" do
+        let(:group) { build(:group) }
+        let(:list_attribs) do
+          [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate
+                                       _destroy name domain_id]]
+        end
+
+        it { is_expected.to match_array(base_admin_attribs) }
+      end
     end
 
     context "with manager" do

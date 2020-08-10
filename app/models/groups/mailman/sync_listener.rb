@@ -117,7 +117,10 @@ module Groups
       def sync_memberships_for_group_list(group)
         return if method_already_ran_this_transaction?(__method__)
         list = group&.mailman_list
-        return if list.nil?
+
+        # If list doesn't have remote ID, it means ListSyncJob hasn't run yet.
+        # We want to run that first. And it will enqueue the MembershipSyncJob.
+        return if list.nil? || !list.reload.remote_id?
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 

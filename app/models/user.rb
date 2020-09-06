@@ -55,6 +55,7 @@ class User < ApplicationRecord
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
                                 dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
+  has_one :memorial, class_name: "People::Memorial", inverse_of: :user
   has_many :children, through: :down_guardianships
   has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,

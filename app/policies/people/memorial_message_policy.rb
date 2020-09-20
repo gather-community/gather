@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module People
-  class MemorialPolicy < ApplicationPolicy
-    alias memorial record
+  class MemorialMessagePolicy < ApplicationPolicy
+    alias memorial_message record
 
     def index?
       active_in_cluster?
@@ -13,19 +13,19 @@ module People
     end
 
     def create?
-      active_admin?
+      index?
     end
 
     def update?
-      active_admin?
+      active_admin? || user == record.author
     end
 
     def destroy?
-      active_admin?
+      active_admin? || user == record.author
     end
 
     def permitted_attributes
-      %i[user_id birth_year death_year]
+      %i[body]
     end
   end
 end

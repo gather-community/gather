@@ -7,7 +7,7 @@ describe People::MemorialPolicy do
     include_context "policy permissions"
     let(:record) { create(:memorial) }
 
-    permissions :index?, :show?, :contribute? do
+    permissions :index?, :show? do
       it_behaves_like "permits cluster and super admins"
       it_behaves_like "permits users in cluster"
     end

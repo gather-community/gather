@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_06_150325) do
+ActiveRecord::Schema.define(version: 2020_09_20_200314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -456,6 +456,19 @@ ActiveRecord::Schema.define(version: 2020_09_06_150325) do
     t.index ["child_id"], name: "index_people_guardianships_on_child_id"
     t.index ["cluster_id"], name: "index_people_guardianships_on_cluster_id"
     t.index ["guardian_id"], name: "index_people_guardianships_on_guardian_id"
+  end
+
+  create_table "people_memorial_messages", force: :cascade do |t|
+    t.bigint "author_id", null: false
+    t.text "body", null: false
+    t.bigint "cluster_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "memorial_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_people_memorial_messages_on_author_id"
+    t.index ["cluster_id"], name: "index_people_memorial_messages_on_cluster_id"
+    t.index ["created_at"], name: "index_people_memorial_messages_on_created_at"
+    t.index ["memorial_id"], name: "index_people_memorial_messages_on_memorial_id"
   end
 
   create_table "people_memorials", force: :cascade do |t|
@@ -925,6 +938,8 @@ ActiveRecord::Schema.define(version: 2020_09_06_150325) do
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_guardianships", "users", column: "child_id"
   add_foreign_key "people_guardianships", "users", column: "guardian_id"
+  add_foreign_key "people_memorial_messages", "people_memorials", column: "memorial_id"
+  add_foreign_key "people_memorial_messages", "users", column: "author_id"
   add_foreign_key "people_memorials", "clusters"
   add_foreign_key "people_memorials", "users"
   add_foreign_key "people_pets", "clusters"

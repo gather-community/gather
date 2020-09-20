@@ -5,6 +5,7 @@ module People
     acts_as_tenant :cluster
 
     belongs_to :user, inverse_of: :memorial
+    has_many :messages, class_name: "People::MemorialMessage", inverse_of: :memorial, dependent: :destroy
 
     scope :in_community, ->(c) { joins(:user).merge(User.in_community(c)) }
     scope :by_user_name, -> { joins(:user).merge(User.by_name) }

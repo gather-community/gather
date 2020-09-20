@@ -397,5 +397,15 @@ describe User do
       let!(:wiki_page) { create(:wiki_page, updater: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
+
+    context "with memorial" do
+      let!(:memorial) { create(:memorial, user: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with memorial message" do
+      let!(:memorial_message) { create(:memorial_message, author: user) }
+      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
   end
 end

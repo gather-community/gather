@@ -1,0 +1,14 @@
+<% content_for(:title, user.full_name) %>
+<% content_for(:top_buttons, memorial.action_links) %>
+
+<div class="row">
+  <div class="col-sm-3 memorial-photo">
+    <%= image_tag(user.photo_variant(:medium)) %>
+    <div class="years">
+      <%= "#{memorial.birth_year}–#{memorial.death_year}" %>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    Messages
+  </div>
+</div>

@@ -5,6 +5,7 @@ module Deactivatable
 
   included do
     scope :active, -> { where(deactivated_at: nil) }
+    scope :inactive, -> { where.not(deactivated_at: nil) }
     scope :active_or_selected, ->(ids) { where(deactivated_at: nil).or(where(id: Array.wrap(ids))) }
     scope :deactivated_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
 

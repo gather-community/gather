@@ -25,4 +25,15 @@ describe People::MemorialPolicy do
 
     it_behaves_like "permits all users in cluster"
   end
+
+  describe "permitted attributes" do
+    include_context "policy permissions"
+    let(:actor) { admin }
+
+    subject { described_class.new(actor, People::Memorial.new).permitted_attributes }
+
+    it do
+      expect(subject).to match_array(%i[user_id birth_year death_year])
+    end
+  end
 end

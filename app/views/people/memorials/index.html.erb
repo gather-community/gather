@@ -1,0 +1,24 @@
+<% content_for(:title, "Memorials") %>
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_memorial).create? %>
+    <%= link_to(icon_tag("plus") << " Create Memorial",
+      new_people_memorial_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if memorials.empty? %>
+  <div class="center-notice">
+    No memorials found.
+  </div>
+<% else %>
+  <div class="flowing-columns-max-4">
+    <% memorials.each do |memorial| %>
+      <% user = memorial.user.decorate %>
+      <div class="memorial section">
+        <%= link_to(image_tag(user.photo_variant(:medium)), memorial) %>
+        <div class="name"><%= link_to(user.full_name, memorial) %></div>
+        <div class="years"><%= link_to("#{memorial.birth_year}–#{memorial.death_year}", memorial) %></div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,45 @@
+.memorial {
+  margin-bottom: 2em;
+
+  a {
+    color: $text-color;
+  }
+
+  img {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  @media screen and (min-width: $screen-sm-min) {
+    img {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: $screen-xs-max) {
+    img {
+      max-width: 14em;
+      margin: auto;
+    }
+  }
+
+  .name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .years {
+    text-align: center;
+  }
+}
+
+.memorial-photo {
+  img {
+    width: 100%;
+  }
+
+  .years {
+    font-size: 1.1em;
+  }
+}

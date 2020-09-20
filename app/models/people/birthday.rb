@@ -22,6 +22,10 @@ module People
       object.birthdate = d
     end
 
+    def birth_year
+      full? ? date.year : nil
+    end
+
     def str
       if invalid?
         @str

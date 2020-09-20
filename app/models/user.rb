@@ -64,7 +64,6 @@ class User < ApplicationRecord
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
-  scope :active, -> { where(deactivated_at: nil) }
   scope :real, -> { where(fake: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
@@ -101,7 +100,7 @@ class User < ApplicationRecord
            :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
-  delegate :age, to: :birthday
+  delegate :age, :birth_year, to: :birthday
   delegate :subdomain, to: :community
 
   normalize_attributes :email, :google_email, with: :email

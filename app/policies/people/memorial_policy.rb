@@ -27,5 +27,9 @@ module People
     def destroy?
       active_admin?
     end
+
+    def permitted_attributes
+      %i[user_id birth_year death_year]
+    end
   end
 end

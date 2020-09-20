@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
     resources :birthdays, only: :index
     resources :vehicles, only: :index
+    resources :memorials
     resource :password_change, only: %i[show edit update], path: "password-change" do
       patch :check
       post :strength

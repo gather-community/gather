@@ -41,22 +41,25 @@ class UsersController < ApplicationController
       format.json do
         @users = case params[:context]
         when "res_sponsor", "reserver_this_cmty", "guardian", "job_choosing_proxy"
-          @users.in_community(current_community).adults
+          @users.active.in_community(current_community).adults
         when "reserver_any_cmty", "group_lens"
-          @users.adults
+          @users.active.adults
         when "group_memberships"
           community_ids = JSON.parse(params[:data]).presence || current_community.id
-          @users.adults.in_community(community_ids)
+          @users.active.adults.in_community(community_ids)
         when "meal_job_lens", "meal_assign", "work_assign"
-          @users.in_community(current_community)
+          @users.active.in_community(current_community)
+        when "memorial"
+          @users.inactive.in_community(current_community)
         else
           raise "invalid select2 context"
         end
-        @users = @users.matching(params[:search]).active
+        @users = @users.matching(params[:search])
         @users = @users.can_be_guardian if params[:context] == "guardian"
         @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.by_name.page(params[:page]).per(20)
-        render(json: @users, meta: {more: @users.next_page.present?}, root: "results")
+        render(json: @users.decorate, meta: {more: @users.next_page.present?}, root: "results",
+               each_serializer: UserSerializer, hide_inactive_in_name: true)
       end
 
       format.csv do

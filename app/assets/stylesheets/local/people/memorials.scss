@@ -59,16 +59,42 @@
     }
   }
 
+  .author-links div {
+    display: inline-block;
+
+    a {
+      display: inline-block;
+      margin-right: 0.5em;
+      color: $gray-light;
+    }
+  }
+
   .author {
     font-style: italic;
+    margin-right: 1em;
   }
 
   // Specificty hack
-  form.gather-form.narrow-label-layout.people--memorial-message-form {
+  form.gather-form.narrow-label-layout {
     .form-group.people_memorial_message_body {
       .control-wrapper {
         margin-top: 20px;
         width: 100%;
+      }
+    }
+  }
+}
+
+.people--memorial-messages.action-edit {
+  // Specificty hack
+  form.gather-form.narrow-label-layout {
+    .form-group.people_memorial_message_body {
+      .control-wrapper {
+        width: 100%;
+      }
+
+      textarea {
+        height: 13em;
       }
     }
   }

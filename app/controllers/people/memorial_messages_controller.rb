@@ -4,6 +4,12 @@ module People
   class MemorialMessagesController < ApplicationController
     include Destructible
 
+    def edit
+      @memorial = Memorial.find(params[:memorial_id])
+      @memorial_message = @memorial.messages.find(params[:id])
+      authorize(@memorial_message)
+    end
+
     def create
       @memorial = Memorial.find(params[:memorial_id])
       @memorial_message = @memorial.messages.new
@@ -17,9 +23,22 @@ module People
     def update
       @memorial_message = MemorialMessage.find(params[:id])
       authorize(@memorial_message)
-      @memorial_message.update!(memorial_message_params)
-      flash[:success] = "Message updated successfully."
-      redirect_to(@memorial_message.memoria)
+      unless params[:cancel]
+        @memorial_message.update!(memorial_message_params)
+        flash[:success] = "Message updated successfully."
+      end
+      redirect_to(@memorial_message.memorial)
+    end
+
+    def destroy
+      @memorial = Memorial.find(params[:memorial_id])
+      simple_action(:destroy, redirect: @memorial)
+    end
+
+    protected
+
+    def klass
+      MemorialMessage
     end
 
     private

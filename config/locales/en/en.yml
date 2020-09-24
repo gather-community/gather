@@ -90,6 +90,8 @@ en:
       invite: "This will send an email to '%{name}' with instructions on how to sign in. Proceed?"
     people/memorial:
       destroy: "Are you sure you want to delete the memorial for '%{name}'? This action cannot be undone."
+    people/memorial_message:
+      destroy: "Are you sure you want to delete this memorial message? This action cannot be undone."
     reservations/protocol:
       destroy: "Are you sure you want to delete the protocol '%{name}'? This action cannot be undone."
     reservations/resource:
@@ -191,6 +193,9 @@ en:
         activate: "Type activated successfully."
         deactivate: "Type deactivated successfully."
         destroy: "Type deleted successfully."
+    people/memorial_message:
+      success:
+        destroy: "Message deleted successfully."
     work/job:
       success:
         destroy: "Job deleted successfully."

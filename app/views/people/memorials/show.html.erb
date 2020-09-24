@@ -12,7 +12,21 @@
     <% messages.each do |message| %>
       <div class="message">
         <div class="body"><%= safe_render_markdown(message.body) %></div>
-        <div class="author">&nbsp;&nbsp;&nbsp;–&nbsp;<%= message.author.decorate.full_name %></div>
+        <div class="author-links">
+          <div class="author">
+            &nbsp;&nbsp;&nbsp;–&nbsp;<%= message.author.decorate.full_name %>
+          </div>
+          <div>
+            <% if policy(message).edit? %>
+              <%= link_to("Edit", edit_people_memorial_message_path(memorial, message)) %>
+            <% end %>
+            <% if policy(message).destroy? %>
+              <%= link_to("Delete", people_memorial_message_path(memorial, message),
+                          method: :delete,
+                          data: {confirm: I18n.t("confirmations.people/memorial_message.destroy")}) %>
+            <% end %>
+          </div>
+        </div>
       </div>
     <% end %>
     <%= gather_form_for([@memorial, @new_message], url: people_memorial_messages_path(memorial),

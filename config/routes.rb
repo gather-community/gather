@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :birthdays, only: :index
     resources :vehicles, only: :index
     resources :memorials do
-      resources :messages, only: %i[create update destroy], controller: "memorial_messages"
+      resources :messages, only: %i[edit create update destroy], controller: "memorial_messages"
     end
     resource :password_change, only: %i[show edit update], path: "password-change" do
       patch :check

@@ -37,7 +37,7 @@ describe People::MemorialMessagePolicy do
     subject { described_class.new(actor, People::MemorialMessage.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[body])
+      expect(subject).to match_array(%i[memorial_id body])
     end
   end
 end

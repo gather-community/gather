@@ -1,45 +1,75 @@
-.memorial {
-  margin-bottom: 2em;
+.people--memorials.action-index {
+  .memorial {
+    margin-bottom: 2em;
 
-  a {
-    color: $text-color;
-  }
-
-  img {
-    display: block;
-    margin-bottom: 0.5em;
-  }
-
-  @media screen and (min-width: $screen-sm-min) {
-    img {
-      width: 100%;
+    a {
+      color: $text-color;
     }
-  }
 
-  @media screen and (max-width: $screen-xs-max) {
     img {
-      max-width: 14em;
-      margin: auto;
+      display: block;
+      margin-bottom: 0.5em;
     }
-  }
 
-  .name {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1em;
-  }
+    @media screen and (min-width: $screen-sm-min) {
+      img {
+        width: 100%;
+      }
+    }
 
-  .years {
-    text-align: center;
+    @media screen and (max-width: $screen-xs-max) {
+      img {
+        max-width: 14em;
+        margin: auto;
+      }
+    }
+
+    .name {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .years {
+      text-align: center;
+    }
   }
 }
 
-.memorial-photo {
-  img {
-    width: 100%;
+.people--memorials.action-show {
+  .photo {
+    img {
+      width: 100%;
+    }
+
+    .years {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   }
 
-  .years {
-    font-size: 1.1em;
+  .message {
+    margin-bottom: 1.5em;
+  }
+
+  .body {
+    p:last-of-type {
+      margin-bottom: 0.2em;
+    }
+  }
+
+  .author {
+    font-style: italic;
+  }
+
+  // Specificty hack
+  form.gather-form.narrow-label-layout.people--memorial-message-form {
+    .form-group.people_memorial_message_body {
+      .control-wrapper {
+        margin-top: 20px;
+        width: 100%;
+      }
+    }
   }
 }

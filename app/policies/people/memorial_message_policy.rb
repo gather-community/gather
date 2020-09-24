@@ -25,7 +25,7 @@ module People
     end
 
     def permitted_attributes
-      %i[body]
+      %i[memorial_id body]
     end
   end
 end

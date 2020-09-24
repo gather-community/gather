@@ -5,7 +5,7 @@ module People
     include Destructible
 
     before_action -> { nav_context(:people, :memorials) }
-    decorates_assigned :memorial, :memorials, :user
+    decorates_assigned :memorial, :memorials, :messages, :user
     helper_method :sample_memorial
 
     def index
@@ -16,6 +16,8 @@ module People
     def show
       @memorial = Memorial.find(params[:id])
       @user = @memorial.user
+      @messages = @memorial.messages
+      @new_message = MemorialMessage.new
       authorize(@memorial)
     end
 

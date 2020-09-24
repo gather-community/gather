@@ -2,15 +2,26 @@
 <% content_for(:top_buttons, memorial.action_links) %>
 
 <div class="row memorial">
-  <div class="col-sm-3 photo">
-    <%= image_tag(user.photo_variant(:medium)) %>
-    <div class="years">
-      <%= "#{memorial.birth_year}–#{memorial.death_year}" %>
+  <div class="col-sm-3">
+    <div class="photo">
+      <%= image_tag(user.photo_variant(:medium)) %>
+      <div class="years">
+        <%= "#{memorial.birth_year}–#{memorial.death_year}" %>
+      </div>
     </div>
   </div>
-  <div class="col-sm-9">
-    <% messages.each do |message| %>
+  <div class="col-sm-9 flowing-columns-max-2 obit-memories">
+    <% if memorial.obituary.present? %>
+      <h2 class="top">Obituary</h2>
+      <%= safe_render_markdown(memorial.obituary) %>
+    <% end %>
+    <% messages.each_with_index do |message, index| %>
       <div class="message">
+        <%# Putting this inside the .message so we can use break-inside: avoid %>
+        <%# break-after: avoid doesn't work :( %>
+        <% if index == 0 && memorial.obituary.present? %>
+          <h2>Community Memories</h2>
+        <% end %>
         <div class="body"><%= safe_render_markdown(message.body) %></div>
         <div class="author-links">
           <div class="author">
@@ -31,6 +42,11 @@
     <% end %>
     <%= gather_form_for([@memorial, @new_message], url: people_memorial_messages_path(memorial),
                                                    width: :full) do |f| %>
+      <%# Putting this inside the form, if there are no messages, so we can use break-inside: avoid %>
+      <%# break-after: avoid doesn't work :( %>
+      <% if messages.empty? && memorial.obituary.present? %>
+        <h2>Community Memories</h2>
+      <% end %>
       <%= f.input(:body, as: :markdown, label: false) %>
       <%= form_actions do %>
         <%= f.button :primary %>

@@ -1,6 +1,6 @@
 <% content_for(:title, "Edit Memorial Message") %>
 <%= gather_form_for(@memorial_message) do |f| %>
-  <%= f.input :body, label: false %>
+  <%= f.input :body, label: false, input_html: {class: "longer"} %>
 
   <%= form_actions do %>
     <%= f.button :secondary, :cancel, name: "cancel" %>

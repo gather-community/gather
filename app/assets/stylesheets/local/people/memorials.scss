@@ -38,6 +38,8 @@
 
 .people--memorials.action-show {
   .photo {
+    break-inside: avoid;
+
     img {
       width: 100%;
     }
@@ -45,8 +47,14 @@
     .years {
       font-size: 1.3em;
       font-weight: bold;
-      margin-top: 10px;
+      margin-top: 0.5em;
+      margin-bottom: 1em;
     }
+  }
+
+  form.people--memorial-message-form,
+  .message {
+    break-inside: avoid;
   }
 
   .message {
@@ -73,28 +81,15 @@
     font-style: italic;
     margin-right: 1em;
   }
-
-  // Specificty hack
-  form.gather-form.narrow-label-layout {
-    .form-group.people_memorial_message_body {
-      .control-wrapper {
-        margin-top: 20px;
-        width: 100%;
-      }
-    }
-  }
 }
 
+.people--memorials.action-show,
 .people--memorial-messages.action-edit {
   // Specificty hack
   form.gather-form.narrow-label-layout {
     .form-group.people_memorial_message_body {
       .control-wrapper {
         width: 100%;
-      }
-
-      textarea {
-        height: 13em;
       }
     }
   }

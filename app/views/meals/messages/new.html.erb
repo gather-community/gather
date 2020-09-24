@@ -11,7 +11,7 @@
 
   <%= f.input :recipient_type, collection: Meals::Message::RECIPIENT_TYPES,
     disabled: @message.cancellation? %>
-  <%= f.input :body %>
+  <%= f.input :body, input_html: {class: "longer"} %>
 
   <%= form_actions do %>
     <%= f.button :primary %>

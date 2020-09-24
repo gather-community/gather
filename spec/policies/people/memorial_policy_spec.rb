@@ -33,7 +33,7 @@ describe People::MemorialPolicy do
     subject { described_class.new(actor, People::Memorial.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[user_id birth_year death_year])
+      expect(subject).to match_array(%i[user_id birth_year death_year obituary])
     end
   end
 end

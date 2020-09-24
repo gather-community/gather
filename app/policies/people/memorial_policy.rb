@@ -25,7 +25,7 @@ module People
     end
 
     def permitted_attributes
-      %i[user_id birth_year death_year]
+      %i[user_id birth_year death_year obituary]
     end
   end
 end

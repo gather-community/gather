@@ -29,7 +29,6 @@ module People
 
     def edit
       @memorial = Memorial.find(params[:id])
-      @user = @memorial.user
       authorize(@memorial)
       prep_form_vars
     end
@@ -69,6 +68,7 @@ module People
 
     def prep_form_vars
       @birth_years = User.in_community(current_community).inactive.map { |u| [u.id, u.birth_year] }.to_h
+      @user = @memorial.user
     end
 
     # Pundit built-in helper doesn't work due to namespacing

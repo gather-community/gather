@@ -8,5 +8,9 @@ module People
     belongs_to :author, class_name: "User", inverse_of: :memorial_messages
 
     delegate :community, to: :memorial
+
+    normalize_attributes :body
+
+    validates :body, presence: true
   end
 end

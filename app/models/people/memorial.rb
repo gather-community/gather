@@ -11,5 +11,9 @@ module People
     scope :by_user_name, -> { joins(:user).merge(User.by_name) }
 
     delegate :community, to: :user
+
+    normalize_attributes :obituary
+
+    validates :birth_year, :death_year, :user_id, presence: true
   end
 end

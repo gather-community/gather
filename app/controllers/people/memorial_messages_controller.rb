@@ -5,14 +5,14 @@ module People
     include Destructible
 
     def edit
-      @memorial = Memorial.find(params[:memorial_id])
-      @memorial_message = @memorial.messages.find(params[:id])
+      memorial = Memorial.find(params[:memorial_id])
+      @memorial_message = memorial.messages.find(params[:id])
       authorize(@memorial_message)
     end
 
     def create
-      @memorial = Memorial.find(params[:memorial_id])
-      @memorial_message = @memorial.messages.new
+      memorial = Memorial.find(params[:memorial_id])
+      @memorial_message = memorial.messages.new
       @memorial_message.assign_attributes(memorial_message_params.merge(author: current_user))
       authorize(@memorial_message)
       @memorial_message.save!
@@ -23,11 +23,14 @@ module People
     def update
       @memorial_message = MemorialMessage.find(params[:id])
       authorize(@memorial_message)
-      unless params[:cancel]
-        @memorial_message.update!(memorial_message_params)
+      if params[:cancel]
+        redirect_to(@memorial_message.memorial)
+      elsif @memorial_message.update(memorial_message_params)
         flash[:success] = "Message updated successfully."
+        redirect_to(@memorial_message.memorial)
+      else
+        render(:edit)
       end
-      redirect_to(@memorial_message.memorial)
     end
 
     def destroy

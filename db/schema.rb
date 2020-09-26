@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_24_131626) do
+ActiveRecord::Schema.define(version: 2020_09_26_144924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -480,7 +480,7 @@ ActiveRecord::Schema.define(version: 2020_09_24_131626) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
     t.index ["cluster_id"], name: "index_people_memorials_on_cluster_id"
-    t.index ["user_id"], name: "index_people_memorials_on_user_id"
+    t.index ["user_id"], name: "index_people_memorials_on_user_id", unique: true
   end
 
   create_table "people_pets", id: :serial, force: :cascade do |t|

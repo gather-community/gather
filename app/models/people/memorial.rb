@@ -15,5 +15,6 @@ module People
     normalize_attributes :obituary
 
     validates :birth_year, :death_year, :user_id, presence: true
+    validates :user_id, uniqueness: true
   end
 end

@@ -193,6 +193,9 @@ en:
         activate: "Type activated successfully."
         deactivate: "Type deactivated successfully."
         destroy: "Type deleted successfully."
+    people/memorial:
+      success:
+        destroy: "Memorial deleted successfully."
     people/memorial_message:
       success:
         destroy: "Message deleted successfully."

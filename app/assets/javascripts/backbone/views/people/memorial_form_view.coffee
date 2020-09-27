@@ -8,6 +8,5 @@ Gather.Views.People.MemorialFormView = Backbone.View.extend
 
   userChanged: (event) ->
     userId = parseInt(@$(event.target).val())
-    console.log(@birthYears[userId])
     if (year = @birthYears[userId])
       @$('#people_memorial_birth_year').val(year)

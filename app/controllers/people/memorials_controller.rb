@@ -22,7 +22,7 @@ module People
     end
 
     def new
-      @memorial = Memorial.new(death_year: Time.current.year)
+      @memorial = sample_memorial
       authorize(@memorial)
       prep_form_vars
     end
@@ -71,13 +71,14 @@ module People
       @user = @memorial.user
     end
 
+    def sample_memorial
+      Memorial.new(death_year: Time.current.year,
+                   user: User.new(household: Household.new(community: current_community)))
+    end
+
     # Pundit built-in helper doesn't work due to namespacing
     def memorial_params
       params.require(:people_memorial).permit(policy(@memorial).permitted_attributes)
-    end
-
-    def sample_memorial
-      Memorial.new(user: User.new(household: Household.new(community: current_community)))
     end
   end
 end

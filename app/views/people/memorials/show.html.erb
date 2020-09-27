@@ -54,3 +54,12 @@
     <% end %>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.People.MemorialView({
+      el: '.people--memorials.action-show'
+    });
+    new Gather.Views.DirtyChecker({el: '.people--memorial-message-form'});
+  });
+<% end %>

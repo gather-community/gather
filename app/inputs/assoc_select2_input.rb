@@ -8,7 +8,6 @@ class AssocSelect2Input < SimpleForm::Inputs::CollectionSelectInput
 
     input_html_options[:data] ||= {}
     input_html_options[:data][:"select2-src"] = options.delete(:src) || "/#{assoc_class.model_name.route_key}"
-    input_html_options[:data][:"select2-label-attr"] = options[:label_method] if options[:label_method]
     input_html_options[:data][:"select2-prompt"] = I18n.t("select2.prompts.#{assoc_name}")
     input_html_options[:data][:"select2-context"] = options.delete(:context)
     input_html_options[:data][:"select2-placeholder"] = I18n.t("select2.placeholders.#{assoc_name}")

@@ -255,10 +255,17 @@ describe Groups::GroupPolicy do
     let(:list_attribs) do
       [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate _destroy]]
     end
+    let(:list_attribs_with_name_edit) do
+      [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate
+                                   _destroy name domain_id]]
+    end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
     let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }
     let(:group) { create(:group) }
+    let!(:list) { create(:group_mailman_list, group: group) }
     subject { Groups::GroupPolicy.new(actor, group).permitted_attributes }
+
+    before { group.reload unless group.new_record? }
 
     context "with super admin" do
       let(:actor) { super_admin }
@@ -279,10 +286,8 @@ describe Groups::GroupPolicy do
 
       context "with new record" do
         let(:group) { build(:group) }
-        let(:list_attribs) do
-          [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate
-                                       _destroy name domain_id]]
-        end
+        let!(:list) { group.build_mailman_list }
+        let(:list_attribs) { list_attribs_with_name_edit }
 
         it { is_expected.to match_array(base_admin_attribs) }
       end

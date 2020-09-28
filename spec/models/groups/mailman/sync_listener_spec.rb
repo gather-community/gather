@@ -233,7 +233,9 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "with attached list" do
-      let!(:list) { create(:group_mailman_list, group: group) }
+      let!(:list) { create(:group_mailman_list, group: group, remote_id: "foo.bar.com") }
+
+      before { group.reload }
 
       it "enqueues membership sync job" do
         expect { create(:group_membership, group: group) }.to have_enqueued_membership_sync_job_with_list
@@ -269,7 +271,7 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "with attached list" do
-      let!(:list) { create(:group_mailman_list, group: group) }
+      let!(:list) { create(:group_mailman_list, group: group, remote_id: "foo.bar.com") }
 
       it "enqueues membership sync job" do
         expect { group.communities << create(:community) }.to have_enqueued_membership_sync_job_with_list

@@ -20,8 +20,18 @@ describe People::MemorialPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { People::Memorial }
-    let(:objs_in_community) { create_list(:memorial, 2, user: user) }
-    let(:objs_in_cluster) { create_list(:memorial, 2, user: userB) }
+    let(:objs_in_community) do
+      [
+        create(:memorial, user: create(:user, community: community)),
+        create(:memorial, user: create(:user, community: community))
+      ]
+    end
+    let(:objs_in_cluster) do
+      [
+        create(:memorial, user: create(:user, community: communityB)),
+        create(:memorial, user: create(:user, community: communityB))
+      ]
+    end
 
     it_behaves_like "permits all users in cluster"
   end

@@ -31,13 +31,13 @@ module Destructible
 
   private
 
-  def simple_action(action)
+  def simple_action(action, redirect: nil)
     object = klass.find(params[:id])
     authorize(object)
     begin
       object.send(action)
       send("after_#{action}", object)
-      redirect_appropriately(action, object)
+      redirect ? redirect_to(redirect) : redirect_appropriately(action, object)
     rescue ActiveRecord::RecordInvalid
       message = object.errors.full_messages.join("; ")
       flash[:error] = I18n.t("deactivatable.#{object.model_name.i18n_key}.error.#{action}", message: message)

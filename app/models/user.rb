@@ -55,6 +55,8 @@ class User < ApplicationRecord
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
                                 dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
+  has_one :memorial, class_name: "People::Memorial", inverse_of: :user
+  has_many :memorial_messages, class_name: "People::MemorialMessage", inverse_of: :user
   has_many :children, through: :down_guardianships
   has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,
@@ -63,7 +65,6 @@ class User < ApplicationRecord
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
-  scope :active, -> { where(deactivated_at: nil) }
   scope :real, -> { where(fake: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
@@ -100,7 +101,7 @@ class User < ApplicationRecord
            :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
-  delegate :age, to: :birthday
+  delegate :age, :birth_year, to: :birthday
   delegate :subdomain, to: :community
 
   normalize_attributes :email, :google_email, with: :email

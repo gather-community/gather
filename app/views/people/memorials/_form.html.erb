@@ -1,0 +1,22 @@
+<%= gather_form_for(memorial) do |f| %>
+  <%= f.input :user_id, as: :assoc_select2, label_method: Proc.new { |u| u.decorate.full_name },
+                        context: "memorial" %>
+  <%= f.input :birth_year %>
+  <%= f.input :death_year %>
+  <%= f.input :obituary, as: :markdown, input_html: {class: "longer"} %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.People.MemorialFormView({
+      el: '.people--memorial-form',
+      birthYears: <%=json @birth_years %>
+    });
+    new Gather.Views.DirtyChecker({el: '.people--memorial-form'});
+    new Gather.Views.AjaxSelect2({el: '.people--memorial-form'});
+  });
+<% end %>

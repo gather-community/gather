@@ -105,14 +105,16 @@ module Nav
           ]
         when :people
           sample_household = Household.new(community: h.current_community)
+          sample_user = User.new(household: sample_household)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: h.current_community))
           sample_group = Groups::Group.new(communities: [h.current_community])
+          sample_memorial = People::Memorial.new(user: sample_user)
           [
             {
               name: :directory,
               parent: :people,
               path: h.users_path,
-              permitted: h.policy(User).index?,
+              permitted: h.policy(sample_user).index?,
               icon: "address-book"
             }, {
               name: :groups,
@@ -130,13 +132,13 @@ module Nav
               name: :roles,
               parent: :people,
               path: h.roles_path,
-              permitted: h.policy(User).index?,
+              permitted: h.policy(sample_user).index?,
               icon: "user-circle-o"
             }, {
               name: :birthdays,
               parent: :people,
               path: h.people_birthdays_path,
-              permitted: h.policy(User).index?,
+              permitted: h.policy(sample_user).index?,
               icon: "birthday-cake"
             }, {
               name: :vehicles,
@@ -144,6 +146,12 @@ module Nav
               path: h.people_vehicles_path,
               permitted: h.policy(sample_vehicle).index?,
               icon: "car"
+            }, {
+              name: :memorials,
+              parent: :people,
+              path: h.people_memorials_path,
+              permitted: h.policy(sample_memorial).index?,
+              icon: "pagelines"
             }
           ]
         when :reservations

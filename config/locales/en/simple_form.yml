@@ -27,6 +27,9 @@ en:
         description: "e.g. Check #12345"
       user:
         birthday_str: "e.g. Feb 29 1981 (year optional)"
+      people_memorial:
+      people_memorial_message:
+        body: "Add your message"
       household:
         name: "e.g. Smith or Singh-Whitman"
         vehicles:
@@ -100,6 +103,8 @@ en:
       meals_type:
         name: "A short, descriptive name for the type."
         category: "Categories are used for calculating portion counts and for reporting."
+      people_memorial:
+        user_id: "Must be an inactive user in this community. Their current profile photo will be used in the memorial."
       wiki_page:
         content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."

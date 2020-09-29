@@ -1,0 +1,3 @@
+<% content_for(:title, "Edit Memorial: #{user.full_name}") %>
+<% content_for(:top_buttons, memorial.action_links(:edit)) %>
+<%= render("form") %>

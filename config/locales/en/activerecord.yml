@@ -157,6 +157,10 @@ en:
         vet: "Veterinarian Info"
         caregivers: "Caregiver Info"
         health_issues: "Health Issues"
+      people/memorial:
+        user_id: "Deceased Person"
+        birth_year: "Birth Year"
+        death_year: "Death Year"
       work/job:
         description: "Description"
         double_signups_allowed: "The same person can sign up more than once for a shift of this job"

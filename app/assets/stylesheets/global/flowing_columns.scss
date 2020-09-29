@@ -27,6 +27,14 @@
   }
 }
 
+.flowing-columns-max-2 {
+  @include flowing-columns;
+
+  @media screen and (min-width: $screen-md-min) {
+    column-count: 2;
+  }
+}
+
 .flowing-columns-max-3 {
   @include flowing-columns;
 

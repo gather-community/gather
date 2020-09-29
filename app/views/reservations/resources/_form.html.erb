@@ -12,7 +12,7 @@
       <%= f.input :meal_hostable, as: :select, required: true %>
       <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS,
         required: true %>
-      <%= f.input :guidelines, as: :markdown %>
+      <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} %>
 
       <%= form_actions do %>
         <%= f.button :primary %>

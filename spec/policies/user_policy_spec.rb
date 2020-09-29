@@ -300,6 +300,16 @@ describe UserPolicy do
         it_behaves_like "forbids all"
       end
 
+      context "with memorial" do
+        let!(:memorial) { create(:memorial, user: record) }
+        it_behaves_like "forbids all"
+      end
+
+      context "with memorial message" do
+        let!(:memorial_message) { create(:memorial_message, author: record) }
+        it_behaves_like "forbids all"
+      end
+
       context "with wiki page version update" do
         let!(:page) { create(:wiki_page) }
 

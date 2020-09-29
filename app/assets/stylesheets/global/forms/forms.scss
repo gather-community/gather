@@ -31,6 +31,10 @@ form {
     margin-bottom: 10px;
   }
 
+  textarea.longer {
+    height: 13em;
+  }
+
   // Don't show dotted bottom border on required mark
   abbr[title="required"] {
     border-bottom: none;

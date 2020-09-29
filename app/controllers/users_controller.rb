@@ -81,6 +81,7 @@ class UsersController < ApplicationController
     end.to_h
     @head_cook_meals = policy_scope(Meals::Meal).worked_by(@user, head_cook_only: true).includes(:signups)
       .past.not_cancelled.newest_first
+    @memberships = @user.group_memberships.positive.by_group_name
   end
 
   def new

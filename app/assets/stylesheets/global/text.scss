@@ -16,3 +16,23 @@ small {
     text-decoration: underline;
   }
 }
+
+.pill {
+  color: $theme-main;
+  border-radius: 5px;
+  border: 1px solid $theme-main;
+  padding: 5px 10px;
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  line-height: 1;
+}
+
+a.pill {
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover-color;
+    border-color: $link-hover-color;
+    text-decoration: none;
+  }
+}

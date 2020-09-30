@@ -48,6 +48,7 @@ class TransactionsController < ApplicationController
   def index_csv
     render(plain: "year_required") unless params[:year]
     transactions = policy_scope(Billing::Transaction).incurred_in_year(params[:year])
+    transactions = transactions.includes(account: :household)
     transactions = if params[:account_id]
                      transactions.where(account_id: params[:account_id])
                    else

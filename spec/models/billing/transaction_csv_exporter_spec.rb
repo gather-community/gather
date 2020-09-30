@@ -18,7 +18,8 @@ describe Billing::TransactionCsvExporter do
     end
 
     context "with transactions" do
-      let(:account) { create(:account) }
+      let(:household) { create(:household, name: "Smith") }
+      let(:account) { create(:account, household: household) }
       let(:meal) { create(:meal, served_at: "2018-08-17 18:15") }
       let!(:transactions) do
         Timecop.freeze("2018-09-10 12:00") do
@@ -40,7 +41,8 @@ describe Billing::TransactionCsvExporter do
                                                       id: transactions.map(&:id),
                                                       account_id: [account.id],
                                                       statement_id: [statement.id],
-                                                      meal_id: [meal.id]))
+                                                      meal_id: [meal.id],
+                                                      household_id: [household.id]))
       end
     end
   end

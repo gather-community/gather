@@ -22,7 +22,7 @@ module Billing
 
     def exportable_attributes
       %i[id incurred_on code chg_crd description quantity unit_price amount created_at
-         account_id statement_id meal_id]
+         account_id household_id household_name statement_id meal_id]
     end
   end
 end

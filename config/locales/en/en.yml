@@ -288,6 +288,8 @@ en:
         code: "Code"
         chg_crd: "Type"
         description: "Description"
+        household_id: "Household ID"
+        household_name: "Household"
         quantity: "Quantity"
         unit_price: "Unit Price"
         amount: "Amount"

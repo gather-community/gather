@@ -33,7 +33,7 @@ module Billing
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
     scope :incurred_in_year, ->(year) { where("EXTRACT(year FROM incurred_on) = ?", year) }
 
-    delegate :household_id, :community_id, :community, to: :account
+    delegate :household, :household_id, :community_id, :community, to: :account
 
     before_validation do
       # Respect qty and unit price

@@ -10,6 +10,9 @@ en:
     community_count:
       one: "%{count} Community"
       other: "%{count} Communities"
+    day:
+      one: "day"
+      other: "days"
     default: "Default"
     edit: "Edit"
     "false": "False"

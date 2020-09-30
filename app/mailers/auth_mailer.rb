@@ -28,6 +28,7 @@ class AuthMailer < Devise::Mailer
     return if user.fake?
     @user = user.decorate
     @token = token
+    @expiry_days = (Devise.reset_password_within / 1.day).to_i
     mail(to: @user.email, subject: default_i18n_subject)
   end
 end

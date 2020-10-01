@@ -82,7 +82,7 @@ en:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
       billing/transaction:
-        incurred_on: "Item Date"
+        incurred_on: "Date Incurred"
         household_name: "Household Name"
         code: "Type"
       billing/account:

@@ -54,6 +54,7 @@ class TransactionsController < ApplicationController
                    else
                      transactions.in_community(current_community)
                    end
+    transactions = transactions.order(:incurred_on, "households.name", :code, :description)
     filename_chunk = params[:account_id] ? "account-#{params[:account_id]}" : :community
     filename = csv_filename(filename_chunk, "transactions", params[:year])
     csv = Billing::TransactionCsvExporter.new(transactions, policy: policy(sample_transaction)).to_csv

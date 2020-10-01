@@ -287,7 +287,7 @@ en:
         created_at: "Creation Time"
       billing/transaction:
         id: "ID"
-        incurred_on: "Date"
+        incurred_on: "Date Incurred"
         code: "Code"
         chg_crd: "Type"
         description: "Description"
@@ -296,7 +296,7 @@ en:
         quantity: "Quantity"
         unit_price: "Unit Price"
         amount: "Amount"
-        created_at: "Creation Time"
+        created_at: "Date Recorded"
         account_id: "Account ID"
         statement_id: "Statement ID"
         meal_id: "Meal ID"

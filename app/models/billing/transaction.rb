@@ -26,12 +26,13 @@ module Billing
     scope :for_community_or_household,
           ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
+    scope :recorded_between,
+          ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
     scope :credit, -> { where("amount < 0") }
     scope :charge, -> { where("amount > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
-    scope :incurred_in_year, ->(year) { where("EXTRACT(year FROM incurred_on) = ?", year) }
 
     delegate :household, :household_id, :community_id, :community, to: :account
 
@@ -60,12 +61,15 @@ module Billing
     validate :nonzero
     validate :quantity_and_unit_price
 
-    def self.year_range(account: nil, community: nil)
-      txns = order(:incurred_on)
+    def self.date_range(account: nil, community: nil)
+      txns = all
       txns = txns.where(account: account) unless account.nil?
       txns = txns.in_community(community) unless community.nil?
       return nil if txns.none?
-      txns.first.incurred_on.year..txns.last.incurred_on.year
+      [
+        [txns.minimum(:created_at).to_date, txns.minimum(:incurred_on)].min,
+        [txns.maximum(:created_at).to_date, txns.maximum(:incurred_on)].max
+      ]
     end
 
     def charge?

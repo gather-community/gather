@@ -31,6 +31,10 @@ en:
       "on": "on %{t}"
       "at": "at %{t}"
       "until": "until %{t}"
+    this_year: "This Year"
+    this_quarter: "This Quarter"
+    this_month: "This Month"
+    all_time: "All Time"
 
   helpers:
     submit:
@@ -287,7 +291,7 @@ en:
         created_at: "Creation Time"
       billing/transaction:
         id: "ID"
-        incurred_on: "Date"
+        incurred_on: "Date Incurred"
         code: "Code"
         chg_crd: "Type"
         description: "Description"
@@ -296,7 +300,7 @@ en:
         quantity: "Quantity"
         unit_price: "Unit Price"
         amount: "Amount"
-        created_at: "Creation Time"
+        created_at: "Date Recorded"
         account_id: "Account ID"
         statement_id: "Statement ID"
         meal_id: "Meal ID"
@@ -462,9 +466,6 @@ en:
 
   date_range_lens:
     past_12: "Past 12 Months"
-    this_year: "This Year"
-    this_quarter: "This Quarter"
-    all_time: "All Time"
 
   community_lens:
     all: "All Communities"

@@ -24,7 +24,7 @@ module Utils
       def generate_admin
         household = Household.create!(community: community, name: last_name)
         self.admin = User.new(email: email, first_name: first_name, last_name: last_name,
-                              household: household, dont_require_phone: true)
+                              household: household)
         super_admin ? admin.skip_confirmation! : admin.skip_confirmation_notification!
         add_password if super_admin
         admin.save!

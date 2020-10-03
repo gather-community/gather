@@ -38,7 +38,7 @@ class User < ApplicationRecord
   acts_as_tenant :cluster
   rolify
 
-  attr_accessor :changing_password, :dont_require_phone
+  attr_accessor :changing_password
   alias changing_password? changing_password
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
@@ -123,7 +123,6 @@ class User < ApplicationRecord
 
   validates :password, confirmation: true
   validate :household_present
-  validate :at_least_one_phone, if: ->(u) { u.new_record? && !u.dont_require_phone }
   validate { birthday.validate }
 
   disallow_semicolons :first_name, :last_name
@@ -268,10 +267,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def at_least_one_phone
-    errors.add(:phone, "You must enter at least one phone number") if adult? && no_phones?
-  end
 
   def household_present
     return if household_id.present? || household.present? && !household.marked_for_destruction?

@@ -10,7 +10,7 @@ FactoryBot.define do
       deactivated_at { Time.current - 1 }
     end
 
-    trait :with_guidelines do
+    trait :with_shared_guidelines do
       guidelines { "Guideline 1" }
 
       after(:build) do |resource|

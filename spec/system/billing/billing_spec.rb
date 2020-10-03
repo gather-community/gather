@@ -84,20 +84,20 @@ describe "billing", js: true do
       visit(accounts_path)
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
-      select(year, from: "year")
+      select(year, from: "dates")
       wait_for_download
       expect(download_content).to match(/"ID",Date/)
-      expect(download_filename).to eq("#{account1.community.slug}-transactions-#{year}.csv")
+      expect(download_filename).to eq("#{account1.community.slug}-transactions-#{year}0101-#{year}1231.csv")
     end
 
     scenario "download account transaction csv" do
       visit(account_path(account1))
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
-      select(year, from: "year")
+      select(year, from: "dates")
       wait_for_download
       expect(download_content).to match(/"ID",Date/)
-      expect(download_filename).to eq("account-#{account1.id}-transactions-#{year}.csv")
+      expect(download_filename).to eq("account-#{account1.id}-transactions-#{year}0101-#{year}1231.csv")
     end
   end
 

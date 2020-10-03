@@ -31,7 +31,6 @@ module Billing
     scope :charge, -> { where("amount > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
-    scope :incurred_in_year, ->(year) { where("EXTRACT(year FROM incurred_on) = ?", year) }
 
     delegate :household, :household_id, :community_id, :community, to: :account
 
@@ -60,12 +59,12 @@ module Billing
     validate :nonzero
     validate :quantity_and_unit_price
 
-    def self.year_range(account: nil, community: nil)
+    def self.date_range(account: nil, community: nil)
       txns = order(:incurred_on)
       txns = txns.where(account: account) unless account.nil?
       txns = txns.in_community(community) unless community.nil?
       return nil if txns.none?
-      txns.first.incurred_on.year..txns.last.incurred_on.year
+      [txns.first.incurred_on, txns.last.incurred_on]
     end
 
     def charge?

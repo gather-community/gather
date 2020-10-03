@@ -49,8 +49,8 @@ describe "meal report", js: true do
       # and thus catch any regressions.
       expect(page).to have_css("svg.nvd3-svg")
 
-      select_lens(:dates, "This Year")
-      expect(page).to have_content("January 2019 - November 2019")
+      select_lens(:dates, "2019")
+      expect(page).to have_content("August 2019 - November 2019")
     end
   end
 end

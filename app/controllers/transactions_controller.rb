@@ -46,8 +46,7 @@ class TransactionsController < ApplicationController
   end
 
   def index_csv
-    render(plain: "year_required") unless params[:year]
-    transactions = policy_scope(Billing::Transaction).incurred_in_year(params[:year])
+    transactions = policy_scope(Billing::Transaction).incurred_between(*params[:dates].split("-"))
     transactions = transactions.includes(account: :household)
     transactions = if params[:account_id]
                      transactions.where(account_id: params[:account_id])
@@ -56,7 +55,7 @@ class TransactionsController < ApplicationController
                    end
     transactions = transactions.order(:incurred_on, "households.name", :code, :description)
     filename_chunk = params[:account_id] ? "account-#{params[:account_id]}" : :community
-    filename = csv_filename(filename_chunk, "transactions", params[:year])
+    filename = csv_filename(filename_chunk, "transactions", params[:dates])
     csv = Billing::TransactionCsvExporter.new(transactions, policy: policy(sample_transaction)).to_csv
     send_data(csv, filename: filename, type: :csv)
   end

@@ -2,17 +2,15 @@
 <% content_for(:top_buttons, account.action_links) %>
 <%= render("details", footnotes: false) %>
 
-<% if @txn_years %>
-  <footer id="local-footer" class="footer-links">
-    <div class="export-link-with-form">
-      <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
-            onclick: "$(this).closest('.export-link-with-form')
-              .find('form').css({display: 'inline-block'}); return false;") %>
-      &nbsp;
-      <%= form_tag(account_transactions_path(account, format: :csv), method: :get) do %>
-        <%= select_tag(:year, options_for_select([["Select Year", nil]].concat(@txn_years)),
-              onchange: "this.form.submit()") %>
-      <% end %>
-    </div>
+<footer id="local-footer" class="footer-links">
+  <div class="export-link-with-form">
+    <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
+          onclick: "$(this).closest('.export-link-with-form')
+            .find('form').css({display: 'inline-block'}); return false;") %>
+    &nbsp;
+    <%= form_tag(account_transactions_path(account, format: :csv), method: :get) do %>
+      <%= select_tag(:dates, options_for_select([["Select Dates", nil]].concat(@txn_ranges)),
+            onchange: "if ($(this.form.dates).val() != '') this.form.submit()") %>
+    <% end %>
   </div>
-<% end %>
+</div>

@@ -31,6 +31,10 @@ en:
       "on": "on %{t}"
       "at": "at %{t}"
       "until": "until %{t}"
+    this_year: "This Year"
+    this_quarter: "This Quarter"
+    this_month: "This Month"
+    all_time: "All Time"
 
   helpers:
     submit:
@@ -462,9 +466,6 @@ en:
 
   date_range_lens:
     past_12: "Past 12 Months"
-    this_year: "This Year"
-    this_quarter: "This Quarter"
-    all_time: "All Time"
 
   community_lens:
     all: "All Communities"

@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
       .includes(:last_statement, household: %i[users community])
       .relevant
       .by_cmty_and_household_name
-    @txn_years = Billing::Transaction.year_range(community: @community)&.to_a&.reverse
+    @txn_ranges = transaction_ranges(max_range: Billing::Transaction.date_range(community: @community))
 
     respond_to do |format|
       format.html { index_html }
@@ -34,7 +34,7 @@ class AccountsController < ApplicationController
     @account = Billing::Account.find(params[:id]).decorate
     @community = @account.community
     authorize(@account)
-    @txn_years = Billing::Transaction.year_range(account: @account)&.to_a&.reverse
+    @txn_ranges = transaction_ranges(max_range: Billing::Transaction.date_range(account: @account))
     prep_account_vars
   end
 
@@ -116,5 +116,14 @@ class AccountsController < ApplicationController
     @statements = @account.statements.page(params[:page] || 1).per(StatementsController::PER_PAGE)
     @last_statement = @account.last_statement
     @has_activity = @account.transactions.any?
+  end
+
+  def transaction_ranges(max_range:)
+    builder = DateRangeBuilder.new(max_range: max_range, trim_ranges: false)
+    builder.add_months(4)
+    builder.add_quarters(4)
+    builder.add_years
+    builder.add_all_time
+    builder.pairs
   end
 end

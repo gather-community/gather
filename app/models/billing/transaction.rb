@@ -26,6 +26,8 @@ module Billing
     scope :for_community_or_household,
           ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
+    scope :recorded_between,
+          ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
     scope :credit, -> { where("amount < 0") }
     scope :charge, -> { where("amount > 0") }
@@ -60,11 +62,14 @@ module Billing
     validate :quantity_and_unit_price
 
     def self.date_range(account: nil, community: nil)
-      txns = order(:incurred_on)
+      txns = all
       txns = txns.where(account: account) unless account.nil?
       txns = txns.in_community(community) unless community.nil?
       return nil if txns.none?
-      [txns.first.incurred_on, txns.last.incurred_on]
+      [
+        [txns.minimum(:created_at).to_date, txns.minimum(:incurred_on)].min,
+        [txns.maximum(:created_at).to_date, txns.maximum(:incurred_on)].max
+      ]
     end
 
     def charge?

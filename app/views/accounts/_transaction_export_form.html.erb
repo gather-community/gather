@@ -1,0 +1,12 @@
+<div class="export-link-with-form">
+  <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
+        onclick: "$(this).closest('.export-link-with-form')
+          .find('form').css({display: 'inline-block'}); return false;") %>
+  &nbsp;
+  <%= form_tag(path, method: :get) do %>
+    <%= select_tag(:col, options_for_select([["Incurred within ...", "incurred"],
+          ["Recorded within ...", "recorded"]])) %>
+    <%= select_tag(:dates, options_for_select([["Select Dates", nil]].concat(@txn_ranges)),
+          onchange: "if ($(this.form.dates).val() != '') this.form.submit()") %>
+  <% end %>
+</div>

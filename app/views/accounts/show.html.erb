@@ -3,14 +3,5 @@
 <%= render("details", footnotes: false) %>
 
 <footer id="local-footer" class="footer-links">
-  <div class="export-link-with-form">
-    <%= icon_tag("download") %> <%= link_to("Download Transactions as CSV", "#",
-          onclick: "$(this).closest('.export-link-with-form')
-            .find('form').css({display: 'inline-block'}); return false;") %>
-    &nbsp;
-    <%= form_tag(account_transactions_path(account, format: :csv), method: :get) do %>
-      <%= select_tag(:dates, options_for_select([["Select Dates", nil]].concat(@txn_ranges)),
-            onchange: "if ($(this.form.dates).val() != '') this.form.submit()") %>
-    <% end %>
-  </div>
+  <%= render("transaction_export_form", path: account_transactions_path(account, format: :csv)) %>
 </div>

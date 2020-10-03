@@ -14,6 +14,10 @@ describe "billing", js: true do
     let!(:account2) { create(:account, :with_statement, :with_transactions) }
     let!(:txn_description) { account1.transactions[0].description }
     let!(:stmt_amt) { account1.statements[0].total_due }
+    let!(:late_recorded_txn) do
+      create(:transaction, account: account1, incurred_on: Time.zone.today - 1.year,
+                           description: "Ye olde transaction")
+    end
 
     before do
       actor.community.settings.billing.late_fee_policy.fee_type = "fixed"
@@ -87,17 +91,30 @@ describe "billing", js: true do
       select(year, from: "dates")
       wait_for_download
       expect(download_content).to match(/"ID",Date/)
-      expect(download_filename).to eq("#{account1.community.slug}-transactions-#{year}0101-#{year}1231.csv")
+      expect(download_filename)
+        .to eq("#{account1.community.slug}-transactions-incd-#{year}0101-#{year}1231.csv")
     end
 
-    scenario "download account transaction csv" do
+    scenario "download account transaction csv by date incurred" do
       visit(account_path(account1))
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
       select(year, from: "dates")
       wait_for_download
       expect(download_content).to match(/"ID",Date/)
-      expect(download_filename).to eq("account-#{account1.id}-transactions-#{year}0101-#{year}1231.csv")
+      expect(download_content).not_to match(/Ye olde transaction/)
+      expect(download_filename).to eq("account-#{account1.id}-transactions-incd-#{year}0101-#{year}1231.csv")
+    end
+
+    scenario "download account transaction csv by date recorded" do
+      visit(account_path(account1))
+      click_link("Download Transactions as CSV")
+      year = Time.zone.today.year
+      select("Recorded within ...", from: "col")
+      select(year, from: "dates")
+      wait_for_download
+      expect(download_content).to match(/Ye olde transaction/)
+      expect(download_filename).to eq("account-#{account1.id}-transactions-recd-#{year}0101-#{year}1231.csv")
     end
   end
 

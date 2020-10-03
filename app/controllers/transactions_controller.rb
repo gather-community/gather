@@ -46,18 +46,27 @@ class TransactionsController < ApplicationController
   end
 
   def index_csv
-    transactions = policy_scope(Billing::Transaction).incurred_between(*params[:dates].split("-"))
-    transactions = transactions.includes(account: :household)
+    dates = params[:dates].split("-")
+    filename_chunk = params[:account_id] ? "account-#{params[:account_id]}" : :community
+    col_chunk = params[:col] == "incurred" ? "incd" : "recd"
+    filename = csv_filename(filename_chunk, "transactions", col_chunk, *dates)
+    export = Billing::TransactionCsvExporter.new(csv_transactions(dates), policy: policy(sample_transaction))
+    send_data(export.to_csv, filename: filename, type: :csv)
+  end
+
+  def csv_transactions(dates)
+    transactions = policy_scope(Billing::Transaction).includes(account: :household)
+    transactions = if params[:col] == "incurred"
+                     transactions.incurred_between(*dates)
+                   else
+                     transactions.recorded_between(*dates)
+                   end
     transactions = if params[:account_id]
                      transactions.where(account_id: params[:account_id])
                    else
                      transactions.in_community(current_community)
                    end
-    transactions = transactions.order(:incurred_on, "households.name", :code, :description)
-    filename_chunk = params[:account_id] ? "account-#{params[:account_id]}" : :community
-    filename = csv_filename(filename_chunk, "transactions", params[:dates])
-    csv = Billing::TransactionCsvExporter.new(transactions, policy: policy(sample_transaction)).to_csv
-    send_data(csv, filename: filename, type: :csv)
+    transactions.order(:incurred_on, "households.name", :code, :description)
   end
 
   def handle_confirmation_flow

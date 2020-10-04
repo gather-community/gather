@@ -18,6 +18,9 @@ module Reservations
     has_many :shared_guidelines, through: :guideline_inclusions
     has_many :reservations, inverse_of: :resource, class_name: "Reservations::Reservation",
                             dependent: :destroy
+    has_many :protocolings, class_name: "Reservations::Protocoling", inverse_of: :resource,
+                            foreign_key: "resource_id", dependent: :destroy
+    has_many :protocols, through: :protocolings
 
     has_one_attached :photo
     accepts_attachment_via_form :photo

@@ -48,7 +48,7 @@ describe WorkMailer do
     let(:user) { create(:user, first_name: "Tom") }
     let(:fc_job) { double(title: "Junk") }
     let(:period) do
-      double(auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
+      double(id: 123, auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
              community: Defaults.community, quota_none?: false)
     end
     let(:synopsis) do
@@ -98,5 +98,13 @@ describe WorkMailer do
 
       it { expect(mail.body.encoded).to include("Choosing begins at 7:00pm.") }
     end
+  end
+
+  def have_correct_shifts_url(community)
+    contain_community_url(community, "/work/signups?period_id=123")
+  end
+
+  def have_correct_shift_url(shift)
+    contain_community_url(shift.community, "/work/signups/#{shift.id}")
   end
 end

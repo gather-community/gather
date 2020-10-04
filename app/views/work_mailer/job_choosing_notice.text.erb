@@ -22,13 +22,13 @@ Your round schedule is as follows:
     <% end %>
   <% end %>
 
-Go to <%= work_shifts_url %> at the time(s) above to choose your jobs. You can also stop by earlier to see what jobs are available and plan your picks. But you won't be able to sign up until the times listed above.
+Go to <%= work_shifts_url(period_id: @period.id) %> at the time(s) above to choose your jobs. You can also stop by earlier to see what jobs are available and plan your picks. But you won't be able to sign up until the times listed above.
 <% else %>
   <% if @period.auto_open_time %>
 Choosing begins at <%= l(@period.auto_open_time, format: :time_only).strip %>.
 
   <% end %>
-Visit <%= work_shifts_url %> for more information.
+Visit <%= work_shifts_url(period_id: @period.id) %> for more information.
 <% end %>
 
 Thanks for your participation!

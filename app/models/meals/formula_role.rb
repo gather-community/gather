@@ -3,6 +3,8 @@
 module Meals
   # Join model between Formula and Role
   class FormulaRole < ApplicationRecord
+    acts_as_tenant :cluster
+
     belongs_to :formula, class_name: "Meals::Formula", inverse_of: :formula_roles
     belongs_to :role, class_name: "Meals::Role"
   end

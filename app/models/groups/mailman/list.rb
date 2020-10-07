@@ -65,10 +65,16 @@ module Groups
         end
       end
 
-      # Additional senders are nonmembers on the list with moderation actions other than reject/discard
+      # Additional senders are nonmembers on the list with moderation actions accept or defer
+      # accept means accept outright
+      # defer means 'default processing', which means the message goes through additional checks
+      #   and is then accepted assuming none of them fail
+      # reject and discard have the obvious meanings
+      # hold means hold for moderation, which is not automatic acceptance
+      # `nil` moderation_action means 'list default', which for a nonmember should always be `hold`
       def additional_senders
         @additional_senders ||= remote_memberships.select do |membership|
-          membership.role == "nonmember" && !%w[reject discard].include?(membership.moderation_action)
+          membership.role == "nonmember" && %w[accept defer].include?(membership.moderation_action)
         end
       end
 

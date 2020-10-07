@@ -27,8 +27,9 @@ describe "mailing lists", js: true do
       let(:api_response) do
         {
           entries: [
-            {email: "a@a.com", role: "nonmember", moderation_action: "hold", display_name: "A Tuzz"},
-            {email: "b@b.com", role: "nonmember", moderation_action: "accept", display_name: "Bo Fuzz"}
+            {email: "a@a.com", role: "nonmember", moderation_action: "defer", display_name: "A Tuzz"},
+            {email: "b@b.com", role: "nonmember", moderation_action: "accept", display_name: "Bo Fuzz"},
+            {email: "b@b.com", role: "nonmember", display_name: "Cal Biz"} # default moderation
           ]
         }
       end
@@ -43,7 +44,8 @@ describe "mailing lists", js: true do
 
           click_link("Knitting Club")
           expect(page).to have_content("knitting@fluff.com")
-          expect(page).to have_content(/These additional senders.*A Tuzz\*\nBo Fuzz\n/m)
+          expect(page).to have_content(/These additional senders.*A Tuzz\nBo Fuzz\n/m)
+          expect(page).not_to have_content(/Cal Biz/)
           click_link("Edit")
 
           check("Delete this list?")

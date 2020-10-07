@@ -19,13 +19,11 @@ module Groups
 
       def membership_ul(memberships, max: nil)
         overflow = max.nil? ? 0 : memberships.size - max
-        memberships = memberships[0...max] if overflow > 0
+        memberships = memberships[0...max] if overflow.positive?
         items = memberships.sort_by { |m| m.name_or_email.downcase }.map do |membership|
-          text = membership.name_or_email
-          text << "*" if membership.moderation_action == "hold"
-          h.content_tag(:li, h.link_to(text, membership.email))
+          h.content_tag(:li, h.link_to(membership.name_or_email, membership.email))
         end
-        items << h.content_tag(:li, "+#{overflow} more") if overflow > 0
+        items << h.content_tag(:li, "+#{overflow} more") if overflow.positive?
         h.content_tag(:ul, h.safe_join(items), class: "no-bullets")
       end
     end

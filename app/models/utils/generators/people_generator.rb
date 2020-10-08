@@ -11,14 +11,15 @@ module Utils
       end
 
       def generate_samples
-        create_households_and_users
+        generate_households_and_users
         deactivate_households
+        generate_memorial
       end
 
       private
 
       # Creates 24 households (3 inactive) with random vehicles and emergency contacts.
-      def create_households_and_users
+      def generate_households_and_users
         self.users = []
         adults = []
         garages = ((1..20).to_a + [nil] * 4).shuffle
@@ -105,6 +106,13 @@ module Utils
             h.deactivate
           end
         end
+      end
+
+      def generate_memorial
+        message = "was such a kind person and a passionate member of our community. "\
+          "They will be dearly missed."
+        memorial = create(:memorial, death_year: Time.current.year, user: User.adults.inactive.first)
+        memorial.messages.create!(author: User.adults.sample, body: "#{memorial.user.first_name} #{message}")
       end
     end
   end

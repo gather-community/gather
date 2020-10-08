@@ -94,6 +94,7 @@ module Groups
 
     def prep_form_vars
       @group.build_mailman_list if @group.mailman_list.nil?
+      @mailman_list = @group.mailman_list
 
       if policy(@group).permitted_attributes.include?(community_ids: [])
         @community_options = Community.by_name_with_first(current_community)
@@ -102,10 +103,6 @@ module Groups
       @domain_options = Domain.by_name.select { |d| policy(d).attach_to? }
       @domain_options << @group.mailman_list.domain if @group.mailman_list.persisted?
       @domain_options.uniq!
-
-      list_remote_id = @group.mailman_list.remote_id
-      mailman_admin_path = list_remote_id ? "/postorius/lists/#{list_remote_id}/" : "/postorius/lists/"
-      @mailman_admin_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(mailman_admin_path)}"
     end
 
     def sample_group

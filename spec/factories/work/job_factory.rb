@@ -36,5 +36,11 @@ FactoryBot.define do
         end
       end
     end
+
+    trait :with_reminder do
+      after(:build) do |job|
+        job.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
+      end
+    end
   end
 end

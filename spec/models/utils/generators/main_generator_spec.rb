@@ -5,15 +5,21 @@ require "fileutils"
 
 # Don't delay jobs so that any mails would get sent immediately
 describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
+  # Classes that are allowed to have no sample data
+  NO_SAMPLE_DATA_CLASSES = %w[Domain DomainOwnership Groups::Mailman::List
+                              Meals::Message Meals::Import Groups::Mailman::User
+                              Wiki::PageVersion Wiki::Page
+                              Work::JobReminderDelivery].freeze
+
   before do
     FileUtils.rm_rf(Rails.root.join("public", "system", "test"))
   end
 
-  it "should run and destroy cleanly with sample data" do
+  it "should run and destroy cleanly with sample data and no photos (runs faster)" do
     cluster = nil
 
     expect do
-      main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: true)
+      main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false)
       cluster = main.generate
     end.to change { ActionMailer::Base.deliveries.size }.by(0)
 
@@ -21,24 +27,37 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       check_cmty_and_cluster_creation(cluster)
       expect_no_admins
 
-      # Check counts of key classes to ensure sub generators are being called.
-      # Detailed counts should be checked in generator specs.
-      expect(User.count).to be > 12
-      expect(Groups::Group.count).to be > 1
-      expect(Meals::Meal.count).to be > 1
-      expect(Reservations::Reservation.count).to be > 1
-      expect(Reservations::Resource.count).to be > 1
-      expect(Billing::Statement.count).to be > 1
+      # Ensure data is getting generated for all classes except those with explicit exceptions.
+      Rails.application.eager_load!
+      dataless = []
+      ApplicationRecord.descendants.each do |model|
+        next if model.test_mock? || NO_SAMPLE_DATA_CLASSES.include?(model.name)
+        dataless << model.name if model.none?
+      end
+      expect(dataless).to be_empty, "#{dataless.join(', ')} don't have any sample data"
 
+      # Destroy and check
+      Utils::DataRemover.new(cluster.id).remove
+      cluster.communities[0].destroy
+      ApplicationRecord.descendants.each do |model|
+        next if model.test_mock? || !model.scoped_by_tenant?
+        expect(model.count).to eq(0), "Expected to find no #{model.name.pluralize}"
+      end
+    end
+  end
+
+  it "should generate and destroy photos" do
+    cluster = nil
+    main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: true)
+    cluster = main.generate
+
+    ActsAsTenant.with_tenant(cluster) do
       # Ensure photos are generated.
       expect(ActiveStorage::Blob.count).to be > 12
 
       # Destroy and check
       Utils::DataRemover.new(cluster.id).remove
       cluster.communities[0].destroy
-      Cluster.cluster_based_models.each do |klass|
-        expect(klass.count).to eq(0), "Expected to find no #{klass.name.pluralize}"
-      end
       expect(ActiveStorage::Blob.count).to eq(0)
     end
   end

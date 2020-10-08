@@ -23,6 +23,15 @@ class ApplicationRecord < ActiveRecord::Base
     connection.execute("SELECT txid_current()").to_a[0]["txid_current"]
   end
 
+  def self.test_mock?
+    false
+  end
+
+  # This is added by ActsAsTenant
+  def self.scoped_by_tenant?
+    false
+  end
+
   # Useful when trying to get the class name of a decorated object.
   def class_name
     self.class.name

@@ -10,7 +10,9 @@ FactoryBot.define do
 
     trait :with_shares do
       after(:create) do |period|
-        User.in_community(period.community).each { |u| period.shares.create!(user: u, portion: 1) }
+        User.in_community(period.community).adults.active.each do |u|
+          period.shares.create!(user: u, portion: [0, 0, 0.25, 0.5, 0.5, 0.5, 1, 1, 1, 1, 1, 1, 1].sample)
+        end
       end
     end
   end

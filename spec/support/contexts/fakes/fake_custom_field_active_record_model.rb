@@ -11,6 +11,10 @@ class FakeCustomFieldActiveRecordModel < ApplicationRecord
     ]}
   ]
 
+  def self.test_mock?
+    true
+  end
+
   def self.create_table
     ActiveRecord::Base.connection.create_table(table_name, force: true) do |t|
       t.column(:foo, :string)

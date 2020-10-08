@@ -9,8 +9,9 @@ module Utils
 
     def remove
       to_destroy_all = [Billing::Account, Meals::Meal, Meals::Formula, Reservations::Reservation,
-                        Reservations::Protocol, Reservations::Resource, Reservations::SharedGuidelines]
-      to_destroy_all.each { |c| c.destroy_all }
+                        Reservations::Protocol, Reservations::Resource, Reservations::SharedGuidelines,
+                        People::Memorial]
+      to_destroy_all.each(&:destroy_all)
 
       non_fake_household_ids = User.where(fake: false).pluck(:household_id)
       User.where(fake: true).destroy_all

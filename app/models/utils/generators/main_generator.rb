@@ -53,6 +53,7 @@ module Utils
         )
         generators[:statements] = StatementGenerator.new(community: community)
         generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements])
+        generators[:work] = WorkGenerator.new(community: community)
       end
     end
   end

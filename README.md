@@ -38,7 +38,7 @@ Follow these steps to setup a development environment for Gather.
         mkdir ../mailman && cd ../mailman
         python3 -m venv venv
         source venv/bin/activate
-        pip install mailman
+        pip3 install mailman
         mailman start
         curl -v http://restadmin:restpass@localhost:8001/3.1/lists
         pip install postorius hyperkitty whoosh

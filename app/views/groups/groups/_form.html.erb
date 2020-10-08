@@ -59,24 +59,24 @@
               <li>
                 <strong>Members</strong>: All members of this group are automatically sync'd to the list.
                 You can manually add additional members via the
-                <%= link_to("Mailman admin panel", @mailman_admin_url) %>.
+                <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
               </li>
               <li>
                 <strong>Moderators</strong>: List moderators are sync'd according to the 'Managers can moderate
                 list?' and 'Can moderate all email lists?' settings above. You can manually add additional
-                moderators via the <%= link_to("Mailman admin panel", @mailman_admin_url) %>.
+                moderators via the <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
               </li>
               <li>
                 <strong>Owners</strong>: List owners are sync'd according to the 'Managers can administer list?'
                 and 'Can administer all email lists?' settings above. You can manually add additional owners
-                via the <%= link_to("Mailman admin panel", @mailman_admin_url) %>.
+                via the <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
               </li>
               <li>
                 <strong>Non-members</strong>: The Mailman 'non-member' feature can be used 1) to
                 allow additional addresses to send email to the list without receiving from it and 2) to
                 ban people from sending to the list. Non-members do not receive email from the list.
                 Non-members are not sync'd from Gather, but can be added manually via the
-                <%= link_to("Mailman admin panel", @mailman_admin_url) %>.
+                <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
                 See the <%= link_to("Mailman documentation",
                   "https://mailman.readthedocs.io/en/latest/src/mailman/rules/docs/moderation.html") %>
                 for more information.
@@ -87,7 +87,8 @@
             Any manual changes to memberships for Gather users will be overwritten during sync.
           <% end %>
           <%= list_form.input(:settings) do %>
-            List settings can be adjusted via the <%= link_to("Mailman admin panel", @mailman_admin_url) %>.
+            List settings can be adjusted via the
+            <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
             The following settings will be forcibly reset by Gather:
             <ul>
               <li>

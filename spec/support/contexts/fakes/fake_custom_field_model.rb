@@ -11,4 +11,8 @@ class FakeCustomFieldModel
       {key: "comment", type: "string", validation: {length: {maximum: 5, message: :foo}}}
     ]}
   ]
+
+  def self.test_mock?
+    true
+  end
 end

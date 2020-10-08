@@ -31,8 +31,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       Rails.application.eager_load!
       dataless = []
       ApplicationRecord.descendants.each do |model|
-        next unless model.table_exists?
-        next if NO_SAMPLE_DATA_CLASSES.include?(model.name)
+        next if model.test_mock? || NO_SAMPLE_DATA_CLASSES.include?(model.name)
         dataless << model.name if model.none?
       end
       expect(dataless).to be_empty, "#{dataless.join(', ')} don't have any sample data"
@@ -40,8 +39,9 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       # Destroy and check
       Utils::DataRemover.new(cluster.id).remove
       cluster.communities[0].destroy
-      Cluster.cluster_based_models.each do |klass|
-        expect(klass.count).to eq(0), "Expected to find no #{klass.name.pluralize}"
+      ApplicationRecord.descendants.each do |model|
+        next if model.test_mock? || !model.scoped_by_tenant?
+        expect(model.count).to eq(0), "Expected to find no #{model.name.pluralize}"
       end
     end
   end

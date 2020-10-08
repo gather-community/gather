@@ -20,9 +20,8 @@ describe "tenancy" do
     models = ApplicationRecord.descendants
     expect(models.size).to be > 20 # Make sure models are eager loaded.
     models.each do |model|
-      next unless model.table_exists? # Don't check non-persisted classes
-      next if WHITELISTED_CLASSES.include?(model.name)
-      expect(model).to respond_to(:scoped_by_tenant?), "#{model.name} doesn't have acts_as_tenant"
+      next if model.test_mock? || WHITELISTED_CLASSES.include?(model.name)
+      expect(model).to be_scoped_by_tenant, "#{model.name} doesn't have acts_as_tenant"
     end
   end
 end

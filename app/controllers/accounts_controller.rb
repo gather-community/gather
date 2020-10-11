@@ -14,6 +14,7 @@ class AccountsController < ApplicationController
       .relevant
       .by_cmty_and_household_name
     @txn_ranges = transaction_ranges(max_range: Billing::Transaction.date_range(community: @community))
+    @totals = build_account_totals
 
     respond_to do |format|
       format.html { index_html }
@@ -110,6 +111,15 @@ class AccountsController < ApplicationController
 
   def late_fee_applier
     @late_fee_applier ||= Billing::LateFeeApplier.new(current_community)
+  end
+
+  def build_account_totals
+    totals = {due_last_statement: 0, total_new_credits: 0, balance_due: 0,
+            total_new_charges: 0, current_balance: 0}
+    @accounts.each do |account|
+      totals.keys.each { |k| totals[k] += (account.send(k) || 0) }
+    end
+    totals
   end
 
   def prep_account_vars

@@ -8,6 +8,14 @@
     table.index {
       width: 100%;
 
+      thead {
+        th {
+          position: sticky;
+          top: 0;
+          background-color: $gray-lighterer;
+        }
+      }
+
       th, td {
         &:first-of-type {
           width: 6%;
@@ -24,6 +32,11 @@
         &:last-of-type {
           width: 4%;
         }
+      }
+
+      tfoot {
+        background-color: $theme-main-lightest;
+        font-weight: bold;
       }
     }
   }

@@ -34,53 +34,81 @@
   </p>
 
   <table class="index">
-    <tr>
-      <th>Num</th>
-      <th>Household</th>
-      <th class="amount">Last Stmt. Date</th>
-      <th class="amount">Due Last Stmt.</th>
-      <th class="amount">New Credits</th>
-      <th class="amount">Balance Due</th>
-      <th class="amount">New Charges</th>
-      <th class="amount">Current Balance</th>
-      <th class="amount">Credit Limit</th>
-      <th></th>
-    </tr>
-    <% accounts.each do |account| %>
+    <thead>
       <tr>
-        <td>
-          <%= account.number_padded %>
-        </td>
-        <td>
-          <%= link_to(account.household_name.html_safe << no_user_warning(account),
-            account_path(account)) %>
-        </td>
-        <td class="amount">
-          <%= l(account.last_statement_on) || "N/A" %>
-        </td>
-        <td class="amount">
-          <%= statement_amount(account.last_statement) %>
-        </td>
-        <td class="amount">
-          <%= link_to_currency_if_nonzero(account.total_new_credits, account_transactions_path(account)) %>
-        </td>
-        <td class="amount">
-          <%= currency_with_cr(account.balance_due) %>
-        </td>
-        <td class="amount">
-          <%= link_to_currency_if_nonzero(account.total_new_charges, account_transactions_path(account)) %>
-        </td>
-        <td class="amount">
-          <strong><%= currency_with_cr(account.current_balance) %></strong>
-        </td>
-        <td class="amount">
-          <%= number_to_currency(account.credit_limit) %>
-        </td>
-        <td>
-          <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
-        </td>
+        <th>Num</th>
+        <th>Household</th>
+        <th class="amount">Last Stmt. Date</th>
+        <th class="amount">Due Last Stmt.</th>
+        <th class="amount">New Credits</th>
+        <th class="amount">Balance Due</th>
+        <th class="amount">New Charges</th>
+        <th class="amount">Current Balance</th>
+        <th class="amount">Credit Limit</th>
+        <th></th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% accounts.each do |account| %>
+        <tr>
+          <td>
+            <%= account.number_padded %>
+          </td>
+          <td>
+            <%= link_to(account.household_name.html_safe << no_user_warning(account),
+              account_path(account)) %>
+          </td>
+          <td class="amount">
+            <%= l(account.last_statement_on) || "N/A" %>
+          </td>
+          <td class="amount">
+            <%= statement_amount(account.last_statement) %>
+          </td>
+          <td class="amount">
+            <%= link_to_currency_if_nonzero(account.total_new_credits, account_transactions_path(account)) %>
+          </td>
+          <td class="amount">
+            <%= currency_with_cr(account.balance_due) %>
+          </td>
+          <td class="amount">
+            <%= link_to_currency_if_nonzero(account.total_new_charges, account_transactions_path(account)) %>
+          </td>
+          <td class="amount">
+            <strong><%= currency_with_cr(account.current_balance) %></strong>
+          </td>
+          <td class="amount">
+            <%= number_to_currency(account.credit_limit) %>
+          </td>
+          <td>
+            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td>Totals</td>
+        <td></td>
+        <td class="amount">
+          <%= currency_with_cr(@totals[:due_last_statement]) %>
+        </td>
+        <td class="amount">
+          <%= number_to_currency(@totals[:total_new_credits]) %>
+        </td>
+        <td class="amount">
+          <%= currency_with_cr(@totals[:balance_due]) %>
+        </td>
+        <td class="amount">
+          <%= number_to_currency(@totals[:total_new_charges]) %>
+        </td>
+        <td class="amount">
+          <%= currency_with_cr(@totals[:current_balance]) %>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
   </table>
 
   <footer id="local-footer" class="footer-links">

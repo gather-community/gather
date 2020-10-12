@@ -17,7 +17,7 @@ module Nav
       sample_shift = Work::Shift.new(job: sample_job)
       sample_resource = Reservations::Resource.new(community: h.current_community)
       sample_reservation = Reservations::Reservation.new(resource: sample_resource)
-      customizer = Utils::Nav::CustomizationParser.new(h.current_community.settings.main_nav_customizations)
+      customizer = Utils::Nav::CustomizationParser.new(h.current_community&.settings&.main_nav_customizations)
 
       items = []
 

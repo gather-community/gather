@@ -26,4 +26,6 @@ Rails.application.config.after_initialize do
   Groups::Mailman::List.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Affiliation.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Membership.subscribe(Groups::Mailman::SyncListener.instance)
+
+  Household.subscribe(Billing::AccountManager.instance)
 end

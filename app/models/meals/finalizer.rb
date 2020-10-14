@@ -39,7 +39,8 @@ module Meals
       return if price < 0.01
 
       Billing::Transaction.create!(
-        account: Billing::Account.for(signup_part.household_id, meal.community_id),
+        account: Billing::AccountManager.instance.account_for(household_id: signup_part.household_id,
+                                                              community_id: meal.community_id),
         code: "meal",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: #{signup_part.type_name}",
@@ -54,7 +55,8 @@ module Meals
         meal.head_cook.present?
 
       Billing::Transaction.create!(
-        account: Billing::Account.for(meal.head_cook.household_id, meal.community_id),
+        account: Billing::AccountManager.instance.account_for(household_id: meal.head_cook.household_id,
+                                                              community_id: meal.community_id),
         code: "reimb",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: Grocery Reimbursement",

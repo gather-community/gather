@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :account, class: "Billing::Account" do
-    household
+    household factory: :household, skip_listener_action: :account_create
     community { Defaults.community }
     last_statement_on { "2015-10-27" }
     due_last_statement { "8.81" }

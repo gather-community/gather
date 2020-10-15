@@ -30,7 +30,7 @@ describe Billing::TransactionPolicy do
     include_context "policy scopes"
     let(:klass) { Billing::Transaction }
     let!(:account1) { create(:account) }
-    let!(:account2) { create(:account, household: actor.household) }
+    let!(:account2) { actor.household.accounts[0] }
     let!(:account3) { create(:account, community: communityB, household: actor.household) }
     let!(:account4) { create(:account, community: communityB) }
     let!(:transaction1) { create(:transaction, account: account1) }

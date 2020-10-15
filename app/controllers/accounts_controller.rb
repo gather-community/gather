@@ -7,12 +7,18 @@ class AccountsController < ApplicationController
 
   def index
     authorize(sample_account)
+    prepare_lenses(:"billing/account_active")
     @community = current_community
     @accounts = policy_scope(Billing::Account)
     @accounts = @accounts.where(community: @community)
       .includes(:last_statement, household: %i[users community])
-      .relevant
       .by_cmty_and_household_name
+
+    # If they ask for 'all accounts' in the lens, we still only show relevant ones, which are those
+    # that are active OR attached to active households. If household and account are BOTH inactive
+    # then it's unlikely anyone would ever care. If they do, we can add another option to lens.
+    @accounts = lenses[:active].value == "all" ? @accounts.relevant : @accounts.active
+
     @txn_ranges = transaction_ranges(max_range: Billing::Transaction.date_range(community: @community))
     @totals = build_account_totals
 

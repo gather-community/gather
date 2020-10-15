@@ -25,7 +25,7 @@ shared_context "policy permissions" do
     create(:household, users: [inactive_user],
                        deactivated_at: Time.current, community: community)
   end
-  let(:account) { create(:account, household: create(:household, community: community)) }
+  let(:account) { create(:household, community: community).accounts[0] }
   let(:guardian) { user }
   let(:child) { create(:user, :child, guardians: [guardian], first_name: "child") }
   let(:other_child) { create(:user, :child, guardians: [other_user], first_name: "other_child") }

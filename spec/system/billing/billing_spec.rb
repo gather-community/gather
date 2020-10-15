@@ -119,8 +119,8 @@ describe "billing", js: true do
   end
 
   describe "user view" do
-    let(:actor) { create(:user) }
-    let(:household) { actor.household }
+    let(:household) { create(:household, skip_listener_action: :account_create) }
+    let(:actor) { create(:user, household: household) }
     let(:community1) { actor.community }
     let!(:community2) { create(:community) }
     let!(:account1) { create(:account, :with_statement, :with_transactions, household: household) }

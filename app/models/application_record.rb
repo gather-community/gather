@@ -4,6 +4,9 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
+  # Transient attribute used by factories to signal that we don't want a listener to do something.
+  attr_accessor :skip_listener_action
+
   # Takes one or more symbols or hashes (e.g. `alpha_order(:name, :title, communities: :name)`)
   # and converts to an `order` call with LOWER wrapping each column
   # (e.g. order("LOWER(name), LOWER(title), LOWER(communities.name)")).

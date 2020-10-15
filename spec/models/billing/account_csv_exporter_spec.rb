@@ -7,7 +7,7 @@ describe Billing::AccountCsvExporter do
   let(:policy) do
     Billing::AccountPolicy.new(actor, Billing::Account.new(community: actor.community))
   end
-  let(:exporter) { described_class.new(Billing::Account.by_cmty_and_household_name, policy: policy) }
+  let(:exporter) { described_class.new(Billing::Account.active.by_cmty_and_household_name, policy: policy) }
 
   describe "to_csv" do
     context "with no accounts" do
@@ -28,14 +28,7 @@ describe Billing::AccountCsvExporter do
           ]
         end
       end
-      let!(:accounts) do
-        Timecop.freeze("2018-09-23 10:00") do
-          [
-            create(:account, community: communities[0], household: households[0]),
-            create(:account, community: communities[1], household: households[1], credit_limit: 50)
-          ]
-        end
-      end
+      let!(:accounts) { households.map { |h| h.accounts[0] } }
 
       before do
         create(:transaction, account: accounts[0], amount: 1.23, code: "othchg")
@@ -46,6 +39,7 @@ describe Billing::AccountCsvExporter do
         end
         create(:transaction, account: accounts[0], amount: 6.78, code: "othcrd")
         create(:transaction, account: accounts[1], amount: 8.90, code: "othchg")
+        accounts[1].update!(credit_limit: 50)
         accounts[0].recalculate!
         accounts[1].recalculate!
       end

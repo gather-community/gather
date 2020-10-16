@@ -12,6 +12,7 @@ describe "billing", js: true do
     let(:actor) { create(:biller) }
     let!(:account1) { create(:account, :with_statement, :with_transactions) }
     let!(:account2) { create(:account, :with_statement, :with_transactions) }
+    let!(:account3) { create(:account, :no_activity) }
     let!(:txn_description) { account1.transactions[0].description }
     let!(:stmt_amt) { account1.statements[0].total_due }
     let!(:late_recorded_txn) do
@@ -30,6 +31,10 @@ describe "billing", js: true do
       visit(accounts_path)
       expect(page).to have_content(account1.household.name)
       expect(page).to have_content(account2.household.name)
+      expect(page).not_to have_content(account3.household.name)
+
+      select_lens(:active, "Show All")
+      expect(page).to have_content(account3.household.name)
 
       click_link(account1.household.name)
       expect(page).to have_content("Balance Due $#{stmt_amt}")

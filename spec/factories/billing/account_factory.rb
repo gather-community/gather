@@ -9,6 +9,15 @@ FactoryBot.define do
     total_new_credits { "10.99" }
     total_new_charges { "22.71" }
 
+    trait :no_activity do
+      last_statement_on { nil }
+      due_last_statement { nil }
+      total_new_credits { 0.0 }
+      total_new_charges { 0.0 }
+      balance_due { 0.0 }
+      current_balance { 0.0 }
+    end
+
     trait :with_statement do
       after(:create) do |account|
         account.transactions << create(:transaction, account: account, incurred_on: Time.zone.today - 10.days)

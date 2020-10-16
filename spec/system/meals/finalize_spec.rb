@@ -49,7 +49,7 @@ describe "finalize meal", js: true do
     expect(page).to have_content("#{signups[1].household_name} (1)")
     expect(page).not_to have_content(signups[0].household_name)
 
-    # Go to accounts page and ensure correct accounts created
+    # Go to accounts page and ensure correct accounts are shown as active
     visit accounts_path
     expect(page).to have_title("Accounts")
     expect(page).to have_content(signups[1].household_name)

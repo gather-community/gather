@@ -19,7 +19,7 @@ describe Billing::TransactionCsvExporter do
 
     context "with transactions" do
       let(:household) { create(:household, name: "Smith") }
-      let(:account) { create(:account, household: household) }
+      let(:account) { household.accounts[0] }
       let(:meal) { create(:meal, served_at: "2018-08-17 18:15") }
       let!(:transactions) do
         Timecop.freeze("2018-09-10 12:00") do

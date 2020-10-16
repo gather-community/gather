@@ -121,7 +121,7 @@ describe Household do
   end
 
   describe "destruction" do
-    let!(:household) { create(:household) }
+    let!(:household) { create(:household, skip_listener_action: :account_create) }
 
     context "with non-restricted associations" do
       let!(:vehicle) { create(:vehicle, household: household) }

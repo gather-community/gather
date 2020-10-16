@@ -121,6 +121,10 @@ en:
         workers_per_round: "How many workers should be choosing jobs in a given round? More workers means more hectic choosing. Fewer workers means more rounds so the job choosing event takes longer."
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
     options:
+      billing_account:
+        active:
+          active_only: "Show Active Only"
+          all: "Show All"
       groups_group:
         availability:
           open: "Open"

@@ -54,7 +54,7 @@ describe "lenses", js: true do
     context "with no subdomain change" do
       before do
         [community1, community2, community3].each do |c|
-          create(:account, community: c, household: user.household)
+          Billing::AccountManager.instance.account_for(household_id: user.household_id, community_id: c.id)
         end
       end
 

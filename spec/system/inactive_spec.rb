@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "inactive user" do
   let(:user) { create(:user, :inactive) }
-  let!(:account) { create(:account, household: user.household) }
+  let!(:account) { user.household.accounts[0] }
 
   before do
     stub_omniauth(google_oauth2: {email: user.google_email})

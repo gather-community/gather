@@ -40,10 +40,6 @@ module Billing
       self.current_balance = balance_due + total_new_charges
     end
 
-    def self.for(household_id, community_id)
-      find_or_create_by!(household_id: household_id, community_id: community_id)
-    end
-
     def self.with_activity_and_users_and_no_recent_statement
       active.joins("LEFT JOIN statements ON statements.id = accounts.last_statement_id")
         .where("statements.created_at <= ? OR statements.created_at IS NULL", RECENT_STATEMENT_WINDOW.ago)

@@ -94,7 +94,7 @@ describe HouseholdPolicy do
       let(:user) { create(:user) }
       let(:admin) { create(:admin) }
       let(:super_admin) { create(:super_admin) }
-      let(:household) { create(:household) }
+      let(:household) { create(:household, skip_listener_action: :account_create) }
 
       context "with no restrictions" do
         it_behaves_like "permits admins but not regular users"

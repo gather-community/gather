@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
     # If they ask for 'all accounts' in the lens, we still only show relevant ones, which are those
     # that are active OR attached to active households. If household and account are BOTH inactive
     # then it's unlikely anyone would ever care. If they do, we can add another option to lens.
-    @accounts = lenses[:active].value == "all" ? @accounts.relevant : @accounts.active
+    @accounts = lenses[:active].value == "active_only" ? @accounts.active : @accounts.relevant
 
     @txn_ranges = transaction_ranges(max_range: Billing::Transaction.date_range(community: @community))
     @totals = build_account_totals

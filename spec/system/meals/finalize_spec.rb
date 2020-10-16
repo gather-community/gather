@@ -51,6 +51,7 @@ describe "finalize meal", js: true do
 
     # Go to accounts page and ensure correct accounts are shown as active
     visit accounts_path
+    select_lens(:active, "Show Active Only")
     expect(page).to have_title("Accounts")
     expect(page).to have_content(signups[1].household_name)
     expect(page).to have_content(late_add.name)

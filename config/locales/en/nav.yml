@@ -2,6 +2,7 @@ en:
   nav_links:
     main:
       people: "People"
+      groups: "Groups"
       meals: "Meals"
       reservations: "Reservations"
       wiki: "Wiki"
@@ -13,12 +14,13 @@ en:
         jobs: "Jobs"
         report: "Report"
         formulas: "Formulas"
-        roles: "Roles"
         types: "Types"
-      people:
-        directory: "Directory"
+      groups:
         groups: "Groups"
+        roles: "Roles"
+      people:
         households: "Households"
+        directory: "Directory"
         roles: "Roles"
         birthdays: "Birthdays"
         vehicles: "Vehicles"

@@ -12,6 +12,9 @@ module Nav
     end
 
     def main_items
+      sample_household = Household.new(community: h.current_community)
+      sample_user = User.new(household: sample_household)
+      sample_group = Groups::Group.new(communities: [h.current_community])
       sample_period = Work::Period.new(community: h.current_community)
       sample_job = Work::Job.new(period: sample_period)
       sample_shift = Work::Shift.new(job: sample_job)
@@ -25,7 +28,13 @@ module Nav
       items << customizer.filter_item(
         name: :people,
         path: lens_path_if_present("users"),
-        permitted: h.policy(User).index?,
+        permitted: h.policy(sample_user).index?,
+        icon: "address-book"
+      )
+      items << customizer.filter_item(
+        name: :groups,
+        path: lens_path_if_present("groups/groups"),
+        permitted: h.policy(sample_group).index?,
         icon: "users"
       )
       items << customizer.filter_item(
@@ -107,7 +116,6 @@ module Nav
           sample_household = Household.new(community: h.current_community)
           sample_user = User.new(household: sample_household)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: h.current_community))
-          sample_group = Groups::Group.new(communities: [h.current_community])
           sample_memorial = People::Memorial.new(user: sample_user)
           [
             {
@@ -115,25 +123,13 @@ module Nav
               parent: :people,
               path: h.users_path,
               permitted: h.policy(sample_user).index?,
-              icon: "address-book"
-            }, {
-              name: :groups,
-              parent: :people,
-              path: h.groups_groups_path,
-              permitted: h.policy(sample_group).index?,
-              icon: "users"
+              icon: "address-card"
             }, {
               name: :households,
               parent: :people,
               path: h.households_path,
               permitted: h.policy(sample_household).index?,
               icon: "home"
-            }, {
-              name: :roles,
-              parent: :people,
-              path: h.roles_path,
-              permitted: h.policy(sample_user).index?,
-              icon: "user-circle-o"
             }, {
               name: :birthdays,
               parent: :people,
@@ -152,6 +148,24 @@ module Nav
               path: h.people_memorials_path,
               permitted: h.policy(sample_memorial).index?,
               icon: "pagelines"
+            }
+          ]
+        when :groups
+          sample_user = User.new(household: sample_household)
+          sample_group = Groups::Group.new(communities: [h.current_community])
+          [
+            {
+              name: :groups,
+              parent: :groups,
+              path: h.groups_groups_path,
+              permitted: h.policy(sample_group).index?,
+              icon: "users"
+            }, {
+              name: :roles,
+              parent: :groups,
+              path: h.roles_path,
+              permitted: h.policy(sample_user).index?,
+              icon: "user-circle-o"
             }
           ]
         when :reservations

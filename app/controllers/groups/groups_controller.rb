@@ -4,7 +4,7 @@ module Groups
   class GroupsController < ApplicationController
     include Destructible
 
-    before_action -> { nav_context(:people, :groups) }
+    before_action -> { nav_context(:groups, :groups) }
     decorates_assigned :group, :groups, :mailman_list
     helper_method :sample_group
 

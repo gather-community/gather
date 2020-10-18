@@ -39,6 +39,9 @@ class Community < ApplicationRecord
     {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
      default: "directory", required: true},
     {key: :main_nav_customizations, type: :text},
+    {key: :people, type: :group, fields: [
+      {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true}
+    ]},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},
       {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},

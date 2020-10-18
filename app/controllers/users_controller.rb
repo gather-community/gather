@@ -181,8 +181,7 @@ class UsersController < ApplicationController
   private
 
   def load_users
-    prepare_lenses({community: {required: true}}, :"people/life_stage", :"people/sort",
-                   :"people/view", :search)
+    prepare_user_lenses
     @community = current_community
     load_communities_in_cluster
     unless policy(sample_user).index_children_for_community?(@community)
@@ -196,6 +195,14 @@ class UsersController < ApplicationController
 
     # Regular folks can't see inactive users.
     @users = @users.active unless policy(sample_user).show_inactive?
+  end
+
+  def prepare_user_lenses
+    prepare_lenses({community: {required: true}},
+                   :"people/life_stage",
+                   {"people/sort": {default: current_community.settings.people.default_directory_sort}},
+                   :"people/view",
+                   :search)
   end
 
   # Called before authorization to check and prepare household attributes.

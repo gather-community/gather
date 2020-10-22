@@ -5,8 +5,7 @@
     <%= transaction.household_name %>
   <% end %>
 
-  <%= f.input :incurred_on, as: :date_picker,
-      input_html: {data: {date_options: {maxDate: Time.zone.today}}} %>
+  <%= f.input :incurred_on, as: :date_picker %>
   <%= f.input :code, as: :radio_buttons, collection: transaction_code_options %>
   <%= f.input :description %>
   <%= f.input :amount, input_html: {value: number_with_precision(f.object.abs_amount, precision: 2) } %>

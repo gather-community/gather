@@ -148,6 +148,12 @@ module Nav
               path: h.people_memorials_path,
               permitted: h.policy(sample_memorial).index?,
               icon: "pagelines"
+            }, {
+              name: :settings,
+              parent: :people,
+              path: h.edit_people_settings_path,
+              permitted: People::SettingsPolicy.new(h.current_user, h.current_community).edit?,
+              icon: "gear"
             }
           ]
         when :groups

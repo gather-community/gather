@@ -25,6 +25,7 @@ en:
         birthdays: "Birthdays"
         vehicles: "Vehicles"
         memorials: "Memorials"
+        settings: "Settings"
       reservations:
         reservations: "Reservations"
         resources: "Resources"
@@ -34,6 +35,10 @@ en:
         report: "Report"
         jobs: "Jobs"
         periods: "Periods"
+    sub_sub:
+      people:
+        settings:
+          member_types: "Member Types"
     personal:
       profile: "Profile"
       accounts: "Accounts"

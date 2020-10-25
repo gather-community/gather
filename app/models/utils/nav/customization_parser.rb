@@ -29,7 +29,7 @@ module Utils
             name: c[0],
             path: c[1],
             permitted: true,
-            icon: "info-circle"
+            icon: "bookmark"
           }
         end
         result

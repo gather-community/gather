@@ -1,0 +1,3 @@
+<% content_for(:title, "Edit Member Type: #{member_type.name}") %>
+<% content_for(:top_buttons, member_type.action_links(:edit)) %>
+<%= render("form") %>

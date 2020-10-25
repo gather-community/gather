@@ -6,6 +6,9 @@ module People
 
     belongs_to :community, inverse_of: :member_types
 
+    scope :in_community, ->(c) { where(community: c) }
+    scope :by_name, -> { alpha_order(:name) }
+
     normalize_attributes :name
 
     validates :name, presence: true

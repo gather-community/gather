@@ -95,6 +95,8 @@ en:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'? This will remove them from any groups they are in."
       invite: "This will send an email to '%{name}' with instructions on how to sign in. Proceed?"
+    people/member_type:
+      destroy: "Are you sure you want to delete the member type '%{name}'? Any households with this type will have no member type. This action cannot be undone."
     people/memorial:
       destroy: "Are you sure you want to delete the memorial for '%{name}'? This action cannot be undone."
     people/memorial_message:
@@ -200,6 +202,9 @@ en:
         activate: "Type activated successfully."
         deactivate: "Type deactivated successfully."
         destroy: "Type deleted successfully."
+    people/member_type:
+      success:
+        destroy: "Member type deleted successfully."
     people/memorial:
       success:
         destroy: "Memorial deleted successfully."
@@ -367,7 +372,6 @@ en:
       models:
         user: "Click or Drag Photo Here"
         reservations/resource: "Click or Drag Photo Here"
-
 
   calendars:
     your_meals: "Meals You're Attending"

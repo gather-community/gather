@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
     resources :birthdays, only: :index
     resources :vehicles, only: :index
+    resources :member_types, path: "member-types"
     resource :settings, only: %i[edit update]
     resources :memorials do
       resources :messages, only: %i[edit create update destroy], controller: "memorial_messages"

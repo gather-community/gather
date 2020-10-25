@@ -102,7 +102,7 @@
 
   <div id="main-row">
     <% if nav_builder.sub_sub_items.present? %>
-      <nav id="subsubnav">
+      <nav id="subsubnav" class="hidden-print">
         <ul>
           <% nav_builder.sub_sub_items.each do |item| %>
             <%= content_tag(:li, class: item[:active] ? "active" : nil) do %>

@@ -44,7 +44,7 @@
         </tr>
       </table>
     </nav>
-    <% if nav_builder.context[:subsection] && (items = nav_builder.sub_items).size > 1 %>
+    <% if nav_builder.context[:sub_item] && (items = nav_builder.sub_items).size > 1 %>
       <nav class="subnav hidden-xs">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>
@@ -100,28 +100,42 @@
     </nav>
   </div>
 
-  <div id="content" class="<%= controller.controller_name.dasherize %>
-    <%= controller.controller_path.gsub("/", "--").dasherize %>
-    action-<%= controller.action_name.dasherize %> clearfix">
-    <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
+  <div id="main-row">
+    <% if nav_builder.sub_sub_items.present? %>
+      <nav id="subsubnav">
+        <ul>
+          <% nav_builder.sub_sub_items.each do |item| %>
+            <%= content_tag(:li, class: item[:active] ? "active" : nil) do %>
+              <%= nav_builder.link(item, icon: false) %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </nav>
+    <% end %>
 
-    <%= flash_messages %><%# These are from the controller via the `flash` array %>
-    <%= yield(:flashes) %><%# These are from the view via `content_for` %>
+    <div id="content" class="<%= controller.controller_name.dasherize %>
+      <%= controller.controller_path.gsub("/", "--").dasherize %>
+      action-<%= controller.action_name.dasherize %> clearfix">
+      <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
 
-    <div class="title-and-buttons">
-      <% title_icons = yield(:title_icons) %>
-      <h1 class="hidden-print"><%= @title %> <%= title_icons %></h1>
-      <h1 class="print-title visible-print">
-        <%= yield(:print_title).presence || @title %> <%= title_icons %>
-      </h1>
-      <div class="top-buttons hidden-print">
-        <%= lenses.html(position: "upper") if lenses&.visible? %>
-        <%= yield(:top_buttons) %>
+      <%= flash_messages %><%# These are from the controller via the `flash` array %>
+      <%= yield(:flashes) %><%# These are from the view via `content_for` %>
+
+      <div class="title-and-buttons">
+        <% title_icons = yield(:title_icons) %>
+        <h1 class="hidden-print"><%= @title %> <%= title_icons %></h1>
+        <h1 class="print-title visible-print">
+          <%= yield(:print_title).presence || @title %> <%= title_icons %>
+        </h1>
+        <div class="top-buttons hidden-print">
+          <%= lenses.html(position: "upper") if lenses&.visible? %>
+          <%= yield(:top_buttons) %>
+        </div>
       </div>
-    </div>
-    <%= lenses.html(position: "lower") if lenses&.visible? %>
+      <%= lenses.html(position: "lower") if lenses&.visible? %>
 
-    <%= yield %>
+      <%= yield %>
+    </div>
   </div>
 
   <%= render("layouts/footer") %>

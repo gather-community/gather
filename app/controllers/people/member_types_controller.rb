@@ -4,7 +4,7 @@ module People
   class MemberTypesController < ApplicationController
     include Destructible
 
-    before_action -> { nav_context(:people, :settings) }
+    before_action -> { nav_context(:people, :settings, :member_types) }
     decorates_assigned :member_type, :member_types
     helper_method :sample_member_type
 

@@ -38,6 +38,7 @@ en:
     sub_sub:
       people:
         settings:
+          general: "General Settings"
           member_types: "Member Types"
     personal:
       profile: "Profile"

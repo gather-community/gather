@@ -16,9 +16,13 @@
   }
 
   #content {
-    padding: 20px;
     line-height: $content-line-height;
     flex-grow: 1; // flex: 1 was not working on IE11 as of 1/19/18
+  }
+
+  #main-row {
+    display: flex;
+    padding: 20px;
   }
 }
 

@@ -2,7 +2,7 @@
 
 module People
   class SettingsController < ApplicationController
-    before_action -> { nav_context(:people, :settings) }
+    before_action -> { nav_context(:people, :settings, :general) }
 
     def edit
       @community = current_community

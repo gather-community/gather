@@ -9,7 +9,7 @@
     flex-direction: column;
   }
 
-  #content, .nav-wrapper, .subnav, #local-footer, #global-footer {
+  #main-row, .nav-wrapper, .subnav, #local-footer, #global-footer {
     max-width: $content-max-width;
     margin: 0 auto;
     width: 100%;
@@ -19,9 +19,25 @@
     line-height: $content-line-height;
     flex-grow: 1; // flex: 1 was not working on IE11 as of 1/19/18
   }
+}
 
+// Desktop
+@media screen and (min-width: $screen-md-min) {
   #main-row {
+    // display flex so that they subsubnav, if present, will be to the left instead of above
     display: flex;
+
+    // padding is on the whole main row. spacing between subsubnav and content is handled
+    // in the navs style
+    padding: 20px;
+  }
+}
+
+// Tablet and mobile
+@media screen and (max-width: $screen-sm-max) {
+  #content {
+    // padding on just the content b/c the subsubnav is closer than 20px to the upper navs
+    // on tablet and mobile
     padding: 20px;
   }
 }

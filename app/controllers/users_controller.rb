@@ -200,7 +200,8 @@ class UsersController < ApplicationController
   def prepare_user_lenses
     prepare_lenses({community: {required: true}},
                    :"people/life_stage",
-                   {"people/sort": {default: current_community.settings.people.default_directory_sort}},
+                   {"people/sort": {default:
+                    current_community.settings.people.default_directory_sort.to_sym}},
                    :"people/view",
                    :search)
   end
@@ -237,6 +238,7 @@ class UsersController < ApplicationController
         @user.validate
         skip_authorization
         set_blank_household
+        prepare_user_form
         render(@user.new_record? ? :new : :edit)
         return false
       end

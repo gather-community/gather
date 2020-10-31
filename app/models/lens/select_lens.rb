@@ -25,6 +25,14 @@ module Lens
       class_var_get_or_set(:possible_options, options)
     end
 
+    def initialize(options:, **args)
+      self.options = options
+      if options && options[:default] == select_prompt
+        options.delete(:default)
+      end
+      super(options: options, **args)
+    end
+
     def render
       select_tag
     end

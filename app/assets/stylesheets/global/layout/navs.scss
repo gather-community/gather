@@ -19,46 +19,76 @@ ul.nav {
   }
 }
 
+// Desktop only
+@media screen and (min-width: $screen-md-min) {
+  .logo {
+    a {
+      padding: 14px 10px 20px 20px;
+    }
+
+    img {
+      height: 54px;
+    }
+  }
+
+  .main-nav {
+    padding: 0 10px 10px 10px;
+  }
+}
+
+// Tablet only
+@media screen and (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+  .logo {
+    a {
+      padding: 10px 10px 0 20px;
+    }
+
+    img {
+      height: 37px;
+    }
+  }
+
+  .main-nav {
+    padding: 10px 20px;
+  }
+}
+
+// Tablet and desktop
 @media screen and (min-width: $screen-sm-min) {
-  nav.navbar {
+  .nav-wrapper {
+    display: flex;
+  }
+
+  .navbar {
     border: none;
     background-color: $theme-main;
     margin-bottom: 0;
     width: 100%;
 
-    table.nav-wrapper {
-      width: 100%;
+    .nav-2-3-4 {
+      flex-grow: 1;
+    }
 
-      tr {
-        border: none;
+    .nav-2-3 {
+      display: flex;
+    }
 
-        td {
-          padding: 0;
-        }
-      }
+    .nav-2, .nav-3 {
+      flex-grow: 1
     }
 
     .navbar-toggle .icon-bar {
       background-color: #fff;
     }
 
-    td.logo {
-      width: 1px;
-
+    .logo {
       a {
-        height: 85px;
-        padding: 10px 30px 0 20px;
         display: block;
-
-        img {
-          height: 54px;
-        }
       }
     }
 
-    td.personal-nav {
+    .personal-nav {
       text-align: right;
-      height: 1px;
 
       // Get rid of annoying flashing on menu close.
       .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
@@ -95,7 +125,7 @@ ul.nav {
       }
     }
 
-    td.main-nav {
+    .main-nav {
       vertical-align: top;
 
       ul.nav {
@@ -144,6 +174,7 @@ ul.nav {
   }
 }
 
+// Mobile only
 @media screen and (max-width: $screen-xs-max) {
   nav.navbar.navbar-default {
     border: none;

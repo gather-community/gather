@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_163607) do
+ActiveRecord::Schema.define(version: 2020_10_31_012614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -221,6 +221,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_163607) do
     t.datetime "deactivated_at"
     t.string "garage_nums"
     t.string "keyholders"
+    t.bigint "member_type_id"
     t.string "name", limit: 50, null: false
     t.integer "unit_num"
     t.string "unit_suffix"
@@ -229,6 +230,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_163607) do
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_households_on_community_id"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
+    t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
   end
 
@@ -911,6 +913,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_163607) do
   add_foreign_key "groups", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
+  add_foreign_key "households", "people_member_types", column: "member_type_id"
   add_foreign_key "meal_assignments", "clusters"
   add_foreign_key "meal_assignments", "meal_roles", column: "role_id"
   add_foreign_key "meal_assignments", "meals"

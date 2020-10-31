@@ -29,6 +29,12 @@
       </tr>
     <% end %>
   <% end %>
+  <% if household.member_type.present? %>
+    <tr>
+      <td>Member Type</td>
+      <td><%= household.member_type.name %></td>
+    </tr>
+  <% end %>
   <tr>
     <td>Emergency Contacts</td>
     <td><%= household.emergency_contacts_html %></td>

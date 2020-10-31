@@ -26,6 +26,7 @@ en:
       household:
         name: "Household Name"
         community_id: "Community"
+        member_type_id: "Member Type"
         unit_num_and_suffix: "Unit Number"
         vehicles: "Vehicles"
         keyholders: "Extra Unit Keyholders"

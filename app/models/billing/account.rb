@@ -6,6 +6,8 @@ module Billing
 
     acts_as_tenant :cluster
 
+    self.table_name = "accounts"
+
     belongs_to :household, inverse_of: :accounts
     belongs_to :community
     belongs_to :last_statement, class_name: "Billing::Statement"

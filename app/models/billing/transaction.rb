@@ -16,6 +16,8 @@ module Billing
 
     acts_as_tenant :cluster
 
+    self.table_name = "transactions"
+
     belongs_to :account
     belongs_to :statement
     belongs_to :statementable, polymorphic: true

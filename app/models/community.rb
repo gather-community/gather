@@ -17,6 +17,7 @@ class Community < ApplicationRecord
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
   has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
   has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
+  has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_many :reservation_protocols, class_name: "Reservations::Protocol",
                                    inverse_of: :community, dependent: :destroy
   has_many :reservation_shared_guidelines, class_name: "Reservations::SharedGuidelines",
@@ -39,6 +40,9 @@ class Community < ApplicationRecord
     {key: :default_landing_page, type: :enum, options: %w[meals directory reservations wiki],
      default: "directory", required: true},
     {key: :main_nav_customizations, type: :text},
+    {key: :people, type: :group, fields: [
+      {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true}
+    ]},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},
       {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},

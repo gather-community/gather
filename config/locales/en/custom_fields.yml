@@ -6,6 +6,9 @@ en:
           main_nav_customizations: "Top Menu Customizations"
           time_zone: "Time Zone"
           default_landing_page: "Default Landing Page"
+          people:
+            _self: "People"
+            default_directory_sort: "Default Directory Sort"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -95,6 +98,10 @@ en:
             directory: "Directory"
             reservations: "Reservations"
             wiki: "Wiki"
+          people:
+            default_directory_sort:
+              name: "By Name"
+              unit: "By Unit"
           billing:
             late_fee_policy:
               fee_type:

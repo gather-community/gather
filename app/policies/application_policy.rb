@@ -203,7 +203,7 @@ class ApplicationPolicy
     end
   end
 
-  # If `record` is a class, (e.g authorize Billing::Account, :index?), we have no way of knowing what
+  # If `record` is a class/symbol, (e.g authorize Billing::Account, :index?), we have no way of knowing what
   # community the action is being requested for. This can be supplied with an optional `context` hash params
   # to the constructor. This method determines whether that context must be supplied in order for
   # class-based authorizations to succeed. Should be overridden for Policies where this important.
@@ -212,7 +212,7 @@ class ApplicationPolicy
   end
 
   def not_specific_record?
-    record.is_a?(Class)
+    record.is_a?(Class) || record.is_a?(Symbol)
   end
 
   def admin_level(user)

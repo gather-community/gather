@@ -119,5 +119,6 @@ class HouseholdsController < ApplicationController
     sample_household = Household.new(community: current_community)
     @allowed_community_changes = policy(sample_household).allowed_community_changes.by_name
     @household.build_blank_associations
+    @member_types = People::MemberType.in_community(@household.community).by_name
   end
 end

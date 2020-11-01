@@ -1,0 +1,13 @@
+<%= gather_form_for(member_type) do |f| %>
+  <%= f.input :name %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.people--member-type-form'});
+  });
+<% end %>

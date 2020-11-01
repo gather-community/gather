@@ -1,0 +1,34 @@
+<% content_for(:title, "Member Types") %>
+<% content_for(:top_buttons) do %>
+  <% if policy(sample_member_type).create? %>
+    <%= link_to(icon_tag("plus") << " Create Member Type",
+      new_people_member_type_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<p class="subtitle">
+  <%= icon_tag("info-circle") %>
+  Member types are assigned to households and allow
+  customization of recurring billing charges.
+</p>
+
+<% if member_types.empty? %>
+  <div class="center-notice">
+    No member types found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% member_types.each do |member_type| %>
+        <tr>
+          <td><%= link_to(member_type.name, edit_people_member_type_path(member_type)) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

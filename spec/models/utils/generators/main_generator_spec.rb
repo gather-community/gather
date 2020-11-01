@@ -8,7 +8,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   # Classes that are allowed to have no sample data
   NO_SAMPLE_DATA_CLASSES = %w[Domain DomainOwnership Groups::Mailman::List
                               Meals::Message Meals::Import Groups::Mailman::User
-                              Wiki::PageVersion Wiki::Page
+                              People::MemberType Wiki::PageVersion Wiki::Page
                               Work::JobReminderDelivery].freeze
 
   before do

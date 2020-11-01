@@ -12,6 +12,9 @@ module Nav
     end
 
     def main_items
+      sample_household = Household.new(community: h.current_community)
+      sample_user = User.new(household: sample_household)
+      sample_group = Groups::Group.new(communities: [h.current_community])
       sample_period = Work::Period.new(community: h.current_community)
       sample_job = Work::Job.new(period: sample_period)
       sample_shift = Work::Shift.new(job: sample_job)
@@ -25,7 +28,13 @@ module Nav
       items << customizer.filter_item(
         name: :people,
         path: lens_path_if_present("users"),
-        permitted: h.policy(User).index?,
+        permitted: h.policy(sample_user).index?,
+        icon: "address-book"
+      )
+      items << customizer.filter_item(
+        name: :groups,
+        path: lens_path_if_present("groups/groups"),
+        permitted: h.policy(sample_group).index?,
         icon: "users"
       )
       items << customizer.filter_item(
@@ -55,49 +64,49 @@ module Nav
 
       # Add all the new menu items defined as customizations
       items.concat(customizer.extra_items).compact!
-      filter_and_set_active_main_items(items, type: :main, active: context[:section])
+      filter_and_set_active_items(items, type: :main, active: context[:main])
     end
 
-    def sub_items(main = nil)
-      main ||= context[:section]
+    def sub_items(main_item = nil)
+      main_item ||= context[:main]
       items =
-        case main
+        case main_item
         when :meals
           policy = h.policy(Meals::Meal.new(community: h.current_community))
           [
             {
               name: :meals,
-              parent: :meals,
+              parents: :meals,
               path: h.meals_path,
               permitted: policy.index?,
               icon: "cutlery"
             }, {
               name: :jobs,
-              parent: :meals,
+              parents: :meals,
               path: h.jobs_meals_path,
               permitted: policy.jobs?,
               icon: "briefcase"
             }, {
               name: :report,
-              parent: :meals,
+              parents: :meals,
               path: h.report_meals_path,
               permitted: policy.report?,
               icon: "line-chart"
             }, {
               name: :formulas,
-              parent: :meals,
+              parents: :meals,
               path: h.meals_formulas_path,
               permitted: h.policy(Meals::Formula.new(community: h.current_community)).index?,
               icon: "calculator"
             }, {
               name: :types,
-              parent: :meals,
+              parents: :meals,
               path: h.meals_types_path,
               permitted: h.policy(Meals::Type.new(community: h.current_community)).index?,
               icon: "cubes"
             }, {
               name: :roles,
-              parent: :meals,
+              parents: :meals,
               path: h.meals_roles_path,
               permitted: h.policy(Meals::Role.new(community: h.current_community)).index?,
               icon: "user-circle-o"
@@ -107,71 +116,82 @@ module Nav
           sample_household = Household.new(community: h.current_community)
           sample_user = User.new(household: sample_household)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: h.current_community))
-          sample_group = Groups::Group.new(communities: [h.current_community])
           sample_memorial = People::Memorial.new(user: sample_user)
           [
             {
               name: :directory,
-              parent: :people,
+              parents: :people,
               path: h.users_path,
               permitted: h.policy(sample_user).index?,
-              icon: "address-book"
-            }, {
-              name: :groups,
-              parent: :people,
-              path: h.groups_groups_path,
-              permitted: h.policy(sample_group).index?,
-              icon: "users"
+              icon: "address-card"
             }, {
               name: :households,
-              parent: :people,
+              parents: :people,
               path: h.households_path,
               permitted: h.policy(sample_household).index?,
               icon: "home"
             }, {
-              name: :roles,
-              parent: :people,
-              path: h.roles_path,
-              permitted: h.policy(sample_user).index?,
-              icon: "user-circle-o"
-            }, {
               name: :birthdays,
-              parent: :people,
+              parents: :people,
               path: h.people_birthdays_path,
               permitted: h.policy(sample_user).index?,
               icon: "birthday-cake"
             }, {
               name: :vehicles,
-              parent: :people,
+              parents: :people,
               path: h.people_vehicles_path,
               permitted: h.policy(sample_vehicle).index?,
               icon: "car"
             }, {
               name: :memorials,
-              parent: :people,
+              parents: :people,
               path: h.people_memorials_path,
               permitted: h.policy(sample_memorial).index?,
               icon: "pagelines"
+            }, {
+              name: :settings,
+              parents: :people,
+              path: h.edit_people_settings_path,
+              permitted: People::SettingsPolicy.new(h.current_user, h.current_community).edit?,
+              icon: "gear"
+            }
+          ]
+        when :groups
+          sample_user = User.new(household: sample_household)
+          sample_group = Groups::Group.new(communities: [h.current_community])
+          [
+            {
+              name: :groups,
+              parents: :groups,
+              path: h.groups_groups_path,
+              permitted: h.policy(sample_group).index?,
+              icon: "users"
+            }, {
+              name: :roles,
+              parents: :groups,
+              path: h.roles_path,
+              permitted: h.policy(sample_user).index?,
+              icon: "user-circle-o"
             }
           ]
         when :reservations
           [
             {
               name: :reservations,
-              parent: :reservations,
+              parents: :reservations,
               path: h.reservations_path,
               permitted: h.policy(Reservations::Reservation.new(resource:
                 Reservations::Resource.new(community: h.current_community))).index?,
               icon: "calendar"
             }, {
               name: :resources,
-              parent: :reservations,
+              parents: :reservations,
               path: h.reservations_resources_path,
               permitted: h.policy(Reservations::Resource.new(community: h.current_community)).index?,
               icon: "bed"
             }, {
               name: :protocols,
-              parent: :reservations,
+              parents: :reservations,
               path: h.reservations_protocols_path,
               permitted: h.policy(Reservations::Protocol.new(community: h.current_community)).index?,
               icon: "cogs"
@@ -184,25 +204,25 @@ module Nav
           [
             {
               name: :signups,
-              parent: :work,
+              parents: :work,
               path: h.work_shifts_path,
               permitted: h.policy(sample_shift).index_wrapper?,
               icon: "check"
             }, {
               name: :report,
-              parent: :work,
+              parents: :work,
               path: h.work_report_path,
               permitted: h.policy(sample_period).report_wrapper?,
               icon: "line-chart"
             }, {
               name: :jobs,
-              parent: :work,
+              parents: :work,
               path: h.work_jobs_path,
               permitted: h.policy(sample_job).index?,
               icon: "wrench"
             }, {
               name: :periods,
-              parent: :work,
+              parents: :work,
               path: h.work_periods_path,
               permitted: h.policy(sample_period).index?,
               icon: "folder-open"
@@ -211,7 +231,30 @@ module Nav
         else
           []
         end
-      filter_and_set_active_main_items(items, type: :sub, active: context[:subsection])
+      filter_and_set_active_items(items, type: :sub, active: context[:sub_item])
+    end
+
+    # This method has no arguments because it's only called once. It's not used to populate
+    # the hamburger menu.
+    def sub_sub_items
+      return @sub_sub_items if defined?(@sub_sub_items)
+      sample_member_type = People::MemberType.new(community: h.current_community)
+      items =
+        case [context[:main], context[:sub_item]]
+        when %i[people settings]
+          [{
+            name: :general,
+            parents: %i[people settings],
+            path: h.edit_people_settings_path,
+            permitted: People::SettingsPolicy.new(h.current_user, h.current_community).edit?,
+          },{
+            name: :member_types,
+            parents: %i[people settings],
+            path: h.people_member_types_path,
+            permitted: h.policy(sample_member_type).index?
+          }]
+        end
+      @sub_sub_items = filter_and_set_active_items(items, type: :sub_sub, active: context[:sub_sub_item])
     end
 
     def personal_items
@@ -247,17 +290,18 @@ module Nav
             method: :delete
           }
         ]
-      filter_and_set_active_main_items(items, type: :personal)
+      filter_and_set_active_items(items, type: :personal)
     end
 
     def link(item, tab: false, icon: true)
-      i18n_sub_key = item[:parent] ? "#{item[:parent]}." : ""
-      name = if item[:name].is_a?(Symbol)
-               t("nav_links.#{item[:type]}.#{i18n_sub_key}#{item[:i18n_key] || item[:name]}")
-             else
+      name = if item[:name].is_a?(String)
                item[:name]
+             else
+               i18n_key_parts = ["nav_links", item[:type]]
+               i18n_key_parts.concat(Array.wrap(item[:parents]))
+               i18n_key_parts << (item[:i18n_key] || item[:name])
+               name = t(i18n_key_parts.join("."))
              end
-
       params = {}
       params[:method] = item[:method]
       params[:role] = "tab" if tab
@@ -274,7 +318,8 @@ module Nav
 
     protected
 
-    def filter_and_set_active_main_items(items, type:, active: nil)
+    def filter_and_set_active_items(items, type:, active: nil)
+      return [] if items.blank?
       items.select! { |i| i[:permitted] }
       items.each do |i|
         i[:type] = type

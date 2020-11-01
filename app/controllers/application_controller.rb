@@ -25,8 +25,8 @@ class ApplicationController < ActionController::Base
     @nav_builder ||= Nav::Builder.new
   end
 
-  def nav_context(section, subsection = nil)
-    nav_builder.context = {section: section, subsection: subsection}
+  def nav_context(main, sub_item = nil, sub_sub_item = nil)
+    nav_builder.context = {main: main, sub_item: sub_item, sub_sub_item: sub_sub_item}
   end
 
   def app_version

@@ -49,6 +49,10 @@ class HouseholdPolicy < ApplicationPolicy
     active_cluster_admin?
   end
 
+  def change_member_type?
+    active_admin?
+  end
+
   # TODO: This should probably move into the CommunityPolicy as a scope method similar to
   # administerable above.
   def allowed_community_changes
@@ -86,7 +90,8 @@ class HouseholdPolicy < ApplicationPolicy
   def permitted_attributes
     permitted = %i[name garage_nums keyholders]
     permitted.concat(%i[unit_num_and_suffix old_id old_name]) if administer?
-    permitted << :community_id if administer?
+    permitted << :community_id if change_community?
+    permitted << :member_type_id if change_member_type?
     permitted << {vehicles_attributes: %i[id make model color plate _destroy]}
     permitted << {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
                                                     email location _destroy]}

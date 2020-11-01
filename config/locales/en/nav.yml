@@ -2,6 +2,7 @@ en:
   nav_links:
     main:
       people: "People"
+      groups: "Groups"
       meals: "Meals"
       reservations: "Reservations"
       wiki: "Wiki"
@@ -15,14 +16,16 @@ en:
         formulas: "Formulas"
         roles: "Roles"
         types: "Types"
-      people:
-        directory: "Directory"
+      groups:
         groups: "Groups"
-        households: "Households"
         roles: "Roles"
+      people:
+        households: "Households"
+        directory: "Directory"
         birthdays: "Birthdays"
         vehicles: "Vehicles"
         memorials: "Memorials"
+        settings: "Settings"
       reservations:
         reservations: "Reservations"
         resources: "Resources"
@@ -32,6 +35,11 @@ en:
         report: "Report"
         jobs: "Jobs"
         periods: "Periods"
+    sub_sub:
+      people:
+        settings:
+          general: "General Settings"
+          member_types: "Member Types"
     personal:
       profile: "Profile"
       accounts: "Accounts"

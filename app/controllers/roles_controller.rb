@@ -2,7 +2,7 @@
 
 # Controller for roles actions. Currently just for displaying who's in what role.
 class RolesController < ApplicationController
-  before_action -> { nav_context(:people, :roles) }
+  before_action -> { nav_context(:groups, :roles) }
 
   def index
     authorize(User)

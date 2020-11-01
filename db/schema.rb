@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_14_141423) do
+ActiveRecord::Schema.define(version: 2020_10_31_012614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -221,6 +221,7 @@ ActiveRecord::Schema.define(version: 2020_10_14_141423) do
     t.datetime "deactivated_at"
     t.string "garage_nums"
     t.string "keyholders"
+    t.bigint "member_type_id"
     t.string "name", limit: 50, null: false
     t.integer "unit_num"
     t.string "unit_suffix"
@@ -229,6 +230,7 @@ ActiveRecord::Schema.define(version: 2020_10_14_141423) do
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_households_on_community_id"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
+    t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
   end
 
@@ -458,6 +460,17 @@ ActiveRecord::Schema.define(version: 2020_10_14_141423) do
     t.index ["child_id"], name: "index_people_guardianships_on_child_id"
     t.index ["cluster_id"], name: "index_people_guardianships_on_cluster_id"
     t.index ["guardian_id"], name: "index_people_guardianships_on_guardian_id"
+  end
+
+  create_table "people_member_types", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "name", limit: 64, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_people_member_types_on_cluster_id"
+    t.index ["community_id"], name: "index_people_member_types_on_community_id"
+    t.index ["name"], name: "index_people_member_types_on_name", unique: true
   end
 
   create_table "people_memorial_messages", force: :cascade do |t|
@@ -900,6 +913,7 @@ ActiveRecord::Schema.define(version: 2020_10_14_141423) do
   add_foreign_key "groups", "clusters"
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
+  add_foreign_key "households", "people_member_types", column: "member_type_id"
   add_foreign_key "meal_assignments", "clusters"
   add_foreign_key "meal_assignments", "meal_roles", column: "role_id"
   add_foreign_key "meal_assignments", "meals"
@@ -942,6 +956,8 @@ ActiveRecord::Schema.define(version: 2020_10_14_141423) do
   add_foreign_key "people_guardianships", "clusters"
   add_foreign_key "people_guardianships", "users", column: "child_id"
   add_foreign_key "people_guardianships", "users", column: "guardian_id"
+  add_foreign_key "people_member_types", "clusters"
+  add_foreign_key "people_member_types", "communities"
   add_foreign_key "people_memorial_messages", "people_memorials", column: "memorial_id"
   add_foreign_key "people_memorial_messages", "users", column: "author_id"
   add_foreign_key "people_memorials", "clusters"

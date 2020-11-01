@@ -11,6 +11,10 @@
 <% end %>
 <%= f.input :unit_num_and_suffix, as: :string, input_html: {class: "numeric"},
                                   disabled: !policy(f.object).administer? %>
+
+<% if @member_types.any? && policy(f.object).change_member_type? %>
+  <%= f.input :member_type_id, collection: @member_types, include_blank: "None" %>
+<% end %>
 <%= f.input :garage_nums %>
 <%= f.input :keyholders %>
 <%= nested_field_set(f, :vehicles) %>

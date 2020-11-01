@@ -7,8 +7,11 @@ table.index {
   width: 100%;
 
   &.part-width {
-    width: auto;
-    min-width: 500px;
+    // Tablet and larger
+    @media screen and (min-width: $screen-sm-min) {
+      width: auto;
+      min-width: 500px;
+    }
   }
 
   tr.inactive,

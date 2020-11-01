@@ -18,6 +18,7 @@ describe "nav menu" do
 
     scenario "no customizations" do
       main_nav_test(match: [["People", "/users"],
+                            ["Groups", "/groups"],
                             ["Meals", "/meals"],
                             ["Work", "/work/signups"],
                             ["Reservations", "/reservations"],
@@ -29,6 +30,7 @@ describe "nav menu" do
 
     scenario "change one link, disable one, add another" do
       main_nav_test(match: [["People", "/users"],
+                            ["Groups", "/groups"],
                             ["Meals", "/meals"],
                             ["Work", "/work/signups"],
                             ["Wiki", "http://wikipedia.org"],
@@ -42,6 +44,6 @@ describe "nav menu" do
     # Get all of the links in the main nav menu
     # map them into an array of arrays
     # and compare them with what they are supposed to be
-    expect(all("td.main-nav ul.nav li a").map { |e| [e.text, e["href"]] }).to eql(match)
+    expect(all(".main-nav ul.nav li a").map { |e| [e.text, e["href"]] }).to eql(match)
   end
 end

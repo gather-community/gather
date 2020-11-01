@@ -11,6 +11,7 @@ class Household < ApplicationRecord
   attr_writer :unit_num_and_suffix
 
   belongs_to :community
+  belongs_to :member_type, class_name: "People::MemberType", inverse_of: :households
   has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
            inverse_of: :household, class_name: "Billing::Account"
   has_many :signups

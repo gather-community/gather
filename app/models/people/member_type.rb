@@ -6,6 +6,8 @@ module People
 
     belongs_to :community, inverse_of: :member_types
     has_many :households, inverse_of: :member_type, dependent: :nullify
+    has_many :billing_template_member_types, class_name: "Billing::TemplateMemberType",
+                                             inverse_of: :member_type, dependent: :destroy
 
     scope :in_community, ->(c) { where(community: c) }
     scope :by_name, -> { alpha_order(:name) }

@@ -57,6 +57,17 @@ ActiveRecord::Schema.define(version: 2020_12_14_210042) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "billing_template_member_types", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "member_type_id", null: false
+    t.bigint "template_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_billing_template_member_types_on_cluster_id"
+    t.index ["member_type_id"], name: "index_billing_template_member_types_on_member_type_id"
+    t.index ["template_id"], name: "index_billing_template_member_types_on_template_id"
+  end
+
   create_table "billing_templates", force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.bigint "cluster_id", null: false
@@ -902,6 +913,9 @@ ActiveRecord::Schema.define(version: 2020_12_14_210042) do
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "billing_template_member_types", "billing_templates", column: "template_id"
+  add_foreign_key "billing_template_member_types", "clusters"
+  add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
   add_foreign_key "communities", "clusters"

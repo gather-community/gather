@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe Billing::Template do
   it "has a valid factory" do
-    create(:billing_template)
+    member_type = create(:member_type)
+    create(:billing_template, member_types: [member_type])
   end
 end

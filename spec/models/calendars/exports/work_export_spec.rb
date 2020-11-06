@@ -44,6 +44,9 @@ describe "work exports" do
   let(:period) do
     create(:work_period, starts_on: period_start, ends_on: period_end, phase: "published")
   end
+  let(:period2) do
+    create(:work_period, starts_on: period_start, ends_on: period_end, phase: "draft")
+  end
   let!(:job1) do
     create(:work_job, title: "Assistant Cook", period: period, time_type: "date_time",
                       description: "Help cook the things", hours: 2, meal_role_id: asst_cook_role.id,
@@ -59,8 +62,8 @@ describe "work exports" do
                       description: "Do something periodically",
                       shift_count: 1)
   end
-  let!(:unpublished_job) do
-    create(:work_job, title: "Unpublished", period: create(:work_period, phase: "open"),
+  let!(:draft_job) do
+    create(:work_job, title: "Unpublished", period: period2,
                       time_type: "full_period", description: "Do something periodically",
                       shift_count: 1)
   end
@@ -76,7 +79,7 @@ describe "work exports" do
     job2.shifts[0].assignments.create!(user: user)
     job2.shifts[1].assignments.create!(user: create(:user)) # Decoy
     job3.shifts[0].assignments.create!(user: user)
-    unpublished_job.shifts[0].assignments.create!(user: user)
+    draft_job.shifts[0].assignments.create!(user: user) # Decoy
   end
 
   context "your jobs" do

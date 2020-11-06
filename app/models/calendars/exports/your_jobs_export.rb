@@ -77,7 +77,7 @@ module Calendars
       def work_assignments
         Work::ShiftPolicy::Scope.new(user, Work::Shift).resolve
           .includes(:job, :assignments, meal: :resources)
-          .published
+          .non_draft
           .with_max_age(MAX_EVENT_AGE)
           .by_date
           .with_user(user)

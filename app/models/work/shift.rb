@@ -32,6 +32,7 @@ module Work
     scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where(work_periods: {community_id: c.id}) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
+    scope :non_draft, -> { joins(job: :period).where.not(work_periods: {phase: "draft"}) }
     scope :published, -> { joins(job: :period).where(work_periods: {phase: "published"}) }
     scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }

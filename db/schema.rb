@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_31_012614) do
+ActiveRecord::Schema.define(version: 2020_11_16_145212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_012614) do
   create_table "clusters", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", limit: 20, null: false
-    t.string "sso_secret"
+    t.string "sso_secret", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_clusters_on_name"
   end
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_012614) do
     t.string "name", limit: 20, null: false
     t.jsonb "settings"
     t.string "slug", null: false
-    t.string "sso_secret"
+    t.string "sso_secret", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_communities_on_cluster_id"
     t.index ["name"], name: "index_communities_on_name", unique: true

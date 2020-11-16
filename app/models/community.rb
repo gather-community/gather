@@ -34,6 +34,7 @@ class Community < ApplicationRecord
   disallow_semicolons :name
 
   before_create :generate_calendar_token
+  before_create :generate_sso_secret
 
   custom_fields :settings, spec: [
     {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
@@ -113,5 +114,9 @@ class Community < ApplicationRecord
 
   def generate_calendar_token
     self.calendar_token = UniqueTokenGenerator.generate(self.class, :calendar_token)
+  end
+
+  def generate_sso_secret
+    self.sso_secret = UniqueTokenGenerator.generate(self.class, :sso_secret, type: :hex32)
   end
 end

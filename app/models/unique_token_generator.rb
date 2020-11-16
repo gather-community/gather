@@ -8,9 +8,12 @@ class UniqueTokenGenerator
     instance.generate(*args)
   end
 
-  def generate(klass, attrib)
+  def generate(klass, attrib, type: :devise)
     loop do
-      token = Devise.friendly_token
+      token = case type
+              when :devise then Devise.friendly_token
+              when :hex32 then SecureRandom.hex(32)
+              end
       break token unless klass.find_by(attrib => token)
     end
   end

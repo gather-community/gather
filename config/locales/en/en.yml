@@ -386,6 +386,7 @@ en:
 
   transaction_codes:
     meal: "Meal"
+    dues: "Membership Dues"
     payment: "Payment"
     reimb: "Reimbursement"
     othcrd: "Other Credit"

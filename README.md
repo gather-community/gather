@@ -41,7 +41,7 @@ Follow these steps to setup a development environment for Gather.
         pip3 install mailman
         mailman start
         curl -v http://restadmin:restpass@localhost:8001/3.1/lists
-        pip install postorius hyperkitty whoosh
+        pip3 install postorius hyperkitty whoosh
         git clone https://github.com/gather-community/mailman-suite.git
         cd mailman-suite/mailman-suite_project/
         git clone https://github.com/gather-community/discoursessoclient.git

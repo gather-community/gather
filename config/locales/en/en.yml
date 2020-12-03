@@ -392,6 +392,7 @@ en:
     othcrd: "Other Credit"
     othchg: "Other Charge"
     late: "Late Fee"
+    initbal: "Opening Balance"
 
   accounts:
     index:

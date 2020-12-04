@@ -3,6 +3,55 @@
 require "rails_helper"
 
 describe User do
+  describe "search" do
+    let!(:users) do
+      [
+        create(:user, first_name: "Gordon", last_name: "Druck",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99B")),
+        create(:user, first_name: "Soox", last_name: "Druck",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99")),
+        create(:user, first_name: "Ralla", last_name: "Bington",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
+        create(:user, first_name: "Pooda", last_name: "Bington",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
+        create(:user, first_name: "Lordum", last_name: "Zobstra",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "")),
+        create(:user, first_name: "Nuru", last_name: "Rog",
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "X"))
+      ]
+    end
+
+    it "matches partial first_name" do
+      expect(User.matching("don")).to contain_exactly(users[0])
+    end
+
+    it "matches full first_name" do
+      expect(User.matching("gordon")).to contain_exactly(users[0])
+    end
+
+    it "matches partial last_name" do
+      expect(User.matching("Dru")).to contain_exactly(users[0], users[1])
+    end
+
+    it "matches full last_name" do
+      expect(User.matching("Druck")).to contain_exactly(users[0], users[1])
+    end
+
+    it "matches full name" do
+      expect(User.matching("Gordon Druck")).to contain_exactly(users[0])
+    end
+
+    it "matches exact unit number with suffix with or without -, or exact unit number" do
+      expect(User.matching("10")).to be_empty
+      expect(User.matching("99B")).to contain_exactly(users[0])
+      expect(User.matching("99-B")).to contain_exactly(users[0])
+      expect(User.matching("99")).to contain_exactly(users[0], users[1], users[2], users[3])
+      expect(User.matching("99X")).to contain_exactly(users[2], users[3])
+      expect(User.matching("99-X")).to contain_exactly(users[2], users[3])
+      expect(User.matching("x")).to contain_exactly(users[1], users[5])
+    end
+  end
+
   describe "validation" do
     describe "phone" do
       let(:user) { build(:user, mobile_phone: phone) }

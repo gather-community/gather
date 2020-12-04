@@ -83,7 +83,22 @@ class User < ApplicationRecord
   scope :active_or_assigned_to, lambda { |meal|
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
-  scope :matching, ->(q) { where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%") }
+  scope :matching, lambda { |q|
+    joins(:household)
+      .where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%")
+      .or( # Exact unit num without suffix
+        joins(:household)
+          .where("unit_num::varchar ILIKE ?", q)
+      )
+      .or( # Exact unit num and suffix
+        joins(:household)
+          .where("(COALESCE(unit_num::varchar, '') || COALESCE(unit_suffix, '')) ILIKE ?", q)
+      )
+      .or( # Exact unit num and suffix with hyphen
+        joins(:household)
+          .where("(COALESCE(unit_num::varchar, '') || '-' || COALESCE(unit_suffix, '')) ILIKE ?", q)
+      )
+  }
   scope :with_full_name, ->(n) { where("LOWER(first_name || ' ' || last_name) = ?", n.downcase) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }

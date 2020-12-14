@@ -80,10 +80,6 @@ module Billing
       value
     end
 
-    def abs_amount
-      value&.abs
-    end
-
     def type
       TYPES_BY_CODE[code]
     end

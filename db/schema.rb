@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_145212) do
+ActiveRecord::Schema.define(version: 2020_12_14_210042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -469,8 +469,8 @@ ActiveRecord::Schema.define(version: 2020_11_16_145212) do
     t.string "name", limit: 64, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_people_member_types_on_cluster_id"
+    t.index ["community_id", "name"], name: "index_people_member_types_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_people_member_types_on_community_id"
-    t.index ["name"], name: "index_people_member_types_on_name", unique: true
   end
 
   create_table "people_memorial_messages", force: :cascade do |t|

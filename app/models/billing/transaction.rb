@@ -10,6 +10,7 @@ module Billing
       OpenStruct.new(code: "othchg", charge?: true, manual?: true),
       OpenStruct.new(code: "payment", credit?: true, manual?: true),
       OpenStruct.new(code: "reimb", credit?: true, manual?: true),
+      OpenStruct.new(code: "initcrd", credit?: true, manual?: false),
       OpenStruct.new(code: "othcrd", credit?: true, manual?: true)
     ].freeze
     TYPES_BY_CODE = TYPES.index_by(&:code)

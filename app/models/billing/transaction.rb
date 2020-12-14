@@ -54,7 +54,7 @@ module Billing
     validates :incurred_on, presence: true
     validates :code, presence: true
     validates :description, presence: true
-    validates :value, presence: true
+    validates :value, presence: true, numericality: {greater_than: 0}
     validate :quantity_and_unit_price
 
     def self.date_range(account: nil, community: nil)

@@ -31,8 +31,8 @@ module Billing
     scope :recorded_between,
           ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
-    scope :credit, -> { where("amount < 0") }
-    scope :charge, -> { where("amount > 0") }
+    scope :credit, -> { where("value < 0") }
+    scope :charge, -> { where("value > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
 
@@ -40,10 +40,10 @@ module Billing
 
     before_validation do
       # Respect qty and unit price
-      self.amount = quantity * unit_price if quantity.present? && unit_price.present?
+      self.value = quantity * unit_price if quantity.present? && unit_price.present?
       # Ensure correct sign for item type
-      if amount.present? && code.present?
-        self.amount = (type.credit? ? -1 : 1) * amount.to_f.abs
+      if value.present? && code.present?
+        self.value = (type.credit? ? -1 : 1) * value.to_f.abs
       end
     end
 
@@ -58,8 +58,7 @@ module Billing
     validates :incurred_on, presence: true
     validates :code, presence: true
     validates :description, presence: true
-    validates :amount, presence: true
-    validates :abs_amount, numericality: {minimum: 0}, if: ->(a) { a.present? }
+    validates :value, presence: true
     validate :nonzero
     validate :quantity_and_unit_price
 
@@ -75,19 +74,24 @@ module Billing
     end
 
     def charge?
-      amount.positive?
+      value.positive?
     end
 
     def credit?
-      amount.negative?
+      value.negative?
     end
 
     def chg_crd
       charge? ? "charge" : "credit"
     end
 
+    # Amount and value are synonymous for now
+    def amount
+      value
+    end
+
     def abs_amount
-      amount.try(:abs)
+      value&.abs
     end
 
     def type
@@ -101,7 +105,7 @@ module Billing
     private
 
     def nonzero
-      errors.add(:amount, "can't be zero") if amount.present? && abs_amount < 0.01
+      errors.add(:value, "can't be zero") if value.present? && abs_value < 0.01
     end
 
     def quantity_and_unit_price

@@ -706,7 +706,6 @@ ActiveRecord::Schema.define(version: 2020_12_14_210042) do
 
   create_table "transactions", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
-    t.decimal "amount", precision: 10, scale: 2, null: false
     t.integer "cluster_id", null: false
     t.string "code", limit: 16, null: false
     t.datetime "created_at", null: false
@@ -718,6 +717,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_210042) do
     t.string "statementable_type", limit: 32
     t.decimal "unit_price", precision: 10, scale: 2
     t.datetime "updated_at", null: false
+    t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["cluster_id"], name: "index_transactions_on_cluster_id"
     t.index ["code"], name: "index_transactions_on_code"

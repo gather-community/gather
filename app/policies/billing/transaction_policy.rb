@@ -17,7 +17,7 @@ module Billing
     end
 
     def permitted_attributes
-      %i[incurred_on code description amount]
+      %i[incurred_on code description value]
     end
 
     def exportable_attributes

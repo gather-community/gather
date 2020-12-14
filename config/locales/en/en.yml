@@ -304,7 +304,7 @@ en:
         household_name: "Household"
         quantity: "Quantity"
         unit_price: "Unit Price"
-        amount: "Amount"
+        value: "Amount"
         created_at: "Date Recorded"
         account_id: "Account ID"
         statement_id: "Statement ID"

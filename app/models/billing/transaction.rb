@@ -38,14 +38,11 @@ module Billing
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
 
     delegate :household, :household_id, :community_id, :community, to: :account
+    delegate :positive?, to: :value
 
     before_validation do
       # Respect qty and unit price
       self.value = quantity * unit_price if quantity.present? && unit_price.present?
-      # Ensure correct sign for item type
-      if value.present? && code.present?
-        self.value = (type.credit? ? -1 : 1) * value.to_f.abs
-      end
     end
 
     after_create do
@@ -74,16 +71,8 @@ module Billing
       ]
     end
 
-    def charge?
-      value.positive?
-    end
-
-    def credit?
-      value.negative?
-    end
-
     def chg_crd
-      charge? ? "charge" : "credit"
+      positive? ? "charge" : "credit"
     end
 
     # Amount and value are synonymous for now

@@ -63,10 +63,10 @@ module Billing
     end
 
     def transaction_added!(transaction)
-      if transaction.charge?
-        self.total_new_charges += transaction.amount
+      if transaction.positive?
+        self.total_new_charges += transaction.value
       else
-        self.total_new_credits += transaction.abs_amount
+        self.total_new_credits += transaction.value
       end
       save!
     end

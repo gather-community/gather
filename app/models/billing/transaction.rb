@@ -32,8 +32,6 @@ module Billing
     scope :recorded_between,
           ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
-    scope :credit, -> { where("value < 0") }
-    scope :charge, -> { where("value > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
 

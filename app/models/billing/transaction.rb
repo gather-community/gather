@@ -4,14 +4,14 @@ module Billing
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     TYPES = [
-      OpenStruct.new(code: "meal", charge?: true, manual?: false),
-      OpenStruct.new(code: "late", charge?: true, manual?: false),
-      OpenStruct.new(code: "dues", charge?: true, manual?: true),
-      OpenStruct.new(code: "othchg", charge?: true, manual?: true),
-      OpenStruct.new(code: "payment", credit?: true, manual?: true),
-      OpenStruct.new(code: "reimb", credit?: true, manual?: true),
-      OpenStruct.new(code: "initcrd", credit?: true, manual?: false),
-      OpenStruct.new(code: "othcrd", credit?: true, manual?: true)
+      OpenStruct.new(code: "meal", effect: :increase, manual?: false),
+      OpenStruct.new(code: "late", effect: :increase, manual?: false),
+      OpenStruct.new(code: "dues", effect: :increase, manual?: true),
+      OpenStruct.new(code: "othchg", effect: :increase, manual?: true),
+      OpenStruct.new(code: "payment", effect: :decrease, manual?: true),
+      OpenStruct.new(code: "reimb", effect: :decrease, manual?: true),
+      OpenStruct.new(code: "initcrd", effect: :decrease, manual?: false),
+      OpenStruct.new(code: "othcrd", effect: :decrease, manual?: true)
     ].freeze
     TYPES_BY_CODE = TYPES.index_by(&:code)
     MANUALLY_ADDABLE_TYPES = TYPES.select(&:manual?)
@@ -36,7 +36,7 @@ module Billing
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
 
     delegate :household, :household_id, :community_id, :community, to: :account
-    delegate :positive?, to: :value
+    delegate :effect, to: :type
 
     before_validation do
       # Respect qty and unit price
@@ -55,7 +55,6 @@ module Billing
     validates :code, presence: true
     validates :description, presence: true
     validates :value, presence: true
-    validate :nonzero
     validate :quantity_and_unit_price
 
     def self.date_range(account: nil, community: nil)
@@ -69,13 +68,22 @@ module Billing
       ]
     end
 
-    def chg_crd
-      positive? ? "charge" : "credit"
+    def increaser?
+      effect == :increase
     end
 
-    # Amount and value are synonymous for now
+    # Used only for CSV
+    def chg_crd
+      increaser? ? "charge" : "credit"
+    end
+
+    # Amount is a signed value reflecting the effect on the balance of the associated account.
+    # We don't store the sign in the database because it's confusing to users to have to enter a
+    # negative value for a payment. Also, in a double entry accounting system it's not quite that simple.
+    # Here, we are imposing the idea that all transactions have positive values and we determine
+    # the effect on the account by consulting the transaction type.
     def amount
-      value
+      increaser? ? value : -value
     end
 
     def type
@@ -87,10 +95,6 @@ module Billing
     end
 
     private
-
-    def nonzero
-      errors.add(:value, "can't be zero") if value.present? && abs_value < 0.01
-    end
 
     def quantity_and_unit_price
       if quantity.present? && unit_price.blank?

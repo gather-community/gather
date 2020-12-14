@@ -7,13 +7,5 @@ FactoryBot.define do
     description { "Some stuff" }
     value { "9.99" }
     account
-
-    factory :credit do
-      code { "payment" }
-      value { "-9.99" }
-    end
-
-    factory :charge do
-    end
   end
 end

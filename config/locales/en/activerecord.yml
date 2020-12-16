@@ -86,6 +86,8 @@ en:
         incurred_on: "Date Incurred"
         household_name: "Household Name"
         code: "Type"
+        value: "Amount"
+        description: "Description"
       billing/account:
         household_id: "Household"
         community_id: "Community Account"

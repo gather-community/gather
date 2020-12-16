@@ -26,7 +26,7 @@ module Billing
           incurred_on: Time.zone.today,
           code: "late",
           description: "Late payment fee",
-          amount: amount_for(account.balance_due)
+          value: amount_for(account.balance_due)
         )
       end
     end

@@ -26,9 +26,9 @@ module Utils
           next if acct.balance_due <= 0
           Timecop.freeze(rand(20).days) do
             acct.transactions.create!(
-              amount: acct.balance_due,
+              value: acct.balance_due,
               code: "payment",
-              incurred_on: Date.today,
+              incurred_on: Time.zone.today,
               description: "Check ##{rand(10_000)}",
               created_at: community.created_at,
               updated_at: community.updated_at

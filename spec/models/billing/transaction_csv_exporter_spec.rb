@@ -24,7 +24,7 @@ describe Billing::TransactionCsvExporter do
       let!(:transactions) do
         Timecop.freeze("2018-09-10 12:00") do
           [
-            create(:transaction, account: account, incurred_on: "2018-09-05", value: -1.23, code: "othcrd",
+            create(:transaction, account: account, incurred_on: "2018-09-05", value: 1.23, code: "othcrd",
                                  description: "Mistake correction"),
             create(:transaction, account: account, incurred_on: "2018-09-01", code: "meal",
                                  quantity: 3, unit_price: 1.50, statementable: meal,

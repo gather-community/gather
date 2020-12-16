@@ -60,7 +60,7 @@ module Meals
         code: "reimb",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: Grocery Reimbursement",
-        amount: -cost.total_cost,
+        value: cost.total_cost,
         statementable: meal
       )
     end

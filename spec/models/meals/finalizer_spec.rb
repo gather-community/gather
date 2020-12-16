@@ -51,7 +51,7 @@ describe Meals::Finalizer do
       code: "reimb",
       description: "#{meal.title}: Grocery Reimbursement",
       incurred_on: meal.served_at.to_date,
-      amount: -25.34,
+      value: 25.34,
       statementable: meal
     )
   end

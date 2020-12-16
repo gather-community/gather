@@ -31,14 +31,14 @@ describe Billing::AccountCsvExporter do
       let!(:accounts) { households.map { |h| h.accounts[0] } }
 
       before do
-        create(:transaction, account: accounts[0], amount: 1.23, code: "othchg")
-        create(:transaction, account: accounts[1], amount: 3.56, code: "othcrd")
+        create(:transaction, account: accounts[0], value: 1.23, code: "othchg")
+        create(:transaction, account: accounts[1], value: 3.56, code: "othcrd")
         Timecop.freeze("2018-10-23 12:00") do
           Billing::Statement.new(account: accounts[0], prev_balance: 0).populate!
           Billing::Statement.new(account: accounts[1], prev_balance: 0).populate!
         end
-        create(:transaction, account: accounts[0], amount: 6.78, code: "othcrd")
-        create(:transaction, account: accounts[1], amount: 8.90, code: "othchg")
+        create(:transaction, account: accounts[0], value: 6.78, code: "othcrd")
+        create(:transaction, account: accounts[1], value: 8.90, code: "othchg")
         accounts[1].update!(credit_limit: 50)
         accounts[0].recalculate!
         accounts[1].recalculate!

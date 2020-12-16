@@ -180,6 +180,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :billing do
+    resources :templates, except: [:show]
+  end
+
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
       get :all

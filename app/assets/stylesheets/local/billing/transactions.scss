@@ -11,12 +11,14 @@
     }
   }
 
-  .transaction_value input {
-    width: 200px;
-  }
-
   table.index.transactions tr :nth-child(3) {
     // In the txn confirm table, Ensure the description column is biggest else it looks weird.
     width: 50%;
+  }
+}
+
+.transaction-core-fields {
+  input[id$=_value] {
+    width: 200px;
   }
 }

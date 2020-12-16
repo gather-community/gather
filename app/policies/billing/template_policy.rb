@@ -39,7 +39,7 @@ module Billing
     end
 
     def permitted_attributes
-      %i[description code] << {member_type_ids: []}
+      %i[description code value] << {member_type_ids: []}
     end
   end
 end

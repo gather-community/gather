@@ -1,0 +1,19 @@
+<div class="type">
+  <%# If this part has a newly created type (and is being re-rendered on validation), we
+      don't need to show the select2. %>
+  <% unless f.object.type&.new_record? %>
+    <%= f.input(:type_id, as: :assoc_select2, required: true, tags: true, src: "/meals/types") %>
+  <% end %>
+
+  <%# We always want to render this subform even if the type starts out as nil.
+      This is why we do the ||. %>
+  <%= f.simple_fields_for(:type, f.object.type || Meals::Type.new) do |type_form| %>
+    <%# Hide the name field unless the part has a newly created type. %>
+    <%# It may get shown later if the user types in a new type name. %>
+    <%= type_form.input(:name, label: t("activerecord.attributes.meals/template_part.type_id"), required: true,
+                               wrapper_html: {style: f.object.type&.new_record? ? nil : "display: none"}) %>
+  <% end %>
+</div>
+<%= f.input(:share_formatted, as: :string) %>
+<%= f.input(:portion_size, collection: f.object.portion_size_select_options,
+                           include_blank: false) %>

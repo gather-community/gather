@@ -1,0 +1,5 @@
+<div class="template-part-hints">
+  <% Meals::Template::MEAL_CALC_TYPES.each do |t| %>
+    <%= content_tag(:div, simple_format(t("meals/templates.hints.meal_type.#{t}")), class: "hint #{t}") %>
+  <% end %>
+</div>

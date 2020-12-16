@@ -1,14 +1,8 @@
 <%= gather_form_for([account, transaction], url: account_transactions_path(account)) do |f| %>
   <%= hidden_field_tag :account_id, account.id %>
-
-  <%= f.input :household_name do %>
-    <%= transaction.household_name %>
-  <% end %>
-
+  <%= f.input(:household_name) { transaction.household_name } %>
   <%= f.input :incurred_on, as: :date_picker %>
-  <%= f.input :code, as: :radio_buttons, collection: transaction_code_options %>
-  <%= f.input :description %>
-  <%= f.input :value, input_html: {value: number_with_precision(f.object.value, precision: 2) } %>
+  <%= render("core_fields") %>
 
   <%= form_actions do %>
     <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>

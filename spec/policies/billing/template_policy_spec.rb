@@ -28,7 +28,7 @@ describe Billing::TemplatePolicy do
     subject { Billing::TemplatePolicy.new(actor, Billing::Template.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[description code] << {member_type_ids: []})
+      expect(subject).to match_array(%i[description code value] << {member_type_ids: []})
     end
   end
 end

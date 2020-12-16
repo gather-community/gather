@@ -1,0 +1,18 @@
+<%= gather_form_for(template) do |f| %>
+  <%= f.input :member_type_ids, collection: member_type_options, required: true,
+                                input_html: {multiple: "multiple"} %>
+  <%= render("transactions/core_fields", f: f) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    // We don't use AjaxSelect2 here since it's not an ajax-based select2.
+    $("#billing_template_member_type_ids").select2();
+
+    new Gather.Views.DirtyChecker({el: '.billing--template-form'});
+  });
+<% end %>

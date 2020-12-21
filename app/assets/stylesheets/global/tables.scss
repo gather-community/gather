@@ -21,7 +21,11 @@ table {
       }
 
       &:first-of-type {
-        padding-left: 10px;
+        padding-left: 0px;
+      }
+
+      &:last-of-type {
+        padding-right: 0px;
       }
     }
   }

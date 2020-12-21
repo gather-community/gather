@@ -5,6 +5,8 @@ module Billing
     include Destructible
     include TransactionEditable
 
+    before_action -> { nav_context(:billing, :templates) }
+
     decorates_assigned :templates, :template
     helper_method :sample_template, :member_type_options
 

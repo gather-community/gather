@@ -228,6 +228,23 @@ module Nav
               icon: "folder-open"
             }
           ]
+        when :billing
+          sample_account = Billing::Account.new(community: h.current_community)
+          [
+            {
+              name: :accounts,
+              parents: :billing,
+              path: h.accounts_path,
+              permitted: h.policy(sample_account).index?,
+              icon: "dollar"
+            }, {
+              name: :templates,
+              parents: :billing,
+              path: h.billing_templates_path,
+              permitted: h.policy(sample_account).index?,
+              icon: "copy"
+            }
+          ]
         else
           []
         end

@@ -14,6 +14,11 @@ table.index {
     }
   }
 
+  th.index-checkbox,
+  td.index-checkbox {
+    width: 1px;
+  }
+
   tr.inactive,
   tr.muted {
     img {

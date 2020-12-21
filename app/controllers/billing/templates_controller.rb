@@ -48,6 +48,9 @@ module Billing
       end
     end
 
+    def apply
+    end
+
     protected
 
     def klass

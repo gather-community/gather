@@ -31,8 +31,8 @@
           <td class="description">
             <%= link_to(template.description, edit_billing_template_path(template)) %>
           </td>
-          <td class="member-types"><%= template.member_type_names %></td>
           <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
+          <td class="member-types"><%= template.member_type_names %></td>
           <td class="amount"><%= number_to_currency(template.value) %></td>
         </tr>
       <% end %>

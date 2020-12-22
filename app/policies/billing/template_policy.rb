@@ -34,6 +34,14 @@ module Billing
       index?
     end
 
+    def review?
+      index?
+    end
+
+    def apply?
+      index?
+    end
+
     def destroy?
       index?
     end

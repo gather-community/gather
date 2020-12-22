@@ -16,5 +16,12 @@ module Billing
     scope :by_description, -> { alpha_order(:description) }
 
     normalize_attributes :code, :description
+
+    def households
+      member_types.map(&:households).flatten.uniq.sort_by(&:name)
+    end
+
+    def apply
+    end
   end
 end

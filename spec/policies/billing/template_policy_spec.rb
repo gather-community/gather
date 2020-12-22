@@ -8,7 +8,7 @@ describe Billing::TemplatePolicy do
 
     let(:record) { create(:billing_template) }
 
-    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :destroy? do
+    permissions :index?, :show?, :new?, :edit?, :create?, :update?, :review?, :apply?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :biller
     end
   end

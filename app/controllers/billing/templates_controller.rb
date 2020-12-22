@@ -1,4 +1,4 @@
-# frozen_string_literal
+# frozen_string_literal: true
 
 module Billing
   class TemplatesController < ApplicationController
@@ -48,7 +48,24 @@ module Billing
       end
     end
 
+    def review
+      authorize(sample_template)
+      @templates = Template.where(id: params[:r]&.keys).to_a
+      return if @templates.any?
+      flash[:alert] = "Please select at least one template."
+      redirect_to(billing_templates_path)
+    end
+
     def apply
+      authorize(sample_template)
+      @templates = Template.where(id: params[:ids].split(",")).to_a
+      if @templates.empty?
+        flash[:alert] = "Please select at least one template."
+      else
+        @templates.each(&:apply)
+        flash[:success] = "Transactions created successfully."
+      end
+      redirect_to(billing_templates_path)
     end
 
     protected

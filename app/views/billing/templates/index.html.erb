@@ -1,6 +1,7 @@
 <% content_for(:title, "Transaction Templates") %>
 
 <% content_for(:top_buttons) do %>
+  <%= link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply") %>
   <% if policy(sample_template).create? %>
     <%= link_to(icon_tag("plus") << " Create Template", new_billing_template_path, class: "btn btn-primary") %>
   <% end %>
@@ -16,7 +17,7 @@
     No templates found.
   </div>
 <% else %>
-  <%= form_tag(apply_billing_templates_path) do %>
+  <%= form_tag(review_billing_templates_path, class: "index-checkbox") do %>
     <table class="index part-width">
       <thead>
         <tr>
@@ -46,4 +47,5 @@
 
 <%= javascript_tag do %>
   $(function() { new Gather.Views.IndexCheckboxView({el: '.index'}); });
+  $(function() { new Gather.Views.Billing.TemplateIndexView({el: '#content'}); });
 <% end %>

@@ -22,6 +22,15 @@ module Billing
     end
 
     def apply
+      households.each do |household|
+        account = Billing::AccountManager.instance.account_for(household_id: household.id,
+                                                               community_id: community.id)
+        Billing::Transaction.create!(account: account,
+                                     code: code,
+                                     value: value,
+                                     description: description,
+                                     incurred_on: Time.zone.today)
+      end
     end
   end
 end

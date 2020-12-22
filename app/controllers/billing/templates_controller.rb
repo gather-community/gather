@@ -59,11 +59,13 @@ module Billing
     def apply
       authorize(sample_template)
       @templates = Template.where(id: params[:ids].split(",")).to_a
-      if @templates.empty?
-        flash[:alert] = "Please select at least one template."
-      else
-        @templates.each(&:apply)
-        flash[:success] = "Transactions created successfully."
+      unless params[:cancel]
+        if @templates.empty?
+          flash[:alert] = "Please select at least one template."
+        else
+          @templates.each(&:apply)
+          flash[:success] = "Transactions created successfully."
+        end
       end
       redirect_to(billing_templates_path)
     end

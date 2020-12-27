@@ -5,6 +5,6 @@ FactoryBot.define do
     community { Defaults.community }
     description { "MyString" }
     code { "othchg" }
-    amount { "9.99" }
+    value { "9.99" }
   end
 end

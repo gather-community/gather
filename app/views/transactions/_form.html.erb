@@ -2,7 +2,7 @@
   <%= hidden_field_tag :account_id, account.id %>
   <%= f.input(:household_name) { transaction.household_name } %>
   <%= f.input :incurred_on, as: :date_picker %>
-  <%= render("core_fields") %>
+  <%= render("core_fields", f: f) %>
 
   <%= form_actions do %>
     <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>

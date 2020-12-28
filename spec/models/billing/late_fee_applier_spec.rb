@@ -42,7 +42,7 @@ describe Billing::LateFeeApplier do
 
     def expect_fees(*amounts)
       accounts
-      LateFeeApplier.new(community).apply!
+      described_class.new(community).apply!
       amounts.each_with_index do |amt, i|
         if amt == 0
           expect(accounts[i].transactions).to be_empty

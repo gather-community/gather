@@ -24,13 +24,14 @@ You about to create the following transactions for the following households:
     <% end %>
   </tbody>
 </table>
-<small>
+
+<div class="footnote footnote-small">
   <%= icon_tag("warning") %>
   The above list of households may become outdated if changes are made to household member types
   between when this confirmation page was loaded and when 'Apply' is clicked below.
-</small>
+</div>
 
-<%= form_tag(apply_billing_templates_path) do %>
+<%= form_tag(apply_billing_templates_path, class: "footnote") do %>
   <%= hidden_field_tag("ids", templates.map(&:id).join(",")) %>
   <%= form_actions do %>
     <%= button_tag("Cancel", name: "cancel", class: "btn btn-default") %>

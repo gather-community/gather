@@ -36,3 +36,12 @@ a.pill {
     text-decoration: none;
   }
 }
+
+.footnote {
+  margin-top: 10px;
+
+  &.footnote-small {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}

@@ -1,0 +1,5 @@
+<div class="transaction-core-fields">
+  <%= f.input :code, as: :radio_buttons, collection: transaction_code_options %>
+  <%= f.input :description %>
+  <%= f.input :value, input_html: {value: number_with_precision(f.object.value, precision: 2) } %>
+</div>

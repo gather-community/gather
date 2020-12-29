@@ -14,8 +14,8 @@ module SystemSpecHelpers
   # then selects the first matching option.
   # If a Node::Element object is provided, it must have a unique ID.
   # Works with single and multiple style select2 boxes. Works with a remote data source.
-  # Use a Node::Element argument if calling from a within block.
-  # The CSS variant may select the wrong element.
+  # Use a Node::Element argument if calling from a within block -- the CSS variant may
+  # select the wrong element.
   def select2(value, from:, multiple: false)
     if from.is_a?(Capybara::Node::Element)
       select_el = from
@@ -102,7 +102,11 @@ module SystemSpecHelpers
   end
 
   def expect_success(pattern = /successfully/)
-    expect(page).to have_css("div.alert-success", text: pattern)
+    expect(page).to have_success(pattern)
+  end
+
+  def have_success(pattern = /successfully/)
+    have_css("div.alert-success", text: pattern)
   end
 
   def expect_alert(pattern)

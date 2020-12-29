@@ -15,16 +15,24 @@
     width: 100%;
   }
 
+  #main-row {
+    // make main row fill vertical space so we get sticky footer
+    // flex: 1 was not working on IE11 as of 1/19/18
+    flex-grow: 1;
+  }
+
   #content {
     line-height: $content-line-height;
-    flex-grow: 1; // flex: 1 was not working on IE11 as of 1/19/18
+
+    // make content fill horizontal space
+    flex-grow: 1;
   }
 }
 
 // Desktop
 @media screen and (min-width: $screen-md-min) {
   #main-row {
-    // display flex so that they subsubnav, if present, will be to the left instead of above
+    // display flex so that the subsubnav, if present, will be to the left instead of above
     display: flex;
 
     // padding is on the whole main row. spacing between subsubnav and content is handled

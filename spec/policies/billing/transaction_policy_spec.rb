@@ -69,7 +69,7 @@ describe Billing::TransactionPolicy do
     subject { Billing::TransactionPolicy.new(User.new, Billing::Transaction.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(:incurred_on, :code, :description, :amount)
+      expect(subject).to contain_exactly(:incurred_on, :code, :description, :value)
     end
   end
 end

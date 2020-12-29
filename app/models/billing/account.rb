@@ -6,6 +6,8 @@ module Billing
 
     acts_as_tenant :cluster
 
+    self.table_name = "accounts"
+
     belongs_to :household, inverse_of: :accounts
     belongs_to :community
     belongs_to :last_statement, class_name: "Billing::Statement"
@@ -61,26 +63,28 @@ module Billing
     end
 
     def transaction_added!(transaction)
-      if transaction.charge?
-        self.total_new_charges += transaction.amount
+      if transaction.increaser?
+        self.total_new_charges += transaction.value
       else
-        self.total_new_credits += transaction.abs_amount
+        self.total_new_credits += transaction.value
       end
       save!
     end
 
     def recalculate!
+      increase_codes = Billing::Transaction::TYPES.select { |t| t.effect == :increase }.map(&:code)
+      increase_codes = increase_codes.map { |c| "'#{c}'" }.join(",")
       new_amounts = Billing::Transaction.select("
-        SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) AS new_credits,
-        SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS new_charges")
+        SUM(CASE WHEN code IN (#{increase_codes}) THEN value ELSE 0 END) AS new_charges,
+        SUM(CASE WHEN code NOT IN (#{increase_codes}) THEN value ELSE 0 END) AS new_credits")
         .where(account_id: id)
         .where(statement_id: nil).to_a.first
 
       self.last_statement = statements.order(:created_at).last
-      self.last_statement_on = last_statement.try(:created_on)
-      self.due_last_statement = last_statement.try(:total_due)
-      self.total_new_credits = new_amounts.try(:[], "new_credits").try(:abs) || 0
-      self.total_new_charges = new_amounts.try(:[], "new_charges") || 0
+      self.last_statement_on = last_statement&.created_on
+      self.due_last_statement = last_statement&.total_due
+      self.total_new_credits = new_amounts&.[]("new_credits")&.abs || 0
+      self.total_new_charges = new_amounts&.[]("new_charges") || 0
       save!
     end
 

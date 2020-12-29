@@ -81,6 +81,8 @@ en:
       destroy: "Delete Job"
 
   confirmations:
+    billing/template:
+      destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."
     groups/group:
       destroy: "Are you sure you want to delete the group '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the group '%{name}'?"
@@ -171,6 +173,9 @@ en:
       error:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
+    billing/template:
+      success:
+        destroy: "Template deleted successfully."
     groups/group:
       success:
         deactivate: "Group deactivated successfully."
@@ -386,11 +391,13 @@ en:
 
   transaction_codes:
     meal: "Meal"
+    dues: "Membership Dues"
     payment: "Payment"
     reimb: "Reimbursement"
     othcrd: "Other Credit"
     othchg: "Other Charge"
     late: "Late Fee"
+    initbal: "Opening Balance"
 
   accounts:
     index:

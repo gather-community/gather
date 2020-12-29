@@ -90,7 +90,7 @@ module Utils
 
       def finalize_and_run_statements
         Meals::Meal.where.not(status: "finalized").find_each do |meal|
-          meal.status = "finalized"
+          meal.update!(status: "finalized")
           meal.build_cost(
             ingredient_cost: rand(10_000) / 100.0 + 32,
             pantry_cost: rand(1000) / 100.0,

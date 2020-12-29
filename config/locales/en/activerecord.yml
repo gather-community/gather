@@ -86,11 +86,18 @@ en:
         incurred_on: "Date Incurred"
         household_name: "Household Name"
         code: "Type"
+        description: "Description"
+        value: "Amount"
       billing/account:
         household_id: "Household"
         community_id: "Community Account"
         current_balance: "Current Balance"
         credit_limit: "Credit Limit"
+      billing/template:
+        code: "Type"
+        description: "Description"
+        value: "Amount"
+        member_type_ids: "Member Types"
       groups/group:
         availability: "Availability"
         can_request_jobs: "Can request jobs?"

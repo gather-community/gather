@@ -10,6 +10,8 @@ module Billing
 
     acts_as_tenant :cluster
 
+    self.table_name = "statements"
+
     belongs_to :account, inverse_of: :statements
     has_many :transactions, -> { oldest_first }, dependent: :nullify
 

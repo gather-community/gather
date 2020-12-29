@@ -1,0 +1,40 @@
+<% content_for(:title, "Apply Templates") %>
+
+You about to create the following transactions for the following households:
+
+<table class="index">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Households</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% templates.each do |template| %>
+      <tr>
+        <td class="description"><%= template.description %></td>
+        <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
+        <td class="amount"><%= number_to_currency(template.value) %></td>
+        <td class="amount">
+          <%= template.households.map(&:name).join(", ") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="footnote footnote-small">
+  <%= icon_tag("warning") %>
+  The above list of households may become outdated if changes are made to household member types
+  between when this confirmation page was loaded and when 'Apply' is clicked below.
+</div>
+
+<%= form_tag(apply_billing_templates_path, class: "footnote") do %>
+  <%= hidden_field_tag("ids", templates.map(&:id).join(",")) %>
+  <%= form_actions do %>
+    <%= button_tag("Cancel", name: "cancel", class: "btn btn-default") %>
+    <%= button_tag("Apply", class: "btn btn-primary") %>
+  <% end %>
+<% end %>

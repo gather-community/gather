@@ -8,6 +8,7 @@ en:
       wiki: "Wiki"
       work: "Work"
       admin: "Admin"
+      billing: "Billing"
     sub:
       meals:
         meals: "Meals"
@@ -35,6 +36,9 @@ en:
         report: "Report"
         jobs: "Jobs"
         periods: "Periods"
+      billing:
+        accounts: "Accounts"
+        templates: "Templates"
     sub_sub:
       people:
         settings:

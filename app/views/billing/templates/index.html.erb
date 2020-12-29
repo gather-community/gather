@@ -1,0 +1,51 @@
+<% content_for(:title, "Transaction Templates") %>
+
+<% content_for(:top_buttons) do %>
+  <%= link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply") %>
+  <% if policy(sample_template).create? %>
+    <%= link_to(icon_tag("plus") << " Create Template", new_billing_template_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<p class="subtitle">
+  <%= icon_tag("info-circle") %>
+  Transaction templates make it easy to create batches of transactions at once.
+</p>
+
+<% if templates.empty? %>
+  <div class="center-notice">
+    No templates found.
+  </div>
+<% else %>
+  <%= form_tag(review_billing_templates_path, class: "index-checkbox") do %>
+    <table class="index part-width">
+      <thead>
+        <tr>
+          <th class="index-checkbox"><input type="checkbox" /></th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Member Type(s)</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% templates.each do |template| %>
+          <tr>
+            <td class="index-checkbox"><%= check_box_tag("r[#{template.id}]") %></td>
+            <td class="description">
+              <%= link_to(template.description, edit_billing_template_path(template)) %>
+            </td>
+            <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
+            <td class="member-types"><%= template.member_type_names %></td>
+            <td class="amount"><%= number_to_currency(template.value) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() { new Gather.Views.IndexCheckboxView({el: '.index'}); });
+  $(function() { new Gather.Views.Billing.TemplateIndexView({el: '#content'}); });
+<% end %>

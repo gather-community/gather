@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-  before_action -> { nav_context(:accounts) }
+  before_action -> { nav_context(:billing, :accounts) }
 
   decorates_assigned :accounts, :account, :last_statement, :community, :statements
 

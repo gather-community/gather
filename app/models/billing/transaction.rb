@@ -3,18 +3,11 @@
 module Billing
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
-    TYPES = [
-      OpenStruct.new(code: "meal", charge?: true, manual?: false),
-      OpenStruct.new(code: "payment", credit?: true, manual?: true),
-      OpenStruct.new(code: "reimb", credit?: true, manual?: true),
-      OpenStruct.new(code: "othcrd", credit?: true, manual?: true),
-      OpenStruct.new(code: "late", charge?: true, manual?: false),
-      OpenStruct.new(code: "othchg", charge?: true, manual?: true)
-    ].freeze
-    TYPES_BY_CODE = TYPES.index_by(&:code)
-    MANUALLY_ADDABLE_TYPES = TYPES.select(&:manual?)
+    include Transactable
 
     acts_as_tenant :cluster
+
+    self.table_name = "transactions"
 
     belongs_to :account
     belongs_to :statement
@@ -28,20 +21,15 @@ module Billing
     scope :recorded_between,
           ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
-    scope :credit, -> { where("amount < 0") }
-    scope :charge, -> { where("amount > 0") }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
 
     delegate :household, :household_id, :community_id, :community, to: :account
+    delegate :effect, to: :type
 
     before_validation do
       # Respect qty and unit price
-      self.amount = quantity * unit_price if quantity.present? && unit_price.present?
-      # Ensure correct sign for item type
-      if amount.present? && code.present?
-        self.amount = (type.credit? ? -1 : 1) * amount.to_f.abs
-      end
+      self.value = quantity * unit_price if quantity.present? && unit_price.present?
     end
 
     after_create do
@@ -53,11 +41,6 @@ module Billing
     end
 
     validates :incurred_on, presence: true
-    validates :code, presence: true
-    validates :description, presence: true
-    validates :amount, presence: true
-    validates :abs_amount, numericality: {minimum: 0}, if: ->(a) { a.present? }
-    validate :nonzero
     validate :quantity_and_unit_price
 
     def self.date_range(account: nil, community: nil)
@@ -71,24 +54,9 @@ module Billing
       ]
     end
 
-    def charge?
-      amount.positive?
-    end
-
-    def credit?
-      amount.negative?
-    end
-
+    # Used only for CSV
     def chg_crd
-      charge? ? "charge" : "credit"
-    end
-
-    def abs_amount
-      amount.try(:abs)
-    end
-
-    def type
-      TYPES_BY_CODE[code]
+      increaser? ? "charge" : "credit"
     end
 
     def meal_id
@@ -96,10 +64,6 @@ module Billing
     end
 
     private
-
-    def nonzero
-      errors.add(:amount, "can't be zero") if amount.present? && abs_amount < 0.01
-    end
 
     def quantity_and_unit_price
       if quantity.present? && unit_price.blank?

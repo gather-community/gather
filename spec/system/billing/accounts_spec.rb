@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "billing", js: true do
+describe "accounts", js: true do
   before do
     use_user_subdomain(actor)
     login_as(actor, scope: :user)

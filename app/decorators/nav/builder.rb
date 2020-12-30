@@ -347,7 +347,7 @@ module Nav
 
     def filter_and_set_active_items(items, type:, display: nil, active: nil)
       return [] if items.blank?
-      items.select! { |i| i[:permitted] && display.nil? || i[:display].nil? || i[:display] == display }
+      items.select! { |i| i[:permitted] && (display.nil? || i[:display].nil? || i[:display] == display) }
       items.each do |i|
         i[:type] = type
         i[:active] = true if active && i[:name] == active

@@ -10,10 +10,8 @@ module Meals
 
     protected
 
-    def select_options
-      options = possible_options.dup
-      options.delete(:finalizable) if route_params[:action] == "jobs"
-      options
+    def excluded_options
+      route_params[:action] == "jobs" ? [:finalizable] : []
     end
   end
 end

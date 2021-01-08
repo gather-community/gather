@@ -22,10 +22,8 @@ module People
 
     protected
 
-    def select_options
-      options = [:table]
-      options.push(:albumall, :tableall) if context.policy(h.sample_user).show_inactive?
-      options
+    def excluded_options
+      UserPolicy.new(context.current_user, h.sample_user).show_inactive? ? [] : %i[albumall tableall]
     end
   end
 end

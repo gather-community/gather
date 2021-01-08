@@ -65,8 +65,13 @@ module Lens
       select_prompt.is_a?(Symbol) ? translate_option(select_prompt) : select_prompt
     end
 
+    # Can be overridden
+    def excluded_options
+      []
+    end
+
     def option_tags
-      tags_for_options(possible_options)
+      tags_for_options(possible_options - excluded_options)
     end
 
     def tags_for_options(options)

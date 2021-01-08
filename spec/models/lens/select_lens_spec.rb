@@ -8,6 +8,12 @@ class TestLens < Lens::SelectLens
   select_prompt :album
   possible_options %i[table tableall]
   i18n_key "simple_form.options.user.view"
+
+  protected
+
+  def excluded_options
+    route_params[:foo] ? [:tableall] : []
+  end
 end
 
 describe Lens::SelectLens do
@@ -60,11 +66,26 @@ describe Lens::SelectLens do
     context "when other value chosen" do
       let(:route_params) { {view: "table"} }
 
-      it "calls expected methods" do
+      it "passes expected selected option" do
         expect(view_context).to receive(:options_for_select)
           .with([["Table", :table], ["Table w/ Inactive", :tableall]], "table").and_return("<option ...>")
-        expect(view_context).to receive(:select_tag).and_return("<select ...>")
-        expect(lens.render).to eq("<select ...>")
+        expect(view_context).to receive(:select_tag) do |_p, _q, options|
+          expect(options[:prompt]).to eq("Album")
+        end
+        lens.render
+      end
+    end
+
+    context "when options excluded" do
+      let(:route_params) { {foo: 1} }
+
+      it "passes expected options" do
+        expect(view_context).to receive(:options_for_select)
+          .with([["Table", :table]], nil).and_return("<option ...>")
+        expect(view_context).to receive(:select_tag) do |_p, _q, options|
+          expect(options[:prompt]).to eq("Album")
+        end
+        lens.render
       end
     end
   end

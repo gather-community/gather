@@ -57,10 +57,6 @@ module Lens
       lenses.map { |l| [l.param_name, l.value] }.to_h.to_query
     end
 
-    def query_string_to_clear
-      optional_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
-    end
-
     # If there are optional filters set, return some text and a link indicating they can clear them.
     def no_result_clear_filter_link
       if optional_lenses_active?
@@ -106,6 +102,10 @@ module Lens
       # This hash may have been accessed and thus memoized by the lens just built,
       # but that could be a problem if it's not the last one, so force it to rebuild on the next access.
       @lenses_by_param_name = nil
+    end
+
+    def query_string_to_clear
+      optional_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
     end
 
     def lenses_by_param_name

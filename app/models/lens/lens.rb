@@ -5,7 +5,6 @@ module Lens
     attr_accessor :options, :context, :store, :route_params, :set
 
     delegate :blank?, :present?, to: :value
-    alias active? present?
 
     VALUE_CHAR_LIMIT = 32
 
@@ -45,6 +44,11 @@ module Lens
 
     def css_classes
       "form-control #{param_name.to_s.dasherize}-lens"
+    end
+
+    # Whether a value is present to be cleared.
+    def clearable_and_active?
+      clearable? && value.present?
     end
 
     def clearable?

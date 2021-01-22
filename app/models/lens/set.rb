@@ -33,12 +33,8 @@ module Lens
       self.visible = false
     end
 
-    def optional_lenses
-      lenses.select(&:clearable?)
-    end
-
-    def optional_lenses_active?
-      optional_lenses.any?(&:active?)
+    def can_clear_lenses?
+      lenses.any?(&:clearable_and_active?)
     end
 
     def [](param_name)
@@ -59,7 +55,7 @@ module Lens
 
     # If there are optional filters set, return some text and a link indicating they can clear them.
     def no_result_clear_filter_link
-      if optional_lenses_active?
+      if can_clear_lenses?
         link = view.link_to(I18n.t("common.clearing_the_filter"), path_to_clear)
         view.t("common.no_result_clear_filter_link_html", link: link)
       else
@@ -105,7 +101,11 @@ module Lens
     end
 
     def query_string_to_clear
-      optional_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
+      clearable_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
+    end
+
+    def clearable_lenses
+      lenses.select(&:clearable?)
     end
 
     def lenses_by_param_name

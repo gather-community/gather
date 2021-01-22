@@ -18,8 +18,8 @@ module Lens
       class_var_get_or_set(:possible_options, possible_options)
     end
 
-    # True if selection is not default. Non-clearable lenses are never active.
-    def active?
+    # True if selection is not default.
+    def clearable_and_active?
       return false if empty?
       clearable? && selection != default_option
     end

@@ -51,9 +51,9 @@ describe Lens::SelectLens do
     klass.new(**params)
   end
 
-  describe "#active" do
+  describe "#clearable_and_active?" do
     let(:klass) { BasicLens }
-    subject(:active) { lens.active? }
+    subject(:clearable_and_active) { lens.clearable_and_active? }
 
     context "with clearable lens" do
       let(:clearable) { true }

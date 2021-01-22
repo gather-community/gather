@@ -28,7 +28,7 @@ module Lens
     end
 
     def link_to_clear
-      if set.optional_lenses_active?
+      if set.can_clear_lenses?
         h.link_to(h.icon_tag("times-circle") << " " << h.content_tag(:span, "Clear Filter"),
                   set.path_to_clear, class: "clear")
       else

@@ -16,12 +16,16 @@ class ApplicationController < ActionController::Base
   after_action :verify_policy_scoped, only: :index
 
   attr_accessor :current_community
-  alias current_cluster current_tenant
 
-  helper_method :current_community, :current_cluster, :multi_community?, :app_version, :nav_builder
+  helper_method :current_community, :current_cluster, :multi_community?, :own_cluster?,
+                :app_version, :nav_builder
 
   def current_cluster
     current_tenant
+  end
+
+  def own_cluster?
+    current_cluster == current_user.cluster
   end
 
   protected

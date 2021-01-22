@@ -73,6 +73,8 @@ module Lens
       context.view_context
     end
 
+    private
+
     def value=(val)
       if val.nil?
         store.delete(param_name.to_s)
@@ -80,8 +82,6 @@ module Lens
         store[param_name.to_s] = truncate(val)
       end
     end
-
-    private
 
     # Make sure val isn't too huge and doesn't blow up the session cookie.
     def truncate(val)

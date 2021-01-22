@@ -18,8 +18,10 @@ module Lens
       self.context = context
       self.lenses ||= []
       self.visible = true
+
       self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
-                                 controller_path: context.controller_path, action_name: context.action_name)
+                                 controller_path: context.controller_path, action_name: context.action_name,
+                                 persist: context.own_cluster?)
       storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
       PathSaver.new(storage: storage).write(lenses: lenses, path: request_path, params: route_params)

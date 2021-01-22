@@ -92,6 +92,10 @@ module Lens
         context: context,
         route_params: route_params,
         storage: storage,
+
+        # This should be removed eventually. The choosee lens is the only one using it currently.
+        # A better way would be to request it be injected in the call to prepare_lenses.
+        # Would have to add a spec to Lens::Set for this.
         set: self
       )
 

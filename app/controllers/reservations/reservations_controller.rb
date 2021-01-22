@@ -50,7 +50,7 @@ module Reservations
           render("calendar")
         end
       else
-        prepare_lenses(community: {required: true})
+        prepare_lenses(community: {clearable: false})
         @community = current_community
 
         authorize(Reservation)

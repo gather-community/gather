@@ -47,7 +47,7 @@ describe Lens::SelectLens do
   let(:lens) do
     params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
     params[:options][:default] = default_option unless default_option.nil?
-    params[:options][:required] = !clearable
+    params[:options][:clearable] = clearable
     klass.new(**params)
   end
 

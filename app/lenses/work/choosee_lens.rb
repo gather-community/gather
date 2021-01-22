@@ -6,7 +6,7 @@ module Work
     param_name :choosee
 
     def initialize(options:, **params)
-      options[:required] = true
+      options[:clearable] = false
       options[:global] = true # Global so that it doesn't cause a clear link to show (sort of a hack).
       options[:floating] = true
       super(options: options, **params)

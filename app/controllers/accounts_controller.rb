@@ -96,7 +96,7 @@ class AccountsController < ApplicationController
 
   def prepare_lens_and_get_community
     return current_user.community unless @accounts.many?
-    prepare_lenses(community: {required: true, subdomain: false})
+    prepare_lenses(community: {clearable: false, subdomain: false})
     lenses[:community].selection
   end
 

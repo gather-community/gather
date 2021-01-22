@@ -34,7 +34,7 @@ module Lens
     end
 
     def optional_lenses
-      lenses.reject(&:required?)
+      lenses.select(&:clearable?)
     end
 
     def optional_lenses_active?

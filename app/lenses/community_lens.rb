@@ -16,7 +16,7 @@ class CommunityLens < Lens::SelectLens
   end
 
   def selection
-    if !options[:required] && (value == "all" || value.nil?)
+    if clearable? && (value == "all" || value.nil?)
       context.current_cluster.communities
     elsif options[:subdomain] || value.nil? || value == "this"
       context.current_community
@@ -34,9 +34,9 @@ class CommunityLens < Lens::SelectLens
   def possible_options
     # Sort the current community to the top so it's the default if not clearable
     community_options = communities.sort_by { |c| context.current_community == c ? 0 : 1 }.map do |c|
-      [c.name, c == context.current_community && !options[:required] ? "this" : c.slug]
+      [c.name, c == context.current_community && clearable? ? "this" : c.slug]
     end
-    (!options[:required] ? [:all] : []).concat(community_options)
+    (clearable? ? [:all] : []).concat(community_options)
   end
 
   def all?
@@ -63,8 +63,7 @@ class CommunityLens < Lens::SelectLens
   def new_url
     h.url_for(
       host: "' + this.value + '.#{Settings.url.host}",
-      params: route_params.except(:action, :controller)
-        .merge(options[:required] ? {} : {community: "this"})
+      params: route_params.except(:action, :controller).merge(clearable? ? {community: "this"} : {})
     )
   end
 end

@@ -47,16 +47,16 @@ module Lens
       "form-control #{param_name.to_s.dasherize}-lens"
     end
 
-    def required?
-      options[:required] == true
+    def clearable?
+      !options.key?(:clearable) || options[:clearable] == true # defaults to true
     end
 
     def global?
-      options[:global] == true
+      options[:global] == true # defaults to false
     end
 
     def floating?
-      options[:floating] == true
+      options[:floating] == true # defaults to false
     end
 
     def value

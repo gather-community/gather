@@ -79,7 +79,7 @@ class HouseholdsController < ApplicationController
   private
 
   def index_html
-    prepare_lenses({community: {required: true}}, :"people/sort", :search)
+    prepare_lenses({community: {clearable: false}}, :"people/sort", :search)
     @households = @households.includes(users: :children)
     @households = @households.deactivated_last.ordered_by(lenses[:sort].value)
     @households = @households.in_community(current_community)

@@ -15,7 +15,7 @@ describe CommunityLens do
   let(:subdomain) { false }
   let(:lens) do
     params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
-    params[:options][:required] = !clearable
+    params[:options][:clearable] = clearable
     params[:options][:subdomain] = subdomain
     described_class.new(**params)
   end

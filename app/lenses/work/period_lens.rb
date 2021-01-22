@@ -8,7 +8,7 @@ module Work
 
     def initialize(context:, options:, **params)
       self.periods = Period.in_community(context.current_community).active.oldest_first
-      options[:required] = true
+      options[:clearable] = false
       options[:global] = true
       options[:default] = default_period
       super(options: options, context: context, **params)

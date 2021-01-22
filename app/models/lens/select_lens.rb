@@ -21,7 +21,7 @@ module Lens
     # True if selection is not default. Non-clearable lenses are never active.
     def active?
       return false if empty?
-      !options[:required] && selection != default_option
+      clearable? && selection != default_option
     end
 
     def render
@@ -84,7 +84,7 @@ module Lens
     # they will be selected.
     def pair_for_option(option)
       pair = [label_for_option(option), value_for_option(option)]
-      pair[1] = nil if !options[:required] && option == default_option
+      pair[1] = nil if clearable? && option == default_option
       pair
     end
 

@@ -243,7 +243,7 @@ module Meals
       first_meal_date = Meal.minimum(:served_at)&.to_date
       result = []
       result << {date_range: {min_date: first_meal_date}}
-      result << {community: {required: true}} if multi_community?
+      result << {community: {clearable: false}} if multi_community?
       result
     end
   end

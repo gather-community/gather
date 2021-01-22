@@ -5,12 +5,11 @@ module Work
   class RequesterLens < Lens::SelectLens
     param_name :requester
     i18n_key "simple_form.options.work_job.requester"
-    select_prompt :any
 
     protected
 
-    def option_tags
-      h.options_from_collection_for_select(requesters, :id, :name, value)
+    def possible_options
+      [:any].concat(requesters)
     end
 
     def requesters

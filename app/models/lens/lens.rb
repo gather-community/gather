@@ -31,7 +31,7 @@ module Lens
       self.context = context
       self.route_params = route_params
       self.store = options[:global] ? storage.global_store : storage.action_store
-      self.value = route_param_given? ? route_param : (value || options[:default])
+      self.value = route_param_given? ? route_param : value
       self.set = set
     end
 

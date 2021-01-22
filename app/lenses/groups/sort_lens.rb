@@ -5,8 +5,7 @@ module Groups
   class SortLens < Lens::SelectLens
     param_name :sort
     i18n_key "simple_form.options.groups_group.sort"
-    select_prompt :name
-    possible_options %i[type]
+    possible_options %i[name type]
 
     def by_type?
       value == "type"

@@ -112,8 +112,8 @@ module Work
       names = params[:action] == "index" ? %i[search work/shift] : []
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      @period = lenses[:period].object
-      @choosee = lenses[:choosee].choosee
+      @period = lenses[:period].selection
+      @choosee = lenses[:choosee].selection
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
     end

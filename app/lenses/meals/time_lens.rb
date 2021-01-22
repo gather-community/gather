@@ -5,8 +5,7 @@ module Meals
   class TimeLens < Lens::SelectLens
     param_name :time
     i18n_key "simple_form.options.meals_meal.time"
-    select_prompt :upcoming
-    possible_options %i[past finalizable all]
+    possible_options %i[upcoming past finalizable all]
 
     protected
 

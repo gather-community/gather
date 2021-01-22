@@ -191,7 +191,7 @@ class UsersController < ApplicationController
     @users = @users.in_community(@community)
     @users = @users.matching(lenses[:search].value) if lenses[:search].present?
     @users = @users.in_life_stage(lenses[:lifestage].value) if lenses[:lifestage].present?
-    @users = @users.deactivated_last.sorted_by(lenses[:sort].value)
+    @users = @users.deactivated_last.sorted_by(lenses[:sort].selection.to_s)
 
     # Regular folks can't see inactive users.
     @users = @users.active unless policy(sample_user).show_inactive?

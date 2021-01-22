@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# For selecting community. Highly customized!
+# For selecting community.
 class CommunityLens < Lens::SelectLens
   param_name :community
   i18n_key "community_lens"
@@ -15,18 +15,32 @@ class CommunityLens < Lens::SelectLens
     context.multi_community? ? select_tag : nil
   end
 
+  def selection
+    if !options[:required] && (value == "all" || value.nil?)
+      context.current_cluster.communities
+    elsif options[:subdomain] || value.nil? || value == "this"
+      context.current_community
+    elsif value.match(/\A\d+\z/) # Legacy link support
+      Community.find(value)
+    else
+      Community.find_by(slug: value)
+    end
+  end
+
   private
 
   attr_accessor :communities
 
-  def selected
-    if !options[:required] && (value == "all" || value.blank?)
-      nil
-    elsif options[:subdomain] || value.blank?
-      context.current_community.slug
-    else
-      value
+  def possible_options
+    # Sort the current community to the top so it's the default if not clearable
+    community_options = communities.sort_by { |c| context.current_community == c ? 0 : 1 }.map do |c|
+      [c.name, c == context.current_community && !options[:required] ? "this" : c.slug]
     end
+    (!options[:required] ? [:all] : []).concat(community_options)
+  end
+
+  def all?
+    value == "all" || value.blank?
   end
 
   def select_input_name
@@ -35,7 +49,7 @@ class CommunityLens < Lens::SelectLens
 
   def onchange
     if options[:subdomain]
-      "if (this.value == 'all') {
+      "if (this.value == '') {
         this.name = 'community';
         this.form.submit();
       } else {
@@ -52,17 +66,5 @@ class CommunityLens < Lens::SelectLens
       params: route_params.except(:action, :controller)
         .merge(options[:required] ? {} : {community: "this"})
     )
-  end
-
-  def option_tags
-    prompt_option_tag << h.options_from_collection_for_select(communities, "slug", "name", selected)
-  end
-
-  def prompt_option_tag
-    if options[:required]
-      "".html_safe
-    else
-      h.content_tag(:option, translate_option(:all), value: "all")
-    end
   end
 end

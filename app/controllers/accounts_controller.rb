@@ -97,13 +97,7 @@ class AccountsController < ApplicationController
   def prepare_lens_and_get_community
     return current_user.community unless @accounts.many?
     prepare_lenses(community: {required: true, subdomain: false})
-    if lenses[:community].value&.match(Community::SLUG_REGEX)
-      Community.find_by(slug: lenses[:community].value)
-    elsif lenses[:community].value&.match(/\d+/)
-      Community.find(lenses[:community].value)
-    else
-      current_user.community
-    end
+    lenses[:community].selection
   end
 
   def sample_account

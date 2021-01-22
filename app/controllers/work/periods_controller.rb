@@ -66,7 +66,7 @@ module Work
 
     def report
       prepare_lenses(:"work/period")
-      @period = lenses[:period].object
+      @period = lenses[:period].selection
       if @period.nil?
         authorize(sample_period, :report_wrapper?)
         lenses.hide!

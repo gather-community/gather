@@ -2,8 +2,25 @@
 
 require "rails_helper"
 
-# Just for test purposes
-class TestLens < Lens::SelectLens
+# Simple id/name class.
+class Foo
+  include ActiveModel::Model
+
+  attr_accessor :id, :name
+
+  def ==(o)
+    o.is_a?(Foo) && o.id == id
+  end
+
+  def eql?(o)
+    o == self
+  end
+
+  delegate :hash, to: :id
+end
+
+# Simple lens for test purposes
+class BasicLens < Lens::SelectLens
   param_name :view
   possible_options %i[album table tableall]
   i18n_key "simple_form.options.user.view"
@@ -15,6 +32,13 @@ class TestLens < Lens::SelectLens
   end
 end
 
+# Lens with multiple option types for test purposes
+class ComplexLens < Lens::SelectLens
+  param_name :view
+  possible_options [:album, ["TABLE", 1], "---", Foo.new(id: 12, name: "TableAll")]
+  i18n_key "simple_form.options.user.view"
+end
+
 describe Lens::SelectLens do
   let(:community) { create(:community) }
   let(:context) { double }
@@ -23,101 +47,316 @@ describe Lens::SelectLens do
   let(:lens) do
     params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
     params[:options][:default] = default_option unless default_option.nil?
-    TestLens.new(**params)
+    params[:options][:required] = !clearable
+    klass.new(**params)
   end
 
   describe "#active" do
+    let(:klass) { BasicLens }
     subject(:active) { lens.active? }
 
-    context "when no value is given" do
-      let(:route_params) { {} }
-      it { is_expected.to be(false) }
-    end
+    context "with clearable lens" do
+      let(:clearable) { true }
 
-    context "without explicitly defined default" do
-      context "when first option is explicitly given" do
-        let(:route_params) { {view: "album"} }
-        it { is_expected.to be(false) }
+      context "without explicitly defined default" do
+        context "when no value is given" do
+          let(:route_params) { {} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when first option is explicitly given" do
+          let(:route_params) { {view: "album"} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when other value is given" do
+          let(:route_params) { {view: "table"} }
+          it { is_expected.to be(true) }
+        end
       end
 
-      context "when value given is not the default" do
-        let(:route_params) { {view: "table"} }
-        it { is_expected.to be(true) }
+      context "with explicitly defined default" do
+        let(:default_option) { :tableall }
+
+        context "when no value is given" do
+          let(:route_params) { {} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when explicitly defined default is given" do
+          let(:route_params) { {view: "tableall"} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when value given is not the default" do
+          let(:route_params) { {view: "table"} }
+          it { is_expected.to be(true) }
+        end
       end
     end
 
-    context "with explicitly defined default" do
+    context "with non-clearable lens" do
+      let(:clearable) { false }
       let(:default_option) { :tableall }
 
-      context "when explicitly defined default is given" do
-        let(:route_params) { {view: "tableall"} }
-        it { is_expected.to be(false) }
+      context "without explicitly defined default" do
+        context "when no value is given" do
+          let(:route_params) { {} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when first option is explicitly given" do
+          let(:route_params) { {view: "album"} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when other value is given" do
+          let(:route_params) { {view: "table"} }
+          it { is_expected.to be(false) }
+        end
       end
 
-      context "when value given is not the default" do
-        let(:route_params) { {view: "table"} }
-        it { is_expected.to be(true) }
+      context "with explicitly defined default" do
+        let(:default_option) { :tableall }
+
+        context "when no value is given" do
+          let(:route_params) { {} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when explicitly defined default is given" do
+          let(:route_params) { {view: "tableall"} }
+          it { is_expected.to be(false) }
+        end
+
+        context "when value given is not the default" do
+          let(:route_params) { {view: "table"} }
+          it { is_expected.to be(false) }
+        end
+      end
+    end
+  end
+
+  describe "#selection" do
+    let(:klass) { ComplexLens }
+    subject(:selection) { lens.selection }
+
+    context "with clearable lens" do
+      let(:clearable) { true }
+
+      context "when nothing selected" do
+        let(:route_params) { {} }
+        it { is_expected.to eq(:album) }
+      end
+
+      context "when symbol (default) selected" do
+        let(:route_params) { {view: "album"} }
+        it { is_expected.to eq(:album) }
+      end
+
+      context "when pair selected" do
+        let(:route_params) { {view: "1"} }
+        it { is_expected.to eq(["TABLE", 1]) }
+      end
+
+      context "when object selected" do
+        let(:route_params) { {view: "12"} }
+        it { is_expected.to eq(Foo.new(id: 12, name: "TableAll")) }
+      end
+    end
+
+    context "with non-clearable lens" do
+      let(:clearable) { false }
+
+      context "when nothing selected" do
+        let(:route_params) { {} }
+        it { is_expected.to eq(:album) }
+      end
+
+      context "when symbol (default) selected" do
+        let(:route_params) { {view: "album"} }
+        it { is_expected.to eq(:album) }
+      end
+
+      context "when pair selected" do
+        let(:route_params) { {view: "1"} }
+        it { is_expected.to eq(["TABLE", 1]) }
+      end
+
+      context "when object selected" do
+        let(:route_params) { {view: "12"} }
+        it { is_expected.to eq(Foo.new(id: 12, name: "TableAll")) }
       end
     end
   end
 
   describe "#render" do
-    let(:view_context) { double }
+    let(:view_context) { double(select_tag: nil) }
+    let(:clearable) { true }
 
     before do
       expect(lens).to receive(:h).twice.and_return(view_context)
     end
 
-    shared_examples_for "has no selected option" do
-      it "calls expected methods" do
-        expect(view_context).to receive(:options_for_select)
-          .with([["Album", :album], ["Table", :table], ["Table w/ Inactive", :tableall]], nil)
-          .and_return("<option ...>")
-        expect(view_context).to receive(:select_tag).with(
-          :view,
-          "<option ...>",
-          class: "form-control view-lens",
-          "data-param-name": :view,
-          onchange: "this.form.submit();"
-        ).and_return("<select ...>")
-        expect(lens.render).to eq("<select ...>")
+    context "with symbol-based lens" do
+      let(:klass) { BasicLens }
+
+      shared_examples_for "has no selected option" do
+        it "calls expected methods" do
+          expect(view_context).to receive(:options_for_select)
+            .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], nil)
+            .and_return("<option ...>")
+          expect(view_context).to receive(:select_tag).with(
+            :view,
+            "<option ...>",
+            class: "form-control view-lens",
+            "data-param-name": :view,
+            onchange: "this.form.submit();"
+          ).and_return("<select ...>")
+          expect(lens.render).to eq("<select ...>")
+        end
+      end
+
+      context "when default value chosen explicitly" do
+        let(:route_params) { {view: "album"} }
+        it_behaves_like "has no selected option"
+      end
+
+      context "when default value but nothing selected" do
+        let(:route_params) { {} }
+        it_behaves_like "has no selected option"
+      end
+
+      context "when other value chosen" do
+        let(:route_params) { {view: "table"} }
+
+        it "passes expected selected option" do
+          expect(view_context).to receive(:options_for_select)
+            .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], "table")
+            .and_return("<option ...>")
+          expect(view_context).to receive(:select_tag) do |_p, _q, options|
+            expect(options[:prompt]).to be_nil
+          end
+          lens.render
+        end
+      end
+
+      context "when options excluded" do
+        let(:route_params) { {foo: 1} }
+
+        it "passes expected options" do
+          expect(view_context).to receive(:options_for_select)
+            .with([["Album", nil], %w[Table table]], nil).and_return("<option ...>")
+          lens.render
+        end
       end
     end
 
-    context "when default value chosen explicitly" do
-      let(:route_params) { {view: "album"} }
-      it_behaves_like "has no selected option"
-    end
+    context "with lens with different option types" do
+      let(:klass) { ComplexLens }
 
-    context "when default value chosen via no value given" do
-      let(:route_params) { {} }
-      it_behaves_like "has no selected option"
-    end
+      context "when lens is clearable" do
+        let(:clearable) { true }
 
-    context "when other value chosen" do
-      let(:route_params) { {view: "table"} }
+        context "with no explicit default" do
+          context "when pair is selected" do
+            let(:route_params) { {view: "1"} }
 
-      it "passes expected selected option" do
-        expect(view_context).to receive(:options_for_select)
-          .with([["Album", :album], ["Table", :table], ["Table w/ Inactive", :tableall]], "table")
-          .and_return("<option ...>")
-        expect(view_context).to receive(:select_tag) do |_p, _q, options|
-          expect(options[:prompt]).to be_nil
+            it "renders properly" do
+              expect(view_context).to receive(:options_for_select)
+                .with([["Album", nil], %w[TABLE 1], ["---", nil], %w[TableAll 12]], "1")
+                .and_return("<option ...>")
+              lens.render
+            end
+          end
+
+          context "when object is selected" do
+            let(:route_params) { {view: "12"} }
+
+            it "renders properly" do
+              expect(view_context).to receive(:options_for_select)
+                .with([["Album", nil], %w[TABLE 1], ["---", nil], %w[TableAll 12]], "12")
+                .and_return("<option ...>")
+              lens.render
+            end
+          end
         end
-        lens.render
+
+        context "when pair is default and nothing is selected" do
+          let(:default_option) { ["TABLE", 1] }
+          let(:route_params) { {} }
+
+          it "no option tag is selected" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["TABLE", nil], %w[Album album], ["---", nil], %w[TableAll 12]], nil)
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
+
+        context "when object is default and nothing is selected" do
+          let(:default_option) { Foo.new(id: 12, name: "TableAll") }
+          let(:route_params) { {} }
+
+          it "no option tag is selected" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["TableAll", nil], %w[Album album], %w[TABLE 1], ["---", nil]], nil)
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
       end
-    end
 
-    context "when options excluded" do
-      let(:route_params) { {foo: 1} }
+      context "when lens is not clearable" do
+        let(:clearable) { false }
 
-      it "passes expected options" do
-        expect(view_context).to receive(:options_for_select)
-          .with([["Album", :album], ["Table", :table]], nil).and_return("<option ...>")
-        expect(view_context).to receive(:select_tag) do |_p, _q, options|
-          expect(options[:prompt]).to be_nil
+        context "with no explicit default" do
+          context "when pair is selected" do
+            let(:route_params) { {view: "1"} }
+
+            it "renders properly" do
+              expect(view_context).to receive(:options_for_select)
+                .with([%w[Album album], %w[TABLE 1], ["---", nil], %w[TableAll 12]], "1")
+                .and_return("<option ...>")
+              lens.render
+            end
+          end
+
+          context "when object is selected" do
+            let(:route_params) { {view: "12"} }
+
+            it "renders properly" do
+              expect(view_context).to receive(:options_for_select)
+                .with([%w[Album album], %w[TABLE 1], ["---", nil], %w[TableAll 12]], "12")
+                .and_return("<option ...>")
+              lens.render
+            end
+          end
         end
-        lens.render
+
+        context "when pair is default and nothing is selected" do
+          let(:default_option) { ["TABLE", 1] }
+          let(:route_params) { {} }
+
+          it "renders properly" do
+            expect(view_context).to receive(:options_for_select)
+              .with([%w[TABLE 1], %w[Album album], ["---", nil], %w[TableAll 12]], nil)
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
+
+        context "when object is default and nothing is selected" do
+          let(:default_option) { Foo.new(id: 12, name: "TableAll") }
+          let(:route_params) { {} }
+
+          it "renders properly" do
+            expect(view_context).to receive(:options_for_select)
+              .with([%w[TableAll 12], %w[Album album], %w[TABLE 1], ["---", nil]], nil)
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
       end
     end
   end

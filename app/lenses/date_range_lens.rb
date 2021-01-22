@@ -4,7 +4,6 @@
 class DateRangeLens < Lens::SelectLens
   param_name :dates
   i18n_key "date_range_lens"
-  select_prompt :past_12
 
   attr_accessor :pairs, :range_builder
 
@@ -17,7 +16,7 @@ class DateRangeLens < Lens::SelectLens
     value.present? && Range.new(*value.split("-").map { |s| Date.parse(s) })
   end
 
-  protected
+  private
 
   # Past 12 months (default, not in options array)
   # This year
@@ -31,10 +30,10 @@ class DateRangeLens < Lens::SelectLens
   # 2017 Q3
   # 2017 Q2
   # All time
-  def option_tags
+  def possible_options
     range_builder.add_years
     range_builder.add_quarters(5)
     range_builder.add_all_time
-    h.options_for_select(range_builder.pairs, value)
+    [:past_12].concat(range_builder.pairs)
   end
 end

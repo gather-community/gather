@@ -5,7 +5,6 @@ module People
   class LifeStageLens < Lens::SelectLens
     param_name :lifestage
     i18n_key "simple_form.options.user.life_stage"
-    select_prompt :any
-    possible_options %i[adult child]
+    possible_options %i[any adult child]
   end
 end

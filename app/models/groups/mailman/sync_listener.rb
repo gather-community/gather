@@ -15,7 +15,7 @@ module Groups
 
       def create_user_successful(user)
         return if no_need_to_create_or_update?(user)
-        return unless Mailman::User.new(user: user).syncable_with_memberships?
+        return unless ::Groups::Mailman::User.new(user: user).syncable_with_memberships?
         UserSyncJob.perform_later(user_id: user.id)
       end
 
@@ -132,7 +132,7 @@ module Groups
         # sync the list even though this group doesn't affect that list. But computing it exactly
         # is tricky and this is an edge case and no harm done.
         group_ids = Group.in_community(group.communities).pluck(:id)
-        Mailman::List.where(group_id: group_ids).pluck(:id).each do |list_id|
+        ::Groups::Mailman::List.where(group_id: group_ids).pluck(:id).each do |list_id|
           MembershipSyncJob.perform_later("Groups::Mailman::List", list_id)
         end
       end
@@ -141,7 +141,7 @@ module Groups
         # If there are currently no sync'd lists and the user doesn't have a sync'd mailman user,
         # there can't be any reason to create a remote user for them, so we can quit early.
         # This is a useful guard to prevent unnecessary HTTP calls, especially in specs.
-        Mailman::List.none? && user.group_mailman_user.nil?
+        ::Groups::Mailman::List.none? && user.group_mailman_user.nil?
       end
 
       def attribs_changed?(object, attribs)

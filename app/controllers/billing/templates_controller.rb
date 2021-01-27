@@ -50,7 +50,7 @@ module Billing
 
     def review
       authorize(sample_template)
-      @templates = Template.where(id: params[:r]&.keys).to_a
+      @templates = Template.where(id: params[:r]&.keys).by_description.to_a
       return if @templates.any?
       flash[:alert] = "Please select at least one template."
       redirect_to(billing_templates_path)

@@ -9,10 +9,12 @@ module Lens
       class_var_get_or_set(:i18n_key, key)
     end
 
+    # Define methods for testing whether symbol-type options are selected.
     def self.possible_options(possible_options = nil)
       possible_options&.each do |option|
+        next unless option.is_a?(Symbol)
         define_method(:"#{option}?") do
-          value == option.to_s
+          selection == option
         end
       end
       class_var_get_or_set(:possible_options, possible_options)

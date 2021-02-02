@@ -38,7 +38,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(dataless).to be_empty, "#{dataless.join(', ')} don't have any sample data"
 
       # Destroy and check
-      Utils::DataRemover.new(cluster.id).remove
+      Utils::SampleDataRemover.new(cluster.id).remove
       cluster.communities[0].destroy
       ApplicationRecord.descendants.each do |model|
         next if model.test_mock? || !model.scoped_by_tenant?
@@ -57,7 +57,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(ActiveStorage::Blob.count).to be > 12
 
       # Destroy and check
-      Utils::DataRemover.new(cluster.id).remove
+      Utils::SampleDataRemover.new(cluster.id).remove
       cluster.communities[0].destroy
       expect(ActiveStorage::Blob.count).to eq(0)
     end

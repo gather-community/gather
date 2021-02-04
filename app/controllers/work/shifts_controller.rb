@@ -113,7 +113,7 @@ module Work
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
       @period = lenses[:period].selection
-      @choosee = lenses[:choosee].selection
+      @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
     end

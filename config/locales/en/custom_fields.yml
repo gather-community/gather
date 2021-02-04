@@ -28,6 +28,9 @@ en:
               _self: "Meal Reservations"
               default_total_time: "Default Total Time"
               default_prep_time: "Default Prep Time"
+          work:
+            _self: "Work"
+            default_date_filter: "Default Signup Date Filter"
           billing:
             _self: "Billing"
             contact: "Billing Contact"
@@ -102,6 +105,10 @@ en:
             default_directory_sort:
               name: "By Name"
               unit: "By Unit"
+          work:
+            default_date_filter:
+              all: "All Dates"
+              curftr: "Current & Future"
           billing:
             late_fee_policy:
               fee_type:

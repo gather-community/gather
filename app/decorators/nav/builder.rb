@@ -236,6 +236,12 @@ module Nav
               path: h.work_periods_path,
               permitted: h.policy(sample_period).index?,
               icon: "folder-open"
+            }, {
+              name: :settings,
+              parents: :work,
+              path: h.edit_work_settings_path,
+              permitted: Work::SettingsPolicy.new(user, community).edit?,
+              icon: "gear"
             }
           ]
         when :billing

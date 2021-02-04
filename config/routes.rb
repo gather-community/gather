@@ -213,6 +213,7 @@ Rails.application.routes.draw do
         post :send_notices
       end
     end
+    resource :settings, only: %i[edit update]
     get "report", to: "periods#report", as: :report
     get "/", to: redirect("/work/signups")
   end

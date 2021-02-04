@@ -26,19 +26,28 @@ describe "community lens", js: true do
 
   context "with all option" do
     scenario do
+      # Start at user's home cmty
       visit(meals_path)
-
+      expect(page).to have_echoed_url(%r{\Ahttp://community3\.})
       expect_unselected_option(lens_selector(:community), "All Communities")
+
+      # Go to cmty2
       lens_field(:community).select("Community 2")
-
       expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
-      expect(lens_selected_option(:community).text).to eq("Community 2")
       expect(page).to have_echoed_url_param("community", "this")
-      # Clear button should work for all option mode only
-      first(".lens-bar a.clear").click
+      expect(lens_selected_option(:community).text).to eq("Community 2")
 
+      # Clear button. Should stay in cmty2, but go back to 'All Communities'
+      first(".lens-bar a.clear").click
+      expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
       expect(page).to have_echoed_url_param("community", "")
       expect_unselected_option(lens_selector(:community), "All Communities")
+
+      # Select current cmty only
+      lens_field(:community).select("Community 2")
+      expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
+      expect(page).to have_echoed_url_param("community", "this")
+      expect(lens_selected_option(:community).text).to eq("Community 2")
     end
   end
 

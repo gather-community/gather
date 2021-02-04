@@ -49,21 +49,19 @@ class CommunityLens < Lens::SelectLens
 
   def onchange
     if options[:subdomain]
+      current_slug = context.current_community.slug
+      params = route_params.except(:action, :controller).merge(clearable? ? {community: "this"} : {})
+      host_with_port = [Settings.url.host, Settings.url.port].compact.join(":")
       "if (this.value == '') {
         this.name = 'community';
         this.form.submit();
       } else {
-        window.location.href = '#{new_url}'
+        let host = (this.value == 'this' ? '#{current_slug}' : this.value) + '.#{host_with_port}';
+        window.location.href =
+          '#{Settings.url.protocol}://' + host + '#{context.request.path}?#{params.to_query}';
       }"
     else
       "this.form.submit();"
     end
-  end
-
-  def new_url
-    h.url_for(
-      host: "' + this.value + '.#{Settings.url.host}",
-      params: route_params.except(:action, :controller).merge(clearable? ? {community: "this"} : {})
-    )
   end
 end

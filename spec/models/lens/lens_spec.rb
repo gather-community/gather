@@ -23,26 +23,13 @@ describe Lens::Lens do
     end
 
     describe "storage" do
-      context "when cluster is own cluster" do
-        let(:route_params) { {basic: "foo"} }
+      let(:route_params) { {basic: "foo"} }
 
-        it "stores lens value in store" do
-          expect(storage).not_to receive(:unpersisted_store)
-          expect(storage).to receive(:action_store).and_return(action_store)
-          expect(action_store).to receive(:[]=).with("basic", "foo")
-          lens
-        end
-      end
-
-      context "when current cluster is not own cluster" do
-        let(:route_params) { {basic: "foo"} }
-        let(:community) { ActsAsTenant.with_tenant(create(:cluster)) { create(:community) } }
-
-        it "stores lens value in store" do
-          expect(storage).to receive(:unpersisted_store).and_return({})
-          expect(storage).not_to receive(:action_store)
-          lens
-        end
+      it "stores lens value in store" do
+        expect(storage).not_to receive(:unpersisted_store)
+        expect(storage).to receive(:action_store).and_return(action_store)
+        expect(action_store).to receive(:[]=).with("basic", "foo")
+        lens
       end
     end
   end

@@ -20,7 +20,7 @@ class Foo
 end
 
 # Simple lens for test purposes
-class BasicLens < Lens::SelectLens
+class BasicSelectLens < Lens::SelectLens
   param_name :view
   possible_options %i[album table tableall]
   i18n_key "simple_form.options.user.view"
@@ -33,7 +33,7 @@ class BasicLens < Lens::SelectLens
 end
 
 # Lens with multiple option types for test purposes
-class ComplexLens < Lens::SelectLens
+class ComplexSelectLens < Lens::SelectLens
   param_name :view
   possible_options [:album, ["TABLE", 1], "---", Foo.new(id: 12, name: "TableAll")]
   i18n_key "simple_form.options.user.view"
@@ -52,7 +52,7 @@ describe Lens::SelectLens do
   end
 
   describe "#clearable_and_active?" do
-    let(:klass) { BasicLens }
+    let(:klass) { BasicSelectLens }
     subject(:clearable_and_active) { lens.clearable_and_active? }
 
     context "with clearable lens" do
@@ -138,7 +138,7 @@ describe Lens::SelectLens do
   end
 
   describe "#selection" do
-    let(:klass) { ComplexLens }
+    let(:klass) { ComplexSelectLens }
     subject(:selection) { lens.selection }
 
     context "with clearable lens" do
@@ -199,7 +199,7 @@ describe Lens::SelectLens do
     end
 
     context "with symbol-based lens" do
-      let(:klass) { BasicLens }
+      let(:klass) { BasicSelectLens }
 
       shared_examples_for "has no selected option" do
         it "calls expected methods" do
@@ -253,7 +253,7 @@ describe Lens::SelectLens do
     end
 
     context "with lens with different option types" do
-      let(:klass) { ComplexLens }
+      let(:klass) { ComplexSelectLens }
 
       context "when lens is clearable" do
         let(:clearable) { true }

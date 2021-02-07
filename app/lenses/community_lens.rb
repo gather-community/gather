@@ -32,8 +32,9 @@ class CommunityLens < Lens::SelectLens
   attr_accessor :communities
 
   def possible_options
-    # Sort the current community to the top so it's the default if not clearable
-    community_options = communities.sort_by { |c| context.current_community == c ? 0 : 1 }.map do |c|
+    # Sort the current community to the top so it's the default if not clearable. Ensure sort is stable.
+    self.communities = communities.sort_by.with_index { |c, i| context.current_community == c ? 0 : i + 1 }
+    community_options = communities.map do |c|
       [c.name, c == context.current_community && clearable? ? "this" : c.slug]
     end
     (clearable? ? [:all] : []).concat(community_options)

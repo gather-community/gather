@@ -198,6 +198,7 @@ module Work
         # stuff to use the search fields, at least for period and community
         size: 10_000
       )
+
       @shifts = @shifts.merge(search.records.records)
     end
 

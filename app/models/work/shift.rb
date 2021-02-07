@@ -29,7 +29,6 @@ module Work
              :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
              :double_signups_allowed?, :meal_role_id, to: :job
 
-    scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where(work_periods: {community_id: c.id}) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :non_draft, -> { joins(job: :period).where.not(work_periods: {phase: "draft"}) }

@@ -125,7 +125,7 @@ describe CommunityLens do
         it "includes 'all', puts current community as first option with 'this', nil selection" do
           expect(view_context).to receive(:options_for_select)
             .with([["All Communities", nil], %w[Community3 this],
-                   %w[Default default], %w[Community2 community2]], nil)
+                   %w[Community2 community2], %w[Default default]], nil)
             .and_return("<option ...>")
           lens.render
         end
@@ -137,7 +137,7 @@ describe CommunityLens do
         it "selects current community" do
           expect(view_context).to receive(:options_for_select)
             .with([["All Communities", nil], %w[Community3 this],
-                   %w[Default default], %w[Community2 community2]], "this")
+                   %w[Community2 community2], %w[Default default]], "this")
             .and_return("<option ...>")
           lens.render
         end
@@ -149,7 +149,7 @@ describe CommunityLens do
         it "selects appropriate community" do
           expect(view_context).to receive(:options_for_select)
             .with([["All Communities", nil], %w[Community3 this],
-                   %w[Default default], %w[Community2 community2]], "community2")
+                   %w[Community2 community2], %w[Default default]], "community2")
             .and_return("<option ...>")
           lens.render
         end
@@ -164,7 +164,7 @@ describe CommunityLens do
 
         it "puts current community as first option, nil selection" do
           expect(view_context).to receive(:options_for_select)
-            .with([%w[Community3 community3], %w[Default default], %w[Community2 community2]], nil)
+            .with([%w[Community3 community3], %w[Community2 community2], %w[Default default]], nil)
             .and_return("<option ...>")
           lens.render
         end
@@ -175,7 +175,7 @@ describe CommunityLens do
 
         it "selects appropriate community" do
           expect(view_context).to receive(:options_for_select)
-            .with([%w[Community3 community3], %w[Default default], %w[Community2 community2]], nil)
+            .with([%w[Community3 community3], %w[Community2 community2], %w[Default default]], nil)
             .and_return("<option ...>")
           lens.render
         end
@@ -186,7 +186,7 @@ describe CommunityLens do
 
         it "selects appropriate community" do
           expect(view_context).to receive(:options_for_select)
-            .with([%w[Community3 community3], %w[Default default], %w[Community2 community2]], "community2")
+            .with([%w[Community3 community3], %w[Community2 community2], %w[Default default]], "community2")
             .and_return("<option ...>")
           lens.render
         end

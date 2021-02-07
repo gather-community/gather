@@ -8,7 +8,7 @@ class CommunityLens < Lens::SelectLens
   def initialize(**args)
     super(**args)
     options[:subdomain] = true unless options.key?(:subdomain)
-    self.communities = h.load_communities_in_cluster
+    self.communities = context.current_cluster.communities.by_name
   end
 
   def render
@@ -17,7 +17,7 @@ class CommunityLens < Lens::SelectLens
 
   def selection
     if clearable? && (value == "all" || value.nil?)
-      context.current_cluster.communities
+      communities
     elsif options[:subdomain] || value.nil? || value == "this"
       context.current_community
     elsif value.match(/\A\d+\z/) # Legacy link support

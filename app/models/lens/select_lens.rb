@@ -20,6 +20,12 @@ module Lens
       class_var_get_or_set(:possible_options, possible_options)
     end
 
+    def initialize(options:, **args)
+      super
+      return if route_param_given? || !value.nil? || !options.key?(:initial_selection)
+      self.value = value_for_option(options[:initial_selection])
+    end
+
     # True if selection is not base_option.
     def clearable_and_active?
       return false if empty?

@@ -43,10 +43,12 @@ describe Lens::SelectLens do
   let(:community) { create(:community) }
   let(:context) { double }
   let(:base_option) { nil }
+  let(:initial_selection) { nil }
   let(:storage) { double(action_store: {}) }
   let(:lens) do
     params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
     params[:options][:base_option] = base_option unless base_option.nil?
+    params[:options][:initial_selection] = initial_selection unless initial_selection.nil?
     params[:options][:clearable] = clearable
     klass.new(**params)
   end
@@ -67,6 +69,12 @@ describe Lens::SelectLens do
         context "when first option is explicitly given" do
           let(:route_params) { {view: "album"} }
           it { is_expected.to be(false) }
+        end
+
+        context "when initial_selection is specified" do
+          let(:route_params) { {} }
+          let(:initial_selection) { :table }
+          it { is_expected.to be(true) }
         end
 
         context "when other value is given" do
@@ -90,6 +98,12 @@ describe Lens::SelectLens do
 
         context "when value given is not the base" do
           let(:route_params) { {view: "table"} }
+          it { is_expected.to be(true) }
+        end
+
+        context "when non-base value set as initial_selection" do
+          let(:route_params) { {} }
+          let(:initial_selection) { :table }
           it { is_expected.to be(true) }
         end
       end
@@ -225,6 +239,55 @@ describe Lens::SelectLens do
       context "when base value but nothing selected" do
         let(:route_params) { {} }
         it_behaves_like "has no selected option"
+      end
+
+      context "with initial_selection" do
+        let(:initial_selection) { :table }
+
+        context "with no route params" do
+          let(:route_params) { {} }
+
+          it "selects the initial selection" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], "table")
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
+
+        context "with blank route params" do
+          let(:route_params) { {view: ""} }
+
+          it "selects the base" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], nil)
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
+
+        context "with explicit route params" do
+          let(:route_params) { {view: "tableall"} }
+
+          it "overrides the initial selection" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], "tableall")
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
+
+        context "with value in store" do
+          let(:route_params) { {} }
+          let(:storage) { double(action_store: {"view" => "tableall"}) }
+
+          it "overrides the initial selection" do
+            expect(view_context).to receive(:options_for_select)
+              .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], "tableall")
+              .and_return("<option ...>")
+            lens.render
+          end
+        end
       end
 
       context "when other value chosen" do

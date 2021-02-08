@@ -10,7 +10,7 @@ module Work
       self.periods = Period.in_community(context.current_community).active.oldest_first
       options[:clearable] = false
       options[:global] = true
-      options[:default] = default_period
+      options[:base_option] = default_period
       super(options: options, context: context, **params)
     end
 

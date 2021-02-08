@@ -42,11 +42,11 @@ end
 describe Lens::SelectLens do
   let(:community) { create(:community) }
   let(:context) { double }
-  let(:default_option) { nil }
+  let(:base_option) { nil }
   let(:storage) { double(action_store: {}) }
   let(:lens) do
     params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
-    params[:options][:default] = default_option unless default_option.nil?
+    params[:options][:base_option] = base_option unless base_option.nil?
     params[:options][:clearable] = clearable
     klass.new(**params)
   end
@@ -58,7 +58,7 @@ describe Lens::SelectLens do
     context "with clearable lens" do
       let(:clearable) { true }
 
-      context "without explicitly defined default" do
+      context "without explicitly defined base" do
         context "when no value is given" do
           let(:route_params) { {} }
           it { is_expected.to be(false) }
@@ -75,20 +75,20 @@ describe Lens::SelectLens do
         end
       end
 
-      context "with explicitly defined default" do
-        let(:default_option) { :tableall }
+      context "with explicitly defined base" do
+        let(:base_option) { :tableall }
 
         context "when no value is given" do
           let(:route_params) { {} }
           it { is_expected.to be(false) }
         end
 
-        context "when explicitly defined default is given" do
+        context "when explicitly defined base is given" do
           let(:route_params) { {view: "tableall"} }
           it { is_expected.to be(false) }
         end
 
-        context "when value given is not the default" do
+        context "when value given is not the base" do
           let(:route_params) { {view: "table"} }
           it { is_expected.to be(true) }
         end
@@ -97,9 +97,9 @@ describe Lens::SelectLens do
 
     context "with non-clearable lens" do
       let(:clearable) { false }
-      let(:default_option) { :tableall }
+      let(:base_option) { :tableall }
 
-      context "without explicitly defined default" do
+      context "without explicitly defined base" do
         context "when no value is given" do
           let(:route_params) { {} }
           it { is_expected.to be(false) }
@@ -116,20 +116,20 @@ describe Lens::SelectLens do
         end
       end
 
-      context "with explicitly defined default" do
-        let(:default_option) { :tableall }
+      context "with explicitly defined base" do
+        let(:base_option) { :tableall }
 
         context "when no value is given" do
           let(:route_params) { {} }
           it { is_expected.to be(false) }
         end
 
-        context "when explicitly defined default is given" do
+        context "when explicitly defined base is given" do
           let(:route_params) { {view: "tableall"} }
           it { is_expected.to be(false) }
         end
 
-        context "when value given is not the default" do
+        context "when value given is not the base" do
           let(:route_params) { {view: "table"} }
           it { is_expected.to be(false) }
         end
@@ -149,7 +149,7 @@ describe Lens::SelectLens do
         it { is_expected.to eq(:album) }
       end
 
-      context "when symbol (default) selected" do
+      context "when symbol (base) selected" do
         let(:route_params) { {view: "album"} }
         it { is_expected.to eq(:album) }
       end
@@ -173,7 +173,7 @@ describe Lens::SelectLens do
         it { is_expected.to eq(:album) }
       end
 
-      context "when symbol (default) selected" do
+      context "when symbol (base) selected" do
         let(:route_params) { {view: "album"} }
         it { is_expected.to eq(:album) }
       end
@@ -217,12 +217,12 @@ describe Lens::SelectLens do
         end
       end
 
-      context "when default value chosen explicitly" do
+      context "when base value chosen explicitly" do
         let(:route_params) { {view: "album"} }
         it_behaves_like "has no selected option"
       end
 
-      context "when default value but nothing selected" do
+      context "when base value but nothing selected" do
         let(:route_params) { {} }
         it_behaves_like "has no selected option"
       end
@@ -258,7 +258,7 @@ describe Lens::SelectLens do
       context "when lens is clearable" do
         let(:clearable) { true }
 
-        context "with no explicit default" do
+        context "with no explicit base" do
           context "when pair is selected" do
             let(:route_params) { {view: "1"} }
 
@@ -282,8 +282,8 @@ describe Lens::SelectLens do
           end
         end
 
-        context "when pair is default and nothing is selected" do
-          let(:default_option) { ["TABLE", 1] }
+        context "when pair is base and nothing is selected" do
+          let(:base_option) { ["TABLE", 1] }
           let(:route_params) { {} }
 
           it "no option tag is selected" do
@@ -294,8 +294,8 @@ describe Lens::SelectLens do
           end
         end
 
-        context "when object is default and nothing is selected" do
-          let(:default_option) { Foo.new(id: 12, name: "TableAll") }
+        context "when object is base and nothing is selected" do
+          let(:base_option) { Foo.new(id: 12, name: "TableAll") }
           let(:route_params) { {} }
 
           it "no option tag is selected" do
@@ -310,7 +310,7 @@ describe Lens::SelectLens do
       context "when lens is not clearable" do
         let(:clearable) { false }
 
-        context "with no explicit default" do
+        context "with no explicit base" do
           context "when pair is selected" do
             let(:route_params) { {view: "1"} }
 
@@ -334,8 +334,8 @@ describe Lens::SelectLens do
           end
         end
 
-        context "when pair is default and nothing is selected" do
-          let(:default_option) { ["TABLE", 1] }
+        context "when pair is base and nothing is selected" do
+          let(:base_option) { ["TABLE", 1] }
           let(:route_params) { {} }
 
           it "renders properly" do
@@ -346,8 +346,8 @@ describe Lens::SelectLens do
           end
         end
 
-        context "when object is default and nothing is selected" do
-          let(:default_option) { Foo.new(id: 12, name: "TableAll") }
+        context "when object is base and nothing is selected" do
+          let(:base_option) { Foo.new(id: 12, name: "TableAll") }
           let(:route_params) { {} }
 
           it "renders properly" do

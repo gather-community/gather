@@ -20,10 +20,10 @@ module Lens
       class_var_get_or_set(:possible_options, possible_options)
     end
 
-    # True if selection is not default.
+    # True if selection is not base_option.
     def clearable_and_active?
       return false if empty?
-      clearable? && selection != default_option
+      clearable? && selection != base_option
     end
 
     def render
@@ -73,20 +73,20 @@ module Lens
     # Depends on enabled_options, which depends on possible_options. So if the lens doesn't
     # define possible_options, it can't use this method.
     def option_tags
-      select_options = [default_option].concat(enabled_options - [default_option])
+      select_options = [base_option].concat(enabled_options - [base_option])
       pairs = select_options.map { |o| pair_for_option(o) }
-      h.options_for_select(pairs, value_is_default_option? ? nil : value)
+      h.options_for_select(pairs, value_is_base_option? ? nil : value)
     end
 
     # Returns pair of strings for use in options_for_select.
-    # If option is the default option and this is a clearable lens,
+    # If option is the base option and this is a clearable lens,
     # the value string (second in pair) will be nil.
     # That way, it's easy to construct a query string to clear (just all blank values).
-    # All defaults should be first in the option list also, because when you set the value to nil
-    # they will be selected.
+    # The base_option should be first in the option list also, because when you set the value to nil
+    # it will be selected.
     def pair_for_option(option)
       pair = [label_for_option(option), value_for_option(option)]
-      pair[1] = nil if clearable? && option == default_option
+      pair[1] = nil if clearable? && option == base_option
       pair
     end
 
@@ -120,17 +120,17 @@ module Lens
       I18n.t("#{i18n_key}.#{option}")
     end
 
-    def value_is_default_option?
-      !default_option.nil? && value_matches_option?(default_option)
+    def value_is_base_option?
+      !base_option.nil? && value_matches_option?(base_option)
     end
 
     def value_matches_option?(option)
-      option == default_option && value.nil? || value == value_for_option(option)
+      option == base_option && value.nil? || value == value_for_option(option)
     end
 
     # Returns nil if select is empty.
-    def default_option
-      options[:default] || enabled_options.first
+    def base_option
+      options[:base_option] || enabled_options.first
     end
 
     def enabled_options

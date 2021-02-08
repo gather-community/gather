@@ -200,8 +200,8 @@ class UsersController < ApplicationController
   def prepare_user_lenses
     prepare_lenses({community: {clearable: false}},
                    :"people/life_stage",
-                   {"people/sort": {default:
-                    current_community.settings.people.default_directory_sort.to_sym}},
+                   {"people/sort":
+                     {base_option: current_community.settings.people.default_directory_sort.to_sym}},
                    :"people/view",
                    :search)
   end

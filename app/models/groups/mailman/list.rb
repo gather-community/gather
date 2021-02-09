@@ -23,7 +23,11 @@ module Groups
         # "defer" means default processing
         default_member_action: "defer",
 
-        # "hold" means send to moderators
+        # What to do with mail from nonmembers (i.e. outsiders). We default this to 'hold' (send to
+        # moderators) but currently don't enforce it because for smaller lists, e.g.
+        # committee lists, this is a pain. We could perhaps add every person in the community as
+        # a permitted sender, but this would have performance issues. If we start seeing spam
+        # flowing as a result of this we may have to enforce.
         default_nonmember_action: "hold",
 
         # Disabling welcome messages for now because they are gross looking and probably not necessary

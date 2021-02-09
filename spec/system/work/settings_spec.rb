@@ -12,7 +12,7 @@ describe "work settings", js: true do
 
   scenario "happy path" do
     visit(edit_work_settings_path)
-    expect(page).to have_select("Default Signup Date Filter", selected: "All Dates")
+    expect(page).to have_select("Default Signup Date Filter", selected: "Past & Future")
 
     select("Current & Future", from: "Default Signup Date Filter")
     click_button("Save")

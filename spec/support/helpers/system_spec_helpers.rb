@@ -346,6 +346,10 @@ module SystemSpecHelpers
     expect(lens_node(param_name).value).to eq(value)
   end
 
+  def have_select_lens(param_name, **args)
+    have_select(param_name.to_s, **args)
+  end
+
   def lens_selected_option(param_name)
     # If there is an explicitly selected option, return that, else return the first one.
     lens_field(param_name).all("option[selected]")[0] || lens_field(param_name).first("option")

@@ -35,6 +35,8 @@ module Work
     scope :published, -> { joins(job: :period).where(work_periods: {phase: "published"}) }
     scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
+    scope :past, -> { where(arel_table[:ends_at].lt(Time.current)) }
+    scope :current_future, -> { where(arel_table[:ends_at].gteq(Time.current)) }
     scope :by_date, -> { order(:starts_at, :ends_at) }
     scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
     scope :open, lambda {

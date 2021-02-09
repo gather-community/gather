@@ -107,7 +107,7 @@ en:
               unit: "By Unit"
           work:
             default_date_filter:
-              all: "All Dates"
+              all: "Past & Future"
               curftr: "Current & Future"
           billing:
             late_fee_policy:

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# This is really a decorator class. Not persisted.
 module People
+  # This is really a decorator class. Not persisted.
   class PhoneNumber
     attr_reader :model, :kind
 
@@ -16,14 +16,10 @@ module People
       model.read_attribute(attrib)
     end
 
-    def formatted(options = {})
-      result = if errors.any?
-                 raw.try(:sub, /\A\+/, "")
-               else
-                 raw.try(:phony_formatted, format: :national)
-      end
+    def formatted(kind_abbrv: nil)
+      result = errors.any? ? raw : raw&.phony_formatted(format: :national)
 
-      if options[:kind_abbrv] && result
+      if kind_abbrv && result
         kind_abbrv = I18n.t("phone_types.abbreviations.#{kind}")
         result = "#{formatted} #{kind_abbrv}"
       end

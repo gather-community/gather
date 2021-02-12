@@ -15,6 +15,8 @@ gem "browser", "~> 2.5"
 gem "cocoon", "~> 1.2"
 gem "coffee-rails", "~> 5.0"
 gem "config", "~> 1.4"
+gem "country_select", "~> 4.0",
+    require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
                             branch: "master", submodules: true

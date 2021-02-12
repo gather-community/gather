@@ -11,6 +11,7 @@ describe AccountMailer do
   let(:account) { create(:account, household: household, community: community) }
   let(:statement) { create(:statement, account: account, total_due: 9.99) }
   let!(:billers) { create_list(:biller, 2, community: community) }
+  let!(:inactive_biller) { create(:biller, :inactive, community: community) }
 
   shared_examples_for "statement email" do
     context "with active users" do

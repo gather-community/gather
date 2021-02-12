@@ -5,15 +5,12 @@ module Meals
   class TimeLens < Lens::SelectLens
     param_name :time
     i18n_key "simple_form.options.meals_meal.time"
-    select_prompt :upcoming
-    possible_options %i[past finalizable all]
+    possible_options %i[upcoming past finalizable all]
 
     protected
 
-    def select_options
-      options = possible_options.dup
-      options.delete(:finalizable) if route_params[:action] == "jobs"
-      options
+    def excluded_options
+      route_params[:action] == "jobs" ? [:finalizable] : []
     end
   end
 end

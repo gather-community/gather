@@ -7,8 +7,8 @@ module Lens
 
     LENS_VERSION = 5
 
-    def initialize(session:, community_id:, controller_path:, action_name:)
-      self.session = session
+    def initialize(session:, community_id:, controller_path:, action_name:, persist:)
+      self.session = persist ? session : {}
       self.community_id = community_id
       self.controller_path = controller_path
       self.action_name = action_name

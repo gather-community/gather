@@ -36,6 +36,7 @@ describe "signups", js: true do
       end
     end
 
+    # NOTE: See below for testing of shift_date_range lens
     describe "filters and search", search: Work::Shift do
       include_context "with assignments"
 
@@ -159,6 +160,78 @@ describe "signups", js: true do
             "Your round limit is 11 hours and will rise to 22 at #{time}")
         end
         expect(periods[0].reload.phase).to eq("open")
+      end
+    end
+  end
+
+  context "with past, present, and future jobs" do
+    let!(:period) do
+      create(:work_period, starts_on: Time.zone.today - 83.days, ends_on: Time.zone.today + 7.days,
+                           phase: "open")
+    end
+    let!(:jobs) do
+      [
+        create(:work_job, period: period, title: "Moldy Oldy", time_type: "date_only",
+                          shift_slots: 1,
+                          shift_starts: [Time.current - 2.days],
+                          shift_ends: [Time.current - 2.days]),
+        create(:work_job, period: period, title: "Current Durrant", time_type: "date_only",
+                          shift_slots: 1,
+                          shift_starts: [Time.current - 1.day],
+                          shift_ends: [Time.current + 1.day]),
+        create(:work_job, period: period, title: "Future Scoocher", time_type: "date_only",
+                          shift_slots: 1,
+                          shift_starts: [Time.current + 2.days],
+                          shift_ends: [Time.current + 2.days])
+      ]
+    end
+
+    context "with default initial_selection (all)" do
+      scenario do
+        visit(page_path)
+        expect(page).to have_select_lens(:dates, selected: "Past & Future")
+        expect_jobs(*jobs[0..2])
+
+        select_lens(:dates, "Current & Future")
+        expect_jobs(*jobs[1..2])
+
+        select_lens(:dates, "Past Only")
+        expect_jobs(*jobs[0])
+      end
+    end
+
+    context "with default initial_selection (all)" do
+      scenario "lenses work properly" do
+        visit(page_path)
+        expect(page).to have_select_lens(:dates, selected: "Past & Future")
+        expect_jobs(*jobs[0..2])
+
+        select_lens(:dates, "Current & Future")
+        expect_jobs(*jobs[1..2])
+
+        select_lens(:dates, "Past Only")
+        expect_jobs(*jobs[0])
+      end
+    end
+
+    context "with current & future initial_selection" do
+      before do
+        Defaults.community.update!(settings: {work: {default_date_filter: "curftr"}})
+      end
+
+      scenario "lenses work properly" do
+        visit(page_path)
+        expect(page).to have_select_lens(:dates, selected: "Current & Future")
+        expect(page).to have_lens_clear_link
+        expect_jobs(*jobs[1..2])
+
+        clear_lenses
+        expect(page).to have_select_lens(:dates, selected: "Past & Future")
+        expect_jobs(*jobs[0..2])
+
+        visit(page_path)
+        expect(page).to have_select_lens(:dates, selected: "Current & Future")
+        expect(page).to have_lens_clear_link
       end
     end
   end

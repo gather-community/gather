@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-module People
+module Work
   class SettingsController < ::SettingsController
-    before_action -> { nav_context(:people, :settings, :general) }
+    before_action -> { nav_context(:work, :settings) }
 
     protected
 
     def sub_settings
-      current_community.settings.people
+      current_community.settings.work
     end
 
     def edit_path
-      edit_people_settings_path
+      edit_work_settings_path
     end
   end
 end

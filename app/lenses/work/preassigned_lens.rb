@@ -5,8 +5,7 @@ module Work
   class PreassignedLens < Lens::SelectLens
     param_name :pre
     i18n_key "simple_form.options.work_job.preassigned"
-    select_prompt :any
-    possible_options %i[y n]
+    possible_options %i[any y n]
 
     def yes?
       y?

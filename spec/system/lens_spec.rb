@@ -21,61 +21,6 @@ describe "lenses", js: true do
     end
   end
 
-  describe "community lens (highly customized)" do
-    context "basic" do
-      scenario do
-        visit(users_path)
-        expect(lens_selected_option(:community).text).to eq("Community 3")
-        lens_field(:community).select("Community 2")
-        expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
-        expect(lens_selected_option(:community).text).to eq("Community 2")
-        expect(page).not_to have_css(".lens-bar a.clear")
-      end
-    end
-
-    context "with all option" do
-      scenario do
-        visit(meals_path)
-
-        expect_unselected_option(lens_selector(:community), "All Communities")
-        lens_field(:community).select("Community 2")
-
-        expect(page).to have_echoed_url(%r{\Ahttp://community2\.})
-        expect(lens_selected_option(:community).text).to eq("Community 2")
-        expect(page).to have_echoed_url_param("community", "this")
-        # Clear button should work for all option mode only
-        first(".lens-bar a.clear").click
-
-        expect(page).to have_echoed_url_param("community", "")
-        expect_unselected_option(lens_selector(:community), "All Communities")
-      end
-    end
-
-    context "with no subdomain change" do
-      before do
-        [community1, community2, community3].each do |c|
-          Billing::AccountManager.instance.account_for(household_id: user.household_id, community_id: c.id)
-        end
-      end
-
-      scenario do
-        visit(yours_accounts_path)
-        expect(lens_selected_option(:community).text).to eq("Community 3")
-
-        lens_field(:community).select("Community 2")
-
-        expect(page).to have_echoed_url(%r{\Ahttp://community3\.})
-        expect(page).to have_echoed_url_param("community", "community2")
-        expect(lens_selected_option(:community).text).to eq("Community 2")
-        expect(page).not_to have_css(".lens-bar a.clear")
-        visit(yours_accounts_path)
-
-        expect(page).to have_echoed_url(yours_accounts_path)
-        expect(lens_selected_option(:community).text).to eq("Community 2")
-      end
-    end
-  end
-
   describe "search lens" do
     scenario "search" do
       visit(users_path)
@@ -144,6 +89,8 @@ describe "lenses", js: true do
   # lenses (e.g. that adults-only are actually displayed when you pick that from the lens.)
   # There is no need to test e.g. the basic select lens behavior over and over.
   # Lenses that are more custom, though, like choosee lens, deserve a bit more coverage.
+  # --- 1/19/2021:
+  # Much of this is now also covered by models specs
 
   describe "directory lenses" do
     scenario "user sort" do

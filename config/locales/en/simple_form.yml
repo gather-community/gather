@@ -257,6 +257,11 @@ en:
           me: "My Jobs"
           myhh: "My Household"
           notpre: "Not Preassigned"
+        date_range:
+          all: "Past & Future"
+          curftr: "Current & Future"
+          past: "Past Only"
+
     prompts:
       user:
         preferred_contact: "How should people contact you for non-emergencies?"

@@ -36,6 +36,7 @@ en:
         report: "Report"
         jobs: "Jobs"
         periods: "Periods"
+        settings: "Settings"
       billing:
         accounts: "Accounts"
         templates: "Templates"

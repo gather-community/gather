@@ -18,8 +18,10 @@ module Lens
       self.context = context
       self.lenses ||= []
       self.visible = true
+
       self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
-                                 controller_path: context.controller_path, action_name: context.action_name)
+                                 controller_path: context.controller_path, action_name: context.action_name,
+                                 persist: context.own_cluster?)
       storage.reset if route_params[:clearlenses]
       build_lenses(lens_names)
       PathSaver.new(storage: storage).write(lenses: lenses, path: request_path, params: route_params)
@@ -33,12 +35,8 @@ module Lens
       self.visible = false
     end
 
-    def optional_lenses
-      lenses.reject(&:required?)
-    end
-
-    def optional_lenses_active?
-      optional_lenses.any?(&:active?)
+    def can_clear_lenses?
+      lenses.any?(&:clearable_and_active?)
     end
 
     def [](param_name)
@@ -57,13 +55,9 @@ module Lens
       lenses.map { |l| [l.param_name, l.value] }.to_h.to_query
     end
 
-    def query_string_to_clear
-      optional_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
-    end
-
     # If there are optional filters set, return some text and a link indicating they can clear them.
     def no_result_clear_filter_link
-      if optional_lenses_active?
+      if can_clear_lenses?
         link = view.link_to(I18n.t("common.clearing_the_filter"), path_to_clear)
         view.t("common.no_result_clear_filter_link_html", link: link)
       else
@@ -100,12 +94,24 @@ module Lens
         context: context,
         route_params: route_params,
         storage: storage,
+
+        # This should be removed eventually. The choosee lens is the only one using it currently.
+        # A better way would be to request it be injected in the call to prepare_lenses.
+        # Would have to add a spec to Lens::Set for this.
         set: self
       )
 
       # This hash may have been accessed and thus memoized by the lens just built,
       # but that could be a problem if it's not the last one, so force it to rebuild on the next access.
       @lenses_by_param_name = nil
+    end
+
+    def query_string_to_clear
+      clearable_lenses.map { |l| [l.param_name, ""] }.to_h.to_query
+    end
+
+    def clearable_lenses
+      lenses.select(&:clearable?)
     end
 
     def lenses_by_param_name

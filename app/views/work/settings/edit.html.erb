@@ -1,6 +1,6 @@
-<% content_for(:title, "People Settings") %>
+<% content_for(:title, "Work Settings") %>
 
-<%= gather_form_for(@community, url: people_settings_path) do |f| %>
+<%= gather_form_for(@community, url: work_settings_path) do |f| %>
   <%= f.fields_for(:settings) do |ff| %>
     <%= render("admin/settings/group_entry", group_entry: @settings, f: ff) %>
   <% end %>

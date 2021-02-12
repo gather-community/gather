@@ -109,11 +109,17 @@ module Work
     private
 
     def prepare_lenses_and_set_contextual_vars
-      names = params[:action] == "index" ? %i[search work/shift] : []
+      if params[:action] == "index"
+        names = %i[search work/shift]
+        default_date_filter = current_community.settings.work.default_date_filter.to_sym
+        names << {"work/shift_date_range": {initial_selection: default_date_filter}}
+      else
+        names = []
+      end
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      @period = lenses[:period].object
-      @choosee = lenses[:choosee].choosee
+      @period = lenses[:period].selection
+      @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
     end
@@ -150,6 +156,7 @@ module Work
         .per(48) # multiple of 2, 3, & 4
       apply_shift_lens
       apply_search_lens
+      apply_date_range_lens
     end
 
     def authorize_and_do_signup_or_raise_error
@@ -198,7 +205,17 @@ module Work
         # stuff to use the search fields, at least for period and community
         size: 10_000
       )
+
       @shifts = @shifts.merge(search.records.records)
+    end
+
+    def apply_date_range_lens
+      return if lenses[:dates].selection == :all
+      if lenses[:dates].selection == :curftr
+        @shifts = @shifts.current_future
+      elsif lenses[:dates].selection == :past
+        @shifts = @shifts.past
+      end
     end
 
     # Custom-builds a ShiftPolicy object with the given shift, including the synopsis if appropriate.

@@ -7,33 +7,25 @@ module Work
 
     param_name :shift
     i18n_key "simple_form.options.work_shift.lens"
-    select_prompt :all
 
     def requester_id
       return unless value =~ /\A#{REQUESTER_PREFIX}(.+)\z/
       Regexp.last_match(1)
     end
 
-    protected
-
-    def option_tags
-      main_options << divider << requester_options
-    end
-
     private
 
-    def main_options
-      tags_for_options(%i[open me myhh notpre])
+    def possible_options
+      (main_options << "------").concat(requester_options)
     end
 
-    def divider
-      h.content_tag(:option, "------", value: "")
+    def main_options
+      %i[all open me myhh notpre]
     end
 
     def requester_options
       requesters = Job.requester_options(community: context.current_community)
-      id_proc = ->(group) { "#{REQUESTER_PREFIX}#{group.id}" }
-      h.options_from_collection_for_select(requesters, id_proc, :name, value)
+      requesters.map { |r| [r.name, "#{REQUESTER_PREFIX}#{r.id}"] }
     end
   end
 end

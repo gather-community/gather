@@ -11,7 +11,7 @@ module Work
     def index
       authorize(sample_job)
       prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
-      @period = lenses[:period].object
+      @period = lenses[:period].selection
       @jobs = policy_scope(Job).includes(:requester, :period).in_community(current_community)
       if @period.nil?
         lenses.hide!

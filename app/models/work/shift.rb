@@ -29,13 +29,14 @@ module Work
              :period_starts_on, :period_ends_on, :slot_type, :date_time?, :date_only?, :reminders,
              :double_signups_allowed?, :meal_role_id, to: :job
 
-    scope :by_time, -> { order(:starts_at, :ends_at) }
     scope :in_community, ->(c) { joins(job: :period).where(work_periods: {community_id: c.id}) }
     scope :in_period, ->(p) { joins(:job).where("work_jobs.period_id": p.id) }
     scope :non_draft, -> { joins(job: :period).where.not(work_periods: {phase: "draft"}) }
     scope :published, -> { joins(job: :period).where(work_periods: {phase: "published"}) }
     scope :by_job_title, -> { joins(:job).alpha_order(work_jobs: :title) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
+    scope :past, -> { where(arel_table[:ends_at].lt(Time.current)) }
+    scope :current_future, -> { where(arel_table[:ends_at].gteq(Time.current)) }
     scope :by_date, -> { order(:starts_at, :ends_at) }
     scope :from_requester, ->(r) { joins(:job).where("work_jobs.requester_id": r) }
     scope :open, lambda {

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module People
+module Work
   class SettingsPolicy < ::SettingsPolicy
   end
 end

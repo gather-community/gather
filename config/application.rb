@@ -78,7 +78,7 @@ module Gather
     config.active_record.belongs_to_required_by_default = false
 
     # Ubuntu Xenial doesn't have a new enough libvips package and don't want to compile everytime.
-    config.active_storage.variant_processor = ENV["TRAVIS"] ? :mini_magick : :vips
+    config.active_storage.variant_processor = ENV["CI"] ? :mini_magick : :vips
 
     # Allow enough time for folks to fill in and submit forms with attachments.
     config.active_storage.service_urls_expire_in = 15.minutes

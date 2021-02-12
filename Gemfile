@@ -94,3 +94,7 @@ end
 group :development do
   gem "listen", "~> 3.2"
 end
+
+group :test do
+  gem "rspec-github", require: false
+end

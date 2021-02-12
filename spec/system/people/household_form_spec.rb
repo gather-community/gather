@@ -92,16 +92,26 @@ describe "household form" do
       visit(new_household_path)
       fill_in("Household Name", with: "Pump")
       fill_in("Unit Number", with: "33")
-      within(".household_emergency_contacts") do
+      within(all(".household_emergency_contacts .nested-fields")[0]) do
         expect(page).to have_select("Country", selected: "New Zealand")
         fill_in("Name *", with: "Lori", exact: true)
         fill_in("Relationship to Household", with: "Mom")
         fill_in("Location", with: "Placey Place")
         fill_in("Main Phone", with: "21345678")
       end
+      click_link("Add Emergency Contact")
+      within(all(".household_emergency_contacts .nested-fields")[1]) do
+        expect(page).to have_select("Country", selected: "New Zealand")
+        fill_in("Name *", with: "Lunz", exact: true)
+        fill_in("Relationship to Household", with: "Friar")
+        fill_in("Location", with: "Overdere")
+        select("Canada", from: "Country")
+        fill_in("Main Phone", with: "7091234444")
+      end
       click_button("Save")
       click_on("Pump")
       expect(page).to have_content("021 345 678") # Formatted for NZ
+      expect(page).to have_content("+1 (709) 123-4444 (Canada)") # Formatted for Canada
     end
   end
 end

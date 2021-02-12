@@ -43,6 +43,22 @@ describe People::PhoneNumber do
         it "should properly format phone number with kind abbrv" do
           expect(phone_number.formatted(kind_abbrv: true)).to eq("(734) 315-1234 m")
         end
+
+        it "should properly format phone number with country" do
+          expect(phone_number.formatted(show_country: true)).to eq("(734) 315-1234 (United States)")
+        end
+
+        context "with other locale" do
+          around do |example|
+            I18n.locale = :fr
+            example.run
+            I18n.locale = :en
+          end
+
+          it "should use correct country name" do
+            expect(phone_number.formatted(show_country: true)).to eq("(734) 315-1234 (États-Unis)")
+          end
+        end
       end
 
       context "with validation errors" do

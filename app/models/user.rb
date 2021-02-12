@@ -116,7 +116,7 @@ class User < ApplicationRecord
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
   delegate :age, :birth_year, to: :birthday
-  delegate :subdomain, to: :community
+  delegate :subdomain, :country_code, to: :community
 
   normalize_attributes :email, :google_email, with: :email
   normalize_attributes :first_name, :last_name, :preferred_contact

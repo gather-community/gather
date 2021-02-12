@@ -9,8 +9,9 @@ module Phoneable
       class_variable_set("@@phone_types", phone_types)
 
       phone_types.each do |p|
-        phony_normalize "#{p}_phone", default_country_code: "US"
-        validates_plausible_phone "#{p}_phone", normalized_country_code: "US", country_number: "1"
+        # country_code should be present on model and is auto-detected by Phony
+        phony_normalize "#{p}_phone"
+        validates_plausible_phone "#{p}_phone"
       end
     end
   end

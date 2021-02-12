@@ -28,7 +28,7 @@ module Work
       end
 
       def self.indexed_fields
-        mappings.to_hash[:shift][:properties].keys
+        mappings.to_hash[:properties].keys
       end
     end
 

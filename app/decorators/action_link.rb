@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class ActionLink < ApplicationDecorator
-  attr_accessor :object, :action, :icon, :method, :path, :confirm, :btn_class, :permitted, :label_symbol
+  attr_accessor :object, :action, :icon, :method, :path, :confirm, :confirm_args,
+    :btn_class, :permitted, :label_symbol
 
   def initialize(object, action, icon:, path:, btn_class: :default, label_symbol: action,
     method: :get, permitted: nil, confirm: false)
@@ -10,7 +11,8 @@ class ActionLink < ApplicationDecorator
     self.icon = icon
     self.path = path
     self.method = method
-    self.confirm = confirm
+    self.confirm_args = confirm.is_a?(Hash) ? confirm : {}
+    self.confirm = confirm != false
     self.btn_class = btn_class
     self.label_symbol = label_symbol
     self.permitted = permitted
@@ -46,6 +48,7 @@ class ActionLink < ApplicationDecorator
 
   def confirm_msg
     return @confirm_msg if defined?(@confirm_msg)
-    @confirm_msg = confirm ? I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", confirm) : nil
+    return @confirm_msg = nil unless confirm
+    @confirm_msg = I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", confirm_args)
   end
 end

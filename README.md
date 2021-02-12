@@ -165,6 +165,11 @@ rails console -e development
 Work::Shift.__elasticsearch__.create_index!(force: true)
 ```
 
+After re-creating the search index in development mode, if you want to be able to search existing data, you'll need to re-populate the index:
+
+    ActsAsTenant.current_tenant = Cluster.find(...)
+    Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+
 ### Tools
 Most code editors have plugins for linting. They will identify and let you click directly into problematic lines. You are encouraged to try one out!
 

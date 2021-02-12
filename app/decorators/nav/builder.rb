@@ -236,6 +236,12 @@ module Nav
               path: h.work_periods_path,
               permitted: h.policy(sample_period).index?,
               icon: "folder-open"
+            }, {
+              name: :settings,
+              parents: :work,
+              path: h.edit_work_settings_path,
+              permitted: Work::SettingsPolicy.new(user, community).edit?,
+              icon: "gear"
             }
           ]
         when :billing
@@ -339,7 +345,8 @@ module Nav
 
     def lens_path_if_present(controller, index_path: nil)
       storage = Lens::Storage.new(session: h.session, community_id: community.id,
-                                  controller_path: controller, action_name: "index")
+                                  controller_path: controller, action_name: "index",
+                                  persist: h.own_cluster?)
       Lens::PathSaver.new(storage: storage).read || index_path || h.send("#{controller.tr('/', '_')}_path")
     end
 

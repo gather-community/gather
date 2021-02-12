@@ -16,7 +16,7 @@ module Work
     belongs_to :requester, class_name: "Groups::Group"
     belongs_to :meal_role, class_name: "Meals::Role"
 
-    has_many :shifts, -> { by_time }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
+    has_many :shifts, -> { by_date }, class_name: "Work::Shift", inverse_of: :job, dependent: :destroy
     has_many :reminders, -> { canonical_order }, class_name: "Work::JobReminder", inverse_of: :job,
                                                  dependent: :destroy
 

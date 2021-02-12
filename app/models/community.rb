@@ -64,6 +64,9 @@ class Community < ApplicationRecord
         {key: :default_prep_time, type: :integer, required: true, default: 180}
       ]}
     ]},
+    {key: :work, type: :group, fields: [
+      {key: :default_date_filter, type: :enum, options: %w[all curftr], default: "all", required: true}
+    ]},
     {key: :billing, type: :group, fields: [
       {key: :contact, type: :email},
       {key: :statement_terms, type: :integer, default: 30},

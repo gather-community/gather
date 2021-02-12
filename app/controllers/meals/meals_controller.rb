@@ -189,7 +189,7 @@ module Meals
 
     def load_meals(context)
       @meals = policy_scope(Meal)
-      @meals = @meals.hosted_by(context == :index ? lens_communities : current_community)
+      @meals = @meals.hosted_by(context == :index ? lenses[:community].selection : current_community)
       @meals = @meals.worked_by(lenses[:user].value) if lenses[:user].present?
 
       @meals = if lenses[:time].finalizable?
@@ -243,7 +243,7 @@ module Meals
       first_meal_date = Meal.minimum(:served_at)&.to_date
       result = []
       result << {date_range: {min_date: first_meal_date}}
-      result << {community: {required: true}} if multi_community?
+      result << {community: {clearable: false}} if multi_community?
       result
     end
   end

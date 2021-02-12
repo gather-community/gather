@@ -5,7 +5,6 @@ module Lens
     attr_accessor :options, :context, :store, :route_params, :set
 
     delegate :blank?, :present?, to: :value
-    alias active? present?
 
     VALUE_CHAR_LIMIT = 32
 
@@ -31,7 +30,7 @@ module Lens
       self.context = context
       self.route_params = route_params
       self.store = options[:global] ? storage.global_store : storage.action_store
-      self.value = route_param_given? ? route_param : (value || options[:default])
+      self.value = route_param_given? ? route_param : value
       self.set = set
     end
 
@@ -47,16 +46,21 @@ module Lens
       "form-control #{param_name.to_s.dasherize}-lens"
     end
 
-    def required?
-      options[:required] == true
+    # Whether a value is present to be cleared.
+    def clearable_and_active?
+      clearable? && value.present?
+    end
+
+    def clearable?
+      !options.key?(:clearable) || options[:clearable] == true # defaults to true
     end
 
     def global?
-      options[:global] == true
+      options[:global] == true # defaults to false
     end
 
     def floating?
-      options[:floating] == true
+      options[:floating] == true # defaults to false
     end
 
     def value
@@ -69,6 +73,8 @@ module Lens
       context.view_context
     end
 
+    private
+
     def value=(val)
       if val.nil?
         store.delete(param_name.to_s)
@@ -76,8 +82,6 @@ module Lens
         store[param_name.to_s] = truncate(val)
       end
     end
-
-    private
 
     # Make sure val isn't too huge and doesn't blow up the session cookie.
     def truncate(val)

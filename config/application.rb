@@ -3,6 +3,7 @@
 require_relative("boot")
 require "rails/all"
 require_relative("../lib/disable_tenant_scoping")
+require_relative("../lib/console_helper")
 
 # Adds search info to log file.
 require "elasticsearch/rails/instrumentation"

@@ -23,7 +23,7 @@ module Utils
             reserver: adults.sample,
             resource: resource_map[row["resource_id"]],
             guidelines_ok: "1",
-            name: Faker::Hipster.words(2).join(" ").capitalize[0..23],
+            name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],
             created_at: community.created_at,
             updated_at: community.updated_at
           ))

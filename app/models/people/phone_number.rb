@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# This is really a decorator class. Not persisted.
 module People
   class PhoneNumber
     attr_reader :model, :kind

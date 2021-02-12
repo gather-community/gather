@@ -3,10 +3,12 @@
   <%= f.input :relationship %>
 </div>
 <div class="field-row">
-  <%= f.input :main_phone, as: :tel, input_html: {value: f.object.phone(:main).formatted} %>
+  <%= f.input :email %>
   <%= f.input :location %>
 </div>
 <div class="field-row">
+  <%= f.input :country_code, as: :country,
+                             selected: f.object.country_code || current_community.country_code %>
+  <%= f.input :main_phone, as: :tel, input_html: {value: f.object.phone(:main).formatted} %>
   <%= f.input :alt_phone, as: :tel, input_html: {value: f.object.phone(:alt).formatted} %>
-  <%= f.input :email %>
 </div>

@@ -21,7 +21,7 @@ class AccountMailer < ApplicationMailer
   end
 
   def biller_emails
-    User.with_biller_role.in_community(@statement.community).pluck(:email).compact
+    User.with_biller_role.active.in_community(@statement.community).pluck(:email).compact
   end
 
   def load_statement_vars(statement)

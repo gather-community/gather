@@ -14,6 +14,7 @@ namespace :db do
   def generate_cluster
     Utils::Generators::MainGenerator.new(
       cmty_name: ENV["NAME"] || "Foo Community",
+      country_code: ENV["COUNTRY"],
       slug: ENV["SLUG"] || "foo",
       sample_data: %w[yes y].include?(ENV["SAMPLE_DATA"] || "yes"),
       photos: %w[yes y].include?(ENV["PHOTOS"] || "yes")

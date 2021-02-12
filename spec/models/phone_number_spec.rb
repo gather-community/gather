@@ -15,7 +15,7 @@ describe People::PhoneNumber do
     end
 
     context "with US country code" do
-      let(:country_code) { "us" }
+      let(:country_code) { "US" }
 
       context "with nil phone number" do
         let(:phone) { nil }
@@ -55,7 +55,7 @@ describe People::PhoneNumber do
     end
 
     context "with other country code" do
-      let(:country_code) { "nz" }
+      let(:country_code) { "NZ" }
 
       context "with good phone number" do
         let(:phone) { "21345678" }

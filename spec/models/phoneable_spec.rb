@@ -10,7 +10,7 @@ describe "phoneable classes" do
     let(:user) { create(:user, community: community, mobile_phone: phone) }
 
     context "with US country code" do
-      let(:country_code) { "us" }
+      let(:country_code) { "US" }
 
       context "should properly normalize phone number" do
         let(:phone) { "7343151234" }
@@ -29,7 +29,7 @@ describe "phoneable classes" do
     end
 
     context "with non-US country code" do
-      let(:country_code) { "nz" }
+      let(:country_code) { "NZ" }
 
       context "should properly normalize phone number" do
         let(:phone) { "21345678" }
@@ -52,7 +52,7 @@ describe "phoneable classes" do
     let(:user) { build(:user, community: community, mobile_phone: phone) }
 
     context "with US country code" do
-      let(:country_code) { "us" }
+      let(:country_code) { "US" }
 
       context "should allow good phone number" do
         let(:phone) { "7343151234" }
@@ -87,7 +87,7 @@ describe "phoneable classes" do
     end
 
     context "with non-US country code" do
-      let(:country_code) { "nz" }
+      let(:country_code) { "NZ" }
 
       context "should allow good phone number" do
         let(:phone) { "21345678" }

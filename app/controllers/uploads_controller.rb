@@ -18,10 +18,7 @@ class UploadsController < ApplicationController
 
     # Run validations to ensure that the attachment is valid.
     # A community is required for some validations so we provide one.
-    object = params[:class_name].constantize.new(
-      params[:attrib] => blob.signed_id,
-      household: Household.new(community: current_community)
-    ).tap(&:valid?)
+    object = params[:class_name].constantize.new(params[:attrib] => blob.signed_id).tap(&:valid?)
 
     if (errors = object.errors[params[:attrib]]).any?
       render(json: {error: errors}, status: :unprocessable_entity)

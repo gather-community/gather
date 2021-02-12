@@ -437,7 +437,7 @@ describe UserPolicy do
       [
         {vehicles_attributes: %i[id make model color plate _destroy]},
         {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-                                           email location _destroy]},
+                                           email location country_code _destroy]},
         {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}
       ]
     end

@@ -53,6 +53,12 @@ describe User do
   end
 
   describe "validation" do
+    context "with no data" do
+      it "should not error" do
+        User.new.valid?
+      end
+    end
+
     # See phoneable_spec.rb for more phone normalization and validation specs.
     describe "phone" do
       let(:user) { build(:user, mobile_phone: phone) }

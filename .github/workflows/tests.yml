@@ -3,7 +3,7 @@ on: [push]
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       CI: true
       RAILS_ENV: test

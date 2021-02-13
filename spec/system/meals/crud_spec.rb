@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe "meal crud", js: true do
   let!(:users) { create_list(:user, 2) }
+  let!(:reimbursee) { create(:user, first_name: "Jo", last_name: "Fiz") }
   let!(:location) { create(:resource, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
   let!(:formula) { create(:meal_formula, :with_two_roles, name: "Formula 1", is_default: true) }
   let!(:no_ac_formula) { create(:meal_formula, name: "Formula 2") }
@@ -78,12 +79,14 @@ describe "meal crud", js: true do
       click_link("Edit")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
+      select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id")
       choose("Balance Credit")
       click_button("Save")
       expect_success
       click_link("Southern Beans")
       click_link("Edit")
       expect(page).to have_field("Ingredient Cost", with: "125.66")
+      expect(page).to have_content("Reimbursee *\nJo Fiz")
       click_button("Save")
 
       # Show

@@ -245,7 +245,7 @@ describe Meals::MealPolicy do
     let(:signup_attribs) do
       [signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]]]
     end
-    let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method]] }
+    let(:expense_attribs) { [cost_attributes: %i[ingredient_cost pantry_cost payment_method reimbursee_id]] }
 
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do

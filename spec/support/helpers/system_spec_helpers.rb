@@ -161,7 +161,7 @@ module SystemSpecHelpers
     page.execute_script(<<-JS)
       fakeFileInput = window.$('<input/>').attr(
         {id: 'fakeFileInput', type:'file'}
-      ).appendTo('body');
+      ).appendTo('#content');
     JS
     # Attach the file to the fake input selector with Capybara
     attach_file("fakeFileInput", file_path)

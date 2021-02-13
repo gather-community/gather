@@ -1,0 +1,87 @@
+name: RSpec & JS Tests
+on: [push]
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-20.04
+    env:
+      CI: true
+      RAILS_ENV: test
+      POSTGRES_USER: gather
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: localhost
+    services:
+      postgres:
+        image: postgres:11
+        # These env vars need to be repeated here b/c they get passed as command line args to docker
+        env:
+          POSTGRES_USER: gather
+          POSTGRES_DB: gather_test
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        # These health checks are important to ensure Postgres is ready before moving on.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Install packages
+        run: sudo apt-get install libvips
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+      - name: Add to hosts file
+        run: |
+          echo "127.0.0.1 gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community1.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community2.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community3.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community4.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community5.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community6.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community7.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community8.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community9.gather.localhost.tv" | sudo tee -a /etc/hosts
+      - name: Ruby gem cache
+        id: cache-gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          # Restore keys will be matched if the main key fails. This may restore older gems to the
+          # dir but we don't care because bundle install will check the gems anyway.
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Set bundle path
+        run: bundle config path vendor/bundle
+      - name: Install gems
+        # Save some time by not even running bundle install if we had a positive cache hit
+        # This doesn't work for yarn for some reason.
+        if: steps.cache-gems.outputs.cache-hit != 'true'
+        run: bundle install --jobs 4 --retry 3
+      - name: Copy local config file
+        run: cp config/settings.local.yml.ci config/settings.local.yml
+      - name: Setup test database
+        run: |
+          cp config/database.yml.ci config/database.yml
+          bin/rails db:setup
+      - name: Configure sysctl limits (for elasticsearch)
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+      - name: Runs Elasticsearch
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: 7.6.0
+      - name: Install Chromedriver
+        uses: nanasess/setup-chromedriver@master
+      - name: Configure Chromedriver
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+      - name: RSpec Tests
+        run: bundle exec rspec --format RSpec::Github::Formatter --format documentation

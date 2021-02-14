@@ -5,6 +5,7 @@ require "rails_helper"
 describe "finalize meal", js: true do
   let!(:actor) { create(:admin) }
   let!(:meal) { create(:meal, :with_menu, served_at: Time.current - 3.days) }
+  let!(:user) { create(:user, first_name: "Bo", last_name: "Liz") }
   let!(:signups) { create_list(:meal_signup, 3, meal: meal, diner_counts: [1]) }
   let!(:late_add) { create(:household) }
 
@@ -12,6 +13,7 @@ describe "finalize meal", js: true do
     use_user_subdomain(actor)
     meal.close!
     login_as(actor, scope: :user)
+    meal.head_cook.update!(first_name: "Jo", last_name: "Fiz")
   end
 
   scenario "happy path" do
@@ -25,13 +27,16 @@ describe "finalize meal", js: true do
     select2(late_add.name, from: all("select[id$=_household_id]").last)
 
     # Fill in expenses
+    expect(page).to have_content("Reimbursee *\nJo Fiz")
     fill_in("Ingredient Cost", with: "100")
     fill_in("Pantry Reimbursable Cost", with: "10")
     choose("Balance Credit")
+    select2("Bo Liz", from: "#meals_meal_cost_attributes_reimbursee_id")
     click_button("Continue")
 
     # Go to finalize screen
     expect(page).to have_content("meal has not been finalized yet")
+    expect(page).to have_content("Reimbursee Bo Liz")
     click_button("Go Back")
 
     # Go back and add 4 more diners to the late add

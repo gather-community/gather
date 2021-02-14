@@ -613,6 +613,7 @@ DEPENDENCIES
   rein (~> 5.0)
   rolify (~> 4.1)
   rspec-github
+  rspec-rails (~> 4.0)
   rubocop (= 0.75.0)
   rubocop-rails (= 2.3.2)
   sass-rails (~> 5.0)

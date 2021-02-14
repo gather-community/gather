@@ -7,7 +7,7 @@ module Utils
     class MainGenerator < Generator
       include ActiveModel::Model
 
-      attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators
+      attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators, :country_code
 
       def generate
         ActionMailer::Base.perform_deliveries = false
@@ -16,7 +16,9 @@ module Utils
         # So the tenant still needs to be set at that point or we get errors.
         ActsAsTenant.with_tenant(cluster) do
           ActiveRecord::Base.transaction do
-            self.community = Community.create!(name: cmty_name, slug: slug)
+            attribs = {name: cmty_name, slug: slug}
+            attribs[:country_code] = country_code if country_code.present?
+            self.community = Community.create!(attribs)
             in_community_timezone { generate_data_and_handle_errors }
           end
         end

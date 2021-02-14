@@ -94,7 +94,7 @@ class HouseholdPolicy < ApplicationPolicy
     permitted << :member_type_id if change_member_type?
     permitted << {vehicles_attributes: %i[id make model color plate _destroy]}
     permitted << {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-                                                    email location _destroy]}
+                                                    email location country_code _destroy]}
     permitted << {pets_attributes: %i[id name species color vet caregivers
                                       health_issues _destroy]}
     permitted

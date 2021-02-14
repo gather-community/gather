@@ -6,7 +6,7 @@ module UsersHelper
     url_in_community(user.community, user_path(user, *args))
   end
 
-  def phone_link(phone, options = {})
-    phone.blank? ? "" : link_to(phone.formatted(options), "tel:#{phone.raw}")
+  def phone_link(phone, **options)
+    phone.blank? ? "" : link_to(phone.formatted(**options), "tel:#{phone.raw}")
   end
 end

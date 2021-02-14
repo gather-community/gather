@@ -19,9 +19,11 @@ class HouseholdDecorator < ApplicationDecorator
   def emergency_contacts_html
     return "[None]" if emergency_contacts.empty?
     emergency_contacts.map do |contact|
+      foreign = contact.country_code != h.current_community.country_code
+      phone_format = foreign ? :international : :national
       h.content_tag(:div, class: "emergency-contact") do
         lines = [contact.name_relationship, contact.location]
-        lines.concat(contact.phones.map { |p| h.phone_link(p) })
+        lines.concat(contact.phones.map { |p| h.phone_link(p, show_country: foreign, format: phone_format) })
         lines << h.link_to(contact.email, "mailto:#{contact.email}") if contact.email.present?
         h.safe_join(lines, h.tag(:br))
       end

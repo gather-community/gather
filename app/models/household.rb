@@ -40,7 +40,9 @@ class Household < ApplicationRecord
   after_deactivate { users.each(&:deactivate) }
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :emergency_contacts, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :emergency_contacts,
+    allow_destroy: true,
+    reject_if: ->(attrs) { attrs.all? { |k, v| k == "_destroy" || k == "country_code" || v.blank? } }
   accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
 
   normalize_attributes :name, :old_id, :old_name, :garage_nums

@@ -153,6 +153,7 @@ en:
         alt_phone: "Alternate Phone"
         email: "Email"
         location: "Location"
+        country_code: "Country"
       people/vehicle:
         make: "Make"
         model: "Model"

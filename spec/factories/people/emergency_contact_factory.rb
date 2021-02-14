@@ -8,5 +8,6 @@ FactoryBot.define do
     main_phone { Faker::PhoneNumber.simple }
     name { Faker::Name.name }
     relationship { Faker::Relationship.relationship }
+    country_code { "US" }
   end
 end

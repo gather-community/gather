@@ -53,33 +53,19 @@ describe User do
   end
 
   describe "validation" do
+    context "with no data" do
+      it "should not error" do
+        User.new.valid?
+      end
+    end
+
+    # See phoneable_spec.rb for more phone normalization and validation specs.
     describe "phone" do
       let(:user) { build(:user, mobile_phone: phone) }
 
       context "should allow good phone number" do
         let(:phone) { "7343151234" }
         it { expect(user).to be_valid }
-      end
-
-      context "should allow good formatted phone number" do
-        let(:phone) { "(734) 315-1234" }
-        it { expect(user).to be_valid }
-      end
-
-      context "should disallow too-long number" do
-        let(:phone) { "73431509811" }
-        it do
-          expect(user).not_to be_valid
-          expect(user.errors[:mobile_phone].join).to eq("is an invalid number")
-        end
-      end
-
-      context "should disallow formatted too-long number" do
-        let(:phone) { "(734) 315-09811" }
-        it do
-          expect(user).not_to be_valid
-          expect(user.errors[:mobile_phone].join).to eq("is an invalid number")
-        end
       end
     end
 

@@ -36,13 +36,13 @@ module Utils
                              updated_at: community.updated_at)
 
           dir = resource_path("photos/people/households/#{i.to_s.rjust(2, '0')}/*.jpg")
-          joined = Faker::Date.birthday(1, 15)
+          joined = Faker::Date.birthday(min_age: 1, max_age: 15)
           last_name = last_names[i]
 
           adults = Dir[dir].map do |path|
             age = File.basename(path, ".jpg").to_i
             next if age < 16
-            bday = Faker::Date.birthday(age, age + 1)
+            bday = Faker::Date.birthday(min_age: age, max_age: age + 1)
             first_name = Faker::Name.unisex_name
 
             email = "#{first_name}#{rand(10_000_000..99_999_999)}@example.com"
@@ -72,7 +72,7 @@ module Utils
           kids = Dir[dir].map do |path|
             age = File.basename(path, ".jpg").to_i
             next if age >= 16
-            bday = Faker::Date.birthday(age, age + 1)
+            bday = Faker::Date.birthday(min_age: age, max_age: age + 1)
             kid = build(:user, :child, :with_random_password,
               fake: true,
               household: household,

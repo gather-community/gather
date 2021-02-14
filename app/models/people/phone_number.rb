@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module People
+  # This is really a decorator class. Not persisted.
   class PhoneNumber
     attr_reader :model, :kind
 
@@ -10,23 +11,26 @@ module People
     end
 
     delegate :blank?, to: :raw
+    delegate :country_code, to: :model
 
     def raw
       model.read_attribute(attrib)
     end
 
-    def formatted(options = {})
-      result = if errors.any?
-                 raw.try(:sub, /\A\+/, "")
-               else
-                 raw.try(:phony_formatted, format: :national)
-      end
+    def formatted(kind_abbrv: false, show_country: false, format: :national)
+      result = errors.any? ? raw : raw&.phony_formatted(format: format)
+      return nil if result.nil?
 
-      if options[:kind_abbrv] && result
+      if kind_abbrv
         kind_abbrv = I18n.t("phone_types.abbreviations.#{kind}")
-        result = "#{formatted} #{kind_abbrv}"
+        result = "#{result} #{kind_abbrv}"
       end
-
+      if show_country
+        raise ArgumentError("Phone number country requested but nil") if country_code.nil?
+        country = ISO3166::Country[country_code]
+        country_name = country.translations[I18n.locale.to_s] || country.name
+        result = "#{result} (#{country_name})"
+      end
       result
     end
 

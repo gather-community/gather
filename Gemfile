@@ -15,6 +15,8 @@ gem "browser", "~> 2.5"
 gem "cocoon", "~> 1.2"
 gem "coffee-rails", "~> 5.0"
 gem "config", "~> 1.4"
+gem "country_select", "~> 4.0",
+    require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
                             branch: "master", submodules: true
@@ -27,7 +29,7 @@ gem "elasticsearch-model", "~> 7.0"
 gem "elasticsearch-rails", "~> 7.0"
 gem "exception_notification", "~> 4.1"
 gem "factory_bot_rails", "~> 4.0"
-gem "faker", "~> 1.7"
+gem "faker", "~> 2.0"
 gem "font-awesome-sass", "~> 4.7"
 gem "hirb", "~> 0.7"
 gem "i18n-js", "~> 3.0"
@@ -76,7 +78,7 @@ group :development, :test do
   gem "pry", "~> 0.10"
   gem "pry-nav", "~> 0.2"
   gem "pry-rails", "~> 0.3"
-  gem "rspec-rails", "~> 3.0"
+  gem "rspec-rails", "~> 4.0"
   gem "rubocop", "0.75.0" # Should match Hound. See: http://help.houndci.com/configuration/rubocop
   gem "rubocop-rails", "2.3.2"
   gem "selenium-webdriver", "~> 3.0"

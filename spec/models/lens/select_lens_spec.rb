@@ -53,6 +53,51 @@ describe Lens::SelectLens do
     klass.new(**params)
   end
 
+  describe "value initialization" do
+    let(:klass) { BasicSelectLens }
+    subject(:value) { lens.value }
+
+    shared_examples_for "correct value initialization" do
+      context "when no route param given" do
+        let(:route_params) { {} }
+        it { is_expected.to be_nil }
+      end
+
+      context "when no route param given but initial_selection given" do
+        let(:route_params) { {} }
+        let(:initial_selection) { :album }
+        it { is_expected.to eq("album") }
+      end
+
+      context "when route param and initial_selection given" do
+        let(:route_params) { {view: "table"} }
+        let(:initial_selection) { :album }
+        it { is_expected.to eq("table") }
+      end
+
+      context "when invalid route param given" do
+        let(:route_params) { {view: "tablez"} }
+        it { is_expected.to be_nil }
+      end
+
+      context "when invalid value stored in storage" do
+        let(:route_params) { {} }
+        let(:storage) { double(action_store: {"view" => "tablez"}) }
+        it { is_expected.to be_nil }
+      end
+    end
+
+    context "with clearable lens" do
+      let(:clearable) { true }
+      it_behaves_like "correct value initialization"
+    end
+
+    context "with non-clearable lens" do
+      let(:clearable) { false }
+      it_behaves_like "correct value initialization"
+    end
+  end
+
   describe "#clearable_and_active?" do
     let(:klass) { BasicSelectLens }
     subject(:clearable_and_active) { lens.clearable_and_active? }

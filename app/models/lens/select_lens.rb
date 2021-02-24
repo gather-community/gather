@@ -22,8 +22,13 @@ module Lens
 
     def initialize(options:, **args)
       super
-      return if route_param_given? || !value.nil? || !options.key?(:initial_selection)
-      self.value = value_for_option(options[:initial_selection])
+      if !route_param_given? && value.nil? && options.key?(:initial_selection)
+        self.value = value_for_option(options[:initial_selection])
+      # Sometimes an invalid value can end up in the storage, or someone could pass one in the
+      # query string. This can corrupt things if we don't remove it.
+      elsif !value.nil? && selection.nil?
+        self.value = nil
+      end
     end
 
     # True if selection is not base_option.

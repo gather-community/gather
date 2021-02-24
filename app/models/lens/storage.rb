@@ -5,7 +5,7 @@ module Lens
   class Storage
     attr_accessor :session, :community_id, :controller_path, :action_name
 
-    LENS_VERSION = 5
+    LENS_VERSION = 6
 
     def initialize(session:, community_id:, controller_path:, action_name:, persist:)
       self.session = persist ? session : {}

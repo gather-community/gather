@@ -1,5 +1,6 @@
 #global-footer-wrapper {
   background-color: $gray-lighterer;
+  flex-shrink: 0;
 }
 
 #global-footer, #local-footer {

@@ -18,14 +18,15 @@
   #main-row {
     // make main row fill vertical space so we get sticky footer
     // flex: 1 was not working on IE11 as of 1/19/18
-    flex-grow: 1;
+    // flex-grow: 1 was not working on Safari as of 3/2/21
+    flex: 1 0 auto;
   }
 
   #content {
     line-height: $content-line-height;
 
     // make content fill horizontal space
-    flex-grow: 1;
+    flex: 1;
   }
 }
 

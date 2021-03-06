@@ -3,9 +3,16 @@
   <div class="fields-col">
     <%= render(options[:inner_partial], f: f, options: options) %>
   </div>
-  <% if options[:multiple] && !options[:no_remove_link] %>
-    <div class="remove-link-col">
-      <%= link_to_remove_association(icon_tag("trash"), f) %>
-    </div>
+  <% if options[:multiple] %>
+    <% unless options[:no_remove_link] %>
+      <div class="remove-link-col">
+        <%= link_to_remove_association(icon_tag("trash"), f) %>
+      </div>
+    <% end %>
+  <% else %>
+    <%# We need a way to set the destroy flag if the object is cleared %>
+    <% if options[:allow_clear] %>
+      <%= f.hidden_field(:_destroy, value: f.object._destroy) %>
+    <% end %>
   <% end %>
 </div>

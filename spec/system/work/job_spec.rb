@@ -113,26 +113,33 @@ describe "jobs", js: true do
         find(".work_job_reminders_rel_magnitude input").set("3.5")
       end
 
-      # Check for workers added earlier
+      # Check for workers added earlier.
       within(all("#shift-rows tr")[1]) do
         expect(page).to have_content(users[0].name)
         expect(page).not_to have_content(users[1].name)
         expect(page).to have_content(users[2].name)
       end
 
-      # Remove previous shift and add a new one.
-      all("#shift-rows tr")[1].find("a.remove_fields").click
+      # Add a new shift
       click_on("Add Shift")
-      within(all("#shift-rows tr")[1]) do
+      within(all("#shift-rows tr")[2]) do
         pick_datetime(".starts-at", day: 15, hour: 9, next_click: ".shift-slots input")
         pick_datetime(".ends-at", day: 15, hour: 11, next_click: ".shift-slots input")
         find(".shift-slots input").set(6)
       end
+
+      # Remove worker from second shift
+      within(all("#shift-rows tr")[1]) do
+        select2(:clear, from: all("select.assoc_select2")[0])
+      end
+
+      # Delete first shift.
+      all("#shift-rows tr")[0].find("a.remove_fields").click
       click_button("Save")
 
       expect_success
       within(all("table.index tr")[1]) do
-        expect(page).to have_css("td.slots", text: 8)
+        expect(page).to have_css("td.slots", text: 10)
       end
       click_link("AAA Painter")
 
@@ -140,6 +147,13 @@ describe "jobs", js: true do
       expect(page).not_to have_selector("input[value='Go to town']")
       expect(page).to have_selector("input[value='Clean the lint trap']")
       expect(all(".work_job_reminders .nested-fields").size).to eq(1)
+
+      # Ensure correct worker removed.
+      within(all("#shift-rows tr")[0]) do
+        expect(page).not_to have_content(users[0].name)
+        expect(page).not_to have_content(users[1].name)
+        expect(page).to have_content(users[2].name)
+      end
     end
 
     scenario "delete" do

@@ -47,8 +47,27 @@ describe "meal crud", js: true do
 
       # Show
       find("a", text: "Southern Beans").click
+      expect(page).to have_content("Head Cook #{users[0].name}")
       expect(page).to have_content("Southern Beans and Rice")
       expect(page).to have_content("Chocolate")
+
+      # Remove and change head cook (to ensure the destroy flag gets unset once new person selected)
+      # These two blocks test the allow_clear option for the nested_fields code.
+      click_link("Edit")
+      select_worker(:clear, role: hc_role)
+      select_worker(users[1].name, role: hc_role)
+      click_button("Save")
+      expect_success
+      find("a", text: "Southern Beans").click
+      expect(page).to have_content("Head Cook #{users[1].name}")
+
+      # Remove head cook
+      click_link("Edit")
+      select_worker(:clear, role: hc_role)
+      click_button("Save")
+      expect_success
+      find("a", text: "Southern Beans").click
+      expect(page).not_to have_content("Head Cook")
 
       summary_close_reopen
 

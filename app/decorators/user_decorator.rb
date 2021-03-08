@@ -88,6 +88,25 @@ class UserDecorator < ApplicationDecorator
     email.size > 25 ? "long-email" : ""
   end
 
+  def household_hint
+    chunks = []
+
+    unless user.persisted?
+      chunks << safe_str
+      chunks[-1] << "Choose an existing household for this user. If one doesn't exist you must "
+      chunks[-1] << h.link_to("create it first", h.new_household_path) << "."
+    end
+
+    if user.child?
+      chunks << "Due to a system limitation, all Gather users must belong to a single household, " \
+        "but children may have parents or guardians from multiple households. " \
+        "All system functions involving children treat all parents/guardians and " \
+        "all households associated with the child equally."
+    end
+
+    h.safe_join(chunks, " ")
+  end
+
   def preferred_contact_icon
     case object.preferred_contact
     when "email" then "fa-envelope"

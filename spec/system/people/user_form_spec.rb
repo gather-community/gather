@@ -99,48 +99,63 @@ describe "user form", js: true, perform_jobs: true do
     end
 
     context "editing" do
-      it_behaves_like "editing user"
+      context "with adult" do
+        it_behaves_like "editing user"
 
-      scenario "editing household" do
-        visit(edit_path)
-        click_on("move them to another household")
-        select2("Potatoheads", from: "#user_household_id")
-        click_button("Save")
+        scenario "editing household" do
+          visit(edit_path)
+          click_on("move them to another household")
+          select2("Potatoheads", from: "#user_household_id")
+          click_button("Save")
 
-        expect_success
-        expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
-      end
+          expect_success
+          expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
+        end
 
-      context "with unconfirmed user" do
-        let(:user) { create(:user, :unconfirmed) }
+        context "with unconfirmed user" do
+          let(:user) { create(:user, :unconfirmed) }
 
-        shared_examples_for "editing email does not result in confirmation email" do
-          scenario do
-            visit(edit_path)
-            fill_in("Email Address", with: "newone@example.com")
-            email_sent = email_sent_by do
-              click_button("Save")
-              expect(page).to have_alert(alert)
+          shared_examples_for "editing email does not result in confirmation email" do
+            scenario do
+              visit(edit_path)
+              fill_in("Email Address", with: "newone@example.com")
+              email_sent = email_sent_by do
+                click_button("Save")
+                expect(page).to have_alert(alert)
+              end
+
+              expect(email_sent).to be_empty
+              expect(user.reload).not_to be_confirmed
+              expect(user.unconfirmed_email).to be_nil
             end
+          end
 
-            expect(email_sent).to be_empty
-            expect(user.reload).not_to be_confirmed
-            expect(user.unconfirmed_email).to be_nil
+          context "with invite pending" do
+            let(:alert) { /invalidated a sign-in invitation/ }
+
+            before { user.reset_reset_password_token! }
+
+            it_behaves_like "editing email does not result in confirmation email"
+          end
+
+          context "without invite pending" do
+            let(:alert) { "User updated successfully." }
+
+            it_behaves_like "editing email does not result in confirmation email"
           end
         end
+      end
 
-        context "with invite pending" do
-          let(:alert) { /invalidated a sign-in invitation/ }
+      context "with child" do
+        let!(:user) { create(:user, :child) }
 
-          before { user.reset_reset_password_token! }
+        scenario "changing household" do
+          visit(edit_path)
+          select2("Potatoheads", from: "#user_household_id")
+          click_button("Save")
 
-          it_behaves_like "editing email does not result in confirmation email"
-        end
-
-        context "without invite pending" do
-          let(:alert) { "User updated successfully." }
-
-          it_behaves_like "editing email does not result in confirmation email"
+          expect_success
+          expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
         end
       end
     end
@@ -205,5 +220,18 @@ describe "user form", js: true, perform_jobs: true do
     let(:actor) { user }
 
     it_behaves_like "editing user"
+
+    context "when editing child" do
+      let!(:child) { create(:user, :child, guardians: [actor]) }
+
+      scenario do
+        visit(edit_user_path(child))
+        fill_in("First Name", with: "Lorp")
+        click_on("Save")
+
+        expect_success
+        expect(page).to have_content("Lorp")
+      end
+    end
   end
 end

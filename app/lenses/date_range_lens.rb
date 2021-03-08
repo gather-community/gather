@@ -7,9 +7,9 @@ class DateRangeLens < Lens::SelectLens
 
   attr_accessor :pairs, :range_builder
 
-  def initialize(*args)
-    super(*args)
+  def initialize(options:, **args)
     self.range_builder = DateRangeBuilder.new(max_range: [options[:min_date], Time.zone.today])
+    super
   end
 
   def range

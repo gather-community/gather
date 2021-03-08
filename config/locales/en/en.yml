@@ -250,6 +250,7 @@ en:
       job_choosing_proxy: "Please type a few letters of the user's name."
       type: "Please type a few letters of the meal type's name, or enter the full name to add a new type."
       category: "Please type a few letters of the category, or enter the full category to add a new one."
+      reimbursee: "Please type a few letters of the reimbursee's name."
     placeholders:
       reserver: "Choose Reserver ..."
       sponsor: "Choose Sponsor ..."
@@ -259,6 +260,7 @@ en:
       job_choosing_proxy: "Choose User ..."
       type: "Choose or Enter Type ..."
       category: "Choose or Enter Category ..."
+      reimbursee: "Choose Reimbursee ..."
 
   csv:
     headers:

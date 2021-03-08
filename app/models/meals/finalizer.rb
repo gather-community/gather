@@ -54,8 +54,11 @@ module Meals
       return unless cost.payment_method == "credit" && cost.total_cost.positive? &&
         meal.head_cook.present?
 
+      # This shouldn't happen but we couldn't put a null false constraint on the column due to legacy data.
+      raise ArgumentError, "Meal ##{meal.id} cost has no reimbursee" if cost.reimbursee.nil?
+
       Billing::Transaction.create!(
-        account: Billing::AccountManager.instance.account_for(household_id: meal.head_cook.household_id,
+        account: Billing::AccountManager.instance.account_for(household_id: cost.reimbursee.household_id,
                                                               community_id: meal.community_id),
         code: "reimb",
         incurred_on: meal.served_at.to_date,

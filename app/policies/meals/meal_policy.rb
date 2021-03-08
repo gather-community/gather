@@ -181,7 +181,7 @@ module Meals
     end
 
     def expense_attribs
-      [cost_attributes: %i[ingredient_cost pantry_cost payment_method]]
+      [cost_attributes: %i[ingredient_cost pantry_cost payment_method reimbursee_id]]
     end
   end
 end

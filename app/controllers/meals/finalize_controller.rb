@@ -5,7 +5,7 @@ module Meals
   class FinalizeController < ApplicationController
     helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
-    decorates_assigned :meal
+    decorates_assigned :meal, :reimbursee
 
     def new
       @meal = Meal.find(params[:meal_id])
@@ -66,6 +66,7 @@ module Meals
     def show_confirmation_page
       @calculator = @finalizer.calculator
       @cost = @meal.cost
+      @reimbursee = @cost.reimbursee
       flash.now[:alert] = t("meals.finalizing.review_and_confirm_html").html_safe
       prepare_and_render_form(:confirm)
     end
@@ -77,13 +78,13 @@ module Meals
     end
 
     def build_meal_cost
-      @meal.build_cost if @meal.cost.nil?
+      @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
     end
 
     def finalize_params
       params.require(:meals_meal).permit(
         signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]],
-        cost_attributes: %i[ingredient_cost pantry_cost payment_method]
+        cost_attributes: %i[ingredient_cost pantry_cost payment_method reimbursee_id]
       )
     end
   end

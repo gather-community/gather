@@ -44,6 +44,12 @@
         <strong><%= t("simple_form.options.meals_meal.cost.payment_method.#{@cost.payment_method}") %></strong>
       </td>
     </tr>
+    <tr>
+      <td><%= t("activerecord.attributes.meals/cost.reimbursee_id") %></td>
+      <td>
+        <strong><%= reimbursee.full_name %></strong>
+      </td>
+    </tr>
   </table>
 
   <%# Hidden data to be resubmitted %>

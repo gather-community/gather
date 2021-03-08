@@ -61,7 +61,8 @@ module Meals
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
-    accepts_nested_attributes_for :cost, reject_if: :all_blank
+    accepts_nested_attributes_for :cost,
+                                  reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
     delegate :cluster, to: :community

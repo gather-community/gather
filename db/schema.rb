@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_12_174457) do
+ActiveRecord::Schema.define(version: 2021_02_13_021707) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -295,9 +295,11 @@ ActiveRecord::Schema.define(version: 2021_02_12_174457) do
     t.decimal "pantry_cost", precision: 10, scale: 2, null: false
     t.decimal "pantry_fee", precision: 10, scale: 2
     t.string "payment_method", null: false
+    t.bigint "reimbursee_id"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_costs_on_cluster_id"
     t.index ["meal_id"], name: "index_meal_costs_on_meal_id"
+    t.index ["reimbursee_id"], name: "index_meal_costs_on_reimbursee_id"
   end
 
   create_table "meal_formula_parts", force: :cascade do |t|
@@ -953,6 +955,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_174457) do
   add_foreign_key "meal_cost_parts", "meal_types", column: "type_id"
   add_foreign_key "meal_costs", "clusters"
   add_foreign_key "meal_costs", "meals"
+  add_foreign_key "meal_costs", "users", column: "reimbursee_id"
   add_foreign_key "meal_formula_parts", "clusters"
   add_foreign_key "meal_formula_parts", "meal_formulas", column: "formula_id"
   add_foreign_key "meal_formula_parts", "meal_types", column: "type_id"

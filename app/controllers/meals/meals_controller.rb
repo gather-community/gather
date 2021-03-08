@@ -215,7 +215,7 @@ module Meals
 
     def prep_form_vars
       prep_worker_form_vars
-      @meal.build_cost if @meal.cost.nil?
+      @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
       load_communities_in_cluster
       @formula_options = policy_scope(Formula).in_community(current_community)
         .active_or_selected(@meal.formula_id).by_name

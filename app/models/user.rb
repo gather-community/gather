@@ -61,7 +61,8 @@ class User < ApplicationRecord
   has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,
                                autosave: false
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
-  has_many :meal_costs, class_name: "Meals::Cost", inverse_of: :reimbursee, dependent: :nullify
+  has_many :meal_costs, class_name: "Meals::Cost", foreign_key: :reimbursee_id,
+                        inverse_of: :reimbursee, dependent: :nullify
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 

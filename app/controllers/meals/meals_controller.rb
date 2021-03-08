@@ -126,7 +126,7 @@ module Meals
       @cost_calculator = CostCalculator.build(@meal)
       return unless @meal.open? && current_user == @meal.head_cook
       flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
-        "You should close the meal using the link below before printing this summary."
+        "You should close the meal before printing this summary."
     end
 
     # Renders just the workers section of the form. Accepts a formula_id, and sets the

@@ -47,7 +47,8 @@ module Groups
 
       normalize_attributes :name
 
-      validates :name, format: {with: /\A[-+_.=a-z0-9]+\z/i}
+      # Mailman's listname_chars setting defaults to [-_.0-9a-z]. Not keen to mess with it.
+      validates :name, format: {with: /\A[-_.a-z0-9]+\z/}
       validates :domain_id, presence: true
 
       delegate :name, to: :domain, prefix: true

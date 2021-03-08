@@ -130,7 +130,7 @@ describe "jobs", js: true do
 
       # Remove worker from second shift
       within(all("#shift-rows tr")[1]) do
-        select2(:clear, from: all("select.assoc_select2")[0])
+        select2(:clear, from: find("select.assoc_select2", text: users[0].name))
       end
 
       # Delete first shift.

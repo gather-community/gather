@@ -95,6 +95,10 @@ Style/Documentation:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
+# Sometimes using a series of if/unless blocks in parallel structure is good for readability.
+Style/GuardClause:
+  Enabled: false
+
 Style/MethodCallWithArgsParentheses:
   Enabled: true
   IgnoredMethods:

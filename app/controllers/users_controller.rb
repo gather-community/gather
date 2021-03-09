@@ -108,7 +108,13 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @user.household_by_id = false
+
+    # We don't allow editing household data via a child's form since it's complicated when
+    # a child belongs to more than one household. But there needs to be a way for admins
+    # to edit the household, so we set household_by_id to true for children which shows the
+    # household dropdown. We a show a caveat in the hint so folks don't get worked up about it.
+    # We don't need to set this for non-admins since they can't change the household anyway.
+    @user.household_by_id = @user.child? && policy(@user).administer?
     authorize(@user)
     prepare_user_form
   end

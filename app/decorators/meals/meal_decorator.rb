@@ -30,6 +30,10 @@ module Meals
       end
     end
 
+    def auto_close_time_soon?
+      auto_close_time.present? && Time.current - auto_close_time < 5.day
+    end
+
     def nonempty_menu_items
       Meals::Meal::MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
     end

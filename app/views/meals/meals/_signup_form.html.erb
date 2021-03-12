@@ -32,6 +32,14 @@
     <p>
       <%= icon_tag("exclamation-circle") if meal.full? %>
       <%= t("meals.spots_left", count: meal.spots_left) %>
+
+      <% if meal.auto_close_time.present? %>
+        &bull;
+        <span class="auto-close-time <%= "auto-close-time-soon" if meal.auto_close_time_soon? %>">
+          Closes on <%= l(meal.auto_close_time, format: :wday_no_year_no_time) %>
+          at <%= l(meal.auto_close_time, format: :time_only) %>
+        </span>
+      <% end %>
     </p>
 
     <div class="signup-fields-with-comments"

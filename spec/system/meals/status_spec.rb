@@ -11,7 +11,7 @@ describe "meal status manipulation", js: true do
   end
 
   context "with closed meal" do
-    let!(:meal) { create(:meal, status: "closed") }
+    let!(:meal) { create(:meal, :closed) }
 
     scenario do
       visit(meal_path(meal))
@@ -21,7 +21,7 @@ describe "meal status manipulation", js: true do
   end
 
   context "with auto_close_time in past" do
-    let!(:meal) { create(:meal, status: "closed", auto_close_time: Time.current - 1.day) }
+    let!(:meal) { create(:meal, :closed, auto_close_time: Time.current - 1.day) }
 
     scenario do
       visit(meal_path(meal))

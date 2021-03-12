@@ -11,7 +11,7 @@ every 5.minutes do
     Billing::StatementReminderJob
     Meals::MealReminderJob
     Meals::CookMenuReminderJob
-    Meals::ClosePastMealsJob
+    Meals::CloseMealsJob
     CustomReminderJob
   ].join(","))
 end

@@ -216,6 +216,7 @@ module Meals
     end
 
     def auto_close_between_now_and_meal_time
+      return unless open?
       return if auto_close_time.blank? || served_at.blank?
       return if auto_close_time > Time.current && auto_close_time < served_at
       errors.add(:auto_close_time, "must be between now and the meal time")

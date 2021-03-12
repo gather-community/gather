@@ -12,9 +12,19 @@ describe Meals::Meal do
 
       context "with time too far in future" do
         subject(:meal) do
-          build(:meal, served_at: Time.current + 7.days, auto_close_time: Time.current + 8.days)
+          build(:meal, status: status, served_at: Time.current + 7.days,
+                       auto_close_time: Time.current + 8.days)
         end
-        it { is_expected.to have_errors(auto_close_time: "must be between now and the meal time") }
+
+        context "with open meal" do
+          let(:status) { "open" }
+          it { is_expected.to have_errors(auto_close_time: "must be between now and the meal time") }
+        end
+
+        context "with non-open meal" do
+          let(:status) { "closed" }
+          it { is_expected.to be_valid }
+        end
       end
 
       context "with no served_at" do
@@ -24,7 +34,7 @@ describe Meals::Meal do
         it { is_expected.to have_errors(auto_close_time: nil, served_at: "can't be blank") }
       end
 
-      context "with time in future" do
+      context "with time in past" do
         subject(:meal) { build(:meal, auto_close_time: Time.current - 1.minute) }
         it { is_expected.to have_errors(auto_close_time: "must be between now and the meal time") }
       end

@@ -128,6 +128,10 @@ module Meals
       served_at + 1.hour
     end
 
+    def auto_close_time_in_past?
+      auto_close_time.present? && auto_close_time < Time.current
+    end
+
     def reservation_handler
       @reservation_handler ||= Reservations::MealReservationHandler.new(self)
     end

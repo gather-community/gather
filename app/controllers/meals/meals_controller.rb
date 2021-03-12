@@ -112,9 +112,15 @@ module Meals
     def reopen
       @meal = Meal.find(params[:id])
       authorize(@meal)
-      @meal.reopen!
-      flash[:success] = "Meal reopened successfully."
-      redirect_to(meals_path)
+      if @meal.auto_close_time_in_past?
+        flash[:error] = "You can't reopen this meal because its auto-close time is in the past. "\
+          "Please change or remove the auto-close time before proceeding."
+        redirect_to(meal_path(@meal))
+      else
+        @meal.reopen!
+        flash[:success] = "Meal reopened successfully."
+        redirect_to(meals_path)
+      end
     end
 
     def summary

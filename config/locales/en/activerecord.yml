@@ -190,7 +190,7 @@ en:
         starts_on: "Starts On"
         ends_on: "Ends On"
         quota_type: "Quota"
-        auto_open_time: "Auto Open Time"
+        auto_open_time: "Auto-Open Time"
         pick_type: "Pick Type"
         round_duration: "Round Duration"
         workers_per_round: "Workers per Group"

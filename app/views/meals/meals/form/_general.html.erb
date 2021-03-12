@@ -48,7 +48,7 @@
 
     <% if policy(meal).change_capacity_close_time? %>
       <%= f.input :capacity, min: 1 %>
-      <%= f.input :auto_close_time, as: :datetime_picker, include_day_of_week: true %>
+      <%= f.input :auto_close_time, as: :datetime_picker, include_day_of_week: true, stepping: 5 %>
     <% else %>
       <%= f.input :capacity do %><%= meal.capacity %><% end %>
       <%= f.input :auto_close_time do %>

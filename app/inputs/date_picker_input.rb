@@ -3,6 +3,7 @@
 class DatePickerInput < SimpleForm::Inputs::StringInput
   def input(wrapper_options)
     @dow = options.delete(:include_day_of_week)
+    @stepping = options.delete(:stepping) || 1
 
     set_html_options
     set_value_html_option
@@ -67,7 +68,8 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     {
       locale: I18n.locale.to_s,
       format: picker_pattern,
-      dayViewHeaderFormat: date_view_header_format
+      dayViewHeaderFormat: date_view_header_format,
+      stepping: @stepping
     }
   end
 

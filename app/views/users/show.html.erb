@@ -7,11 +7,11 @@
       <div class="col-sm-4">
         <%= user.photo_if_permitted(:medium) %>
         <% user.roles.each do |role| %>
-          <div class="pill"><%= icon_tag("star-o") %> <%= t("roles.#{role.name}") %></div>
+          <div class="pill pill-normal"><%= icon_tag("star-o") %> <%= t("roles.#{role.name}") %></div>
         <% end %>
         <% @memberships.each do |mship| %>
           <% icon = mship.manager? ? "star" : "star-o" %>
-          <%= link_to(icon_tag(icon) << " " << mship.group_name, mship.group, class: "pill") %>
+          <%= link_to(icon_tag(icon) << " " << mship.group_name, mship.group, class: "pill pill-normal") %>
         <% end %>
       </div>
       <div class="col-sm-8">

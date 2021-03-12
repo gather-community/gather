@@ -43,6 +43,7 @@
             <%= icon_tag("lock") if meal.closed? %>
             <%= icon_tag("ban") if meal.cancelled? %>
             <%= icon_tag("certificate") if meal.finalized? %>
+            <%= meal.closing_soon_pill if meal.auto_close_time_soon? %>
           </td>
           <td>
             <% if signup = meal.current_signup %>
@@ -76,6 +77,7 @@
           <%= icon_tag("lock") if meal.closed? %>
           <%= icon_tag("certificate") if meal.finalized? %>
           <%= icon_tag("ban") if meal.cancelled? %>
+          <%= meal.closing_soon_pill if meal.auto_close_time_soon? %>
         </h4>
         <div>
           <%= icon_tag("calendar") %> <%= meal.served_at_lens_dependent(lenses[:time]) %>

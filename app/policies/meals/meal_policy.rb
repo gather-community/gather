@@ -89,7 +89,7 @@ module Meals
       meal.signups.none? && not_finalized_and_admin_coord_head_cook_or_biller?
     end
 
-    def change_capacity?
+    def change_capacity_close_time?
       !meal.finalized? && admin_coord_or_head_cook?
     end
 
@@ -126,7 +126,7 @@ module Meals
       permitted.concat(signup_attribs) if change_signups?
       permitted.concat(expense_attribs) if change_expenses?
       permitted << :formula_id if change_formula?
-      permitted << :capacity if change_capacity?
+      permitted.concat(capacity_close_time_attribs) if change_capacity_close_time?
       permitted
     end
 
@@ -170,6 +170,10 @@ module Meals
 
     def menu_attribs
       %i[title entrees side kids dessert notes no_allergens] << {allergens: []}
+    end
+
+    def capacity_close_time_attribs
+      %i[capacity auto_close_time]
     end
 
     def worker_attribs

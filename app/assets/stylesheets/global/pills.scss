@@ -1,0 +1,39 @@
+.pill {
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  line-height: 1;
+  font-weight: normal;
+}
+
+.pill-normal {
+  color: $theme-main;
+  border: 1px solid $theme-main;
+}
+
+.pill-emphasis {
+  color: white;
+  background-color: $theme-accent;
+}
+
+.pill-small {
+  font-size: 1.2rem;
+}
+
+a.pill {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.pill-normal:hover {
+    color: $link-hover-color;
+    border-color: $link-hover-color;
+  }
+
+  &.pill-emphasis:hover {
+    color: white;
+  }
+}

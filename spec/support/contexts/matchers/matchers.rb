@@ -25,7 +25,7 @@ end
 RSpec::Matchers.define(:have_errors) do |errors|
   match do |object|
     object.invalid? && errors.all? do |field, pattern|
-      object.errors[field].join.match?(pattern)
+      pattern.nil? ? object.errors[field].empty? : object.errors[field].join.match?(pattern)
     end
   end
   failure_message do |object|

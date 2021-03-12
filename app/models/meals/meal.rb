@@ -48,6 +48,7 @@ module Meals
     scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
     scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
     scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
+    scope :with_past_auto_close_time, -> { where("auto_close_time < ?", Time.current) }
     scope :worked_by, lambda { |user, head_cook_only: false|
       user = user.id if user.is_a?(User)
       assignments = Meals::Assignment.arel_table
@@ -83,6 +84,7 @@ module Meals
     validates :community_id, presence: true
     validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
     validate :enough_capacity_for_current_signups
+    validate :auto_close_between_now_and_meal_time
     validate :title_and_entree_if_other_menu_items
     validate :at_least_one_community
     validate :allergens_specified_appropriately
@@ -125,6 +127,10 @@ module Meals
 
     def ends_at
       served_at + 1.hour
+    end
+
+    def auto_close_time_in_past?
+      auto_close_time.present? && auto_close_time < Time.current
     end
 
     def reservation_handler
@@ -212,6 +218,13 @@ module Meals
     def at_least_one_community
       return unless invitations.reject(&:blank?).empty?
       errors.add(:invitations, "you must invite at least one community")
+    end
+
+    def auto_close_between_now_and_meal_time
+      return unless open?
+      return if auto_close_time.blank? || served_at.blank?
+      return if auto_close_time > Time.current && auto_close_time < served_at
+      errors.add(:auto_close_time, "must be between now and the meal time")
     end
 
     def allergens_specified_appropriately

@@ -6,7 +6,8 @@ describe "meal signups", js: true do
   let(:user) { create(:user) }
   let(:formula) { create(:meal_formula, name: "Fmla A", parts_attrs: [1, 1, 1]) }
   let!(:meal) do
-    create(:meal, :with_menu, formula: formula, title: "Burgers", served_at: Time.current + 7.days)
+    create(:meal, :with_menu, formula: formula, title: "Burgers", served_at: Time.current + 7.days,
+                              capacity: 10)
   end
 
   before do
@@ -55,6 +56,47 @@ describe "meal signups", js: true do
       expect(page).to have_css("td", text: "Sign Up") # Signed up column
       click_link("Burgers")
       expect(page).to have_css("button.btn-primary", text: "Sign Up")
+    end
+  end
+
+  context "when meal gets closed right before new signup" do
+    scenario do
+      visit(meal_path(meal))
+      meal.close!
+      click_button("Sign Up")
+      all("select[id$=_count]")[0].select("2")
+      click_button("Save")
+      expect(page).to have_alert("Your signup could not be recorded because "\
+        "the meal is full or no longer open.")
+      expect(page).to have_content("You have not signed up for this meal and it is now closed.")
+    end
+  end
+
+  context "when meal gets closed right before signup change" do
+    let!(:signup) { create(:meal_signup, meal: meal, household: user.household, diner_counts: [4, 3]) }
+
+    scenario do
+      visit(meal_path(meal))
+      meal.close!
+      all("select[id$=_count]")[0].select("0")
+      all("select[id$=_count]")[1].select("0")
+      click_button("Save")
+      expect(page).to have_alert("Your signup could not be recorded because "\
+        "the meal is full or no longer open.")
+      expect(page).to have_content("4 Fmla A Type 1")
+    end
+  end
+
+  context "when meal gets full right before new signup" do
+    scenario do
+      visit(meal_path(meal))
+      create(:meal_signup, meal: meal, diner_counts: [10, 0])
+      click_button("Sign Up")
+      all("select[id$=_count]")[0].select("2")
+      click_button("Save")
+      expect(page).to have_alert("Your signup could not be recorded because "\
+        "the meal is full or no longer open.")
+      expect(page).to have_content("You have not signed up for this meal and it is now full.")
     end
   end
 

@@ -30,6 +30,15 @@ module Meals
       end
     end
 
+    def auto_close_time_soon?
+      open? && auto_close_time.present? && Time.current - auto_close_time < 1.day
+    end
+
+    def closing_soon_pill
+      safe_str << nbsp <<
+        h.link_to("Closes Soon!", h.meal_path(object), class: "pill pill-emphasis pill-small")
+    end
+
     def nonempty_menu_items
       Meals::Meal::MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
     end

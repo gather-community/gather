@@ -67,7 +67,7 @@ describe Meals::MealPolicy do
       it_behaves_like "permits admins or special role but not regular users", :biller
     end
 
-    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity?, :change_expenses?,
+    permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity_close_time?, :change_expenses?,
                 :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
@@ -240,7 +240,7 @@ describe Meals::MealPolicy do
       %i[title entrees side kids dessert notes no_allergens] << {allergens: []}
     end
     let(:worker_attribs) { [assignments_attributes: %i[id user_id role_id _destroy]] }
-    let(:head_cook_attribs) { %i[title capacity entrees] }
+    let(:head_cook_attribs) { %i[capacity auto_close_time formula_id] }
     let(:admin_attribs) { [:formula_id] }
     let(:signup_attribs) do
       [signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]]]
@@ -250,13 +250,14 @@ describe Meals::MealPolicy do
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
         expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
-          signup_attribs + expense_attribs + %i[capacity formula_id])
+          signup_attribs + expense_attribs + head_cook_attribs)
       end
 
-      it "should not allow formula_id, capacity if meal finalized" do
+      it "should not allow formula_id, capacity, auto_close_time if meal finalized" do
         stub_status("finalized")
         expect(subject).not_to include(:formula_id)
         expect(subject).not_to include(:capacity)
+        expect(subject).not_to include(:auto_close_time)
       end
 
       context "with signups" do
@@ -282,7 +283,7 @@ describe Meals::MealPolicy do
 
       it "should allow more stuff" do
         expect(subject).to match_array(menu_attribs + worker_attribs +
-          signup_attribs + expense_attribs + %i[capacity formula_id])
+          signup_attribs + expense_attribs + head_cook_attribs)
       end
     end
 

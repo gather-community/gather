@@ -38,6 +38,14 @@ FactoryBot.define do
       allergens { %w[Dairy Soy] }
     end
 
+    trait :open do
+      status { "open" }
+    end
+
+    trait :closed do
+      status { "closed" }
+    end
+
     trait :finalized do
       with_menu
       status { "finalized" }

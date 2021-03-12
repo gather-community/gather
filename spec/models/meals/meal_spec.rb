@@ -4,6 +4,32 @@ require "rails_helper"
 
 describe Meals::Meal do
   describe "validations" do
+    describe "auto_close_time" do
+      context "with time in future" do
+        subject(:meal) { build(:meal, auto_close_time: Time.current + 1.day) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with time too far in future" do
+        subject(:meal) do
+          build(:meal, served_at: Time.current + 7.days, auto_close_time: Time.current + 8.days)
+        end
+        it { is_expected.to have_errors(auto_close_time: "must be between now and the meal time") }
+      end
+
+      context "with no served_at" do
+        subject(:meal) do
+          build(:meal, served_at: nil, auto_close_time: Time.current + 8.days)
+        end
+        it { is_expected.to have_errors(auto_close_time: nil, served_at: "can't be blank") }
+      end
+
+      context "with time in future" do
+        subject(:meal) { build(:meal, auto_close_time: Time.current - 1.minute) }
+        it { is_expected.to have_errors(auto_close_time: "must be between now and the meal time") }
+      end
+    end
+
     describe "resources" do
       it "fails if none" do
         meal = build(:meal, no_resources: true)

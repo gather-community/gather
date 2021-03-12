@@ -3,7 +3,7 @@
     <% if policy(meal).change_date_loc_invites? %>
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true %>
       <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
-        required: true, input_html: {multiple: "multiple"} %>
+                                 required: true, input_html: {multiple: "multiple"} %>
       <%= javascript_tag do %>
         $(function() {
           // We don't use AjaxSelect2 here since it's not an ajax-based select2.
@@ -46,10 +46,14 @@
       <% end %>
     <% end %>
 
-    <% if policy(meal).change_capacity? %>
+    <% if policy(meal).change_capacity_close_time? %>
       <%= f.input :capacity, min: 1 %>
+      <%= f.input :auto_close_time, as: :datetime_picker, include_day_of_week: true %>
     <% else %>
       <%= f.input :capacity do %><%= meal.capacity %><% end %>
+      <%= f.input :auto_close_time do %>
+        <%= l(auto_close_time) %>
+      <% end %>
     <% end %>
 
     <% if policy(meal).change_formula? %>

@@ -46,6 +46,7 @@ en:
         kids: "Kids"
         dessert: "Dessert"
         notes: "Notes"
+        auto_close_time: "Auto-Close Time"
       meals/message:
         meal: "Meal"
         body: "Message"

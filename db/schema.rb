@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_13_021707) do
+ActiveRecord::Schema.define(version: 2021_03_11_032607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -439,6 +439,7 @@ ActiveRecord::Schema.define(version: 2021_02_13_021707) do
 
   create_table "meals", id: :serial, force: :cascade do |t|
     t.jsonb "allergens", default: [], null: false
+    t.datetime "auto_close_time"
     t.integer "capacity", null: false
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false

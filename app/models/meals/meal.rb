@@ -83,6 +83,7 @@ module Meals
     validates :community_id, presence: true
     validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
     validate :enough_capacity_for_current_signups
+    validate :auto_close_between_now_and_meal_time
     validate :title_and_entree_if_other_menu_items
     validate :at_least_one_community
     validate :allergens_specified_appropriately
@@ -212,6 +213,12 @@ module Meals
     def at_least_one_community
       return unless invitations.reject(&:blank?).empty?
       errors.add(:invitations, "you must invite at least one community")
+    end
+
+    def auto_close_between_now_and_meal_time
+      return if auto_close_time.blank? || served_at.blank?
+      return if auto_close_time > Time.current && auto_close_time < served_at
+      errors.add(:auto_close_time, "must be between now and the meal time")
     end
 
     def allergens_specified_appropriately

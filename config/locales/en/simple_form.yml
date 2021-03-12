@@ -51,6 +51,7 @@ en:
       meals_meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
         capacity: "How many people can the meal accommodate?"
+        auto_close_time: "Enter a time in the future at which the meal should be automatically closed. If blank, meal must be closed manually."
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       groups_group:

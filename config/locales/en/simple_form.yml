@@ -54,6 +54,13 @@ en:
         auto_close_time: "Enter a time in the future at which the meal should be automatically closed. If blank, meal must be closed manually."
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
+      billing_transaction:
+        incurred_on: "This date will show as the trasaction date on statements. Today's date will also be saved with the transaction."
+        description: "Description will be shown to the user on the statement. A detailed description can help resolve discrepancies in the future."
+        code_html: "<i class='fa fa-arrow-up'></i> Increases amount user owes &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Decreases amount user owes"
+        value: "Amount must be positive. The transaction type (above) determines whether the amount increases or decreases the account."
+      billing_template:
+        member_type_ids: "Select the member type(s) this template applies to."
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."

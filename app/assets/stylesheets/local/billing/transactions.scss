@@ -21,4 +21,11 @@
   input[id$=_value] {
     width: 200px;
   }
+
+  .billing_transaction_code {
+    .fa-arrow-up, .fa-arrow-down {
+      font-size: 1.1rem;
+      color: $text-muted;
+    }
+  }
 }

@@ -157,9 +157,11 @@ class UsersController < ApplicationController
   end
 
   def unimpersonate
-    @user = User.find(params[:id])
-    session.delete(:impersonating_id)
-    redirect_to(user_path(@user))
+    ActsAsTenant.without_tenant do
+      @user = User.find(params[:id])
+      session.delete(:impersonating_id)
+      redirect_to(url_in_community(@user.community, user_path(@user)))
+    end
   end
 
   protected

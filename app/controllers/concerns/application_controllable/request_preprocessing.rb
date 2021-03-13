@@ -189,7 +189,11 @@ module ApplicationControllable::RequestPreprocessing
 
   # Skip this before_action to not respect impersonation for a given controller action.
   def handle_impersonation
-    return unless session[:impersonating_id] && (user = User.find_by(id: session[:impersonating_id]))
+    return unless session[:impersonating_id]
+    user = ActsAsTenant.without_tenant do
+      # If user found, need to load subdomain inside without_tenant block or it will fail later.
+      User.find_by(id: session[:impersonating_id]).tap { |u| u&.subdomain }
+    end
     @real_current_user = current_user
     @current_user = @impersonated_user = user
   end

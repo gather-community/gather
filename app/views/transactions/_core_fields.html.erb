@@ -1,5 +1,9 @@
 <div class="transaction-core-fields">
-  <%= f.input :code, as: :radio_buttons, collection: transaction_code_options %>
-  <%= f.input :description %>
-  <%= f.input :value, input_html: {value: number_with_precision(f.object.value, precision: 2) } %>
+  <%# We include the hints explicitly because these fields are used on multiple forms
+      so automatic lookup doesn't work %>
+  <%= f.input :code, as: :radio_buttons, collection: f.object.transaction_code_options,
+                     hint: t("simple_form.hints.billing_transaction.code_html") %>
+  <%= f.input :description, hint: t("simple_form.hints.billing_transaction.description")  %>
+  <%= f.input :value, input_html: {value: number_with_precision(f.object.value, precision: 2)},
+                      hint: t("simple_form.hints.billing_transaction.value") %>
 </div>

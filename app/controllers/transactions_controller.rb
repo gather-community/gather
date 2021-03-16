@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TransactionsController < ApplicationController
-  include Billing::TransactionEditable
-
   before_action -> { nav_context(:accounts) }
 
   decorates_assigned :account, :transaction, :transactions, :last_statement

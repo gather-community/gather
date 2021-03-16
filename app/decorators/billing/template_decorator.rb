@@ -2,6 +2,8 @@
 
 module Billing
   class TemplateDecorator < ApplicationDecorator
+    include TransactableDecorable
+
     delegate_all
 
     def member_type_names

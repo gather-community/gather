@@ -2,6 +2,8 @@
 
 module Billing
   class TransactionDecorator < ApplicationDecorator
+    include TransactableDecorable
+
     delegate_all
 
     def household_name

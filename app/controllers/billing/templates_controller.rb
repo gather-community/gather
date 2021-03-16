@@ -3,7 +3,6 @@
 module Billing
   class TemplatesController < ApplicationController
     include Destructible
-    include TransactionEditable
 
     before_action -> { nav_context(:billing, :templates) }
 

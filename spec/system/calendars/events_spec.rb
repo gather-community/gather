@@ -14,9 +14,13 @@ describe "event calendar", js: true do
     let!(:calendar1) { create(:calendar, name: "Foo Room") }
     let!(:calendar2) { create(:calendar, name: "Bar Room") }
     let(:time) { Time.current.midnight + 9.hours }
-    let(:time2) { (time + 2.weeks).at_beginning_of_month }
+
+    # This is the start of the month that should be showing on the calendar after two clicks on
+    # 'next week' and one click on 'month view'.
+    let(:time2) { (Time.current.end_of_week(:sunday) + 1.day + 1.week).at_beginning_of_month }
     let(:time2_ymd) { time2.strftime("%Y-%m-%d") }
     let(:time2_my) { time2.strftime("%B %Y") }
+
     let!(:meal) { create(:meal, :with_menu, title: "Yum", served_at: time + 9.hours, calendars: [calendar1]) }
     let!(:event) do
       create(:event, calendar: calendar1, starts_at: time, ends_at: time + 1.hour, name: "Funtimes")

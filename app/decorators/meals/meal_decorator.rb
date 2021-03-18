@@ -4,6 +4,11 @@ module Meals
   class MealDecorator < ApplicationDecorator
     delegate_all
 
+    # Form helper guesses this wrong b/c it's not namespaced.
+    def submission_url
+      new_record? ? h.meals_path : h.meal_path(object)
+    end
+
     def title_or_no_title
       title || "[No Menu]"
     end

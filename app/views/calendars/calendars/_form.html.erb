@@ -4,7 +4,7 @@
   </div>
 
   <div class="col-sm-9 col-sm-pull-3">
-    <%= gather_form_for(calendar, width: :full) do |f| %>
+    <%= gather_form_for(calendar, url: calendar.submission_url, width: :full) do |f| %>
       <%= f.hidden_field :photo_new_signed_id %>
       <%= f.hidden_field :photo_destroy %>
       <%= f.input :name, maxlength: 24 %>

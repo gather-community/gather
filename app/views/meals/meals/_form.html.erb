@@ -1,4 +1,4 @@
-<%= gather_form_for(meal, url: meal.new_record? ? meals_path : meal_path(meal)) do |f| %>
+<%= gather_form_for(meal, url: meal.submission_url) do |f| %>
   <%= render("meals/meals/form/general", f: f) %>
   <%= render("meals/meals/form/workers", f: f) %>
   <%= render("meals/meals/form/menu", f: f) %>

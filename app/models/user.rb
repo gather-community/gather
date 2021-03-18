@@ -293,7 +293,7 @@ class User < ApplicationRecord
 
   # Returns a hash of global roles (those with no associated resource) indexed by name.
   def global_roles
-    @global_roles ||= roles.where(calendar_id: nil).to_a.index_by(&:name).with_indifferent_access
+    @global_roles ||= roles.where(resource_id: nil).to_a.index_by(&:name).with_indifferent_access
   end
 
   def password_required?

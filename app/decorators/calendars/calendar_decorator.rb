@@ -4,6 +4,11 @@ module Calendars
   class CalendarDecorator < ApplicationDecorator
     delegate_all
 
+    # Form helper guesses this wrong b/c it's not namespaced.
+    def submission_url
+      new_record? ? h.calendars_path : h.calendar_path(object)
+    end
+
     def name_with_prefix
       "#{cmty_prefix_no_colon}#{name}"
     end

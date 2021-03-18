@@ -35,10 +35,10 @@ module Meals
 
     # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.
-    has_many :resourcings, class_name: "Meals::Resourcing", dependent: :destroy
+    has_many :resourcings, dependent: :destroy
     has_many :calendars, -> { order(:id) }, class_name: "Calendars::Calendar", through: :resourcings
     has_many :events, -> { order(:id) }, class_name: "Calendars::Event", autosave: true,
-                                               dependent: :destroy, inverse_of: :meal
+                                         dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
     scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }

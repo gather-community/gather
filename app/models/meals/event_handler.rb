@@ -33,7 +33,7 @@ module Meals
       meal.events.each do |event|
         next if event.valid?
         errors = event.errors.map do |attrib, msg|
-          attrib == :base ? msg : "#{Event.human_attribute_name(attrib)}: #{msg}"
+          attrib == :base ? msg : "#{Calendars::Event.human_attribute_name(attrib)}: #{msg}"
         end.join(", ")
         meal.errors.add(:base,
                         "The following error(s) occurred in making a #{event.calendar_name} event "\
@@ -88,7 +88,7 @@ module Meals
     def event_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-                       length: Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+                       length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

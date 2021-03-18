@@ -6,8 +6,6 @@ module Calendars
 
     acts_as_tenant :cluster
 
-    self.table_name = "events"
-
     attr_accessor :guidelines_ok, :privileged_changer
     alias privileged_changer? privileged_changer
 

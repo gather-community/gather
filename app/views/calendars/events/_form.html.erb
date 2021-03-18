@@ -1,5 +1,4 @@
-<%= gather_form_for(event,
-      url: event.new_record? ? calendars_events_path : calendars_event_path(event)) do |f| %>
+<%= gather_form_for(event) do |f| %>
 
   <%= f.hidden_field :calendar_id %>
   <%= f.input :calendar do %>

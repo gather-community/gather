@@ -119,7 +119,7 @@ Rails.application.routes.draw do
         format: :ics
       }
 
-  resources :calendars, except: :show, controller: "calendars/calendar" do
+  resources :calendars, except: :show, controller: "calendars/calendars" do
     member do
       put :activate
       put :deactivate

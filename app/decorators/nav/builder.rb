@@ -190,7 +190,7 @@ module Nav
               name: :events,
               parents: :calendars,
               path: h.calendars_events_path,
-              permitted: h.policy(Calendars::Calendar.new(calendar:
+              permitted: h.policy(Calendars::Event.new(calendar:
                 Calendars::Calendar.new(community: community))).index?,
               icon: "calendar"
             }, {

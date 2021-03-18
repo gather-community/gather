@@ -76,7 +76,7 @@ module Calendars
 
       def work_assignments
         Work::ShiftPolicy::Scope.new(user, Work::Shift).resolve
-          .includes(:job, :assignments, meal: :resources)
+          .includes(:job, :assignments, meal: :calendars)
           .non_draft
           .with_max_age(MAX_EVENT_AGE)
           .by_date
@@ -86,7 +86,7 @@ module Calendars
 
       def meal_assignments
         Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
-          .includes(:resources, assignments: :role, work_shifts: :job)
+          .includes(:calendars, assignments: :role, work_shifts: :job)
           .with_max_age(MAX_EVENT_AGE)
           .oldest_first
           .worked_by(user)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   def self.table_name_prefix
-    "reservation_"
+    "calendar_"
   end
 end

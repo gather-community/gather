@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "reservation form" do
+describe "event form" do
   let(:user) { create(:user) }
 
   before do
@@ -11,11 +11,11 @@ describe "reservation form" do
   end
 
   context "with pre_notice" do
-    let(:resource) { create(:resource) }
-    let!(:protocol) { create(:reservation_protocol, resources: [resource], pre_notice: "May be bed bugs!") }
+    let(:calendar) { create(:calendar) }
+    let!(:protocol) { create(:calendar_protocol, calendars: [calendar], pre_notice: "May be bed bugs!") }
 
     scenario "should show warning" do
-      visit new_reservation_path(resource_id: resource.id)
+      visit new_calendars_event_path(calendar_id: calendar.id)
       expect(page).to have_content("May be bed bugs!")
     end
   end

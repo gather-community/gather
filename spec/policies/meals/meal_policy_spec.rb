@@ -234,7 +234,7 @@ describe Meals::MealPolicy do
     let(:head_cook) { create(:user) }
     let(:meal) { create(:meal, head_cook: head_cook, communities: [community, communityC]) }
     let(:date_loc_invite_attribs) do
-      [:served_at, {resource_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
+      [:served_at, {calendar_ids: []}, {community_boxes: [Community.all.pluck(:id).map(&:to_s)]}]
     end
     let(:menu_attribs) do
       %i[title entrees side kids dessert notes no_allergens] << {allergens: []}

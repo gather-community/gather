@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :meal, class: "Meals::Meal" do
     transient do
       communities { [] }
-      no_resources { false }
+      no_calendars { false }
       head_cook { nil }
       asst_cooks { [] }
       cleaners { [] }
@@ -27,8 +27,8 @@ FactoryBot.define do
       evaluator.asst_cooks.each { |user| build_assignment(meal, "Assistant Cook", user) }
       evaluator.cleaners.each { |user| build_assignment(meal, "Cleaner", user) }
 
-      if meal.resources.empty? && !evaluator.no_resources
-        meal.resources = [create(:resource, meal_hostable: true)]
+      if meal.calendars.empty? && !evaluator.no_calendars
+        meal.calendars = [create(:calendar, meal_hostable: true)]
       end
     end
 

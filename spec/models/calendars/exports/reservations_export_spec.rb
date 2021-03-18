@@ -2,43 +2,43 @@
 
 require "rails_helper"
 
-describe "reservations exports" do
+describe "events exports" do
   include_context "calendar exports"
 
   let(:time) { Time.zone.parse("2019-08-29 13:00") }
   let(:user2) { create(:user) }
-  let(:resource1) { create(:resource, name: "Fun Room") }
-  let(:resource2) { create(:resource, name: "Sad Room") }
-  let!(:reservation1) do
-    create(:reservation, starts_at: time + 1.hour, ends_at: time + 90.minutes,
-                         resource: resource1, reserver: user, name: "Games")
+  let(:calendar1) { create(:calendar, name: "Fun Room") }
+  let(:calendar2) { create(:calendar, name: "Sad Room") }
+  let!(:event1) do
+    create(:event, starts_at: time + 1.hour, ends_at: time + 90.minutes,
+                         calendar: calendar1, reserver: user, name: "Games")
   end
-  let!(:reservation2) do
-    create(:reservation, resource: resource1, starts_at: time + 2.hours, reserver: user2,
+  let!(:event2) do
+    create(:event, calendar: calendar1, starts_at: time + 2.hours, reserver: user2,
                          ends_at: time + 3.hours, name: "Dance")
   end
   # Identical times, reserver, and name
-  let!(:reservation3) do
-    create(:reservation, resource: resource2, starts_at: time + 2.hours, reserver: user2,
+  let!(:event3) do
+    create(:event, calendar: calendar2, starts_at: time + 2.hours, reserver: user2,
                          ends_at: time + 3.hours, name: "Dance")
   end
-  let!(:other_cmty_reservation) do
-    create(:reservation, name: "Nope", resource: create(:resource, community: communityB))
+  let!(:other_cmty_event) do
+    create(:event, name: "Nope", calendar: create(:calendar, community: communityB))
   end
 
   around do |example|
     Timecop.freeze(time) { example.run }
   end
 
-  context "your reservations" do
-    subject(:ical_data) { Calendars::Exports::YourReservationsExport.new(user: user).generate }
+  context "your events" do
+    subject(:ical_data) { Calendars::Exports::YourEventsExport.new(user: user).generate }
 
     it do
-      expect_calendar_name("Your Reservations")
+      expect_calendar_name("Your Events")
       expect_events(
         summary: "Games (#{user.name})",
         location: "Fun Room",
-        description: %r{http://.+/reservations/},
+        description: %r{http://.+/calendars/events/},
         "DTSTART;TZID=Etc/UTC" => (time + 1.hour).to_s(:no_sep),
         "DTEND;TZID=Etc/UTC" => (time + 90.minutes).to_s(:no_sep)
       )
@@ -46,26 +46,26 @@ describe "reservations exports" do
     end
   end
 
-  shared_examples_for "community reservations" do
+  shared_examples_for "community events" do
     it do
-      expect_calendar_name("#{user.community.name} Reservations")
+      expect_calendar_name("#{user.community.name} Events")
       expect_events({
-        summary: "Games (#{reservation1.reserver.name})",
+        summary: "Games (#{event1.reserver.name})",
         location: "Fun Room"
       }, {
-        summary: "Dance (#{reservation2.reserver.name})",
-        location: [resource1, resource2].sort_by(&:id).map(&:name).join(" + ")
+        summary: "Dance (#{event2.reserver.name})",
+        location: [calendar1, calendar2].sort_by(&:id).map(&:name).join(" + ")
       })
     end
   end
 
-  context "community reservations (personalized)" do
-    subject(:ical_data) { Calendars::Exports::CommunityReservationsExport.new(user: user).generate }
-    it_behaves_like "community reservations"
+  context "community events (personalized)" do
+    subject(:ical_data) { Calendars::Exports::CommunityEventsExport.new(user: user).generate }
+    it_behaves_like "community events"
   end
 
-  context "community reservations (not personalized)" do
-    subject(:ical_data) { Calendars::Exports::CommunityReservationsExport.new(community: community).generate }
-    it_behaves_like "community reservations"
+  context "community events (not personalized)" do
+    subject(:ical_data) { Calendars::Exports::CommunityEventsExport.new(community: community).generate }
+    it_behaves_like "community events"
   end
 end

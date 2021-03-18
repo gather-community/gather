@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Reservations
-  class ReservationPolicy < ApplicationPolicy
-    alias reservation record
+module Calendars
+  class EventPolicy < ApplicationPolicy
+    alias event record
 
-    delegate :rule_set, :meal?, to: :reservation
+    delegate :rule_set, :meal?, to: :event
 
     class Scope < Scope
       def resolve
@@ -13,7 +13,7 @@ module Reservations
     end
 
     def index?
-      # If record is a Class (not a specific reservation), can't check protocol
+      # If record is a Class (not a specific event), can't check protocol
       active_cluster_admin? || (active? && (not_specific_record? || !forbidden_by_protocol?))
     end
 
@@ -30,7 +30,7 @@ module Reservations
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
-    # Which exact changes this allows are defined in the Reservation model and/or Rule system.
+    # Which exact changes this allows are defined in the Event model and/or Rule system.
     def privileged_change?
       active_admin?
     end
@@ -44,7 +44,7 @@ module Reservations
     end
 
     def permitted_attributes
-      # We don't include resource_id here because that must be set explicitly because the admin
+      # We don't include calendar_id here because that must be set explicitly because the admin
       # community check relies on it.
       attribs = %i[starts_at ends_at note]
       attribs.concat(%i[name kind sponsor_id guidelines_ok]) unless meal?
@@ -54,10 +54,10 @@ module Reservations
 
     private
 
-    delegate :future?, :recently_created?, to: :reservation
+    delegate :future?, :recently_created?, to: :event
 
     def active_reserver?
-      active? && reservation.reserver == user
+      active? && event.reserver == user
     end
 
     def forbidden_by_protocol?

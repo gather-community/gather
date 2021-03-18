@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Reservations
-  # Join class for Resource and Reservations::Protocol
+module Calendars
+  # Join class for Calendar and Calendars::Protocol
   class Protocoling < ApplicationRecord
     acts_as_tenant :cluster
 
-    belongs_to :protocol, class_name: "Reservations::Protocol"
-    belongs_to :resource
+    belongs_to :protocol, class_name: "Calendars::Protocol"
+    belongs_to :calendar, class_name: "Calendars::Calendar"
   end
 end

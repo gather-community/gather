@@ -33,11 +33,11 @@ module Meals
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
                             dependent: :restrict_with_exception, inverse_of: :statementable
 
-    # Resources are chosen by the user. Reservations are then automatically created.
+    # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.
-    has_many :resourcings, class_name: "Reservations::Resourcing", dependent: :destroy
-    has_many :resources, -> { order(:id) }, class_name: "Reservations::Resource", through: :resourcings
-    has_many :reservations, -> { order(:id) }, class_name: "Reservations::Reservation", autosave: true,
+    has_many :resourcings, class_name: "Meals::Resourcing", dependent: :destroy
+    has_many :calendars, -> { order(:id) }, class_name: "Calendars::Calendar", through: :resourcings
+    has_many :events, -> { order(:id) }, class_name: "Calendars::Event", autosave: true,
                                                dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
@@ -71,9 +71,9 @@ module Meals
     delegate :name, to: :head_cook, prefix: true, allow_nil: true
     delegate :name, to: :formula, prefix: true, allow_nil: true
     delegate :head_cook_role, :types, to: :formula
-    delegate :build_reservations, to: :reservation_handler
+    delegate :build_events, to: :event_handler
 
-    after_validation :copy_resource_errors
+    after_validation :copy_calendar_errors
     before_save :set_menu_timestamp
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
@@ -88,8 +88,8 @@ module Meals
     validate :title_and_entree_if_other_menu_items
     validate :at_least_one_community
     validate :allergens_specified_appropriately
-    validate { reservation_handler.validate_meal if reservations.any? }
-    validates :resources, presence: {message: :need_location}
+    validate { event_handler.validate_meal if events.any? }
+    validates :calendars, presence: {message: :need_location}
     validates_with Meals::SignupsValidator
 
     def self.served_within_days_from_now(days)
@@ -133,8 +133,8 @@ module Meals
       auto_close_time.present? && auto_close_time < Time.current
     end
 
-    def reservation_handler
-      @reservation_handler ||= Reservations::MealReservationHandler.new(self)
+    def event_handler
+      @event_handler ||= Meals::EventHandler.new(self)
     end
 
     # Accepts values from the community checkboxes on the form.
@@ -236,8 +236,8 @@ module Meals
       end
     end
 
-    def copy_resource_errors
-      errors[:resources].each { |m| errors.add(:resource_ids, m) }
+    def copy_calendar_errors
+      errors[:calendars].each { |m| errors.add(:calendar_ids, m) }
     end
 
     def set_menu_timestamp

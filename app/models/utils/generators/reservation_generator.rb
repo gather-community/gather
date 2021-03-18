@@ -2,26 +2,26 @@
 
 module Utils
   module Generators
-    class ReservationGenerator < Generator
-      attr_accessor :resource_map, :community, :data
+    class EventGenerator < Generator
+      attr_accessor :calendar_map, :community, :data
 
-      RESERVATIONS_EXPORTED_ON = Date.new(2017, 6, 14)
+      EVENTS_EXPORTED_ON = Date.new(2017, 6, 14)
 
-      def initialize(community:, resource_map:)
+      def initialize(community:, calendar_map:)
         self.community = community
-        self.resource_map = resource_map
+        self.calendar_map = calendar_map
       end
 
       def generate_samples
-        self.data = load_yaml("reservation/reservations.yml")
+        self.data = load_yaml("calendars/events.yml")
         adults = User.adults.active.to_a
 
         data.each do |row|
-          Reservations::Reservation.create!(row.except("id", "resource_id").merge(
+          Calendars::Event.create!(row.except("id", "calendar_id").merge(
             starts_at: translate_time(row["starts_at"]),
             ends_at: translate_time(row["ends_at"]),
             reserver: adults.sample,
-            resource: resource_map[row["resource_id"]],
+            calendar: calendar_map[row["calendar_id"]],
             guidelines_ok: "1",
             name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],
             created_at: community.created_at,
@@ -32,9 +32,9 @@ module Utils
 
       private
 
-      # Calculate offset to shift reservations so that latest one is 30 days from now
+      # Calculate offset to shift events so that latest one is 30 days from now
       def date_offset
-        @date_offset ||= Date.today - RESERVATIONS_EXPORTED_ON
+        @date_offset ||= Date.today - EVENTS_EXPORTED_ON
       end
 
       def translate_time(datetime)

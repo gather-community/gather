@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-describe Reservations::Rules::RuleSet do
-  let(:resource1) { create(:resource) }
+describe Calendars::Rules::RuleSet do
+  let(:calendar1) { create(:calendar) }
   let(:user) { create(:user) }
-  let(:rule_set) { described_class.build_for(resource: resource1, kind: nil) }
+  let(:rule_set) { described_class.build_for(calendar: calendar1, kind: nil) }
 
   describe "#errors" do
     let(:rule1) { double(check: [:starts_at, "foo"]) }
@@ -23,15 +23,15 @@ describe Reservations::Rules::RuleSet do
     subject(:access_level) { rule_set.access_level(community) }
 
     context "with reserver in same community" do
-      let(:community) { resource1.community }
+      let(:community) { calendar1.community }
 
       context "with other communities forbidden" do
-        let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
+        let!(:p1) { create(:calendar_protocol, calendars: [calendar1], other_communities: "forbidden") }
         it { is_expected.to eq("ok") }
       end
 
       context "with no protocols" do
-        let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
+        let!(:p1) { create(:calendar_protocol, calendars: [calendar1]) }
         it { is_expected.to eq("ok") }
       end
     end
@@ -40,14 +40,14 @@ describe Reservations::Rules::RuleSet do
       let(:community) { create(:community) }
 
       context "with multiple protocols" do
-        let!(:p1) { create(:reservation_protocol, resources: [resource1], other_communities: "read_only") }
-        let!(:p2) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
-        let!(:p3) { create(:reservation_protocol, resources: [resource1], max_lead_days: 60) }
+        let!(:p1) { create(:calendar_protocol, calendars: [calendar1], other_communities: "read_only") }
+        let!(:p2) { create(:calendar_protocol, calendars: [calendar1], other_communities: "forbidden") }
+        let!(:p3) { create(:calendar_protocol, calendars: [calendar1], max_lead_days: 60) }
         it { is_expected.to eq("forbidden") }
       end
 
       context "with no protocols" do
-        let!(:p1) { create(:reservation_protocol, resources: [resource1]) }
+        let!(:p1) { create(:calendar_protocol, calendars: [calendar1]) }
         it { is_expected.to eq("ok") }
       end
     end
@@ -58,11 +58,11 @@ describe Reservations::Rules::RuleSet do
 
     context "with multiple rules" do
       let!(:p1) do
-        create(:reservation_protocol, resources: [resource1], rule_name => "11:00am",
+        create(:calendar_protocol, calendars: [calendar1], rule_name => "11:00am",
                                       created_at: Time.current - 10)
       end
       let!(:p2) do
-        create(:reservation_protocol, resources: [resource1], rule_name => "10:00am")
+        create(:calendar_protocol, calendars: [calendar1], rule_name => "10:00am")
       end
       it { is_expected.to eq("11:00:00") }
     end
@@ -87,11 +87,11 @@ describe Reservations::Rules::RuleSet do
 
     context "with multiple rules" do
       let!(:p1) do
-        create(:reservation_protocol, resources: [resource1], pre_notice: "Foo",
+        create(:calendar_protocol, calendars: [calendar1], pre_notice: "Foo",
                                       created_at: Time.current - 10)
       end
       let!(:p2) do
-        create(:reservation_protocol, resources: [resource1], pre_notice: "Bar")
+        create(:calendar_protocol, calendars: [calendar1], pre_notice: "Bar")
       end
       it { is_expected.to eq(%w[Foo Bar]) }
     end
@@ -106,18 +106,18 @@ describe Reservations::Rules::RuleSet do
 
     context "with multiple rules" do
       let!(:p1) do
-        create(:reservation_protocol, resources: [resource1], requires_kind: nil,
+        create(:calendar_protocol, calendars: [calendar1], requires_kind: nil,
                                       created_at: Time.current - 10)
       end
       let!(:p2) do
-        create(:reservation_protocol, resources: [resource1], requires_kind: true)
+        create(:calendar_protocol, calendars: [calendar1], requires_kind: true)
       end
       it { is_expected.to be(true) }
     end
 
     context "with one nil rule" do
       let!(:p1) do
-        create(:reservation_protocol, resources: [resource1], requires_kind: nil)
+        create(:calendar_protocol, calendars: [calendar1], requires_kind: nil)
       end
       it { is_expected.to be(false) }
     end

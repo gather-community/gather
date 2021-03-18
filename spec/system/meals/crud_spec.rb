@@ -5,12 +5,12 @@ require "rails_helper"
 describe "meal crud", js: true do
   let!(:users) { create_list(:user, 2) }
   let!(:reimbursee) { create(:user, first_name: "Jo", last_name: "Fiz") }
-  let!(:location) { create(:resource, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
+  let!(:location) { create(:calendar, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
   let!(:formula) { create(:meal_formula, :with_two_roles, name: "Formula 1", is_default: true) }
   let!(:no_ac_formula) { create(:meal_formula, name: "Formula 2") }
   let(:hc_role) { formula.roles[0] }
   let(:ac_role) { formula.roles[1] }
-  let!(:meals) { create_list(:meal, 5, formula: formula, resources: [location]) }
+  let!(:meals) { create_list(:meal, 5, formula: formula, calendars: [location]) }
   let!(:meal) { meals.first }
 
   before do
@@ -27,7 +27,7 @@ describe "meal crud", js: true do
       # Create with no menu
       find("button.dropdown-toggle").click
       click_on("Create Meal")
-      select2(location.name, from: "#meals_meal_resource_ids", multiple: true)
+      select2(location.name, from: "#meals_meal_calendar_ids", multiple: true)
 
       # Formula change changes worker roles
       select("Formula 2", from: "Formula")

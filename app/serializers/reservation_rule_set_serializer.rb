@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Serialize RuleSet for form.
-class ReservationRuleSetSerializer < ApplicationSerializer
+class CalendarRuleSetSerializer < ApplicationSerializer
   attributes :fixed_start_time, :fixed_end_time, :access_level
 
   def initialize(rule_set, reserver_community:)

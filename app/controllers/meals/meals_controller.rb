@@ -75,7 +75,7 @@ module Meals
         creator: current_user
       )
       @meal.assign_attributes(meal_params)
-      @meal.build_reservations
+      @meal.build_events
       authorize(@meal)
       if @meal.save
         flash[:success] = "Meal created successfully."
@@ -90,7 +90,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       @meal.assign_attributes(meal_params)
-      @meal.build_reservations
+      @meal.build_events
       if @meal.save
         flash[:success] = "Meal updated successfully."
         @worker_change_notifier&.check_and_send!
@@ -225,9 +225,9 @@ module Meals
       load_communities_in_cluster
       @formula_options = policy_scope(Formula).in_community(current_community)
         .active_or_selected(@meal.formula_id).by_name
-      @resource_options = policy_scope(Reservations::Resource).active.meal_hostable.by_cmty_and_name.decorate
+      @calendar_options = policy_scope(Calendars::Calendar).active.meal_hostable.by_cmty_and_name.decorate
       @sample_formula = Formula.new(community: current_community)
-      @sample_resource = Reservations::Resource.new(community: current_community)
+      @sample_calendar = Calendars::Calendar.new(community: current_community)
     end
 
     def prep_worker_form_vars

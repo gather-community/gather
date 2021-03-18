@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Reservations
-  class ResourceDecorator < ApplicationDecorator
+module Calendars
+  class CalendarDecorator < ApplicationDecorator
     delegate_all
 
     def name_with_prefix
@@ -21,7 +21,7 @@ module Reservations
     end
 
     def photo_variant(format)
-      return "missing/reservations/resources/#{format}.png" unless photo.attached? && photo.variable?
+      return "missing/calendars/calendars/#{format}.png" unless photo.attached? && photo.variable?
       case format
       when :thumb then photo.variant(resize_to_fill: [220, 165])
       else raise "Unknown photo format #{format}"
@@ -31,9 +31,9 @@ module Reservations
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :deactivate, icon: "times-circle", method: :put, confirm: {name: name},
-                                            path: h.deactivate_reservations_resource_path(object)),
+                                            path: h.deactivate_calendar_path(object)),
         ActionLink.new(object, :destroy, icon: "trash", method: :delete, confirm: {name: name},
-                                         path: h.reservations_resource_path(object))
+                                         path: h.calendar_path(object))
       )
     end
   end

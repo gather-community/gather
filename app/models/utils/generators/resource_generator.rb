@@ -2,73 +2,73 @@
 
 module Utils
   module Generators
-    class ResourceGenerator < Generator
-      attr_accessor :community, :resource_data, :resource_map, :photos
+    class CalendarGenerator < Generator
+      attr_accessor :community, :calendar_data, :calendar_map, :photos
 
       def initialize(community:, photos:)
         self.community = community
         self.photos = photos
-        self.resource_map = {}
+        self.calendar_map = {}
       end
 
       def generate_samples
-        create_resources
+        create_calendars
         create_shared_guidelines_and_associate
-        create_resource_protocols_and_associate
+        create_calendar_protocols_and_associate
       end
 
-      def resources
-        resource_map.values
+      def calendars
+        calendar_map.values
       end
 
       def cleanup_on_error
-        resources&.each { |u| u.photo&.destroy }
+        calendars&.each { |u| u.photo&.destroy }
       end
 
       private
 
-      def create_resources
-        self.resource_data = load_yaml("reservation/resources.yml")
-        resource_data.each do |row|
-          resource = create(:resource, row.except("id", :shared_guideline_ids).merge(
+      def create_calendars
+        self.calendar_data = load_yaml("calendars/calendars.yml")
+        calendar_data.each do |row|
+          calendar = create(:calendar, row.except("id", :shared_guideline_ids).merge(
             community: community,
             created_at: community.created_at,
             updated_at: community.updated_at
           ))
-          resource.photo.attach(io: resource_photo(row["id"]), filename: "#{row['id']}.jpg") if photos
-          row[:obj] = resource
-          resource_map[row["id"]] = row[:obj]
+          calendar.photo.attach(io: calendar_photo(row["id"]), filename: "#{row['id']}.jpg") if photos
+          row[:obj] = calendar
+          calendar_map[row["id"]] = row[:obj]
         end
       end
 
       def create_shared_guidelines_and_associate
-        load_yaml("reservation/shared_guidelines.yml").each do |row|
-          sg = Reservations::SharedGuidelines.create!(row.except("id").merge(community: community))
-          resources_with_shared_guidelines_id(row["id"]).each do |resource|
-            resource.shared_guidelines << sg
+        load_yaml("calendars/shared_guidelines.yml").each do |row|
+          sg = Calendars::SharedGuidelines.create!(row.except("id").merge(community: community))
+          calendars_with_shared_guidelines_id(row["id"]).each do |calendar|
+            calendar.shared_guidelines << sg
           end
         end
       end
 
-      def create_resource_protocols_and_associate
-        load_yaml("reservation/protocols.yml").each do |row|
-          protocol = create(:reservation_protocol, row.except("id").merge(community: community))
-          protocol.resources = resources_with_protocol_id(row["id"])
+      def create_calendar_protocols_and_associate
+        load_yaml("calendars/protocols.yml").each do |row|
+          protocol = create(:calendar_protocol, row.except("id").merge(community: community))
+          protocol.calendars = calendars_with_protocol_id(row["id"])
         end
       end
 
-      def resource_photo(id)
-        File.open(resource_path("photos/reservation/resources/#{id}.jpg"))
+      def calendar_photo(id)
+        File.open(resource_path("photos/calendars/calendars/#{id}.jpg"))
       end
 
-      def resources_with_shared_guidelines_id(id)
-        resource_data.select { |r| r[:shared_guideline_ids].include?(id) }.map { |r| r[:obj] }
+      def calendars_with_shared_guidelines_id(id)
+        calendar_data.select { |r| r[:shared_guideline_ids].include?(id) }.map { |r| r[:obj] }
       end
 
-      def resources_with_protocol_id(id)
-        @protocoling_data = load_yaml("reservation/protocolings.yml")
-        resource_ids = @protocoling_data.select { |p| p["protocol_id"] == id }.map { |p| p["resource_id"] }
-        resource_data.select { |r| resource_ids.include?(r["id"]) }.map { |r| r[:obj] }
+      def calendars_with_protocol_id(id)
+        @protocoling_data = load_yaml("calendars/protocolings.yml")
+        calendar_ids = @protocoling_data.select { |p| p["protocol_id"] == id }.map { |p| p["calendar_id"] }
+        calendar_data.select { |r| calendar_ids.include?(r["id"]) }.map { |r| r[:obj] }
       end
     end
   end

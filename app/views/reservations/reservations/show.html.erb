@@ -1,17 +1,17 @@
-<% content_for(:title, "Reservation: #{reservation.name}") %>
-<% content_for(:top_buttons, reservation.action_links) %>
+<% content_for(:title, "Event: #{event.name}") %>
+<% content_for(:top_buttons, event.action_links) %>
 
 <table class="key-value key-value-wide">
   <tr>
-    <td>Resource</td>
+    <td>Calendar</td>
     <td>
-      <%= image_tag(resource.photo_variant(:thumb)) %><br/>
-      <%= resource.name %>
+      <%= image_tag(calendar.photo_variant(:thumb)) %><br/>
+      <%= calendar.name %>
     </td>
   </tr>
   <tr>
     <td>Date/Time</td>
-    <td><%= reservation.timespan %></td>
+    <td><%= event.timespan %></td>
   </tr>
   <% if meal %>
     <tr>
@@ -27,25 +27,25 @@
   <% else %>
     <tr>
       <td>Reserved By</td>
-      <td><%= reservation.reserver.decorate.link(show_cmty_if_foreign: true) %></td>
+      <td><%= event.reserver.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
-  <% if reservation.sponsor %>
+  <% if event.sponsor %>
     <tr>
       <td>Sponsor</td>
-      <td><%= reservation.sponsor.decorate.link(show_cmty_if_foreign: true) %></td>
+      <td><%= event.sponsor.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
-  <% if reservation.displayable_kind? %>
+  <% if event.displayable_kind? %>
     <tr>
       <td>Type</td>
-      <td><%= reservation.kind %></td>
+      <td><%= event.kind %></td>
     </tr>
   <% end %>
-  <% if reservation.note %>
+  <% if event.note %>
     <tr>
       <td>Note</td>
-      <td><%= reservation.rendered_note %></td>
+      <td><%= event.rendered_note %></td>
     </tr>
   <% end %>
 </table>

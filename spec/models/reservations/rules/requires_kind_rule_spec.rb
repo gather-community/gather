@@ -2,18 +2,18 @@
 
 require "rails_helper"
 
-describe Reservations::Rules::RequiresKindRule do
+describe Calendars::Rules::RequiresKindRule do
   describe "#check" do
-    let(:reservation) { Reservations::Reservation.new }
+    let(:event) { Calendars::Event.new }
     let(:rule) { described_class.new(value: true) }
 
-    it "should pass if reservation has kind" do
-      reservation.kind = "personal"
-      expect(rule.check(reservation)).to be(true)
+    it "should pass if event has kind" do
+      event.kind = "personal"
+      expect(rule.check(event)).to be(true)
     end
 
-    it "should fail if reservation has no kind" do
-      expect(rule.check(reservation)).to eq([:kind, "can't be blank"])
+    it "should fail if event has no kind" do
+      expect(rule.check(event)).to eq([:kind, "can't be blank"])
     end
   end
 end

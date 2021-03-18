@@ -1,6 +1,6 @@
 # Ultimately this class should just wrap the calendar plugin and serve events.
 # Most other heavy lifting should be done by other classes like CalendarLinkManager.
-Gather.Views.ReservationCalendarView = Backbone.View.extend
+Gather.Views.CalendarView = Backbone.View.extend
 
   URL_PARAMS_TO_VIEW_TYPES:
     'day': 'agendaDay'
@@ -11,7 +11,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @newUrl = options.newUrl
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
-    @resourceId = options.resourceId
+    @calendarId = options.calendarId
     @savedSettings = @loadSettings()
     @showAppropriateEarlyLink()
 
@@ -95,11 +95,11 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
 
   onEventChange: (event, _, revertFunc) ->
     $.ajax
-      url: "/reservations/#{event.id}"
+      url: "/calendars/events/#{event.id}"
       method: "POST"
       data:
         _method: "PATCH"
-        reservations_reservation:
+        calendars_event:
           starts_at: event.start.format()
           ends_at: event.end.format()
       error: (xhr) ->
@@ -173,7 +173,7 @@ Gather.Views.ReservationCalendarView = Backbone.View.extend
     @$('#show-early').css(display: if @savedSettings.earlyMorning then 'none' else 'inline')
 
   storageKey: ->
-    "calendar#{@resourceId}Settings"
+    "calendar#{@calendarId}Settings"
 
   loadSettings: ->
     settings = JSON.parse(window.localStorage.getItem(@storageKey()) || '{}')

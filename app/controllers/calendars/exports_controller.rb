@@ -40,7 +40,7 @@ module Calendars
       authorize(sample_export, policy_class: ExportPolicy)
       current_user.reset_calendar_token!
       flash[:success] = "Token reset successfully."
-      redirect_to(calendar_exports_path)
+      redirect_to(calendars_exports_path)
     end
 
     protected

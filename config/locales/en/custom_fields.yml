@@ -21,11 +21,11 @@ en:
               diner: "Diner Reminder"
               early_menu: "Early Menu Reminder"
               late_menu: "Late Menu Reminder"
-          reservations:
-            _self: "Reservations"
+          calendars:
+            _self: "Calendars"
             kinds: "Types"
             meals:
-              _self: "Meal Reservations"
+              _self: "Meal Events"
               default_total_time: "Default Total Time"
               default_prep_time: "Default Prep Time"
           work:
@@ -68,10 +68,10 @@ en:
               diner: "The reminder sent to all diners."
               early_menu: "The reminder sent to the head cook to remind them to enter a menu."
               late_menu: "A second, more urgent reminder sent to the head cook if they still haven't entered a menu. Should be fewer days in advance than the early menu reminder."
-          reservations:
-            kinds: "Different types of reservations separated by commas. Can be used in reservation protocols. If blank, 'type' field won't appear in reservation form."
+          calendars:
+            kinds: "Different types of events separated by commas. Can be used in event protocols. If blank, 'type' field won't appear in event form."
             meals:
-              default_total_time: "Default total length of meal reservations in minutes, including prep and cleanup time"
+              default_total_time: "Default total length of meal events in minutes, including prep and cleanup time"
               default_prep_time: "Default meal prep time in minutes"
           billing:
             contact: "Email for billing inquiries. Will be included with payment instructions."
@@ -99,7 +99,7 @@ en:
           default_landing_page:
             meals: "Meals"
             directory: "Directory"
-            reservations: "Reservations"
+            calendars: "Calendars"
             wiki: "Wiki"
           people:
             default_directory_sort:

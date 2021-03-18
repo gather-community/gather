@@ -19,8 +19,8 @@ module Nav
       sample_period = Work::Period.new(community: community)
       sample_job = Work::Job.new(period: sample_period)
       sample_shift = Work::Shift.new(job: sample_job)
-      sample_resource = Reservations::Resource.new(community: community)
-      sample_reservation = Reservations::Reservation.new(resource: sample_resource)
+      sample_calendar = Calendars::Calendar.new(community: community)
+      sample_event = Calendars::Event.new(calendar: sample_calendar)
       sample_wiki_page = Wiki::Page.new(community: community)
       sample_account = Billing::Account.new(community: community)
       customizer = Utils::Nav::CustomizationParser.new(community&.settings&.main_nav_customizations)
@@ -53,9 +53,9 @@ module Nav
         icon: "wrench"
       )
       items << customizer.filter_item(
-        name: :reservations,
-        path: lens_path_if_present("reservations"),
-        permitted: h.policy(sample_reservation).index?,
+        name: :calendars,
+        path: lens_path_if_present("calendars/events"),
+        permitted: h.policy(sample_event).index?,
         icon: "book"
       )
       items << customizer.filter_item(
@@ -184,26 +184,26 @@ module Nav
               icon: "user-circle-o"
             }
           ]
-        when :reservations
+        when :calendars
           [
             {
-              name: :reservations,
-              parents: :reservations,
-              path: h.reservations_path,
-              permitted: h.policy(Reservations::Reservation.new(resource:
-                Reservations::Resource.new(community: community))).index?,
+              name: :events,
+              parents: :calendars,
+              path: h.calendars_events_path,
+              permitted: h.policy(Calendars::Calendar.new(calendar:
+                Calendars::Calendar.new(community: community))).index?,
               icon: "calendar"
             }, {
-              name: :resources,
-              parents: :reservations,
-              path: h.reservations_resources_path,
-              permitted: h.policy(Reservations::Resource.new(community: community)).index?,
+              name: :calendars,
+              parents: :calendars,
+              path: h.calendars_path,
+              permitted: h.policy(Calendars::Calendar.new(community: community)).index?,
               icon: "bed"
             }, {
               name: :protocols,
-              parents: :reservations,
-              path: h.reservations_protocols_path,
-              permitted: h.policy(Reservations::Protocol.new(community: community)).index?,
+              parents: :calendars,
+              path: h.calendars_protocols_path,
+              permitted: h.policy(Calendars::Protocol.new(community: community)).index?,
               icon: "cogs"
             }
           ]
@@ -307,7 +307,7 @@ module Nav
             i18n_key: multi_community? ? :accounts : :account
           }, {
             name: :calendars,
-            path: h.calendar_exports_path,
+            path: h.calendars_exports_path,
             permitted: Calendars::ExportPolicy.new(user, sample_export).index?,
             icon: "calendar"
           }, {

@@ -1,7 +1,7 @@
 en:
-  reservations/protocol:
+  calendars/protocol:
     applicability: "Applicability"
-    no_kinds_html: "This community has no reservation types defined. See the <a href='%{url}'>settings page</a>."
+    no_kinds_html: "This community has no event types defined. See the <a href='%{url}'>settings page</a>."
     rules: "Rules"
     durations:
       mins:
@@ -10,4 +10,4 @@ en:
       days:
         one: "1 day"
         other: "%{formatted} days"
-    exceeded_time: "You can book at most %{max} of %{kind_resource} events per year and you have already booked %{booked}"
+    exceeded_time: "You can book at most %{max} of %{kind_calendar} events per year and you have already booked %{booked}"

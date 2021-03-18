@@ -165,7 +165,7 @@ module Meals
     end
 
     def date_loc_invite_attribs
-      [:served_at, {community_boxes: [Community.all.map(&:id).map(&:to_s)]}, {resource_ids: []}]
+      [:served_at, {community_boxes: [Community.all.map(&:id).map(&:to_s)]}, {calendar_ids: []}]
     end
 
     def menu_attribs

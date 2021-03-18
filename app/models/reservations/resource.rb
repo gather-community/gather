@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   # Something that can be reserved.
-  class Resource < ApplicationRecord
+  class Calendar < ApplicationRecord
     include Deactivatable
     include AttachmentFormable
     include SemicolonDisallowable
@@ -11,15 +11,15 @@ module Reservations
 
     acts_as_tenant :cluster
 
-    self.table_name = "resources"
+    self.table_name = "calendars"
 
     belongs_to :community
-    has_many :guideline_inclusions, class_name: "Reservations::GuidelineInclusion", dependent: :destroy
+    has_many :guideline_inclusions, class_name: "Calendars::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
-    has_many :reservations, inverse_of: :resource, class_name: "Reservations::Reservation",
+    has_many :events, inverse_of: :calendar, class_name: "Calendars::Event",
                             dependent: :destroy
-    has_many :protocolings, class_name: "Reservations::Protocoling", inverse_of: :resource,
-                            foreign_key: "resource_id", dependent: :destroy
+    has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :calendar,
+                            foreign_key: "calendar_id", dependent: :destroy
     has_many :protocols, through: :protocolings
 
     has_one_attached :photo
@@ -36,24 +36,24 @@ module Reservations
     scope :meal_hostable, -> { where(meal_hostable: true) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
     scope :by_name, -> { alpha_order(:name) }
-    scope :with_reservation_counts, lambda {
-      select("resources.*, (SELECT COUNT(id) FROM reservations
-        WHERE resource_id = resources.id) AS reservation_count")
+    scope :with_event_counts, lambda {
+      select("calendars.*, (SELECT COUNT(id) FROM calendar_events
+        WHERE calendar_id = calendars.id) AS event_count")
     }
 
     delegate :name, to: :community, prefix: true
 
-    # Available reservation kinds. Returns nil if none are defined.
+    # Available event kinds. Returns nil if none are defined.
     def kinds
-      (community.settings.reservations.kinds || "").split(/\s*,\s*/).presence
+      (community.settings.calendars.kinds || "").split(/\s*,\s*/).presence
     end
 
-    def reservation_count
-      attributes["reservation_count"] || reservations.count
+    def event_count
+      attributes["event_count"] || events.count
     end
 
-    def reservations?
-      reservation_count.positive?
+    def events?
+      event_count.positive?
     end
 
     def guidelines?

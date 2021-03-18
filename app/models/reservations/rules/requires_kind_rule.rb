@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   module Rules
-    # Rule for ensuring the reservation kind is entered by the reserver.
+    # Rule for ensuring the event kind is entered by the reserver.
     class RequiresKindRule < Rule
-      def check(reservation)
-        reservation.kind.present? || [:kind, "can't be blank"]
+      def check(event)
+        event.kind.present? || [:kind, "can't be blank"]
       end
     end
   end

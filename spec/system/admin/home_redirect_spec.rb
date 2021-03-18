@@ -15,7 +15,7 @@ describe "home redirect" do
       visit "/"
       expect(page).to have_title("Directory")
 
-      %w[Meals Directory Reservations Wiki].each do |new_default|
+      %w[Meals Directory Calendars Wiki].each do |new_default|
         change_default_home(new_default)
         visit "/"
         expect(page).to have_title(new_default)

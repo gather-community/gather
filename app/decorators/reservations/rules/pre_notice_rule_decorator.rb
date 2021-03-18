@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   module Rules
     class PreNoticeRuleDecorator < ApplicationDecorator
       delegate_all

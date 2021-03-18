@@ -258,7 +258,7 @@ class User < ApplicationRecord
     end
   end
 
-  # Efficiently does role lookups for global roles (those without associated resources) by caching
+  # Efficiently does role lookups for global roles (those without associated calendars) by caching
   # the user's roles. The has_role? method provided by Rolify does not do any caching which results in
   # a ton of unnecessary DB requests on some pages.
   def global_role?(role)
@@ -293,7 +293,7 @@ class User < ApplicationRecord
 
   # Returns a hash of global roles (those with no associated resource) indexed by name.
   def global_roles
-    @global_roles ||= roles.where(resource_id: nil).to_a.index_by(&:name).with_indifferent_access
+    @global_roles ||= roles.where(calendar_id: nil).to_a.index_by(&:name).with_indifferent_access
   end
 
   def password_required?

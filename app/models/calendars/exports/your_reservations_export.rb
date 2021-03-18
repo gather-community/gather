@@ -2,8 +2,8 @@
 
 module Calendars
   module Exports
-    # Exports reservations for user's household
-    class YourReservationsExport < ReservationsExport
+    # Exports events created by user
+    class YourEventsExport < EventsExport
       include UserRequiring
 
       protected

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   module Rules
     # Rule for limiting number of total minutes booked per year.
     class MaxMinutesPerYearRule < MaxTimePerYearRule

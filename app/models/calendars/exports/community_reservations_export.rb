@@ -2,12 +2,12 @@
 
 module Calendars
   module Exports
-    # Exports all reservations in community
-    class CommunityReservationsExport < ReservationsExport
+    # Exports all events in community
+    class CommunityEventsExport < EventsExport
       protected
 
       def scope
-        base_scope.where(resources: {community_id: user.community_id})
+        base_scope.where(calendars: {community_id: user.community_id})
       end
     end
   end

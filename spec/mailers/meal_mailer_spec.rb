@@ -4,8 +4,8 @@ require "rails_helper"
 
 describe MealMailer do
   let!(:multiple_communities) { create_list(:community, 2) }
-  let(:resource) { create(:resource, name: "Place", abbrv: "CH") }
-  let(:ca) { resource.community.abbrv }
+  let(:calendar) { create(:calendar, name: "Place", abbrv: "CH") }
+  let(:ca) { calendar.community.abbrv }
   let(:head_cook_role) { create(:meal_role, :head_cook, description: "Cook something tasty") }
   let(:asst_cook_role) do
     create(:meal_role, title: "Assistant Cook", time_type: "date_time",
@@ -14,7 +14,7 @@ describe MealMailer do
   let(:taster_role) { create(:meal_role, title: "Taster", time_type: "date_only") }
   let(:formula) { create(:meal_formula, roles: [head_cook_role, asst_cook_role, taster_role]) }
   let(:served_at) { Time.zone.parse("2017-01-01 12:00") }
-  let(:meal) { create(:meal, :with_menu, served_at: served_at, formula: formula, resources: [resource]) }
+  let(:meal) { create(:meal, :with_menu, served_at: served_at, formula: formula, calendars: [calendar]) }
 
   # This tests fake user handling for mails with a household recipient.
   describe "meal_reminder with fake user" do

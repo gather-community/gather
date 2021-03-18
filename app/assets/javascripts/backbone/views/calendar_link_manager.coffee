@@ -8,14 +8,14 @@ Gather.Views.CalendarLinkManager = Backbone.View.extend
     currentDate = @calendarView.currentDate()
     qsParams = "view=#{viewType}&date=#{currentDate}"
     @updatePermalink(qsParams)
-    @updateOtherResourceLinks(qsParams)
+    @updateOtherCalendarLinks(qsParams)
 
   updatePermalink: (qsParams) ->
     @updateLink($('#permalink'), qsParams)
 
-  updateOtherResourceLinks: (qsParams) ->
-    @$('.resource-link').each (_, el) => @updateLink(el, qsParams)
+  updateOtherCalendarLinks: (qsParams) ->
+    @$('.calendar-link').each (_, el) => @updateLink(el, qsParams)
 
   updateLink: (link, qsParams) ->
-    href = $(link).attr('href').replace(/(resource_id=[^&]+).*$/, (_, $1) -> "#{$1}&#{qsParams}")
+    href = $(link).attr('href').replace(/(calendar_id=[^&]+).*$/, (_, $1) -> "#{$1}&#{qsParams}")
     $(link).attr('href', href)

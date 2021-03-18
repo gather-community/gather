@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :reservation_protocoling, class: "Reservations::Protocoling" do
-    resource
+  factory :calendar_protocoling, class: "Calendars::Protocoling" do
+    calendar
     protocol
   end
 end

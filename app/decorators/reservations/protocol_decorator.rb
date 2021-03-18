@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   class ProtocolDecorator < ApplicationDecorator
     delegate_all
 
@@ -11,13 +11,13 @@ module Reservations
       h.safe_join(rules, h.tag(:br))
     end
 
-    def resource_names
-      general? ? t("common.all") : resources.map(&:name).join(", ")
+    def calendar_names
+      general? ? t("common.all") : calendars.map(&:name).join(", ")
     end
 
     def edit_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :destroy, icon: "trash", path: h.reservations_protocol_path(object),
+        ActionLink.new(object, :destroy, icon: "trash", path: h.calendars_protocol_path(object),
                                          method: :delete, confirm: {name: name})
       )
     end
@@ -25,7 +25,7 @@ module Reservations
     private
 
     def t_rule_name(rule_name)
-      h.t("activerecord.attributes.reservations/protocol.#{rule_name}")
+      h.t("activerecord.attributes.calendars/protocol.#{rule_name}")
     end
 
     def rule_value(rule_name)
@@ -33,7 +33,7 @@ module Reservations
       case rule_name
       when :pre_notice then h.truncate(val, length: 32, separator: " ")
       when :fixed_start_time, :fixed_end_time then h.l(val, format: :time_only).strip
-      when :other_communities then h.t("simple_form.options.reservations_protocol.other_communities.#{val}")
+      when :other_communities then h.t("simple_form.options.calendars_protocol.other_communities.#{val}")
       when :requires_kind then h.t("common.yes")
       when :max_lead_days, :max_days_per_year, :max_length_minutes, :max_minutes_per_year
         duration_rule_value(rule_name, val)
@@ -45,7 +45,7 @@ module Reservations
             when :max_lead_days, :max_days_per_year then "days"
             else "mins"
             end
-      h.t("reservations/protocol.durations.#{key}", count: val, formatted: h.number_with_delimiter(val))
+      h.t("calendars/protocol.durations.#{key}", count: val, formatted: h.number_with_delimiter(val))
     end
   end
 end

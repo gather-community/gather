@@ -101,7 +101,7 @@ describe HouseholdPolicy do
       end
 
       context "with non-deletable user" do
-        let!(:reservation) { create(:reservation, reserver: household.users[0]) }
+        let!(:event) { create(:event, reserver: household.users[0]) }
         it_behaves_like "forbids all"
       end
 

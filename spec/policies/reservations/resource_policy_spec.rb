@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-describe Reservations::ResourcePolicy do
+describe Calendars::CalendarPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:resource) { create(:resource) }
-    let(:record) { resource }
+    let(:calendar) { create(:calendar) }
+    let(:record) { calendar }
 
     permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do
       it_behaves_like "permits admins but not regular users"
@@ -19,42 +19,42 @@ describe Reservations::ResourcePolicy do
     end
 
     permissions :destroy? do
-      it "denies if there are existing reservations" do
-        resource.save!
-        create(:reservation, resource: resource)
-        expect(subject).not_to permit(admin, resource)
+      it "denies if there are existing events" do
+        calendar.save!
+        create(:event, calendar: calendar)
+        expect(subject).not_to permit(admin, calendar)
       end
     end
   end
 
   describe "scope" do
     include_context "policy scopes"
-    let(:klass) { Reservations::Resource }
-    let!(:resource1) { create(:resource) }
-    let!(:resource2) { create(:resource) }
-    let!(:resource3) { create(:resource) }
-    let!(:resource4) { create(:resource, :inactive) }
-    let!(:protocol1) { create(:reservation_protocol, resources: [resource1], other_communities: "forbidden") }
-    let!(:protocol2) { create(:reservation_protocol, resources: [resource2], other_communities: "read_only") }
+    let(:klass) { Calendars::Calendar }
+    let!(:calendar1) { create(:calendar) }
+    let!(:calendar2) { create(:calendar) }
+    let!(:calendar3) { create(:calendar) }
+    let!(:calendar4) { create(:calendar, :inactive) }
+    let!(:protocol1) { create(:calendar_protocol, calendars: [calendar1], other_communities: "forbidden") }
+    let!(:protocol2) { create(:calendar_protocol, calendars: [calendar2], other_communities: "read_only") }
 
-    context "for insiders, returns all active resources" do
+    context "for insiders, returns all active calendars" do
       let(:actor) { user }
-      it { is_expected.to contain_exactly(resource1, resource2, resource3) }
+      it { is_expected.to contain_exactly(calendar1, calendar2, calendar3) }
     end
 
-    context "for outsiders, returns only non-forbidden resources" do
+    context "for outsiders, returns only non-forbidden calendars" do
       let(:actor) { userB }
-      it { is_expected.to contain_exactly(resource2, resource3) }
+      it { is_expected.to contain_exactly(calendar2, calendar3) }
     end
 
-    context "for admins, returns all resources" do
+    context "for admins, returns all calendars" do
       let(:actor) { admin }
-      it { is_expected.to contain_exactly(resource1, resource2, resource3, resource4) }
+      it { is_expected.to contain_exactly(calendar1, calendar2, calendar3, calendar4) }
     end
   end
 
   describe "permitted attributes" do
-    subject { Reservations::ResourcePolicy.new(User.new, Reservations::Resource.new).permitted_attributes }
+    subject { Calendars::CalendarPolicy.new(User.new, Calendars::Calendar.new).permitted_attributes }
 
     it "should allow basic attribs" do
       expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :abbrv, :name,

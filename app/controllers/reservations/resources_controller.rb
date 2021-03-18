@@ -1,39 +1,39 @@
 # frozen_string_literal: true
 
-module Reservations
-  class ResourcesController < ApplicationController
+module Calendars
+  class CalendarsController < ApplicationController
     include Destructible
 
-    decorates_assigned :resource, :resources
-    helper_method :sample_resource
+    decorates_assigned :calendar, :calendars
+    helper_method :sample_calendar
 
-    before_action -> { nav_context(:reservations, :resources) }
+    before_action -> { nav_context(:calendars, :calendars) }
 
     def index
-      authorize(sample_resource)
-      @resources = policy_scope(Resource).with_reservation_counts
+      authorize(sample_calendar)
+      @calendars = policy_scope(Calendar).with_event_counts
         .in_community(current_community).deactivated_last.by_name
     end
 
     def new
-      @resource = sample_resource
-      authorize(@resource)
+      @calendar = sample_calendar
+      authorize(@calendar)
       prep_form_vars
     end
 
     def edit
-      @resource = Resource.find(params[:id])
-      authorize(@resource)
+      @calendar = Calendar.find(params[:id])
+      authorize(@calendar)
       prep_form_vars
     end
 
     def create
-      @resource = sample_resource
-      @resource.assign_attributes(resource_params)
-      authorize(@resource)
-      if @resource.save
-        flash[:success] = "Resource created successfully."
-        redirect_to(reservations_resources_path)
+      @calendar = sample_calendar
+      @calendar.assign_attributes(calendar_params)
+      authorize(@calendar)
+      if @calendar.save
+        flash[:success] = "Calendar created successfully."
+        redirect_to(calendars_path)
       else
         prep_form_vars
         render(:new)
@@ -41,11 +41,11 @@ module Reservations
     end
 
     def update
-      @resource = Resource.find(params[:id])
-      authorize(@resource)
-      if @resource.update(resource_params)
-        flash[:success] = "Resource updated successfully."
-        redirect_to(reservations_resources_path)
+      @calendar = Calendar.find(params[:id])
+      authorize(@calendar)
+      if @calendar.update(calendar_params)
+        flash[:success] = "Calendar updated successfully."
+        redirect_to(calendars_path)
       else
         prep_form_vars
         render(:edit)
@@ -55,22 +55,22 @@ module Reservations
     protected
 
     def klass
-      Resource
+      Calendar
     end
 
     private
 
-    def sample_resource
-      @sample_resource ||= Resource.new(community: current_community)
+    def sample_calendar
+      @sample_calendar ||= Calendar.new(community: current_community)
     end
 
     def prep_form_vars
-      @max_photo_size = Resource.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
+      @max_photo_size = Calendar.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
     end
 
     # Pundit built-in helper doesn't work due to namespacing
-    def resource_params
-      params.require(:reservations_resource).permit(policy(@resource).permitted_attributes)
+    def calendar_params
+      params.require(:calendars_calendar).permit(policy(@calendar).permitted_attributes)
     end
   end
 end

@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :reservation_protocol, class: "Reservations::Protocol" do
+  factory :calendar_protocol, class: "Calendars::Protocol" do
     transient do
-      resources { [] }
+      calendars { [] }
     end
 
     sequence(:name) { |i| "Protocol #{i}" }
     kinds { nil }
-    community { resources.first&.community || Defaults.community }
+    community { calendars.first&.community || Defaults.community }
 
     after(:create) do |protocol, evaluator|
-      protocol.resources = evaluator.resources
+      protocol.calendars = evaluator.calendars
     end
   end
 end

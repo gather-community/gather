@@ -1,16 +1,16 @@
-<div class="row" id="resource-forms">
+<div class="row" id="calendar-forms">
   <div class="col-sm-3 col-sm-push-9">
-    <%= render("shared/dropzone", obj: resource, attrib: :photo, format: :thumb) %>
+    <%= render("shared/dropzone", obj: calendar, attrib: :photo, format: :thumb) %>
   </div>
 
   <div class="col-sm-9 col-sm-pull-3">
-    <%= gather_form_for(resource, width: :full) do |f| %>
+    <%= gather_form_for(calendar, width: :full) do |f| %>
       <%= f.hidden_field :photo_new_signed_id %>
       <%= f.hidden_field :photo_destroy %>
       <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
       <%= f.input :meal_hostable, as: :select, required: true %>
-      <%= f.input :default_calendar_view, collection: Reservations::Resource::DEFAULT_CALENDAR_VIEWS,
+      <%= f.input :default_calendar_view, collection: Calendars::Calendar::DEFAULT_CALENDAR_VIEWS,
         required: true %>
       <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} %>
 
@@ -24,9 +24,9 @@
 <%= javascript_tag do %>
   $(function() {
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
-      el: '#resource-forms',
+      el: '#calendar-forms',
       maxSize: @max_photo_size
     )%>);
-    new Gather.Views.DirtyChecker({el: '.reservations--resource-form', helpers: [uploadView]});
+    new Gather.Views.DirtyChecker({el: '.calendars--calendar-form', helpers: [uploadView]});
   });
 <% end %>

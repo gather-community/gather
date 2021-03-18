@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :resource, class: "Reservations::Resource" do
-    sequence(:name) { |n| "Resource #{n}" }
+  factory :calendar, class: "Calendars::Calendar" do
+    sequence(:name) { |n| "Calendar #{n}" }
     sequence(:abbrv) { |n| "Res#{n}" }
     community { Defaults.community }
 
@@ -13,9 +13,9 @@ FactoryBot.define do
     trait :with_shared_guidelines do
       guidelines { "Guideline 1" }
 
-      after(:build) do |resource|
-        resource.shared_guidelines.build(community: resource.community, name: "Foo", body: "Guideline 2")
-        resource.shared_guidelines.build(community: resource.community, name: "Bar", body: "Guideline 3")
+      after(:build) do |calendar|
+        calendar.shared_guidelines.build(community: calendar.community, name: "Foo", body: "Guideline 2")
+        calendar.shared_guidelines.build(community: calendar.community, name: "Bar", body: "Guideline 3")
       end
     end
   end

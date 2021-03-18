@@ -1,41 +1,41 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   module Rules
-    # Models a set of Rules governing a single reservation.
+    # Models a set of Rules governing a single event.
     # Represents the unification of one or more protocols.
     # Knows how to aggregate multiple rules where necessary.
     class RuleSet
       # Finds all matching protocols and unions them into one.
       # Raises an error if any two protocols have non-nil values for the same attrib.
-      def self.build_for(resource:, kind:)
+      def self.build_for(calendar:, kind:)
         rules = []
-        Protocol.matching(resource, kind).each do |protocol|
+        Protocol.matching(calendar, kind).each do |protocol|
           Rule::NAMES.each do |rule_name|
             klass = Rule.class_for(rule_name)
             next if (value = protocol.send(rule_name)).blank?
-            rules << klass.new(value: value, community: resource.community, kinds: protocol.kinds,
-                               resources: protocol.resources)
+            rules << klass.new(value: value, community: calendar.community, kinds: protocol.kinds,
+                               calendars: protocol.calendars)
           end
         end
-        new(resource: resource, kind: kind, rules: rules)
+        new(calendar: calendar, kind: kind, rules: rules)
       end
 
-      def initialize(resource:, kind:, rules:)
-        self.resource = resource
+      def initialize(calendar:, kind:, rules:)
+        self.calendar = calendar
         self.kind = kind
         self.rules = rules
       end
 
-      # Runs `check` on each rule for the given reservation and returns any error info.
-      def errors(reservation)
-        rules.map { |r| r.check(reservation) }.reject { |v| v == true }
+      # Runs `check` on each rule for the given event and returns any error info.
+      def errors(event)
+        rules.map { |r| r.check(event) }.reject { |v| v == true }
       end
 
       # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
-      # the given reserver vis a vis the rule set's resource.
+      # the given reserver vis a vis the rule set's calendar.
       def access_level(reserver_community)
-        return "ok" if resource_community == reserver_community
+        return "ok" if calendar_community == reserver_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
       end
@@ -71,8 +71,8 @@ module Reservations
 
       private
 
-      attr_accessor :resource, :kind, :rules
-      delegate :community, to: :resource, prefix: true
+      attr_accessor :calendar, :kind, :rules
+      delegate :community, to: :calendar, prefix: true
 
       def values_for(rule_name)
         rules_by_name[rule_name]&.map(&:value) || []

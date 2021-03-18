@@ -3,7 +3,7 @@
 <% content_for(:top_buttons) do %>
   <% if policy(sample_protocol).create? %>
     <%= link_to(icon_tag("plus") << " Create Protocol",
-      new_reservations_protocol_path, class: "btn btn-primary") %>
+      new_calendars_protocol_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
@@ -15,7 +15,7 @@
   <table class="index">
     <tr>
       <th>Name</th>
-      <th>Resources</th>
+      <th>Calendars</th>
       <% if @kinds_present %>
         <th>Types</th>
       <% end %>
@@ -24,10 +24,10 @@
     <% protocols.each do |protocol| %>
       <tr>
         <td class="name">
-          <%= link_to(protocol.name, edit_reservations_protocol_path(protocol)) %>
+          <%= link_to(protocol.name, edit_calendars_protocol_path(protocol)) %>
         </td>
         <td>
-          <%= protocol.resource_names %>
+          <%= protocol.calendar_names %>
         </td>
         <% if @kinds_present %>
           <td>

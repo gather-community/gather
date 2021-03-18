@@ -1,51 +1,51 @@
-<%= gather_form_for(reservation,
-      url: reservation.new_record? ? reservations_path : reservation_path(reservation)) do |f| %>
+<%= gather_form_for(event,
+      url: event.new_record? ? calendars_events_path : calendars_event_path(event)) do |f| %>
 
-  <%= f.hidden_field :resource_id %>
-  <%= f.input :resource do %>
-    <%= image_tag(resource.photo_variant(:thumb)) %><br/>
-    <%= resource.name_with_prefix %>
+  <%= f.hidden_field :calendar_id %>
+  <%= f.input :calendar do %>
+    <%= image_tag(calendar.photo_variant(:thumb)) %><br/>
+    <%= calendar.name_with_prefix %>
   <% end %>
 
-  <% reservation.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>
+  <% event.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>
     <%# Include rule kinds as data attrib so these can be shown/hidden appropriately. %>
     <% data = rule.kinds.present? ? {kinds: rule.kinds.map { |k| "{#{k}}" }.join} : nil %>
     <%= f.input :pre_notice, label: "", wrapper_html: {data: data} do %>
-      <%= Reservations::Rules::PreNoticeRuleDecorator.new(rule).alert_tag %>
+      <%= Calendars::Rules::PreNoticeRuleDecorator.new(rule).alert_tag %>
     <% end %>
   <% end %>
 
-  <% unless reservation.meal? %>
-    <%= f.input :name, maxlength: Reservations::Reservation::NAME_MAX_LENGTH %>
+  <% unless event.meal? %>
+    <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
   <% end %>
 
-  <% if policy(reservation).choose_reserver? %>
-    <%= f.input :reserver_id, as: :assoc_select2, context: reservation.reserver_select2_context %>
+  <% if policy(event).choose_reserver? %>
+    <%= f.input :reserver_id, as: :assoc_select2, context: event.reserver_select2_context %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
-    wrapper_html: { class: reservation.fixed_start_time? ? "no-time-picker" : "" } %>
+    wrapper_html: { class: event.fixed_start_time? ? "no-time-picker" : "" } %>
 
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
-    wrapper_html: { class: reservation.fixed_end_time? ? "no-time-picker" : "" } %>
+    wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" } %>
 
-  <% unless reservation.meal? %>
-    <% if @kinds.present? && reservation.requires_kind? %>
+  <% unless event.meal? %>
+    <% if @kinds.present? && event.requires_kind? %>
       <%= f.input :kind, collection: @kinds, required: true %>
     <% end %>
 
-    <% if reservation.access_level(current_user.community) == "sponsor" %>
+    <% if event.access_level(current_user.community) == "sponsor" %>
       <%= f.input :sponsor_id, as: :assoc_select2, context: "res_sponsor", required: true %>
     <% end %>
   <% end %>
 
   <%= f.input :note, as: :markdown %>
 
-  <%# Meal reservations are only ever edited, so there is no need for this. It would always be checked. %>
-  <% if resource.guidelines? && !reservation.meal? %>
+  <%# Meal events are only ever edited, so there is no need for this. It would always be checked. %>
+  <% if calendar.guidelines? && !event.meal? %>
     <%= f.input :guidelines, required: true do %>
       <div id="guidelines">
-        <%= safe_render_markdown(resource.all_guidelines) %>
+        <%= safe_render_markdown(calendar.all_guidelines) %>
       </div>
       <label>
         <%= f.check_box(:guidelines_ok) %>
@@ -62,13 +62,13 @@
 <%= javascript_tag do %>
   $(function() {
     new Gather.Views.AjaxSelect2({
-      el: '.reservations_reservation_sponsor_id',
-      extraData: {community_id: <%= reservation.community_id %>}
+      el: '.calendars_event_sponsor_id',
+      extraData: {community_id: <%= event.community_id %>}
     });
     new Gather.Views.AjaxSelect2({
-      el: '.reservations_reservation_reserver_id'
+      el: '.calendars_event_reserver_id'
     });
-    new Gather.Views.Reservations.ReservationFormView({el: '.reservations--reservation-form'});
-    new Gather.Views.DirtyChecker({el: '.reservations--reservation-form'});
+    new Gather.Views.Calendars.EventFormView({el: '.calendars--event-form'});
+    new Gather.Views.DirtyChecker({el: '.calendars--event-form'});
   });
 <% end %>

@@ -18,10 +18,10 @@ en:
         kids: "e.g. Mac & cheese and boiled eggs"
         dessert: "e.g. Dark chocolate squares"
         notes: "e.g. Some ingredients organic and local where possible"
-      reservations_protocol:
+      calendars_protocol:
         kinds: "Select types or leave blank to apply to all  ..."
-        resource_ids: "Select resources or leave blank to apply to all ..."
-      reservations_reservation:
+        calendar_ids: "Select calendars or leave blank to apply to all ..."
+      calendars_event:
         name: "e.g. Game night"
       billing_transaction:
         description: "e.g. Check #12345"
@@ -74,24 +74,24 @@ en:
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list via the Mailman admin panel."
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
-      reservations_protocol:
-        kinds: "Which reservation types does this protocol apply to? Leave blank to apply to all."
-        resource_ids: "Which resources does this protocol apply to? Leave blank to apply to all."
-        fixed_end_time: "All applicable reservations will be required to end at this time. If before fixed start time, it will be treated as on the following day."
-        fixed_start_time: "All applicable reservations will be required to start at this time."
-        max_days_per_year: "Users will not be allowed to make applicable reservations on more than this many days per year."
-        max_lead_days: "Users will not be allowed to make applicable reservations more than this many days in advance"
-        max_length_minutes: "Users will not be allowed to make reservations longer than this many minutes in duration."
-        max_minutes_per_year: "Users will not be allowed to make more than this many minutes of applicable reservations per year."
-        other_communities: "Restricts the ability of members of other communities in your cluster to view and create applicable reservations. If blank, there will be no restrictions on members of other communities."
-        pre_notice: "A notice entered here will be displayed at the top of the reservation form for applicable reservations."
-        requires_kind: "If checked, applicable reservations will be required to specify a type. Use this in conjunction with other protocols to enforce special rules for some types of reservations."
+      calendars_protocol:
+        kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
+        calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."
+        fixed_end_time: "All applicable events will be required to end at this time. If before fixed start time, it will be treated as on the following day."
+        fixed_start_time: "All applicable events will be required to start at this time."
+        max_days_per_year: "Users will not be allowed to make applicable events on more than this many days per year."
+        max_lead_days: "Users will not be allowed to make applicable events more than this many days in advance"
+        max_length_minutes: "Users will not be allowed to make events longer than this many minutes in duration."
+        max_minutes_per_year: "Users will not be allowed to make more than this many minutes of applicable events per year."
+        other_communities: "Restricts the ability of members of other communities in your cluster to view and create applicable events. If blank, there will be no restrictions on members of other communities."
+        pre_notice: "A notice entered here will be displayed at the top of the event form for applicable events."
+        requires_kind: "If checked, applicable events will be required to specify a type. Use this in conjunction with other protocols to enforce special rules for some types of events."
         name: "A short, descriptive name for this protocol."
-      reservations_resource:
-        default_calendar_view: "Reservation calendar style when first loaded"
+      calendars_calendar:
+        default_calendar_view: "Event calendar style when first loaded"
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
-        meal_hostable: "If yes, this resource will show up as possible location when creating a meal."
-        guidelines: "Text that the user must agree to when making a reservation."
+        meal_hostable: "If yes, this calendar will show up as possible location when creating a meal."
+        guidelines: "Text that the user must agree to when making a event."
       user:
         joined_on: "Approximate date when you joined the community"
         job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
@@ -196,12 +196,12 @@ en:
           table: "Table"
           albumall: "Album w/ Inactive"
           tableall: "Table w/ Inactive"
-      reservations_protocol:
+      calendars_protocol:
         other_communities:
           sponsor: "Can create only if sponsor named"
           read_only: "Can view only"
           forbidden: "Can't view or create"
-      reservations_resource:
+      calendars_calendar:
         default_calendar_view:
           week: "Week"
           month: "Month"

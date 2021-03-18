@@ -1,19 +1,19 @@
-<% content_for(:title, "Reservations") %>
+<% content_for(:title, "Events") %>
 
 <% content_for(:top_buttons) do %>
   <%= calendar_exports_link %>
 <% end %>
 
-<% if resources.empty? %>
+<% if calendars.empty? %>
   <div class="center-notice">
-    No reservable resources found.
+    No reservable calendars found.
   </div>
 <% else %>
-  <% resources.each do |resource| %>
-    <div class="resource">
-      <%= link_to(reservations_path(resource_id: resource.id)) do %>
-        <%= image_tag(resource.photo_variant(:thumb)) %>
-        <%= resource.name_with_inactive %>
+  <% calendars.each do |calendar| %>
+    <div class="calendar">
+      <%= link_to(calendars_events_path(calendar_id: calendar.id)) do %>
+        <%= image_tag(calendar.photo_variant(:thumb)) %>
+        <%= calendar.name_with_inactive %>
       <% end %>
     </div>
   <% end %>

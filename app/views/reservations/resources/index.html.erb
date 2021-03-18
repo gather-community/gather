@@ -1,30 +1,30 @@
-<% content_for(:title, "Resources") %>
+<% content_for(:title, "Calendars") %>
 
 <% content_for(:top_buttons) do %>
-  <% if policy(sample_resource).create? %>
-    <%= link_to(icon_tag("plus") << " Create Resource",
-      new_reservations_resource_path, class: "btn btn-primary") %>
+  <% if policy(sample_calendar).create? %>
+    <%= link_to(icon_tag("plus") << " Create Calendar",
+      new_calendar_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
-<% if resources.empty? %>
+<% if calendars.empty? %>
   <div class="center-notice">
-    No resources found.
+    No calendars found.
   </div>
 <% else %>
   <table class="index part-width">
     <tr>
       <th></th>
       <th>Name</th>
-      <th>Reservations</th>
+      <th>Events</th>
     </tr>
-    <% resources.each do |resource| %>
-      <tr class="<%= resource.tr_classes %>">
-        <td><%= image_tag(resource.photo_variant(:thumb), alt: resource.name) %></td>
+    <% calendars.each do |calendar| %>
+      <tr class="<%= calendar.tr_classes %>">
+        <td><%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %></td>
         <td class="name">
-          <%= link_to(resource.name_with_inactive, edit_reservations_resource_path(resource.id)) %>
+          <%= link_to(calendar.name_with_inactive, edit_calendar_path(calendar.id)) %>
         </td>
-        <td><%= number_with_delimiter(resource.reservation_count) %></td>
+        <td><%= number_with_delimiter(calendar.event_count) %></td>
       </tr>
     <% end %>
   </table>

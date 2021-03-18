@@ -1,6 +1,6 @@
-.reservations {
+.calendars--events {
   &.action-index {
-    .resource {
+    .calendar {
       display: inline-block;
       margin: 0 20px 20px 0;
 
@@ -24,7 +24,7 @@
   }
 
   // These will be shown as appropriate by JS.
-  .reservations_reservation_pre_notice[data-kinds] {
+  .calendars_event_pre_notice[data-kinds] {
     display: none;
   }
 

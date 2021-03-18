@@ -77,8 +77,8 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(Meals::Meal.count).to eq(0)
       expect(Meals::Formula.count).to eq(1) # Default formula
       expect(Meals::Role.count).to eq(3) # Default roles
-      expect(Reservations::Reservation.count).to eq(0)
-      expect(Reservations::Resource.count).to eq(0)
+      expect(Calendars::Event.count).to eq(0)
+      expect(Calendars::Calendar.count).to eq(0)
       expect(Billing::Statement.count).to eq(0)
       expect(ActiveStorage::Blob.count).to eq(0)
     end

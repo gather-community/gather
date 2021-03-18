@@ -280,13 +280,13 @@ describe UserPolicy do
         it_behaves_like "forbids all"
       end
 
-      context "with own reservations" do
-        let!(:reservation) { create(:reservation, reserver: record) }
+      context "with own events" do
+        let!(:event) { create(:event, reserver: record) }
         it_behaves_like "forbids all"
       end
 
-      context "with sponsored reservations" do
-        let!(:reservation) { create(:reservation, sponsor: record) }
+      context "with sponsored events" do
+        let!(:event) { create(:event, sponsor: record) }
         it_behaves_like "forbids all"
       end
 

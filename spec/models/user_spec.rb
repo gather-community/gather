@@ -413,13 +413,13 @@ describe User do
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 
-    context "with reservation reserver record" do
-      let!(:reservation) { create(:reservation, reserver: user) }
+    context "with event reserver record" do
+      let!(:event) { create(:event, reserver: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 
-    context "with reservation sponsor record" do
-      let!(:reservation) { create(:reservation, sponsor: user) }
+    context "with event sponsor record" do
+      let!(:event) { create(:event, sponsor: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 

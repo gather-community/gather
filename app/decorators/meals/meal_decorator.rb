@@ -50,11 +50,11 @@ module Meals
     end
 
     def location_name
-      resources.first&.decorate&.name_with_prefix
+      calendars.first&.decorate&.name_with_prefix
     end
 
     def location_abbrv
-      resources.first&.decorate&.abbrv_with_prefix
+      calendars.first&.decorate&.abbrv_with_prefix
     end
 
     def served_at_datetime

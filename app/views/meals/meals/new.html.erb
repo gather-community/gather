@@ -7,9 +7,9 @@
   <% str = "an applicable cost formula" %>
   <% missing << (policy(@sample_formula).create? ? link_to(str, new_meals_formula_path) : str) %>
 <% end %>
-<% if @resource_options.empty? %>
-  <% str = "at least one meal-hostable resource" %>
-  <% missing << (policy(@sample_resource).create? ? link_to(str, new_reservations_resource_path) : str) %>
+<% if @calendar_options.empty? %>
+  <% str = "at least one meal-hostable calendar" %>
+  <% missing << (policy(@sample_calendar).create? ? link_to(str, new_calendar_path) : str) %>
 <% end %>
 
 <% if missing.any? %>

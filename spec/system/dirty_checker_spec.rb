@@ -6,7 +6,7 @@ require "rails_helper"
 # It is reporting that a dialog was shown when not expected.
 # describe "dirty checker" do
 #   let(:admin) { create(:admin) }
-#   let!(:meal_location) { create(:resource, name: "Dining Room", abbrv: "DR") }
+#   let!(:meal_location) { create(:calendar, name: "Dining Room", abbrv: "DR") }
 #   let!(:formula) { create(:meal_formula) }
 #
 #   before do

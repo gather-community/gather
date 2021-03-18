@@ -1,9 +1,9 @@
-<% content_for(:title, "Reservations: #{resource.name_with_prefix}") %>
+<% content_for(:title, "Events: #{calendar.name_with_prefix}") %>
 
 <% content_for(:top_buttons) do %>
-  <% if resource && policy(@sample_reservation).create? %>
-    <%= link_to(icon_tag("plus") << " Create Reservation",
-      new_reservation_path(resource_id: resource.id),
+  <% if calendar && policy(@sample_event).create? %>
+    <%= link_to(icon_tag("plus") << " Create Event",
+      new_calendars_event_path(calendar_id: calendar.id),
       class: "btn btn-default") %>
     <%= calendar_exports_link %>
   <% end %>
@@ -13,7 +13,7 @@
   <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
     <footer>
-      <%= link_to("Permalink", reservations_path(resource_id: resource.id), id: "permalink") %> &nbsp;
+      <%= link_to("Permalink", calendars_events_path(calendar_id: calendar.id), id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
@@ -23,7 +23,7 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button>
-            <h2 class="modal-title">Create Reservation?</h2>
+            <h2 class="modal-title">Create Event?</h2>
           </div>
           <div class="modal-body">
           </div>
@@ -36,15 +36,15 @@
     </div>
   </div>
   <div class="col-md-2 col-sm-3 sidebar">
-    <%= image_tag(resource.photo_variant(:thumb)) %><br/><br/>
-    <% if @other_resources.any? %>
+    <%= image_tag(calendar.photo_variant(:thumb)) %><br/><br/>
+    <% if @other_calendars.any? %>
       <div>
-        <small>Other Resources</small>
+        <small>Other Calendars</small>
         <ul class="no-marker">
-          <% @other_resources.each do |other| %>
+          <% @other_calendars.each do |other| %>
             <li>
               <%= link_to(other.name,
-                    reservations_path(resource_id: other.id), class: "resource-link") %>
+                    calendars_events_path(calendar_id: other.id), class: "calendar-link") %>
             </li>
           <% end %>
         </ul>
@@ -55,7 +55,7 @@
         <small>Other Communities</small>
         <ul class="no-marker">
           <% @other_communities.each do |community| %>
-            <li><%= link_to(community.name, url_in_community(community, reservations_path)) %></li>
+            <li><%= link_to(community.name, url_in_community(community, calendars_events_path)) %></li>
           <% end %>
         </ul>
       </div>
@@ -65,14 +65,14 @@
 
 <%= javascript_tag do %>
   $(function() {
-    var calendarView = new Gather.Views.ReservationCalendarView({
+    var calendarView = new Gather.Views.CalendarView({
       el: '#calendar-col',
-      resourceId: <%= json(resource.id) %>,
-      feedUrl: <%= json(reservations_path(resource_id: resource.id)) %>,
-      newUrl: <%= json(new_reservation_path(resource_id: resource.id)) %>,
+      calendarId: <%= json(calendar.id) %>,
+      feedUrl: <%= json(calendars_events_path(calendar_id: calendar.id)) %>,
+      newUrl: <%= json(new_calendars_event_path(calendar_id: calendar.id)) %>,
       focusDate: <%= json(params[:date]) %>,
       viewType: <%= json(params[:view]) %>,
-      defaultViewType: <%= json(resource.default_calendar_view) %>,
+      defaultViewType: <%= json(calendar.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set_serializer) %>
     });
     var linkManager = new Gather.Views.CalendarLinkManager({

@@ -11,7 +11,7 @@ class HomeController < ApplicationController
     case current_community.settings.default_landing_page
     when "meals" then redirect_to(meals_path)
     when "directory" then redirect_to(users_path)
-    when "reservations" then redirect_to(reservations_path)
+    when "calendars" then redirect_to(calendars_events_path)
     when "wiki" then redirect_to(wiki_pages_path)
     else redirect_to(users_path)
     end

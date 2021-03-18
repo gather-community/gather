@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 # For calendars.
-class ReservationSerializer < ApplicationSerializer
+class EventSerializer < ApplicationSerializer
   include Rails.application.routes.url_helpers
 
   attributes :id, :url, :title, :start, :end, :editable, :className
 
   def url
-    reservation_path(object)
+    calendars_event_path(object)
   end
 
   def title
@@ -30,14 +30,14 @@ class ReservationSerializer < ApplicationSerializer
 
   def editable
     # scope == current_user
-    Reservations::ReservationPolicy.new(scope, object).edit?
+    Calendars::EventPolicy.new(scope, object).edit?
   end
 
   def className
     if object.meal
       "has-meal"
     elsif object.reserver == scope
-      "own-reservation"
+      "own-event"
     else
       ""
     end

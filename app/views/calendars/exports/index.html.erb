@@ -10,8 +10,8 @@
       <%= decorator.calendar_link("all_meals") %>
       <%= decorator.calendar_link("community_meals") if multi_community? %>
       <%= decorator.calendar_link("your_jobs") %>
-      <%= decorator.calendar_link("community_reservations") %>
-      <%= decorator.calendar_link("your_reservations") %>
+      <%= decorator.calendar_link("community_events") %>
+      <%= decorator.calendar_link("your_events") %>
     </div>
 
     <div class="links community-links">
@@ -19,7 +19,7 @@
       <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
       <%= decorator.calendar_link("all_meals", personalized: false) %>
       <%= decorator.calendar_link("community_meals", personalized: false) if multi_community? %>
-      <%= decorator.calendar_link("community_reservations", personalized: false) %>
+      <%= decorator.calendar_link("community_events", personalized: false) %>
     </div>
   </div>
   <div class="col-sm-6">
@@ -27,7 +27,7 @@
       <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
       Personalized calendar links are tailored and unique to you, so don't share them. If you want to tell
       someone about this fun feature, send them the
-      <%= link_to("link to this page", calendar_exports_path) %>,
+      <%= link_to("link to this page", calendars_exports_path) %>,
       not an individual calendar.
     </div>
 

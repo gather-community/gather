@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   # Custom error for duplicate attribute definitions.
   class ProtocolDuplicateDefinitionError < StandardError
     attr_accessor :attrib, :protocols

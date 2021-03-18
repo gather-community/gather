@@ -40,11 +40,11 @@ module Meals
       @sample_times = [Time.current.midnight + 7.days, Time.current.midnight + 10.days].map do |t|
         (t + 18.hours).to_s(:no_sec_no_t)
       end
-      @locations = Meal.hosted_by(current_community).newest_first.first&.resources
-      @locations ||= Reservations::Resource.in_community(current_community).meal_hostable[0...2].presence
+      @locations = Meal.hosted_by(current_community).newest_first.first&.calendars
+      @locations ||= Calendars::Calendar.in_community(current_community).meal_hostable[0...2].presence
       @locations ||= [
-        Reservations::Resource.new(id: 1234, name: "Dining Room"),
-        Reservations::Resource.new(id: 5678, name: "Kitchen")
+        Calendars::Calendar.new(id: 1234, name: "Dining Room"),
+        Calendars::Calendar.new(id: 5678, name: "Kitchen")
       ]
       @formula = Formula.default_for(current_community) || Formula.new(id: 439, name: "Main Formula")
     end

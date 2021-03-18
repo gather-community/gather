@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-module Reservations
-  class ResourcePolicy < ApplicationPolicy
-    alias resource record
+module Calendars
+  class CalendarPolicy < ApplicationPolicy
+    alias calendar record
 
     class Scope < Scope
       def resolve
-        # Only show active resources unless admin.
+        # Only show active calendars unless admin.
         scope_with_visibility = active_admin? ? scope : scope.active
 
-        # Need to load the resources because access_level is computed by RuleSet which can't be computed
+        # Need to load the calendars because access_level is computed by RuleSet which can't be computed
         # at database level.
-        ids = scope_with_visibility.all.reject do |resource|
-          sample_reservation = Reservation.new(reserver: user, resource: resource)
-          sample_reservation.access_level(user.community) == "forbidden"
+        ids = scope_with_visibility.all.reject do |calendar|
+          sample_event = Event.new(reserver: user, calendar: calendar)
+          sample_event.access_level(user.community) == "forbidden"
         end.map(&:id)
         scope.where(id: ids)
       end
@@ -36,15 +36,15 @@ module Reservations
     end
 
     def destroy?
-      !resource.reservations? && active_admin?
+      !calendar.events? && active_admin?
     end
 
     def activate?
-      resource.inactive? && active_admin?
+      calendar.inactive? && active_admin?
     end
 
     def deactivate?
-      resource.active? && active_admin?
+      calendar.active? && active_admin?
     end
 
     def permitted_attributes

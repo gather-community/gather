@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   module Rules
-    # Rule for showing a static notice at the top of the reservation form.
+    # Rule for showing a static notice at the top of the event form.
     class PreNoticeRule < Rule
-      def check(_reservation)
+      def check(_event)
         true
       end
     end

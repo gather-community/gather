@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-module Reservations
+module Calendars
   class ProtocolsController < ApplicationController
     include Destructible
 
     decorates_assigned :protocol, :protocols
     helper_method :sample_protocol
 
-    before_action -> { nav_context(:reservations, :protocols) }
+    before_action -> { nav_context(:calendars, :protocols) }
 
     def index
       authorize(sample_protocol)
-      @protocols = policy_scope(Protocol).in_community(current_community).includes(:resources).by_name
+      @protocols = policy_scope(Protocol).in_community(current_community).includes(:calendars).by_name
       check_if_kinds_present
     end
 
@@ -33,7 +33,7 @@ module Reservations
       authorize(@protocol)
       if @protocol.save
         flash[:success] = "Protocol created successfully."
-        redirect_to(reservations_protocols_path)
+        redirect_to(calendars_protocols_path)
       else
         prep_form_vars
         render(:new)
@@ -45,7 +45,7 @@ module Reservations
       authorize(@protocol)
       if @protocol.update(protocol_params)
         flash[:success] = "Protocol updated successfully."
-        redirect_to(reservations_protocols_path)
+        redirect_to(calendars_protocols_path)
       else
         prep_form_vars
         render(:edit)
@@ -65,17 +65,17 @@ module Reservations
     end
 
     def prep_form_vars
-      @resource_options = policy_scope(Resource).in_community(current_community).active.by_name.decorate
-      @kind_options = (current_community.settings.reservations.kinds || "").split(/\s*,\s*/)
+      @calendar_options = policy_scope(Calendar).in_community(current_community).active.by_name.decorate
+      @kind_options = (current_community.settings.calendars.kinds || "").split(/\s*,\s*/)
     end
 
     def check_if_kinds_present
-      @kinds_present = current_community.settings.reservations.kinds.present?
+      @kinds_present = current_community.settings.calendars.kinds.present?
     end
 
     # Pundit built-in helper doesn't work due to namespacing
     def protocol_params
-      params.require(:reservations_protocol).permit(policy(@protocol).permitted_attributes)
+      params.require(:calendars_protocol).permit(policy(@protocol).permitted_attributes)
     end
   end
 end

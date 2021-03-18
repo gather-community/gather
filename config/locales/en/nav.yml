@@ -4,7 +4,7 @@ en:
       people: "People"
       groups: "Groups"
       meals: "Meals"
-      reservations: "Reservations"
+      calendars: "Calendars"
       wiki: "Wiki"
       work: "Work"
       admin: "Admin"
@@ -27,9 +27,9 @@ en:
         vehicles: "Vehicles"
         memorials: "Memorials"
         settings: "Settings"
-      reservations:
-        reservations: "Reservations"
-        resources: "Resources"
+      calendars:
+        events: "Events"
+        calendars: "Calendars"
         protocols: "Protocols"
       work:
         signups: "Signups"

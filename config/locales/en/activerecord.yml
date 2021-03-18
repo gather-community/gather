@@ -37,7 +37,7 @@ en:
         community_id: "Host Community"
         served_at: "Date/Time"
         communities: "Communities"
-        resource_ids: "Location(s)"
+        calendar_ids: "Location(s)"
         formula: "Formula"
         capacity: "Capacity"
         title: "Title"
@@ -120,10 +120,10 @@ en:
         settings: "List Settings"
         address: "List Address"
         _destroy: "Delete this list?"
-      reservations/protocol:
+      calendars/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"
-        kinds: "Reservation Types"
+        kinds: "Event Types"
         max_days_per_year: "Max. Days/Year"
         max_lead_days: "Max. Advance Time"
         max_length_minutes: "Max. Duration"
@@ -131,9 +131,9 @@ en:
         other_communities: "Other Communities"
         pre_notice: "Pre-notice"
         requires_kind: "Type Required"
-        resource_ids: "Resources"
-      reservations/reservation:
-        resource: "Resource"
+        calendar_ids: "Calendars"
+      calendars/event:
+        calendar: "Calendar"
         pre_notice: "Notice"
         name: "Event Name"
         starts_at: "Start Time"
@@ -141,7 +141,7 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
-      reservations/resource:
+      calendars/calendar:
         name: "Name"
         guidelines: "Guidelines"
         hidden: "Hidden"
@@ -241,7 +241,7 @@ en:
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
         meals/meal:
           need_location: "You must choose at least one location"
-        reservations/reservation:
+        calendars/event:
           attributes:
             starts_at:
               after_meal_time: "must be at or before the meal time (%{time})"
@@ -250,10 +250,10 @@ en:
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
-        reservations/resource:
+        calendars/calendar:
           attributes:
             abbrv:
-              blank: "can't be blank if resource can host meals"
+              blank: "can't be blank if calendar can host meals"
         meals/formula:
           at_least_one_type: "You must include at least one meal type."
           at_least_one_nonzero_type: "You must include at least one non-zero meal type if the calculation type is proportional."

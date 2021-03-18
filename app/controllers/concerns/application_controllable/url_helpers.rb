@@ -10,8 +10,22 @@ module ApplicationControllable
 
     protected
 
+    # These methods are necessary because Rails guesses the wrong route keys.
+    # They can't be aliases because they are dynamically programming methods.
     def meals_meals_path(*args)
       meals_path(*args)
+    end
+
+    def meals_meal_path(*args)
+      meal_path(*args)
+    end
+
+    def calendars_calendars_path(*args)
+      calendars_path(*args)
+    end
+
+    def calendars_calendar_path(*args)
+      calendar_path(*args)
     end
 
     def default_url_options

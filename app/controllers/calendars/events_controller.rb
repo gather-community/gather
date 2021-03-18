@@ -41,8 +41,7 @@ module Calendars
           if @rule_set.access_level(current_community) == "read_only"
             flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
           end
-          @rule_set_serializer = CalendarRuleSetSerializer.new(@rule_set,
-                                                                  reserver_community: current_community)
+          @rule_set_serializer = RuleSetSerializer.new(@rule_set, reserver_community: current_community)
           @other_calendars = policy_scope(Calendar)
             .where(community_id: @calendar.community_id)
             .where("id != ?", @calendar.id)

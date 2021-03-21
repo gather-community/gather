@@ -39,13 +39,13 @@ module Utils
 
     def rsrv_join
       "LEFT JOIN (
-        SELECT COUNT(r.id) AS rsrv_count,
-               MAX(r.starts_at) AS last_rsrv_starts_at,
-               rc.community_id AS community_id
-          FROM calendar_events r INNER JOIN calendars rc ON rc.id = r.calendar_id
-            INNER JOIN communities c ON c.id = rc.community_id
-          WHERE r.created_at > c.created_at
-          GROUP BY rc.community_id
+        SELECT COUNT(e.id) AS rsrv_count,
+               MAX(e.starts_at) AS last_rsrv_starts_at,
+               cn.community_id AS community_id
+          FROM calendar_events e INNER JOIN calendar_nodes cn ON cn.id = e.calendar_id
+            INNER JOIN communities c ON c.id = cn.community_id
+          WHERE e.created_at > c.created_at
+          GROUP BY cn.community_id
         ) AS rsrv_stats ON rsrv_stats.community_id = communities.id"
     end
 

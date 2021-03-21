@@ -7,7 +7,7 @@ module Calendars
       protected
 
       def scope
-        base_scope.where(calendars: {community_id: user.community_id})
+        base_scope.where(calendar_nodes: {community_id: user.community_id})
       end
     end
   end

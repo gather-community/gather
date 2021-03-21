@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_023025) do
+ActiveRecord::Schema.define(version: 2021_03_21_204133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,6 +109,23 @@ ActiveRecord::Schema.define(version: 2021_03_17_023025) do
     t.index ["cluster_id"], name: "index_calendar_guideline_inclusions_on_cluster_id"
   end
 
+  create_table "calendar_nodes", id: :serial, force: :cascade do |t|
+    t.string "abbrv", limit: 6
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
+    t.string "default_calendar_view", default: "week", null: false
+    t.text "guidelines"
+    t.boolean "meal_hostable", default: false, null: false
+    t.string "name", limit: 24, null: false
+    t.string "type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_calendar_nodes_on_cluster_id"
+    t.index ["community_id", "name"], name: "index_calendar_nodes_on_community_id_and_name", unique: true
+    t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
+  end
+
   create_table "calendar_protocolings", id: :serial, force: :cascade do |t|
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
@@ -148,22 +165,6 @@ ActiveRecord::Schema.define(version: 2021_03_17_023025) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_calendar_shared_guidelines_on_cluster_id"
     t.index ["community_id"], name: "index_calendar_shared_guidelines_on_community_id"
-  end
-
-  create_table "calendars", id: :serial, force: :cascade do |t|
-    t.string "abbrv", limit: 6
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "deactivated_at"
-    t.string "default_calendar_view", default: "week", null: false
-    t.text "guidelines"
-    t.boolean "meal_hostable", default: false, null: false
-    t.string "name", limit: 24, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_calendars_on_cluster_id"
-    t.index ["community_id", "name"], name: "index_calendars_on_community_id_and_name", unique: true
-    t.index ["community_id"], name: "index_calendars_on_community_id"
   end
 
   create_table "clusters", id: :serial, force: :cascade do |t|
@@ -923,23 +924,23 @@ ActiveRecord::Schema.define(version: 2021_03_17_023025) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
-  add_foreign_key "calendar_events", "calendars"
+  add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "meals"
   add_foreign_key "calendar_events", "users", column: "reserver_id"
   add_foreign_key "calendar_events", "users", column: "sponsor_id"
+  add_foreign_key "calendar_guideline_inclusions", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_shared_guidelines", column: "shared_guidelines_id"
-  add_foreign_key "calendar_guideline_inclusions", "calendars"
   add_foreign_key "calendar_guideline_inclusions", "clusters"
+  add_foreign_key "calendar_nodes", "clusters"
+  add_foreign_key "calendar_nodes", "communities"
+  add_foreign_key "calendar_protocolings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_protocolings", "calendar_protocols", column: "protocol_id"
-  add_foreign_key "calendar_protocolings", "calendars"
   add_foreign_key "calendar_protocolings", "clusters"
   add_foreign_key "calendar_protocols", "clusters"
   add_foreign_key "calendar_protocols", "communities"
   add_foreign_key "calendar_shared_guidelines", "clusters"
   add_foreign_key "calendar_shared_guidelines", "communities"
-  add_foreign_key "calendars", "clusters"
-  add_foreign_key "calendars", "communities"
   add_foreign_key "communities", "clusters"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"
@@ -988,7 +989,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_023025) do
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"
-  add_foreign_key "meal_resourcings", "calendars"
+  add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
   add_foreign_key "meal_roles", "clusters"

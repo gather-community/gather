@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_21_204133) do
+ActiveRecord::Schema.define(version: 2021_03_21_233108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2021_03_21_204133) do
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.string "default_calendar_view", default: "week", null: false
+    t.bigint "group_id"
     t.text "guidelines"
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
@@ -124,6 +125,7 @@ ActiveRecord::Schema.define(version: 2021_03_21_204133) do
     t.index ["cluster_id"], name: "index_calendar_nodes_on_cluster_id"
     t.index ["community_id", "name"], name: "index_calendar_nodes_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
+    t.index ["group_id"], name: "index_calendar_nodes_on_group_id"
   end
 
   create_table "calendar_protocolings", id: :serial, force: :cascade do |t|
@@ -932,6 +934,7 @@ ActiveRecord::Schema.define(version: 2021_03_21_204133) do
   add_foreign_key "calendar_guideline_inclusions", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_shared_guidelines", column: "shared_guidelines_id"
   add_foreign_key "calendar_guideline_inclusions", "clusters"
+  add_foreign_key "calendar_nodes", "calendar_nodes", column: "group_id"
   add_foreign_key "calendar_nodes", "clusters"
   add_foreign_key "calendar_nodes", "communities"
   add_foreign_key "calendar_protocolings", "calendar_nodes", column: "calendar_id"

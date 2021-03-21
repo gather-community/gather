@@ -9,6 +9,7 @@ module Calendars
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
 
+    belongs_to :group, class_name: "Calendars::Group", inverse_of: :calendars
     has_many :guideline_inclusions, class_name: "Calendars::GuidelineInclusion", dependent: :destroy
     has_many :shared_guidelines, through: :guideline_inclusions
     has_many :events, inverse_of: :calendar, class_name: "Calendars::Event",

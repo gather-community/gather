@@ -6,6 +6,8 @@ module ApplicationControllable
 
     included do
       helper_method :home_path, :home_url, :url_in_community, :url_in_home_community
+      helper_method :meals_meals_path, :meals_meal_path, :calendars_calendars_path,
+                    :calendars_calendar_path, :activate_calendars_calendar_path
     end
 
     protected
@@ -26,6 +28,10 @@ module ApplicationControllable
 
     def calendars_calendar_path(*args)
       calendar_path(*args)
+    end
+
+    def activate_calendars_calendar_path(*args)
+      activate_calendar_path(*args)
     end
 
     def default_url_options

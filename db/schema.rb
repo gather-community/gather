@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_22_013636) do
+ActiveRecord::Schema.define(version: 2021_03_22_013952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_013636) do
     t.index ["community_id", "name"], name: "index_calendar_nodes_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
     t.index ["group_id"], name: "index_calendar_nodes_on_group_id"
+    t.check_constraint :group_id_null, "(((type)::text = 'Calendars::Calendar'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL)))"
   end
 
   create_table "calendar_protocolings", id: :serial, force: :cascade do |t|

@@ -19,7 +19,7 @@
 
     <%= f.input :email, required: @user.email_required? %>
     <%= f.input :google_email, disabled: !policy(@user).administer? %>
-    <%= f.input :phone, required: @user.adult? do %>
+    <%= f.input :phone do %>
       <div class="nested-fields subfields">
         <div class="fields-col">
           <div class="field-row">

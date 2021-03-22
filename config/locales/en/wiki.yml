@@ -6,7 +6,7 @@ en:
     revision_info_no_by: "Page revised on %{time}"
     special_pages:
       home:
-        title: "Wiki Home Page"
+        title: "Wiki"
         content: |-
           This is your **wiki home page**!
 

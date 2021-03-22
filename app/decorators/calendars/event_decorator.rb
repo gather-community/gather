@@ -4,7 +4,7 @@ module Calendars
   class EventDecorator < ApplicationDecorator
     delegate_all
 
-    # Fetches rules matching the given name and kind for the event's calendar and reserver.
+    # Fetches rules matching the given name and kind for the event's calendar and creator.
     # Allows overriding of kind because in the UI we sometimes need to fetch rules for any kind or no
     # kind at render time in case the user changes the kind on the client side.
     def rules(rule_name:, kind:)
@@ -19,8 +19,8 @@ module Calendars
       h.safe_render_markdown(note)
     end
 
-    def reserver_select2_context
-      access_level(h.current_community) == "sponsor" ? "reserver_any_cmty" : "reserver_this_cmty"
+    def creator_select2_context
+      access_level(h.current_community) == "sponsor" ? "event_creator_any_cmty" : "event_creator_this_cmty"
     end
 
     def show_action_link_set

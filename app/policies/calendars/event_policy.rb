@@ -26,7 +26,7 @@ module Calendars
     end
 
     def update?
-      active_admin? || active_reserver? || (meal? && active_with_community_role?(:meals_coordinator))
+      active_admin? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -35,12 +35,12 @@ module Calendars
       active_admin?
     end
 
-    def choose_reserver?
+    def choose_creator?
       active_admin?
     end
 
     def destroy?
-      (active_reserver? && (future? || recently_created?) || active_admin?) && !meal?
+      (active_creator? && (future? || recently_created?) || active_admin?) && !meal?
     end
 
     def permitted_attributes
@@ -48,7 +48,7 @@ module Calendars
       # community check relies on it.
       attribs = %i[starts_at ends_at note]
       attribs.concat(%i[name kind sponsor_id guidelines_ok]) unless meal?
-      attribs << :reserver_id if choose_reserver?
+      attribs << :creator_id if choose_creator?
       attribs
     end
 
@@ -56,8 +56,8 @@ module Calendars
 
     delegate :future?, :recently_created?, to: :event
 
-    def active_reserver?
-      active? && event.reserver == user
+    def active_creator?
+      active? && event.creator == user
     end
 
     def forbidden_by_protocol?

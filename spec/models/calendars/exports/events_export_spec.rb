@@ -11,15 +11,15 @@ describe "events exports" do
   let(:calendar2) { create(:calendar, name: "Sad Room") }
   let!(:event1) do
     create(:event, starts_at: time + 1.hour, ends_at: time + 90.minutes,
-                         calendar: calendar1, reserver: user, name: "Games")
+                         calendar: calendar1, creator: user, name: "Games")
   end
   let!(:event2) do
-    create(:event, calendar: calendar1, starts_at: time + 2.hours, reserver: user2,
+    create(:event, calendar: calendar1, starts_at: time + 2.hours, creator: user2,
                          ends_at: time + 3.hours, name: "Dance")
   end
-  # Identical times, reserver, and name
+  # Identical times, creator, and name
   let!(:event3) do
-    create(:event, calendar: calendar2, starts_at: time + 2.hours, reserver: user2,
+    create(:event, calendar: calendar2, starts_at: time + 2.hours, creator: user2,
                          ends_at: time + 3.hours, name: "Dance")
   end
   let!(:other_cmty_event) do
@@ -50,10 +50,10 @@ describe "events exports" do
     it do
       expect_calendar_name("#{user.community.name} Events")
       expect_events({
-        summary: "Games (#{event1.reserver.name})",
+        summary: "Games (#{event1.creator.name})",
         location: "Fun Room"
       }, {
-        summary: "Dance (#{event2.reserver.name})",
+        summary: "Dance (#{event2.creator.name})",
         location: [calendar1, calendar2].sort_by(&:id).map(&:name).join(" + ")
       })
     end

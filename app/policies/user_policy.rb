@@ -52,7 +52,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   # We don't allow destroy if the user is referred to from an independent record in the community, such
-  # as a child (guardian), event (reserver, sponsor), wiki page (creator, updater), etc.
+  # as a child (guardian), event (creator, sponsor), wiki page (creator, updater), etc.
   # Records that are not independent, i.e., that make no sense without the user (e.g. work share,
   # job choosing proxy), can be dependendly destroyed or nullified.
   def destroy?

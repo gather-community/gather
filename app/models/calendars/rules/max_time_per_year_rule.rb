@@ -2,7 +2,7 @@
 
 module Calendars
   module Rules
-    # Rule for limiting time reservered per year. Abstract class.
+    # Rule for limiting time reserved per year. Abstract class.
     class MaxTimePerYearRule < Rule
       def check(event)
         booked = booked_time_for_year(event, unit)
@@ -17,7 +17,7 @@ module Calendars
 
       private
 
-      # Gets the amount of time that the given event's reserver household has booked
+      # Gets the amount of time that the given event's creator household has booked
       # on the current rule's calendars in the event's year, in the given unit (:hours or :minutes).
       # The number of days is rounded up for each event.
       # i.e., a 1-hour event and a 10-hour event both counts as 1 day, while a 36-hour event
@@ -28,7 +28,7 @@ module Calendars
           .where.not(id: event.id)
           .where(calendars.present? ? {calendar: calendars} : nil)
           .where(kinds.present? ? {kind: kinds} : nil)
-          .where(reserver: event.household_users)
+          .where(creator: event.household_users)
           .where(starts_at: Time.zone.local(year)...Time.zone.local(year + 1))
           .to_a.sum(&unit)
       end

@@ -5,13 +5,13 @@ module Calendars
   class RuleSetSerializer < ApplicationSerializer
     attributes :fixed_start_time, :fixed_end_time, :access_level
 
-    def initialize(rule_set, reserver_community:)
+    def initialize(rule_set, creator_community:)
       super(rule_set)
-      self.reserver_community = reserver_community
+      self.creator_community = creator_community
     end
 
     def access_level
-      object.access_level(reserver_community)
+      object.access_level(creator_community)
     end
 
     def fixed_start_time
@@ -24,6 +24,6 @@ module Calendars
 
     private
 
-    attr_accessor :reserver_community
+    attr_accessor :creator_community
   end
 end

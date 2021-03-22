@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_22_013952) do
+ActiveRecord::Schema.define(version: 2021_03_22_135218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,19 +84,19 @@ ActiveRecord::Schema.define(version: 2021_03_22_013952) do
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.integer "creator_id", null: false
     t.datetime "ends_at", null: false
     t.string "kind"
     t.integer "meal_id"
     t.string "name", limit: 24, null: false
     t.text "note"
-    t.integer "reserver_id", null: false
     t.integer "sponsor_id"
     t.datetime "starts_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
     t.index ["cluster_id"], name: "index_calendar_events_on_cluster_id"
+    t.index ["creator_id"], name: "index_calendar_events_on_creator_id"
     t.index ["meal_id"], name: "index_calendar_events_on_meal_id"
-    t.index ["reserver_id"], name: "index_calendar_events_on_reserver_id"
     t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
     t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
   end
@@ -931,7 +931,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_013952) do
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "meals"
-  add_foreign_key "calendar_events", "users", column: "reserver_id"
+  add_foreign_key "calendar_events", "users", column: "creator_id"
   add_foreign_key "calendar_events", "users", column: "sponsor_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_shared_guidelines", column: "shared_guidelines_id"

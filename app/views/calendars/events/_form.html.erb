@@ -18,8 +18,8 @@
     <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
   <% end %>
 
-  <% if policy(event).choose_reserver? %>
-    <%= f.input :reserver_id, as: :assoc_select2, context: event.reserver_select2_context %>
+  <% if policy(event).choose_creator? %>
+    <%= f.input :creator_id, as: :assoc_select2, context: event.creator_select2_context %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
@@ -65,7 +65,7 @@
       extraData: {community_id: <%= event.community_id %>}
     });
     new Gather.Views.AjaxSelect2({
-      el: '.calendars_event_reserver_id'
+      el: '.calendars_event_creator_id'
     });
     new Gather.Views.Calendars.EventFormView({el: '.calendars--event-form'});
     new Gather.Views.DirtyChecker({el: '.calendars--event-form'});

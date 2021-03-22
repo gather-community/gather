@@ -9,43 +9,43 @@ module Calendars
     attr_accessor :guidelines_ok, :privileged_changer
     alias privileged_changer? privileged_changer
 
-    belongs_to :reserver, class_name: "User"
+    belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :events
 
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }
-    scope :related_to, ->(user) { where(reserver: user).or(where(sponsor: user)) }
+    scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
 
-    # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+    # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
     delegate :community, to: :calendar, allow_nil: true
 
-    delegate :household, to: :reserver
+    delegate :household, to: :creator
     delegate :users, to: :household, prefix: true
-    delegate :name, :community, to: :reserver, prefix: true
-    delegate :name, to: :reserver_community, prefix: true
+    delegate :name, :community, to: :creator, prefix: true
+    delegate :name, to: :creator_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, to: :calendar
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
-    validates :calendar_id, :reserver_id, :starts_at, :ends_at, presence: true
+    validates :calendar_id, :creator_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted
     validate :start_before_end
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
-    validate lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+    validate lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
                # and sponsor_community for other uses.
                # Set fixed start/end time
                # We add an underscore to differentiate from user-specified kinds
                meal&.event_handler&.validate_event(r)
              }
 
-    before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants reserver_community
+    before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
                   # and sponsor_community for other uses.
                   # Set fixed start/end time
                   # We add an underscore to differentiate from user-specified kinds

@@ -9,7 +9,7 @@ module Calendars
       protected
 
       def scope
-        base_scope.where(reserver_id: user.id)
+        base_scope.where(creator_id: user.id)
       end
     end
   end

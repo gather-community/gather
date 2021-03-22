@@ -37,7 +37,7 @@ module Calendars
     def className
       if object.meal
         "has-meal"
-      elsif object.reserver == scope
+      elsif object.creator == scope
         "own-event"
       else
         ""

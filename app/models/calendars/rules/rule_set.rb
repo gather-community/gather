@@ -33,9 +33,9 @@ module Calendars
       end
 
       # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
-      # the given reserver vis a vis the rule set's calendar.
-      def access_level(reserver_community)
-        return "ok" if calendar_community == reserver_community
+      # the given creator vis a vis the rule set's calendar.
+      def access_level(creator_community)
+        return "ok" if calendar_community == creator_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
       end

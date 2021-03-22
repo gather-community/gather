@@ -413,8 +413,8 @@ describe User do
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 
-    context "with event reserver record" do
-      let!(:event) { create(:event, reserver: user) }
+    context "with event creator record" do
+      let!(:event) { create(:event, creator: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 

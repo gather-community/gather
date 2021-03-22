@@ -12,7 +12,7 @@ module Calendars
         # Need to load the calendars because access_level is computed by RuleSet which can't be computed
         # at database level.
         ids = scope_with_visibility.all.reject do |calendar|
-          sample_event = Event.new(reserver: user, calendar: calendar)
+          sample_event = Event.new(creator: user, calendar: calendar)
           sample_event.access_level(user.community) == "forbidden"
         end.map(&:id)
         scope.where(id: ids)

@@ -2,7 +2,7 @@
 
 module Calendars
   module Rules
-    # Rule for limiting days reservered per year.
+    # Rule for limiting days reserved per year.
     class MaxDaysPerYearRule < MaxTimePerYearRule
       protected
 

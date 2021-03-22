@@ -5,7 +5,7 @@ module Calendars
     # Abstract parent class for event calendars of various sorts
     class EventsExport < Export
       # If all of these are the same for any N calendar events, we should group them together in the export.
-      GROUP_ATTRIBS = %w[starts_at ends_at reserver_id meal_id name].freeze
+      GROUP_ATTRIBS = %w[starts_at ends_at creator_id meal_id name].freeze
 
       def kind_name(_object)
         "Event"
@@ -16,7 +16,7 @@ module Calendars
       def base_scope
         # calendar_id sort is for specs
         Calendars::EventPolicy::Scope.new(user, Calendars::Event).resolve
-          .joins(:calendar, :reserver).includes(:calendar, :reserver)
+          .joins(:calendar, :creator).includes(:calendar, :creator)
           .with_max_age(MAX_EVENT_AGE).oldest_first.order(:calendar_id)
       end
 
@@ -32,7 +32,7 @@ module Calendars
       end
 
       def summary(calendar_event)
-        calendar_event.name << (calendar_event.meal? ? "" : " (#{calendar_event.reserver_name})")
+        calendar_event.name << (calendar_event.meal? ? "" : " (#{calendar_event.creator_name})")
       end
 
       def url(calendar_event)

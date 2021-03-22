@@ -22,7 +22,7 @@ describe Calendars::Rules::RuleSet do
   describe "#access_level" do
     subject(:access_level) { rule_set.access_level(community) }
 
-    context "with reserver in same community" do
+    context "with creator in same community" do
       let(:community) { calendar1.community }
 
       context "with other communities forbidden" do
@@ -36,7 +36,7 @@ describe Calendars::Rules::RuleSet do
       end
     end
 
-    context "with reserver in different community" do
+    context "with creator in different community" do
       let(:community) { create(:community) }
 
       context "with multiple protocols" do

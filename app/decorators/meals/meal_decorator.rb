@@ -31,7 +31,8 @@ module Meals
     end
 
     def auto_close_time_soon?
-      open? && auto_close_time.present? && Time.current - auto_close_time < 1.day
+      open? && auto_close_time.present? &&
+        auto_close_time > Time.current && auto_close_time - Time.current < 1.day
     end
 
     def closing_soon_pill

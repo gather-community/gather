@@ -147,7 +147,7 @@ en:
         hidden: "Hidden"
         abbrv: "Abbreviation"
         default_calendar_view: "Calendar View"
-        meal_hostable: "Can host meals?"
+        meal_hostable: "Can Host Meals?"
       people/emergency_contact:
         name: "Name"
         relationship: "Relationship to Household"

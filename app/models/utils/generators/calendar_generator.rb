@@ -12,7 +12,8 @@ module Utils
       end
 
       def generate_samples
-        create_calendars
+        create_main_calendars
+        create_reservation_calendars
         create_shared_guidelines_and_associate
         create_calendar_protocols_and_associate
       end
@@ -27,11 +28,18 @@ module Utils
 
       private
 
-      def create_calendars
+      def create_main_calendars
+        create(:calendar, name: "Social Events", abbrv: nil, community: community)
+        create(:calendar, name: "Meetings", abbrv: nil, community: community)
+      end
+
+      def create_reservation_calendars
+        reservations_group = create(:calendar_group, community: community, name: "Reservations")
         self.calendar_data = load_yaml("calendars/calendars.yml")
         calendar_data.each do |row|
           calendar = create(:calendar, row.except("id", :shared_guideline_ids).merge(
             community: community,
+            group: reservations_group,
             created_at: community.created_at,
             updated_at: community.updated_at
           ))

@@ -24,6 +24,7 @@ class Community < ApplicationRecord
   has_many :calendar_shared_guidelines, class_name: "Calendars::SharedGuidelines",
                                            inverse_of: :community, dependent: :destroy
   has_many :calendars, class_name: "Calendars::Calendar", inverse_of: :community, dependent: :destroy
+  has_many :calendar_groups, class_name: "Calendars::Group", inverse_of: :community, dependent: :destroy
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy

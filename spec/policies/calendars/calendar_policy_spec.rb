@@ -31,25 +31,11 @@ describe Calendars::CalendarPolicy do
     include_context "policy scopes"
     let(:klass) { Calendars::Calendar }
     let!(:calendar1) { create(:calendar) }
-    let!(:calendar2) { create(:calendar) }
-    let!(:calendar3) { create(:calendar) }
-    let!(:calendar4) { create(:calendar, :inactive) }
-    let!(:protocol1) { create(:calendar_protocol, calendars: [calendar1], other_communities: "forbidden") }
-    let!(:protocol2) { create(:calendar_protocol, calendars: [calendar2], other_communities: "read_only") }
+    let!(:group1) { create(:calendar_group) }
+    let(:actor) { admin }
 
-    context "for insiders, returns all active calendars" do
-      let(:actor) { user }
-      it { is_expected.to contain_exactly(calendar1, calendar2, calendar3) }
-    end
-
-    context "for outsiders, returns only non-forbidden calendars" do
-      let(:actor) { userB }
-      it { is_expected.to contain_exactly(calendar2, calendar3) }
-    end
-
-    context "for admins, returns all calendars" do
-      let(:actor) { admin }
-      it { is_expected.to contain_exactly(calendar1, calendar2, calendar3, calendar4) }
+    it "exludes groups" do
+      is_expected.to contain_exactly(calendar1)
     end
   end
 

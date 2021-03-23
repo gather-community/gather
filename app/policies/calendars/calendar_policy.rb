@@ -1,21 +1,12 @@
 # frozen_string_literal: true
 
 module Calendars
-  class CalendarPolicy < ApplicationPolicy
+  class CalendarPolicy < NodePolicy
     alias calendar record
 
-    class Scope < Scope
+    class Scope < NodePolicy::Scope
       def resolve
-        # Only show active calendars unless admin.
-        scope_with_visibility = active_admin? ? scope : scope.active
-
-        # Need to load the calendars because access_level is computed by RuleSet which can't be computed
-        # at database level.
-        ids = scope_with_visibility.all.reject do |calendar|
-          sample_event = Event.new(creator: user, calendar: calendar)
-          sample_event.access_level(user.community) == "forbidden"
-        end.map(&:id)
-        scope.where(id: ids)
+        super.where(type: "Calendars::Calendar")
       end
     end
 

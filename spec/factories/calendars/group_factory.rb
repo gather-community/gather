@@ -5,8 +5,10 @@ FactoryBot.define do
     sequence(:name) { |n| "Calendar Group #{n}" }
     community { Defaults.community }
 
-    after(:build) do |group|
-      2.times { group.calendars.build(build(:calendar).attributes) }
+    trait :with_calendars do
+      after(:build) do |group|
+        2.times { group.calendars.build(build(:calendar).attributes) }
+      end
     end
   end
 end

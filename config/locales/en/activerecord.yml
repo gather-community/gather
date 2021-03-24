@@ -146,6 +146,7 @@ en:
         guidelines: "Guidelines"
         hidden: "Hidden"
         abbrv: "Abbreviation"
+        group_id: "Calendar Group"
         default_calendar_view: "Calendar View"
         meal_hostable: "Can Host Meals?"
       people/emergency_contact:

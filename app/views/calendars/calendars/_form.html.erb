@@ -9,6 +9,7 @@
       <%= f.hidden_field :photo_destroy %>
       <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
+      <%= f.input :group_id, collection: @group_options, include_blank: "[None]" %>
       <%= f.input :meal_hostable, as: :select, required: true %>
       <%= f.input :default_calendar_view, collection: Calendars::Calendar::DEFAULT_CALENDAR_VIEWS,
         required: true %>

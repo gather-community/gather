@@ -66,6 +66,7 @@ module Calendars
 
     def prep_form_vars
       @max_photo_size = Calendar.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
+      @group_options = policy_scope(Group).in_community(current_community).by_rank
     end
 
     # Pundit built-in helper doesn't work due to namespacing

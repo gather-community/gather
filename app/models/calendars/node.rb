@@ -14,5 +14,6 @@ module Calendars
     scope :in_community, ->(c) { where(community: c) }
     scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
     scope :by_name, -> { alpha_order(:name) }
+    scope :by_rank, -> { order(:rank) }
   end
 end

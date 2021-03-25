@@ -9,7 +9,7 @@ describe Calendars::NodePolicy do
     let(:node) { create(:calendar) }
     let(:record) { node }
 
-    permissions :index? do
+    permissions :index?, :move? do
       it_behaves_like "permits admins but not regular users"
     end
   end

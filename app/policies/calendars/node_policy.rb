@@ -23,5 +23,9 @@ module Calendars
     def index?
       active_admin?
     end
+
+    def move?
+      active_admin?
+    end
   end
 end

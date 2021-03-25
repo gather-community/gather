@@ -129,6 +129,11 @@ Rails.application.routes.draw do
   namespace :calendars do
     resources :events
     resources :protocols
+    resources :nodes, only: [] do
+      member do
+        put :move
+      end
+    end
 
     # index - The calendar export page
     resources :exports, only: :index do

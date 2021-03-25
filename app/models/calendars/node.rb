@@ -3,6 +3,7 @@
 module Calendars
   # Parent class of Calendars and Groups (composite design pattern).
   class Node < ApplicationRecord
+    include Deactivatable
     include Rankable
 
     acts_as_tenant :cluster

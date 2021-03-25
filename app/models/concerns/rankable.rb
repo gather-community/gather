@@ -20,10 +20,17 @@ module Rankable
   private
 
   def assign_rank
-    self.rank ||= (base_rankable_class.in_rank_scope(self).maximum("rank") || 0) + 1
+    if inactive?
+      self.rank = nil
+    else
+      self.rank ||= (base_rankable_class.in_rank_scope(self).maximum("rank") || 0) + 1
+    end
   end
 
   def fix_ranks
+    return unless rank_previously_changed? || group_id_previously_changed? ||
+      deactivated_at_previously_changed?
+
     old_rank = previous_changes["rank"] ? previous_changes["rank"][0] : rank
     old_group_id = previous_changes["group_id"] ? previous_changes["group_id"][0] : group_id
 
@@ -41,6 +48,7 @@ module Rankable
     subq = base_rankable_class
       .select(:id, "row_number() OVER (ORDER BY rank, id #{tiebreak_op} #{id}, name) AS rownum")
       .in_rank_scope(example_obj_in_scope)
+      .active
       .to_sql
     table = self.class.table_name
     sql = "UPDATE #{table} SET rank = sub.rownum FROM (#{subq}) sub WHERE #{table}.id = sub.id"

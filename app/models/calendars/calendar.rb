@@ -3,7 +3,6 @@
 module Calendars
   # An event calendar.
   class Calendar < Node
-    include Deactivatable
     include AttachmentFormable
     include SemicolonDisallowable
 

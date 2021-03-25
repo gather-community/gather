@@ -125,6 +125,26 @@ describe "Rankable" do
         expect_rank_order(group1, cal_b, group2, cal_f, cal_g, reload_first: [3, 4, 5])
       end
     end
+
+    context "when deactivated_at changes" do
+      let!(:cal_a) { create(:calendar, name: "Alpha") }
+      let!(:cal_b) { create(:calendar, name: "Bravo") }
+      let!(:cal_c) { create(:calendar, name: "Charlie") }
+      let!(:cal_d) { create(:calendar, :inactive, name: "Delta") }
+
+      it do
+        expect(cal_d.rank).to be_nil
+        cal_d.activate
+        expect_rank_order(cal_a, cal_b, cal_c, cal_d)
+      end
+
+      it do
+        cal_b.deactivate
+        expect_rank_order(cal_a, cal_c, reload_first: [2])
+        expect(cal_b.rank).to be_nil
+        expect(cal_b.reload.rank).to be_nil
+      end
+    end
   end
 
   describe "on destroy" do

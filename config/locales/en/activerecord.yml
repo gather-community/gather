@@ -132,6 +132,8 @@ en:
         pre_notice: "Pre-notice"
         requires_kind: "Type Required"
         calendar_ids: "Calendars"
+      calendars/group:
+        name: "Group Name"
       calendars/event:
         calendar: "Calendar"
         pre_notice: "Notice"

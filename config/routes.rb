@@ -129,6 +129,7 @@ Rails.application.routes.draw do
   namespace :calendars do
     resources :events
     resources :protocols
+    resources :groups, only: %i[new edit create update destroy]
     resources :nodes, only: [] do
       member do
         put :move

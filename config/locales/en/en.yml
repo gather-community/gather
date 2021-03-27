@@ -110,6 +110,8 @@ en:
       deactivate: "Are you sure you want to deactivate the calendar '%{name}'?"
     calendars/event:
       destroy: "Are you sure you want to delete this event? This action cannot be undone."
+    calendars/group:
+      destroy: "Are you sure you want to delete this calendar group? This action cannot be undone."
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
@@ -184,6 +186,9 @@ en:
     calendars/protocol:
       success:
         destroy: "Protocol deleted successfully."
+    calendars/group:
+      success:
+        destroy: "Group deleted successfully."
     calendars/calendar:
       success:
         activate: "Calendar activated successfully."

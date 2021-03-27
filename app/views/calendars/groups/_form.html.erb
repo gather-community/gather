@@ -1,0 +1,13 @@
+<%= gather_form_for(group) do |f| %>
+  <%= f.input :name, maxlength: 24 %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.DirtyChecker({el: '.calendars--group-form'});
+  });
+<% end %>

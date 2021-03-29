@@ -1,0 +1,27 @@
+<table class="index part-width">
+  <tr>
+    <th colspan="2">Name</th>
+    <th>Events</th>
+    <th><%= icon_tag("camera") %></th>
+  </tr>
+  <% @first_level_nodes.each do |node| %>
+    <% if node.is_a?(Calendars::Group) %>
+      <tr>
+        <td class="name" colspan="2">
+          <div>
+            <%= render("move_links", node: node) %>
+            <div class="icon"><%= icon_tag("folder-open-o") %></div>
+            <%= link_to(node.name, edit_calendars_group_path(node)) %>
+          </div>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      <% @children_by_group_id[node.id].each do |calendar| %>
+        <%= render("calendar", calendar: calendar.decorate) %>
+      <% end %>
+    <% else %>
+      <%= render("calendar", calendar: node.decorate) %>
+    <% end %>
+  <% end %>
+</table>

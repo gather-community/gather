@@ -2,30 +2,23 @@
 
 <% content_for(:top_buttons) do %>
   <% if policy(sample_calendar).create? %>
+    <%= link_to(icon_tag("plus") << " Create Group",
+      new_calendars_group_path, class: "btn btn-default") %>
     <%= link_to(icon_tag("plus") << " Create Calendar",
       new_calendar_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
-<% if calendars.empty? %>
+<% if @first_level_nodes.empty? %>
   <div class="center-notice">
     No calendars found.
   </div>
 <% else %>
-  <table class="index part-width">
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Events</th>
-    </tr>
-    <% calendars.each do |calendar| %>
-      <tr class="<%= calendar.tr_classes %>">
-        <td><%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %></td>
-        <td class="name">
-          <%= link_to(calendar.name_with_inactive, edit_calendar_path(calendar.id)) %>
-        </td>
-        <td><%= number_with_delimiter(calendar.event_count) %></td>
-      </tr>
-    <% end %>
-  </table>
+  <%= render("table") %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Calendars.IndexView({el: '.calendars--calendars'});
+  });
 <% end %>

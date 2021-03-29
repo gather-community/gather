@@ -123,6 +123,7 @@ Rails.application.routes.draw do
     member do
       put :activate
       put :deactivate
+      put :move
     end
   end
 
@@ -130,11 +131,6 @@ Rails.application.routes.draw do
     resources :events
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
-    resources :nodes, only: [] do
-      member do
-        put :move
-      end
-    end
 
     # index - The calendar export page
     resources :exports, only: :index do

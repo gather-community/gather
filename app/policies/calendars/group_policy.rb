@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calendars
-  class GroupPolicy < ApplicationPolicy
+  class GroupPolicy < NodePolicy
     alias group record
 
     def index?

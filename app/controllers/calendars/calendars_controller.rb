@@ -4,15 +4,14 @@ module Calendars
   class CalendarsController < ApplicationController
     include Destructible
 
-    decorates_assigned :calendar, :calendars
+    decorates_assigned :calendar
     helper_method :sample_calendar
 
     before_action -> { nav_context(:calendars, :calendars) }
 
     def index
-      authorize(sample_calendar)
-      @calendars = policy_scope(Calendar).with_event_counts
-        .in_community(current_community).deactivated_last.by_name
+      authorize(sample_node)
+      prep_calendar_table
     end
 
     def new
@@ -52,6 +51,20 @@ module Calendars
       end
     end
 
+    # Moves calendars or groups up or down.
+    def move
+      @node = Node.find(params[:id])
+      authorize(@node)
+      delta = case params[:dir]
+              when "up" then -1
+              when "down" then 1
+              else 0
+              end
+      @node.update!(rank: @node.rank + delta)
+      prep_calendar_table
+      render(partial: "table")
+    end
+
     protected
 
     def klass
@@ -59,6 +72,17 @@ module Calendars
     end
 
     private
+
+    def prep_calendar_table
+      base_scope = policy_scope(Node).with_event_counts.in_community(current_community)
+        .deactivated_last.by_rank
+      @first_level_nodes = base_scope.first_level
+      @children_by_group_id = base_scope.second_level.group_by(&:group_id)
+    end
+
+    def sample_node
+      @sample_node ||= Node.new(community: current_community)
+    end
 
     def sample_calendar
       @sample_calendar ||= Calendar.new(community: current_community)

@@ -27,10 +27,6 @@ module Calendars
     disallow_semicolons :name
 
     scope :meal_hostable, -> { where(meal_hostable: true) }
-    scope :with_event_counts, lambda {
-      select("calendar_nodes.*, (SELECT COUNT(id) FROM calendar_events
-        WHERE calendar_id = calendar_nodes.id) AS event_count")
-    }
 
     delegate :name, to: :community, prefix: true
 
@@ -49,6 +45,14 @@ module Calendars
 
     def guidelines?
       all_guidelines.present?
+    end
+
+    def photo?
+      photo.attached?
+    end
+
+    def in_group?
+      group.present?
     end
 
     # Concatenates own guidelines and shared guidelines together

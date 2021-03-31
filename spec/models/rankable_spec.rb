@@ -148,23 +148,37 @@ describe "Rankable" do
   end
 
   describe "on destroy" do
+    let!(:group) { create(:calendar_group, name: "Group") }
     let!(:cal_a) { create(:calendar, name: "Alpha") }
     let!(:cal_b) { create(:calendar, name: "Bravo") }
     let!(:cal_c) { create(:calendar, name: "Charlie") }
+    let!(:cal_d) { create(:calendar, name: "Delta", group: group) }
+    let!(:cal_e) { create(:calendar, name: "Echo", group: group) }
 
     it do
       cal_a.destroy
-      expect_rank_order(cal_b, cal_c, reload_first: [1, 2])
+      expect_rank_order(group, cal_b, cal_c, reload_first: [2, 3])
     end
 
     it do
       cal_b.destroy
-      expect_rank_order(cal_a, cal_c, reload_first: [2])
+      expect_rank_order(group, cal_a, cal_c, reload_first: [3])
     end
 
     it do
       cal_c.destroy
-      expect_rank_order(cal_a, cal_b)
+      expect_rank_order(group, cal_a, cal_b)
+    end
+
+    it do
+      group.destroy
+      # When group is destroyed, ranks wind up as follows:
+      # 1. cal_d
+      # 2. cal_a, cal_e
+      # 3. cal_b
+      # 4. cal_c
+      # The tie at rank 2 is broken by name since the tiebreak_op is irrelelvant with destroys.
+      expect_rank_order(cal_d, cal_a, cal_e, cal_b, cal_c, reload_first: [2, 3, 4, 5])
     end
   end
 

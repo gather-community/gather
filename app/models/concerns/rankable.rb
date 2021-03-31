@@ -37,7 +37,7 @@ module Rankable
     # If we are moving rank down (increasing the number) within the same scope,
     # we want to lose the tiebreak with any existing ranks when the ranks are being fixed.
     # Since false < true in Postgres sorting, comparing with = will evaluate to true for self,
-    # meaning we lose the tie. In all other cases we want to win the tie.
+    # meaning the updated row will lose the tie. In all other cases we want to win the tie.
     tiebreak_op = old_rank && rank && old_group_id == group_id && old_rank < rank ? "=" : "!="
 
     [old_group_id, group_id].uniq.each { |gid| fix_ranks_for_group_id(gid, tiebreak_op) }

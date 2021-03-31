@@ -17,7 +17,7 @@
         <td></td>
         <td></td>
       </tr>
-      <% @children_by_group_id[node.id].each do |calendar| %>
+      <% (@children_by_group_id[node.id] || []).each do |calendar| %>
         <%= render("calendar", calendar: calendar.decorate) %>
       <% end %>
     <% else %>

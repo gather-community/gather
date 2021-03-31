@@ -1,4 +1,4 @@
 <div class="move-links">
-  <%= link_to(icon_tag("caret-up"), move_calendar_path(node, dir: "up"), method: :put) %>
-  <%= link_to(icon_tag("caret-down"), move_calendar_path(node, dir: "down"), method: :put) %>
+  <%= link_to(icon_tag("caret-up"), move_calendar_path(node, dir: "up"), method: :put, class: "up") %>
+  <%= link_to(icon_tag("caret-down"), move_calendar_path(node, dir: "down"), method: :put, class: "down") %>
 </div>

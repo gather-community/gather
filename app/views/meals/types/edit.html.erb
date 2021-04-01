@@ -1,4 +1,4 @@
 <% content_for(:flashes, inactive_notice(type)) if type.inactive? %>
 <% content_for(:title, "Edit Meal Type: #{type.name}") %>
-<% content_for(:top_buttons, type.action_links(:edit)) %>
+<% content_for(:action_links, type.action_links(:edit)) %>
 <%= render("form") %>

@@ -59,7 +59,7 @@ module ApplicationHelper
   end
 
   def print_button
-    button_tag(type: "button", class: "btn btn-default btn-print") { icon_tag("print") }
+    button_tag(type: "button", class: "btn btn-default btn-print icon-only") { icon_tag("print") }
   end
 
   def inactive_notice(object)

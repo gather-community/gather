@@ -1,6 +1,7 @@
 .form-inline.lens-bar {
   margin-bottom: 10px;
   white-space: nowrap;
+  vertical-align: top;
 
   &:last-child {
     margin-right: 0;
@@ -32,7 +33,6 @@
   // Desktop
   @media screen and (min-width: $screen-md-min) {
     margin-left: 10px;
-    margin-right: 10px;
 
     &.upper {
       display: inline-block;

@@ -1,12 +1,12 @@
 <% content_for(:title, "Events: #{calendar.name_with_prefix}") %>
 
-<% content_for(:top_buttons) do %>
-  <% if calendar && policy(@sample_event).create? %>
-    <%= link_to(icon_tag("plus") << " Create Event",
+<% content_for(:action_links) do %>
+  <%- if calendar && policy(@sample_event).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Event",
       new_calendars_event_path(calendar_id: calendar.id),
-      class: "btn btn-default") %>
-    <%= calendar_exports_link %>
-  <% end %>
+      class: "btn btn-default")) -%>
+    <%- concat(calendar_exports_link) %>
+  <%- end -%>
 <% end %>
 
 <div class="row calendar-and-links">

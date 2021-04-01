@@ -1,17 +1,15 @@
 <% content_for(:title, "Accounts") %>
 
-<% content_for(:top_buttons) do %>
-  <strong>
-    <% if @active_accounts > 0 && @late_fee_count > 0 %>
-      <%= link_to(icon_tag("thumbs-down") << " Apply Late Fees", apply_late_fees_accounts_path,
-        method: :put, class: "btn btn-default",
-        data: { confirm: late_fee_confirm }) %>
-    <% end %>
-    <% if @statement_accounts %>
-      <%= link_to(icon_tag("send") << " Send Statements", generate_statements_path,
-        method: :post, class: "btn btn-primary", data: { confirm: statement_confirm_msg}) %>
-    <% end %>
-  </strong>
+<% content_for(:action_links) do %>
+  <% if @active_accounts > 0 && @late_fee_count > 0 %>
+    <%- concat(link_to(icon_tag("thumbs-down") << " Apply Late Fees", apply_late_fees_accounts_path,
+      method: :put, class: "btn btn-default",
+      data: {confirm: late_fee_confirm})) -%>
+  <%- end -%>
+  <%- if @statement_accounts -%>
+    <%- concat(link_to(icon_tag("send") << " Send Statements", generate_statements_path,
+      method: :post, class: "btn btn-primary", data: {confirm: statement_confirm_msg})) -%>
+  <%- end %>
 <% end %>
 
 <% if accounts.empty? %>

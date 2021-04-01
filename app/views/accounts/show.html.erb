@@ -1,5 +1,5 @@
 <% content_for(:title, "Account: #{account.household_name}") %>
-<% content_for(:top_buttons, account.action_links) %>
+<% content_for(:action_links, account.action_links) %>
 <%= render("details", footnotes: false) %>
 
 <footer id="local-footer" class="footer-links">

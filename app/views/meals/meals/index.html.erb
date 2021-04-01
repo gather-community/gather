@@ -1,19 +1,20 @@
 <% content_for(:title, "Meals") %>
-<% content_for(:top_buttons) do %>
-  <%= calendar_exports_link %>
-  <% if policy(sample_meal).create? && policy(sample_meal).import? %>
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= icon_tag("plus") %></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><%= link_to("Create Meal", new_meal_path) %></li>
-        <li><%= link_to("Import Meals", new_meals_import_path) %></li>
-      </ul>
-    </div>
-  <% elsif policy(sample_meal).create? %>
-    <%= link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary") %>
-  <% end %>
+<% content_for(:action_links) do %>
+  <%- concat(calendar_exports_link) %>
+  <%- if policy(sample_meal).create? && policy(sample_meal).import? -%>
+<div class="btn-group">
+  <button type="button" class="btn btn-primary dropdown-toggle icon-only" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
+    <%= icon_tag("plus") %></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><%= link_to("Create Meal", new_meal_path) %></li>
+    <li><%= link_to("Import Meals", new_meals_import_path) %></li>
+  </ul>
+</div>
+  <%- elsif policy(sample_meal).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Meal", new_meal_path, class: "btn btn-primary")) %>
+  <%- end -%>
 <% end %>
 
 <% if meals.empty? %>

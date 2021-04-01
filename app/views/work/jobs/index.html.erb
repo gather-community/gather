@@ -1,5 +1,5 @@
 <% content_for(:title, +"Jobs" << (@period ? ": #{@period.name}" : "")) %>
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if @period && policy(sample_job).create? %>
     <%= link_to(icon_tag("plus") << " Create Job",
       new_work_job_path(period: @period.id), class: "btn btn-primary") %>

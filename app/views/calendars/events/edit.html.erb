@@ -1,4 +1,4 @@
 <% content_for(:title, "Edit Event: #{event.name}") %>
-<% content_for(:top_buttons, event.action_links(:edit)) %>
+<% content_for(:action_links, event.action_links(:edit)) %>
 <%= render("form") %>
 <br/><br/>

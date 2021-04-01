@@ -1,5 +1,5 @@
 <% content_for(:flashes, inactive_notice(household)) if household.inactive? %>
 <% content_for(:title, "Edit Household: #{household.name}") %>
-<% content_for(:top_buttons, household.action_links(:edit)) %>
+<% content_for(:action_links, household.action_links(:edit)) %>
 <%= render("form") %>
 <br/><br/>

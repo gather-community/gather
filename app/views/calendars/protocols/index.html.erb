@@ -1,6 +1,6 @@
 <% content_for(:title, "Protocols") %>
 
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if policy(sample_protocol).create? %>
     <%= link_to(icon_tag("plus") << " Create Protocol",
       new_calendars_protocol_path, class: "btn btn-primary") %>

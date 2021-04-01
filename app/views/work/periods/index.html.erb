@@ -1,5 +1,5 @@
 <% content_for(:title, "Work Periods") %>
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if policy(sample_period).create? %>
     <%= link_to(icon_tag("plus") << " Create Period",
       new_work_period_path, class: "btn btn-primary") %>

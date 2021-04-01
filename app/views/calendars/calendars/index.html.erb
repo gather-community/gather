@@ -1,12 +1,12 @@
 <% content_for(:title, "Calendars") %>
 
-<% content_for(:top_buttons) do %>
-  <% if policy(sample_calendar).create? %>
-    <%= link_to(icon_tag("plus") << " Create Group",
-      new_calendars_group_path, class: "btn btn-default") %>
-    <%= link_to(icon_tag("plus") << " Create Calendar",
-      new_calendar_path, class: "btn btn-primary") %>
-  <% end %>
+<% content_for(:action_links) do %>
+  <%- if policy(sample_calendar).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Group",
+      new_calendars_group_path, class: "btn btn-default")) -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Calendar",
+      new_calendar_path, class: "btn btn-primary")) -%>
+  <%- end -%>
 <% end %>
 
 <% if @first_level_nodes.empty? %>

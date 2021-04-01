@@ -74,10 +74,7 @@ module Calendars
     private
 
     def prep_calendar_table
-      base_scope = policy_scope(Node).with_event_counts.in_community(current_community)
-        .deactivated_last.by_rank
-      @first_level_nodes = base_scope.first_level
-      @children_by_group_id = base_scope.second_level.group_by(&:group_id)
+      @calendar_nodes = policy_scope(Node).with_event_counts.in_community(current_community).arrange
     end
 
     def sample_node

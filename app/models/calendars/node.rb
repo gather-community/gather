@@ -22,5 +22,12 @@ module Calendars
       select("calendar_nodes.*, (SELECT COUNT(id) FROM calendar_events
         WHERE calendar_id = calendar_nodes.id) AS event_count")
     }
+
+    # Loads the scoped nodes and arranges them as a tree in an ordered hash.
+    def self.arrange
+      base_scope = deactivated_last.by_rank
+      children_by_group_id = base_scope.second_level.group_by(&:group_id)
+      base_scope.first_level.map { |n| [n, children_by_group_id[n.id]] }.to_h
+    end
   end
 end

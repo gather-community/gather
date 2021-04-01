@@ -8,5 +8,9 @@ module Calendars
     def photo?
       false
     end
+
+    def group?
+      true
+    end
   end
 end

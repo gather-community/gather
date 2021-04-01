@@ -5,7 +5,7 @@
     <th><%= icon_tag("camera") %></th>
   </tr>
   <% @calendar_nodes.each do |node, children| %>
-    <% if node.is_a?(Calendars::Group) %>
+    <% if node.group? %>
       <tr>
         <td class="name" colspan="2">
           <div>

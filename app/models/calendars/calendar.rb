@@ -51,6 +51,10 @@ module Calendars
       photo.attached?
     end
 
+    def group?
+      false
+    end
+
     def in_group?
       group.present?
     end

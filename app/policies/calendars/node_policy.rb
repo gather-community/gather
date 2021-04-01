@@ -12,7 +12,7 @@ module Calendars
         # Need to load the calendars because access_level is computed by RuleSet which can't be computed
         # at database level.
         ids = scope_with_visibility.all.reject do |node|
-          next false unless node.is_a?(Calendar)
+          next false if node.group?
           sample_event = Event.new(creator: user, calendar: node)
           sample_event.access_level(user.community) == "forbidden"
         end.map(&:id)

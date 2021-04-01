@@ -38,16 +38,9 @@
   <div class="col-md-2 col-sm-3 sidebar">
     <%= image_tag(calendar.photo_variant(:thumb)) %><br/><br/>
     <% if @other_calendars.any? %>
-      <div>
+      <div class="other-calendars">
         <small>Other Calendars</small>
-        <ul class="no-marker">
-          <% @other_calendars.each do |other| %>
-            <li>
-              <%= link_to(other.name,
-                    calendars_events_path(calendar_id: other.id), class: "calendar-link") %>
-            </li>
-          <% end %>
-        </ul>
+        <%= render("simple_calendar_list", nodes: @other_calendars) %>
       </div>
     <% end %>
     <% if multi_community? %>

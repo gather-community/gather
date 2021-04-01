@@ -42,9 +42,8 @@ module Calendars
             flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
           end
           @rule_set_serializer = RuleSetSerializer.new(@rule_set, creator_community: current_community)
-          @other_calendars = policy_scope(Calendar)
-            .where(community_id: @calendar.community_id)
-            .where("id != ?", @calendar.id)
+          @other_calendars = policy_scope(Node).in_community(@calendar.community)
+            .where("id != ?", @calendar.id).arrange
           @other_communities = Community.where("id != ?", @calendar.community_id)
           render("calendar")
         end

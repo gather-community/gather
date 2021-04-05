@@ -7,7 +7,7 @@ module Groups
     class ListMembership
       include ActiveModel::Model
 
-      attr_accessor :remote_id, :mailman_user, :list_id, :role, :moderation_action, :display_name
+      attr_accessor :remote_id, :mailman_user, :list_id, :role, :moderation_action, :display_name, :by_address
       delegate :email, to: :mailman_user
       delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 
@@ -27,6 +27,15 @@ module Groups
 
       def name_or_email
         @name_or_email ||= display_name.presence || email
+      end
+
+      def subscriber
+        # We prefer to subscribe by user_id so that we are subscribing via preferred address.
+        # Then when we change the user's preferred address, we don't have to change all their memberships.
+        # So if mailman_user is set, we use that.
+        # In testing sometimes we want to subscribe by address so we support that via the
+        # by_address flag.
+        by_address ? email : user_remote_id
       end
     end
   end

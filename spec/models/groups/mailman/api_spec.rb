@@ -145,6 +145,56 @@ describe Groups::Mailman::Api do
           end
         end
       end
+
+      context "when email belongs to other user" do
+        let(:domain) { build(:domain, name: "tscoho.org") }
+        let(:list) { build(:group_mailman_list, name: "ping", domain: domain) }
+        let(:list2) { build(:group_mailman_list, name: "zing", domain: domain) }
+        let(:mm_user2) do
+          build(:group_mailman_user,
+                user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
+        end
+
+        # Start out with user1 as member in ping
+        # user2 is member and owner of ping
+        # user2 is also member of zing by address only
+        let(:mship) do
+          Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user,
+                                              role: "member")
+        end
+        let(:mship2) do
+          Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user2,
+                                              role: "member")
+        end
+        let(:mship3) do
+          Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user2,
+                                              role: "owner")
+        end
+        let(:mship4) do
+          Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org", mailman_user: mm_user2,
+                                              role: "member", by_address: true)
+        end
+
+        it "merges the two users, including memberships by ID and by address, and ignores duplicate mships" do
+          VCR.use_cassette("groups/mailman/api/update_user/email_owned_by_other_user") do
+            api.create_domain(domain)
+            api.create_list(list)
+            api.create_list(list2)
+            mm_user.remote_id = api.create_user(mm_user)
+            mm_user2.remote_id = api.create_user(mm_user2)
+            [mship, mship2, mship3, mship4].each { |m| api.create_membership(m) }
+
+            mm_user.user.email = "len@example.com"
+            api.update_user(mm_user)
+            mships = api.memberships(mm_user).sort_by(&:list_id)
+            expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user, mm_user])
+            expect(mships.map(&:list_id)).to eq(%w[ping.tscoho.org ping.tscoho.org zing.tscoho.org])
+            expect(mships.map(&:role)).to match_array(%w[member member owner])
+            expect(api.user_exists?(mm_user2)).to be(false)
+            expect(api.user_id_for_email(OpenStruct.new(email: "jen@example.com"))).to be_nil
+          end
+        end
+      end
     end
 
     describe "#delete_user" do
@@ -157,7 +207,7 @@ describe Groups::Mailman::Api do
         it "deletes user" do
           VCR.use_cassette("groups/mailman/api/delete_user/matching_user") do
             mm_user.remote_id = api.create_user(mm_user)
-            
+
             api.delete_user(mm_user)
           end
         end
@@ -184,10 +234,10 @@ describe Groups::Mailman::Api do
     end
 
     describe "#populate_membership" do
-      let(:list_mship) do
+      let(:mship) do
         Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user, role: "owner")
       end
-      let(:list_mship_copy) do
+      let(:mship_copy) do
         Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
       end
 
@@ -197,11 +247,11 @@ describe Groups::Mailman::Api do
             api.create_domain(domain)
             api.create_list(list)
             mm_user.remote_id = api.create_user(mm_user)
-            api.create_membership(list_mship)
+            api.create_membership(mship)
 
-            api.populate_membership(list_mship_copy)
-            expect(list_mship_copy.remote_id).to eq("f3c4242818a34a48a94483131e07de3d")
-            expect(list_mship_copy.role).to eq("owner")
+            api.populate_membership(mship_copy)
+            expect(mship_copy.remote_id).to eq("f3c4242818a34a48a94483131e07de3d")
+            expect(mship_copy.role).to eq("owner")
           end
         end
       end
@@ -213,7 +263,7 @@ describe Groups::Mailman::Api do
             api.create_list(list)
             mm_user.remote_id = api.create_user(mm_user)
 
-            expect { api.populate_membership(list_mship) }
+            expect { api.populate_membership(mship) }
               .to raise_error(ApiRequestError, "Membership not found")
           end
         end
@@ -222,11 +272,11 @@ describe Groups::Mailman::Api do
 
     describe "#create_membership" do
       context "with member role" do
-        let(:list_mship) do
+        let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
                                               mailman_user: mm_user, role: "member")
         end
-        let(:list_mship_copy) do
+        let(:mship_copy) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
         end
 
@@ -236,20 +286,20 @@ describe Groups::Mailman::Api do
             api.create_list(list)
             mm_user.remote_id = api.create_user(mm_user)
 
-            api.create_membership(list_mship)
-            api.populate_membership(list_mship_copy)
-            expect(list_mship_copy.remote_id).to eq("5d4109345c894b4da088b0ce0cef737a")
-            expect(list_mship_copy.role).to eq("member")
+            api.create_membership(mship)
+            api.populate_membership(mship_copy)
+            expect(mship_copy.remote_id).to eq("5d4109345c894b4da088b0ce0cef737a")
+            expect(mship_copy.role).to eq("member")
           end
         end
       end
 
       context "with owner role" do
-        let(:list_mship) do
+        let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
                                               mailman_user: mm_user, role: "owner")
         end
-        let(:list_mship_copy) do
+        let(:mship_copy) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
         end
 
@@ -259,10 +309,10 @@ describe Groups::Mailman::Api do
             api.create_list(list)
             mm_user.remote_id = api.create_user(mm_user)
 
-            api.create_membership(list_mship)
-            api.populate_membership(list_mship_copy)
-            expect(list_mship_copy.remote_id).to eq("8c6366feab0a44628e6eee3337aa1c04")
-            expect(list_mship_copy.role).to eq("owner")
+            api.create_membership(mship)
+            api.populate_membership(mship_copy)
+            expect(mship_copy.remote_id).to eq("8c6366feab0a44628e6eee3337aa1c04")
+            expect(mship_copy.role).to eq("owner")
           end
         end
       end
@@ -270,7 +320,7 @@ describe Groups::Mailman::Api do
 
     describe "#delete_membership" do
       # We assume remote_id is already set on the object, since we set it when we fetch the remote mship list.
-      let(:list_mship) do
+      let(:mship) do
         Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user, role: "member")
       end
 
@@ -280,11 +330,11 @@ describe Groups::Mailman::Api do
             api.create_domain(domain)
             api.create_list(list)
             mm_user.remote_id = api.create_user(mm_user)
-            api.create_membership(list_mship)
-            api.populate_membership(list_mship)
+            api.create_membership(mship)
+            api.populate_membership(mship)
 
-            api.delete_membership(list_mship)
-            expect { api.populate_membership(list_mship) }
+            api.delete_membership(mship)
+            expect { api.populate_membership(mship) }
               .to raise_error(ApiRequestError, "Membership not found")
           end
         end
@@ -295,11 +345,11 @@ describe Groups::Mailman::Api do
       context "for user" do
         context "with matching" do
           let(:list2) { build(:group_mailman_list, name: "zing", domain: domain) }
-          let(:list_mship) do
+          let(:mship) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
                                                 mailman_user: mm_user, role: "member")
           end
-          let(:list_mship2) do
+          let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org",
                                                 mailman_user: mm_user, role: "owner")
           end
@@ -310,8 +360,8 @@ describe Groups::Mailman::Api do
               api.create_list(list)
               api.create_list(list2)
               mm_user.remote_id = api.create_user(mm_user)
-              api.create_membership(list_mship)
-              api.create_membership(list_mship2)
+              api.create_membership(mship)
+              api.create_membership(mship2)
 
               mships = api.memberships(mm_user).sort_by(&:list_id)
               expect(mships.map(&:mailman_user)).to eq([mm_user, mm_user])
@@ -334,11 +384,11 @@ describe Groups::Mailman::Api do
 
       context "for list" do
         context "with matching" do
-          let(:list_mship) do
+          let(:mship) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
                                                 mailman_user: mm_user, role: "member")
           end
-          let(:list_mship2) do
+          let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
                                                 mailman_user: mm_user2, role: "owner")
           end
@@ -353,8 +403,8 @@ describe Groups::Mailman::Api do
               list.remote_id = api.create_list(list)
               mm_user.remote_id = api.create_user(mm_user)
               mm_user2.remote_id = api.create_user(mm_user2)
-              api.create_membership(list_mship)
-              api.create_membership(list_mship2)
+              api.create_membership(mship)
+              api.create_membership(mship2)
 
               mships = api.memberships(list).sort_by(&:email)
               expect(mships.map(&:email)).to eq(%w[jen@example.com len@example.com])

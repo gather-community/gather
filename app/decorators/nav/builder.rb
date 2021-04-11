@@ -56,7 +56,7 @@ module Nav
         name: :calendars,
         path: lens_path_if_present("calendars/events"),
         permitted: h.policy(sample_event).index?,
-        icon: "book"
+        icon: "calendar"
       )
       items << customizer.filter_item(
         name: :wiki,

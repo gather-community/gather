@@ -28,7 +28,7 @@ module Groups
         unless mm_user.display_name.nil?
           request("users/#{mm_user.email}", :patch, display_name: mm_user.display_name)
         end
-        verify_address_and_set_verified(mm_user)
+        verify_address_and_set_preferred(mm_user)
         user_id_for_email(mm_user)
       end
 
@@ -43,8 +43,15 @@ module Groups
 
         return if remote_email == mm_user.email
 
-        request("users/#{mm_user.remote_id}/addresses", :post, email: mm_user.email)
-        verify_address_and_set_verified(mm_user)
+        begin
+          request("users/#{mm_user.remote_id}/addresses", :post, email: mm_user.email)
+        rescue ApiRequestError => e
+          if e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /belongs to other/
+            merge_user_with_owned_email(mm_user, mm_user.email)
+          end
+        else
+          verify_address_and_set_preferred(mm_user)
+        end
         request("addresses/#{remote_email}", :delete)
       end
 
@@ -64,9 +71,7 @@ module Groups
 
       # Assumes list_mship has an associated user remote_id.
       def create_membership(list_mship)
-        # We subscribe by user_id so that we are subscribing via preferred address.
-        # Then when we change the user's preferred address, we don't have to change all their memberships.
-        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.user_remote_id,
+        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
                                   role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
                                   pre_approved: "true")
       rescue ApiRequestError => e
@@ -124,9 +129,28 @@ module Groups
 
       private
 
-      def verify_address_and_set_verified(mm_user)
+      def verify_address_and_set_preferred(mm_user)
         request("addresses/#{mm_user.email}/verify", :post)
         request("users/#{mm_user.email}/preferred_address", :post, email: mm_user.email)
+      end
+
+      def merge_user_with_owned_email(mm_user, email)
+        other_user_id = request("users/#{email}")["user_id"]
+        other_mships = request("members/find", :post, subscriber: email)["entries"]
+
+        # Need to remove other user and set the new preferred address before re-creating the memberships
+        # b/c owner/moderator type memberships are only associated with addresses (mailman bug).
+        request("users/#{other_user_id}", :delete)
+        request("users/#{mm_user.remote_id}/addresses", :post, email: email)
+        verify_address_and_set_preferred(mm_user)
+
+        other_mships.each do |mship|
+          request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
+                                    delivery_mode: mship["delivery_mode"], role: mship["role"],
+                                    pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+        rescue ApiRequestError => e
+          raise e unless e.response.body =~ /Member already subscribed/
+        end
       end
 
       def request(endpoint, method = :get, **data)

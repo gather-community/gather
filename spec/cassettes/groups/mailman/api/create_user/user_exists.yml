@@ -21,22 +21,216 @@ http_interactions:
       - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/ef2b8d0b6ac5436caed1f20779f5de02
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/jen@example.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Lo"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/jen@example.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/jen@example.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/jen@example.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/jen@example.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '421'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2021-04-03T16:18:06.648901", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/ef2b8d0b6ac5436caed1f20779f5de02",
+        "user_id": "ef2b8d0b6ac5436caed1f20779f5de02", "password": "$6$rounds=656000$5hM56498/B1QL635$5jRVGQlrH2ILUwdB4BeHS3ECujyAZ/6afvZLCJNAISw1XcyP1KKiYDgEdzUQthKUA2XVD80nESa92wV0BeZQY1",
+        "display_name": "Jen Lo", "http_etag": "\"a956493ceb7eec6e4c162d43e0683583e91bbb0f\""}'
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
       code: 400
       message: Bad Request
     headers:
       Server:
-      - nginx/1.14.0 (Ubuntu)
+      - gunicorn/20.0.4
       Date:
-      - Sat, 15 Feb 2020 21:05:57 GMT
+      - Sat, 03 Apr 2021 16:18:07 GMT
+      Connection:
+      - close
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
       - '83'
-      Connection:
-      - keep-alive
     body:
       encoding: UTF-8
       string: '{"title": "400 Bad Request", "description": "User already exists: jen@example.com"}'
-    http_version:
-  recorded_at: Sat, 15 Feb 2020 21:07:13 GMT
+    http_version: 
+  recorded_at: Sat, 03 Apr 2021 16:18:07 GMT
 recorded_with: VCR 4.0.0

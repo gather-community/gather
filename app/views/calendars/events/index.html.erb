@@ -5,10 +5,13 @@
 <% end %>
 
 <% content_for(:action_links) do %>
+  <%- if calendar && policy(calendar).edit? -%>
+    <%- concat(link_to(icon_tag("pencil") << " Edit Calendar", edit_calendar_path(calendar),
+               class: "btn btn-default")) -%>
+  <%- end -%>
   <%- if calendar && policy(@sample_event).create? -%>
     <%- concat(link_to(icon_tag("plus") << " Create Event",
-      new_calendars_event_path(@url_params),
-      class: "btn btn-default")) -%>
+               new_calendars_event_path(@url_params), class: "btn btn-default")) -%>
     <%- concat(calendar_exports_link) %>
   <%- end -%>
 <% end %>

@@ -1,9 +1,13 @@
-<% content_for(:title, "Events: #{calendar.name_with_prefix}") %>
+<% if calendar %>
+  <% content_for(:title, calendar.name_with_prefix) %>
+<% else %>
+  <% content_for(:title, "Calendars") %>
+<% end %>
 
 <% content_for(:action_links) do %>
   <%- if calendar && policy(@sample_event).create? -%>
     <%- concat(link_to(icon_tag("plus") << " Create Event",
-      new_calendars_event_path(calendar_id: calendar.id),
+      new_calendars_event_path(@url_params),
       class: "btn btn-default")) -%>
     <%- concat(calendar_exports_link) %>
   <%- end -%>
@@ -13,7 +17,7 @@
   <div id="calendar-col" class="col-md-10 col-sm-9">
     <div id="calendar"></div>
     <footer>
-      <%= link_to("Permalink", calendars_events_path(calendar_id: calendar.id), id: "permalink") %> &nbsp;
+      <%= link_to("Permalink", calendars_events_path(@url_params), id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
@@ -36,22 +40,10 @@
     </div>
   </div>
   <div class="col-md-2 col-sm-3 sidebar">
-    <%= image_tag(calendar.photo_variant(:thumb)) %><br/><br/>
-    <% if @other_calendars.any? %>
-      <div class="other-calendars">
-        <small>Other Calendars</small>
-        <%= render("simple_calendar_list", nodes: @other_calendars) %>
-      </div>
-    <% end %>
-    <% if multi_community? %>
-      <div>
-        <small>Other Communities</small>
-        <ul class="no-marker">
-          <% @other_communities.each do |community| %>
-            <li><%= link_to(community.name, url_in_community(community, calendars_events_path)) %></li>
-          <% end %>
-        </ul>
-      </div>
+    <% if calendar %>
+      <%= render("single_calendar_sidebar", calendar: calendar) %>
+    <% else %>
+      <%= render("all_events_sidebar") %>
     <% end %>
   </div>
 </div>
@@ -60,13 +52,13 @@
   $(function() {
     var calendarView = new Gather.Views.CalendarView({
       el: '#calendar-col',
-      calendarId: <%= json(calendar.id) %>,
-      feedUrl: <%= json(calendars_events_path(calendar_id: calendar.id)) %>,
-      newUrl: <%= json(new_calendars_event_path(calendar_id: calendar.id)) %>,
+      calendarId: <%= json(calendar&.id) %>,
+      feedUrl: <%= json(calendars_events_path(@url_params)) %>,
+      newUrl: <%= json(new_calendars_event_path(@url_params)) %>,
       focusDate: <%= json(params[:date]) %>,
       viewType: <%= json(params[:view]) %>,
-      defaultViewType: <%= json(calendar.default_calendar_view) %>,
-      ruleSet: <%= json(@rule_set_serializer) %>
+      defaultViewType: <%= json(calendar&.default_calendar_view) %>,
+      ruleSet: <%= json(@rule_set) %>
     });
     var linkManager = new Gather.Views.CalendarLinkManager({
       el: '.calendar-and-links',

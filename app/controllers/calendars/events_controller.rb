@@ -10,9 +10,10 @@ module Calendars
     before_action -> { nav_context(:calendars, :events) }
 
     def index
-      if params[:calendar_id]
-        @calendar = Calendar.find(params[:calendar_id])
+      @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
+      return render_json_event_list if request.xhr?
 
+      if @calendar
         # We use an unsaved sample event to authorize against.
         # We set kind to nil because we can't know the kind in advance. This object is also used
         # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
@@ -21,46 +22,21 @@ module Calendars
         @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
         authorize(@sample_event)
 
-        # JSON list of events for calendar plugin
-        if request.xhr?
-          raise "Calendar required" unless @calendar
-
-          @events = policy_scope(Event)
-            .where(calendar_id: params[:calendar_id])
-            .where("starts_at < ? AND ends_at > ?",
-                   Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
-          render(json: @events, adapter: :attributes) # The adapter option removes the root.
-
-        # Main event pages
-        else
-          # This will happen in JSON mode.
-          # We don't actually return any Events here.
-          skip_policy_scope
-
-          @rule_set = @sample_event.rule_set
-          if @rule_set.access_level(current_community) == "read_only"
-            flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
-          end
-          @rule_set_serializer = RuleSetSerializer.new(@rule_set, creator_community: current_community)
-          @other_calendars = policy_scope(Node).in_community(@calendar.community)
-            .where("id != ?", @calendar.id).arrange
-          @other_communities = Community.where("id != ?", @calendar.community_id)
-          render("calendar")
+        @rule_set = @sample_event.rule_set
+        if @rule_set.access_level(current_community) == "read_only"
+          flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
         end
+        @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
+        @other_calendars = policy_scope(Node).in_community(@calendar.community)
+          .where("id != ?", @calendar.id).arrange
+        @other_communities = Community.where("id != ?", @calendar.community_id)
       else
-        prepare_lenses(community: {clearable: false})
-        @community = current_community
-
         authorize(Event)
-
-        # This will happen in JSON mode.
-        # We don't actually return any Events here.
-        skip_policy_scope
-
-        load_communities_in_cluster
-        @calendars = policy_scope(Calendar).where(community_id: @community.id)
-        render("home")
+        prepare_lenses(community: {clearable: false})
+        @calendars = policy_scope(Node).in_community(current_community).arrange
+        @rule_set = {}
       end
+      @url_params = @calendar ? {calendar_id: @calendar.id} : {}
     end
 
     def show
@@ -139,6 +115,14 @@ module Calendars
     end
 
     private
+
+    def render_json_event_list
+      @events = policy_scope(Event).where("starts_at < ? AND ends_at > ?",
+                                          Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
+      calendar_ids = @calendar ? [@calendar.id] : Calendar.in_community(current_community).pluck(:id)
+      @events = @events.where(calendar_id: calendar_ids)
+      render(json: @events, adapter: :attributes) # The adapter option removes the root.
+    end
 
     def prep_form_vars
       @calendar ||= @event.calendar

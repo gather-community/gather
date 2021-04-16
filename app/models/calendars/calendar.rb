@@ -19,10 +19,13 @@ module Calendars
 
     has_one_attached :photo
     accepts_attachment_via_form :photo
+
+    normalize_attributes :color, with: :downcase
+
     validates :photo, content_type: {in: %w[image/jpg image/jpeg image/png image/gif]},
                       file_size: {max: Settings.photos.max_size_mb.megabytes}
-
     validates :abbrv, presence: true, if: :meal_hostable?
+    validates :color, presence: true, format: {with: /\A#[0-9a-f]{6}\z/}
 
     disallow_semicolons :name
 

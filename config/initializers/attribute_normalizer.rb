@@ -8,4 +8,8 @@ AttributeNormalizer.configure do |config|
       value
     end
   end
+
+  config.normalizers[:downcase] = lambda do |value, _options|
+    value&.downcase
+  end
 end

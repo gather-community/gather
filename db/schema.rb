@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_001816) do
+ActiveRecord::Schema.define(version: 2021_04_15_230747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2021_03_25_001816) do
   create_table "calendar_nodes", id: :serial, force: :cascade do |t|
     t.string "abbrv", limit: 6
     t.integer "cluster_id", null: false
+    t.string "color", limit: 7
     t.integer "community_id", null: false
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"

@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Calendar #{n}" }
     sequence(:abbrv) { |n| "Res#{n}" }
     community { Defaults.community }
+    sequence(:color) { |n| "#" << n.to_s.ljust(6, "0") }
 
     trait :inactive do
       deactivated_at { Time.current - 1 }

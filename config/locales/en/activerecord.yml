@@ -257,6 +257,8 @@ en:
           attributes:
             abbrv:
               blank: "can't be blank if calendar can host meals"
+            color:
+              invalid: "Must be in hex format (e.g. #112233)"
         meals/formula:
           at_least_one_type: "You must include at least one meal type."
           at_least_one_nonzero_type: "You must include at least one non-zero meal type if the calculation type is proportional."

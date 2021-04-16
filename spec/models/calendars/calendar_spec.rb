@@ -14,6 +14,32 @@ describe Calendars::Calendar do
     end
   end
 
+  describe "validation" do
+    describe "color" do
+      subject(:calendar) { build(:calendar, color: color) }
+
+      context "with valid color and uppercase letters" do
+        let(:color) { "#bbFF22" }
+        it { is_expected.to be_valid } # Must be normalized b/c regexp is case sensitive.
+      end
+
+      context "with missing #" do
+        let(:color) { "bbff22" }
+        it { is_expected.to have_errors(color: /Must be in hex format \(e.g. #112233\)/) }
+      end
+
+      context "with non-hex letter" do
+        let(:color) { "#bbfg22" }
+        it { is_expected.to have_errors(color: /Must be in hex format \(e.g. #112233\)/) }
+      end
+
+      context "with wrong length" do
+        let(:color) { "#bbff222" }
+        it { is_expected.to have_errors(color: /Must be in hex format \(e.g. #112233\)/) }
+      end
+    end
+  end
+
   # Our approach to destruction is to:
   # - Set the policy to only disallow deletions based on what users of various roles should be able
   #   to destroy given various combinations of existing associations.

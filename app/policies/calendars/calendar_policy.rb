@@ -39,7 +39,7 @@ module Calendars
     end
 
     def permitted_attributes
-      %i[default_calendar_view guidelines abbrv name meal_hostable
+      %i[default_calendar_view guidelines abbrv name color meal_hostable
          photo_new_signed_id photo_destroy group_id]
     end
   end

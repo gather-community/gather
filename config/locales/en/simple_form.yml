@@ -92,6 +92,7 @@ en:
         abbrv: "Abbreviation for use in short text, e.g. email subjects (max 6 letters)"
         meal_hostable: "If yes, this calendar will show up as possible location when creating a meal."
         guidelines: "Text that the user must agree to when making a event."
+        color: "The color for this calendar's events in the main calendar view. Use hex format, e.g. #6e43a1."
       user:
         joined_on: "Approximate date when you joined the community"
         job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."

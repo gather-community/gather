@@ -149,6 +149,7 @@ en:
         hidden: "Hidden"
         abbrv: "Abbreviation"
         group_id: "Calendar Group"
+        color: "Color"
         default_calendar_view: "Calendar View"
         meal_hostable: "Can Host Meals?"
       people/emergency_contact:

@@ -27,7 +27,7 @@ module Calendars
     def self.arrange
       base_scope = deactivated_last.by_rank
       children_by_group_id = base_scope.second_level.group_by(&:group_id)
-      base_scope.first_level.map { |n| [n, children_by_group_id[n.id]] }.to_h
+      base_scope.first_level.map { |n| [n, children_by_group_id[n.id] || {}] }.to_h
     end
   end
 end

@@ -82,7 +82,8 @@ module Calendars
     end
 
     def sample_calendar
-      @sample_calendar ||= Calendar.new(community: current_community)
+      @sample_calendar ||= Calendar.new(community: current_community,
+                                        color: Calendar.next_color(current_community))
     end
 
     def prep_form_vars

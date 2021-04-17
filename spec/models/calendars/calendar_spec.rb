@@ -3,6 +3,41 @@
 require "rails_helper"
 
 describe Calendars::Calendar do
+  describe ".next_color" do
+    subject(:color) { described_class.next_color(Defaults.community) }
+    let!(:decoy) { create(:calendar, community: create(:community), color: "#75c5c9") }
+
+    before do
+      stub_const("#{described_class.name}::COLORS", %w[#75c5c9 #c67033 #910843])
+    end
+
+    context "with no existing calendars in community" do
+      it { is_expected.to eq("#75c5c9") }
+    end
+
+    context "with one existing calendar" do
+      let!(:calendar1) { create(:calendar, community: Defaults.community, color: "#75c5c9") }
+      it { is_expected.to eq("#c67033") }
+    end
+
+    context "with more calendars than colors" do
+      let!(:calendar1) { create(:calendar, community: Defaults.community, color: "#75c5c9") }
+      let!(:calendar2) { create(:calendar, community: Defaults.community, color: "#c67033") }
+      let!(:calendar3) { create(:calendar, community: Defaults.community, color: "#75c5c9") }
+      let!(:calendar4) { create(:calendar, community: Defaults.community, color: "#910843") }
+      it { is_expected.to eq("#c67033") }
+    end
+
+    context "with even more calendars than colors" do
+      let!(:calendar1) { create(:calendar, community: Defaults.community, color: "#75c5c9") }
+      let!(:calendar2) { create(:calendar, community: Defaults.community, color: "#c67033") }
+      let!(:calendar3) { create(:calendar, community: Defaults.community, color: "#75c5c9") }
+      let!(:calendar4) { create(:calendar, community: Defaults.community, color: "#910843") }
+      let!(:calendar5) { create(:calendar, community: Defaults.community, color: "#c67033") }
+      it { is_expected.to eq("#910843") }
+    end
+  end
+
   describe "#all_guidelines" do
     let(:calendar) { create(:calendar, :with_shared_guidelines) }
     let(:gl1) { calendar.guidelines }

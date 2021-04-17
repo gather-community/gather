@@ -36,6 +36,14 @@ module Calendars
 
     delegate :name, to: :community, prefix: true
 
+    # Selects the first least-used color in the color set, for the given community
+    def self.next_color(community)
+      counts = COLORS.map { |c| [c, 0] }.to_h
+      in_community(community).each { |c| counts[c.color] += 1 }
+      min_count = counts.values.min
+      counts.detect { |_color, count| count == min_count }[0]
+    end
+
     # Available event kinds. Returns nil if none are defined.
     def kinds
       (community.settings.calendars.kinds || "").split(/\s*,\s*/).presence

@@ -22,6 +22,13 @@
     td.name {
       min-width: 300px;
       height: 45px; // So that group rows have about same height as calendar rows with photos.
+
+      .swatch {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        margin-right: 5px;
+      }
     }
 
     .move-links {

@@ -5,7 +5,7 @@
   <td class="name" colspan="<%= calendar.in_group? ? "1" : "2" %>">
     <div>
       <%= render("move_links", node: calendar) %>
-      <div class="icon"><%= icon_tag("calendar") %></div>
+      <div class="swatch" style="background-color: <%= calendar.color %>"></div>
       <%= link_to(calendar.name_with_inactive, edit_calendar_path(calendar.id)) %>
     </div>
   </td>

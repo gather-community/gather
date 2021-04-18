@@ -23,7 +23,7 @@ module Calendars
         authorize(@sample_event)
 
         @rule_set = @sample_event.rule_set
-        if @rule_set.access_level(current_community) == "read_only"
+        if @rule_set.access_level(current_user.community) == "read_only"
           flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
         end
         @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)

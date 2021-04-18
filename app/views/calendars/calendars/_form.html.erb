@@ -10,7 +10,18 @@
       <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
       <%= f.input :group_id, collection: @group_options, include_blank: "[None]" %>
-      <%= f.input :color, required: true %>
+      <%= f.input :color, required: true do %>
+        <%= f.input_field(:color, class: "form-control") %>
+        <div class="swatches">
+          <% Calendars::Calendar::COLORS.in_groups(2).each do |colors| %>
+            <div class="swatch-row">
+              <% colors.each do |color| %>
+                <%= calendar.swatch(color, @least_used_colors) %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
       <%= f.input :meal_hostable, as: :select, required: true %>
       <%= f.input :default_calendar_view, collection: Calendars::Calendar::DEFAULT_CALENDAR_VIEWS,
         required: true %>
@@ -29,6 +40,7 @@
       el: '#calendar-forms',
       maxSize: @max_photo_size
     )%>);
+    new Gather.Views.Calendars.ColorFieldView({el: '.calendars_calendar_color'})
     new Gather.Views.DirtyChecker({el: '.calendars--calendar-form', helpers: [uploadView]});
   });
 <% end %>

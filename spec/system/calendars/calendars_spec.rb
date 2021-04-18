@@ -71,6 +71,8 @@ describe "calendars", js: true do
       drop_in_dropzone(fixture_file_path("chomsky.jpg"))
       expect_image_upload(state: :new)
       fill_in("Name", with: "Baz Qux")
+      all(".swatch")[3].click
+      expect(page).to have_field("Color", with: Calendars::Calendar::COLORS[3])
       select("Group", from: "Calendar Group")
       click_button("Save")
       expect_success

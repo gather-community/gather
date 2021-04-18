@@ -9,7 +9,7 @@ module Calendars
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
     COLORS = %w[#75c5c9 #c67033 #910843 #d63679 #424ea8 #7c4d17 #a8982b #b7cd12 #308c58 #4795d3
                 #2559aa #6e43a1 #a22084 #e42215 #e8590e #efbb00 #dfce00 #6faf49 #3e80c6 #e893be
-                #d59fc2 #3a231d #5b7827]
+                #3a231d #5b7827]
 
     belongs_to :group, class_name: "Calendars::Group", inverse_of: :calendars
     has_many :guideline_inclusions, class_name: "Calendars::GuidelineInclusion", dependent: :destroy
@@ -36,12 +36,12 @@ module Calendars
 
     delegate :name, to: :community, prefix: true
 
-    # Selects the first least-used color in the color set, for the given community
-    def self.next_color(community)
+    # Selects the least-used colors in the color set, for the given community
+    def self.least_used_colors(community)
       counts = COLORS.map { |c| [c, 0] }.to_h
-      in_community(community).each { |c| counts[c.color] += 1 }
+      in_community(community).each { |c| counts[c.color] += 1 if counts[c.color] }
       min_count = counts.values.min
-      counts.detect { |_color, count| count == min_count }[0]
+      counts.map { |color, count| count == min_count ? color : nil }.compact
     end
 
     # Available event kinds. Returns nil if none are defined.

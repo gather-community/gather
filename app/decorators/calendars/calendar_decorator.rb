@@ -25,6 +25,13 @@ module Calendars
       active? ? "" : "inactive"
     end
 
+    def swatch(color, least_used_colors)
+      least_used = least_used_colors.include?(color)
+      fg_color_style = least_used ? "; color: #{color}" : ""
+      h.content_tag(:div, "×", class: "swatch", style: "background-color: #{color}#{fg_color_style}",
+                               data: {color: color})
+    end
+
     def photo_variant(format)
       return "missing/calendars/calendars/#{format}.png" unless photo.attached? && photo.variable?
       case format

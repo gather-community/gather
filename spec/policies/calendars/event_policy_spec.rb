@@ -13,7 +13,7 @@ describe Calendars::EventPolicy do
     let(:ends_at) { starts_at + 1.hour }
     let(:event) do
       create(:event, creator: creator, calendar: calendar, created_at: created_at,
-                           starts_at: starts_at, ends_at: ends_at)
+                     starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { event }
 
@@ -54,6 +54,14 @@ describe Calendars::EventPolicy do
           let(:starts_at) { 3.hours.ago }
 
           it_behaves_like "permits admins and creator"
+        end
+      end
+
+      context "inactive calendar" do
+        let(:calendar) { create(:calendar, :inactive) }
+
+        permissions :index?, :new?, :create? do
+          it_behaves_like "forbids all"
         end
       end
 

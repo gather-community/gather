@@ -13,8 +13,10 @@ module Calendars
     end
 
     def index?
-      # If record is a Class (not a specific event), can't check protocol
-      active_cluster_admin? || (active? && (not_specific_record? || !forbidden_by_protocol?))
+      # If record is a Class (not a specific event), can't check if calendar is active
+      (not_specific_record? || calendar.active?) &&
+        # If record is a Class (not a specific event), can't check protocol
+        (active_cluster_admin? || (active? && (not_specific_record? || !forbidden_by_protocol?)))
     end
 
     def show?
@@ -22,7 +24,8 @@ module Calendars
     end
 
     def create?
-      active_cluster_admin? || (active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?)
+      calendar.active? &&
+        (active_cluster_admin? || (active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?))
     end
 
     def update?
@@ -54,7 +57,7 @@ module Calendars
 
     private
 
-    delegate :future?, :recently_created?, to: :event
+    delegate :calendar, :future?, :recently_created?, to: :event
 
     def active_creator?
       active? && event.creator == user

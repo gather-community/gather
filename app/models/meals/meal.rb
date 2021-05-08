@@ -89,7 +89,6 @@ module Meals
     validate :at_least_one_community
     validate :allergens_specified_appropriately
     validate { reservation_handler.validate_meal if reservations.any? }
-    validates :resources, presence: {message: :need_location}
     validates_with Meals::SignupsValidator
 
     def self.served_within_days_from_now(days)

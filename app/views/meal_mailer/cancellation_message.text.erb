@@ -1,6 +1,6 @@
 <%= @recipient.greeting %>
 
-We regret to inform you that the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %> at <%= @meal.location_name %> has been CANCELLED.
+We regret to inform you that the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %> has been CANCELLED.
 
 <%= @message.sender_name %> sent the following message in regard to the cancellation:
 

@@ -52,6 +52,7 @@ en:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
         capacity: "How many people can the meal accommodate?"
         auto_close_time: "Enter a time in the future at which the meal should be automatically closed. If blank, meal must be closed manually."
+        resource_ids: "Select reservable meal location(s) for this meal. Reservations will be generated automatically. If location is not reservable, specify it in the title, e.g. 'Potluck at Jane's house'."
       billing_account:
         credit_limit: "Leave blank to indicate unlimited credit. Enter zero to indicate no credit."
       billing_transaction:

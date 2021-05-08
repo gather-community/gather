@@ -1,4 +1,4 @@
-<%= @initiator.name %> just made the following change(s) to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %> at <%= @meal.location_name %>.
+<%= @initiator.name %> just made the following change(s) to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %>.
 
 <% if @added.any? -%>
 <% @added.each do |a| -%>

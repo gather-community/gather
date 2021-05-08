@@ -50,7 +50,12 @@ module Meals
     end
 
     def location_name
-      resources.first&.decorate&.name_with_prefix
+      return @location_name if defined?(@location_name)
+      @location_name = resources.first&.decorate&.name_with_prefix
+    end
+
+    def location_name_with_at
+      location_name.nil? ? nil : " at #{location_name}"
     end
 
     def location_abbrv

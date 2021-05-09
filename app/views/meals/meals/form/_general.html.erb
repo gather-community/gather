@@ -3,7 +3,7 @@
     <% if policy(meal).change_date_loc_invites? %>
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true %>
       <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
-                                 required: true, input_html: {multiple: "multiple"} %>
+                                 input_html: {multiple: "multiple"} %>
       <%= javascript_tag do %>
         $(function() {
           // We don't use AjaxSelect2 here since it's not an ajax-based select2.

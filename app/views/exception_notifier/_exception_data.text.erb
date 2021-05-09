@@ -1,0 +1,4 @@
+<%# Prints YAML if exception has extra variables %>
+<% if @exception.instance_variables.any? %>
+<%= @exception.instance_values.to_yaml %>
+<% end %>

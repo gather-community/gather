@@ -64,7 +64,7 @@ module Groups
       # Loads membership ID and role based on given list_id and remote member id
       def populate_membership(list_mship)
         found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
-        raise ApiRequestError, "Membership not found" if found["total_size"].zero?
+        raise ArgumentError, "Membership not found for #{list_mship.email}" if found["total_size"].zero?
         list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
       end
@@ -105,7 +105,7 @@ module Groups
       end
 
       def configure_list(list)
-        raise ArgumentError, "No config given" if list.config.blank?
+        raise ArgumentError, "No config given for list ##{list.id}" if list.config.blank?
         config = list.config.dup
         config.each { |k, v| config[k] = v.to_s if [true, false].include?(v) }
         request("lists/#{list.fqdn_listname}/config", :patch, config)
@@ -165,7 +165,7 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
-        raise ApiRequestError, res unless res.is_a?(Net::HTTPSuccess)
+        raise ApiRequestError.new(request: req, response: res) unless res.is_a?(Net::HTTPSuccess)
         ApiJsonResponse.new(res)
       end
 

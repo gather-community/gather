@@ -44,7 +44,7 @@ module Groups
       rescue ApiRequestError => e
         # We don't care about user_not_found errors because we don't need to sign out someone
         # if they don't exist.
-        e.to_s =~ /user_not_found/ ? nil : (raise e)
+        e.response.body =~ /user_not_found/ ? nil : (raise e)
       end
 
       def do_request(sso)
@@ -54,7 +54,7 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
-        raise ApiRequestError, res unless res.is_a?(Net::HTTPSuccess)
+        raise ApiRequestError.new(request: req, response: res) unless res.is_a?(Net::HTTPSuccess)
       end
     end
   end

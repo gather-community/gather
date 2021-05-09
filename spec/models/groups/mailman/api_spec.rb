@@ -30,9 +30,10 @@ describe Groups::Mailman::Api do
 
       it "raises error" do
         VCR.use_cassette("groups/mailman/auth/invalid") do
-          expect { api.user_exists?(mm_user) }
-            .to raise_error(ApiRequestError, "Net::HTTPUnauthorized: "\
-              "{\"title\": \"401 Unauthorized\", \"description\": \"REST API authorization failed\"}")
+          expect { api.user_exists?(mm_user) }.to raise_error(ApiRequestError) do |error|
+            expect(error.message).to eq("API request failed: GET /3.1/users/xxxx")
+            expect(error.response.class).to eq(Net::HTTPUnauthorized)
+          end
         end
       end
     end
@@ -110,9 +111,10 @@ describe Groups::Mailman::Api do
           VCR.use_cassette("groups/mailman/api/create_user/user_exists") do
             api.create_user(mm_user)
 
-            expect { api.create_user(mm_user) }
-              .to raise_error(ApiRequestError, "Net::HTTPBadRequest: "\
-                "{\"title\": \"400 Bad Request\", \"description\": \"User already exists: jen@example.com\"}")
+            expect { api.create_user(mm_user) }.to raise_error(ApiRequestError) do |error|
+              expect(error.message).to eq("API request failed: POST /3.1/users")
+              expect(error.response.class).to eq(Net::HTTPBadRequest)
+            end
           end
         end
       end
@@ -264,7 +266,7 @@ describe Groups::Mailman::Api do
             mm_user.remote_id = api.create_user(mm_user)
 
             expect { api.populate_membership(mship) }
-              .to raise_error(ApiRequestError, "Membership not found")
+              .to raise_error(ArgumentError, "Membership not found for jen@example.com")
           end
         end
       end
@@ -335,7 +337,7 @@ describe Groups::Mailman::Api do
 
             api.delete_membership(mship)
             expect { api.populate_membership(mship) }
-              .to raise_error(ApiRequestError, "Membership not found")
+              .to raise_error(ArgumentError, "Membership not found for jen@example.com")
           end
         end
       end
@@ -481,9 +483,10 @@ describe Groups::Mailman::Api do
 
         it "raises error" do
           VCR.use_cassette("groups/mailman/api/configure_list/no_matching_list") do
-            expect { api.configure_list(list) }
-              .to raise_error(ApiRequestError, "Net::HTTPNotFound: "\
-                "{\"title\": \"404 Not Found\"}")
+            expect { api.configure_list(list) }.to raise_error(ApiRequestError) do |error|
+              expect(error.message).to eq("API request failed: PATCH /3.1/lists/baz@tscoho.org/config")
+              expect(error.response.class).to eq(Net::HTTPNotFound)
+            end
           end
         end
       end

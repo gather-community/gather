@@ -2,14 +2,11 @@
 
 # Unexpected error in a http request.
 class ApiRequestError < StandardError
-  attr_accessor :response
+  attr_accessor :request, :response
 
-  def initialize(message)
-    if message.is_a?(Net::HTTPResponse)
-      self.response = message
-      super("#{message.class.name}: #{message.body}")
-    else
-      super(message)
-    end
+  def initialize(request:, response:)
+    super("API request failed: #{request.method.upcase} #{request.path}")
+    self.request = request
+    self.response = response
   end
 end

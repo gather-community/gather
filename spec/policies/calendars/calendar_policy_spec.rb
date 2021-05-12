@@ -30,12 +30,29 @@ describe Calendars::CalendarPolicy do
   describe "scope" do
     include_context "policy scopes"
     let(:klass) { Calendars::Calendar }
-    let!(:calendar1) { create(:calendar) }
-    let!(:group1) { create(:calendar_group) }
-    let(:actor) { admin }
 
-    it "exludes groups" do
-      is_expected.to contain_exactly(calendar1)
+    describe "#resolve" do
+      let!(:calendar1) { create(:calendar) }
+      let!(:group1) { create(:calendar_group) }
+      let(:actor) { admin }
+
+      it "exludes groups" do
+        is_expected.to contain_exactly(calendar1)
+      end
+    end
+
+    describe "#resolve_for_create" do
+      let!(:calendar1) { create(:calendar, name: "Cal1") }
+      let!(:calendar2) { create(:calendar, name: "Cal2") }
+      let!(:calendar3) { create(:calendar, name: "Cal3") }
+      let(:actor) { user }
+      subject(:result) { described_class::Scope.new(actor, klass.by_name).resolve_for_create }
+
+      it "returns calendars for which EventPolicy returns true" do
+        expect(Calendars::EventPolicy).to receive(:new)
+          .and_return(double(create?: true), double(create?: true), double(create?: false))
+        expect(result).to eq([calendar1, calendar2])
+      end
     end
   end
 

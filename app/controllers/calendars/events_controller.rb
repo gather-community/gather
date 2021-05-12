@@ -22,6 +22,8 @@ module Calendars
         @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
         authorize(@sample_event)
 
+        @can_create_event = policy(@sample_event).create?
+
         @rule_set = @sample_event.rule_set
         if @rule_set.access_level(current_user.community) == "read_only"
           flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
@@ -35,6 +37,7 @@ module Calendars
         prepare_lenses(community: {clearable: false})
         @calendars = policy_scope(Node).in_community(current_community).arrange
         @rule_set = {}
+        @can_create_event = writeable_calendars.any?
       end
       @url_params = @calendar ? {calendar_id: @calendar.id} : {}
     end
@@ -47,17 +50,23 @@ module Calendars
     end
 
     def new
-      @calendar = Calendar.find_by(id: params[:calendar_id])
-      raise "Calendar not found" unless @calendar
-
-      @event = Event.new_with_defaults(
-        calendar: @calendar,
-        creator: current_user,
-        starts_at: params[:start],
-        ends_at: params[:end]
-      )
-      authorize(@event)
-      prep_form_vars
+      if params[:calendar_id]
+        @calendar = Calendar.find(params[:calendar_id])
+        @event = Event.new_with_defaults(
+          calendar: @calendar,
+          creator: current_user,
+          starts_at: params[:start],
+          ends_at: params[:end]
+        )
+        authorize(@event)
+        prep_form_vars
+      elsif writeable_calendars.any?
+        @sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
+        authorize(@sample_event)
+        @calendars = writeable_calendars
+      else
+        render_error_page(:forbidden)
+      end
     end
 
     def edit
@@ -115,6 +124,11 @@ module Calendars
     end
 
     private
+
+    def writeable_calendars
+      @writeable_calendars ||=
+        CalendarPolicy::Scope.new(current_user, Calendar.in_community(current_community)).resolve_for_create
+    end
 
     def render_json_event_list
       @events = policy_scope(Event).where("starts_at < ? AND ends_at > ?",

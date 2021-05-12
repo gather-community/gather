@@ -62,4 +62,22 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
     end
   end
+
+  describe "new event flow" do
+    let!(:calendar1) { create(:calendar, name: "Foo Room") }
+    let!(:calendar2) { create(:calendar, name: "Bar Room") }
+
+    scenario "via combined view" do
+      visit(calendars_events_path)
+      click_on("Create Event")
+      click_link("Bar Room")
+      expect(page).to have_title("Bar Room: Create Event")
+    end
+
+    scenario "via single calendar view" do
+      visit(calendars_events_path(calendar_id: calendar1.id))
+      click_on("Create Event")
+      expect(page).to have_title("Foo Room: Create Event")
+    end
+  end
 end

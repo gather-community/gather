@@ -14,6 +14,10 @@ module Groups
         e.response.is_a?(Net::HTTPNotFound) ? false : (raise e)
       end
 
+      def correct_email?(mm_user)
+        preferred_address_for_user(mm_user) == mm_user.email
+      end
+
       # Assumes mm_user.email is set.
       def user_id_for_email(mm_user)
         request("users/#{mm_user.email}")["user_id"]
@@ -32,19 +36,13 @@ module Groups
         user_id_for_email(mm_user)
       end
 
+      # Assumes user has remote_id set and that user exists on the mailman server.
       def update_user(mm_user)
-        begin
-          remote_email = request("users/#{mm_user.remote_id}/preferred_address")["email"]
-          if remote_email != mm_user.email
-            update_user_email(mm_user, old_email: remote_email)
-          end
-        rescue ApiRequestError => e
-          # We assume 404 means the user had no preferred_address set. update_user_email will fix that.
-          if e.response.is_a?(Net::HTTPNotFound)
-            update_user_email(mm_user)
-          else
-            raise e
-          end
+        remote_email = preferred_address_for_user(mm_user)
+        if remote_email.nil?
+          update_user_email(mm_user)
+        elsif remote_email != mm_user.email
+          update_user_email(mm_user, old_email: remote_email)
         end
 
         # display_name should never change from nil to non-nil.
@@ -127,6 +125,15 @@ module Groups
       end
 
       private
+
+      def preferred_address_for_user(mm_user)
+        begin
+          request("users/#{mm_user.remote_id}/preferred_address")["email"]
+        rescue ApiRequestError => e
+          # We assume 404 means the user had no preferred_address set.
+          e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        end
+      end
 
       def verify_address_and_set_preferred(mm_user)
         request("addresses/#{mm_user.email}/verify", :post)

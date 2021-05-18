@@ -148,6 +148,18 @@ describe Groups::Mailman::Api do
         end
       end
 
+      context "when remote user has no preferred_address" do
+        it "sets preferred_address" do
+          VCR.use_cassette("groups/mailman/api/update_user/no_pref_address") do
+            api.send(:request, "users", :post, email: mm_user.email)
+            mm_user.remote_id = api.user_id_for_email(mm_user)
+
+            mm_user.user.first_name = "Lop"
+            api.update_user(mm_user)
+          end
+        end
+      end
+
       context "when email belongs to other user" do
         let(:domain) { build(:domain, name: "tscoho.org") }
         let(:list) { build(:group_mailman_list, name: "ping", domain: domain) }

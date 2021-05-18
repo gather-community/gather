@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:05 GMT
+      - Tue, 18 May 2021 19:33:08 GMT
       Connection:
       - close
       Location:
@@ -39,8 +39,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:05 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:08 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/lists
@@ -68,7 +68,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:05 GMT
+      - Tue, 18 May 2021 19:33:08 GMT
       Connection:
       - close
       Location:
@@ -80,8 +80,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:05 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:08 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/lists
@@ -109,7 +109,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:08 GMT
       Connection:
       - close
       Location:
@@ -121,8 +121,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:08 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users
@@ -150,11 +150,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:09 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352
+      - http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493
       Content-Length:
       - '0'
       Content-Type:
@@ -162,8 +162,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:09 GMT
 - request:
     method: patch
     uri: http://localhost:8001/3.1/users/jen@example.com
@@ -191,14 +191,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:09 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:09 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/jen@example.com/verify
@@ -226,14 +226,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:09 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:09 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/jen@example.com/preferred_address
@@ -261,7 +261,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:09 GMT
       Connection:
       - close
       Location:
@@ -273,8 +273,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:09 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/jen@example.com
@@ -302,7 +302,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:06 GMT
+      - Tue, 18 May 2021 19:33:09 GMT
       Connection:
       - close
       Content-Length:
@@ -311,12 +311,12 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"created_on": "2021-04-05T00:04:06.114619", "is_server_owner": false,
-        "self_link": "http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352",
-        "user_id": "f0ae12472a5149c48a01c4ac0d865352", "password": "$6$rounds=656000$JO5GSHAsS8ktKF1B$/upit37QRUzuUPwIOSQlehaYf46g5EquGnVknh7JezTCqU/6akKHceqpFN080iCIs8gEu6HBFSqcs4r5JZSPl1",
-        "display_name": "Jen Lo", "http_etag": "\"f55fac436ead05a04ad442f1eacc80d60db02634\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:06 GMT
+      string: '{"created_on": "2021-05-18T19:33:08.970491", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493",
+        "user_id": "d870d07b56d445f8b9dcc1c6be162493", "password": "$6$rounds=656000$KqFPLpfIK6grAANW$vlDON4Mfce1gw1zk7tGYk.52UADCziXi/E4svv.jUQVp5FfmMyjUgtH77jo7Er/5tRQe/GZsppN0E4S1rGxQY1",
+        "display_name": "Jen Lo", "http_etag": "\"0f31bbee448d3acdc3c9b1a719676103ab135f3a\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:09 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users
@@ -344,11 +344,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d
+      - http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e
       Content-Length:
       - '0'
       Content-Type:
@@ -356,8 +356,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: patch
     uri: http://localhost:8001/3.1/users/len@example.com
@@ -385,14 +385,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/len@example.com/verify
@@ -420,14 +420,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/len@example.com/preferred_address
@@ -455,7 +455,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
@@ -467,8 +467,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/len@example.com
@@ -496,7 +496,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Length:
@@ -505,18 +505,18 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"created_on": "2021-04-05T00:04:06.886925", "is_server_owner": false,
-        "self_link": "http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d",
-        "user_id": "67bfb1f7db2d4402a9d7f11577e8124d", "password": "$6$rounds=656000$xWPtE3iC0x8Jigr3$ZzMfOpotSEILj27rPYszuo4rxb93vanDDEGKLUKU8LM1AxyRTilgvAKwvjtCVBoDIp2dMk6ioM/pG6Cl/aDa..",
-        "display_name": "Len Jo", "http_etag": "\"9efb4aa9ba8244d37e0b3b5928f5028221bf24c2\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+      string: '{"created_on": "2021-05-18T19:33:09.676743", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "user_id": "7f4eecaca20f499aa78ef6ee9463792e", "password": "$6$rounds=656000$ScsVx2Khw4GzKakm$zoeVLEsMCLePGyybT9fuSebnRr2t6nQZ3/3G/fTrw6JEvRwg2PDiBkyOapxP7i7047/JqjYc4Ghhywoirca/u.",
+        "display_name": "Len Jo", "http_etag": "\"9d98b27c82f4c79735703847247afbc3c505a0db\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"f0ae12472a5149c48a01c4ac0d865352","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"d870d07b56d445f8b9dcc1c6be162493","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -538,11 +538,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/79515b45e29148d9844b81059937f008
+      - http://localhost:8001/3.1/members/0735b5ad8e99400cb5947fb190deca18
       Content-Length:
       - '0'
       Content-Type:
@@ -550,14 +550,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"67bfb1f7db2d4402a9d7f11577e8124d","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"7f4eecaca20f499aa78ef6ee9463792e","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -579,11 +579,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/9579b3c285c6431ebb2567ce7c1a7a62
+      - http://localhost:8001/3.1/members/27ae089735d046e7b2e8f997282f42ca
       Content-Length:
       - '0'
       Content-Type:
@@ -591,14 +591,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"67bfb1f7db2d4402a9d7f11577e8124d","role":"owner","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"7f4eecaca20f499aa78ef6ee9463792e","role":"owner","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -620,11 +620,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/a4efc51008be484ab6a8ad6f072a63fb
+      - http://localhost:8001/3.1/members/86f3b92db0a34a8e9c4b8c144bfba445
       Content-Length:
       - '0'
       Content-Type:
@@ -632,8 +632,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
@@ -661,11 +661,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/6703b22d3322427299271ffad1cc2c15
+      - http://localhost:8001/3.1/members/c7ee03f2b0f7478a95e0c2dc5fb9cf8e
       Content-Length:
       - '0'
       Content-Type:
@@ -673,11 +673,11 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: get
-    uri: http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352/preferred_address
+    uri: http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493/preferred_address
     body:
       encoding: US-ASCII
       string: ''
@@ -702,7 +702,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Length:
@@ -712,52 +712,17 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"email": "jen@example.com", "original_email": "jen@example.com", "registered_on":
-        "2021-04-05T00:04:06.114389", "self_link": "http://localhost:8001/3.1/addresses/jen@example.com",
-        "verified_on": "2021-04-05T00:04:06.806601", "user": "http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352",
-        "http_etag": "\"b79aee8dcc750df1d3427a614ec8af503f08289e\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+        "2021-05-18T19:33:08.970354", "self_link": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "verified_on": "2021-05-18T19:33:09.638298", "user": "http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493",
+        "http_etag": "\"8b91488bedf94147c531e64fbb825fbaa60515cb\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
-    method: patch
-    uri: http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352
+    method: get
+    uri: http://localhost:8001/3.1/addresses/len@example.com
     body:
-      encoding: UTF-8
-      string: '{"display_name":"Jen Lo"}'
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Host:
-      - localhost:8001
-      Content-Type:
-      - application/json
-      Authorization:
-      - Basic cmVzdGFkbWluOnJlc3RwYXNz
-  response:
-    status:
-      code: 204
-      message: No Content
-    headers:
-      Server:
-      - gunicorn/20.0.4
-      Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
-      Connection:
-      - close
-    body:
-      encoding: UTF-8
+      encoding: US-ASCII
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
-- request:
-    method: post
-    uri: http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352/addresses
-    body:
-      encoding: UTF-8
-      string: '{"email":"len@example.com"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -773,25 +738,27 @@ http_interactions:
       - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
-      code: 400
-      message: Bad Request
+      code: 200
+      message: OK
     headers:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
-      Content-Type:
-      - application/json; charset=UTF-8
       Content-Length:
-      - '76'
+      - '362'
+      Content-Type:
+      - application/json
     body:
       encoding: UTF-8
-      string: '{"title": "400 Bad Request", "description": "Address belongs to other
-        user"}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+      string: '{"email": "len@example.com", "original_email": "len@example.com", "registered_on":
+        "2021-05-18T19:33:09.676603", "self_link": "http://localhost:8001/3.1/addresses/len@example.com",
+        "verified_on": "2021-05-18T19:33:10.358241", "user": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "http_etag": "\"42296fd7e73920b10751b4cb5ea74ab76a91b79f\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/len@example.com
@@ -819,7 +786,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Length:
@@ -828,12 +795,12 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"created_on": "2021-04-05T00:04:06.886925", "is_server_owner": false,
-        "self_link": "http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d",
-        "user_id": "67bfb1f7db2d4402a9d7f11577e8124d", "password": "$6$rounds=656000$xWPtE3iC0x8Jigr3$ZzMfOpotSEILj27rPYszuo4rxb93vanDDEGKLUKU8LM1AxyRTilgvAKwvjtCVBoDIp2dMk6ioM/pG6Cl/aDa..",
-        "display_name": "Len Jo", "http_etag": "\"9efb4aa9ba8244d37e0b3b5928f5028221bf24c2\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+      string: '{"created_on": "2021-05-18T19:33:09.676743", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "user_id": "7f4eecaca20f499aa78ef6ee9463792e", "password": "$6$rounds=656000$ScsVx2Khw4GzKakm$zoeVLEsMCLePGyybT9fuSebnRr2t6nQZ3/3G/fTrw6JEvRwg2PDiBkyOapxP7i7047/JqjYc4Ghhywoirca/u.",
+        "display_name": "Len Jo", "http_etag": "\"9d98b27c82f4c79735703847247afbc3c505a0db\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members/find
@@ -861,7 +828,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Length:
@@ -872,26 +839,26 @@ http_interactions:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 3, "entries": [{"address": "http://localhost:8001/3.1/addresses/len@example.com",
         "delivery_mode": "regular", "email": "len@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "9579b3c285c6431ebb2567ce7c1a7a62", "role": "member", "self_link":
-        "http://localhost:8001/3.1/members/9579b3c285c6431ebb2567ce7c1a7a62", "display_name":
-        "Len Jo", "user": "http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d",
-        "http_etag": "\"9e538f611117974349d508dcf076ff18e94b1dde\""}, {"address":
+        "member_id": "27ae089735d046e7b2e8f997282f42ca", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/27ae089735d046e7b2e8f997282f42ca", "display_name":
+        "Len Jo", "user": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "http_etag": "\"99fcaaff0854189271f6ccf3d53ce39d884233d2\""}, {"address":
         "http://localhost:8001/3.1/addresses/len@example.com", "delivery_mode": "regular",
-        "email": "len@example.com", "list_id": "ping.tscoho.org", "member_id": "a4efc51008be484ab6a8ad6f072a63fb",
-        "role": "owner", "self_link": "http://localhost:8001/3.1/members/a4efc51008be484ab6a8ad6f072a63fb",
-        "moderation_action": "accept", "display_name": "Len Jo", "user": "http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d",
-        "http_etag": "\"a1c264f2a321337282e33d631763b5b24189fdb3\""}, {"address":
+        "email": "len@example.com", "list_id": "ping.tscoho.org", "member_id": "86f3b92db0a34a8e9c4b8c144bfba445",
+        "role": "owner", "self_link": "http://localhost:8001/3.1/members/86f3b92db0a34a8e9c4b8c144bfba445",
+        "moderation_action": "accept", "display_name": "Len Jo", "user": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "http_etag": "\"0ad6d10a94d35f518a8e3964e12cf9e857edabb9\""}, {"address":
         "http://localhost:8001/3.1/addresses/len@example.com", "delivery_mode": "regular",
-        "email": "len@example.com", "list_id": "zing.tscoho.org", "member_id": "6703b22d3322427299271ffad1cc2c15",
-        "role": "member", "self_link": "http://localhost:8001/3.1/members/6703b22d3322427299271ffad1cc2c15",
-        "display_name": "Len Jo", "user": "http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d",
-        "http_etag": "\"ba815438ec62c774c67474b6d2f8312673d47fbf\""}], "http_etag":
-        "\"e5c9312e1ab90c35f20445934bc2a770e6ea6778\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+        "email": "len@example.com", "list_id": "zing.tscoho.org", "member_id": "c7ee03f2b0f7478a95e0c2dc5fb9cf8e",
+        "role": "member", "self_link": "http://localhost:8001/3.1/members/c7ee03f2b0f7478a95e0c2dc5fb9cf8e",
+        "display_name": "Len Jo", "user": "http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e",
+        "http_etag": "\"523b76cea56dac65ede264f313774af500361b6f\""}], "http_etag":
+        "\"6da73963c6ae78ee3025941e46392b6cb5bb8f05\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: delete
-    uri: http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d
+    uri: http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e
     body:
       encoding: US-ASCII
       string: ''
@@ -916,17 +883,17 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
-    uri: http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352/addresses
+    uri: http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493/addresses
     body:
       encoding: UTF-8
       string: '{"email":"len@example.com"}'
@@ -951,7 +918,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
@@ -963,8 +930,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/len@example.com/verify
@@ -992,14 +959,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/len@example.com/preferred_address
@@ -1027,7 +994,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
@@ -1039,14 +1006,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"f0ae12472a5149c48a01c4ac0d865352","delivery_mode":"regular","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"d870d07b56d445f8b9dcc1c6be162493","delivery_mode":"regular","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -1068,7 +1035,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Type:
@@ -1078,14 +1045,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "409 Conflict", "description": "Member already subscribed"}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"ping.tscoho.org","subscriber":"f0ae12472a5149c48a01c4ac0d865352","delivery_mode":"regular","role":"owner","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"ping.tscoho.org","subscriber":"d870d07b56d445f8b9dcc1c6be162493","delivery_mode":"regular","role":"owner","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -1107,11 +1074,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:07 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/ad42f547418749a693097522fe944761
+      - http://localhost:8001/3.1/members/eeb877aa9e4547df8c4b246836cafa56
       Content-Length:
       - '0'
       Content-Type:
@@ -1119,14 +1086,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:07 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"zing.tscoho.org","subscriber":"f0ae12472a5149c48a01c4ac0d865352","delivery_mode":"regular","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"zing.tscoho.org","subscriber":"d870d07b56d445f8b9dcc1c6be162493","delivery_mode":"regular","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -1148,11 +1115,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:08 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/85821c79c4214c988172e6d576f762ce
+      - http://localhost:8001/3.1/members/549abd1fa1d34e49a9e59472c0428310
       Content-Length:
       - '0'
       Content-Type:
@@ -1160,8 +1127,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:08 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/addresses/jen@example.com
@@ -1189,14 +1156,49 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:08 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:08 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Lo"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Tue, 18 May 2021 19:33:10 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members/find
@@ -1224,7 +1226,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:08 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Length:
@@ -1235,26 +1237,26 @@ http_interactions:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 3, "entries": [{"address": "http://localhost:8001/3.1/addresses/len@example.com",
         "delivery_mode": "regular", "email": "len@example.com", "list_id": "ping.tscoho.org",
-        "member_id": "79515b45e29148d9844b81059937f008", "role": "member", "self_link":
-        "http://localhost:8001/3.1/members/79515b45e29148d9844b81059937f008", "display_name":
-        "Jen Lo", "user": "http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352",
-        "http_etag": "\"d425e842ad349e94c48c8f25247a0e775bdeb169\""}, {"address":
+        "member_id": "0735b5ad8e99400cb5947fb190deca18", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/0735b5ad8e99400cb5947fb190deca18", "display_name":
+        "Jen Lo", "user": "http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493",
+        "http_etag": "\"0741eaa479eb95b6d1d84bd5fc1ffdb8d816900c\""}, {"address":
         "http://localhost:8001/3.1/addresses/len@example.com", "delivery_mode": "regular",
-        "email": "len@example.com", "list_id": "ping.tscoho.org", "member_id": "ad42f547418749a693097522fe944761",
-        "role": "owner", "self_link": "http://localhost:8001/3.1/members/ad42f547418749a693097522fe944761",
-        "moderation_action": "accept", "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352",
-        "http_etag": "\"9869fef17965a54730109350b72ff9c568bea7e6\""}, {"address":
+        "email": "len@example.com", "list_id": "ping.tscoho.org", "member_id": "eeb877aa9e4547df8c4b246836cafa56",
+        "role": "owner", "self_link": "http://localhost:8001/3.1/members/eeb877aa9e4547df8c4b246836cafa56",
+        "moderation_action": "accept", "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493",
+        "http_etag": "\"d916451002678d824401bd56ab40798c7cf6d318\""}, {"address":
         "http://localhost:8001/3.1/addresses/len@example.com", "delivery_mode": "regular",
-        "email": "len@example.com", "list_id": "zing.tscoho.org", "member_id": "85821c79c4214c988172e6d576f762ce",
-        "role": "member", "self_link": "http://localhost:8001/3.1/members/85821c79c4214c988172e6d576f762ce",
-        "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/f0ae12472a5149c48a01c4ac0d865352",
-        "http_etag": "\"cdebcec9578a810195a9ce62e3b37a83c9ac9c6f\""}], "http_etag":
-        "\"225c487fbe3eb80f1b6f8084c94e633b8f15056c\""}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:08 GMT
+        "email": "len@example.com", "list_id": "zing.tscoho.org", "member_id": "549abd1fa1d34e49a9e59472c0428310",
+        "role": "member", "self_link": "http://localhost:8001/3.1/members/549abd1fa1d34e49a9e59472c0428310",
+        "display_name": "Jen Lo", "user": "http://localhost:8001/3.1/users/d870d07b56d445f8b9dcc1c6be162493",
+        "http_etag": "\"352e067b0a3ffc47545c8a835bf947be97bbd5d2\""}], "http_etag":
+        "\"097e7717f63d9bbf54340399159622de9d4aa1f3\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: get
-    uri: http://localhost:8001/3.1/users/67bfb1f7db2d4402a9d7f11577e8124d
+    uri: http://localhost:8001/3.1/users/7f4eecaca20f499aa78ef6ee9463792e
     body:
       encoding: US-ASCII
       string: ''
@@ -1279,7 +1281,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:08 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Type:
@@ -1289,8 +1291,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:08 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/jen@example.com
@@ -1318,7 +1320,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Mon, 05 Apr 2021 00:04:08 GMT
+      - Tue, 18 May 2021 19:33:10 GMT
       Connection:
       - close
       Content-Type:
@@ -1328,6 +1330,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
-    http_version: 
-  recorded_at: Mon, 05 Apr 2021 00:04:08 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:33:10 GMT
 recorded_with: VCR 4.0.0

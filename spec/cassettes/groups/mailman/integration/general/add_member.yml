@@ -27,44 +27,29 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:18 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Content-Length:
-      - '2357'
+      - '1009'
       Content-Type:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"start": 0, "total_size": 5, "entries": [{"address": "http://localhost:8001/3.1/addresses/a@x.com",
+      string: '{"start": 0, "total_size": 2, "entries": [{"address": "http://localhost:8001/3.1/addresses/a@x.com",
         "delivery_mode": "regular", "email": "a@x.com", "list_id": "zulu.foo.com",
-        "member_id": "634fc67c91e34aabae4e1cff27c5c9e3", "role": "member", "self_link":
-        "http://localhost:8001/3.1/members/634fc67c91e34aabae4e1cff27c5c9e3", "display_name":
-        "Alpha Smith", "user": "http://localhost:8001/3.1/users/74b10a7c0dcf41ca9741bd740f2dcd1a",
-        "http_etag": "\"ea0ebaa9a1d8776e5d158aae527bd35540d14a2a\""}, {"address":
+        "member_id": "52f7e5d5822245c1bb3daa792d600ad6", "role": "member", "self_link":
+        "http://localhost:8001/3.1/members/52f7e5d5822245c1bb3daa792d600ad6", "display_name":
+        "Alpha Smith", "user": "http://localhost:8001/3.1/users/7cadde8e063946dab4f049233c036beb",
+        "http_etag": "\"596738daf1c8dca6d9046d64d79276ac91bca9bb\""}, {"address":
         "http://localhost:8001/3.1/addresses/b@x.com", "delivery_mode": "regular",
-        "email": "b@x.com", "list_id": "zulu.foo.com", "member_id": "51ac562cb65b4d6a949f16e592be0280",
-        "role": "member", "self_link": "http://localhost:8001/3.1/members/51ac562cb65b4d6a949f16e592be0280",
-        "display_name": "Bravo Smith", "user": "http://localhost:8001/3.1/users/75fa099f8d454120833ee38f52112564",
-        "http_etag": "\"47f32f024b981b420de8134e4d93bdbd5016a867\""}, {"address":
-        "http://localhost:8001/3.1/addresses/d@x.com", "delivery_mode": "regular",
-        "email": "d@x.com", "list_id": "zulu.foo.com", "member_id": "28b2e110c4ed45689e2e05331c5245b8",
-        "role": "member", "self_link": "http://localhost:8001/3.1/members/28b2e110c4ed45689e2e05331c5245b8",
-        "display_name": "Delta Smith", "user": "http://localhost:8001/3.1/users/4787bad7db3e48bf8be97c274803232c",
-        "http_etag": "\"8341d16d74672c945b7c5036fcc6cf836a71bc21\""}, {"address":
-        "http://localhost:8001/3.1/addresses/e@x.com", "delivery_mode": "regular",
-        "email": "e@x.com", "list_id": "zulu.foo.com", "member_id": "866796e7e34b4d33971943f7b332bc9b",
-        "role": "member", "self_link": "http://localhost:8001/3.1/members/866796e7e34b4d33971943f7b332bc9b",
-        "display_name": "None", "user": "http://localhost:8001/3.1/users/0da25fb4844b4497ae6110eb8924c411",
-        "http_etag": "\"182c516118354cb49961310755cabcfa16dc83db\""}, {"address":
-        "http://localhost:8001/3.1/addresses/f@x.com", "delivery_mode": "regular",
-        "email": "f@x.com", "list_id": "zulu.foo.com", "member_id": "1c4bc31e379b42ce9dc37c7b798330a8",
-        "role": "nonmember", "self_link": "http://localhost:8001/3.1/members/1c4bc31e379b42ce9dc37c7b798330a8",
-        "display_name": "None", "user": "http://localhost:8001/3.1/users/3957068761d3481ba982e8d1245fd995",
-        "http_etag": "\"f33dade84e62b2d303c5af746b8d1eee4899b84b\""}], "http_etag":
-        "\"2c40096eedb40e09c17db05bb66ce7613414dac7\""}'
+        "email": "b@x.com", "list_id": "zulu.foo.com", "member_id": "4ee012d095f94cf5b5e8df839c0b9875",
+        "role": "member", "self_link": "http://localhost:8001/3.1/members/4ee012d095f94cf5b5e8df839c0b9875",
+        "display_name": "Bravo Smith", "user": "http://localhost:8001/3.1/users/92327b01358c42cba6ee4cc40f566a0c",
+        "http_etag": "\"480044666fe285ae0c83ce2e010fc6b41d4d51fa\""}], "http_etag":
+        "\"170061d48d3d5efc29c73f3b444bed875a34a677\""}'
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:18 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/c@x.com
@@ -92,7 +77,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:18 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Content-Type:
@@ -103,7 +88,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"title": "404 Not Found", "description": "404 Not Found"}'
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:18 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users
@@ -131,11 +116,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/users/252d261c4e7842e9a1c874febd9cac6c
+      - http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718
       Content-Length:
       - '0'
       Content-Type:
@@ -144,7 +129,7 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: patch
     uri: http://localhost:8001/3.1/users/c@x.com
@@ -172,14 +157,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/c@x.com/verify
@@ -207,14 +192,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/c@x.com/preferred_address
@@ -242,7 +227,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Location:
@@ -255,7 +240,7 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/c@x.com
@@ -283,7 +268,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Content-Length:
@@ -292,18 +277,60 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"created_on": "2020-03-21T21:26:18.505212", "is_server_owner": false,
-        "self_link": "http://localhost:8001/3.1/users/252d261c4e7842e9a1c874febd9cac6c",
-        "user_id": "252d261c4e7842e9a1c874febd9cac6c", "password": "$6$rounds=656000$cIrLCTbhMWLJNy0M$LKe7RYr.hX9LWNG3XBAXl6zjCqVjq.fY4C7UkvLOpA/bFjrYPCZUUvNHvNnmrORkwYFBsWw.DXcHODpoXO3ww1",
-        "display_name": "Charlie Smith", "http_etag": "\"9a1a9bd39996d9b21d4833f3d757f7c574299433\""}'
+      string: '{"created_on": "2021-05-19T01:33:46.114756", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718",
+        "user_id": "2ac8eefcede64945b9aadd09ce9b5718", "password": "$6$rounds=656000$fFnZhIa8vu7dRABK$wKnq.Xg4z8zMKaUDv8RknRUfTzJTj3oq867Bph1SKgfRQNG98wUyaXQEWxuwDuPJNaH2BlKixvswz5uU5N.O7/",
+        "display_name": "Charlie Smith", "http_etag": "\"d6f300bc2be8a4f9ee2339dc8d78aad6c517a893\""}'
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718/preferred_address
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Wed, 19 May 2021 01:33:46 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '338'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"email": "c@x.com", "original_email": "c@x.com", "registered_on":
+        "2021-05-19T01:33:46.114618", "self_link": "http://localhost:8001/3.1/addresses/c@x.com",
+        "verified_on": "2021-05-19T01:33:46.861080", "user": "http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718",
+        "http_etag": "\"b3666b5c43d6157673aeb97c2fd5bac0bedb09b7\""}'
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"zulu.foo.com","subscriber":"252d261c4e7842e9a1c874febd9cac6c","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"zulu.foo.com","subscriber":"2ac8eefcede64945b9aadd09ce9b5718","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -325,11 +352,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:19 GMT
+      - Wed, 19 May 2021 01:33:46 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/2d20b06128494a61af11f8adb936e40f
+      - http://localhost:8001/3.1/members/4b558d85aaef4db89573ed49ac27dc1d
       Content-Length:
       - '0'
       Content-Type:
@@ -338,5 +365,5 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 21 Mar 2020 21:26:19 GMT
+  recorded_at: Wed, 19 May 2021 01:33:46 GMT
 recorded_with: VCR 4.0.0

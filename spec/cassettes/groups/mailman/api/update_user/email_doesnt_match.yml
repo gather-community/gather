@@ -27,11 +27,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:20 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb
+      - http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618
       Content-Length:
       - '0'
       Content-Type:
@@ -39,8 +39,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:20 GMT
 - request:
     method: patch
     uri: http://localhost:8001/3.1/users/jen@example.com
@@ -68,14 +68,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:20 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:20 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/jen@example.com/verify
@@ -103,14 +103,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:20 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:20 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/jen@example.com/preferred_address
@@ -138,7 +138,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:20 GMT
       Connection:
       - close
       Location:
@@ -150,8 +150,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:20 GMT
 - request:
     method: get
     uri: http://localhost:8001/3.1/users/jen@example.com
@@ -179,7 +179,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:20 GMT
       Connection:
       - close
       Content-Length:
@@ -188,15 +188,15 @@ http_interactions:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"created_on": "2021-04-03T20:22:36.746496", "is_server_owner": false,
-        "self_link": "http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb",
-        "user_id": "73c05d5780f04170aa69ff24f56de6fb", "password": "$6$rounds=656000$z4XCmSZrQgFj7Ot/$AmfVY0QPY1i9k9otW9v8bx5zyLaeTlaA54t3wlcZQ9HAqmaYgqntG6bFTzEXOaQr4CkLLJAp2wxg0RordVv7t0",
-        "display_name": "Jen Lo", "http_etag": "\"4ad4a928e2a0d6ee9e789f8cd9f4b390876d7f3c\""}'
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+      string: '{"created_on": "2021-05-18T19:30:20.269881", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618",
+        "user_id": "7ac1fc3f4df24cf4b030773f9b511618", "password": "$6$rounds=656000$MNxafACKFWTW1aJ0$xba6HxEf8Ur8gVfQ5KS0fBkDfgMI19UeSEZGgz5YIUwNiHN4lHE4nXwsmZXBtgKNd7m/ZD6OvqBtpjVWf3YLO.",
+        "display_name": "Jen Lo", "http_etag": "\"8ab56cab2d0682d75e5691ec7e8b9005f18bac2a\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:20 GMT
 - request:
     method: get
-    uri: http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb/preferred_address
+    uri: http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618/preferred_address
     body:
       encoding: US-ASCII
       string: ''
@@ -221,7 +221,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
       Content-Length:
@@ -231,17 +231,17 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"email": "jen@example.com", "original_email": "jen@example.com", "registered_on":
-        "2021-04-03T20:22:36.746349", "self_link": "http://localhost:8001/3.1/addresses/jen@example.com",
-        "verified_on": "2021-04-03T20:22:37.431946", "user": "http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb",
-        "http_etag": "\"eda240a7554ba14ac10be9cbf46771201e0eea38\""}'
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+        "2021-05-18T19:30:20.269553", "self_link": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "verified_on": "2021-05-18T19:30:20.963798", "user": "http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618",
+        "http_etag": "\"0acf7431abc4326c7dc8427f5f72f95bcbee3302\""}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 - request:
-    method: patch
-    uri: http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb
+    method: get
+    uri: http://localhost:8001/3.1/addresses/jen@example.org
     body:
-      encoding: UTF-8
-      string: '{"display_name":"Jen Lo"}'
+      encoding: US-ASCII
+      string: ''
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -257,23 +257,27 @@ http_interactions:
       - Basic cmVzdGFkbWluOnJlc3RwYXNz
   response:
     status:
-      code: 204
-      message: No Content
+      code: 404
+      message: Not Found
     headers:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '58'
     body:
       encoding: UTF-8
-      string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+      string: '{"title": "404 Not Found", "description": "404 Not Found"}'
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 - request:
     method: post
-    uri: http://localhost:8001/3.1/users/73c05d5780f04170aa69ff24f56de6fb/addresses
+    uri: http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618/addresses
     body:
       encoding: UTF-8
       string: '{"email":"jen@example.org"}'
@@ -298,7 +302,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
       Location:
@@ -310,8 +314,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/addresses/jen@example.org/verify
@@ -339,14 +343,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/users/jen@example.org/preferred_address
@@ -374,7 +378,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
       Location:
@@ -386,8 +390,8 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/addresses/jen@example.com
@@ -415,12 +419,47 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 03 Apr 2021 20:22:37 GMT
+      - Tue, 18 May 2021 19:30:21 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
-  recorded_at: Sat, 03 Apr 2021 20:22:37 GMT
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/7ac1fc3f4df24cf4b030773f9b511618
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Lo"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Tue, 18 May 2021 19:30:21 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Tue, 18 May 2021 19:30:21 GMT
 recorded_with: VCR 4.0.0

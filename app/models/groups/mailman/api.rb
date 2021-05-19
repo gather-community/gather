@@ -14,6 +14,10 @@ module Groups
         e.response.is_a?(Net::HTTPNotFound) ? false : (raise e)
       end
 
+      def correct_email?(mm_user)
+        preferred_address_for_user(mm_user) == mm_user.email
+      end
+
       # Assumes mm_user.email is set.
       def user_id_for_email(mm_user)
         request("users/#{mm_user.email}")["user_id"]
@@ -32,27 +36,20 @@ module Groups
         user_id_for_email(mm_user)
       end
 
+      # Assumes user has remote_id set and that user exists on the mailman server.
       def update_user(mm_user)
-        remote_email = request("users/#{mm_user.remote_id}/preferred_address")["email"]
+        remote_email = preferred_address_for_user(mm_user)
+        if remote_email.nil?
+          update_user_email(mm_user)
+        elsif remote_email != mm_user.email
+          update_user_email(mm_user, old_email: remote_email)
+        end
 
         # display_name should never change from nil to non-nil.
         # It's only nil for ephemeral User objects for nonmember accounts.
         unless mm_user.display_name.nil?
           request("users/#{mm_user.remote_id}", :patch, display_name: mm_user.display_name)
         end
-
-        return if remote_email == mm_user.email
-
-        begin
-          request("users/#{mm_user.remote_id}/addresses", :post, email: mm_user.email)
-        rescue ApiRequestError => e
-          if e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /belongs to other/
-            merge_user_with_owned_email(mm_user, mm_user.email)
-          end
-        else
-          verify_address_and_set_preferred(mm_user)
-        end
-        request("addresses/#{remote_email}", :delete)
       end
 
       def delete_user(mm_user)
@@ -129,9 +126,43 @@ module Groups
 
       private
 
+      def preferred_address_for_user(mm_user)
+        begin
+          request("users/#{mm_user.remote_id}/preferred_address")["email"]
+        rescue ApiRequestError => e
+          # We assume 404 means the user had no preferred_address set.
+          e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        end
+      end
+
       def verify_address_and_set_preferred(mm_user)
         request("addresses/#{mm_user.email}/verify", :post)
         request("users/#{mm_user.email}/preferred_address", :post, email: mm_user.email)
+      end
+
+      def update_user_email(mm_user, old_email: nil)
+        # If new email exists in the system, check if it's owned by current user and act accordingly.
+        if (new_email_owner_id = email_owner_id(mm_user.email)).present?
+          if mm_user.remote_id == new_email_owner_id
+            verify_address_and_set_preferred(mm_user)
+          else
+            merge_user_with_owned_email(mm_user, mm_user.email)
+          end
+        # Otherwise we need to add it to the system and set it preferred.
+        else
+          request("users/#{mm_user.remote_id}/addresses", :post, email: mm_user.email)
+          verify_address_and_set_preferred(mm_user)
+        end
+        request("addresses/#{old_email}", :delete) if old_email.present? && old_email != mm_user.email
+      end
+
+      def email_owner_id(email)
+        begin
+          # Response JSON will include full URL to user e.g. https://.../users/abc...
+          request("addresses/#{email}")["user"].split("/")[-1]
+        rescue ApiRequestError => e
+          e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
+        end
       end
 
       def merge_user_with_owned_email(mm_user, email)

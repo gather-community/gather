@@ -23,7 +23,7 @@ describe Groups::Mailman::MembershipSyncJob do
   end
 
   context "with user source" do
-    let!(:mm_user1) { create(:group_mailman_user, remote_id: "111", user: create(:user)) }
+    let!(:mm_user1) { create(:group_mailman_user, remote_id: "111", user: create(:user, email: "a@a.com")) }
     let(:local_mships) do
       [
         # These should get created since no matching mships in remote.
@@ -52,6 +52,7 @@ describe Groups::Mailman::MembershipSyncJob do
     end
 
     it "calls correct api methods" do
+      expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).once.and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
                                                                    list_id: "list1.blah", role: "member"))
 
@@ -127,15 +128,19 @@ describe Groups::Mailman::MembershipSyncJob do
     end
 
     it "calls correct api methods" do
+      expect(api).to receive(:correct_email?, &with_obj_attribs(email: "y@y.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "000",
                                                                    list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "a@a.com")).and_return("222")
+      expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).and_return(false)
+      expect(api).to receive(:update_user, &with_obj_attribs(email: "a@a.com"))
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "222",
                                                                    list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "b@b.com")).and_return(nil)
       expect(api).to receive(:create_user).with(mm_user5).and_return("333")
+      expect(api).to receive(:correct_email?, &with_obj_attribs(email: "b@b.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "333",
                                                                    list_id: "list3.blah", role: "member"))
 

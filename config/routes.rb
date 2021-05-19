@@ -29,6 +29,9 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    collection do
+      patch :update_setting, path: "update-setting"
+    end
     member do
       put :activate
       put :deactivate

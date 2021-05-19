@@ -133,6 +133,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_setting
+    @user = current_user
+    authorize(@user)
+    new_settings = params.require(:settings).permit(:calendar_popover_dismissed)
+    @user.settings = (@user.settings || {}).merge(new_settings)
+    @user.save!
+  end
+
   def resend_email_confirmation
     @user = User.find(params[:id])
     authorize(@user, :update_info?)

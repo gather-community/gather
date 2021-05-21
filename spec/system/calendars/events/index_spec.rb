@@ -77,7 +77,7 @@ describe "event calendar", js: true do
     scenario "via combined view and click grid" do
       visit(calendars_events_path)
       all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
-      expect(page).to have_content(/Reserve on.+11:30 am to 12:00 pm/)
+      expect(page).to have_content(/Create event on.+11:30 am to 12:00 pm/)
       click_on("OK")
       click_link("Bar Room")
       expect(page).to have_title("Bar Room: Create Event")

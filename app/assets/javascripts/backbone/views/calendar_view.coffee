@@ -78,11 +78,11 @@ Gather.Views.CalendarView = Backbone.View.extend
       date = start.format(Gather.TIME_FORMATS.regDate)
       startTime = start.format(Gather.TIME_FORMATS.regTime)
       endTime = end.format(Gather.TIME_FORMATS.regTime)
-      body.html("Reserve on <b>#{date}</b> from <b>#{startTime}</b> to <b>#{endTime}</b>?")
+      body.html("Create event on <b>#{date}</b> from <b>#{startTime}</b> to <b>#{endTime}</b>?")
     else
       startTime = start.format(Gather.TIME_FORMATS.fullDatetime)
       endTime = end.format(Gather.TIME_FORMATS.fullDatetime)
-      body.html("Reserve from <b>#{startTime}</b> to <b>#{endTime}</b>?")
+      body.html("Create event from <b>#{startTime}</b> to <b>#{endTime}</b>?")
 
     modal.modal('show')
 

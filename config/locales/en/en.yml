@@ -60,26 +60,6 @@ en:
     messages:
       no_semicolons: "Semicolons not allowed"
 
-  button_labels:
-    calendars/event:
-      destroy: "Delete Event"
-    calendars/calendar:
-      deactivate: "Deactivate Calendar"
-      destroy: "Delete Calendar"
-    meals/formula:
-      deactivate: "Deactivate Formula"
-      destroy: "Delete Formula"
-    household:
-      deactivate: "Deactivate Household"
-      destroy: "Delete Household"
-    meals/meal:
-      destroy: "Delete Meal"
-    user:
-      deactivate: "Deactivate User"
-      destroy: "Delete User"
-    work/job:
-      destroy: "Delete Job"
-
   confirmations:
     billing/template:
       destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."

@@ -64,6 +64,7 @@ module Calendars
         @sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
         authorize(@sample_event)
         @calendars = writeable_calendars
+        @time_params = params.permit(:start, :end)
       else
         render_error_page(:forbidden)
       end

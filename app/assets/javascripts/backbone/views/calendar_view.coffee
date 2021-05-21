@@ -107,8 +107,12 @@ Gather.Views.CalendarView = Backbone.View.extend
         Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   create: ->
-    # newUrl includes a QS param already so we use '&'
-    window.location.href = "#{@newUrl}&#{$.param(@selection)}"
+    # Add start and end params to @newUrl. The URL library needs a base url but we just want a path
+    # so we add a base url and then remove it.
+    url = new URL(@newUrl, 'https://example.com')
+    url.searchParams.append('start', @selection.start)
+    url.searchParams.append('end', @selection.end)
+    window.location.href = url.href.replace('https://example.com', '')
 
   initialViewType: (linkParam, defaultType) ->
     type = linkParam || @savedSettings.viewType || defaultType || 'week'

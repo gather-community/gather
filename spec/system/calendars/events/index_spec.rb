@@ -67,11 +67,21 @@ describe "event calendar", js: true do
     let!(:calendar1) { create(:calendar, name: "Foo Room") }
     let!(:calendar2) { create(:calendar, name: "Bar Room") }
 
-    scenario "via combined view" do
+    scenario "via combined view and create event button" do
       visit(calendars_events_path)
       click_on("Create Event")
       click_link("Bar Room")
       expect(page).to have_title("Bar Room: Create Event")
+    end
+
+    scenario "via combined view and click grid" do
+      visit(calendars_events_path)
+      all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
+      expect(page).to have_content(/Reserve on.+11:30 am to 12:00 pm/)
+      click_on("OK")
+      click_link("Bar Room")
+      expect(page).to have_title("Bar Room: Create Event")
+      expect(page).to have_field("Start Time", with: /11:30/)
     end
 
     scenario "via single calendar view" do

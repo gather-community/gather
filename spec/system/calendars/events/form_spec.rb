@@ -29,7 +29,7 @@ describe "event form", js: true do
 
     find("div.fc-title", text: "Stuff").click
     click_on("Edit")
-    accept_confirm { click_on("Delete") }
+    accept_confirm { click_on("Cancel") }
     expect_success
     expect(page).to have_title(calendar.name)
     expect(page).not_to have_content("Stuffy Stuff")

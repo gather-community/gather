@@ -5,7 +5,7 @@ module Calendars
   class EventSerializer < ApplicationSerializer
     include Rails.application.routes.url_helpers
 
-    attributes :id, :url, :title, :start, :end, :editable, :className
+    attributes :id, :url, :title, :start, :end, :editable, :class_name
 
     def url
       calendars_event_path(object)
@@ -34,7 +34,7 @@ module Calendars
       Calendars::EventPolicy.new(scope, object).edit?
     end
 
-    def className
+    def class_name
       if object.meal
         "has-meal"
       elsif object.creator == scope

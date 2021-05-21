@@ -23,7 +23,7 @@ Gather.Views.CalendarView = Backbone.View.extend
       minTime: @minTime()
       allDaySlot: false
       eventOverlap: false
-      selectable: @ruleSet.access_level != "read_only"
+      selectable: @ruleSet.accessLevel != "read_only"
       selectOverlap: false
       selectHelper: true
       longPressDelay: 500
@@ -133,8 +133,8 @@ Gather.Views.CalendarView = Backbone.View.extend
     matches.length > 0
 
   applyFixedTimes: (start, end) ->
-    fixedStart = @ruleSet.fixed_start_time && $.fullCalendar.moment(@ruleSet.fixed_start_time)
-    fixedEnd = @ruleSet.fixed_end_time && $.fullCalendar.moment(@ruleSet.fixed_end_time)
+    fixedStart = @ruleSet.fixedStartTime && $.fullCalendar.moment(@ruleSet.fixedStartTime)
+    fixedEnd = @ruleSet.fixedEndTime && $.fullCalendar.moment(@ruleSet.fixedEndTime)
     changed = false
 
     if fixedStart && fixedStart.format('HHmm') != start.format('HHmm')

@@ -26,6 +26,7 @@
       <%= f.input :default_calendar_view, collection: Calendars::Calendar::DEFAULT_CALENDAR_VIEWS,
         required: true %>
       <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} %>
+      <%= f.input :allow_overlap, as: :boolean %>
 
       <%= form_actions do %>
         <%= f.button :primary %>

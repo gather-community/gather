@@ -132,8 +132,10 @@ module Calendars
     end
 
     def render_json_event_list
-      @events = policy_scope(Event).where("starts_at < ? AND ends_at > ?",
-                                          Time.zone.parse(params[:end]), Time.zone.parse(params[:start]))
+      @events = policy_scope(Event)
+      times = [Time.zone.parse(params[:end]), Time.zone.parse(params[:start])]
+      @events = @events.where("starts_at < ? AND ends_at > ?", *times)
+      @events = @events.includes(:calendar)
       calendar_ids = @calendar ? [@calendar.id] : Calendar.in_community(current_community).pluck(:id)
       @events = @events.where(calendar_id: calendar_ids)
       render(json: @events, adapter: :attributes) # The adapter option removes the root.

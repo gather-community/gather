@@ -119,6 +119,10 @@ module Calendars
       kind == "_meal"
     end
 
+    def calendar_allows_overlap?
+      calendar.allow_overlap?
+    end
+
     private
 
     def guidelines_accepted
@@ -132,6 +136,7 @@ module Calendars
     end
 
     def no_overlap
+      return if calendar_allows_overlap?
       query = self.class.where("ends_at > ? AND starts_at < ?", starts_at, ends_at)
       query = query.where(calendar_id: calendar_id)
       query = query.where("id != #{id}") if persisted?

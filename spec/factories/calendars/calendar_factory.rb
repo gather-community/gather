@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:abbrv) { |n| "Res#{n}" }
     community { Defaults.community }
     sequence(:color) { |n| "##{n.to_s.ljust(6, '0')}" }
+    allow_overlap { false } # DB default is true now but many specs assume false
 
     trait :inactive do
       deactivated_at { Time.current - 1 }

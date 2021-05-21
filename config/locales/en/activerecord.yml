@@ -152,6 +152,7 @@ en:
         color: "Color"
         default_calendar_view: "Calendar View"
         meal_hostable: "Can Host Meals?"
+        allow_overlap: "Events can overlap each other?"
       people/emergency_contact:
         name: "Name"
         relationship: "Relationship to Household"

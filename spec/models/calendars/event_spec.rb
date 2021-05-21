@@ -3,44 +3,57 @@
 require "rails_helper"
 
 describe Calendars::Event do
-  let(:calendar) { create(:calendar) }
+  let(:allow_overlap) { false }
+  let(:calendar) { create(:calendar, allow_overlap: allow_overlap) }
   let(:calendar2) { create(:calendar) }
 
   describe "no_overlap" do
     let!(:existing_event) do
-      create(:event, calendar: calendar,
-                           starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 15:00")
+      create(:event, calendar: calendar, starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 15:00")
     end
     let(:event) { Calendars::Event.new(calendar: calendar) }
 
-    it "should not set error if no overlap on left" do
-      event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
-      expect_no_error(:no_overlap)
+    context "with no overlap allowed" do
+      let(:allow_overlap) { false }
+
+      it "should not set error if no overlap on left" do
+        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+        expect_no_error(:no_overlap)
+      end
+
+      it "should not set error if no overlap on right" do
+        event.assign_attributes(starts_at: "2016-04-07 15:00", ends_at: "2016-04-07 15:30")
+        expect_no_error(:no_overlap)
+      end
+
+      it "should set error if partial overlap on left" do
+        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
+        expect_overlap_error
+      end
+
+      it "should set error if partial overlap on right" do
+        event.assign_attributes(starts_at: "2016-04-07 14:59", ends_at: "2016-04-07 15:30")
+        expect_overlap_error
+      end
+
+      it "should set error if full overlap" do
+        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 15:30")
+        expect_overlap_error
+      end
+
+      it "should set error if interior overlap" do
+        event.assign_attributes(starts_at: "2016-04-07 14:30", ends_at: "2016-04-07 14:45")
+        expect_overlap_error
+      end
     end
 
-    it "should not set error if no overlap on right" do
-      event.assign_attributes(starts_at: "2016-04-07 15:00", ends_at: "2016-04-07 15:30")
-      expect_no_error(:no_overlap)
-    end
+    context "with overlap allowed" do
+      let(:allow_overlap) { true }
 
-    it "should set error if partial overlap on left" do
-      event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
-      expect_overlap_error
-    end
-
-    it "should set error if partial overlap on right" do
-      event.assign_attributes(starts_at: "2016-04-07 14:59", ends_at: "2016-04-07 15:30")
-      expect_overlap_error
-    end
-
-    it "should set error if full overlap" do
-      event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 15:30")
-      expect_overlap_error
-    end
-
-    it "should set error if interior overlap" do
-      event.assign_attributes(starts_at: "2016-04-07 14:30", ends_at: "2016-04-07 14:45")
-      expect_overlap_error
+      it "should not set error if overlap" do
+        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
+        expect_no_error(:no_overlap)
+      end
     end
 
     def expect_overlap_error

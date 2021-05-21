@@ -22,7 +22,7 @@ Gather.Views.CalendarView = Backbone.View.extend
       height: 'auto'
       minTime: @minTime()
       allDaySlot: false
-      eventOverlap: false
+      eventOverlap: @eventOverlap.bind(this)
       selectable: @ruleSet.accessLevel != "read_only"
       selectOverlap: false
       selectHelper: true
@@ -40,6 +40,10 @@ Gather.Views.CalendarView = Backbone.View.extend
   events:
     'click .modal .btn-primary': 'create'
     'click .early': 'showHideEarly'
+
+  eventOverlap: (stillEvent, movingEvent) ->
+    # Disallow overlap only if events on same calendar and the calendar forbids overlap
+    stillEvent.calendarId != movingEvent.calendarId || stillEvent.calendarAllowsOverlap
 
   onSelect: (start, end, _, view) ->
     modal = @$('#create-confirm-modal')

@@ -15,7 +15,7 @@ describe "home redirect" do
       visit "/"
       expect(page).to have_title("Directory")
 
-      ["Meals", "Directory", %w[Calendars Events], "Wiki"].each do |new_default|
+      ["Meals", "Directory", ["Calendars", "Events & Reservations"], "Wiki"].each do |new_default|
         new_default = Array.wrap(new_default)
         change_default_home(new_default[0])
         visit "/"

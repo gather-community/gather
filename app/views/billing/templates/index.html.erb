@@ -4,7 +4,7 @@
   <%- concat(link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply")) -%>
   <%- if policy(sample_template).create? -%>
     <%- concat(link_to(icon_tag("plus") << " Create Template", new_billing_template_path,
-          class: "btn btn-primary") -%>
+          class: "btn btn-primary")) -%>
   <%- end -%>
 <% end %>
 

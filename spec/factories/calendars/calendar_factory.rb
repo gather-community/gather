@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :calendar, class: "Calendars::Calendar" do
     sequence(:name) { |n| "Calendar #{n}" }
-    sequence(:abbrv) { |n| "Res#{n}" }
+    sequence(:abbrv) { |n| "C#{n}" }
     community { Defaults.community }
     sequence(:color) { |n| "##{n.to_s.ljust(6, '0')}" }
     allow_overlap { false } # DB default is true now but many specs assume false

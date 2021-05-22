@@ -29,7 +29,7 @@ module Rankable
 
   def fix_ranks
     return unless rank_previously_changed? || group_id_previously_changed? ||
-      deactivated_at_previously_changed?
+      deactivated_at_previously_changed? || destroyed?
 
     old_rank = previous_changes["rank"] ? previous_changes["rank"][0] : rank
     old_group_id = previous_changes["group_id"] ? previous_changes["group_id"][0] : group_id

@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+3# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -113,8 +113,11 @@ describe "calendars", js: true do
       expect(page).to have_content("Group2.1")
 
       click_on("Group")
+      puts "--------------------------------------------------"
       accept_confirm { click_on("Delete") }
       expect_success
+      # Cal1 and Cal3 have the same rank (2) after group is deleted. Cal1 comes first
+      # because it is first alphabetically.
       expect(page).to have_content(/Cal2.+Cal1.+Cal3.+Cal4.+Cal5.+Group2.1/m)
     end
   end

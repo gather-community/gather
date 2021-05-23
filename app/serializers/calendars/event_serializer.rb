@@ -8,7 +8,7 @@ module Calendars
     attributes :id, :url, :title, :start, :end, :editable, :class_name, :calendar_allows_overlap, :calendar_id
 
     def url
-      calendars_event_path(object)
+      calendars_event_path(object, origin_page: instance_options[:origin_page])
     end
 
     def title

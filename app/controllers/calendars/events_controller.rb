@@ -13,8 +13,8 @@ module Calendars
       @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       return render_json_event_list if request.xhr?
 
-      @self_url_params = @calendar ? {calendar_id: @calendar.id} : {}
-      @new_url_params = @self_url_params.dup
+      @url_params = @calendar ? {calendar_id: @calendar.id} : {}
+      @url_params_with_origin = @url_params.dup
 
       if @calendar
         # We use an unsaved sample event to authorize against.
@@ -41,7 +41,7 @@ module Calendars
         @calendars = policy_scope(Node).in_community(current_community).arrange
         @rule_set = {}
         @can_create_event = writeable_calendars.any?
-        @new_url_params[:origin_page] = "home"
+        @url_params_with_origin[:origin_page] = "combined"
       end
     end
 
@@ -64,6 +64,7 @@ module Calendars
 
     def edit
       @event = Event.find(params[:id])
+      @event.origin_page = params[:origin_page]
       authorize(@event)
       @event.guidelines_ok = "1"
       prep_form_vars
@@ -130,7 +131,8 @@ module Calendars
       @events = @events.includes(:calendar)
       calendar_ids = @calendar ? [@calendar.id] : Calendar.in_community(current_community).pluck(:id)
       @events = @events.where(calendar_id: calendar_ids)
-      render(json: @events, adapter: :attributes) # The adapter option removes the root.
+      # The adapter option removes the root.
+      render(json: @events, adapter: :attributes, origin_page: params[:origin_page])
     end
 
     def render_form
@@ -182,7 +184,7 @@ module Calendars
 
     def redirect_to_event_in_context(event)
       params = {date: event.starts_at&.to_s(:no_time)}
-      params[:calendar_id] = event.calendar_id if event.origin_page != "home"
+      params[:calendar_id] = event.calendar_id if event.origin_page != "combined"
       redirect_to(calendars_events_path(params))
     end
   end

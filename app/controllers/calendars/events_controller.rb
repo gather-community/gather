@@ -13,6 +13,9 @@ module Calendars
       @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       return render_json_event_list if request.xhr?
 
+      @self_url_params = @calendar ? {calendar_id: @calendar.id} : {}
+      @new_url_params = @self_url_params.dup
+
       if @calendar
         # We use an unsaved sample event to authorize against.
         # We set kind to nil because we can't know the kind in advance. This object is also used
@@ -38,8 +41,8 @@ module Calendars
         @calendars = policy_scope(Node).in_community(current_community).arrange
         @rule_set = {}
         @can_create_event = writeable_calendars.any?
+        @new_url_params[:origin_page] = "home"
       end
-      @url_params = @calendar ? {calendar_id: @calendar.id} : {}
     end
 
     def show
@@ -51,20 +54,9 @@ module Calendars
 
     def new
       if params[:calendar_id]
-        @calendar = Calendar.find(params[:calendar_id])
-        @event = Event.new_with_defaults(
-          calendar: @calendar,
-          creator: current_user,
-          starts_at: params[:start],
-          ends_at: params[:end]
-        )
-        authorize(@event)
-        prep_form_vars
+        render_form
       elsif writeable_calendars.any?
-        @sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
-        authorize(@sample_event)
-        @calendars = writeable_calendars
-        @time_params = params.permit(:start, :end)
+        render_choose_calendar_page
       else
         render_error_page(:forbidden)
       end
@@ -141,9 +133,29 @@ module Calendars
       render(json: @events, adapter: :attributes) # The adapter option removes the root.
     end
 
+    def render_form
+      @calendar = Calendar.find(params[:calendar_id])
+      @event = Event.new_with_defaults(
+        calendar: @calendar,
+        creator: current_user,
+        starts_at: params[:start],
+        ends_at: params[:end],
+        origin_page: params[:origin_page]
+      )
+      authorize(@event)
+      prep_form_vars
+    end
+
     def prep_form_vars
       @calendar ||= @event.calendar
       @kinds = @calendar.kinds # May be nil
+    end
+
+    def render_choose_calendar_page
+      @sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
+      authorize(@sample_event)
+      @calendars = writeable_calendars
+      @url_params = params.permit(:start, :end, :origin_page)
     end
 
     def handle_xhr_update
@@ -169,8 +181,9 @@ module Calendars
     end
 
     def redirect_to_event_in_context(event)
-      redirect_to(calendars_events_path(calendar_id: event.calendar_id,
-                                    date: event.starts_at&.to_s(:no_time)))
+      params = {date: event.starts_at&.to_s(:no_time)}
+      params[:calendar_id] = event.calendar_id if event.origin_page != "home"
+      redirect_to(calendars_events_path(params))
     end
   end
 end

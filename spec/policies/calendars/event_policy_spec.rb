@@ -158,12 +158,12 @@ describe Calendars::EventPolicy do
     end
 
     context "regular event" do
-      let(:basic_attribs) { %i[name kind sponsor_id starts_at ends_at guidelines_ok note] }
+      let(:basic_attribs) { %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page] }
       it_behaves_like "each user type"
     end
 
     context "meal event" do
-      let(:basic_attribs) { %i[starts_at ends_at note] }
+      let(:basic_attribs) { %i[starts_at ends_at note origin_page] }
       let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
       it_behaves_like "each user type"
     end

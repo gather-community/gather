@@ -6,6 +6,9 @@ describe "event page flow", js: true do
   let(:user) { create(:user) }
   let!(:calendar1) { create(:calendar, name: "Foo Room") }
   let!(:calendar2) { create(:calendar, name: "Bar Room") }
+  let!(:event) do
+    create(:event, name: "Fun Event", calendar: calendar1, starts_at: Time.current, creator: user)
+  end
 
   before do
     use_user_subdomain(user)
@@ -52,10 +55,6 @@ describe "event page flow", js: true do
   end
 
   describe "edit" do
-    let!(:event) do
-      create(:event, name: "Fun Event", calendar: calendar1, starts_at: Time.current, creator: user)
-    end
-
     scenario "from combined view" do
       visit(calendars_events_path)
       show_edit_and_save
@@ -73,6 +72,26 @@ describe "event page flow", js: true do
       click_on("Edit")
       fill_in("Event Name", with: "Fun Event Delta")
       click_on("Save")
+      expect_success
+    end
+  end
+
+  describe "destroy" do
+    scenario "from combined view" do
+      visit(calendars_events_path)
+      show_and_destroy
+      expect(page).to have_title("Events & Reservations")
+    end
+
+    scenario "from single calendar view" do
+      visit(calendars_events_path(calendar_id: calendar1.id))
+      show_and_destroy
+      expect(page).to have_title("Foo Room")
+    end
+
+    def show_and_destroy
+      find("div.fc-title", text: "Fun Event").click
+      accept_confirm { click_on("Cancel") }
       expect_success
     end
   end

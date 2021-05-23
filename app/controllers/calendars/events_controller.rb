@@ -99,10 +99,11 @@ module Calendars
 
     def destroy
       @event = Event.find(params[:id])
+      @event.origin_page = params[:origin_page]
       authorize(@event)
       @event.destroy
       flash[:success] = "Event deleted successfully."
-      redirect_to(calendars_events_path(calendar_id: @event.calendar_id))
+      redirect_to_event_in_context(@event)
     end
 
     protected

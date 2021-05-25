@@ -25,11 +25,15 @@ module Calendars
       active? ? "" : "inactive"
     end
 
-    def swatch(color, least_used_colors)
+    def swatch_with_x(color, least_used_colors)
       least_used = least_used_colors.include?(color)
-      fg_color_style = least_used ? "; color: #{color}" : ""
-      h.content_tag(:div, "×", class: "swatch", style: "background-color: #{color}#{fg_color_style}",
-                               data: {color: color})
+      swatch(color: color, content: "×", fg_color: least_used ? color : nil)
+    end
+
+    def swatch(color: self.color, content: "", fg_color: nil)
+      fg_color_style = fg_color ? "; color: #{fg_color}" : ""
+      h.content_tag(:div, content, class: "swatch", style: "background-color: #{color}#{fg_color_style}",
+                                   data: {color: color})
     end
 
     def photo_variant(format)

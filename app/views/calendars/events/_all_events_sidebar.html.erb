@@ -1,1 +1,4 @@
-<%= render("calendar_list", nodes: @calendars) %>
+<% if @calendars.any? %>
+  <h3 class="top">Calendars</h3>
+  <%= render("calendar_list", nodes: @calendars) %>
+<% end %>

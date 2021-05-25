@@ -10,20 +10,16 @@
         height: 165px;
       }
     }
+  }
 
-    .sidebar {
-      img {
-        width: 100%;
-        max-width: 220px;
-      }
+  .sidebar {
+    img {
+      width: 100%;
+      max-width: 220px;
+    }
 
-      > div {
-        margin-bottom: 15px;
-      }
-
-      .group-name {
-        color: $text-muted;
-      }
+    > div {
+      margin-bottom: 15px;
     }
   }
 

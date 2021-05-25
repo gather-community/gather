@@ -15,6 +15,7 @@ module Calendars
 
       @url_params = @calendar ? {calendar_id: @calendar.id} : {}
       @url_params_with_origin = @url_params.dup
+      @calendars = policy_scope(Node).in_community(current_community).arrange(decorator: CalendarDecorator)
 
       if @calendar
         # We use an unsaved sample event to authorize against.
@@ -32,13 +33,10 @@ module Calendars
           flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
         end
         @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
-        @other_calendars = policy_scope(Node).in_community(@calendar.community)
-          .where("id != ?", @calendar.id).arrange
         @other_communities = Community.where("id != ?", @calendar.community_id)
       else
         authorize(Event)
         prepare_lenses(community: {clearable: false})
-        @calendars = policy_scope(Node).in_community(current_community).arrange
         @rule_set = {}
         @can_create_event = writeable_calendars.any?
         @url_params_with_origin[:origin_page] = "combined"

@@ -24,10 +24,14 @@ module Calendars
     }
 
     # Loads the scoped nodes and arranges them as a tree in an ordered hash.
-    def self.arrange
+    def self.arrange(decorator: nil)
       base_scope = deactivated_last.by_rank
-      children_by_group_id = base_scope.second_level.group_by(&:group_id)
-      base_scope.first_level.map { |n| [n, children_by_group_id[n.id] || {}] }.to_h
+      second_level = base_scope.second_level
+      second_level = decorator.decorate_collection(second_level) if decorator.present?
+      children_by_group_id = second_level.group_by(&:group_id)
+      first_level = base_scope.first_level
+      first_level = decorator.decorate_collection(first_level) if decorator.present?
+      first_level.map { |n| [n, children_by_group_id[n.id] || {}] }.to_h
     end
   end
 end

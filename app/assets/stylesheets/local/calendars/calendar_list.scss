@@ -1,0 +1,23 @@
+.calendar-list {
+  line-height: 3rem;
+
+  .group {
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+
+  .calendar {
+    display: flex;
+    align-items: center;
+  }
+
+  input[type=checkbox] {
+    margin: 0 6px 0 0;
+  }
+
+  .swatch {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+}

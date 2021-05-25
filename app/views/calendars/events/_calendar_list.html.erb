@@ -1,11 +1,15 @@
-<ul class="no-marker <%= "nested" if local_assigns[:nested] %>">
+<ul class="no-marker <%= local_assigns[:nested] ? "nested" : "calendar-list" %>">
   <% nodes.each do |node, children| %>
     <li>
       <% if node.group? %>
-        <span class="group-name"><%= node.name %></span>
-        <%= render("calendar_list", nodes: children, nested: true) %>
+        <div class="group"><%= node.name %></div>
+        <%= render("calendar_list", local_assigns.merge(nodes: children, nested: true)) %>
       <% else %>
-        <%= link_to(node.name, calendars_events_path(calendar_id: node.id), class: "calendar-link") %>
+        <div class="calendar">
+          <%= check_box_tag("calendar", node.id) unless local_assigns[:checkboxes] == false %>
+          <%= node.swatch %>
+          <%= link_to(node.name, calendars_events_path(calendar_id: node.id), class: "calendar-link") %>
+        </div>
       <% end %>
     </li>
   <% end %>

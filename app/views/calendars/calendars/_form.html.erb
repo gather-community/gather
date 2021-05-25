@@ -16,7 +16,7 @@
           <% Calendars::Calendar::COLORS.in_groups(2).each do |colors| %>
             <div class="swatch-row">
               <% colors.each do |color| %>
-                <%= calendar.swatch(color, @least_used_colors) %>
+                <%= calendar.swatch_with_x(color, @least_used_colors) %>
               <% end %>
             </div>
           <% end %>

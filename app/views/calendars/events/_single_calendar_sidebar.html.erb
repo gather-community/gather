@@ -1,7 +1,5 @@
 <%= image_tag(calendar.photo_variant(:thumb)) %><br/><br/>
-<% if @other_calendars.any? %>
-  <div class="other-calendars">
-    <small>Other Calendars</small>
-    <%= render("calendar_list", nodes: @other_calendars) %>
-  </div>
+<% if @calendars.any? %>
+  <h3 class="top">Calendars</h3>
+  <%= render("calendar_list", nodes: @calendars, checkboxes: false) %>
 <% end %>

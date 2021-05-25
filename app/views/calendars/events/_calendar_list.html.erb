@@ -3,7 +3,7 @@
     <li>
       <% if node.group? %>
         <span class="group-name"><%= node.name %></span>
-        <%= render("simple_calendar_list", nodes: children, nested: true) %>
+        <%= render("calendar_list", nodes: children, nested: true) %>
       <% else %>
         <%= link_to(node.name, calendars_events_path(calendar_id: node.id), class: "calendar-link") %>
       <% end %>

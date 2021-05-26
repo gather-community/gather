@@ -27,7 +27,7 @@ module Calendars
     delegate :name, :community, to: :creator, prefix: true
     delegate :name, to: :creator_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
-    delegate :community_id, to: :calendar
+    delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 

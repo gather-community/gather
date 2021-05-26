@@ -7,8 +7,8 @@ module Calendars
     include SemicolonDisallowable
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
-    COLORS = %w[#75c5c9 #c67033 #910843 #d63679 #424ea8 #7c4d17 #a8982b #b7cd12 #308c58 #4795d3
-                #2559aa #6e43a1 #a22084 #e42215 #e8590e #efbb00 #dfce00 #6faf49 #3e80c6 #e893be
+    COLORS = %w[#68adb1 #c67033 #910843 #d63679 #424ea8 #7c4d17 #a8982b #97a90e #308c58 #4795d3
+                #2559aa #6e43a1 #a22084 #e42215 #e8590e #bc9300 #b5a803 #6faf49 #3e80c6 #e893be
                 #3a231d #5b7827]
 
     belongs_to :group, class_name: "Calendars::Group", inverse_of: :calendars

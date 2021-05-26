@@ -5,7 +5,8 @@ module Calendars
   class EventSerializer < ApplicationSerializer
     include Rails.application.routes.url_helpers
 
-    attributes :id, :url, :title, :start, :end, :editable, :class_name, :calendar_allows_overlap, :calendar_id
+    attributes :id, :url, :title, :start, :end, :editable, :class_name, :calendar_allows_overlap,
+               :calendar_id, :background_color, :border_color
 
     def url
       calendars_event_path(object, origin_page: instance_options[:origin_page])
@@ -46,6 +47,14 @@ module Calendars
 
     def calendar_allows_overlap
       object.calendar_allows_overlap?
+    end
+
+    def background_color
+      object.color
+    end
+
+    def border_color
+      background_color.paint.darken(5).to_hex
     end
   end
 end

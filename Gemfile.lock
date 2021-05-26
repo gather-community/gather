@@ -141,6 +141,7 @@ GEM
     case_transform (0.2)
       activesupport
     childprocess (3.0.0)
+    chroma (0.2.0)
     chronic (0.10.2)
     cocoon (1.2.14)
     coderay (1.1.2)
@@ -546,6 +547,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.1)
   capistrano3-delayed-job (~> 1.0)
   capybara (~> 3.29)
+  chroma (~> 0.2)
   cocoon (~> 1.2)
   coffee-rails (~> 5.0)
   config (~> 1.4)

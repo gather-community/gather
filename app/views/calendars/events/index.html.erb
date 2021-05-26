@@ -56,12 +56,15 @@
     var calendarView = new Gather.Views.Calendars.CalendarView({
       el: '#calendar-col',
       calendarId: <%= json(calendar&.id) %>,
-      feedUrl: <%= json(calendars_events_path(@url_params_with_origin)) %>,
-      newUrl: <%= json(new_calendars_event_path(@url_params_with_origin)) %>,
-      focusDate: <%= json(params[:date]) %>,
-      viewType: <%= json(params[:view]) %>,
+      feedPath: <%= json(calendars_events_path) %>,
+      newPath: <%= json(new_calendars_event_path(@url_params_with_origin)) %>,
+      dateUrlParam: <%= json(params[:date]) %>,
+      viewTypeUrlParam: <%= json(params[:view]) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set) %>
+    });
+    var listView = new Gather.Views.Calendars.CalendarListView({
+      el: '.calendar-list'
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
       el: '.calendar-and-sidebar'
@@ -69,7 +72,10 @@
     new Gather.Views.Calendars.CalendarPageView({
       el: '.calendar-and-sidebar',
       calendarView: calendarView,
-      linkManager: linkManager
+      listView: listView,
+      linkManager: linkManager,
+      pageType: <%= json(@calendar ? "single" : "combined") %>,
+      calendarId: <%= json(params[:calendar_id]) %>
     });
   });
 <% end %>

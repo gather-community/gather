@@ -8,17 +8,26 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     'month': 'month'
 
   initialize: (options) ->
-    @newUrl = options.newUrl
+    @newPath = options.newPath
+    @feedPath = options.feedPath
+    @viewTypeUrlParam = options.viewTypeUrlParam
+    @defaultViewType = options.defaultViewType
+    @dateUrlParam = options.dateUrlParam
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
     @calendarId = options.calendarId
     @savedSettings = @loadSettings()
     @showAppropriateEarlyLink()
+    @initCalendar()
 
+  events:
+    'click .modal .btn-primary': 'create'
+    'click .early': 'showHideEarly'
+
+  initCalendar: ->
     @calendar.fullCalendar
-      events: options.feedUrl
-      defaultView: @initialViewType(options.viewType, options.defaultViewType)
-      defaultDate: options.focusDate || @savedSettings.currentDate
+      defaultView: @initialViewType(@viewTypeUrlParam, @defaultViewType)
+      defaultDate: @dateUrlParam || @savedSettings.currentDate
       height: 'auto'
       minTime: @minTime()
       allDaySlot: false
@@ -37,9 +46,15 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       eventResize: @onEventChange.bind(this)
       eventAfterAllRender: @onViewRender.bind(this)
 
-  events:
-    'click .modal .btn-primary': 'create'
-    'click .early': 'showHideEarly'
+  updateSource: (calendarIds) ->
+    path = @feedPath
+    if calendarIds
+      url = new URL(path, 'https://example.com')
+      url.searchParams.append('calendar_ids', calendarIds.join(' '))
+      path = url.href.replace('https://example.com', '')
+    oldSource = @calendar.fullCalendar('getEventSources')[0]
+    @calendar.fullCalendar('addEventSource', path)
+    @calendar.fullCalendar('removeEventSource', oldSource) if oldSource
 
   eventOverlap: (stillEvent, movingEvent) ->
     # Disallow overlap only if events on same calendar and the calendar forbids overlap
@@ -111,9 +126,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
         Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   create: ->
-    # Add start and end params to @newUrl. The URL library needs a base url but we just want a path
+    # Add start and end params to @newPath. The URL library needs a base url but we just want a path
     # so we add a base url and then remove it.
-    url = new URL(@newUrl, 'https://example.com')
+    url = new URL(@newPath, 'https://example.com')
     url.searchParams.append('start', @selection.start)
     url.searchParams.append('end', @selection.end)
     window.location.href = url.href.replace('https://example.com', '')

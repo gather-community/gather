@@ -10,9 +10,9 @@ module Calendars
     before_action -> { nav_context(:calendars, :events) }
 
     def index
-      @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       return render_json_event_list if request.xhr?
 
+      @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       @url_params = @calendar ? {calendar_id: @calendar.id} : {}
       @url_params_with_origin = @url_params.dup
       @calendars = policy_scope(Node).in_community(current_community).arrange(decorator: CalendarDecorator)
@@ -128,8 +128,7 @@ module Calendars
       times = [Time.zone.parse(params[:end]), Time.zone.parse(params[:start])]
       @events = @events.where("starts_at < ? AND ends_at > ?", *times)
       @events = @events.includes(:calendar)
-      calendar_ids = @calendar ? [@calendar.id] : Calendar.in_community(current_community).pluck(:id)
-      @events = @events.where(calendar_id: calendar_ids)
+      @events = @events.where(calendar_id: params[:calendar_ids]&.split(" "))
       # The adapter option removes the root.
       render(json: @events, adapter: :attributes, origin_page: params[:origin_page])
     end

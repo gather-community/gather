@@ -91,7 +91,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     modal.modal('show')
 
   onViewRender: ->
-    @trigger('viewRender')
+    @$el.trigger('viewRender')
     @saveSettings()
 
   onLoading: (isLoading) ->

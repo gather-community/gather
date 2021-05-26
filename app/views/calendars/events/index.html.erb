@@ -53,7 +53,7 @@
 
 <%= javascript_tag do %>
   $(function() {
-    var calendarView = new Gather.Views.CalendarView({
+    var calendarView = new Gather.Views.Calendars.CalendarView({
       el: '#calendar-col',
       calendarId: <%= json(calendar&.id) %>,
       feedUrl: <%= json(calendars_events_path(@url_params_with_origin)) %>,
@@ -63,7 +63,7 @@
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set) %>
     });
-    var linkManager = new Gather.Views.CalendarLinkManager({
+    new Gather.Views.Calendars.CalendarLinkManager({
       el: '.calendar-and-links',
       calendarView: calendarView
     });

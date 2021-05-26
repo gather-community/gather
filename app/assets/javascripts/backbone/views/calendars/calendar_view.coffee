@@ -1,6 +1,6 @@
 # Ultimately this class should just wrap the calendar plugin and serve events.
 # Most other heavy lifting should be done by other classes like CalendarLinkManager.
-Gather.Views.CalendarView = Backbone.View.extend
+Gather.Views.Calendars.CalendarView = Backbone.View.extend
 
   URL_PARAMS_TO_VIEW_TYPES:
     'day': 'agendaDay'

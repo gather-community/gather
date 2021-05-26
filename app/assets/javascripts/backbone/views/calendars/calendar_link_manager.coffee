@@ -1,4 +1,4 @@
-Gather.Views.CalendarLinkManager = Backbone.View.extend
+Gather.Views.Calendars.CalendarLinkManager = Backbone.View.extend
   initialize: (options) ->
     @calendarView = options.calendarView
     @listenTo(@calendarView, 'viewRender', @onViewRender.bind(this))

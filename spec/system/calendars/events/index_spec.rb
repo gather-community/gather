@@ -31,7 +31,7 @@ describe "event calendar", js: true do
       meal.save!
     end
 
-    scenario do
+    scenario "single calendar page" do
       # Clear saved calendar settings in localStorage
       visit("/")
       page.execute_script("localStorage.clear()")
@@ -45,10 +45,7 @@ describe "event calendar", js: true do
       find(".fc-month-button").click
 
       # Test permalink and calendar links update correctly.
-      permalink_url = "/calendars/events?calendar_id=#{calendar1.id}&view=month&date=#{time2_ymd}"
-      expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
-      other_calendar_url = "/calendars/events?calendar_id=#{calendar2.id}&view=month&date=#{time2_ymd}"
-      expect(page).to have_css(%(a.calendar-link[href="#{other_calendar_url}"]), text: "Bar Room")
+      expect_correct_permalink_and_other_calendar_link(cur_calendar_id: calendar1.id)
 
       # Test params respected on page load.
       click_link("Bar Room")
@@ -60,6 +57,27 @@ describe "event calendar", js: true do
       visit(calendars_events_path(calendar_id: calendar2.id))
       expect(page).to have_css(".fc-month-button.fc-state-active")
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+    end
+
+    scenario "all events page" do
+      visit(calendars_events_path)
+      expect(page).to have_title("Events & Reservations")
+      find(".fc-next-button").click
+      find(".fc-next-button").click
+      find(".fc-month-button").click
+
+      expect_correct_permalink_and_other_calendar_link(cur_calendar_id: nil)
+    end
+
+    def expect_correct_permalink_and_other_calendar_link(cur_calendar_id:)
+      cur_calendar_param = cur_calendar_id ? "calendar_id=#{cur_calendar_id}&" : ""
+      permalink_url = "/calendars/events?#{cur_calendar_param}view=month&date=#{time2_ymd}"
+      expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
+      expect(page).to have_css(%(a.calendar-link[href="#{other_calendar_url}"]), text: "Bar Room")
+    end
+
+    def other_calendar_url
+      "/calendars/events?calendar_id=#{calendar2.id}&view=month&date=#{time2_ymd}"
     end
   end
 end

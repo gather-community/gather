@@ -22,8 +22,11 @@ describe "event calendar", js: true do
     let(:time2_my) { time2.strftime("%B %Y") }
 
     let!(:meal) { create(:meal, :with_menu, title: "Yum", served_at: time + 9.hours, calendars: [calendar1]) }
-    let!(:event) do
+    let!(:event1) do
       create(:event, calendar: calendar1, starts_at: time, ends_at: time + 1.hour, name: "Funtimes")
+    end
+    let!(:event2) do
+      create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours, name: "Badtimes")
     end
 
     before do
@@ -59,14 +62,51 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
     end
 
-    scenario "all events page" do
-      visit(calendars_events_path)
-      expect(page).to have_title("Events & Reservations")
-      find(".fc-next-button").click
-      find(".fc-next-button").click
-      find(".fc-month-button").click
+    describe "all events page" do
+      scenario "permalink" do
+        visit(calendars_events_path)
+        expect(page).to have_title("Events & Reservations")
+        find(".fc-next-button").click
+        find(".fc-next-button").click
+        find(".fc-month-button").click
+        expect_correct_permalink_and_other_calendar_link(cur_calendar_id: nil)
+      end
 
-      expect_correct_permalink_and_other_calendar_link(cur_calendar_id: nil)
+      scenario "checkboxes, selection save & reset" do
+        visit(calendars_events_path)
+        expect(page).not_to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+
+        select_calendar(calendar1, true)
+        expect(page).to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+
+        select_calendar(calendar2, true)
+        expect(page).to have_content("Funtimes")
+        expect(page).to have_content("Badtimes")
+
+        click_link("Reset Selection")
+        expect(page).not_to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+        expect(page).not_to have_css(checkbox_selector(calendar1, checked: true))
+        expect(page).not_to have_css(checkbox_selector(calendar2, checked: true))
+
+        select_calendar(calendar1, true)
+        expect(page).to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+
+        click_link("Save Selection")
+
+        select_calendar(calendar1, false)
+        expect(page).not_to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+
+        visit(calendars_events_path)
+        expect(page).to have_content("Funtimes")
+        expect(page).not_to have_content("Badtimes")
+        expect(page).to have_css(checkbox_selector(calendar1, checked: true))
+        expect(page).not_to have_css(checkbox_selector(calendar2, checked: true))
+      end
     end
 
     def expect_correct_permalink_and_other_calendar_link(cur_calendar_id:)
@@ -78,6 +118,15 @@ describe "event calendar", js: true do
 
     def other_calendar_url
       "/calendars/events?calendar_id=#{calendar2.id}&view=month&date=#{time2_ymd}"
+    end
+
+    def select_calendar(calendar, select)
+      el = first(checkbox_selector(calendar))
+      select ? el.check : el.uncheck
+    end
+
+    def checkbox_selector(calendar, checked: false)
+      "input[type='checkbox'][value='#{calendar.id}']#{checked ? ':checked' : ''}"
     end
   end
 end

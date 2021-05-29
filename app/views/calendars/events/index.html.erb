@@ -64,7 +64,8 @@
       ruleSet: <%= json(@rule_set) %>
     });
     var listView = new Gather.Views.Calendars.CalendarListView({
-      el: '.calendar-list'
+      el: '.calendar-list-with-links',
+      selection: <%= json(@calendar_selection) %>
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
       el: '.calendar-and-sidebar'

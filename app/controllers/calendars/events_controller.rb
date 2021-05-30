@@ -15,7 +15,8 @@ module Calendars
       @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       @url_params = @calendar ? {calendar_id: @calendar.id} : {}
       @url_params_with_origin = @url_params.dup
-      @calendars = policy_scope(Node).in_community(current_community).arrange(decorator: CalendarDecorator)
+      @calendars = policy_scope(Node).in_community(current_community).active
+      @calendars = @calendars.arrange(decorator: CalendarDecorator)
       @calendar_selection = current_user.settings[:calendar_selection]
 
       if @calendar

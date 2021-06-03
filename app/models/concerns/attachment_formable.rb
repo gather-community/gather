@@ -35,6 +35,7 @@ module AttachmentFormable
   private
 
   def destroy_attachments_if_requested
+    return if self.class.attachment_attribs.blank?
     self.class.attachment_attribs.each do |attrib|
       attachment = send(attrib)
       attachment.purge if send("#{attrib}_destroy?") && attachment.attached?

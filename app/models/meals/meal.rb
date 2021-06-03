@@ -43,6 +43,7 @@ module Meals
     scope :hosted_by, ->(community) { where(community: community) }
     scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
     scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
+    scope :in_community, ->(c) { where(community: c) }
     scope :by_community, -> { joins(:community).alpha_order(communities: :name) }
     scope :by_community_reverse, -> { joins(:community).alpha_order("communities.name": :desc) }
     scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }

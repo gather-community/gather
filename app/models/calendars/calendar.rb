@@ -69,6 +69,10 @@ module Calendars
       false
     end
 
+    def system?
+      false
+    end
+
     def in_group?
       group.present?
     end

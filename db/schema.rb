@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_02_133413) do
+ActiveRecord::Schema.define(version: 2021_06_04_000752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 2021_06_02_133413) do
     t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
     t.index ["group_id"], name: "index_calendar_nodes_on_group_id"
     t.check_constraint :color_null, "(((type)::text = 'Calendars::Group'::text) = (color IS NULL))"
-    t.check_constraint :group_id_null, "(((type)::text = 'Calendars::Calendar'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL)))"
+    t.check_constraint :group_id_null, "(((type)::text <> 'Calendars::Group'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL)))"
     t.check_constraint :rank_or_deactivated_at_null, "(((deactivated_at IS NOT NULL) AND (rank IS NULL)) OR ((rank IS NOT NULL) AND (deactivated_at IS NULL)))"
   end
 

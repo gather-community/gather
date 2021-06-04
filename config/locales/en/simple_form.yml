@@ -263,8 +263,8 @@ en:
         lens:
           all: "All Jobs"
           open: "Open Jobs"
-          me: "My Jobs"
-          myhh: "My Household"
+          you: "Your Jobs"
+          yourhh: "Your Household"
           notpre: "Not Preassigned"
         date_range:
           all: "Past & Future"

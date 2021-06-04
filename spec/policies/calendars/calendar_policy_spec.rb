@@ -64,11 +64,24 @@ describe Calendars::CalendarPolicy do
   end
 
   describe "permitted attributes" do
-    subject { Calendars::CalendarPolicy.new(User.new, Calendars::Calendar.new).permitted_attributes }
+    context "with normal calendar" do
+      subject { Calendars::CalendarPolicy.new(User.new, Calendars::Calendar.new).permitted_attributes }
 
-    it "should allow basic attribs" do
-      expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :abbrv, :name, :color,
-                                         :meal_hostable, :photo_new_signed_id, :photo_destroy, :group_id)
+      it "should allow basic attribs" do
+        expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :abbrv, :name, :color,
+                                           :meal_hostable, :photo_new_signed_id, :photo_destroy, :group_id)
+      end
+    end
+
+    context "with system calendar" do
+      subject do
+        Calendars::CalendarPolicy.new(User.new, Calendars::System::YourMealsCalendar.new).permitted_attributes
+      end
+
+      it "should allow fewer attribs" do
+        expect(subject).to contain_exactly(:default_calendar_view, :abbrv, :name, :color,
+                                           :photo_new_signed_id, :photo_destroy, :group_id)
+      end
     end
   end
 end

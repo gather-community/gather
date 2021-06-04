@@ -22,11 +22,11 @@
           <% end %>
         </div>
       <% end %>
-      <%= f.input :meal_hostable, as: :select, required: true %>
+      <%= f.input :meal_hostable, as: :select, required: true unless calendar.system? %>
       <%= f.input :default_calendar_view, collection: Calendars::Calendar::DEFAULT_CALENDAR_VIEWS,
         required: true %>
-      <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} %>
-      <%= f.input :allow_overlap, as: :boolean %>
+      <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} unless calendar.system? %>
+      <%= f.input :allow_overlap, as: :boolean unless calendar.system? %>
 
       <%= form_actions do %>
         <%= f.button :primary %>

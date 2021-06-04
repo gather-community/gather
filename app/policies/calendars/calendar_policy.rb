@@ -48,8 +48,10 @@ module Calendars
     end
 
     def permitted_attributes
-      %i[default_calendar_view guidelines abbrv name color meal_hostable
-         photo_new_signed_id photo_destroy group_id]
+      base = %i[default_calendar_view abbrv name color
+                photo_new_signed_id photo_destroy group_id]
+      base.concat(%i[meal_hostable guidelines]) unless calendar.system?
+      base
     end
   end
 end

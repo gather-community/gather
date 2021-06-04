@@ -65,7 +65,8 @@ module Calendars
     end
 
     def prep_form_vars
-      @calendar_options = policy_scope(Calendar).in_community(current_community).active.by_name.decorate
+      @calendar_options = policy_scope(Calendar).in_community(current_community)
+        .non_system.active.by_name.decorate
       @kind_options = (current_community.settings.calendars.kinds || "").split(/\s*,\s*/)
     end
 

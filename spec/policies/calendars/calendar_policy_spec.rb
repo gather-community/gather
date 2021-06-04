@@ -40,11 +40,12 @@ describe Calendars::CalendarPolicy do
 
     describe "#resolve" do
       let!(:calendar1) { create(:calendar) }
+      let!(:calendar2) { create(:community_meals_calendar) }
       let!(:group1) { create(:calendar_group) }
       let(:actor) { admin }
 
-      it "exludes groups" do
-        is_expected.to contain_exactly(calendar1)
+      it "exludes groups and includes subclasses" do
+        is_expected.to contain_exactly(calendar1, calendar2)
       end
     end
 

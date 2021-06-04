@@ -45,6 +45,19 @@ describe Calendars::Calendar do
     end
   end
 
+  describe ".non_system" do
+    let!(:cal1) { create(:calendar) }
+    let!(:cal2) { create(:calendar) }
+    let!(:cal3) { create(:community_meals_calendar) }
+    let!(:cal4) { create(:other_communities_meals_calendar) }
+    let!(:group) { create(:calendar_group) }
+
+    it "returns only normal calendars" do
+      expect(described_class.non_system.to_a).to contain_exactly(cal1, cal2)
+    end
+  end
+
+
   describe "#all_guidelines" do
     let(:calendar) { create(:calendar, :with_shared_guidelines) }
     let(:gl1) { calendar.guidelines }

@@ -21,12 +21,13 @@ describe "protocols", js: true do
 
   context "with protocols" do
     let!(:calendars) { create_list(:calendar, 2, community: community) }
+    let!(:sys_calendar) { create(:community_meals_calendar, community: community) }
     let!(:protocols) do
       [
         create(:calendar_protocol, community: community, calendars: calendars,
-                                      pre_notice: "Foo notice"),
+                                   pre_notice: "Foo notice"),
         create(:calendar_protocol, community: community, kinds: ["Official"],
-                                      pre_notice: "Bar notice")
+                                   pre_notice: "Bar notice")
       ]
     end
 
@@ -46,6 +47,7 @@ describe "protocols", js: true do
 
       expect(page).to have_content("Type Required")
       fill_in("Name", with: "Stuff")
+      expect_no_select2_match(sys_calendar.name, from: "#calendars_protocol_calendar_ids", multiple: true)
       select2(calendars[0].name, from: "#calendars_protocol_calendar_ids", multiple: true)
       select2("Official", from: "#calendars_protocol_kinds", multiple: true)
       expect(page).not_to have_content("Type Required")

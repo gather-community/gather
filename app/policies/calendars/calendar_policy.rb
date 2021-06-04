@@ -5,10 +5,6 @@ module Calendars
     alias calendar record
 
     class Scope < NodePolicy::Scope
-      def resolve
-        super.where(type: "Calendars::Calendar")
-      end
-
       # Returns an Array of calendars within the given scope that
       # the user can create events on, according to the EventPolicy.
       def resolve_for_create

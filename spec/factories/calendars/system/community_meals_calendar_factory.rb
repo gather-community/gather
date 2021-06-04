@@ -12,5 +12,9 @@ FactoryBot.define do
     factory :other_communities_meals_calendar, class: "Calendars::System::OtherCommunitiesMealsCalendar" do
       sequence(:name) { |n| "Oth Cmtys Meals #{n}" }
     end
+
+    factory :your_meals_calendar, class: "Calendars::System::YourMealsCalendar" do
+      sequence(:name) { |n| "Your Meals #{n}" }
+    end
   end
 end

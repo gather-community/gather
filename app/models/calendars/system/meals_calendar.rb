@@ -9,11 +9,11 @@ module Calendars
       def events_between(range, user:)
         scope = base_meals_scope(range, user: user)
         meals = scope.order(:served_at).decorate
-        attended_meals = scope.attended_by(user.household).index_by(&:id) if user.present?
+        attended_meals_by_id = attended_meals(scope, user: user).index_by(&:id) if user.present?
 
         meals.map do |meal|
           title = +meal.title_or_no_title
-          title << " ✓" if user.present? && attended_meals.key?(meal.id)
+          title << " ✓" if user.present? && attended_meals_by_id.key?(meal.id)
           # We don't save the events since that's not how system calendars work.
           events.build(
             name: title,
@@ -26,6 +26,10 @@ module Calendars
       end
 
       private
+
+      def attended_meals(base_scope, user:)
+        base_scope.attended_by(user)
+      end
 
       def base_meals_scope(range, user:)
         Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve

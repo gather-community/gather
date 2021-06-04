@@ -24,12 +24,13 @@ module Calendars
     end
 
     def create?
-      calendar.active? &&
+      calendar.active? && !calendar.system? &&
         (active_cluster_admin? || (active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?))
     end
 
     def update?
-      active_admin? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator))
+      !calendar.system? &&
+        (active_admin? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -43,7 +44,7 @@ module Calendars
     end
 
     def destroy?
-      (active_creator? && (future? || recently_created?) || active_admin?) && !meal?
+      (active_creator? && (future? || recently_created?) || active_admin?) && !meal? && !calendar.system?
     end
 
     def permitted_attributes

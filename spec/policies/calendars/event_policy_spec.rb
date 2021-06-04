@@ -113,6 +113,23 @@ describe Calendars::EventPolicy do
         end
       end
     end
+
+    context "system calendar event" do
+      let(:calendar) { create(:your_meals_calendar) }
+      let(:event) { build(:event, creator: creator, calendar: calendar) }
+
+      permissions :index?, :show? do
+        it_behaves_like "permits active users only"
+      end
+
+      permissions :new?, :create?, :edit?, :update?, :destroy? do
+        it "forbids all" do
+          expect(subject).not_to permit(creator, event)
+          expect(subject).not_to permit(user, event)
+          expect(subject).not_to permit(admin, event)
+        end
+      end
+    end
   end
 
   describe "scope" do

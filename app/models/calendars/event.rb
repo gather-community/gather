@@ -14,6 +14,7 @@ module Calendars
     belongs_to :calendar, inverse_of: :events
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :events
 
+    scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }

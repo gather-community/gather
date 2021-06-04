@@ -6,6 +6,7 @@ describe Calendars::System::MealsCalendar do
   let(:community) { Defaults.community }
   let(:communityB) { create(:community) }
   let(:user) { create(:user, community: community) }
+  let(:full_range) { (Time.current - 2.days)..(Time.current + 4.days) }
   let!(:meal1) do
     create(:meal, head_cook: user, served_at: Time.current + 1.day)
   end
@@ -52,7 +53,7 @@ describe Calendars::System::MealsCalendar do
         meal_id: meal2.id,
         creator_id: meal2.creator_id
       }]
-      events = calendar.events_between((Time.current - 2.days)..(Time.current + 4.days), user: user)
+      events = calendar.events_between(full_range, user: user)
       expect_events(events, *attribs)
     end
 
@@ -63,6 +64,12 @@ describe Calendars::System::MealsCalendar do
       range = (meal2.served_at + 15.minutes)..(meal2.served_at + 30.minutes)
       events = calendar.events_between(range, user: user)
       expect_events(events, name: "Meal2")
+    end
+
+    it "respects policy scope" do
+      null_scope = double(resolve: Meals::Meal.none)
+      expect(Meals::MealPolicy::Scope).to receive(:new).and_return(null_scope)
+      expect(calendar.events_between(full_range, user: user)).to be_empty
     end
   end
 

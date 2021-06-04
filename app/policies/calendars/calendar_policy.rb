@@ -36,7 +36,7 @@ module Calendars
     end
 
     def destroy?
-      !calendar.events? && active_admin?
+      !calendar.events? && !calendar.system? && active_admin?
     end
 
     def activate?

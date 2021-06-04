@@ -20,9 +20,16 @@ describe Calendars::CalendarPolicy do
 
     permissions :destroy? do
       it "denies if there are existing events" do
-        calendar.save!
         create(:event, calendar: calendar)
         expect(subject).not_to permit(admin, calendar)
+      end
+
+      context "with system calendar" do
+        let(:calendar) { create(:your_meals_calendar) }
+
+        it "denies" do
+          expect(subject).not_to permit(admin, calendar)
+        end
       end
     end
   end

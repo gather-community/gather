@@ -136,7 +136,8 @@ class UsersController < ApplicationController
   def update_setting
     @user = current_user
     authorize(@user)
-    new_settings = params.require(:settings).permit(:calendar_popover_dismissed, calendar_selection: [])
+    new_settings = params.require(:settings)
+      .permit(:calendar_popover_dismissed, calendar_selection: params[:settings][:calendar_selection]&.keys)
     @user.settings = (@user.settings || {}).merge(new_settings)
     @user.save!
   end

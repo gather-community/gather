@@ -1,6 +1,6 @@
 Gather.Views.Calendars.CalendarListView = Backbone.View.extend
   initialize: (options) ->
-    @selection = options.selection || []
+    @selection = options.selection || {}
     @resetSelection()
 
   events:
@@ -13,7 +13,7 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend
     @$el.trigger('calendarSelectionChanged')
 
   selectedIds: ->
-    @$("input[type=checkbox]:checked").map(-> parseInt(@value)).get()
+    @$("input[type=checkbox]:checked").map((_, el) -> el.value).get()
 
   saveLinkClicked: (e) ->
     e.preventDefault()
@@ -25,7 +25,8 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend
     @$el.trigger('calendarSelectionChanged')
 
   saveSelection: ->
-    @selection = @selectedIds()
+    entries = @$("input[type=checkbox]").map((_, el) => [[el.value, @$(el).prop('checked')]])
+    @selection = Object.fromEntries(entries)
     $.ajax
       url: '/users/update-setting'
       method: 'PATCH'
@@ -33,5 +34,6 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend
       data: JSON.stringify({settings: {calendar_selection: @selection}})
 
   resetSelection: ->
-    @$("input[type=checkbox]:checked").each(-> $(this).prop('checked', false))
-    @selection.forEach((id) -> @$("input[type=checkbox][value=#{id}]").prop('checked', true))
+    @$("input[type=checkbox]:checked").each((_, el) => @$(el).prop('checked', false))
+    for id, checked of @selection
+      @$("input[type=checkbox][value=#{id}]").prop('checked', checked)

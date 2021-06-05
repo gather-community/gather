@@ -15,9 +15,7 @@ module Calendars
       @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
       @url_params = @calendar ? {calendar_id: @calendar.id} : {}
       @url_params_with_origin = @url_params.dup
-      @calendars = policy_scope(Node).in_community(current_community).active
-      @calendars = @calendars.arrange(decorator: CalendarDecorator)
-      @calendar_selection = current_user.settings[:calendar_selection]
+      load_calendars_and_selection
 
       if @calendar
         # We use an unsaved sample event to authorize against.
@@ -119,6 +117,12 @@ module Calendars
     end
 
     private
+
+    def load_calendars_and_selection
+      base_scope = policy_scope(Node).in_community(current_community).active
+      @calendars = base_scope.arrange(decorator: CalendarDecorator)
+      @calendar_selection = InitialSelection.new(user: current_user, calendar_scope: base_scope).selection
+    end
 
     def writeable_calendars
       @writeable_calendars ||=

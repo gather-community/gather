@@ -121,7 +121,8 @@ module Calendars
     def load_calendars_and_selection
       base_scope = policy_scope(Node).in_community(current_community).active
       @calendars = base_scope.arrange(decorator: CalendarDecorator)
-      @calendar_selection = InitialSelection.new(user: current_user, calendar_scope: base_scope).selection
+      setting = current_user.settings[:calendar_selection]
+      @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: base_scope).selection
     end
 
     def writeable_calendars

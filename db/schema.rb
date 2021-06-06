@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_000752) do
+ActiveRecord::Schema.define(version: 2021_06_04_194706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_000752) do
     t.boolean "meal_hostable", default: false, null: false
     t.string "name", limit: 24, null: false
     t.integer "rank"
+    t.boolean "selected_by_default", default: false, null: false
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_calendar_nodes_on_cluster_id"

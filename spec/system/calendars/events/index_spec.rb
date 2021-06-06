@@ -11,7 +11,7 @@ describe "event calendar", js: true do
   end
 
   context "with a meal event and a non-meal event" do
-    let!(:calendar1) { create(:calendar, name: "Foo Room") }
+    let!(:calendar1) { create(:calendar, name: "Foo Room", selected_by_default: true) }
     let!(:calendar2) { create(:calendar, name: "Bar Room") }
     let(:time) { Time.current.midnight + 9.hours }
 
@@ -23,10 +23,10 @@ describe "event calendar", js: true do
 
     let!(:meal) { create(:meal, :with_menu, title: "Yum", served_at: time + 9.hours, calendars: [calendar1]) }
     let!(:event1) do
-      create(:event, calendar: calendar1, starts_at: time, ends_at: time + 1.hour, name: "Funtimes")
+      create(:event, calendar: calendar1, starts_at: time, ends_at: time + 1.hour, name: "Cal1 Event")
     end
     let!(:event2) do
-      create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours, name: "Badtimes")
+      create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours, name: "Cal2 Event")
     end
 
     before do
@@ -41,10 +41,10 @@ describe "event calendar", js: true do
 
       visit(calendars_events_path(calendar_id: calendar1.id))
       expect(page).to have_content("Yum")
-      expect(page).to have_content("Funtimes")
+      expect(page).to have_content("Cal1 Event")
       find(".fc-next-button").click
       find(".fc-next-button").click
-      expect(page).not_to have_content("Funtimes")
+      expect(page).not_to have_content("Cal1 Event")
       find(".fc-month-button").click
 
       # Test permalink and calendar links update correctly.
@@ -74,39 +74,42 @@ describe "event calendar", js: true do
 
       scenario "checkboxes, selection save & reset" do
         visit(calendars_events_path)
-        expect(page).not_to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
+        expect_selected(cal1: true, cal2: false) # Cal 1 sel'd by default
 
-        select_calendar(calendar1, true)
-        expect(page).to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
+        select_calendar(calendar1, false)
+        expect_selected(cal1: false, cal2: false)
 
         select_calendar(calendar2, true)
-        expect(page).to have_content("Funtimes")
-        expect(page).to have_content("Badtimes")
+        expect_selected(cal1: false, cal2: true)
 
-        click_link("Reset Selection")
-        expect(page).not_to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
-        expect(page).not_to have_css(checkbox_selector(calendar1, checked: true))
-        expect(page).not_to have_css(checkbox_selector(calendar2, checked: true))
+        click_link("Reset Selection") # Resetting selection goes back to defaults since nothing saved yet.
+        expect_selected(cal1: true, cal2: false)
 
-        select_calendar(calendar1, true)
-        expect(page).to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
+        select_calendar(calendar1, false)
+        select_calendar(calendar2, true)
+        expect_selected(cal1: false, cal2: true)
 
         click_link("Save Selection")
 
-        select_calendar(calendar1, false)
-        expect(page).not_to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
+        select_calendar(calendar1, true)
+        expect_selected(cal1: true, cal2: true)
 
-        visit(calendars_events_path)
-        expect(page).to have_content("Funtimes")
-        expect(page).not_to have_content("Badtimes")
-        expect(page).to have_css(checkbox_selector(calendar1, checked: true))
-        expect(page).not_to have_css(checkbox_selector(calendar2, checked: true))
+        visit(calendars_events_path) # Saved selection reloaded
+        expect_selected(cal1: false, cal2: true)
+
+        select_calendar(calendar1, true)
+        expect_selected(cal1: true, cal2: true)
+
+        click_link("Reset Selection") # Resetting selection now goes back to saved one
+        expect_selected(cal1: false, cal2: true)
       end
+    end
+
+    def expect_selected(cal1:, cal2:)
+      expect(page).send(cal1 ? :to : :not_to, have_content("Cal1 Event"))
+      expect(page).send(cal2 ? :to : :not_to, have_content("Cal2 Event"))
+      expect(page).send(cal1 ? :to : :not_to, have_css(checkbox_selector(calendar1, checked: true)))
+      expect(page).send(cal2 ? :to : :not_to, have_css(checkbox_selector(calendar2, checked: true)))
     end
 
     def expect_correct_permalink_and_other_calendar_link(cur_calendar_id:)

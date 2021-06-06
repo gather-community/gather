@@ -5,8 +5,12 @@ module Calendars
   class InitialSelection
     attr_accessor :selection
 
-    def initialize(user:, calendar_scope:)
-      self.selection = user.settings[:calendar_selection]
+    def initialize(stored:, calendar_scope:)
+      self.selection = stored || {}
+      calendar_scope.each do |calendar|
+        key = calendar.id.to_s.to_sym # Keys in settings array are symbols
+        selection[key] = calendar.selected_by_default unless selection.key?(key)
+      end
     end
   end
 end

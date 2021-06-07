@@ -71,7 +71,7 @@ describe Calendars::CalendarPolicy do
       it "should allow basic attribs" do
         expect(subject).to contain_exactly(:default_calendar_view, :guidelines, :abbrv, :name, :color,
                                            :meal_hostable, :photo_new_signed_id, :photo_destroy, :group_id,
-                                           :allow_overlap)
+                                           :allow_overlap, :selected_by_default)
       end
     end
 
@@ -82,7 +82,8 @@ describe Calendars::CalendarPolicy do
 
       it "should allow fewer attribs" do
         expect(subject).to contain_exactly(:default_calendar_view, :abbrv, :name, :color,
-                                           :photo_new_signed_id, :photo_destroy, :group_id)
+                                           :photo_new_signed_id, :photo_destroy, :group_id,
+                                           :selected_by_default)
       end
     end
   end

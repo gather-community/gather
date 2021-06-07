@@ -27,6 +27,7 @@
         required: true %>
       <%= f.input :guidelines, as: :markdown, input_html: {class: "longer"} unless calendar.system? %>
       <%= f.input :allow_overlap, as: :boolean unless calendar.system? %>
+      <%= f.input :selected_by_default, as: :boolean %>
 
       <%= form_actions do %>
         <%= f.button :primary %>

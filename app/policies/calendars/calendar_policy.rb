@@ -45,7 +45,7 @@ module Calendars
 
     def permitted_attributes
       base = %i[default_calendar_view abbrv name color
-                photo_new_signed_id photo_destroy group_id]
+                photo_new_signed_id photo_destroy group_id selected_by_default]
       base.concat(%i[meal_hostable guidelines allow_overlap]) unless calendar.system?
       base
     end

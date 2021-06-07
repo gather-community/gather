@@ -110,7 +110,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     @saveSettings()
 
   onLoading: (isLoading) ->
-    Gather.loadingIndicator[if isLoading then 'show' else 'hide']()
+    Gather.loadingIndicator.toggle(isLoading)
 
   onEventChange: (event, _, revertFunc) ->
     $.ajax

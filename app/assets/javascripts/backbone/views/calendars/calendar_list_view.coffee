@@ -27,11 +27,13 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend
   saveSelection: ->
     entries = @$("input[type=checkbox]").map((_, el) => [[el.value, @$(el).prop('checked')]])
     @selection = Object.fromEntries(entries)
+    Gather.loadingIndicator.show()
     $.ajax
       url: '/users/update-setting'
       method: 'PATCH'
       contentType: 'application/json'
       data: JSON.stringify({settings: {calendar_selection: @selection}})
+      success: -> Gather.loadingIndicator.hide()
 
   resetSelection: ->
     @$("input[type=checkbox]:checked").each((_, el) => @$(el).prop('checked', false))

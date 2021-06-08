@@ -16,8 +16,8 @@
   <%- concat(calendar_exports_link) %>
 <% end %>
 
-<div class="row calendar-and-sidebar">
-  <div id="calendar-col" class="col-md-10 col-sm-9">
+<div id="calendar-and-sidebar">
+  <div id="calendar-col">
     <div id="calendar"></div>
     <footer>
       <%= link_to("Permalink", calendars_events_path(@url_params), id: "permalink") %> &nbsp;
@@ -42,7 +42,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-2 col-sm-3 sidebar">
+  <div id="sidebar">
     <% if calendar %>
       <%= render("single_calendar_sidebar", calendar: calendar) %>
     <% else %>
@@ -68,10 +68,10 @@
       selection: <%= json(@calendar_selection) %>
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
-      el: '.calendar-and-sidebar'
+      el: '#calendar-and-sidebar'
     });
     new Gather.Views.Calendars.CalendarPageView({
-      el: '.calendar-and-sidebar',
+      el: '#calendar-and-sidebar',
       calendarView: calendarView,
       listView: listView,
       linkManager: linkManager,

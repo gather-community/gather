@@ -12,17 +12,6 @@
     }
   }
 
-  .sidebar {
-    img {
-      width: 100%;
-      max-width: 220px;
-    }
-
-    > div {
-      margin-bottom: 15px;
-    }
-  }
-
   // These will be shown as appropriate by JS.
   .calendars_event_pre_notice[data-kinds] {
     display: none;

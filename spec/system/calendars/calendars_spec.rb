@@ -58,7 +58,7 @@ describe "calendars", js: true do
       expect_image_upload(state: :existing, path: /cooper/)
       fill_in("Name", with: "Foo Bar")
       fill_in("Abbreviation", with: "Bar")
-      select("Yes", from: "Can Host Meals?")
+      select("Yes", from: "Can host meals?")
       select("Month", from: "Calendar View")
       fill_in("Guidelines", with: "Don't do bad stuff")
       click_button("Save")

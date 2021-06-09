@@ -1,7 +1,9 @@
 #calendar-and-sidebar {
   #calendar-col {
     footer {
-      margin-bottom: 30px;
+      @media screen and (max-width: $screen-xs-max) {
+        margin-bottom: 15px;
+      }
 
       a {
         color: $text-muted;

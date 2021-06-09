@@ -137,7 +137,7 @@ module Calendars
     end
 
     def no_overlap
-      return if calendar_allows_overlap?
+      return if calendar_allows_overlap? || starts_at.blank? || ends_at.blank?
       query = self.class.between(starts_at..ends_at)
       query = query.where(calendar_id: calendar_id)
       query = query.where("id != #{id}") if persisted?

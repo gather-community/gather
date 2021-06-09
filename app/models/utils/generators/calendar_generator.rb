@@ -13,6 +13,7 @@ module Utils
 
       def generate_samples
         create_main_calendars
+        create_meals_calendars
         create_reservation_calendars
         create_shared_guidelines_and_associate
         create_calendar_protocols_and_associate
@@ -29,8 +30,18 @@ module Utils
       private
 
       def create_main_calendars
-        create(:calendar, name: "Social Events", abbrv: nil, community: community)
-        create(:calendar, name: "Meetings", abbrv: nil, community: community)
+        create(:calendar, name: "Social Events", color: next_color, abbrv: nil,
+                          community: community, selected_by_default: true)
+        create(:calendar, name: "Meetings", color: next_color, abbrv: nil,
+                          community: community, selected_by_default: true)
+      end
+
+      def create_meals_calendars
+        group = create(:calendar_group, community: community, name: "Meals")
+        create(:community_meals_calendar, name: "All Meals", community: community, group: group,
+                                          color: next_color, selected_by_default: true)
+        create(:your_meals_calendar, name: "Your Meals", community: community, group: group,
+                                     color: next_color)
       end
 
       def create_reservation_calendars
@@ -39,6 +50,7 @@ module Utils
         calendar_data.each do |row|
           calendar = create(:calendar, row.except("id", :shared_guideline_ids).merge(
             community: community,
+            color: next_color,
             group: reservations_group,
             created_at: community.created_at,
             updated_at: community.updated_at
@@ -77,6 +89,10 @@ module Utils
         @protocoling_data = load_yaml("calendars/protocolings.yml")
         calendar_ids = @protocoling_data.select { |p| p["protocol_id"] == id }.map { |p| p["calendar_id"] }
         calendar_data.select { |r| calendar_ids.include?(r["id"]) }.map { |r| r[:obj] }
+      end
+
+      def next_color
+        Calendars::Calendar.least_used_colors(community).first
       end
     end
   end

@@ -11,7 +11,7 @@ class PopulateGeneralCalendars < ActiveRecord::Migration[6.0]
       Community.all.find_each do |community|
         cluster = community.cluster
         ActsAsTenant.with_tenant(cluster) do
-          Calendars::Calendar.create!(name: "Fun & Leisure", color: next_color(community),
+          Calendars::Calendar.create!(name: "Social Events", color: next_color(community),
                                       community: community, selected_by_default: true, rank: 1)
           Calendars::Calendar.create!(name: "Meetings", color: next_color(community), community: community,
                                       selected_by_default: true, rank: 2)
@@ -22,7 +22,7 @@ class PopulateGeneralCalendars < ActiveRecord::Migration[6.0]
 
   def down
     ActsAsTenant.without_tenant do
-      Calendars::Calendar.where(name: ["Fun & Leisure", "Meetings"], group_id: nil).delete_all
+      Calendars::Calendar.where(name: ["Social Events", "Meetings"], group_id: nil).delete_all
     end
   end
 

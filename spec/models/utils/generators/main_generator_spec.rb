@@ -6,10 +6,17 @@ require "fileutils"
 # Don't delay jobs so that any mails would get sent immediately
 describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   # Classes that are allowed to have no sample data
-  NO_SAMPLE_DATA_CLASSES = %w[Billing::Template Billing::TemplateMemberType
-                              Domain DomainOwnership Groups::Mailman::List
-                              Meals::Message Meals::Import Groups::Mailman::User
-                              People::MemberType Wiki::PageVersion Wiki::Page
+  NO_SAMPLE_DATA_CLASSES = %w[Billing::Template
+                              Billing::TemplateMemberType
+                              Calendars::System::OtherCommunitiesMealsCalendar
+                              Domain DomainOwnership
+                              Groups::Mailman::List
+                              Groups::Mailman::User
+                              Meals::Import
+                              Meals::Message
+                              People::MemberType
+                              Wiki::Page
+                              Wiki::PageVersion
                               Work::JobReminderDelivery].freeze
 
   before do

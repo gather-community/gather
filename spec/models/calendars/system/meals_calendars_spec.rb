@@ -102,6 +102,6 @@ describe Calendars::System::MealsCalendar do
 
   def expect_event(event, attribs)
     attribs = {kind: nil, note: nil, sponsor_id: nil, calendar_id: calendar.id}.merge(attribs)
-    attribs.each { |k, v| expect(event[k]).to eq(attribs[k]), "#{k} should eq #{v}" }
+    attribs.each { |k, v| expect(event[k]).to eq(v) }
   end
 end

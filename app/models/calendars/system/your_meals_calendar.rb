@@ -11,7 +11,7 @@ module Calendars
       end
 
       def base_meals_scope(range, user:)
-        super.attended_by(user)
+        super.attended_by(user.household)
       end
 
       def attended_meals(base_scope, user:)

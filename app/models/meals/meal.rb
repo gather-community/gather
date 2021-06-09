@@ -58,7 +58,7 @@ module Meals
       rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
       where("? IN (#{rel.to_sql})", user)
     }
-    scope :attended_by, ->(household) { includes(:signups).where(meal_signups: {household_id: household.id}) }
+    scope :attended_by, ->(household) { joins(:signups).where(meal_signups: {household_id: household.id}) }
 
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }

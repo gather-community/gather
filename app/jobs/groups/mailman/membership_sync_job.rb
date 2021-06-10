@@ -48,6 +48,7 @@ module Groups
         return unless mship.user_syncable?
 
         create_or_capture_mailman_user(mship) unless mship.user_remote_id?
+        api.update_user(mship.mailman_user) unless correct_email?(mship.mailman_user)
         api.create_membership(mship)
       end
 
@@ -62,6 +63,16 @@ module Groups
         # associated Gather user, then the mm_user record came from e.g. an outside_sender, in which
         # case we can't store the remote ID.
         mm_user.save! if mm_user.user.present?
+      end
+
+      def correct_email?(mm_user)
+        if source == mm_user
+          # Don't call API over and over if source is user
+          return @correct_email if defined?(@correct_email)
+          @correct_email = api.correct_email?(mm_user)
+        else
+          api.correct_email?(mm_user)
+        end
       end
     end
   end

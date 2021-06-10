@@ -7,7 +7,10 @@
         <% if meal.head_cook %>
           By <%= meal.head_cook_name %><br/>
         <% end %>
-        <%= meal.served_at_datetime %> at <%= meal.location_name %>
+        <%= meal.served_at_datetime %>
+        <% if meal.location_name %>
+          at <%= meal.location_name %>
+        <% end %>
       </td>
     </tr>
     <tr>

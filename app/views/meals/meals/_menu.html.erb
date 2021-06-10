@@ -2,9 +2,11 @@
   <div class="menu-label">menu</div>
   <%= render("meals/meals/time_cook") %>
   <div id="details">
-    <div class="chunk">
-      At <%= meal.location_name %>
-    </div>
+    <% if meal.location_name %>
+      <div class="chunk">
+        At <%= meal.location_name %>
+      </div>
+    <% end %>
     <% if multi_community? %>
       <div class="chunk">
         for <%= meal.communities.map(&:name).join(', ') %>

@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:26 GMT
+      - Wed, 19 May 2021 01:33:49 GMT
       Connection:
       - close
       Content-Type:
@@ -38,8 +38,8 @@ http_interactions:
       encoding: UTF-8
       string: '{"title": "400 Bad Request", "description": "Duplicate email host:
         foo.com"}'
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:26 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/lists
@@ -67,7 +67,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:26 GMT
+      - Wed, 19 May 2021 01:33:49 GMT
       Connection:
       - close
       Location:
@@ -79,14 +79,15 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:26 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: patch
     uri: http://localhost:8001/3.1/lists/yankee@foo.com/config
     body:
       encoding: UTF-8
-      string: '{"advertised":"false","dmarc_mitigate_action":"munge_from","archive_policy":"private","max_message_size":5120,"subscription_policy":"moderate","default_member_action":"defer","default_nonmember_action":"hold","send_welcome_message":"false","display_name":"Regular","subject_prefix":"[yankee] "}'
+      string: '{"advertised":"false","dmarc_mitigate_action":"munge_from","archive_policy":"private","max_message_size":5120,"subscription_policy":"moderate","default_member_action":"defer","default_nonmember_action":"hold","send_welcome_message":"false","display_name":"Regular","subject_prefix":"[yankee]
+        "}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -108,14 +109,14 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:26 GMT
+      - Wed, 19 May 2021 01:33:49 GMT
       Connection:
       - close
     body:
       encoding: UTF-8
       string: ''
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:26 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members/find
@@ -143,7 +144,7 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:27 GMT
+      - Wed, 19 May 2021 01:33:50 GMT
       Connection:
       - close
       Content-Length:
@@ -153,14 +154,56 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"start": 0, "total_size": 0, "http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\""}'
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:50 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718/preferred_address
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Wed, 19 May 2021 01:33:50 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '338'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"email": "c@x.com", "original_email": "c@x.com", "registered_on":
+        "2021-05-19T01:33:46.114618", "self_link": "http://localhost:8001/3.1/addresses/c@x.com",
+        "verified_on": "2021-05-19T01:33:46.861080", "user": "http://localhost:8001/3.1/users/2ac8eefcede64945b9aadd09ce9b5718",
+        "http_etag": "\"b3666b5c43d6157673aeb97c2fd5bac0bedb09b7\""}'
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:50 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"yankee.foo.com","subscriber":"252d261c4e7842e9a1c874febd9cac6c","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"yankee.foo.com","subscriber":"2ac8eefcede64945b9aadd09ce9b5718","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -182,11 +225,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:27 GMT
+      - Wed, 19 May 2021 01:33:50 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/43b493b1181043688a45fdb9ba264a19
+      - http://localhost:8001/3.1/members/295ec7740dd54304a96fbc03a0a7f5d6
       Content-Length:
       - '0'
       Content-Type:
@@ -194,14 +237,56 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:50 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/5d6fe56d947346579afd79d2d589ed7b/preferred_address
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn/20.0.4
+      Date:
+      - Wed, 19 May 2021 01:33:50 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '338'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"email": "h@x.com", "original_email": "h@x.com", "registered_on":
+        "2021-05-19T01:33:48.505601", "self_link": "http://localhost:8001/3.1/addresses/h@x.com",
+        "verified_on": "2021-05-19T01:33:49.305926", "user": "http://localhost:8001/3.1/users/5d6fe56d947346579afd79d2d589ed7b",
+        "http_etag": "\"97f9459558dcc33e98da58c0995663a5d0dcd8c2\""}'
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:50 GMT
 - request:
     method: post
     uri: http://localhost:8001/3.1/members
     body:
       encoding: UTF-8
-      string: '{"list_id":"yankee.foo.com","subscriber":"3a11aae4effa4bfa91e76ed877c47754","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+      string: '{"list_id":"yankee.foo.com","subscriber":"5d6fe56d947346579afd79d2d589ed7b","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -223,11 +308,11 @@ http_interactions:
       Server:
       - gunicorn/20.0.4
       Date:
-      - Sat, 21 Mar 2020 21:26:27 GMT
+      - Wed, 19 May 2021 01:33:50 GMT
       Connection:
       - close
       Location:
-      - http://localhost:8001/3.1/members/04c38b430ae747a7aaf66439e91b17b9
+      - http://localhost:8001/3.1/members/a0085a8ce24043f5a40ca0b113dedb42
       Content-Length:
       - '0'
       Content-Type:
@@ -235,6 +320,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
-  recorded_at: Sat, 21 Mar 2020 21:26:27 GMT
+    http_version: 
+  recorded_at: Wed, 19 May 2021 01:33:50 GMT
 recorded_with: VCR 4.0.0

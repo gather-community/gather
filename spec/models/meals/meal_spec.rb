@@ -40,19 +40,6 @@ describe Meals::Meal do
       end
     end
 
-    describe "calendars" do
-      it "fails if none" do
-        meal = build(:meal, no_calendars: true)
-        expect(meal).not_to be_valid
-        expect(meal.errors[:calendars].join).to match(/must choose at least one location/)
-      end
-
-      it "succeeds if some" do
-        meal = build(:meal)
-        expect(meal).to be_valid
-      end
-    end
-
     describe "via meal event handler" do
       let(:meal) { build(:meal, calendars: [create(:calendar)]) }
 

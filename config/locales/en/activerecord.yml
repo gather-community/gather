@@ -37,7 +37,7 @@ en:
         community_id: "Host Community"
         served_at: "Date/Time"
         communities: "Communities"
-        calendar_ids: "Location(s)"
+        calendar_ids: "Reservable Location(s)"
         formula: "Formula"
         capacity: "Capacity"
         title: "Title"
@@ -245,8 +245,6 @@ en:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
-        meals/meal:
-          need_location: "You must choose at least one location"
         calendars/event:
           attributes:
             starts_at:

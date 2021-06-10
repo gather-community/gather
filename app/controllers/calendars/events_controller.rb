@@ -12,33 +12,14 @@ module Calendars
     def index
       return render_json_event_list if request.xhr?
 
-      @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
-      load_calendars_and_selection
-
-      if @calendar
-        # We use an unsaved sample event to authorize against.
-        # We set kind to nil because we can't know the kind in advance. This object is also used
-        # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
-        # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
-        # Kind-specific rules will be enforced through validation.
-        @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
-        authorize(@sample_event)
-
-        @can_create_event = policy(@sample_event).create?
-
-        @rule_set = @sample_event.rule_set
-        if @rule_set.access_level(current_user.community) == "read_only"
-          flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
-        end
-        @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
-        @other_communities = Community.where("id != ?", @calendar.community_id)
+      calendar_scope = policy_scope(Node).in_community(current_community).active
+      @calendars = calendar_scope.arrange(decorator: CalendarDecorator)
+      if params[:calendar_id]
+        @calendar = Calendar.find(params[:calendar_id])
+        prep_single_calendar_index
       else
-        authorize(Event)
-        prepare_lenses(community: {clearable: false})
-        @rule_set = {}
-        @can_create_event = writeable_calendars.any?
+        prep_combined_index(calendar_scope)
       end
-      build_index_urls
     end
 
     def show
@@ -116,23 +97,44 @@ module Calendars
 
     private
 
-    def load_calendars_and_selection
-      base_scope = policy_scope(Node).in_community(current_community).active
-      @calendars = base_scope.arrange(decorator: CalendarDecorator)
-      setting = current_user.settings[:calendar_selection]
-      @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: base_scope).selection
-    end
+    def prep_single_calendar_index
+      # We use an unsaved sample event to authorize against.
+      # We set kind to nil because we can't know the kind in advance. This object is also used
+      # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
+      # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
+      # Kind-specific rules will be enforced through validation.
+      @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
+      authorize(@sample_event)
+      @can_create_event = policy(@sample_event).create?
 
-    def build_index_urls
-      calendar_id = {calendar_id: @calendar.id} if @calendar
-      origin_page = {origin_page: "combined"}
+      @rule_set = @sample_event.rule_set
+      if @rule_set.access_level(current_user.community) == "read_only"
+        flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
+      end
+      @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
+      @other_communities = Community.where("id != ?", @calendar.community_id)
 
-      @new_event_path = new_calendars_event_path(@calendar ? calendar_id : origin_page)
-      # Permalink doesn't need origin page
-      @permalink = calendars_events_path(@calendar ? calendar_id : {})
+      @new_event_path = new_calendars_event_path(calendar_id: @calendar.id)
+      @permalink = calendars_events_path(calendar_id: @calendar.id)
       # Feed path doesn't need calendar_id because the JS calendar view is responsible for inserting
       # whichever calendar ids the user selects, or the single ID in the case of single view.
-      @feed_path = calendars_events_path(@calendar ? {} : origin_page)
+      @feed_path = calendars_events_path
+    end
+
+    def prep_combined_index(calendar_scope)
+      authorize(Event)
+      prepare_lenses(community: {clearable: false})
+      @rule_set = {}
+      @can_create_event = writeable_calendars.any?
+      setting = current_user.settings[:calendar_selection]
+      @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
+
+      @new_event_path = new_calendars_event_path(origin_page: "combined")
+      # Permalink doesn't need origin page
+      @permalink = calendars_events_path
+      # Feed path doesn't need calendar_id because the JS calendar view is responsible for inserting
+      # whichever calendar ids the user selects, or the single ID in the case of single view.
+      @feed_path = calendars_events_path(origin_page: "combined")
     end
 
     def writeable_calendars

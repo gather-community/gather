@@ -124,9 +124,9 @@ describe "lenses", js: true do
     end
   end
 
-  describe "reservation lens" do
+  describe "event lens" do
     scenario "community" do
-      visit(reservations_path)
+      visit(calendars_events_path)
       expect_community_dropdown
     end
   end

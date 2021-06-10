@@ -1,10 +1,11 @@
 <% content_for(:title, "Transaction Templates") %>
 
-<% content_for(:top_buttons) do %>
-  <%= link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply") %>
-  <% if policy(sample_template).create? %>
-    <%= link_to(icon_tag("plus") << " Create Template", new_billing_template_path, class: "btn btn-primary") %>
-  <% end %>
+<% content_for(:action_links) do %>
+  <%- concat(link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply")) -%>
+  <%- if policy(sample_template).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Template", new_billing_template_path,
+          class: "btn btn-primary")) -%>
+  <%- end -%>
 <% end %>
 
 <p class="subtitle">

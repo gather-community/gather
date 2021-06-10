@@ -6,4 +6,4 @@ fr:
         first_name: "Prénom"
       meals/meal:
         served_at: "Date/Heure"
-        resources: "Ressources"
+        calendars: "Ressources"

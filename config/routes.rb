@@ -29,6 +29,9 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    collection do
+      patch :update_setting, path: "update-setting"
+    end
     member do
       put :activate
       put :deactivate
@@ -83,16 +86,6 @@ Rails.application.routes.draw do
     resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
 
-  namespace :reservations do
-    resources :resources, except: :show do
-      member do
-        put :activate
-        put :deactivate
-      end
-    end
-    resources :protocols
-  end
-
   # `namespace :x` is just a shorthand for scope :x, module: :x, as: :x
   # scope :x adds /x/ as a URL prefix
   # scope module: :x adds /x as a controller prefix (controllers will be fetched under controllers/x/foo.rb)
@@ -112,13 +105,12 @@ Rails.application.routes.draw do
   namespace :groups do
     namespace :mailman do
       get "templates/:template_name/:list_id/:locale",
-        to: "templates#show", constraints: { list_id: /.*/ }, defaults: {format: "text"}
+          to: "templates#show", constraints: { list_id: /.*/ }, defaults: {format: "text"}
     end
   end
 
-  resources :reservations, controller: "reservations/reservations"
-
-  # Legacy calendar routes
+  # Legacy calendar export routes. They are highly constrained.
+  # These come first so they don't get gobbled up by more generic calendar routes below.
   get "calendars/:id/:calendar_token",
       to: "calendars/exports#personalized",
       constraints: {
@@ -126,24 +118,37 @@ Rails.application.routes.draw do
         id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
         # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
         # Enforcing this will make it easier to distinguish from other calendars routes in future.
-        calendar_token: /[A-Za-z0-9_\-]{20}/
+        calendar_token: /[A-Za-z0-9_\-]{20}/,
+        format: :ics
       }
 
+  resources :calendars, except: :show, controller: "calendars/calendars" do
+    member do
+      put :activate
+      put :deactivate
+      put :move
+    end
+  end
+
   namespace :calendars do
+    resources :events
+    resources :protocols
+    resources :groups, only: %i[new edit create update destroy]
+
     # index - The calendar export page
     resources :exports, only: :index do
       member do
         token_constraints = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
 
         # This is the personalized show action, allowing paths to include the user's calendar token,
-        # e.g. /calendars/meals/D7sbPv7YCUhxMs4Pyx9D.
+        # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
         # The calendar's type gets captured as the :id param, so this is equivalent to
-        # /calendars/:id/:calendar_token
+        # /calendars/exports/:id/:calendar_token
         get ":calendar_token", to: "exports#personalized", as: :personalized, constraints: token_constraints
 
         # This is the community show action, allowing paths to include the community's calendar token.
         # The community part is indicated by a leading +, e.g.
-        # e.g. /calendars/meals/+X7sbPv7YCUhxMs4Pyx9D.
+        # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
         get "+:calendar_token", to: "exports#community", as: :community, constraints: token_constraints
       end
       collection do
@@ -151,8 +156,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resources :calendar_exports, only: :index, path: "calendars", controller: "calendars/exports"
 
   resources :households do
     member do

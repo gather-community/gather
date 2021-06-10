@@ -23,7 +23,8 @@ module Calendars
       def mapped_type(type)
         case type
         when "meals" then "your_meals"
-        when "reservations" then "community_reservations"
+        when "reservations" then "community_events"
+        when "your_reservations" then "your_events"
         when "shifts" then "your_jobs"
         else type
         end

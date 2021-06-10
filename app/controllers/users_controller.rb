@@ -40,9 +40,9 @@ class UsersController < ApplicationController
       # For select2 lookups
       format.json do
         @users = case params[:context]
-        when "res_sponsor", "reserver_this_cmty", "guardian", "job_choosing_proxy", "reimbursee"
+        when "res_sponsor", "event_creator_this_cmty", "guardian", "job_choosing_proxy", "reimbursee"
           @users.active.in_community(current_community).adults
-        when "reserver_any_cmty", "group_lens"
+        when "event_creator_any_cmty", "group_lens"
           @users.active.adults
         when "group_memberships"
           community_ids = JSON.parse(params[:data]).presence || current_community.id
@@ -131,6 +131,15 @@ class UsersController < ApplicationController
       prepare_user_form
       render(:edit)
     end
+  end
+
+  def update_setting
+    @user = current_user
+    authorize(@user)
+    new_settings = params.require(:settings)
+      .permit(:calendar_popover_dismissed, calendar_selection: params[:settings][:calendar_selection]&.keys)
+    @user.settings = (@user.settings || {}).merge(new_settings)
+    @user.save!
   end
 
   def resend_email_confirmation

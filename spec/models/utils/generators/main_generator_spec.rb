@@ -6,10 +6,17 @@ require "fileutils"
 # Don't delay jobs so that any mails would get sent immediately
 describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   # Classes that are allowed to have no sample data
-  NO_SAMPLE_DATA_CLASSES = %w[Billing::Template Billing::TemplateMemberType
-                              Domain DomainOwnership Groups::Mailman::List
-                              Meals::Message Meals::Import Groups::Mailman::User
-                              People::MemberType Wiki::PageVersion Wiki::Page
+  NO_SAMPLE_DATA_CLASSES = %w[Billing::Template
+                              Billing::TemplateMemberType
+                              Calendars::System::OtherCommunitiesMealsCalendar
+                              Domain DomainOwnership
+                              Groups::Mailman::List
+                              Groups::Mailman::User
+                              Meals::Import
+                              Meals::Message
+                              People::MemberType
+                              Wiki::Page
+                              Wiki::PageVersion
                               Work::JobReminderDelivery].freeze
 
   before do
@@ -77,8 +84,8 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(Meals::Meal.count).to eq(0)
       expect(Meals::Formula.count).to eq(1) # Default formula
       expect(Meals::Role.count).to eq(3) # Default roles
-      expect(Reservations::Reservation.count).to eq(0)
-      expect(Reservations::Resource.count).to eq(0)
+      expect(Calendars::Event.count).to eq(0)
+      expect(Calendars::Calendar.count).to eq(0)
       expect(Billing::Statement.count).to eq(0)
       expect(ActiveStorage::Blob.count).to eq(0)
     end

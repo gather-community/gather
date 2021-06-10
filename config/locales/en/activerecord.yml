@@ -37,7 +37,7 @@ en:
         community_id: "Host Community"
         served_at: "Date/Time"
         communities: "Communities"
-        resource_ids: "Reservable Location(s)"
+        calendar_ids: "Reservable Location(s)"
         formula: "Formula"
         capacity: "Capacity"
         title: "Title"
@@ -60,10 +60,10 @@ en:
         name: "Name"
         meal_calc_type: "Calculation Type"
         pantry_calc_type: "Calculation Type"
-        is_default: "Default Formula?"
+        is_default: "Default formula?"
         parts: "Meal Types"
         pantry_fee_formatted: "Pantry Fee"
-        pantry_reimbursement: "Allow Pantry Reimbursement?"
+        pantry_reimbursement: "Allow pantry reimbursement?"
         role_ids: "Roles"
       meals/formula_part:
         type_id: "Type"
@@ -120,10 +120,10 @@ en:
         settings: "List Settings"
         address: "List Address"
         _destroy: "Delete this list?"
-      reservations/protocol:
+      calendars/protocol:
         fixed_end_time: "Fixed End Time"
         fixed_start_time: "Fixed Start Time"
-        kinds: "Reservation Types"
+        kinds: "Event Types"
         max_days_per_year: "Max. Days/Year"
         max_lead_days: "Max. Advance Time"
         max_length_minutes: "Max. Duration"
@@ -131,9 +131,11 @@ en:
         other_communities: "Other Communities"
         pre_notice: "Pre-notice"
         requires_kind: "Type Required"
-        resource_ids: "Resources"
-      reservations/reservation:
-        resource: "Resource"
+        calendar_ids: "Calendars"
+      calendars/group:
+        name: "Group Name"
+      calendars/event:
+        calendar: "Calendar"
         pre_notice: "Notice"
         name: "Event Name"
         starts_at: "Start Time"
@@ -141,13 +143,17 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
-      reservations/resource:
+      calendars/calendar:
         name: "Name"
         guidelines: "Guidelines"
         hidden: "Hidden"
         abbrv: "Abbreviation"
+        group_id: "Calendar Group"
+        color: "Color"
         default_calendar_view: "Calendar View"
-        meal_hostable: "Can Host Meals?"
+        meal_hostable: "Can host meals?"
+        allow_overlap: "Events can overlap each other?"
+        selected_by_default: "Selected by default in calendar list?"
       people/emergency_contact:
         name: "Name"
         relationship: "Relationship to Household"
@@ -174,7 +180,7 @@ en:
         death_year: "Death Year"
       work/job:
         description: "Description"
-        double_signups_allowed: "The same person can sign up more than once for a shift of this job"
+        double_signups_allowed: "Same person can sign up more than once for a shift of this job?"
         hours: "Hours"
         hours_per_shift: "Hours per Shift"
         period_id: "Period"
@@ -239,7 +245,7 @@ en:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
-        reservations/reservation:
+        calendars/event:
           attributes:
             starts_at:
               after_meal_time: "must be at or before the meal time (%{time})"
@@ -248,10 +254,12 @@ en:
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
-        reservations/resource:
+        calendars/calendar:
           attributes:
             abbrv:
-              blank: "can't be blank if resource can host meals"
+              blank: "can't be blank if calendar can host meals"
+            color:
+              invalid: "Must be in hex format (e.g. #112233)"
         meals/formula:
           at_least_one_type: "You must include at least one meal type."
           at_least_one_nonzero_type: "You must include at least one non-zero meal type if the calculation type is proportional."

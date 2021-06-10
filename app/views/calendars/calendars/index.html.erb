@@ -1,0 +1,24 @@
+<% content_for(:title, "Calendars") %>
+
+<% content_for(:action_links) do %>
+  <%- if policy(sample_calendar).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Group",
+      new_calendars_group_path, class: "btn btn-default")) -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Calendar",
+      new_calendar_path, class: "btn btn-primary")) -%>
+  <%- end -%>
+<% end %>
+
+<% if @calendar_nodes.empty? %>
+  <div class="center-notice">
+    No calendars found.
+  </div>
+<% else %>
+  <%= render("table") %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.Calendars.IndexView({el: '.calendars--calendars'});
+  });
+<% end %>

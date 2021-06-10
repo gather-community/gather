@@ -3,7 +3,7 @@
 class UploadsController < ApplicationController
   PERMITTED_ATTRIBS = {
     "User" => "photo",
-    "Reservations::Resource" => "photo",
+    "Calendars::Calendar" => "photo",
     "Meals::Import" => "file"
   }.freeze
 

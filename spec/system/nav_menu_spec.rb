@@ -21,12 +21,12 @@ describe "nav menu" do
                             ["Groups", "/groups"],
                             ["Meals", "/meals"],
                             ["Work", "/work/signups"],
-                            ["Reservations", "/reservations"],
+                            ["Calendars", "/calendars/events"],
                             ["Wiki", "/wiki"]])
     end
   end
   context "changes" do
-    let(:setting) { "[Reservations]()[Wiki](http://wikipedia.org) [Google](http://google.com)" }
+    let(:setting) { "[Calendars]()[Wiki](http://wikipedia.org) [Google](http://google.com)" }
 
     scenario "change one link, disable one, add another" do
       main_nav_test(match: [["People", "/users"],

@@ -258,7 +258,7 @@ class User < ApplicationRecord
     end
   end
 
-  # Efficiently does role lookups for global roles (those without associated resources) by caching
+  # Efficiently does role lookups for global roles (those without associated calendars) by caching
   # the user's roles. The has_role? method provided by Rolify does not do any caching which results in
   # a ton of unnecessary DB requests on some pages.
   def global_role?(role)
@@ -282,6 +282,10 @@ class User < ApplicationRecord
 
   def never_signed_in?
     sign_in_count.zero?
+  end
+
+  def settings
+    (self[:settings] || {}).deep_symbolize_keys
   end
 
   private

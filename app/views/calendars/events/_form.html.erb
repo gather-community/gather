@@ -1,0 +1,74 @@
+<%= gather_form_for(event) do |f| %>
+
+  <%= f.hidden_field :calendar_id %>
+  <%= f.hidden_field :origin_page %>
+  <%= f.input :calendar do %>
+    <%= image_tag(calendar.photo_variant(:thumb)) %><br/>
+    <%= calendar.name_with_prefix %>
+  <% end %>
+
+  <% event.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>
+    <%# Include rule kinds as data attrib so these can be shown/hidden appropriately. %>
+    <% data = rule.kinds.present? ? {kinds: rule.kinds.map { |k| "{#{k}}" }.join} : nil %>
+    <%= f.input :pre_notice, label: "", wrapper_html: {data: data} do %>
+      <%= Calendars::Rules::PreNoticeRuleDecorator.new(rule).alert_tag %>
+    <% end %>
+  <% end %>
+
+  <% unless event.meal? %>
+    <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
+  <% end %>
+
+  <% if policy(event).choose_creator? %>
+    <%= f.input :creator_id, as: :assoc_select2, context: event.creator_select2_context %>
+  <% end %>
+
+  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
+    wrapper_html: { class: event.fixed_start_time? ? "no-time-picker" : "" } %>
+
+  <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
+    wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" } %>
+
+  <% unless event.meal? %>
+    <% if @kinds.present? && event.requires_kind? %>
+      <%= f.input :kind, collection: @kinds, required: true %>
+    <% end %>
+
+    <% if event.access_level(current_user.community) == "sponsor" %>
+      <%= f.input :sponsor_id, as: :assoc_select2, context: "res_sponsor", required: true %>
+    <% end %>
+  <% end %>
+
+  <%= f.input :note, as: :markdown %>
+
+  <%# Meal events are only ever edited, so there is no need for this. It would always be checked. %>
+  <% if calendar.guidelines? && !event.meal? %>
+    <%= f.input :guidelines, required: true do %>
+      <div id="guidelines">
+        <%= safe_render_markdown(calendar.all_guidelines) %>
+      </div>
+      <label>
+        <%= f.check_box(:guidelines_ok) %>
+        <strong>I agree to the above guidelines</strong>
+      </label>
+    <% end %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.AjaxSelect2({
+      el: '.calendars_event_sponsor_id',
+      extraData: {community_id: <%= event.community_id %>}
+    });
+    new Gather.Views.AjaxSelect2({
+      el: '.calendars_event_creator_id'
+    });
+    new Gather.Views.Calendars.EventFormView({el: '.calendars--event-form'});
+    new Gather.Views.DirtyChecker({el: '.calendars--event-form'});
+  });
+<% end %>

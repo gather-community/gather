@@ -17,6 +17,10 @@ div.title-and-buttons {
       text-align: right;
     }
 
+    @media screen and (min-width: $screen-md-min) {
+      display: inline-block;
+    }
+
     .action-link-group {
       @media screen and (max-width: $screen-xs-max) {
         display: inline-block;
@@ -27,13 +31,13 @@ div.title-and-buttons {
       }
     }
 
-    i {
+    i.fa {
       margin-right: 4px;
     }
 
-    a {
+    button, a {
       @media screen and (min-width: $screen-sm-min) {
-        margin-left: 10px;
+        margin-left: 5px;
       }
 
       @media screen and (max-width: $screen-xs-max) {
@@ -42,7 +46,18 @@ div.title-and-buttons {
 
       white-space: nowrap;
       display: inline-block;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
+    }
+
+    a.icon-only, button.icon-only {
+      i.fa {
+        margin-right: 0;
+      }
+    }
+
+    .btn-group {
+      // Bootstrap sets this to 'middle' by default which messes up alignment with the other buttons.
+      vertical-align: top;
     }
   }
 

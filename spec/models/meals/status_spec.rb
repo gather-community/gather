@@ -22,15 +22,15 @@ describe Meals::Meal do
 
   describe "cancel!" do
     before do
-      meal.build_reservations
+      meal.build_events
       meal.save!
     end
 
-    it "should cancel the meal and delete reservations" do
-      expect(meal.reservations.count).to be > 0
+    it "should cancel the meal and delete events" do
+      expect(meal.events.count).to be > 0
       meal.cancel!
       expect(meal.reload).to be_cancelled
-      expect(meal.reservations.count).to eq(0)
+      expect(meal.events.count).to eq(0)
     end
   end
 

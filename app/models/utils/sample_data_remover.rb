@@ -12,8 +12,8 @@ module Utils
                                   last_statement_id: nil, last_statement_on: nil,
                                   total_new_charges: 0, total_new_credits: 0)
       to_destroy_all = [Billing::Transaction, Billing::Statement, Meals::Meal,
-                        Reservations::Reservation, Reservations::Protocol, Reservations::Resource,
-                        Reservations::SharedGuidelines, People::Memorial]
+                        Calendars::Event, Calendars::Protocol, Calendars::Calendar,
+                        Calendars::SharedGuidelines, People::Memorial]
       to_destroy_all.each(&:destroy_all)
 
       non_fake_household_ids = User.where(fake: false).pluck(:household_id)

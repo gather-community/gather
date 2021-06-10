@@ -60,26 +60,6 @@ en:
     messages:
       no_semicolons: "Semicolons not allowed"
 
-  button_labels:
-    reservations/reservation:
-      destroy: "Delete Reservation"
-    reservations/resource:
-      deactivate: "Deactivate Resource"
-      destroy: "Delete Resource"
-    meals/formula:
-      deactivate: "Deactivate Formula"
-      destroy: "Delete Formula"
-    household:
-      deactivate: "Deactivate Household"
-      destroy: "Delete Household"
-    meals/meal:
-      destroy: "Delete Meal"
-    user:
-      deactivate: "Deactivate User"
-      destroy: "Delete User"
-    work/job:
-      destroy: "Delete Job"
-
   confirmations:
     billing/template:
       destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."
@@ -103,13 +83,15 @@ en:
       destroy: "Are you sure you want to delete the memorial for '%{name}'? This action cannot be undone."
     people/memorial_message:
       destroy: "Are you sure you want to delete this memorial message? This action cannot be undone."
-    reservations/protocol:
+    calendars/protocol:
       destroy: "Are you sure you want to delete the protocol '%{name}'? This action cannot be undone."
-    reservations/resource:
-      destroy: "Are you sure you want to delete the resource '%{name}'? This action cannot be undone."
-      deactivate: "Are you sure you want to deactivate the resource '%{name}'?"
-    reservations/reservation:
-      destroy: "Are you sure you want to delete this reservation? This action cannot be undone."
+    calendars/calendar:
+      destroy: "Are you sure you want to delete the calendar '%{name}'? This action cannot be undone."
+      deactivate: "Are you sure you want to deactivate the calendar '%{name}'?"
+    calendars/event:
+      destroy: "Are you sure you want to cancel this event? This action cannot be undone."
+    calendars/group:
+      destroy: "Are you sure you want to delete this calendar group? This action cannot be undone."
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
@@ -141,8 +123,8 @@ en:
       one_html: "This group was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
-    reservations/resource:
-      one_html: "This resource was marked inactive at %{time}."
+    calendars/calendar:
+      one_html: "This calendar was marked inactive at %{time}."
       two_html: "You can %{link}."
       three: "reactivate it"
     meals/formula:
@@ -181,14 +163,17 @@ en:
         deactivate: "Group deactivated successfully."
         activate: "Group activated successfully."
         destroy: "Group deleted successfully."
-    reservations/protocol:
+    calendars/protocol:
       success:
         destroy: "Protocol deleted successfully."
-    reservations/resource:
+    calendars/group:
       success:
-        activate: "Resource activated successfully."
-        deactivate: "Resource deactivated successfully."
-        destroy: "Resource deleted successfully."
+        destroy: "Group deleted successfully."
+    calendars/calendar:
+      success:
+        activate: "Calendar activated successfully."
+        deactivate: "Calendar deactivated successfully."
+        destroy: "Calendar deleted successfully."
     meals/meal:
       success:
         destroy: "Meal deleted successfully."
@@ -242,7 +227,7 @@ en:
 
   select2:
     prompts:
-      reserver: "Please type a few letters of the reserver's name."
+      creator: "Please type a few letters of the creator's name."
       sponsor: "Please type a few letters of the sponsor's name."
       household: "Please type a few letters of the household's name."
       guardian: "Please type a few letters of the guardian's name."
@@ -252,7 +237,7 @@ en:
       category: "Please type a few letters of the category, or enter the full category to add a new one."
       reimbursee: "Please type a few letters of the reimbursee's name."
     placeholders:
-      reserver: "Choose Reserver ..."
+      creator: "Choose Creator ..."
       sponsor: "Choose Sponsor ..."
       household: "Choose Household ..."
       guardian: "Choose Guardian ..."
@@ -318,7 +303,7 @@ en:
         meal_id: "Meal ID"
       meals/meal:
         served_at: "Date/Time"
-        resources: "Locations"
+        calendars: "Locations"
         formula: "Formula"
         communities: "Communities"
         role: "Role"
@@ -327,9 +312,9 @@ en:
         action: "Action"
     errors:
       meals/meal:
-        resource:
-          bad_id: "Could not find a resource with ID %{str}"
-          bad_name: "Could not find a resource named '%{str}'"
+        calendar:
+          bad_id: "Could not find a calendar with ID %{str}"
+          bad_name: "Could not find a calendar named '%{str}'"
         formula:
           bad_id: "Could not find a meal formula with ID %{str}"
           bad_name: "Could not find a meal formula named '%{str}'"
@@ -378,14 +363,14 @@ en:
       default: "Click or Drag File Here"
       models:
         user: "Click or Drag Photo Here"
-        reservations/resource: "Click or Drag Photo Here"
+        calendars/calendar: "Click or Drag Photo Here"
 
   calendars:
     your_meals: "Meals You're Attending"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
-    community_reservations: "%{community} Reservations"
-    your_reservations: "Your Reservations"
+    community_events: "%{community} Events"
+    your_events: "Your Events"
     your_jobs: "Your Jobs"
 
   titles:

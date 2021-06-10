@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_11_032607) do
+ActiveRecord::Schema.define(version: 2021_06_08_132208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -78,6 +78,102 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
     t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["cluster_id"], name: "index_billing_templates_on_cluster_id"
     t.index ["community_id"], name: "index_billing_templates_on_community_id"
+  end
+
+  create_table "calendar_events", id: :serial, force: :cascade do |t|
+    t.integer "calendar_id", null: false
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "creator_id", null: false
+    t.datetime "ends_at", null: false
+    t.string "kind"
+    t.integer "meal_id"
+    t.string "name", limit: 24, null: false
+    t.text "note"
+    t.integer "sponsor_id"
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendar_events_on_cluster_id"
+    t.index ["creator_id"], name: "index_calendar_events_on_creator_id"
+    t.index ["meal_id"], name: "index_calendar_events_on_meal_id"
+    t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
+    t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
+  end
+
+  create_table "calendar_guideline_inclusions", id: :serial, force: :cascade do |t|
+    t.integer "calendar_id", null: false
+    t.integer "cluster_id", null: false
+    t.integer "shared_guidelines_id", null: false
+    t.index ["calendar_id", "shared_guidelines_id"], name: "index_reservation_guideline_inclusions", unique: true
+    t.index ["cluster_id"], name: "index_calendar_guideline_inclusions_on_cluster_id"
+  end
+
+  create_table "calendar_nodes", id: :serial, force: :cascade do |t|
+    t.string "abbrv", limit: 6
+    t.boolean "allow_overlap", default: true, null: false
+    t.integer "cluster_id", null: false
+    t.string "color", limit: 7
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
+    t.string "default_calendar_view", default: "week", null: false
+    t.bigint "group_id"
+    t.text "guidelines"
+    t.boolean "meal_hostable", default: false, null: false
+    t.string "name", limit: 24, null: false
+    t.integer "rank"
+    t.boolean "selected_by_default", default: false, null: false
+    t.string "type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_calendar_nodes_on_cluster_id"
+    t.index ["community_id", "name"], name: "index_calendar_nodes_on_community_id_and_name", unique: true
+    t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
+    t.index ["group_id"], name: "index_calendar_nodes_on_group_id"
+    t.check_constraint :color_null, "(((type)::text = 'Calendars::Group'::text) = (color IS NULL))"
+    t.check_constraint :group_id_null, "(((type)::text <> 'Calendars::Group'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL)))"
+    t.check_constraint :rank_or_deactivated_at_null, "(((deactivated_at IS NOT NULL) AND (rank IS NULL)) OR ((rank IS NOT NULL) AND (deactivated_at IS NULL)))"
+  end
+
+  create_table "calendar_protocolings", id: :serial, force: :cascade do |t|
+    t.integer "calendar_id", null: false
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "protocol_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id", "protocol_id"], name: "protocolings_unique", unique: true
+    t.index ["cluster_id"], name: "index_calendar_protocolings_on_cluster_id"
+  end
+
+  create_table "calendar_protocols", id: :serial, force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.time "fixed_end_time"
+    t.time "fixed_start_time"
+    t.jsonb "kinds"
+    t.integer "max_days_per_year"
+    t.integer "max_lead_days"
+    t.integer "max_length_minutes"
+    t.integer "max_minutes_per_year"
+    t.string "name", null: false
+    t.string "other_communities"
+    t.text "pre_notice"
+    t.boolean "requires_kind"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_calendar_protocols_on_cluster_id"
+    t.index ["community_id"], name: "index_calendar_protocols_on_community_id"
+  end
+
+  create_table "calendar_shared_guidelines", id: :serial, force: :cascade do |t|
+    t.text "body", null: false
+    t.integer "cluster_id", null: false
+    t.integer "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", limit: 64, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_calendar_shared_guidelines_on_cluster_id"
+    t.index ["community_id"], name: "index_calendar_shared_guidelines_on_community_id"
   end
 
   create_table "clusters", id: :serial, force: :cascade do |t|
@@ -379,6 +475,16 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "meal_resourcings", id: :serial, force: :cascade do |t|
+    t.integer "calendar_id", null: false
+    t.integer "cluster_id", null: false
+    t.integer "meal_id", null: false
+    t.integer "prep_time", null: false
+    t.integer "total_time", null: false
+    t.index ["cluster_id"], name: "index_meal_resourcings_on_cluster_id"
+    t.index ["meal_id", "calendar_id"], name: "index_meal_resourcings_on_meal_id_and_calendar_id", unique: true
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -587,102 +693,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
     t.check_constraint :reminders_850637520, "(((role_id IS NOT NULL) AND (job_id IS NULL)) OR ((job_id IS NOT NULL) AND (role_id IS NULL)))"
   end
 
-  create_table "reservation_guideline_inclusions", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "resource_id", null: false
-    t.integer "shared_guidelines_id", null: false
-    t.index ["cluster_id"], name: "index_reservation_guideline_inclusions_on_cluster_id"
-    t.index ["resource_id", "shared_guidelines_id"], name: "index_reservation_guideline_inclusions", unique: true
-  end
-
-  create_table "reservation_protocolings", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "protocol_id", null: false
-    t.integer "resource_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_reservation_protocolings_on_cluster_id"
-    t.index ["resource_id", "protocol_id"], name: "protocolings_unique", unique: true
-  end
-
-  create_table "reservation_protocols", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.time "fixed_end_time"
-    t.time "fixed_start_time"
-    t.jsonb "kinds"
-    t.integer "max_days_per_year"
-    t.integer "max_lead_days"
-    t.integer "max_length_minutes"
-    t.integer "max_minutes_per_year"
-    t.string "name", null: false
-    t.string "other_communities"
-    t.text "pre_notice"
-    t.boolean "requires_kind"
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_reservation_protocols_on_cluster_id"
-    t.index ["community_id"], name: "index_reservation_protocols_on_community_id"
-  end
-
-  create_table "reservation_resourcings", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.integer "meal_id", null: false
-    t.integer "prep_time", null: false
-    t.integer "resource_id", null: false
-    t.integer "total_time", null: false
-    t.index ["cluster_id"], name: "index_reservation_resourcings_on_cluster_id"
-    t.index ["meal_id", "resource_id"], name: "index_reservation_resourcings_on_meal_id_and_resource_id", unique: true
-  end
-
-  create_table "reservation_shared_guidelines", id: :serial, force: :cascade do |t|
-    t.text "body", null: false
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.string "name", limit: 64, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_reservation_shared_guidelines_on_cluster_id"
-    t.index ["community_id"], name: "index_reservation_shared_guidelines_on_community_id"
-  end
-
-  create_table "reservations", id: :serial, force: :cascade do |t|
-    t.integer "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "ends_at", null: false
-    t.string "kind"
-    t.integer "meal_id"
-    t.string "name", limit: 24, null: false
-    t.text "note"
-    t.integer "reserver_id", null: false
-    t.integer "resource_id", null: false
-    t.integer "sponsor_id"
-    t.datetime "starts_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_reservations_on_cluster_id"
-    t.index ["meal_id"], name: "index_reservations_on_meal_id"
-    t.index ["reserver_id"], name: "index_reservations_on_reserver_id"
-    t.index ["resource_id"], name: "index_reservations_on_resource_id"
-    t.index ["sponsor_id"], name: "index_reservations_on_sponsor_id"
-    t.index ["starts_at"], name: "index_reservations_on_starts_at"
-  end
-
-  create_table "resources", id: :serial, force: :cascade do |t|
-    t.string "abbrv", limit: 6
-    t.integer "cluster_id", null: false
-    t.integer "community_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "deactivated_at"
-    t.string "default_calendar_view", default: "week", null: false
-    t.text "guidelines"
-    t.boolean "meal_hostable", default: false, null: false
-    t.string "name", limit: 24, null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_resources_on_cluster_id"
-    t.index ["community_id", "name"], name: "index_resources_on_community_id_and_name", unique: true
-    t.index ["community_id"], name: "index_resources_on_community_id"
-  end
-
   create_table "roles", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.string "name"
@@ -768,6 +778,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "school"
+    t.jsonb "settings"
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
     t.string "unconfirmed_email"
@@ -923,6 +934,24 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
+  add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_events", "clusters"
+  add_foreign_key "calendar_events", "meals"
+  add_foreign_key "calendar_events", "users", column: "creator_id"
+  add_foreign_key "calendar_events", "users", column: "sponsor_id"
+  add_foreign_key "calendar_guideline_inclusions", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_guideline_inclusions", "calendar_shared_guidelines", column: "shared_guidelines_id"
+  add_foreign_key "calendar_guideline_inclusions", "clusters"
+  add_foreign_key "calendar_nodes", "calendar_nodes", column: "group_id"
+  add_foreign_key "calendar_nodes", "clusters"
+  add_foreign_key "calendar_nodes", "communities"
+  add_foreign_key "calendar_protocolings", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_protocolings", "calendar_protocols", column: "protocol_id"
+  add_foreign_key "calendar_protocolings", "clusters"
+  add_foreign_key "calendar_protocols", "clusters"
+  add_foreign_key "calendar_protocols", "communities"
+  add_foreign_key "calendar_shared_guidelines", "clusters"
+  add_foreign_key "calendar_shared_guidelines", "communities"
   add_foreign_key "communities", "clusters"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"
@@ -971,6 +1000,9 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"
+  add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "meal_resourcings", "clusters"
+  add_foreign_key "meal_resourcings", "meals"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
   add_foreign_key "meal_signup_parts", "clusters"
@@ -1007,26 +1039,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_032607) do
   add_foreign_key "reminders", "clusters"
   add_foreign_key "reminders", "meal_roles", column: "role_id"
   add_foreign_key "reminders", "work_jobs", column: "job_id"
-  add_foreign_key "reservation_guideline_inclusions", "clusters"
-  add_foreign_key "reservation_guideline_inclusions", "reservation_shared_guidelines", column: "shared_guidelines_id"
-  add_foreign_key "reservation_guideline_inclusions", "resources"
-  add_foreign_key "reservation_protocolings", "clusters"
-  add_foreign_key "reservation_protocolings", "reservation_protocols", column: "protocol_id"
-  add_foreign_key "reservation_protocolings", "resources"
-  add_foreign_key "reservation_protocols", "clusters"
-  add_foreign_key "reservation_protocols", "communities"
-  add_foreign_key "reservation_resourcings", "clusters"
-  add_foreign_key "reservation_resourcings", "meals"
-  add_foreign_key "reservation_resourcings", "resources"
-  add_foreign_key "reservation_shared_guidelines", "clusters"
-  add_foreign_key "reservation_shared_guidelines", "communities"
-  add_foreign_key "reservations", "clusters"
-  add_foreign_key "reservations", "meals"
-  add_foreign_key "reservations", "resources"
-  add_foreign_key "reservations", "users", column: "reserver_id"
-  add_foreign_key "reservations", "users", column: "sponsor_id"
-  add_foreign_key "resources", "clusters"
-  add_foreign_key "resources", "communities"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
   add_foreign_key "transactions", "accounts"

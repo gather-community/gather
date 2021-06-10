@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "meal import", :js, :perform_jobs do
   let(:actor) { create(:admin) }
-  let!(:resource) { create(:resource, name: "Dining Room") }
+  let!(:calendar) { create(:calendar, name: "Dining Room") }
   let!(:formula) { create(:meal_formula, is_default: true) }
 
   before do

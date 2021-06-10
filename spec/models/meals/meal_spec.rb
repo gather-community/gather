@@ -40,12 +40,12 @@ describe Meals::Meal do
       end
     end
 
-    describe "via meal reservation handler" do
-      let(:meal) { build(:meal, resources: [create(:resource)]) }
+    describe "via meal event handler" do
+      let(:meal) { build(:meal, calendars: [create(:calendar)]) }
 
-      it "should call validate_meal on handler if reservations present" do
-        meal.build_reservations
-        expect(meal.reservation_handler).to receive(:validate_meal)
+      it "should call validate_meal on handler if events present" do
+        meal.build_events
+        expect(meal.event_handler).to receive(:validate_meal)
         meal.valid?
       end
     end
@@ -137,7 +137,7 @@ describe Meals::Meal do
 
     before do
       meal.reload # Force associations to be recognized.
-      meal.build_reservations
+      meal.build_events
       meal.save!
     end
 

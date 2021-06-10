@@ -2,20 +2,20 @@
   <div class="fields">
     <% if policy(meal).change_date_loc_invites? %>
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true %>
-      <%= f.input :resource_ids, collection: @resource_options, label_method: :name_with_prefix,
+      <%= f.input :calendar_ids, collection: @calendar_options, label_method: :name_with_prefix,
                                  input_html: {multiple: "multiple"} %>
       <%= javascript_tag do %>
         $(function() {
           // We don't use AjaxSelect2 here since it's not an ajax-based select2.
           // We specify width 100% so that the control has the proper width when the section is toggled.
-          $("#meals_meal_resource_ids").select2({width: '100%'});
+          $("#meals_meal_calendar_ids").select2({width: '100%'});
         });
       <% end %>
     <% else %>
       <%= f.input :served_at do %>
         <%= meal.served_at_datetime %>
       <% end %>
-      <%= f.input :resource_ids do %>
+      <%= f.input :calendar_ids do %>
         <%= meal.location_name %>
       <% end %>
     <% end %>

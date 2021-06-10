@@ -1,0 +1,7 @@
+<p>The following error(s) occurred in trying to save your changes:</p>
+<ul>
+  <% @event.errors.each do |attrib, error| %>
+    <% attrib = "Event" if attrib == :base %>
+    <li><%= "#{Calendars::Event.human_attribute_name(attrib)}: #{error}" %></li>
+  <% end %>
+</ul>

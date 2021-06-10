@@ -48,7 +48,7 @@ describe "password auth" do
     scenario "forgot password", js: true do
       visit(root_path)
       click_on("Sign in with Password")
-      click_on("I don't know my password")
+      click_on("Don't know your password?")
       fill_in("Email Address", with: "#{user.email}x")
       click_on("Send Reset Instructions")
       expect(page).to have_content("Email not found")
@@ -103,7 +103,7 @@ describe "password auth" do
 
       visit(root_path)
       click_on("Sign in with Password")
-      click_on("I don't know my password")
+      click_on("Don't know your password?")
       submit_email_and_visit_new_password_entry_page
 
       fill_in("New Password", with: "48hafeirafar42", match: :prefer_exact)

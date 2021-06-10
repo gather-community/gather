@@ -13,7 +13,7 @@
                                   disabled: !policy(f.object).administer? %>
 
 <% if @member_types.any? && policy(f.object).change_member_type? %>
-  <%= f.input :member_type_id, collection: @member_types, include_blank: "None" %>
+  <%= f.input :member_type_id, collection: @member_types, include_blank: "[None]" %>
 <% end %>
 <%= f.input :garage_nums %>
 <%= f.input :keyholders %>

@@ -1,0 +1,4 @@
+<% content_for(:flashes, inactive_notice(calendar)) if calendar.inactive? %>
+<% content_for(:title, "Edit Calendar: #{calendar.name_with_inactive}") %>
+<% content_for(:action_links, calendar.action_links(:edit)) %>
+<%= render("form") %>

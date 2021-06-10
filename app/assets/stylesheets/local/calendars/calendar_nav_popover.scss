@@ -1,0 +1,17 @@
+// All this stuff is for specificity
+nav.navbar.navbar-default ul.navbar-nav .popover,
+nav.navbar.navbar-default ul.nav .popover {
+  width: 276px;
+  text-align: center;
+  font-size: 18px;
+
+  div {
+    color: $text-color;
+  }
+
+  a {
+    font-size: 14px;
+    color: $link-color;
+    background-color: inherit;
+  }
+}

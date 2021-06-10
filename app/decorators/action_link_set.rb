@@ -17,7 +17,6 @@ class ActionLinkSet < ApplicationDecorator
     slice_size = tags.size <= 4 ? 4 : 3
     tag_groups = tags.each_slice(slice_size).to_a
     tag_html = tag_groups.map { |g| h.content_tag(:div, g.reduce(:<<), class: "action-link-group") }
-
-    h.content_tag(:div, tag_html.reduce(:<<), class: "action-links")
+    tag_html.reduce(:<<)
   end
 end

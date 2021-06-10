@@ -5,8 +5,8 @@ require "fileutils"
 
 describe Utils::Generators::MealGenerator do
   let(:community) { create(:community) }
-  let!(:kitchen) { create(:resource, name: "Kitchen") }
-  let!(:dining_room) { create(:resource, name: "Dining Room") }
+  let!(:kitchen) { create(:calendar, name: "Kitchen") }
+  let!(:dining_room) { create(:calendar, name: "Dining Room") }
   let!(:users) { create_list(:user, 5) }
   let(:generator) { described_class.new(community: community, statement_gen: double(generate_samples: nil)) }
 

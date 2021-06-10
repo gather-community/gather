@@ -43,8 +43,11 @@ mark {
 
 ul.no-marker {
   list-style-type: none;
-  padding: 0;
-  margin: 0;
+  padding-left: 0;
+
+  &.nested {
+    padding-left: 20px;
+  }
 }
 
 .center-notice {

@@ -20,7 +20,7 @@ module Work
     end
 
     def main_options
-      %i[all open me myhh notpre]
+      %i[all open you yourhh notpre]
     end
 
     def requester_options

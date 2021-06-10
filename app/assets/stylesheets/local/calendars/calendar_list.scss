@@ -1,0 +1,38 @@
+.calendar-list-with-links {
+  .links {
+    a {
+      font-size: 13px;
+    }
+  }
+}
+
+.calendar-list {
+  line-height: 3rem;
+
+  .group {
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+
+  .calendar {
+    display: flex;
+    align-items: center;
+  }
+
+  a.calendar-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  input[type=checkbox] {
+    margin: 0 6px 0 0;
+  }
+
+  .swatch {
+    min-width: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+}

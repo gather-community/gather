@@ -1,0 +1,50 @@
+.calendars--calendars {
+  .index {
+    td.name > div {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      color: $link-color;
+      margin-right: 5px;
+    }
+
+    .cal-img {
+      width: 46.656px;
+      height: 35px;
+    }
+
+    td.indent {
+      min-width: 21px;
+    }
+
+    td.name {
+      min-width: 300px;
+      height: 45px; // So that group rows have about same height as calendar rows with photos.
+
+      .swatch {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        margin-right: 5px;
+      }
+    }
+
+    .move-links {
+      margin-right: 10px;
+      font-size: 17px;
+      display: flex;
+      flex-direction: column;
+
+      a,
+      i.fa {
+        line-height: 100%;
+      }
+    }
+  }
+
+  .dropzone-wrapper {
+    @include dropzone(220px, 165px);
+  }
+}

@@ -1,0 +1,59 @@
+#calendar-and-sidebar {
+  #calendar-col {
+    footer {
+      @media screen and (max-width: $screen-xs-max) {
+        margin-bottom: 15px;
+      }
+
+      a {
+        color: $text-muted;
+        font-size: 11px;
+      }
+
+      a.early {
+        display: none;
+      }
+    }
+
+    #calendar {
+      // Hacky way to get the day/month/year buttons to look decent.
+      // Will probably go away when upgrading to Fullcalendar v4.
+      @media (max-width: 600px) {
+        .fc-toolbar {
+          text-align: left;
+
+          h2 {
+            margin-bottom: 10px;
+            margin-right: 20px;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  #sidebar {
+    img {
+      width: 100%;
+      max-width: 220px;
+    }
+
+    > div {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  #calendar-and-sidebar {
+    display: flex;
+
+    #calendar {
+      margin-right: 15px;
+    }
+
+    #sidebar {
+      min-width: 200px;
+    }
+  }
+}

@@ -181,8 +181,8 @@ module Work
       @shifts =
         case lenses[:shift].value
         when "open" then @shifts.open
-        when "me" then @shifts.with_user(@choosee)
-        when "myhh" then @shifts.with_user(@choosee.household.users)
+        when "you" then @shifts.with_user(@choosee)
+        when "yourhh" then @shifts.with_user(@choosee.household.users)
         when "notpre" then @shifts.with_non_preassigned_or_empty_slots
         else lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
         end

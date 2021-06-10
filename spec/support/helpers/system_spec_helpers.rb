@@ -17,6 +17,21 @@ module SystemSpecHelpers
   # Use a Node::Element argument if calling from a within block -- the CSS variant may
   # select the wrong element.
   def select2(value, from:, multiple: false)
+    prep_select2(value, from: from, multiple: multiple) do
+      find(".select2-dropdown .select2-results li", text: /#{value}/).click
+    end
+  end
+
+  def expect_no_select2_match(value, from:, multiple: false)
+    prep_select2(value, from: from, multiple: multiple) do
+      expect { find(".select2-dropdown .select2-results li", text: /#{value}/) }
+        .to raise_error(Capybara::ElementNotFound)
+      find("body").click
+    end
+  end
+
+  # Prepares select2 for finding the element and clicking it. Yields when it's time to shine.
+  def prep_select2(value, from:, multiple:)
     if from.is_a?(Capybara::Node::Element)
       select_el = from
       raise "Element must have a unique ID attribute so jQuery can grab it" if select_el[:id].blank?
@@ -40,7 +55,7 @@ module SystemSpecHelpers
           execute_script("$('#{css}').select2('open')")
           find(".select2-search--dropdown .select2-search__field").set(value)
         end
-        find(".select2-dropdown .select2-results li", text: /#{value}/).click
+        yield
       end
     end
   end

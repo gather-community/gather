@@ -33,16 +33,17 @@ module Meals
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
                             dependent: :restrict_with_exception, inverse_of: :statementable
 
-    # Resources are chosen by the user. Reservations are then automatically created.
+    # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.
-    has_many :resourcings, class_name: "Reservations::Resourcing", dependent: :destroy
-    has_many :resources, -> { order(:id) }, class_name: "Reservations::Resource", through: :resourcings
-    has_many :reservations, -> { order(:id) }, class_name: "Reservations::Reservation", autosave: true,
-                                               dependent: :destroy, inverse_of: :meal
+    has_many :resourcings, dependent: :destroy
+    has_many :calendars, -> { order(:id) }, class_name: "Calendars::Calendar", through: :resourcings
+    has_many :events, -> { order(:id) }, class_name: "Calendars::Event", autosave: true,
+                                         dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
     scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
     scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
+    scope :in_community, ->(c) { where(community: c) }
     scope :by_community, -> { joins(:community).alpha_order(communities: :name) }
     scope :by_community_reverse, -> { joins(:community).alpha_order("communities.name": :desc) }
     scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
@@ -57,7 +58,7 @@ module Meals
       rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
       where("? IN (#{rel.to_sql})", user)
     }
-    scope :attended_by, ->(household) { includes(:signups).where(meal_signups: {household_id: household.id}) }
+    scope :attended_by, ->(household) { joins(:signups).where(meal_signups: {household_id: household.id}) }
 
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
@@ -71,9 +72,9 @@ module Meals
     delegate :name, to: :head_cook, prefix: true, allow_nil: true
     delegate :name, to: :formula, prefix: true, allow_nil: true
     delegate :head_cook_role, :types, to: :formula
-    delegate :build_reservations, to: :reservation_handler
+    delegate :build_events, to: :event_handler
 
-    after_validation :copy_resource_errors
+    after_validation :copy_calendar_errors
     before_save :set_menu_timestamp
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
@@ -88,7 +89,8 @@ module Meals
     validate :title_and_entree_if_other_menu_items
     validate :at_least_one_community
     validate :allergens_specified_appropriately
-    validate { reservation_handler.validate_meal if reservations.any? }
+    validate { event_handler.validate_meal if events.any? }
+
     validates_with Meals::SignupsValidator
 
     def self.served_within_days_from_now(days)
@@ -132,8 +134,8 @@ module Meals
       auto_close_time.present? && auto_close_time < Time.current
     end
 
-    def reservation_handler
-      @reservation_handler ||= Reservations::MealReservationHandler.new(self)
+    def event_handler
+      @event_handler ||= Meals::EventHandler.new(self)
     end
 
     # Accepts values from the community checkboxes on the form.
@@ -235,8 +237,8 @@ module Meals
       end
     end
 
-    def copy_resource_errors
-      errors[:resources].each { |m| errors.add(:resource_ids, m) }
+    def copy_calendar_errors
+      errors[:calendars].each { |m| errors.add(:calendar_ids, m) }
     end
 
     def set_menu_timestamp

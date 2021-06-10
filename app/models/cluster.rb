@@ -6,6 +6,10 @@ class Cluster < ApplicationRecord
 
   before_create :generate_sso_secret
 
+  def multi_community?
+    communities.count > 1
+  end
+
   private
 
   def generate_sso_secret

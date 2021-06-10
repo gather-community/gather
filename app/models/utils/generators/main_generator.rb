@@ -49,9 +49,9 @@ module Utils
         self.generators = ActiveSupport::OrderedHash.new
         generators[:people] = PeopleGenerator.new(community: community, photos: photos)
         generators[:groups] = GroupGenerator.new(community: community)
-        generators[:resources] = ResourceGenerator.new(community: community, photos: photos)
-        generators[:reservations] = ReservationGenerator.new(
-          community: community, resource_map: generators[:resources].resource_map
+        generators[:calendars] = CalendarGenerator.new(community: community, photos: photos)
+        generators[:events] = EventGenerator.new(
+          community: community, calendar_map: generators[:calendars].calendar_map
         )
         generators[:statements] = StatementGenerator.new(community: community)
         generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements])

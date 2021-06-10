@@ -1,0 +1,3 @@
+<% content_for(:title, "Edit Calendar Group: #{group.name}") %>
+<% content_for(:action_links, group.action_links(:edit)) %>
+<%= render("form") %>

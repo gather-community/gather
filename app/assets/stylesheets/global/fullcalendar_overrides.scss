@@ -4,7 +4,7 @@
   }
 
   &.fc-unthemed .fc-today {
-    background-color: $theme-main-lightest;
+    background-color: $highlight-color2;
   }
 
   .fc-event-container {
@@ -13,7 +13,7 @@
     }
   }
 
-  .fc-event.own-reservation {
+  .fc-event.own-event {
     background-color: #0072AB;
   }
 

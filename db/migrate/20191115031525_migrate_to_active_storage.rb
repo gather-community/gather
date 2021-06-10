@@ -23,7 +23,7 @@ class MigrateToActiveStorage < ActiveRecord::Migration[6.0]
     SQL
 
     Rails.application.eager_load!
-    models = [User, Reservations::Resource]
+    models = [User, Calendars::Calendar]
 
     ActsAsTenant.without_tenant do
       transaction do

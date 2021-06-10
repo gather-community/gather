@@ -4,6 +4,11 @@ module Meals
   class MealDecorator < ApplicationDecorator
     delegate_all
 
+    # Form helper guesses this wrong b/c it's not namespaced.
+    def submission_url
+      new_record? ? h.meals_path : h.meal_path(object)
+    end
+
     def title_or_no_title
       title || "[No Menu]"
     end
@@ -51,7 +56,7 @@ module Meals
 
     def location_name
       return @location_name if defined?(@location_name)
-      @location_name = resources.first&.decorate&.name_with_prefix
+      @location_name = calendars.first&.decorate&.name_with_prefix
     end
 
     def location_name_with_at
@@ -59,7 +64,7 @@ module Meals
     end
 
     def location_abbrv
-      resources.first&.decorate&.abbrv_with_prefix
+      calendars.first&.decorate&.abbrv_with_prefix
     end
 
     def served_at_datetime

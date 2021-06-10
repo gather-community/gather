@@ -113,14 +113,14 @@ describe "work exports" do
       }, {
         uid: "#{signature}_Work_Assignment_#{job1.shifts[0].assignments[0].id}",
         summary: "Assistant Cook: Figs",
-        location: meal1.resources[0].name,
+        location: meal1.calendars[0].name,
         description: %r{Help cook the things\s+\n http://.+/work/signups/},
         "DTSTART;TZID=Etc/UTC" => (meal1_time - 2.hours).to_s(:no_sep),
         "DTEND;TZID=Etc/UTC" => meal1_time.to_s(:no_sep)
       }, {
         uid: "#{signature}_Work_Assignment_#{job1.shifts[1].assignments[0].id}",
         summary: "Assistant Cook: Buns",
-        location: meal2.resources[0].name,
+        location: meal2.calendars[0].name,
         description: %r{Help cook the things\s+\n http://.+/work/signups/},
         "DTSTART;TZID=Etc/UTC" => (meal2_time - 2.hours).to_s(:no_sep),
         "DTEND;TZID=Etc/UTC" => meal2_time.to_s(:no_sep)
@@ -130,14 +130,14 @@ describe "work exports" do
         # We know to use assignments[1] because the head cook is always [0].
         uid: "#{signature}_Meals_Assignment_#{meal3.assignments[1].id}",
         summary: "Assistant Cook: Rice",
-        location: meal3.resources[0].name,
+        location: meal3.calendars[0].name,
         description: %r{Assist the wise cook\s+\n http://.+/meals/},
         "DTSTART;TZID=Etc/UTC" => (meal3_time - 90.minutes).to_s(:no_sep),
         "DTEND;TZID=Etc/UTC" => meal3_time.to_s(:no_sep)
       }, {
         uid: "#{signature}_Meals_Assignment_#{meal4.assignments[0].id}",
         summary: "Head Cook: Corn",
-        location: meal4.resources[0].name,
+        location: meal4.calendars[0].name,
         description: %r{Cook something tasty\s+\n http://.+/meals/},
         "DTSTART;VALUE=DATE" => meal4_time.to_date.to_s(:no_sep),
         "DTEND;VALUE=DATE" => (meal4_time.to_date + 1).to_s(:no_sep)

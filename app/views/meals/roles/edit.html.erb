@@ -1,4 +1,4 @@
 <% content_for(:flashes, inactive_notice(role)) if role.inactive? %>
 <% content_for(:title, "Edit Meal Role: #{role.title}") %>
-<% content_for(:top_buttons, role.action_links(:edit)) %>
+<% content_for(:action_links, role.action_links(:edit)) %>
 <%= render("form") %>

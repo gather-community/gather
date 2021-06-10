@@ -241,7 +241,7 @@ describe UserPolicy do
       end
     end
 
-    permissions :update_info? do
+    permissions :update_info?, :update_setting? do
       it_behaves_like "permits admins but not regular users"
       it_behaves_like "permits self (active or not) and guardians"
     end
@@ -280,13 +280,13 @@ describe UserPolicy do
         it_behaves_like "forbids all"
       end
 
-      context "with own reservations" do
-        let!(:reservation) { create(:reservation, reserver: record) }
+      context "with own events" do
+        let!(:event) { create(:event, creator: record) }
         it_behaves_like "forbids all"
       end
 
-      context "with sponsored reservations" do
-        let!(:reservation) { create(:reservation, sponsor: record) }
+      context "with sponsored events" do
+        let!(:event) { create(:event, sponsor: record) }
         it_behaves_like "forbids all"
       end
 

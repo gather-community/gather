@@ -132,7 +132,9 @@
         </h1>
         <div class="top-buttons hidden-print">
           <%= lenses.html(position: "upper") if lenses&.visible? %>
-          <%= yield(:top_buttons) %>
+          <div class="action-links">
+            <%= yield(:action_links) %>
+          </div>
         </div>
       </div>
       <%= lenses.html(position: "lower") if lenses&.visible? %>
@@ -158,6 +160,10 @@
   <%= javascript_tag do %>
     $(function() {
       new Gather.Views.AddToHomeScreenView({el: '.add-to-home', host: <%=json Settings.url.host %>});
+      <% if current_user && current_user.created_at < Time.zone.parse("2021-06-01") &&
+           !current_user.settings[:calendar_popover_dismissed] %>
+        new Gather.Views.CalendarNavLinkPopoverView({el: '#navs'});
+      <% end %>
     });
   <% end %>
 </body>

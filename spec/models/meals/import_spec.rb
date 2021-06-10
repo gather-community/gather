@@ -68,10 +68,10 @@ describe Meals::Import do
     end
 
     context "with bad data" do
-      let!(:inactive_resource) { create(:resource, :inactive, name: "Inacto") }
+      let!(:inactive_calendar) { create(:calendar, :inactive, name: "Inacto") }
       let!(:inactive_formula) { create(:meal_formula, :inactive, name: "Inacto") }
       let!(:inactive_user) { create(:user, :inactive, first_name: "I", last_name: "J") }
-      let!(:outside_resource) { create(:resource, community: other_community, name: "Plizz") }
+      let!(:outside_calendar) { create(:calendar, community: other_community, name: "Plizz") }
       let!(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
       let!(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }
       let!(:outside_community) do
@@ -79,7 +79,7 @@ describe Meals::Import do
       end
       let(:csv) do
         prepare_fixture("meals/import/bad_data.csv", role_id: roles.map(&:id),
-                                                         resource_id: [outside_resource.id],
+                                                         calendar_id: [outside_calendar.id],
                                                          formula_id: [outside_formula.id],
                                                          user_id: [outside_user.id],
                                                          community_id: [outside_community.id])
@@ -89,8 +89,8 @@ describe Meals::Import do
         expect(import.errors_by_row).to eq(
           "2" => [
             "'notadate' is not a valid date/time",
-            "Could not find a resource with ID #{outside_resource.id}",
-            "Could not find a resource with ID 18249187214",
+            "Could not find a calendar with ID #{outside_calendar.id}",
+            "Could not find a calendar with ID 18249187214",
             "Could not find a meal formula with ID #{outside_formula.id}",
             "Could not find a community with ID #{outside_community.id}",
             "Could not find a community with ID 6822411",
@@ -99,8 +99,8 @@ describe Meals::Import do
           ],
           "3" => [
             "'2019-01-32 12:43' is not a valid date/time",
-            "Could not find a resource named 'Plizz'",
-            "Could not find a resource named 'Pants Room'",
+            "Could not find a calendar named 'Plizz'",
+            "Could not find a calendar named 'Pants Room'",
             "Could not find a meal formula named 'Blorph'",
             "Could not find a community named 'Saucy Community'",
             "Could not find a community named 'Sooville'",
@@ -109,11 +109,11 @@ describe Meals::Import do
           ],
           "5" => [
             "Date/time is required",
-            "Resource(s) are required"
+            "Calendar(s) are required"
           ],
           "6" => [
             "Date/time is required",
-            "Could not find a resource named 'Inacto'",
+            "Could not find a calendar named 'Inacto'",
             "Could not find a meal formula named 'Inacto'",
             "Could not find a user named 'I J'"
           ]
@@ -123,15 +123,15 @@ describe Meals::Import do
 
     context "with data causing validation errors" do
       let!(:formula) { create(:meal_formula, is_default: true) }
-      let(:resource) { create(:resource, name: "Kitchen") }
+      let(:calendar) { create(:calendar, name: "Kitchen") }
       let(:csv) do
-        prepare_fixture("meals/import/data_with_validation_error.csv", resource_id: [resource.id])
+        prepare_fixture("meals/import/data_with_validation_error.csv", calendar_id: [calendar.id])
       end
 
       it "returns errors on valid rows and saves no meals" do
         expect(import.errors_by_row).to eq(
-          "3" => ["The following error(s) occurred in making a Kitchen reservation for this meal: "\
-            "This reservation overlaps an existing one."],
+          "3" => ["The following error(s) occurred in making a Kitchen event for this meal: "\
+            "This event overlaps an existing one."],
           "4" => ["Could not find a meal formula with ID 1234"]
         )
         expect(Meals::Meal.count).to be_zero
@@ -142,14 +142,14 @@ describe Meals::Import do
       let!(:default_formula) { create(:meal_formula, :with_two_roles, is_default: true) }
       let!(:asst_cook_role) { default_formula.roles[1] }
       let!(:other_formula) { create(:meal_formula, name: "Qux") }
-      let!(:resources) { [create(:resource, name: "Large"), create(:resource, name: "Foo")] }
+      let!(:calendars) { [create(:calendar, name: "Large"), create(:calendar, name: "Foo")] }
       let!(:users) do
         [create(:user), create(:user), create(:user, first_name: "John", last_name: "Fish")]
       end
       let!(:communities) { [community, other_community, create(:community)] }
       let(:csv) do
         prepare_fixture("meals/import/successful_data.csv",
-                            resource_id: resources.map(&:id),
+                            calendar_id: calendars.map(&:id),
                             role_id: [asst_cook_role.id],
                             user_id: users.map(&:id),
                             community_id: communities.map(&:id))
@@ -166,7 +166,7 @@ describe Meals::Import do
         expect(meals.size).to eq(2)
 
         expect(meals[0].served_at).to eq(Time.zone.parse("2019-01-31 12:00"))
-        expect(meals[0].resources).to match_array(resources)
+        expect(meals[0].calendars).to match_array(calendars)
         expect(meals[0].formula).to eq(default_formula)
         expect(meals[0].communities).to match_array(communities)
         expect(meals[0].community).to eq(community)
@@ -177,7 +177,7 @@ describe Meals::Import do
         expect(meals[0].capacity).to eq(42)
 
         expect(meals[1].served_at).to eq(Time.zone.parse("2019-02-01 13:00"))
-        expect(meals[1].resources).to eq([resources[0]])
+        expect(meals[1].calendars).to eq([calendars[0]])
         expect(meals[1].formula).to eq(other_formula)
         expect(meals[1].communities).to match_array(communities[0..1])
         expect(meals[1].community).to eq(community)
@@ -191,14 +191,14 @@ describe Meals::Import do
     context "with action column" do
       let!(:formula) { create(:meal_formula, is_default: true) }
       let!(:formula2) { create(:meal_formula, name: "Pizza") }
-      let!(:resources) { [create(:resource, name: "Foo"), create(:resource, name: "Bar")] }
+      let!(:calendars) { [create(:calendar, name: "Foo"), create(:calendar, name: "Bar")] }
 
       context "when can't find existing meal for update or destroy" do
         let(:csv) { prepare_fixture("meals/import/missing_existing_meals.csv") }
 
         it "fails and doesn't save valid meal" do
           expect(import.errors_by_row).to eq(
-            "2" => ["Could not find a resource named 'Blah'"],
+            "2" => ["Could not find a calendar named 'Blah'"],
             "3" => ["Could not find meal served at Thu Jan 31 2019 12:00pm at locations: Foo"],
             "4" => ["Could not find meal served at Fri Feb 01 2019 1:00pm at locations: Foo"],
             "6" => ["Invalid action: baloney"]
@@ -209,7 +209,7 @@ describe Meals::Import do
 
       # Create and update are not interesting
       context "with destroy permission issues" do
-        let!(:meal) { create(:meal, :finalized, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
+        let!(:meal) { create(:meal, :finalized, served_at: "2019-01-31 12:00", calendars: [calendars[0]]) }
         let(:csv) { prepare_fixture("meals/import/destroy_permission_errors.csv") }
 
         it "fails with correct errors" do
@@ -220,31 +220,31 @@ describe Meals::Import do
       context "with valid data" do
         let!(:user1) { create(:user, first_name: "Pol", last_name: "Pum") }
         let!(:user2) { create(:user, first_name: "Bil", last_name: "Bip") }
-        let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", resources: resources) }
+        let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", calendars: calendars) }
         let!(:meal2) do
-          create(:meal, served_at: "2019-02-01 12:00", resources: resources,
+          create(:meal, served_at: "2019-02-01 12:00", calendars: calendars,
                         formula: formula, head_cook: user1, communities: [community])
         end
         let!(:meal3) do
-          create(:meal, :finalized, served_at: "2019-02-02 12:00", resources: resources,
+          create(:meal, :finalized, served_at: "2019-02-02 12:00", calendars: calendars,
                                     formula: formula, head_cook: user1, communities: [community])
         end
         let(:csv) { prepare_fixture("meals/import/successful_data_with_actions.csv") }
 
-        it "succeeds, ignoring case for action, ignoring resource order, ignoring unpermitted fields" do
+        it "succeeds, ignoring case for action, ignoring calendar order, ignoring unpermitted fields" do
           expect(import).to be_successful
           expect { meal1.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
           # meal2 formula should have changed b/c it's not finalized
           meal2.reload
-          expect(meal2.resources).to match_array(resources)
+          expect(meal2.calendars).to match_array(calendars)
           expect(meal2.formula).to eq(formula2)
           expect(meal2.head_cook).to eq(user2)
           expect(meal2.communities).to contain_exactly(community, other_community)
 
           # meal3 formula should not have changed b/c it's finalized
           meal3.reload
-          expect(meal3.resources).to match_array(resources)
+          expect(meal3.calendars).to match_array(calendars)
           expect(meal3.formula).to eq(formula)
           expect(meal3.head_cook).to eq(user2)
           expect(meal3.communities).to contain_exactly(community, other_community)
@@ -252,7 +252,7 @@ describe Meals::Import do
       end
 
       context "with optional ID column" do
-        let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", resources: [resources[0]]) }
+        let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", calendars: [calendars[0]]) }
 
         context "with correct data" do
           let(:csv) { prepare_fixture("meals/import/actions_with_id_column.csv", meal_id: [meal1.id]) }
@@ -261,7 +261,7 @@ describe Meals::Import do
             expect(import).to be_successful
             meal1.reload
             expect(meal1.served_at).to eq(Time.zone.parse("2019-02-01 12:00"))
-            expect(meal1.resources).to contain_exactly(resources[1])
+            expect(meal1.calendars).to contain_exactly(calendars[1])
             expect(Meals::Meal.count).to eq(2)
           end
         end

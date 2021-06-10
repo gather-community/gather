@@ -10,7 +10,7 @@ describe "communities index" do
     use_user_subdomain(actor)
     # Generate some fake data to exercise the queries.
     create(:meal)
-    create(:reservation)
+    create(:event)
     create(:work_shift)
     create(:transaction)
 

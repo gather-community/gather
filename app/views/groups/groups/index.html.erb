@@ -1,6 +1,6 @@
 <% content_for(:title, "Groups") %>
 
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if policy(sample_group).create? %>
     <%= link_to(icon_tag("plus") << " Create Group", new_groups_group_path, class: "btn btn-primary") %>
   <% end %>

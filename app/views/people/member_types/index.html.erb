@@ -1,5 +1,5 @@
 <% content_for(:title, "Member Types") %>
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if policy(sample_member_type).create? %>
     <%= link_to(icon_tag("plus") << " Create Member Type",
       new_people_member_type_path, class: "btn btn-primary") %>

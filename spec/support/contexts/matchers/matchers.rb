@@ -2,6 +2,12 @@
 
 require "rspec/expectations"
 
+RSpec::Matchers.define(:eq_time) do |t1|
+  match do |t2|
+    t1.strftime("%F %T") == t2.strftime("%F %T")
+  end
+end
+
 RSpec::Matchers.define(:have_apex_domain) do |_subdomain|
   match do |url|
     url =~ %r{\Ahttp://#{Settings.url.host}}

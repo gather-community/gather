@@ -1,4 +1,0 @@
-<% content_for(:flashes, inactive_notice(resource)) if resource.inactive? %>
-<% content_for(:title, "Edit Resource: #{resource.name_with_inactive}") %>
-<% content_for(:top_buttons, resource.action_links(:edit)) %>
-<%= render("form") %>

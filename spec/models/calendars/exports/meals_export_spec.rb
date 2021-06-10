@@ -5,11 +5,11 @@ require "rails_helper"
 describe "meals exports" do
   include_context "calendar exports"
 
-  let(:resource) { create(:resource, name: "Dining Room") }
+  let(:calendar) { create(:calendar, name: "Dining Room") }
   let(:meal1_time) { Time.current.midnight + 18.hours }
   let!(:meal1) do
     create(:meal, :with_menu, title: "Meal1", head_cook: user,
-                              served_at: meal1_time, resources: [resource])
+                              served_at: meal1_time, calendars: [calendar])
   end
   let!(:meal2) do
     create(:meal, :with_menu, title: "Meal2", served_at: Time.current + 2.days)

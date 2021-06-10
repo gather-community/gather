@@ -38,6 +38,9 @@ Layout/MultilineOperationIndentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
 Metrics/AbcSize:
   Max: 35
 

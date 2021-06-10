@@ -67,8 +67,8 @@ module Utils
         self.households = Household.all
         self.adults = User.adults.active.to_a
         self.locations = [
-          Reservations::Resource.find_by(name: "Kitchen"),
-          Reservations::Resource.find_by(name: "Dining Room")
+          Calendars::Calendar.find_by(name: "Kitchen"),
+          Calendars::Calendar.find_by(name: "Dining Room")
         ]
       end
 
@@ -110,7 +110,7 @@ module Utils
 
           meal = build(:meal, datum.merge(
             formula: formula,
-            resources: locations,
+            calendars: locations,
             community: community,
             capacity: 80,
             head_cook: staff[0],
@@ -121,7 +121,7 @@ module Utils
             created_at: community.created_at,
             updated_at: community.updated_at
           ))
-          meal.build_reservations
+          meal.build_events
           meal.save!
 
           num_households = 5 + rand(households.size - 5)

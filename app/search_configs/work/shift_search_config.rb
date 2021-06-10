@@ -33,6 +33,8 @@ module Work
     end
 
     def as_indexed_json(_options = {})
+      # Keys don't get transformed here b/c we're calling as_json on the serializer directly,
+      # not the SerializableResource.
       ShiftSearchSerializer.new(self).as_json
     end
   end

@@ -1,3 +1,3 @@
 <% content_for(:title, "Edit Meal" << (meal.title.blank? ? "" : ": #{meal.title}")) %>
-<% content_for(:top_buttons, meal.action_links(:edit)) %>
+<% content_for(:action_links, meal.action_links(:edit)) %>
 <%= render("form") %>

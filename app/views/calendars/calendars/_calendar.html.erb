@@ -1,0 +1,18 @@
+<tr class="<%= calendar.tr_classes %>">
+  <% if calendar.in_group? %>
+    <td class="indent">&nbsp;</td>
+  <% end %>
+  <td class="name" colspan="<%= calendar.in_group? ? "1" : "2" %>">
+    <div>
+      <%= render("move_links", node: calendar) %>
+      <div class="swatch" style="background-color: <%= calendar.color %>"></div>
+      <%= link_to(calendar.name_with_inactive, edit_calendar_path(calendar.id)) %>
+    </div>
+  </td>
+  <td><%= number_with_delimiter(calendar.event_count) %></td>
+  <td>
+    <% if calendar.photo? %>
+      <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name, class: "cal-img") %>
+    <% end %>
+  </td>
+</tr>

@@ -28,7 +28,7 @@ describe "meals" do
     end
   end
 
-  context "with no meals, resources, or formulas" do
+  context "with no meals, calendars, or formulas" do
     scenario "index" do
       visit "/meals?community=all"
       expect(page).to have_content("No meals found")

@@ -7,8 +7,8 @@ module Meals
   class Import < ApplicationRecord
     include AttachmentFormable
 
-    BASIC_HEADERS = %i[served_at resources formula communities action id].freeze
-    REQUIRED_HEADERS = %i[served_at resources].freeze
+    BASIC_HEADERS = %i[served_at calendars formula communities action id].freeze
+    REQUIRED_HEADERS = %i[served_at calendars].freeze
     DB_ID_REGEX = /\A\d+\z/.freeze
 
     acts_as_tenant :cluster
@@ -100,12 +100,12 @@ module Meals
       new_meal.communities = Community.all if new_meal.communities.none?
       new_meal.creator = user
       new_meal.capacity = community.settings.meals.default_capacity
-      new_meal.build_reservations
+      new_meal.build_events
     end
 
     def copy_attribs_to_target_meal
       attribs = []
-      attribs.concat(%i[served_at resources communities]) if row_policy.change_date_loc_invites?
+      attribs.concat(%i[served_at calendars communities]) if row_policy.change_date_loc_invites?
       attribs << :formula if row_policy.change_formula?
       attribs << :assignments if row_policy.change_workers?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
@@ -123,10 +123,10 @@ module Meals
         scope.find_by(id: parsed_id) || add_error("Could not find meal with ID '#{parsed_id}'")
       else
         candidates = scope.where(served_at: new_meal.served_at)
-        meal = candidates.detect { |m| m.resources.to_set == new_meal.resources.to_set }
+        meal = candidates.detect { |m| m.calendars.to_set == new_meal.calendars.to_set }
         return meal if meal.present?
         add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at "\
-          "locations: #{new_meal.resources.map(&:name).join(', ')}")
+          "locations: #{new_meal.calendars.map(&:name).join(', ')}")
       end
     end
 
@@ -177,7 +177,7 @@ module Meals
 
     def parse_attrib(attrib, str)
       case attrib
-      when :action, :served_at, :resources, :formula, :communities
+      when :action, :served_at, :calendars, :formula, :communities
         send("parse_#{attrib}", str)
       when :id
         self.parsed_id = str
@@ -200,10 +200,10 @@ module Meals
       add_error("'#{str}' is not a valid date/time")
     end
 
-    def parse_resources(str)
-      return add_error("Resource(s) are required") if str.blank?
-      new_meal.resources = str.split(/\s*;\s*/).map do |substr|
-        find_resource(substr)
+    def parse_calendars(str)
+      return add_error("Calendar(s) are required") if str.blank?
+      new_meal.calendars = str.split(/\s*;\s*/).map do |substr|
+        find_calendar(substr)
       end.compact
     end
 
@@ -237,12 +237,12 @@ module Meals
       errors_by_row[row_pointer].present?
     end
 
-    def find_resource(str)
+    def find_calendar(str)
       attrib = id?(str) ? :id : :name
-      scope = Reservations::ResourcePolicy::Scope.new(user, Reservations::Resource).resolve
+      scope = Calendars::CalendarPolicy::Scope.new(user, Calendars::Calendar).resolve
         .in_community(community).active
       scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
-        add_error(I18n.t("csv.errors.meals/meal.resource.bad_#{attrib}", str: str))
+        add_error(I18n.t("csv.errors.meals/meal.calendar.bad_#{attrib}", str: str))
     end
 
     def find_formula(str)

@@ -1,5 +1,5 @@
 <% content_for(:title, "Meal Types") %>
-<% content_for(:top_buttons) do %>
+<% content_for(:action_links) do %>
   <% if policy(sample_type).create? %>
     <%= link_to(icon_tag("plus") << " Create Type",
       new_meals_type_path, class: "btn btn-primary") %>

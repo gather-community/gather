@@ -1,0 +1,81 @@
+<% if calendar %>
+  <% content_for(:title, calendar.name_with_prefix) %>
+<% else %>
+  <% content_for(:title, "Events & Reservations") %>
+<% end %>
+
+<% content_for(:action_links) do %>
+  <%- if calendar && policy(calendar).edit? -%>
+    <%- concat(link_to(icon_tag("pencil") << " Edit Calendar", edit_calendar_path(calendar),
+               class: "btn btn-default")) -%>
+  <%- end -%>
+  <%- if @can_create_event -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Event", @new_event_path, class: "btn btn-primary")) -%>
+  <%- end -%>
+  <%- concat(calendar_exports_link) %>
+<% end %>
+
+<div id="calendar-and-sidebar">
+  <div id="calendar-col">
+    <div id="calendar"></div>
+    <footer>
+      <%= link_to("Permalink", @permalink, id: "permalink") %> &nbsp;
+      <a href="#" class="early" id="show-early">Show Early Morning</a>
+      <a href="#" class="early" id="hide-early">Hide Early Morning</a>
+    </footer>
+    <div id="create-confirm-modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h2 class="modal-title">Create Event?</h2>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar">
+    <% if calendar %>
+      <%= render("single_calendar_sidebar", calendar: calendar) %>
+    <% else %>
+      <%= render("all_events_sidebar") %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  $(function() {
+    var calendarView = new Gather.Views.Calendars.CalendarView({
+      el: '#calendar-col',
+      calendarId: <%= json(calendar&.id) %>,
+      feedPath: <%= json(@feed_path) %>,
+      newPath: <%= json(@new_event_path) %>,
+      dateUrlParam: <%= json(params[:date]) %>,
+      viewTypeUrlParam: <%= json(params[:view]) %>,
+      defaultViewType: <%= json(calendar&.default_calendar_view) %>,
+      ruleSet: <%= json(@rule_set) %>
+    });
+    var listView = new Gather.Views.Calendars.CalendarListView({
+      el: '.calendar-list-with-links',
+      selection: <%= json(@calendar_selection) %>
+    });
+    var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
+      el: '#calendar-and-sidebar'
+    });
+    new Gather.Views.Calendars.CalendarPageView({
+      el: '#calendar-and-sidebar',
+      calendarView: calendarView,
+      listView: listView,
+      linkManager: linkManager,
+      pageType: <%= json(@calendar ? "single" : "combined") %>,
+      calendarId: <%= json(params[:calendar_id]) %>
+    });
+  });
+<% end %>

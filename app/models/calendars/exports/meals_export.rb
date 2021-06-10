@@ -11,9 +11,9 @@ module Calendars
       protected
 
       def base_scope
-        # Eager loading resources due to location.
+        # Eager loading calendars due to location.
         Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
-          .includes(:resources)
+          .includes(:calendars)
           .with_max_age(MAX_EVENT_AGE)
           .not_cancelled
           .oldest_first

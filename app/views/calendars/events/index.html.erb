@@ -10,8 +10,7 @@
                class: "btn btn-default")) -%>
   <%- end -%>
   <%- if @can_create_event -%>
-    <%- concat(link_to(icon_tag("plus") << " Create Event",
-               new_calendars_event_path(@url_params_with_origin), class: "btn btn-primary")) -%>
+    <%- concat(link_to(icon_tag("plus") << " Create Event", @new_event_path, class: "btn btn-primary")) -%>
   <%- end -%>
   <%- concat(calendar_exports_link) %>
 <% end %>
@@ -20,7 +19,7 @@
   <div id="calendar-col">
     <div id="calendar"></div>
     <footer>
-      <%= link_to("Permalink", calendars_events_path(@url_params), id: "permalink") %> &nbsp;
+      <%= link_to("Permalink", @permalink, id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
@@ -56,8 +55,8 @@
     var calendarView = new Gather.Views.Calendars.CalendarView({
       el: '#calendar-col',
       calendarId: <%= json(calendar&.id) %>,
-      feedPath: <%= json(calendars_events_path) %>,
-      newPath: <%= json(new_calendars_event_path(@url_params_with_origin)) %>,
+      feedPath: <%= json(@feed_path) %>,
+      newPath: <%= json(@new_event_path) %>,
       dateUrlParam: <%= json(params[:date]) %>,
       viewTypeUrlParam: <%= json(params[:view]) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,

@@ -4,10 +4,11 @@ require "rails_helper"
 
 describe "event page flow", js: true do
   let(:user) { create(:user) }
-  let!(:calendar1) { create(:calendar, name: "Foo Room") }
-  let!(:calendar2) { create(:calendar, name: "Bar Room") }
+  let!(:calendar1) { create(:calendar, name: "Foo Room", selected_by_default: true) }
+  let!(:calendar2) { create(:calendar, name: "Bar Room", selected_by_default: true) }
   let!(:event) do
-    create(:event, name: "Fun Event", calendar: calendar1, starts_at: Time.current, creator: user)
+    create(:event, name: "Fun Event", calendar: calendar1,
+                   starts_at: Time.current.midnight + 8.hours, creator: user)
   end
 
   before do

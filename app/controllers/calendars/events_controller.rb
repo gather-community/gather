@@ -13,8 +13,6 @@ module Calendars
       return render_json_event_list if request.xhr?
 
       @calendar = Calendar.find(params[:calendar_id]) if params[:calendar_id]
-      @url_params = @calendar ? {calendar_id: @calendar.id} : {}
-      @url_params_with_origin = @url_params.dup
       load_calendars_and_selection
 
       if @calendar
@@ -39,8 +37,8 @@ module Calendars
         prepare_lenses(community: {clearable: false})
         @rule_set = {}
         @can_create_event = writeable_calendars.any?
-        @url_params_with_origin[:origin_page] = "combined"
       end
+      build_index_urls
     end
 
     def show
@@ -123,6 +121,18 @@ module Calendars
       @calendars = base_scope.arrange(decorator: CalendarDecorator)
       setting = current_user.settings[:calendar_selection]
       @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: base_scope).selection
+    end
+
+    def build_index_urls
+      calendar_id = {calendar_id: @calendar.id} if @calendar
+      origin_page = {origin_page: "combined"}
+
+      @new_event_path = new_calendars_event_path(@calendar ? calendar_id : origin_page)
+      # Permalink doesn't need origin page
+      @permalink = calendars_events_path(@calendar ? calendar_id : {})
+      # Feed path doesn't need calendar_id because the JS calendar view is responsible for inserting
+      # whichever calendar ids the user selects, or the single ID in the case of single view.
+      @feed_path = calendars_events_path(@calendar ? {} : origin_page)
     end
 
     def writeable_calendars

@@ -120,5 +120,18 @@ describe "calendars", js: true do
       # because it is first alphabetically.
       expect(page).to have_content(/Cal2.+Cal1.+Cal3.+Cal4.+Cal5.+Group2.1/m)
     end
+
+    context "with system calendar" do
+      let!(:calendar) { create(:community_meals_calendar, name: "Cmty Meals") }
+
+      scenario "edit system calendar" do
+        visit(calendars_path)
+        click_on("Cmty Meals")
+        fill_in("Name", with: "Cmty Mealz")
+        click_on("Save")
+        expect_success
+        expect(page).to have_content("Cmty Mealz")
+      end
+    end
   end
 end

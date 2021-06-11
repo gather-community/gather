@@ -9,7 +9,7 @@ module Calendars
                :calendar_id, :background_color, :border_color
 
     def url
-      calendars_event_path(object, origin_page: instance_options[:origin_page])
+      object.id.nil? ? nil : calendars_event_path(object, origin_page: instance_options[:origin_page])
     end
 
     def title

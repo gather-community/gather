@@ -15,7 +15,8 @@
 %>
 <%= content_tag(:div, class: wrapper_classes.join(" ")) do %>
   <%= form_tag(uploads_path, class: "dropzone") do %>
-    <%= hidden_field_tag(:class_name, obj.class_name) %>
+    <%# Use .model_name.name instead of .class.name b/c sometimes we override .model_name when using STI %>
+    <%= hidden_field_tag(:class_name, obj.model_name.name) %>
     <%= hidden_field_tag(:attrib, attrib) %>
 
     <%# Existing image on object (may or may not be persisted as an attachment-could be just a blob.) %>

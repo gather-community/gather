@@ -35,11 +35,6 @@ class ApplicationRecord < ActiveRecord::Base
     false
   end
 
-  # Useful when trying to get the class name of a decorated object.
-  def class_name
-    self.class.name
-  end
-
   protected
 
   # Runs the given block inside a transaction with repeatable_read isolation.

@@ -128,9 +128,17 @@ describe "calendars", js: true do
         visit(calendars_path)
         click_on("Cmty Meals")
         fill_in("Name", with: "Cmty Mealz")
+        drop_in_dropzone(fixture_file_path("chomsky.jpg"))
         click_on("Save")
+
         expect_success
-        expect(page).to have_content("Cmty Mealz")
+        click_on("Cmty Mealz")
+        expect_image_upload(state: :existing, path: /chomsky/)
+
+        message = accept_confirm { click_on("Deactivate") }
+        expect(message).to match(/Are you sure you want to/) # Not missing translation
+        expect_success
+        expect(page).to have_content("Cmty Mealz (Inactive)")
       end
     end
   end

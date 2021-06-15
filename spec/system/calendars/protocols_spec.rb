@@ -21,6 +21,7 @@ describe "protocols", js: true do
 
   context "with protocols" do
     let!(:calendars) { create_list(:calendar, 2, community: community) }
+    let!(:inactive_calendar) { create(:calendar, :inactive, community: community) }
     let!(:sys_calendar) { create(:community_meals_calendar, community: community) }
     let!(:protocols) do
       [
@@ -47,8 +48,10 @@ describe "protocols", js: true do
 
       expect(page).to have_content("Type Required")
       fill_in("Name", with: "Stuff")
-      expect_no_select2_match(sys_calendar.name, from: "#calendars_protocol_calendar_ids", multiple: true)
-      select2(calendars[0].name, from: "#calendars_protocol_calendar_ids", multiple: true)
+      cal_select = "#calendars_protocol_calendar_ids"
+      expect_no_select2_match(sys_calendar.name, from: cal_select, multiple: true)
+      expect_no_select2_match(inactive_calendar.name, from: cal_select, multiple: true)
+      select2(calendars[0].name, from: cal_select, multiple: true)
       select2("Official", from: "#calendars_protocol_kinds", multiple: true)
       expect(page).not_to have_content("Type Required")
       pick_time(".calendars_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm)
@@ -76,6 +79,23 @@ describe "protocols", js: true do
       accept_confirm { click_on("Delete") }
       expect_success
       expect(page).to have_css("table.index tr", count: 2)
+    end
+  end
+
+  context "with protocol with inactive calendar" do
+    let!(:calendar) { create(:calendar, :inactive, community: community, name: "Log Drivings") }
+    let!(:protocol) do
+      create(:calendar_protocol, community: community, calendars: [calendar], name: "Stuff",
+                                 pre_notice: "Foo notice")
+    end
+
+    scenario "does not lose calendar" do
+      visit(edit_calendars_protocol_path(protocol))
+      expect(page).to have_content("Log Drivings (Inactive)")
+      click_on("Save")
+      expect_success
+      click_on("Stuff")
+      expect(page).to have_content("Log Drivings (Inactive)")
     end
   end
 end

@@ -3,7 +3,7 @@
 
   <h2><%= t("calendars/protocol.applicability") %></h2>
 
-  <%= f.input(:calendar_ids, collection: @calendar_options, label_method: :name,
+  <%= f.input(:calendar_ids, collection: @calendar_options, label_method: :name_with_inactive,
                              input_html: {
                                multiple: "multiple",
                                "data-placeholder":

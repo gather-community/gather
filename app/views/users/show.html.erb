@@ -56,7 +56,19 @@
                 <td><%= user.birthday_formatted %></td>
               </tr>
             <% end %>
-            <% %i(age joined_on school allergies doctor medical).each do |attr| %>
+            <% if user.age.present? %>
+              <tr>
+                <td>Age</td>
+                <td><%= user.age %></td>
+              </tr>
+            <% end %>
+            <% if user.joined_on.present? %>
+              <tr>
+                <td>Join Date</td>
+                <td><%= user.joined_on %></td>
+              </tr>
+            <% end %>
+            <% %i(school allergies doctor medical).each do |attr| %>
               <% if user[attr].present? %>
                 <tr>
                   <td><%= User.human_attribute_name(attr) %></td>

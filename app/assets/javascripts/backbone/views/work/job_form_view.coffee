@@ -37,7 +37,7 @@ Gather.Views.Work.JobFormView = Backbone.View.extend
       when 'date_only' then @setPickerFormat(dateFormat)
 
   initDatePickers: (inserted) ->
-    @$(inserted).find('.datetimepicker').datetimepicker()
+    @$(inserted).trigger('page:change') # Force recognition of datepicker in pickers.js
 
   setPickerFormat: (format) ->
     @shiftDatePickers().map ->

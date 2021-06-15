@@ -47,6 +47,11 @@ module Groups
         # We need to check if the user is syncable (i.e. not fake).
         return unless mship.user_syncable?
 
+        # list_id can be nil if the MembershipSyncJob gets enqueued before ListSyncJob for a new list,
+        # e.g. if a new group has 'can administer' set to true.
+        # We can skip it safely because ListSyncJob will enqueue a separate MembershipSyncJob once it's done.
+        return if mship.list_id.nil?
+
         create_or_capture_mailman_user(mship) unless mship.user_remote_id?
         api.update_user(mship.mailman_user) unless correct_email?(mship.mailman_user)
         api.create_membership(mship)

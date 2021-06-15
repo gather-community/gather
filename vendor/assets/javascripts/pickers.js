@@ -1,6 +1,8 @@
 (function() {
   // From https://github.com/zpaulovics/datetimepicker-rails
   function initPickers() {
+    var defaultKeyBinds = $.fn.datetimepicker.defaults.keyBinds;
+    delete defaultKeyBinds.t;
     $('.datetimepicker').datetimepicker({
       // put here your custom picker options, that should be applied for all pickers
       icons: {
@@ -13,7 +15,8 @@
         today: 'fa fa-crosshairs',
         clear: 'fa fa-trash-o',
         close: 'fa fa-times'
-      }
+      },
+      keyBinds: defaultKeyBinds
     });
 
     $('.datetimerange').each(function(){

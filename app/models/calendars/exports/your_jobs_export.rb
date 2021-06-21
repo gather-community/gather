@@ -30,6 +30,7 @@ module Calendars
 
       def multi_day_start_event(assignment)
         Event.new(basic_event_attribs(assignment).merge(
+          uid_suffix: "Start",
           summary: I18n.t("calendars.exports.jobs.summary_with_suffix.start", base: summary(assignment)),
           ends_at: starts_at(assignment) + 1
         ))
@@ -37,6 +38,7 @@ module Calendars
 
       def multi_day_end_event(assignment)
         Event.new(basic_event_attribs(assignment).merge(
+          uid_suffix: "End",
           summary: I18n.t("calendars.exports.jobs.summary_with_suffix.end", base: summary(assignment)),
           starts_at: ends_at(assignment) - 1
         ))

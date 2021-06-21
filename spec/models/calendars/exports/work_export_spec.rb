@@ -91,14 +91,14 @@ describe "work exports" do
 
       expect_calendar_name("Your Jobs")
       expect_events({
-        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}",
+        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
         summary: "Multi-day (Start)",
         location: nil,
         description: %r{Do something periodically\s+\n http://.+/work/signups/},
         "DTSTART;VALUE=DATE" => period_start.to_date.to_s(:no_sep),
         "DTEND;VALUE=DATE" => (period_start.to_date + 1).to_s(:no_sep)
       }, {
-        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}",
+        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_End",
         summary: "Multi-day (End)",
         location: nil,
         description: %r{Do something periodically\s+\n http://.+/work/signups/},

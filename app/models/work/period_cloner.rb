@@ -16,7 +16,7 @@ module Work
         new_period[attrib] = old_period[attrib]
       end
 
-      old_period.shares.includes(:user).each do |share|
+      old_period.shares.includes(:user).find_each do |share|
         next if share.user.inactive?
         new_period.shares.build(period: new_period, user_id: share.user_id, portion: share.portion,
                                 priority: share.priority)
@@ -43,17 +43,18 @@ module Work
       return if new_bounds.first.to_date >= new_period.ends_on
       new_shift = new_job.shifts.build(slots: old_shift.slots)
       new_shift.starts_at = new_bounds.first
-      new_shift.ends_at = [new_bounds.last, new_period.ends_on.midnight + 1.day - 1.minute].min
+      new_shift.ends_at = [new_bounds.last, normalize_end_time(new_period.ends_on)].min
     end
 
     def new_shift_bounds(old_shift)
       if old_shift.full_period?
         starts_at = Time.zone.parse(new_period.starts_on.to_s)
         ends_at = Time.zone.parse(new_period.ends_on.to_s) + 1.day - 1.minute
-      elsif month_boundary_period_and_shift?(old_shift)
+      elsif periods_and_shift_have_month_boundaries?(old_shift)
         period_month_diff = ((new_period.starts_on - old_period.starts_on) / 30).round
         starts_at = old_shift.starts_at + period_month_diff.months
-        ends_at = old_shift.ends_at + period_month_diff.months
+        # Sometimes adding months (e.g. to Feb 29) doesn't get you to the end of the future month.
+        ends_at = normalize_end_time((old_shift.ends_at + period_month_diff.months).end_of_month)
       else
         period_day_diff = new_period.starts_on - old_period.starts_on
         starts_at = old_shift.starts_at + period_day_diff.days
@@ -62,13 +63,32 @@ module Work
       starts_at..ends_at
     end
 
-    def month_boundary_period_and_shift?(shift)
+    def periods_and_shift_have_month_boundaries?(shift)
       return false unless shift.date_only?
+      return unless old_period_has_month_boundaries?
+      return unless new_period_has_month_boundary_start?
       shift_month_start = shift.starts_at.to_date == shift.starts_at.to_date.beginning_of_month
       shift_month_end = shift.ends_at.to_date == shift.ends_at.to_date.end_of_month
+      shift_month_start && shift_month_end
+    end
+
+    def old_period_has_month_boundaries?
+      return @old_period_has_month_boundaries if defined?(@old_period_has_month_boundaries)
       period_month_start = old_period.starts_on == old_period.starts_on.beginning_of_month
       period_month_end = old_period.ends_on == old_period.ends_on.end_of_month
-      shift_month_start && shift_month_end && period_month_start && period_month_end
+      @old_period_has_month_boundaries = period_month_start && period_month_end
+    end
+
+    def new_period_has_month_boundary_start?
+      return @new_period_has_month_boundary_start if defined?(@new_period_has_month_boundary_start)
+      period_month_start = new_period.starts_on == new_period.starts_on.beginning_of_month
+      @new_period_has_month_boundary_start = period_month_start
+    end
+
+    # The system expects 23:59 but end_of_month can give weird fractions of a second.
+    # Given a time on the correct day, this will switch it to the right time.
+    def normalize_end_time(time)
+      time.midnight + 1.day - 1.minute
     end
   end
 end

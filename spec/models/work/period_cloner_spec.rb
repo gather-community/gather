@@ -41,6 +41,7 @@ describe Work::PeriodCloner do
       expect(newp.round_duration).to eq(5)
       expect(newp.max_rounds_per_worker).to eq(3)
       expect(newp.workers_per_round).to eq(10)
+      expect(newp.job_copy_source_id).to eq(oldp.id)
 
       expect(newp.shares.size).to eq(2)
       expect(newp.shares[0].portion).to eq(1)

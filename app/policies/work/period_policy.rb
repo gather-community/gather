@@ -60,8 +60,9 @@ module Work
     end
 
     def permitted_attributes
-      %i[starts_on ends_on name phase quota_type auto_open_time pick_type max_rounds_per_worker
-         workers_per_round round_duration] << {shares_attributes: %i[id user_id portion priority]}
+      basic = %i[starts_on ends_on name phase quota_type auto_open_time pick_type max_rounds_per_worker
+                 workers_per_round round_duration] << {shares_attributes: %i[id user_id portion priority]}
+      period.new_record? ? basic << :job_copy_source_id : basic
     end
   end
 end

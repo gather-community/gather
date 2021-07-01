@@ -59,14 +59,20 @@ describe Work::PeriodPolicy do
   describe "permitted attributes" do
     include_context "policy permissions"
     let(:actor) { work_coordinator }
-    subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
-
-    it do
-      expect(subject).to match_array(
-        %i[starts_on ends_on name phase quota_type
-           auto_open_time pick_type max_rounds_per_worker workers_per_round round_duration] <<
+    let(:basic_attribs) do
+      %i[starts_on ends_on name phase quota_type auto_open_time pick_type
+         max_rounds_per_worker workers_per_round round_duration] <<
         {shares_attributes: %i[id user_id portion priority]}
-      )
+    end
+
+    context "unpersisted record" do
+      subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
+      it { is_expected.to match_array(basic_attribs << :job_copy_source_id) }
+    end
+
+    context "persisted record" do
+      subject { Work::PeriodPolicy.new(actor, create(:work_period)).permitted_attributes }
+      it { is_expected.to match_array(basic_attribs) }
     end
   end
 end

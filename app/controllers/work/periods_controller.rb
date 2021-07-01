@@ -28,6 +28,7 @@ module Work
           "Please review and adjust below. Jobs will be copied when you save the period."
       end
       authorize(@period)
+      @periods = Period.in_community(current_community).newest_first
       prep_form_vars
     end
 
@@ -48,10 +49,13 @@ module Work
       @period = Period.new(community: current_community)
       @period.assign_attributes(period_params)
       authorize(@period)
-      if @period.save
-        QuotaCalculator.new(@period).recalculate_and_save
-        flash[:success] = "Period created successfully."
-        redirect_to(work_periods_path)
+      if @period.valid?
+        if @period.job_copy_source_id.present?
+          copy_jobs_and_redirect
+        else
+          @period.save!
+          calculate_quota_and_redirect
+        end
       else
         prep_form_vars
         render(:new)
@@ -124,6 +128,31 @@ module Work
       @share_builder.build
       @users_by_kind = UserDecorator.decorate_collection(@share_builder.users).group_by(&:kind)
       @shares_by_user = @period.shares.index_by(&:user_id)
+    end
+
+    def copy_jobs_and_redirect
+      old_period = Period.find(@period.job_copy_source_id)
+      PeriodCloner.new(old_period: old_period, new_period: @period).copy_jobs
+
+      # Period was valid at start of this method so if it's invalid now, something has gone wrong
+      # and we should set a flash message to notify the user that we have been notified (PeriodCloner
+      # takes care of the notification)
+      if @period.invalid?
+        flash.now[:error] = "There was an error copying jobs. Administrators have been notified. "\
+          "Please try again later."
+        @period.errors.clear
+        prep_form_vars
+        render(:new)
+      else
+        @period.save!
+        calculate_quota_and_redirect
+      end
+    end
+
+    def calculate_quota_and_redirect
+      QuotaCalculator.new(@period).recalculate_and_save
+      flash[:success] = "Period created successfully."
+      redirect_to(work_periods_path)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

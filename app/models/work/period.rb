@@ -9,6 +9,8 @@ module Work
 
     acts_as_tenant :cluster
 
+    attr_accessor :job_copy_source_id
+
     belongs_to :community, inverse_of: :work_periods
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :destroy

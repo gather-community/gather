@@ -14,6 +14,9 @@
         <%= f.input :workers_per_round %>
         <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>
       </div>
+      <% if period.new_record? %>
+        <%= f.input :job_copy_source_id, collection: @periods, prompt: "Do not copy jobs" %>
+      <% end %>
     </div>
   </div>
 

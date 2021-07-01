@@ -15,7 +15,7 @@ describe Work::PeriodPolicy do
     end
     let(:record) { period }
 
-    permissions :index?, :show?, :new?, :edit?, :review_notices?,
+    permissions :index?, :show?, :new?, :edit?, :review_notices?, :clone?,
                 :create?, :update?, :destroy? do
       it_behaves_like "permits admins or special role but not regular users", :work_coordinator
     end

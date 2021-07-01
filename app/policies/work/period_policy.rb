@@ -30,6 +30,10 @@ module Work
       index?
     end
 
+    def clone?
+      index?
+    end
+
     def update?
       index?
     end

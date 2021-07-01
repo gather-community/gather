@@ -120,6 +120,28 @@ describe "periods", js: true do
     expect(page).to have_content("deleted successfully")
   end
 
+  context "with period with shares and jobs" do
+    let!(:users) { create_list(:user, 5) }
+    let!(:period4) do
+      create(:work_period, :with_shares, name: "Charlie", quota_type: "by_person", pick_type: "staggered",
+                                         round_duration: 5, auto_open_time: Time.current + 1.day,
+                                         max_rounds_per_worker: 3, workers_per_round: 10)
+    end
+
+    scenario "clone" do
+      visit(work_periods_path)
+      click_on("Charlie")
+      click_on("Clone")
+      expect(page).to have_notice("data have been copied")
+      expect(page).to have_field("Workers per Group", with: "10")
+      expect(page).to have_select(users[0].name)
+      fill_in("Name", with: "Delta")
+      pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
+      click_on("Save")
+      expect(page).to have_success
+    end
+  end
+
   def fill_basic_fields
     select("Open", from: "Phase")
     pick_date(".work_period_starts_on", day: 15)

@@ -124,6 +124,10 @@ module SystemSpecHelpers
     have_css("div.alert-success", text: pattern)
   end
 
+  def have_notice(pattern)
+    have_css("div.alert-info", text: pattern)
+  end
+
   def expect_alert(pattern)
     expect(page).to have_css("div.alert-warning", text: pattern)
   end

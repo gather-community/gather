@@ -91,7 +91,7 @@ describe Work::PeriodCloner do
     end
 
     context "with new period starting on month start" do
-      let(:newp) { Work::Period.new(starts_on: "2020-04-01", ends_on: "2020-05-15") }
+      let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-05-15") }
 
       it "adjusts dates correctly, skips meal jobs" do
         cloner.copy_jobs
@@ -132,13 +132,15 @@ describe Work::PeriodCloner do
         [job1n, job2n, job3n, job4n].each do |job|
           job.shifts.each { |s| expect(s.assignments).to be_empty }
         end
+
+        expect(newp).to be_valid
       end
     end
 
-    context "with new period starting on month start" do
-      let(:newp) { Work::Period.new(starts_on: "2020-04-05", ends_on: "2020-05-15") }
+    context "with new period not starting on month start" do
+      let(:newp) { build(:work_period, starts_on: "2020-04-05", ends_on: "2020-05-20") }
 
-      it "adjusts dates correctly, skips meal jobs" do
+      it "adjusts dates correctly" do
         cloner.copy_jobs
 
         job2n = newp.jobs.detect { |j| j.title == "Job2" }
@@ -146,12 +148,30 @@ describe Work::PeriodCloner do
         expect(job2n.shifts.size).to eq(2)
         # These shift don't stay at month boundaries now.
         expect_shift_times(job2n.shifts[0], "2020-04-05 00:00", "2020-05-05 23:59")
-        expect_shift_times(job2n.shifts[1], "2020-05-06 00:00", "2020-05-15 23:59")
+        expect_shift_times(job2n.shifts[1], "2020-05-06 00:00", "2020-05-20 23:59")
+
+        expect(newp).to be_valid
+      end
+    end
+
+    context "with short period such that at least one job would have no shifts" do
+      let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-04-30") }
+
+      it "adjusts dates correctly" do
+        cloner.copy_jobs
+
+        job3n = newp.jobs.detect { |j| j.title == "Job3" }
+        attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
+        expect(job3n.shifts.size).to eq(1)
+        # The first shift of this job is moved back so that it fits in the period.
+        expect_shift_times(job3n.shifts[0], "2020-04-30 00:00", "2020-04-30 23:59")
+
+        expect(newp).to be_valid
       end
     end
 
     context "with new period with both month boundaries" do
-      let(:newp) { Work::Period.new(starts_on: "2020-05-01", ends_on: "2020-06-30") }
+      let(:newp) { build(:work_period, starts_on: "2020-05-01", ends_on: "2020-06-30") }
 
       it "adjusts dates correctly, skips meal jobs" do
         cloner.copy_jobs
@@ -176,6 +196,8 @@ describe Work::PeriodCloner do
         expect(job4n.shifts.size).to eq(1)
         expect_shift_times(job4n.shifts[0], "2020-06-10 12:00", "2020-06-10 13:00")
         # The second shift is dropped entirely.
+
+        expect(newp).to be_valid
       end
     end
 

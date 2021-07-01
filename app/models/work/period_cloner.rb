@@ -36,12 +36,23 @@ module Work
       return if old_job.meal_role?
       new_job = new_period.jobs.build
       JOB_ATTRIBS_TO_COPY.each { |a| new_job[a] = old_job[a] }
-      old_job.shifts.each { |s| copy_shift(old_shift: s, new_job: new_job) }
+      old_job.shifts.each_with_index do |shift, index|
+        copy_shift(old_shift: shift, new_job: new_job, is_first: index.zero?)
+      end
     end
 
-    def copy_shift(old_shift:, new_job:)
+    def copy_shift(old_shift:, new_job:, is_first: false)
       new_bounds = new_shift_bounds(old_shift)
-      return if new_bounds.first.to_date >= new_period.ends_on
+      if new_bounds.first.to_date >= new_period.ends_on
+        if is_first
+          shift_length = ((new_bounds.last - new_bounds.first) / 1.day).ceil
+          days_past_period_end = new_bounds.first.to_date - new_period.ends_on
+          delta = (shift_length + days_past_period_end - 1).days
+          new_bounds = (new_bounds.first - delta)..(new_bounds.last - delta)
+        else
+          return
+        end
+      end
       new_shift = new_job.shifts.build(slots: old_shift.slots)
       new_shift.starts_at = new_bounds.first
       new_shift.ends_at = [new_bounds.last, normalize_end_time(new_period.ends_on)].min

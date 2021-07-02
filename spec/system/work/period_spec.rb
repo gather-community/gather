@@ -149,6 +149,24 @@ describe "periods", js: true do
       select_lens(:period, "Delta")
       expect(page).to have_content("Frungler")
     end
+
+    scenario "clone with no job copy" do
+      visit(work_periods_path)
+      click_on("Charlie")
+      click_on("Clone")
+      expect(page).to have_notice("data have been copied")
+      expect(page).to have_field("Workers per Group", with: "10")
+      expect(page).to have_select(users[0].name)
+      fill_in("Name", with: "Delta")
+      pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
+      select("Do not copy jobs", from: "Copy Jobs From")
+      click_on("Save")
+      expect(page).to have_success
+
+      click_on("Jobs")
+      select_lens(:period, "Delta")
+      expect(page).not_to have_content("Frungler")
+    end
   end
 
   def fill_basic_fields

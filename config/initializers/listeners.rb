@@ -9,6 +9,11 @@ Rails.application.config.after_initialize do
   Meals::Meal.subscribe(Meals::RoleReminderMaintainer.instance)
   Meals::Role.subscribe(Meals::RoleReminderMaintainer.instance)
 
+  Work::Job.subscribe(Work::AssignmentSynchronizer.instance)
+  Work::Shift.subscribe(Work::AssignmentSynchronizer.instance)
+  Work::Assignment.subscribe(Work::AssignmentSynchronizer.instance)
+  Meals::Assignment.subscribe(Work::AssignmentSynchronizer.instance)
+
   User.subscribe(Work::ShiftIndexUpdater.instance)
   Groups::Group.subscribe(Work::ShiftIndexUpdater.instance)
   Work::Job.subscribe(Work::ShiftIndexUpdater.instance)

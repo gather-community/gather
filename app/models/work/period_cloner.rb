@@ -27,6 +27,11 @@ module Work
     # Called when newp's attributes have been populated by the user, but it is still unpersisted.
     def copy_jobs
       old_period.jobs.each { |j| copy_job(j) }
+      # Print some debug info if what we've created has validation errors.
+      if new_period.invalid?
+        Rails.logger.debug(new_period.errors)
+        Rails.logger.debug(new_period.jobs.map { |j| [j.errors] + j.shifts.map(&:errors) })
+      end
     end
 
     private

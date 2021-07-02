@@ -133,20 +133,9 @@ module Work
     def copy_jobs_and_redirect
       old_period = Period.find(@period.job_copy_source_id)
       PeriodCloner.new(old_period: old_period, new_period: @period).copy_jobs
-
-      # Period was valid at start of this method so if it's invalid now, something has gone wrong
-      # and we should set a flash message to notify the user that we have been notified (PeriodCloner
-      # takes care of the notification)
-      if @period.invalid?
-        flash.now[:error] = "There was an error copying jobs. Administrators have been notified. "\
-          "Please try again later."
-        @period.errors.clear
-        prep_form_vars
-        render(:new)
-      else
-        @period.save!
-        calculate_quota_and_redirect
-      end
+      # This shouldn't error. If it does, PeriodCloner should have written some debug info.
+      @period.save!
+      calculate_quota_and_redirect
     end
 
     def calculate_quota_and_redirect

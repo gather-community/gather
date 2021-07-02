@@ -124,8 +124,13 @@ describe "periods", js: true do
     let!(:users) { create_list(:user, 5) }
     let!(:period4) do
       create(:work_period, :with_shares, name: "Charlie", quota_type: "by_person", pick_type: "staggered",
-                                         round_duration: 5, auto_open_time: Time.current + 1.day,
+                                         starts_on: "2020-02-01", ends_on: "2020-04-30",
+                                         round_duration: 5, auto_open_time: "2020-01-15 12:00",
                                          max_rounds_per_worker: 3, workers_per_round: 10)
+    end
+    let!(:job) do
+      create(:work_job, period: period4, title: "Frungler", time_type: "date_only", hours: 2,
+                        shift_starts: ["2020-02-03"], shift_ends: ["2020-02-03"])
     end
 
     scenario "clone" do
@@ -139,6 +144,10 @@ describe "periods", js: true do
       pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
       click_on("Save")
       expect(page).to have_success
+
+      click_on("Jobs")
+      select_lens(:period, "Delta")
+      expect(page).to have_content("Frungler")
     end
   end
 

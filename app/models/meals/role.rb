@@ -17,6 +17,8 @@ module Meals
                                                  foreign_key: :role_id, inverse_of: :role
     has_many :formula_roles, inverse_of: :role
     has_many :formulas, through: :formula_roles
+    has_many :work_meal_job_sync_settings, class_name: "Work::MealJobSyncSetting", inverse_of: :role,
+                                           dependent: :destroy
 
     scope :by_title, -> { order(arel_table[:special].not_eq("head_cook")).alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }

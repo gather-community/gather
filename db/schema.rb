@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_08_132208) do
+ActiveRecord::Schema.define(version: 2021_07_05_142550) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -873,6 +873,18 @@ ActiveRecord::Schema.define(version: 2021_06_08_132208) do
     t.index ["requester_id"], name: "index_work_jobs_on_requester_id"
   end
 
+  create_table "work_meal_job_sync_settings", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "formula_id", null: false
+    t.bigint "period_id", null: false
+    t.bigint "role_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["formula_id", "role_id", "period_id"], name: "work_meal_job_sync_settings_uniq", unique: true
+    t.index ["formula_id"], name: "index_work_meal_job_sync_settings_on_formula_id"
+    t.index ["period_id"], name: "index_work_meal_job_sync_settings_on_period_id"
+    t.index ["role_id"], name: "index_work_meal_job_sync_settings_on_role_id"
+  end
+
   create_table "work_periods", force: :cascade do |t|
     t.datetime "auto_open_time"
     t.integer "cluster_id", null: false
@@ -880,6 +892,7 @@ ActiveRecord::Schema.define(version: 2021_06_08_132208) do
     t.datetime "created_at", null: false
     t.date "ends_on", null: false
     t.integer "max_rounds_per_worker"
+    t.boolean "meal_job_sync", default: false, null: false
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
     t.string "pick_type", default: "free_for_all", null: false
@@ -1063,6 +1076,9 @@ ActiveRecord::Schema.define(version: 2021_06_08_132208) do
   add_foreign_key "work_jobs", "groups", column: "requester_id"
   add_foreign_key "work_jobs", "meal_roles"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
+  add_foreign_key "work_meal_job_sync_settings", "meal_formulas", column: "formula_id"
+  add_foreign_key "work_meal_job_sync_settings", "meal_roles", column: "role_id"
+  add_foreign_key "work_meal_job_sync_settings", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
   add_foreign_key "work_shares", "clusters"

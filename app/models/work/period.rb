@@ -15,7 +15,8 @@ module Work
 
     belongs_to :community, inverse_of: :work_periods
     has_many :shares, inverse_of: :period, dependent: :destroy
-    has_many :jobs, inverse_of: :period, dependent: :destroy
+    has_many :jobs, inverse_of: :period, dependent: :restrict_with_exception
+    has_many :meal_job_sync_settings, inverse_of: :period, dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :with_phase, ->(p) { where(phase: p) }

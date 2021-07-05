@@ -120,14 +120,31 @@ describe Meals::Formula do
   describe "destruction" do
     let(:formula) { create(:meal_formula) }
 
-    it "works" do
-      formula.destroy
-      expect(Meals::Formula.count).to be_zero
+    context "with no associated objects" do
+      it "works" do
+        formula.destroy
+        expect(Meals::Formula.count).to be_zero
+      end
     end
 
     context "with associated meal" do
       let!(:meal) { create(:meal, formula: formula) }
       it { expect { formula.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+    end
+
+    context "with associated meal job sync setting" do
+      let(:period) { create(:work_period) }
+
+      before do
+        formula.work_meal_job_sync_settings.create!(period: period, formula: formula,
+                                                    role: formula.roles.first)
+      end
+
+      it "destroys setting record" do
+        formula.destroy
+        expect(Meals::Formula.count).to be_zero
+        expect(Work::MealJobSyncSetting.count).to be_zero
+      end
     end
 
     context "with associated role" do

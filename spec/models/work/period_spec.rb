@@ -97,4 +97,49 @@ describe Work::Period do
       end
     end
   end
+
+  # Our approach to destruction is to:
+  # - Set the policy to only disallow deletions based on what users of various roles should be able
+  #   to destroy given various combinations of existing associations.
+  # - Set association `dependent` options to avoid DB constraint errors UNLESS the destroy is never allowed.
+  # - In the model spec, assume destroy has been called and test for the appropriate behavior
+  #   (dependent destruction, nullification, or error) for each foreign key.
+  # - In the policy spec, test for the appropriate restrictions on destroy.
+  # - In the feature spec, test the destruction/deactivation/activation happy paths.
+  describe "destruction" do
+    context "With no associated objects" do
+      let!(:period) { create(:work_period) }
+
+      it "works" do
+        period.destroy
+        expect(Work::Period.count).to be_zero
+      end
+    end
+
+    context "with shares, meal job sync settings" do
+      let!(:period) { create(:work_period, :with_shares) }
+      let!(:formula) { create(:meal_formula) }
+
+      before do
+        period.meal_job_sync_settings.create!(period: period, formula: formula, role: formula.roles.first)
+      end
+
+      it "destroys dependent objects" do
+        period.destroy
+        expect(Work::Period.count).to be_zero
+        expect(Meals::Formula.count).to eq(1)
+        expect(Work::Share.count).to be_zero
+        expect(Work::MealJobSyncSetting.count).to be_zero
+      end
+    end
+
+    context "with job" do
+      let!(:period) { create(:work_period) }
+      let!(:job) { create(:work_job, period: period, shift_count: 1) }
+
+      it "errors" do
+        expect { period.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      end
+    end
+  end
 end

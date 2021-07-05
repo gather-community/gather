@@ -101,6 +101,19 @@ describe Meals::Role do
       end
     end
 
+    context "with associated meal job sync setting" do
+      let(:period) { create(:work_period) }
+      let(:formula) { create(:meal_formula, roles: [role]) }
+
+      before do
+        role.work_meal_job_sync_settings.create!(period: period, formula: formula, role: role)
+      end
+
+      it "destroys setting record" do
+        expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)
+      end
+    end
+
     context "with associated formula" do
       let!(:formula) { create(:meal_formula, roles: [role]) }
       it { expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }

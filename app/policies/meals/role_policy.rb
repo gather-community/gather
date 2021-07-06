@@ -49,7 +49,8 @@ module Meals
     end
 
     def permitted_attributes
-      %i[description time_type title double_signups_allowed count_per_meal shift_start shift_end] <<
+      %i[description time_type title double_signups_allowed count_per_meal
+         shift_start shift_end work_job_title] <<
         {reminders_attributes: %i[rel_magnitude rel_unit_sign note id _destroy]}
     end
   end

@@ -14,6 +14,8 @@ module Work
     alias copy_preassignments? copy_preassignments
 
     belongs_to :community, inverse_of: :work_periods
+    belongs_to :meal_job_requester, class_name: "Groups::Group",
+                                    inverse_of: :work_periods_as_meal_job_requester
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :restrict_with_exception
     has_many :meal_job_sync_settings, inverse_of: :period, dependent: :destroy

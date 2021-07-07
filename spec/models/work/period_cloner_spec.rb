@@ -3,6 +3,7 @@
 require "rails_helper"
 
 describe Work::PeriodCloner do
+  let(:group) { create(:group) }
   let!(:oldp) do
     create(:work_period, name: "My Period",
                          starts_on: "2020-01-01",
@@ -13,7 +14,8 @@ describe Work::PeriodCloner do
                          quota_type: "by_person",
                          round_duration: 5,
                          max_rounds_per_worker: 3,
-                         workers_per_round: 10)
+                         workers_per_round: 10,
+                         meal_job_requester: group)
   end
   subject(:cloner) { described_class.new(old_period: oldp, new_period: newp) }
 
@@ -42,6 +44,7 @@ describe Work::PeriodCloner do
       expect(newp.max_rounds_per_worker).to eq(3)
       expect(newp.workers_per_round).to eq(10)
       expect(newp.job_copy_source_id).to eq(oldp.id)
+      expect(newp.meal_job_requester_id).to eq(group.id)
 
       expect(newp.shares.size).to eq(2)
       expect(newp.shares[0].portion).to eq(1)

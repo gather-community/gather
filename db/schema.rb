@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_135000) do
+ActiveRecord::Schema.define(version: 2021_07_07_001754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -893,6 +893,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_135000) do
     t.datetime "created_at", null: false
     t.date "ends_on", null: false
     t.integer "max_rounds_per_worker"
+    t.bigint "meal_job_requester_id"
     t.boolean "meal_job_sync", default: false, null: false
     t.string "name", null: false
     t.string "phase", default: "draft", null: false
@@ -906,6 +907,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_135000) do
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
     t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
+    t.index ["meal_job_requester_id"], name: "index_work_periods_on_meal_job_requester_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
   end
 
@@ -1082,6 +1084,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_135000) do
   add_foreign_key "work_meal_job_sync_settings", "work_periods", column: "period_id"
   add_foreign_key "work_periods", "clusters"
   add_foreign_key "work_periods", "communities"
+  add_foreign_key "work_periods", "groups", column: "meal_job_requester_id"
   add_foreign_key "work_shares", "clusters"
   add_foreign_key "work_shares", "users"
   add_foreign_key "work_shares", "work_periods", column: "period_id"

@@ -13,7 +13,8 @@ module Work
     # Called when newp is a blank, unpersisted period.
     def copy_attributes_and_shares
       new_period.job_copy_source_id = old_period.id
-      %i[pick_type quota_type round_duration max_rounds_per_worker workers_per_round].each do |attrib|
+      %i[meal_job_requester_id pick_type quota_type round_duration
+         max_rounds_per_worker workers_per_round].each do |attrib|
         new_period[attrib] = old_period[attrib]
       end
 

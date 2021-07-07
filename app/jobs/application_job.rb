@@ -51,10 +51,12 @@ class ApplicationJob < ActiveJob::Base
   end
 
   # Assumes all communities in the cluster have the same timezone.
+  # If cluster has no communities, sets UTC.
   # The timezone setting should eventually move to the cluster model.
   # Also assumes the given cluster has been set as the current tenant.
   def with_cluster_timezone(cluster)
-    Time.zone = cluster.communities[0].settings.time_zone
+    community = cluster.communities[0]
+    Time.zone = community ? community.settings.time_zone : "UTC"
     yield
   ensure
     Time.zone = "UTC"

@@ -74,6 +74,7 @@ en:
         time_type: "Times"
         shift_start: "Start Time"
         shift_end: "End Time"
+        work_hours: "Work Hours"
         work_job_title: "Work Job Title"
         description: "Job Description"
         double_signups_allowed: "The same person can sign up more than once for this role in a single meal"

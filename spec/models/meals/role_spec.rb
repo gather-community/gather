@@ -36,6 +36,18 @@ describe Meals::Role do
         it { is_expected.to eq(special: nil, count_per_meal: 3) }
       end
     end
+
+    describe "work_hours" do
+      context "date_only" do
+        let(:submitted) { {time_type: "date_only", work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_only", work_hours: 3) }
+      end
+
+      context "date_time" do
+        let(:submitted) { {time_type: "date_time", work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_time", work_hours: nil) }
+      end
+    end
   end
 
   describe "validation" do

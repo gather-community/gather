@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_07_001754) do
+ActiveRecord::Schema.define(version: 2021_07_07_110608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -499,6 +499,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_001754) do
     t.string "time_type", limit: 32, default: "date_time", null: false
     t.string "title", limit: 128, null: false
     t.datetime "updated_at", null: false
+    t.decimal "work_hours", precision: 6, scale: 2
     t.string "work_job_title", limit: 128
     t.index ["cluster_id", "community_id", "title"], name: "index_meal_roles_on_cluster_id_and_community_id_and_title", where: "(deactivated_at IS NULL)"
     t.index ["cluster_id"], name: "index_meal_roles_on_cluster_id"

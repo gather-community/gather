@@ -109,7 +109,8 @@ en:
         time_type: "Form some roles (such as head cook), people may want to choose their own times to work. If so, choose 'date only'. If a specific schedule is desired, choose 'date and time'."
         shift_start: "Number of minutes before/after the start of the meal that people should show up. Negatives represent times prior to the meal start."
         shift_end: "Number of minutes before/after the start of the meal that this role ends. Negatives represent times prior to the meal start."
-        work_job_title: "Optional. If specified, this is how the job will appear in the Work module. Specify a different title if the main role title above may be ambiguous in the Work module (e.g. you might enter 'Meal Cleaner' here vs. 'Cleaner' above)."
+        work_job_title: "If specified, this is how the job will appear in the Work module. Specify a different title if the main role title above may be ambiguous in the Work module (e.g. you might enter 'Meal Cleaner' here vs. 'Cleaner' above)."
+        work_hours: "How many hours will the job be worth if imported to the Work module? You can leave blank if not using the Work module."
         description: "This description will be copied to the Work module during job sync."
         count_per_meal: "How many people are typically needed for this role for a given meal?"
       meals_type:

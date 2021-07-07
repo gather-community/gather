@@ -4,6 +4,7 @@
   <%= f.input :time_type, collection: Meals::Role::TIMES_OPTIONS, include_blank: false %>
   <%= f.input :shift_start %>
   <%= f.input :shift_end %>
+  <%= f.input :work_hours, as: :decimal %>
   <%= f.input :work_job_title %>
   <%= f.input :description, as: :markdown %>
   <%= f.input :double_signups_allowed, as: :boolean %>

@@ -52,7 +52,9 @@ module Meals
     private
 
     def normalize
-      unless date_time?
+      if date_time?
+        self.work_hours = nil
+      else
         self.shift_start = nil
         self.shift_end = nil
       end

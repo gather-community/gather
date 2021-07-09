@@ -9,6 +9,7 @@ module Work
   # Represents one timed occurrence of a job.
   class Shift < ApplicationRecord
     include ShiftSearchConfig
+    include Wisper.model
 
     UNLIMITED_SLOTS = 1e6
 

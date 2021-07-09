@@ -12,6 +12,7 @@ module Work
       ActionLinkSet.new(
         ActionLink.new(object, :review_notices, icon: "bullhorn",
                                                 path: h.review_notices_work_period_path(object)),
+        ActionLink.new(object, :clone, icon: "copy", path: h.new_work_period_path(clone_from: id)),
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_work_period_path(object))
       )
     end

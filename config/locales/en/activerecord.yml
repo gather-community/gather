@@ -201,6 +201,7 @@ en:
         round_duration: "Round Duration"
         workers_per_round: "Workers per Group"
         max_rounds_per_worker: "Max. Rounds per Worker"
+        job_copy_source_id: "Copy Jobs From"
       work/job_reminder:
         abs_rel: "Type"
         abs_time: "Send Time"
@@ -297,7 +298,7 @@ en:
             ends_on:
               not_after_start: "must be after start date"
             auto_open_time:
-              blank: "Can't be blank if pick type is 'take turns'"
+              blank: "Can't be blank if pick type is 'take turns'. If you don't know the exact time yet, enter something approximate and update it later."
         work/shift:
           attributes:
             starts_at:

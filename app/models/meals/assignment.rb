@@ -3,7 +3,12 @@
 module Meals
   # Models an assignment of a worker to a meal for a meal role.
   class Assignment < ApplicationRecord
+    include Wisper.model
+
     acts_as_tenant :cluster
+
+    attr_accessor :syncing
+    alias syncing? syncing
 
     scope :oldest_first, -> { joins(:meal).order("meals.served_at") }
     scope :by_role, lambda {

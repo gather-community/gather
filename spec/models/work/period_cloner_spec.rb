@@ -90,114 +90,156 @@ describe Work::PeriodCloner do
       example.run
     end
 
-    context "with new period starting on month start" do
-      let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-05-15") }
+    context "without assignments" do
+      context "with new period starting on month start" do
+        let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-05-15") }
 
-      it "adjusts dates correctly, skips meal jobs" do
-        cloner.copy_jobs
-        expect(newp.jobs.size).to eq(4)
+        it "adjusts dates correctly, skips meal jobs" do
+          cloner.copy_jobs
+          expect(newp.jobs.size).to eq(4)
 
-        job1n = newp.jobs.detect { |j| j.title == "Job1" }
-        attribs_copied.each { |a| expect(job1n[a]).to eq(job1[a]) }
-        expect(job1n.shifts.size).to eq(1)
-        expect_shift_times(job1n.shifts[0], "2020-04-01 00:00", "2020-05-15 23:59")
-        expect(job1n.shifts[0].slots).to eq(1)
+          job1n = newp.jobs.detect { |j| j.title == "Job1" }
+          attribs_copied.each { |a| expect(job1n[a]).to eq(job1[a]) }
+          expect(job1n.shifts.size).to eq(1)
+          expect_shift_times(job1n.shifts[0], "2020-04-01 00:00", "2020-05-15 23:59")
+          expect(job1n.shifts[0].slots).to eq(1)
 
-        job2n = newp.jobs.detect { |j| j.title == "Job2" }
-        attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
-        expect(job2n.shifts.size).to eq(2)
-        # This shift stays at month boundaries.
-        expect_shift_times(job2n.shifts[0], "2020-04-01 00:00", "2020-04-30 23:59")
-        # This shift stays at month start but gets clipped at end of period.
-        expect_shift_times(job2n.shifts[1], "2020-05-01 00:00", "2020-05-15 23:59")
-        # The third shift is dropped entirely.
+          job2n = newp.jobs.detect { |j| j.title == "Job2" }
+          attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
+          expect(job2n.shifts.size).to eq(2)
+          # This shift stays at month boundaries.
+          expect_shift_times(job2n.shifts[0], "2020-04-01 00:00", "2020-04-30 23:59")
+          # This shift stays at month start but gets clipped at end of period.
+          expect_shift_times(job2n.shifts[1], "2020-05-01 00:00", "2020-05-15 23:59")
+          # The third shift is dropped entirely.
 
-        job3n = newp.jobs.detect { |j| j.title == "Job3" }
-        attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
-        expect(job3n.shifts.size).to eq(3)
-        # This moves a day later even though it was at month start b/c it didn't end at month end.
-        expect_shift_times(job3n.shifts[0], "2020-05-02 00:00", "2020-05-02 23:59")
-        # This moves a day later b/c Jan has 31 days but Apr has 30
-        expect_shift_times(job3n.shifts[1], "2020-05-08 00:00", "2020-05-10 23:59")
-        # This gets clipped at the end of the period, now one day instead of 2.
-        expect_shift_times(job3n.shifts[2], "2020-05-14 00:00", "2020-05-15 23:59")
+          job3n = newp.jobs.detect { |j| j.title == "Job3" }
+          attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
+          expect(job3n.shifts.size).to eq(3)
+          # This moves a day later even though it was at month start b/c it didn't end at month end.
+          expect_shift_times(job3n.shifts[0], "2020-05-02 00:00", "2020-05-02 23:59")
+          # This moves a day later b/c Jan has 31 days but Apr has 30
+          expect_shift_times(job3n.shifts[1], "2020-05-08 00:00", "2020-05-10 23:59")
+          # This gets clipped at the end of the period, now one day instead of 2.
+          expect_shift_times(job3n.shifts[2], "2020-05-14 00:00", "2020-05-15 23:59")
 
-        job4n = newp.jobs.detect { |j| j.title == "Job4" }
-        attribs_copied.each { |a| expect(job4n[a]).to eq(job4[a]) }
-        expect(job4n.shifts.size).to eq(1)
-        # This moves a day later b/c Jan has 31 days but Apr has 30
-        expect_shift_times(job4n.shifts[0], "2020-05-11 12:00", "2020-05-11 13:00")
-        # The second shift is dropped entirely.
+          job4n = newp.jobs.detect { |j| j.title == "Job4" }
+          attribs_copied.each { |a| expect(job4n[a]).to eq(job4[a]) }
+          expect(job4n.shifts.size).to eq(1)
+          # This moves a day later b/c Jan has 31 days but Apr has 30
+          expect_shift_times(job4n.shifts[0], "2020-05-11 12:00", "2020-05-11 13:00")
+          # The second shift is dropped entirely.
 
-        [job1n, job2n, job3n, job4n].each do |job|
-          job.shifts.each { |s| expect(s.assignments).to be_empty }
+          [job1n, job2n, job3n, job4n].each do |job|
+            job.shifts.each { |s| expect(s.assignments).to be_empty }
+          end
+
+          expect(newp).to be_valid
+        end
+      end
+
+      context "with new period not starting on month start" do
+        let(:newp) { build(:work_period, starts_on: "2020-04-05", ends_on: "2020-05-20") }
+
+        it "adjusts dates correctly" do
+          cloner.copy_jobs
+
+          job2n = newp.jobs.detect { |j| j.title == "Job2" }
+          attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
+          expect(job2n.shifts.size).to eq(2)
+          # These shift don't stay at month boundaries now.
+          expect_shift_times(job2n.shifts[0], "2020-04-05 00:00", "2020-05-05 23:59")
+          expect_shift_times(job2n.shifts[1], "2020-05-06 00:00", "2020-05-20 23:59")
+
+          expect(newp).to be_valid
+        end
+      end
+
+      context "with short period such that at least one job would have no shifts" do
+        let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-04-30") }
+
+        it "adjusts dates correctly" do
+          cloner.copy_jobs
+
+          job3n = newp.jobs.detect { |j| j.title == "Job3" }
+          attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
+          expect(job3n.shifts.size).to eq(1)
+          # The first shift of this job is moved back so that it fits in the period.
+          expect_shift_times(job3n.shifts[0], "2020-04-30 00:00", "2020-04-30 23:59")
+
+          expect(newp).to be_valid
+        end
+      end
+
+      context "with new period with both month boundaries" do
+        let(:newp) { build(:work_period, starts_on: "2020-05-01", ends_on: "2020-06-30") }
+
+        it "adjusts dates correctly, skips meal jobs" do
+          cloner.copy_jobs
+
+          job2n = newp.jobs.detect { |j| j.title == "Job2" }
+          attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
+          expect(job2n.shifts.size).to eq(2)
+          # These shifts stay at month boundaries.
+          expect_shift_times(job2n.shifts[0], "2020-05-01 00:00", "2020-05-31 23:59")
+          expect_shift_times(job2n.shifts[1], "2020-06-01 00:00", "2020-06-30 23:59")
+          # The third shift is dropped entirely.
+
+          job3n = newp.jobs.detect { |j| j.title == "Job3" }
+          attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
+          expect(job3n.shifts.size).to eq(3)
+          expect_shift_times(job3n.shifts[0], "2020-06-01 00:00", "2020-06-01 23:59")
+          expect_shift_times(job3n.shifts[1], "2020-06-07 00:00", "2020-06-09 23:59")
+          expect_shift_times(job3n.shifts[2], "2020-06-13 00:00", "2020-06-15 23:59")
+
+          job4n = newp.jobs.detect { |j| j.title == "Job4" }
+          attribs_copied.each { |a| expect(job4n[a]).to eq(job4[a]) }
+          expect(job4n.shifts.size).to eq(1)
+          expect_shift_times(job4n.shifts[0], "2020-06-10 12:00", "2020-06-10 13:00")
+          # The second shift is dropped entirely.
+
+          expect(newp).to be_valid
+        end
+      end
+    end
+
+    context "with assignments" do
+      before do
+        oldp.update!(phase: "draft", auto_open_time: Time.current.tomorrow)
+        # These will be preassigned
+        job2.shifts[0].assignments.create!(user: create(:user))
+        job2.shifts[0].assignments.create!(user: create(:user, :inactive))
+
+        oldp.update!(phase: "open")
+        # These won't be preassigned
+        job2.shifts[0].assignments.create!(user: create(:user))
+      end
+
+      context "without copy_preassignments" do
+        let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-04-30") }
+
+        it "copies no assignments" do
+          cloner.copy_jobs
+          expect(newp.jobs.flat_map(&:shifts).flat_map(&:assignments).size).to be_zero
+        end
+      end
+
+      context "with copy_preassignments" do
+        let(:newp) do
+          build(:work_period, starts_on: "2020-04-01", ends_on: "2020-04-30", copy_preassignments: true)
         end
 
-        expect(newp).to be_valid
-      end
-    end
+        it "copies pre-assignments" do
+          cloner.copy_jobs
 
-    context "with new period not starting on month start" do
-      let(:newp) { build(:work_period, starts_on: "2020-04-05", ends_on: "2020-05-20") }
+          expect(newp.jobs.flat_map(&:shifts).flat_map(&:assignments).size).to eq(1)
+          new_assignment = newp.jobs.detect { |j| j.title == "Job2" }.shifts[0].assignments[0]
+          expect(new_assignment.preassigned).to be(true)
+          expect(new_assignment.shift.starts_at).to eq(Time.zone.parse("2020-04-01 00:00"))
+          expect(new_assignment.job.title).to eq("Job2")
 
-      it "adjusts dates correctly" do
-        cloner.copy_jobs
-
-        job2n = newp.jobs.detect { |j| j.title == "Job2" }
-        attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
-        expect(job2n.shifts.size).to eq(2)
-        # These shift don't stay at month boundaries now.
-        expect_shift_times(job2n.shifts[0], "2020-04-05 00:00", "2020-05-05 23:59")
-        expect_shift_times(job2n.shifts[1], "2020-05-06 00:00", "2020-05-20 23:59")
-
-        expect(newp).to be_valid
-      end
-    end
-
-    context "with short period such that at least one job would have no shifts" do
-      let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-04-30") }
-
-      it "adjusts dates correctly" do
-        cloner.copy_jobs
-
-        job3n = newp.jobs.detect { |j| j.title == "Job3" }
-        attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
-        expect(job3n.shifts.size).to eq(1)
-        # The first shift of this job is moved back so that it fits in the period.
-        expect_shift_times(job3n.shifts[0], "2020-04-30 00:00", "2020-04-30 23:59")
-
-        expect(newp).to be_valid
-      end
-    end
-
-    context "with new period with both month boundaries" do
-      let(:newp) { build(:work_period, starts_on: "2020-05-01", ends_on: "2020-06-30") }
-
-      it "adjusts dates correctly, skips meal jobs" do
-        cloner.copy_jobs
-
-        job2n = newp.jobs.detect { |j| j.title == "Job2" }
-        attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }
-        expect(job2n.shifts.size).to eq(2)
-        # These shifts stay at month boundaries.
-        expect_shift_times(job2n.shifts[0], "2020-05-01 00:00", "2020-05-31 23:59")
-        expect_shift_times(job2n.shifts[1], "2020-06-01 00:00", "2020-06-30 23:59")
-        # The third shift is dropped entirely.
-
-        job3n = newp.jobs.detect { |j| j.title == "Job3" }
-        attribs_copied.each { |a| expect(job3n[a]).to eq(job3[a]) }
-        expect(job3n.shifts.size).to eq(3)
-        expect_shift_times(job3n.shifts[0], "2020-06-01 00:00", "2020-06-01 23:59")
-        expect_shift_times(job3n.shifts[1], "2020-06-07 00:00", "2020-06-09 23:59")
-        expect_shift_times(job3n.shifts[2], "2020-06-13 00:00", "2020-06-15 23:59")
-
-        job4n = newp.jobs.detect { |j| j.title == "Job4" }
-        attribs_copied.each { |a| expect(job4n[a]).to eq(job4[a]) }
-        expect(job4n.shifts.size).to eq(1)
-        expect_shift_times(job4n.shifts[0], "2020-06-10 12:00", "2020-06-10 13:00")
-        # The second shift is dropped entirely.
-
-        expect(newp).to be_valid
+          expect(newp).to be_valid
+        end
       end
     end
 

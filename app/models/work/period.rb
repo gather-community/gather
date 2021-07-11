@@ -10,6 +10,8 @@ module Work
     acts_as_tenant :cluster
 
     attr_accessor :job_copy_source_id
+    attr_accessor :copy_preassignments
+    alias copy_preassignments? copy_preassignments
 
     belongs_to :community, inverse_of: :work_periods
     has_many :shares, inverse_of: :period, dependent: :destroy
@@ -41,7 +43,8 @@ module Work
         ends_on: (Time.zone.today + 1.month).end_of_month,
         max_rounds_per_worker: 3,
         workers_per_round: 10,
-        round_duration: 5
+        round_duration: 5,
+        copy_preassignments: true
       )
     end
 

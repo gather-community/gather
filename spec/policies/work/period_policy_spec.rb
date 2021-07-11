@@ -67,7 +67,7 @@ describe Work::PeriodPolicy do
 
     context "unpersisted record" do
       subject { Work::PeriodPolicy.new(actor, Work::Period.new).permitted_attributes }
-      it { is_expected.to match_array(basic_attribs << :job_copy_source_id) }
+      it { is_expected.to match_array(basic_attribs.concat(%i[job_copy_source_id copy_preassignments])) }
     end
 
     context "persisted record" do

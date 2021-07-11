@@ -15,7 +15,8 @@
         <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>
       </div>
       <% if period.new_record? %>
-        <%= f.input :job_copy_source_id, collection: @periods, include_blank: "Do not copy jobs" %>
+        <%= f.input :job_copy_source_id, collection: @periods, include_blank: "[Do not copy jobs]" %>
+        <%= f.input :copy_preassignments, as: :boolean %>
       <% end %>
     </div>
   </div>

@@ -61,6 +61,15 @@ module Work
       new_shift = new_job.shifts.build(slots: old_shift.slots)
       new_shift.starts_at = new_bounds.first
       new_shift.ends_at = [new_bounds.last, normalize_end_time(new_period.ends_on)].min
+      copy_assignments(old_shift: old_shift, new_shift: new_shift)
+    end
+
+    def copy_assignments(old_shift:, new_shift:)
+      return unless new_period.copy_preassignments?
+      old_shift.assignments.preassigned.each do |old_assignment|
+        next if old_assignment.user.inactive?
+        new_shift.assignments.build(preassigned: true, user_id: old_assignment.user_id)
+      end
     end
 
     def new_shift_bounds(old_shift)

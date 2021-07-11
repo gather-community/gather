@@ -3,11 +3,13 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
   initialize: ->
     @quotaTypeOrPhaseChanged()
     @pickTypeChanged()
+    @jobCopySourceIdChanged()
 
   events:
     "change #work_period_quota_type": "quotaTypeOrPhaseChanged"
     "change #work_period_phase": "quotaTypeOrPhaseChanged"
     "change #work_period_pick_type": "pickTypeChanged"
+    "change #work_period_job_copy_source_id": "jobCopySourceIdChanged"
     "click .priority-icon": "priorityChanged"
 
   quotaTypeOrPhaseChanged: ->
@@ -31,3 +33,7 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
     oldClass = if newVal then "fa-star-o" else "fa-star"
     newClass = if newVal then "fa-star" else "fa-star-o"
     icon.removeClass(oldClass).addClass(newClass)
+
+  jobCopySourceIdChanged: ->
+    copying = @$("#work_period_job_copy_source_id").val() != ''
+    @$(".work_period_copy_preassignments").toggle(copying)

@@ -202,6 +202,7 @@ en:
         workers_per_round: "Workers per Group"
         max_rounds_per_worker: "Max. Rounds per Worker"
         job_copy_source_id: "Copy Jobs From"
+        copy_preassignments: "Copy pre-assignments?"
       work/job_reminder:
         abs_rel: "Type"
         abs_time: "Send Time"

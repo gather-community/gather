@@ -14,6 +14,8 @@ Rails.application.config.after_initialize do
   Work::Assignment.subscribe(Work::AssignmentSynchronizer.instance)
   Meals::Assignment.subscribe(Work::AssignmentSynchronizer.instance)
 
+  Work::Period.subscribe(Work::MealJobSynchronizer.instance)
+
   User.subscribe(Work::ShiftIndexUpdater.instance)
   Groups::Group.subscribe(Work::ShiftIndexUpdater.instance)
   Work::Job.subscribe(Work::ShiftIndexUpdater.instance)

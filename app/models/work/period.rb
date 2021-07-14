@@ -3,6 +3,8 @@
 module Work
   # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord
+    include Wisper.model
+
     PHASE_OPTIONS = %i[draft ready open published archived].freeze
     QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
     PICK_TYPE_OPTIONS = %i[free_for_all staggered].freeze
@@ -36,6 +38,7 @@ module Work
     validates :workers_per_round, presence: true, numericality: {greater_than: 0}, if: :staggered?
     validate :start_before_end
 
+    accepts_nested_attributes_for :meal_job_sync_settings, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
 
     def self.new_with_defaults(community)

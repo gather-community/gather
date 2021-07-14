@@ -24,7 +24,7 @@ module Meals
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :head_cook, -> { where(special: "head_cook") }
 
-    normalize_attributes :title, :description
+    normalize_attributes :title, :description, :work_job_title
 
     before_validation :normalize
 
@@ -53,7 +53,11 @@ module Meals
 
     def normalize
       if date_time?
-        self.work_hours = nil
+        if shift_end.present? && shift_start.present?
+          self.work_hours = (shift_end - shift_start).to_f / 60
+        else
+          self.work_hours = nil
+        end
       else
         self.shift_start = nil
         self.shift_end = nil

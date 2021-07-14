@@ -13,15 +13,25 @@ describe Meals::Role do
       role.validate
     end
 
-    describe "offsets" do
+    describe "offsets and work hours" do
       context "date_only with offsets" do
-        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0} }
-        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil) }
+        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil, work_hours: 3) }
+      end
+
+      context "date_only with offsets, no work hours" do
+        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0, work_hours: nil} }
+        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil, work_hours: nil) }
       end
 
       context "date_time with offsets" do
-        let(:submitted) { {time_type: "date_time", shift_start: -90, shift_end: 0} }
-        it { is_expected.to eq(time_type: "date_time", shift_start: -90, shift_end: 0) }
+        let(:submitted) { {time_type: "date_time", shift_start: -90, shift_end: 0, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_time", shift_start: -90, shift_end: 0, work_hours: 1.5) }
+      end
+
+      context "date_time with no offsets" do
+        let(:submitted) { {time_type: "date_time", shift_start: nil, shift_end: nil, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_time", shift_start: nil, shift_end: nil, work_hours: nil) }
       end
     end
 
@@ -34,18 +44,6 @@ describe Meals::Role do
       context "not head_cook" do
         let(:submitted) { {special: nil, count_per_meal: 3} }
         it { is_expected.to eq(special: nil, count_per_meal: 3) }
-      end
-    end
-
-    describe "work_hours" do
-      context "date_only" do
-        let(:submitted) { {time_type: "date_only", work_hours: 3} }
-        it { is_expected.to eq(time_type: "date_only", work_hours: 3) }
-      end
-
-      context "date_time" do
-        let(:submitted) { {time_type: "date_time", work_hours: 3} }
-        it { is_expected.to eq(time_type: "date_time", work_hours: nil) }
       end
     end
   end

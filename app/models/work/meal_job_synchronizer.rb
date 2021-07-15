@@ -17,6 +17,11 @@ module Work
       sync_jobs_and_shifts(period)
     end
 
+    def create_meals_meal_successful(meal)
+      periods = Work::Period.active.in_community(meal.community_id).containing_date(meal.served_at.to_date)
+      periods.each { |p| sync_jobs_and_shifts(p) }
+    end
+
     private
 
     def sync_jobs_and_shifts(period)

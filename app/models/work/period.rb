@@ -22,11 +22,12 @@ module Work
     has_many :jobs, inverse_of: :period, dependent: :restrict_with_exception
     has_many :meal_job_sync_settings, inverse_of: :period, dependent: :destroy
 
-    scope :in_community, ->(c) { where(community_id: c.id) }
+    scope :in_community, ->(c) { where(community: c) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
     scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc) }
     scope :oldest_first, -> { order(:starts_on, :ends_on) }
+    scope :containing_date, ->(d) { where("starts_on <= ?", d).where("ends_on >= ?", d) }
 
     before_validation :normalize
 

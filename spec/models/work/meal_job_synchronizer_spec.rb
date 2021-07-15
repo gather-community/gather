@@ -8,7 +8,8 @@ describe Work::MealJobSynchronizer do
   context "on period create" do
     let!(:role1) { create(:meal_role, :head_cook) }
     let!(:role2) do
-      create(:meal_role, title: "A", count_per_meal: 3, time_type: "date_time", shift_start: -30, shift_end: 30,
+      create(:meal_role, title: "A", count_per_meal: 3, time_type: "date_time",
+                         shift_start: -30, shift_end: 30,
                          work_job_title: "Meal Crumbler", double_signups_allowed: true)
     end
     let!(:role3) { create(:meal_role, title: "B", count_per_meal: 2, shift_start: -120, shift_end: -30) }
@@ -168,6 +169,76 @@ describe Work::MealJobSynchronizer do
       create(:meal, served_at: "2020-02-01 18:00", formula: formula1)
       expect(Work::Job.count).to eq(1)
       expect(Work::Job.first.shifts.map(&:meal_id)).to match_array([meal1, meal2].map(&:id))
+    end
+  end
+
+  context "on served_at change within period" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    it "updates shift time" do
+      meal1.update!(served_at: "2020-01-02 18:00")
+      expect(Work::Shift.count).to eq(1)
+      expect(Work::Shift.first.starts_at).to eq(Time.zone.parse("2020-01-02 00:00"))
+    end
+  end
+
+  context "on served_at change to different period" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:period1) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+    let!(:period2) do
+      create(:work_period, starts_on: "2020-02-01", ends_on: "2020-02-29", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    it "destroys old job and creates new one in correct period" do
+      meal1.update!(served_at: "2020-02-01 18:00")
+      expect(Work::Job.count).to eq(1)
+      expect(Work::Shift.count).to eq(1)
+
+      expect(Work::Job.first.period).to eq(period2)
+      expect(Work::Shift.first.starts_at).to eq(Time.zone.parse("2020-02-01 00:00"))
+    end
+  end
+
+  context "on meal formula change to formula with different roles" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:role2) { create(:meal_role) }
+    let!(:role3) { create(:meal_role) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:formula1) { create(:meal_formula, roles: [role1, role2]) }
+    let!(:formula2) { create(:meal_formula, roles: [role1, role3]) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role2.id},
+                             "1" => {formula_id: formula2.id, role_id: role3.id}
+                           })
+    end
+
+    it "destroys old shift and creates new one" do
+      meal1.update!(formula: formula2)
+      expect(Work::Job.count).to eq(1)
+      expect(Work::Shift.count).to eq(1)
+
+      expect(Work::Job.first.meal_role).to eq(role3)
+      expect(Work::Shift.first.starts_at).to eq(Time.zone.parse("2020-01-01 00:00"))
     end
   end
 end

@@ -6,6 +6,7 @@ FactoryBot.define do
       communities { [] }
       no_calendars { false }
       head_cook { nil }
+      head_cook_role_title { nil }
       asst_cooks { [] }
       cleaners { [] }
     end
@@ -22,7 +23,7 @@ FactoryBot.define do
 
       unless evaluator.head_cook == false
         head_cook = evaluator.head_cook || create(:user, community: meal.community)
-        build_assignment(meal, "Head Cook", head_cook)
+        build_assignment(meal, evaluator.head_cook_role_title || "Head Cook", head_cook)
       end
       evaluator.asst_cooks.each { |user| build_assignment(meal, "Assistant Cook", user) }
       evaluator.cleaners.each { |user| build_assignment(meal, "Cleaner", user) }

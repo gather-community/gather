@@ -18,11 +18,25 @@ module Work
     end
 
     def create_meals_meal_successful(meal)
-      periods = Work::Period.active.in_community(meal.community_id).containing_date(meal.served_at.to_date)
+      periods = base_period_scope(meal.community_id).containing_date(meal.served_at.to_date)
+      periods.each { |p| sync_jobs_and_shifts(p) }
+    end
+
+    def update_meals_meal_successful(meal)
+      periods = base_period_scope(meal.community_id).containing_date(meal.served_at.to_date).to_a
+      if meal.served_at_previously_changed?
+        old_date = meal.served_at_previous_change[0].to_date
+        periods.concat(base_period_scope(meal.community_id).containing_date(old_date).to_a)
+        periods.uniq!
+      end
       periods.each { |p| sync_jobs_and_shifts(p) }
     end
 
     private
+
+    def base_period_scope(community_id)
+      Work::Period.active.in_community(community_id)
+    end
 
     def sync_jobs_and_shifts(period)
       job_ids = []

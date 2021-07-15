@@ -10,16 +10,30 @@ module Work
     DEFAULT_WORK_HOURS = 1.5
 
     def create_work_period_successful(period)
+      sync_jobs_and_shifts(period)
+    end
+
+    def update_work_period_successful(period)
+      sync_jobs_and_shifts(period)
+    end
+
+    private
+
+    def sync_jobs_and_shifts(period)
+      job_ids = []
+      shift_ids = []
       Meals::Meal.where(served_at: meal_time_range(period)).oldest_first.each do |meal|
         meal.roles.each do |role|
           next unless period_sync_role?(period, meal, role)
           job = find_or_create_job(period, role)
-          find_or_create_shift(period, job, role, meal)
+          job_ids << job.id
+          shift = find_or_create_shift(job, role, meal)
+          shift_ids << shift.id
         end
       end
+      Work::Job.where(period_id: period.id).where.not(meal_role: nil).where.not(id: job_ids).destroy_all
+      Work::Shift.where(job_id: job_ids).where.not(id: shift_ids).destroy_all
     end
-
-    private
 
     def meal_time_range(period)
       period.starts_on.midnight...((period.ends_on + 1.day).midnight)
@@ -42,12 +56,13 @@ module Work
       job
     end
 
-    def find_or_create_shift(period, job, role, meal)
+    def find_or_create_shift(job, role, meal)
       shift = job.shifts.find_or_initialize_by(meal: meal)
       shift.starts_at = meal.served_at + (role.shift_start || DEFAULT_SHIFT_START_OFFSET).minutes
       shift.ends_at = meal.served_at + (role.shift_end || DEFAULT_SHIFT_END_OFFSET).minutes
       shift.slots = role.count_per_meal
       shift.save!
+      shift
     end
   end
 end

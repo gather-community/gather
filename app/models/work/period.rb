@@ -12,6 +12,7 @@ module Work
     acts_as_tenant :cluster
 
     attr_accessor :job_copy_source_id
+    attr_accessor :previous_meal_job_sync_setting_ids
     attr_accessor :copy_preassignments
     alias copy_preassignments? copy_preassignments
 
@@ -30,6 +31,7 @@ module Work
     scope :containing_date, ->(d) { where("starts_on <= ?", d).where("ends_on >= ?", d) }
 
     before_validation :normalize
+    before_update :save_meal_job_sync_setting_ids
 
     validates :name, :starts_on, :ends_on, presence: true
     validates :name, uniqueness: {scope: :community_id}
@@ -113,6 +115,10 @@ module Work
 
     def start_before_end
       errors.add(:ends_on, :not_after_start) unless ends_on > starts_on
+    end
+
+    def save_meal_job_sync_setting_ids
+      self.previous_meal_job_sync_setting_ids = meal_job_sync_settings.map(&:id).compact
     end
   end
 end

@@ -14,7 +14,12 @@ module Work
     end
 
     def update_work_period_successful(period)
-      sync_jobs_and_shifts(period)
+      # If dates changed or settings added, changed, or deleted
+      if (period.previous_changes.keys & %w[starts_on ends_on]).any? ||
+          period.meal_job_sync_settings.any? { |s| s.previous_changes.any? } ||
+          (period.previous_meal_job_sync_setting_ids - period.meal_job_sync_settings.map(&:id)).any?
+        sync_jobs_and_shifts(period)
+      end
     end
 
     def create_meals_meal_successful(meal)
@@ -22,6 +27,7 @@ module Work
     end
 
     def update_meals_meal_successful(meal)
+      return unless (meal.previous_changes.keys & %w[served_at formula_id]).any?
       periods = meal_periods(meal)
       if meal.served_at_previously_changed?
         old_date = meal.served_at_previous_change[0].to_date
@@ -82,8 +88,18 @@ module Work
       job.requester_id = period.meal_job_requester_id
       job.slot_type = "fixed"
       job.time_type = role.time_type
+      fix_title_collisions(job)
       job.save!
       job
+    end
+
+    def fix_title_collisions(job)
+      original = job.title
+      counter = 2
+      while job.invalid? && job.errors[:title].include?(I18n.t("errors.messages.taken"))
+        job.title = "#{original} #{counter}"
+        counter += 1
+      end
     end
 
     def find_or_create_shift(job, role, meal)

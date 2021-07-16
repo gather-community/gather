@@ -148,6 +148,76 @@ describe Work::MealJobSynchronizer do
     end
   end
 
+  context "on period update when role name has changed to match existing job" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:role2) { create(:meal_role) }
+    let!(:formula1) { create(:meal_formula, roles: [role1, role2]) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+    let!(:dupe_job) { create(:work_job, period: period, title: "Head Cooke") } # Initially not a collision.
+
+    it "handles duplicate name" do
+      role1.update(work_job_title: "Head Cooke") # This doesn't cause sync immediately.
+
+      # This update causes a sync which generates collision.
+      settings = period.meal_job_sync_settings
+      period.update!(meal_job_sync_settings_attributes: {
+        "0" => {id: settings.detect { |s| s.role_id == role1.id }.id}, # No change
+        "1" => {formula_id: formula1.id, role_id: role2.id} # Newly added
+      })
+
+      expect(Work::Job.find_by(meal_role: role1).title).to eq("Head Cooke 2")
+    end
+  end
+
+  context "on period update only a sync setting is deleted" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:role2) { create(:meal_role) }
+    let!(:formula1) { create(:meal_formula, roles: [role1, role2]) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id},
+                             "1" => {formula_id: formula1.id, role_id: role2.id}
+                           })
+    end
+
+    it "causes sync" do
+      expect(Work::MealJobSynchronizer.instance).to receive(:sync_jobs_and_shifts)
+      period.reload
+      settings = period.meal_job_sync_settings
+      period.update!(meal_job_sync_settings_attributes: {
+        "0" => {id: settings.detect { |s| s.role_id == role1.id }.id},
+        "1" => {id: settings.detect { |s| s.role_id == role2.id }.id, _destroy: "1"}
+      })
+    end
+  end
+
+  context "on period update when dates or sync settings don't change" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    it "doesn't cause sync" do
+      expect(Work::MealJobSynchronizer.instance).not_to receive(:sync_jobs_and_shifts)
+      period.reload
+      settings = period.meal_job_sync_settings
+      period.update!(meal_job_sync_settings_attributes: {"0" => {id: settings.first.id}})
+    end
+  end
+
   context "on meal create" do
     let!(:role1) { create(:meal_role, :head_cook) }
     let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }

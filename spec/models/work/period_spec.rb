@@ -49,6 +49,30 @@ describe Work::Period do
       end
     end
 
+    context "with meal_job_sync_settings" do
+      let(:role) { create(:meal_role, :head_cook) }
+      let(:formula) { create(:meal_formula, roles: [role]) }
+      let(:period) do
+        create(:work_period, meal_job_sync_setting_pairs: [[formula, role]], meal_job_sync: meal_job_sync)
+      end
+
+      context "with meal_job_sync true" do
+        let(:meal_job_sync) { true }
+
+        it "keeps shares" do
+          expect(period.meal_job_sync_settings.size).to eq(1)
+        end
+      end
+
+      context "with meal_job_sync false" do
+        let(:meal_job_sync) { false }
+
+        it "keeps shares" do
+          expect(period.meal_job_sync_settings).to be_empty
+        end
+      end
+    end
+
     context "with staggering fields" do
       let(:period) do
         create(:work_period, quota_type: "by_person", pick_type: "staggered", round_duration: 5,

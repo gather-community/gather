@@ -26,13 +26,17 @@
     <td><%= Work::Job.human_attribute_name(:slot_type) %></td>
     <td><%= t("simple_form.options.work_job.slot_type.#{job.slot_type}") %></td>
   </tr>
-  <% if job.reminders.any? %>
+  <tr>
+    <td><%= Work::Job.human_attribute_name(:double_signups_allowed) %></td>
+    <td><%= t("common.#{job.double_signups_allowed.to_s}") %></td>
+  </tr>
+  <% if reminders.any? %>
     <tr>
       <td><%= Work::Job.human_attribute_name(:reminders) %></td>
       <td>
         <ul>
-          <% job.reminders.each do |reminder| %>
-            <li><%= reminder.decorate.to_s %></li>
+          <% reminders.each do |reminder| %>
+            <li><%= reminder.to_s %></li>
           <% end %>
         </ul>
       </td>

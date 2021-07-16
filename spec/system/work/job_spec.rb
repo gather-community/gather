@@ -156,6 +156,13 @@ describe "jobs", js: true do
       end
     end
 
+    scenario "view meal job" do
+      visit(work_jobs_path)
+      click_on("Cook")
+      expect(page).to have_content("This is job was synchronized from the meals system and can't")
+      expect(page).not_to have_field("Title")
+    end
+
     scenario "delete" do
       visit(edit_work_job_path(jobs.first))
       accept_confirm { click_on("Delete") }

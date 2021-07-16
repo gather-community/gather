@@ -14,13 +14,23 @@ describe Work::JobPolicy do
       it_behaves_like "permits users in community only"
     end
 
-    permissions :new?, :edit?, :create?, :update?, :destroy? do
-      context "most phases" do
-        it_behaves_like "permits admins or special role but not regular users", :work_coordinator
-      end
+    context "normal job" do
+      permissions :new?, :edit?, :create?, :update?, :destroy? do
+        context "most phases" do
+          it_behaves_like "permits admins or special role but not regular users", :work_coordinator
+        end
 
-      context "archived phase" do
-        let(:phase) { "archived" }
+        context "archived phase" do
+          let(:phase) { "archived" }
+          it_behaves_like "forbids all"
+        end
+      end
+    end
+
+    context "meal job" do
+      let(:job) { create(:work_job, period: period, meal_role: create(:meal_role)) }
+
+      permissions :new?, :edit?, :create?, :update?, :destroy? do
         it_behaves_like "forbids all"
       end
     end

@@ -15,7 +15,7 @@ module Work
 
     def update_work_period_successful(period)
       # If dates changed or settings added, changed, or deleted
-      if (period.previous_changes.keys & %w[starts_on ends_on]).any? ||
+      if (period.previous_changes.keys & %w[starts_on ends_on meal_job_requester_id]).any? ||
           period.meal_job_sync_settings.any? { |s| s.previous_changes.any? } ||
           (period.previous_meal_job_sync_setting_ids - period.meal_job_sync_settings.map(&:id)).any?
         sync_jobs_and_shifts(period)

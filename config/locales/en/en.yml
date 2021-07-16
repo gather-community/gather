@@ -331,6 +331,7 @@ en:
       edit: "Edit"
       deactivate: "Deactivate"
       destroy: "Delete"
+      clone: "Clone"
       close: "Close"
       join: "Join"
       leave: "Leave"

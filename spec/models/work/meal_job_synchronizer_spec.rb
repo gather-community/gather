@@ -56,6 +56,8 @@ describe Work::MealJobSynchronizer do
           meal_id: meal2.id,
           slots: 1
         )
+        expect(role1_job.shifts[0].assignments.count).to eq(1)
+        expect(role1_job.shifts[0].assignments[0].user).to eq(meal2.head_cook)
         expect(role1_job.shifts[1]).to have_attributes(
           starts_at: Time.zone.parse("2020-01-02 00:00"),
           ends_at: Time.zone.parse("2020-01-02 23:59"),

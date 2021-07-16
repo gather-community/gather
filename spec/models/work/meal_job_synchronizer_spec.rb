@@ -241,4 +241,31 @@ describe Work::MealJobSynchronizer do
       expect(Work::Shift.first.starts_at).to eq(Time.zone.parse("2020-01-01 00:00"))
     end
   end
+
+  context "on meal destroy" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:role2) { create(:meal_role) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:meal2) { create(:meal, served_at: "2020-01-02 18:00", formula: formula2) }
+    let!(:formula1) { create(:meal_formula, roles: [role1, role2]) }
+    let!(:formula2) { create(:meal_formula, roles: [role1]) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id},
+                             "1" => {formula_id: formula1.id, role_id: role2.id},
+                             "2" => {formula_id: formula2.id, role_id: role1.id}
+                           })
+    end
+
+    it "destroys one job and one shift" do
+      expect(Work::Job.count).to eq(2)
+      expect(Work::Shift.count).to eq(3)
+      meal1.destroy
+      expect(Work::Job.count).to eq(1)
+      expect(Work::Shift.count).to eq(1)
+      expect(Work::Job.first.meal_role).to eq(role1)
+      expect(Work::Shift.first.meal).to eq(meal2)
+    end
+  end
 end

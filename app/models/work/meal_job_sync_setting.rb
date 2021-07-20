@@ -7,5 +7,8 @@ module Work
     belongs_to :formula, class_name: "Meals::Formula", inverse_of: :work_meal_job_sync_settings
     belongs_to :role, class_name: "Meals::Role", inverse_of: :work_meal_job_sync_settings
     belongs_to :period, class_name: "Work::Period", inverse_of: :meal_job_sync_settings
+
+    attribute :selected, :boolean, default: true
+    attribute :legacy, :boolean, default: false
   end
 end

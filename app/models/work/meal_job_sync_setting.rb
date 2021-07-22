@@ -10,5 +10,7 @@ module Work
 
     attribute :selected, :boolean, default: true
     attribute :legacy, :boolean, default: false
+
+    delegate :title, to: :role, prefix: true
   end
 end

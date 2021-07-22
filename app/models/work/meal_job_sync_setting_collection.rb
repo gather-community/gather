@@ -39,7 +39,7 @@ module Work
 
     def lookup_table
       return @lookup_table if defined?(@lookup_table)
-      @lookup_table = period.meal_job_sync_settings.includes(:role, :formula).group_by(&:formula)
+      @lookup_table = period.meal_job_sync_settings.group_by(&:formula)
       @lookup_table.each { |formula, settings| @lookup_table[formula] = settings.index_by(&:role) }
       @lookup_table
     end

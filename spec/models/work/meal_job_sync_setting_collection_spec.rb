@@ -13,7 +13,12 @@ describe Work::MealJobSyncSettingCollection do
   subject(:result) { described_class.new(period: period).settings_by_formula }
 
   context "with new period" do
-    let!(:period) { build(:work_period) }
+    let!(:period) do
+      build(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                          meal_job_sync_settings_attributes: {
+                            "0" => {formula_id: formula1.id, role_id: role1.id}
+                          })
+    end
 
     it "is correct" do
       expect(result.size).to eq(2)
@@ -23,7 +28,7 @@ describe Work::MealJobSyncSettingCollection do
 
       expect(result[formula1][0].formula).to eq(formula1)
       expect(result[formula1][0].role).to eq(role1)
-      expect(result[formula1][0].selected?).to be(false)
+      expect(result[formula1][0].selected?).to be(true)
       expect(result[formula1][0].legacy?).to be(false)
 
       expect(result[formula1][1].formula).to eq(formula1)

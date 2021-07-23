@@ -16,6 +16,7 @@ Rails.application.config.after_initialize do
 
   Work::Period.subscribe(Work::MealJobSynchronizer.instance)
   Meals::Meal.subscribe(Work::MealJobSynchronizer.instance)
+  Meals::Role.subscribe(Work::MealJobSynchronizer.instance)
 
   User.subscribe(Work::ShiftIndexUpdater.instance)
   Groups::Group.subscribe(Work::ShiftIndexUpdater.instance)

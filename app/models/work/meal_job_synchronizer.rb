@@ -41,6 +41,12 @@ module Work
       sync_jobs_and_shifts_for_periods(meal_periods(meal))
     end
 
+    def update_meals_role_successful(role)
+      period_ids = Work::MealJobSyncSetting.where(role: role).pluck(:period_id)
+      periods = Period.with_phase("draft").where(id: period_ids)
+      sync_jobs_and_shifts_for_periods(periods)
+    end
+
     private
 
     def sync_jobs_and_shifts_for_periods(periods)

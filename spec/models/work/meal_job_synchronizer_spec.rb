@@ -218,6 +218,34 @@ describe Work::MealJobSynchronizer do
     end
   end
 
+  context "on role update" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           phase: phase, meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    context "when period in draft phase" do
+      let(:phase) { "draft" }
+      it "causes sync" do
+        role1.update!(work_job_title: "Head Cooke")
+        expect(Work::Job.first.title).to eq("Head Cooke")
+      end
+    end
+
+    context "when period in other phase" do
+      let(:phase) { "ready" }
+      it "doesn't cause sync" do
+        role1.update!(work_job_title: "Head Cooke")
+        expect(Work::Job.first.title).to eq("Head Cook")
+      end
+    end
+  end
+
   context "on meal create" do
     let!(:role1) { create(:meal_role, :head_cook) }
     let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }

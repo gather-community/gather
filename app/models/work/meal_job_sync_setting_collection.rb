@@ -10,20 +10,26 @@ module Work
     def settings_by_formula
       return @settings_by_formula if defined?(@settings_by_formula)
       @settings_by_formula = {}
-      formulas = Meals::Formula.in_community(period.community).includes(:roles).by_name
-      formulas.each do |formula|
-        @settings_by_formula[formula] = []
-        formula.roles.each do |role|
-          @settings_by_formula[formula] << find_or_init_setting_for(formula, role)
-        end
-        legacy_roles_for(formula).each do |role|
-          @settings_by_formula[formula] << find_or_init_setting_for(formula, role, legacy: true)
-        end
-      end
+      active_formulas = Meals::Formula.in_community(period.community).includes(:roles).active.by_name
+      add_settings_for_formulas(active_formulas, legacy: false)
+      add_settings_for_formulas(lookup_table.keys - active_formulas, legacy: true)
       @settings_by_formula
     end
 
     private
+
+    def add_settings_for_formulas(formulas, legacy:)
+      formulas.each do |formula|
+        @settings_by_formula[formula] = []
+        active_roles = formula.roles.active
+        active_roles.each do |role|
+          @settings_by_formula[formula] << find_or_init_setting_for(formula, role, legacy: legacy)
+        end
+        legacy_roles_for(formula, active_roles).each do |role|
+          @settings_by_formula[formula] << find_or_init_setting_for(formula, role, legacy: true)
+        end
+      end
+    end
 
     def find_or_init_setting_for(formula, role, legacy: false)
       setting = lookup_table.dig(formula, role)
@@ -32,9 +38,9 @@ module Work
       setting
     end
 
-    def legacy_roles_for(formula)
+    def legacy_roles_for(formula, active_roles)
       settings_roles = lookup_table[formula]&.keys || []
-      settings_roles - formula.roles
+      settings_roles - active_roles
     end
 
     def lookup_table

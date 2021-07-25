@@ -131,7 +131,7 @@ describe Work::Period do
   # - In the policy spec, test for the appropriate restrictions on destroy.
   # - In the feature spec, test the destruction/deactivation/activation happy paths.
   describe "destruction" do
-    context "With no associated objects" do
+    context "with no associated objects" do
       let!(:period) { create(:work_period) }
 
       it "works" do

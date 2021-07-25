@@ -103,7 +103,7 @@ module Work
 
     def normalize
       shares.destroy_all if quota_none?
-      meal_job_sync_settings.destroy_all unless meal_job_sync?
+      meal_job_sync_settings.each(&:mark_for_destruction) unless meal_job_sync?
       self.phase = "open" if should_auto_open?
       self.pick_type = "free_for_all" if quota_none?
       return if staggered?

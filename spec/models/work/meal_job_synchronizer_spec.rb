@@ -218,6 +218,23 @@ describe Work::MealJobSynchronizer do
     end
   end
 
+  context "on period update when meal job sync disabled" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    it "deletes all jobs" do
+      period.update!(meal_job_sync: false)
+      expect(Work::Job.count).to be_zero
+    end
+  end
+
   context "on role update" do
     let!(:role1) { create(:meal_role, :head_cook) }
     let!(:formula1) { create(:meal_formula, roles: [role1]) }

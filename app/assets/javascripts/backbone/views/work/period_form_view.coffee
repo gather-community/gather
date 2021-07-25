@@ -4,12 +4,14 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
     @quotaTypeOrPhaseChanged()
     @pickTypeChanged()
     @jobCopySourceIdChanged()
+    @mealJobSyncChanged()
 
   events:
     "change #work_period_quota_type": "quotaTypeOrPhaseChanged"
     "change #work_period_phase": "quotaTypeOrPhaseChanged"
     "change #work_period_pick_type": "pickTypeChanged"
     "change #work_period_job_copy_source_id": "jobCopySourceIdChanged"
+    "change #work_period_meal_job_sync": "mealJobSyncChanged"
     "click .priority-icon": "priorityChanged"
 
   quotaTypeOrPhaseChanged: ->
@@ -37,3 +39,7 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
   jobCopySourceIdChanged: ->
     copying = @$("#work_period_job_copy_source_id").val() != ''
     @$(".work_period_copy_preassignments").toggle(copying)
+
+  mealJobSyncChanged: ->
+    sync = @$("#work_period_meal_job_sync").val() == 'true'
+    @$("#meal-job-sync-settings").toggle(sync)

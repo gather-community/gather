@@ -8,6 +8,7 @@ module Work
     PHASE_OPTIONS = %i[draft ready open published archived].freeze
     QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
     PICK_TYPE_OPTIONS = %i[free_for_all staggered].freeze
+    MEAL_JOB_SYNC_OPTIONS = %i[false true].freeze
 
     acts_as_tenant :cluster
 
@@ -21,7 +22,8 @@ module Work
                                     inverse_of: :work_periods_as_meal_job_requester
     has_many :shares, inverse_of: :period, dependent: :destroy
     has_many :jobs, inverse_of: :period, dependent: :restrict_with_exception
-    has_many :meal_job_sync_settings, inverse_of: :period, dependent: :destroy
+    has_many :meal_job_sync_settings, -> { includes(:formula, :role) },
+             inverse_of: :period, dependent: :destroy
 
     scope :in_community, ->(c) { where(community: c) }
     scope :with_phase, ->(p) { where(phase: p) }
@@ -41,7 +43,7 @@ module Work
     validates :workers_per_round, presence: true, numericality: {greater_than: 0}, if: :staggered?
     validate :start_before_end
 
-    accepts_nested_attributes_for :meal_job_sync_settings, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :meal_job_sync_settings, allow_destroy: true
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
 
     def self.new_with_defaults(community)

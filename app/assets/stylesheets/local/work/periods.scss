@@ -1,0 +1,24 @@
+.work--periods {
+  #meal-job-sync-settings {
+    .hint {
+      margin-top: 10px;
+    }
+
+    table {
+      margin-top: 5px;
+    }
+
+    th:first-of-type {
+      padding-right: 20px;
+    }
+
+    label {
+      margin: 0;
+    }
+
+    .setting {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+}

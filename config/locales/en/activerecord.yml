@@ -203,8 +203,9 @@ en:
         round_duration: "Round Duration"
         workers_per_round: "Workers per Group"
         max_rounds_per_worker: "Max. Rounds per Worker"
-        job_copy_source_id: "Copy Jobs From"
+        job_copy_source_id: "Job Copy"
         copy_preassignments: "Copy pre-assignments?"
+        meal_job_sync_settings: "Meal Job Sync"
       work/job_reminder:
         abs_rel: "Type"
         abs_time: "Send Time"

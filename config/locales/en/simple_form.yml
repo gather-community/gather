@@ -133,7 +133,7 @@ en:
         max_rounds_per_worker: "How many rounds should a worker have to go through to meet their quota? More rounds means a longer job choosing event."
         workers_per_round: "How many workers should be choosing jobs in a given round? More workers means more hectic choosing. Fewer workers means more rounds so the job choosing event takes longer."
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
-        job_copy_source_id: "Choose a period from which to copy jobs, if desired. Meal jobs will not be copied and should be imported instead."
+        job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
       billing_account:
         active:
@@ -264,6 +264,9 @@ en:
         pick_type:
           free_for_all: "Everyone picks at once"
           staggered: "Groups of workers take turns choosing"
+        meal_job_sync:
+          "false": "Do not sync meal jobs"
+          "true": "Sync meal jobs for selected formulas and roles"
       work_shift:
         lens:
           all: "All Jobs"

@@ -15,8 +15,53 @@
         <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>
       </div>
       <% if period.new_record? %>
-        <%= f.input :job_copy_source_id, collection: @periods, include_blank: "[Do not copy jobs]" %>
+        <%= f.input :job_copy_source_id, collection: @periods, include_blank: "Do not copy jobs" %>
         <%= f.input :copy_preassignments, as: :boolean %>
+      <% end %>
+
+      <% if @meal_job_sync_settings.settings_by_formula.any? %>
+        <%= f.input :meal_job_sync_settings do %>
+          <%= f.input_field :meal_job_sync, collection: Work::Period::MEAL_JOB_SYNC_OPTIONS,
+                            class: "form-control", include_blank: false %>
+          <div id="meal-job-sync-settings">
+            <table>
+              <thead>
+                <tr>
+                  <th>Meal Formula</th>
+                  <th>Meal Roles To Sync</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% index = 0 %>
+                <% @meal_job_sync_settings.settings_by_formula.each do |formula, settings| %>
+                  <tr>
+                    <td><%= formula.name %></td>
+                    <td>
+                      <% settings.each do |setting| %>
+                        <%= f.simple_fields_for(:meal_job_sync_settings_attributes,
+                              setting, index: index) do |setting_fields| %>
+                          <%= setting_fields.hidden_field :id %>
+                          <%= setting_fields.hidden_field :formula_id %>
+                          <%= setting_fields.hidden_field :role_id %>
+                          <div class="setting">
+                            <%= setting_fields.check_box :_destroy, {checked: setting.selected?}, "0", "1" %>
+                            <%= setting_fields.label :_destroy, setting.role_title %>
+                          </div>
+                        <% end %>
+                        <% index += 1 %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <div class="hint">
+              Meal jobs will be sync'd whenever the period changes or meals are added/changed/removed.
+              Signups will be sync'd whether user signs up via meal or work system.
+              Changes to meal roles will only cause sync if period is in draft mode.
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>

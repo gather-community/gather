@@ -28,8 +28,8 @@ module Work
     scope :in_community, ->(c) { where(community: c) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
-    scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc) }
-    scope :oldest_first, -> { order(:starts_on, :ends_on) }
+    scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc, name: :asc) }
+    scope :oldest_first, -> { order(:starts_on, :ends_on, :name) }
     scope :containing_date, ->(d) { where("starts_on <= ?", d).where("ends_on >= ?", d) }
 
     before_validation :normalize

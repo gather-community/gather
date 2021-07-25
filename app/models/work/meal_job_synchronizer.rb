@@ -62,6 +62,7 @@ module Work
     end
 
     def sync_jobs_and_shifts(period)
+      ShiftIndexUpdater.instance.paused = true
       job_ids = []
       shift_ids = []
       Meals::Meal.where(served_at: meal_time_range(period)).oldest_first.each do |meal|
@@ -75,6 +76,9 @@ module Work
       end
       Work::Job.where(period_id: period.id).where.not(meal_role: nil).where.not(id: job_ids).destroy_all
       Work::Shift.where(job_id: job_ids).where.not(id: shift_ids).destroy_all
+      ShiftIndexUpdater.instance.reindex(Work::Shift.joins(:job).where(work_jobs: {period_id: period.id}))
+    ensure
+      ShiftIndexUpdater.instance.paused = false
     end
 
     def meal_time_range(period)

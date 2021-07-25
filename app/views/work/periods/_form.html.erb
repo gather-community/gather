@@ -9,7 +9,7 @@
       <%= f.input :auto_open_time, as: :datetime_picker, stepping: 5 %>
       <%= f.input :pick_type, collection: Work::Period::PICK_TYPE_OPTIONS, include_blank: false,
                               wrapper_html: {class: "hiding"} %>
-      <div class="staggering-options hiding" %>
+      <div class="staggering-options hiding">
         <%= f.input :max_rounds_per_worker %>
         <%= f.input :workers_per_round %>
         <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>

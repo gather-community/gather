@@ -46,6 +46,9 @@ describe "periods", js: true do
     click_on("Create Period")
     fill_basic_fields
 
+    # There are no formulas/roles so this shouldn't be there.
+    expect(page).not_to have_content("Meal Job Sync")
+
     # Set quota attrib and choose share values
     expect(page).not_to have_content("Pick Type")
     expect(page).not_to have_select("Jane Picard")
@@ -168,6 +171,33 @@ describe "periods", js: true do
       click_on("Jobs")
       select_lens(:period, "Delta")
       expect(page).not_to have_content("Frungler")
+    end
+  end
+
+  context "with meal formulas/roles" do
+    let!(:role1) { create(:meal_role, :head_cook, title: "Honcho") }
+    let!(:role2) { create(:meal_role, title: "Flunkie") }
+    let!(:formula1) { create(:meal_formula, roles: [role1, role2]) }
+
+    scenario "meal job sync settings are saved properly" do
+      visit(work_periods_path)
+      click_on("Create Period")
+      find("#work_period_meal_job_sync").select("Sync meal jobs for selected formulas and roles")
+      check("Honcho")
+      click_on("Save")
+
+      expect(page).to have_alert("Please review the problems below")
+      expect(page).to have_checked_field("Honcho")
+      expect(page).to have_unchecked_field("Flunkie")
+
+      fill_basic_fields
+      click_on("Save")
+
+      expect(page).to have_alert("created successfully")
+      click_on("Qux")
+      click_on("Edit")
+      expect(page).to have_checked_field("Honcho")
+      expect(page).to have_unchecked_field("Flunkie")
     end
   end
 

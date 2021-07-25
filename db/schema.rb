@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_24_110223) do
+ActiveRecord::Schema.define(version: 2021_07_25_235747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -876,11 +876,13 @@ ActiveRecord::Schema.define(version: 2021_07_24_110223) do
   end
 
   create_table "work_meal_job_sync_settings", force: :cascade do |t|
+    t.bigint "cluster_id"
     t.datetime "created_at", precision: 6, null: false
     t.bigint "formula_id", null: false
     t.bigint "period_id", null: false
     t.bigint "role_id", null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_work_meal_job_sync_settings_on_cluster_id"
     t.index ["formula_id", "role_id", "period_id"], name: "work_meal_job_sync_settings_uniq", unique: true
     t.index ["formula_id"], name: "index_work_meal_job_sync_settings_on_formula_id"
     t.index ["period_id"], name: "index_work_meal_job_sync_settings_on_period_id"
@@ -1080,6 +1082,7 @@ ActiveRecord::Schema.define(version: 2021_07_24_110223) do
   add_foreign_key "work_jobs", "groups", column: "requester_id"
   add_foreign_key "work_jobs", "meal_roles"
   add_foreign_key "work_jobs", "work_periods", column: "period_id"
+  add_foreign_key "work_meal_job_sync_settings", "clusters"
   add_foreign_key "work_meal_job_sync_settings", "meal_formulas", column: "formula_id"
   add_foreign_key "work_meal_job_sync_settings", "meal_roles", column: "role_id"
   add_foreign_key "work_meal_job_sync_settings", "work_periods", column: "period_id"

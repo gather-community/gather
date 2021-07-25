@@ -12,5 +12,9 @@ module Work
     attribute :legacy, :boolean, default: false
 
     delegate :title, to: :role, prefix: true
+
+    def selected?
+      self[:selected] && !marked_for_destruction?
+    end
   end
 end

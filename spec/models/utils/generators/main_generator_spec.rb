@@ -17,7 +17,8 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
                               People::MemberType
                               Wiki::Page
                               Wiki::PageVersion
-                              Work::JobReminderDelivery].freeze
+                              Work::JobReminderDelivery
+                              Work::MealJobSyncSetting].freeze
 
   before do
     FileUtils.rm_rf(Rails.root.join("public", "system", "test"))

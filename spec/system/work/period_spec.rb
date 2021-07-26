@@ -163,7 +163,7 @@ describe "periods", js: true do
       fill_in("Name", with: "Delta")
       pick_datetime(".work_period_auto_open_time", day: 1, hour: 12)
       expect(page).to have_content("Copy pre-assignments?")
-      select("[Do not copy jobs]", from: "Copy Jobs From")
+      select("Do not copy jobs", from: "Job Copy")
       expect(page).not_to have_content("Copy pre-assignments?")
       click_on("Save")
       expect(page).to have_success

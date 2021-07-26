@@ -161,8 +161,9 @@ describe Work::Period do
       let!(:period) { create(:work_period) }
       let!(:job) { create(:work_job, period: period, shift_count: 1) }
 
-      it "errors" do
-        expect { period.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      it "deletes associated jobs" do
+        period.destroy
+        expect(Work::Job.count).to be_zero
       end
     end
   end

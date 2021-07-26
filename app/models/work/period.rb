@@ -21,7 +21,11 @@ module Work
     belongs_to :meal_job_requester, class_name: "Groups::Group",
                                     inverse_of: :work_periods_as_meal_job_requester
     has_many :shares, inverse_of: :period, dependent: :destroy
-    has_many :jobs, inverse_of: :period, dependent: :restrict_with_exception
+
+    # Deleting period shouldn't be possible for user if there are jobs within, but we still want to cascade
+    # deletion for when system processes are destroying data.
+    has_many :jobs, inverse_of: :period, dependent: :destroy
+
     has_many :meal_job_sync_settings, -> { includes(:formula, :role) },
              inverse_of: :period, dependent: :destroy
 

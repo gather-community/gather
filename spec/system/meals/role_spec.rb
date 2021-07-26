@@ -20,7 +20,7 @@ describe "roles", js: true do
   scenario "create and update" do
     visit(meals_roles_path)
     click_link("Create Role")
-    fill_in("Title", with: "Assistant Cook")
+    fill_in("Job Title *", with: "Assistant Cook", exact: true)
     fill_in("People per Meal", with: 2)
     select("date and time", from: "Times")
     fill_in("Start Time", with: -180)

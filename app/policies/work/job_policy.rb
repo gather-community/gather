@@ -19,7 +19,7 @@ module Work
     end
 
     def new?
-      !job.period_archived? && active_admin_or?(:work_coordinator)
+      !job.meal_role? && !job.period_archived? && active_admin_or?(:work_coordinator)
     end
 
     def edit?

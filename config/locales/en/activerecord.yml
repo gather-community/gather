@@ -74,6 +74,8 @@ en:
         time_type: "Times"
         shift_start: "Start Time"
         shift_end: "End Time"
+        work_hours: "Work Hours"
+        work_job_title: "Work Job Title"
         description: "Job Description"
         double_signups_allowed: "The same person can sign up more than once for this role in a single meal"
         count_per_meal: "People per Meal"
@@ -201,8 +203,9 @@ en:
         round_duration: "Round Duration"
         workers_per_round: "Workers per Group"
         max_rounds_per_worker: "Max. Rounds per Worker"
-        job_copy_source_id: "Copy Jobs From"
+        job_copy_source_id: "Job Copy"
         copy_preassignments: "Copy pre-assignments?"
+        meal_job_sync_settings: "Meal Job Sync"
       work/job_reminder:
         abs_rel: "Type"
         abs_time: "Send Time"
@@ -291,7 +294,6 @@ en:
             shifts:
               more_than_one_shift_for_full_single: "You can only add one shift for single shift jobs."
               more_than_one_shift_for_full_period: "You can only add one shift for whole period jobs."
-              no_shifts: "You must add at least one shift."
               duplicate_start_end_times: "Multiple shifts can't have identical start and end times."
               different_length_shifts: "All shfits must be the same length."
         work/period:

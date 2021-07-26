@@ -128,6 +128,7 @@ module Work
       @share_builder.build
       @users_by_kind = UserDecorator.decorate_collection(@share_builder.users).group_by(&:kind)
       @shares_by_user = @period.shares.index_by(&:user_id)
+      @meal_job_sync_settings = MealJobSyncSettingCollection.new(period: period)
     end
 
     def copy_jobs_and_redirect

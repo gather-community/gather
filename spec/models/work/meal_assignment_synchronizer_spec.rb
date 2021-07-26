@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Work::AssignmentSynchronizer do
+describe Work::MealAssignmentSynchronizer do
   let!(:role1) { create(:meal_role, :head_cook) }
   let!(:role2) { create(:meal_role, title: "A", count_per_meal: 3) }
   let(:formula) { create(:meal_formula, roles: [role1, role2]) }

@@ -5,7 +5,7 @@ module Work
     include Destructible
 
     before_action -> { nav_context(:work, :jobs) }
-    decorates_assigned :job, :jobs
+    decorates_assigned :job, :jobs, :reminders
     helper_method :sample_job
 
     def index
@@ -22,7 +22,12 @@ module Work
 
     def show
       @job = Job.includes(shifts: :assignments).find(params[:id])
+      @reminders = job.meal_role? ? job.meal_role.reminders : job.reminders
       authorize(@job)
+      if policy(sample_job).edit? && job.meal_role?
+        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited "\
+          "directly. It will be automatically updated to reflect newly added or changed meals."
+      end
     end
 
     def new

@@ -13,15 +13,25 @@ describe Meals::Role do
       role.validate
     end
 
-    describe "offsets" do
+    describe "offsets and work hours" do
       context "date_only with offsets" do
-        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0} }
-        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil) }
+        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil, work_hours: 3) }
+      end
+
+      context "date_only with offsets, no work hours" do
+        let(:submitted) { {time_type: "date_only", shift_start: -90, shift_end: 0, work_hours: nil} }
+        it { is_expected.to eq(time_type: "date_only", shift_start: nil, shift_end: nil, work_hours: nil) }
       end
 
       context "date_time with offsets" do
-        let(:submitted) { {time_type: "date_time", shift_start: -90, shift_end: 0} }
-        it { is_expected.to eq(time_type: "date_time", shift_start: -90, shift_end: 0) }
+        let(:submitted) { {time_type: "date_time", shift_start: -90, shift_end: 0, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_time", shift_start: -90, shift_end: 0, work_hours: 1.5) }
+      end
+
+      context "date_time with no offsets" do
+        let(:submitted) { {time_type: "date_time", shift_start: nil, shift_end: nil, work_hours: 3} }
+        it { is_expected.to eq(time_type: "date_time", shift_start: nil, shift_end: nil, work_hours: nil) }
       end
     end
 
@@ -98,6 +108,19 @@ describe Meals::Role do
         role.destroy
         expect(Meals::Role.count).to be_zero
         expect(Meals::RoleReminder.count).to be_zero
+      end
+    end
+
+    context "with associated meal job sync setting" do
+      let(:period) { create(:work_period) }
+      let(:formula) { create(:meal_formula, roles: [role]) }
+
+      before do
+        role.work_meal_job_sync_settings.create!(period: period, formula: formula, role: role)
+      end
+
+      it "destroys setting record" do
+        expect { role.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)
       end
     end
 

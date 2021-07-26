@@ -17,12 +17,14 @@ module Meals
                                                  foreign_key: :role_id, inverse_of: :role
     has_many :formula_roles, inverse_of: :role
     has_many :formulas, through: :formula_roles
+    has_many :work_meal_job_sync_settings, class_name: "Work::MealJobSyncSetting", inverse_of: :role,
+                                           dependent: :destroy
 
     scope :by_title, -> { order(arel_table[:special].not_eq("head_cook")).alpha_order(:title) }
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :head_cook, -> { where(special: "head_cook") }
 
-    normalize_attributes :title, :description
+    normalize_attributes :title, :description, :work_job_title
 
     before_validation :normalize
 
@@ -50,7 +52,13 @@ module Meals
     private
 
     def normalize
-      unless date_time?
+      if date_time?
+        if shift_end.present? && shift_start.present?
+          self.work_hours = (shift_end - shift_start).to_f / 60
+        else
+          self.work_hours = nil
+        end
+      else
         self.shift_start = nil
         self.shift_end = nil
       end

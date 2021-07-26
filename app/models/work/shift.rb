@@ -171,9 +171,9 @@ module Work
     def elapsed_hours_must_equal_job_hours
       return unless job_date_time? && job_hours.present? && elapsed_time.present?
       if slot_type == "full_multiple"
-        return unless elapsed_time.positive? && !(job_hours.hours % elapsed_time).zero?
+        return unless elapsed_time.positive? && job_hours.hours % elapsed_time > 0.01
         errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
-      elsif elapsed_time != job_hours.hours
+      elsif (elapsed_time - job_hours.hours).abs > 0.01
         errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
       end
     end

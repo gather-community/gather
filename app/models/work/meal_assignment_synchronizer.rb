@@ -2,7 +2,7 @@
 
 module Work
   # Keeps meal and work assignments in sync
-  class AssignmentSynchronizer
+  class MealAssignmentSynchronizer
     include Singleton
 
     def destroy_work_job_successful(job)

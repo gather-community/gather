@@ -3,27 +3,41 @@
 module Work
   # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord
+    include Wisper.model
+
     PHASE_OPTIONS = %i[draft ready open published archived].freeze
     QUOTA_TYPE_OPTIONS = %i[none by_person by_household].freeze
     PICK_TYPE_OPTIONS = %i[free_for_all staggered].freeze
+    MEAL_JOB_SYNC_OPTIONS = %i[false true].freeze
 
     acts_as_tenant :cluster
 
     attr_accessor :job_copy_source_id
+    attr_accessor :previous_meal_job_sync_setting_ids
     attr_accessor :copy_preassignments
     alias copy_preassignments? copy_preassignments
 
     belongs_to :community, inverse_of: :work_periods
+    belongs_to :meal_job_requester, class_name: "Groups::Group",
+                                    inverse_of: :work_periods_as_meal_job_requester
     has_many :shares, inverse_of: :period, dependent: :destroy
+
+    # Deleting period shouldn't be possible for user if there are jobs within, but we still want to cascade
+    # deletion for when system processes are destroying data.
     has_many :jobs, inverse_of: :period, dependent: :destroy
 
-    scope :in_community, ->(c) { where(community_id: c.id) }
+    has_many :meal_job_sync_settings, -> { includes(:formula, :role) },
+             inverse_of: :period, dependent: :destroy
+
+    scope :in_community, ->(c) { where(community: c) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
-    scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc) }
-    scope :oldest_first, -> { order(:starts_on, :ends_on) }
+    scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc, name: :asc) }
+    scope :oldest_first, -> { order(:starts_on, :ends_on, :name) }
+    scope :containing_date, ->(d) { where("starts_on <= ?", d).where("ends_on >= ?", d) }
 
     before_validation :normalize
+    before_update :save_meal_job_sync_setting_ids
 
     validates :name, :starts_on, :ends_on, presence: true
     validates :name, uniqueness: {scope: :community_id}
@@ -33,6 +47,7 @@ module Work
     validates :workers_per_round, presence: true, numericality: {greater_than: 0}, if: :staggered?
     validate :start_before_end
 
+    accepts_nested_attributes_for :meal_job_sync_settings, allow_destroy: true
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
 
     def self.new_with_defaults(community)
@@ -92,6 +107,7 @@ module Work
 
     def normalize
       shares.destroy_all if quota_none?
+      meal_job_sync_settings.each(&:mark_for_destruction) unless meal_job_sync?
       self.phase = "open" if should_auto_open?
       self.pick_type = "free_for_all" if quota_none?
       return if staggered?
@@ -106,6 +122,10 @@ module Work
 
     def start_before_end
       errors.add(:ends_on, :not_after_start) unless ends_on > starts_on
+    end
+
+    def save_meal_job_sync_setting_ids
+      self.previous_meal_job_sync_setting_ids = meal_job_sync_settings.map(&:id).compact
     end
   end
 end

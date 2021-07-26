@@ -19,6 +19,10 @@ module Groups
                                                          dependent: :destroy, inverse_of: :group
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
                          inverse_of: :requester
+    has_many :work_periods_as_meal_job_requester, class_name: "Work::Period",
+                                                  foreign_key: :meal_job_requester_id,
+                                                  dependent: :nullify,
+                                                  inverse_of: :meal_job_requester
     has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
     scope :in_community, lambda { |c|

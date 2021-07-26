@@ -19,6 +19,8 @@ module Meals
     has_many :parts, -> { includes(:type).by_rank }, class_name: "Meals::FormulaPart", inverse_of: :formula,
                                                      dependent: :destroy
     has_many :types, through: :parts
+    has_many :work_meal_job_sync_settings, class_name: "Work::MealJobSyncSetting", inverse_of: :formula,
+                                           dependent: :destroy
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }

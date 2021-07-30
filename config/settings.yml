@@ -31,6 +31,8 @@ mailman:
 elasticsearch:
   host: 127.0.0.1 # This IP is ignored by VCR, but localhost isn't.
   port: 9200
+redis:
+  url: redis://localhost:6379/0
 s3:
   access_key_id: key
   secret_access_key: secret

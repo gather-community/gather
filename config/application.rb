@@ -85,7 +85,7 @@ module Gather
     # Allow enough time for folks to fill in and submit forms with attachments.
     config.active_storage.service_urls_expire_in = 15.minutes
 
-    config.cache_store = :redis_cache_store, {url: "redis://localhost:6379/0"}
+    config.cache_store = :redis_cache_store, {url: Settings.redis.url}
 
     config.hosts << /([a-z0-9\-]+\.)?#{Settings.url.host}/
 

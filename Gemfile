@@ -7,6 +7,7 @@ gem "active_record-postgres-constraints", "~> 0.1" # This can/should go away whe
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
+gem "aws-sdk-s3", "~> 1.97", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.4"
 gem "bootstrap-kaminari-views", "~> 0.0"

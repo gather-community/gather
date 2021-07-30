@@ -31,3 +31,9 @@ mailman:
 elasticsearch:
   host: 127.0.0.1 # This IP is ignored by VCR, but localhost isn't.
   port: 9200
+s3:
+  access_key_id: key
+  secret_access_key: secret
+  region: region
+  bucket: gather
+  endpoint: https://region.digitaloceanspaces.com

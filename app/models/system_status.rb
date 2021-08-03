@@ -60,12 +60,12 @@ class SystemStatus
 
   def backups_up?
     return @backups_up if defined?(@backups_up)
-    return (@backups_up = false) unless File.exist?(BACKUP_TIMES_FILE)
-    @backups_up = File.read(BACKUP_TIMES_FILE).strip.split("\n").all? do |stamp|
-      # The timestamp fetch operation runs an hour after the backup operation so we
-      # do 26 hours instead of 24 to allow a little leeway.
-      Time.current - Time.zone.parse(stamp) <= 26.hours
-    end
+
+    latest = `s3cmd ls s3://gather-db-backups`.split("\n").map { |l| l.split("/")[-1][0...-5] }.max
+
+    # The timestamp fetch operation runs an hour after the backup operation so we
+    # do 26 hours instead of 24 to allow a little leeway.
+    @backups_up = Time.current - Time.zone.parse("#{latest} UTC") <= 26.hours
   end
 
   private

@@ -187,8 +187,6 @@ module Groups
       def request(endpoint, method = :get, **data)
         return stubbed_response if Rails.env.test? && ENV["STUB_MAILMAN"]
         url = URI.parse("#{base_url}/#{endpoint}")
-        raise "HTTPS only in production" if Rails.env.production? && url.scheme != "https"
-
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)

@@ -49,7 +49,6 @@ module Groups
 
       def do_request(sso)
         url = URI(sso.to_url)
-        raise "HTTPS only in production" if Rails.env.production? && url.scheme != "https"
         req = Net::HTTP::Post.new(url)
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)

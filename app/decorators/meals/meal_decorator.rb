@@ -25,10 +25,10 @@ module Meals
       @current_signup ||= signups.detect { |s| s.household_id == h.current_user.household_id }&.decorate
     end
 
-    def css_classes
+    def css_classes(highlight_signup: true)
       if cancelled?
         "cancelled"
-      elsif current_signup.present?
+      elsif highlight_signup && current_signup.present?
         "signed-up"
       else
         ""

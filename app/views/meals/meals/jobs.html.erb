@@ -11,7 +11,7 @@
 <% else %>
   <div class="meals-list">
     <% meals.each do |meal| %>
-      <div class="meal <%= meal.css_classes %>">
+      <div class="meal <%= meal.css_classes(highlight_signup: false) %>">
         <h4><%= meal.served_at_lens_dependent(lenses[:time]) %></h4>
         <div><%= meal.link %> at <%= meal.location_abbrv %></div>
         <% meal.roles.each do |role| %>

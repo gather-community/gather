@@ -149,7 +149,7 @@ module Work
       @shifts = @shifts
         .in_community(current_community)
         .in_period(@period)
-        .includes(job: {period: :community}, assignments: :user)
+        .includes(:meal, job: {period: :community}, assignments: {user: {photo_attachment: :blob}})
         .by_job_title
         .by_date
         .page(params[:page])

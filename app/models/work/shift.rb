@@ -136,7 +136,7 @@ module Work
     end
 
     def meal?
-      meal.present?
+      meal_id.present?
     end
 
     private

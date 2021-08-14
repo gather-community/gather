@@ -63,7 +63,7 @@ module Work
         meal.assignments.create!(user_id: uid, role_id: shift.meal_role_id, syncing: true)
       end
       id_diff(dest_ids, source_ids).each do |uid|
-        meal.assignments.find_by(user_id: uid, role_id: shift.meal_role_id).destroy
+        destroy_assignment(meal.assignments.find_by(user_id: uid, role_id: shift.meal_role_id))
       end
     end
 
@@ -74,7 +74,7 @@ module Work
         shift.assignments.create!(user_id: uid)
       end
       id_diff(dest_ids, source_ids).each do |uid|
-        shift.assignments.find_by(user_id: uid).destroy
+        destroy_assignment(shift.assignments.find_by(user_id: uid))
       end
     end
 
@@ -91,6 +91,11 @@ module Work
     def shift_for_meal_assignment(meal_asst)
       Work::Shift.joins(:job).find_by(meal_id: meal_asst.meal_id,
                                       work_jobs: {meal_role_id: meal_asst.role_id})
+    end
+
+    def destroy_assignment(assignment)
+      assignment.syncing = true
+      assignment.destroy
     end
 
     def destroyed_jobs

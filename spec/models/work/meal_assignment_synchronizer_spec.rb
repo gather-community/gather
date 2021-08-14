@@ -29,15 +29,30 @@ describe Work::MealAssignmentSynchronizer do
   end
 
   context "with existing job" do
+    let(:double_signups_allowed) { false }
     let!(:job) do
       # Create and then load fresh so that syncing flags are not set.
-      Work::Job.find(create(:work_job, meal_role: role2, shift_count: 1, meals: [meal]).id)
+      job = create(:work_job, meal_role: role2, shift_count: 1, meals: [meal],
+                              double_signups_allowed: double_signups_allowed)
+      Work::Job.find(job.id)
     end
 
     context "on work job signup" do
       it "copies new assignment to meals" do
         job.shifts[0].assignments.create!(user: user4)
         expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id)
+      end
+
+      context "when double signups are allowed" do
+        let(:double_signups_allowed) { true }
+
+        it "copies both signups" do
+          a1 = job.shifts[0].assignments.create!(user: user4)
+          a2 = job.shifts[0].assignments.create!(user: user4)
+          expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id, user4.id)
+          a2.reload.destroy
+          expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id)
+        end
       end
     end
 

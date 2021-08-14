@@ -82,6 +82,18 @@ describe Work::MealAssignmentSynchronizer do
         meal.assignments.create!(user: user4, role: role2)
         expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id)
       end
+
+      context "when work assignment already exists for some reason" do
+        let!(:work_assign) { job.shifts[0].assignments.create!(user: user4, syncing: true) }
+
+        it "should not create another one" do
+          # First make sure that the creation of the work_assign above didn't cause a sync.
+          expect(meal.assignments.map(&:user)).not_to include(user4)
+
+          meal.assignments.create!(user: user4, role: role2)
+          expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id)
+        end
+      end
     end
 
     context "on meal assignment change" do

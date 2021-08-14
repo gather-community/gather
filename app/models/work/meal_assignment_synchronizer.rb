@@ -24,66 +24,65 @@ module Work
     # Copies assignments from meal if they exist.
     def create_work_shift_successful(shift)
       return unless meal_shift?(shift)
-      shift.meal.assignments.where(role_id: shift.meal_role_id).find_each do |assign|
-        shift.assignments.create!(user_id: assign.user_id, syncing: true)
-      end
+      sync_meal_to_shift(shift.meal, shift)
     end
 
     def create_work_assignment_successful(work_asst)
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
-      meal = work_asst.meal
-      meal.assignments.create!(role_id: work_asst.meal_role_id, user_id: work_asst.user_id, syncing: true)
+      sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
     def update_work_assignment_successful(work_asst)
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
-      meal = work_asst.meal
-      old_user_id = work_asst.user_id_previous_change[0]
-      if (meal_asst = meal.assignments.find_by(role_id: work_asst.meal_role_id, user_id: old_user_id))
-        meal_asst.update!(user_id: work_asst.user_id, syncing: true)
-      else
-        meal.assignments.create!(role_id: work_asst.meal_role_id, user_id: work_asst.user_id, syncing: true)
-      end
+      sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
     def destroy_work_assignment_successful(work_asst)
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
       return if destroyed_jobs[work_asst.job_id] || destroyed_shifts[work_asst.shift_id]
-      meal = work_asst.meal
-      meal_asst = meal.assignments.find_by(role_id: work_asst.meal_role_id, user_id: work_asst.user_id)
-      meal_asst.syncing = true
-      meal_asst.destroy
+      sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
     def create_meals_assignment_successful(meal_asst)
       return if meal_asst.syncing?
       return unless (shift = shift_for_meal_assignment(meal_asst))
-      shift.assignments.create!(user_id: meal_asst.user_id, syncing: true)
+      sync_meal_to_shift(meal_asst.meal, shift)
     end
+    alias update_meals_assignment_successful create_meals_assignment_successful
+    alias destroy_meals_assignment_successful create_meals_assignment_successful
 
-    def update_meals_assignment_successful(meal_asst)
-      return if meal_asst.syncing?
-      return unless (shift = shift_for_meal_assignment(meal_asst))
-      old_user_id = meal_asst.user_id_previous_change[0]
-      if (work_asst = shift.assignments.find_by(user_id: old_user_id))
-        work_asst.update!(user_id: meal_asst.user_id, syncing: true)
-      else
-        shift.assignments.create!(user_id: meal_asst.user_id, syncing: true)
+    private
+
+    def sync_shift_to_meal(shift, meal)
+      source_ids = shift.assignments.map(&:user_id)
+      dest_ids = meal.assignments.where(role_id: shift.meal_role_id).map(&:user_id)
+      id_diff(source_ids, dest_ids).each do |uid|
+        meal.assignments.create!(user_id: uid, role_id: shift.meal_role_id, syncing: true)
+      end
+      id_diff(dest_ids, source_ids).each do |uid|
+        meal.assignments.find_by(user_id: uid, role_id: shift.meal_role_id).destroy
       end
     end
 
-    def destroy_meals_assignment_successful(meal_asst)
-      return if meal_asst.syncing?
-      return unless (shift = shift_for_meal_assignment(meal_asst))
-      work_asst = shift.assignments.find_by(user_id: meal_asst.user_id)
-      work_asst.syncing = true
-      work_asst.destroy
+    def sync_meal_to_shift(meal, shift)
+      source_ids = meal.assignments.where(role_id: shift.meal_role_id).map(&:user_id)
+      dest_ids = shift.assignments.map(&:user_id)
+      id_diff(source_ids, dest_ids).each do |uid|
+        shift.assignments.create!(user_id: uid)
+      end
+      id_diff(dest_ids, source_ids).each do |uid|
+        shift.assignments.find_by(user_id: uid).destroy
+      end
     end
 
-    private
+    def id_diff(source, dest)
+      grouped = source.group_by(&:itself)
+      dest.each { |uid| grouped[uid]&.pop }
+      grouped.values.flatten
+    end
 
     def meal_shift?(shift)
       shift.meal? && shift.meal_role_id.present?

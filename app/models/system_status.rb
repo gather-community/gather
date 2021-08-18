@@ -23,7 +23,7 @@ class SystemStatus
       begin
         Cluster.count && true
       rescue ActiveRecord::StatementInvalid
-        Rails.logger.debug("Database down")
+        Rails.logger.debug("[system status] Database down")
         false
       end
   end
@@ -36,7 +36,7 @@ class SystemStatus
         pid = delayed_job_pid
         pid.present? && Process.kill(0, pid) && true
       rescue Errno::ESRCH
-        Rails.logger.debug("Delayed Job down (process not running)")
+        Rails.logger.debug("[system status] Delayed Job down (process not running)")
         false
       end
   end
@@ -47,7 +47,7 @@ class SystemStatus
       begin
         Work::Shift.search("foo").results.size && true
       rescue Faraday::ConnectionFailed
-        Rails.logger.debug("Elasticsearch down (connection failed error)")
+        Rails.logger.debug("[system status] Elasticsearch down (connection failed error)")
         false
       end
   end
@@ -61,11 +61,11 @@ class SystemStatus
         if Rails.cache.redis.connected?
           true
         else
-          Rails.logger.debug("Redis down (connected? returned false)")
+          Rails.logger.debug("[system status] Redis down (connected? returned false)")
           false
         end
       rescue Redis::CannotConnectError
-        Rails.logger.debug("Redis down (cannot connect error)")
+        Rails.logger.debug("[system status] Redis down (cannot connect error)")
         false
       end
   end
@@ -81,7 +81,7 @@ class SystemStatus
     if (@backups_up = Time.current - Time.zone.parse("#{latest} UTC") <= 26.hours)
       true
     else
-      Rails.logger.debug("Backups down (latest timestamp: #{latest})")
+      Rails.logger.debug("[system status] Backups down (latest timestamp: #{latest}, zone: #{Time.zone})")
       false
     end
   end

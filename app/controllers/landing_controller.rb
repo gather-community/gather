@@ -5,6 +5,7 @@ class LandingController < ApplicationController
   skip_before_action :authenticate_user!
   skip_after_action :verify_authorized
   skip_after_action :verify_policy_scoped
+  skip_before_action :ensure_subdomain
   before_action :ensure_apex_domain, only: :index
 
   # We have to be on apex domain for index page because otherwise the CSRF system doesn't work

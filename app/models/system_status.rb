@@ -29,6 +29,7 @@ class SystemStatus
   end
 
   def delayed_job_up?
+    return true if Rails.env.test? # DJ doesn't run in test env.
     return @delayed_job_up if defined?(@delayed_job_up)
     @delayed_job_up =
       begin
@@ -52,6 +53,7 @@ class SystemStatus
   end
 
   def redis_up?
+    return true if Rails.env.test? # Redis doesn't run in test env.
     return @redis_up if defined?(@redis_up)
     @redis_up =
       begin
@@ -69,6 +71,7 @@ class SystemStatus
   end
 
   def backups_up?
+    return true if Rails.env.test? # We don't want to make real s3cmd calls in tests.
     return @backups_up if defined?(@backups_up)
 
     latest = `s3cmd ls s3://gather-db-backups`.split("\n").map { |l| l.split("/")[-1][0...-5] }.max

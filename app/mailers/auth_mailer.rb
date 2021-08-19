@@ -25,7 +25,7 @@ class AuthMailer < Devise::Mailer
   end
 
   def sign_in_invitation(user, token)
-    return if user.fake?
+    return if user.fake? || user.email.blank?
     @user = user.decorate
     @token = token
     @expiry_days = (Devise.reset_password_within / 1.day).to_i

@@ -184,7 +184,8 @@ module ApplicationControllable::RequestPreprocessing
   end
 
   def set_time_zone
-    Time.zone = current_community.settings.time_zone if current_community
+    # Important to set to UTC if no current_community b/c otherwise zone from previous request can leak.
+    Time.zone = current_community ? current_community.settings.time_zone : "UTC"
   end
 
   # Skip this before_action to not respect impersonation for a given controller action.

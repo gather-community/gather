@@ -23,19 +23,20 @@ class SystemStatus
       begin
         Cluster.count && true
       rescue ActiveRecord::StatementInvalid
-        Rails.logger.debug("Database down")
+        Rails.logger.debug("[system status] Database down")
         false
       end
   end
 
   def delayed_job_up?
+    return true if Rails.env.test? # DJ doesn't run in test env.
     return @delayed_job_up if defined?(@delayed_job_up)
     @delayed_job_up =
       begin
         pid = delayed_job_pid
         pid.present? && Process.kill(0, pid) && true
       rescue Errno::ESRCH
-        Rails.logger.debug("Delayed Job down (process not running)")
+        Rails.logger.debug("[system status] Delayed Job down (process not running)")
         false
       end
   end
@@ -46,12 +47,13 @@ class SystemStatus
       begin
         Work::Shift.search("foo").results.size && true
       rescue Faraday::ConnectionFailed
-        Rails.logger.debug("Elasticsearch down (connection failed error)")
+        Rails.logger.debug("[system status] Elasticsearch down (connection failed error)")
         false
       end
   end
 
   def redis_up?
+    return true if Rails.env.test? # Redis doesn't run in test env.
     return @redis_up if defined?(@redis_up)
     @redis_up =
       begin
@@ -59,16 +61,17 @@ class SystemStatus
         if Rails.cache.redis.connected?
           true
         else
-          Rails.logger.debug("Redis down (connected? returned false)")
+          Rails.logger.debug("[system status] Redis down (connected? returned false)")
           false
         end
       rescue Redis::CannotConnectError
-        Rails.logger.debug("Redis down (cannot connect error)")
+        Rails.logger.debug("[system status] Redis down (cannot connect error)")
         false
       end
   end
 
   def backups_up?
+    return true if Rails.env.test? # We don't want to make real s3cmd calls in tests.
     return @backups_up if defined?(@backups_up)
 
     latest = `s3cmd ls s3://gather-db-backups`.split("\n").map { |l| l.split("/")[-1][0...-5] }.max
@@ -78,7 +81,7 @@ class SystemStatus
     if (@backups_up = Time.current - Time.zone.parse("#{latest} UTC") <= 26.hours)
       true
     else
-      Rails.logger.debug("Backups down (latest timestamp: #{latest})")
+      Rails.logger.debug("[system status] Backups down (latest timestamp: #{latest}, zone: #{Time.zone})")
       false
     end
   end

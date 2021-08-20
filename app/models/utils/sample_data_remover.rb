@@ -3,8 +3,8 @@
 module Utils
   # Removes all data from the current cluster, except for non-fake users and their households.
   class SampleDataRemover
-    def initialize(cluster_id)
-      raise "CLUSTERS DON'T MATCH, DANGER" unless ActsAsTenant.current_tenant.id == cluster_id
+    def initialize(cluster)
+      raise "CLUSTERS DON'T MATCH, DANGER" unless ActsAsTenant.current_tenant == cluster
     end
 
     def remove

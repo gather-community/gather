@@ -4,7 +4,6 @@
   <thead>
     <tr>
       <td>ID</td>
-      <td>CL</td>
       <td>Name</td>
       <td>Created</td>
       <td>Login?</td>
@@ -13,13 +12,13 @@
       <td>Rsrvs</td>
       <td>Jobs</td>
       <td>Txns</td>
+      <td colspan="2">Cluster</td>
     </tr>
   </thead>
   <tbody>
     <% communities.each do |community| %>
       <tr>
         <td><%= community.id %></td>
-        <td><%= community.cluster_id %></td>
         <td><%= link_to(community.name, url_in_community(community)) %></td>
         <td><%= community.created_at.to_s(:no_time) %></td>
         <td>
@@ -62,6 +61,8 @@
                   title: community.last_txn_created_at) %>
           <% end %>
         </td>
+        <td><%= community.cluster_id %></td>
+        <td><%= community.cluster_name %></td>
       </tr>
     <% end %>
   </tbody>

@@ -26,7 +26,7 @@
               <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
             </div>
             <div class="nav-3 personal-nav">
-              <% if user_signed_in? %>
+              <% if user_signed_in? && current_community %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
                 </ul>
@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="main-nav">
-            <% if user_signed_in? %>
+            <% if user_signed_in? && current_community %>
               <ul class="nav">
                 <% nav_builder.main_items(display: :desktop).each do |item| %>
                   <li class="<%= "active" if item[:active] %>">
@@ -73,7 +73,7 @@
           <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo") %>
         </div>
 
-        <% if user_signed_in? %>
+        <% if user_signed_in? && current_community %>
           <div class="collapse navbar-collapse" id="mobile-nav">
             <ul class="nav navbar-nav mobile-nav">
               <% nav_builder.main_items(display: :mobile).each do |item| %>

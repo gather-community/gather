@@ -109,6 +109,12 @@ describe Work::Job do
         expect(job).to be_valid
       end
 
+      it "does not error when hours not given" do
+        job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
+                               hours_per_shift: 2, hours: nil)
+        expect { job.valid? }.not_to raise_error
+      end
+
       it "is invalid when doesn't evenly divide" do
         job = build(:work_job, time_type: "date_only", slot_type: "full_multiple",
                                hours_per_shift: 3, hours: 4, shifts_attributes: [

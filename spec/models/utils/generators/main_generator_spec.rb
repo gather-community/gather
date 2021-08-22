@@ -71,7 +71,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     end
   end
 
-  it "should run and destroy cleanly without sample data" do
+  it "should run cleanly without sample data" do
     cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: false).generate
 
     ActsAsTenant.with_tenant(cluster) do
@@ -86,7 +86,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(Meals::Formula.count).to eq(1) # Default formula
       expect(Meals::Role.count).to eq(3) # Default roles
       expect(Calendars::Event.count).to eq(0)
-      expect(Calendars::Calendar.count).to eq(0)
+      expect(Calendars::Calendar.count).to eq(4)
       expect(Billing::Statement.count).to eq(0)
       expect(ActiveStorage::Blob.count).to eq(0)
     end

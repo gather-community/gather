@@ -3,7 +3,7 @@
 module Utils
   module Generators
     class CalendarGenerator < Generator
-      attr_accessor :community, :calendar_data, :calendar_map, :photos
+      attr_accessor :community, :calendar_data, :calendar_map, :photos, :reservations_group
 
       def initialize(community:, photos:)
         self.community = community
@@ -11,9 +11,13 @@ module Utils
         self.calendar_map = {}
       end
 
-      def generate_samples
+      def generate_seed_data
         create_main_calendars
         create_meals_calendars
+        self.reservations_group = create(:calendar_group, community: community, name: "Reservations")
+      end
+
+      def generate_samples
         create_reservation_calendars
         create_shared_guidelines_and_associate
         create_calendar_protocols_and_associate
@@ -45,7 +49,6 @@ module Utils
       end
 
       def create_reservation_calendars
-        reservations_group = create(:calendar_group, community: community, name: "Reservations")
         self.calendar_data = load_yaml("calendars/calendars.yml")
         calendar_data.each do |row|
           calendar = create(:calendar, row.except("id", :shared_guideline_ids).merge(

@@ -12,10 +12,8 @@ module Utils
         self.user_index = 0
       end
 
-      def generate_everybody_group
-        create(:group, communities: [community], availability: "everybody",
-                       name: "Full Community", kind: "group",
-                       description: "General group containing all adults in the community.")
+      def generate_seed_data
+        generate_everybody_group
       end
 
       def generate_samples
@@ -25,6 +23,12 @@ module Utils
       end
 
       private
+
+      def generate_everybody_group
+        create(:group, communities: [community], availability: "everybody",
+                       name: "Full Community", kind: "group",
+                       description: "General group containing all adults in the community.")
+      end
 
       def generate_and_populate_everybody_group
         generate_everybody_group unless Groups::Group.where(availability: "everybody").exists?

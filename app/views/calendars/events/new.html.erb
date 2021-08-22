@@ -2,6 +2,12 @@
   <% content_for(:title, "#{calendar.name}: Create Event") %>
   <%= render("form") %>
   <br/><br/>
+<% elsif calendars.empty? %>
+  <% content_for(:title, "No Calendars") %>
+  Your community does not have any calendars on which you can create an event.
+  <% if policy(@sample_calendar).create? %>
+    <%= link_to("You can create one.", calendars_calendars_path) %>
+  <% end %>
 <% else %>
   <% content_for(:title, "Select Calendar") %>
   <% calendars.each do |calendar| %>

@@ -14,7 +14,7 @@ module Utils
         self.data = load_yaml("meals/meals.yml")
       end
 
-      def generate_formula_and_roles
+      def generate_seed_data
         roles = [
           Meals::Role.create!(
             community: community,

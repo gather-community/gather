@@ -28,14 +28,33 @@ describe "event page flow", js: true do
       expect(page).to have_title("Events & Reservations")
     end
 
-    scenario "via combined view and click grid" do
-      visit(calendars_events_path)
-      all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
-      expect(page).to have_content(/Create event on.+11:30 am to 12:00 pm/)
-      click_on("OK")
-      click_link("Bar Room")
-      expect(page).to have_title("Bar Room: Create Event")
-      expect(page).to have_field("Start Time", with: /11:30/)
+    describe "via combined view and click grid" do
+      context "with existing reservable calendar" do
+        scenario do
+          visit(calendars_events_path)
+          all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
+          expect(page).to have_content(/Create event on.+11:30 am to 12:00 pm/)
+          click_on("OK")
+          click_link("Bar Room")
+          expect(page).to have_title("Bar Room: Create Event")
+          expect(page).to have_field("Start Time", with: /11:30/)
+        end
+      end
+
+      context "without existing reservable calendar" do
+        let(:community) { create(:community) }
+        let(:user) { create(:admin, community: community) }
+
+        scenario do
+          visit(calendars_events_path)
+          all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
+          expect(page).to have_content(/Create event on.+11:30 am to 12:00 pm/)
+          click_on("OK")
+          expect(page).to have_content("does not have any calendars")
+          click_on("You can create one")
+          expect(page).to have_title("Calendars")
+        end
+      end
     end
 
     scenario "via single calendar view" do

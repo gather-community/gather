@@ -35,10 +35,7 @@ module Utils
       def generate_data_and_handle_errors
         build_generators
 
-        # We need these even if not doing sample data.
-        generators[:meals].generate_formula_and_roles
-        generators[:groups].generate_everybody_group
-
+        generators.each_value(&:generate_seed_data)
         generators.each_value(&:generate_samples) if sample_data
       rescue StandardError => e
         generators.each_value(&:cleanup_on_error)

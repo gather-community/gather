@@ -2,8 +2,13 @@
 
 module Utils
   module Generators
+    # Superclass for generator classes.
     class Generator
       include FactoryBot::Syntax::Methods
+
+      def generate_seed_data
+        # Implemented optionally by subclasses
+      end
 
       def generate_samples
         # Implemented optionally by subclasses

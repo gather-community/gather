@@ -6,8 +6,8 @@ describe Utils::Generators::GroupGenerator do
   let!(:users) { create_list(:user, 12) }
   let(:generator) { described_class.new(community: Defaults.community) }
 
-  it "generates everyone group" do
-    generator.generate_everybody_group
+  it "generates everybody group" do
+    generator.generate_seed_data
     expect(Groups::Group.count).to eq(1)
     expect(Groups::Group.first.availability).to eq("everybody")
     expect(Groups::Group.first.memberships).to be_empty

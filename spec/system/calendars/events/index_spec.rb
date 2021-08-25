@@ -13,6 +13,7 @@ describe "event calendar", js: true do
   context "with a meal event and a non-meal event" do
     let!(:calendar1) { create(:calendar, name: "Foo Room", selected_by_default: true) }
     let!(:calendar2) { create(:calendar, name: "Bar Room") }
+    let!(:meals_calendar) { create(:community_meals_calendar, name: "Meals") }
     let(:time) { Time.current.midnight + 9.hours }
 
     # This is the start of the month that should be showing on the calendar after two clicks on
@@ -26,7 +27,8 @@ describe "event calendar", js: true do
       create(:event, calendar: calendar1, starts_at: time, ends_at: time + 1.hour, name: "Cal1 Event")
     end
     let!(:event2) do
-      create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours, name: "Cal2 Event")
+      create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours,
+                     name: "Cal2 Event")
     end
 
     before do
@@ -60,6 +62,12 @@ describe "event calendar", js: true do
       visit(calendars_events_path(calendar_id: calendar2.id))
       expect(page).to have_css(".fc-month-button.fc-state-active")
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+    end
+
+    scenario "meal link works" do
+      visit(calendars_events_path(calendar_id: meals_calendar.id))
+      click_on("Yum")
+      expect(page).to have_title("Yum")
     end
 
     describe "all events page" do

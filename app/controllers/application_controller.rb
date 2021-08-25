@@ -41,4 +41,12 @@ class ApplicationController < ActionController::Base
   def app_version
     @app_version ||= File.read(Rails.root.join("VERSION"))
   end
+
+  # Builds a serializer for the given object using the Attributes adapter.
+  # Useful for getting JSON to pass into a JS view, for instance.
+  # Respects the key_transform setting.
+  def build_attribute_serializer(obj, **options)
+    options.merge!(adapter: ActiveModelSerializers::Adapter::Attributes)
+    ActiveModelSerializers::SerializableResource.new(obj, options)
+  end
 end

@@ -111,7 +111,8 @@ module Calendars
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
-      @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
+      @rule_set = build_attribute_serializer(@rule_set, creator_community: Community.first,
+                                                        serializer: RuleSetSerializer)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
       @new_event_path = new_calendar_event_path(@calendar)

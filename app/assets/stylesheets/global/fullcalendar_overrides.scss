@@ -25,4 +25,8 @@
   .fc-slats tr {
     border: none;
   }
+
+  .fc-month-view .fc-day-grid .fc-row {
+    min-height: 90px;
+  }
 }

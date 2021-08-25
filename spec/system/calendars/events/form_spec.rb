@@ -13,7 +13,7 @@ describe "event form", js: true do
 
   describe "new, validation, edit" do
     scenario do
-      visit(new_calendars_event_path(calendar_id: calendar.id))
+      visit(new_calendar_event_path(calendar))
       fill_in("Event Name", with: "Stuff")
       click_on("Save")
       expect_validation_error("You must agree to the guidelines")
@@ -41,7 +41,7 @@ describe "event form", js: true do
     let!(:protocol) { create(:calendar_protocol, calendars: [calendar], pre_notice: "May be bed bugs!") }
 
     scenario "should show warning" do
-      visit(new_calendars_event_path(calendar_id: calendar.id))
+      visit(new_calendar_event_path(calendar))
       expect(page).to have_content("May be bed bugs!")
     end
   end

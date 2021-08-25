@@ -114,8 +114,8 @@ module Calendars
       @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
-      @new_event_path = new_calendars_event_path(calendar_id: @calendar.id)
-      @permalink = calendars_events_path(calendar_id: @calendar.id)
+      @new_event_path = new_calendar_event_path(@calendar)
+      @permalink = calendar_events_path(@calendar)
       # Feed path doesn't need calendar_id because the JS calendar view is responsible for inserting
       # whichever calendar ids the user selects, or the single ID in the case of single view.
       @feed_path = calendars_events_path
@@ -207,8 +207,11 @@ module Calendars
 
     def redirect_to_event_in_context(event)
       params = {date: event.starts_at&.to_s(:no_time)}
-      params[:calendar_id] = event.calendar_id if event.origin_page != "combined"
-      redirect_to(calendars_events_path(params))
+      if event.origin_page == "combined"
+        redirect_to(calendars_events_path(params))
+      else
+        redirect_to(calendar_events_path(event.calendar, params))
+      end
     end
   end
 end

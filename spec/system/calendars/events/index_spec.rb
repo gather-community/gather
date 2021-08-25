@@ -41,7 +41,7 @@ describe "event calendar", js: true do
       visit("/")
       page.execute_script("localStorage.clear()")
 
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       expect(page).to have_content("Yum")
       expect(page).to have_content("Cal1 Event")
       find(".fc-next-button").click
@@ -59,13 +59,13 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
 
       # Test storage of calendar params in localStorage
-      visit(calendars_events_path(calendar_id: calendar2.id))
+      visit(calendar_events_path(calendar2))
       expect(page).to have_css(".fc-month-button.fc-state-active")
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
     end
 
     scenario "meal link works" do
-      visit(calendars_events_path(calendar_id: meals_calendar.id))
+      visit(calendar_events_path(meals_calendar))
       click_on("Yum")
       expect(page).to have_title("Yum")
     end
@@ -121,14 +121,14 @@ describe "event calendar", js: true do
     end
 
     def expect_correct_permalink_and_other_calendar_link(cur_calendar_id:)
-      cur_calendar_param = cur_calendar_id ? "calendar_id=#{cur_calendar_id}&" : ""
-      permalink_url = "/calendars/events?#{cur_calendar_param}view=month&date=#{time2_ymd}"
+      path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
+      permalink_url = "#{path}?view=month&date=#{time2_ymd}"
       expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
       expect(page).to have_css(%(a.calendar-link[href="#{other_calendar_url}"]), text: "Bar Room")
     end
 
     def other_calendar_url
-      "/calendars/events?calendar_id=#{calendar2.id}&view=month&date=#{time2_ymd}"
+      "/calendars/#{calendar2.id}/events?view=month&date=#{time2_ymd}"
     end
 
     def select_calendar(calendar, select)

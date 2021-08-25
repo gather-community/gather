@@ -58,7 +58,7 @@ describe "event page flow", js: true do
     end
 
     scenario "via single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       click_on("Create Event")
       expect(page).to have_title("Foo Room: Create Event")
 
@@ -82,7 +82,7 @@ describe "event page flow", js: true do
     end
 
     scenario "from single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       show_edit_and_save
       expect(page).to have_title("Foo Room")
     end
@@ -104,7 +104,7 @@ describe "event page flow", js: true do
     end
 
     scenario "from single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       show_and_destroy
       expect(page).to have_title("Foo Room")
     end

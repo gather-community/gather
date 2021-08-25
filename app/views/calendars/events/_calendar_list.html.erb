@@ -11,7 +11,7 @@
             <%= check_box_tag("calendar", node.id, false, autocomplete: "off") %>
           <% end %>
           <%= node.swatch %>
-          <%= link_to(node.name, calendars_events_path(calendar_id: node.id), class: "calendar-link") %>
+          <%= link_to(node.name, calendar_events_path(node), class: "calendar-link") %>
         </div>
       <% end %>
     </li>

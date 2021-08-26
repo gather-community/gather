@@ -80,7 +80,7 @@ describe "event calendar", js: true do
         expect_correct_permalink_and_other_calendar_link(cur_calendar_id: nil)
       end
 
-      scenario "checkboxes, selection save & reset" do
+      scenario "checkboxes, selection load and save" do
         visit(calendars_events_path)
         expect_selected(cal1: true, cal2: false) # Cal 1 sel'd by default
 
@@ -90,25 +90,10 @@ describe "event calendar", js: true do
         select_calendar(calendar2, true)
         expect_selected(cal1: false, cal2: true)
 
-        click_link("Reset Selection") # Resetting selection goes back to defaults since nothing saved yet.
-        expect_selected(cal1: true, cal2: false)
+        visit(calendar_events_path(calendar1)) # Leave page
+        expect(page).to have_title("Foo Room")
 
-        select_calendar(calendar1, false)
-        select_calendar(calendar2, true)
-        expect_selected(cal1: false, cal2: true)
-
-        click_link("Save Selection")
-
-        select_calendar(calendar1, true)
-        expect_selected(cal1: true, cal2: true)
-
-        visit(calendars_events_path) # Saved selection reloaded
-        expect_selected(cal1: false, cal2: true)
-
-        select_calendar(calendar1, true)
-        expect_selected(cal1: true, cal2: true)
-
-        click_link("Reset Selection") # Resetting selection now goes back to saved one
+        visit(calendars_events_path) # Return, saved selection reloaded
         expect_selected(cal1: false, cal2: true)
       end
     end

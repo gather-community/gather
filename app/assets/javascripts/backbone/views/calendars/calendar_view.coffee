@@ -113,17 +113,20 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     Gather.loadingIndicator.toggle(isLoading)
 
   onEventChange: (event, _, revertFunc) ->
-    $.ajax
-      url: "/calendars/events/#{event.id}"
-      method: "POST"
-      data:
-        _method: "PATCH"
-        calendars_event:
-          starts_at: event.start.format()
-          ends_at: event.end.format()
-      error: (xhr) ->
-        revertFunc()
-        Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
+    if !confirm("Are you sure you want to move the event '#{event.title}?'")
+      revertFunc()
+    else
+      $.ajax
+        url: "/calendars/events/#{event.id}"
+        method: "POST"
+        data:
+          _method: "PATCH"
+          calendars_event:
+            starts_at: event.start.format()
+            ends_at: event.end.format()
+        error: (xhr) ->
+          revertFunc()
+          Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   create: ->
     # Add start and end params to @newPath. The URL library needs a base url but we just want a path

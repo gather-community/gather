@@ -30,21 +30,21 @@ module Calendars
 
     def update?
       !calendar.system? &&
-        (active_admin? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
+        (admin_or_coord? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
     # Which exact changes this allows are defined in the Event model and/or Rule system.
     def privileged_change?
-      active_admin?
+      admin_or_coord?
     end
 
     def choose_creator?
-      active_admin?
+      admin_or_coord?
     end
 
     def destroy?
-      (active_creator? && (future? || recently_created?) || active_admin?) && !meal? && !calendar.system?
+      (active_creator? && (future? || recently_created?) || admin_or_coord?) && !meal? && !calendar.system?
     end
 
     def permitted_attributes
@@ -59,6 +59,10 @@ module Calendars
     private
 
     delegate :calendar, :future?, :recently_created?, to: :event
+
+    def admin_or_coord?
+      active_admin_or?(:calendar_coordinator)
+    end
 
     def active_creator?
       active? && event.creator == user

@@ -63,6 +63,10 @@ shared_context "policy permissions" do
   let(:biller_cmtyB) { create(:biller, community: communityB, first_name: "biller_cmtyB") }
   let(:photographer) { create(:photographer, first_name: "photographer") }
   let(:photographer_cmtyB) { create(:photographer, community: communityB, first_name: "photographer_cmtyB") }
+  let(:calendar_coordinator) { create(:calendar_coordinator, first_name: "calendar_coord") }
+  let(:calendar_coordinator_cmtyB) do
+    create(:calendar_coordinator, community: communityB, first_name: "calendar_coord_cmtyB")
+  end
   let(:meals_coordinator) { create(:meals_coordinator, first_name: "meals_coord") }
   let(:meals_coordinator_cmtyB) do
     create(:meals_coordinator, community: communityB, first_name: "meals_coord_cmtyB")

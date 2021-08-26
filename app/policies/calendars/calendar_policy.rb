@@ -16,31 +16,31 @@ module Calendars
     end
 
     def index?
-      active_admin?
+      active_admin_or?(:calendar_coordinator)
     end
 
     def show?
-      active_admin?
+      active_admin_or?(:calendar_coordinator)
     end
 
     def create?
-      active_admin?
+      active_admin_or?(:calendar_coordinator)
     end
 
     def update?
-      active_admin?
+      active_admin_or?(:calendar_coordinator)
     end
 
     def destroy?
-      !calendar.events? && !calendar.system? && active_admin?
+      !calendar.events? && !calendar.system? && active_admin_or?(:calendar_coordinator)
     end
 
     def activate?
-      calendar.inactive? && active_admin?
+      calendar.inactive? && active_admin_or?(:calendar_coordinator)
     end
 
     def deactivate?
-      calendar.active? && active_admin?
+      calendar.active? && active_admin_or?(:calendar_coordinator)
     end
 
     def permitted_attributes

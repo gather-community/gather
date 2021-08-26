@@ -15,6 +15,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     @dateUrlParam = options.dateUrlParam
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
+    @canCreate = options.canCreate
     @calendarId = options.calendarId
     @savedSettings = @loadSettings()
     @showAppropriateEarlyLink()
@@ -32,7 +33,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       minTime: @minTime()
       allDaySlot: false
       eventOverlap: @eventOverlap.bind(this)
-      selectable: @ruleSet.accessLevel != "read_only"
+      selectable: @canCreate
       selectOverlap: false
       selectHelper: true
       longPressDelay: 500

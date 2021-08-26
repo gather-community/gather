@@ -60,7 +60,8 @@
       dateUrlParam: <%= json(params[:date]) %>,
       viewTypeUrlParam: <%= json(params[:view]) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
-      ruleSet: <%= json(@rule_set) %>
+      ruleSet: <%= json(@rule_set) %>,
+      canCreate: <%= json(@can_create_event) %>
     });
     var listView = new Gather.Views.Calendars.CalendarListView({
       el: '.calendar-list-with-links',

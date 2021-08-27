@@ -16,35 +16,36 @@ module Calendars
       # If record is a Class (not a specific event), can't check if calendar is active
       (not_specific_record? || calendar.active?) &&
         # If record is a Class (not a specific event), can't check protocol
-        (active_cluster_admin? || (active? && (not_specific_record? || !forbidden_by_protocol?)))
+        active? && (not_specific_record? || !forbidden_by_protocol?)
     end
 
     def show?
-      active_cluster_admin? || active? && !forbidden_by_protocol?
+      specific_record? && active? && !forbidden_by_protocol?
     end
 
     def create?
-      calendar.active? && !calendar.system? &&
-        (active_cluster_admin? || (active? && !forbidden_by_protocol? && !read_only_by_protocol? && !meal?))
+      specific_record? && calendar.active? && !calendar.system? &&
+        active? && !read_only_by_protocol? && !meal?
     end
 
     def update?
-      !calendar.system? &&
+      specific_record? && !calendar.system? && !read_only_by_protocol? &&
         (admin_or_coord? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
     # Which exact changes this allows are defined in the Event model and/or Rule system.
     def privileged_change?
-      admin_or_coord?
+      update? && admin_or_coord?
     end
 
     def choose_creator?
-      admin_or_coord?
+      (update? || create?) && admin_or_coord?
     end
 
     def destroy?
-      (active_creator? && (future? || recently_created?) || admin_or_coord?) && !meal? && !calendar.system?
+      specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
+        (admin_or_coord? || active_creator? && (future? || recently_created?))
     end
 
     def permitted_attributes
@@ -69,11 +70,11 @@ module Calendars
     end
 
     def forbidden_by_protocol?
-      rule_set.access_level(user.community) == "forbidden"
+      !active_cluster_admin? && rule_set.access_level(user.community) == "forbidden"
     end
 
     def read_only_by_protocol?
-      rule_set.access_level(user.community) == "read_only"
+      !active_cluster_admin? && %w[forbidden read_only].include?(rule_set.access_level(user.community))
     end
   end
 end

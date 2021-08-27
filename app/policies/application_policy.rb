@@ -215,6 +215,10 @@ class ApplicationPolicy
     record.is_a?(Class) || record.is_a?(Symbol)
   end
 
+  def specific_record?
+    !not_specific_record?
+  end
+
   def admin_level(user)
     if user.global_role?(:super_admin)
       3

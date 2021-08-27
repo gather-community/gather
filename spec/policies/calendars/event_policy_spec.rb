@@ -31,11 +31,24 @@ describe Calendars::EventPolicy do
       end
     end
 
-    permissions :choose_creator? do
+    permissions :choose_creator?, :privileged_change? do
       it_behaves_like "permits admins or special role but not creator"
     end
 
-    context "non-meal event" do
+    context "with class instead of object" do
+      let(:record) { Calendars::Event }
+
+      permissions :index? do
+        it_behaves_like "permits active users only"
+      end
+
+      permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
+                  :choose_creator?, :destroy? do
+        it_behaves_like "forbids all"
+      end
+    end
+
+    context "regular (non-meal) event" do
       permissions :index?, :show?, :new?, :create? do
         it_behaves_like "permits active users only"
       end
@@ -83,9 +96,47 @@ describe Calendars::EventPolicy do
           it_behaves_like "permits admins or special role but not creator"
         end
       end
+    end
 
-      permissions :privileged_change? do
-        it_behaves_like "permits admins or special role but not creator"
+    # These specs assumes that the user is from a different community since it wouldn't make
+    # sense for a rule set to forbid access from the calendar's own community.
+    # With forbidden access level, the only outside users that can do the things are cluster admins.
+    context "event with calendar with access_level rule for outside communities" do
+      before do
+        allow(event).to receive(:rule_set).and_return(double(access_level: access_level))
+      end
+
+      context "with forbidden access_level" do
+        let(:access_level) { "forbidden" }
+
+        permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
+          it_behaves_like "permits cluster admins only"
+        end
+      end
+
+      context "with read_only access_level" do
+        let(:access_level) { "read_only" }
+
+        permissions :index?, :show? do
+          it_behaves_like "permits active users only"
+        end
+
+        permissions :new?, :create?, :edit?, :update?, :destroy? do
+          it_behaves_like "permits cluster admins only"
+        end
+      end
+
+      # For authz purposes, sponsor access level is treated the same as having no rule
+      context "with sponsor access_level" do
+        let(:access_level) { "sponsor" }
+
+        permissions :index?, :show?, :new?, :create? do
+          it_behaves_like "permits active users only"
+        end
+
+        permissions :edit?, :update?, :destroy? do
+          it_behaves_like "permits admins or special role and creator"
+        end
       end
     end
 

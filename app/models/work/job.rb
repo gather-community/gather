@@ -131,7 +131,7 @@ module Work
     end
 
     def hours_per_shift_evenly_divides_hours
-      return unless hours_per_shift.present? && hours % hours_per_shift != 0
+      return unless hours.present? && hours_per_shift.present? && hours % hours_per_shift != 0
       errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
     end
 

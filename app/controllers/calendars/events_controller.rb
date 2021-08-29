@@ -35,7 +35,7 @@ module Calendars
       elsif writeable_calendars.any?
         render_choose_calendar_page
       else
-        render_error_page(:forbidden)
+        render_no_calendars
       end
     end
 
@@ -174,6 +174,13 @@ module Calendars
       authorize(@sample_event)
       @calendars = writeable_calendars
       @url_params = params.permit(:start, :end, :origin_page)
+    end
+
+    def render_no_calendars
+      @sample_calendar = Calendar.new(community: current_community)
+      @sample_event = Event.new(calendar: @sample_calendar, creator: current_user)
+      authorize(@sample_event)
+      @calendars = []
     end
 
     def handle_xhr_update

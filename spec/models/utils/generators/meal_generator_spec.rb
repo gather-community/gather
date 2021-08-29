@@ -11,7 +11,7 @@ describe Utils::Generators::MealGenerator do
   let(:generator) { described_class.new(community: community, statement_gen: double(generate_samples: nil)) }
 
   it "should run cleanly" do
-    generator.generate_formula_and_roles
+    generator.generate_seed_data
     generator.generate_samples
 
     # Don't create extra roles or formulas

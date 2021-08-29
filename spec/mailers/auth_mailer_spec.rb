@@ -63,5 +63,17 @@ describe AuthMailer do
         expect(mail.body.encoded).to contain_apex_url("/?token=#{token}")
       end
     end
+
+    context "with user with no email" do
+      let(:user) { create(:user, :child) }
+
+      before do
+        user.update!(email: nil)
+      end
+
+      it "sends nothing" do
+        expect(mail).to be_nil
+      end
+    end
   end
 end

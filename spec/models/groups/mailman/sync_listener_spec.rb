@@ -31,9 +31,20 @@ describe Groups::Mailman::SyncListener do
     end
 
     context "when changing name or email" do
-      it "enqueues user sync job" do
-        expect { user.update!(last_name: "Bostich") }
-          .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :update)
+      context "with adult" do
+        it "enqueues user sync job" do
+          expect { user.update!(last_name: "Bostich") }
+            .to have_enqueued_job(Groups::Mailman::SingleSignOnJob).with(user_id: user.id, action: :update)
+        end
+      end
+
+      context "with user with no email" do
+        let!(:user) { create(:user, :child, email: nil) }
+
+        it "does not enqueue user sync job" do
+          expect { user.update!(last_name: "Bostich") }
+            .not_to have_enqueued_job(Groups::Mailman::SingleSignOnJob)
+        end
       end
     end
 

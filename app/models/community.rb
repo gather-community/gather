@@ -35,6 +35,8 @@ class Community < ApplicationRecord
 
   disallow_semicolons :name
 
+  delegate :name, to: :cluster, prefix: true
+
   before_create :generate_calendar_token
   before_create :generate_sso_secret
 

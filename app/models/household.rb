@@ -8,8 +8,6 @@ class Household < ApplicationRecord
 
   acts_as_tenant :cluster
 
-  attr_writer :unit_num_and_suffix
-
   belongs_to :community
   belongs_to :member_type, class_name: "People::MemberType", inverse_of: :households
   has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
@@ -36,7 +34,6 @@ class Household < ApplicationRecord
 
   disallow_semicolons :name
 
-  before_validation :split_unit_num_and_suffix
   after_deactivate { users.each(&:deactivate) }
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
@@ -96,15 +93,13 @@ class Household < ApplicationRecord
     [unit_num, unit_suffix].compact.join("-").presence
   end
 
-  private
-
-  def split_unit_num_and_suffix
-    @unit_num_and_suffix = @unit_num_and_suffix&.strip
+  def unit_num_and_suffix=(str)
+    str = str&.strip
 
     # We don't use the reader method here because that would combine unit_num and unit_suffix.
     # We are only interested in parsing if a combined value has been given.
-    return if @unit_num_and_suffix.blank?
-    return unless (match = @unit_num_and_suffix.match(/\A(\d*)(.*)\z/))
+    return if str.blank?
+    return unless (match = str.match(/\A(\d*)(.*)\z/))
 
     self.unit_num = match[1].presence&.strip
 

@@ -3,9 +3,10 @@
 require "rails_helper"
 
 # The general approach to developing these specs is to:
-# 1. Clear the mailman database
-# 2. Run the spec, creating the VCR cassette
-# 3. If the spec works:
+# 1. Run mailman (cd mailman && source venv/bin/activate && mailman start)
+# 2. Clear the mailman database (rm var/data/mailman.db && mailman restart)
+# 3. Run the spec, creating the VCR cassette
+# 4. If the spec works:
 #       Run it again to make sure there is no randomizing happening in factories that messes things up.
 #    Else, delete the cassette and return to step 1.
 #
@@ -155,6 +156,24 @@ describe Groups::Mailman::Api do
             mm_user.remote_id = api.user_id_for_email(mm_user)
 
             mm_user.user.first_name = "Lop"
+            api.update_user(mm_user)
+          end
+        end
+      end
+
+      context "when email address exists in mailman but doesn't belong to user" do
+        let(:mm_user2) do
+          build(:group_mailman_user,
+                user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
+        end
+
+        it "claims the address" do
+          VCR.use_cassette("groups/mailman/api/update_user/existing_address") do
+            mm_user.remote_id = api.create_user(mm_user)
+            api.create_user(mm_user2)
+            api.send(:request, "addresses/len@example.com/user", :delete) # Unlink the address
+
+            mm_user.user.email = "len@example.com"
             api.update_user(mm_user)
           end
         end

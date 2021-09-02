@@ -4,7 +4,7 @@
 class ApiJsonResponse
   attr_accessor :response
 
-  delegate :[], to: :json
+  delegate :[], :[]=, :key?, to: :json
 
   def initialize(response)
     self.response = response

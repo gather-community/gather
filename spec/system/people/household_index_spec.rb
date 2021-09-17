@@ -13,6 +13,7 @@ describe "household index", js: true do
   let!(:household2) { create(:household, name: "Bravo", unit_num_and_suffix: "2-ABC") }
   let!(:household3) { create(:household, name: "Charlie", unit_num_and_suffix: "10 ABC") }
   let!(:household4) { create(:household, name: "Delta", unit_num_and_suffix: "1") }
+  let!(:community2) { create(:community) }
 
   scenario "sort lens" do
     visit(households_path)
@@ -33,5 +34,12 @@ describe "household index", js: true do
     fill_in_lens_and_wait(:search, "alpha")
     expect(page).to have_content("Alpha")
     expect(page).not_to have_content("Bravo")
+  end
+
+  scenario "community lens" do
+    visit(households_path)
+    expect(page).to have_echoed_url(%r{https?://#{Defaults.community.subdomain}\.})
+    select_lens(:community, community2.name)
+    expect(page).to have_echoed_url(%r{https?://#{community2.subdomain}\.})
   end
 end

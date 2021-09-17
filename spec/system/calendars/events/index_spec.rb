@@ -71,6 +71,8 @@ describe "event calendar", js: true do
     end
 
     describe "all events page" do
+      let!(:community2) { create(:community) }
+
       scenario "permalink" do
         visit(calendars_events_path)
         expect(page).to have_title("Events & Reservations")
@@ -95,6 +97,13 @@ describe "event calendar", js: true do
 
         visit(calendars_events_path) # Return, saved selection reloaded
         expect_selected(cal1: false, cal2: true)
+      end
+
+      scenario "community lens" do
+        visit(calendars_events_path)
+        expect(page).to have_echoed_url(%r{https?://#{Defaults.community.subdomain}\.})
+        select_lens(:community, community2.name)
+        expect(page).to have_echoed_url(%r{https?://#{community2.subdomain}\.})
       end
     end
 

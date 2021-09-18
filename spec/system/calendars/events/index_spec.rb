@@ -40,6 +40,7 @@ describe "event calendar", js: true do
       visit(calendar_events_path(calendar1))
       expect(page).to have_content("Yum")
       expect(page).to have_content("Cal1 Event")
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # week view is default
       find(".fc-next-button").click
       find(".fc-next-button").click
       expect(page).not_to have_content("Cal1 Event")
@@ -103,6 +104,21 @@ describe "event calendar", js: true do
         expect(page).to have_echoed_url(%r{https?://#{Defaults.community.subdomain}\.})
         select_lens(:community, community2.name)
         expect(page).to have_echoed_url(%r{https?://#{community2.subdomain}\.})
+      end
+    end
+
+    context "with default calendar view" do
+      let!(:calendar3) { create(:calendar, name: "Baz Room", default_calendar_view: "month") }
+
+      scenario "default calendar view is respected unless overridden" do
+        visit(calendar_events_path(calendar3))
+        expect(page).to have_css(".fc-month-button.fc-state-active")
+        find(".fc-agendaWeek-button").click
+        sleep(1) # Wait for lens to be updated
+        click_link("Events")
+        click_link("Baz Room")
+        expect(page).to have_title("Baz Room")
+        expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
       end
     end
 

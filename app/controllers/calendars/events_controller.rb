@@ -12,6 +12,7 @@ module Calendars
     before_action -> { nav_context(:calendars, :events) }
 
     def index
+      set_no_cache # Cache means lens would not be respected on back button click.
       return update_lenses_and_quit(*BASE_LENSES) if params[:update_lenses]
       return render_json_event_list if request.xhr?
 

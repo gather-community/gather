@@ -37,10 +37,6 @@ describe "event calendar", js: true do
     end
 
     scenario "single calendar page" do
-      # Clear saved calendar settings in localStorage
-      visit("/")
-      page.execute_script("localStorage.clear()")
-
       visit(calendar_events_path(calendar1))
       expect(page).to have_content("Yum")
       expect(page).to have_content("Cal1 Event")
@@ -48,20 +44,23 @@ describe "event calendar", js: true do
       find(".fc-next-button").click
       expect(page).not_to have_content("Cal1 Event")
       find(".fc-month-button").click
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+      sleep(1) # Wait for lens to be updated
 
       # Test permalink and calendar links update correctly.
-      expect_correct_permalink_and_other_calendar_link(cur_calendar_id: calendar1.id)
+      expect_correct_permalink(cur_calendar_id: calendar1.id)
 
-      # Test params respected on page load.
+      # Test saved view respected across calendars.
       click_link("Bar Room")
-      expect(page).to have_echoed_url(other_calendar_url)
       expect(page).to have_css(".fc-month-button.fc-state-active")
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
 
-      # Test storage of calendar params in localStorage
-      visit(calendar_events_path(calendar2))
-      expect(page).to have_css(".fc-month-button.fc-state-active")
-      expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+      # Test saved view respected on back button click.
+      find(".fc-agendaWeek-button").click
+      sleep(1) # Wait for lens to be updated
+      page.evaluate_script("window.history.back()")
+      expect(page).to have_title("Foo Room")
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
     end
 
     scenario "meal link works" do
@@ -79,7 +78,7 @@ describe "event calendar", js: true do
         find(".fc-next-button").click
         find(".fc-next-button").click
         find(".fc-month-button").click
-        expect_correct_permalink_and_other_calendar_link(cur_calendar_id: nil)
+        expect_correct_permalink(cur_calendar_id: nil)
       end
 
       scenario "checkboxes, selection load and save" do
@@ -114,15 +113,10 @@ describe "event calendar", js: true do
       expect(page).send(cal2 ? :to : :not_to, have_css(checkbox_selector(calendar2, checked: true)))
     end
 
-    def expect_correct_permalink_and_other_calendar_link(cur_calendar_id:)
+    def expect_correct_permalink(cur_calendar_id:)
       path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
       permalink_url = "#{path}?view=month&date=#{time2_ymd}"
       expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
-      expect(page).to have_css(%(a.calendar-link[href="#{other_calendar_url}"]), text: "Bar Room")
-    end
-
-    def other_calendar_url
-      "/calendars/#{calendar2.id}/events?view=month&date=#{time2_ymd}"
     end
 
     def select_calendar(calendar, select)

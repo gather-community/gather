@@ -5,6 +5,8 @@ module Calendars
   class EventsController < ApplicationController
     include Lensable
 
+    BASE_LENSES = [:"calendars/view_type", :"calendars/date", :"calendars/early_morning"].freeze
+
     decorates_assigned :event, :calendar, :calendars, :meal
 
     before_action -> { nav_context(:calendars, :events) }
@@ -105,6 +107,7 @@ module Calendars
       # Kind-specific rules will be enforced through validation.
       @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
       authorize(@sample_event)
+      prepare_lenses(*BASE_LENSES)
       @can_create_event = policy(@sample_event).create?
 
       @rule_set = @sample_event.rule_set
@@ -124,7 +127,7 @@ module Calendars
 
     def prep_combined_index(calendar_scope)
       authorize(Event)
-      prepare_lenses(community: {clearable: false})
+      prepare_lenses(*[community: {clearable: false}].concat(BASE_LENSES))
       @rule_set = {}
       @can_create_event = writeable_calendars.any?
       setting = current_user.settings[:calendar_selection]

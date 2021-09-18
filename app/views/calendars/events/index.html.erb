@@ -57,8 +57,8 @@
       calendarId: <%= json(calendar&.id) %>,
       feedPath: <%= json(@feed_path) %>,
       newPath: <%= json(@new_event_path) %>,
-      dateUrlParam: <%= json(params[:date]) %>,
-      viewTypeUrlParam: <%= json(params[:view]) %>,
+      viewParams: <%= json(viewType: lenses[:view].value, date: lenses[:date].value,
+                           earlyMorning: lenses[:early].value) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set) %>,
       canCreate: <%= json(@can_create_event) %>

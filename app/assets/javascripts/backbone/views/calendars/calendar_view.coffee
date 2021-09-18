@@ -105,7 +105,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     modal.modal('show')
 
   onViewRender: ->
-    @$el.trigger('viewRender')
+    @$el.trigger('viewRender') # Notify other views
     @saveViewParams()
 
   onLoading: (isLoading) ->
@@ -200,4 +200,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       delete settings.date if settingsAge > 3600
 
   saveViewParams: ->
-    console.log("saving to server")
+    $.ajax
+      url: "/calendars/events/"
+      method: "GET"
+      data:
+        update_lenses: 1
+        view: @viewType()
+        date: @date()
+        early: @viewParams.earlyMorning

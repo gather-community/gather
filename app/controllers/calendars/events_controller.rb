@@ -5,13 +5,14 @@ module Calendars
   class EventsController < ApplicationController
     include Lensable
 
-    BASE_LENSES = [:"calendars/view_type", :"calendars/date", :"calendars/early_morning"].freeze
+    BASE_LENSES = %i[calendars/view_type calendars/date calendars/early_morning].freeze
 
     decorates_assigned :event, :calendar, :calendars, :meal
 
     before_action -> { nav_context(:calendars, :events) }
 
     def index
+      return update_lenses_and_quit(*BASE_LENSES) if params[:update_lenses]
       return render_json_event_list if request.xhr?
 
       calendar_scope = policy_scope(Node).in_community(current_community).active

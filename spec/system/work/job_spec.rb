@@ -48,6 +48,11 @@ describe "jobs", js: true do
       clear_lenses
       select_lens(:period, periods[1].name)
       expect_jobs(jobs[4])
+
+      # Period lens should carry over to other pages
+      visit(work_shifts_path)
+      expect(page).to have_title(periods[1].name)
+      expect(page).to have_select_lens(:period, selected: periods[1].name)
     end
 
     scenario "create, show, and update" do

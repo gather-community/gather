@@ -12,7 +12,7 @@
   <% content_for(:title, "Select Calendar") %>
   <% calendars.each do |calendar| %>
     <div class="calendar">
-      <%= link_to(new_calendars_event_path(@url_params.merge(calendar_id: calendar.id))) do %>
+      <%= link_to(new_calendar_event_path(calendar, @url_params)) do %>
         <%= image_tag(calendar.photo_variant(:thumb)) %>
         <%= calendar.name_with_inactive %>
       <% end %>

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Household do
-  describe "unit_num_and_suffix transformation" do
+  describe "unit_num_and_suffix writer" do
     let(:household) { create(:household, unit_num_and_suffix: unit_num_and_suffix) }
     subject(:pair) { [household.unit_num, household.unit_suffix] }
 

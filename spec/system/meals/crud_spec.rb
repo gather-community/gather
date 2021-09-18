@@ -22,7 +22,7 @@ describe "meal crud", js: true do
     let!(:actor) { create(:meals_coordinator) }
 
     scenario do
-      test_index
+      visit(meals_path)
 
       # Create with no menu
       find("button.dropdown-toggle").click
@@ -84,7 +84,7 @@ describe "meal crud", js: true do
     let!(:actor) { meal.head_cook }
 
     scenario do
-      test_index
+      visit(meals_path)
       expect(page).not_to have_content("Create Meal")
 
       # Update to add menu
@@ -123,7 +123,7 @@ describe "meal crud", js: true do
 
     shared_examples_for "allows show, summary, and edit to workers" do
       scenario do
-        test_index
+        visit(meals_path)
         expect(page).not_to have_content("Create Meal")
 
         # Update to change assignment
@@ -159,12 +159,6 @@ describe "meal crud", js: true do
 
       it_behaves_like "allows show, summary, and edit to workers"
     end
-  end
-
-  def test_index
-    visit("/meals")
-    expect(page).to have_css("tr", text: meals[0].head_cook.name)
-    expect(page).to have_css("tr", text: meals[4].head_cook.name)
   end
 
   def worker_div_selector(role:)

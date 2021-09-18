@@ -10,13 +10,12 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
   initialize: (options) ->
     @newPath = options.newPath
     @feedPath = options.feedPath
-    @viewTypeUrlParam = options.viewTypeUrlParam
-    @defaultViewType = options.defaultViewType
-    @dateUrlParam = options.dateUrlParam
+    @viewParams = options.viewParams
+    @defaultViewType = options.defaultViewType || 'week'
     @calendar = @$('#calendar')
     @ruleSet = options.ruleSet
+    @canCreate = options.canCreate
     @calendarId = options.calendarId
-    @savedSettings = @loadSettings()
     @showAppropriateEarlyLink()
     @initCalendar()
 
@@ -26,13 +25,13 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
 
   initCalendar: ->
     @calendar.fullCalendar
-      defaultView: @initialViewType(@viewTypeUrlParam, @defaultViewType)
-      defaultDate: @dateUrlParam || @savedSettings.currentDate
+      defaultView: @URL_PARAMS_TO_VIEW_TYPES[@viewParams.viewType || @defaultViewType]
+      defaultDate: @viewParams.date
       height: 'auto'
       minTime: @minTime()
       allDaySlot: false
       eventOverlap: @eventOverlap.bind(this)
-      selectable: @ruleSet.accessLevel != "read_only"
+      selectable: @canCreate
       selectOverlap: false
       selectHelper: true
       longPressDelay: 500
@@ -106,24 +105,27 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     modal.modal('show')
 
   onViewRender: ->
-    @$el.trigger('viewRender')
-    @saveSettings()
+    @$el.trigger('viewRender') # Notify other views
+    @saveViewParams()
 
   onLoading: (isLoading) ->
     Gather.loadingIndicator.toggle(isLoading)
 
   onEventChange: (event, _, revertFunc) ->
-    $.ajax
-      url: "/calendars/events/#{event.id}"
-      method: "POST"
-      data:
-        _method: "PATCH"
-        calendars_event:
-          starts_at: event.start.format()
-          ends_at: event.end.format()
-      error: (xhr) ->
-        revertFunc()
-        Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
+    if !confirm("Are you sure you want to move the event '#{event.title}?'")
+      revertFunc()
+    else
+      $.ajax
+        url: "/calendars/events/#{event.id}"
+        method: "POST"
+        data:
+          _method: "PATCH"
+          calendars_event:
+            starts_at: event.start.format()
+            ends_at: event.end.format()
+        error: (xhr) ->
+          revertFunc()
+          Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText)
 
   create: ->
     # Add start and end params to @newPath. The URL library needs a base url but we just want a path
@@ -133,17 +135,13 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     url.searchParams.append('end', @selection.end)
     window.location.href = url.href.replace('https://example.com', '')
 
-  initialViewType: (linkParam, defaultType) ->
-    type = linkParam || @savedSettings.viewType || defaultType || 'week'
-    @URL_PARAMS_TO_VIEW_TYPES[type]
-
   minTime: ->
-    if @savedSettings.earlyMorning then '00:00:00' else '06:00:00'
+    if @viewParams.earlyMorning then '00:00:00' else '06:00:00'
 
   viewType: ->
     @calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase()
 
-  currentDate: ->
+  date: ->
     @calendar.fullCalendar('getView').intervalStart.format(Gather.TIME_FORMATS.compactDate)
 
   hasEventInInterval: (start, end) ->
@@ -187,30 +185,26 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
   # Toggles the earlyMorning setting and re-renders.
   showHideEarly: (e) ->
     e.preventDefault()
-    @savedSettings.earlyMorning = !@savedSettings.earlyMorning
+    @viewParams.earlyMorning = !@viewParams.earlyMorning
     @showAppropriateEarlyLink()
     @calendar.fullCalendar('option', 'minTime', @minTime())
+    @saveViewParams()
 
   showAppropriateEarlyLink: ->
-    @$('#hide-early').css(display: if @savedSettings.earlyMorning then 'inline' else 'none')
-    @$('#show-early').css(display: if @savedSettings.earlyMorning then 'none' else 'inline')
-
-  storageKey: ->
-    "calendar#{@calendarId}Settings"
-
-  loadSettings: ->
-    settings = JSON.parse(window.localStorage.getItem(@storageKey()) || '{}')
-    @expireCurrentDateSettingAfterOneHour(settings)
-    settings
+    @$('#hide-early').css(display: if @viewParams.earlyMorning then 'inline' else 'none')
+    @$('#show-early').css(display: if @viewParams.earlyMorning then 'none' else 'inline')
 
   expireCurrentDateSettingAfterOneHour: (settings) ->
     if settings.savedAt
       settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds()
-      delete settings.currentDate if settingsAge > 3600
+      delete settings.date if settingsAge > 3600
 
-  saveSettings: ->
-    @savedSettings.savedAt = new Date()
-    @savedSettings.viewType = @viewType()
-    @savedSettings.currentDate = @currentDate()
-
-    window.localStorage.setItem(@storageKey(), JSON.stringify(@savedSettings))
+  saveViewParams: ->
+    $.ajax
+      url: "/calendars/events/"
+      method: "GET"
+      data:
+        update_lenses: 1
+        view: @viewType()
+        date: @date()
+        early: @viewParams.earlyMorning

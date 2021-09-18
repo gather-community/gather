@@ -128,6 +128,8 @@ Rails.application.routes.draw do
       put :deactivate
       put :move
     end
+
+    resources :events, controller: "calendars/events"
   end
 
   namespace :calendars do

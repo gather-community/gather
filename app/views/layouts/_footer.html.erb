@@ -12,8 +12,7 @@
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;
-        <%= link_to("Accounts",
-              nav_builder.lens_path_if_present("accounts", index_path: accounts_path)) %>
+        <%= link_to("Accounts", accounts_path) %>
       <% end %>
       <% if policy(Community.new).index? %>
         &nbsp;

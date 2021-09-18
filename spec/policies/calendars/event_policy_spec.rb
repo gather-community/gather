@@ -17,43 +17,56 @@ describe Calendars::EventPolicy do
     end
     let(:record) { event }
 
-    shared_examples_for "permits admins and creator" do
-      it_behaves_like "permits admins but not regular users"
+    shared_examples_for "permits admins or special role and creator" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
       it "permits creator" do
         expect(subject).to permit(creator, event)
       end
     end
 
-    shared_examples_for "permits admins but not creator" do
-      it_behaves_like "permits admins but not regular users"
+    shared_examples_for "permits admins or special role but not creator" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
       it "forbids creator" do
         expect(subject).not_to permit(creator, event)
       end
     end
 
-    permissions :choose_creator? do
-      it_behaves_like "permits admins but not creator"
+    permissions :choose_creator?, :privileged_change? do
+      it_behaves_like "permits admins or special role but not creator"
     end
 
-    context "non-meal event" do
+    context "with class instead of object" do
+      let(:record) { Calendars::Event }
+
+      permissions :index? do
+        it_behaves_like "permits active users only"
+      end
+
+      permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
+                  :choose_creator?, :destroy? do
+        it_behaves_like "forbids all"
+      end
+    end
+
+    context "regular (non-meal) event" do
       permissions :index?, :show?, :new?, :create? do
         it_behaves_like "permits active users only"
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins and creator"
+        it_behaves_like "permits admins or special role and creator"
 
         context "just-created event with end time in past" do
           let(:starts_at) { 3.hours.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins and creator"
+          it_behaves_like "permits admins or special role and creator"
         end
 
         context "not-just-created event with end time in past" do
           let(:created_at) { 90.minutes.ago }
           let(:starts_at) { 3.hours.ago }
 
-          it_behaves_like "permits admins and creator"
+          it_behaves_like "permits admins or special role and creator"
         end
       end
 
@@ -68,24 +81,62 @@ describe Calendars::EventPolicy do
       permissions :destroy? do
         context "future event" do
           let(:starts_at) { 1.day.from_now }
-          it_behaves_like "permits admins and creator"
+          it_behaves_like "permits admins or special role and creator"
         end
 
         context "just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins and creator"
+          it_behaves_like "permits admins or special role and creator"
         end
 
         context "not-just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 1.week.ago }
-          it_behaves_like "permits admins but not creator"
+          it_behaves_like "permits admins or special role but not creator"
+        end
+      end
+    end
+
+    # These specs assumes that the user is from a different community since it wouldn't make
+    # sense for a rule set to forbid access from the calendar's own community.
+    # With forbidden access level, the only outside users that can do the things are cluster admins.
+    context "event with calendar with access_level rule for outside communities" do
+      before do
+        allow(event).to receive(:rule_set).and_return(double(access_level: access_level))
+      end
+
+      context "with forbidden access_level" do
+        let(:access_level) { "forbidden" }
+
+        permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
+          it_behaves_like "permits cluster admins only"
         end
       end
 
-      permissions :privileged_change? do
-        it_behaves_like "permits admins but not creator"
+      context "with read_only access_level" do
+        let(:access_level) { "read_only" }
+
+        permissions :index?, :show? do
+          it_behaves_like "permits active users only"
+        end
+
+        permissions :new?, :create?, :edit?, :update?, :destroy? do
+          it_behaves_like "permits cluster admins only"
+        end
+      end
+
+      # For authz purposes, sponsor access level is treated the same as having no rule
+      context "with sponsor access_level" do
+        let(:access_level) { "sponsor" }
+
+        permissions :index?, :show?, :new?, :create? do
+          it_behaves_like "permits active users only"
+        end
+
+        permissions :edit?, :update?, :destroy? do
+          it_behaves_like "permits admins or special role and creator"
+        end
       end
     end
 
@@ -105,10 +156,11 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it "permits access to admins, meals coordinators, and meal creator, and forbids others" do
+        it "permits access to admins, meals/cal coordinators, and meal creator, and forbids others" do
           expect(subject).to permit(creator, event)
           expect(subject).to permit(admin, event)
           expect(subject).to permit(meals_coordinator, event)
+          expect(subject).to permit(calendar_coordinator, event)
           expect(subject).not_to permit(user, event)
         end
       end
@@ -158,6 +210,14 @@ describe Calendars::EventPolicy do
     shared_examples_for "each user type" do
       context "regular user" do
         it_behaves_like "basic attribs"
+      end
+
+      context "calendar_coordinator" do
+        let(:creator) { calendar_coordinator }
+
+        it "should allow admin-only attribs" do
+          expect(subject).to contain_exactly(*admin_attribs)
+        end
       end
 
       context "admin" do

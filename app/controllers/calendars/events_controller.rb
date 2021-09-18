@@ -5,11 +5,15 @@ module Calendars
   class EventsController < ApplicationController
     include Lensable
 
+    BASE_LENSES = %i[calendars/view_type calendars/date calendars/early_morning].freeze
+
     decorates_assigned :event, :calendar, :calendars, :meal
 
     before_action -> { nav_context(:calendars, :events) }
 
     def index
+      set_no_cache # Cache means lens would not be respected on back button click.
+      return update_lenses_and_quit(*BASE_LENSES) if params[:update_lenses]
       return render_json_event_list if request.xhr?
 
       calendar_scope = policy_scope(Node).in_community(current_community).active
@@ -105,17 +109,19 @@ module Calendars
       # Kind-specific rules will be enforced through validation.
       @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
       authorize(@sample_event)
+      prepare_lenses(*BASE_LENSES)
       @can_create_event = policy(@sample_event).create?
 
       @rule_set = @sample_event.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
-      @rule_set = RuleSetSerializer.new(@rule_set, creator_community: current_community)
+      @rule_set = build_attribute_serializer(@rule_set, creator_community: Community.first,
+                                                        serializer: RuleSetSerializer)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
-      @new_event_path = new_calendars_event_path(calendar_id: @calendar.id)
-      @permalink = calendars_events_path(calendar_id: @calendar.id)
+      @new_event_path = new_calendar_event_path(@calendar)
+      @permalink = calendar_events_path(@calendar)
       # Feed path doesn't need calendar_id because the JS calendar view is responsible for inserting
       # whichever calendar ids the user selects, or the single ID in the case of single view.
       @feed_path = calendars_events_path
@@ -123,7 +129,7 @@ module Calendars
 
     def prep_combined_index(calendar_scope)
       authorize(Event)
-      prepare_lenses(community: {clearable: false})
+      prepare_lenses(*[community: {clearable: false}].concat(BASE_LENSES))
       @rule_set = {}
       @can_create_event = writeable_calendars.any?
       setting = current_user.settings[:calendar_selection]
@@ -207,8 +213,11 @@ module Calendars
 
     def redirect_to_event_in_context(event)
       params = {date: event.starts_at&.to_s(:no_time)}
-      params[:calendar_id] = event.calendar_id if event.origin_page != "combined"
-      redirect_to(calendars_events_path(params))
+      if event.origin_page == "combined"
+        redirect_to(calendars_events_path(params))
+      else
+        redirect_to(calendar_events_path(event.calendar, params))
+      end
     end
   end
 end

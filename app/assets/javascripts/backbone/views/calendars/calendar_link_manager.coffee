@@ -1,14 +1,10 @@
 Gather.Views.Calendars.CalendarLinkManager = Backbone.View.extend
-  update: (viewType, currentDate) ->
-    qsParams = {view: viewType, date: currentDate}
+  update: (viewType, date) ->
+    qsParams = {view: viewType, date: date}
     @updatePermalink(qsParams)
-    @updateOtherCalendarLinks(qsParams)
 
   updatePermalink: (qsParams) ->
     @updateLink(@$('#permalink'), qsParams)
-
-  updateOtherCalendarLinks: (qsParams) ->
-    @$('.calendar-link').each (_, el) => @updateLink(el, qsParams)
 
   updateLink: (link, qsParams) ->
     path = href = @$(link).attr('href')

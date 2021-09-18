@@ -12,7 +12,7 @@ Gather.Views.Calendars.CalendarPageView = Backbone.View.extend
     'calendarSelectionChanged': 'updateCalendarSource'
 
   onViewRender: ->
-    @linkManager.update(@calendarView.viewType(), @calendarView.currentDate())
+    @linkManager.update(@calendarView.viewType(), @calendarView.date())
 
   updateCalendarSource: ->
     calendarIds = null

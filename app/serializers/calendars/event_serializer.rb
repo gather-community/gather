@@ -9,7 +9,15 @@ module Calendars
                :calendar_id, :background_color, :border_color
 
     def url
-      object.id.nil? ? nil : calendars_event_path(object, origin_page: instance_options[:origin_page])
+      # System events aren't persisted so we can't link to them.
+      if object.persisted?
+        calendars_event_path(object, origin_page: instance_options[:origin_page])
+      # Meal system events will have a meal ID so we can link to the meal.
+      # This is a bit hacky, probably should have subclasses of Event or composition or something.
+      # Can refactor when we have other types of system calendar.
+      elsif object.meal_id?
+        meal_path(object.meal_id)
+      end
     end
 
     def title

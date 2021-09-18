@@ -327,7 +327,9 @@ describe UserPolicy do
   describe "#grantable_roles" do
     include_context "policy permissions"
     let(:roles) { described_class.new(actor, other_user).grantable_roles }
-    let(:base_roles) { %i[biller photographer meals_coordinator wikiist work_coordinator] }
+    let(:base_roles) do
+      %i[biller calendar_coordinator photographer meals_coordinator wikiist work_coordinator]
+    end
 
     context "for super admin" do
       let(:actor) { super_admin }
@@ -418,7 +420,7 @@ describe UserPolicy do
     let(:admin_attribs) do
       base_attribs + [
         :google_email, :role_admin, :role_biller, :role_photographer,
-        :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
+        :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
                                   old_id old_name member_type_id]
           .concat(nested_hhold_attribs)}
@@ -427,7 +429,7 @@ describe UserPolicy do
     let(:cluster_admin_attribs) do
       base_attribs + [
         :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
-        :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
+        :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
                                   old_id old_name member_type_id]
           .concat(nested_hhold_attribs)}

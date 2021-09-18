@@ -48,17 +48,15 @@ describe "event page flow", js: true do
         scenario do
           visit(calendars_events_path)
           all('tr[data-time="11:30:00"] td.fc-widget-content')[-1].click
-          expect(page).to have_content(/Create event on.+11:30 am to 12:00 pm/)
-          click_on("OK")
-          expect(page).to have_content("does not have any calendars")
-          click_on("You can create one")
-          expect(page).to have_title("Calendars")
+
+          # Nothing happens b/c canCreate is false b/c no writeable calendars
+          expect(page).not_to have_content(/Create event on/)
         end
       end
     end
 
     scenario "via single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       click_on("Create Event")
       expect(page).to have_title("Foo Room: Create Event")
 
@@ -82,7 +80,7 @@ describe "event page flow", js: true do
     end
 
     scenario "from single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       show_edit_and_save
       expect(page).to have_title("Foo Room")
     end
@@ -104,7 +102,7 @@ describe "event page flow", js: true do
     end
 
     scenario "from single calendar view" do
-      visit(calendars_events_path(calendar_id: calendar1.id))
+      visit(calendar_events_path(calendar1))
       show_and_destroy
       expect(page).to have_title("Foo Room")
     end

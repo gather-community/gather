@@ -415,6 +415,7 @@ en:
 
   roles:
     admin: "Admin"
+    calendar_coordinator: "Calendar Coordinator"
     cluster_admin: "Cluster Admin"
     super_admin: "Super Admin"
     biller: "Biller"

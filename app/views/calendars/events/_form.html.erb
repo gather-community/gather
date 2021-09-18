@@ -4,7 +4,7 @@
   <%= f.hidden_field :origin_page %>
   <%= f.input :calendar do %>
     <%= image_tag(calendar.photo_variant(:thumb)) %><br/>
-    <%= calendar.name_with_prefix %>
+    <%= calendar.name %>
   <% end %>
 
   <% event.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>

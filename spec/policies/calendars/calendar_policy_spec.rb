@@ -10,12 +10,12 @@ describe Calendars::CalendarPolicy do
     let(:record) { calendar }
 
     permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy?, :deactivate? do
-      it_behaves_like "permits admins but not regular users"
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
     end
 
     permissions :activate? do
       before { record.deactivate }
-      it_behaves_like "permits admins but not regular users"
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
     end
 
     permissions :destroy? do

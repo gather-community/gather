@@ -27,6 +27,7 @@ describe "report", js: true do
   context "with data" do
     include_context "with jobs"
     include_context "with assignments"
+    let!(:period2) { create(:work_period, name: "Reckoning", phase: "draft") }
 
     context "in open phase" do
       before do
@@ -41,6 +42,10 @@ describe "report", js: true do
         expect(page).to have_content("Donnell Corkery 4.0 50% 0.0")
         expect(page).to have_content("Churl Rox 0.0 0%")
         expect(page).to have_content(/Household\d+ 6.0 38% 2.0/)
+        select_lens(:period, "Reckoning")
+        expect(page).to have_title("Work Report: Reckoning")
+        expect(page).not_to have_content("Churl Rox")
+        expect(page).to have_content("This period is in the draft phase")
       end
     end
 

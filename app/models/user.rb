@@ -29,7 +29,7 @@ class User < ApplicationRecord
   include Deactivatable
   include SemicolonDisallowable
 
-  ROLES = %i[super_admin cluster_admin admin biller photographer
+  ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
              meals_coordinator wikiist work_coordinator].freeze
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze

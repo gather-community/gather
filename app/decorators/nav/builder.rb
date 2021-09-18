@@ -30,31 +30,31 @@ module Nav
       # Run each hard-coded menu item through the customization filter and then add it to the list.
       items << customizer.filter_item(
         name: :people,
-        path: lens_path_if_present("users"),
+        path: h.users_path,
         permitted: h.policy(sample_user).index?,
         icon: "address-book"
       )
       items << customizer.filter_item(
         name: :groups,
-        path: lens_path_if_present("groups/groups"),
+        path: h.groups_groups_path,
         permitted: h.policy(sample_group).index?,
         icon: "users"
       )
       items << customizer.filter_item(
         name: :meals,
-        path: lens_path_if_present("meals/meals", index_path: h.meals_path),
+        path: h.meals_path,
         permitted: h.policy(sample_meal).index?,
         icon: "cutlery"
       )
       items << customizer.filter_item(
         name: :work,
-        path: lens_path_if_present("work/shifts", index_path: h.work_shifts_path),
+        path: h.work_shifts_path,
         permitted: h.policy(sample_shift).index_wrapper?,
         icon: "wrench"
       )
       items << customizer.filter_item(
         name: :calendars,
-        path: lens_path_if_present("calendars/events"),
+        path: h.calendars_events_path,
         permitted: h.policy(sample_event).index?,
         icon: "calendar"
       )
@@ -341,13 +341,6 @@ module Nav
       params[:"aria-controls"] = name if tab
       icon_tag = icon && item[:icon] ? h.icon_tag(item[:icon]) << " " : h.safe_str
       h.link_to(icon_tag << " #{name}", item[:path], params)
-    end
-
-    def lens_path_if_present(controller, index_path: nil)
-      storage = Lens::Storage.new(session: h.session, community_id: community.id,
-                                  controller_path: controller, action_name: "index",
-                                  persist: h.own_cluster?)
-      Lens::PathSaver.new(storage: storage).read || index_path || h.send("#{controller.tr('/', '_')}_path")
     end
 
     protected

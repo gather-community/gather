@@ -46,6 +46,8 @@ module Calendars
                meal&.event_handler&.validate_event(r)
              }
 
+    before_validation :normalize
+
     before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
                   # and sponsor_community for other uses.
                   # Set fixed start/end time
@@ -125,6 +127,12 @@ module Calendars
     end
 
     private
+
+    def normalize
+      return unless all_day?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
 
     def guidelines_accepted
       return unless new_record? && calendar.guidelines? && !guidelines_ok?

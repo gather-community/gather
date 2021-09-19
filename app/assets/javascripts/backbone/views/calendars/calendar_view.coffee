@@ -16,6 +16,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     @ruleSet = options.ruleSet
     @canCreate = options.canCreate
     @calendarId = options.calendarId
+    @allDayAllowed = options.allDayAllowed
+    @allDayText = options.allDayText
     @showAppropriateEarlyLink()
     @initCalendar()
 
@@ -29,7 +31,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       defaultDate: @viewParams.date
       height: 'auto'
       minTime: @minTime()
-      allDaySlot: false
+      allDaySlot: @allDayAllowed
+      allDayText: @allDayText
       eventOverlap: @eventOverlap.bind(this)
       selectable: @canCreate
       selectOverlap: false

@@ -61,7 +61,9 @@
                            earlyMorning: lenses[:early].value) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set) %>,
-      canCreate: <%= json(@can_create_event) %>
+      canCreate: <%= json(@can_create_event) %>,
+      allDayAllowed: <%= json(calendar.nil? || calendar.all_day_allowed?) %>,
+      allDayText: <%= json(I18n.t("calendars.all_day")) %>
     });
     var listView = new Gather.Views.Calendars.CalendarListView({
       el: '.calendar-list-with-links',

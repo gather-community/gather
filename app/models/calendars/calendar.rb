@@ -45,6 +45,10 @@ module Calendars
       counts.map { |color, count| count == min_count ? color : nil }.compact
     end
 
+    def all_day_allowed?
+      true
+    end
+
     # Available event kinds. Returns nil if none are defined.
     def kinds
       (community.settings.calendars.kinds || "").split(/\s*,\s*/).presence

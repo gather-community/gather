@@ -25,6 +25,10 @@ module Calendars
         end
       end
 
+      def all_day_allowed?
+        false
+      end
+
       private
 
       def attended_meals(base_scope, user:)

@@ -30,12 +30,12 @@ module Calendars
       # assume all incoming events are in the community's zone. The only reason we'd need
       # zone is if we someday wanted to mix times from several zones on the calendar but
       # we don't and can't foresee needing to.
-      object.starts_at.to_s
+      (object.all_day? ? object.starts_at.to_date : object.starts_at).to_s
     end
 
     # end is a reserved word
     define_method("end") do
-      object.ends_at.to_s
+      (object.all_day? ? object.ends_at.to_date : object.ends_at).to_s
     end
 
     def editable

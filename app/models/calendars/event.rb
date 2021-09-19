@@ -109,10 +109,6 @@ module Calendars
       guidelines_ok == "1"
     end
 
-    def timespan
-      I18n.l(starts_at) << " - " << I18n.l(ends_at, format: single_day? ? :time_only : :default)
-    end
-
     def single_day?
       ends_at.to_date == starts_at.to_date
     end

@@ -15,6 +15,10 @@
     <% end %>
   <% end %>
 
+  <% unless event.meal? || event.fixed_start_time? || event.fixed_end_time? %>
+    <%= f.input :all_day %>
+  <% end %>
+
   <% unless event.meal? %>
     <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
   <% end %>

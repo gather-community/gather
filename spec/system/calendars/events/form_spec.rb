@@ -37,6 +37,28 @@ describe "event form", js: true do
     end
   end
 
+  describe "all day events" do
+    scenario do
+      visit(new_calendar_event_path(calendar, start: "2021-09-29 08:00", end: "2021-09-29 09:00"))
+      fill_in("Event Name", with: "Stuff")
+      check("I agree to the above")
+
+      expect(evaluate_script("$('.datetimepicker input').val()")).to include("8:00am")
+      check("All-day event")
+      expect(evaluate_script("$('.datetimepicker input').val()")). not_to include("8:00am")
+
+      click_on("Save")
+      expect_success
+
+      click_on("Stuff")
+      expect(page).not_to have_content("12:00am")
+
+      click_on("Edit")
+      expect(page).to have_field("calendars_event_all_day", checked: true)
+      expect(evaluate_script("$('.datetimepicker input').val()")). not_to include("12:00am")
+    end
+  end
+
   describe "pre_notice" do
     let!(:protocol) { create(:calendar_protocol, calendars: [calendar], pre_notice: "May be bed bugs!") }
 

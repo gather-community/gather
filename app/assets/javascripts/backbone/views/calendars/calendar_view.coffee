@@ -67,11 +67,12 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     body = modal.find('.modal-body')
     changedInterval = false
 
-    # If month view, default selection is 12am to 12am, which is weird.
-    # Change to 12:00 - 13:00 instead. This works better with fixed times.
+    # If we get an all day selection (hasTime false), and the calendar supports all day events,
+    # go with it. Else change to 12:00 - 13:00. This can happen if calendar is in month mode.
+    # 12:00 - 13:00 works better with fixed times than 00:00 - 00:00.
     # We need to do this before applying fixed times so that overnight stays go from the day clicked
     # to the next day instead of ending on the day clicked.
-    if view.name == "month" && start.hours() == 0 && end.hours() == 0
+    if !start.hasTime() && !@allDayAllowed
       start.hours(12)
       end.hours(13)
       end.days(end.days() - 1)
@@ -95,14 +96,22 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       end: end.format(Gather.TIME_FORMATS.machineDatetime)
 
     # Build confirmation string
+    end = end.subtract(1, 'seconds') unless start.hasTime()
     if (start.format('YYYYMMDD') == end.format('YYYYMMDD'))
       date = start.format(Gather.TIME_FORMATS.regDate)
-      startTime = start.format(Gather.TIME_FORMATS.regTime)
-      endTime = end.format(Gather.TIME_FORMATS.regTime)
-      body.html("Create event on <b>#{date}</b> from <b>#{startTime}</b> to <b>#{endTime}</b>?")
+      if start.hasTime()
+        startTime = start.format(Gather.TIME_FORMATS.regTime)
+        endTime = end.format(Gather.TIME_FORMATS.regTime)
+        body.html("Create event on <b>#{date}</b> from <b>#{startTime}</b> to <b>#{endTime}</b>?")
+      else
+        body.html("Create event on <b>#{date}</b>?")
     else
-      startTime = start.format(Gather.TIME_FORMATS.fullDatetime)
-      endTime = end.format(Gather.TIME_FORMATS.fullDatetime)
+      if start.hasTime()
+        startTime = start.format(Gather.TIME_FORMATS.fullDatetime)
+        endTime = end.format(Gather.TIME_FORMATS.fullDatetime)
+      else
+        startTime = start.format(Gather.TIME_FORMATS.regDate)
+        endTime = end.format(Gather.TIME_FORMATS.regDate)
       body.html("Create event from <b>#{startTime}</b> to <b>#{endTime}</b>?")
 
     modal.modal('show')

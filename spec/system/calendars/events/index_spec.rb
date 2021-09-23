@@ -130,6 +130,9 @@ describe "event calendar", js: true do
       scenario do
         visit(calendar_events_path(calendar))
         expect(page).to have_content("All Day")
+
+        find(".fc-day-grid td[data-date=\"#{Time.current.to_s(:no_time)}\"]").click
+        expect(page).to have_content(/Create event on #{I18n.l(Time.current, format: :wday_no_year_no_time)}/)
       end
     end
 

@@ -33,9 +33,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       minTime: @minTime()
       allDaySlot: @allDayAllowed
       allDayText: @allDayText
+      selectOverlap: @selectOverlap.bind(this)
       eventOverlap: @eventOverlap.bind(this)
       selectable: @canCreate
-      selectOverlap: false
       selectHelper: true
       longPressDelay: 500
       header:
@@ -57,6 +57,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     oldSource = @calendar.fullCalendar('getEventSources')[0]
     @calendar.fullCalendar('addEventSource', path)
     @calendar.fullCalendar('removeEventSource', oldSource) if oldSource
+
+  selectOverlap: (existingEvent) ->
+    # Disallow overlap only if on single calendar page and overlap not allowed.
+    !@calendarId || existingEvent.calendarAllowsOverlap
 
   eventOverlap: (stillEvent, movingEvent) ->
     # Disallow overlap only if events on same calendar and the calendar forbids overlap
@@ -83,11 +87,6 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     # and doesn't provide any useful feedback to the user.
     if changed && view.name != "month"
       @calendar.fullCalendar('select', start, end)
-      return
-
-    # If there is an overlap we halt the process because overlaps aren't allowed.
-    if @hasEventInInterval(start, end)
-      @calendar.fullCalendar('unselect')
       return
 
     # Save for create method to use.

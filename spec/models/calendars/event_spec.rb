@@ -10,18 +10,12 @@ describe Calendars::Event do
   describe "normalization" do
     let(:event) { build(:event, submitted) }
 
-    # Get the normalized values for the submitted keys.
-    subject(:result) { submitted.keys.map { |k| [k, event.send(k)] }.to_h }
-
-    before do
-      event.validate
-    end
-
     describe "all day events" do
       context "with all_day false" do
         let(:submitted) { {all_day: false, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
 
         it do
+          event.validate
           expect(event.all_day).to be(false)
           expect(event.starts_at.to_s(:default)).to eq("2016-04-07T12:00:00")
           expect(event.ends_at.to_s(:default)).to eq("2016-04-07T13:00:00")
@@ -29,11 +23,32 @@ describe Calendars::Event do
       end
 
       context "with all_day true" do
-        let(:submitted) { {all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
-        it do
-          expect(event.all_day).to be(true)
-          expect(event.starts_at.to_s(:default)).to eq("2016-04-07T00:00:00")
-          expect(event.ends_at.to_s(:default)).to eq("2016-04-07T23:59:59")
+        before do
+          allow(event).to receive(:rule_set).and_return(double("timed_events_only?": timed_only, errors: []))
+        end
+
+        context "with calendar permitting all day events" do
+          let(:timed_only) { false }
+          let(:submitted) { {all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
+
+          it do
+            event.validate
+            expect(event.all_day).to be(true)
+            expect(event.starts_at.to_s(:default)).to eq("2016-04-07T00:00:00")
+            expect(event.ends_at.to_s(:default)).to eq("2016-04-07T23:59:59")
+          end
+        end
+
+        context "with calendar not permitting all day events" do
+          let(:timed_only) { true }
+          let(:submitted) { {all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
+
+          it do
+            event.validate
+            expect(event.all_day).to be(false)
+            expect(event.starts_at.to_s(:default)).to eq("2016-04-07T12:00:00")
+            expect(event.ends_at.to_s(:default)).to eq("2016-04-07T13:00:00")
+          end
         end
       end
     end

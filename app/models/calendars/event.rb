@@ -93,6 +93,12 @@ module Calendars
       (seconds.to_f / 1.day).ceil
     end
 
+    # RuleSet needs to know `kind` to give a definitive answer on event permissions.
+    # At event grid or event form load time, kind isn't known,
+    # so some rules can't be applied until event submission.
+    # But many protocols don't involve kind, and for those we can use the RuleSet to show things
+    # about the RuleSet in the UI like the event form or the event grid.
+    # In those cases, we can use a sample Event object with nil kind.
     def rule_set
       @rule_set ||= Rules::RuleSet.build_for(calendar: calendar, kind: kind)
     end
@@ -125,6 +131,7 @@ module Calendars
     private
 
     def normalize
+      self.all_day = false if rule_set.timed_events_only?
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second

@@ -15,7 +15,7 @@
     <% end %>
   <% end %>
 
-  <% unless event.meal? || event.fixed_start_time? || event.fixed_end_time? %>
+  <% unless @rule_set.timed_events_only? %>
     <%= f.input :all_day %>
   <% end %>
 

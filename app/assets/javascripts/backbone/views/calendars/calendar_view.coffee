@@ -16,7 +16,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     @ruleSet = options.ruleSet
     @canCreate = options.canCreate
     @calendarId = options.calendarId
-    @allDayAllowed = options.allDayAllowed
+    @timedEventsOnly = options.timedEventsOnly
     @allDayText = options.allDayText
     @showAppropriateEarlyLink()
     @initCalendar()
@@ -31,7 +31,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
       defaultDate: @viewParams.date
       height: 'auto'
       minTime: @minTime()
-      allDaySlot: @allDayAllowed
+      allDaySlot: !@timedEventsOnly
       allDayText: @allDayText
       selectOverlap: @selectOverlap.bind(this)
       eventOverlap: @eventOverlap.bind(this)
@@ -76,7 +76,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend
     # 12:00 - 13:00 works better with fixed times than 00:00 - 00:00.
     # We need to do this before applying fixed times so that overnight stays go from the day clicked
     # to the next day instead of ending on the day clicked.
-    if !start.hasTime() && !@allDayAllowed
+    if !start.hasTime() && @timedEventsOnly
       start.hours(12)
       end.hours(13)
       end.days(end.days() - 1)

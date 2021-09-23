@@ -121,27 +121,47 @@ describe "event calendar", js: true do
         expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
       end
     end
+  end
 
-    def expect_selected(cal1:, cal2:)
-      expect(page).send(cal1 ? :to : :not_to, have_content("Cal1 Event"))
-      expect(page).send(cal2 ? :to : :not_to, have_content("Cal2 Event"))
-      expect(page).send(cal1 ? :to : :not_to, have_css(checkbox_selector(calendar1, checked: true)))
-      expect(page).send(cal2 ? :to : :not_to, have_css(checkbox_selector(calendar2, checked: true)))
+  describe "all day events row" do
+    let(:calendar) { create(:calendar) }
+
+    context "with a calendar that supports them" do
+      scenario do
+        visit(calendar_events_path(calendar))
+        expect(page).to have_content("All Day")
+      end
     end
 
-    def expect_correct_permalink(cur_calendar_id:)
-      path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
-      permalink_url = "#{path}?view=month&date=#{time2_ymd}"
-      expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
-    end
+    context "with a calendar that doesn't support them" do
+      let!(:protocol) { create(:calendar_protocol, calendars: [calendar], fixed_start_time: "8:00am") }
 
-    def select_calendar(calendar, select)
-      el = first(checkbox_selector(calendar))
-      select ? el.check : el.uncheck
+      scenario do
+        visit(calendar_events_path(calendar))
+        expect(page).not_to have_content("All Day")
+      end
     end
+  end
 
-    def checkbox_selector(calendar, checked: false)
-      "input[type='checkbox'][value='#{calendar.id}']#{checked ? ':checked' : ''}"
-    end
+  def expect_selected(cal1:, cal2:)
+    expect(page).send(cal1 ? :to : :not_to, have_content("Cal1 Event"))
+    expect(page).send(cal2 ? :to : :not_to, have_content("Cal2 Event"))
+    expect(page).send(cal1 ? :to : :not_to, have_css(checkbox_selector(calendar1, checked: true)))
+    expect(page).send(cal2 ? :to : :not_to, have_css(checkbox_selector(calendar2, checked: true)))
+  end
+
+  def expect_correct_permalink(cur_calendar_id:)
+    path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
+    permalink_url = "#{path}?view=month&date=#{time2_ymd}"
+    expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
+  end
+
+  def select_calendar(calendar, select)
+    el = first(checkbox_selector(calendar))
+    select ? el.check : el.uncheck
+  end
+
+  def checkbox_selector(calendar, checked: false)
+    "input[type='checkbox'][value='#{calendar.id}']#{checked ? ':checked' : ''}"
   end
 end

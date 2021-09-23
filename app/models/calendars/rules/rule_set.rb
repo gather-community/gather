@@ -67,6 +67,10 @@ module Calendars
         end
       end
 
+      def timed_events_only?
+        !calendar.all_day_allowed? || fixed_start_time.present? || fixed_end_time.present?
+      end
+
       def to_s
         rules.map(&:to_s).join("\n")
       end

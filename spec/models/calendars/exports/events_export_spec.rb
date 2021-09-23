@@ -11,16 +11,20 @@ describe "events exports" do
   let(:calendar2) { create(:calendar, name: "Sad Room") }
   let!(:event1) do
     create(:event, starts_at: time + 1.hour, ends_at: time + 90.minutes,
-                         calendar: calendar1, creator: user, name: "Games")
+                   calendar: calendar1, creator: user, name: "Games")
   end
   let!(:event2) do
-    create(:event, calendar: calendar1, starts_at: time + 2.hours, creator: user2,
-                         ends_at: time + 3.hours, name: "Dance")
+    create(:event, calendar: calendar1, starts_at: time + 2.hours, ends_at: time + 3.hours,
+                   name: "Dance", creator: user2)
   end
-  # Identical times, creator, and name
+  # Identical times, creator, and name; should be combined
   let!(:event3) do
-    create(:event, calendar: calendar2, starts_at: time + 2.hours, creator: user2,
-                         ends_at: time + 3.hours, name: "Dance")
+    create(:event, calendar: calendar2, starts_at: time + 2.hours, ends_at: time + 3.hours,
+                   name: "Dance", creator: user2)
+  end
+  let!(:event4) do
+    create(:event, calendar: calendar2, all_day: true, starts_at: time.tomorrow, ends_at: time + 2.days,
+                   name: "Funday", creator: user2)
   end
   let!(:other_cmty_event) do
     create(:event, name: "Nope", calendar: create(:calendar, community: communityB))
@@ -48,6 +52,7 @@ describe "events exports" do
 
   shared_examples_for "community events" do
     it do
+      # rubocop:disable Style/BracesAroundHashParameters
       expect_calendar_name("#{user.community.name} Events")
       expect_events({
         summary: "Games (#{event1.creator.name})",
@@ -55,7 +60,13 @@ describe "events exports" do
       }, {
         summary: "Dance (#{event2.creator.name})",
         location: [calendar1, calendar2].sort_by(&:id).map(&:name).join(" + ")
+      }, {
+        summary: "Funday (#{event4.creator.name})",
+        location: "Sad Room",
+        "DTSTART;VALUE=DATE" => "20190830",
+        "DTEND;VALUE=DATE" => "20190831"
       })
+      # rubocop:enable Style/BracesAroundHashParameters
     end
   end
 

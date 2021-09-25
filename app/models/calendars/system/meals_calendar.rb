@@ -20,7 +20,8 @@ module Calendars
             creator_id: meal.creator_id,
             meal_id: meal.id,
             starts_at: meal.served_at,
-            ends_at: meal.served_at + MEAL_DURATION
+            ends_at: meal.served_at + MEAL_DURATION,
+            linkable: meal
           )
         end
       end

@@ -6,7 +6,7 @@ module Calendars
 
     acts_as_tenant :cluster
 
-    attr_accessor :guidelines_ok, :privileged_changer, :origin_page
+    attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :linkable
     alias privileged_changer? privileged_changer
 
     belongs_to :creator, class_name: "User"

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :meals_calendar, class: "Calendars::System::MealsCalendar" do
+  factory :system_calendar, class: "Calendars::System::SystemCalendar" do
     community { Defaults.community }
     sequence(:color) { |n| "##{n.to_s.ljust(6, '0')}" }
 
@@ -15,6 +15,10 @@ FactoryBot.define do
 
     factory :your_meals_calendar, class: "Calendars::System::YourMealsCalendar" do
       sequence(:name) { |n| "Your Meals #{n}" }
+    end
+
+    factory :birthdays_calendar, class: "Calendars::System::BirthdaysCalendar" do
+      sequence(:name) { |n| "Birthdays #{n}" }
     end
   end
 end

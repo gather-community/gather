@@ -13,7 +13,7 @@ module Utils
 
       def generate_seed_data
         create_main_calendars
-        create_meals_calendars
+        create_system_calendars
         self.reservations_group = create(:calendar_group, community: community, name: "Reservations")
       end
 
@@ -40,12 +40,13 @@ module Utils
                           community: community, selected_by_default: true)
       end
 
-      def create_meals_calendars
+      def create_system_calendars
         group = create(:calendar_group, community: community, name: "Meals")
         create(:community_meals_calendar, name: "All Meals", community: community, group: group,
                                           color: next_color, selected_by_default: true)
         create(:your_meals_calendar, name: "Your Meals", community: community, group: group,
                                      color: next_color)
+        create(:birthdays_calendar, name: "Birthdays", community: community, color: next_color)
       end
 
       def create_reservation_calendars

@@ -12,9 +12,9 @@ shared_context "system calendars" do
     attribs = {kind: nil, note: nil, sponsor_id: nil, calendar_id: calendar.id}.merge(attribs)
     attribs.each do |k, v|
       if v.is_a?(Time)
-        expect(event[k]).to eq_time(v)
+        expect(event.send(k)).to eq_time(v)
       else
-        expect(event[k]).to eq(v)
+        expect(event.send(k)).to eq(v)
       end
     end
   end

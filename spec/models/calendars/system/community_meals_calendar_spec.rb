@@ -14,13 +14,15 @@ describe Calendars::System::CommunityMealsCalendar do
       starts_at: meal1.served_at,
       ends_at: meal1.served_at + 1.hour,
       meal_id: meal1.id,
-      creator_id: meal1.creator_id
+      creator_id: meal1.creator_id,
+      linkable: meal1
     }, {
       name: "Meal2",
       starts_at: meal2.served_at,
       ends_at: meal2.served_at + 1.hour,
       meal_id: meal2.id,
-      creator_id: meal2.creator_id
+      creator_id: meal2.creator_id,
+      linkable: meal2
     }]
     events = calendar.events_between(full_range, user: user)
     expect_events(events, *attribs)

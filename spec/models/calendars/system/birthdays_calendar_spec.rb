@@ -60,17 +60,17 @@ describe Calendars::System::BirthdaysCalendar do
       note: nil,
       linkable: user2
     }]
-    events = calendar.events_between(full_range, user: actor)
+    events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)
   end
 
   it "returns correct events inside tighter range" do
-    events = calendar.events_between(Date.new(2021, 2, 1)..Date.new(2021, 2, 20), user: actor)
+    events = calendar.events_between(Date.new(2021, 2, 1)..Date.new(2021, 2, 20), actor: actor)
     expect_events(events, name: "🎂 Ko Xiz (13)")
   end
 
   it "returns correct events inside longer range" do
-    events = calendar.events_between(Date.new(2020, 2, 1)..Date.new(2023, 2, 20), user: actor)
+    events = calendar.events_between(Date.new(2020, 2, 1)..Date.new(2023, 2, 20), actor: actor)
     attribs = [
       {name: "🎂 Ko Xiz (12)", starts_at: Time.zone.parse("19 Feb 2020 00:00:00")},
       {name: "🎂 Bo Biz", starts_at: Time.zone.parse("29 Feb 2020 00:00:00")},

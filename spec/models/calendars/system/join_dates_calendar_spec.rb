@@ -28,7 +28,7 @@ describe Calendars::System::JoinDatesCalendar do
       note: nil,
       linkable: user1
     }]
-    events = calendar.events_between(full_range, user: actor)
+    events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)
   end
 end

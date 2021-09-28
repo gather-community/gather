@@ -4,8 +4,8 @@ module Calendars
   module System
     # Returns dates people joined the community
     class JoinDatesCalendar < UserAnniversariesCalendar
-      def events_between(range, user:)
-        super(range, user: user)
+      def events_between(range, actor:)
+        super(range, actor: actor)
       end
 
       protected

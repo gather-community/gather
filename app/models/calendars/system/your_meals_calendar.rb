@@ -10,11 +10,11 @@ module Calendars
         Community.all
       end
 
-      def base_meals_scope(range, user:)
-        super.attended_by(user.household)
+      def base_meals_scope(range, actor:)
+        super.attended_by(actor.household)
       end
 
-      def attended_meals(base_scope, user:)
+      def attended_meals(base_scope, actor:)
         base_scope
       end
     end

@@ -10,7 +10,7 @@ describe Calendars::System::OtherCommunitiesMealsCalendar do
 
   it "includes only meals from other cmtys" do
     attribs = [{name: "Other Cmty Meal ✓"}, {name: "Other Cmty Meal 2"}]
-    events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), user: user)
+    events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
   end
 end

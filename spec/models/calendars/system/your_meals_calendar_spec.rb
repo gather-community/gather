@@ -10,7 +10,7 @@ describe Calendars::System::YourMealsCalendar do
 
   it "includes only meals signed up for" do
     attribs = [{name: "[No Menu] ✓"}, {name: "Other Cmty Meal ✓"}]
-    events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), user: user)
+    events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
   end
 end

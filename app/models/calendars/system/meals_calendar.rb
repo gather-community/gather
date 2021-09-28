@@ -6,14 +6,14 @@ module Calendars
     class MealsCalendar < SystemCalendar
       MEAL_DURATION = 1.hour
 
-      def events_between(range, user:)
-        scope = base_meals_scope(range, user: user)
+      def events_between(range, actor:)
+        scope = base_meals_scope(range, actor: actor)
         meals = scope.order(:served_at).decorate
-        attended_meals_by_id = attended_meals(scope, user: user).index_by(&:id) if user.present?
+        attended_meals_by_id = attended_meals(scope, actor: actor).index_by(&:id) if actor.present?
 
         meals.map do |meal|
           title = +meal.title_or_no_title
-          title << " ✓" if user.present? && attended_meals_by_id.key?(meal.id)
+          title << " ✓" if actor.present? && attended_meals_by_id.key?(meal.id)
           # We don't save the events since that's not how system calendars work.
           events.build(
             name: title,
@@ -32,12 +32,12 @@ module Calendars
 
       private
 
-      def attended_meals(base_scope, user:)
-        base_scope.attended_by(user.household)
+      def attended_meals(base_scope, actor:)
+        base_scope.attended_by(actor.household)
       end
 
-      def base_meals_scope(range, user:)
-        Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
+      def base_meals_scope(range, actor:)
+        Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
           .hosted_by(hosting_communities)
           .not_cancelled
           .where("served_at > ?", range.first - MEAL_DURATION)

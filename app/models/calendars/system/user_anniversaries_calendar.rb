@@ -10,7 +10,7 @@ module Calendars
 
       protected
 
-      def events_between(range, user:)
+      def events_between(range, actor:)
         lower = range.first
         upper = range.last
         users = User.in_community(community).active.where.not(attrib => nil)

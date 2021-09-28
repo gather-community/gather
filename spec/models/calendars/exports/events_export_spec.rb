@@ -23,8 +23,14 @@ describe "events exports" do
                    name: "Dance", creator: user2)
   end
   let!(:event4) do
-    create(:event, calendar: calendar2, all_day: true, starts_at: time.tomorrow, ends_at: time + 2.days,
-                   name: "Funday", creator: user2)
+    create(:event, calendar: calendar2, all_day: true,
+                   starts_at: time + 1.day, ends_at: time + 2.days,
+                   name: "2 days", creator: user2)
+  end
+  let!(:event5) do
+    create(:event, calendar: calendar2, all_day: true,
+                   starts_at: time + 3.days, ends_at: time + 3.days, # Should be normalized to one day.
+                   name: "Single Day", creator: user2)
   end
   let!(:other_cmty_event) do
     create(:event, name: "Nope", calendar: create(:calendar, community: communityB))
@@ -52,6 +58,10 @@ describe "events exports" do
 
   shared_examples_for "community events" do
     it do
+      # Confirm exppected duration for all_day events
+      expect(event4.ends_at - event4.starts_at).to eq((2.days - 1.second).to_i)
+      expect(event5.ends_at - event5.starts_at).to eq((1.day - 1.second).to_i)
+
       # rubocop:disable Style/BracesAroundHashParameters
       expect_calendar_name("#{user.community.name} Events")
       expect_events({
@@ -61,10 +71,15 @@ describe "events exports" do
         summary: "Dance (#{event2.creator.name})",
         location: [calendar1, calendar2].sort_by(&:id).map(&:name).join(" + ")
       }, {
-        summary: "Funday (#{event4.creator.name})",
+        summary: "2 days (#{event4.creator.name})",
         location: "Sad Room",
         "DTSTART;VALUE=DATE" => "20190830",
-        "DTEND;VALUE=DATE" => "20190831"
+        "DTEND;VALUE=DATE" => "20190901"
+      }, {
+        summary: "Single Day (#{event4.creator.name})",
+        location: "Sad Room",
+        "DTSTART;VALUE=DATE" => "20190901",
+        "DTEND;VALUE=DATE" => "20190902"
       })
       # rubocop:enable Style/BracesAroundHashParameters
     end

@@ -44,7 +44,8 @@ module Calendars
       end
 
       def ends_at(object)
-        object.all_day? ? object.ends_at.to_date : object.ends_at
+        # iCal format wants the day after the last day of the event as the end date for all day events.
+        object.all_day? ? object.ends_at.to_date + 1 : object.ends_at
       end
     end
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "work exports" do
+describe "your jobs exports" do
   include_context "calendar exports"
 
   let(:head_cook_role) { create(:meal_role, :head_cook, description: "Cook something tasty") }
@@ -67,6 +67,7 @@ describe "work exports" do
                       time_type: "full_period", description: "Do something periodically",
                       shift_count: 1)
   end
+  subject(:ical_data) { Calendars::Exports::YourJobsExport.new(user: user).generate }
 
   before do
     # Associate meals 1 & 2 (but NOT 3) with appropriate shifts.
@@ -82,66 +83,63 @@ describe "work exports" do
     draft_job.shifts[0].assignments.create!(user: user) # Decoy
   end
 
-  context "your jobs" do
-    subject(:ical_data) { Calendars::Exports::YourJobsExport.new(user: user).generate }
 
-    it "includes all meal_assignments and work_assignments" do
-      meal3.assignments[1]
-      meal4.assignments[0]
+  it "includes all meal_assignments and work_assignments" do
+    meal3.assignments[1]
+    meal4.assignments[0]
 
-      expect_calendar_name("Your Jobs")
-      expect_events({
-        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
-        summary: "Multi-day (Start)",
-        location: nil,
-        description: %r{Do something periodically\s+\n http://.+/work/signups/},
-        "DTSTART;VALUE=DATE" => period_start.to_date.to_s(:no_sep),
-        "DTEND;VALUE=DATE" => (period_start.to_date + 1).to_s(:no_sep)
-      }, {
-        uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_End",
-        summary: "Multi-day (End)",
-        location: nil,
-        description: %r{Do something periodically\s+\n http://.+/work/signups/},
-        "DTSTART;VALUE=DATE" => period_end.to_date.to_s(:no_sep),
-        "DTEND;VALUE=DATE" => (period_end.to_date + 1).to_s(:no_sep)
-      }, {
-        summary: "Single-day",
-        location: nil,
-        description: %r{A very silly job\.\s+\n http://.+/work/signups/},
-        "DTSTART;VALUE=DATE" => shift2_1_start.to_date.to_s(:no_sep),
-        "DTEND;VALUE=DATE" => (shift2_1_start.to_date + 1).to_s(:no_sep)
-      }, {
-        uid: "#{signature}_Work_Assignment_#{job1.shifts[0].assignments[0].id}",
-        summary: "Assistant Cook: Figs",
-        location: meal1.calendars[0].name,
-        description: %r{Help cook the things\s+\n http://.+/work/signups/},
-        "DTSTART;TZID=Etc/UTC" => (meal1_time - 2.hours).to_s(:no_sep),
-        "DTEND;TZID=Etc/UTC" => meal1_time.to_s(:no_sep)
-      }, {
-        uid: "#{signature}_Work_Assignment_#{job1.shifts[1].assignments[0].id}",
-        summary: "Assistant Cook: Buns",
-        location: meal2.calendars[0].name,
-        description: %r{Help cook the things\s+\n http://.+/work/signups/},
-        "DTSTART;TZID=Etc/UTC" => (meal2_time - 2.hours).to_s(:no_sep),
-        "DTEND;TZID=Etc/UTC" => meal2_time.to_s(:no_sep)
-      }, {
-        # These entries are generated from meal assignments, not work assignments, so
-        # the description and timing match the meal role, not the work job.
-        # We know to use assignments[1] because the head cook is always [0].
-        uid: "#{signature}_Meals_Assignment_#{meal3.assignments[1].id}",
-        summary: "Assistant Cook: Rice",
-        location: meal3.calendars[0].name,
-        description: %r{Assist the wise cook\s+\n http://.+/meals/},
-        "DTSTART;TZID=Etc/UTC" => (meal3_time - 90.minutes).to_s(:no_sep),
-        "DTEND;TZID=Etc/UTC" => meal3_time.to_s(:no_sep)
-      }, {
-        uid: "#{signature}_Meals_Assignment_#{meal4.assignments[0].id}",
-        summary: "Head Cook: Corn",
-        location: meal4.calendars[0].name,
-        description: %r{Cook something tasty\s+\n http://.+/meals/},
-        "DTSTART;VALUE=DATE" => meal4_time.to_date.to_s(:no_sep),
-        "DTEND;VALUE=DATE" => (meal4_time.to_date + 1).to_s(:no_sep)
-      })
-    end
+    expect_calendar_name("Your Jobs")
+    expect_events({
+      uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
+      summary: "Multi-day (Start)",
+      location: nil,
+      description: %r{Do something periodically\s+\n http://.+/work/signups/},
+      "DTSTART;VALUE=DATE" => period_start.to_date.to_s(:no_sep),
+      "DTEND;VALUE=DATE" => (period_start.to_date + 1).to_s(:no_sep)
+    }, {
+      uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_End",
+      summary: "Multi-day (End)",
+      location: nil,
+      description: %r{Do something periodically\s+\n http://.+/work/signups/},
+      "DTSTART;VALUE=DATE" => period_end.to_date.to_s(:no_sep),
+      "DTEND;VALUE=DATE" => (period_end.to_date + 1).to_s(:no_sep)
+    }, {
+      summary: "Single-day",
+      location: nil,
+      description: %r{A very silly job\.\s+\n http://.+/work/signups/},
+      "DTSTART;VALUE=DATE" => shift2_1_start.to_date.to_s(:no_sep),
+      "DTEND;VALUE=DATE" => (shift2_1_start.to_date + 1).to_s(:no_sep)
+    }, {
+      uid: "#{signature}_Work_Assignment_#{job1.shifts[0].assignments[0].id}",
+      summary: "Assistant Cook: Figs",
+      location: meal1.calendars[0].name,
+      description: %r{Help cook the things\s+\n http://.+/work/signups/},
+      "DTSTART;TZID=Etc/UTC" => (meal1_time - 2.hours).to_s(:no_sep),
+      "DTEND;TZID=Etc/UTC" => meal1_time.to_s(:no_sep)
+    }, {
+      uid: "#{signature}_Work_Assignment_#{job1.shifts[1].assignments[0].id}",
+      summary: "Assistant Cook: Buns",
+      location: meal2.calendars[0].name,
+      description: %r{Help cook the things\s+\n http://.+/work/signups/},
+      "DTSTART;TZID=Etc/UTC" => (meal2_time - 2.hours).to_s(:no_sep),
+      "DTEND;TZID=Etc/UTC" => meal2_time.to_s(:no_sep)
+    }, {
+      # These entries are generated from meal assignments, not work assignments, so
+      # the description and timing match the meal role, not the work job.
+      # We know to use assignments[1] because the head cook is always [0].
+      uid: "#{signature}_Meals_Assignment_#{meal3.assignments[1].id}",
+      summary: "Assistant Cook: Rice",
+      location: meal3.calendars[0].name,
+      description: %r{Assist the wise cook\s+\n http://.+/meals/},
+      "DTSTART;TZID=Etc/UTC" => (meal3_time - 90.minutes).to_s(:no_sep),
+      "DTEND;TZID=Etc/UTC" => meal3_time.to_s(:no_sep)
+    }, {
+      uid: "#{signature}_Meals_Assignment_#{meal4.assignments[0].id}",
+      summary: "Head Cook: Corn",
+      location: meal4.calendars[0].name,
+      description: %r{Cook something tasty\s+\n http://.+/meals/},
+      "DTSTART;VALUE=DATE" => meal4_time.to_date.to_s(:no_sep),
+      "DTEND;VALUE=DATE" => (meal4_time.to_date + 1).to_s(:no_sep)
+    })
   end
 end

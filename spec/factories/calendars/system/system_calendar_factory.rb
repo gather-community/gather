@@ -20,5 +20,9 @@ FactoryBot.define do
     factory :birthdays_calendar, class: "Calendars::System::BirthdaysCalendar" do
       sequence(:name) { |n| "Birthdays #{n}" }
     end
+
+    factory :join_dates_calendar, class: "Calendars::System::JoinDatesCalendar" do
+      sequence(:name) { |n| "Join Dates #{n}" }
+    end
   end
 end

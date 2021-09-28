@@ -47,6 +47,7 @@ module Utils
         create(:your_meals_calendar, name: "Your Meals", community: community, group: group,
                                      color: next_color)
         create(:birthdays_calendar, name: "Birthdays", community: community, color: next_color)
+        create(:join_dates_calendar, name: "Join Dates", community: community, color: next_color)
       end
 
       def create_reservation_calendars

@@ -2,8 +2,8 @@
 
 module Calendars
   module System
-    # Returns people's birthdays
-    class BirthdaysCalendar < UserAnniversariesCalendar
+    # Returns dates people joined the community
+    class JoinDatesCalendar < UserAnniversariesCalendar
       def events_between(range, user:)
         super(range, user: user)
       end
@@ -11,11 +11,11 @@ module Calendars
       protected
 
       def attrib
-        :birthdate
+        :joined_on
       end
 
       def emoji
-        "🎂"
+        "➕"
       end
     end
   end

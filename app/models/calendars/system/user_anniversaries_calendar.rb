@@ -8,8 +8,6 @@ module Calendars
         true
       end
 
-      protected
-
       def events_between(range, actor:)
         lower = range.first
         upper = range.last

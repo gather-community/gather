@@ -24,5 +24,9 @@ FactoryBot.define do
     factory :join_dates_calendar, class: "Calendars::System::JoinDatesCalendar" do
       sequence(:name) { |n| "Join Dates #{n}" }
     end
+
+    factory :your_jobs_calendar, class: "Calendars::System::YourJobsCalendar" do
+      sequence(:name) { |n| "Your Jobs #{n}" }
+    end
   end
 end

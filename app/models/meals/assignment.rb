@@ -64,6 +64,10 @@ module Meals
       role.description
     end
 
+    def linkable
+      meal
+    end
+
     private
 
     def shift_time_offset(start_or_end)

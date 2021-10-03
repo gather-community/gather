@@ -51,12 +51,13 @@ describe "meals exports" do
 
     it do
       expect_calendar_name("#{user.community.name} Meals")
-      expect_events({
+      attribs = [{
         summary: "Meal1",
         description: /By #{user.name}\s+2 diners from your household/ # Personalized description
       }, {
         summary: "Meal2"
-      })
+      }]
+      expect_events(*attribs)
       expect(ical_data).not_to match("Other Cmty Meal")
     end
   end
@@ -66,12 +67,13 @@ describe "meals exports" do
 
     it do
       expect_calendar_name("#{user.community.name} Meals")
-      expect_events({
+      attribs = [{
         summary: "Meal1",
         description: "By #{user.name}" # Non-personalized description
       }, {
         summary: "Meal2"
-      })
+      }]
+      expect_events(*attribs)
       expect(ical_data).not_to match("Other Cmty Meal")
     end
   end
@@ -81,14 +83,15 @@ describe "meals exports" do
 
     it do
       expect_calendar_name("All Meals")
-      expect_events({
+      attribs = [{
         summary: "Meal1",
         description: /By #{user.name}\s+2 diners from your household/ # Personalized description
       }, {
         summary: "Meal2"
       }, {
         summary: "Other Cmty Meal"
-      })
+      }]
+      expect_events(*attribs)
     end
   end
 
@@ -97,14 +100,15 @@ describe "meals exports" do
 
     it do
       expect_calendar_name("All Meals")
-      expect_events({
+      attribs = [{
         summary: "Meal1",
         description: "By #{user.name}" # Non-personalized description
       }, {
         summary: "Meal2"
       }, {
         summary: "Other Cmty Meal"
-      })
+      }]
+      expect_events(*attribs)
     end
   end
 end

@@ -21,7 +21,7 @@ module Calendars
     end
 
     def system_events
-      system_calendars.map { |c| c.events_between(range, user: user) }.flatten
+      system_calendars.map { |c| c.events_between(range, actor: user) }.flatten
     end
 
     def non_system_calendars

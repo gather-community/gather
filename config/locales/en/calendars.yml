@@ -5,6 +5,7 @@ en:
         summary_with_suffix:
           start: "%{base} (Start)"
           end: "%{base} (End)"
+    all_day: "All Day"
   calendars/protocol:
     applicability: "Applicability"
     no_kinds_html: "This community has no event types defined. See the <a href='%{url}'>settings page</a>."

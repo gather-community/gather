@@ -49,6 +49,7 @@ module Meals
     scope :without_menu, -> { where(MENU_ITEMS.map { |i| "#{i} IS NULL" }.join(" AND ")) }
     scope :with_min_age, ->(age) { where("served_at <= ?", Time.current - age) }
     scope :with_max_age, ->(age) { where("served_at >= ?", Time.current - age) }
+    scope :in_time_range, ->(r) { where("served_at <= ?", r.last).where("served_at >= ?", r.first) }
     scope :with_past_auto_close_time, -> { where("auto_close_time < ?", Time.current) }
     scope :worked_by, lambda { |user, head_cook_only: false|
       user = user.id if user.is_a?(User)

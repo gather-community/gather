@@ -142,6 +142,7 @@ en:
         name: "Event Name"
         starts_at: "Start Time"
         ends_at: "End Time"
+        all_day: "All-day event?"
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"

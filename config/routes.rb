@@ -86,6 +86,13 @@ Rails.application.routes.draw do
     resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
 
+  # These routes are provided because Rails guesses meals_meal_path and meals_meals_path even
+  # though we prefer meals_path (above) in code we write. Both this route and
+  # the above one will lead to the same controller and URL.
+  namespace :meals, path: "" do
+    resources :meals
+  end
+
   # `namespace :x` is just a shorthand for scope :x, module: :x, as: :x
   # scope :x adds /x/ as a URL prefix
   # scope module: :x adds /x as a controller prefix (controllers will be fetched under controllers/x/foo.rb)
@@ -122,16 +129,6 @@ Rails.application.routes.draw do
         format: :ics
       }
 
-  resources :calendars, except: :show, controller: "calendars/calendars" do
-    member do
-      put :activate
-      put :deactivate
-      put :move
-    end
-
-    resources :events, controller: "calendars/events"
-  end
-
   namespace :calendars do
     resources :events
     resources :protocols
@@ -155,6 +152,29 @@ Rails.application.routes.draw do
       end
       collection do
         put :reset_token
+      end
+    end
+  end
+
+  resources :calendars, except: :show, controller: "calendars/calendars" do
+    member do
+      put :activate
+      put :deactivate
+      put :move
+    end
+
+    resources :events, controller: "calendars/events"
+  end
+
+  # These routes are provided because Rails guesses calendars_calendar_path and calendars_calendars_path even
+  # though we prefer calendars_path (above) in code we write. Both these routes and
+  # the above ones will lead to the same controller and URL.
+  namespace :calendars, path: "" do
+    resources :calendars do
+      member do
+        put :activate
+        put :deactivate
+        put :move
       end
     end
   end

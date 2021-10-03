@@ -38,6 +38,15 @@ module Calendars
       def url(calendar_event)
         url_for(calendar_event, :calendars_event_url)
       end
+
+      def starts_at(object)
+        object.all_day? ? object.starts_at.to_date : object.starts_at
+      end
+
+      def ends_at(object)
+        # iCal format wants the day after the last day of the event as the end date for all day events.
+        object.all_day? ? object.ends_at.to_date + 1 : object.ends_at
+      end
     end
   end
 end

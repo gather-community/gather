@@ -116,8 +116,8 @@ module Calendars
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
-      @rule_set = build_attribute_serializer(@rule_set, creator_community: Community.first,
-                                                        serializer: RuleSetSerializer)
+      @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
+                                                                   serializer: RuleSetSerializer)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
       @new_event_path = new_calendar_event_path(@calendar)
@@ -130,7 +130,7 @@ module Calendars
     def prep_combined_index(calendar_scope)
       authorize(Event)
       prepare_lenses(*[community: {clearable: false}].concat(BASE_LENSES))
-      @rule_set = {}
+      @rule_set_serializer = {}
       @can_create_event = writeable_calendars.any?
       setting = current_user.settings[:calendar_selection]
       @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
@@ -172,6 +172,7 @@ module Calendars
 
     def prep_form_vars
       @calendar ||= @event.calendar
+      @rule_set = @event.rule_set
       @kinds = @calendar.kinds # May be nil
     end
 

@@ -9,14 +9,12 @@ module Calendars
                :calendar_id, :background_color, :border_color
 
     def url
-      # System events aren't persisted so we can't link to them.
-      if object.persisted?
+      if object.linkable.present?
+        polymorphic_path(object.linkable)
+      elsif object.persisted?
         calendars_event_path(object, origin_page: instance_options[:origin_page])
-      # Meal system events will have a meal ID so we can link to the meal.
-      # This is a bit hacky, probably should have subclasses of Event or composition or something.
-      # Can refactor when we have other types of system calendar.
-      elsif object.meal_id?
-        meal_path(object.meal_id)
+      else
+        raise ArgumentError, "unpersisted events must define linkable"
       end
     end
 
@@ -30,12 +28,12 @@ module Calendars
       # assume all incoming events are in the community's zone. The only reason we'd need
       # zone is if we someday wanted to mix times from several zones on the calendar but
       # we don't and can't foresee needing to.
-      object.starts_at.to_s
+      (object.all_day? ? object.starts_at.to_date : object.starts_at).to_s
     end
 
     # end is a reserved word
     define_method("end") do
-      object.ends_at.to_s
+      (object.all_day? ? object.ends_at.to_date : object.ends_at).to_s
     end
 
     def editable

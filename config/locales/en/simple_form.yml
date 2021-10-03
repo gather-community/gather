@@ -75,6 +75,8 @@ en:
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list via the Mailman admin panel."
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
+      calendars_event:
+        all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
       calendars_protocol:
         kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
         calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."

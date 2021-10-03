@@ -74,6 +74,10 @@ module Calendars
       false
     end
 
+    def all_day_allowed?
+      true
+    end
+
     def in_group?
       group.present?
     end

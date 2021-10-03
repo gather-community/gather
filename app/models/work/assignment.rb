@@ -30,5 +30,9 @@ module Work
       # Assignments are automatically marked 'preassigned' if the current phase is before the open phase.
       self.preassigned = period_pre_open?
     end
+
+    def linkable
+      shift
+    end
   end
 end

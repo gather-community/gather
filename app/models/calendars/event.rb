@@ -6,7 +6,7 @@ module Calendars
 
     acts_as_tenant :cluster
 
-    attr_accessor :guidelines_ok, :privileged_changer, :origin_page
+    attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :linkable, :location
     alias privileged_changer? privileged_changer
 
     belongs_to :creator, class_name: "User"
@@ -45,6 +45,8 @@ module Calendars
                # We add an underscore to differentiate from user-specified kinds
                meal&.event_handler&.validate_event(r)
              }
+
+    before_validation :normalize
 
     before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
                   # and sponsor_community for other uses.
@@ -91,6 +93,12 @@ module Calendars
       (seconds.to_f / 1.day).ceil
     end
 
+    # RuleSet needs to know `kind` to give a definitive answer on event permissions.
+    # At event grid or event form load time, kind isn't known,
+    # so some rules can't be applied until event submission.
+    # But many protocols don't involve kind, and for those we can use the RuleSet to show things
+    # about the RuleSet in the UI like the event form or the event grid.
+    # In those cases, we can use a sample Event object with nil kind.
     def rule_set
       @rule_set ||= Rules::RuleSet.build_for(calendar: calendar, kind: kind)
     end
@@ -107,10 +115,6 @@ module Calendars
       guidelines_ok == "1"
     end
 
-    def timespan
-      I18n.l(starts_at) << " - " << I18n.l(ends_at, format: single_day? ? :time_only : :default)
-    end
-
     def single_day?
       ends_at.to_date == starts_at.to_date
     end
@@ -125,6 +129,13 @@ module Calendars
     end
 
     private
+
+    def normalize
+      self.all_day = false if rule_set.timed_events_only?
+      return unless all_day?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
 
     def guidelines_accepted
       return unless new_record? && calendar.guidelines? && !guidelines_ok?

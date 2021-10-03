@@ -21,8 +21,8 @@ describe Calendars::EventFinder do
   subject(:events) { described_class.new(range: range, calendars: calendars, user: user).events }
 
   before do
-    allow(cal2).to receive(:events_between).with(range, user: user).and_return(event2_1)
-    allow(cal4).to receive(:events_between).with(range, user: user).and_return(event4_1)
+    allow(cal2).to receive(:events_between).with(range, actor: user).and_return(event2_1)
+    allow(cal4).to receive(:events_between).with(range, actor: user).and_return(event4_1)
   end
 
   context "with no calendars" do

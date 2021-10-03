@@ -52,7 +52,7 @@ module Calendars
       # We don't include calendar_id here because that must be set explicitly because the admin
       # community check relies on it.
       attribs = %i[starts_at ends_at note origin_page]
-      attribs.concat(%i[name kind sponsor_id guidelines_ok]) unless meal?
+      attribs.concat(%i[name kind sponsor_id guidelines_ok all_day]) unless meal?
       attribs << :creator_id if choose_creator?
       attribs
     end

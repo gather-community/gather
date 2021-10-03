@@ -15,6 +15,10 @@
     <% end %>
   <% end %>
 
+  <% unless @rule_set.timed_events_only? %>
+    <%= f.input :all_day %>
+  <% end %>
+
   <% unless event.meal? %>
     <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
   <% end %>

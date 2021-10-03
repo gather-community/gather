@@ -49,6 +49,7 @@ module Calendars
       end
 
       def ends_at(assignment)
+        # iCal format wants the day after the last day of the event as the end date for all day events.
         assignment.date_time? ? super : assignment.ends_at.to_date + 1
       end
 

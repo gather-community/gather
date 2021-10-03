@@ -7,9 +7,9 @@ describe Utils::Generators::CalendarGenerator do
 
   it "generates seed data and samples" do
     generator.generate_seed_data
-    expect(Calendars::Calendar.count).to eq(4)
-    expect(Calendars::Node.count).to eq(6)
+    expect(Calendars::Calendar.count).to eq(7)
+    expect(Calendars::Node.count).to eq(10)
     generator.generate_samples
-    expect(Calendars::Calendar.count).to be > 4
+    expect(Calendars::Calendar.count).to be > 7
   end
 end

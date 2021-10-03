@@ -58,13 +58,12 @@ describe "events exports" do
 
   shared_examples_for "community events" do
     it do
-      # Confirm exppected duration for all_day events
+      # Confirm expected duration for all_day events
       expect(event4.ends_at - event4.starts_at).to eq((2.days - 1.second).to_i)
       expect(event5.ends_at - event5.starts_at).to eq((1.day - 1.second).to_i)
 
-      # rubocop:disable Style/BracesAroundHashParameters
       expect_calendar_name("#{user.community.name} Events")
-      expect_events({
+      attribs = [{
         summary: "Games (#{event1.creator.name})",
         location: "Fun Room"
       }, {
@@ -80,8 +79,8 @@ describe "events exports" do
         location: "Sad Room",
         "DTSTART;VALUE=DATE" => "20190901",
         "DTEND;VALUE=DATE" => "20190902"
-      })
-      # rubocop:enable Style/BracesAroundHashParameters
+      }]
+      expect_events(*attribs)
     end
   end
 

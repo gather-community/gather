@@ -89,7 +89,7 @@ describe "your jobs exports" do
     meal4.assignments[0]
 
     expect_calendar_name("Your Jobs")
-    expect_events({
+    attribs = [{
       uid: "#{signature}_Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
       summary: "Multi-day (Start)",
       location: nil,
@@ -140,6 +140,7 @@ describe "your jobs exports" do
       description: %r{Cook something tasty\s+\n http://.+/meals/},
       "DTSTART;VALUE=DATE" => meal4_time.to_date.to_s(:no_sep),
       "DTEND;VALUE=DATE" => (meal4_time.to_date + 1).to_s(:no_sep)
-    })
+    }]
+    expect_events(*attribs)
   end
 end

@@ -23,7 +23,7 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
 
   def setup_plain_select
     users = UserSelectScoper.new(scope_name: options[:context], actor: current_user,
-                                 community: current_community).resolve.by_name
+                                 community: current_community).resolve
     options[:collection] = users
     options[:include_blank] = options[:allow_clear] == true
     options[:prompt] = options[:allow_clear] == true ? false : "Select User ..."

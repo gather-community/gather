@@ -7,7 +7,7 @@ class UserSelectScoper
   attr_accessor :scope_name, :actor, :community, :extra_data
 
   def resolve
-    users = UserPolicy::Scope.new(actor, User).resolve
+    users = UserPolicy::Scope.new(actor, User).resolve.by_name
     case scope_name
     when "current_community_adults"
       users.active.in_community(community).adults

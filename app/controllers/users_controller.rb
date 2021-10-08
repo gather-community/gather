@@ -45,7 +45,7 @@ class UsersController < ApplicationController
                                       extra_data: extra_data).resolve
         @users = @users.matching(params[:search])
         @users = @users.in_community(params[:community_id]) if params[:community_id]
-        @users = @users.by_name.page(params[:page]).per(20)
+        @users = @users.page(params[:page]).per(20)
         render(json: @users.decorate, meta: {more: @users.next_page.present?}, root: "results",
                each_serializer: UserSerializer, hide_inactive_in_name: true)
       end

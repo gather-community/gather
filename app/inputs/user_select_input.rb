@@ -19,24 +19,11 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
 
   private
 
-  delegate :current_community, :current_cluster, to: :template
+  delegate :current_community, :current_cluster, :current_user, to: :template
 
   def setup_plain_select
-    users = UserPolicy::Scope.new(template.current_user, User).resolve.by_name
-    users = case options[:context]
-            when "current_community_adults", "specific_community_adults"
-              users.active.in_community(current_community).adults
-            when "guardians"
-              users.active.in_community(current_community).can_be_guardian
-            when "current_cluster_adults"
-              users.active.adults
-            when "current_community_all"
-              users.active.in_community(current_community)
-            when "current_community_inactive"
-              users.inactive.in_community(current_community)
-            else
-              raise "invalid select2 context"
-            end
+    users = UserSelectScoper.new(scope_name: options[:context], actor: current_user,
+                                 community: current_community).resolve.by_name
     options[:collection] = users
     options[:include_blank] = options[:allow_clear] == true
     options[:prompt] = options[:allow_clear] == true ? false : "Select User ..."

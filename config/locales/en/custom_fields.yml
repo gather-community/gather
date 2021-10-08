@@ -9,6 +9,7 @@ en:
           people:
             _self: "People"
             default_directory_sort: "Default Directory Sort"
+            plain_user_selects: "Plain User Dropdowns"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -57,6 +58,8 @@ en:
       community:
         settings:
           main_nav_customizations: "Use this setting to edit the links in the top menu. Enter links in Markdown format. Example: [Link Name](https://example.com). If the link name matches an existing one it will override the default URL. A blank URL will remove a link completely. All other text and markup will be ignored."
+          people:
+            plain_user_selects: "Use plain dropdowns instead of typedown-search-style boxes. May be preferable for smaller communities."
           meals:
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
             allergens: "Comma-separated list of allergens cooks select from when posting menus."

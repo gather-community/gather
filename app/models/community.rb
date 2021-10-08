@@ -46,7 +46,8 @@ class Community < ApplicationRecord
      default: "directory", required: true},
     {key: :main_nav_customizations, type: :text},
     {key: :people, type: :group, fields: [
-      {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true}
+      {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
+      {key: :plain_user_selects, type: :boolean, default: false, required: true}
     ]},
     {key: :meals, type: :group, fields: [
       {key: :reimb_instructions, type: :markdown},

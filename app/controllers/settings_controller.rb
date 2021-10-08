@@ -14,6 +14,7 @@ class SettingsController < ApplicationController
       flash[:success] = "Settings updated successfully."
       redirect_to(edit_path)
     else
+      @settings = sub_settings
       render(:edit)
     end
   end

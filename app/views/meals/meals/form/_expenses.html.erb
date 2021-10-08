@@ -6,7 +6,7 @@
       <%= mc_form.input(:ingredient_cost, input_html: {value: cost.ingredient_cost_decimals}) %>
       <%= mc_form.input(:pantry_cost, input_html: {value: cost.pantry_cost_decimals}) %>
       <%= mc_form.input(:payment_method, collection: Meals::Cost::PAYMENT_METHODS, as: :radio_buttons) %>
-      <%= mc_form.input(:reimbursee_id, as: :assoc_select2, context: "current_community_adults") %>
+      <%= mc_form.input(:reimbursee_id, as: :user_select, context: "current_community_adults") %>
     <% end %>
   <% end %>
 <% end %>

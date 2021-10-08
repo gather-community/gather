@@ -24,7 +24,7 @@
   <% end %>
 
   <% if policy(event).choose_creator? %>
-    <%= f.input :creator_id, as: :assoc_select2, context: event.creator_select2_context %>
+    <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context %>
   <% end %>
 
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
@@ -39,7 +39,7 @@
     <% end %>
 
     <% if event.access_level(current_user.community) == "sponsor" %>
-      <%= f.input :sponsor_id, as: :assoc_select2, context: "current_community_adults", required: true %>
+      <%= f.input :sponsor_id, as: :user_select, context: "current_community_adults", required: true %>
     <% end %>
   <% end %>
 

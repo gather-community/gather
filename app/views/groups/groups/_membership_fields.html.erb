@@ -1,6 +1,6 @@
 <%= f.error(:user_id) %>
 <div class="user-and-kind">
   <%= f.input(:user_id, as: :assoc_select2, error: false,
-                        src: "/users", context: "group_memberships") %>
+                        src: "/users", context: "specific_community_adults") %>
   <%= f.input(:kind, collection: Groups::Membership::KINDS, include_blank: false) %>
 </div>

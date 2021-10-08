@@ -36,7 +36,8 @@
     <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
-    <%= f.input :job_choosing_proxy_id, as: :assoc_select2, context: "job_choosing_proxy", allow_clear: true %>
+    <%= f.input :job_choosing_proxy_id, as: :assoc_select2, context: "current_community_adults",
+                                        allow_clear: true %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
     <%= f.input :doctor %>

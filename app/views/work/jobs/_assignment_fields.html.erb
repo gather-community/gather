@@ -1,5 +1,5 @@
 <div class="assignment-fields">
   <%= f.hidden_field :id %>
-  <%= render "shared/user_select", f: f, options: {context: "work_assign", allow_clear: true} %>
+  <%= render "shared/user_select", f: f, options: {context: "current_community_all", allow_clear: true} %>
   <%= icon_tag("thumb-tack") if f.object.preassigned? || (f.object.new_record? && @job.period_draft?) %>
 </div>

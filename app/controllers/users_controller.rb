@@ -40,22 +40,22 @@ class UsersController < ApplicationController
       # For select2 lookups
       format.json do
         @users = case params[:context]
-        when "res_sponsor", "event_creator_this_cmty", "guardian", "job_choosing_proxy", "reimbursee"
+        when "current_community_adults", "guardians"
           @users.active.in_community(current_community).adults
-        when "event_creator_any_cmty", "group_lens"
+        when "current_cluster_adults"
           @users.active.adults
-        when "group_memberships"
+        when "specific_community_adults"
           community_ids = JSON.parse(params[:data]).presence || current_community.id
           @users.active.adults.in_community(community_ids)
-        when "meal_job_lens", "meal_assign", "work_assign"
+        when "current_community_all"
           @users.active.in_community(current_community)
-        when "memorial"
+        when "current_community_inactive"
           @users.inactive.in_community(current_community)
         else
           raise "invalid select2 context"
         end
         @users = @users.matching(params[:search])
-        @users = @users.can_be_guardian if params[:context] == "guardian"
+        @users = @users.can_be_guardian if params[:context] == "guardians"
         @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.by_name.page(params[:page]).per(20)
         render(json: @users.decorate, meta: {more: @users.next_page.present?}, root: "results",

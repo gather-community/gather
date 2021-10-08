@@ -9,7 +9,7 @@
       <div data-role-id="<%= role.id %>">
         <%= nested_field_set(f, :assignments,
               objects: meal.assignments_by_role[role] || [],
-              context: "meal_assign",
+              context: "current_community_all",
               label: role.title,
               multiple: !role.head_cook?,
               allow_clear: role.head_cook?,

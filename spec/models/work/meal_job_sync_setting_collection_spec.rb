@@ -13,6 +13,7 @@ describe Work::MealJobSyncSettingCollection do
   let!(:formula2) { create(:meal_formula, name: "Yankee", roles: [role1, role5, role6]) }
   let!(:formula3) { create(:meal_formula, :inactive, name: "X-ray", roles: [role1, role2, role6]) }
   let!(:formula4) { create(:meal_formula, :inactive, name: "Victor", roles: [role1]) }
+  let!(:formula5) { create(:meal_formula, name: "Zzz", roles: [role1]) }
   subject(:result) { described_class.new(period: period).settings_by_formula }
 
   context "with new period" do
@@ -24,8 +25,8 @@ describe Work::MealJobSyncSettingCollection do
     end
 
     it "is correct" do
-      expect(result.size).to eq(2)
-      expect(result.keys).to eq([formula2, formula1])
+      expect(result.size).to eq(3)
+      expect(result.keys).to eq([formula2, formula1, formula5])
 
       expect(result[formula1].size).to eq(4)
 
@@ -60,6 +61,13 @@ describe Work::MealJobSyncSettingCollection do
       expect(result[formula2][1].role).to eq(role5)
       expect(result[formula2][1].selected?).to be(false)
       expect(result[formula2][1].legacy?).to be(false)
+
+      expect(result[formula5].size).to eq(1)
+
+      expect(result[formula5][0].formula).to eq(formula5)
+      expect(result[formula5][0].role).to eq(role1)
+      expect(result[formula5][0].selected?).to be(false)
+      expect(result[formula5][0].legacy?).to be(false)
     end
   end
 
@@ -82,8 +90,8 @@ describe Work::MealJobSyncSettingCollection do
     end
 
     it "is correct" do
-      expect(result.size).to eq(3)
-      expect(result.keys).to eq([formula2, formula1, formula3])
+      expect(result.size).to eq(4)
+      expect(result.keys).to eq([formula2, formula1, formula5, formula3]) # Inactive last
 
       expect(result[formula1].size).to eq(4)
 
@@ -136,6 +144,15 @@ describe Work::MealJobSyncSettingCollection do
       expect(result[formula3][2].role).to eq(role6)
       expect(result[formula3][2].selected?).to be(true)
       expect(result[formula3][2].legacy?).to be(true) # Legacy b/c both formula AND role are inative
+
+      # formula5 isn't involved in any persisted settings but should still show up in the collection
+      # in case someone wants to add it in later.
+      expect(result[formula5].size).to eq(1)
+
+      expect(result[formula5][0].formula).to eq(formula5)
+      expect(result[formula5][0].role).to eq(role1)
+      expect(result[formula5][0].selected?).to be(false)
+      expect(result[formula5][0].legacy?).to be(false)
     end
   end
 end

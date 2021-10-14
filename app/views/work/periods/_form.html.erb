@@ -35,7 +35,7 @@
                 <% index = 0 %>
                 <% @meal_job_sync_settings.settings_by_formula.each do |formula, settings| %>
                   <tr>
-                    <td><%= formula.name %></td>
+                    <td><%= formula.decorate.name_with_suffix %></td>
                     <td>
                       <% settings.each do |setting| %>
                         <%= f.simple_fields_for(:meal_job_sync_settings_attributes,

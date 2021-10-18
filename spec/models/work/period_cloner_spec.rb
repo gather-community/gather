@@ -82,6 +82,13 @@ describe Work::PeriodCloner do
       create(:work_job, title: "MealJob", period: oldp, time_type: "date_time", hours: 1,
                         meal_role: create(:meal_role))
     end
+    let!(:reminder1) do
+      job1.reminders.create!(abs_rel: "relative", rel_magnitude: 1, rel_unit_sign: "days_before", note: "Foo")
+    end
+    let!(:reminder2) do
+      job1.reminders.create!(abs_rel: "absolute", abs_time: "2020-02-10 12:00", note: "Bar")
+    end
+
     let(:attribs_copied) do
       %i[description double_signups_allowed hours hours_per_shift meal_role_id
          requester_id slot_type time_type title]
@@ -97,7 +104,7 @@ describe Work::PeriodCloner do
       context "with new period starting on month start" do
         let(:newp) { build(:work_period, starts_on: "2020-04-01", ends_on: "2020-05-15") }
 
-        it "adjusts dates correctly, skips meal jobs" do
+        it "adjusts dates correctly, skips meal jobs, copies reminders" do
           cloner.copy_jobs
           expect(newp.jobs.size).to eq(4)
 
@@ -106,6 +113,19 @@ describe Work::PeriodCloner do
           expect(job1n.shifts.size).to eq(1)
           expect_shift_times(job1n.shifts[0], "2020-04-01 00:00", "2020-05-15 23:59")
           expect(job1n.shifts[0].slots).to eq(1)
+
+          expect(job1n.reminders.size).to eq(2)
+          reminder1n = job1n.reminders.detect { |r| r.abs_rel == "relative" }
+          expect(reminder1n.class).to eq(Work::JobReminder)
+          expect(reminder1n.job_id).to be_nil # Not persisted yet
+          expect(reminder1n.rel_magnitude).to eq(1)
+          expect(reminder1n.rel_unit_sign).to eq("days_before")
+          expect(reminder1n.note).to eq("Foo")
+          reminder2n = job1n.reminders.detect { |r| r.abs_rel == "absolute" }
+          expect(reminder2n.abs_time).to eq(Time.zone.parse("2020-05-11 12:00"))
+          expect(reminder2n.rel_magnitude).to be_nil
+          expect(reminder2n.rel_unit_sign).to be_nil
+          expect(reminder2n.note).to eq("Bar")
 
           job2n = newp.jobs.detect { |j| j.title == "Job2" }
           attribs_copied.each { |a| expect(job2n[a]).to eq(job2[a]) }

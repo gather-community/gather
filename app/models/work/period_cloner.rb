@@ -7,6 +7,7 @@ module Work
 
     JOB_ATTRIBS_TO_COPY = %i[description double_signups_allowed hours hours_per_shift
                              requester_id slot_type time_type title].freeze
+    REMINDER_ATTRIBS_TO_COPY = %i[abs_rel note rel_magnitude rel_unit_sign].freeze
 
     attr_accessor :old_period, :new_period
 
@@ -42,8 +43,20 @@ module Work
       return if old_job.meal_role?
       new_job = new_period.jobs.build
       JOB_ATTRIBS_TO_COPY.each { |a| new_job[a] = old_job[a] }
+      copy_reminders(old_job, new_job)
       old_job.shifts.each_with_index do |shift, index|
         copy_shift(old_shift: shift, new_job: new_job, is_first: index.zero?)
+      end
+    end
+
+    def copy_reminders(old_job, new_job)
+      old_job.reminders.each do |old_reminder|
+        new_reminder = new_job.reminders.build
+        REMINDER_ATTRIBS_TO_COPY.each { |a| new_reminder[a] = old_reminder[a] }
+        if old_reminder.abs_time?
+          period_day_diff = new_period.starts_on - old_period.starts_on
+          new_reminder.abs_time = old_reminder.abs_time + period_day_diff.days
+        end
       end
     end
 

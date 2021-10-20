@@ -18,6 +18,8 @@ module Meals
 
     acts_as_tenant :cluster
 
+    attr_accessor :source_form # Which form is submitting data to the model.
+
     belongs_to :community, class_name: "Community"
     belongs_to :creator, class_name: "User"
     belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
@@ -80,19 +82,20 @@ module Meals
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
-    validates :creator_id, presence: true
-    validates :formula_id, presence: true
-    validates :served_at, presence: true
-    validates :community_id, presence: true
-    validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
-    validate :enough_capacity_for_current_signups
-    validate :auto_close_between_now_and_meal_time
-    validate :title_and_entree_if_other_menu_items
-    validate :at_least_one_community
-    validate :allergens_specified_appropriately
-    validate { event_handler.validate_meal if events.any? }
-
-    validates_with Meals::SignupsValidator
+    with_options if: :main_form? do
+      validates :creator_id, presence: true
+      validates :formula_id, presence: true
+      validates :served_at, presence: true
+      validates :community_id, presence: true
+      validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
+      validate :enough_capacity_for_current_signups
+      validate :auto_close_between_now_and_meal_time
+      validate :title_and_entree_if_other_menu_items
+      validate :at_least_one_community
+      validate :allergens_specified_appropriately
+      validate { event_handler.validate_meal if events.any? }
+      validates_with Meals::SignupsValidator
+    end
 
     def self.served_within_days_from_now(days)
       within_days_from_now(:served_at, days)
@@ -244,6 +247,10 @@ module Meals
 
     def set_menu_timestamp
       self.menu_posted_at = Time.current if menu_posted? && title_was.blank?
+    end
+
+    def main_form?
+      source_form == "main"
     end
   end
 end

@@ -27,6 +27,11 @@ describe "meal crud", js: true do
       # Create with no menu
       find("button.dropdown-toggle").click
       click_on("Create Meal")
+      fill_in("Capacity", with: "")
+      click_on("Save")
+
+      expect(page).to have_content("can't be blank")
+      fill_in("Capacity", with: "50")
       select2(location.name, from: "#meals_meal_calendar_ids", multiple: true)
 
       # Formula change changes worker roles

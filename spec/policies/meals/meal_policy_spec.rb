@@ -250,7 +250,7 @@ describe Meals::MealPolicy do
     shared_examples_for "admin or meals coordinator" do
       it "should allow even more stuff" do
         expect(subject).to match_array(date_loc_invite_attribs + menu_attribs + worker_attribs +
-          signup_attribs + expense_attribs + head_cook_attribs)
+          signup_attribs + expense_attribs + head_cook_attribs + [:source_form])
       end
 
       it "should not allow formula_id, capacity, auto_close_time if meal finalized" do
@@ -273,7 +273,7 @@ describe Meals::MealPolicy do
       let(:actor) { user }
 
       it "should allow only assignment attribs" do
-        expect(subject).to match_array(worker_attribs)
+        expect(subject).to match_array(worker_attribs + [:source_form])
       end
     end
 
@@ -283,7 +283,7 @@ describe Meals::MealPolicy do
 
       it "should allow more stuff" do
         expect(subject).to match_array(menu_attribs + worker_attribs +
-          signup_attribs + expense_attribs + head_cook_attribs)
+          signup_attribs + expense_attribs + head_cook_attribs + [:source_form])
       end
     end
 
@@ -291,7 +291,9 @@ describe Meals::MealPolicy do
       let(:actor) { biller }
 
       it "should allow edit formula" do
-        expect(subject).to match_array((worker_attribs + signup_attribs + expense_attribs) << :formula_id)
+        expect(subject).to match_array(
+          (worker_attribs + signup_attribs + expense_attribs) + %i[formula_id source_form]
+        )
       end
     end
 

@@ -74,7 +74,7 @@ module Meals
         self.row_action = :create
         next if row.empty?
         (parse_headers(row) ? next : break) if row_pointer == 1
-        self.new_meal = Meal.new
+        self.new_meal = Meal.new(source_form: "import")
         header_map.each do |col_index, attrib|
           parse_attrib(attrib, row[col_index])
         end

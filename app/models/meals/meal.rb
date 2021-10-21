@@ -82,7 +82,7 @@ module Meals
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
-    with_options if: :main_form? do
+    with_options if: :main_form_or_import? do
       validates :creator_id, presence: true
       validates :formula_id, presence: true
       validates :served_at, presence: true
@@ -249,8 +249,8 @@ module Meals
       self.menu_posted_at = Time.current if menu_posted? && title_was.blank?
     end
 
-    def main_form?
-      source_form == "main"
+    def main_form_or_import?
+      %w[main import].include?(source_form)
     end
   end
 end

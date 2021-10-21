@@ -3,10 +3,10 @@
 module Meals
   class MealsController < ApplicationController
     include Lensable
-    include MealShowable
+    include HouseholdSignupFormable
     include Destructible
 
-    decorates_assigned :meals, :meal_summary, :report, :user
+    decorates_assigned :meal, :meals, :meal_summary, :report, :user, :signup, :signups, :cost, :formula
 
     # decorates_assigned :report collides with action method
     helper_method :meals_report
@@ -219,6 +219,14 @@ module Meals
       @meals = @meals.page(params[:page])
     end
 
+    def prep_show_meal_vars
+      load_signups
+      prep_signup_form_vars
+      @cost = @meal.cost || @meal.build_cost
+      @formula = @meal.formula
+      @calculator = Meals::CostCalculator.build(@meal)
+    end
+
     def prep_form_vars
       prep_worker_form_vars
       @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
@@ -232,6 +240,15 @@ module Meals
 
     def prep_worker_form_vars
       @roles = (meal.roles + meal.assignments.map(&:role)).uniq
+    end
+
+    def load_signups
+      @signups = @meal.signups.by_one_cmty_first(@meal.community).sorted
+        .includes(parts: :type, household: :community)
+    end
+
+    def sample_meal
+      Meals::Meal.new(community: current_community)
     end
 
     def ensure_head_cook_assignment_present

@@ -1,7 +1,3 @@
-<h2>
-  Signups for <%= household.name %>
-  <%= meal.closed? ? icon_tag("lock") : "" %>
-</h2>
 <% if account.present? && account.credit_exceeded? && signup.new_record? %>
   <%= t("meals.over_limit_notice_html", community: meal.community.name,
         account_link: link_to("account", yours_accounts_path(community: meal.community_id)),
@@ -25,9 +21,14 @@
     <%= render("signup_read_only") %>
   <% end %>
 <% else %>
-  <%= gather_form_for(signup, width: :full, layout: :vertical, top_error_notification: false) do |f| %>
+  <%= gather_form_for(signup, width: :full, layout: :vertical,
+                              top_error_notification: false, remote: true) do |f| %>
     <%= hidden_field_tag("next_meal_id", next_meal&.id) %>
     <%= f.input(:meal_id, as: :hidden) %>
+
+    <% if local_assigns[:ajax_success] %>
+      <div class="alert alert-success alert-minimal">Signup saved successfully</div>
+    <% end %>
 
     <p>
       <%= icon_tag("exclamation-circle") if meal.full? %>
@@ -62,12 +63,16 @@
         Sign Up
       </button>
     <% end %>
-  <% end %>
 
-  <%= javascript_tag do %>
-    $(function() {
-      new Gather.Views.DirtyChecker({el: '.meals--signup-form'});
-      new Gather.Views.Meals.SignupView({el: '.signup-fields'});
-    });
+    <%= javascript_tag do %>
+      $(function() {
+        new Gather.Views.DirtyChecker({el: '.meals--signup-form'});
+        new Gather.Views.Meals.SignupAjaxFormView({
+          el: '.meals--signup-form',
+          ajaxSuccess: <%= json(local_assigns[:ajax_success]) %>
+        });
+        new Gather.Views.Meals.SignupView({el: '.signup-fields'});
+      });
+    <% end %>
   <% end %>
 <% end %>

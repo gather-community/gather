@@ -2,6 +2,9 @@ en:
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
     cancelled_notice: "This meal has been cancelled."
+    persion_is_helping:
+      one: "1 person from your household is helping with this meal"
+      other: "%{count} people from your household are helping with this meal"
     menu_posted_at: "Menu posted on %{time}."
     type: "Type"
     category: "Category"

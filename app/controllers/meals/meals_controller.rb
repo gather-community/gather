@@ -225,6 +225,7 @@ module Meals
       @cost = @meal.cost || @meal.build_cost
       @formula = @meal.formula
       @calculator = Meals::CostCalculator.build(@meal)
+      @household_workers = Meals::HouseholdWorkersPresenter.new(@meal, current_user.household)
     end
 
     def prep_form_vars

@@ -40,7 +40,10 @@
     <%= javascript_tag do %>
       $(function() {
         new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
-        new Gather.Views.Meals.HouseholdWorkerFormView({el: '.meals--meal-form'});
+        new Gather.Views.Meals.HouseholdWorkerFormView(<%=json(
+          el: ".meals--meal-form",
+          notifyOnWorkerChange: policy(meal).change_workers_without_notification?
+        )%>);
       });
     <% end %>
   <% end %>

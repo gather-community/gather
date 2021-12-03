@@ -136,10 +136,14 @@ describe "meal crud", js: true do
         click_link("Edit")
         expect(page).not_to have_content("Delete Meal")
         add_worker_field(role: ac_role)
-        accept_confirm { select_worker(actor.name, role: ac_role) }
-        click_button("Save")
+        message = accept_confirm { select_worker(actor.name, role: ac_role) }
+        expect(message).to match(/If you change meal workers/)
 
-        expect_success
+        expect do
+          click_button("Save")
+          expect_success
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Meal Job Assignment Change Notice")
 
         # Show
         find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click

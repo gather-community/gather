@@ -88,11 +88,12 @@ module Meals
     def update
       @meal = Meal.find(params[:id])
       authorize(@meal)
+      @worker_change_notifier = WorkerChangeNotifier.new(current_user, @meal)
       @meal.assign_attributes(meal_params)
       @meal.build_events
       if @meal.save
         flash[:success] = "Meal updated successfully."
-        WorkerChangeNotifier.new(current_user, meal).check_and_send!
+        @worker_change_notifier.check_and_send!
         redirect_to(meals_path)
       else
         prep_form_vars

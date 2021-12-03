@@ -1,21 +1,26 @@
-<% if @household_workers.existing? %>
-  <%= t("meals.persion_is_helping", count: @household_workers.existing.size) %>:
-  <ul>
-    <% @household_workers.existing.each do |assign| %>
-      <li><%= assign.user.decorate.full_name %> - <%= assign.role_title %> <i class="fa fa-close"></i></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<% if @household_workers.no_open? %>
-  <% unless @household_workers.existing? %>
-    <%# If nothing was rendered above, show something here to populate the section. %>
-    <p>This meal doesn't need any more workers.</p>
+<%= gather_form_for(meal, class: "help-out-form", width: :full, top_error_notification: false, remote: true) do |f| %>
+  <% if @household_workers.existing? %>
+    <div id="household-worker-info">
+      <%= t("meals.persion_is_helping", count: @household_workers.existing.size) %>:
+      <ul>
+        <% @household_workers.existing.each do |assign| %>
+          <li>
+            <%= assign.user.decorate.full_name %> - <%= assign.role_title %>&nbsp;
+            <%= link_to(assign, class: "delete-assign") do %>
+              <i class="fa fa-close"></i>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
-<% else %>
-  <p>This meal still needs <b>2 Assistant Cooks</b>.</p>
-  <%= gather_form_for(meal, class: "help-out-form", width: :full, top_error_notification: false, remote: true) do |f| %>
-    <%= hidden_field_tag("next_meal_id", next_meal&.id) %>
+  <% if @household_workers.no_open? %>
+    <% unless @household_workers.existing? %>
+      <%# If nothing was rendered above, show something here to populate the section. %>
+      <p>This meal doesn't need any more workers.</p>
+    <% end %>
+  <% else %>
+    <p>This meal still needs <b>2 Assistant Cooks</b>.</p>
 
     <% if local_assigns[:ajax_success] %>
       <div class="alert alert-success alert-minimal">Workers saved successfully</div>
@@ -31,11 +36,12 @@
         Help Out
       </button>
     <% end %>
-  <% end %>
 
-  <%= javascript_tag do %>
-    $(function() {
-      new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
-    });
+    <%= javascript_tag do %>
+      $(function() {
+        new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
+        new Gather.Views.Meals.HouseholdWorkerFormView({el: '.meals--meal-form'});
+      });
+    <% end %>
   <% end %>
 <% end %>

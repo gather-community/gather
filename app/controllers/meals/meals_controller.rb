@@ -11,7 +11,6 @@ module Meals
     # decorates_assigned :report collides with action method
     helper_method :meals_report
 
-    before_action :create_worker_change_notifier, only: :update
     before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
     def index
@@ -93,7 +92,7 @@ module Meals
       @meal.build_events
       if @meal.save
         flash[:success] = "Meal updated successfully."
-        @worker_change_notifier&.check_and_send!
+        WorkerChangeNotifier.new(current_user, meal).check_and_send!
         redirect_to(meals_path)
       else
         prep_form_vars
@@ -255,12 +254,6 @@ module Meals
     def ensure_head_cook_assignment_present
       return unless @meal.head_cook.nil?
       @meal.assignments.build(role: meal.head_cook_role)
-    end
-
-    def create_worker_change_notifier
-      @meal = Meal.find(params[:id])
-      return if policy(@meal).change_date_loc_invites?
-      @worker_change_notifier = WorkerChangeNotifier.new(current_user, @meal)
     end
 
     def report_lenses

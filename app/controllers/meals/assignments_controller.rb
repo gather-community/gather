@@ -10,7 +10,9 @@ module Meals
     def destroy
       @assignment = Assignment.find(params[:id])
       authorize(@assignment)
+      @worker_change_notifier = WorkerChangeNotifier.new(current_user, @assignment.meal)
       @assignment.destroy
+      @worker_change_notifier.check_and_send!
       render_form
     end
 

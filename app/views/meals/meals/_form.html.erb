@@ -20,10 +20,11 @@
     new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
     new Gather.Views.AjaxSelect2({el: '.meals--meal-form'});
     new Gather.Views.Meals.WorkerFormView({el: ".meals--meal-form"});
-    new Gather.Views.Meals.WorkerChangeNotificationView(<%=json(
-      el: ".meals--meal-form",
-      notifyOnWorkerChange: policy(meal).change_workers_without_notification?,
-      newRecord: meal.new_record?
-    )%>);
+    <% unless policy(meal).change_workers_without_notification? %>
+      new Gather.Views.Meals.WorkerChangeNotificationView(<%=json(
+        el: ".meals--meal-form",
+        newRecord: meal.new_record?
+      )%>);
+    <% end %>
   });
 <% end %>

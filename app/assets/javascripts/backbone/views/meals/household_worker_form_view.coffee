@@ -11,10 +11,8 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend
     event.preventDefault()
 
     if !@alertShown && @options.notifyOnWorkerChange
-      msg = 'Note: If you change meal workers, an email notification will be sent to ' +
-        'the meals committee/manager and all current and newly assigned workers.'
       @alertShown = true
-      unless confirm(msg)
+      unless confirm(I18n.t('meals/assignments.change_warning'))
         return
 
     Gather.loadingIndicator.show()

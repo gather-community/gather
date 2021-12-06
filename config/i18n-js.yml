@@ -4,6 +4,7 @@ translations:
   - file: "app/assets/javascripts/i18n/translations.js"
     only: [
       "*.common.*",
+      "*.meals/assignments.*",
       "*.datepicker.*",
       "*.timepicker.*",
       "*.password.strength.*",

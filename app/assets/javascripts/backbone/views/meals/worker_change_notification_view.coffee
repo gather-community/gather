@@ -10,8 +10,7 @@ Gather.Views.Meals.WorkerChangeNotificationView = Backbone.View.extend
 
   workersChanged: ->
     if !@shown && !@options.newRecord
-      alert('Note: If you change meal workers, an email notification will be sent to ' +
-        'the meals committee/manager and all current and newly assigned workers.')
+      alert(I18n.t('meals/assignments.change_warning'))
       @shown = true
 
   formulaChanged: (e) ->

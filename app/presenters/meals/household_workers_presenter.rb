@@ -38,6 +38,8 @@ module Meals
       end
     end
 
+    private
+
     def open_counts
       @open_counts ||= meal.roles.map do |role|
         existing = meal.assignments_by_role[role] || []

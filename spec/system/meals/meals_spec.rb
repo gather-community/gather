@@ -103,7 +103,7 @@ describe "meal create, show, update, delete", js: true do
       click_link("Edit")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
-      select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id")
+      accept_alert { select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id") }
       choose("Balance Credit")
       click_button("Save")
       expect_success

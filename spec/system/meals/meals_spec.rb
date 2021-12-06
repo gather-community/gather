@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "meal crud", js: true do
+describe "meal create, show, update, delete", js: true do
   let!(:users) { create_list(:user, 2) }
   let!(:reimbursee) { create(:user, first_name: "Jo", last_name: "Fiz") }
   let!(:location) { create(:calendar, name: "Dining Room", abbrv: "DR", meal_hostable: true) }

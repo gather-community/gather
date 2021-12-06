@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
   namespace :meals do
     resources :signups, only: %i[create update]
-    resources :assignments, only: :destroy
+    resources :assignments, only: %i[update destroy]
     resources :formulas do
       member do
         put :activate
@@ -86,6 +86,9 @@ Rails.application.routes.draw do
     resources :messages, only: %i[new create], module: :meals
     resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
+
+  resources :meals, controller: "meals/meals_household_worker_change", path: "meals/worker-form",
+                    as: "meal_worker_form", only: :update
 
   # These routes are provided because Rails guesses meals_meal_path and meals_meals_path even
   # though we prefer meals_path (above) in code we write. Both this route and

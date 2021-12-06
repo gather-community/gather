@@ -1,4 +1,5 @@
-<%= gather_form_for(meal, class: "help-out-form", width: :full, top_error_notification: false, remote: true) do |f| %>
+<%= gather_form_for(meal, url: meal_worker_form_path(meal), class: "help-out-form", layout: :vertical, width: :full,
+                          top_error_notification: false, remote: true) do |f| %>
   <% if @household_workers.existing? %>
     <div id="household-worker-info">
       <%= t("meals.persion_is_helping", count: @household_workers.existing.size) %>:
@@ -20,13 +21,18 @@
       <p>This meal doesn't need any more workers.</p>
     <% end %>
   <% else %>
-    <p>This meal still needs <b>2 Assistant Cooks</b>.</p>
-
-    <% if local_assigns[:ajax_success] %>
-      <div class="alert alert-success alert-minimal">Workers saved successfully</div>
-    <% end %>
+    <p>
+      This meal still needs
+      <b><%= @household_workers.total_needed %>
+        <%= t("common.worker", count: @household_workers.total_needed) %></b>.
+    </p>
 
     <div class="help-out-fields" <%= @expand_help_out_form ? "" : "data-toggle-off=help-out-form" %>>
+      <%= f.simple_fields_for(:assignments, @household_workers.open) do |assign_fields| %>
+        <%= assign_fields.input(:user_id, collection: @household_workers.eligible_workers,
+                                          label: assign_fields.object.role.title) %>
+        <%= assign_fields.input(:role_id, as: :hidden) %>
+      <% end %>
       <%= form_actions do %>
         <%= f.button(:primary) %>
       <% end %>

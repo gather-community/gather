@@ -20,7 +20,7 @@ module Meals
 
     def render_form
       @meal = @assignment.meal
-      @household_workers = Meals::HouseholdWorkersPresenter.new(@meal, current_user.household)
+      @household_workers = Meals::HouseholdWorkersPresenter.new(@meal.reload, current_user.household)
       render(partial: "meals/meals/household_worker_form")
     end
   end

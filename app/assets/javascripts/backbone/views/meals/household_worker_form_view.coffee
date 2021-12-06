@@ -4,6 +4,8 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend
 
   events:
     'click .delete-assign': 'destroyAssign'
+    'ajax:send': 'formSubmitting'
+    'ajax:success': 'formSuccess'
 
   destroyAssign: (event) ->
     event.preventDefault()
@@ -22,3 +24,11 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend
       success: (data) =>
         @$el.replaceWith($(data).find('form'))
         Gather.loadingIndicator.hide()
+
+  formSubmitting: (e) ->
+    Gather.loadingIndicator.show()
+
+  formSuccess: (e, data) ->
+    Gather.loadingIndicator.hide()
+    @$el.dirtyForms('setClean')
+    @$el.replaceWith($(data).find('form'))

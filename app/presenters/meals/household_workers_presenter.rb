@@ -18,6 +18,14 @@ module Meals
       open_counts.none?
     end
 
+    def total_needed
+      open_counts.sum { |c| c[:count] }
+    end
+
+    def eligible_workers
+      household.adults
+    end
+
     def existing
       @existing ||= meal.assignments.where(user_id: household.users.pluck(:id)).by_role
     end

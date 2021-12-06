@@ -1,0 +1,49 @@
+<div class="cost-info">
+  <h2>Cost</h2>
+  <% if meal.finalized? || formula.fixed_meal? %>
+    <div class="row">
+      <div class="col-sm-4">
+        <table class="key-value key-value-full">
+          <% formula.types.each do |type| %>
+            <tr>
+              <td><%= type.name %></td>
+              <td><%= cost.formatted_price_for_type(type: type, calculator: @calculator) %></td>
+            </tr>
+          <% end %>
+        </table>
+        <br/>
+      </div>
+      <div class="col-sm-4">
+        <table class="key-value key-value-full">
+          <tr>
+            <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
+            <td><%= cost.present? ? cost.ingredient_cost_formatted : "?" %></td>
+          </tr>
+          <tr>
+            <td>
+              <%= t("activerecord.attributes.meals/formula.pantry_fee_formatted") %>
+              (Included)
+            </td>
+            <td><%= formula.pantry_fee_formatted %></td>
+          </tr>
+          <% if cost.present? && policy(meal).show_reimbursement_details? %>
+            <% if formula.pantry_reimbursement? %>
+              <%# This is in here because without context an average
+                  user might think it's related to pantry fee. %>
+              <tr>
+                <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
+                <td><%= cost.pantry_cost_formatted %></td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
+              <td><%= cost.payment_method_formatted %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    This meal uses a proportional formula so cost calculations will be performed after the meal has taken place and is finalized.
+  <% end %>
+</div>

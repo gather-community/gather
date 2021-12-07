@@ -54,7 +54,7 @@ end %>
     </h2>
     <%= render("meals/meals/signup_form") %>
 
-    <% unless meal.in_past? %>
+    <% if current_community.settings.meals.allow_job_signup_on_meal_page && !meal.in_past? %>
       <h2>
         Helping Out
       </h2>

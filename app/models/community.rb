@@ -55,6 +55,7 @@ class Community < ApplicationRecord
       {key: :default_capacity, type: :integer, required: true, default: 50},
       {key: :show_reimb_form, type: :boolean, default: false},
       {key: :cooks_can_finalize, type: :boolean, default: false},
+      {key: :allow_job_signup_on_meal_page, type: :boolean, default: true},
       {key: :reminder_lead_times, type: :group, fields: [
         {key: :diner, type: :integer, required: true, default: 0},
         {key: :early_menu, type: :integer, required: true, default: 10},

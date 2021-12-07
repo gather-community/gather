@@ -120,6 +120,12 @@ module Nav
               path: h.meals_roles_path,
               permitted: h.policy(Meals::Role.new(community: community)).index?,
               icon: "user-circle-o"
+            }, {
+              name: :settings,
+              parents: :meals,
+              path: h.edit_meals_settings_path,
+              permitted: Meals::SettingsPolicy.new(user, community).edit?,
+              icon: "gear"
             }
           ]
         when :people

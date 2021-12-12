@@ -1,0 +1,16 @@
+<% content_for(:title, "Meals Settings") %>
+
+<%= gather_form_for(@community, url: meals_settings_path) do |f| %>
+  <%= f.fields_for(:settings) do |ff| %>
+    <%= render("admin/settings/group_entry", group_entry: @settings, f: ff, hide_title: true) %>
+  <% end %>
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.DirtyChecker({el: '.community-form'});
+    });
+  <% end %>
+<% end %>

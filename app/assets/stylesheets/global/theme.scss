@@ -22,7 +22,8 @@ mark {
 }
 
 .alert {
-  &.in-text {
+  &.alert-minimal {
+    padding: 0 5px;
     margin-bottom: 10px;
   }
 

@@ -1,5 +1,5 @@
 <div class="custom-fields">
-  <% if (title = group_entry.label_or_key) %>
+  <% if (title = group_entry.label_or_key) && !local_assigns[:hide_title] %>
     <div class="group-title"><%= title %></div>
   <% end %>
   <%# OK to use html_safe here because the hints are in the translation file and don't take any params. %>

@@ -26,6 +26,9 @@ en:
     "true": "True"
     unknown: "Unknown"
     unlimited: "Unlimited"
+    worker:
+      one: "worker"
+      other: "workers"
     "yes": "Yes"
     time_with_preposition:
       "on": "on %{t}"

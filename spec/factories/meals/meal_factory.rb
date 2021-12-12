@@ -14,6 +14,7 @@ FactoryBot.define do
     served_at { Time.current + 7.days }
     capacity { 64 }
     community { Defaults.community }
+    source_form { "main" }
 
     association :formula, factory: :meal_formula
     association :creator, factory: :user

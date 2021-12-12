@@ -93,11 +93,11 @@ describe "jobs", js: true do
 
         # Add three workers but delete one.
         click_on("Add Worker")
-        select2(users[0].name, from: all("select.assoc_select2")[0])
+        select2(users[0].name, from: all("select.user_select")[0])
         click_on("Add Worker")
-        select2(users[1].name, from: all("select.assoc_select2")[1])
-        select2(:clear, from: all("select.assoc_select2")[1])
-        select2(users[2].name, from: all("select.assoc_select2")[1])
+        select2(users[1].name, from: all("select.user_select")[1])
+        select2(:clear, from: all("select.user_select")[1])
+        select2(users[2].name, from: all("select.user_select")[1])
       end
       click_button("Save")
 
@@ -135,7 +135,7 @@ describe "jobs", js: true do
 
       # Remove worker from second shift
       within(all("#shift-rows tr")[1]) do
-        select2(:clear, from: find("select.assoc_select2", text: users[0].name))
+        select2(:clear, from: find("select.user_select", text: users[0].name))
       end
 
       # Delete first shift.

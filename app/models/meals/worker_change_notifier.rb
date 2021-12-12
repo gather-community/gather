@@ -12,6 +12,7 @@ module Meals
     end
 
     def check_and_send!
+      return if policy.change_workers_without_notification?
       current = assignment_wrappers
       added = (current - orig).map(&:assignment)
       removed = (orig - current).map(&:assignment)
@@ -27,6 +28,10 @@ module Meals
 
     def assignment_wrappers
       meal.assignments.reload.map { |a| AssignmentWrapper.new(a) }
+    end
+
+    def policy
+      Meals::MealPolicy.new(initiator, meal)
     end
   end
 

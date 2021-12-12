@@ -6,7 +6,7 @@ module Groups
     protected
 
     def select2_context
-      "group_lens"
+      "current_cluster_adults"
     end
   end
 end

@@ -127,6 +127,7 @@ module Meals
       permitted.concat(expense_attribs) if change_expenses?
       permitted << :formula_id if change_formula?
       permitted.concat(capacity_close_time_attribs) if change_capacity_close_time?
+      permitted << :source_form if permitted.any?
       permitted
     end
 

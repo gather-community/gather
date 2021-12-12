@@ -21,7 +21,7 @@ describe "memorials", js: true do
       expect(page).to have_content("No memorials found")
       click_link("Create Memorial")
 
-      select2("John Smith", from: find("select.assoc_select2"))
+      select2("John Smith", from: find("select.user_select"))
       fill_in("Death Year", with: "2020")
       fill_in("Obituary", with: "Nice chap")
       expect(page).to have_field("Birth Year", with: "1950")

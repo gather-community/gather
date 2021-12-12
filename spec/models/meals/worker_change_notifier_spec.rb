@@ -29,10 +29,22 @@ describe Meals::WorkerChangeNotifier do
       new_assign
     end
 
-    it "calls mailer with correct args" do
-      expect(MealMailer).to receive(:worker_change_notice)
-        .with(actor, meal, [new_assign], old_assigns[0..1]).and_return(double(deliver_now: nil))
-      notifier.check_and_send!
+    context "with unprivileged actor" do
+      it "calls mailer with correct args" do
+        expect(MealMailer).to receive(:worker_change_notice)
+          .with(actor, meal, [new_assign], old_assigns[0..1]).and_return(double(deliver_now: nil))
+        notifier.check_and_send!
+      end
+    end
+
+    context "with privileged actor" do
+      before do
+        allow(notifier).to receive(:policy).and_return(double(change_workers_without_notification: true))
+      end
+
+      it "doesn't call mailer" do
+        expect(MealMailer).not_to receive(:worker_change_notice)
+      end
     end
   end
 end

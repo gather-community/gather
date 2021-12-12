@@ -1,2 +1,2 @@
-<%= render("shared/user_select", f: f, options: options) %>
+<%= f.input :user_id, options.merge(as: :user_select, label: false) %>
 <%= f.hidden_field(:role_id) %>

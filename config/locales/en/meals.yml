@@ -2,6 +2,9 @@ en:
   meals:
     over_limit_notice_html: "Your household has exceeded its %{community} %{account_link} credit limit of %{limit} and you are thus not permitted to sign up for meals hosted by %{community}. Please contact the %{community} meals committee/manager if you have questions."
     cancelled_notice: "This meal has been cancelled."
+    persion_is_helping:
+      one: "1 person from your household is helping with this meal"
+      other: "%{count} people from your household are helping with this meal"
     menu_posted_at: "Menu posted on %{time}."
     type: "Type"
     category: "Category"
@@ -51,6 +54,8 @@ en:
       cancelled: "The meal was not finalized. You can edit it below and try again, or click 'Cancel' below to return to the meals page."
       success: "Meal finalized successfully"
       review_and_confirm_html: "<strong>Note:</strong> This meal has not been finalized yet. Please review and confirm your entries below. This information cannot be changed once confirmed, so be careful."
+  meals/assignments:
+    change_warning: "Note: If you change meal workers, an email notification will be sent to the meals committee/manager and all current and newly assigned workers.'"
   meals/formulas:
     pantry: "Pantry"
     calc_types:

@@ -6,7 +6,7 @@ module Meals
     protected
 
     def select2_context
-      "meal_job_lens"
+      "current_community_all"
     end
   end
 end

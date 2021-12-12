@@ -46,13 +46,13 @@ describe "groups", js: true do
 
       click_link("Add Member")
       within(all(".nested-fields")[0]) do
-        select2(user1.name, from: find("select.assoc_select2"))
+        select2(user1.name, from: find("select.user_select"))
         select("Manager", from: "Kind")
       end
 
       click_link("Add Member")
       within(all(".nested-fields")[1]) do
-        select2(user2.name, from: find("select.assoc_select2"))
+        select2(user2.name, from: find("select.user_select"))
         select("Member", from: "Kind")
       end
 
@@ -65,7 +65,7 @@ describe "groups", js: true do
 
       click_link("Add Member")
       within(all(".nested-fields")[1]) do
-        select2(user2.name, from: find("select.assoc_select2"))
+        select2(user2.name, from: find("select.user_select"))
         select("Opt Out", from: "Kind")
       end
 
@@ -108,14 +108,14 @@ describe "groups", js: true do
 
       # User in community 2 shouldn't be an option yet.
       within(all(".nested-fields")[0]) do
-        expect { select2(user3.name, from: find("select.assoc_select2")) }
+        expect { select2(user3.name, from: find("select.user_select")) }
           .to raise_error(Capybara::ElementNotFound)
       end
 
       check(community2.name)
 
       within(all(".nested-fields")[0]) do
-        select2(user3.name, from: find("select.assoc_select2"))
+        select2(user3.name, from: find("select.user_select"))
       end
 
       click_button("Save")

@@ -16,7 +16,7 @@ describe "meal signups", js: true do
   end
 
   scenario "signup for meal, fix validation error, submit again" do
-    visit meals_path
+    visit(meals_path)
     click_link("Burgers")
     click_button("Sign Up")
     all("select[id$=_count]")[0].select(0)
@@ -31,17 +31,19 @@ describe "meal signups", js: true do
     all("select[id$=_type_id]")[1].select("Fmla A Type 1")
     fill_in("Comments", with: "Extra tasty please")
     click_button("Save")
+    expect(page).to have_alert("Signup saved successfully")
+    expect(page).not_to have_alert("Signup saved successfully")
 
     # Edit existing
-    click_link("Burgers")
     all("select[id$=_count]")[0].select("3")
     click_button("Save")
+    expect(page).to have_alert("Signup saved successfully")
 
     # Read-only mode
     meal.close!
-    click_link("Burgers")
-    expect(page).to have_content("3 Fmla A Type 1")
-    expect(page).to have_content("2 Fmla A Type 2")
+    visit(current_path)
+    expect(page).to have_content("1 Fmla A Type 1")
+    expect(page).to have_content("3 Fmla A Type 2")
     expect(page).to have_content('"Extra tasty please"')
   end
 
@@ -53,9 +55,29 @@ describe "meal signups", js: true do
       all("select[id$=_count]")[0].select("0")
       all("select[id$=_count]")[1].select("0")
       click_button("Save")
-      expect(page).to have_css("td", text: "Sign Up") # Signed up column
-      click_link("Burgers")
+      expect(page).to have_content("Signup saved successfully")
+
+      # Sign up button should reappear, indicating signup was destroyed
+      visit(meal_path(meal))
       expect(page).to have_css("button.btn-primary", text: "Sign Up")
+    end
+  end
+
+  context "with click on save and go to next" do
+    let!(:meal2) do
+      create(:meal, :with_menu, formula: formula, title: "Fries", served_at: Time.current + 8.days)
+    end
+
+    scenario do
+      visit(meal_path(meal))
+      click_on("Sign Up")
+      all("select[id$=_count]")[0].select(9)
+      click_button("Save & Go To Next Meal")
+      expect(page).to have_content("Fries")
+
+      # Ensure choice was persisted
+      click_link("Burgers")
+      expect(page).to have_select("meals_signup_parts_attributes_0_count", selected: "9")
     end
   end
 

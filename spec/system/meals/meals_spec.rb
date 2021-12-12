@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "meal crud", js: true do
+describe "meal create, show, update, delete", js: true do
   let!(:users) { create_list(:user, 2) }
   let!(:reimbursee) { create(:user, first_name: "Jo", last_name: "Fiz") }
   let!(:location) { create(:calendar, name: "Dining Room", abbrv: "DR", meal_hostable: true) }
@@ -27,6 +27,11 @@ describe "meal crud", js: true do
       # Create with no menu
       find("button.dropdown-toggle").click
       click_on("Create Meal")
+      fill_in("Capacity", with: "")
+      click_on("Save")
+
+      expect(page).to have_content("can't be blank")
+      fill_in("Capacity", with: "50")
       select2(location.name, from: "#meals_meal_calendar_ids", multiple: true)
 
       # Formula change changes worker roles
@@ -98,7 +103,7 @@ describe "meal crud", js: true do
       click_link("Edit")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
-      select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id")
+      accept_alert { select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id") }
       choose("Balance Credit")
       click_button("Save")
       expect_success
@@ -131,10 +136,14 @@ describe "meal crud", js: true do
         click_link("Edit")
         expect(page).not_to have_content("Delete Meal")
         add_worker_field(role: ac_role)
-        accept_confirm { select_worker(actor.name, role: ac_role) }
-        click_button("Save")
+        message = accept_confirm { select_worker(actor.name, role: ac_role) }
+        expect(message).to match(/If you change meal workers/)
 
-        expect_success
+        expect do
+          click_button("Save")
+          expect_success
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Meal Job Assignment Change Notice")
 
         # Show
         find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click

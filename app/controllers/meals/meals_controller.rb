@@ -3,15 +3,14 @@
 module Meals
   class MealsController < ApplicationController
     include Lensable
-    include MealShowable
+    include HouseholdSignupFormable
     include Destructible
 
-    decorates_assigned :meals, :meal_summary, :report, :user
+    decorates_assigned :meal, :meals, :meal_summary, :report, :user, :signup, :signups, :cost, :formula
 
     # decorates_assigned :report collides with action method
     helper_method :meals_report
 
-    before_action :create_worker_change_notifier, only: :update
     before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
     def index
@@ -89,11 +88,12 @@ module Meals
     def update
       @meal = Meal.find(params[:id])
       authorize(@meal)
+      @worker_change_notifier = WorkerChangeNotifier.new(current_user, @meal)
       @meal.assign_attributes(meal_params)
       @meal.build_events
       if @meal.save
         flash[:success] = "Meal updated successfully."
-        @worker_change_notifier&.check_and_send!
+        @worker_change_notifier.check_and_send!
         redirect_to(meals_path)
       else
         prep_form_vars
@@ -219,6 +219,15 @@ module Meals
       @meals = @meals.page(params[:page])
     end
 
+    def prep_show_meal_vars
+      load_signups
+      prep_signup_form_vars
+      @cost = @meal.cost || @meal.build_cost
+      @formula = @meal.formula
+      @calculator = Meals::CostCalculator.build(@meal)
+      @household_workers = Meals::HouseholdWorkersPresenter.new(@meal, current_user.household)
+    end
+
     def prep_form_vars
       prep_worker_form_vars
       @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
@@ -234,15 +243,18 @@ module Meals
       @roles = (meal.roles + meal.assignments.map(&:role)).uniq
     end
 
+    def load_signups
+      @signups = @meal.signups.by_one_cmty_first(@meal.community).sorted
+        .includes(parts: :type, household: :community)
+    end
+
+    def sample_meal
+      Meals::Meal.new(community: current_community)
+    end
+
     def ensure_head_cook_assignment_present
       return unless @meal.head_cook.nil?
       @meal.assignments.build(role: meal.head_cook_role)
-    end
-
-    def create_worker_change_notifier
-      @meal = Meal.find(params[:id])
-      return if policy(@meal).change_date_loc_invites?
-      @worker_change_notifier = WorkerChangeNotifier.new(current_user, @meal)
     end
 
     def report_lenses

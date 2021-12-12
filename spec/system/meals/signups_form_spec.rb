@@ -16,7 +16,6 @@ describe "meal signups form", js: true do
   scenario do
     # Try to submit duplicate signups
     visit edit_meal_path(meal)
-    # click_link("Edit Signups")
     enter_signup(household: households[0], quantities: {"Fmla A Type 1": 2, "Fmla A Type 2": 3})
     enter_signup(household: households[0], quantities: {"Fmla A Type 3": 4})
     click_button("Save")
@@ -32,7 +31,6 @@ describe "meal signups form", js: true do
 
     # Remove a signup by zeroing out, and change the other one.
     visit edit_meal_path(meal)
-    # click_link("Edit Signups")
     enter_signup(index: 0, quantities: {"Fmla A Type 1": 0, "Fmla A Type 2": 0})
     enter_signup(index: 1, quantities: {"Fmla A Type 4": 6})
     click_button("Save")
@@ -40,7 +38,6 @@ describe "meal signups form", js: true do
 
     # Check only one signup remains
     visit edit_meal_path(meal)
-    # click_link("Edit Signups")
     expect(all(".meals_meal_signups_signup").size).to eq(1)
     expect(page).to have_select(all("select[id$=_count]")[0][:id], selected: "6")
     expect(page).to have_select(all("select[id$=_type_id]")[0][:id], selected: "Fmla A Type 4")

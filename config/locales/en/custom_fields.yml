@@ -9,12 +9,14 @@ en:
           people:
             _self: "People"
             default_directory_sort: "Default Directory Sort"
+            plain_user_selects: "Plain User Dropdowns"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
             allergens: "Allergens"
             show_reimb_form: "Show printable reimbursement form"
             cooks_can_finalize: "Cooks can finalize meals"
+            allow_job_signup_on_meal_page: "Allow meal job signup on meal page"
             default_capacity: "Default Capacity"
             reminder_lead_times:
               _self: "Reminder Days in Advance"
@@ -57,11 +59,14 @@ en:
       community:
         settings:
           main_nav_customizations: "Use this setting to edit the links in the top menu. Enter links in Markdown format. Example: [Link Name](https://example.com). If the link name matches an existing one it will override the default URL. A blank URL will remove a link completely. All other text and markup will be ignored."
+          people:
+            plain_user_selects: "Use plain dropdowns instead of typedown-search-style boxes. May be preferable for smaller communities."
           meals:
             reimb_instructions: "What cooks should do with their receipts in order to get reimbursed. May include requesting cooks enter amounts via Gather's meal edit page, using the built-in reimbursement form, or some other process."
             allergens: "Comma-separated list of allergens cooks select from when posting menus."
             show_reimb_form: "Whether to show a printable reimbursement form (including grocery and pantry amounts and reimbursement method) on the meal summary page. Uncheck if you prefer an electronic reimbursement process."
             cooks_can_finalize: "Whether head cooks can finalize meals in addition to billers, meals coordinators, and admins."
+            allow_job_signup_on_meal_page: "Whether diners can volunteer to help out with a meal while signing up to attend the meal."
             default_capacity: "The default setting for how many people a meal can accommodate."
             reminder_lead_times:
               _self: "The number of days in advance reminders of various types are sent. Reminders are sent at 6am local time. Entering a '0' means the reminder will be sent on the morning of the day of the meal. See the meal roles page for more reminder settings."

@@ -22,10 +22,10 @@ module Calendars
 
     def calendar_url(type, personalized)
       if personalized
-        method = :personalized_calendars_export_url
+        method = :calendars_personalized_exports_url
         token = user.calendar_token
       else
-        method = :community_calendars_export_url
+        method = :calendars_community_exports_url
         token = community.calendar_token
       end
 

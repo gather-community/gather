@@ -41,17 +41,6 @@ module ApplicationControllable::RequestPreprocessing
 
   private
 
-  # Currently we are only checking for calendar_token, but could add others later.
-  def authenticate_user_from_token!
-    if params[:calendar_token] && (user = User.find_by(calendar_token: params[:calendar_token]))
-      # We are passing store false, so the user is not
-      # actually stored in the session and a token is needed for every request.
-      sign_in(user, store: false)
-    else
-      render_error_page(:unauthorized)
-    end
-  end
-
   def authorize_with_explict_policy_object(record, query, policy_object:)
     skip_authorization # We are doing this manually so need to skip the check.
     return if policy_object.send(query)

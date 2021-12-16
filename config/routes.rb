@@ -121,44 +121,45 @@ Rails.application.routes.draw do
     end
   end
 
-  # Legacy calendar export routes. They are highly constrained.
-  # These come first so they don't get gobbled up by more generic calendar routes below.
-  get "calendars/:id/:calendar_token",
-      to: "calendars/exports#personalized",
-      constraints: {
-        # These are the original calendar export types. Only these need to work for legacy URLs.
-        id: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
-        # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
-        # Enforcing this will make it easier to distinguish from other calendars routes in future.
-        calendar_token: /[A-Za-z0-9_\-]{20}/,
-        format: :ics
-      }
-
   namespace :calendars do
     resources :events
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 
-    # index - The calendar export page
-    resources :exports, only: :index do
-      member do
-        token_constraints = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
+    calendar_token_constraints = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
 
-        # This is the personalized show action, allowing paths to include the user's calendar token,
-        # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
-        # The calendar's type gets captured as the :id param, so this is equivalent to
-        # /calendars/exports/:id/:calendar_token
-        get ":calendar_token", to: "exports#personalized", as: :personalized, constraints: token_constraints
+    # Gen 1 legacy calendar export routes. They are highly constrained.
+    # These come first so they don't get gobbled up by more generic calendar routes below.
+    get ":type/:calendar_token",
+        to: "legacy_exports#personalized",
+        as: nil,
+        constraints: calendar_token_constraints.merge(
+          # These are the original calendar export types. Only these need to work for legacy URLs.
+          cal_name: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
+          # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
+          # Enforcing this will make it easier to distinguish from other calendars routes in future.
+          calendar_token: /[A-Za-z0-9_\-]{20}/
+        )
 
-        # This is the community show action, allowing paths to include the community's calendar token.
-        # The community part is indicated by a leading +, e.g.
-        # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
-        get "+:calendar_token", to: "exports#community", as: :community, constraints: token_constraints
-      end
-      collection do
-        put :reset_token
-      end
-    end
+    # Gen 2 legacy calendar export routes. These are resource-style because they assumed one calendar
+    # per export.
+    #
+    # This is the personalized show action, allowing paths to include the user's calendar token,
+    # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
+    # The calendar's type gets captured as the :id param, so this is equivalent to
+    # /calendars/exports/:type/:calendar_token
+    get "exports/:type/:calendar_token", to: "legacy_exports#personalized", as: :personalized_exports,
+                                         constraints: calendar_token_constraints
+    # This is the community show action, allowing paths to include the community's calendar token.
+    # The community part is indicated by a leading +, e.g.
+    # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
+    get "exports/:type/+:calendar_token", to: "legacy_exports#community", as: :community_exports,
+                                          constraints: calendar_token_constraints
+
+    # Gen 3 (current) calendar export routes
+    get "exports", to: "exports#index", constraints: {format: :html}
+    get "exports", to: "exports#export", constraints: {format: :ics}
+    put "exports/reset_token", to: "exports#reset_token"
   end
 
   resources :calendars, except: :show, controller: "calendars/calendars" do

@@ -5,7 +5,7 @@ require "rails_helper"
 describe "calendar export" do
   let(:user_token) { "z8-fwETMhx93t9nxkeQ_" }
   let(:cmty_token) { "mYfEv68-_HG4_lrfGGre" }
-  let(:signature) { Calendars::Exports::IcalGenerator::UID_SIGNATURE }
+  let(:signature) { Calendars::Exports::LegacyIcalGenerator::UID_SIGNATURE }
   let!(:user) { create(:user, calendar_token: user_token) }
   let(:communityB) { create(:community) }
 

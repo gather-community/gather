@@ -6,7 +6,7 @@ require "icalendar/tzinfo"
 module Calendars
   module Exports
     # Generates ICS files for various calendars in the system from a Dataset object.
-    class IcalGenerator
+    class LegacyIcalGenerator
       UID_SIGNATURE = "91a772a5ae4a"
 
       attr_accessor :data, :cal

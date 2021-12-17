@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Calendars::Exports::IcalGenerator do
+describe Calendars::Exports::LegacyIcalGenerator do
   let(:export) do
     double(calendar_name: "Foo Calendar", events: events, kind_name: "Thing")
   end

@@ -29,7 +29,7 @@ module Calendars
 
       def generate
         self.events = events_for_objects(objects)
-        IcalGenerator.new(self).generate
+        LegacyIcalGenerator.new(self).generate
       end
 
       protected

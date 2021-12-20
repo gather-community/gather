@@ -9,7 +9,10 @@ describe Calendars::System::OtherCommunitiesMealsCalendar do
   let(:calendar) { create(:other_communities_meals_calendar) }
 
   it "includes only meals from other cmtys" do
-    attribs = [{name: "Other Cmty Meal ✓"}, {name: "Other Cmty Meal 2"}]
+    attribs = [
+      {name: "Other Cmty Meal ✓", uid: "other_cmty_meals_#{meal3.id}"},
+      {name: "Other Cmty Meal 2", uid: "other_cmty_meals_#{meal4.id}"}
+    ]
     events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
   end

@@ -7,6 +7,7 @@ module Calendars
     acts_as_tenant :cluster
 
     attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :linkable, :location
+    attr_writer :uid
     alias privileged_changer? privileged_changer
 
     belongs_to :creator, class_name: "User"
@@ -75,6 +76,12 @@ module Calendars
       event.ends_at += 1.day if event.starts_at >= event.ends_at
 
       event
+    end
+
+    def uid
+      # System calendars that make unpersisted events should set
+      # uid or the export process will raise an error.
+      persisted? ? id : @uid
     end
 
     def displayable_kind?

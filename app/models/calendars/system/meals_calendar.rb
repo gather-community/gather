@@ -21,7 +21,8 @@ module Calendars
             meal_id: meal.id,
             starts_at: meal.served_at,
             ends_at: meal.served_at + MEAL_DURATION,
-            linkable: meal
+            linkable: meal,
+            uid: "#{slug}_#{meal.id}"
           )
         end
       end

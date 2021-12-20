@@ -4,6 +4,12 @@ module Calendars
   module System
     # System-populated calendar for all meals in cluser that user has signed up for
     class YourMealsCalendar < MealsCalendar
+      protected
+
+      def slug
+        "your_meals"
+      end
+
       private
 
       def hosting_communities

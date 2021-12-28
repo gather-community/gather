@@ -37,7 +37,7 @@ module Calendars
           e.summary = event.summary
           # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
           # so we include it at the end of the description instead.
-          e.description = break_lines(Array.wrap(event.description) << event.url)
+          e.description = break_lines([event.description, event.url].compact.join("\n"))
         end
       end
 
@@ -69,7 +69,7 @@ module Calendars
       # it will be broken properly by the icalendar gem. Somewhat hackish.
       def break_lines(lines)
         regex = /\P{M}\p{M}*/u # The regex icalendar uses to split by character.
-        lines = lines.compact
+        lines = lines.split("\n")
         padded = lines[0...-1].map.with_index do |line, i|
           line + " " * (75 - (line.scan(regex).size + (i.zero? ? 12 : 1)) % 75)
         end

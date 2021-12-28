@@ -34,7 +34,7 @@ module Calendars
             lines.concat(comments.split("\n"))
           end
         end
-        lines
+        lines.compact.join("\n")
       end
 
       def url(meal)

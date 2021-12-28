@@ -36,7 +36,7 @@ describe "meals exports" do
       expect_calendar_name("Meals You're Attending")
       expect_events(
         summary: "Meal1",
-        description: /By #{user.name}\s+2 diners from your household\s+Signup comments:\s+Foo\s+Bar/,
+        description: /By #{user.name}\s+2 diners from your household\s{49}Signup comments:\s+Foo\s+Bar/,
         location: "#{user.community_abbrv} Dining Room",
         "DTSTART;TZID=Etc/UTC" => meal1_time.to_s(:no_sep),
         "DTEND;TZID=Etc/UTC" => (meal1_time + 1.hour).to_s(:no_sep)

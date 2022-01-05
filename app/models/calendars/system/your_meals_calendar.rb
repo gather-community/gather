@@ -17,11 +17,8 @@ module Calendars
       end
 
       def base_meals_scope(range, actor:)
+        raise ArgumentError, "actor is required for this calendar" if actor.nil?
         super.attended_by(actor.household)
-      end
-
-      def attended_meals(base_scope, actor:)
-        base_scope
       end
     end
   end

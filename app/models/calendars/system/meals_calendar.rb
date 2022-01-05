@@ -9,11 +9,13 @@ module Calendars
       def events_between(range, actor:)
         scope = base_meals_scope(range, actor: actor)
         meals = scope.order(:served_at).decorate
-        attended_meals_by_id = attended_meals(scope, actor: actor).index_by(&:id) if actor.present?
+        signups_by_meal_id = build_signups_by_meal_id(meals: meals, actor: actor)
 
         meals.map do |meal|
           title = +meal.title_or_no_title
-          title << " ✓" if actor.present? && attended_meals_by_id.key?(meal.id)
+          title << " ✓" if signups_by_meal_id.key?(meal.id)
+          signup = signups_by_meal_id[meal.id]
+
           # We don't save the events since that's not how system calendars work.
           events.build(
             name: title,
@@ -22,7 +24,8 @@ module Calendars
             starts_at: meal.served_at,
             ends_at: meal.served_at + MEAL_DURATION,
             linkable: meal,
-            uid: "#{slug}_#{meal.id}"
+            uid: "#{slug}_#{meal.id}",
+            note: note_for_meal(meal: meal, actor: actor, signup: signup)
           )
         end
       end
@@ -33,16 +36,34 @@ module Calendars
 
       private
 
-      def attended_meals(base_scope, actor:)
-        base_scope.attended_by(actor.household)
-      end
-
       def base_meals_scope(range, actor:)
         Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
           .hosted_by(hosting_communities)
           .not_cancelled
           .where("served_at > ?", range.first - MEAL_DURATION)
           .where("served_at < ?", range.last)
+      end
+
+      def note_for_meal(meal:, actor:, signup:)
+        lines = []
+        lines << (meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil)
+        if signup
+          lines << I18n.t("calendar_exports.meals.diner_count", count: signup.total)
+          if signup.comments.present?
+            comments = I18n.t("calendar_exports.meals.signup_comments", comments: signup.comments)
+            lines.concat(comments.split("\n"))
+          end
+        end
+        lines.compact.join("\n")
+      end
+
+      def build_signups_by_meal_id(meals:, actor:)
+        return {} if actor.nil?
+
+        Meals::Signup
+          .includes(:meal)
+          .where(household: actor.household, meal_id: meals.map(&:id))
+          .index_by(&:meal_id)
       end
     end
   end

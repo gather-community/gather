@@ -13,7 +13,11 @@ module Meals
         WHERE meal_signups.meal_id = meals.id AND meal_signups.household_id = ?)"
 
       def resolve
-        if active_cluster_admin?
+        # If user is nil, it means this Scope class is being used for getting a meal listing not linked
+        # to a particular user. This is useful in cases like exporting for a shared calendar.
+        # Since we don't have a user to check assigned/invited/signed up, we just return all meals
+        # and leave it up to the model class to filter meals appropriately beyond that.
+        if user.nil? || active_cluster_admin?
           scope
         elsif user.active?
           scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",

@@ -5,6 +5,8 @@ module Calendars
     # Returns people's work shifts.
     class YourJobsCalendar < SystemCalendar
       def events_between(range, actor:)
+        raise ArgumentError, "actor is required for this calendar" if actor.nil?
+
         assignments = (work_assignments(range, actor) + meal_assignments(range, actor))
         events = assignments.flat_map do |assignment|
           if assignment.date_time? || assignment.elapsed_time <= 1.day

@@ -6,7 +6,14 @@ module Calendars
 
     acts_as_tenant :cluster
 
-    attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :linkable, :location
+    attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :location
+
+    # linkable is used by system calendars and holds either a URL or
+    # an object that this event should link to.
+    # objects are preferred so that the system calendar classes don't have to be responsible
+    # for generating URLs/paths.
+    attr_accessor :linkable
+
     attr_writer :uid
     alias privileged_changer? privileged_changer
 

@@ -17,6 +17,7 @@ describe Calendars::System::CommunityMealsCalendar do
         meal_id: meal1.id,
         creator_id: meal1.creator_id,
         linkable: meal1,
+        location: "#{community.abbrv} Dining Room",
         uid: "cmty_meals_#{meal1.id}",
         note: "By #{meal1.head_cook_name}\n2 diners from your household\nSignup comments:\nFoo\nBar"
       }, {
@@ -26,6 +27,7 @@ describe Calendars::System::CommunityMealsCalendar do
         meal_id: meal2.id,
         creator_id: meal2.creator_id,
         linkable: meal2,
+        location: "#{community.abbrv} Kitchen",
         uid: "cmty_meals_#{meal2.id}",
         note: "By #{meal2.head_cook_name}"
       }]

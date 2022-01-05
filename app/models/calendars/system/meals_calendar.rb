@@ -23,6 +23,7 @@ module Calendars
             meal_id: meal.id,
             starts_at: meal.served_at,
             ends_at: meal.served_at + MEAL_DURATION,
+            location: meal.location_name,
             linkable: meal,
             uid: "#{slug}_#{meal.id}",
             note: note_for_meal(meal: meal, actor: actor, signup: signup)

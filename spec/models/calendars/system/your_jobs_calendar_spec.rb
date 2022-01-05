@@ -108,6 +108,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Do something periodically",
       uid: "Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
       linkable: job3.shifts[0],
+      all_day: true,
       starts_at: period_start.midnight,
       ends_at: period_start.midnight + 1.day - 1.second
     }, {
@@ -116,6 +117,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "A very silly job\.",
       uid: "Work_Assignment_#{job2.shifts[0].assignments[0].id}",
       linkable: job2.shifts[0],
+      all_day: true,
       starts_at: shift2_1_start.midnight,
       ends_at: shift2_1_start.midnight + 1.day - 1.second
     }, {
@@ -124,6 +126,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Help cook the things",
       uid: "Work_Assignment_#{job1.shifts[0].assignments[0].id}",
       linkable: job1.shifts[0],
+      all_day: false,
       starts_at: meal1_time - 2.hours,
       ends_at: meal1_time
     }, {
@@ -132,6 +135,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Help cook the things",
       uid: "Work_Assignment_#{job1.shifts[1].assignments[0].id}",
       linkable: job1.shifts[1],
+      all_day: false,
       starts_at: meal2_time - 2.hours,
       ends_at: meal2_time
     }, {
@@ -143,6 +147,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Assist the wise cook",
       uid: "Meals_Assignment_#{meal3.assignments[1].id}",
       linkable: meal3,
+      all_day: false,
       starts_at: meal3_time - 90.minutes,
       ends_at: meal3_time
     }, {
@@ -151,6 +156,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Cook something tasty",
       uid: "Meals_Assignment_#{meal4.assignments[0].id}",
       linkable: meal4,
+      all_day: true,
       starts_at: meal4_time.midnight,
       ends_at: meal4_time.midnight + 1.day - 1.second
     }, {
@@ -159,6 +165,7 @@ describe Calendars::System::YourJobsCalendar do
       note: "Do something periodically",
       uid: "Work_Assignment_#{job3.shifts[0].assignments[0].id}_End",
       linkable: job3.shifts[0],
+      all_day: true,
       starts_at: period_end.midnight,
       ends_at: period_end.midnight + 1.day - 1.second
     }]

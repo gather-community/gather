@@ -76,6 +76,7 @@ module Calendars
           note: assignment.job_description,
           linkable: assignment.linkable,
           uid: "#{uid_prefix}_#{assignment.id}",
+          all_day: !assignment.date_time?,
           starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
           ends_at: assignment.date_time? ? assignment.ends_at : assignment.ends_at.midnight + 1.day - 1.second
         }

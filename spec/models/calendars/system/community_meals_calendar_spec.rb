@@ -18,7 +18,7 @@ describe Calendars::System::CommunityMealsCalendar do
         creator_id: meal1.creator_id,
         linkable: meal1,
         location: "#{community.abbrv} Dining Room",
-        uid: "cmty_meals_#{meal1.id}",
+        uid: "Meal_#{meal1.id}",
         note: "By #{meal1.head_cook_name}\n2 diners from your household\nSignup comments:\nFoo\nBar"
       }, {
         name: "Meal2",
@@ -28,7 +28,7 @@ describe Calendars::System::CommunityMealsCalendar do
         creator_id: meal2.creator_id,
         linkable: meal2,
         location: "#{community.abbrv} Kitchen",
-        uid: "cmty_meals_#{meal2.id}",
+        uid: "Meal_#{meal2.id}",
         note: "By #{meal2.head_cook_name}"
       }]
       events = calendar.events_between(full_range, actor: actor)

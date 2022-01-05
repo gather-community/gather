@@ -7,7 +7,8 @@ module Calendars
       protected
 
       def slug
-        "cmty_meals"
+        # Matches legacy meal calendar exports
+        "Meal"
       end
 
       private

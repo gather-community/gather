@@ -7,6 +7,8 @@ module Calendars
       protected
 
       def slug
+        # Does not match legacy meal calendar exports
+        # This may lead to some duplicates temporarily but there isn't a good alternative.
         "your_meals"
       end
 

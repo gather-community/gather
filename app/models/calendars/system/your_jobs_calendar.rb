@@ -53,7 +53,7 @@ module Calendars
       def multi_day_start_event_for(assignment)
         attribs = event_attribs(assignment)
         attribs[:name] = "#{attribs[:name]} (Start)"
-        attribs[:uid] = "#{attribs[:uid]}_start"
+        attribs[:uid] = "#{attribs[:uid]}_Start"
         attribs[:ends_at] = attribs[:starts_at] + 1.day - 1.second
         events.build(attribs)
       end
@@ -62,18 +62,20 @@ module Calendars
       def multi_day_end_event_for(assignment)
         attribs = event_attribs(assignment)
         attribs[:name] = "#{attribs[:name]} (End)"
-        attribs[:uid] = "#{attribs[:uid]}_end"
+        attribs[:uid] = "#{attribs[:uid]}_End"
         attribs[:starts_at] = attribs[:ends_at] - 1.day + 1.second
         events.build(attribs)
       end
 
       def event_attribs(assignment)
+        # These prefixes match legacy export uid prefixes
+        uid_prefix = assignment.is_a?(Work::Assignment) ? "Work_Assignment" : "Meals_Assignment"
         {
           name: [assignment.job_title, meal_for(assignment)&.title_or_no_title].compact.join(": "),
           location: meal_for(assignment)&.location_name,
           note: assignment.job_description,
           linkable: assignment.linkable,
-          uid: "#{assignment.class.name.underscore}_#{assignment.id}",
+          uid: "#{uid_prefix}_#{assignment.id}",
           starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
           ends_at: assignment.date_time? ? assignment.ends_at : assignment.ends_at.midnight + 1.day - 1.second
         }

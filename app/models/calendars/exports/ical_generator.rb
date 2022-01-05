@@ -11,18 +11,21 @@ module Calendars
 
       UID_SIGNATURE = "91a772a5ae4a"
 
-      attr_accessor :calendar_name, :events, :cal, :url_options
+      # If all of these are the same for any N calendar events, we should group them together in the export.
+      GROUP_ATTRIBS = %w[starts_at ends_at creator_id meal_id name].freeze
+
+      attr_accessor :calendar_name, :grouped_events, :cal, :url_options, :groups
 
       def initialize(calendar_name:, events:, url_options:)
         self.calendar_name = calendar_name
-        self.events = events
+        self.grouped_events = events.group_by { |e| e.attributes.slice(*GROUP_ATTRIBS) }.values
         self.url_options = url_options
       end
 
       def generate
         self.cal = Icalendar::Calendar.new
         set_timezone
-        events.each { |event| add_event(event) }
+        grouped_events.each { |group| add_event_group(group) }
         cal.append_custom_property("X-WR-CALNAME", calendar_name)
         cal.publish
         cal.to_ical
@@ -30,21 +33,20 @@ module Calendars
 
       private
 
-      # `event` should be an Event object.
-      def add_event(event)
-        raise ArgumentError, "all events must specify uid" if event.uid.nil?
+      def add_event_group(group)
+        raise ArgumentError, "all events must specify uid" if group[0].uid.nil?
 
         cal.event do |e|
           # UID should be unique within the calendar. It is how the importing system determines which
           # events have changed when it refreshes the calendar.
-          e.uid = [UID_SIGNATURE, event.uid].join("_")
-          e.dtstart = date_or_time_value(event, :starts_at)
-          e.dtend = date_or_time_value(event, :ends_at)
-          e.location = event.location
-          e.summary = event.name
+          e.uid = [UID_SIGNATURE, group[0].uid].join("_")
+          e.dtstart = date_or_time_value(group[0], :starts_at)
+          e.dtend = date_or_time_value(group[0], :ends_at)
+          e.location = group.map(&:location).join(" + ")
+          e.summary = group[0].name
           # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
           # so we include it at the end of the description instead.
-          e.description = [event.note, url_for_event(event)].compact.join("\n")
+          e.description = (group.map(&:note) + [url_for_event(group[0])]).compact.join("\n")
         end
       end
 

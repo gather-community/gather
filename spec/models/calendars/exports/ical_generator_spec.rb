@@ -131,6 +131,37 @@ describe Calendars::Exports::IcalGenerator do
     end
   end
 
+  context "with groupable events" do
+    let(:user) { create(:user) }
+    let(:events) do
+      [
+        create(:event, name: "Some Event",
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00",
+                       note: "This is a description",
+                       location: "A nice place"),
+        create(:event, name: "Some Event",
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00",
+                       note: "Other description",
+                       location: "Other place"),
+        create(:event, name: "Other Event",
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00")
+      ]
+    end
+
+    it "groups first two events" do
+      expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
+      expect(ical).to include_line("LOCATION:A nice place + Other place")
+      expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n"\
+        "https://foo.com/calen\r\n dars/events/#{events[0].id}")
+    end
+  end
+
   def match_ical(expected)
     include(expected.gsub("\n", "\r\n").gsub(/^\s+/m, ""))
   end

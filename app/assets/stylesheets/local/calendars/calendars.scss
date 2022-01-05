@@ -42,6 +42,10 @@
         line-height: 100%;
       }
     }
+
+    .inactive .move-links {
+      visibility: hidden;
+    }
   }
 
   .dropzone-wrapper {

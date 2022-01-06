@@ -10,22 +10,15 @@ module Calendars
 
     def index
       skip_policy_scope
-      authorize(sample_export, policy_class: ExportPolicy)
+      authorize(current_community, policy_class: ExportPolicy)
       current_user.ensure_calendar_token!
     end
 
     def reset_token
-      authorize(sample_export, policy_class: ExportPolicy)
+      authorize(current_community, policy_class: ExportPolicy)
       current_user.reset_calendar_token!
       flash[:success] = "Token reset successfully."
       redirect_to(calendars_exports_path)
-    end
-
-
-    private
-
-    def sample_export
-      Exports::Export.new(user: current_user)
     end
   end
 end

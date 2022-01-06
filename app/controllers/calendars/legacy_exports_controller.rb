@@ -17,7 +17,7 @@ module Calendars
 
     def community
       export = Exports::Factory.build(type: params[:type], community: current_community)
-      policy = ExportPolicy.new(nil, export, community_token: params[:calendar_token])
+      policy = ExportPolicy.new(nil, current_community, community_token: params[:calendar_token])
       authorize_with_explict_policy_object(export, :community?, policy_object: policy)
       send_calendar_data(export)
     rescue Exports::TypeError
@@ -26,7 +26,7 @@ module Calendars
 
     def personalized
       export = Exports::Factory.build(type: params[:type], user: current_user)
-      authorize(export, policy_class: ExportPolicy)
+      authorize(current_community, policy_class: ExportPolicy)
       send_calendar_data(export)
     rescue Exports::TypeError
       handle_calendar_error
@@ -41,12 +41,6 @@ module Calendars
 
     def export_file_basename
       params[:type]
-    end
-
-    private
-
-    def sample_export
-      Exports::Export.new(user: current_user)
     end
   end
 end

@@ -126,6 +126,8 @@ Rails.application.routes.draw do
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 
+    # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
+    # Enforcing this will make it easier to distinguish from other calendars routes in future.
     calendar_token_constraints = {calendar_token: /[A-Za-z0-9_\-]{20}/}.freeze
 
     # Gen 1 legacy calendar export routes. They are highly constrained.
@@ -135,10 +137,7 @@ Rails.application.routes.draw do
         as: nil,
         constraints: calendar_token_constraints.merge(
           # These are the original calendar export types. Only these need to work for legacy URLs.
-          cal_name: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
-          # These URLs should always have a 20 character token with alphanumeric chars plus - and _.
-          # Enforcing this will make it easier to distinguish from other calendars routes in future.
-          calendar_token: /[A-Za-z0-9_\-]{20}/
+          type: /meals|community-meals|all-meals|shifts|reservations|your-reservations/,
         )
 
     # Gen 2 legacy calendar export routes. These are resource-style because they assumed one calendar
@@ -148,13 +147,22 @@ Rails.application.routes.draw do
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:calendar_token
-    get "exports/:type/:calendar_token", to: "legacy_exports#personalized", as: :personalized_exports,
-                                         constraints: calendar_token_constraints
+    get "exports/:type/:calendar_token",
+      to: "legacy_exports#personalized",
+      as: :personalized_exports,
+      constraints: calendar_token_constraints.merge(
+        type: /meals|your-meals|community-meals|all-meals|your-jobs|community-events|your-events/
+      )
+
     # This is the community show action, allowing paths to include the community's calendar token.
     # The community part is indicated by a leading +, e.g.
     # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
-    get "exports/:type/+:calendar_token", to: "legacy_exports#community", as: :community_exports,
-                                          constraints: calendar_token_constraints
+    get "exports/:type/+:calendar_token",
+      to: "legacy_exports#community",
+      as: :community_exports,
+      constraints: calendar_token_constraints.merge(
+        type: /community-meals|all-meals|community-events/
+      )
 
     # Gen 3 (current) calendar export routes
     get "exports", to: "exports#index", constraints: {format: :html}

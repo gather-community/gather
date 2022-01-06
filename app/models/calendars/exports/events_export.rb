@@ -16,7 +16,9 @@ module Calendars
       def base_scope
         # calendar_id sort is for specs
         Calendars::EventPolicy::Scope.new(user, Calendars::Event).resolve
-          .joins(:calendar, :creator).includes(:calendar, :creator)
+          .joins(:calendar, :creator)
+          .includes(:calendar, :creator)
+          .where(calendar_nodes: {community_id: user.community_id})
           .with_max_age(MAX_EVENT_AGE).oldest_first.order(:calendar_id)
       end
 

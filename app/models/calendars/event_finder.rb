@@ -5,7 +5,7 @@ module Calendars
   class EventFinder
     include ActiveModel::Model
 
-    attr_accessor :range, :user, :calendars
+    attr_accessor :range, :user, :calendars, :own_only
 
     def events
       @events ||= normal_events + system_events
@@ -17,10 +17,14 @@ module Calendars
       EventPolicy::Scope.new(user, Event).resolve
         .between(range)
         .includes(:calendar)
-        .where(calendar: non_system_calendars).to_a
+        .where(calendar: non_system_calendars)
+        .where(own_only ? {creator: user} : true)
+        .to_a
     end
 
     def system_events
+      # If own_only is true, we exclude all system events because all such events are created by the system.
+      return [] if own_only
       system_calendars.map { |c| c.events_between(range, actor: user) }.flatten
     end
 

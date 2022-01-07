@@ -41,10 +41,10 @@ module ApplicationControllable::RequestPreprocessing
 
   private
 
-  def authorize_with_explict_policy_object(record, query, policy_object:)
+  def authorize_with_explict_policy_object(query, policy_object:)
     skip_authorization # We are doing this manually so need to skip the check.
     return if policy_object.send(query)
-    raise Pundit::NotAuthorizedError, query: query, record: record, policy: policy_object
+    raise Pundit::NotAuthorizedError, query: query, record: policy_object.record, policy: policy_object
   end
 
   # Redirects to the apex domain. Requested at the controller level if the apex domain is required.

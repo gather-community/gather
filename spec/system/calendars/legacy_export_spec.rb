@@ -31,12 +31,20 @@ describe "calendar export" do
     let!(:signup1) do
       create(:meal_signup, meal: meal1, household: user.household, diner_counts: [2])
     end
+    let!(:system_calendars) do
+      create(:your_meals_calendar)
+      create(:community_meals_calendar)
+      create(:other_communities_meals_calendar)
+    end
   end
 
   shared_context "jobs" do
     let!(:period) { create(:work_period, starts_on: Time.zone.today, phase: "published") }
     let!(:job1) { create(:work_job, period: period, title: "Job 1", time_type: "full_period") }
     let!(:job2) { create(:work_job, period: period, title: "Job 2", time_type: "full_period") }
+    let!(:system_calendars) do
+      create(:your_jobs_calendar)
+    end
 
     before do
       job1.shifts[0].assignments.create!(user: user)
@@ -69,6 +77,10 @@ describe "calendar export" do
         expect(page).not_to have_content("Meal 2")
         expect(page).not_to have_content("Meal 3")
         expect(page).not_to have_content("Meal 4")
+
+        # Ensure there was no redirection to user's subdomain.
+        # We don't want to redirect when fetching ICS in case some clients don't support that.
+        expect(current_url).not_to match(user.community.slug)
       end
     end
 
@@ -315,16 +327,6 @@ describe "calendar export" do
         expect do
           visit("/calendars/exports/all-meals/+totalgarbageofatoken.ics")
         end.to raise_error(Pundit::NotAuthorizedError) # Error reaches here b/c not a JS test.
-      end
-    end
-
-    context "with apex subdomain" do
-      scenario "your meals" do
-        visit("/calendars/exports/meals/#{user_token}.ics")
-        expect(page).to have_content("Meals You're Attending")
-
-        # We don't want to redirect when fetching ICS in case some clients don't support that.
-        expect(current_url).not_to match(user.community.slug)
       end
     end
   end

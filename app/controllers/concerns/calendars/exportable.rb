@@ -4,6 +4,10 @@ module Calendars
   module Exportable
     extend ActiveSupport::Concern
 
+    def event_date_range
+      (Time.current - 1.year)..(Time.current + 1.year)
+    end
+
     def authenticate_user_from_token!
       if params[:calendar_token] && (user = User.find_by(calendar_token: params[:calendar_token]))
         # We are passing store false, so the user is not
@@ -14,8 +18,12 @@ module Calendars
       end
     end
 
-    def send_calendar_data(export)
-      send_data(export.generate, filename: "#{export_file_basename}.ics", type: "text/calendar")
+    def send_calendar_data(calendar_name, events)
+      host = "#{current_community.subdomain}.#{Settings.url.host}"
+      url_options = Settings.url.to_h.slice(:port, :protocol).merge(host: host)
+      generator = Exports::IcalGenerator.new(calendar_name: calendar_name, events: events,
+                                    url_options: url_options)
+      send_data(generator.generate, filename: "#{export_file_basename}.ics", type: "text/calendar")
     end
 
     def handle_calendar_error

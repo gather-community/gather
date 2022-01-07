@@ -14,12 +14,12 @@ module Calendars
     private
 
     def normal_events
-      EventPolicy::Scope.new(user, Event).resolve
+      scope = EventPolicy::Scope.new(user, Event).resolve
         .between(range)
         .includes(:calendar)
         .where(calendar: non_system_calendars)
-        .where(own_only ? {creator: user} : true)
-        .to_a
+      scope = scope.where(creator: user) if own_only
+      scope.to_a
     end
 
     def system_events

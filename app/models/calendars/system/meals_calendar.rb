@@ -6,6 +6,7 @@ module Calendars
     class MealsCalendar < SystemCalendar
       MEAL_DURATION = 1.hour
 
+      # actor may be nil in the case of a non-personalized calendar export
       def events_between(range, actor:)
         scope = base_meals_scope(range, actor: actor)
         meals = scope.order(:served_at).decorate
@@ -26,7 +27,7 @@ module Calendars
             location: meal.location_name,
             linkable: meal,
             uid: "#{slug}_#{meal.id}",
-            note: note_for_meal(meal: meal, actor: actor, signup: signup)
+            note: note_for_meal(meal: meal, signup: signup)
           )
         end
       end
@@ -38,14 +39,23 @@ module Calendars
       private
 
       def base_meals_scope(range, actor:)
-        Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
+        # actor may be nil in the case of a non-personalized calendar export
+        # In that case we must restrict to meals that invite the current community only.
+        # If actor is given, we use the MealPolicy scope which is more sensitive and can detect
+        # edge-case meals that the actor may be signed up for even if their community is not invited somehow.
+        base = if actor.nil?
+                 Meals::Meal.inviting(community)
+               else
+                 Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
+               end
+        base
           .hosted_by(hosting_communities)
           .not_cancelled
           .where("served_at > ?", range.first - MEAL_DURATION)
           .where("served_at < ?", range.last)
       end
 
-      def note_for_meal(meal:, actor:, signup:)
+      def note_for_meal(meal:, signup:)
         lines = []
         lines << (meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil)
         if signup

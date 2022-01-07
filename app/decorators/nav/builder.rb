@@ -297,7 +297,6 @@ module Nav
     end
 
     def personal_items
-      sample_export = Calendars::Exports::Export.new(user: user)
       items =
         [
           {
@@ -314,7 +313,7 @@ module Nav
           }, {
             name: :calendars,
             path: h.calendars_exports_path,
-            permitted: Calendars::ExportPolicy.new(user, sample_export).index?,
+            permitted: true,
             icon: "calendar"
           }, {
             name: :change_passwd,

@@ -21,14 +21,9 @@ module Calendars
     def send_calendar_data(calendar_name, events)
       host = "#{current_community.subdomain}.#{Settings.url.host}"
       url_options = Settings.url.to_h.slice(:port, :protocol).merge(host: host)
-      generator = Exports::IcalGenerator.new(calendar_name: calendar_name, events: events,
+      generator = IcalGenerator.new(calendar_name: calendar_name, events: events,
                                     url_options: url_options)
       send_data(generator.generate, filename: "#{export_file_basename}.ics", type: "text/calendar")
-    end
-
-    def handle_calendar_error
-      skip_authorization # Auth may not have been performed yet but that's OK b/c we're erroring.
-      render(plain: "Invalid calendar type", status: :not_found)
     end
   end
 end

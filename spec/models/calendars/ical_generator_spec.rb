@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Calendars::Exports::IcalGenerator do
+describe Calendars::IcalGenerator do
   let(:calendar_name) { "Some Calendar" }
   let(:events) { [] }
   subject(:ical) do

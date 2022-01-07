@@ -21,8 +21,6 @@ module Calendars
       policy = ExportPolicy.new(nil, current_community, community_token: params[:calendar_token])
       authorize_with_explict_policy_object(:community?, policy_object: policy)
       find_events_and_send(params[:type])
-    rescue Exports::TypeError
-      handle_calendar_error
     end
 
     # Personalized calendars are those where the current user is known. They are authenticated by a token.
@@ -31,8 +29,6 @@ module Calendars
       self.current_community = current_user.community
       authorize(current_community, policy_class: ExportPolicy)
       find_events_and_send(params[:type])
-    rescue Exports::TypeError
-      handle_calendar_error
     end
 
     protected

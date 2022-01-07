@@ -95,6 +95,9 @@ describe "calendar export" do
         expect(page).not_to have_content("Meal 4")
         expect(page).not_to have_content("Meal 5")
 
+        # Link hostname should get piped in properly and include subdomian
+        expect(page.body.gsub("\r\n ", "")).to include("http://default.gather.localhost.tv:31337/")
+
         # Ensure there was no redirection to user's subdomain.
         # We don't want to redirect when fetching ICS in case some clients don't support that.
         expect(current_url).not_to match(user.community.slug)

@@ -17,6 +17,7 @@ module Calendars
 
     # Community calendars are those where the current user is not known and the token
     # specifies the community only.
+    # These routes should always have subdomain set, so current_community comes from that.
     def community
       policy = ExportPolicy.new(nil, current_community, community_token: params[:calendar_token])
       authorize_with_explict_policy_object(:community?, policy_object: policy)
@@ -24,9 +25,10 @@ module Calendars
     end
 
     # Personalized calendars are those where the current user is known. They are authenticated by a token.
+    # For legacy URLs the subdomain may not be specified, so we have to get the community from the user.
     def personalized
-      # For legacy URLs the subdomain may not be specified, so we have to get the community from the user.
       self.current_community = current_user.community
+      set_current_tenant(current_community.cluster)
       authorize(current_community, policy_class: ExportPolicy)
       find_events_and_send(params[:type])
     end

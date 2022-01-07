@@ -28,6 +28,13 @@ describe "calendar export" do
     let!(:meal4) do # main community not invited
       create(:meal, :with_menu, title: "Meal 4", community: communityB, communities: [communityB])
     end
+    let!(:meal5) do
+      ActsAsTenant.with_tenant(create(:cluster)) do
+        community = create(:community)
+        formula = create(:meal_formula, community: community)
+        create(:meal, :with_menu, formula: formula, community: community, title: "Meal 5")
+      end
+    end
     let!(:signup1) do
       create(:meal_signup, meal: meal1, household: user.household, diner_counts: [2])
     end
@@ -62,6 +69,15 @@ describe "calendar export" do
     # Decoy meal for testing that system cal events not included
     let!(:meal) { create(:meal, :with_menu, title: "Yummy Meal") }
     let!(:signup) { create(:meal_signup, meal: meal, household: user.household, diner_counts: [2]) }
+
+    # Decoy event from other cluster
+    let!(:event4) do
+      ActsAsTenant.with_tenant(create(:cluster)) do
+        community = create(:community)
+        calendar = create(:calendar, community: community)
+        create(:event, name: "Event 4", calendar: calendar)
+      end
+    end
   end
 
   describe "gen 1 routes (all personalized)" do
@@ -77,6 +93,7 @@ describe "calendar export" do
         expect(page).not_to have_content("Meal 2")
         expect(page).not_to have_content("Meal 3")
         expect(page).not_to have_content("Meal 4")
+        expect(page).not_to have_content("Meal 5")
 
         # Ensure there was no redirection to user's subdomain.
         # We don't want to redirect when fetching ICS in case some clients don't support that.
@@ -96,6 +113,7 @@ describe "calendar export" do
         expect(page).to have_content("Meal 2")
         expect(page).not_to have_content("Meal 3")
         expect(page).not_to have_content("Meal 4")
+        expect(page).not_to have_content("Meal 5")
       end
     end
 
@@ -113,6 +131,7 @@ describe "calendar export" do
         expect(page).to have_content("Meal 2")
         expect(page).to have_content("Meal 3")
         expect(page).not_to have_content("Meal 4")
+        expect(page).not_to have_content("Meal 5")
       end
     end
 
@@ -139,6 +158,7 @@ describe "calendar export" do
         expect(page).to have_content("Event 2")
         expect(page).not_to have_content("Event 3")
         expect(page).not_to have_content("Yummy") # Shouldn't include things from system calendars
+        expect(page).not_to have_content("Event 4") # Shouldn't include things from other clusters
       end
     end
 
@@ -178,6 +198,7 @@ describe "calendar export" do
             expect(page).not_to have_content("Meal 2")
             expect(page).not_to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
           end
         end
 
@@ -193,6 +214,7 @@ describe "calendar export" do
             expect(page).not_to have_content("Meal 2")
             expect(page).not_to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
           end
         end
 
@@ -208,6 +230,7 @@ describe "calendar export" do
             expect(page).to have_content("Meal 2")
             expect(page).not_to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
           end
         end
 
@@ -223,6 +246,7 @@ describe "calendar export" do
             expect(page).to have_content("Meal 2")
             expect(page).to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
           end
         end
 
@@ -249,6 +273,7 @@ describe "calendar export" do
             expect(page).to have_content("Event 2")
             expect(page).not_to have_content("Event 3")
             expect(page).not_to have_content("Yummy") # Shouldn't include things from system calendars
+            expect(page).not_to have_content("Event 4") # Shouldn't include things from other clusters
           end
         end
 
@@ -279,6 +304,7 @@ describe "calendar export" do
             expect(page).to have_content("Meal 2")
             expect(page).not_to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
             expect(page).not_to have_content("diners from your household")
           end
         end
@@ -294,6 +320,7 @@ describe "calendar export" do
             expect(page).to have_content("Meal 2")
             expect(page).to have_content("Meal 3")
             expect(page).not_to have_content("Meal 4")
+            expect(page).not_to have_content("Meal 5")
             expect(page).not_to have_content("diners from your household")
           end
         end

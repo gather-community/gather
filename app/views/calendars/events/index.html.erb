@@ -12,7 +12,7 @@
   <%- if @can_create_event -%>
     <%- concat(link_to(icon_tag("plus") << " Create Event", @new_event_path, class: "btn btn-primary")) -%>
   <%- end -%>
-  <%- concat(calendar_exports_link) %>
+  <%- concat(Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link) %>
 <% end %>
 
 <div id="calendar-and-sidebar">

@@ -312,8 +312,8 @@ module Nav
             i18n_key: multi_community? ? :accounts : :account
           }, {
             name: :calendars,
-            path: h.calendars_exports_path,
-            permitted: true,
+            path: h.calendars_legacy_exports_path,
+            permitted: user.settings["show_legacy_calendar_export_links"],
             icon: "calendar"
           }, {
             name: :change_passwd,

@@ -112,6 +112,10 @@ module SystemSpecHelpers
     find(".personal-nav .dropdown-menu a", text: item).click
   end
 
+  def have_personal_nav(item)
+    have_css(".personal-nav .dropdown-menu a", text: item)
+  end
+
   def have_signed_in_user(user)
     have_css(".personal-nav a", text: user.name)
   end

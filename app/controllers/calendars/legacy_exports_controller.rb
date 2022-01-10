@@ -15,6 +15,18 @@ module Calendars
     # based on the community calendar token.
     skip_before_action :authenticate_user!, only: :community
 
+    def index
+      skip_policy_scope
+      authorize(current_community, policy_class: ExportPolicy)
+    end
+
+    def hide_legacy_links
+      authorize(current_community, :index?, policy_class: ExportPolicy)
+      current_user.settings.delete("show_legacy_calendar_export_links")
+      current_user.save(validate: false)
+      redirect_to(calendars_exports_path)
+    end
+
     # Community calendars are those where the current user is not known and the token
     # specifies the community only.
     # These routes should always have subdomain set, so current_community comes from that.

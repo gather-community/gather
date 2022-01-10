@@ -142,7 +142,10 @@ Rails.application.routes.draw do
 
     # Gen 2 legacy calendar export routes. These are resource-style because they assumed one calendar
     # per export.
-    #
+    # This is the old export page that now shows a notice directing folks to the new one.
+    get "exports/old", to: "legacy_exports#index", as: :legacy_exports
+    put "exports/hide_legacy_links", to: "legacy_exports#hide_legacy_links", as: :hide_legacy_export_links
+
     # This is the personalized show action, allowing paths to include the user's calendar token,
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
     # The calendar's type gets captured as the :id param, so this is equivalent to

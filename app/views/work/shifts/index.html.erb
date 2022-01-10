@@ -1,6 +1,6 @@
 <% content_for(:title, @period&.name || "Job Signups") %>
 <% content_for(:action_links) do %>
-  <%= calendar_exports_link %>
+  <%= Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link %>
 <% end %>
 
 <% if @period.nil? %>

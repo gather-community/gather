@@ -132,7 +132,7 @@ module Calendars
       prepare_lenses(*[community: {clearable: false}].concat(BASE_LENSES))
       @rule_set_serializer = {}
       @can_create_event = writeable_calendars.any?
-      setting = current_user.settings[:calendar_selection]
+      setting = current_user.settings["calendar_selection"]
       @calendar_selection = InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
 
       @new_event_path = new_calendars_event_path(origin_page: "combined")

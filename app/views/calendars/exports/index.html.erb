@@ -1,27 +1,7 @@
-<% content_for(:title, "Calendars") %>
+<% content_for(:title, "Calendar Export") %>
 <% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
 <div class="row">
-  <div class="col-sm-6">
-    <div class="links personalized-links">
-      <h2 class="top">Personalized Calendars</h2>
-      <p>Personalized calendars include information tailored for you or your household.</p>
-      <%= decorator.calendar_link("your_meals") %>
-      <%= decorator.calendar_link("all_meals") %>
-      <%= decorator.calendar_link("community_meals") if multi_community? %>
-      <%= decorator.calendar_link("your_jobs") %>
-      <%= decorator.calendar_link("community_events") %>
-      <%= decorator.calendar_link("your_events") %>
-    </div>
-
-    <div class="links community-links">
-      <h2>Community Calendars</h2>
-      <p>These calendars are not tailored to any individual user so they are suitable for use in a shared context.</p>
-      <%= decorator.calendar_link("all_meals", personalized: false) %>
-      <%= decorator.calendar_link("community_meals", personalized: false) if multi_community? %>
-      <%= decorator.calendar_link("community_events", personalized: false) %>
-    </div>
-  </div>
   <div class="col-sm-6">
     <div class="callout">
       <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>

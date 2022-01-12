@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "calendar exports ICS endpoint" do
+describe "calendar exports ICS endpoints" do
   let(:community) { create(:community, abbrv: "TS") }
   let(:user_token) { "z8-fwETMhx93t9nxkeQ_" }
   let(:cmty_token) { community.calendar_token }

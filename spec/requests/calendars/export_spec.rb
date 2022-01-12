@@ -8,14 +8,7 @@ describe "calendar exports ICS endpoint" do
   let(:cmty_token) { community.calendar_token }
   let!(:user) { create(:user, community: community, calendar_token: user_token) }
   let!(:calendar1) { create(:calendar, name: "Fun Room", community: community) }
-  let(:base_args) do
-    {
-      range: Time.zone.parse("2020-01-01 12:00")..Time.zone.parse("2022-01-01 12:00"),
-      user: user,
-      calendars: [calendar1],
-      own_only: false
-    }
-  end
+  let!(:original_event_finder_constructor) { Calendars::EventFinder.method(:new) }
 
   around do |example|
     Timecop.freeze("2021-01-01 12:00") { example.run }
@@ -30,8 +23,13 @@ describe "calendar exports ICS endpoint" do
       let!(:calendar2) { create(:calendar, community: community) }
 
       it "sends personalized event data" do
-        expected_args = base_args.merge(calendars: [calendar1, calendar2])
-        expect(Calendars::EventFinder).to receive(:new).with(expected_args).and_call_original
+        expect(Calendars::EventFinder).to receive(:new) do |args|
+          expect(args[:range]).to eq(Time.zone.parse("2020-01-01 12:00")..Time.zone.parse("2022-01-01 12:00"))
+          expect(args[:user]).to eq(user)
+          expect(args[:calendars]).to contain_exactly(calendar1, calendar2)
+          expect(args[:own_only]).to eq(false)
+          original_event_finder_constructor.call(args)
+        end
         get("/calendars/export.ics?calendars=#{calendar1.id}+#{calendar2.id}&token=#{user_token}")
         expect(response.body).to match("X-WR-CALNAME:2 TS Calendars")
         expect(response.headers["Content-Disposition"]).to match(/attachment; filename="calendars.ics"/)
@@ -40,8 +38,10 @@ describe "calendar exports ICS endpoint" do
 
     context "with no matching calendars" do
       it "still returns ics" do
-        expected_args = base_args.merge(calendars: [])
-        expect(Calendars::EventFinder).to receive(:new).with(expected_args).and_call_original
+        expect(Calendars::EventFinder).to receive(:new) do |args|
+          expect(args[:calendars]).to be_empty
+          original_event_finder_constructor.call(args)
+        end
         get("/calendars/export.ics?calendars=82937439287289&token=#{user_token}")
         expect(response.body).to match("X-WR-CALNAME:0 TS Calendars")
       end
@@ -59,8 +59,10 @@ describe "calendar exports ICS endpoint" do
       let!(:calendar3) { create(:calendar, community: create(:community)) }
 
       it "sends appropriate calendars to event finder" do
-        expected_args = base_args.merge(calendars: [calendar1, calendar2])
-        expect(Calendars::EventFinder).to receive(:new).with(expected_args).and_call_original
+        expect(Calendars::EventFinder).to receive(:new) do |args|
+          expect(args[:calendars]).to contain_exactly(calendar1, calendar2)
+          original_event_finder_constructor.call(args)
+        end
         get("/calendars/export.ics?calendars=all&token=#{user_token}")
         expect(response.body).to match("X-WR-CALNAME:All TS Calendars")
       end
@@ -68,8 +70,10 @@ describe "calendar exports ICS endpoint" do
 
     context "with own events only" do
       it "requests own events only" do
-        expected_args = base_args.merge(own_only: true)
-        expect(Calendars::EventFinder).to receive(:new).with(expected_args).and_call_original
+        expect(Calendars::EventFinder).to receive(:new) do |args|
+          expect(args[:own_only]).to be(true)
+          original_event_finder_constructor.call(args)
+        end
         get("/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
       end
     end
@@ -85,8 +89,10 @@ describe "calendar exports ICS endpoint" do
   context "with non-personalized export" do
     context "with good community token" do
       it "sends non-personalized event data" do
-        expected_args = base_args.merge(user: nil)
-        expect(Calendars::EventFinder).to receive(:new).with(expected_args).and_call_original
+        expect(Calendars::EventFinder).to receive(:new) do |args|
+          expect(args[:user]).to be_nil
+          original_event_finder_constructor.call(args)
+        end
         get("/calendars/community-export.ics?calendars=#{calendar1.id}&token=#{cmty_token}")
       end
     end

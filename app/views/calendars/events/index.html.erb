@@ -9,10 +9,12 @@
     <%- concat(link_to(icon_tag("pencil") << " Edit Calendar", edit_calendar_path(calendar),
                class: "btn btn-default")) -%>
   <%- end -%>
+  <%- concat(link_to(icon_tag("download") << " Export",
+             calendars_exports_path(calendar ? {calendar_id: calendar.id} : {}),
+             class: "btn btn-default")) -%>
   <%- if @can_create_event -%>
     <%- concat(link_to(icon_tag("plus") << " Create Event", @new_event_path, class: "btn btn-primary")) -%>
   <%- end -%>
-  <%- concat(Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link) %>
 <% end %>
 
 <div id="calendar-and-sidebar">

@@ -6,7 +6,7 @@ module Calendars
     include Exportable
 
     # Users are authenticated from the provided token for the personalized endpoint.
-    prepend_before_action :authenticate_user_from_token!, only: :personalized
+    prepend_before_action :authenticate_user_from_calendar_token!, only: :personalized
 
     # This is skipped to support legacy domains.
     skip_before_action :ensure_subdomain, only: :personalized
@@ -31,7 +31,7 @@ module Calendars
     # specifies the community only.
     # These routes should always have subdomain set, so current_community comes from that.
     def community
-      policy = ExportPolicy.new(nil, current_community, community_token: params[:calendar_token])
+      policy = ExportPolicy.new(nil, current_community, community_token: params[:token])
       authorize_with_explict_policy_object(:community?, policy_object: policy)
       find_events_and_send(params[:type])
     end

@@ -8,8 +8,8 @@ module Calendars
       (Time.current - 1.year)..(Time.current + 1.year)
     end
 
-    def authenticate_user_from_token!
-      if params[:calendar_token] && (user = User.find_by(calendar_token: params[:calendar_token]))
+    def authenticate_user_from_calendar_token!
+      if params[:token] && (user = User.find_by(calendar_token: params[:token]))
         # We are passing store false, so the user is not
         # actually stored in the session and a token is needed for every request.
         sign_in(user, store: false)

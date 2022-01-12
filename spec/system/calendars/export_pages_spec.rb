@@ -2,12 +2,10 @@
 
 require "rails_helper"
 
-describe "calendar export" do
+describe "calendar export pages" do
   let(:user_token) { "z8-fwETMhx93t9nxkeQ_" }
   let(:cmty_token) { "mYfEv68-_HG4_lrfGGre" }
-  let(:signature) { Calendars::IcalGenerator::UID_SIGNATURE }
   let!(:user) { create(:user, calendar_token: user_token) }
-  let(:communityB) { create(:community) }
 
   before do
     Defaults.community.update!(calendar_token: cmty_token)

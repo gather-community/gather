@@ -64,5 +64,11 @@ describe Calendars::EventFinder do
         is_expected.to contain_exactly(event1_2)
       end
     end
+
+    context "with no user" do
+      it "still returns events" do
+        is_expected.to contain_exactly(event1_2, event1_3, event1_4, event2_1, event4_1)
+      end
+    end
   end
 end

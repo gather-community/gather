@@ -193,6 +193,7 @@ module ApplicationControllable::RequestPreprocessing
     if current_user&.inactive?
       redirect_to(inactive_path)
     else
+      # This will be handled by Rails and 403 page will be rendered.
       raise exception
     end
   end

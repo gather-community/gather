@@ -161,8 +161,8 @@ Rails.application.routes.draw do
     # The community part is indicated by a leading +, e.g.
     # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
     get "exports/:type/+:token",
-        to: "legacy_exports#community",
-        as: :community_exports,
+        to: "legacy_exports#nonpersonalized",
+        as: :nonpersonalized_exports,
         constraints: calendar_token_constraints.merge(
           type: /community-meals|all-meals|community-events/
         )

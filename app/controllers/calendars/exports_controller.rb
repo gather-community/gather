@@ -24,6 +24,9 @@ module Calendars
       send_calendar_data(calendar_name, finder.events)
     end
 
+    # Nonpersonalized exports are those where the current user is not known and the token
+    # specifies the community only.
+    # current_community comes from the URL subdomain.
     def nonpersonalized
       policy = ExportPolicy.new(nil, current_community, community_token: params[:token])
       authorize_with_explict_policy_object(:community?, policy_object: policy)

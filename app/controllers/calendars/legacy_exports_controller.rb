@@ -13,7 +13,7 @@ module Calendars
 
     # Community calendars are not user-specific. Authorization is handled by the policy class
     # based on the community calendar token.
-    skip_before_action :authenticate_user!, only: :community
+    skip_before_action :authenticate_user!, only: :nonpersonalized
 
     def index
       skip_policy_scope
@@ -27,10 +27,10 @@ module Calendars
       redirect_to(calendars_exports_path)
     end
 
-    # Community calendars are those where the current user is not known and the token
+    # Nonpersonalized exports are those where the current user is not known and the token
     # specifies the community only.
     # These routes should always have subdomain set, so current_community comes from that.
-    def community
+    def nonpersonalized
       policy = ExportPolicy.new(nil, current_community, community_token: params[:token])
       authorize_with_explict_policy_object(:community?, policy_object: policy)
       find_events_and_send(params[:type])

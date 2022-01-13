@@ -40,6 +40,12 @@ function onActivate(event) {
 
 // Borrowed from https://github.com/TalAter/UpUp
 function onFetch(event) {
+  // This service worker was sometimes not setting the session cookie properly on google oauth logins.
+  // I'm not sure why, but there is no reason a service worker would be useful in that case anyway,
+  // so we just disable it for that URL.
+  if (event.request.url.includes("people/users/auth/google_oauth2/callback")) {
+    return false;
+  }
   // Chrome bug
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
     return;

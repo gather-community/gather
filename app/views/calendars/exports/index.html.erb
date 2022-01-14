@@ -1,22 +1,40 @@
 <% content_for(:title, "Calendar Export") %>
 <% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
-<div class="row">
-  <div class="col-sm-6">
-    <div class="callout">
-      <h4><%= icon_tag("share-alt") %> A Note on Sharing</h4>
-      Personalized calendar links are tailored and unique to you, so don't share them. If you want to tell
-      someone about this fun feature, send them the
-      <%= link_to("link to this page", calendars_exports_path) %>,
-      not an individual calendar.
-    </div>
+<div class="calendars-and-url">
+  <div class="calendar-list-wrapper">
+    <h2 class="top">Select Calendars</h2>
+    <%= render("calendars/calendar_list", nodes: @calendars) %>
+  </div>
+  <div class="export-url-and-options">
+    <h2 class="top">Export Link</h2>
+
+    <%= simple_form_for(:calendars_export) do |f| %>
+      <input type="text" id="export-url" readonly/>
+      <div class="sub-links">
+        <a href="#" id="copy-link">Copy Link</a>&nbsp;&nbsp;&nbsp;
+        <a href="#" id="visit-link">Visit Link in Browser</a>
+      </div>
+      <small class="details">
+        <span class="personalized">
+          This is your personalized export link for the selected calendars.
+        </span>
+        If you change the calendar selection (by checking the boxes), the link will
+        change accordingly. Changing the options below will also change the link.
+      </small>
+      <div class="options">
+        <h3>Options</h3>
+        <%= f.input(:dont_personalize, as: :boolean) %>
+        <%= f.input(:own_only, as: :boolean) %>
+      </div>
+    <% end %>
 
     <h2>Import Instructions</h2>
 
     <h3><%= icon_tag("google") %> Google Calendar</h3>
     <h4>Method 1</h4>
-    If you are signed in to your Google account, try simply clicking the link of the calendar you
-    want to import. Google Calendar should open on its own and ask you to import.
+    If you are signed in to your Google account, try simply clicking 'Visit Link in Browser' above.
+    Google Calendar should open on its own and ask you to import.
     <h4>Method 2</h4>
     <ol>
       <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
@@ -29,7 +47,7 @@
 
     <h3><%= icon_tag("apple") %> Apple Calendar</h3>
     <h4>Method 1</h4>
-    Try simply clicking the link of the calendar you want to import. If your browser is set to handle
+    Try simply clicking 'Visit Link in Browser' above. If your browser is set to handle
     webcal links with Apple Calendar, it may just work!
     <h4>Method 2</h4>
     <ol>
@@ -50,3 +68,20 @@
   <%= link_to("click here to reset your secret token", calendars_exports_reset_token_path, method: :put) %>.
   Note: This will make the old links inoperative, so you will need to update your calendar app.
 </div>
+
+<%= javascript_tag do %>
+  $(function() {
+    var listView = new Gather.Views.Calendars.CalendarListView({
+      el: '.calendar-list-wrapper',
+      selection: <%= json(@calendar_selection) %>,
+      dontPersist: true
+    });
+    new Gather.Views.Calendars.ExportView({
+      el: '.calendars-and-url',
+      listView: listView,
+      rootUrl: <%= json(root_url) %>,
+      userToken: <%= json(current_user.calendar_token) %>,
+      communityToken: <%= json(current_community.calendar_token) %>
+    });
+  });
+<% end %>

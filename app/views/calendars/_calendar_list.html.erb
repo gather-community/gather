@@ -8,10 +8,14 @@
       <% else %>
         <div class="calendar">
           <% unless local_assigns[:checkboxes] == false %>
-            <%= check_box_tag("calendar", node.id, false, autocomplete: "off") %>
+            <label>
+              <%= check_box_tag("calendar", node.id, false, autocomplete: "off") %>
           <% end %>
           <%= node.swatch %>
           <%= link_to(node.name, calendar_events_path(node), class: "calendar-link") %>
+          <% unless local_assigns[:checkboxes] == false %>
+            </label>
+          <% end %>
         </div>
       <% end %>
     </li>

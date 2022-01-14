@@ -15,6 +15,7 @@ module Calendars
       skip_policy_scope
       authorize(current_community, policy_class: ExportPolicy)
       current_user.ensure_calendar_token!
+      load_calendar_selection
     end
 
     def personalized
@@ -49,6 +50,19 @@ module Calendars
     end
 
     private
+
+    def load_calendar_selection
+      calendar_scope = policy_scope(Node).in_community(current_community).active
+      @calendars = calendar_scope.arrange(decorator: CalendarDecorator)
+      @calendar_selection =
+        # If a single calendar is requested, honor that.
+        if params[:calendar_id]
+          {params[:calendar_id] => true}
+        else
+          setting = current_user.settings["calendar_selection"]
+          InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
+        end
+    end
 
     def calendars
       return @calendars if @calendars

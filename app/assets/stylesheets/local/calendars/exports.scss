@@ -15,29 +15,34 @@ div.title-and-buttons div.top-buttons a.calendar-export {
 }
 
 .calendars--exports.action-index {
-  .links {
-    margin-bottom: 20px;
-
-    div {
-      font-size: 1.1em;
-      line-height: 1.1em;
-      margin-bottom: 10px;
-
-      i.fa {
-        color: $text-muted;
-        margin: 0 10px 0 20px;
-      }
-    }
-
-    a.copy {
-      display: inline-block;
-      margin-left: 49px;
-      color: $text-muted;
-      font-size: 0.7em;
-    }
+  #export-url {
+    font-size: 1.1em;
+    line-height: 1.1em;
+    padding: 5px;
+    width: 100%;
   }
 
   ol {
     padding-left: 14px;
+  }
+
+  @media screen and (min-width: $screen-sm-min) {
+    .calendars-and-url {
+      display: flex;
+    }
+
+    .calendar-list-wrapper {
+      margin-right: 30px;
+    }
+
+    .calendar-list-wrapper h2 {
+      display: none;
+    }
+  }
+
+  .options {
+    .checkbox {
+      margin-bottom: 0;
+    }
   }
 }

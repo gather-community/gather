@@ -1,4 +1,4 @@
-.calendar-list-with-links {
+.calendar-list-wrapper {
   .links {
     a {
       font-size: 13px;
@@ -14,9 +14,14 @@
     font-size: 1.3rem;
   }
 
-  .calendar {
+  .calendar, .calendar label {
     display: flex;
     align-items: center;
+  }
+
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
   }
 
   a.calendar-link {

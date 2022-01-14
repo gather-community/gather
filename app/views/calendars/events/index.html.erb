@@ -68,7 +68,7 @@
       allDayText: <%= json(I18n.t("calendars.all_day")) %>
     });
     var listView = new Gather.Views.Calendars.CalendarListView({
-      el: '.calendar-list-with-links',
+      el: '.calendar-list-wrapper',
       selection: <%= json(@calendar_selection) %>
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({

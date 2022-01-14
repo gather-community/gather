@@ -106,28 +106,36 @@ describe Calendars::System::YourJobsCalendar do
       name: "Multi-day (Start)",
       location: nil,
       note: "Do something periodically",
+      uid: "Work_Assignment_#{job3.shifts[0].assignments[0].id}_Start",
       linkable: job3.shifts[0],
+      all_day: true,
       starts_at: period_start.midnight,
       ends_at: period_start.midnight + 1.day - 1.second
     }, {
       name: "Single-day",
       location: nil,
       note: "A very silly job\.",
+      uid: "Work_Assignment_#{job2.shifts[0].assignments[0].id}",
       linkable: job2.shifts[0],
+      all_day: true,
       starts_at: shift2_1_start.midnight,
       ends_at: shift2_1_start.midnight + 1.day - 1.second
     }, {
       name: "Assistant Cook: Figs",
       location: meal1.calendars[0].name,
       note: "Help cook the things",
+      uid: "Work_Assignment_#{job1.shifts[0].assignments[0].id}",
       linkable: job1.shifts[0],
+      all_day: false,
       starts_at: meal1_time - 2.hours,
       ends_at: meal1_time
     }, {
       name: "Assistant Cook: Buns",
       location: meal2.calendars[0].name,
       note: "Help cook the things",
+      uid: "Work_Assignment_#{job1.shifts[1].assignments[0].id}",
       linkable: job1.shifts[1],
+      all_day: false,
       starts_at: meal2_time - 2.hours,
       ends_at: meal2_time
     }, {
@@ -137,25 +145,36 @@ describe Calendars::System::YourJobsCalendar do
       name: "Assistant Cook: Rice",
       location: meal3.calendars[0].name,
       note: "Assist the wise cook",
+      uid: "Meals_Assignment_#{meal3.assignments[1].id}",
       linkable: meal3,
+      all_day: false,
       starts_at: meal3_time - 90.minutes,
       ends_at: meal3_time
     }, {
       name: "Head Cook: Corn",
       location: meal4.calendars[0].name,
       note: "Cook something tasty",
+      uid: "Meals_Assignment_#{meal4.assignments[0].id}",
       linkable: meal4,
+      all_day: true,
       starts_at: meal4_time.midnight,
       ends_at: meal4_time.midnight + 1.day - 1.second
     }, {
       name: "Multi-day (End)",
       location: nil,
       note: "Do something periodically",
+      uid: "Work_Assignment_#{job3.shifts[0].assignments[0].id}_End",
       linkable: job3.shifts[0],
+      all_day: true,
       starts_at: period_end.midnight,
       ends_at: period_end.midnight + 1.day - 1.second
     }]
     events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)
+  end
+
+  it "returns empty if no actor is given" do
+    events = calendar.events_between(full_range, actor: nil)
+    expect_events(events, *[])
   end
 end

@@ -6,9 +6,14 @@ p.intro {
   font-size: 16px;
 }
 
-small {
-  font-size: 12px;
+@mixin deemphasized-text {
+  font-size: 13px;
   color: $text-muted;
+  line-height: 1.4;
+}
+
+small {
+  @include deemphasized-text;
   display: block;
 
   a {
@@ -18,10 +23,6 @@ small {
 }
 
 .footnote {
+  @include deemphasized-text;
   margin-top: 10px;
-
-  &.footnote-small {
-    font-size: 13px;
-    line-height: 1.6;
-  }
 }

@@ -3,10 +3,13 @@
 module Calendars
   class ExportPolicy < ApplicationPolicy
     attr_accessor :community_token
+    alias community record
 
-    def initialize(user, record, community_token: nil)
+    # We pass a community as the record because the community is the key object when it comes
+    # to authorization.
+    def initialize(user, community, community_token: nil)
       self.community_token = community_token
-      super(user, record)
+      super(user, community)
     rescue Pundit::NotAuthorizedError => e
       # Suppress the not auth'd error if community_token given. User not required in this case.
       raise e if community_token.blank?
@@ -20,8 +23,9 @@ module Calendars
       index?
     end
 
+    # Tests whether non-personalized "community" exports are allowed.
     def community?
-      record.community_calendar_token == community_token
+      community.calendar_token == community_token
     end
 
     def reset_token?

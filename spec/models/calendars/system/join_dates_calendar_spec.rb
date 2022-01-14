@@ -26,7 +26,8 @@ describe Calendars::System::JoinDatesCalendar do
       all_day: true,
       creator_id: nil,
       note: nil,
-      linkable: user1
+      linkable: user1,
+      uid: "join_dates_#{user1.id}"
     }]
     events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)

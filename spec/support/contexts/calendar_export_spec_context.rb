@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 shared_context "calendar exports" do
-  let(:signature) { Calendars::Exports::IcalGenerator::UID_SIGNATURE }
+  let(:signature) { Calendars::IcalGenerator::UID_SIGNATURE }
   let(:community) { Defaults.community }
   let(:communityB) { create(:community) }
   let(:user) { create(:user, community: community) }

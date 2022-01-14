@@ -43,6 +43,10 @@ module Meals
                                          dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
+    scope :inviting, ->(community) {
+      where("EXISTS (SELECT id FROM meal_invitations
+        WHERE meal_invitations.meal_id = meals.id AND meal_invitations.community_id = ?)", community)
+    }
     scope :oldest_first, -> { order(served_at: :asc).by_community.order(:id) }
     scope :newest_first, -> { order(served_at: :desc).by_community_reverse.order(id: :desc) }
     scope :in_community, ->(c) { where(community: c) }

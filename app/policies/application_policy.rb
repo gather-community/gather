@@ -75,7 +75,7 @@ class ApplicationPolicy
       end
     end
 
-    def allow_all_users_in_cluster
+    def allow_all_records_in_cluster_if_user_is_active
       active? ? scope : scope.none
     end
   end

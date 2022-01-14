@@ -41,21 +41,10 @@ module ApplicationControllable::RequestPreprocessing
 
   private
 
-  # Currently we are only checking for calendar_token, but could add others later.
-  def authenticate_user_from_token!
-    if params[:calendar_token] && (user = User.find_by(calendar_token: params[:calendar_token]))
-      # We are passing store false, so the user is not
-      # actually stored in the session and a token is needed for every request.
-      sign_in(user, store: false)
-    else
-      render_error_page(:unauthorized)
-    end
-  end
-
-  def authorize_with_explict_policy_object(record, query, policy_object:)
+  def authorize_with_explict_policy_object(query, policy_object:)
     skip_authorization # We are doing this manually so need to skip the check.
     return if policy_object.send(query)
-    raise Pundit::NotAuthorizedError, query: query, record: record, policy: policy_object
+    raise Pundit::NotAuthorizedError, query: query, record: policy_object.record, policy: policy_object
   end
 
   # Redirects to the apex domain. Requested at the controller level if the apex domain is required.
@@ -204,6 +193,7 @@ module ApplicationControllable::RequestPreprocessing
     if current_user&.inactive?
       redirect_to(inactive_path)
     else
+      # This will be handled by Rails and 403 page will be rendered.
       raise exception
     end
   end

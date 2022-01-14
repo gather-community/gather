@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_02_132242) do
+ActiveRecord::Schema.define(version: 2022_01_08_122403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -781,7 +781,7 @@ ActiveRecord::Schema.define(version: 2021_10_02_132242) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "school"
-    t.jsonb "settings"
+    t.jsonb "settings", default: {}, null: false
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
     t.string "unconfirmed_email"

@@ -284,10 +284,6 @@ class User < ApplicationRecord
     sign_in_count.zero?
   end
 
-  def settings
-    (self[:settings] || {}).deep_symbolize_keys
-  end
-
   private
 
   def household_present

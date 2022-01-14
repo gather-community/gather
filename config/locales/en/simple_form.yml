@@ -10,6 +10,11 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    labels:
+      # These labels are here instead of activerecord b/c export is not a model.
+      calendars_export:
+        dont_personalize: "Don't personalize events"
+        own_only: "Include only events you created"
     placeholders:
       meals_meal:
         title: "e.g. Southern Red Beans and Rice"
@@ -62,6 +67,9 @@ en:
         value: "Amount must be positive. The transaction type (above) determines whether the amount increases or decreases the account."
       billing_template:
         member_type_ids: "Select the member type(s) this template applies to."
+      calendars_export:
+        dont_personalize: "By default, calendar exports are tailored to you and your household so you shouldn't share your export links. If you need a non-personalized link to use in a public place, check this box."
+        own_only: "Check this box to only export events you created. Events from system-generated calendars like 'Your Meals' or 'Birthdays' won't be included."
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."

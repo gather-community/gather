@@ -172,4 +172,9 @@ describe Calendars::System::YourJobsCalendar do
     events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)
   end
+
+  it "returns empty if no actor is given" do
+    events = calendar.events_between(full_range, actor: nil)
+    expect_events(events, *[])
+  end
 end

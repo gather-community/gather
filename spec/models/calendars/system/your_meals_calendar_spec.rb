@@ -16,4 +16,9 @@ describe Calendars::System::YourMealsCalendar do
     events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
   end
+
+  it "returns nothing if no actor given" do
+    events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: nil)
+    expect_events(events, *[])
+  end
 end

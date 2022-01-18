@@ -74,6 +74,9 @@ module Gather
       }
     end
 
+    # Show a 403 page if Pundit rejects.
+    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+
     config.action_mailer.default_url_options = Settings.url.to_h.slice(:host, :port, :protocol)
 
     config.active_record.time_zone_aware_types = [:datetime]

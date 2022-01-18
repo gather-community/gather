@@ -6,6 +6,10 @@ module Calendars
     class BirthdaysCalendar < UserAnniversariesCalendar
       protected
 
+      def slug
+        :birthdays
+      end
+
       def attrib
         :birthdate
       end

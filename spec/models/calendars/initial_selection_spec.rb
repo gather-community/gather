@@ -13,11 +13,11 @@ describe Calendars::InitialSelection do
 
   context "with null stored setting" do
     let(:setting) { nil }
-    it { is_expected.to eq("1": true, "2": false, "3": true, "4": false) }
+    it { is_expected.to eq("1" => true, "2" => false, "3" => true, "4" => false) }
   end
 
   context "with non-null stored setting" do
-    let(:setting) { {"1": false, "2": true} }
-    it { is_expected.to eq("1": false, "2": true, "3": true, "4": false) }
+    let(:setting) { {"1" => false, "2" => true} }
+    it { is_expected.to eq("1" => false, "2" => true, "3" => true, "4" => false) }
   end
 end

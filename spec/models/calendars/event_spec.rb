@@ -228,6 +228,43 @@ describe Calendars::Event do
     end
   end
 
+  describe "location" do
+    let(:calendar) { create(:calendar, name: "Fun Room") }
+    subject(:location) { event.location }
+
+    context "with persisted event and no explicit location" do
+      let(:event) { create(:event, calendar: calendar) }
+
+      it "returns calendar name as location" do
+        expect(event.location).to eq("Fun Room")
+      end
+    end
+
+    context "with persisted event but explicit location" do
+      let(:event) { create(:event, calendar: calendar, location: "Martian surface") }
+
+      it "returns explicit location" do
+        expect(event.location).to eq("Martian surface")
+      end
+    end
+
+    context "with unpersisted event and explicit location" do
+      let(:event) { build(:event, calendar: calendar, location: "Martian surface") }
+
+      it "returns explicit location" do
+        expect(event.location).to eq("Martian surface")
+      end
+    end
+
+    context "with unpersisted event and no explicit location" do
+      let(:event) { build(:event, calendar: calendar, location: nil) }
+
+      it "returns nil" do
+        expect(event.location).to be_nil
+      end
+    end
+  end
+
   def expect_no_error(method)
     event.send(method)
     expect(event.errors).to be_empty

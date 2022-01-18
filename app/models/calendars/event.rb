@@ -6,7 +6,16 @@ module Calendars
 
     acts_as_tenant :cluster
 
-    attr_accessor :guidelines_ok, :privileged_changer, :origin_page, :linkable, :location
+    attr_accessor :guidelines_ok, :privileged_changer, :origin_page
+    attr_writer :location
+
+    # linkable is used by system calendars and holds either a URL or
+    # an object that this event should link to.
+    # objects are preferred so that the system calendar classes don't have to be responsible
+    # for generating URLs/paths.
+    attr_accessor :linkable
+
+    attr_writer :uid
     alias privileged_changer? privileged_changer
 
     belongs_to :creator, class_name: "User"
@@ -75,6 +84,20 @@ module Calendars
       event.ends_at += 1.day if event.starts_at >= event.ends_at
 
       event
+    end
+
+    def uid
+      # System calendars that make unpersisted events should set
+      # uid or the export process will raise an error.
+      persisted? ? id : @uid
+    end
+
+    # Location is an ephemeral attribute for now because you can't set it in the UI but it's useful for
+    # exports. Usually the location is just the calendar name. But system calendars may want to set a more
+    # useful location like the location of a meal or a job. We might make this available in the form later.
+    def location
+      # Explicit location will always be returned if it's set.
+      @location || (persisted? ? calendar_name : nil)
     end
 
     def displayable_kind?

@@ -8,7 +8,7 @@ module Calendars
     def initialize(stored:, calendar_scope:)
       self.selection = stored || {}
       calendar_scope.each do |calendar|
-        key = calendar.id.to_s.to_sym # Keys in settings array are symbols
+        key = calendar.id.to_s
         selection[key] = calendar.selected_by_default unless selection.key?(key)
       end
     end

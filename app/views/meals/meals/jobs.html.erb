@@ -1,7 +1,7 @@
 <% content_for(:title, ["Meal Jobs", (user.full_name if user)].compact.join(": ")) %>
 
 <% content_for(:action_links) do %>
-  <%= calendar_exports_link %>
+  <%= Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link %>
 <% end %>
 
 <% if meals.empty? %>

@@ -6,6 +6,10 @@ module Calendars
     class JoinDatesCalendar < UserAnniversariesCalendar
       protected
 
+      def slug
+        :join_dates
+      end
+
       def attrib
         :joined_on
       end

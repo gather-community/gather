@@ -187,12 +187,16 @@ describe Meals::MealPolicy do
     let(:klass) { Meals::Meal }
     let(:formula) { create(:meal_formula, :with_two_roles) }
     let!(:meal1) { create(:meal, formula: formula, communities: [user.community]) } # Invited
-    let!(:meal2) { create(:meal, formula: formula, asst_cooks: [actor], communities: [communityB]) } # Assgned
+    let!(:meal2) do # Assigned
+      create(:meal, formula: formula, asst_cooks: [actor].compact, communities: [communityB])
+    end
     let!(:meal3) { create(:meal, formula: formula, communities: [communityB]) } # Signed up
     let!(:meal4) { create(:meal, formula: formula, communities: [communityB]) } # None of the above
 
     before do
-      meal3.signups << create(:meal_signup, meal: meal3, household: actor.household, diner_counts: [2])
+      if actor
+        meal3.signups << create(:meal_signup, meal: meal3, household: actor.household, diner_counts: [2])
+      end
     end
 
     context "as regular user" do
@@ -224,6 +228,14 @@ describe Meals::MealPolicy do
 
       it "returns meals only signed up for" do
         is_expected.to contain_exactly(meal3)
+      end
+    end
+
+    context "with no user (for e.g. calendar exports)" do
+      let(:actor) { nil }
+
+      it "returns all meals in cluster" do
+        is_expected.to contain_exactly(meal1, meal2, meal3, meal4)
       end
     end
   end

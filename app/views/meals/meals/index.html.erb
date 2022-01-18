@@ -1,6 +1,6 @@
 <% content_for(:title, "Meals") %>
 <% content_for(:action_links) do %>
-  <%- concat(calendar_exports_link) %>
+  <%- concat(Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link) %>
   <%- if policy(sample_meal).create? && policy(sample_meal).import? -%>
 <div class="btn-group">
   <button type="button" class="btn btn-primary dropdown-toggle icon-only" data-toggle="dropdown"

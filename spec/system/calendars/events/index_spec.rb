@@ -86,10 +86,10 @@ describe "event calendar", js: true do
         visit(calendars_events_path)
         expect_selected(cal1: true, cal2: false) # Cal 1 sel'd by default
 
-        select_calendar(calendar1, false)
+        uncheck("Foo Room")
         expect_selected(cal1: false, cal2: false)
 
-        select_calendar(calendar2, true)
+        check("Bar Room")
         expect_selected(cal1: false, cal2: true)
 
         visit(calendar_events_path(calendar1)) # Leave page
@@ -149,22 +149,13 @@ describe "event calendar", js: true do
   def expect_selected(cal1:, cal2:)
     expect(page).send(cal1 ? :to : :not_to, have_content("Cal1 Event"))
     expect(page).send(cal2 ? :to : :not_to, have_content("Cal2 Event"))
-    expect(page).send(cal1 ? :to : :not_to, have_css(checkbox_selector(calendar1, checked: true)))
-    expect(page).send(cal2 ? :to : :not_to, have_css(checkbox_selector(calendar2, checked: true)))
+    expect(page).to have_field("Foo Room", checked: cal1)
+    expect(page).to have_field("Bar Room", checked: cal2)
   end
 
   def expect_correct_permalink(cur_calendar_id:)
     path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
     permalink_url = "#{path}?view=month&date=#{time2_ymd}"
     expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
-  end
-
-  def select_calendar(calendar, select)
-    el = first(checkbox_selector(calendar))
-    select ? el.check : el.uncheck
-  end
-
-  def checkbox_selector(calendar, checked: false)
-    "input[type='checkbox'][value='#{calendar.id}']#{checked ? ':checked' : ''}"
   end
 end

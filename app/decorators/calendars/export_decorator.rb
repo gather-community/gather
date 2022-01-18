@@ -9,29 +9,15 @@ module Calendars
       self.user = user
     end
 
-    def calendar_link(type, personalized: true)
-      h.content_tag(:div) do
-        url = calendar_url(type, personalized)
-        h.link_to(h.icon_tag("calendar"), url) << " " <<
-          h.link_to(Exports::Factory.build(type: type, user: user).calendar_name, url) << h.tag(:br) <<
-          h.link_to("Copy Link", url, class: "copy", onclick: "copyTextToClipboard('#{url}'); return false")
+    def legacy_export_link
+      return nil unless user.settings["show_legacy_calendar_export_links"]
+      url = h.url_in_home_community(h.calendars_legacy_exports_path)
+      h.link_to(url, class: "btn btn-default calendar-export icon-only") do
+        h.content_tag(:span, class: "fa-stack") do
+          h.icon_tag("calendar-o", class: "fa-stack-2x") <<
+            h.icon_tag("arrow-down", class: "fa-stack-1x")
+        end
       end
-    end
-
-    private
-
-    def calendar_url(type, personalized)
-      if personalized
-        method = :personalized_calendars_export_url
-        token = user.calendar_token
-      else
-        method = :community_calendars_export_url
-        token = community.calendar_token
-      end
-
-      # If we don't set port to nil then it will be included in the
-      # webcal link which some clients don't like.
-      h.send(method, type.tr("_", "-"), calendar_token: token, format: :ics, protocol: :webcal, port: nil)
     end
   end
 end

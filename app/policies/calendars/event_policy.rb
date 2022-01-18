@@ -8,7 +8,12 @@ module Calendars
 
     class Scope < Scope
       def resolve
-        allow_all_users_in_cluster
+        # user may be nil in the case of a non-personalized calendar export so we have to support that
+        if user.nil?
+          scope
+        else
+          allow_all_records_in_cluster_if_user_is_active
+        end
       end
     end
 

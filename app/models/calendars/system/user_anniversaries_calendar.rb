@@ -35,6 +35,7 @@ module Calendars
           starts_at: date.in_time_zone,
           ends_at: date.in_time_zone + 1.day - 1.second,
           linkable: user,
+          uid: "#{slug}_#{user.id}",
           all_day: true
         )
       end

@@ -50,6 +50,7 @@ module CustomFields
       def input_params
         {}.tap do |params|
           params[:as] = field.input_type
+          params[:wrapper_html] = {class: "custom-field custom-field-#{field.type}"}
           if field.collection
             i18n_prefix = i18n_key(:options)
             params[:collection] = field.collection.map do |item|
@@ -58,20 +59,31 @@ module CustomFields
             params[:value_method] = :first
             params[:label_method] = :last
           end
-          params.merge!(%i[label hint placeholder].map { |t| i18n_pair(t) }.compact.to_h)
+          params.merge!(label_hint_placeholder_params)
           params.merge!(field.value_input_param { value })
-          params.merge!(wrapper_html: {class: "custom-field custom-field-#{field.type}"})
         end
       end
 
       private
 
-      # Translates the given type and key, returning a the pair [type, translation] if found, else nil.
-      def i18n_pair(type)
-        result = translate(type)
-        return nil if result.nil?
-        result = result.html_safe if type == :hint && "".respond_to?(:html_safe)
-        [type, result]
+      def label_hint_placeholder_params
+        %i[label hint placeholder].map do |param_name|
+          param_value = explicit_or_translated_param_value(param_name)
+          if param_value.nil?
+            nil
+          else
+            param_value = param_value.html_safe if param_name == :hint && "".respond_to?(:html_safe)
+            [param_name, param_value]
+          end
+        end.compact.to_h
+      end
+
+      def explicit_or_translated_param_value(param_name)
+        if (explicit = field.extra_params[param_name])
+          explicit
+        else
+          translate(param_name)
+        end
       end
 
       def validator(validation_name)

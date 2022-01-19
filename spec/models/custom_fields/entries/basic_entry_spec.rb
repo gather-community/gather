@@ -56,12 +56,32 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
       context "with no translations defined" do
-        it "should return empty hash with no translations" do
-          expect(entry.input_params).to eq(
-            as: :string,
-            input_html: {value: "bar"},
-            wrapper_html: {class: "custom-field custom-field-string"}
-          )
+        context "with no explicit label/hint/placeholder defined" do
+          it "should not include label/hint/placeholder params" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
+        end
+
+        context "with explicit label/hint/placeholder defined" do
+          let(:field) do
+            CustomFields::Fields::StringField.new(key: "foo", label: "Foo", hint: "Foo!",
+                                                  placeholder: "Foo...")
+          end
+
+          it "should include label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              label: "Foo",
+              hint: "Foo!",
+              placeholder: "Foo...",
+              input_html: {value: "bar"},
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
         end
       end
 
@@ -80,15 +100,35 @@ describe CustomFields::Entries::BasicEntry do
           I18n.backend = I18n::Backend::Simple.new
         end
 
-        it "should use translated label, hint, placeholder" do
-          expect(entry.input_params).to eq(
-            as: :string,
-            input_html: {value: "bar"},
-            label: "The Foo",
-            hint: "Think about foos",
-            placeholder: "Some foo",
-            wrapper_html: {class: "custom-field custom-field-string"}
-          )
+        context "with no explicit label/hint/placeholder defined" do
+          it "should use translated label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              label: "The Foo",
+              hint: "Think about foos",
+              placeholder: "Some foo",
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
+        end
+
+        context "with explicit label/hint/placeholder defined" do
+          let(:field) do
+            CustomFields::Fields::StringField.new(key: "foo", label: "Foo", hint: "Foo!",
+                                                  placeholder: "Foo...")
+          end
+
+          it "should use explicit label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              label: "Foo",
+              hint: "Foo!",
+              placeholder: "Foo...",
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
         end
       end
     end

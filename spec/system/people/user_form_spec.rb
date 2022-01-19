@@ -163,7 +163,12 @@ describe "user form", js: true, perform_jobs: true do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {
             people: {
-              user_custom_fields_spec: "- key: foo\n  type: string\n- key: bar\n  type: string"
+              user_custom_fields_spec: "- key: foo\n"\
+                                       "  type: string\n"\
+                                       "- key: bar\n"\
+                                       "  type: string\n"\
+                                       "  label: Pants\n"\
+                                       "  hint: Pants information"
             }
           })
         end
@@ -172,14 +177,15 @@ describe "user form", js: true, perform_jobs: true do
 
         scenario "shows custom fields" do
           visit(edit_path)
+          expect(page).to have_content("Pants information")
           fill_in("Foo", with: "stuff")
-          fill_in("Bar", with: "blah")
+          fill_in("Pants", with: "blah")
           click_button("Save")
 
           expect_success
           click_on("Edit")
           expect(page).to have_field("Foo", with: "stuff")
-          expect(page).to have_field("Bar", with: "blah")
+          expect(page).to have_field("Pants", with: "blah")
         end
       end
     end

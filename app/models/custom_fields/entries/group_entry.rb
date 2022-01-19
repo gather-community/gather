@@ -21,6 +21,9 @@ module CustomFields
         # If we use method missing we have to reserve all of those and there are plenty of useful
         # words in there like method, display, extend, etc.
         field.fields.each do |f|
+          if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
+            raise ArgumentError, "`#{f.key}` is a reserved attribute name"
+          end
           define_singleton_method(f.key) { self[f.key] }
           define_singleton_method("#{f.key}?") { self[f.key] } if f.type == :boolean
           define_singleton_method("#{f.key}=") { |value| self[f.key] = value }

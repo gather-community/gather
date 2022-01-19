@@ -63,6 +63,13 @@ describe CustomFields::Spec do
         expect { described_class.new([{key: "nil", type: "string"}]) }.to raise_error(ArgumentError)
       end
     end
+
+    describe "reserved method as sub-key" do
+      it do
+        spec = [{key: "alpha", type: "group", fields: [{key: "nil", type: "string"}]}]
+        expect { described_class.new(spec) }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe "permitted" do

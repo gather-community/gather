@@ -26,4 +26,9 @@
   .checkbox {
     padding-top: 0;
   }
+
+  .custom-field-spec textarea {
+    font-family: $font-family-monospace;
+    height: 10em;
+  }
 }

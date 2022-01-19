@@ -40,6 +40,32 @@ describe CustomFields::Spec do
     end
   end
 
+  describe "invalid specs" do
+    describe "bad type" do
+      it do
+        expect { described_class.new([{key: "alpha", type: "strink"}]) }.to raise_error(NameError)
+      end
+    end
+
+    describe "missing keys" do
+      it do
+        expect { described_class.new([{key: "alpha"}, {type: "string"}]) }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "bad data structure" do
+      it do
+        expect { described_class.new(key: "alpha", type: "string") }.to raise_error(NoMethodError)
+      end
+    end
+
+    describe "reserved method as key" do
+      it do
+        expect { described_class.new([{key: "nil", type: "string"}]) }.to raise_error(ArgumentError)
+      end
+    end
+  end
+
   describe "permitted" do
     context "without nesting" do
       let(:spec) do

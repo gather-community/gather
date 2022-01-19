@@ -60,6 +60,7 @@ module CustomFields
           end
           params.merge!(%i[label hint placeholder].map { |t| i18n_pair(t) }.compact.to_h)
           params.merge!(field.value_input_param { value })
+          params.merge!(wrapper_html: {class: "custom-field custom-field-#{field.type}"})
         end
       end
 
@@ -78,7 +79,11 @@ module CustomFields
         begin
           "#{validation_name}Validator".constantize
         rescue NameError
-          "ActiveModel::Validations::#{validation_name}Validator".constantize
+          begin
+            "CustomFields::Validations::#{validation_name}Validator".constantize
+          rescue NameError
+            "ActiveModel::Validations::#{validation_name}Validator".constantize
+          end
         end
       end
     end

@@ -20,7 +20,7 @@ module CustomFields
       self.root = Entries::RootEntry.new(
         parent: self,
         field: spec.root,
-        hash: instance_data,
+        hash: instance_data.deep_symbolize_keys,
         model_i18n_key: model_i18n_key,
         attrib_name: attrib_name
       )

@@ -158,6 +158,30 @@ describe "user form", js: true, perform_jobs: true do
           expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
         end
       end
+
+      context "with custom fields" do
+        let(:community_with_user_custom_fields) do
+          create(:community, settings: {
+            people: {
+              user_custom_fields_spec: "- key: foo\n  type: string\n- key: bar\n  type: string"
+            }
+          })
+        end
+        let!(:user) { create(:user, community: community_with_user_custom_fields) }
+        let!(:actor) { create(:admin, community: community_with_user_custom_fields) }
+
+        scenario "shows custom fields" do
+          visit(edit_path)
+          fill_in("Foo", with: "stuff")
+          fill_in("Bar", with: "blah")
+          click_button("Save")
+
+          expect_success
+          click_on("Edit")
+          expect(page).to have_field("Foo", with: "stuff")
+          expect(page).to have_field("Bar", with: "blah")
+        end
+      end
     end
 
     scenario "deactivate/activate/delete with email" do

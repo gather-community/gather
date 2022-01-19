@@ -40,61 +40,63 @@ class Community < ApplicationRecord
   before_create :generate_calendar_token
   before_create :generate_sso_secret
 
-  custom_fields :settings, spec: [
-    {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
-    {key: :default_landing_page, type: :enum, options: %w[meals directory calendars wiki],
-     default: "directory", required: true},
-    {key: :main_nav_customizations, type: :text},
-    {key: :people, type: :group, fields: [
-      {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
-      {key: :plain_user_selects, type: :boolean, default: false},
-      {key: :user_custom_fields_spec, type: :spec}
-    ]},
-    {key: :meals, type: :group, fields: [
-      {key: :reimb_instructions, type: :markdown},
-      {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
-      {key: :default_capacity, type: :integer, required: true, default: 50},
-      {key: :show_reimb_form, type: :boolean, default: false},
-      {key: :cooks_can_finalize, type: :boolean, default: false},
-      {key: :allow_job_signup_on_meal_page, type: :boolean, default: true},
-      {key: :reminder_lead_times, type: :group, fields: [
-        {key: :diner, type: :integer, required: true, default: 0},
-        {key: :early_menu, type: :integer, required: true, default: 10},
-        {key: :late_menu, type: :integer, required: true, default: 5}
-      ]}
-    ]},
-    {key: :calendars, type: :group, fields: [
-      {key: :kinds, type: :string},
-      {key: :meals, type: :group, fields: [
-        {key: :default_total_time, type: :integer, required: true, default: 330},
-        {key: :default_prep_time, type: :integer, required: true, default: 180}
-      ]}
-    ]},
-    {key: :work, type: :group, fields: [
-      {key: :default_date_filter, type: :enum, options: %w[all curftr], default: "all", required: true}
-    ]},
-    {key: :billing, type: :group, fields: [
-      {key: :contact, type: :email},
-      {key: :statement_terms, type: :integer, default: 30},
-      {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
-      {key: :payment_methods, type: :group, fields: [
-        {key: :paypal_me, type: :url, host: "paypal.me"},
-        {key: :paypal_email, type: :email},
-        {key: :paypal_friend, type: :boolean, default: true},
-        {key: :check_payee, type: :string},
-        {key: :check_address, type: :text},
-        {key: :check_dropoff, type: :string},
-        {key: :cash_dropoff, type: :string},
-        {key: :additional_info, type: :markdown},
-        {key: :show_billing_contact, type: :boolean, default: true}
+  custom_fields :settings, spec: lambda { |_cmty|
+    [
+      {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
+      {key: :default_landing_page, type: :enum, options: %w[meals directory calendars wiki],
+       default: "directory", required: true},
+      {key: :main_nav_customizations, type: :text},
+      {key: :people, type: :group, fields: [
+        {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
+        {key: :plain_user_selects, type: :boolean, default: false},
+        {key: :user_custom_fields_spec, type: :spec}
       ]},
-      {key: :late_fee_policy, type: :group, fields: [
-        {key: :fee_type, type: :enum, options: %w[none fixed percent], default: "none", required: true},
-        {key: :threshold, type: :decimal},
-        {key: :amount, type: :decimal}
+      {key: :meals, type: :group, fields: [
+        {key: :reimb_instructions, type: :markdown},
+        {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
+        {key: :default_capacity, type: :integer, required: true, default: 50},
+        {key: :show_reimb_form, type: :boolean, default: false},
+        {key: :cooks_can_finalize, type: :boolean, default: false},
+        {key: :allow_job_signup_on_meal_page, type: :boolean, default: true},
+        {key: :reminder_lead_times, type: :group, fields: [
+          {key: :diner, type: :integer, required: true, default: 0},
+          {key: :early_menu, type: :integer, required: true, default: 10},
+          {key: :late_menu, type: :integer, required: true, default: 5}
+        ]}
+      ]},
+      {key: :calendars, type: :group, fields: [
+        {key: :kinds, type: :string},
+        {key: :meals, type: :group, fields: [
+          {key: :default_total_time, type: :integer, required: true, default: 330},
+          {key: :default_prep_time, type: :integer, required: true, default: 180}
+        ]}
+      ]},
+      {key: :work, type: :group, fields: [
+        {key: :default_date_filter, type: :enum, options: %w[all curftr], default: "all", required: true}
+      ]},
+      {key: :billing, type: :group, fields: [
+        {key: :contact, type: :email},
+        {key: :statement_terms, type: :integer, default: 30},
+        {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
+        {key: :payment_methods, type: :group, fields: [
+          {key: :paypal_me, type: :url, host: "paypal.me"},
+          {key: :paypal_email, type: :email},
+          {key: :paypal_friend, type: :boolean, default: true},
+          {key: :check_payee, type: :string},
+          {key: :check_address, type: :text},
+          {key: :check_dropoff, type: :string},
+          {key: :cash_dropoff, type: :string},
+          {key: :additional_info, type: :markdown},
+          {key: :show_billing_contact, type: :boolean, default: true}
+        ]},
+        {key: :late_fee_policy, type: :group, fields: [
+          {key: :fee_type, type: :enum, options: %w[none fixed percent], default: "none", required: true},
+          {key: :threshold, type: :decimal},
+          {key: :amount, type: :decimal}
+        ]}
       ]}
-    ]}
-  ]
+    ]
+  }
 
   def self.multiple?
     count > 1

@@ -59,7 +59,8 @@ describe CustomFields::Entries::BasicEntry do
         it "should return empty hash with no translations" do
           expect(entry.input_params).to eq(
             as: :string,
-            input_html: {value: "bar"}
+            input_html: {value: "bar"},
+            wrapper_html: {class: "custom-field custom-field-string"}
           )
         end
       end
@@ -85,7 +86,8 @@ describe CustomFields::Entries::BasicEntry do
             input_html: {value: "bar"},
             label: "The Foo",
             hint: "Think about foos",
-            placeholder: "Some foo"
+            placeholder: "Some foo",
+            wrapper_html: {class: "custom-field custom-field-string"}
           )
         end
       end
@@ -102,7 +104,8 @@ describe CustomFields::Entries::BasicEntry do
             collection: [%w[a a], %w[b b]],
             value_method: :first,
             label_method: :last,
-            selected: "b"
+            selected: "b",
+            wrapper_html: {class: "custom-field custom-field-enum"}
           )
         end
       end
@@ -124,7 +127,8 @@ describe CustomFields::Entries::BasicEntry do
             collection: [%w[a Alpha], %w[b Bravo]],
             value_method: :first,
             label_method: :last,
-            selected: "b"
+            selected: "b",
+            wrapper_html: {class: "custom-field custom-field-enum"}
           )
         end
       end
@@ -135,7 +139,11 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: true}, parent: root) }
 
       it "should return as boolean" do
-        expect(entry.input_params).to eq(as: :boolean, input_html: {checked: true})
+        expect(entry.input_params).to eq(
+          as: :boolean,
+          input_html: {checked: true},
+          wrapper_html: {class: "custom-field custom-field-boolean"}
+        )
       end
     end
 
@@ -144,7 +152,11 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
       it "should return empty hash" do
-        expect(entry.input_params).to eq(as: :text, input_html: {value: "bar"})
+        expect(entry.input_params).to eq(
+          as: :text,
+          input_html: {value: "bar"},
+          wrapper_html: {class: "custom-field custom-field-text"}
+        )
       end
     end
   end

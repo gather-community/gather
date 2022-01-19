@@ -9,12 +9,14 @@ module CustomFields
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :[], :[]=,
-             :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
+             :label_or_key, :translate, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError, "instance_data is required" if instance_data.nil?
       self.spec = spec
       self.host = host
+      return if undefined?
+
       self.root = Entries::RootEntry.new(
         parent: self,
         field: spec.root,
@@ -34,6 +36,10 @@ module CustomFields
       end
 
       notify_of_update
+    end
+
+    def undefined?
+      spec.empty?
     end
 
     def key
@@ -64,8 +70,14 @@ module CustomFields
       true
     end
 
+    def valid?
+      return true if undefined?
+      root.valid?
+    end
+
     # Returns a list of permitted keys in the form expected by strong params.
     def permitted
+      return nil if undefined?
       {attrib_name => spec.permitted}
     end
   end

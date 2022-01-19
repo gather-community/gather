@@ -4,9 +4,8 @@ require "rails_helper"
 
 describe CustomFields::Spec do
   describe "constructor" do
-    it "should error with nil argument" do
-      expect { described_class.new }.to raise_error(ArgumentError)
-      expect { described_class.new(nil) }.to raise_error(ArgumentError)
+    it "should not error with nil argument" do
+      expect { described_class.new(nil) }.not_to raise_error
     end
   end
 

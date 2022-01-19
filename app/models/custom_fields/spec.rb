@@ -10,11 +10,15 @@ module CustomFields
     # Accepts a JSON-originating array of hashes defining the spec.
     # Converts to Field objects.
     def initialize(spec_data)
-      raise ArgumentError, "spec data is required" if spec_data.nil?
+      return if spec_data.nil?
       self.root = Fields::GroupField.new(key: :__root__, fields: spec_data)
 
       # Create a dummy instance to ensure that no reserved name collisions are encountered.
       Instance.new(spec: self, host: self, instance_data: {}, model_i18n_key: "foo", attrib_name: "sample")
+    end
+
+    def empty?
+      root.nil?
     end
   end
 end

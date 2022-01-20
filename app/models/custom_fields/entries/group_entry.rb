@@ -16,10 +16,6 @@ module CustomFields
         super(field: field, hash: hash, parent: parent)
         self.entries = field.fields.map { |f| build_child_entry(f) }
 
-        # Define methods instead of using method_missing because it's cleaner and
-        # this way we can override the many Object instance methods that we don't use here.
-        # If we use method missing we have to reserve all of those and there are plenty of useful
-        # words in there like method, display, extend, etc.
         field.fields.each do |f|
           if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
             raise ArgumentError, "`#{f.key}` is a reserved attribute name"

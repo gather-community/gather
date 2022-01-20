@@ -25,7 +25,9 @@ module CustomFields
         attrib_name: attrib_name
       )
 
-      # Define these methods to pass through to the RootEntry. See docs in GroupEntry for why we do this.
+      # Define these methods to pass through to the RootEntry.
+      # Nearly identical definitions appear in GroupEntry. We have to duplicate them here
+      # because Instance also behaves like an Entry.
       spec.root.fields.each do |f|
         if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
           raise ArgumentError, "`#{f.key}` is a reserved attribute name"

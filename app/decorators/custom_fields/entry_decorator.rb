@@ -14,5 +14,11 @@ module CustomFields
       else value
       end
     end
+
+    def sanitized_hint
+      return nil if hint.nil?
+      # Hints can contain user-generated HTML.
+      Rails::Html::SafeListSanitizer.new.sanitize(hint).html_safe # rubocop:disable Rails/OutputSafety
+    end
   end
 end

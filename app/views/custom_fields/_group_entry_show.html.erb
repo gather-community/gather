@@ -1,9 +1,8 @@
 <div class="custom-fields">
-  <% if (title = group_entry.label_or_key) && !local_assigns[:hide_title] %>
+  <% if (title = group_entry.label) && !local_assigns[:hide_title] %>
     <div class="group-title"><%= title %></div>
   <% end %>
-  <%# OK to use html_safe here because the hints are in the translation file and don't take any params. %>
-  <% if (hint = group_entry.translate(:hint)&.html_safe) %>
+  <% if (hint = CustomFields::EntryDecorator.new(group_entry).sanitized_hint) %>
     <div class="hint group-hint"><%= hint %></div>
   <% end %>
   <div class="fields">

@@ -43,10 +43,6 @@ module CustomFields
         :"#{parent.i18n_key(type, suffix: false)}.#{key}"
       end
 
-      def label_or_key
-        translate(:label) || key != :__root__ && key || nil
-      end
-
       def translate(type)
         key = i18n_key(type.to_s.pluralize)
         result = I18n.translate!(key)
@@ -55,7 +51,11 @@ module CustomFields
       end
 
       def label
-        explicit_or_translated_param_value(:label) || field.key.capitalize
+        explicit_or_translated_param_value(:label) || key != :__root__ && key.capitalize || nil
+      end
+
+      def hint
+        explicit_or_translated_param_value(:hint)
       end
 
       protected

@@ -72,10 +72,16 @@ module CustomFields
           if param_value.nil?
             nil
           else
-            param_value = param_value.html_safe if param_name == :hint && "".respond_to?(:html_safe)
+            # Hints can have HTML
+            param_value = sanitize_and_mark_safe(param_value) if param_name == :hint
             [param_name, param_value]
           end
         end.compact.to_h
+      end
+
+      def sanitize_and_mark_safe(content)
+        return nil if content.nil?
+        Rails::Html::SafeListSanitizer.new.sanitize(content).html_safe # rubocop:disable Rails/OutputSafety
       end
 
       def validator(validation_name)

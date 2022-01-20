@@ -9,6 +9,8 @@
     <% group_entry.entries.each do |entry| %>
       <% if entry.group? %>
         <%= render("custom_fields/group_entry_show", group_entry: entry) %>
+      <%# We don't show entries that have nil, empty string, or false as values. %>
+      <%# This includes booleans where the box is unchecked. %>
       <% elsif entry.present? %>
         <tr>
           <td><%= entry.label %></td>

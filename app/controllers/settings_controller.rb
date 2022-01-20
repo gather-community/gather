@@ -10,6 +10,9 @@ class SettingsController < ApplicationController
   def update
     @community = current_community
     authorize(current_community)
+    # We have to call `settings` before `update` to trigger the CustomFields infrastructure to set things
+    # up. Otherwise update bypasses the CustomFields infrastructure altogether.
+    @community.settings
     if @community.update(settings_params)
       flash[:success] = "Settings updated successfully."
       redirect_to(edit_path)

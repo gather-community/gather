@@ -1,5 +1,8 @@
 en:
   custom_fields:
+    boolean:
+      "true": "Yes"
+      "false": "No"
     labels:
       community:
         settings:

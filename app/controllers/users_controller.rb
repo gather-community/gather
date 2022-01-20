@@ -112,6 +112,9 @@ class UsersController < ApplicationController
     return unless bootstrap_household
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
+    # We have to call `custom_data` before `update` to trigger the CustomFields infrastructure to set things
+    # up. Otherwise update bypasses the CustomFields infrastructure altogether.
+    @user.custom_data
     if @user.update(permitted_attributes(@user))
       flash_on_update
       redirect_to(user_path(@user))

@@ -2,8 +2,8 @@
 
 module CustomFields
   module Fields
-    class MarkdownField < TextField
-      def input_type
+    class MarkdownField < TextualField
+      def type
         :markdown
       end
     end

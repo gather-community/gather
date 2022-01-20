@@ -23,6 +23,10 @@ module CustomFields
         hash[key] = nil if !hash.key?(key) && key != :__root__
       end
 
+      def blank?
+        value.blank?
+      end
+
       def value
         raise NotImplementedError
       end
@@ -50,7 +54,19 @@ module CustomFields
         nil
       end
 
+      def label
+        explicit_or_translated_param_value(:label) || field.key.capitalize
+      end
+
       protected
+
+      def explicit_or_translated_param_value(param_name)
+        if (explicit = field.extra_params[param_name])
+          explicit
+        else
+          translate(param_name)
+        end
+      end
 
       def check_hash(hash)
         raise ArgumentError, "Malformed data: #{hash}" unless hash.is_a?(Hash)

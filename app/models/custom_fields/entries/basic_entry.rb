@@ -78,14 +78,6 @@ module CustomFields
         end.compact.to_h
       end
 
-      def explicit_or_translated_param_value(param_name)
-        if (explicit = field.extra_params[param_name])
-          explicit
-        else
-          translate(param_name)
-        end
-      end
-
       def validator(validation_name)
         validation_name = validation_name.to_s.camelize
         begin

@@ -43,7 +43,7 @@
     <%= f.input :doctor %>
     <%= f.input :medical %>
     <% unless @user.custom_data.undefined? %>
-      <%= render("admin/settings/group_entry", group_entry: @user.custom_data, f: f, hide_title: true) %>
+      <%= render("custom_fields/group_entry_edit", group_entry: @user.custom_data, f: f, hide_title: true) %>
     <% end %>
 
     <% if multi_community? && @user.adult? %>

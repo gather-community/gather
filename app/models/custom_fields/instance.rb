@@ -54,6 +54,8 @@ module CustomFields
 
     # Updates the full hash (as with submitted hash of params).
     def update(new_hash)
+      return if root.nil?
+
       # We set notify to true because we need to treat this update just like all the others initiated by user.
       # This will cause the notify_of_update to run and write out the new hash value to the attribute,
       # if applicable.

@@ -72,8 +72,9 @@ module CustomFields
       # reload uses attributes= which bypasses our setters above.
       # So we need to intercept and run update manually.
       define_method("reload") do |options = nil|
-        super(options)
+        result = super(options)
         send("#{attrib_name}=", self[attrib_name])
+        result
       end
     end
   end

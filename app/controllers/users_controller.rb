@@ -242,6 +242,8 @@ class UsersController < ApplicationController
       # If household was not found, validation needs to fail, but the Policy won't let us get that far, so
       # we have to work around it. We can use permit! since we know these attribs will not be saved.
       if @user.household.nil?
+        # We have to put in a dummy community before we assign attribs or custom fields will fail.
+        @user.build_household(community: current_community)
         @user.assign_attributes(params[:user].permit!)
         @user.validate
         skip_authorization
@@ -277,7 +279,6 @@ class UsersController < ApplicationController
 
   def prepare_user_form
     @user.up_guardianships.build if @user.up_guardianships.empty?
-    @user.build_household if @user.household.nil?
     @user.household.build_blank_associations
     @user.household = @user.household.decorate
     @max_photo_size = User.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]

@@ -55,7 +55,7 @@ describe User do
   describe "validation" do
     context "with no data" do
       it "should not error" do
-        User.new.valid?
+        expect(User.new).to be_invalid
       end
     end
 

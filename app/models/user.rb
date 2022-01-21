@@ -160,7 +160,7 @@ class User < ApplicationRecord
   before_save :unconfirm_if_no_email
 
   custom_fields :custom_data, spec: lambda { |user|
-    YAML.safe_load(user.community.settings.people.user_custom_fields_spec || "")
+    user.community && YAML.safe_load(user.community.settings.people.user_custom_fields_spec || "")
   }
 
   def self.from_omniauth(auth)

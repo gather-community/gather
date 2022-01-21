@@ -82,6 +82,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new
     return unless bootstrap_household
+    prepare_custom_data_infrastructure
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
@@ -112,9 +113,7 @@ class UsersController < ApplicationController
     return unless bootstrap_household
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
-    # We have to call `custom_data` before `update` to trigger the CustomFields infrastructure to set things
-    # up. Otherwise update bypasses the CustomFields infrastructure altogether.
-    @user.custom_data
+    prepare_custom_data_infrastructure
     if @user.update(permitted_attributes(@user))
       flash_on_update
       redirect_to(user_path(@user))
@@ -212,6 +211,13 @@ class UsersController < ApplicationController
                      {base_option: current_community.settings.people.default_directory_sort.to_sym}},
                    :"people/view",
                    :search)
+  end
+
+  def prepare_custom_data_infrastructure
+    # We have to call `custom_data` before `create` and `update` (AND after the user's community is set)
+    # to trigger the CustomFields infrastructure to set things
+    # up. Otherwise update bypasses the CustomFields infrastructure altogether.
+    @user.custom_data
   end
 
   # Called before authorization to check and prepare household attributes.

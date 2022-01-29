@@ -453,6 +453,22 @@ describe UserPolicy do
 
     context "normal user" do
       it_behaves_like "normal user"
+
+      context "with custom fields defined on community" do
+        let(:community_with_user_custom_fields) do
+          create(:community, settings: {
+            people: {
+              user_custom_fields_spec: "- key: foo\n  type: string\n- key: bar\n  type: string"
+            }
+          })
+        end
+        let(:user) { create(:user, community: community_with_user_custom_fields) }
+        let(:user2) { create(:user, community: community_with_user_custom_fields) }
+
+        it "includes custom data fields in permitted attributes" do
+          expect(subject).to match_array(normal_user_attribs << {custom_data: %i[foo bar]})
+        end
+      end
     end
 
     context "photographer" do

@@ -76,6 +76,10 @@
                 </tr>
               <% end %>
             <% end %>
+            <% unless @user.custom_data.undefined? %>
+              <%= render("custom_fields/group_entry_show", group_entry: @user.custom_data,
+                                                            hide_title: true) %>
+            <% end %>
           <% end %>
           <% @households_and_members.each do |household, members| %>
             <%= render("households/attribs",

@@ -1,7 +1,7 @@
 <% content_for(:title, "Settings") %>
 
 <%= gather_form_for(@community, url: admin_settings_path(type: "community")) do |f| %>
-  <%= render("admin/settings/group_entry", group_entry: @community.settings, f: f) %>
+  <%= render("custom_fields/group_entry_edit", group_entry: @community.settings, f: f) %>
   <%= form_actions do %>
     <%= f.button :primary %>
   <% end %>

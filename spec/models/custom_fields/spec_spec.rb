@@ -4,9 +4,8 @@ require "rails_helper"
 
 describe CustomFields::Spec do
   describe "constructor" do
-    it "should error with nil argument" do
-      expect { described_class.new }.to raise_error(ArgumentError)
-      expect { described_class.new(nil) }.to raise_error(ArgumentError)
+    it "should not error with nil argument" do
+      expect { described_class.new(nil) }.not_to raise_error
     end
   end
 
@@ -37,6 +36,48 @@ describe CustomFields::Spec do
       expect(spec.fields[1].fields[2].fields[1].key).to eq(:height)
       expect(spec.fields[1].fields[3].key).to eq(:count)
       expect(spec.fields[2].key).to eq(:bar)
+    end
+  end
+
+  describe "invalid specs" do
+    describe "bad type" do
+      it do
+        expect { described_class.new([{key: "alpha", type: "strink"}]) }
+          .to raise_error(ArgumentError, "Invalid type 'strink'.")
+      end
+    end
+
+    describe "bad characters in key" do
+      it do
+        expect { described_class.new([{key: "alp ha", type: "string"}]) }
+          .to raise_error(ArgumentError,
+                          "Invalid key 'alp ha'. Keys can only contain lowercase letters and _.")
+      end
+    end
+
+    describe "missing keys" do
+      it do
+        expect { described_class.new([{key: "alpha"}, {type: "string"}]) }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "bad data structure" do
+      it do
+        expect { described_class.new(key: "alpha", type: "string") }.to raise_error(NoMethodError)
+      end
+    end
+
+    describe "reserved method as key" do
+      it do
+        expect { described_class.new([{key: "nil", type: "string"}]) }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "reserved method as sub-key" do
+      it do
+        spec = [{key: "alpha", type: "group", fields: [{key: "nil", type: "string"}]}]
+        expect { described_class.new(spec) }.to raise_error(ArgumentError)
+      end
     end
   end
 

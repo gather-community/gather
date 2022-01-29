@@ -9,6 +9,10 @@ module CustomFields
       TYPES = %i[string text boolean enum integer group].freeze
 
       def initialize(key:, required: false, options: nil, validation: nil, default: nil, **extra_params)
+        unless key =~ /\A[a-z_]+\z/
+          raise ArgumentError, "Invalid key '#{key}'. Keys can only contain lowercase letters and _."
+        end
+
         self.key = key = key.to_sym
 
         # Any methods of the GroupEntry class can't be used as keys as they would
@@ -39,6 +43,10 @@ module CustomFields
 
       def value_input_param
         {input_html: {value: yield}}
+      end
+
+      def additional_input_params
+        {}
       end
 
       def root?

@@ -56,11 +56,32 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
       context "with no translations defined" do
-        it "should return empty hash with no translations" do
-          expect(entry.input_params).to eq(
-            as: :string,
-            input_html: {value: "bar"}
-          )
+        context "with no explicit label/hint/placeholder defined" do
+          it "should not include label/hint/placeholder params" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
+        end
+
+        context "with explicit label/hint/placeholder defined" do
+          let(:field) do
+            CustomFields::Fields::StringField.new(key: "foo", label: "Foo", hint: "Foo!",
+                                                  placeholder: "Foo...")
+          end
+
+          it "should include label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              label: "Foo",
+              hint: "Foo!",
+              placeholder: "Foo...",
+              input_html: {value: "bar"},
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
         end
       end
 
@@ -79,20 +100,41 @@ describe CustomFields::Entries::BasicEntry do
           I18n.backend = I18n::Backend::Simple.new
         end
 
-        it "should use translated label, hint, placeholder" do
-          expect(entry.input_params).to eq(
-            as: :string,
-            input_html: {value: "bar"},
-            label: "The Foo",
-            hint: "Think about foos",
-            placeholder: "Some foo"
-          )
+        context "with no explicit label/hint/placeholder defined" do
+          it "should use translated label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              label: "The Foo",
+              hint: "Think about foos",
+              placeholder: "Some foo",
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
+        end
+
+        context "with explicit label/hint/placeholder defined" do
+          let(:field) do
+            CustomFields::Fields::StringField.new(key: "foo", label: "Foo", hint: "Foo!",
+                                                  placeholder: "Foo...")
+          end
+
+          it "should use explicit label/hint/placeholder" do
+            expect(entry.input_params).to eq(
+              as: :string,
+              input_html: {value: "bar"},
+              label: "Foo",
+              hint: "Foo!",
+              placeholder: "Foo...",
+              wrapper_html: {class: "custom-field custom-field-string"}
+            )
+          end
         end
       end
     end
 
     context "for enum field" do
-      let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w[a b]) }
+      let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w[a b], include_blank: "bar") }
       let(:entry) { described_class.new(field: field, hash: {foo: "b"}, parent: root) }
 
       context "with no translations defined" do
@@ -102,7 +144,9 @@ describe CustomFields::Entries::BasicEntry do
             collection: [%w[a a], %w[b b]],
             value_method: :first,
             label_method: :last,
-            selected: "b"
+            selected: "b",
+            wrapper_html: {class: "custom-field custom-field-enum"},
+            include_blank: "bar"
           )
         end
       end
@@ -124,7 +168,9 @@ describe CustomFields::Entries::BasicEntry do
             collection: [%w[a Alpha], %w[b Bravo]],
             value_method: :first,
             label_method: :last,
-            selected: "b"
+            selected: "b",
+            wrapper_html: {class: "custom-field custom-field-enum"},
+            include_blank: "bar"
           )
         end
       end
@@ -135,7 +181,11 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: true}, parent: root) }
 
       it "should return as boolean" do
-        expect(entry.input_params).to eq(as: :boolean, input_html: {checked: true})
+        expect(entry.input_params).to eq(
+          as: :boolean,
+          input_html: {checked: true},
+          wrapper_html: {class: "custom-field custom-field-boolean"}
+        )
       end
     end
 
@@ -144,7 +194,11 @@ describe CustomFields::Entries::BasicEntry do
       let(:entry) { described_class.new(field: field, hash: {foo: "bar"}, parent: root) }
 
       it "should return empty hash" do
-        expect(entry.input_params).to eq(as: :text, input_html: {value: "bar"})
+        expect(entry.input_params).to eq(
+          as: :text,
+          input_html: {value: "bar"},
+          wrapper_html: {class: "custom-field custom-field-text"}
+        )
       end
     end
   end

@@ -19,8 +19,12 @@ module CustomFields
         check_hash(hash)
         self.parent = parent
         self.field = field
-        self.hash = hash.symbolize_keys!
+        self.hash = hash
         hash[key] = nil if !hash.key?(key) && key != :__root__
+      end
+
+      def blank?
+        value.blank?
       end
 
       def value
@@ -39,10 +43,6 @@ module CustomFields
         :"#{parent.i18n_key(type, suffix: false)}.#{key}"
       end
 
-      def label_or_key
-        translate(:label) || key != :__root__ && key || nil
-      end
-
       def translate(type)
         key = i18n_key(type.to_s.pluralize)
         result = I18n.translate!(key)
@@ -50,7 +50,23 @@ module CustomFields
         nil
       end
 
+      def label
+        explicit_or_translated_param_value(:label) || key != :__root__ && key.capitalize || nil
+      end
+
+      def hint
+        explicit_or_translated_param_value(:hint)
+      end
+
       protected
+
+      def explicit_or_translated_param_value(param_name)
+        if (explicit = field.extra_params[param_name])
+          explicit
+        else
+          translate(param_name)
+        end
+      end
 
       def check_hash(hash)
         raise ArgumentError, "Malformed data: #{hash}" unless hash.is_a?(Hash)

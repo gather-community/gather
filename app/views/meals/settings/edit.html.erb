@@ -2,7 +2,7 @@
 
 <%= gather_form_for(@community, url: meals_settings_path) do |f| %>
   <%= f.fields_for(:settings) do |ff| %>
-    <%= render("admin/settings/group_entry", group_entry: @settings, f: ff, hide_title: true) %>
+    <%= render("custom_fields/group_entry_edit", group_entry: @settings, f: ff, hide_title: true) %>
   <% end %>
   <%= form_actions do %>
     <%= f.button :primary %>

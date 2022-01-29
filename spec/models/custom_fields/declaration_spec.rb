@@ -38,6 +38,38 @@ describe "custom field declaration" do
     end
   end
 
+  describe "dynamic model" do
+    let(:fake1) { FakeCustomFieldModelDynamic.new }
+    let(:fake2) { FakeCustomFieldModelDynamic.new }
+
+    it "respects different specs on different instances" do
+      fake1.fruits = %w[apple banana cherry]
+      fake1.settings.fruit = "banana"
+      expect(fake1.settings.fruit).to eq("banana")
+      expect(fake1).to be_valid
+
+      fake2.fruits = %w[apple pear]
+      fake2.settings.fruit = "banana"
+      expect(fake2.settings.fruit).to eq("banana")
+      expect(fake2).not_to be_valid
+      fake2.settings.fruit = "pear"
+      expect(fake2.settings.fruit).to eq("pear")
+      expect(fake2.settings).to be_valid
+
+      fake1.settings.fruit = "cherry"
+      expect(fake1).to be_valid
+      fake1.settings.fruit = "pear"
+      expect(fake1).not_to be_valid
+    end
+
+    it "handles nil spec gracefully" do
+      fake1.fruits = nil
+      expect(fake1.settings.undefined?).to be(true)
+      expect { fake1.settings.fruit }.to raise_error(NoMethodError)
+      expect { fake1.settings.fruit = "foo" }.to raise_error(NoMethodError)
+    end
+  end
+
   describe "for ActiveRecord model" do
     let(:fake) { FakeCustomFieldActiveRecordModel.new }
 

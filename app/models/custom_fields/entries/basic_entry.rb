@@ -50,6 +50,7 @@ module CustomFields
       def input_params
         {}.tap do |params|
           params[:as] = field.input_type
+          params[:wrapper_html] = {class: "custom-field custom-field-#{field.type}"}
           if field.collection
             i18n_prefix = i18n_key(:options)
             params[:collection] = field.collection.map do |item|
@@ -58,19 +59,30 @@ module CustomFields
             params[:value_method] = :first
             params[:label_method] = :last
           end
-          params.merge!(%i[label hint placeholder].map { |t| i18n_pair(t) }.compact.to_h)
+          params.merge!(label_hint_placeholder_params)
           params.merge!(field.value_input_param { value })
+          params.merge!(field.additional_input_params)
         end
       end
 
       private
 
-      # Translates the given type and key, returning a the pair [type, translation] if found, else nil.
-      def i18n_pair(type)
-        result = translate(type)
-        return nil if result.nil?
-        result = result.html_safe if type == :hint && "".respond_to?(:html_safe)
-        [type, result]
+      def label_hint_placeholder_params
+        %i[label hint placeholder].map do |param_name|
+          param_value = explicit_or_translated_param_value(param_name)
+          if param_value.nil?
+            nil
+          else
+            # Hints can have HTML
+            param_value = sanitize_and_mark_safe(param_value) if param_name == :hint
+            [param_name, param_value]
+          end
+        end.compact.to_h
+      end
+
+      def sanitize_and_mark_safe(content)
+        return nil if content.nil?
+        Rails::Html::SafeListSanitizer.new.sanitize(content).html_safe # rubocop:disable Rails/OutputSafety
       end
 
       def validator(validation_name)
@@ -78,7 +90,11 @@ module CustomFields
         begin
           "#{validation_name}Validator".constantize
         rescue NameError
-          "ActiveModel::Validations::#{validation_name}Validator".constantize
+          begin
+            "CustomFields::Validations::#{validation_name}Validator".constantize
+          rescue NameError
+            "ActiveModel::Validations::#{validation_name}Validator".constantize
+          end
         end
       end
     end

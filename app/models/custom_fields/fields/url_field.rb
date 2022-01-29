@@ -15,7 +15,7 @@ module CustomFields
 
       def set_implicit_validations
         super
-        validation[:url] = {host: extra_params[:host], allow_nil: true}
+        validation[:url] = {host: extra_params[:host], allow_blank: true}
       end
     end
   end

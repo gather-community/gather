@@ -9,28 +9,39 @@ module CustomFields
 
     delegate :fields, to: :spec
     delegate :hash, :entries, :entries_by_key, :[], :[]=,
-             :label_or_key, :translate, :valid?, :errors, :input_params, :attrib_name, to: :root
+             :label, :hint, :translate, :errors, :input_params, :attrib_name, to: :root
 
     def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError, "instance_data is required" if instance_data.nil?
       self.spec = spec
       self.host = host
+      return if undefined?
+
       self.root = Entries::RootEntry.new(
         parent: self,
         field: spec.root,
-        hash: instance_data,
+        hash: instance_data.deep_symbolize_keys,
         model_i18n_key: model_i18n_key,
         attrib_name: attrib_name
       )
 
-      # Define these methods to pass through to the RootEntry. See docs in GroupEntry for why we do this.
+      # Define these methods to pass through to the RootEntry.
+      # Nearly identical definitions appear in GroupEntry. We have to duplicate them here
+      # because Instance also behaves like an Entry.
       spec.root.fields.each do |f|
+        if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
+          raise ArgumentError, "`#{f.key}` is a reserved attribute name"
+        end
         define_singleton_method(f.key) { root[f.key] }
         define_singleton_method("#{f.key}?") { root[f.key] } if f.type == :boolean
         define_singleton_method("#{f.key}=") { |value| root[f.key] = value }
       end
 
       notify_of_update
+    end
+
+    def undefined?
+      spec.empty?
     end
 
     def key
@@ -43,6 +54,8 @@ module CustomFields
 
     # Updates the full hash (as with submitted hash of params).
     def update(new_hash)
+      return if root.nil?
+
       # We set notify to true because we need to treat this update just like all the others initiated by user.
       # This will cause the notify_of_update to run and write out the new hash value to the attribute,
       # if applicable.
@@ -61,8 +74,14 @@ module CustomFields
       true
     end
 
+    def valid?
+      return true if undefined?
+      root.valid?
+    end
+
     # Returns a list of permitted keys in the form expected by strong params.
     def permitted
+      return nil if undefined?
       {attrib_name => spec.permitted}
     end
   end

@@ -17,9 +17,8 @@ class UploadsController < ApplicationController
                                                     filename: params[:file].original_filename)
 
     # Run validations to ensure that the attachment is valid.
-    # A community is required for some validations so we provide one.
-    object = params[:class_name].constantize.new(params[:attrib] => blob.signed_id).tap(&:valid?)
-
+    object = build_object_with_blob_attached(params[:class_name], params[:attrib], blob)
+    object.valid?
     if (errors = object.errors[params[:attrib]]).any?
       render(json: {error: errors}, status: :unprocessable_entity)
     else
@@ -28,6 +27,16 @@ class UploadsController < ApplicationController
   end
 
   private
+
+  def build_object_with_blob_attached(class_name, attrib, blob)
+    object = class_name.constantize.new
+
+    # If we don't set this, we get a custom field error.
+    object.build_household(community: current_community) if class_name == "User"
+
+    object.assign_attributes(attrib => blob.signed_id)
+    object
+  end
 
   def ensure_permitted_class
     return if Array.wrap(PERMITTED_ATTRIBS[params[:class_name]]).include?(params[:attrib])

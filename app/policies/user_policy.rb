@@ -130,6 +130,7 @@ class UserPolicy < ApplicationPolicy
                    school allergies doctor medical preferred_contact household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
     permitted << {up_guardianships_attributes: %i[id guardian_id _destroy]}
+    permitted << user.custom_data.permitted
 
     # We allow household_attributes.id through here even though changing the household ID is very sensitive
     # security-wise. But Rails doesn't let you set change the ID this way. It only uses the ID to determine
@@ -141,7 +142,7 @@ class UserPolicy < ApplicationPolicy
 
     permitted << :google_email if active_admin?
     grantable_roles.each { |r| permitted << :"role_#{r}" }
-    permitted
+    permitted.compact
   end
 
   def grantable_roles

@@ -6,11 +6,16 @@ module CustomFields
     class GroupField < Field
       attr_accessor :fields
 
+      PERMITTED_TYPES = %w[boolean decimal email enum group integer markdown
+                           spec string text time_zone url].freeze
+
       def initialize(key:, fields:)
         super(key: key)
         self.fields = fields.map do |field_data|
           field_data.symbolize_keys!
-          klass = "CustomFields::Fields::#{field_data.delete(:type).to_s.classify}Field"
+          type = field_data.delete(:type).to_s
+          raise ArgumentError, "Invalid type '#{type}'." unless PERMITTED_TYPES.include?(type)
+          klass = "CustomFields::Fields::#{type.classify}Field"
           klass.constantize.new(field_data)
         end
       end

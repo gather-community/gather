@@ -96,6 +96,42 @@ describe "user form", js: true, perform_jobs: true do
         expect(email_sent.map(&:subject)).to eq(["Instructions for Signing in to Gather"])
         expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
       end
+
+      context "with custom fields" do
+        let(:community_with_user_custom_fields) do
+          create(:community, settings: {
+            people: {
+              user_custom_fields_spec: "- key: foo\n"\
+                                       "  type: boolean\n"\
+                                       "- key: bar\n"\
+                                       "  type: string\n"\
+                                       "  label: Pants\n"\
+                                       "  hint: Pants information"
+            }
+          })
+        end
+        let!(:actor) { create(:admin, community: community_with_user_custom_fields) }
+        let!(:household) { create(:household, name: "Qux", community: community_with_user_custom_fields) }
+
+        scenario "allows entry of custom fields" do
+          visit(new_user_path)
+          fill_in("First Name", with: "Foo")
+          fill_in("Last Name", with: "Barre")
+          fill_in("Email", with: "foo@example.com")
+          select2("Qux", from: "#user_household_id")
+          fill_in("Mobile", with: "5556667777")
+
+          check("Foo")
+          fill_in("Pants", with: "blah")
+
+          click_button("Save")
+          expect(page).to have_alert("User created successfully.")
+
+          # Check that the boolean value got persisted properly, which shows that normalizations ran.
+          expect(page).to have_content(/Foo\s+Yes/)
+          expect(page).to have_content(/Pants\s+blah/)
+        end
+      end
     end
 
     context "editing" do
@@ -156,6 +192,40 @@ describe "user form", js: true, perform_jobs: true do
 
           expect_success
           expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
+        end
+      end
+
+      context "with custom fields" do
+        let(:community_with_user_custom_fields) do
+          create(:community, settings: {
+            people: {
+              user_custom_fields_spec: "- key: foo\n"\
+                                       "  type: boolean\n"\
+                                       "- key: bar\n"\
+                                       "  type: string\n"\
+                                       "  label: Pants\n"\
+                                       "  hint: Pants information"
+            }
+          })
+        end
+        let!(:user) { create(:user, community: community_with_user_custom_fields) }
+        let!(:actor) { create(:admin, community: community_with_user_custom_fields) }
+
+        scenario "allows entry of custom fields" do
+          visit(edit_path)
+          expect(page).to have_content("Pants information")
+          check("Foo")
+          fill_in("Pants", with: "blah")
+          click_button("Save")
+
+          expect_success
+
+          # Check that the boolean value got persisted properly, which shows that normalizations ran.
+          expect(page).to have_content(/Foo\s+Yes/)
+
+          click_on("Edit")
+          expect(page).to have_field("Foo", checked: true)
+          expect(page).to have_field("Pants", with: "blah")
         end
       end
     end

@@ -61,6 +61,7 @@ module CustomFields
           end
           params.merge!(label_hint_placeholder_params)
           params.merge!(field.value_input_param { value })
+          params.merge!(field.additional_input_params)
         end
       end
 

@@ -23,11 +23,16 @@ module CustomFields
         {selected: yield}
       end
 
+      def additional_input_params
+        extra_params.key?(:include_blank) ? extra_params.slice(:include_blank) : {}
+      end
+
       protected
 
       def set_implicit_validations
         super
         validation[:inclusion] ||= {in: options}
+        validation[:inclusion][:allow_blank] = true if extra_params[:include_blank]
       end
     end
   end

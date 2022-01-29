@@ -134,7 +134,7 @@ describe CustomFields::Entries::BasicEntry do
     end
 
     context "for enum field" do
-      let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w[a b]) }
+      let(:field) { CustomFields::Fields::EnumField.new(key: "foo", options: %w[a b], include_blank: "bar") }
       let(:entry) { described_class.new(field: field, hash: {foo: "b"}, parent: root) }
 
       context "with no translations defined" do
@@ -145,7 +145,8 @@ describe CustomFields::Entries::BasicEntry do
             value_method: :first,
             label_method: :last,
             selected: "b",
-            wrapper_html: {class: "custom-field custom-field-enum"}
+            wrapper_html: {class: "custom-field custom-field-enum"},
+            include_blank: "bar"
           )
         end
       end
@@ -168,7 +169,8 @@ describe CustomFields::Entries::BasicEntry do
             value_method: :first,
             label_method: :last,
             selected: "b",
-            wrapper_html: {class: "custom-field custom-field-enum"}
+            wrapper_html: {class: "custom-field custom-field-enum"},
+            include_blank: "bar"
           )
         end
       end

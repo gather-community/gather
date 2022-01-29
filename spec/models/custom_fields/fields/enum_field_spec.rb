@@ -28,4 +28,36 @@ describe CustomFields::Fields::EnumField do
       expect(field.value_input_param { "a" }).to eq(selected: "a")
     end
   end
+
+  describe "additional_input_params" do
+    context "without include_blank" do
+      it "should pass on include_blank to in additional_input_params" do
+        expect(field.additional_input_params).to eq({})
+      end
+    end
+
+    context "with include_blank" do
+      let(:field) { described_class.new(key: "foo", options: %w[a b], include_blank: "Stuff") }
+
+      it "should pass on include_blank to in additional_input_params" do
+        expect(field.additional_input_params).to eq(include_blank: "Stuff")
+      end
+    end
+  end
+
+  describe "validation" do
+    context "without include_blank" do
+      it "should validate for inclusion" do
+        expect(field.validation).to eq(inclusion: {in: %w[a b]})
+      end
+    end
+
+    context "with include_blank" do
+      let(:field) { described_class.new(key: "foo", options: %w[a b], include_blank: "Stuff") }
+
+      it "should allow blank" do
+        expect(field.validation).to eq(inclusion: {in: %w[a b], allow_blank: true})
+      end
+    end
+  end
 end

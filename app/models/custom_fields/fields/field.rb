@@ -45,6 +45,10 @@ module CustomFields
         {input_html: {value: yield}}
       end
 
+      def additional_input_params
+        {}
+      end
+
       def root?
         false
       end

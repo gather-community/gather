@@ -42,7 +42,16 @@ describe CustomFields::Spec do
   describe "invalid specs" do
     describe "bad type" do
       it do
-        expect { described_class.new([{key: "alpha", type: "strink"}]) }.to raise_error(NameError)
+        expect { described_class.new([{key: "alpha", type: "strink"}]) }
+          .to raise_error(ArgumentError, "Invalid type 'strink'.")
+      end
+    end
+
+    describe "bad characters in key" do
+      it do
+        expect { described_class.new([{key: "alp ha", type: "string"}]) }
+          .to raise_error(ArgumentError,
+                          "Invalid key 'alp ha'. Keys can only contain lowercase letters and _.")
       end
     end
 

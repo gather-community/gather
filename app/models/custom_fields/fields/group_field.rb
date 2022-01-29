@@ -14,7 +14,7 @@ module CustomFields
         self.fields = fields.map do |field_data|
           field_data.symbolize_keys!
           type = field_data.delete(:type).to_s
-          next unless PERMITTED_TYPES.include?(type)
+          raise ArgumentError, "Invalid type '#{type}'." unless PERMITTED_TYPES.include?(type)
           klass = "CustomFields::Fields::#{type.classify}Field"
           klass.constantize.new(field_data)
         end

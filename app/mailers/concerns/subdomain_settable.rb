@@ -13,6 +13,7 @@ module SubdomainSettable
     old_host = config.default_url_options[:host]
     config.default_url_options[:host] = "#{community.slug}.#{Settings.url.host}"
     yield
+  ensure
     config.default_url_options[:host] = old_host
   end
 end

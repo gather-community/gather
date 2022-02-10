@@ -3,6 +3,7 @@
   <%= f.input :is_default, disabled: @force_default %>
   <%= f.hidden_field :is_default if @force_default %>
   <%= f.input :pantry_reimbursement %>
+  <%= f.input :takeout %>
   <%= f.input :role_ids, collection: @role_options, label_method: :title_with_suffix,
         required: true, input_html: {multiple: "multiple"} %>
   <%= javascript_tag do %>

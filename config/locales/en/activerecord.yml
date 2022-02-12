@@ -64,6 +64,7 @@ en:
         parts: "Meal Types"
         pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow pantry reimbursement?"
+        takeout: "Allow takeout requests?"
         role_ids: "Roles"
       meals/formula_part:
         type_id: "Type"
@@ -86,6 +87,7 @@ en:
       meals/signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
+        takeout: "Request takeout"
       billing/transaction:
         incurred_on: "Date Incurred"
         household_name: "Household Name"

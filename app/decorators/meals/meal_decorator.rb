@@ -103,6 +103,10 @@ module Meals
       links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
     end
 
+    def takeout_allowed?
+      formula.takeout?
+    end
+
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),

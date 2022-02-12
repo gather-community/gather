@@ -49,6 +49,9 @@
         <%= render("meals/meals/form/signup_fields", f: f, hide_household: true) %>
       </div>
 
+      <% if meal.takeout_allowed? %>
+        <%= f.input(:takeout) %>
+      <% end %>
       <%= f.input(:comments, maxlength: Meals::Signup::MAX_COMMENT_LENGTH) %>
 
       <%= form_actions do %>

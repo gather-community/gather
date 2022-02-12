@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_19_161834) do
+ActiveRecord::Schema.define(version: 2022_02_10_151908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -436,6 +436,7 @@ ActiveRecord::Schema.define(version: 2022_01_19_161834) do
     t.string "pantry_calc_type", null: false
     t.decimal "pantry_fee", precision: 10, scale: 4, null: false
     t.boolean "pantry_reimbursement", default: false
+    t.boolean "takeout", default: true, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_formulas_on_cluster_id"
     t.index ["community_id"], name: "index_meal_formulas_on_community_id"
@@ -526,6 +527,7 @@ ActiveRecord::Schema.define(version: 2022_01_19_161834) do
     t.integer "household_id", null: false
     t.integer "meal_id", null: false
     t.boolean "notified", default: false, null: false
+    t.boolean "takeout", default: false, null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_signups_on_cluster_id"
     t.index ["household_id", "meal_id"], name: "index_meal_signups_on_household_id_and_meal_id", unique: true

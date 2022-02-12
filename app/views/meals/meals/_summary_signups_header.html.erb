@@ -3,8 +3,11 @@
     <th class="cmty">Cmty</th>
   <% end %>
   <th class="hhld">Household</th>
-  <% @meal.types.each do |type| %>
+  <% meal.types.each do |type| %>
     <th class="count"><%= type.name %></th>
+  <% end %>
+  <% if meal.takeout_allowed? %>
+    <th class="takeout">Takeout</th>
   <% end %>
   <th>Comments</th>
 </tr>

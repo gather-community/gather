@@ -52,8 +52,14 @@ describe "password auth" do
           click_on("Sign in with Password")
           click_on("Don't know your password?")
           fill_in("Email Address", with: "#{user.email}x")
-          click_on("Send Reset Instructions")
-          expect(page).to have_content("Email not found")
+
+          email_sent = email_sent_by do
+            click_on("Send Reset Instructions")
+            expect(page).to have_content("If your email address exists in our database")
+          end
+          expect(email_sent).to be_empty
+
+          click_on("Don't know your password?")
           submit_email_and_visit_new_password_entry_page
 
           click_on("Set Password")
@@ -83,8 +89,7 @@ describe "password auth" do
           fill_in("Email Address", with: user.email)
           email_sent = email_sent_by do
             click_on("Send Reset Instructions")
-            expect(page).to have_alert("You will receive an email with "\
-              "instructions on how to reset your password")
+            expect(page).to have_alert("If your email address exists in our database")
           end
           expect(email_sent).to be_empty
         end
@@ -142,8 +147,7 @@ describe "password auth" do
     fill_in("Email Address", with: user.email)
     email_sent = email_sent_by do
       click_on("Send Reset Instructions")
-      expect(page).to have_alert("You will receive an email with "\
-        "instructions on how to reset your password")
+      expect(page).to have_alert("If your email address exists in our database")
     end
     body = email_sent[0].body.encoded
     match_and_visit_url(body, %r{https?://.+/people/users/password/edit\?reset_password_token=.+$})

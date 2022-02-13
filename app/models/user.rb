@@ -248,6 +248,10 @@ class User < ApplicationRecord
     set_reset_password_token
   end
 
+  def send_reset_password_instructions
+    super unless child?
+  end
+
   # All roles are currently global.
   # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense
   # if someone can e.g. be a meals_coordinator in multiple communities, which they can't.

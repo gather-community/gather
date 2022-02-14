@@ -144,7 +144,7 @@ class UserDecorator < ApplicationDecorator
                      method: :post,
                      path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
                      confirm: {name: name},
-                     permitted: People::SignInInvitationsPolicy.new(h.current_user, community).create?)
+                     permitted: People::SignInInvitationsPolicy.new(h.current_user, object).create?)
     )
   end
 

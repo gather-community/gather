@@ -4,6 +4,12 @@ module People
   module Users
     # Handles resetting password.
     class PasswordsController < Devise::PasswordsController
+      def create
+        super do |user|
+          AuthMailer.cant_reset_password(user).deliver_later if user.child?
+        end
+      end
+
       def update
         # This block is called after the password reset attempt. So we check if the password reset succeeded
         # (i.e. that the user is valid), unconfirmed, and not pending_reconfirmation.

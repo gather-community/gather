@@ -82,7 +82,7 @@ describe "password auth" do
       context "as child" do
         let!(:user) { create(:user, :child) }
 
-        scenario do
+        scenario "sends failure email", :perform_jobs do
           visit(root_path)
           click_on("Sign in with Password")
           click_on("Don't know your password?")
@@ -90,8 +90,11 @@ describe "password auth" do
           email_sent = email_sent_by do
             click_on("Send Reset Instructions")
             expect(page).to have_alert("If your email address exists in our database")
+            perform_job
           end
-          expect(email_sent).to be_empty
+          expect(email_sent.size).to eq(1)
+          body = email_sent[0].body.encoded
+          expect(body).to match("your profile is marked 'directory only'")
         end
       end
     end
@@ -149,6 +152,7 @@ describe "password auth" do
       click_on("Send Reset Instructions")
       expect(page).to have_alert("If your email address exists in our database")
     end
+    expect(email_sent.size).to eq(1)
     body = email_sent[0].body.encoded
     match_and_visit_url(body, %r{https?://.+/people/users/password/edit\?reset_password_token=.+$})
   end

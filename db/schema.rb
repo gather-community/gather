@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_151908) do
+ActiveRecord::Schema.define(version: 2022_02_15_020337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -761,6 +761,7 @@ ActiveRecord::Schema.define(version: 2022_02_10_151908) do
     t.inet "current_sign_in_ip"
     t.jsonb "custom_data", default: {}, null: false
     t.datetime "deactivated_at"
+    t.boolean "directory_only", default: false, null: false
     t.string "doctor"
     t.string "email"
     t.string "encrypted_password", default: "", null: false

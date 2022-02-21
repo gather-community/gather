@@ -208,8 +208,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}#{active? ? nil : ' (Inactive)'}"
   end
 
-  def kind
-    raise "OLD KIND METHOD"
+  def life_stage
     child? ? "child" : "adult"
   end
 

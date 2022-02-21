@@ -4,11 +4,11 @@
 
 # Email confirmation info:
 # Rules:
-# * User must have email unless child or inactive
+# * User must have email unless directory_only or inactive
 # * Email changes must be reconfirmed if user is already confirmed
 # * Signing in with invitation code counts as confirmation since it proves email ownership
-# * Children can have emails (for e.g. reminders) but can't be confirmed
-#   (this implies childrens' emails are NOT secure, but that should be OK)
+# * Directory only users can have emails (for e.g. reminders) but can't be confirmed
+#   (this implies directory only user emails are NOT secure, but that should be OK)
 #
 # Sample Flows:
 # 1. Adult created with unconfirmed email, signs in with invite, is confirmed
@@ -18,10 +18,10 @@
 #    reactivated, sent sign in invite, signs in, is confirmed
 # 4. Unconfirmed adult deactivated, email removed, same as above
 # 5. Unconfirmed adult deactivated, email stays in place, reactivated, same as above
-# 6. Child created with no email, not confirmed, can't sign in, later converted to adult, email must
-#    be added, still unconfirmed, sent sign in invite, etc.
-# 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
-#    sign in invite, signs in, is confirmed
+# 6. Directory-only child created with no email, not confirmed, can't sign in, later converted to full access,
+#    email must be added, still unconfirmed, sent sign in invite, etc.
+# 7. Directory-only child created with email, not confirmed, can't sign in, later converted to full access,
+#    sent sign in invite, signs in, is confirmed
 class User < ApplicationRecord
   include Wisper.model
   include AttachmentFormable
@@ -105,6 +105,7 @@ class User < ApplicationRecord
   scope :with_full_name, ->(n) { where("LOWER(first_name || ' ' || last_name) = ?", n.downcase) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
+  scope :full_access, -> { where(directory_only: false) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
   ROLES.each do |role|
@@ -208,6 +209,7 @@ class User < ApplicationRecord
   end
 
   def kind
+    raise "OLD KIND METHOD"
     child? ? "child" : "adult"
   end
 
@@ -249,7 +251,7 @@ class User < ApplicationRecord
   end
 
   def send_reset_password_instructions
-    super unless child?
+    super unless directory_only?
   end
 
   # All roles are currently global.
@@ -278,15 +280,19 @@ class User < ApplicationRecord
     !child?
   end
 
+  def full_access?
+    !directory_only
+  end
+
   def email_required?
-    adult? && active?
+    full_access? && active?
   end
 
   # Devise method, instantly signs out user if returns false.
   def active_for_authentication?
-    # We don't return false for adult inactive users because they
+    # We don't return false for full access inactive users because they
     # can still see some pages.
-    super && adult?
+    super && full_access?
   end
 
   def never_signed_in?

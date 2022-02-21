@@ -85,7 +85,7 @@ Children under 13 cannot sign in to the system directly. Their information can o
 Children can only sign in to the system when:
 
 1. they are over the age of 13;
-2. their parents/guardians grant permission for them to be considered as "adults" in the system;
+2. their parents/guardians grant permission for them to be considered as "full users" in the system;
 3. an administrator makes this change in the system.
 
 Communities may define other policies in addition to this and instruct the administrator to make the above change only after additional requirements have been met.

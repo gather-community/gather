@@ -44,7 +44,9 @@ module Groups
         WHEN 'everybody' THEN
           (SELECT COUNT(users.id)
             FROM users INNER JOIN households ON users.household_id = households.id
-            WHERE users.cluster_id = groups.cluster_id AND users.deactivated_at IS NULL AND child = 'f'
+            WHERE users.cluster_id = groups.cluster_id
+              AND users.deactivated_at IS NULL
+              AND directory_only = 'f'
               AND households.community_id IN
               (SELECT community_id FROM group_affiliations WHERE group_id = groups.id))
           - (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id AND kind = 'opt_out')
@@ -119,7 +121,7 @@ module Groups
       @opt_outs ||= memberships.opt_outs.including_users_and_communities.map(&:user)
     end
 
-    # computed_memberships = persisted_memberships + (ephemeral memberships for all other active adults)
+    # computed_memberships = persisted_memberships + (ephemeral memberships for all other active full users)
     def computed_memberships(user_eager_load: nil)
       kinds = everybody? ? %i[opt_out manager] : %i[joiner manager]
       matching_mships = memberships.where(kind: kinds).including_users_and_communities
@@ -128,7 +130,7 @@ module Groups
       if everybody?
         # The scope on Users for everybody groups is defined here and in the with_member_counts scope also.
         # They should be consistent.
-        all_users = ::User.active.adults.in_community(communities).including_communities.by_name
+        all_users = ::User.active.full_access.in_community(communities).including_communities.by_name
         all_users = all_users.includes(user_eager_load) unless user_eager_load.nil?
         mships_by_user = matching_mships.index_by(&:user)
         all_users.each do |user|
@@ -139,7 +141,7 @@ module Groups
       matching_mships
     end
 
-    # members = managers + (everybody ? all active adults : joiners) - opt outs
+    # members = managers + (everybody ? all active full users : joiners) - opt outs
     def members(*args)
       computed_memberships(*args).map { |mship| mship.opt_out? ? nil : mship.user }.compact
     end

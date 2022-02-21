@@ -23,7 +23,7 @@ module Meals
     end
 
     def eligible_workers
-      household.adults
+      household.full_access_users
     end
 
     def existing

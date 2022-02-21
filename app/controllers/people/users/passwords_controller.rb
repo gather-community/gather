@@ -6,7 +6,7 @@ module People
     class PasswordsController < Devise::PasswordsController
       def create
         super do |user|
-          AuthMailer.cant_reset_password(user).deliver_later if user.child?
+          AuthMailer.cant_reset_password(user).deliver_later if user.directory_only?
         end
       end
 

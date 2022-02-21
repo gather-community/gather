@@ -14,7 +14,15 @@ describe People::SignInInvitationsPolicy do
       end
     end
 
-    context "with child" do
+    context "with full_access child" do
+      let(:user) { create(:user, :full_access_child) }
+
+      permissions :new?, :create? do
+        it_behaves_like "permits admins but not regular users"
+      end
+    end
+
+    context "with directory_only child" do
       let(:user) { create(:user, :child) }
 
       permissions :new?, :create? do

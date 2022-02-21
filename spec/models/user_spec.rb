@@ -156,6 +156,11 @@ describe User do
           it { is_expected.to have_errors(email: "can't be blank") }
         end
 
+        context "full_access_child" do
+          subject(:user) { build(:user, :full_access_child, email: nil) }
+          it { is_expected.to have_errors(email: "can't be blank") }
+        end
+
         context "child" do
           subject(:user) { build(:user, :child, email: nil) }
           it { is_expected.to be_valid }
@@ -251,6 +256,11 @@ describe User do
 
     context "inactive user" do
       let(:user) { build(:user, :inactive) }
+      it_behaves_like "active_for_auth", true
+    end
+
+    context "full_access_child" do
+      let(:user) { build(:user, :full_access_child) }
       it_behaves_like "active_for_auth", true
     end
 

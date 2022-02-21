@@ -48,7 +48,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    active_admin? && !self? && record.adult? && admin_level(user) >= admin_level(record)
+    active_admin? && !self? && record.full_access? && admin_level(user) >= admin_level(record)
   end
 
   # We don't allow destroy if the user is referred to from an independent record in the community, such

@@ -32,7 +32,7 @@ module Work
       # For existing periods with quota_type not none, only new users will usually not have shares.
       # We don't want to assume they should get a portion.
       return unless @period.new_record? || @period.quota_none?
-      user.child? ? 0 : 1
+      user.directory_only? ? 0 : 1
     end
 
     def existing_shares_by_user_id

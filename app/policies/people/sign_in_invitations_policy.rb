@@ -9,7 +9,7 @@ module People
     end
 
     def create?
-      !invited_user.child? && active_admin?
+      !invited_user.directory_only? && active_admin?
     end
   end
 end

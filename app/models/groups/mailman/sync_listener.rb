@@ -21,8 +21,8 @@ module Groups
 
       def update_user_successful(user)
         return if no_need_to_create_or_update?(user)
-        attribs = %w[email first_name last_name deactivated_at adult]
-        if attribs_changed?(user, %w[deactivated_at adult])
+        attribs = %w[email first_name last_name deactivated_at directory_only]
+        if attribs_changed?(user, %w[deactivated_at directory_only])
           # If user is no longer syncable, sign them out. Then they won't be able to sign in again.
           if (mm_user = user.group_mailman_user).present? && !mm_user.syncable?
             SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)

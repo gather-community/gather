@@ -197,7 +197,11 @@ describe UserPolicy do
         expect(subject).not_to permit(cluster_admin, super_admin)
       end
 
-      it "denies on children" do
+      it "permits for full access children" do
+        expect(subject).to permit(admin, full_access_child)
+      end
+
+      it "denies on directory only users" do
         expect(subject).not_to permit(admin, child)
       end
     end

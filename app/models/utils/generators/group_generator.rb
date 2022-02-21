@@ -8,7 +8,7 @@ module Utils
 
       def initialize(community:)
         self.community = community
-        self.users = User.adults.all
+        self.users = User.full_access.all
         self.user_index = 0
       end
 
@@ -27,7 +27,7 @@ module Utils
       def generate_everybody_group
         create(:group, communities: [community], availability: "everybody",
                        name: "Full Community", kind: "group",
-                       description: "General group containing all adults in the community.")
+                       description: "General group containing all full users in the community.")
       end
 
       def generate_and_populate_everybody_group

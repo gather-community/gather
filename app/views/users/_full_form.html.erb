@@ -36,7 +36,7 @@
     <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
-    <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_adults",
+    <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",
                                         allow_clear: true %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
@@ -62,7 +62,7 @@
       <% end %>
     <% end %>
 
-    <% if policy(@user).administer? && @user.adult? %>
+    <% if policy(@user).administer? && @user.full_access? %>
       <%= f.input :roles do %>
         <div class="roles">
           <% User::ROLES.each do |role| %>
@@ -107,7 +107,7 @@
     <% end %>
 
     <%= form_actions do %>
-      <% if @user.new_record? && @user.adult? %>
+      <% if @user.new_record? && @user.full_access? %>
         <%= f.button :secondary %>
         <%= f.button :primary, :save_and_invite, name: "save_and_invite" %>
       <% else %>

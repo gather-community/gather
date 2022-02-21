@@ -102,7 +102,7 @@ namespace :db do
       kids.each do |kid|
         if User.find_by(kid.slice(:first_name, :last_name)).nil?
           User.create!(kid.slice(:first_name, :last_name, :birthdate, :guardians, :photo, :household)
-            .merge(child: true))
+            .merge(child: true, directory_only: true))
         end
       end
       households.each do |household, attribs|

@@ -5,7 +5,7 @@ module People
   class SignInInvitationsController < ApplicationController
     def new
       authorize(sample_user, policy_class: SignInInvitationsPolicy)
-      @users = User.in_community(current_community).adults.active.by_name
+      @users = User.in_community(current_community).full_access.active.by_name
     end
 
     # Expects params[to_invite] = ["1", "5", ...]

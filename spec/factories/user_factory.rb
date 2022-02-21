@@ -54,7 +54,20 @@ FactoryBot.define do
         guardians { nil }
       end
       child { true }
-      confirmed_at { nil } # Children can't be confirmed.
+      directory_only { true }
+      confirmed_at { nil } # Directory only users can't be confirmed.
+
+      after(:build) do |child, evaluator|
+        child.guardians = evaluator.guardians || [create(:user)]
+      end
+    end
+
+    trait :full_access_child do
+      transient do
+        guardians { nil }
+      end
+      child { true }
+      directory_only { false }
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

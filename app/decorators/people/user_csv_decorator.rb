@@ -24,6 +24,10 @@ module People
       csv_bool(object.child?)
     end
 
+    def directory_only
+      csv_bool(object.directory_only?)
+    end
+
     def vehicles
       adult? && household.vehicles.any? ? household.vehicles.map(&:to_s).sort.join("; ") : nil
     end

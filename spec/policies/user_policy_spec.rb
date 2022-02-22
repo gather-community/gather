@@ -518,7 +518,8 @@ describe UserPolicy do
 
     let(:sample_user) { double(community: community) }
     let(:base_attribs) do
-      %i[id first_name last_name unit_num unit_suffix birthdate email child household_id household_name
+      %i[id first_name last_name unit_num unit_suffix birthdate email child directory_only
+         household_id household_name
          guardian_names mobile_phone home_phone work_phone joined_on preferred_contact
          garage_nums vehicles keyholders emergency_contacts pets]
     end

@@ -152,7 +152,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def exportable_attributes
-    all = %i[id first_name last_name unit_num unit_suffix birthdate email google_email child
+    all = %i[id first_name last_name unit_num unit_suffix birthdate email google_email child directory_only
              household_id household_name guardian_names mobile_phone home_phone work_phone joined_on
              preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
     active_admin? ? all : all - [:google_email]

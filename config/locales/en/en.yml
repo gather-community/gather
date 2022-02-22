@@ -261,6 +261,7 @@ en:
         birthdate: "Birthday"
         email: "Email"
         child: "Is Child"
+        directory_only: "Directory Only"
         household_id: "Household ID"
         household_name: "Household Name"
         mobile_phone: "Mobile Phone"

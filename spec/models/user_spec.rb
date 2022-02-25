@@ -52,6 +52,56 @@ describe User do
     end
   end
 
+  describe "normalization" do
+    let(:user) { build(:user, submitted) }
+    let(:user2) { create(:user) }
+
+    # Get the normalized values for the submitted keys.
+    subject { submitted.keys.map { |k| [k, user.send(k)] }.to_h }
+
+    before do
+      user.validate
+    end
+
+    describe "directory_only, child" do
+      context "with child true" do
+        let(:submitted) { {child: true, directory_only: true} }
+        it { is_expected.to eq(child: true, directory_only: true) }
+      end
+
+      context "with child false" do
+        let(:submitted) { {child: false, directory_only: true} }
+        it { is_expected.to eq(child: false, directory_only: false) }
+      end
+    end
+
+    describe "google_email, job_choosing_proxy, reset_password_token" do
+      context "with directory_only false" do
+        let(:submitted) do
+          {google_email: "a@b.com", job_choosing_proxy_id: user2.id, reset_password_token: "xyz",
+           child: true, directory_only: false}
+        end
+
+        it do
+          is_expected.to eq(google_email: "a@b.com", job_choosing_proxy_id: user2.id,
+                            child: true, reset_password_token: "xyz", directory_only: false)
+        end
+      end
+
+      context "with directory_only true" do
+        let(:submitted) do
+          {google_email: "a@b.com", job_choosing_proxy_id: user2.id, child: true, reset_password_token: "xyz",
+           directory_only: true}
+        end
+
+        it do
+          is_expected.to eq(google_email: nil, job_choosing_proxy_id: nil, child: true,
+                            reset_password_token: nil, directory_only: true)
+        end
+      end
+    end
+  end
+
   describe "validation" do
     context "with no data" do
       it "should not error" do

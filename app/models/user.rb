@@ -155,6 +155,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
+  before_validation :normalize
+
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
@@ -299,6 +301,15 @@ class User < ApplicationRecord
   end
 
   private
+
+  def normalize
+    self.directory_only = false unless child?
+    if directory_only?
+      self.google_email = nil
+      self.job_choosing_proxy_id = nil
+      self.reset_password_token = nil
+    end
+  end
 
   def household_present
     return if household_id.present? || household.present? && !household.marked_for_destruction?

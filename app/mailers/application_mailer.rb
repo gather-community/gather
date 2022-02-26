@@ -49,13 +49,13 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def resolve_user_email(user, include_inactive:, via_household: false)
-    # Don't sent to fake users or unconfirmed full_access users.
-    # It's ok to send emails to unconfirmed directory_only users
+    # Don't send to fake users or unconfirmed full_access users.
+    # It's ok to send emails to unconfirmed non-full_access users
     # because they can't log in, and they may still want to get emails.
     # It would probably even be ok to send to unconfirmed full_access users but just to be safe we don't.
     # Inactive users may have blank emails, but if they do, they can't be confirmed,
     # so we exclude them anyway.
-    if user.fake? || (!user.directory_only? && !user.confirmed?) || (user.inactive? && !include_inactive)
+    if user.fake? || (user.full_access? && !user.confirmed?) || (user.inactive? && !include_inactive)
       nil
     # For children with no emails, we send to their guardians, except
     # we don't map emails to guardians if we're going via household because not all guardians

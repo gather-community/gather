@@ -46,7 +46,7 @@ module Groups
             FROM users INNER JOIN households ON users.household_id = households.id
             WHERE users.cluster_id = groups.cluster_id
               AND users.deactivated_at IS NULL
-              AND directory_only = 'f'
+              AND full_access = 't'
               AND households.community_id IN
               (SELECT community_id FROM group_affiliations WHERE group_id = groups.id))
           - (SELECT COUNT(id) FROM group_memberships WHERE group_id = groups.id AND kind = 'opt_out')

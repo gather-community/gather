@@ -63,40 +63,40 @@ describe User do
       user.validate
     end
 
-    describe "directory_only, child" do
+    describe "full_access, child" do
       context "with child true" do
-        let(:submitted) { {child: true, directory_only: true} }
-        it { is_expected.to eq(child: true, directory_only: true) }
+        let(:submitted) { {child: true, full_access: false} }
+        it { is_expected.to eq(child: true, full_access: false) }
       end
 
       context "with child false" do
-        let(:submitted) { {child: false, directory_only: true} }
-        it { is_expected.to eq(child: false, directory_only: false) }
+        let(:submitted) { {child: false, full_access: false} }
+        it { is_expected.to eq(child: false, full_access: true) }
       end
     end
 
     describe "google_email, job_choosing_proxy, reset_password_token" do
-      context "with directory_only false" do
+      context "with full_access true" do
         let(:submitted) do
           {google_email: "a@b.com", job_choosing_proxy_id: user2.id, reset_password_token: "xyz",
-           child: true, directory_only: false}
+           child: true, full_access: true}
         end
 
         it do
           is_expected.to eq(google_email: "a@b.com", job_choosing_proxy_id: user2.id,
-                            child: true, reset_password_token: "xyz", directory_only: false)
+                            child: true, reset_password_token: "xyz", full_access: true)
         end
       end
 
-      context "with directory_only true" do
+      context "with full_access false" do
         let(:submitted) do
           {google_email: "a@b.com", job_choosing_proxy_id: user2.id, child: true, reset_password_token: "xyz",
-           directory_only: true}
+           full_access: false}
         end
 
         it do
           is_expected.to eq(google_email: nil, job_choosing_proxy_id: nil, child: true,
-                            reset_password_token: nil, directory_only: true)
+                            reset_password_token: nil, full_access: false)
         end
       end
     end

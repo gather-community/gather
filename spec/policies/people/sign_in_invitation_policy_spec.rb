@@ -22,7 +22,7 @@ describe People::SignInInvitationsPolicy do
       end
     end
 
-    context "with directory_only child" do
+    context "with non-full_access child" do
       let(:user) { create(:user, :child) }
 
       permissions :new?, :create? do

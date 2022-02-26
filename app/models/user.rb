@@ -4,7 +4,7 @@
 
 # Email confirmation info:
 # Rules:
-# * User must have email unless directory_only or inactive
+# * User must have email unless non-full-access or inactive
 # * Email changes must be reconfirmed if user is already confirmed
 # * Signing in with invitation code counts as confirmation since it proves email ownership
 # * Directory only users can have emails (for e.g. reminders) but can't be confirmed
@@ -105,7 +105,7 @@ class User < ApplicationRecord
   scope :with_full_name, ->(n) { where("LOWER(first_name || ' ' || last_name) = ?", n.downcase) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
-  scope :full_access, -> { where(directory_only: false) }
+  scope :full_access, -> { where(full_access: true) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
   ROLES.each do |role|
@@ -252,7 +252,7 @@ class User < ApplicationRecord
   end
 
   def send_reset_password_instructions
-    super unless directory_only?
+    super if full_access?
   end
 
   # All roles are currently global.
@@ -281,10 +281,6 @@ class User < ApplicationRecord
     !child?
   end
 
-  def full_access?
-    !directory_only
-  end
-
   def email_required?
     full_access? && active?
   end
@@ -303,8 +299,8 @@ class User < ApplicationRecord
   private
 
   def normalize
-    self.directory_only = false unless child?
-    if directory_only?
+    self.full_access = true unless child?
+    unless full_access?
       self.google_email = nil
       self.job_choosing_proxy_id = nil
       self.reset_password_token = nil

@@ -24,8 +24,8 @@ module People
       csv_bool(object.child?)
     end
 
-    def directory_only
-      csv_bool(object.directory_only?)
+    def full_access
+      csv_bool(object.full_access?)
     end
 
     def vehicles

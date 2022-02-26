@@ -12,7 +12,7 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     email { "person#{rand(10_000_000..99_999_999)}@example.com" }
-    google_email { directory_only ? nil : "person#{rand(10_000_000..99_999_999)}@gmail.com" }
+    google_email { full_access ? "person#{rand(10_000_000..99_999_999)}@gmail.com" : nil }
     mobile_phone { "5555551212" }
     password { FactoryBot::DEFAULT_PASSWORD }
     password_confirmation { FactoryBot::DEFAULT_PASSWORD }
@@ -54,7 +54,7 @@ FactoryBot.define do
         guardians { nil }
       end
       child { true }
-      directory_only { true }
+      full_access { false }
       confirmed_at { nil } # Directory only users can't be confirmed.
 
       after(:build) do |child, evaluator|
@@ -67,7 +67,7 @@ FactoryBot.define do
         guardians { nil }
       end
       child { true }
-      directory_only { false }
+      full_access { true }
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

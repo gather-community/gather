@@ -126,6 +126,7 @@ class UserPolicy < ApplicationPolicy
     household_permitted.delete(:community_id)
 
     permitted = %i[email first_name last_name mobile_phone home_phone work_phone
+                   child full_access certify_13_or_older
                    photo_new_signed_id photo_destroy birthday_str child joined_on job_choosing_proxy_id
                    school allergies doctor medical preferred_contact household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}

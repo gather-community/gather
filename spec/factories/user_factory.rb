@@ -68,6 +68,7 @@ FactoryBot.define do
       end
       child { true }
       full_access { true }
+      certify_13_or_older { "1" }
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

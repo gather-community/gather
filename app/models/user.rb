@@ -42,6 +42,8 @@ class User < ApplicationRecord
   attr_accessor :changing_password
   alias changing_password? changing_password
 
+  attr_accessor :certify_13_or_older
+
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
          :confirmable, omniauth_providers: [:google_oauth2]
@@ -142,8 +144,10 @@ class User < ApplicationRecord
                        if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
+  validates :certify_13_or_older, acceptance: true, if: :full_access_child?
   validate :household_present
   validate { birthday.validate }
+  validate :birthdate_age_certification_agreement
 
   disallow_semicolons :first_name, :last_name
 
@@ -281,6 +285,14 @@ class User < ApplicationRecord
     !child?
   end
 
+  def full_access_child?
+    child? && full_access?
+  end
+
+  def certify_13_or_older?
+    ["1", "true", true].include?(certify_13_or_older)
+  end
+
   def email_required?
     full_access? && active?
   end
@@ -328,5 +340,10 @@ class User < ApplicationRecord
   def unconfirm_if_no_email
     # This is currently only applicable if the user is inactive.
     self.confirmed_at = nil if email.blank?
+  end
+
+  def birthdate_age_certification_agreement
+    return if adult? || !full_access? || !birthday? || age >= 13
+    errors.add(:birthday_str, :too_young)
   end
 end

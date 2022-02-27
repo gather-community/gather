@@ -6,7 +6,6 @@
   <%= gather_form_for(@user, width: :full) do |f| %>
     <%= f.hidden_field :photo_new_signed_id %>
     <%= f.hidden_field :photo_destroy %>
-    <%= f.hidden_field :child %>
     <%= f.hidden_field :household_by_id %>
 
     <%# For new records, we put this up here so that folks see early on they need to make a household first. %>
@@ -14,6 +13,10 @@
 
     <%= f.input :first_name %>
     <%= f.input :last_name %>
+
+    <%= f.input :child %>
+    <%= f.input :full_access %>
+    <%= f.input :certify_13_or_older, as: :boolean %>
 
     <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) if @user.child? %>
 

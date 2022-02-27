@@ -23,6 +23,9 @@ en:
         doctor: "Doctor Info"
         medical: "Medical Info"
         remember_me: "Stay signed in after you close your browser"
+        child: "User is a child?"
+        full_access: "User should have full access to the system?"
+        certify_13_or_older: "I certify that this user is 13 years of age or older"
       household:
         name: "Household Name"
         community_id: "Community"
@@ -262,6 +265,11 @@ en:
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
+          attributes:
+            certify_13_or_older:
+              accepted: "Age certification is required for children with full access"
+            birthday_str:
+              too_young: "Children must be 13 years of age or older to have full access"
         calendars/calendar:
           attributes:
             abbrv:

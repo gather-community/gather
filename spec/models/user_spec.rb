@@ -109,6 +109,58 @@ describe User do
       end
     end
 
+    describe "age certification" do
+      context "with full access child" do
+        context "with age certification '0'" do
+          subject(:user) { build(:user, :full_access_child, certify_13_or_older: "0") }
+
+          it do
+            expect(user).not_to be_valid
+            expect(user.errors[:certify_13_or_older].join)
+              .to eq("Age certification is required for children with full access")
+          end
+        end
+
+        context "with age certification" do
+          context "with no birthday" do
+            subject(:user) { build(:user, :full_access_child, certify_13_or_older: "1") }
+            it { is_expected.to be_valid }
+          end
+
+          context "with birthday" do
+            subject(:user) do
+              build(:user, :full_access_child, certify_13_or_older: true, birthday_str: birthdate)
+            end
+
+            context "with valid birthday" do
+              let(:birthdate) { (Time.current - 14.years).to_s(:no_time) }
+              it { is_expected.to be_valid }
+            end
+
+            context "with invalid birthday" do
+              let(:birthdate) { (Time.current - 12.years).to_s(:no_time) }
+
+              it do
+                expect(user).not_to be_valid
+                expect(user.errors[:birthday_str].join)
+                  .to eq("Children must be 13 years of age or older to have full access")
+              end
+            end
+          end
+        end
+      end
+
+      context "with regular child" do
+        subject(:user) { build(:user, :child) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with adult" do
+        subject(:user) { build(:user) }
+        it { is_expected.to be_valid }
+      end
+    end
+
     # See phoneable_spec.rb for more phone normalization and validation specs.
     describe "phone" do
       let(:user) { build(:user, mobile_phone: phone) }

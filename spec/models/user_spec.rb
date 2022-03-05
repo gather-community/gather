@@ -196,8 +196,20 @@ describe User do
       end
 
       context "with adult" do
-        subject(:user) { build(:user) }
-        it { is_expected.to be_valid }
+        context "with newly created adult" do
+          subject(:user) { build(:user) }
+          it { is_expected.to be_valid }
+        end
+
+        context "with adult who was previously child" do
+          subject(:user) { create(:user, :child).tap { |u| u.child = false } }
+
+          it do
+            expect(user).not_to be_valid
+            expect(user.errors[:certify_13_or_older].join)
+              .to eq("Age certification is required for changing child to adult")
+          end
+        end
       end
     end
 

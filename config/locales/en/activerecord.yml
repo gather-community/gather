@@ -267,7 +267,8 @@ en:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
           attributes:
             certify_13_or_older:
-              accepted: "Age certification is required for children with full access"
+              accepted_full_access: "Age certification is required for children with full access"
+              accepted_becoming_adult: "Age certification is required for changing child to adult"
             birthday_str:
               too_young: "Children must be 13 years of age or older to have full access"
         calendars/calendar:

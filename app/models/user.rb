@@ -144,7 +144,7 @@ class User < ApplicationRecord
                        if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
-  validates :certify_13_or_older, acceptance: true, if: :full_access_child?
+  validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
   validate :household_present
   validate { birthday.validate }
   validate :birthdate_age_certification_agreement
@@ -339,6 +339,12 @@ class User < ApplicationRecord
 
   def password_required_and_not_blank?
     password_required? && password.present?
+  end
+
+  def certify_13_or_older_if_full_access_child_or_child_becoming_adult
+    return if ["1", "true", true].include?(certify_13_or_older)
+    errors.add(:certify_13_or_older, :accepted_full_access) if full_access_child?
+    errors.add(:certify_13_or_older, :accepted_becoming_adult) if adult? && child_changed?
   end
 
   def unconfirm_if_no_email

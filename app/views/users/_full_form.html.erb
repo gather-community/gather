@@ -14,14 +14,17 @@
     <%= f.input :first_name %>
     <%= f.input :last_name %>
 
-    <%= f.input :child %>
+    <%= f.input :child, input_html: {"data-was-child": @user.child_was} %>
     <%= f.input :full_access %>
     <%= f.input :certify_13_or_older, as: :boolean %>
 
-    <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) if @user.child? %>
+    <div data-child-only="true">
+      <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) %>
+    </div>
 
     <%= f.input :email, required: @user.email_required? %>
-    <%= f.input :google_email, disabled: !policy(@user).administer? %>
+    <%= f.input :google_email, disabled: !policy(@user).administer?,
+                               wrapper_html: {"data-adult-only": true} %>
     <%= f.input :phone do %>
       <div class="nested-fields subfields">
         <div class="fields-col">
@@ -40,7 +43,7 @@
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
     <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",
-                                        allow_clear: true %>
+                                        wrapper_html: {"data-adult-only": true}, allow_clear: true %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
     <%= f.input :doctor %>
@@ -65,7 +68,7 @@
       <% end %>
     <% end %>
 
-    <% if policy(@user).administer? && @user.full_access? %>
+    <% if policy(@user).administer? %>
       <%= f.input :roles do %>
         <div class="roles">
           <% User::ROLES.each do |role| %>
@@ -86,7 +89,8 @@
     <%# Showing these fields is problematic if the child lives in multiple households.
         In the data model they have one primary household plus we show them in the households of
         their guardians. But it would be difficult and is unnecessary to show both households here
-        so we don't. %>
+        so we don't. If the user changes from child to adult during edit, then these fields
+        still won't show, but that's ok. Changing life stage is a rare operation. %>
     <% if @user.adult? %>
       <%= f.simple_fields_for(:household_attributes, @user.household) do |hf| %>
         <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">

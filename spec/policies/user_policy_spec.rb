@@ -201,7 +201,7 @@ describe UserPolicy do
         expect(subject).to permit(admin, full_access_child)
       end
 
-      it "denies on directory only users" do
+      it "denies on non-full-access users" do
         expect(subject).not_to permit(admin, child)
       end
     end

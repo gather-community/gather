@@ -94,7 +94,7 @@ describe "password auth" do
           end
           expect(email_sent.size).to eq(1)
           body = email_sent[0].body.encoded
-          expect(body).to match("your profile is marked 'directory only'")
+          expect(body).to match("your profile does not have full system access")
         end
       end
     end

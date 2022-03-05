@@ -8,7 +8,7 @@
 # * Email changes must be reconfirmed if user is already confirmed
 # * Signing in with invitation code counts as confirmation since it proves email ownership
 # * Directory only users can have emails (for e.g. reminders) but can't be confirmed
-#   (this implies directory only user emails are NOT secure, but that should be OK)
+#   (this implies non-full-access user emails are NOT secure, but that should be OK)
 #
 # Sample Flows:
 # 1. Adult created with unconfirmed email, signs in with invite, is confirmed

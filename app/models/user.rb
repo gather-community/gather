@@ -311,7 +311,10 @@ class User < ApplicationRecord
   private
 
   def normalize
-    self.full_access = true unless child?
+    unless child?
+      self.full_access = true
+      up_guardianships.destroy_all
+    end
     unless full_access?
       self.google_email = nil
       self.job_choosing_proxy_id = nil

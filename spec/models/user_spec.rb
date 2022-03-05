@@ -102,6 +102,44 @@ describe User do
         end
       end
     end
+
+    describe "guardians" do
+      context "with regular child" do
+        let(:user) { build(:user, :child) }
+
+        it "doesn't remove guardians" do
+          expect(user.up_guardianships).not_to be_empty
+        end
+      end
+
+      context "with full_access child" do
+        let(:user) { build(:user, :full_access_child) }
+
+        it "doesn't remove guardians" do
+          expect(user.up_guardianships).not_to be_empty
+        end
+      end
+
+      context "with adult" do
+        context "with preexisting guardians" do
+          let(:user) { create(:user, :full_access_child).tap { |u| u.child = false } }
+
+          it "removes guardians" do
+            expect(user.up_guardianships).to be_empty
+          end
+        end
+
+        context "with non-preexisting guardians" do
+          let(:user) do
+            build(:user, up_guardianships_attributes: {"0" => {guardian_id: create(:user).id.to_s}})
+          end
+
+          it "removes guardians" do
+            expect(user.up_guardianships).to be_empty
+          end
+        end
+      end
+    end
   end
 
   describe "validation" do

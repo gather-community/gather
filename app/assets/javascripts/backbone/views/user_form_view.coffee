@@ -27,5 +27,5 @@ Gather.Views.UserFormView = Backbone.View.extend
     @$('.user_full_access').toggle(child)
     @$('.user_roles').toggle(!child || full_access)
     @$('.user_certify_13_or_older').toggle(child && full_access || !child && was_child)
-    @$('[data-adult-only]').toggle(!child)
+    @$('[data-full-access-only]').toggle(full_access || !child)
     @$('[data-child-only]').toggle(child)

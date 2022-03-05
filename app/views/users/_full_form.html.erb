@@ -14,9 +14,11 @@
     <%= f.input :first_name %>
     <%= f.input :last_name %>
 
-    <%= f.input :child, input_html: {"data-was-child": @user.child_was} %>
-    <%= f.input :full_access %>
-    <%= f.input :certify_13_or_older, as: :boolean %>
+    <% if policy(@user).administer? %>
+      <%= f.input :child, input_html: {"data-was-child": @user.child_was} %>
+      <%= f.input :full_access %>
+      <%= f.input :certify_13_or_older, as: :boolean %>
+    <% end %>
 
     <div data-child-only="true">
       <%= nested_field_set(f, :up_guardianships, inner_labels: false, required: true) %>
@@ -24,7 +26,7 @@
 
     <%= f.input :email, required: @user.email_required? %>
     <%= f.input :google_email, disabled: !policy(@user).administer?,
-                               wrapper_html: {"data-adult-only": true} %>
+                               wrapper_html: {"data-full-access-only": true} %>
     <%= f.input :phone do %>
       <div class="nested-fields subfields">
         <div class="fields-col">
@@ -43,7 +45,7 @@
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
     <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",
-                                        wrapper_html: {"data-adult-only": true}, allow_clear: true %>
+                                        wrapper_html: {"data-full-access-only": true}, allow_clear: true %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
     <%= f.input :doctor %>

@@ -75,28 +75,30 @@ describe User do
       end
     end
 
-    describe "google_email, job_choosing_proxy, reset_password_token" do
+    describe "google_email, job_choosing_proxy, reset_password_token, roles" do
       context "with full_access true" do
         let(:submitted) do
           {google_email: "a@b.com", job_choosing_proxy_id: user2.id, reset_password_token: "xyz",
-           child: true, full_access: true}
+           child: true, full_access: true, role_admin: true, role_biller: true}
         end
 
         it do
           is_expected.to eq(google_email: "a@b.com", job_choosing_proxy_id: user2.id,
-                            child: true, reset_password_token: "xyz", full_access: true)
+                            child: true, reset_password_token: "xyz", full_access: true,
+                            role_admin: true, role_biller: true)
         end
       end
 
       context "with full_access false" do
         let(:submitted) do
           {google_email: "a@b.com", job_choosing_proxy_id: user2.id, child: true, reset_password_token: "xyz",
-           full_access: false}
+           full_access: false, role_admin: true, role_biller: true}
         end
 
         it do
           is_expected.to eq(google_email: nil, job_choosing_proxy_id: nil, child: true,
-                            reset_password_token: nil, full_access: false)
+                            reset_password_token: nil, full_access: false,
+                            role_admin: false, role_biller: false)
         end
       end
     end

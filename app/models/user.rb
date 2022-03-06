@@ -343,7 +343,9 @@ class User < ApplicationRecord
 
   def certify_13_or_older_if_full_access_child_or_child_becoming_adult
     return if ["1", "true", true].include?(certify_13_or_older)
-    errors.add(:certify_13_or_older, :accepted_full_access) if full_access_child?
+    if full_access_child? && (new_record? || full_access_changed?)
+      errors.add(:certify_13_or_older, :accepted_full_access)
+    end
     errors.add(:certify_13_or_older, :accepted_becoming_adult) if adult? && child_changed?
   end
 

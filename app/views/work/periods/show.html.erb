@@ -38,8 +38,8 @@
 <% unless period.quota_none? %>
   <div class="shares">
     <h2>Shares</h2>
-    <% @users_by_kind.each do |kind, users| %>
-      <% if @users_by_kind.size > 1 %>
+    <% @users_by_life_stage.each do |kind, users| %>
+      <% if @users_by_life_stage.size > 1 %>
         <h3><%= t("common.#{kind.pluralize}") %></h3>
       <% end %>
       <div class="work-share-section">

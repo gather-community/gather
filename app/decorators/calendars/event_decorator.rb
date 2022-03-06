@@ -32,7 +32,7 @@ module Calendars
     end
 
     def creator_select2_context
-      access_level(h.current_community) == "sponsor" ? "current_cluster_adults" : "current_community_adults"
+      access_level(h.current_community) == "sponsor" ? "current_cluster_full_access" : "current_community_full_access"
     end
 
     def show_action_link_set

@@ -19,6 +19,12 @@ class AuthMailer < Devise::Mailer
     super(user.decorate, token, opts)
   end
 
+  def cant_reset_password(user)
+    return if user.fake?
+    @user = user.decorate
+    mail(to: @user)
+  end
+
   def confirmation_instructions(user, token, opts = {})
     return if user.fake?
     super(user.decorate, token, opts)

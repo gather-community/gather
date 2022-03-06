@@ -15,8 +15,8 @@ describe Groups::Mailman::User do
     context "with user record" do
       let(:fake) { false }
       let(:active) { true }
-      let(:child) { false }
-      let(:user) { create(:user, active ? :active : :inactive, child ? :child : :adult, fake: fake) }
+      let(:trait) { :adult }
+      let(:user) { create(:user, active ? :active : :inactive, trait, fake: fake) }
       let(:mm_user) { build(:group_mailman_user, user: user) }
 
       context "with non-fake user" do
@@ -30,8 +30,13 @@ describe Groups::Mailman::User do
         end
 
         context "with child user" do
-          let(:child) { true }
+          let(:trait) { :child }
           it { is_expected.to be(false) }
+        end
+
+        context "full_access_child" do
+          let(:trait) { :full_access_child }
+          it { is_expected.to be(true) }
         end
       end
 

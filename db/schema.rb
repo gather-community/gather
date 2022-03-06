@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_151908) do
+ActiveRecord::Schema.define(version: 2022_02_15_124508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -766,6 +766,7 @@ ActiveRecord::Schema.define(version: 2022_02_10_151908) do
     t.string "encrypted_password", default: "", null: false
     t.boolean "fake", default: false, null: false
     t.string "first_name", null: false
+    t.boolean "full_access", default: true, null: false
     t.string "google_email"
     t.string "home_phone"
     t.integer "household_id", null: false
@@ -798,8 +799,10 @@ ActiveRecord::Schema.define(version: 2022_02_10_151908) do
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.check_constraint :children_not_confirmed, "((child = false) OR (confirmed_at IS NULL))"
-    t.check_constraint :email_presence, "((child = true) OR (deactivated_at IS NOT NULL) OR ((email IS NOT NULL) AND ((email)::text !~ '^\\s*$'::text)))"
+    t.check_constraint :email_presence, "((full_access = false) OR (deactivated_at IS NOT NULL) OR ((email IS NOT NULL) AND ((email)::text !~ '^\\s*$'::text)))"
+    t.check_constraint :full_access_no_google_email, "((full_access = true) OR (google_email IS NULL))"
+    t.check_constraint :full_access_not_confirmed, "((full_access = true) OR (confirmed_at IS NULL))"
+    t.check_constraint :full_access_reset_password_token, "((full_access = true) OR (reset_password_token IS NULL))"
     t.check_constraint :unconfirmed_if_no_email, "((email IS NOT NULL) OR (confirmed_at IS NULL))"
   end
 

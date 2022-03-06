@@ -9,15 +9,15 @@ class UserSelectScoper
   def resolve
     users = UserPolicy::Scope.new(actor, User).resolve.by_name
     case scope_name
-    when "current_community_adults"
-      users.active.in_community(community).adults
+    when "current_community_full_access"
+      users.active.in_community(community).full_access
     when "guardians"
       users.active.in_community(community).can_be_guardian
-    when "current_cluster_adults"
-      users.active.adults
-    when "specific_community_adults"
+    when "current_cluster_full_access"
+      users.active.full_access
+    when "specific_community_full_access"
       community_ids = extra_data.presence || community.id
-      users.active.adults.in_community(community_ids)
+      users.active.full_access.in_community(community_ids)
     when "current_community_all"
       users.active.in_community(community)
     when "current_community_inactive"

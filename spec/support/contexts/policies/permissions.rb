@@ -28,6 +28,7 @@ shared_context "policy permissions" do
   let(:account) { create(:household, community: community).accounts[0] }
   let(:guardian) { user }
   let(:child) { create(:user, :child, guardians: [guardian], first_name: "child") }
+  let(:full_access_child) { create(:user, :full_access_child, guardians: [guardian], first_name: "fachild") }
   let(:other_child) { create(:user, :child, guardians: [other_user], first_name: "other_child") }
   let(:child_cmtyB) do
     create(:user, :child, community: communityB, guardians: [user_cmtyB], first_name: "child_cmtyB")

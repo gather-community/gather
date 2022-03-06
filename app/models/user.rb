@@ -4,11 +4,11 @@
 
 # Email confirmation info:
 # Rules:
-# * User must have email unless child or inactive
+# * User must have email unless non-full-access or inactive
 # * Email changes must be reconfirmed if user is already confirmed
 # * Signing in with invitation code counts as confirmation since it proves email ownership
-# * Children can have emails (for e.g. reminders) but can't be confirmed
-#   (this implies childrens' emails are NOT secure, but that should be OK)
+# * Directory only users can have emails (for e.g. reminders) but can't be confirmed
+#   (this implies non-full-access user emails are NOT secure, but that should be OK)
 #
 # Sample Flows:
 # 1. Adult created with unconfirmed email, signs in with invite, is confirmed
@@ -18,10 +18,10 @@
 #    reactivated, sent sign in invite, signs in, is confirmed
 # 4. Unconfirmed adult deactivated, email removed, same as above
 # 5. Unconfirmed adult deactivated, email stays in place, reactivated, same as above
-# 6. Child created with no email, not confirmed, can't sign in, later converted to adult, email must
-#    be added, still unconfirmed, sent sign in invite, etc.
-# 7. Child created with email, not confirmed, can't sign in, later converted to adult via console, sent
-#    sign in invite, signs in, is confirmed
+# 6. Directory-only child created with no email, not confirmed, can't sign in, later converted to full access,
+#    email must be added, still unconfirmed, sent sign in invite, etc.
+# 7. Directory-only child created with email, not confirmed, can't sign in, later converted to full access,
+#    sent sign in invite, signs in, is confirmed
 class User < ApplicationRecord
   include Wisper.model
   include AttachmentFormable
@@ -41,6 +41,8 @@ class User < ApplicationRecord
 
   attr_accessor :changing_password
   alias changing_password? changing_password
+
+  attr_accessor :certify_13_or_older
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
@@ -105,6 +107,7 @@ class User < ApplicationRecord
   scope :with_full_name, ->(n) { where("LOWER(first_name || ' ' || last_name) = ?", n.downcase) }
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
+  scope :full_access, -> { where(full_access: true) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
 
   ROLES.each do |role|
@@ -141,8 +144,10 @@ class User < ApplicationRecord
                        if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
+  validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
   validate :household_present
   validate { birthday.validate }
+  validate :birthdate_age_certification_agreement
 
   disallow_semicolons :first_name, :last_name
 
@@ -153,6 +158,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
+
+  before_validation :normalize
 
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
@@ -207,7 +214,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}#{active? ? nil : ' (Inactive)'}"
   end
 
-  def kind
+  def life_stage
     child? ? "child" : "adult"
   end
 
@@ -248,6 +255,10 @@ class User < ApplicationRecord
     set_reset_password_token
   end
 
+  def send_reset_password_instructions
+    super if full_access?
+  end
+
   # All roles are currently global.
   # It might be tempting to scope e.g. meals_coordinator by community, but that would only make sense
   # if someone can e.g. be a meals_coordinator in multiple communities, which they can't.
@@ -274,15 +285,23 @@ class User < ApplicationRecord
     !child?
   end
 
+  def full_access_child?
+    child? && full_access?
+  end
+
+  def certify_13_or_older?
+    ["1", "true", true].include?(certify_13_or_older)
+  end
+
   def email_required?
-    adult? && active?
+    full_access? && active?
   end
 
   # Devise method, instantly signs out user if returns false.
   def active_for_authentication?
-    # We don't return false for adult inactive users because they
+    # We don't return false for full access inactive users because they
     # can still see some pages.
-    super && adult?
+    super && full_access?
   end
 
   def never_signed_in?
@@ -290,6 +309,19 @@ class User < ApplicationRecord
   end
 
   private
+
+  def normalize
+    unless child?
+      self.full_access = true
+      up_guardianships.destroy_all
+    end
+    unless full_access?
+      self.google_email = nil
+      self.job_choosing_proxy_id = nil
+      self.reset_password_token = nil
+      roles.destroy_all
+    end
+  end
 
   def household_present
     return if household_id.present? || household.present? && !household.marked_for_destruction?
@@ -309,8 +341,21 @@ class User < ApplicationRecord
     password_required? && password.present?
   end
 
+  def certify_13_or_older_if_full_access_child_or_child_becoming_adult
+    return if ["1", "true", true].include?(certify_13_or_older)
+    if full_access_child? && (new_record? || full_access_changed?)
+      errors.add(:certify_13_or_older, :accepted_full_access)
+    end
+    errors.add(:certify_13_or_older, :accepted_becoming_adult) if adult? && child_changed?
+  end
+
   def unconfirm_if_no_email
     # This is currently only applicable if the user is inactive.
     self.confirmed_at = nil if email.blank?
+  end
+
+  def birthdate_age_certification_agreement
+    return if adult? || !full_access? || !birthday? || age >= 13
+    errors.add(:birthday_str, :too_young)
   end
 end

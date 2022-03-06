@@ -52,10 +52,177 @@ describe User do
     end
   end
 
+  describe "normalization" do
+    let(:user) { build(:user, submitted) }
+    let(:user2) { create(:user) }
+
+    # Get the normalized values for the submitted keys.
+    subject { submitted.keys.map { |k| [k, user.send(k)] }.to_h }
+
+    before do
+      user.validate
+    end
+
+    describe "full_access, child" do
+      context "with child true" do
+        let(:submitted) { {child: true, full_access: false} }
+        it { is_expected.to eq(child: true, full_access: false) }
+      end
+
+      context "with child false" do
+        let(:submitted) { {child: false, full_access: false} }
+        it { is_expected.to eq(child: false, full_access: true) }
+      end
+    end
+
+    describe "google_email, job_choosing_proxy, reset_password_token, roles" do
+      context "with full_access true" do
+        let(:submitted) do
+          {google_email: "a@b.com", job_choosing_proxy_id: user2.id, reset_password_token: "xyz",
+           child: true, full_access: true, role_admin: true, role_biller: true}
+        end
+
+        it do
+          is_expected.to eq(google_email: "a@b.com", job_choosing_proxy_id: user2.id,
+                            child: true, reset_password_token: "xyz", full_access: true,
+                            role_admin: true, role_biller: true)
+        end
+      end
+
+      context "with full_access false" do
+        let(:submitted) do
+          {google_email: "a@b.com", job_choosing_proxy_id: user2.id, child: true, reset_password_token: "xyz",
+           full_access: false, role_admin: true, role_biller: true}
+        end
+
+        it do
+          is_expected.to eq(google_email: nil, job_choosing_proxy_id: nil, child: true,
+                            reset_password_token: nil, full_access: false,
+                            role_admin: false, role_biller: false)
+        end
+      end
+    end
+
+    describe "guardians" do
+      context "with regular child" do
+        let(:user) { build(:user, :child) }
+
+        it "doesn't remove guardians" do
+          expect(user.up_guardianships).not_to be_empty
+        end
+      end
+
+      context "with full_access child" do
+        let(:user) { build(:user, :full_access_child) }
+
+        it "doesn't remove guardians" do
+          expect(user.up_guardianships).not_to be_empty
+        end
+      end
+
+      context "with adult" do
+        context "with preexisting guardians" do
+          let(:user) { create(:user, :full_access_child).tap { |u| u.child = false } }
+
+          it "removes guardians" do
+            expect(user.up_guardianships).to be_empty
+          end
+        end
+
+        context "with non-preexisting guardians" do
+          let(:user) do
+            build(:user, up_guardianships_attributes: {"0" => {guardian_id: create(:user).id.to_s}})
+          end
+
+          it "removes guardians" do
+            expect(user.up_guardianships).to be_empty
+          end
+        end
+      end
+    end
+  end
+
   describe "validation" do
     context "with no data" do
       it "should not error" do
         expect(User.new).to be_invalid
+      end
+    end
+
+    describe "age certification" do
+      context "with full access child" do
+        context "with new record" do
+          context "with age certification '0'" do
+            subject(:user) { build(:user, :full_access_child, certify_13_or_older: "0") }
+
+            it do
+              expect(user).not_to be_valid
+              expect(user.errors[:certify_13_or_older].join)
+                .to eq("Age certification is required for children with full access")
+            end
+          end
+
+          context "with age certification" do
+            context "with no birthday" do
+              subject(:user) { build(:user, :full_access_child, certify_13_or_older: "1") }
+              it { is_expected.to be_valid }
+            end
+
+            context "with birthday" do
+              subject(:user) do
+                build(:user, :full_access_child, certify_13_or_older: true, birthday_str: birthdate)
+              end
+
+              context "with valid birthday" do
+                let(:birthdate) { (Time.current - 14.years).to_s(:no_time) }
+                it { is_expected.to be_valid }
+              end
+
+              context "with invalid birthday" do
+                let(:birthdate) { (Time.current - 12.years).to_s(:no_time) }
+
+                it do
+                  expect(user).not_to be_valid
+                  expect(user.errors[:birthday_str].join)
+                    .to eq("Children must be 13 years of age or older to have full access")
+                end
+              end
+            end
+          end
+        end
+
+        # Once a user has full access, we shouldn't need them to check the box on every edit.
+        context "with reloaded persisted record" do
+          let(:user) { create(:user, :full_access_child) }
+
+          context "with unrelated change" do
+            subject(:reloaded_user) { User.find(user.id).tap { |u| u.last_name = "Fizz" } }
+
+            it { is_expected.to be_valid }
+          end
+        end
+      end
+
+      context "with regular child" do
+        subject(:user) { build(:user, :child) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with adult" do
+        context "with newly created adult" do
+          subject(:user) { build(:user) }
+          it { is_expected.to be_valid }
+        end
+
+        context "with adult who was previously child" do
+          subject(:user) { create(:user, :child).tap { |u| u.child = false } }
+
+          it do
+            expect(user).not_to be_valid
+            expect(user.errors[:certify_13_or_older].join)
+              .to eq("Age certification is required for changing child to adult")
+          end
+        end
       end
     end
 
@@ -156,6 +323,11 @@ describe User do
           it { is_expected.to have_errors(email: "can't be blank") }
         end
 
+        context "full_access_child" do
+          subject(:user) { build(:user, :full_access_child, email: nil) }
+          it { is_expected.to have_errors(email: "can't be blank") }
+        end
+
         context "child" do
           subject(:user) { build(:user, :child, email: nil) }
           it { is_expected.to be_valid }
@@ -251,6 +423,11 @@ describe User do
 
     context "inactive user" do
       let(:user) { build(:user, :inactive) }
+      it_behaves_like "active_for_auth", true
+    end
+
+    context "full_access_child" do
+      let(:user) { build(:user, :full_access_child) }
       it_behaves_like "active_for_auth", true
     end
 

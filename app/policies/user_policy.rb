@@ -48,7 +48,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    active_admin? && !self? && record.adult? && admin_level(user) >= admin_level(record)
+    active_admin? && !self? && record.full_access? && admin_level(user) >= admin_level(record)
   end
 
   # We don't allow destroy if the user is referred to from an independent record in the community, such
@@ -126,6 +126,7 @@ class UserPolicy < ApplicationPolicy
     household_permitted.delete(:community_id)
 
     permitted = %i[email first_name last_name mobile_phone home_phone work_phone
+                   child full_access certify_13_or_older
                    photo_new_signed_id photo_destroy birthday_str child joined_on job_choosing_proxy_id
                    school allergies doctor medical preferred_contact household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
@@ -152,7 +153,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def exportable_attributes
-    all = %i[id first_name last_name unit_num unit_suffix birthdate email google_email child
+    all = %i[id first_name last_name unit_num unit_suffix birthdate email google_email child full_access
              household_id household_name guardian_names mobile_phone home_phone work_phone joined_on
              preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
     active_admin? ? all : all - [:google_email]

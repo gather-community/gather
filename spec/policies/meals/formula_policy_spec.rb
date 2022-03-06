@@ -112,7 +112,7 @@ describe Meals::FormulaPolicy do
   describe "permitted attributes" do
     let(:formula) { create(:meal_formula) }
     let(:admin) { create(:admin) }
-    let(:base_attribs) { %i[name is_default pantry_reimbursement allow_takeout] << {role_ids: []} }
+    let(:base_attribs) { %i[name is_default pantry_reimbursement takeout] << {role_ids: []} }
     subject { Meals::FormulaPolicy.new(admin, formula).permitted_attributes }
 
     context "with no meals" do

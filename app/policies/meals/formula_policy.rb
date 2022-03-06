@@ -49,7 +49,7 @@ module Meals
     end
 
     def permitted_attributes
-      attrs = %i[name is_default allow_takeout pantry_reimbursement] << {role_ids: []}
+      attrs = %i[name is_default takeout pantry_reimbursement] << {role_ids: []}
       if update_calcs?
         attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_formatted)
         attrs.push(parts_attributes: [:id, :type_id, :share_formatted, :portion_size,

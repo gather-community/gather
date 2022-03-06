@@ -49,17 +49,19 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def resolve_user_email(user, include_inactive:, via_household: false)
-    # It's ok to send emails to unconfirmed children because they can't log in, and children may still want
-    # to get emails.
-    # It would probably even be ok to send to unconfirmed adults but just to be safe we don't.
+    # Don't send to fake users or unconfirmed full_access users.
+    # It's ok to send emails to unconfirmed non-full_access users
+    # because they can't log in, and they may still want to get emails.
+    # It would probably even be ok to send to unconfirmed full_access users but just to be safe we don't.
     # Inactive users may have blank emails, but if they do, they can't be confirmed,
     # so we exclude them anyway.
-    if user.fake? || (user.adult? && !user.confirmed?) || (user.inactive? && !include_inactive)
+    if user.fake? || (user.full_access? && !user.confirmed?) || (user.inactive? && !include_inactive)
       nil
+    # For children with no emails, we send to their guardians, except
+    # we don't map emails to guardians if we're going via household because not all guardians
+    # of children in a household live in that household. So sending an email addressed to household X
+    # to guardians Y and Z of child C, even though Z doesn't live in household X, could be awkward.
     elsif user.child? && user.email.blank? && !via_household
-      # We don't map emails to guardians if we're going via household because not all guardians
-      # of children in a household live in that household. So sending an email addressed to household X
-      # to guardians Y and Z of child C, even though Z doesn't live in household X, could be awkward.
       user.guardians.map(&:email)
     else
       user.email

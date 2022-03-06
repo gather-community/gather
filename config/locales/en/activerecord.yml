@@ -23,6 +23,9 @@ en:
         doctor: "Doctor Info"
         medical: "Medical Info"
         remember_me: "Stay signed in after you close your browser"
+        child: "User is a child?"
+        full_access: "User should have full access to the system?"
+        certify_13_or_older: "I certify that this user is 13 years of age or older"
       household:
         name: "Household Name"
         community_id: "Community"
@@ -64,6 +67,7 @@ en:
         parts: "Meal Types"
         pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow pantry reimbursement?"
+        takeout: "Allow takeout requests?"
         role_ids: "Roles"
       meals/formula_part:
         type_id: "Type"
@@ -86,6 +90,7 @@ en:
       meals/signup:
         spots_left: "Spots Left"
         comments: "Comments for Cook"
+        takeout: "Request takeout"
       billing/transaction:
         incurred_on: "Date Incurred"
         household_name: "Household Name"
@@ -260,6 +265,12 @@ en:
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."
+          attributes:
+            certify_13_or_older:
+              accepted_full_access: "Age certification is required for children with full access"
+              accepted_becoming_adult: "Age certification is required for changing child to adult"
+            birthday_str:
+              too_young: "Children must be 13 years of age or older to have full access"
         calendars/calendar:
           attributes:
             abbrv:

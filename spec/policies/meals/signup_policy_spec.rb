@@ -96,7 +96,7 @@ describe Meals::SignupPolicy do
     subject { described_class.new(user, Meals::Signup.new).permitted_attributes }
 
     it "should allow basic attribs" do
-      expect(subject).to contain_exactly(:id, :household_id, :comments, :meal_id,
+      expect(subject).to contain_exactly(:id, :household_id, :comments, :takeout, :meal_id,
                                          parts_attributes: %i[id type_id count _destroy])
     end
   end

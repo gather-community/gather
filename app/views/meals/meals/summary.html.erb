@@ -1,4 +1,4 @@
-<% content_for(:title, @meal.title || "Untitled Meal") %>
+<% content_for(:title, meal.title || "Untitled Meal") %>
 
 <% content_for(:action_links) do %>
   <%= print_button %>
@@ -17,40 +17,43 @@
     <%= @portion_count_builder.portion_counts %>
     <table class="compact">
       <%= render("summary_signups_header") %>
-      <% @signups.each do |signup| %>
+      <% signups.each do |signup| %>
         <tr>
           <% if multi_community? %>
             <td class="cmty"><%= signup.community_abbrv %></td>
           <% end %>
           <td class="hhld"><%= signup.household_name %></td>
-          <% @meal.types.each do |type| %>
+          <% meal.types.each do |type| %>
             <td><%= signup.parts_by_type[type]&.count %></td>
+          <% end %>
+          <% if meal.takeout_allowed? %>
+            <td><%= signup.takeout_cell %></td>
           <% end %>
           <td><%= signup.comments %></td>
         </tr>
       <% end %>
       <tr class="total">
         <td colspan="<%= multi_community? ? 2 : 1 %>">Total</td>
-        <% @meal.types.each do |type| %>
-          <td><%= @meal.signup_totals[type] %></td>
+        <% meal.types.each do |type| %>
+          <td><%= meal.signup_totals[type] %></td>
         <% end %>
-        <td><%= @meal.signup_count %></td>
+        <td><%= meal.signup_count %></td>
       </tr>
-      <% cols = @meal.types.size + (multi_community? ? 3 : 2) %>
+      <% col_count = meal.types.size + (meal.takeout_allowed? ? 1 : 0) + (multi_community? ? 3 : 2) %>
       <tr class="late-signups-header">
-        <td colspan="<%= cols %>">
+        <td colspan="<%= col_count %>">
           Late Signups
         </td>
       </tr>
       <%= render("summary_signups_header") %>
       <% 8.times do %>
         <tr class="late-signup">
-          <% cols.times do %><td>&nbsp;</td><% end %>
+          <% col_count.times do %><td>&nbsp;</td><% end %>
         </tr>
       <% end %>
     </table>
     <small id="portion-formula">
-      * Total portions calculated using portion size values in <%= link_to("meal formula", @meal.formula) %>.
+      * Total portions calculated using portion size values in <%= link_to("meal formula", meal.formula) %>.
     </small>
   </div>
 </div>

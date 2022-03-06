@@ -17,6 +17,11 @@ module Meals
       h.icon_tag("check") << " #{total}"
     end
 
+    def takeout_cell
+      return "" unless takeout?
+      safe_str << "✔" << nbsp << "Takeout"
+    end
+
     # Returns the household name or, if not persisted, a select2 control for selecting it.
     # Used as the label in the signup form.
     def household_as_label(form)

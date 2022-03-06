@@ -28,7 +28,7 @@ module Groups
       def syncable?
         # If user is nil, this is a non-persisted instance so it must be syncable, else it wouldn't
         # have been built.
-        user.nil? || (!user.fake? && user.active? && user.adult?)
+        user.nil? || (!user.fake? && user.active? && user.full_access?)
       end
 
       def syncable_with_memberships?

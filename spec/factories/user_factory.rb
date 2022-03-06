@@ -12,7 +12,7 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     email { "person#{rand(10_000_000..99_999_999)}@example.com" }
-    google_email { "person#{rand(10_000_000..99_999_999)}@gmail.com" }
+    google_email { full_access ? "person#{rand(10_000_000..99_999_999)}@gmail.com" : nil }
     mobile_phone { "5555551212" }
     password { FactoryBot::DEFAULT_PASSWORD }
     password_confirmation { FactoryBot::DEFAULT_PASSWORD }
@@ -54,7 +54,21 @@ FactoryBot.define do
         guardians { nil }
       end
       child { true }
-      confirmed_at { nil } # Children can't be confirmed.
+      full_access { false }
+      confirmed_at { nil } # Directory only users can't be confirmed.
+
+      after(:build) do |child, evaluator|
+        child.guardians = evaluator.guardians || [create(:user)]
+      end
+    end
+
+    trait :full_access_child do
+      transient do
+        guardians { nil }
+      end
+      child { true }
+      full_access { true }
+      certify_13_or_older { "1" }
 
       after(:build) do |child, evaluator|
         child.guardians = evaluator.guardians || [create(:user)]

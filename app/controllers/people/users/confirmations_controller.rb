@@ -12,8 +12,10 @@ module People
 
         if resource.errors.empty?
           handle_success
-        else
+        elsif resource.errors.details[:email]&.first&.[](:error) == :confirmation_period_expired
           handle_expiry
+        else
+          raise StandardError, "Unexpected error(s) when confirming email: #{resource.errors.inspect}"
         end
       end
 

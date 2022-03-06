@@ -10,6 +10,10 @@
     <td><%= Meals::Formula.human_attribute_name(:role_ids) %></td>
     <td><%= formula.role_titles %></td>
   </tr>
+  <tr>
+    <td><%= Meals::Formula.human_attribute_name(:takeout) %></td>
+    <td><%= formula.takeout? ? "Yes" : "No" %></td>
+  </tr>
 </table>
 
 <h2>Meal Calculations</h2>

@@ -6,7 +6,7 @@ module Groups
     protected
 
     def select2_context
-      "current_cluster_adults"
+      "current_cluster_full_access"
     end
   end
 end

@@ -6,10 +6,10 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
   include AssocSelect2able
 
   def input(wrapper_options)
-    # We can't use a plain user select for the specific_community_adults context if multi community
+    # We can't use a plain user select for the specific_community_full_access context if multi community
     # it's dependent on a selection in the form so AJAX is required.
     if current_community.settings.people.plain_user_selects &&
-        !(current_cluster.multi_community? && options["context"] == "specific_community_adults")
+        !(current_cluster.multi_community? && options["context"] == "specific_community_full_access")
       setup_plain_select
     else
       setup_select2

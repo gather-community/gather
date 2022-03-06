@@ -28,6 +28,7 @@ describe "user form", js: true, perform_jobs: true do
         click_button("Save")
         expect(page).to have_alert(/updated successfully/)
       end
+      expect(page).not_to have_field("User is a child?") unless actor.has_role?(:admin)
 
       expect(email_sent).to be_empty
       expect(page).to have_title(/Zoor/)
@@ -56,8 +57,16 @@ describe "user form", js: true, perform_jobs: true do
     it_behaves_like "photo upload widget"
 
     context "creating" do
-      scenario "new user" do
-        visit(new_user_path)
+      scenario "new adult" do
+        visit(users_path)
+        find(".btn .fa-plus").click
+        click_on("Create Adult")
+
+        expect(page).to have_field("User is a child?", checked: false)
+        expect(page).not_to have_field("User should have full access to the system?")
+        expect_full_access_fields(true)
+        expect(page).not_to have_content("Guardians")
+
         expect_no_image_and_drop_file("cooper.jpg")
         click_button("Save")
 
@@ -78,6 +87,19 @@ describe "user form", js: true, perform_jobs: true do
 
         expect(email_sent).to be_empty
         expect(User.find_by(email: "foo@example.com")).not_to be_confirmed
+      end
+
+      scenario "new child" do
+        visit(users_path)
+        find(".btn .fa-plus").click
+        click_on("Create Child")
+        expect(page).to have_field("User is a child?", checked: true)
+        expect(page).to have_field("User should have full access to the system?", checked: false)
+        expect_full_access_fields(false)
+        expect(page).to have_content("Guardians")
+        check("User should have full access to the system?")
+        expect_full_access_fields(true)
+        expect(page).to have_content("Guardians")
       end
 
       scenario "new user with invite" do
@@ -193,6 +215,37 @@ describe "user form", js: true, perform_jobs: true do
           expect_success
           expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
         end
+
+        scenario "changing to full access" do
+          visit(edit_path)
+          check("User should have full access to the system?")
+          expect_full_access_fields(true)
+          expect(page).to have_content("Guardians")
+
+          click_button("Save")
+          expect(page).to have_content("Age certification is required for children with full access")
+
+          check("I certify that this user is 13 years of age or older")
+          click_button("Save")
+          expect_success
+          expect(page).to have_content("This address has not yet been confirmed")
+        end
+
+        scenario "changing to adult" do
+          visit(edit_path)
+          uncheck("User is a child?")
+          expect_full_access_fields(true)
+          expect(page).not_to have_content("Guardians")
+          expect(page).not_to have_field("User should have full access to the system?")
+
+          click_button("Save")
+          expect(page).to have_content("Age certification is required for changing child to adult")
+
+          check("I certify that this user is 13 years of age or older")
+          click_button("Save")
+          expect_success
+          expect(page).to have_content("This address has not yet been confirmed")
+        end
       end
 
       context "with custom fields" do
@@ -296,12 +349,25 @@ describe "user form", js: true, perform_jobs: true do
 
       scenario do
         visit(edit_user_path(child))
+        expect(page).not_to have_field("User is a child?")
         fill_in("First Name", with: "Lorp")
         click_on("Save")
 
         expect_success
         expect(page).to have_content("Lorp")
       end
+    end
+  end
+
+  def expect_full_access_fields(whether)
+    if whether
+      expect(page).to have_field("Google ID")
+      expect(page).to have_field("Job Choosing Proxy")
+      expect(page).to have_field("Admin")
+    else
+      expect(page).not_to have_field("Google ID")
+      expect(page).not_to have_field("Job Choosing Proxy")
+      expect(page).not_to have_field("Admin")
     end
   end
 end

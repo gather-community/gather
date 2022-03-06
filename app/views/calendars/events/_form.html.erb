@@ -39,7 +39,7 @@
     <% end %>
 
     <% if event.access_level(current_user.community) == "sponsor" %>
-      <%= f.input :sponsor_id, as: :user_select, context: "current_community_adults", required: true %>
+      <%= f.input :sponsor_id, as: :user_select, context: "current_community_full_access", required: true %>
     <% end %>
   <% end %>
 

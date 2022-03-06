@@ -6,11 +6,28 @@ describe People::SignInInvitationsPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    # The record is the community itself since that's all we need to know to determine permissions.
-    let(:record) { community }
+    let(:record) { user }
 
-    permissions :new?, :create? do
-      it_behaves_like "permits admins but not regular users"
+    context "with adult" do
+      permissions :new?, :create? do
+        it_behaves_like "permits admins but not regular users"
+      end
+    end
+
+    context "with full_access child" do
+      let(:user) { create(:user, :full_access_child) }
+
+      permissions :new?, :create? do
+        it_behaves_like "permits admins but not regular users"
+      end
+    end
+
+    context "with non-full_access child" do
+      let(:user) { create(:user, :child) }
+
+      permissions :new?, :create? do
+        it_behaves_like "forbids all"
+      end
     end
 
     permissions :index?, :show?, :edit?, :update?, :destroy? do

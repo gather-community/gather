@@ -24,6 +24,10 @@ module People
       csv_bool(object.child?)
     end
 
+    def full_access
+      csv_bool(object.full_access?)
+    end
+
     def vehicles
       adult? && household.vehicles.any? ? household.vehicles.map(&:to_s).sort.join("; ") : nil
     end

@@ -2,12 +2,14 @@
 
 module People
   class SignInInvitationsPolicy < ApplicationPolicy
+    alias invited_user record
+
     def show?
       false
     end
 
     def create?
-      active_admin?
+      invited_user.full_access? && active_admin?
     end
   end
 end

@@ -64,6 +64,10 @@ class Household < ApplicationRecord
     users.select(&:adult?)
   end
 
+  def full_access_users
+    users.select(&:full_access?)
+  end
+
   def account_for(community)
     @accounts_by_community ||= {}
     @accounts_by_community[community] ||= accounts.find_by(community_id: community.id)

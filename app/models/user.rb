@@ -319,6 +319,7 @@ class User < ApplicationRecord
       self.google_email = nil
       self.job_choosing_proxy_id = nil
       self.reset_password_token = nil
+      self.confirmed_at = nil
       roles.destroy_all
     end
   end

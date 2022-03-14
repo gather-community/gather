@@ -15,6 +15,8 @@ module People
         User.in_community(community).where(id: user_ids).each do |user|
           token = user.reset_reset_password_token!
           AuthMailer.sign_in_invitation(user, token).deliver_now
+        rescue ActiveRecord::StatementInvalid => e
+          ExceptionNotifier.notify_exception(e)
         end
       end
     end

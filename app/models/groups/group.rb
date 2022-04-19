@@ -6,7 +6,7 @@ module Groups
     include Wisper.model
     include Deactivatable
 
-    KINDS = %i[committee subcommittee team task_force club crew squad group].freeze
+    KINDS = %i[committee subcommittee team task_force club crew circle squad group].freeze
     AVAILABILITIES = %i[open closed everybody hidden].freeze
 
     self.table_name = "groups"

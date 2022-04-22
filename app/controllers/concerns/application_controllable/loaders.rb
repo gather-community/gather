@@ -15,7 +15,9 @@ module ApplicationControllable::Loaders
 
   # Users and children related to the given household that are active
   # and that the UserPolicy says we can show.
-  def load_showable_users_and_children_in(household)
-    UserPolicy.new(current_user, User).filter(household.users_and_children).map(&:decorate)
+  def load_showable_users_and_children_in(household, show_inactive_for_admins: false)
+    UserPolicy.new(current_user, User)
+      .filter(household.users_and_children, show_inactive_for_admins: show_inactive_for_admins)
+      .map(&:decorate)
   end
 end

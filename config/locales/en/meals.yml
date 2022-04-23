@@ -81,4 +81,4 @@ en:
       three_qtr: "¾"
       full: "Full"
   meals/messages:
-    cancel_notice: "Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."
+    cancel_notice_html: "Cancelling a meal cannot be undone. Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."

@@ -18,7 +18,7 @@ describe "meal messages", :perform_jobs do
       visit meal_path(meal)
       click_link "Cancel"
       fill_in "Message", with: "Foo bar"
-      click_button "Send Message"
+      click_button "Send Message and Cancel Meal"
       expect(page).to have_content("Message sent successfully")
       expect(page).to have_content("This meal has been cancelled")
     end

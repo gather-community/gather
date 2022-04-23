@@ -36,7 +36,7 @@ module Meals
     private
 
     def show_cancel_notice_if_appropriate
-      flash.now[:alert] = I18n.t("meals/messages.cancel_notice") if @message.cancellation?
+      flash.now[:error] = I18n.t("meals/messages.cancel_notice_html") if @message.cancellation?
     end
 
     def message_params

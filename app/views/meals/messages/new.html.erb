@@ -1,4 +1,8 @@
-<% content_for(:title, I18n.t("titles.meals/messages")) %>
+<% if @message.cancellation? %>
+  <% content_for(:title, "Cancel Meal") %>
+<% else %>
+  <% content_for(:title, I18n.t("titles.meals/messages")) %>
+<% end %>
 
 <%= gather_form_for(@message, url: meal_messages_path) do |f| %>
   <%= f.hidden_field :kind %>
@@ -14,7 +18,11 @@
   <%= f.input :body, input_html: {class: "longer"} %>
 
   <%= form_actions do %>
-    <%= f.button :primary %>
+    <% if @message.cancellation? %>
+      <%= f.button :primary, "Send Message and Cancel Meal", class: "btn btn-danger" %>
+    <% else %>
+      <%= f.button :primary %>
+    <% end %>
   <% end %>
 
   <%= javascript_tag do %>

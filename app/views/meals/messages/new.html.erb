@@ -19,6 +19,9 @@
 
   <%= form_actions do %>
     <% if @message.cancellation? %>
+      <%= f.button :secondary, "Don't Cancel Meal",
+                   class: "btn btn-default", "data-href": meals_meal_url(@meal),
+                   onclick: "window.location.href = $(this).data('href'); return false;" %>
       <%= f.button :primary, "Send Message and Cancel Meal", class: "btn btn-danger" %>
     <% else %>
       <%= f.button :primary %>

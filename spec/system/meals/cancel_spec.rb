@@ -24,4 +24,15 @@ describe "meal messages", :perform_jobs do
     end
     expect(email_sent.size).to eq(4) # Signed up households + team
   end
+
+  scenario "abort cancellation" do
+    email_sent = email_sent_by do
+      visit meal_path(meal)
+      click_link "Cancel"
+      click_button "Don't Cancel Meal"
+      expect(page).to have_title(meal.title)
+      expect(page).not_to have_content("This meal has been cancelled")
+    end
+    expect(email_sent.size).to eq(0)
+  end
 end

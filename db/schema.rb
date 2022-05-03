@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_124508) do
+ActiveRecord::Schema.define(version: 2022_05_03_013349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -234,6 +234,25 @@ ActiveRecord::Schema.define(version: 2022_02_15_124508) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_domains_on_cluster_id"
     t.index ["name"], name: "index_domains_on_name", unique: true
+  end
+
+  create_table "feature_flag_users", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "feature_flag_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["feature_flag_id", "user_id"], name: "index_feature_flag_users_on_feature_flag_id_and_user_id", unique: true
+    t.index ["feature_flag_id"], name: "index_feature_flag_users_on_feature_flag_id"
+    t.index ["user_id"], name: "index_feature_flag_users_on_user_id"
+  end
+
+  create_table "feature_flags", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.string "interface", default: "basic", null: false
+    t.string "name", null: false
+    t.boolean "status"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_feature_flags_on_name", unique: true
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
@@ -983,6 +1002,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_124508) do
   add_foreign_key "domain_ownerships", "communities"
   add_foreign_key "domain_ownerships", "domains"
   add_foreign_key "domains", "clusters"
+  add_foreign_key "feature_flag_users", "feature_flags"
+  add_foreign_key "feature_flag_users", "users"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
   add_foreign_key "gdrive_stray_files", "clusters"

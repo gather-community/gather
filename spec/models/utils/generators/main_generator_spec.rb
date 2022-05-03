@@ -10,6 +10,8 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
                               Billing::TemplateMemberType
                               Calendars::System::OtherCommunitiesMealsCalendar
                               Domain DomainOwnership
+                              FeatureFlag
+                              FeatureFlagUser
                               Groups::Mailman::List
                               Groups::Mailman::User
                               Meals::Import

@@ -111,8 +111,10 @@ class UserPolicy < ApplicationPolicy
   end
 
   # Returns all user records from the given set that are showable for the current user.
-  def filter(users)
-    users.select { |u| self.class.new(user, u).show? }
+  def filter(users, show_inactive_for_admins: false)
+    users.select do |u|
+      self.class.new(user, u).show? && (u.active? || active_admin? && show_inactive_for_admins)
+    end
   end
 
   def permitted_attributes

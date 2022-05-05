@@ -37,7 +37,7 @@
         <% meal.types.each do |type| %>
           <td><%= meal.signup_totals[type] %></td>
         <% end %>
-        <td><%= meal.signup_count %></td>
+        <td colspan="<%= meal.takeout_allowed? ? 2 : 1 %>"></td>
       </tr>
       <% col_count = meal.types.size + (meal.takeout_allowed? ? 1 : 0) + (multi_community? ? 3 : 2) %>
       <tr class="late-signups-header">

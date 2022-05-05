@@ -8,11 +8,14 @@ module Meals
       nil_category_formula_parts = formula_parts_by_category.delete(nil)
       chunks = formula_parts_by_category.map { |c, fp| chunk(c, fp) }
       chunks << chunk(nil, nil_category_formula_parts, only: chunks.empty?) if nil_category_formula_parts
+      ttl_signups = h.content_tag(:strong, "#{signup_count} diners")
       h.content_tag(:div, class: "portion-counts") do
         if chunks.size == 1
-          safe_str << "This meal will require approximately " << chunks[0] << ".*"
+          safe_str << "This meal has " << ttl_signups << " and will require approximately " <<
+            chunks[0] << ".*"
         else
-          safe_str << "This meal will require approximately: " << chunks.reduce(&sep(", ")) << ".*"
+          safe_str << "This meal has " << ttl_signups << " and will require approximately: " <<
+            chunks.reduce(&sep(", ")) << ".*"
         end
       end
     end

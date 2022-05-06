@@ -267,6 +267,23 @@ module Nav
               icon: "copy"
             }
           ]
+        when :wiki
+          sample_wiki_page = Wiki::Page.new(community: community)
+          [
+            {
+              name: :wiki,
+              parents: :wiki,
+              path: "/wiki",
+              permitted: h.policy(sample_wiki_page).show?,
+              icon: "info-circle"
+            }, {
+              name: :gdrive,
+              parents: :wiki,
+              path: h.gdrive_home_path,
+              permitted: GDrive::FoldersPolicy.new(user, :folder).show?,
+              icon: "google"
+            }
+          ]
         else
           []
         end

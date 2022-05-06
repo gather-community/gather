@@ -41,6 +41,9 @@ en:
       billing:
         accounts: "Accounts"
         templates: "Templates"
+      wiki:
+        wiki: "Wiki"
+        gdrive: "Google Drive"
     sub_sub:
       people:
         settings:

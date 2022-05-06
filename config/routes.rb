@@ -242,6 +242,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :gdrive do
+    get "/", to: "folders#show", as: :home
+  end
+
   namespace :work do
     resources :shifts, path: :signups, only: %i[index show] do
       member do

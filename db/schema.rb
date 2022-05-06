@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_03_013349) do
+ActiveRecord::Schema.define(version: 2022_05_06_004359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -253,6 +253,18 @@ ActiveRecord::Schema.define(version: 2022_05_03_013349) do
     t.boolean "status"
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true
+  end
+
+  create_table "gdrive_configs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "google_id", limit: 255, null: false
+    t.string "token", limit: 255
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
+    t.index ["community_id"], name: "index_gdrive_configs_on_community_id", unique: true
+    t.index ["google_id"], name: "index_gdrive_configs_on_google_id", unique: true
   end
 
   create_table "group_affiliations", force: :cascade do |t|

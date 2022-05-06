@@ -65,12 +65,12 @@ module Gather
 
     if Settings.smtp
       config.action_mailer.smtp_settings = {
-        address: Settings.smtp.address,
-        port: Settings.smtp.port,
-        domain: Settings.smtp.domain,
-        authentication: Settings.smtp.authentication.try(:to_sym),
-        user_name: Settings.smtp.user_name,
-        password: Settings.smtp.password
+        address: Settings.smtp.address.presence,
+        port: Settings.smtp.port.presence,
+        domain: Settings.smtp.domain.presence,
+        authentication: Settings.smtp.authentication.presence&.to_sym,
+        user_name: Settings.smtp.user_name.presence,
+        password: Settings.smtp.password.presence
       }
     end
 

@@ -255,37 +255,6 @@ ActiveRecord::Schema.define(version: 2022_05_03_013349) do
     t.index ["name"], name: "index_feature_flags_on_name", unique: true
   end
 
-  create_table "gdrive_configs", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.bigint "community_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.jsonb "credentials", null: false
-    t.datetime "last_scanned_at"
-    t.string "owner_email", limit: 128, null: false
-    t.string "root_folder_id", limit: 128, null: false
-    t.jsonb "token"
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
-    t.index ["community_id"], name: "index_gdrive_configs_on_community_id"
-  end
-
-  create_table "gdrive_stray_files", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.bigint "community_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.string "file_id", limit: 128, null: false
-    t.string "mime_type", limit: 128, null: false
-    t.string "owner_email", limit: 128, null: false
-    t.string "parent_id", limit: 128, null: false
-    t.text "path", null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["cluster_id", "community_id", "file_id"], name: "unique_by_cmty_and_file", unique: true
-    t.index ["cluster_id"], name: "index_gdrive_stray_files_on_cluster_id"
-    t.index ["community_id"], name: "index_gdrive_stray_files_on_community_id"
-    t.index ["mime_type"], name: "index_gdrive_stray_files_on_mime_type"
-    t.index ["owner_email"], name: "index_gdrive_stray_files_on_owner_email"
-  end
-
   create_table "group_affiliations", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -1006,8 +975,6 @@ ActiveRecord::Schema.define(version: 2022_05_03_013349) do
   add_foreign_key "feature_flag_users", "users"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
-  add_foreign_key "gdrive_stray_files", "clusters"
-  add_foreign_key "gdrive_stray_files", "communities"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

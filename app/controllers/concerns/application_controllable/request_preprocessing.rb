@@ -26,14 +26,19 @@ module ApplicationControllable::RequestPreprocessing
 
     before_action :log_full_url
     before_action :set_default_nav_context
-    before_action :check_subdomain_validity
+
+    # Must come before authenticate_user so that path is saved in case of redirect.
     before_action :store_current_location
+
+    # Must come before set_current_community b/c community_for_route expects current_user to be set.
     before_action :authenticate_user!
-    before_action :prepare_exception_notifier
-    before_action :ensure_subdomain
+
+    before_action :set_current_community
+    before_action :require_current_community
     before_action :check_community_permissions
     before_action :set_tenant
     before_action :set_time_zone
+    before_action :prepare_exception_notifier
     before_action :handle_impersonation
 
     rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
@@ -65,15 +70,6 @@ module ApplicationControllable::RequestPreprocessing
     nav_builder.context = {}
   end
 
-  # Checks that the subdomain's community exists and sets current_community.
-  # Does nothing if subdomain is not present.
-  # Renders 404 if community not found.
-  def check_subdomain_validity
-    return if subdomain.blank?
-    self.current_community = Community.find_by(slug: subdomain)
-    render_error_page(:not_found) if current_community.nil?
-  end
-
   # Saves the location before loading each page so we can return to the right page after sign in.
   def store_current_location
     # If we're on a devise page, we don't want to store that as the
@@ -81,8 +77,11 @@ module ApplicationControllable::RequestPreprocessing
     return if devise_controller? ||
       request.fullpath == "/?sign-in=1" ||
       request.fullpath =~ %r{\A/\?token=.+} ||
-      request.fullpath == user_signed_out_path ||
-      request.fullpath == strength_people_password_change_path
+      # We don't use path helpers here on purpose, because doing so calls default_url_options, which
+      # seems to memoize the default_url_options which we don't want to do b/c set_current_community
+      # hasn't been called yet.
+      request.fullpath == "/people/users/signed-out" ||
+      request.fullpath == "/people/password-change/strength"
 
     session["user_return_to"] = request.url
   end
@@ -105,47 +104,25 @@ module ApplicationControllable::RequestPreprocessing
     end
   end
 
-  def prepare_exception_notifier
-    data = {
-      community: {
-        id: current_community.try(:id),
-        name: current_community.try(:name)
-      }
-    }
-
-    if user_signed_in?
-      data[:user] = {
-        id: real_current_user.id,
-        name: real_current_user.name,
-        email: real_current_user.email,
-        google_email: real_current_user.google_email,
-        impersonating_id: session[:impersonating_id]
-      }
-    end
-
-    request.env["exception_notifier.exception_data"] = data
-  end
-
-  # Redirects requests to the appropriate subdomain if one is needed but missing.
-  # The assumption here is that all authenticated pages that do not skip this action require a subdomain.
-  # But not all unauthenticated pages do. If no current_user is set by now and we have not redirected,
-  # this must be an unauthenticated page, so we don't need to do anything
-  # if current_user is not present or if this is a Devise controller.
-  def ensure_subdomain
-    return if devise_controller? || current_user.nil? || subdomain.present?
-    if community = community_for_route
-      host = "#{community.slug}.#{Settings.url.host}"
-      url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
-      url_params = Settings.url.to_h.merge(host: host)
-      url_params[:path], url_params[:query] = request.fullpath.split("?")
-      redirect_to(url_builder.build(url_params).to_s)
-    else
-      render_error_page(:not_found)
+  def set_current_community
+    if subdomain.present?
+      set_current_community_from_subdomain(subdomain)
+    elsif (community_from_controller = community_for_route)
+      if redirect_if_subdomain_missing?
+        redirect_to_same_path_in_community(community_from_controller)
+      else
+        self.current_community = community_from_controller
+      end
     end
   end
 
-  # Checks that the subdomain's community is accessible by the user.
-  # Does nothing if user is not present or current_community is not present.
+  def require_current_community
+    return if !authenticated_page? || devise_controller?
+    render_error_page(:not_found) if current_community.nil?
+  end
+
+  # Checks that the current_community is accessible by current_user.
+  # Does nothing if current_user or current_community are not present.
   # Renders 403 if community not permitted.
   def check_community_permissions
     return unless current_user.present? && current_community.present?
@@ -177,6 +154,27 @@ module ApplicationControllable::RequestPreprocessing
     Time.zone = current_community ? current_community.settings.time_zone : "UTC"
   end
 
+  def prepare_exception_notifier
+    data = {
+      community: {
+        id: current_community.try(:id),
+        name: current_community.try(:name)
+      }
+    }
+
+    if user_signed_in?
+      data[:user] = {
+        id: real_current_user.id,
+        name: real_current_user.name,
+        email: real_current_user.email,
+        google_email: real_current_user.google_email,
+        impersonating_id: session[:impersonating_id]
+      }
+    end
+
+    request.env["exception_notifier.exception_data"] = data
+  end
+
   # Skip this before_action to not respect impersonation for a given controller action.
   def handle_impersonation
     return unless session[:impersonating_id]
@@ -196,5 +194,31 @@ module ApplicationControllable::RequestPreprocessing
       # This will be handled by Rails and 403 page will be rendered.
       raise exception
     end
+  end
+
+  # If route community is specified explicitly via community_for_route, should we redirect the user
+  # so that they get the subdomain in their address bar, or just set current_community and be done with it?
+  def redirect_if_subdomain_missing?
+    true
+  end
+
+  # This method is only correct if we've gone past authenticate_user's position in the callback order.
+  # If, by then, current_user hasn't been set and we haven't bailed out, we must
+  # have skipped authenticate_user, i.e. this is an unauthenticated page.
+  def authenticated_page?
+    current_user.present?
+  end
+
+  def set_current_community_from_subdomain(subdomain) # rubocop:disable Naming/AccessorMethodName
+    self.current_community = Community.find_by(slug: subdomain)
+    render_error_page(:not_found) if current_community.nil?
+  end
+
+  def redirect_to_same_path_in_community(community)
+    host = "#{community.slug}.#{Settings.url.host}"
+    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+    url_params = Settings.url.to_h.merge(host: host)
+    url_params[:path], url_params[:query] = request.fullpath.split("?")
+    redirect_to(url_builder.build(url_params).to_s)
   end
 end

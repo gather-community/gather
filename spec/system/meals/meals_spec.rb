@@ -151,7 +151,7 @@ describe "meal create, show, update, delete", js: true do
 
         # Summary
         click_link("Summary")
-        expect(page).to have_content("This meal will require")
+        expect(page).to have_content(/This meal has.+and will require/)
         expect(page).to have_css("#meal-menu", text: actor.name)
         expect(page).not_to have_css("a", text: "Close")
       end
@@ -198,7 +198,7 @@ describe "meal create, show, update, delete", js: true do
   def summary_close_reopen
     # Summary
     click_link("Summary")
-    expect(page).to have_content("This meal will require")
+    expect(page).to have_content(/This meal has.+and will require/)
     expect(page).to have_content("Southern Beans and Rice")
     page.driver.go_back
 

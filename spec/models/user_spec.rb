@@ -3,6 +3,19 @@
 require "rails_helper"
 
 describe User do
+  describe ".in_household" do
+    let!(:household) { create(:household, member_count: 0) }
+    let!(:parent) { create(:user, household: household) }
+    let!(:child1) { create(:user, :child, household: household) }
+    let!(:child2) { create(:user, :child, guardians: [parent]) }
+    let!(:decoy1) { create(:user) }
+    let!(:decoy2) { create(:user, :child) }
+
+    it "matches direct members and members by parentage" do
+      expect(User.in_household(household)).to contain_exactly(parent, child1, child2)
+    end
+  end
+
   describe "search" do
     let!(:users) do
       [

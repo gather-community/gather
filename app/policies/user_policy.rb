@@ -7,11 +7,13 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if active_cluster_admin?
-        scope
-      else
-        scope.all_in_community_or_adult_in_cluster(user.community)
-      end
+      result =
+        if active_cluster_admin?
+          scope.all
+        else
+          scope.all_in_community_or_adult_in_cluster(user.community)
+        end
+      active_admin? ? result : result.active
     end
   end
 
@@ -108,13 +110,6 @@ class UserPolicy < ApplicationPolicy
 
   def super_adminify?
     active_super_admin?
-  end
-
-  # Returns all user records from the given set that are showable for the current user.
-  def filter(users, show_inactive_for_admins: false)
-    users.select do |u|
-      self.class.new(user, u).show? && (u.active? || active_admin? && show_inactive_for_admins)
-    end
   end
 
   def permitted_attributes

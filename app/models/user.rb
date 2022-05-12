@@ -80,6 +80,7 @@ class User < ApplicationRecord
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
   scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
+  scope :inactive_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   scope :including_communities, -> { includes(household: :community) }
   scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
   scope :by_birthday, lambda {
@@ -109,6 +110,14 @@ class User < ApplicationRecord
   scope :adults, -> { where(child: false) }
   scope :full_access, -> { where(full_access: true) }
   scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
+
+  # Returns users (including children) directly in the household PLUS any children associated by parentage,
+  # even if they aren't directly in the household via the foreign key.
+  scope :in_household, lambda { |h|
+    parentage = "SELECT child_id FROM people_guardianships g INNER JOIN users u ON g.guardian_id = u.id
+      WHERE u.household_id = ?"
+    where(household: h).or(where("users.id IN (#{parentage})", h.id))
+  }
 
   ROLES.each do |role|
     # Using these scopes instead of with_role helps avoid invalid role mistakes.

@@ -50,12 +50,6 @@ class Household < ApplicationRecord
     pets.build if pets.empty?
   end
 
-  # Returns users (including children) directly in the household PLUS any children associated by parentage,
-  # even if they aren't directly in the household via the foreign key.
-  def users_and_children
-    (users + adults.map(&:children).flatten).uniq
-  end
-
   def other_cluster_communities
     cluster.communities - [community]
   end

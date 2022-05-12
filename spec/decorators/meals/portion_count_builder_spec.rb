@@ -18,7 +18,7 @@ describe Meals::PortionCountBuilder do
       ]
     end
 
-    it { is_expected.to match("This meal will require approximately <strong>4</strong> portions.") }
+    it { is_expected.to match("This meal has <strong>6 diners</strong> and will require approximately <strong>4</strong> portions.") }
   end
 
   context "with categores" do
@@ -37,7 +37,7 @@ describe Meals::PortionCountBuilder do
     end
 
     it do
-      is_expected.to match("This meal will require approximately: <strong>5 Meat</strong> portions, "\
+      is_expected.to match("This meal has <strong>10 diners</strong> and will require approximately: <strong>5 Meat</strong> portions, "\
         "<strong>2 Veg</strong> portions.")
     end
   end
@@ -58,7 +58,7 @@ describe Meals::PortionCountBuilder do
     end
 
     it do
-      is_expected.to match("This meal will require approximately: <strong>2 Meat</strong> portions, "\
+      is_expected.to match("This meal has <strong>10 diners</strong> and will require approximately: <strong>2 Meat</strong> portions, "\
         "<strong>2 Veg</strong> portions, <strong>3 other</strong> portions.")
     end
   end

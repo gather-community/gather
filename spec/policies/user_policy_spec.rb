@@ -371,33 +371,30 @@ describe UserPolicy do
     let(:inactive_child) { create(:user, :child, :inactive, guardians: [user]) }
     let(:childB) { create(:user, :child, guardians: [user], community: communityB) }
 
-    shared_examples_for "adults in cluster and children in community" do
-      let!(:expected) do
-        [user, other_user, userB, inactive_user,
-         admin, cluster_admin, child, inactive_child, other_child]
-      end
-      it { is_expected.to match_array(expected) }
-    end
-
     context "for cluster admin" do
       let(:actor) { cluster_admin }
-      let!(:expected) do
-        [user, other_user, userB, inactive_user,
-         admin, cluster_admin, child, inactive_child, other_child, childB]
-      end
-      it "returns adults and children in cluster" do
-        is_expected.to match_array(expected)
+
+      it "returns adults and children in cluster including inactives" do
+        is_expected.to contain_exactly(user, other_user, userB, inactive_user,
+          admin, cluster_admin, child, inactive_child, other_child, childB)
       end
     end
 
     context "for admin" do
       let(:actor) { admin }
-      it_behaves_like "adults in cluster and children in community"
+
+      it "includes inactive users" do
+        is_expected.to contain_exactly(user, other_user, userB, admin, cluster_admin, child,
+          other_child, inactive_user, inactive_child)
+      end
     end
 
     context "for regular user" do
       let(:actor) { user }
-      it_behaves_like "adults in cluster and children in community"
+
+      it "does not return inactive users" do
+        is_expected.to contain_exactly(user, other_user, userB, admin, cluster_admin, child, other_child)
+      end
     end
   end
 

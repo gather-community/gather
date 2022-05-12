@@ -31,7 +31,7 @@
           <%= household.unit_num_and_suffix %>
         </td>
         <td>
-          <%= load_showable_users_and_children_in(household, show_inactive_for_admins: true)
+          <%= load_showable_users_and_children_in(household, show_inactive_if_allowed: true)
                 .map { |u| u.link(show_inactive: true) }.reduce(&sep(", ")) %>
         </td>
       </tr>

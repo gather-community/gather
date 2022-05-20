@@ -1,0 +1,7 @@
+<% content_for(:title, "Auth") %>
+<%= link_to("Go", @auth_url) %>
+<% if @server_error %>
+  server error
+<% else %>
+  <%= @folder_name %>
+<% end %>

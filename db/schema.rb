@@ -259,8 +259,9 @@ ActiveRecord::Schema.define(version: 2022_05_06_004359) do
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", precision: 6, null: false
-    t.string "google_id", limit: 255, null: false
-    t.string "token", limit: 255
+    t.string "folder_id", limit: 128
+    t.string "google_id", limit: 255
+    t.string "token", limit: 2048
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id"], name: "index_gdrive_configs_on_community_id", unique: true

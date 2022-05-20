@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe(GDrive::Config) do
+describe GDrive::Config do
   it "has valid factory" do
     create(:gdrive_config)
   end

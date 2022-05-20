@@ -244,6 +244,8 @@ Rails.application.routes.draw do
 
   namespace :gdrive do
     get "/", to: "folders#show", as: :home
+    get "auth", to: "auth#index", as: :auth
+    get "auth/callback", to: "auth#callback", as: :auth_callback
   end
 
   namespace :work do

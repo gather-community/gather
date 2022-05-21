@@ -1,7 +1,16 @@
 <% content_for(:title, "Auth") %>
-<%= link_to("Go", @auth_url) %>
-<% if @server_error %>
-  server error
+<% if @auth_url %>
+  <%= link_to("Authenticate With Google", @auth_url) %>
+<% elsif @no_folder %>
+  <%= link_to("Pick Folder", gdrive_pick_folder_path) %>
+<% elsif @error %>
+  <%= @error %>
+<% elsif @not_found %>
+  not found
 <% else %>
   <%= @folder_name %>
+<% end %>
+
+<% unless @auth_url %>
+  <%= link_to("Reset Connection", "#") %>
 <% end %>

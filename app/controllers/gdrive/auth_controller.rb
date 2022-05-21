@@ -20,15 +20,25 @@ module GDrive
       if credentials.nil?
         state = {community_id: current_community.id}
         @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
-                                                     state: state)
-      elsif config.folder_id.present?
+                                                     state: state, redirect_to: gdrive_pick_folder_url)
+      elsif config.folder_id.nil?
+        @no_folder = true
+      else
         begin
           drive = Google::Apis::DriveV3::DriveService.new
           drive.authorization = credentials
           folder = drive.get_file(config.folder_id)
           @folder_name = folder.name
         rescue Google::Apis::ServerError
-          @server_error = true
+          @error = "server error"
+        rescue Google::Apis::AuthorizationError
+          @error = "unauthorized"
+        rescue Google::Apis::ClientError => error
+          if error.status_code == 404
+            @error = "not found"
+          else
+            raise error
+          end
         end
       end
     end

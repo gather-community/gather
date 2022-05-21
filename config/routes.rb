@@ -246,6 +246,7 @@ Rails.application.routes.draw do
     get "/", to: "folders#show", as: :home
     get "auth", to: "auth#index", as: :auth
     get "auth/callback", to: "auth#callback", as: :auth_callback
+    get "auth/pickfolder", to: "auth#pick_folder", as: :pick_folder
   end
 
   namespace :work do

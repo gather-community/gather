@@ -13,5 +13,9 @@ module GDrive
     def callback?
       index?
     end
+
+    def pick_folder?
+      index?
+    end
   end
 end

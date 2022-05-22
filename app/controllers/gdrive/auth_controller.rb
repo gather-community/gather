@@ -11,6 +11,7 @@ module GDrive
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
     prepend_before_action :set_current_community_from_callback_state, only: :callback
+    prepend_before_action :set_current_community_from_query_string, only: :pick_folder
 
     def index
       skip_policy_scope
@@ -64,7 +65,16 @@ module GDrive
       redirect_to(@redirect_uri)
     end
 
+    def pick_folder
+      authorize(current_community, policy_class: GDrive::AuthPolicy)
+      @google_id = Config.find_by!(community: current_community).google_id
+    end
+
     private
+
+    def set_current_community_from_query_string
+      self.current_community = Community.find(params[:community_id])
+    end
 
     def set_current_community_from_callback_state
       @callback_state, @redirect_uri = Google::Auth::WebUserAuthorizer.extract_callback_state(request)

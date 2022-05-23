@@ -11,7 +11,7 @@ module GDrive
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
     prepend_before_action :set_current_community_from_callback_state, only: :callback
-    prepend_before_action :set_current_community_from_query_string, only: :pick_folder
+    prepend_before_action :set_current_community_from_query_string, only: :index
 
     def index
       skip_policy_scope
@@ -23,7 +23,10 @@ module GDrive
         @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
                                                      state: state, redirect_to: gdrive_pick_folder_url)
       elsif config.folder_id.nil?
+        # Ensure we have a fresh token in case the user wants to use the picker.
+        credentials.fetch_access_token!
         @no_folder = true
+        @access_token = credentials.access_token
       else
         begin
           drive = Google::Apis::DriveV3::DriveService.new
@@ -63,11 +66,6 @@ module GDrive
       @authorizer.store_credentials(current_community.id, credentials)
 
       redirect_to(@redirect_uri)
-    end
-
-    def pick_folder
-      authorize(current_community, policy_class: GDrive::AuthPolicy)
-      @google_id = Config.find_by!(community: current_community).google_id
     end
 
     private

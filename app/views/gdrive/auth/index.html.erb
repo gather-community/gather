@@ -2,7 +2,7 @@
 <% if @auth_url %>
   <%= link_to("Authenticate With Google", @auth_url) %>
 <% elsif @no_folder %>
-  <%= link_to("Pick Folder", gdrive_pick_folder_path) %>
+  <button id="pick-folder" class="btn btn-primary">Pick Your Community's Root Folder</button>
 <% elsif @error %>
   <%= @error %>
 <% elsif @not_found %>
@@ -13,4 +13,17 @@
 
 <% unless @auth_url %>
   <%= link_to("Reset Connection", "#") %>
+<% end %>
+
+<script src="https://apis.google.com/js/api.js"></script>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.GDrive.RootFolderPickerView(<%=json(
+      el: '.gdrive--auth.action-index',
+      clientId: Settings.gdrive.auth.client_id,
+      apiKey: Settings.gdrive.auth.api_key,
+      accessToken: @access_token
+    )%>);
+  });
 <% end %>

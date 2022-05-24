@@ -10,6 +10,7 @@ module GDrive
   class AuthController < ApplicationController
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
+    # We can't use a subdomain on these pages due to Google API restrictions.
     prepend_before_action :set_current_community_from_query_string, only: :index
     prepend_before_action :set_current_community_from_callback_state, only: :callback
 
@@ -21,7 +22,7 @@ module GDrive
       if credentials.nil?
         state = {community_id: current_community.id}
         @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
-                                                     state: state, redirect_to: gdrive_pick_folder_url)
+                                                     state: state)
       elsif config.folder_id.nil?
         # Ensure we have a fresh token in case the user wants to use the picker.
         credentials.fetch_access_token!

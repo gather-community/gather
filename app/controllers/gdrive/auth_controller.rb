@@ -10,8 +10,8 @@ module GDrive
   class AuthController < ApplicationController
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
-    prepend_before_action :set_current_community_from_callback_state, only: :callback
     prepend_before_action :set_current_community_from_query_string, only: :index
+    prepend_before_action :set_current_community_from_callback_state, only: :callback
 
     def index
       skip_policy_scope
@@ -66,6 +66,12 @@ module GDrive
       @authorizer.store_credentials(current_community.id, credentials)
 
       redirect_to(@redirect_uri)
+    end
+
+    def save_folder
+      authorize(current_community, policy_class: GDrive::AuthPolicy)
+      Config.find_by!(community: current_community).update!(folder_id: params[:folder_id])
+      redirect_to(gdrive_auth_url(subdomain: nil, community_id: current_community.id))
     end
 
     private

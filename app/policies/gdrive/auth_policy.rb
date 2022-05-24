@@ -14,7 +14,7 @@ module GDrive
       index?
     end
 
-    def pick_folder?
+    def save_folder?
       index?
     end
   end

@@ -244,9 +244,10 @@ Rails.application.routes.draw do
 
   namespace :gdrive do
     get "/", to: "folders#show", as: :home
+
     get "auth", to: "auth#index", as: :auth
     get "auth/callback", to: "auth#callback", as: :auth_callback
-    get "auth/pickfolder", to: "auth#pick_folder", as: :pick_folder
+    put "auth/save-folder", to: "auth#save_folder", as: :auth_save_folder
   end
 
   namespace :work do

@@ -1,0 +1,62 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://oauth2.googleapis.com/token
+    body:
+      encoding: ASCII-8BIT
+      string: grant_type=refresh_token&refresh_token=xxxx4HCOkvr0wgmNCgYIARAAGAQSNwF-L9IrEdybQAql6Z9OiwLdUuPLUR-dl8H5DhX8SoL_IkITiJ3m64HbqOMVOIFnK52YQ8Jxxxx&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    headers:
+      User-Agent:
+      - Faraday v1.10.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Tue, 24 May 2022 12:54:52 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Server:
+      - scaffolding on HTTPServer2
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "access_token": "xxxxxxxxRrdaM-g4ih894mj7R_bsNQO7Wmr7m2gzxqCn6uPIAz1spNJYUkDwWoztknBO9MOGlzm9jbDOjzSmPkyNeqoNS5XKgYwg6hWkwGVi66OjRsg96ZaIqGEPtGUU1kvl3nG6FQfv_chyXPoFN6HVNevxxxxxxxx",
+          "expires_in": 3599,
+          "scope": "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email",
+          "token_type": "Bearer",
+          "id_token": "xxxxxxxxOiJSUzI1NiIsImtpZCI6IjQ4NmYxNjQ4MjAwNWEyY2RhZjI2ZDkyMTQwMThkMDI5Y2E0NmZiNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTY2MDc4MzU0Njc4ODc4NDcxNTEiLCJlbWFpbCI6InRzY29ob3RlY2hAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiI4NW00QVpxcUZrM2FBc1BEREVDRjRRIiwiaWF0IjoxNjUzMzk2ODkyLCJleHAiOjE2NTM0MDA0OTJ9.Mtnh1C3qNOpreY64Dsm11fpkZr-vTCHFldam31XXvBhQP83lFoSvhfokLUoYsZT-GFhZC_ZCp0bYgVUgYccAzgCNlG6njt2nSA4OFB9ual02oqgnsiv8dXfK6Dt2RQ_YJa6QqtBJ-FoqgdPQ_vxWpBJlqUcphFV4V9u67MZErSXhPXgGlwb91AL55jJ8gPoghoLdDFgph9No1m89cafinc55kCXyG3sCZghUmpduXGTAfTm6dBUMxvGnuNjoZZTHqlPAJ-VkIZViM6HK-tT4BMOJNYrur8aC9m5yE5Od0dYXkM0uL4AppCnpa3k5fy15V8dgM9SJSNEA1Axxxxxxxx"
+        }
+    http_version:
+  recorded_at: Tue, 24 May 2022 12:54:52 GMT
+recorded_with: VCR 4.0.0

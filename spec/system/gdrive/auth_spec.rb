@@ -76,10 +76,16 @@ describe "gdrive auth index", js: true do
   context "when saved credentials are present but no folder" do
     let!(:gdrive_config) { create(:gdrive_config, folder_id: nil) }
 
+    before do
+      stub_client_secret
+    end
+
     it "shows need to pick folder link, option to reset" do
-      visit(url)
-      expect(page).to have_css("a", text: "Pick Folder")
-      expect(page).to have_content("Reset Connection")
+      VCR.use_cassette("gdrive/auth/index/folder_not_present") do
+        visit(url)
+        expect(page).to have_css("button", text: "Pick Your Community's Root Folder")
+        expect(page).to have_content("Reset Connection")
+      end
     end
   end
 
@@ -93,5 +99,12 @@ describe "gdrive auth index", js: true do
       expect(link["href"]).to include("%22current_uri%22:%22#{url}%22")
       expect(page).not_to have_content("Reset Connection")
     end
+  end
+
+  # Google oauth API requests for a new access_token include the client secret which we don't want to leak.
+  # It is stored on the Settings object. So after we have captured the request, we change the cassette
+  # to have all x's as the client secret and add a call to this method in the spec.
+  def stub_client_secret
+    expect(Settings.gdrive.auth).to receive(:client_secret).and_return('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
   end
 end

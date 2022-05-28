@@ -248,6 +248,7 @@ Rails.application.routes.draw do
     get "auth", to: "auth#index", as: :auth
     get "auth/callback", to: "auth#callback", as: :auth_callback
     put "auth/save-folder", to: "auth#save_folder", as: :auth_save_folder
+    delete "auth/reset", to: "auth#reset", as: :auth_reset
   end
 
   namespace :work do

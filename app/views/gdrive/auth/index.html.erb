@@ -12,7 +12,11 @@
 <% end %>
 
 <% unless @auth_url %>
-  <%= link_to("Reset Connection", "#") %>
+  <%= link_to("Reset Connection", gdrive_auth_reset_path(community_id: current_community.id),
+              data: {
+                method: :delete,
+                confirm: "Are you sure you want to reset your community's connection to Google Drive? Any in-process ownership transfers will be aborted."
+              }) %>
 <% end %>
 
 <script src="https://apis.google.com/js/api.js"></script>

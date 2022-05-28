@@ -21,6 +21,9 @@ describe "gdrive auth index", js: true do
           visit(url)
           expect(page).to have_content("Touchstone Documents")
           expect(page).to have_content("Reset Connection")
+
+          accept_confirm { click_on("Reset Connection") }
+          expect(page).to have_content("Authenticate With Google")
         end
       end
     end

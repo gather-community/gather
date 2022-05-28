@@ -17,5 +17,9 @@ module GDrive
     def save_folder?
       index?
     end
+
+    def reset?
+      index?
+    end
   end
 end

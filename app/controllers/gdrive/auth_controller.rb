@@ -11,8 +11,8 @@ module GDrive
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
     # We can't use a subdomain on these pages due to Google API restrictions.
-    prepend_before_action :set_current_community_from_query_string, only: [:index, :save_folder]
     prepend_before_action :set_current_community_from_callback_state, only: :callback
+    prepend_before_action :set_current_community_from_query_string, except: :callback
 
     def index
       skip_policy_scope
@@ -75,11 +75,13 @@ module GDrive
       head(:ok)
     end
 
-    private
-
-    def set_current_community_from_query_string
-      self.current_community = Community.find(params[:community_id])
+    def reset
+      authorize(current_community, policy_class: GDrive::AuthPolicy)
+      Config.find_by(community: current_community)&.destroy
+      redirect_to(gdrive_auth_path(community_id: current_community.id))
     end
+
+    private
 
     def set_current_community_from_callback_state
       @callback_state, @redirect_uri = Google::Auth::WebUserAuthorizer.extract_callback_state(request)
@@ -88,13 +90,17 @@ module GDrive
       self.current_community = Community.find(community_id)
     end
 
+    def set_current_community_from_query_string
+      self.current_community ||= Community.find(params[:community_id])
+    end
+
     def authorizer
       return @authorizer if @authorizer
       auth_settings = Settings.gdrive.auth
       client_id = Google::Auth::ClientId.new(auth_settings.client_id, auth_settings.client_secret)
       scope = ["https://www.googleapis.com/auth/drive.file"]
       token_store = TokenStore.new
-      redirect_url = gdrive_auth_callback_url(host: Settings.url.host, port: Settings.url.port)
+      redirect_url = gdrive_auth_callback_url(host: Settings.url.host)
       @authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store, redirect_url)
     end
   end

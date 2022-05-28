@@ -23,7 +23,8 @@
       el: '.gdrive--auth.action-index',
       clientId: Settings.gdrive.auth.client_id,
       apiKey: Settings.gdrive.auth.api_key,
-      accessToken: @access_token
+      accessToken: @access_token,
+      saveFolderUrl: gdrive_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id)
     )%>);
   });
 <% end %>

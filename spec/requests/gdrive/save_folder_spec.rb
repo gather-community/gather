@@ -15,8 +15,9 @@ describe "gdrive auth save_folder" do
     let!(:gdrive_config) { create(:gdrive_config) }
 
     it "saves folder and redirects to index" do
-      put(gdrive_auth_save_folder_path, params: {folder_id: "xyz"})
-      expect(response).to redirect_to(gdrive_auth_url(subdomain: nil, community_id: Defaults.community.id))
+      url = gdrive_auth_save_folder_path(host: Settings.url.host, community_id: Defaults.community.id)
+      put(url, params: {folder_id: "xyz"})
+      expect(response.status).to eq(200)
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Config.find_by!(community_id: Defaults.community.id).folder_id).to eq('xyz')
       end

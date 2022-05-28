@@ -11,7 +11,7 @@ module GDrive
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
     # We can't use a subdomain on these pages due to Google API restrictions.
-    prepend_before_action :set_current_community_from_query_string, only: :index
+    prepend_before_action :set_current_community_from_query_string, only: [:index, :save_folder]
     prepend_before_action :set_current_community_from_callback_state, only: :callback
 
     def index
@@ -72,7 +72,7 @@ module GDrive
     def save_folder
       authorize(current_community, policy_class: GDrive::AuthPolicy)
       Config.find_by!(community: current_community).update!(folder_id: params[:folder_id])
-      redirect_to(gdrive_auth_url(subdomain: nil, community_id: current_community.id))
+      head(:ok)
     end
 
     private

@@ -3,6 +3,7 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
     this.appId = options.clientId.split("-")[0];
     this.accessToken = options.accessToken;
     this.apiKey = options.apiKey;
+    this.saveFolderUrl = options.saveFolderUrl;
     gapi.load("picker");
   }
 
@@ -33,7 +34,12 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
 
   callback(data) {
     if (data.action === google.picker.Action.PICKED) {
-      const doc = data.docs[0];
+      $.ajax({
+        url: this.saveFolderUrl,
+        method: "PUT",
+        data: {folder_id: data.docs[0].id},
+        success: () => window.location.reload()
+      });
     }
   }
 };

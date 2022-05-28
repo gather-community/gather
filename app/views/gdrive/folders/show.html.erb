@@ -1,1 +1,17 @@
 <% content_for(:title) { "Google Drive" } %>
+<% content_for(:action_links) do %>
+  <% if @auth_policy.index? %>
+    <%= link_to(icon_tag("gear") << " Setup",
+                gdrive_auth_path(host: Settings.url.host, community_id: current_community.id),
+                class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<% if @config.nil? || @config.incomplete? %>
+  Your community has not yet been configured for Google Drive.
+  <% if @auth_policy.index? %>
+    You can click <strong>Setup</strong> above to get started.
+  <% else %>
+    Please talk to a Gather Admin about getting Google Drive set up.
+  <% end %>
+<% end %>

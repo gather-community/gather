@@ -362,7 +362,13 @@ module Nav
       params[:role] = "tab" if tab
       params[:"aria-controls"] = name if tab
       icon_tag = icon && item[:icon] ? h.icon_tag(item[:icon]) << " " : h.safe_str
-      h.link_to(icon_tag << " #{name}", item[:path], params)
+
+      # We have to add the full host, port, and protocol if it's not given since some pages
+      # are under the apex gather domain with community specified through query string but we want the
+      # nav links to go back to the subdomain.
+      url = item[:path].match(/\Ahttps?:\/\//) ? item[:path] : h.url_in_home_community(item[:path])
+
+      h.link_to(icon_tag << " #{name}", url, params)
     end
 
     protected

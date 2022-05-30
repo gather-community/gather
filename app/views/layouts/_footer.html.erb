@@ -8,15 +8,15 @@
     <% if current_user && current_community %>
       <% if policy(current_community).update? %>
         &nbsp;
-        <%= link_to("Settings", admin_settings_path(type: "community")) %>
+        <%= link_to("Settings", admin_settings_url(type: "community")) %>
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;
-        <%= link_to("Accounts", accounts_path) %>
+        <%= link_to("Accounts", accounts_url) %>
       <% end %>
       <% if policy(Community.new).index? %>
         &nbsp;
-        <%= link_to("Communities", communities_path) %>
+        <%= link_to("Communities", communities_url) %>
       <% end %>
     <% end %>
 

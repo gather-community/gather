@@ -28,7 +28,8 @@
       clientId: Settings.gdrive.auth.client_id,
       apiKey: Settings.gdrive.auth.api_key,
       accessToken: @access_token,
-      saveFolderUrl: gdrive_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id)
+      saveFolderUrl: gdrive_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id),
+      testMode: Rails.env.test?
     )%>);
   });
 <% end %>

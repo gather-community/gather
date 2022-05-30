@@ -2,7 +2,7 @@
 <% content_for(:action_links) do %>
   <% if @auth_policy.index? %>
     <%= link_to(icon_tag("gear") << " Setup",
-                gdrive_auth_path(host: Settings.url.host, community_id: current_community.id),
+                gdrive_auth_url(host: Settings.url.host, community_id: current_community.id),
                 class: "btn btn-primary") %>
   <% end %>
 <% end %>

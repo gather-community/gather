@@ -88,6 +88,8 @@ describe "gdrive auth index", js: true do
         visit(url)
         expect(page).to have_css("button", text: "Pick Your Community's Root Folder")
         expect(page).to have_content("Reset Connection")
+        click_on("Pick Your Community's Root Folder")
+        expect(page).to have_content("Touchstone Documents")
       end
     end
   end
@@ -108,6 +110,7 @@ describe "gdrive auth index", js: true do
   # It is stored on the Settings object. So after we have captured the request, we change the cassette
   # to have all x's as the client secret and add a call to this method in the spec.
   def stub_client_secret
-    expect(Settings.gdrive.auth).to receive(:client_secret).and_return('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    expect(Settings.gdrive.auth).to receive(:client_secret).at_least(1)
+      .and_return("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
   end
 end

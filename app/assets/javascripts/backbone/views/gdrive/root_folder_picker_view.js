@@ -4,6 +4,7 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
     this.accessToken = options.accessToken;
     this.apiKey = options.apiKey;
     this.saveFolderUrl = options.saveFolderUrl;
+    this.testMode = options.testMode;
     gapi.load("picker");
   }
 
@@ -14,6 +15,14 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
   }
 
   showPicker() {
+    /*
+     * In test env, we can't call out to the picker so we just short circuit
+     * and pretend we selected some random folder ID.
+     */
+    if (this.testMode) {
+      this.saveFolder("xxxxxxxxZC4JyX21yUUwxxxxxxxx");
+    }
+
     const view = new google.picker.DocsView(google.picker.ViewId.FOLDERS);
     view.setIncludeFolders(true);
     view.setSelectFolderEnabled(true);
@@ -34,12 +43,16 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
 
   callback(data) {
     if (data.action === google.picker.Action.PICKED) {
-      $.ajax({
-        url: this.saveFolderUrl,
-        method: "PUT",
-        data: {folder_id: data.docs[0].id},
-        success: () => window.location.reload()
-      });
+      this.saveFolder(data.docs[0].id);
     }
+  }
+
+  saveFolder(id) {
+    $.ajax({
+      url: this.saveFolderUrl,
+      method: "PUT",
+      data: {folder_id: id},
+      success: () => window.location.reload()
+    });
   }
 };

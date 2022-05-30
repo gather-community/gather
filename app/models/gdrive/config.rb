@@ -6,5 +6,9 @@ module GDrive
     acts_as_tenant :cluster
 
     belongs_to :community
+
+    def incomplete?
+      folder_id.nil?
+    end
   end
 end

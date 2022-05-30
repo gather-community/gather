@@ -47,7 +47,7 @@
         </div>
       </div>
     </nav>
-    <% if nav_builder.context[:sub_item] && (items = nav_builder.sub_items).size > 1 %>
+    <% if nav_builder.context[1] && (items = nav_builder.sub_items).size > 1 %>
       <nav class="subnav hidden-xs">
         <ul class="nav nav-tabs" role="tablist">
           <% items.each do |item| %>

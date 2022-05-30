@@ -18,7 +18,7 @@ describe "gdrive auth save_folder" do
       url = gdrive_auth_save_folder_path(host: Settings.url.host, community_id: Defaults.community.id)
       put(url, params: {folder_id: "xyz"})
       expect(response.status).to eq(200)
-      ActsAsTenant.with_tenant(Defaults.cluster) do
+      with_default_tenant do
         expect(GDrive::Config.find_by!(community_id: Defaults.community.id).folder_id).to eq('xyz')
       end
     end

@@ -10,9 +10,12 @@ module GDrive
   class AuthController < ApplicationController
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
+
     # We can't use a subdomain on these pages due to Google API restrictions.
     prepend_before_action :set_current_community_from_callback_state, only: :callback
     prepend_before_action :set_current_community_from_query_string, except: :callback
+
+    prepend_before_action :stub_g_xsrf_token_in_session if Rails.env.test?
 
     def index
       skip_policy_scope
@@ -51,22 +54,16 @@ module GDrive
     def callback
       authorize(current_community, policy_class: GDrive::AuthPolicy)
 
-      credentials = authorizer.get_credentials_from_code(
-        user_id:  current_community.id,
-        code:     @callback_state[Google::Auth::WebUserAuthorizer::AUTH_CODE_KEY],
-        scope:    @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
-        base_url: request.url
-      )
-
-      uri = URI("#{USERINFO_URL}#{credentials.access_token}")
-      res = Net::HTTP.get_response(uri)
-      google_id = JSON.parse(res.body)["email"]
-      Config.create!(community: current_community, google_id: google_id)
-      # ERROR HANDLING
-
-      @authorizer.store_credentials(current_community.id, credentials)
-
       redirect_to(@redirect_uri)
+
+      if params[:error] == "access_denied"
+        flash[:error] = "It looks like you cancelled the Google authentication flow."
+        return
+      end
+
+      credentials = fetch_credentials
+      authenticated_google_id = fetch_email_of_authenticated_account(credentials)
+      update_config(credentials, authenticated_google_id)
     end
 
     def save_folder
@@ -83,11 +80,17 @@ module GDrive
 
     private
 
+    def stub_g_xsrf_token_in_session
+      request.session["g-xsrf-token"] = ENV["STUB_SESSION_G_XSRF_TOKEN"]
+    end
+
     def set_current_community_from_callback_state
       @callback_state, @redirect_uri = Google::Auth::WebUserAuthorizer.extract_callback_state(request)
       community_id = JSON.parse(params[:state])["community_id"]
-      Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
       self.current_community = Community.find(community_id)
+      # We don't call validate_callback_state here because it will fail if the user has
+      # cancelled the oauth request. We check for that in the main callback method body and then
+      # we call validate right after. The purpose of this before_action is just to set the current_community.
     end
 
     def set_current_community_from_query_string
@@ -102,6 +105,38 @@ module GDrive
       token_store = TokenStore.new
       redirect_url = gdrive_auth_callback_url(host: Settings.url.host)
       @authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store, redirect_url)
+    end
+
+    def fetch_credentials
+      Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
+      authorizer.get_credentials_from_code(
+        user_id:  current_community.id,
+        code:     @callback_state[Google::Auth::WebUserAuthorizer::AUTH_CODE_KEY],
+        scope:    @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
+        base_url: request.url
+      )
+    end
+
+    def fetch_email_of_authenticated_account(credentials)
+      uri = URI("#{USERINFO_URL}#{credentials.access_token}")
+      res = Net::HTTP.get_response(uri)
+      authenticated_google_id = JSON.parse(res.body)["email"]
+    end
+
+    def update_config(credentials, authenticated_google_id)
+      if (config = Config.find_by(community: current_community))
+        if config.google_id != authenticated_google_id
+          flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
+            "Please sign in with #{config.google_id} instead."
+          return
+        end
+      elsif Config.where(google_id: authenticated_google_id).exists?
+        flash[:error] = "The Google ID #{authenticated_google_id} is in use by another community."
+        return
+      else
+        Config.create!(community: current_community, google_id: authenticated_google_id)
+      end
+      @authorizer.store_credentials(current_community.id, credentials)
     end
   end
 end

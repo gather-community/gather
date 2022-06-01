@@ -49,7 +49,7 @@ describe "gdrive auth index", js: true do
         # In another spec we'll cover the big warning that should be shown, etc.
         VCR.use_cassette("gdrive/auth/index/creds_and_folder_present/not_found") do
           visit(url)
-          expect(page).to have_content("not found")
+          expect(page).to have_content("could not be found")
           expect(page).to have_content("Reset Connection")
         end
       end
@@ -59,7 +59,8 @@ describe "gdrive auth index", js: true do
       scenario "it shows error information, option to reset" do
         VCR.use_cassette("gdrive/auth/index/creds_and_folder_present/invalid_creds") do
           visit(url)
-          expect(page).to have_content("unauthorized")
+          expect(page).to have_content("authorization error")
+          expect(page).to have_content("Authenticate With Google")
           expect(page).to have_content("Reset Connection")
         end
       end

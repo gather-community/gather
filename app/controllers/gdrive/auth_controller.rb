@@ -22,12 +22,11 @@ module GDrive
       skip_policy_scope
       authorize(current_community, policy_class: GDrive::AuthPolicy)
       credentials = authorizer.get_credentials(current_community.id.to_s)
-      config = Config.find_by(community: current_community)
-      if credentials.nil?
-        state = {community_id: current_community.id}
-        @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
-                                                     state: state)
-      elsif config.folder_id.nil?
+      @config = Config.find_by(community: current_community)
+      if @config.nil?
+        @no_config = true
+        setup_auth_url
+      elsif @config.folder_id.nil?
         # Ensure we have a fresh token in case the user wants to use the picker.
         credentials.fetch_access_token!
         @no_folder = true
@@ -36,15 +35,19 @@ module GDrive
         begin
           drive = Google::Apis::DriveV3::DriveService.new
           drive.authorization = credentials
-          folder = drive.get_file(config.folder_id)
+          folder = drive.get_file(@config.folder_id)
           @folder_name = folder.name
         rescue Google::Apis::ServerError
-          @error = "server error"
+          flash.now[:error] = "There was a server error when connecting to Google Drive. "\
+            "Please try again in a few minutes."
         rescue Google::Apis::AuthorizationError
-          @error = "unauthorized"
+          setup_auth_url
+          flash.now[:error] = "There was an authorization error when connecting to Google Drive. "\
+            "You can try to <a href=\"#{@auth_url}\">Authenticate With Google</a> again.".html_safe
         rescue Google::Apis::ClientError => error
           if error.status_code == 404
-            @error = "not found"
+            flash.now[:error] = "Your Google Drive folder could not be found. "\
+              "You may need to reset your connection."
           else
             raise error
           end
@@ -116,6 +119,12 @@ module GDrive
         scope:    @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
         base_url: request.url
       )
+    end
+
+    def setup_auth_url
+      state = {community_id: current_community.id}
+      @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
+                                                   state: state)
     end
 
     def fetch_email_of_authenticated_account(credentials)

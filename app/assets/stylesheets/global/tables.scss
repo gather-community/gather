@@ -43,6 +43,10 @@ table.key-value {
     vertical-align: top;
   }
 
+  td:last-of-type {
+    padding-right: 15px;
+  }
+
   ul {
     // The default of 40px is too much in this context.
     padding-left: 25px;

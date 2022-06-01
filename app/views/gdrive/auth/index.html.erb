@@ -1,22 +1,71 @@
-<% content_for(:title, "Auth") %>
-<% if @auth_url %>
-  <%= link_to("Authenticate With Google", @auth_url) %>
+<% content_for(:title, "Connection To Google Drive") %>
+<% if @no_config %>
+  <p>
+    Your community is not yet connected to Google Drive. To connect to Google Drive, please do the following:
+  </p>
+  <ol>
+    <li>
+      Choose a Google Account that you'd like to connect to. You should choose one that doesn't belong
+      to an individual. Something like <strong>yourcommunity@gmail.com</strong> is a good choice.
+      Create a new Google Account if necessary.
+    </li>
+    <li>
+      Make sure all your community's files are contained inside a single "root" folder that is owned by or shared
+      with your community's Google Account. Gather will only pay attention to the files inside that folder.
+    </li>
+    <li>
+      Ensure your community's Google Account has at least "Editor"
+      access to your folder and its subfolders. This is required for Gather to be able to
+      help you manage permissions of your community's files. See
+      <a href="https://support.google.com/drive/answer/7166529?hl=en&ref_topic=7000947">
+        Google's help docs
+      </a>
+      for more information on how to change sharing settings.
+    </li>
+    <li>
+      Make sure your community's Google Account has no "Starred" files in Google Drive.
+      See <a href="https://support.google.com/a/users/answer/9310349?hl=en#4.4">this help document</a>
+      for more information about "Starred" files. Gather uses the "Star" feature to keep track files during
+      the import process.
+    </li>
+  </ol>
+  <p>
+    Once you have done the above, click below to authenticate with Google. Be sure to sign in with the
+    Google Account you chose above.
+  </p>
+  <p>
+    <%= link_to("Authenticate With Google", @auth_url, class: "btn btn-primary") %>
+  </p>
 <% elsif @no_folder %>
-  <button id="pick-folder" class="btn btn-primary">Pick Your Community's Root Folder</button>
-<% elsif @error %>
-  <%= @error %>
-<% elsif @not_found %>
-  not found
+  <p>
+    Your community is connected to Google Drive but you have not picked a root folder yet.
+  </p>
+  <p>
+    <button id="pick-folder" class="btn btn-primary">Pick Your Community's Root Folder</button>
+  </p>
 <% else %>
-  <%= @folder_name %>
+  <table class="key-value">
+    <tr>
+      <td>Connected Google ID</td>
+      <td><%= @config.google_id %></td>
+    </tr>
+    <tr>
+      <td>Root Folder</td>
+      <td>
+        <%= link_to(@folder_name, "https://drive.google.com/drive/folders/#{@config.folder_id}") %>
+      </td>
+    </tr>
+  </table>
 <% end %>
 
-<% unless @auth_url %>
-  <%= link_to("Reset Connection", gdrive_auth_reset_path(community_id: current_community.id),
-              data: {
-                method: :delete,
-                confirm: "Are you sure you want to reset your community's connection to Google Drive? Any in-process ownership transfers will be aborted."
-              }) %>
+<% if @config %>
+  <footer id="local-footer" class="footer-links">
+    <%= link_to("Reset Connection", gdrive_auth_reset_path(community_id: current_community.id),
+                data: {
+                  method: :delete,
+                  confirm: "Are you sure you want to reset your community's connection to Google Drive? Any in-process ownership transfers will be aborted."
+                }) %>
+  </footer>
 <% end %>
 
 <script src="https://apis.google.com/js/api.js"></script>

@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe "gdrive auth callback" do
+  include_context "gdrive"
+
   let(:actor) { create(:admin) }
   let(:callback_payload) do
     {

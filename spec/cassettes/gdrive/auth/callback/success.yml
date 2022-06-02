@@ -5,7 +5,7 @@ http_interactions:
     uri: https://oauth2.googleapis.com/token
     body:
       encoding: ASCII-8BIT
-      string: grant_type=authorization_code&code=4%2F0AX4XfWi1iHTsts9hiS2un1INqmi0KAIOB-iRL_OnUd7FCqyhJ7MDkPqmgjYlhAIoysAnpw&redirect_uri=http%3A%2F%2Fgather.localhost.tv%3A31337%2Fgdrive%2Fauth%2Fcallback&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=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
+      string: grant_type=authorization_code&code=4%2F0AX4XfWi1iHTsts9hiS2un1INqmi0KAIOB-iRL_OnUd7FCqyhJ7MDkPqmgjYlhAIoysAnpw&redirect_uri=http%3A%2F%2Fgather.localhost.tv%3A31337%2Fgdrive%2Fauth%2Fcallback&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     headers:
       User-Agent:
       - Faraday v1.10.0

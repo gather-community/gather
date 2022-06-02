@@ -12,9 +12,10 @@ describe GDrive::TokenStore do
       expect(config.reload.token).to eq("atoken")
     end
 
-    it "creates new record if not found" do
-      described_class.new.store(community.id.to_s, "atoken")
-      expect(GDrive::Config.find_by!(community: community).token).to eq("atoken")
+    it "errors if not found" do
+      expect do
+        described_class.new.store(community.id.to_s, "atoken")
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

@@ -56,11 +56,15 @@ describe "gdrive auth index", js: true do
     end
 
     context "when fetching folder fails with 401" do
-      scenario "it shows error information, option to reset" do
+      scenario "it shows error information, option to re-auth with login hint, option to reset" do
         VCR.use_cassette("gdrive/auth/index/creds_and_folder_present/invalid_creds") do
           visit(url)
           expect(page).to have_content("authorization error")
           expect(page).to have_content("Authenticate With Google")
+
+          link = find("a", text: "Authenticate With Google")
+          expect(link["href"]).to include("login_hint=abc123@gmail.com")
+
           expect(page).to have_content("Reset Connection")
         end
       end

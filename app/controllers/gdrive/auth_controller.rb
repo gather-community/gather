@@ -41,7 +41,7 @@ module GDrive
           flash.now[:error] = "There was a server error when connecting to Google Drive. "\
             "Please try again in a few minutes."
         rescue Google::Apis::AuthorizationError
-          setup_auth_url
+          setup_auth_url(config: @config)
           flash.now[:error] = "There was an authorization error when connecting to Google Drive. "\
             "You can try to <a href=\"#{@auth_url}\">Authenticate With Google</a> again.".html_safe
         rescue Google::Apis::ClientError => error
@@ -121,9 +121,9 @@ module GDrive
       )
     end
 
-    def setup_auth_url
+    def setup_auth_url(config: nil)
       state = {community_id: current_community.id}
-      @auth_url = authorizer.get_authorization_url(login_hint: "tscohotech@gmail.com", request: request,
+      @auth_url = authorizer.get_authorization_url(login_hint: config&.google_id, request: request,
                                                    state: state)
     end
 

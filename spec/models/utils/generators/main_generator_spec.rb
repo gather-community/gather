@@ -9,7 +9,11 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   NO_SAMPLE_DATA_CLASSES = %w[Billing::Template
                               Billing::TemplateMemberType
                               Calendars::System::OtherCommunitiesMealsCalendar
-                              Domain DomainOwnership
+                              Domain
+                              DomainOwnership
+                              FeatureFlag
+                              FeatureFlagUser
+                              GDrive::Config
                               Groups::Mailman::List
                               Groups::Mailman::User
                               Meals::Import

@@ -8,9 +8,6 @@ module Calendars
     # Users are authenticated from the provided token for the personalized endpoint.
     prepend_before_action :authenticate_user_from_calendar_token!, only: :personalized
 
-    # This is skipped to support legacy domains.
-    skip_before_action :ensure_subdomain, only: :personalized
-
     # Community calendars are not user-specific. Authorization is handled by the policy class
     # based on the community calendar token.
     skip_before_action :authenticate_user!, only: :nonpersonalized
@@ -50,6 +47,12 @@ module Calendars
     # See def'n in ApplicationController for documentation.
     def community_for_route
       current_user.community if params[:action] == "personalized"
+    end
+
+    def redirect_if_subdomain_missing?
+      # Since this is a machine-read route, we don't care about the subdomain in the address bar,
+      # and we don't want to redirect in case clients don't support it.
+      false
     end
 
     def export_file_basename

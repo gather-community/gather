@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_124508) do
+ActiveRecord::Schema.define(version: 2022_05_06_004359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -236,35 +236,36 @@ ActiveRecord::Schema.define(version: 2022_02_15_124508) do
     t.index ["name"], name: "index_domains_on_name", unique: true
   end
 
+  create_table "feature_flag_users", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.bigint "feature_flag_id", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["feature_flag_id", "user_id"], name: "index_feature_flag_users_on_feature_flag_id_and_user_id", unique: true
+    t.index ["feature_flag_id"], name: "index_feature_flag_users_on_feature_flag_id"
+    t.index ["user_id"], name: "index_feature_flag_users_on_user_id"
+  end
+
+  create_table "feature_flags", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.string "interface", default: "basic", null: false
+    t.string "name", null: false
+    t.boolean "status"
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_feature_flags_on_name", unique: true
+  end
+
   create_table "gdrive_configs", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", precision: 6, null: false
-    t.jsonb "credentials", null: false
-    t.datetime "last_scanned_at"
-    t.string "owner_email", limit: 128, null: false
-    t.string "root_folder_id", limit: 128, null: false
-    t.jsonb "token"
+    t.string "folder_id", limit: 128
+    t.string "google_id", limit: 255, null: false
+    t.string "token", limit: 2048
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
-    t.index ["community_id"], name: "index_gdrive_configs_on_community_id"
-  end
-
-  create_table "gdrive_stray_files", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.bigint "community_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.string "file_id", limit: 128, null: false
-    t.string "mime_type", limit: 128, null: false
-    t.string "owner_email", limit: 128, null: false
-    t.string "parent_id", limit: 128, null: false
-    t.text "path", null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["cluster_id", "community_id", "file_id"], name: "unique_by_cmty_and_file", unique: true
-    t.index ["cluster_id"], name: "index_gdrive_stray_files_on_cluster_id"
-    t.index ["community_id"], name: "index_gdrive_stray_files_on_community_id"
-    t.index ["mime_type"], name: "index_gdrive_stray_files_on_mime_type"
-    t.index ["owner_email"], name: "index_gdrive_stray_files_on_owner_email"
+    t.index ["community_id"], name: "index_gdrive_configs_on_community_id", unique: true
+    t.index ["google_id"], name: "index_gdrive_configs_on_google_id", unique: true
   end
 
   create_table "group_affiliations", force: :cascade do |t|
@@ -983,10 +984,10 @@ ActiveRecord::Schema.define(version: 2022_02_15_124508) do
   add_foreign_key "domain_ownerships", "communities"
   add_foreign_key "domain_ownerships", "domains"
   add_foreign_key "domains", "clusters"
+  add_foreign_key "feature_flag_users", "feature_flags"
+  add_foreign_key "feature_flag_users", "users"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
-  add_foreign_key "gdrive_stray_files", "clusters"
-  add_foreign_key "gdrive_stray_files", "communities"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

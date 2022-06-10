@@ -242,6 +242,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :gdrive do
+    get "/", to: "folders#show", as: :home
+
+    get "auth", to: "auth#index", as: :auth
+    get "auth/callback", to: "auth#callback", as: :auth_callback
+    put "auth/save-folder", to: "auth#save_folder", as: :auth_save_folder
+    delete "auth/reset", to: "auth#reset", as: :auth_reset
+  end
+
   namespace :work do
     resources :shifts, path: :signups, only: %i[index show] do
       member do

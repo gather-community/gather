@@ -1,51 +1,54 @@
 en:
   nav_links:
-    main:
-      people: "People"
+    people:
+      _self: "People"
+      households: "Households"
+      directory: "Directory"
+      birthdays: "Birthdays"
+      vehicles: "Vehicles"
+      memorials: "Memorials"
+      settings:
+        _self: "Settings"
+        general: "General Settings"
+        member_types: "Member Types"
+    groups:
+      _self: "Groups"
       groups: "Groups"
+      roles: "Roles"
+    meals:
+      _self: "Meals"
       meals: "Meals"
+      jobs: "Jobs"
+      report: "Report"
+      formulas: "Formulas"
+      roles: "Roles"
+      types: "Types"
+      settings: "Settings"
+    calendars:
+      _self: "Calendars"
+      events: "Events"
       calendars: "Calendars"
+      protocols: "Protocols"
+    wiki:
+      _self: "Wiki"
       wiki: "Wiki"
-      work: "Work"
-      admin: "Admin"
-      billing: "Billing"
-    sub:
-      meals:
-        meals: "Meals"
-        jobs: "Jobs"
-        report: "Report"
-        formulas: "Formulas"
-        roles: "Roles"
-        types: "Types"
-        settings: "Settings"
-      groups:
-        groups: "Groups"
-        roles: "Roles"
-      people:
-        households: "Households"
-        directory: "Directory"
-        birthdays: "Birthdays"
-        vehicles: "Vehicles"
-        memorials: "Memorials"
-        settings: "Settings"
-      calendars:
-        events: "Events"
-        calendars: "Calendars"
-        protocols: "Protocols"
-      work:
-        signups: "Signups"
-        report: "Report"
-        jobs: "Jobs"
-        periods: "Periods"
-        settings: "Settings"
-      billing:
-        accounts: "Accounts"
-        templates: "Templates"
-    sub_sub:
-      people:
-        settings:
-          general: "General Settings"
-          member_types: "Member Types"
+      gdrive:
+        _self: "Google Drive"
+        setup:
+          auth: "Connection"
+    work:
+      _self: "Work"
+      signups: "Signups"
+      report: "Report"
+      jobs: "Jobs"
+      periods: "Periods"
+      settings: "Settings"
+    admin:
+      _self: "Admin"
+    billing:
+      _self: "Billing"
+      accounts: "Accounts"
+      templates: "Templates"
     personal:
       profile: "Profile"
       accounts: "Accounts"

@@ -6,9 +6,9 @@ parserOptions:
 extends:
   - eslint:recommended
 globals:
-  React: true
-  ELMO: true
-  $: true
+  google: true
+  gapi: true
+  Gather: true
   I18n: true
   console: true
 rules:

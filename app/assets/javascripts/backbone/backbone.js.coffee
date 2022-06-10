@@ -19,3 +19,4 @@ window.Gather =
     Calendars: {}
     Groups: {}
     Billing: {}
+    GDrive: {}

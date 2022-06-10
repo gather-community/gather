@@ -23,6 +23,7 @@ describe "calendar export pages", js: true do
         visit("/calendars/events")
         check("Calendar 1")
         check("Calendar 3")
+        expect(page).not_to have_loading_indicator
 
         click_on("Export")
         expect(page).to have_field("Calendar 1", checked: true)

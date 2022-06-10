@@ -1,0 +1,130 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://oauth2.googleapis.com/token
+    body:
+      encoding: ASCII-8BIT
+      string: grant_type=refresh_token&refresh_token=xxxx4HCOkvr0wgmNCgYIARAAGAQSNwF-L9IrEdybQAql6Z9OiwLdUuPLUR-dl8H5DhX8SoL_IkITiJ3m64HbqOMVOIFnK52YQ8Jxxxx&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    headers:
+      User-Agent:
+      - Faraday v1.10.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Mon, 30 May 2022 01:49:39 GMT
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Server:
+      - scaffolding on HTTPServer2
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "access_token": "xxxxxxxxRrdaM8de8W3C3Jvf7xKRgJC7GO84Z2VV3Q1ar_6QEZkv_4gQcuLx8oNjH2Aqx1WG1ebE4uF0pwaefvlwuJ-Le92mpRD1WR-WFktFfA4z4zlTCcJtkyfGyCqMZAGPvdx0ayFw4MgOIXwWz65dX3Lxxxxxxxx",
+          "expires_in": 3599,
+          "scope": "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.file openid https://www.googleapis.com/auth/userinfo.profile",
+          "token_type": "Bearer",
+          "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM4ZjM4ODM0NjhmYzY1OWFiYjQ0NzVmMzYzMTNkMjI1ODVjMmQ3Y2EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTY2MDc4MzU0Njc4ODc4NDcxNTEiLCJlbWFpbCI6InRzY29ob3RlY2hAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJpNmpfbDBaRXdXNXozSUc1UnRiLWNBIiwiaWF0IjoxNjUzODc1Mzc5LCJleHAiOjE2NTM4Nzg5Nzl9.Hu0HAlSq9JWATRFPZAwUhbqqBJMrIDTSStdKhYrTlFT6MvjnPx28qDtFTx9wP3xSJcKuruZFArOztpTjk--xfnyYZsOLKpRhr2y_rKjO-z4MGanhirV-WjYKcICbYVQxHasTRBskDVkYZDpyF3dYVlTVDVNP8CVMesxd5LWkJOHeeknR2rUMOroacRDH7WG5vDT9FzzNIRPIGrQdDi1NbZ35xKW0XcThq1o0pLd8ocv15fXaqKLHcWL4eMHbQoGx-LeB0QxigjUgPi91KtJbL1KTvKakJSSUfrBuLefnucgDy1wLQwGjTiEu8Syte1ub4cxRNAnTcWhtFFKZOWqQRQ"
+        }
+    http_version:
+  recorded_at: Mon, 30 May 2022 01:49:39 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/xxxxxxxxZC4JyX21yUUwxxxxxxxx
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.21.0 Mac OS X/12.2.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Mon, 30 May 2022 01:49:41 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.6.5 gdcl/1.21.0
+      Authorization:
+      - Bearer xxxxxxxxRrdaM8de8W3C3Jvf7xKRgJC7GO84Z2VV3Q1ar_6QEZkv_4gQcuLx8oNjH2Aqx1WG1ebE4uF0pwaefvlwuJ-Le92mpRD1WR-WFktFfA4z4zlTCcJtkyfGyCqMZAGPvdx0ayFw4MgOIXwWz65dX3Lxxxxxxxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Mon, 30 May 2022 01:49:41 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "kind": "drive#file",
+         "id": "xxxxxxxxZC4JyX21yUUw3xxxxxxxx",
+         "name": "Touchstone Documents",
+         "mimeType": "application/vnd.google-apps.folder",
+         "resourceKey": "0-evbMKFvU0WlZr-Fq9aIueg"
+        }
+    http_version:
+  recorded_at: Mon, 30 May 2022 01:49:41 GMT
+recorded_with: VCR 4.0.0

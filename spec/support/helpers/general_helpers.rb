@@ -45,6 +45,12 @@ module GeneralHelpers
     end
   end
 
+  def with_default_tenant
+    ActsAsTenant.with_tenant(Defaults.cluster) do
+      yield
+    end
+  end
+
   def with_locale(locale)
     old_locale = I18n.locale
     I18n.locale = locale

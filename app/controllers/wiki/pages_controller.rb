@@ -3,7 +3,7 @@
 module Wiki
   class PagesController < ApplicationController
     before_action :find_page, only: %i[history compare edit update destroy]
-    before_action -> { nav_context(:wiki) }
+    before_action -> { nav_context(:wiki, :wiki) }
 
     decorates_assigned :page, :pages, :versions
     helper_method :preview?

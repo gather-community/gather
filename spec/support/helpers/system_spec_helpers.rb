@@ -132,6 +132,10 @@ module SystemSpecHelpers
     have_css("div.alert-info", text: pattern)
   end
 
+  def have_loading_indicator
+    have_css("#glb-load-ind")
+  end
+
   def expect_alert(pattern)
     expect(page).to have_css("div.alert-warning", text: pattern)
   end

@@ -34,8 +34,8 @@ class ApplicationController < ActionController::Base
     @nav_builder ||= Nav::Builder.new
   end
 
-  def nav_context(main, sub_item = nil, sub_sub_item = nil)
-    nav_builder.context = {main: main, sub_item: sub_item, sub_sub_item: sub_sub_item}
+  def nav_context(*levels)
+    nav_builder.context = levels
   end
 
   def app_version

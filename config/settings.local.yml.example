@@ -10,6 +10,13 @@ oauth:
     client_id: <client ID>
     client_secret: <client secret>
 
+gdrive:
+  auth:
+    # Should be different from OAuth login client ID/secret
+    client_id: <client ID>
+    client_secret: <client secret>
+    api_key: <API key>
+
 # Get a secret key by running 'rake secret'.
 secret_key_base: <secret key>
 

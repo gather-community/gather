@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommunitiesController < ApplicationController
-  skip_before_action :ensure_subdomain
+  skip_before_action :require_current_community
   decorates_assigned :communities
 
   def index

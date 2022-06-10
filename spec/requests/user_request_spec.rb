@@ -62,6 +62,7 @@ describe "user request" do
             first_name: "Jorpo"
           }}
           expect_successful_create_or_update
+
           expect(user.reload.first_name).to eq("Jorpo")
         end
       end

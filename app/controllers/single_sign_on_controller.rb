@@ -2,7 +2,7 @@
 
 class SingleSignOnController < ApplicationController
   # sso requests may be to the apex domain or subdomain.
-  skip_before_action :ensure_subdomain, only: :sign_on
+  skip_before_action :require_current_community, only: :sign_on
 
   # Impersonation doesn't make sense for SSO since you can't see the impersonation banner
   # and you may arrive at the Mailman UI from a different path and forget that you are impersonating someone.

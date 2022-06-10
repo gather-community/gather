@@ -74,11 +74,11 @@ module Nav
 
       # Add all the new menu items defined as customizations
       items.concat(customizer.extra_items).compact!
-      filter_and_set_active_items(items, type: :main, display: display, active: context[:main])
+      filter_and_set_active_items(items, display: display, active: context[0])
     end
 
     def sub_items(main_item = nil)
-      main_item ||= context[:main]
+      main_item ||= context[0]
       items =
         case main_item
         when :meals
@@ -267,10 +267,27 @@ module Nav
               icon: "copy"
             }
           ]
+        when :wiki
+          sample_wiki_page = Wiki::Page.new(community: community)
+          [
+            {
+              name: :wiki,
+              parents: :wiki,
+              path: "/wiki",
+              permitted: h.policy(sample_wiki_page).show?,
+              icon: "info-circle"
+            }, {
+              name: :gdrive,
+              parents: :wiki,
+              path: h.gdrive_home_path,
+              permitted: GDrive::FoldersPolicy.new(user, :folder).show?,
+              icon: "google"
+            }
+          ]
         else
           []
         end
-      filter_and_set_active_items(items, type: :sub, active: context[:sub_item])
+      filter_and_set_active_items(items, active: context[1])
     end
 
     # This method has no arguments because it's only called once. It's not used to populate
@@ -278,9 +295,10 @@ module Nav
     def sub_sub_items
       return @sub_sub_items if defined?(@sub_sub_items)
       sample_member_type = People::MemberType.new(community: community)
+      depth = 0
       items =
-        case [context[:main], context[:sub_item]]
-        when %i[people settings]
+        if context[0..1] == %i[people settings]
+          depth = 2
           [{
             name: :general,
             parents: %i[people settings],
@@ -292,8 +310,16 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
+        elsif context[0..2] == %i[wiki gdrive setup]
+          depth = 3
+          [{
+            name: :auth,
+            parents: %i[wiki gdrive setup],
+            path: h.gdrive_auth_path,
+            permitted: GDrive::AuthPolicy.new(user, community).index?,
+          }]
         end
-      @sub_sub_items = filter_and_set_active_items(items, type: :sub_sub, active: context[:sub_sub_item])
+      @sub_sub_items = filter_and_set_active_items(items, active: context[depth])
     end
 
     def personal_items
@@ -328,33 +354,39 @@ module Nav
             method: :delete
           }
         ]
-      filter_and_set_active_items(items, type: :personal)
+      filter_and_set_active_items(items)
     end
 
     def link(item, tab: false, icon: true)
       name = if item[:name].is_a?(String)
                item[:name]
              else
-               i18n_key_parts = ["nav_links", item[:type]]
+               i18n_key_parts = ["nav_links"]
                i18n_key_parts.concat(Array.wrap(item[:parents]))
                i18n_key_parts << (item[:i18n_key] || item[:name])
-               name = t(i18n_key_parts.join("."))
+               i18n_key = i18n_key_parts.join(".")
+               name = t("#{i18n_key}._self", default: t(i18n_key))
              end
       params = {}
       params[:method] = item[:method]
       params[:role] = "tab" if tab
       params[:"aria-controls"] = name if tab
       icon_tag = icon && item[:icon] ? h.icon_tag(item[:icon]) << " " : h.safe_str
-      h.link_to(icon_tag << " #{name}", item[:path], params)
+
+      # We have to add the full host, port, and protocol if it's not given since some pages
+      # are under the apex gather domain with community specified through query string but we want the
+      # nav links to go back to the subdomain.
+      url = item[:path].match(/\Ahttps?:\/\//) ? item[:path] : h.url_in_home_community(item[:path])
+
+      h.link_to(icon_tag << " #{name}", url, params)
     end
 
     protected
 
-    def filter_and_set_active_items(items, type:, display: nil, active: nil)
+    def filter_and_set_active_items(items, display: nil, active: nil)
       return [] if items.blank?
       items.select! { |i| i[:permitted] && (display.nil? || i[:display].nil? || i[:display] == display) }
       items.each do |i|
-        i[:type] = type
         i[:active] = true if active && i[:name] == active
       end
       items

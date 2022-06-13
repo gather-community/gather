@@ -327,27 +327,32 @@ module Nav
         [
           {
             name: :profile,
+            parents: [:personal],
             path: h.user_url(user),
             permitted: h.policy(user).show?,
             icon: "vcard"
           }, {
             name: :accounts,
+            parents: [:personal],
             path: h.yours_accounts_path,
             permitted: h.policy(Billing::Account.new).yours?,
             icon: "money",
             i18n_key: multi_community? ? :accounts : :account
           }, {
             name: :calendars,
+            parents: [:personal],
             path: h.calendars_legacy_exports_path,
             permitted: user.settings["show_legacy_calendar_export_links"],
             icon: "calendar"
           }, {
             name: :change_passwd,
+            parents: [:personal],
             path: h.people_password_change_path(user),
             permitted: UserPolicy.new(user, user).update?,
             icon: "asterisk"
           }, {
             name: :sign_out,
+            parents: [:personal],
             path: h.destroy_user_session_path,
             permitted: true,
             icon: "sign-out",

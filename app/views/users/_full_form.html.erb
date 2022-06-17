@@ -45,7 +45,7 @@
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
     <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",
-                                        wrapper_html: {"data-full-access-only": true}, allow_clear: true %>
+                                        allow_clear: true %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
     <%= f.input :doctor %>

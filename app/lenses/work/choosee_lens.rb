@@ -22,20 +22,13 @@ module Work
       options[:chooser]
     end
 
-    # Users this user can choose as (must have a nonzero share) for the current period.
+    # Users this user can choose as.
     def possible_options
-      [chooser].concat(other_household_members, users_with_chooser_as_proxy)
+      [chooser].concat(chooser.household.users, users_with_chooser_as_proxy).uniq
     end
 
     def name_for_object_option(user)
       I18n.t("work/shift.choosing_as", name: user.decorate.full_name)
-    end
-
-    # Other household members with nonzero share for this period.
-    def other_household_members
-      return [] if period.nil?
-      ids = chooser.household.users.pluck(:id) - [chooser.id]
-      period.shares.nonzero.where(user_id: ids).includes(:user).map(&:user)
     end
 
     def users_with_chooser_as_proxy

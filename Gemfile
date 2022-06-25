@@ -24,7 +24,7 @@ gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-r
                             branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"
-gem "diffy", "~> 3.2"
+gem "diffy", "~> 3.4"
 gem "draper", "~> 3.0"
 gem "dropzonejs-rails", "~> 0.7"
 gem "elasticsearch-model", "~> 7.0"

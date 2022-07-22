@@ -564,7 +564,7 @@ GEM
     tilt (2.0.10)
     timecop (0.9.1)
     trailblazer-option (0.1.2)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)

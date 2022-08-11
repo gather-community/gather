@@ -200,7 +200,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
-    diffy (3.3.0)
+    diffy (3.4.1)
     draper (3.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -629,7 +629,7 @@ DEPENDENCIES
   datetimepicker-rails!
   delayed_job_active_record (~> 4.1)
   devise (~> 4.7)
-  diffy (~> 3.2)
+  diffy (~> 3.4)
   draper (~> 3.0)
   dropzonejs-rails (~> 0.7)
   elasticsearch-model (~> 7.0)

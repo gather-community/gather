@@ -362,11 +362,9 @@ describe "user form", js: true, perform_jobs: true do
   def expect_full_access_fields(whether)
     if whether
       expect(page).to have_field("Google ID")
-      expect(page).to have_field("Job Choosing Proxy")
       expect(page).to have_field("Admin")
     else
       expect(page).not_to have_field("Google ID")
-      expect(page).not_to have_field("Job Choosing Proxy")
       expect(page).not_to have_field("Admin")
     end
   end

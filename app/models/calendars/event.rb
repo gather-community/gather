@@ -123,7 +123,8 @@ module Calendars
     # about the RuleSet in the UI like the event form or the event grid.
     # In those cases, we can use a sample Event object with nil kind.
     def rule_set
-      @rule_set ||= Rules::RuleSet.build_for(calendar: calendar, kind: kind)
+      # Don't memoize this, it causes all kinds of bugs. Worth the performance hit.
+      Rules::RuleSet.build_for(calendar: calendar, kind: kind)
     end
 
     def future?

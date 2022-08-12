@@ -3,8 +3,9 @@
 require "rails_helper"
 
 describe "event form", js: true do
-  let(:user) { create(:user) }
-  let(:calendar) { create(:calendar, :with_shared_guidelines) }
+  let(:community) { create(:community, settings: {calendars: {kinds: "Official,Personal"}}) }
+  let(:user) { create(:user, community: community) }
+  let(:calendar) { create(:calendar, :with_shared_guidelines, community: community) }
 
   before do
     use_user_subdomain(user)
@@ -34,6 +35,33 @@ describe "event form", js: true do
       expect_success
       expect(page).to have_title(calendar.name)
       expect(page).not_to have_content("Stuffy Stuff")
+    end
+
+    context "with kind-based protocol" do
+      let!(:protocol1) do
+        create(:calendar_protocol, community: community, calendars: [calendar], requires_kind: true)
+      end
+      let!(:protocol2) do
+        create(:calendar_protocol, community: community, calendars: [calendar], max_days_per_year: 1,
+                                   kinds: ["Personal"])
+      end
+      let!(:existing_event) do
+        Timecop.freeze("2022-01-01 12:00") do
+          create(:event, creator: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
+                         starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
+        end
+      end
+
+      scenario "attempt to create event violating policy" do
+        Timecop.freeze("2022-01-02 12:00") do
+          visit(new_calendar_event_path(calendar))
+          fill_in("Event Name", with: "Stuff")
+          select("Personal", from: "Type")
+          check("I agree to the above")
+          click_on("Save")
+          expect_validation_error("You can book at most")
+        end
+      end
     end
   end
 

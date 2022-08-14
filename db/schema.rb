@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_14_152045) do
+ActiveRecord::Schema.define(version: 2022_08_14_152414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -580,7 +580,7 @@ ActiveRecord::Schema.define(version: 2022_08_14_152045) do
     t.integer "cluster_id", null: false
     t.string "country_code", limit: 2, null: false
     t.datetime "created_at", null: false
-    t.string "email"
+    t.string "email", limit: 255
     t.integer "household_id"
     t.string "location", null: false
     t.string "main_phone", null: false
@@ -763,12 +763,12 @@ ActiveRecord::Schema.define(version: 2022_08_14_152045) do
     t.jsonb "custom_data", default: {}, null: false
     t.datetime "deactivated_at"
     t.string "doctor"
-    t.string "email"
+    t.string "email", limit: 255
     t.string "encrypted_password", default: "", null: false
     t.boolean "fake", default: false, null: false
     t.string "first_name", null: false
     t.boolean "full_access", default: true, null: false
-    t.string "google_email"
+    t.string "google_email", limit: 255
     t.string "home_phone"
     t.integer "household_id", null: false
     t.integer "job_choosing_proxy_id"
@@ -790,7 +790,7 @@ ActiveRecord::Schema.define(version: 2022_08_14_152045) do
     t.jsonb "settings", default: {}, null: false
     t.integer "sign_in_count", default: 0, null: false
     t.string "uid"
-    t.string "unconfirmed_email"
+    t.string "unconfirmed_email", limit: 255
     t.datetime "updated_at", null: false
     t.string "work_phone"
     t.index ["alternate_id"], name: "index_users_on_alternate_id"

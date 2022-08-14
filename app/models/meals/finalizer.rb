@@ -51,8 +51,7 @@ module Meals
     end
 
     def create_reimbursement_transaction
-      return unless cost.payment_method == "credit" && cost.total_cost.positive? &&
-        meal.head_cook.present?
+      return unless cost.payment_method == "credit" && cost.total_cost.positive?
 
       # This shouldn't happen but we couldn't put a null false constraint on the column due to legacy data.
       raise ArgumentError, "Meal ##{meal.id} cost has no reimbursee" if cost.reimbursee.nil?

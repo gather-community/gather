@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_06_004359) do
+ActiveRecord::Schema.define(version: 2022_08_14_152045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -778,6 +778,7 @@ ActiveRecord::Schema.define(version: 2022_05_06_004359) do
     t.inet "last_sign_in_ip"
     t.text "medical"
     t.string "mobile_phone"
+    t.string "paypal_email", limit: 255
     t.string "preferred_contact"
     t.jsonb "privacy_settings", default: {}, null: false
     t.string "provider"

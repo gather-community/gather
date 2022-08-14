@@ -109,6 +109,7 @@ en:
         job_choosing_proxy_id: "Someone outside your household who can sign up for jobs on your behalf. Household members can already do this by default."
         email: "The email address at which you'd prefer to be contacted. Also used for signing in with a password."
         google_email: "The email address tied to the Google account used for sign-in. Not displayed in the directory. Ask an <a href='/roles'>admin</a> if you need this changed."
+        paypal_email: "The email address on your PayPal account. Used for cook reimbursements. Leave blank to use your main email address shown above."
         full_access: "Children without full access can't sign in to Gather but appear in the directory. Children with full access count as adults for billing purposes."
         certify_13_or_older: "Children must be 13 years or older to sign in to Gather."
       meals_formula:

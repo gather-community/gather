@@ -46,6 +46,7 @@
     <%= f.input :joined_on, as: :date_picker %>
     <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",
                                         allow_clear: true %>
+    <%= f.input :paypal_email %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
     <%= f.input :doctor %>

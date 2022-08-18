@@ -187,6 +187,7 @@ en:
           payment_method:
             check: "Check"
             credit: "Balance Credit"
+            paypal: "PayPal"
       meals_formula:
         meal_calc_type:
           fixed: "Fixed"

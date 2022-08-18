@@ -1,4 +1,4 @@
-<ul class="no-marker <%= local_assigns[:nested] ? "nested" : "calendar-list" %>">
+<ul class="no-bullets <%= local_assigns[:nested] ? "nested" : "calendar-list" %>">
   <% nodes.each do |node, children| %>
     <li>
       <% if node.group? %>

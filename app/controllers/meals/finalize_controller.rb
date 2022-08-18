@@ -78,7 +78,9 @@ module Meals
     end
 
     def build_meal_cost
-      @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
+      cook = @meal.head_cook
+      @meal.build_cost(reimbursee: cook) if @meal.cost.nil?
+      @paypal_email = cook.paypal_email || cook.email
     end
 
     def finalize_params

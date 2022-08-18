@@ -35,15 +35,6 @@ mark {
   line-height: 90%;
 }
 
-ul.no-marker {
-  list-style-type: none;
-  padding-left: 0;
-
-  &.nested {
-    padding-left: 20px;
-  }
-}
-
 .center-notice {
   font-size: 17px;
   font-weight: bold;

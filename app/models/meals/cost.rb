@@ -5,7 +5,7 @@ module Meals
   class Cost < ApplicationRecord
     acts_as_tenant :cluster
 
-    PAYMENT_METHODS = %i[check credit].freeze
+    PAYMENT_METHODS = %i[check paypal credit].freeze
 
     has_many :parts, -> { includes(:type).by_rank },
              class_name: "Meals::CostPart", inverse_of: :cost, dependent: :destroy

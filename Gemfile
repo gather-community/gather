@@ -56,6 +56,8 @@ gem "redcarpet", "~> 3.5"
 gem "redis", "~> 4.1"
 gem "rein", "~> 5.0" # This can be removed when we go to Rails 6.1.
 gem "rolify", "~> 4.1"
+gem "sentry-ruby", "~> 5.4"
+gem "sentry-rails", "~> 5.4"
 gem "sass-rails", "~> 5.0"
 gem "serviceworker-rails", "~> 0.5"
 gem "simple_form", "~> 5.0"

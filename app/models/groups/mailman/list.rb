@@ -125,9 +125,10 @@ module Groups
 
       def normal_memberships
         group.computed_memberships(user_eager_load: :group_mailman_user).flat_map do |mship|
+          next if mship.opt_out?
           mm_user = find_or_initialize_mm_user_for(mship.user)
           list_memberships_for_group_membership_and_mm_user(mship, mm_user)
-        end
+        end.compact
       end
 
       # Fetches memberships stored on the Mailman server via the API.

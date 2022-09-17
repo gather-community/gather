@@ -24,12 +24,21 @@
             <label>
               <%= mc_form.radio_button(:payment_method, :paypal) %>
               <%= t("simple_form.options.meals_meal.cost.payment_method.paypal") %>
-              - <%= @paypal_email %>
+              - <span id="reimbursee-paypal-email"><%= @paypal_email %></span>
               <%= icon_tag("question-circle") %>
             </label>
           </li>
         </ul>
       <% end %>
     <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.Meals.ReimburseeChangeView(<%=json(
+        el: ".finalize-form",
+        paypalEmailUrl: reimbursee_paypal_email_meal_finalize_path
+      )%>);
+    });
   <% end %>
 <% end %>

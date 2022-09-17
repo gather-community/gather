@@ -36,6 +36,12 @@ module Meals
       @signups ||= @meal.signups.map(&:decorate)
     end
 
+    def reimbursee_paypal_email
+      user = User.find(params[:user_id])
+      authorize(user, :show?)
+      render(json: {email: paypal_email_for(user)})
+    end
+
     private
 
     def handle_unconfirmed
@@ -80,7 +86,7 @@ module Meals
     def build_meal_cost
       cook = @meal.head_cook
       @meal.build_cost(reimbursee: cook) if @meal.cost.nil?
-      @paypal_email = cook.paypal_email || cook.email
+      @paypal_email = paypal_email_for(cook)
     end
 
     def finalize_params
@@ -88,6 +94,10 @@ module Meals
         signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]],
         cost_attributes: %i[ingredient_cost pantry_cost payment_method reimbursee_id]
       )
+    end
+
+    def paypal_email_for(user)
+      user.paypal_email || user.email
     end
   end
 end

@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       get :jobs
       get :report
       get :worker_form, path: "worker-form"
+      get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end
     member do
       put :close
@@ -85,11 +86,7 @@ Rails.application.routes.draw do
     end
 
     resources :messages, only: %i[new create], module: :meals
-    resource :finalize, only: %i[new create], module: :meals, controller: :finalize do
-      collection do
-        get :reimbursee_paypal_email
-      end
-    end
+    resource :finalize, only: %i[new create], module: :meals, controller: :finalize
   end
 
   resources :meals, controller: "meals/meals_household_worker_change", path: "meals/worker-form",

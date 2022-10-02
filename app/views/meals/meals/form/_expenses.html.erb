@@ -36,8 +36,8 @@
   <%= javascript_tag do %>
     $(function() {
       new Gather.Views.Meals.ReimburseeChangeView(<%=json(
-        el: ".finalize-form",
-        paypalEmailUrl: reimbursee_paypal_email_meal_finalize_path
+        el: ".finalize-form, .meals--meal-form",
+        paypalEmailUrl: reimbursee_paypal_email_meals_path
       )%>);
     });
   <% end %>

@@ -3,6 +3,7 @@
 module Meals
   # For finalizing meals.
   class FinalizeController < ApplicationController
+    include ExpenseFormable
     helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
     decorates_assigned :meal, :reimbursee
@@ -11,7 +12,7 @@ module Meals
       @meal = Meal.find(params[:meal_id])
       authorize(@meal, :finalize?)
       @dupes = []
-      build_meal_cost
+      prep_expense_form_vars
       prepare_and_render_form
     end
 
@@ -23,7 +24,7 @@ module Meals
       @meal.assign_attributes(finalize_params.merge(status: "finalized"))
 
       # Need to build the meal cost object so it can hold validation errors.
-      build_meal_cost
+      prep_expense_form_vars
 
       if @meal.valid?
         params[:confirmed] == "0" ? handle_unconfirmed : handle_valid
@@ -34,12 +35,6 @@ module Meals
 
     def signups
       @signups ||= @meal.signups.map(&:decorate)
-    end
-
-    def reimbursee_paypal_email
-      user = User.find(params[:user_id])
-      authorize(user, :show?)
-      render(json: {email: paypal_email_for(user)})
     end
 
     private
@@ -83,21 +78,11 @@ module Meals
       render(template)
     end
 
-    def build_meal_cost
-      cook = @meal.head_cook
-      @meal.build_cost(reimbursee: cook) if @meal.cost.nil?
-      @paypal_email = paypal_email_for(cook)
-    end
-
     def finalize_params
       params.require(:meals_meal).permit(
         signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]],
         cost_attributes: %i[id ingredient_cost pantry_cost payment_method reimbursee_id]
       )
-    end
-
-    def paypal_email_for(user)
-      user.paypal_email || user.email
     end
   end
 end

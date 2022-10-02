@@ -235,6 +235,10 @@ class User < ApplicationRecord
     @birthday ||= People::Birthday.new(self)
   end
 
+  def paypal_email_or_default
+    paypal_email || email
+  end
+
   def privacy_settings=(settings)
     settings = {} if settings.blank?
     settings.each { |k, v| settings[k] = ["1", "true", true].include?(v) }

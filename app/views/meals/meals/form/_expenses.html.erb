@@ -7,25 +7,47 @@
       <%= mc_form.input(:pantry_cost, input_html: {value: cost.pantry_cost_decimals}) %>
       <%= mc_form.input(:reimbursee_id, as: :user_select, context: "current_community_full_access") %>
       <%= mc_form.input(:payment_method) do %>
-        <ul class="no-bullets">
+        <ul class="reimbursement-options no-bullets">
           <li>
             <label>
-              <%= mc_form.radio_button(:payment_method, :check) %>
-              <%= t("simple_form.options.meals_meal.cost.payment_method.check") %>
+              <div>
+                <%= mc_form.radio_button(:payment_method, :check) %>
+              </div>
+              <div>
+                <div><%= t("simple_form.options.meals_meal.cost.payment_method.check") %></div>
+                <div class="hint">
+                  Reimbursee will receive a check for the ingredient cost.
+                </div>
+              </div>
             </label>
           </li>
           <li>
             <label>
-              <%= mc_form.radio_button(:payment_method, :credit) %>
-              <%= t("simple_form.options.meals_meal.cost.payment_method.credit") %>
+              <div>
+                <%= mc_form.radio_button(:payment_method, :credit) %>
+              </div>
+              <div>
+                <div><%= t("simple_form.options.meals_meal.cost.payment_method.credit") %></div>
+                <div class="hint">
+                  Reimbursee will receive a credit to their Gather
+                  account in the amount of the ingredient cost.
+                </div>
+              </div>
             </label>
           </li>
           <li>
             <label>
-              <%= mc_form.radio_button(:payment_method, :paypal) %>
-              <%= t("simple_form.options.meals_meal.cost.payment_method.paypal") %>
-              - <span id="reimbursee-paypal-email"><%= @paypal_email %></span>
-              <%= icon_tag("question-circle") %>
+              <div>
+                <%= mc_form.radio_button(:payment_method, :paypal) %>
+              </div>
+              <div>
+                <div>
+                  <%= t("simple_form.options.meals_meal.cost.payment_method.paypal") %>
+                  - <span id="reimbursee-paypal-email"><%= @paypal_email %></span>
+                </div>
+                <div class="hint">
+                  Reimbursee will receive a PayPal payment in the amount of the ingredient cost.
+                </div>
             </label>
           </li>
         </ul>

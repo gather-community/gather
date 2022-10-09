@@ -86,7 +86,11 @@ Rails.application.routes.draw do
     end
 
     resources :messages, only: %i[new create], module: :meals
-    resource :finalize, only: %i[new create], module: :meals, controller: :finalize
+    resource :finalize, only: %i[new create], module: :meals, controller: :finalize do
+      member do
+        get :complete
+      end
+    end
   end
 
   resources :meals, controller: "meals/meals_household_worker_change", path: "meals/worker-form",

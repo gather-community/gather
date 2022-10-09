@@ -33,6 +33,12 @@ module Meals
       end
     end
 
+    def complete
+      @meal = Meal.find(params[:meal_id])
+      authorize(@meal, :finalize_complete?)
+      @cost = @meal.cost
+    end
+
     def signups
       @signups ||= @meal.signups.map(&:decorate)
     end
@@ -60,8 +66,7 @@ module Meals
     def complete_process
       @finalizer.finalize!
       @meal.save!
-      flash[:success] = t("meals.finalizing.success")
-      redirect_to(meals_path(finalizable: 1))
+      redirect_to(complete_meal_finalize_path(@meal))
     end
 
     def show_confirmation_page

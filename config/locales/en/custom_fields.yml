@@ -43,6 +43,7 @@ en:
             payment_instructions: "Payment Instructions"
             statement_terms: "Statement Terms"
             statement_reminder_lead_time: "Statement Reminder\nDays in Advance"
+            paypal_reimbursement: "Offer reimbursement via PayPal"
             payment_methods:
               _self: "Payment Method Info"
               paypal_me: "PayPal.me"
@@ -88,6 +89,7 @@ en:
             payment_instructions: "How to send payment for an account."
             statement_terms: "Number of days after the creation date that a statement is due. If zero (0), statements have no due dates."
             statement_reminder_lead_time: "The number of days in advance of the due date that the statement payment reminder will be sent. Reminders won't be sent if statements don't have due dates or the balance has been paid."
+            paypal_reimbursement: "Allow cooks to request meal reimbursements be sent via PayPal. PayPal payments must be made manually (not automated)."
             payment_methods:
               _self: "Instructions or information for various payment methods. Leave blank if method not accepted. Visit your <a href='/accounts/yours'>accounts page</a> to see how the instructions look."
               paypal_me: "Enter your <a href='https://paypal.me'>PayPal.me link</a>. This is the easiest way for members to pay with PayPal. Note that there is no way to avoid paying a fee with this method if you have a business PayPal account."

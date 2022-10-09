@@ -32,11 +32,11 @@
   <table class="key-value key-value-narrow">
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-      <td><strong><%= number_to_currency(@cost.ingredient_cost) %></strong></td>
+      <td><strong><%= number_to_currency(cost.ingredient_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
-      <td><strong><%= number_to_currency(@cost.pantry_cost) %></strong></td>
+      <td><strong><%= number_to_currency(cost.pantry_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.reimbursee_id") %></td>
@@ -48,8 +48,7 @@
       <td><%= t("activerecord.attributes.meals/cost.payment_method") %></td>
       <td>
         <strong>
-          <%= t("simple_form.options.meals_meal.cost.payment_method.#{@cost.payment_method}") %> -
-          <%= @paypal_email %>
+          <%= cost.payment_method_formatted_with_details %>
         </strong>
       </td>
     </tr>

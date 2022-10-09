@@ -1,6 +1,6 @@
 <%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
 <% if policy(meal).change_expenses? %>
-  <% cost = meal.cost %>
+  <% cost = meal.cost.decorate %>
   <%= meal.form_section(:expenses, expanded: local_assigns[:expanded]) do %>
     <%= f.simple_fields_for(:cost, cost) do |mc_form| %>
       <%= mc_form.input(:ingredient_cost, input_html: {value: cost.ingredient_cost_decimals}) %>
@@ -35,21 +35,23 @@
               </div>
             </label>
           </li>
-          <li>
-            <label>
-              <div>
-                <%= mc_form.radio_button(:payment_method, :paypal) %>
-              </div>
-              <div>
+          <% if current_community.settings.billing.paypal_reimbursement %>
+            <li>
+              <label>
                 <div>
-                  <%= t("simple_form.options.meals_meal.cost.payment_method.paypal") %>
-                  - <span id="reimbursee-paypal-email"><%= @paypal_email %></span>
+                  <%= mc_form.radio_button(:payment_method, :paypal) %>
                 </div>
-                <div class="hint">
-                  Reimbursee will receive a PayPal payment in the amount of the ingredient cost.
-                </div>
-            </label>
-          </li>
+                <div>
+                  <div>
+                    <%= cost.payment_method_formatted_with_details("paypal") %>
+                  </div>
+                  <div class="hint">
+                    Reimbursee will receive a PayPal payment in the amount of the ingredient cost.
+                    Users can change their PayPal email address by editing their profile.
+                  </div>
+              </label>
+            </li>
+          <% end %>
         </ul>
       <% end %>
     <% end %>

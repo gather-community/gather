@@ -6,7 +6,7 @@ module Meals
     include ExpenseFormable
     helper_method :signups
     before_action -> { nav_context(:meals, :meals) }
-    decorates_assigned :meal, :reimbursee
+    decorates_assigned :meal, :reimbursee, :cost
 
     def new
       @meal = Meal.find(params[:meal_id])

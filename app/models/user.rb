@@ -134,7 +134,7 @@ class User < ApplicationRecord
   delegate :subdomain, to: :community
   delegate :country_code, to: :community, allow_nil: true
 
-  normalize_attributes :email, :google_email, with: :email
+  normalize_attributes :email, :google_email, :paypal_email, with: :email
   normalize_attributes :first_name, :last_name, :preferred_contact
 
   handle_phone_types :mobile, :home, :work # In order of general preference
@@ -233,6 +233,10 @@ class User < ApplicationRecord
 
   def birthday
     @birthday ||= People::Birthday.new(self)
+  end
+
+  def paypal_email_or_default
+    paypal_email || email
   end
 
   def privacy_settings=(settings)

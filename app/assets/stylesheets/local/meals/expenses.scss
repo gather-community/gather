@@ -1,0 +1,16 @@
+.finalize-form, .meals--meal-form {
+  .reimbursement-options {
+    label {
+      display: flex;
+
+      > div:first-of-type {
+        align-self: flex-start;
+        padding-top: 1px;
+      }
+
+      > div:last-of-type {
+        margin-left: 10px;
+      }
+    }
+  }
+}

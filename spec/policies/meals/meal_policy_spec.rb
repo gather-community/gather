@@ -160,6 +160,39 @@ describe Meals::MealPolicy do
       end
     end
 
+    permissions :finalize_complete? do
+      before do
+        stub_status("finalized")
+      end
+
+      it_behaves_like "permits admins or special role but not regular users", :biller
+
+      it "forbids if wrong status" do
+        %w[cancelled open closed].each do |bad_status|
+          stub_status(bad_status)
+          expect(subject).not_to permit(admin, meal)
+        end
+      end
+
+      describe "cooks_can_finalize setting" do
+        let(:head_cook) { user }
+
+        before do
+          community.settings.meals.cooks_can_finalize = value
+        end
+
+        context "true" do
+          let(:value) { true }
+          it { is_expected.to permit(user, meal) }
+        end
+
+        context "false" do
+          let(:value) { false }
+          it { is_expected.not_to permit(user, meal) }
+        end
+      end
+    end
+
     permissions :cancel? do
       it "forbids if meal already cancelled" do
         stub_status("cancelled")

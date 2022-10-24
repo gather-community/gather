@@ -1,0 +1,14 @@
+<% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
+
+<div class="center-notice">
+  <p>Meal finalized successfully!</p>
+  <% case cost.payment_method %>
+  <% when "paypal" %>
+    Please send a check to <%= cost.reimbursee.name %> for <%= cost.ingredient_cost_formatted %> now.
+  <% when "credit" %>
+    <%= cost.reimbursee.name %>'s Gather account has been credited <%= cost.ingredient_cost_formatted %>.
+  <% when "paypal" %>
+    Please send <%= cost.ingredient_cost_formatted %> to
+    <%= cost.reimbursee.paypal_email_or_default %> via PayPal now.
+  <% end %>
+</div>

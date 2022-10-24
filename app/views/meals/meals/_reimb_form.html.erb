@@ -31,7 +31,10 @@
       <td>Reimbursement method:</td>
       <td>
         <%= icon_tag("square-o") %> Account credit<br/>
-        <%= icon_tag("square-o") %> Check payable to <span class="payable-to"></span>
+        <%= icon_tag("square-o") %> Check payable to: <span class="payable-to"></span><br/>
+        <% if current_community.settings.billing.paypal_reimbursement %>
+          <%= icon_tag("square-o") %> PayPal to email address: <span class="payable-to"></span><br/>
+        <% end %>
       </td>
     </tr>
   </table>

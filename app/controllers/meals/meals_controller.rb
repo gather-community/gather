@@ -2,6 +2,7 @@
 
 module Meals
   class MealsController < ApplicationController
+    include ExpenseFormable
     include Lensable
     include HouseholdSignupFormable
     include Destructible
@@ -145,6 +146,12 @@ module Meals
       render(partial: "meals/meals/form/single_section", layout: false, locals: {section: "workers"})
     end
 
+    def reimbursee_paypal_email
+      user = User.find(params[:user_id])
+      authorize(user, :show?)
+      render(json: {email: user.paypal_email_or_default})
+    end
+
     protected
 
     def klass
@@ -230,7 +237,7 @@ module Meals
 
     def prep_form_vars
       prep_worker_form_vars
-      @meal.build_cost(reimbursee: @meal.head_cook) if @meal.cost.nil?
+      prep_expense_form_vars
       load_communities_in_cluster
       @formula_options = policy_scope(Formula).in_community(current_community)
         .active_or_selected(@meal.formula_id).by_name

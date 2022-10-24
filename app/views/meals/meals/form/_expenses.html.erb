@@ -1,12 +1,68 @@
 <%# Unlike some of the other sections, we don't show any of this unless the user can change it. %>
 <% if policy(meal).change_expenses? %>
-  <% cost = meal.cost %>
+  <% cost = meal.cost.decorate %>
   <%= meal.form_section(:expenses, expanded: local_assigns[:expanded]) do %>
     <%= f.simple_fields_for(:cost, cost) do |mc_form| %>
       <%= mc_form.input(:ingredient_cost, input_html: {value: cost.ingredient_cost_decimals}) %>
       <%= mc_form.input(:pantry_cost, input_html: {value: cost.pantry_cost_decimals}) %>
-      <%= mc_form.input(:payment_method, collection: Meals::Cost::PAYMENT_METHODS, as: :radio_buttons) %>
       <%= mc_form.input(:reimbursee_id, as: :user_select, context: "current_community_full_access") %>
+      <%= mc_form.input(:payment_method) do %>
+        <ul class="reimbursement-options no-bullets">
+          <li>
+            <label>
+              <div>
+                <%= mc_form.radio_button(:payment_method, :check) %>
+              </div>
+              <div>
+                <div><%= t("simple_form.options.meals_meal.cost.payment_method.check") %></div>
+                <div class="hint">
+                  Reimbursee will receive a check for the ingredient cost.
+                </div>
+              </div>
+            </label>
+          </li>
+          <li>
+            <label>
+              <div>
+                <%= mc_form.radio_button(:payment_method, :credit) %>
+              </div>
+              <div>
+                <div><%= t("simple_form.options.meals_meal.cost.payment_method.credit") %></div>
+                <div class="hint">
+                  Reimbursee will receive a credit to their Gather
+                  account in the amount of the ingredient cost.
+                </div>
+              </div>
+            </label>
+          </li>
+          <% if current_community.settings.billing.paypal_reimbursement %>
+            <li>
+              <label>
+                <div>
+                  <%= mc_form.radio_button(:payment_method, :paypal) %>
+                </div>
+                <div>
+                  <div>
+                    <%= cost.payment_method_formatted_with_details("paypal") %>
+                  </div>
+                  <div class="hint">
+                    Reimbursee will receive a PayPal payment in the amount of the ingredient cost.
+                    Users can change their PayPal email address by editing their profile.
+                  </div>
+              </label>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     <% end %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    $(function() {
+      new Gather.Views.Meals.ReimburseeChangeView(<%=json(
+        el: ".finalize-form, .meals--meal-form",
+        paypalEmailUrl: reimbursee_paypal_email_meals_path
+      )%>);
+    });
   <% end %>
 <% end %>

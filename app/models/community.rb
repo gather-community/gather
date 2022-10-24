@@ -78,6 +78,7 @@ class Community < ApplicationRecord
         {key: :contact, type: :email},
         {key: :statement_terms, type: :integer, default: 30},
         {key: :statement_reminder_lead_time, type: :integer, required: true, default: 5},
+        {key: :paypal_reimbursement, type: :boolean, default: false},
         {key: :payment_methods, type: :group, fields: [
           {key: :paypal_me, type: :url, host: "paypal.me"},
           {key: :paypal_email, type: :email},

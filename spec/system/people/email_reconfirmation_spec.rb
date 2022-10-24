@@ -42,7 +42,7 @@ describe "email reconfirmation", js: true do
         match_and_visit_url(email.body.encoded, %r{https?://.+/?confirmation_token=.+$})
         expect(page).to have_alert("Your email address has been successfully confirmed. Please sign in")
         click_on("Sign in with Password")
-        fill_in("Email", with: "new@example.com")
+        fill_in("Email Address", with: "new@example.com")
         fill_in("Password", with: FactoryBot::DEFAULT_PASSWORD)
         click_on("Sign In")
         click_on_personal_nav("Profile")
@@ -58,7 +58,7 @@ describe "email reconfirmation", js: true do
         match_and_visit_url(email.body.encoded, %r{https?://.+/?confirmation_token=.+$})
         expect(page).to have_alert("The confirmation period has expired. Please sign in")
         click_on("Sign in with Password")
-        fill_in("Email", with: "old@example.com")
+        fill_in("Email Address", with: "old@example.com")
         fill_in("Password", with: FactoryBot::DEFAULT_PASSWORD)
         click_on("Sign In")
         click_on_personal_nav("Profile")
@@ -95,7 +95,7 @@ describe "email reconfirmation", js: true do
     scenario "should allow change without reconfirmation" do
       expect do
         visit(edit_user_path(child))
-        fill_in("Email", with: "kid2@example.com")
+        fill_in("Email Address", with: "kid2@example.com")
         click_on("Save")
         expect(page).to have_content("kid2@example.com")
         expect(page).not_to have_content("kid@example.com")

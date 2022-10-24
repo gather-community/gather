@@ -77,8 +77,11 @@ module Meals
     end
 
     def finalize?
-      meal.closed? && meal.in_past? &&
-        (active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?)
+      meal.closed? && meal.in_past? && admin_or_biller_or_head_cook_and_can_finalize?
+    end
+
+    def finalize_complete?
+      meal.finalized? && admin_or_biller_or_head_cook_and_can_finalize?
     end
 
     def show_reimbursement_details?
@@ -147,6 +150,10 @@ module Meals
 
     def not_finalized_and_admin_coord_head_cook_or_biller?
       !meal.finalized? && (active_admin_or?(:meals_coordinator, :biller) || head_cook?)
+    end
+
+    def admin_or_biller_or_head_cook_and_can_finalize?
+      active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?
     end
 
     def associated?

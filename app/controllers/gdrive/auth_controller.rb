@@ -105,7 +105,10 @@ module GDrive
       return @authorizer if @authorizer
       auth_settings = Settings.gdrive.auth
       client_id = Google::Auth::ClientId.new(auth_settings.client_id, auth_settings.client_secret)
-      scope = ["https://www.googleapis.com/auth/drive.file"]
+      scope = [
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/userinfo.email"
+      ]
       token_store = TokenStore.new
       redirect_url = gdrive_auth_callback_url(host: Settings.url.host)
       @authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store, redirect_url)

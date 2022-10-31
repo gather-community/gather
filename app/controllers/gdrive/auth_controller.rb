@@ -21,7 +21,7 @@ module GDrive
     def index
       skip_policy_scope
       authorize(current_community, policy_class: GDrive::AuthPolicy)
-      credentials = authorizer.get_credentials(current_community.id.to_s)
+      credentials = fetch_credentials_from_store
       @config = Config.find_by(community: current_community)
       if @config.nil?
         @no_config = true
@@ -33,9 +33,7 @@ module GDrive
         @access_token = credentials.access_token
       else
         begin
-          drive = Google::Apis::DriveV3::DriveService.new
-          drive.authorization = credentials
-          folder = drive.get_file(@config.folder_id)
+          folder = drive_service.get_file(@config.folder_id)
           @folder_name = folder.name
         rescue Google::Apis::ServerError
           flash.now[:error] = "There was a server error when connecting to Google Drive. "\
@@ -65,7 +63,7 @@ module GDrive
         return
       end
 
-      credentials = fetch_credentials
+      credentials = fetch_credentials_from_callback_request(request)
       authenticated_google_id = fetch_email_of_authenticated_account(credentials)
       update_config(credentials, authenticated_google_id)
     end
@@ -114,7 +112,18 @@ module GDrive
       @authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store, redirect_url)
     end
 
-    def fetch_credentials
+    def drive_service
+      return @drive_service if @drive_service
+      @drive_service = Google::Apis::DriveV3::DriveService.new
+      @drive_service.authorization = fetch_credentials_from_store
+      @drive_service
+    end
+
+    def fetch_credentials_from_store
+      authorizer.get_credentials(current_community.id.to_s)
+    end
+
+    def fetch_credentials_from_callback_request(request)
       Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
       authorizer.get_credentials_from_code(
         user_id:  current_community.id,

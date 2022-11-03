@@ -1,0 +1,22 @@
+.gdrive--folders {
+  .breadcrumbs {
+    color: $gray-light;
+    margin-bottom: 0.5em;
+
+    a {
+      font-size: 1.2em;
+      color: $gray-light;
+    }
+
+    .divider {
+      font-weight: normal;
+      display: inline-block;
+      margin: 0 0.5em;
+    }
+  }
+
+  .file-icon {
+    display: inline-block;
+    margin-right: 0.3em;
+  }
+}

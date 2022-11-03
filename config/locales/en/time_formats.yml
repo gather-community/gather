@@ -13,6 +13,7 @@ en:
   time:
     formats:
       default: "%a %b %d %Y %l:%M%P"
+      no_wday: "%b %d %Y %l:%M%P"
       wday_no_year: "%a %b %d %l:%M%P"
       wday_no_year_no_time: "%a %b %d"
       time_only: "%l:%M%P"

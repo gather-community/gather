@@ -7,6 +7,10 @@ module GDrive
 
     belongs_to :community
 
+    def complete?
+      !incomplete?
+    end
+
     def incomplete?
       folder_id.nil?
     end

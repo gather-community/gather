@@ -71,6 +71,10 @@
       </td>
     </tr>
   </table>
+  <br/>
+  <%= link_to("Proceed to Select Files",
+        gdrive_file_selection_url(host: Settings.url.host, community_id: current_community.id),
+        class: "btn btn-primary") %>
 <% end %>
 
 <% if @config %>

@@ -315,8 +315,13 @@ module Nav
           [{
             name: :auth,
             parents: %i[wiki gdrive setup],
-            path: h.gdrive_auth_path,
+            path: h.gdrive_auth_url(host: Settings.url.host, community_id: community.id),
             permitted: GDrive::AuthPolicy.new(user, community).index?,
+          },{
+            name: :file_selection,
+            parents: %i[wiki gdrive setup],
+            path: h.gdrive_file_selection_url(host: Settings.url.host, community_id: community.id),
+            permitted: GDrive::AuthPolicy.new(user, community).index?
           }]
         end
       @sub_sub_items = filter_and_set_active_items(items, active: context[depth])

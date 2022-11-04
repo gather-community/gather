@@ -97,10 +97,6 @@ module GDrive
       # we call validate right after. The purpose of this before_action is just to set the current_community.
     end
 
-    def set_current_community_from_query_string
-      self.current_community ||= Community.find(params[:community_id])
-    end
-
     def fetch_credentials_from_callback_request(request)
       Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
       authorizer.get_credentials_from_code(

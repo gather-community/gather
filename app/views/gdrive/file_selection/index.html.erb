@@ -1,0 +1,13 @@
+<% content_for(:title, "Select Files") %>
+
+<% if @config&.complete? %>
+
+
+
+<% else %>
+  <div class="center-notice">
+    Your connection is not set up yet. Please do that first.
+  </div>
+<% end %>
+
+<script src="https://apis.google.com/js/api.js"></script>

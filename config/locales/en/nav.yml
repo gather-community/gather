@@ -36,6 +36,7 @@ en:
         _self: "Google Drive"
         setup:
           auth: "Connection"
+          file_selection: "File Selection"
     work:
       _self: "Work"
       signups: "Signups"

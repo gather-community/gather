@@ -412,11 +412,6 @@ describe User do
         expect(user.global_role?(:foo)).to be(true)
       end
 
-      it "doesn't get scoped role" do
-        user.add_role(:foo, meal)
-        expect(user.global_role?(:foo)).to be(false)
-      end
-
       it "doesn't get global role set after first call" do
         user.global_role?(:foo)
         user.add_role(:foo)

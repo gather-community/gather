@@ -65,7 +65,7 @@ describe Wiki::PageDecorator do
     context "with no errors" do
       before do
         if attribs[:data_source].present?
-          allow(Kernel).to receive(:open).and_return(
+          allow(URI).to receive(:open).and_return(
             '{"name":"Rolph","pants":[{"type":"jeans"},{"type":"cords"}]}'
           )
         end
@@ -103,7 +103,7 @@ describe Wiki::PageDecorator do
     context "error handling" do
       context "with socket error" do
         before do
-          expect(Kernel).to receive(:open).and_raise(SocketError)
+          expect(URI).to receive(:open).and_raise(SocketError)
         end
 
         it do
@@ -114,7 +114,7 @@ describe Wiki::PageDecorator do
 
       context "with http error" do
         before do
-          expect(Kernel).to receive(:open).and_raise(OpenURI::HTTPError.new("404 Not Found", nil))
+          expect(URI).to receive(:open).and_raise(OpenURI::HTTPError.new("404 Not Found", nil))
         end
 
         it do
@@ -125,7 +125,7 @@ describe Wiki::PageDecorator do
 
       context "with json error" do
         before do
-          expect(Kernel).to receive(:open).and_return("badjson")
+          expect(URI).to receive(:open).and_return("badjson")
         end
 
         it do
@@ -138,7 +138,7 @@ describe Wiki::PageDecorator do
         before do
           # Have to do it this way to sidestep validation errors.
           page.update_column(:content, "{{1&na.me}}")
-          expect(Kernel).to receive(:open).and_return("{}")
+          expect(URI).to receive(:open).and_return("{}")
         end
 
         it do

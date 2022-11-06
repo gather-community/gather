@@ -10,6 +10,7 @@ jobs:
       POSTGRES_USER: gather
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: localhost
+      RUBYOPT: -W:deprecated # Turn on deprecated warnings so we can move toward ruby 3
     services:
       postgres:
         image: postgres:11

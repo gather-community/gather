@@ -85,3 +85,9 @@ jobs:
           chromedriver --url-base=/wd/hub &
       - name: RSpec Tests
         run: bundle exec rspec --format RSpec::Github::Formatter --format documentation
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: screnshots
+          path: /home/runner/work/gather/gather/tmp/screenshots

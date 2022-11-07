@@ -3,7 +3,6 @@
 source "https://rubygems.org"
 
 gem "active_model_serializers", "~> 0.10.0"
-gem "active_record-postgres-constraints", "~> 0.1" # This can/should go away when we go to Rails 6.1
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
@@ -52,7 +51,7 @@ gem "phony_rails", "~> 0.12"
 gem "psych", "< 4"
 gem "puma", "~> 5.6"
 gem "pundit", "~> 2.0"
-gem "rails", "~> 6.0.0"
+gem "rails", "~> 6.1.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.5"
 gem "redis", "~> 4.1"

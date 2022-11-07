@@ -4,15 +4,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_14_152414) do
+ActiveRecord::Schema.define(version: 2022_11_07_024710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,7 +54,14 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
     t.string "filename", null: false
     t.string "key", null: false
     t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "billing_template_member_types", force: :cascade do |t|
@@ -131,9 +138,9 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
     t.index ["community_id", "name"], name: "index_calendar_nodes_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_calendar_nodes_on_community_id"
     t.index ["group_id"], name: "index_calendar_nodes_on_group_id"
-    t.check_constraint :color_null, "(((type)::text = 'Calendars::Group'::text) = (color IS NULL))"
-    t.check_constraint :group_id_null, "(((type)::text <> 'Calendars::Group'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL)))"
-    t.check_constraint :rank_or_deactivated_at_null, "(((deactivated_at IS NOT NULL) AND (rank IS NULL)) OR ((rank IS NOT NULL) AND (deactivated_at IS NULL)))"
+    t.check_constraint "((deactivated_at IS NOT NULL) AND (rank IS NULL)) OR ((rank IS NOT NULL) AND (deactivated_at IS NULL))", name: "rank_or_deactivated_at_null"
+    t.check_constraint "((type)::text <> 'Calendars::Group'::text) OR (((type)::text = 'Calendars::Group'::text) AND (group_id IS NULL))", name: "group_id_null"
+    t.check_constraint "((type)::text = 'Calendars::Group'::text) = (color IS NULL)", name: "color_null"
   end
 
   create_table "calendar_protocolings", id: :serial, force: :cascade do |t|
@@ -679,7 +686,7 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
     t.index ["meal_id"], name: "index_reminder_deliveries_on_meal_id"
     t.index ["reminder_id"], name: "index_reminder_deliveries_on_reminder_id"
     t.index ["shift_id"], name: "index_reminder_deliveries_on_shift_id"
-    t.check_constraint :reminder_deliveries_741100539, "(((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL)))"
+    t.check_constraint "((shift_id IS NOT NULL) AND (meal_id IS NULL)) OR ((meal_id IS NOT NULL) AND (shift_id IS NULL))", name: "reminder_deliveries_741100539"
   end
 
   create_table "reminders", force: :cascade do |t|
@@ -696,7 +703,7 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id", "job_id"], name: "index_reminders_on_cluster_id_and_job_id"
     t.index ["role_id"], name: "index_reminders_on_role_id"
-    t.check_constraint :reminders_850637520, "(((role_id IS NOT NULL) AND (job_id IS NULL)) OR ((job_id IS NOT NULL) AND (role_id IS NULL)))"
+    t.check_constraint "((role_id IS NOT NULL) AND (job_id IS NULL)) OR ((job_id IS NOT NULL) AND (role_id IS NULL))", name: "reminders_850637520"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -801,11 +808,11 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.check_constraint :email_presence, "((full_access = false) OR (deactivated_at IS NOT NULL) OR ((email IS NOT NULL) AND ((email)::text !~ '^\\s*$'::text)))"
-    t.check_constraint :full_access_no_google_email, "((full_access = true) OR (google_email IS NULL))"
-    t.check_constraint :full_access_not_confirmed, "((full_access = true) OR (confirmed_at IS NULL))"
-    t.check_constraint :full_access_reset_password_token, "((full_access = true) OR (reset_password_token IS NULL))"
-    t.check_constraint :unconfirmed_if_no_email, "((email IS NOT NULL) OR (confirmed_at IS NULL))"
+    t.check_constraint "(email IS NOT NULL) OR (confirmed_at IS NULL)", name: "unconfirmed_if_no_email"
+    t.check_constraint "(full_access = false) OR (deactivated_at IS NOT NULL) OR ((email IS NOT NULL) AND ((email)::text !~ '^\\s*$'::text))", name: "email_presence"
+    t.check_constraint "(full_access = true) OR (confirmed_at IS NULL)", name: "full_access_not_confirmed"
+    t.check_constraint "(full_access = true) OR (google_email IS NULL)", name: "full_access_no_google_email"
+    t.check_constraint "(full_access = true) OR (reset_password_token IS NULL)", name: "full_access_reset_password_token"
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -957,6 +964,7 @@ ActiveRecord::Schema.define(version: 2022_08_14_152414) do
   add_foreign_key "accounts", "households"
   add_foreign_key "accounts", "statements", column: "last_statement_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "billing_template_member_types", "billing_templates", column: "template_id"
   add_foreign_key "billing_template_member_types", "clusters"
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"

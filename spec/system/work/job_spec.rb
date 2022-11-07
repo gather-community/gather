@@ -73,7 +73,7 @@ describe "jobs", js: true do
       within(all(".work_job_reminders .nested-fields")[1]) do
         find(".work_job_reminders_abs_rel select").select("Exact Time")
         pick_datetime(".work_job_reminders_abs_time", day: 15, hour: 4,
-                                                      next_click: ".work_job_reminders_note input")
+                                                      next_click: ".work_job_reminders_abs_rel label")
         fill_in("Note", with: "Go to town")
       end
 

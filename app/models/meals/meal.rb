@@ -81,7 +81,6 @@ module Meals
     delegate :head_cook_role, :types, to: :formula
     delegate :build_events, to: :event_handler
 
-    after_validation :copy_calendar_errors
     before_save :set_menu_timestamp
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
@@ -243,10 +242,6 @@ module Meals
       elsif allergens? && no_allergens?
         errors.add(:allergens, "'None' can't be selected if other allergens present")
       end
-    end
-
-    def copy_calendar_errors
-      errors[:calendars].each { |m| errors.add(:calendar_ids, m) }
     end
 
     def set_menu_timestamp

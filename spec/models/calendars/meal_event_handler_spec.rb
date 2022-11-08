@@ -119,6 +119,7 @@ describe Meals::EventHandler do
 
           it "should handle validation errors" do
             expect(meal).not_to be_valid
+            p meal.calendars.map(&:errors)
             expect_overlap_error(calendars[1])
           end
         end

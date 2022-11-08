@@ -20,7 +20,7 @@
       <tr>
         <td><%= community.id %></td>
         <td><%= link_to(community.name, url_in_community(community)) %></td>
-        <td><%= community.created_at.to_s(:no_time) %></td>
+        <td><%= community.created_at.to_fs(:no_time) %></td>
         <td>
           <% if community.last_login_at && (Time.zone.today - community.last_login_at.to_date).to_i < 14 %>
             <%= icon_tag("check", title: community.last_login_at) %>

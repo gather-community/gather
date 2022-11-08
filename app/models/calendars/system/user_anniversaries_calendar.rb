@@ -18,7 +18,7 @@ module Calendars
             day = user[attrib].day
             feb29 = !Date.leap?(year) && month == 2 && day == 29
             candidate = feb29 ? Date.new(year, 2, 28) : Date.new(year, month, day)
-            range.include?(candidate) ? event_for(candidate, user) : nil
+            range.first <= candidate && range.last >= candidate ? event_for(candidate, user) : nil
           end
         end
         events.compact.sort_by(&:starts_at)

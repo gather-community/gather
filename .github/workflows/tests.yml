@@ -91,4 +91,4 @@ jobs:
         if: success() || failure()
         with:
           name: screnshots
-          path: /home/runner/work/gather/gather/tmp/screenshots
+          path: /home/runner/work/gather/gather/tmp/capybara

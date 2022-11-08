@@ -20,9 +20,9 @@ describe ImportJob do
   context "with unhandled error" do
     it "sets crashed status and sends error notification" do
       with_env("STUB_IMPORT_ERROR" => "Unhandled error", "RESCUE_FROM_JOB_EXCEPTIONS" => "true") do
-        emails = email_sent_by { perform_job }
+        expect(ErrorReporter.instance).to receive(:report)
+        perform_job
         expect(meal_import.reload.status).to eq("crashed")
-        expect(emails[0].body.encoded).to match(/Unhandled error/)
       end
     end
   end

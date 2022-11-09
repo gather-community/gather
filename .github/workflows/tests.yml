@@ -47,7 +47,7 @@ jobs:
           echo "127.0.0.1 community9.gather.localhost.tv" | sudo tee -a /etc/hosts
       - name: Ruby gem cache
         id: cache-gems
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}-v2

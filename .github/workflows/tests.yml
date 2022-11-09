@@ -62,8 +62,6 @@ jobs:
         # This doesn't work for yarn for some reason.
         if: steps.cache-gems.outputs.cache-hit != 'true'
         run: bundle install --jobs 4 --retry 3
-      - name: Copy local config file
-        run: cp config/settings.local.yml.ci config/settings.local.yml
       - name: Setup test database
         run: |
           cp config/database.yml.ci config/database.yml

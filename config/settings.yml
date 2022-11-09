@@ -39,3 +39,4 @@ s3:
   region: region
   bucket: gather
   endpoint: https://region.digitaloceanspaces.com
+error_reporting: sentry

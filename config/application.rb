@@ -42,14 +42,16 @@ module Gather
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
-    config.middleware.use(ExceptionNotification::Rack,
-                          email: {
-                            email_prefix: "[Gather ERROR] ",
-                            sender_address: Settings.email.from,
-                            exception_recipients: Settings.email.webmaster,
-                            sections: %w[request session environment backtrace exception_data],
-                            background_sections: %w[backtrace exception_data data]
-                          })
+    if Settings.error_reporting == "email"
+      config.middleware.use(ExceptionNotification::Rack,
+                            email: {
+                              email_prefix: "[Gather ERROR] ",
+                              sender_address: Settings.email.from,
+                              exception_recipients: Settings.email.webmaster,
+                              sections: %w[request session environment backtrace exception_data],
+                              background_sections: %w[backtrace exception_data data]
+                            })
+    end
 
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb

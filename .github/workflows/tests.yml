@@ -10,6 +10,7 @@ jobs:
       POSTGRES_USER: gather
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: localhost
+      RUBYOPT: -W:deprecated # Turn on deprecated warnings so we can move toward ruby 3
     services:
       postgres:
         image: postgres:11
@@ -46,14 +47,14 @@ jobs:
           echo "127.0.0.1 community9.gather.localhost.tv" | sudo tee -a /etc/hosts
       - name: Ruby gem cache
         id: cache-gems
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}-v2
           # Restore keys will be matched if the main key fails. This may restore older gems to the
           # dir but we don't care because bundle install will check the gems anyway.
           restore-keys: |
-            ${{ runner.os }}-gems-
+            ${{ runner.os }}-gems-v2
       - name: Set bundle path
         run: bundle config path vendor/bundle
       - name: Install gems
@@ -61,8 +62,6 @@ jobs:
         # This doesn't work for yarn for some reason.
         if: steps.cache-gems.outputs.cache-hit != 'true'
         run: bundle install --jobs 4 --retry 3
-      - name: Copy local config file
-        run: cp config/settings.local.yml.ci config/settings.local.yml
       - name: Setup test database
         run: |
           cp config/database.yml.ci config/database.yml
@@ -85,3 +84,9 @@ jobs:
           chromedriver --url-base=/wd/hub &
       - name: RSpec Tests
         run: bundle exec rspec --format RSpec::Github::Formatter --format documentation
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: screnshots
+          path: /home/runner/work/gather/gather/tmp/capybara

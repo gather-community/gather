@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-Elasticsearch::Model.client = Elasticsearch::Client.new(Settings.elasticsearch || {})
+Elasticsearch::Model.client = Elasticsearch::Client.new(Settings.elasticsearch.to_h || {})

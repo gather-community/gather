@@ -36,8 +36,8 @@ describe Work::JobReminderMaintainer do
 
     context "on new shift additions" do
       before do
-        job.shifts << build(:work_shift, job: job, starts_at: base_t + 7.days, hours: 2)
-        job.shifts << build(:work_shift, job: job, starts_at: base_t + 8.days, hours: 2)
+        job.shifts.build(attributes_for(:work_shift, job: job, starts_at: base_t + 7.days, hours: 2))
+        job.shifts.build(attributes_for(:work_shift, job: job, starts_at: base_t + 8.days, hours: 2))
         job.save!
       end
 

@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Lensable
-  include Pundit
+  include Pundit::Authorization
   include ApplicationControllable::Csv
   include ApplicationControllable::RequestPreprocessing
   include ApplicationControllable::Setters

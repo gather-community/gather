@@ -109,7 +109,7 @@ module Wiki
     def process_data(str)
       if data_source.present?
         begin
-          Mustache.render(str, JSON.parse(Kernel.open(data_source, &:read)))
+          Mustache.render(str, JSON.parse(URI.open(data_source, &:read)))
         rescue SocketError
           self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.socket_error")
           ""

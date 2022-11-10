@@ -20,7 +20,7 @@ class SingleSignOnController < ApplicationController
     handler.custom_fields[:first_name] = current_user.first_name
     handler.custom_fields[:last_name] = current_user.last_name
 
-    redirect_to(handler.to_url)
+    redirect_to(handler.to_url, allow_other_host: true)
   rescue Pundit::NotAuthorizedError
     render_forbidden
   rescue DiscourseSingleSignOn::ParseError, DiscourseSingleSignOn::SignatureError => e

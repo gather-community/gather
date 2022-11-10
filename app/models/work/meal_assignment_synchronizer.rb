@@ -57,8 +57,8 @@ module Work
     private
 
     def sync_shift_to_meal(shift, meal)
-      source_ids = shift.assignments.map(&:user_id)
-      dest_ids = meal.assignments.where(role_id: shift.meal_role_id).map(&:user_id)
+      source_ids = shift.assignments.reload.map(&:user_id)
+      dest_ids = meal.assignments.reload.where(role_id: shift.meal_role_id).map(&:user_id)
       id_diff(source_ids, dest_ids).each do |uid|
         meal.assignments.create!(user_id: uid, role_id: shift.meal_role_id, syncing: true)
       end

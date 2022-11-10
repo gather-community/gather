@@ -123,7 +123,7 @@ describe Meals::Import do
 
     context "with data causing validation errors" do
       let!(:formula) { create(:meal_formula, is_default: true) }
-      let(:calendar) { create(:calendar, name: "Kitchen") }
+      let!(:calendar) { create(:calendar, name: "Kitchen") }
       let(:csv) do
         prepare_fixture("meals/import/data_with_validation_error.csv", calendar_id: [calendar.id])
       end

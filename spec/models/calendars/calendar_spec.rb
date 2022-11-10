@@ -128,8 +128,9 @@ describe Calendars::Calendar do
       let!(:calendar) { create(:calendar, :with_shared_guidelines) }
 
       it "does not destroy guidelines" do
+        shared_guideline = calendar.shared_guidelines[0]
         calendar.destroy
-        expect { calendar.shared_guidelines[0].reload }.not_to raise_error
+        expect { shared_guideline.reload }.not_to raise_error
       end
     end
   end

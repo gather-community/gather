@@ -92,7 +92,13 @@ module Meals
       return destroy_target_meal if row_action == :destroy
       assign_defaults_to_new_meal
       copy_attribs_to_target_meal if row_action == :update
-      target_meal.errors.full_messages.each { |e| add_error(e) } unless target_meal.save
+      unless target_meal.save
+        target_meal.errors.each do |error|
+          # We don't care about errors on the calendars collection b/c they are separate added
+          # by the Meals::EventHandler so the error on :calendars is a duplicate.
+          add_error(error.full_message) unless error.attribute == :calendars
+        end
+      end
     end
 
     def assign_defaults_to_new_meal

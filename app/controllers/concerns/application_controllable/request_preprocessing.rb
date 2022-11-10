@@ -59,7 +59,7 @@ module ApplicationControllable::RequestPreprocessing
     url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h
     url_params[:path], url_params[:query] = request.fullpath.split("?")
-    redirect_to(url_builder.build(url_params).to_s)
+    redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)
   end
 
   def log_full_url
@@ -100,7 +100,9 @@ module ApplicationControllable::RequestPreprocessing
     else
       # Important to not redirect in a devise controller because otherwise it will mess up the OAuth flow.
       # The same condition exists in the original implementation.
-      redirect_to(sign_in_url, notice: I18n.t("devise.failure.unauthenticated")) unless devise_controller?
+      unless devise_controller?
+        redirect_to(sign_in_url, notice: I18n.t("devise.failure.unauthenticated"), allow_other_host: true)
+      end
     end
   end
 
@@ -219,6 +221,6 @@ module ApplicationControllable::RequestPreprocessing
     url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h.merge(host: host)
     url_params[:path], url_params[:query] = request.fullpath.split("?")
-    redirect_to(url_builder.build(url_params).to_s)
+    redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)
   end
 end

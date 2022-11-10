@@ -213,7 +213,7 @@ module Calendars
     end
 
     def redirect_to_event_in_context(event)
-      params = {date: event.starts_at&.to_s(:no_time)}
+      params = {date: event.starts_at&.to_fs(:no_time)}
       if event.origin_page == "combined"
         redirect_to(calendars_events_path(params))
       else

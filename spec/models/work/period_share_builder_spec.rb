@@ -11,16 +11,14 @@ describe Work::PeriodShareBuilder do
   let!(:inactive) { create(:user, :inactive) }
   let(:shares_by_user_id) { period.shares.index_by(&:user_id) }
 
-  before do
-    described_class.new(period).build
-  end
-
   shared_examples_for "builds shares with appropriate default portion" do
     it "builds shares for active users and children over min age" do
+      described_class.new(period).build
       expect(period.shares.map(&:user_id)).to contain_exactly(adult1.id, adult2.id, adult3.id, child.id)
     end
 
     it "builds shares with the appropriate default portion" do
+      described_class.new(period).build
       expect(shares_by_user_id[adult1.id].portion).to eq(1)
       expect(shares_by_user_id[child.id].portion).to eq(0)
     end
@@ -45,10 +43,12 @@ describe Work::PeriodShareBuilder do
       let(:quota_type) { "by_household" }
 
       it "builds shares for active users and children over min age" do
+        described_class.new(period).build
         expect(period.shares.map(&:user_id)).to contain_exactly(adult1.id, adult2.id, adult3.id, child.id)
       end
 
       it "builds shares with nil portion" do
+        described_class.new(period).build
         expect(shares_by_user_id[adult1.id].portion).to be_nil
         expect(shares_by_user_id[child.id].portion).to be_nil
       end

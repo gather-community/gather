@@ -69,7 +69,7 @@ module Groups
         translated = I18n.t("simple_form.options.groups_group.kind.#{kind}")
         "WHEN '#{kind}' THEN '#{translated}'"
       end
-      order("LOWER(CASE kind #{whens.join(' ')} END)")
+      order(Arel.sql("LOWER(CASE kind #{whens.join(' ')} END)"))
     }
 
     normalize_attributes :kind, :availability, :name

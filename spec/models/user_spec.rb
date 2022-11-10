@@ -190,12 +190,12 @@ describe User do
               end
 
               context "with valid birthday" do
-                let(:birthdate) { (Time.current - 14.years).to_s(:no_time) }
+                let(:birthdate) { (Time.current - 14.years).to_fs(:no_time) }
                 it { is_expected.to be_valid }
               end
 
               context "with invalid birthday" do
-                let(:birthdate) { (Time.current - 12.years).to_s(:no_time) }
+                let(:birthdate) { (Time.current - 12.years).to_fs(:no_time) }
 
                 it do
                   expect(user).not_to be_valid
@@ -410,11 +410,6 @@ describe User do
       it "gets global role" do
         user.add_role(:foo)
         expect(user.global_role?(:foo)).to be(true)
-      end
-
-      it "doesn't get scoped role" do
-        user.add_role(:foo, meal)
-        expect(user.global_role?(:foo)).to be(false)
       end
 
       it "doesn't get global role set after first call" do

@@ -17,8 +17,8 @@ describe Calendars::Event do
         it do
           event.validate
           expect(event.all_day).to be(false)
-          expect(event.starts_at.to_s(:default)).to eq("2016-04-07T12:00:00")
-          expect(event.ends_at.to_s(:default)).to eq("2016-04-07T13:00:00")
+          expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
+          expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
         end
       end
 
@@ -34,8 +34,8 @@ describe Calendars::Event do
           it do
             event.validate
             expect(event.all_day).to be(true)
-            expect(event.starts_at.to_s(:default)).to eq("2016-04-07T00:00:00")
-            expect(event.ends_at.to_s(:default)).to eq("2016-04-07T23:59:59")
+            expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T00:00:00")
+            expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T23:59:59")
           end
         end
 
@@ -46,8 +46,8 @@ describe Calendars::Event do
           it do
             event.validate
             expect(event.all_day).to be(false)
-            expect(event.starts_at.to_s(:default)).to eq("2016-04-07T12:00:00")
-            expect(event.ends_at.to_s(:default)).to eq("2016-04-07T13:00:00")
+            expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
+            expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
           end
         end
       end

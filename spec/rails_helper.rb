@@ -99,6 +99,8 @@ RSpec.configure do |config|
     # We have to ignore 127.0.0.1 b/c capybara makes all sorts of requests to it.
     c.ignore_hosts("127.0.0.1")
 
+    c.ignore_hosts("o1375887.ingest.sentry.io")
+
     # Make VCR ignore download of chromedriver by webdrivers gem.
     c.ignore_hosts("chromedriver.storage.googleapis.com")
 

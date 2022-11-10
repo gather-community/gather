@@ -8,7 +8,7 @@ module ApplicationControllable::Csv
       if p == :community
         current_community.slug
       elsif p == :date
-        Time.current.to_s(:no_time)
+        Time.current.to_fs(:no_time)
       else
         p
       end

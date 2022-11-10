@@ -24,7 +24,7 @@ module Billing
             AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
           end
         rescue StatementError => e
-          ExceptionNotifier.notify_exception(e, data: {account_id: account.id})
+          ErrorReporter.instance.report(e, data: {account_id: account.id})
         end
       end
     end

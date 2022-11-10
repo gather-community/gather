@@ -32,8 +32,12 @@ module Meals
     def validate_meal
       meal.events.each do |event|
         next if event.valid?
-        errors = event.errors.map do |attrib, msg|
-          attrib == :base ? msg : "#{Calendars::Event.human_attribute_name(attrib)}: #{msg}"
+        errors = event.errors.map do |error|
+          if error.attribute == :base
+            error.message
+          else
+            "#{Calendars::Event.human_attribute_name(error.attribute)}: #{error.message}"
+          end
         end.join(", ")
         meal.errors.add(:base,
                         "The following error(s) occurred in making a #{event.calendar_name} event "\

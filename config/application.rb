@@ -15,7 +15,7 @@ Bundler.require(*Rails.groups)
 module Gather
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults("6.0")
+    config.load_defaults("7.0")
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -42,14 +42,16 @@ module Gather
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
-    config.middleware.use(ExceptionNotification::Rack,
-                          email: {
-                            email_prefix: "[Gather ERROR] ",
-                            sender_address: Settings.email.from,
-                            exception_recipients: Settings.email.webmaster,
-                            sections: %w[request session environment backtrace exception_data],
-                            background_sections: %w[backtrace exception_data data]
-                          })
+    if Settings.error_reporting == "email"
+      config.middleware.use(ExceptionNotification::Rack,
+                            email: {
+                              email_prefix: "[Gather ERROR] ",
+                              sender_address: Settings.email.from,
+                              exception_recipients: Settings.email.webmaster,
+                              sections: %w[request session environment backtrace exception_data],
+                              background_sections: %w[backtrace exception_data data]
+                            })
+    end
 
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
     # when Warden is loading the current user. We re-enable it in request_preprocessing.rb
@@ -74,6 +76,10 @@ module Gather
         enable_starttls_auto: Settings.smtp.enable_starttls_auto,
       }
     end
+
+    # We need to do this to move between subdomains and the apex domain.
+    # Devise doesn't allow us to add allow_other_host to redirects so we have to disable for now.
+    config.action_controller.raise_on_open_redirects = false
 
     # Show a 403 page if Pundit rejects.
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden

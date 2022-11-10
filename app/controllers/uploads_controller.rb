@@ -13,7 +13,7 @@ class UploadsController < ApplicationController
   # Checks validation errors on model and returns if found, but doesn't save model.
   def create
     authorize(Upload.new)
-    blob = ActiveStorage::Blob.create_after_upload!(io: params[:file].open,
+    blob = ActiveStorage::Blob.create_and_upload!(io: params[:file].open,
                                                     filename: params[:file].original_filename)
 
     # Run validations to ensure that the attachment is valid.

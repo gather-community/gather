@@ -1,7 +1,7 @@
 meals:
   close_cutoff_age: 2 # hours
 reminders:
-  time_of_day: 6 # 6:00am
+  time_of_day: 7 # 7:00am
 photos:
   max_size_mb: 8
 work:

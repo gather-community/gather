@@ -42,7 +42,7 @@ module Gather
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
-    if Settings.error_reporting == "email"
+    if Rails.env.production? && Settings.error_reporting == "email"
       config.middleware.use(ExceptionNotification::Rack,
                             email: {
                               email_prefix: "[Gather ERROR] ",

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock "3.16.0"
+lock "3.17.1"
 
 set :application, "gather"
 set :pty, true

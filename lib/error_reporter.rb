@@ -4,7 +4,7 @@ class ErrorReporter
   include Singleton
 
   def report(error, env: nil, data: nil)
-    if Settings.error_reporting == "sentry"
+    if Settings.error_reporting == "sentry" && Rails.env.production?
       Sentry.with_scope do |scope|
         scope.set_context("Gather", env: env, data: data)
         Sentry.capture_exception(error)

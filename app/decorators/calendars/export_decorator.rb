@@ -14,8 +14,8 @@ module Calendars
       url = h.url_in_home_community(h.calendars_legacy_exports_path)
       h.link_to(url, class: "btn btn-default calendar-export icon-only") do
         h.content_tag(:span, class: "fa-stack") do
-          h.icon_tag("calendar-o", class: "fa-stack-2x") <<
-            h.icon_tag("arrow-down", class: "fa-stack-1x")
+          h.icon_tag("calendar", class: "fa-stack-2x") <<
+            h.icon_tag("arrow-down", class: "fa-stack-1x fa-inverse")
         end
       end
     end

@@ -13,7 +13,7 @@ module MealsHelper
 
   def signup_count(meal)
     icon = meal.full? ? "exclamation-circle" : "users"
-    "#{icon_tag(icon)} #{meal.signup_count}/#{meal.capacity}".html_safe
+    "#{icon_tag(icon)}&nbsp;&nbsp;#{meal.signup_count}/#{meal.capacity}".html_safe
   end
 
   def signup_label(type)

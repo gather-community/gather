@@ -84,7 +84,7 @@
               <%= share_fields.hidden_field :user_id %>
               <%= share_fields.hidden_field :priority, data: {"orig-val": share.priority} %>
               <%= share_fields.label :portion, link_to(user.full_name, user_path(user)) %>
-              <%= icon_tag("star#{'-o' unless share.priority?}", class: "priority-icon") %>
+              <%= content_tag(:span, (share.priority? ? "★" : "☆").html_safe, class: "priority-icon") %>
               <%= share_fields.select :portion, share.select_options,
                 {include_blank: share.portion.nil?}, class: "form-control" %>
             </div>

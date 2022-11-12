@@ -73,7 +73,7 @@ module Gather
         authentication: Settings.smtp.authentication.presence&.to_sym,
         user_name: Settings.smtp.user_name.presence,
         password: Settings.smtp.password.presence,
-        enable_starttls_auto: Settings.smtp.enable_starttls_auto,
+        enable_starttls_auto: Settings.smtp.enable_starttls_auto
       }
     end
 

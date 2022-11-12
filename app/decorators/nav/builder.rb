@@ -119,7 +119,7 @@ module Nav
               parents: :meals,
               path: h.meals_roles_path,
               permitted: h.policy(Meals::Role.new(community: community)).index?,
-              icon: "user-circle-o"
+              icon: "user-circle"
             }, {
               name: :settings,
               parents: :meals,
@@ -163,7 +163,7 @@ module Nav
               parents: :people,
               path: h.people_memorials_path,
               permitted: h.policy(sample_memorial).index?,
-              icon: "pagelines"
+              icon: {name: "pagelines", style: :brands}
             }, {
               name: :settings,
               parents: :people,
@@ -187,7 +187,7 @@ module Nav
               parents: :groups,
               path: h.roles_path,
               permitted: h.policy(sample_user).index?,
-              icon: "user-circle-o"
+              icon: "user-circle"
             }
           ]
         when :calendars
@@ -281,7 +281,7 @@ module Nav
               parents: :wiki,
               path: h.gdrive_home_path,
               permitted: GDrive::FoldersPolicy.new(user, :folder).show?,
-              icon: "google"
+              icon: {name: "google", style: :brands}
             }
           ]
         else
@@ -336,7 +336,7 @@ module Nav
             parents: [:personal],
             path: h.yours_accounts_path,
             permitted: h.policy(Billing::Account.new).yours?,
-            icon: "money",
+            icon: "coins",
             i18n_key: multi_community? ? :accounts : :account
           }, {
             name: :calendars,
@@ -376,7 +376,13 @@ module Nav
       params[:method] = item[:method]
       params[:role] = "tab" if tab
       params[:"aria-controls"] = name if tab
-      icon_tag = icon && item[:icon] ? h.icon_tag(item[:icon]) << " " : h.safe_str
+      icon_tag = if icon && item[:icon]
+        icon_name = item[:icon].is_a?(Hash) ? item[:icon][:name] : item[:icon]
+        icon_style = item[:icon].is_a?(Hash) ? item[:icon][:style] : nil
+        h.icon_tag(icon_name, style: icon_style) << " "
+      else
+        h.safe_str
+      end
 
       # We have to add the full host, port, and protocol if it's not given since some pages
       # are under the apex gather domain with community specified through query string but we want the

@@ -30,11 +30,10 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend
 
   priorityChanged: (e) ->
     icon = @$(e.currentTarget)
-    newVal = icon.is(".fa-star-o")
+    newVal = icon.html() == "☆"
     icon.closest(".work-share").find("input[id$=_priority]").val(if newVal then "true" else "false")
-    oldClass = if newVal then "fa-star-o" else "fa-star"
-    newClass = if newVal then "fa-star" else "fa-star-o"
-    icon.removeClass(oldClass).addClass(newClass)
+    newGlyph = if newVal then "★" else "☆"
+    icon.html(newGlyph)
 
   jobCopySourceIdChanged: ->
     copying = @$("#work_period_job_copy_source_id").val() != ''

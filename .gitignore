@@ -12,6 +12,8 @@
 !/log/.keep
 /tmp
 
+/public/assets
+
 # i18n.js stuff
 /app/assets/javascripts/i18n/translations.js
 /public/javascripts/i18n.js

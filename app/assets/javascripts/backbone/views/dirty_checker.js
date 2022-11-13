@@ -1,5 +1,4 @@
 Gather.Views.DirtyChecker = Backbone.View.extend({
-
   initialize(params) {
     params.helpers = params.helpers || [];
     params.helpers.push(this.datetimePickerHelper);

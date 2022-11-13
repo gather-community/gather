@@ -1,5 +1,4 @@
 Gather.Views.People.DirectoryPrintView = Gather.Views.PrintView.extend({
-
   initialize(params) {
     this.viewType = params.viewType;
   },

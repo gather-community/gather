@@ -31,7 +31,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   initCalendar() {
-    return this.calendar.fullCalendar({
+    this.calendar.fullCalendar({
       defaultView: this.URL_PARAMS_TO_VIEW_TYPES[this.viewParams.viewType || this.defaultViewType],
       defaultDate: this.viewParams.date,
       height: "auto",
@@ -66,7 +66,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     const oldSource = this.calendar.fullCalendar("getEventSources")[0];
     this.calendar.fullCalendar("addEventSource", path);
     if (oldSource) {
-      return this.calendar.fullCalendar("removeEventSource", oldSource);
+      this.calendar.fullCalendar("removeEventSource", oldSource);
     }
   },
 
@@ -140,23 +140,23 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       body.html(`Create event from <b>${startTime}</b> to <b>${endTime}</b>?`);
     }
 
-    return modal.modal("show");
+    modal.modal("show");
   },
 
   onViewRender() {
     this.$el.trigger("viewRender"); // Notify other views
-    return this.saveViewParams();
+    this.saveViewParams();
   },
 
   onLoading(isLoading) {
-    return Gather.loadingIndicator.toggle(isLoading);
+    Gather.loadingIndicator.toggle(isLoading);
   },
 
   onEventChange(event, _, revertFunc) {
     if (!confirm(`Are you sure you want to move the event '${event.title}?'`)) {
-      return revertFunc();
+      revertFunc();
     } else {
-      return $.ajax({
+      $.ajax({
         url: `/calendars/events/${event.id}`,
         method: "POST",
         data: {
@@ -168,7 +168,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         },
         error(xhr) {
           revertFunc();
-          return Gather.errorModal.modal("show").find(".modal-body").html(xhr.responseText);
+          Gather.errorModal.modal("show").find(".modal-body").html(xhr.responseText);
         }
       });
     }
@@ -182,7 +182,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     const url = new URL(this.newPath, "https://example.com");
     url.searchParams.append("start", this.selection.start);
     url.searchParams.append("end", this.selection.end);
-    return window.location.href = url.href.replace("https://example.com", "");
+    window.location.href = url.href.replace("https://example.com", "");
   },
 
   minTime() {
@@ -255,25 +255,25 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.viewParams.earlyMorning = !this.viewParams.earlyMorning;
     this.showAppropriateEarlyLink();
     this.calendar.fullCalendar("option", "minTime", this.minTime());
-    return this.saveViewParams();
+    this.saveViewParams();
   },
 
   showAppropriateEarlyLink() {
     this.$("#hide-early").css({display: this.viewParams.earlyMorning ? "inline" : "none"});
-    return this.$("#show-early").css({display: this.viewParams.earlyMorning ? "none" : "inline"});
+    this.$("#show-early").css({display: this.viewParams.earlyMorning ? "none" : "inline"});
   },
 
   expireCurrentDateSettingAfterOneHour(settings) {
     if (settings.savedAt) {
       const settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds();
       if (settingsAge > 3600) {
-        return delete settings.date;
+        delete settings.date;
       }
     }
   },
 
   saveViewParams() {
-    return $.ajax({
+    $.ajax({
       url: "/calendars/events/",
       method: "GET",
       data: {

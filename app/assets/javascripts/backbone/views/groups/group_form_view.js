@@ -29,7 +29,7 @@ Gather.Views.Groups.GroupFormView = Backbone.View.extend({
   },
 
   everybody() {
-    this.$(".groups_group_availability select").val() === "everybody";
+    return this.$(".groups_group_availability select").val() === "everybody";
   },
 
   handleListNameChanged() {

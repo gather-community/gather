@@ -2,7 +2,7 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   initialize(options) {
     this.selection = options.selection || {};
     this.dontPersist = options.dontPersist || false;
-    return this.loadSelection();
+    this.loadSelection();
   },
 
   events: {
@@ -12,7 +12,7 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   checkboxChanged(e) {
     e.stopPropagation();
     this.$el.trigger("calendarSelectionChanged");
-    return this.saveSelection();
+    this.saveSelection();
   },
 
   selectedIds() {
@@ -36,7 +36,7 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
       contentType: "application/json",
       data: JSON.stringify({settings: {calendar_selection: this.selection}}),
       success() {
-        return Gather.loadingIndicator.hide();
+        Gather.loadingIndicator.hide();
       }
     });
   },

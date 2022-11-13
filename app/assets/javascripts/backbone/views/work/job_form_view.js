@@ -1,5 +1,4 @@
 Gather.Views.Work.JobFormView = Backbone.View.extend({
-
   initialize(options) {
     this.formatFields();
 
@@ -52,7 +51,7 @@ Gather.Views.Work.JobFormView = Backbone.View.extend({
   },
 
   shiftDatePickers() {
-    this.$("#shift-table .datetimepicker");
+    return this.$("#shift-table .datetimepicker");
   },
 
   toggleHoursPerShift(show) {

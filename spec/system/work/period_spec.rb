@@ -103,8 +103,8 @@ describe "periods", js: true do
     click_button("Save")
     click_on("Qux")
     click_on("Edit")
-    expect(all(".priority-icon")[0][:class].split(" ")).to include("fa-star")
-    expect(all(".priority-icon")[1][:class].split(" ")).to include("fa-star-o")
+    expect(all(".priority-icon")[0]).to have_content("★")
+    expect(all(".priority-icon")[1]).to have_content("☆")
 
     # Test dirty check
     page.go_back

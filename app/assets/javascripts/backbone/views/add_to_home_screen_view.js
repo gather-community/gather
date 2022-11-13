@@ -2,7 +2,7 @@
 Gather.Views.AddToHomeScreenView = Backbone.View.extend({
   initialize(options) {
     this.options = options;
-    window.addEventListener('beforeinstallprompt', event => {
+    window.addEventListener("beforeinstallprompt", event => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       event.preventDefault();
       if (!this.optedOut()) {
@@ -15,8 +15,8 @@ Gather.Views.AddToHomeScreenView = Backbone.View.extend({
   },
 
   events: {
-    'click .btn': 'add',
-    'click .opt-out': 'optOut'
+    "click .btn": "add",
+    "click .opt-out": "optOut"
   },
 
   add() {
@@ -26,10 +26,10 @@ Gather.Views.AddToHomeScreenView = Backbone.View.extend({
     this.deferredPrompt.prompt();
     // Wait for the user to respond to the prompt. We need to handle this event for it to work, I think.
     this.deferredPrompt.userChoice.then(choiceResult => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the A2HS prompt");
       } else {
-        console.log('User dismissed the A2HS prompt');
+        console.log("User dismissed the A2HS prompt");
       }
       this.deferredPrompt = null;
     });
@@ -43,8 +43,12 @@ Gather.Views.AddToHomeScreenView = Backbone.View.extend({
   },
 
   optedOut() {
-    if (window.localStorage.getItem('dontAddToHomeScreen')) { return true; } // Legacy
-    if (document.cookie.indexOf('dontAddToHomeScreen=1') !== -1) { return true; }
+    if (window.localStorage.getItem("dontAddToHomeScreen")) {
+      return true;
+    } // Legacy
+    if (document.cookie.indexOf("dontAddToHomeScreen=1") !== -1) {
+      return true;
+    }
     return false;
   }
 });

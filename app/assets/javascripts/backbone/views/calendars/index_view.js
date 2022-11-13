@@ -1,20 +1,20 @@
 Gather.Views.Calendars.IndexView = Backbone.View.extend({
   events: {
-    'click .move-links a': 'moveLinkClicked'
+    "click .move-links a": "moveLinkClicked"
   },
 
   moveLinkClicked(event) {
     event.stopPropagation();
     event.preventDefault();
-    const href = this.$(event.currentTarget).attr('href');
+    const href = this.$(event.currentTarget).attr("href");
     $.ajax({
       url: href,
-      method: 'post',
+      method: "post",
       data: {
-        _method: 'put'
+        _method: "put"
       },
       success: response => {
-        this.$('table.index').replaceWith(response);
+        this.$("table.index").replaceWith(response);
       }
     });
   }

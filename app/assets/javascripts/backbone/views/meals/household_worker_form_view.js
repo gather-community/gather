@@ -4,9 +4,9 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend({
   },
 
   events: {
-    'click .delete-assign': 'destroyAssign',
-    'ajax:send': 'formSubmitting',
-    'ajax:success': 'formSuccess'
+    "click .delete-assign": "destroyAssign",
+    "ajax:send": "formSubmitting",
+    "ajax:success": "formSuccess"
   },
 
   destroyAssign(event) {
@@ -14,7 +14,7 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend({
 
     if (!this.alertShown && this.options.notifyOnWorkerChange) {
       this.alertShown = true;
-      if (!confirm(I18n.t('meals/assignments.change_warning'))) {
+      if (!confirm(I18n.t("meals/assignments.change_warning"))) {
         return;
       }
     }
@@ -22,9 +22,9 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend({
     Gather.loadingIndicator.show();
     $.ajax({
       url: event.currentTarget.href,
-      method: 'DELETE',
+      method: "DELETE",
       success: data => {
-        this.$el.replaceWith($(data).find('form'));
+        this.$el.replaceWith($(data).find("form"));
         Gather.loadingIndicator.hide();
       }
     });
@@ -36,7 +36,7 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend({
 
   formSuccess(e, data) {
     Gather.loadingIndicator.hide();
-    this.$el.dirtyForms('setClean');
-    this.$el.replaceWith($(data).find('form'));
+    this.$el.dirtyForms("setClean");
+    this.$el.replaceWith($(data).find("form"));
   }
 });

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
@@ -36,13 +37,16 @@
 //= require i18n/translations
 //= require serviceworker-companion
 //= require_tree .
+/* eslint-enable */
 
-$(document).ready(function(){ $('form').preventDoubleSubmission(); });
+$(document).ready(function() {
+  $("form").preventDoubleSubmission();
+});
 
 Gather.TIME_FORMATS = {
-  fullDatetime: 'ddd MMM D YYYY h:mm a',
-  machineDatetime: 'YYYY-MM-DD HH:mm',
-  regDate: 'ddd MMM DD YYYY',
-  regTime: 'h:mm a',
-  compactDate: 'YYYY-MM-DD'
-}
+  fullDatetime: "ddd MMM D YYYY h:mm a",
+  machineDatetime: "YYYY-MM-DD HH:mm",
+  regDate: "ddd MMM DD YYYY",
+  regTime: "h:mm a",
+  compactDate: "YYYY-MM-DD"
+};

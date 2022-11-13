@@ -6,8 +6,8 @@ Gather.Views.Meals.SignupAjaxFormView = Backbone.View.extend({
   },
 
   events: {
-    'ajax:send': 'formSubmitting',
-    'ajax:success': 'formSuccess'
+    "ajax:send": "formSubmitting",
+    "ajax:success": "formSuccess"
   },
 
   formSubmitting(e) {
@@ -16,15 +16,15 @@ Gather.Views.Meals.SignupAjaxFormView = Backbone.View.extend({
 
   formSuccess(e, data) {
     Gather.loadingIndicator.hide();
-    this.$el.dirtyForms('setClean');
+    this.$el.dirtyForms("setClean");
     if (data.redirect) {
       window.location.href = data.redirect;
     } else {
-      this.$el.replaceWith($(data).find('form'));
+      this.$el.replaceWith($(data).find("form"));
     }
   },
 
   hideSuccess() {
-    this.$('.alert-success').remove();
+    this.$(".alert-success").remove();
   }
 });

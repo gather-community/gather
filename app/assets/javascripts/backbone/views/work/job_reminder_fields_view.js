@@ -15,7 +15,7 @@ Gather.Views.Work.JobReminderFieldsView = Backbone.View.extend({
 
   reminderInserted(event, inserted) {
     const row = this.$(inserted);
-    row.trigger('page:change'); // Force recognition of datepicker in pickers.js
+    row.trigger("page:change"); // Force recognition of datepicker in pickers.js
     this.toggleFields(row);
   },
 

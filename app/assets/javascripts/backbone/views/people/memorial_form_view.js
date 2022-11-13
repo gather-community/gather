@@ -5,14 +5,14 @@ Gather.Views.People.MemorialFormView = Backbone.View.extend({
   },
 
   events: {
-    'change #people_memorial_user_id': 'userChanged'
+    "change #people_memorial_user_id": "userChanged"
   },
 
   userChanged(event) {
     let year;
     const userId = parseInt(this.$(event.target).val());
     if (year = this.birthYears[userId]) {
-      this.$('#people_memorial_birth_year').val(year);
+      this.$("#people_memorial_birth_year").val(year);
     }
   }
 });

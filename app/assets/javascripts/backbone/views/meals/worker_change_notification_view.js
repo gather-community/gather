@@ -4,13 +4,13 @@ Gather.Views.Meals.WorkerChangeNotificationView = Backbone.View.extend({
   },
 
   events: {
-    'select2:select': 'workersChanged',
-    'select2:unselect': 'workersChanged'
+    "select2:select": "workersChanged",
+    "select2:unselect": "workersChanged"
   },
 
   workersChanged() {
     if (!this.shown && !this.options.newRecord) {
-      alert(I18n.t('meals/assignments.change_warning'));
+      alert(I18n.t("meals/assignments.change_warning"));
       this.shown = true;
     }
   }

@@ -6,12 +6,12 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   },
 
   events: {
-    'change input[type=checkbox]': 'checkboxChanged'
+    "change input[type=checkbox]": "checkboxChanged"
   },
 
   checkboxChanged(e) {
     e.stopPropagation();
-    this.$el.trigger('calendarSelectionChanged');
+    this.$el.trigger("calendarSelectionChanged");
     return this.saveSelection();
   },
 
@@ -24,24 +24,28 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   },
 
   saveSelection() {
-    if (this.dontPersist) { return; }
-    const entries = this.$("input[type=checkbox]").map((_, el) => [[el.value, this.$(el).prop('checked')]]);
+    if (this.dontPersist) {
+      return;
+    }
+    const entries = this.$("input[type=checkbox]").map((_, el) => [[el.value, this.$(el).prop("checked")]]);
     this.selection = Object.fromEntries(entries);
     Gather.loadingIndicator.show();
     $.ajax({
-      url: '/users/update-setting',
-      method: 'PATCH',
-      contentType: 'application/json',
+      url: "/users/update-setting",
+      method: "PATCH",
+      contentType: "application/json",
       data: JSON.stringify({settings: {calendar_selection: this.selection}}),
-      success() { return Gather.loadingIndicator.hide(); }
+      success() {
+        return Gather.loadingIndicator.hide();
+      }
     });
   },
 
   loadSelection() {
-    this.$("input[type=checkbox]:checked").each((_, el) => this.$(el).prop('checked', false));
-    for (var id in this.selection) {
-      var checked = this.selection[id];
-      result.push(this.$(`input[type=checkbox][value=${id}]`).prop('checked', checked));
+    this.$("input[type=checkbox]:checked").each((_, el) => this.$(el).prop("checked", false));
+    for (let id in this.selection) {
+      let checked = this.selection[id];
+      this.$(`input[type=checkbox][value=${id}]`).prop("checked", checked);
     }
   }
 });

@@ -1,19 +1,21 @@
-// Ultimately this class should just wrap the calendar plugin and serve events.
-// Most other heavy lifting should be done by other classes like CalendarLinkManager.
+/*
+ * Ultimately this class should just wrap the calendar plugin and serve events.
+ * Most other heavy lifting should be done by other classes like CalendarLinkManager.
+ */
 Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   URL_PARAMS_TO_VIEW_TYPES: {
-    'day': 'agendaDay',
-    'week': 'agendaWeek',
-    'month': 'month'
+    "day": "agendaDay",
+    "week": "agendaWeek",
+    "month": "month"
   },
 
   initialize(options) {
     this.newPath = options.newPath;
     this.feedPath = options.feedPath;
     this.viewParams = options.viewParams;
-    this.defaultViewType = options.defaultViewType || 'week';
-    this.calendar = this.$('#calendar');
+    this.defaultViewType = options.defaultViewType || "week";
+    this.calendar = this.$("#calendar");
     this.ruleSet = options.ruleSet;
     this.canCreate = options.canCreate;
     this.calendarId = options.calendarId;
@@ -24,15 +26,15 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   events: {
-    'click .modal .btn-primary': 'create',
-    'click .early': 'showHideEarly'
+    "click .modal .btn-primary": "create",
+    "click .early": "showHideEarly"
   },
 
   initCalendar() {
     return this.calendar.fullCalendar({
       defaultView: this.URL_PARAMS_TO_VIEW_TYPES[this.viewParams.viewType || this.defaultViewType],
       defaultDate: this.viewParams.date,
-      height: 'auto',
+      height: "auto",
       minTime: this.minTime(),
       allDaySlot: !this.timedEventsOnly,
       allDayText: this.allDayText,
@@ -42,9 +44,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       selectHelper: true,
       longPressDelay: 500,
       header: {
-        left: 'title',
-        center: 'agendaDay,agendaWeek,month',
-        right: 'today prev,next'
+        left: "title",
+        center: "agendaDay,agendaWeek,month",
+        right: "today prev,next"
       },
       select: this.onSelect.bind(this),
       loading: this.onLoading.bind(this),
@@ -57,13 +59,15 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   updateSource(calendarIds) {
     let path = this.feedPath;
     if (calendarIds) {
-      const url = new URL(path, 'https://example.com');
-      url.searchParams.append('calendar_ids', calendarIds.join(' '));
-      path = url.href.replace('https://example.com', '');
+      const url = new URL(path, "https://example.com");
+      url.searchParams.append("calendar_ids", calendarIds.join(" "));
+      path = url.href.replace("https://example.com", "");
     }
-    const oldSource = this.calendar.fullCalendar('getEventSources')[0];
-    this.calendar.fullCalendar('addEventSource', path);
-    if (oldSource) { return this.calendar.fullCalendar('removeEventSource', oldSource); }
+    const oldSource = this.calendar.fullCalendar("getEventSources")[0];
+    this.calendar.fullCalendar("addEventSource", path);
+    if (oldSource) {
+      return this.calendar.fullCalendar("removeEventSource", oldSource);
+    }
   },
 
   selectOverlap(existingEvent) {
@@ -78,15 +82,17 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   onSelect(start, end, _, view) {
     let changed, endTime, startTime;
-    const modal = this.$('#create-confirm-modal');
-    const body = modal.find('.modal-body');
+    const modal = this.$("#create-confirm-modal");
+    const body = modal.find(".modal-body");
     const changedInterval = false;
 
-    // If we get an all day selection (hasTime false), and the calendar supports all day events,
-    // go with it. Else change to 12:00 - 13:00. This can happen if calendar is in month mode.
-    // 12:00 - 13:00 works better with fixed times than 00:00 - 00:00.
-    // We need to do this before applying fixed times so that overnight stays go from the day clicked
-    // to the next day instead of ending on the day clicked.
+    /*
+     * If we get an all day selection (hasTime false), and the calendar supports all day events,
+     * go with it. Else change to 12:00 - 13:00. This can happen if calendar is in month mode.
+     * 12:00 - 13:00 works better with fixed times than 00:00 - 00:00.
+     * We need to do this before applying fixed times so that overnight stays go from the day clicked
+     * to the next day instead of ending on the day clicked.
+     */
     if (!start.hasTime() && this.timedEventsOnly) {
       start.hours(12);
       end.hours(13);
@@ -95,10 +101,12 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
     [start, end, changed] = this.applyFixedTimes(start, end);
 
-    // Redraw selection if fixed times applied. But doing this in month mode causes an infinite loop
-    // and doesn't provide any useful feedback to the user.
+    /*
+     * Redraw selection if fixed times applied. But doing this in month mode causes an infinite loop
+     * and doesn't provide any useful feedback to the user.
+     */
     if (changed && (view.name !== "month")) {
-      this.calendar.fullCalendar('select', start, end);
+      this.calendar.fullCalendar("select", start, end);
       return;
     }
 
@@ -109,8 +117,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     };
 
     // Build confirmation string
-    if (!start.hasTime()) { end = end.subtract(1, 'seconds'); }
-    if (start.format('YYYYMMDD') === end.format('YYYYMMDD')) {
+    if (!start.hasTime()) {
+      end = end.subtract(1, "seconds");
+    }
+    if (start.format("YYYYMMDD") === end.format("YYYYMMDD")) {
       const date = start.format(Gather.TIME_FORMATS.regDate);
       if (start.hasTime()) {
         startTime = start.format(Gather.TIME_FORMATS.regTime);
@@ -130,11 +140,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       body.html(`Create event from <b>${startTime}</b> to <b>${endTime}</b>?`);
     }
 
-    return modal.modal('show');
+    return modal.modal("show");
   },
 
   onViewRender() {
-    this.$el.trigger('viewRender'); // Notify other views
+    this.$el.trigger("viewRender"); // Notify other views
     return this.saveViewParams();
   },
 
@@ -158,35 +168,41 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         },
         error(xhr) {
           revertFunc();
-          return Gather.errorModal.modal('show').find('.modal-body').html(xhr.responseText);
+          return Gather.errorModal.modal("show").find(".modal-body").html(xhr.responseText);
         }
       });
     }
   },
 
   create() {
-    // Add start and end params to @newPath. The URL library needs a base url but we just want a path
-    // so we add a base url and then remove it.
-    const url = new URL(this.newPath, 'https://example.com');
-    url.searchParams.append('start', this.selection.start);
-    url.searchParams.append('end', this.selection.end);
-    return window.location.href = url.href.replace('https://example.com', '');
+    /*
+     * Add start and end params to @newPath. The URL library needs a base url but we just want a path
+     * so we add a base url and then remove it.
+     */
+    const url = new URL(this.newPath, "https://example.com");
+    url.searchParams.append("start", this.selection.start);
+    url.searchParams.append("end", this.selection.end);
+    return window.location.href = url.href.replace("https://example.com", "");
   },
 
   minTime() {
-    if (this.viewParams.earlyMorning) { return '00:00:00'; } else { return '06:00:00'; }
+    if (this.viewParams.earlyMorning) {
+      return "00:00:00";
+    } else {
+      return "06:00:00";
+    }
   },
 
   viewType() {
-    return this.calendar.fullCalendar('getView').name.replace('agenda', '').toLowerCase();
+    return this.calendar.fullCalendar("getView").name.replace("agenda", "").toLowerCase();
   },
 
   date() {
-    return this.calendar.fullCalendar('getView').intervalStart.format(Gather.TIME_FORMATS.compactDate);
+    return this.calendar.fullCalendar("getView").intervalStart.format(Gather.TIME_FORMATS.compactDate);
   },
 
   hasEventInInterval(start, end) {
-    const matches = this.calendar.fullCalendar('clientEvents', event => event.start.isBefore(end) && event.end.isAfter(start));
+    const matches = this.calendar.fullCalendar("clientEvents", event => event.start.isBefore(end) && event.end.isAfter(start));
     return matches.length > 0;
   },
 
@@ -195,19 +211,21 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     const fixedEnd = this.ruleSet.fixedEndTime && $.fullCalendar.moment(this.ruleSet.fixedEndTime);
     let changed = false;
 
-    if (fixedStart && (fixedStart.format('HHmm') !== start.format('HHmm'))) {
+    if (fixedStart && (fixedStart.format("HHmm") !== start.format("HHmm"))) {
       start = this.nearestFixedTime(start, fixedStart);
       const length = end.diff(start);
       end = $.fullCalendar.moment(start).add(length);
       changed = true;
     }
 
-    if (fixedEnd && (fixedEnd.format('HHmm') !== end.format('HHmm'))) {
+    if (fixedEnd && (fixedEnd.format("HHmm") !== end.format("HHmm"))) {
       end = this.nearestFixedTime(end, fixedEnd);
       changed = true;
     }
 
-    if (end.isBefore(start)) { end.add(1, 'day'); }
+    if (end.isBefore(start)) {
+      end.add(1, "day");
+    }
 
     return [start, end, changed];
   },
@@ -219,12 +237,14 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     today.hours(fixedTime.hours()).minutes(fixedTime.minutes());
 
     if (selectedTime.isBefore(today)) {
-      nearest = $.fullCalendar.moment(today).subtract(1, 'day');
+      nearest = $.fullCalendar.moment(today).subtract(1, "day");
     } else {
       nearest = today;
     }
 
-    if (selectedTime.diff(nearest, 'hours', true) > 12) { nearest.add(1, 'days'); }
+    if (selectedTime.diff(nearest, "hours", true) > 12) {
+      nearest.add(1, "days");
+    }
 
     return nearest;
   },
@@ -234,19 +254,21 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     e.preventDefault();
     this.viewParams.earlyMorning = !this.viewParams.earlyMorning;
     this.showAppropriateEarlyLink();
-    this.calendar.fullCalendar('option', 'minTime', this.minTime());
+    this.calendar.fullCalendar("option", "minTime", this.minTime());
     return this.saveViewParams();
   },
 
   showAppropriateEarlyLink() {
-    this.$('#hide-early').css({display: this.viewParams.earlyMorning ? 'inline' : 'none'});
-    return this.$('#show-early').css({display: this.viewParams.earlyMorning ? 'none' : 'inline'});
+    this.$("#hide-early").css({display: this.viewParams.earlyMorning ? "inline" : "none"});
+    return this.$("#show-early").css({display: this.viewParams.earlyMorning ? "none" : "inline"});
   },
 
   expireCurrentDateSettingAfterOneHour(settings) {
     if (settings.savedAt) {
       const settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds();
-      if (settingsAge > 3600) { return delete settings.date; }
+      if (settingsAge > 3600) {
+        return delete settings.date;
+      }
     }
   },
 

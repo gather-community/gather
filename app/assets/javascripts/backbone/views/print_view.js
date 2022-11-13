@@ -1,9 +1,9 @@
 // Simply calls window.print when button clicked.
 Gather.Views.PrintView = Backbone.View.extend({
-  el: '#content',
+  el: "#content",
 
   events: {
-    'click button.btn-print': 'print'
+    "click button.btn-print": "print"
   },
 
   print() {

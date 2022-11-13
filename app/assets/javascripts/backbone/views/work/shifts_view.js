@@ -5,8 +5,12 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
   },
 
   resetRefreshInterval() {
-    if (!this.options.autorefresh) { return; }
-    if (this.refreshInterval) { clearInterval(this.refreshInterval); }
+    if (!this.options.autorefresh) {
+      return;
+    }
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
     const delay = window._rails_env === "test" ? 1000 : 5000;
     this.refreshInterval = setInterval(this.refresh.bind(this), delay);
   },
@@ -40,7 +44,9 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
   },
 
   handleCancelClick(event, confirmAnswer) {
-    if (!confirmAnswer) { return; }
+    if (!confirmAnswer) {
+      return;
+    }
     const card = this.$(event.target).closest(".shift-card");
     const link = this.$(event.target).closest(".cancel-link");
     link.find("a").hide();

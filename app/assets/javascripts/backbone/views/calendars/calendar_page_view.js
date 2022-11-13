@@ -9,8 +9,8 @@ Gather.Views.Calendars.CalendarPageView = Backbone.View.extend({
   },
 
   events: {
-    'viewRender': 'onViewRender',
-    'calendarSelectionChanged': 'updateCalendarSource'
+    "viewRender": "onViewRender",
+    "calendarSelectionChanged": "updateCalendarSource"
   },
 
   onViewRender() {
@@ -19,8 +19,12 @@ Gather.Views.Calendars.CalendarPageView = Backbone.View.extend({
 
   updateCalendarSource() {
     let calendarIds = null;
-    if (this.pageType === 'combined') { calendarIds = this.listView.selectedIds(); }
-    if (this.pageType === 'single') { calendarIds = [this.calendarId]; }
+    if (this.pageType === "combined") {
+      calendarIds = this.listView.selectedIds();
+    }
+    if (this.pageType === "single") {
+      calendarIds = [this.calendarId];
+    }
     this.calendarView.updateSource(calendarIds);
   }
 });

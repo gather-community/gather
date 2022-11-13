@@ -6,11 +6,28 @@ parserOptions:
 extends:
   - eslint:recommended
 globals:
-  google: true
-  gapi: true
-  Gather: true
-  I18n: true
-  console: true
+  $: readonly
+  _: readonly
+  alert: readonly
+  Backbone: readonly
+  clearInterval: readonly
+  confirm: readonly
+  console: readonly
+  copyTextToClipboard: readonly
+  d3: readonly
+  document: readonly
+  Dropzone: readonly
+  gapi: readonly
+  Gather: readonly
+  google: readonly
+  I18n: readonly
+  moment: readonly
+  navigator: readonly
+  nv: readonly
+  setInterval: readonly
+  setTimeout: readonly
+  URL: readonly
+  window: readonly
 rules:
   array-bracket-spacing: error
   arrow-body-style: error
@@ -50,6 +67,7 @@ rules:
     - error
     -
       max: 1
+  no-trailing-spaces: error
   no-unneeded-ternary: error
   no-unused-vars: 0
   no-var: error

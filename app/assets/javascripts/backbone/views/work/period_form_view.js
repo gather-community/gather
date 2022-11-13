@@ -40,12 +40,12 @@ Gather.Views.Work.PeriodFormView = Backbone.View.extend({
   },
 
   jobCopySourceIdChanged() {
-    const copying = this.$("#work_period_job_copy_source_id").val() !== '';
+    const copying = this.$("#work_period_job_copy_source_id").val() !== "";
     this.$(".work_period_copy_preassignments").toggle(copying);
   },
 
   mealJobSyncChanged() {
-    const sync = this.$("#work_period_meal_job_sync").val() === 'true';
+    const sync = this.$("#work_period_meal_job_sync").val() === "true";
     this.$("#meal-job-sync-settings").toggle(sync);
   }
 });

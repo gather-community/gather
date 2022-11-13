@@ -5,5 +5,4 @@ else
 fi
 echo "$files" | egrep '\.rb$' | xargs rubocop
 echo "$files" | egrep '\.(js|jsx)$' | xargs eslint --ext .js,.jsx
-echo "$files" | egrep '\.coffee$' | xargs coffeelint -q -f coffeelint.json
 echo "$files" | egrep '\.scss$' | xargs scss-lint -c .scss-lint.yml

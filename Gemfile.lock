@@ -644,7 +644,6 @@ DEPENDENCIES
   capybara (~> 3.29)
   chroma (~> 0.2)
   cocoon (~> 1.2)
-  coffee-rails (~> 5.0)
   config (~> 4.0)
   country_select (~> 4.0)
   daemons (~> 1.2)

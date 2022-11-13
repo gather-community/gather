@@ -14,7 +14,6 @@ gem "bootstrap-sass", "~> 3.4"
 gem "browser", "~> 2.5"
 gem "chroma", "~> 0.2"
 gem "cocoon", "~> 1.2"
-gem "coffee-rails", "~> 5.0"
 gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
     require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?

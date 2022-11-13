@@ -130,7 +130,6 @@ Once you have `nvm` and Node installed, the following lines should give you all 
 
 ```
 nvm use
-npm install -g coffeelint@2.1.0
 npm install -g eslint@4.17.0
 gem install rubocop -v 0.52.0
 gem install scss_lint -v 0.56.0

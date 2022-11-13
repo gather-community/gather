@@ -1,4 +1,4 @@
-Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Backbone.View {
+Gather.Views.GDrive.RootFolderPickerView = Backbone.View.extend({
   initialize(options) {
     this.appId = options.clientId.split("-")[0];
     this.accessToken = options.accessToken;
@@ -6,13 +6,11 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
     this.saveFolderUrl = options.saveFolderUrl;
     this.testMode = options.testMode;
     gapi.load("picker");
-  }
+  },
 
-  get events() {
-    return {
-      "click #pick-folder": "showPicker"
-    };
-  }
+  events: {
+    "click #pick-folder": "showPicker"
+  },
 
   showPicker() {
     /*
@@ -39,13 +37,13 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
       .setCallback(this.callback.bind(this))
       .build();
     picker.setVisible(true);
-  }
+  },
 
   callback(data) {
     if (data.action === google.picker.Action.PICKED) {
       this.saveFolder(data.docs[0].id);
     }
-  }
+  },
 
   saveFolder(id) {
     $.ajax({
@@ -55,4 +53,4 @@ Gather.Views.GDrive.RootFolderPickerView = class RootFolderPickerView extends Ba
       success: () => window.location.reload()
     });
   }
-};
+});

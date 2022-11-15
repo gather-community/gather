@@ -18,6 +18,8 @@ For both production and development environments:
 1. Ruby (see [.ruby-version file](.ruby-version) for exact version, [rbenv](https://github.com/sstephenson/rbenv) is recommended for Ruby version management)
 1. [Bundler](http://bundler.io/)
     1. Once Ruby is installed, run `gem install bundler` to install.
+1. Node.js (see [.nvmrc file](.nvmrc) for exact version, nvm is recommended for Node version management)
+1. Yarn (`npm install -g yarn`)
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
 1. Elasticsearch 6.2+ (search engine)

@@ -1,0 +1,3 @@
+web: bundle exec thin start --ssl --ssl-key-file config/ssl/gather.localhost.tv.key --ssl-cert-file config/ssl/gather.localhost.tv.crt
+js: yarn build --watch
+types: yarn check-types

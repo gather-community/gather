@@ -7,7 +7,7 @@
       data: {confirm: late_fee_confirm})) -%>
   <%- end -%>
   <%- if @statement_accounts -%>
-    <%- concat(link_to(icon_tag("send") << " Send Statements", generate_statements_path,
+    <%- concat(link_to(icon_tag("paper-plane") << " Send Statements", generate_statements_path,
       method: :post, class: "btn btn-primary", data: {confirm: statement_confirm_msg})) -%>
   <%- end %>
 <% end %>

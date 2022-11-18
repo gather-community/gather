@@ -42,7 +42,7 @@ module Gather
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
-    if Settings.error_reporting == "email"
+    if Rails.env.production? && Settings.error_reporting == "email"
       config.middleware.use(ExceptionNotification::Rack,
                             email: {
                               email_prefix: "[Gather ERROR] ",
@@ -73,7 +73,7 @@ module Gather
         authentication: Settings.smtp.authentication.presence&.to_sym,
         user_name: Settings.smtp.user_name.presence,
         password: Settings.smtp.password.presence,
-        enable_starttls_auto: Settings.smtp.enable_starttls_auto,
+        enable_starttls_auto: Settings.smtp.enable_starttls_auto
       }
     end
 

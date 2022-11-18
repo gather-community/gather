@@ -11,7 +11,7 @@
     <%= image_tag("logo-white.png", id: "logo") %>
     <div id="sign-in-btns">
 
-      <%= link_to(icon_tag("google") << " Sign in with Google",
+      <%= link_to(icon_tag("brands google") << " Sign in with Google",
             user_google_oauth2_omniauth_authorize_url(host: Settings.url.host, state: @invite_token),
             method: :post, id: "sign-in-btn", class: "btn btn-primary") %>
       <% if @invite_token %>

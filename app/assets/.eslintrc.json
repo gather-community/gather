@@ -1,0 +1,31 @@
+{
+  "env": {
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "globals": {
+    "$": "readonly",
+    "_": "readonly",
+    "alert": "readonly",
+    "Backbone": "readonly",
+    "clearInterval": "readonly",
+    "confirm": "readonly",
+    "console": "readonly",
+    "copyTextToClipboard": "readonly",
+    "d3": "readonly",
+    "document": "readonly",
+    "Dropzone": "readonly",
+    "Gather": "readonly",
+    "I18n": "readonly",
+    "moment": "readonly",
+    "navigator": "readonly",
+    "nv": "readonly",
+    "setInterval": "readonly",
+    "setTimeout": "readonly",
+    "URL": "readonly",
+    "window": "readonly"
+  },
+  "root": false
+}

@@ -62,6 +62,18 @@ jobs:
         # This doesn't work for yarn for some reason.
         if: steps.cache-gems.outputs.cache-hit != 'true'
         run: bundle install --jobs 4 --retry 3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install yarn
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install
+      - name: Build JS
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build
       - name: Setup test database
         run: |
           cp config/database.yml.ci config/database.yml

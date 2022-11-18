@@ -1,3 +1,4 @@
 url:
   protocol: https
   port: 443
+error_reporting: sentry

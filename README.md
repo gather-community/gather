@@ -18,6 +18,8 @@ For both production and development environments:
 1. Ruby (see [.ruby-version file](.ruby-version) for exact version, [rbenv](https://github.com/sstephenson/rbenv) is recommended for Ruby version management)
 1. [Bundler](http://bundler.io/)
     1. Once Ruby is installed, run `gem install bundler` to install.
+1. Node.js (see [.nvmrc file](.nvmrc) for exact version, nvm is recommended for Node version management)
+1. Yarn (`npm install -g yarn`)
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
 1. Elasticsearch 6.2+ (search engine)
@@ -81,7 +83,7 @@ Follow these steps to setup a development environment for Gather.
     1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gather.localhost.tv.crt`.
     2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
 1. Start the server
-    1. Run `. bin/server` (the leading `.` is important to ensure nvm loads the correct node version).
+    1. Run `bin/dev`.
     1. Leave this console open.
 1. Start DelayedJob
     1. Open a new console.
@@ -118,43 +120,7 @@ CACHE=1 rails server
 
 ## Linters
 
-Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer.
-
-### Setup
-
-Several linters require `npm` to install. We recommend [using `nvm`](https://github.com/creationix/nvm#installation) to manage your Node/npm versions. Note that `nvm` does NOT shim Node executables so `nvm use` is required to load the right Node versions in each new shell session.
-
-The below assume you have installed the Ruby and Node versions specified in `.ruby-version` and `.nvmrc` files, respectively.
-
-Once you have `nvm` and Node installed, the following lines should give you all the required linters:
-
-```
-nvm use
-npm install -g coffeelint@2.1.0
-npm install -g eslint@4.17.0
-gem install rubocop -v 0.52.0
-gem install scss_lint -v 0.56.0
-```
-
-### Running
-
-To lint your code, simply run:
-
-```
-bin/lint
-```
-
-This will examine any modified or untracked files in your working copy.
-
-To instead examine any new or modified files in your branch (not including uncommitted changes), run:
-
-```
-bin/lint --branch
-```
-
-The latter should be run before opening a pull request.
-
-As part of an effort to clean up old code, you should try to resolve any linter errors in files you touch, unless there are an overwhelming number of them. At bare minimum, the _lines_ you touch should not have any lint.
+Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer. We recommend eslint, rubocop, and scss_lint.
 
 ### Troubleshooting
 

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# Start development server with SSL cert. Run with `. bin/server` so that `nvm use` works properly.
-nvm use
-echo "**************************************************"
-echo "Access server at https://gather.localhost.tv:3000"
-echo "Run: tail -f log/development.log to see log"
-echo "**************************************************"
-bundle exec thin start --ssl --ssl-key-file config/ssl/gather.localhost.tv.key --ssl-cert-file config/ssl/gather.localhost.tv.crt

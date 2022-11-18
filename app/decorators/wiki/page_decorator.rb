@@ -50,7 +50,7 @@ module Wiki
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_wiki_page_path(object)),
-        ActionLink.new(object, :history, icon: "clock-o", path: h.history_wiki_page_path(object)),
+        ActionLink.new(object, :history, icon: "clock", path: h.history_wiki_page_path(object)),
         ActionLink.new(object, :destroy, icon: "trash", path: h.wiki_page_path(object),
                                          method: :delete, confirm: {title: title})
       )

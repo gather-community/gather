@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+  },
+  "include": [
+    "app/javascript/**/*.ts"
+  ]
+}

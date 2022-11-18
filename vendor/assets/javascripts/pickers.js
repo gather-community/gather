@@ -7,13 +7,13 @@
       // put here your custom picker options, that should be applied for all pickers
       icons: {
         date: 'fa fa-calendar',
-        time: 'fa fa-clock-o',
+        time: 'fa fa-clock',
         up: 'fa fa-chevron-up',
         down: 'fa fa-chevron-down',
         previous: 'fa fa-chevron-left',
         next: 'fa fa-chevron-right',
         today: 'fa fa-crosshairs',
-        clear: 'fa fa-trash-o',
+        clear: 'fa fa-trash',
         close: 'fa fa-times'
       },
       keyBinds: defaultKeyBinds

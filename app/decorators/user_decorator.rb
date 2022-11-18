@@ -109,9 +109,9 @@ class UserDecorator < ApplicationDecorator
 
   def preferred_contact_icon
     case object.preferred_contact
-    when "email" then "fa-envelope"
-    when "text" then "fa-comment"
-    when "phone" then "fa-phone"
+    when "email" then "envelope"
+    when "text" then "comment"
+    when "phone" then "phone"
     end
   end
 
@@ -137,7 +137,7 @@ class UserDecorator < ApplicationDecorator
     ActionLinkSet.new(
       ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
       ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object)),
-      ActionLink.new(object, :impersonate, icon: "user-circle-o", path: h.impersonate_user_path(object),
+      ActionLink.new(object, :impersonate, icon: "user-circle", path: h.impersonate_user_path(object),
                                            method: :post),
       ActionLink.new(object, :invite,
                      icon: "life-ring",

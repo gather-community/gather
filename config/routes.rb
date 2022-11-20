@@ -257,6 +257,7 @@ Rails.application.routes.draw do
     delete "auth/reset", to: "auth#reset", as: :auth_reset
 
     get "file-selection", to: "file_selection#index", as: :file_selection
+    put "file-selection/mark", to: "file_selection#mark", as: :mark_file_selection
   end
 
   namespace :work do

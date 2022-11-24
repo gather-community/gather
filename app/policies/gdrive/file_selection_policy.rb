@@ -10,7 +10,7 @@ module GDrive
       active_admin? && FeatureFlag.lookup(:gdrive).on?(user)
     end
 
-    def mark?
+    def ingest?
       index?
     end
   end

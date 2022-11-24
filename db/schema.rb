@@ -275,6 +275,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
     t.index ["google_id"], name: "index_gdrive_configs_on_google_id", unique: true
   end
 
+  create_table "gdrive_file_ingestion_batches", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "gdrive_config_id", null: false
+    t.jsonb "picked", null: false
+    t.string "status", default: "new", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_file_ingestion_batches_on_cluster_id"
+    t.index ["gdrive_config_id"], name: "index_gdrive_file_ingestion_batches_on_gdrive_config_id"
+  end
+
+  create_table "gdrive_unowned_files", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data", null: false
+    t.string "external_id", null: false
+    t.bigint "gdrive_config_id", null: false
+    t.string "owner", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_unowned_files_on_cluster_id"
+    t.index ["external_id"], name: "index_gdrive_unowned_files_on_external_id", unique: true
+    t.index ["gdrive_config_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id"
+  end
+
   create_table "group_affiliations", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -1031,6 +1055,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
   add_foreign_key "feature_flag_users", "users"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
+  add_foreign_key "gdrive_file_ingestion_batches", "clusters"
+  add_foreign_key "gdrive_file_ingestion_batches", "gdrive_configs"
+  add_foreign_key "gdrive_unowned_files", "clusters"
+  add_foreign_key "gdrive_unowned_files", "gdrive_configs"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

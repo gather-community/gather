@@ -5,7 +5,7 @@ module GDrive
     include GDriveable
 
     prepend_before_action :set_current_community_from_query_string
-    skip_before_action :verify_authenticity_token, only: :mark
+    skip_before_action :verify_authenticity_token, only: :ingest
     before_action -> { nav_context(:wiki, :gdrive, :setup, :file_selection) }
 
     def index
@@ -20,9 +20,13 @@ module GDrive
       end
     end
 
-    def mark
+    def ingest
       authorize(current_community, policy_class: FileSelectionPolicy)
-      puts "Item count: #{params[:docs].size}"
+      config = Config.find_by(community: current_community)
+      puts "Item count: #{params[:picked][:docs].size}"
+      batch = FileIngestionBatch.create!(gdrive_config: config, picked: params[:picked])
+      FileIngestionJob.perform_later(cluster_id: current_cluster.id, batch_id: batch.id)
+      render(json: {batch_id: batch.id})
     end
   end
 end

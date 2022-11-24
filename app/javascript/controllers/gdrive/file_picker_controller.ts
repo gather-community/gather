@@ -6,7 +6,7 @@ export default class extends Controller<HTMLFormElement> {
     apiKey: String,
     accessToken: String,
     rootFolderId: String,
-    markFilesUrl: String,
+    ingestFilesUrl: String,
     testMode: Boolean
   };
 
@@ -14,7 +14,7 @@ export default class extends Controller<HTMLFormElement> {
   declare apiKeyValue: string;
   declare accessTokenValue: string;
   declare rootFolderIdValue: string;
-  declare markFilesUrlValue: string;
+  declare ingestFilesUrlValue: string;
   declare testModeValue: boolean;
   declare gapiLoaded: boolean;
 
@@ -60,10 +60,10 @@ export default class extends Controller<HTMLFormElement> {
 
   callback(data: {docs:[{id: string}], action: string}): void {
     if (data.action === google.picker.Action.PICKED) {
-      fetch(this.markFilesUrlValue, {
+      fetch(this.ingestFilesUrlValue, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
+        body: JSON.stringify({picked: data})
       });
     }
   }

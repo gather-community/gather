@@ -295,7 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
     t.string "owner", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_unowned_files_on_cluster_id"
-    t.index ["external_id"], name: "index_gdrive_unowned_files_on_external_id", unique: true
+    t.index ["gdrive_config_id", "external_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id_and_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id"
   end
 

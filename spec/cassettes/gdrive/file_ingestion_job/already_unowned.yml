@@ -1,0 +1,211 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/1rewJdE-UySaFWHw0NpVfxmNGGOLsD6rbCUwkLjiLc5I?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 00:34:36 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 27 Nov 2022 00:34:36 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "id": "1rewJdE-UySaFWHw0NpVfxmNGGOLsD6rbCUwkLjiLc5I",
+         "name": "Touchstone Committee Payment Authorization",
+         "mimeType": "application/vnd.google-apps.form",
+         "owners": [
+          {
+           "emailAddress": "bar@gmail.com"
+          }
+         ]
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 00:34:36 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/0B3vqeGRChC_MV2VUbmdSbkpxVEU?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 00:34:36 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 27 Nov 2022 00:34:37 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "id": "0B3vqeGRChC_MV2VUbmdSbkpxVEU",
+         "name": "_DSF1341.jpg",
+         "mimeType": "image/jpeg",
+         "owners": [
+          {
+           "emailAddress": "foo@gmail.com"
+          }
+         ]
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 00:34:37 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?pageSize=1000&q=starred%20=%20false
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 00:34:37 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 27 Nov 2022 00:34:37 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "kind": "drive#fileList",
+         "incompleteSearch": false,
+         "files": []
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 00:34:37 GMT
+recorded_with: VCR 4.0.0

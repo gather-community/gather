@@ -279,6 +279,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "gdrive_config_id", null: false
+    t.jsonb "http_errors"
     t.jsonb "picked", null: false
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false

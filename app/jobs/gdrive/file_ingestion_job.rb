@@ -3,16 +3,20 @@
 module GDrive
   # Ingests selected files by starring them and noting any unowned files.
   class FileIngestionJob < ApplicationJob
-    attr_accessor :batch
+    attr_accessor :batch, :error_count
 
     delegate :gdrive_config, to: :batch
     delegate :community_id, to: :gdrive_config
 
+    MAX_ERRORS = 10
+
     def perform(cluster_id:, batch_id:)
       ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
         self.batch = FileIngestionBatch.find(batch_id)
+        self.error_count = 0
         batch.picked["docs"].each do |doc|
-          ingest_file(doc["id"])
+          ingest_file(doc["id"], pick_data: doc)
+          return if error_count >= MAX_ERRORS
         end
         star_any_unstarred_files
       end
@@ -20,7 +24,7 @@ module GDrive
 
     private
 
-    def ingest_file(file_id)
+    def ingest_file(file_id, pick_data: {}, from_unstarred_list: false)
       # This request may fail if the selected object was a shortcut and the user hadn't already picked
       # the target file. So we should handle that gracefully.
       # It could also lead to a duplicate insertion in the UnownedFile table if the target file HAS already
@@ -32,12 +36,22 @@ module GDrive
           Google::Apis::DriveV3::File.new(starred: true),
           fields: "id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)"
         )
+        remove_403_error_for_target_of_shortcut(file)
+        log_shortcut_details(file)
+        record_file_if_unowned(file)
       rescue => error
         ErrorReporter.instance.report(error, data: {file_id: file_id})
         Rails.logger.error("[GDrive] Error #{error.inspect} marking file #{file_id} as starred")
+
+        # If we have hit the (MAX_ERRORS + 1)th error, don't save it. We only report out MAX_ERRORS errors.
+        # We will stop processing in the main loop as soon as we return.
+        self.error_count += 1
+        return if error_count > MAX_ERRORS
+        batch.http_errors ||= []
+        batch.http_errors << {id: file_id, name: pick_data["name"], message: error.to_s}
+        batch.http_errors.last[:from_unstarred_list] = true if from_unstarred_list
+        batch.save!
       end
-      log_shortcut_details(file)
-      record_file_if_unowned(file)
     end
 
     def log_shortcut_details(file)
@@ -74,12 +88,23 @@ module GDrive
           Rails.logger.info("[GDrive] Ingesting #{result.files.size} unstarred but accessible files")
           result.files.each do |file|
             Rails.logger.info("[GDrive] File #{file.id} is accessible but not starred, ingesting")
-            ingest_file(file.id)
+            ingest_file(file.id, from_unstarred_list: true)
           end
         end
         break if result.next_page_token.nil?
         page_token = result.next_page_token
       end
+    end
+
+    # If we ingest a file and it is a shortcut to a file that we've just seen a 403 error for,
+    # we can assume the error was because the user actually selected the shortcut itself, so we don't
+    # report that error.
+    def remove_403_error_for_target_of_shortcut(file)
+      return unless file.mime_type == "application/vnd.google-apps.shortcut"
+      batch.http_errors.reject! do |error|
+        error["id"] == file.shortcut_details.target_id && error["message"].include?("access to the file")
+      end
+      batch.save!
     end
 
     def drive_service

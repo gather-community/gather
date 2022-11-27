@@ -41,6 +41,62 @@ describe GDrive::FileIngestionJob do
     end
   end
 
+  context "when there is an http error on adding star" do
+    let!(:batch) do
+      create(:gdrive_file_ingestion_batch,
+             gdrive_config: gdrive_config,
+             picked: {
+               "docs" => [
+                 {"id" => "123", "name" => "Foo File"},
+                 {"id" => "456", "name" => "Bar File"},
+                 {"id" => "789", "name" => "Baz File"}
+               ]
+             })
+    end
+    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, batch_id: batch.id) }
+
+    before do
+      stub_const("#{described_class.name}::MAX_ERRORS", 2)
+    end
+
+    it "continues processing, saves MAX_ERRORS errors" do
+      VCR.use_cassette("gdrive/file_ingestion_job/http_errors") do
+        perform_job
+        expect(GDrive::UnownedFile.count).to eq(0)
+        batch.reload
+        expect(batch.http_errors).to eq([
+          {"id" => "123", "name" => "Foo File", "message" => "Unauthorized"},
+          {"id" => "456", "name" => "Bar File", "message" => "Unauthorized"}
+        ])
+      end
+    end
+  end
+
+  context "when trying to ingest shortcut when we don't have access to target" do
+    let!(:batch) do
+      create(:gdrive_file_ingestion_batch,
+             gdrive_config: gdrive_config,
+             picked: {
+               "docs" => [
+                 # This is the ID of the target file, as that's what the Google Picker gives us.
+                 {"id" => "1H2S6WdUs7iVgs14ZRt_0xZybclzHy41Bl7rDC1Yqpyc"},
+                ]
+             })
+    end
+    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, batch_id: batch.id) }
+
+    it "does not error out, does not report error, saves shortcut as unowned" do
+      VCR.use_cassette("gdrive/file_ingestion_job/shortcut_no_access") do
+        perform_job
+        expect(GDrive::UnownedFile.count).to eq(1)
+        # This is the ID of the shortcut, not the target file
+        expect(GDrive::UnownedFile.first.external_id).to eq("1G8kly1IDekfawcu_tEr8f6vX7ckuBkXj")
+        batch.reload
+        expect(batch.http_errors).to be_empty
+      end
+    end
+  end
+
   context "with file already recorded as unowned" do
     let!(:unowned_file) do
       create(:gdrive_unowned_file, gdrive_config: gdrive_config,
@@ -58,7 +114,7 @@ describe GDrive::FileIngestionJob do
     end
     subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, batch_id: batch.id) }
 
-    it "does not error out" do
+    it "does not error out, does not report error" do
       VCR.use_cassette("gdrive/file_ingestion_job/already_unowned") do
         perform_job
         expect(GDrive::UnownedFile.count).to eq(2)

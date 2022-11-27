@@ -7,8 +7,7 @@ FactoryBot.define do
       # with a valid access_token taken from the development database.
       #
       # Once we have captured the request, remove the overridden values from the factory
-      # call, and in the cassette, replace them with the access token value below.
-      # Then the test will run again but no secrets will be committed.
+      # call. We can leave the valid access_token in the cassette because access tokens are short-lived.
       access_token do
         "xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx"
       end

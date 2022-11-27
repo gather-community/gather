@@ -20,7 +20,7 @@ http_interactions:
       Content-Type:
       - application/json
       Authorization:
-      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
   response:
     status:
       code: 200
@@ -91,7 +91,7 @@ http_interactions:
       Content-Type:
       - application/json
       Authorization:
-      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
   response:
     status:
       code: 200
@@ -160,7 +160,7 @@ http_interactions:
       X-Goog-Api-Client:
       - gl-ruby/2.7.5 gdcl/1.32.0
       Authorization:
-      - Bearer ya29.a0AeTM1ifNU64lWejUnGgoVR70JqTYxnariqzM6nypqlJOHGqZdr3RLgRk90oR-FjGz6LlNMkN7vHKzUN6KBBmSGcc1qZ_tWsuYCnChpy6Ht7y42zY0UO1FeblhK6bPP2QDI4LvKcibFDefKvn7GP5TqAVGjiBIAaCgYKAYoSARESFQHWtWOmFj4ZbZsGyEjp2ZExX0eOxw0165
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
       Content-Type:
       - application/x-www-form-urlencoded
   response:

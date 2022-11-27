@@ -3,7 +3,7 @@
 module GDrive
   # Ingests selected files by starring them and noting any unowned files.
   class FileIngestionJob < ApplicationJob
-    attr_accessor :batch, :error_count
+    attr_accessor :batch, :wrapper, :error_count
 
     delegate :gdrive_config, to: :batch
     delegate :community_id, to: :gdrive_config
@@ -13,6 +13,7 @@ module GDrive
     def perform(cluster_id:, batch_id:)
       ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
         self.batch = FileIngestionBatch.find(batch_id)
+        self.wrapper = Wrapper.new(community_id: community_id)
         self.error_count = 0
         batch.picked["docs"].each do |doc|
           ingest_file(doc["id"], pick_data: doc)
@@ -31,7 +32,7 @@ module GDrive
       # been picked. So we need to handle that gracefully too.
       Rails.logger.info("[GDrive] Marking file #{file_id} as starred")
       begin
-        file = drive_service.update_file(
+        file = wrapper.service.update_file(
           file_id,
           Google::Apis::DriveV3::File.new(starred: true),
           fields: "id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)"
@@ -83,7 +84,7 @@ module GDrive
     def star_any_unstarred_files
       page_token = nil
       loop do
-        result = drive_service.list_files(q: "starred = false", page_size: 1000, page_token: page_token)
+        result = wrapper.service.list_files(q: "starred = false", page_size: 1000, page_token: page_token)
         if result.files.any?
           Rails.logger.info("[GDrive] Ingesting #{result.files.size} unstarred but accessible files")
           result.files.each do |file|
@@ -105,26 +106,6 @@ module GDrive
         error["id"] == file.shortcut_details.target_id && error["message"].include?("access to the file")
       end
       batch.save!
-    end
-
-    def drive_service
-      return @drive_service if @drive_service
-
-      auth_settings = Settings.gdrive.auth
-      client_id = Google::Auth::ClientId.new(auth_settings.client_id, auth_settings.client_secret)
-      scope = [
-        "https://www.googleapis.com/auth/drive.file",
-        "https://www.googleapis.com/auth/userinfo.email"
-      ]
-      token_store = GDrive::TokenStore.new
-      authorizer = Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
-      credentials = authorizer.get_credentials(community_id)
-
-      raise Google::Apis::AuthorizationError, "No valid credentials stored" if credentials.nil?
-
-      @drive_service = Google::Apis::DriveV3::DriveService.new
-      @drive_service.authorization = credentials
-      @drive_service
     end
   end
 end

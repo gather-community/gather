@@ -8,8 +8,6 @@ require "net/http"
 
 module GDrive
   class AuthController < ApplicationController
-    include GDriveable
-
     USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
     before_action -> { nav_context(:wiki, :gdrive, :setup, :auth) }
@@ -23,11 +21,12 @@ module GDrive
     def index
       skip_policy_scope
       authorize(current_community, policy_class: GDrive::AuthPolicy)
-      credentials = fetch_credentials_from_store
+      wrapper = Wrapper.new(community_id: current_community.id, callback_url: callback_url)
+      credentials = wrapper.fetch_credentials_from_store
       @config = Config.find_by(community: current_community)
       if @config.nil?
         @no_config = true
-        setup_auth_url
+        setup_auth_url(wrapper: wrapper)
       elsif @config.folder_id.nil?
         # Ensure we have a fresh token in case the user wants to use the picker.
         credentials.fetch_access_token!
@@ -35,13 +34,13 @@ module GDrive
         @access_token = credentials.access_token
       else
         begin
-          folder = drive_service.get_file(@config.folder_id)
+          folder = wrapper.service.get_file(@config.folder_id)
           @folder_name = folder.name
         rescue Google::Apis::ServerError
           flash.now[:error] = "There was a server error when connecting to Google Drive. "\
             "Please try again in a few minutes."
         rescue Google::Apis::AuthorizationError
-          setup_auth_url(config: @config)
+          setup_auth_url(wrapper: wrapper, config: @config)
           flash.now[:error] = "There was an authorization error when connecting to Google Drive. "\
             "You can try to <a href=\"#{@auth_url}\">Authenticate With Google</a> again.".html_safe
         rescue Google::Apis::ClientError => error
@@ -58,6 +57,8 @@ module GDrive
     def callback
       authorize(current_community, policy_class: GDrive::AuthPolicy)
 
+      # @redirect_uri is set in set_current_community_from_callback_state
+      # We call it up here since we still want to redirect if the following guard clause is true.
       redirect_to(@redirect_uri)
 
       if params[:error] == "access_denied"
@@ -65,9 +66,10 @@ module GDrive
         return
       end
 
-      credentials = fetch_credentials_from_callback_request(request)
+      wrapper = Wrapper.new(community_id: current_community.id, callback_url: callback_url)
+      credentials = fetch_credentials_from_callback_request(wrapper, request)
       authenticated_google_id = fetch_email_of_authenticated_account(credentials)
-      update_config(credentials, authenticated_google_id)
+      update_config(wrapper, credentials, authenticated_google_id)
     end
 
     def save_folder
@@ -84,6 +86,10 @@ module GDrive
 
     private
 
+    def callback_url
+      gdrive_auth_callback_url(host: Settings.url.host)
+    end
+
     def stub_g_xsrf_token_in_session
       request.session["g-xsrf-token"] = ENV["STUB_SESSION_G_XSRF_TOKEN"]
     end
@@ -97,9 +103,9 @@ module GDrive
       # we call validate right after. The purpose of this before_action is just to set the current_community.
     end
 
-    def fetch_credentials_from_callback_request(request)
+    def fetch_credentials_from_callback_request(wrapper, request)
       Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
-      authorizer.get_credentials_from_code(
+      wrapper.authorizer.get_credentials_from_code(
         user_id:  current_community.id,
         code:     @callback_state[Google::Auth::WebUserAuthorizer::AUTH_CODE_KEY],
         scope:    @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
@@ -107,10 +113,10 @@ module GDrive
       )
     end
 
-    def setup_auth_url(config: nil)
+    def setup_auth_url(wrapper:, config: nil)
       state = {community_id: current_community.id}
-      @auth_url = authorizer.get_authorization_url(login_hint: config&.google_id, request: request,
-                                                   state: state)
+      @auth_url = wrapper.authorizer.get_authorization_url(login_hint: config&.google_id, request: request,
+                                                           state: state)
     end
 
     def fetch_email_of_authenticated_account(credentials)
@@ -119,7 +125,7 @@ module GDrive
       authenticated_google_id = JSON.parse(res.body)["email"]
     end
 
-    def update_config(credentials, authenticated_google_id)
+    def update_config(wrapper, credentials, authenticated_google_id)
       if (config = Config.find_by(community: current_community))
         if config.google_id != authenticated_google_id
           flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
@@ -132,7 +138,7 @@ module GDrive
       else
         Config.create!(community: current_community, google_id: authenticated_google_id)
       end
-      @authorizer.store_credentials(current_community.id, credentials)
+      wrapper.authorizer.store_credentials(current_community.id, credentials)
     end
   end
 end

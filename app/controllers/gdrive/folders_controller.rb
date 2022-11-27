@@ -2,8 +2,6 @@
 
 module GDrive
   class FoldersController < ApplicationController
-    include GDriveable
-
     before_action -> { nav_context(:wiki, :gdrive) }
 
     def show
@@ -12,21 +10,22 @@ module GDrive
       @auth_policy = GDrive::AuthPolicy.new(current_user, current_community)
       if @config&.complete?
         folder_id = params[:folder_id].presence || @config.folder_id
-        @ancestors = find_ancestors(folder_id)
-        @file_list = drive_service.list_files(q: "'#{folder_id}' in parents",
-                                              fields: "files(id,name,mimeType,iconLink,webViewLink)",
-                                              order_by: "folder,name")
+        wrapper = Wrapper.new(community_id: current_community.id)
+        @ancestors = find_ancestors(wrapper, folder_id)
+        @file_list = wrapper.service.list_files(q: "'#{folder_id}' in parents",
+                                                fields: "files(id,name,mimeType,iconLink,webViewLink)",
+                                                order_by: "folder,name")
       end
     end
 
     private
 
-    def find_ancestors(folder_id)
+    def find_ancestors(wrapper, folder_id)
       ancestors = []
       ancestor_id = folder_id
       loop do
         break if ancestor_id == @config.folder_id
-        ancestors.unshift(drive_service.get_file(ancestor_id, fields: "id,name,parents"))
+        ancestors.unshift(wrapper.service.get_file(ancestor_id, fields: "id,name,parents"))
         ancestor_id = ancestors.first.parents[0]
       end
       ancestors

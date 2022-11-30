@@ -14,6 +14,8 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
                               FeatureFlag
                               FeatureFlagUser
                               GDrive::Config
+                              GDrive::FileIngestionBatch
+                              GDrive::UnownedFile
                               Groups::Mailman::List
                               Groups::Mailman::User
                               Meals::Import

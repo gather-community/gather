@@ -30,14 +30,6 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   showPicker(): void {
-    /*
-     * In test env, we can't call out to the picker so we just short circuit
-     * and pretend we selected some random folder ID.
-     */
-    if (this.testModeValue) {
-      // this.saveFolder("xxxxxxxxZC4JyX21yUUwxxxxxxxx");
-    }
-
     const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
     view.setIncludeFolders(true);
     view.setSelectFolderEnabled(true);

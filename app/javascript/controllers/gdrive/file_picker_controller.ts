@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
+import {jsonFetch} from "../../utils/json_fetch";
 
 export default class extends Controller<HTMLFormElement> {
   static values = {
@@ -60,10 +61,9 @@ export default class extends Controller<HTMLFormElement> {
 
   callback(data: {docs:[{id: string}], action: string}): void {
     if (data.action === google.picker.Action.PICKED) {
-      fetch(this.ingestFilesUrlValue, {
+      jsonFetch(this.ingestFilesUrlValue, {
         method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({picked: data})
+        body: {picked: data}
       });
     }
   }

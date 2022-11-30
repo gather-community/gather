@@ -3,7 +3,6 @@
 module GDrive
   class FileSelectionController < ApplicationController
     prepend_before_action :set_current_community_from_query_string
-    skip_before_action :verify_authenticity_token, only: :ingest
     before_action -> { nav_context(:wiki, :gdrive, :setup, :file_selection) }
 
     def index

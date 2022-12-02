@@ -26,7 +26,7 @@
             </td>
             <td><%= formula.pantry_fee_formatted %></td>
           </tr>
-          <% if cost.present? && policy(meal).show_reimbursement_details? %>
+          <% if cost.persisted? && policy(meal).show_reimbursement_details? %>
             <% if formula.pantry_reimbursement? %>
               <%# This is in here because without context an average
                   user might think it's related to pantry fee. %>

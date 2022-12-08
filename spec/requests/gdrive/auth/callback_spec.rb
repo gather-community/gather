@@ -48,7 +48,7 @@ describe "gdrive auth callback" do
           with_default_tenant do
             config = GDrive::Config.find_by(community: Defaults.community)
             expect(config.token).to match(/xxxxxxxxRrdaM_ejqXa0Fx7v97ybEf1R/)
-            expect(config.google_id).to eq("tscohotech@gmail.com")
+            expect(config.org_user_id).to eq("tscohotech@gmail.com")
           end
         end
       end
@@ -62,7 +62,7 @@ describe "gdrive auth callback" do
 
     context "when google ID already taken by other community" do
       let!(:config) do
-        create(:gdrive_config, community: create(:community), google_id: "tscohotech@gmail.com")
+        create(:gdrive_config, community: create(:community), org_user_id: "tscohotech@gmail.com")
       end
 
       it "redirects with error" do
@@ -80,12 +80,12 @@ describe "gdrive auth callback" do
 
   context "when credentials are saved" do
     context "when authenticated google ID matches stored config" do
-      let!(:config) { create(:gdrive_config, google_id: "tscohotech@gmail.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "tscohotech@gmail.com") }
       it_behaves_like "stores credentials and redirects"
     end
 
     context "when authenticated google ID does not match stored config" do
-      let!(:config) { create(:gdrive_config, google_id: "foo@gmail.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "foo@gmail.com") }
 
       it "redirects with error" do
         with_env("STUB_SESSION_G_XSRF_TOKEN" => "P5JPu/n1QyYvkdEr3zgyHQ==") do

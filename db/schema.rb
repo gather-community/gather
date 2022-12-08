@@ -267,12 +267,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "folder_id", limit: 128
-    t.string "google_id", limit: 255, null: false
+    t.string "org_user_id", limit: 255, null: false
     t.string "token", limit: 2048
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id"], name: "index_gdrive_configs_on_community_id", unique: true
-    t.index ["google_id"], name: "index_gdrive_configs_on_google_id", unique: true
+    t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id", unique: true
   end
 
   create_table "gdrive_file_ingestion_batches", force: :cascade do |t|

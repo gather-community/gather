@@ -17,7 +17,7 @@ FactoryBot.define do
       expiration_time_millis { (Time.now + 1.day).to_i * 1000 }
     end
     community { Defaults.community }
-    google_id { "abc123@gmail.com" }
+    org_user_id { "abc123@gmail.com" }
     token do
       {
         # This is not a secret.

@@ -116,7 +116,7 @@ module GDrive
 
       def setup_auth_url(wrapper:, config: nil)
         state = {community_id: current_community.id}
-        @auth_url = wrapper.authorizer.get_authorization_url(login_hint: config&.google_id, request: request,
+        @auth_url = wrapper.authorizer.get_authorization_url(login_hint: config&.org_user_id, request: request,
                                                              state: state)
       end
 
@@ -128,16 +128,16 @@ module GDrive
 
       def update_config(wrapper, credentials, authenticated_google_id)
         if (config = Config.find_by(community: current_community))
-          if config.google_id != authenticated_google_id
+          if config.org_user_id != authenticated_google_id
             flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
-              "Please sign in with #{config.google_id} instead."
+              "Please sign in with #{config.org_user_id} instead."
             return
           end
-        elsif Config.where(google_id: authenticated_google_id).exists?
+        elsif Config.where(org_user_id: authenticated_google_id).exists?
           flash[:error] = "The Google ID #{authenticated_google_id} is in use by another community."
           return
         else
-          Config.create!(community: current_community, google_id: authenticated_google_id)
+          Config.create!(community: current_community, org_user_id: authenticated_google_id)
         end
         wrapper.authorizer.store_credentials(current_community.id, credentials)
       end

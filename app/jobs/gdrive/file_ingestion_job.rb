@@ -61,7 +61,7 @@ module GDrive
     end
 
     def record_file_if_unowned(file)
-      return if file.owners.any? { |o| o.email_address == gdrive_config.google_id }
+      return if file.owners.any? { |o| o.email_address == gdrive_config.org_user_id }
       owners = file.owners.map(&:email_address).join(",")
       Rails.logger.info("[GDrive] File #{file.id} is owned by #{owners}, saving record")
       unowned_file = UnownedFile.create_with(

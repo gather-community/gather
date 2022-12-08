@@ -6,7 +6,7 @@
     data-gdrive--file-picker-api-key-value="<%= Settings.gdrive.auth.api_key %>"
     data-gdrive--file-picker-access-token-value="<%= @access_token %>"
     data-gdrive--file-picker-root-folder-id="<%= @config.folder_id %>"
-    data-gdrive--file-picker-ingest-files-url-value="<%= gdrive_ingest_file_selection_url(
+    data-gdrive--file-picker-ingest-files-url-value="<%= gdrive_migration_ingest_file_selection_url(
       host: Settings.url.host, community_id: current_community.id) %>"
     data-gdrive--file-picker-test-mode-value="<%= Rails.env.test? %>"
     >

@@ -51,7 +51,7 @@
       data-gdrive--root-picker-client-id-value="<%= Settings.gdrive.auth.client_id %>"
       data-gdrive--root-picker-api-key-value="<%= Settings.gdrive.auth.api_key %>"
       data-gdrive--root-picker-access-token-value="<%= @access_token %>"
-      data-gdrive--root-picker-save-folder-url-value="<%= gdrive_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id) %>"
+      data-gdrive--root-picker-save-folder-url-value="<%= gdrive_migration_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id) %>"
       data-gdrive--root-picker-test-mode-value="<%= Rails.env.test? %>"
       >
       <button data-action="gdrive--root-picker#showPicker"
@@ -73,13 +73,13 @@
   </table>
   <br/>
   <%= link_to("Proceed to Select Files",
-        gdrive_file_selection_url(host: Settings.url.host, community_id: current_community.id),
+        gdrive_migration_file_selection_url(host: Settings.url.host, community_id: current_community.id),
         class: "btn btn-primary") %>
 <% end %>
 
 <% if @config %>
   <footer id="local-footer" class="footer-links">
-    <%= link_to("Reset Connection", gdrive_auth_reset_path(community_id: current_community.id),
+    <%= link_to("Reset Connection", gdrive_migration_auth_reset_path(community_id: current_community.id),
                 data: {
                   method: :delete,
                   confirm: "Are you sure you want to reset your community's connection to Google Drive? Any in-process ownership transfers will be aborted."

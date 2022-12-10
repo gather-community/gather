@@ -17,11 +17,14 @@ FactoryBot.define do
       expiration_time_millis { (Time.now + 1.day).to_i * 1000 }
     end
     community { Defaults.community }
+    client_id { "xxxxxxxxxxxxxx-qufsbvlpl758tmfv217tlq2qf30haflo.apps.googleusercontent.com" }
+    client_secret { "xxxxxxxx" }
+    api_key { "xxxxxxxx" }
     org_user_id { "abc123@gmail.com" }
     token do
       {
         # This is not a secret.
-        client_id: "302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com",
+        client_id: "xxxxxxxxxxxxxx-qufsbvlpl758tmfv217tlq2qf30haflo.apps.googleusercontent.com",
         access_token: access_token,
         refresh_token: refresh_token,
         scope: [

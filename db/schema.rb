@@ -263,6 +263,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
+    t.string "api_key", null: false
+    t.string "client_id", null: false
+    t.string "client_secret", null: false
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false

@@ -22,11 +22,13 @@ module GDrive
       def index
         skip_policy_scope
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        wrapper = Wrapper.new(community_id: current_community.id, callback_url: callback_url)
-        credentials = wrapper.fetch_credentials_from_store
         @config = Config.find_by(community: current_community)
+        wrapper = Wrapper.new(config: @config, callback_url: callback_url)
+        credentials = wrapper.fetch_credentials_from_store
         if @config.nil?
-          @no_config = true
+          raise "no config"
+        elsif @config.token.nil?
+          @no_auth = true
           setup_auth_url(wrapper: wrapper)
         elsif @config.folder_id.nil?
           # Ensure we have a fresh token in case the user wants to use the picker.
@@ -67,10 +69,16 @@ module GDrive
           return
         end
 
-        wrapper = Wrapper.new(community_id: current_community.id, callback_url: callback_url)
+        config = Config.find_by(community: current_community)
+        wrapper = Wrapper.new(config: config, callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
-        update_config(wrapper, credentials, authenticated_google_id)
+        if config.org_user_id != authenticated_google_id
+          flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
+            "Please sign in with #{config.org_user_id} instead."
+          return
+        end
+        wrapper.authorizer.store_credentials(current_community.id, credentials)
       end
 
       def save_folder
@@ -81,7 +89,7 @@ module GDrive
 
       def reset
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        Config.find_by(community: current_community)&.destroy
+        Config.find_by(community: current_community).update!(token: nil)
         redirect_to(gdrive_migration_auth_path(community_id: current_community.id))
       end
 
@@ -124,22 +132,6 @@ module GDrive
         uri = URI("#{USERINFO_URL}#{credentials.access_token}")
         res = Net::HTTP.get_response(uri)
         authenticated_google_id = JSON.parse(res.body)["email"]
-      end
-
-      def update_config(wrapper, credentials, authenticated_google_id)
-        if (config = Config.find_by(community: current_community))
-          if config.org_user_id != authenticated_google_id
-            flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
-              "Please sign in with #{config.org_user_id} instead."
-            return
-          end
-        elsif Config.where(org_user_id: authenticated_google_id).exists?
-          flash[:error] = "The Google ID #{authenticated_google_id} is in use by another community."
-          return
-        else
-          Config.create!(community: current_community, org_user_id: authenticated_google_id)
-        end
-        wrapper.authorizer.store_credentials(current_community.id, credentials)
       end
     end
   end

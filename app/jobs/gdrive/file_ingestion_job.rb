@@ -3,7 +3,7 @@
 module GDrive
   # Ingests selected files by starring them and noting any unowned files.
   class FileIngestionJob < ApplicationJob
-    attr_accessor :batch, :wrapper, :error_count
+    attr_accessor :batch, :config, :wrapper, :error_count
 
     delegate :gdrive_config, to: :batch
     delegate :community_id, to: :gdrive_config
@@ -13,7 +13,8 @@ module GDrive
     def perform(cluster_id:, batch_id:)
       ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
         self.batch = FileIngestionBatch.find(batch_id)
-        self.wrapper = Wrapper.new(community_id: community_id)
+        self.config = Config.find_by(community_id: community_id)
+        self.wrapper = Wrapper.new(config: config)
         self.error_count = 0
         batch.picked["docs"].each do |doc|
           ingest_file(doc["id"], pick_data: doc)

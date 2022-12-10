@@ -12,7 +12,7 @@ module GDrive
         @config = Config.find_by(community: current_community)
         @auth_policy = AuthPolicy.new(current_user, current_community)
         if @config&.complete?
-          @access_token = Wrapper.new(community_id: current_community.id).fresh_access_token
+          @access_token = Wrapper.new(config: @config).fresh_access_token
         end
       end
 

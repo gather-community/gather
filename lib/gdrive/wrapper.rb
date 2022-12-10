@@ -2,12 +2,13 @@
 
 module GDrive
   class Wrapper
-    attr_accessor :community_id, :callback_url
+    attr_accessor :config, :callback_url
 
     # callback_url is only required if you're planning to call get_authorization_url
     # or get_credentials_from_code on the WebUserAuthorizer object.
-    def initialize(community_id:, callback_url: nil)
-      self.community_id = community_id
+    def initialize(config:, callback_url: nil)
+      raise ArgumentError, "config cannot be nil" if config.nil?
+      self.config = config
       self.callback_url = callback_url
     end
 
@@ -25,15 +26,15 @@ module GDrive
     end
 
     def fetch_credentials_from_store
-      authorizer.get_credentials(community_id.to_s)
+      authorizer.get_credentials(config.community_id.to_s)
     end
 
     def authorizer
       return @authorizer if @authorizer
       auth_settings = Settings.gdrive.auth
-      client_id = Google::Auth::ClientId.new(auth_settings.client_id, auth_settings.client_secret)
+      client_id = Google::Auth::ClientId.new(config.client_id, config.client_secret)
       scope = [
-        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive",
         "https://www.googleapis.com/auth/userinfo.email"
       ]
       token_store = TokenStore.new

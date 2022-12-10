@@ -4,7 +4,8 @@ require "rails_helper"
 
 describe GDrive::Config do
   it "has valid factory" do
-    create(:gdrive_config)
+    create(:gdrive_main_config, org_user_id: "a@example.com")
+    create(:gdrive_migration_config, org_user_id: "b@example.com")
   end
 
   # Our approach to destruction is to:
@@ -19,7 +20,7 @@ describe GDrive::Config do
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
   describe "destruction" do
-    let!(:config) { create(:gdrive_config) }
+    let!(:config) { create(:gdrive_migration_config) }
 
     context "with file ingestion batch" do
       let!(:batch) { create(:gdrive_file_ingestion_batch, gdrive_config: config) }

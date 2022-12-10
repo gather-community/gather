@@ -5,7 +5,7 @@ require "rails_helper"
 describe GDrive::FileIngestionJob do
   include_context "jobs"
 
-  let!(:gdrive_config) { create(:gdrive_config) }
+  let!(:gdrive_config) { create(:gdrive_migration_config) }
 
   context "happy path" do
     let!(:batch) do

@@ -14,7 +14,7 @@ describe "gdrive browse", js: true do
   end
 
   context "when saved credentials and folder are present" do
-    let!(:gdrive_config) { create(:gdrive_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYlU") }
+    let!(:gdrive_config) { create(:gdrive_main_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYlU") }
 
     scenario "it shows files" do
       VCR.use_cassette("gdrive/folders/creds_and_folder_present/success") do
@@ -34,7 +34,7 @@ describe "gdrive browse", js: true do
   end
 
   context "when saved credentials are not present" do
-    let!(:gdrive_config) { create(:gdrive_config, folder_id: nil) }
+    let!(:gdrive_config) { create(:gdrive_main_config, folder_id: nil) }
 
     scenario "it shows message" do
       visit(gdrive_home_path)

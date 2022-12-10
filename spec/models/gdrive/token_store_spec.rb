@@ -7,7 +7,7 @@ describe GDrive::TokenStore do
 
   describe "#store" do
     it "updates the token" do
-      config = create(:gdrive_config, community: community)
+      config = create(:gdrive_main_config, community: community)
       described_class.new.store(community.id.to_s, "atoken")
       expect(config.reload.token).to eq("atoken")
     end
@@ -20,7 +20,7 @@ describe GDrive::TokenStore do
   end
 
   describe "#load" do
-    let!(:config) { create(:gdrive_config, community: community, token: "atoken") }
+    let!(:config) { create(:gdrive_main_config, community: community, token: "atoken") }
 
     it "loads the token" do
       expect(described_class.new.load(community.id.to_s)).to eq("atoken")
@@ -32,7 +32,7 @@ describe GDrive::TokenStore do
   end
 
   describe "#delete" do
-    let!(:config) { create(:gdrive_config, community: community, token: "atoken") }
+    let!(:config) { create(:gdrive_main_config, community: community, token: "atoken") }
 
     it "deletes the config" do
       described_class.new.delete(community.id.to_s)

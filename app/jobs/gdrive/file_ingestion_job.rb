@@ -13,7 +13,7 @@ module GDrive
     def perform(cluster_id:, batch_id:)
       ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
         self.batch = FileIngestionBatch.find(batch_id)
-        self.config = Config.find_by(community_id: community_id)
+        self.config = MigrationConfig.find_by(community_id: community_id)
         self.wrapper = Wrapper.new(config: config)
         self.error_count = 0
         batch.picked["docs"].each do |doc|

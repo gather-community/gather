@@ -22,7 +22,7 @@ module GDrive
       def index
         skip_policy_scope
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        @config = Config.find_by(community: current_community)
+        @config = MigrationConfig.find_by!(community: current_community)
         wrapper = Wrapper.new(config: @config, callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
         if @config.nil?
@@ -69,7 +69,7 @@ module GDrive
           return
         end
 
-        config = Config.find_by(community: current_community)
+        config = MigrationConfig.find_by!(community: current_community)
         wrapper = Wrapper.new(config: config, callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
@@ -83,13 +83,13 @@ module GDrive
 
       def save_folder
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        Config.find_by!(community: current_community).update!(folder_id: params[:folder_id])
+        MigrationConfig.find_by!(community: current_community).update!(folder_id: params[:folder_id])
         head(:ok)
       end
 
       def reset
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        Config.find_by(community: current_community).update!(token: nil)
+        MigrationConfig.find_by!(community: current_community).update!(token: nil)
         redirect_to(gdrive_migration_auth_path(community_id: current_community.id))
       end
 

@@ -276,7 +276,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_132012) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
-    t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id", unique: true
+    t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
   end
 
   create_table "gdrive_file_ingestion_batches", force: :cascade do |t|

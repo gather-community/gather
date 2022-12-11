@@ -37,7 +37,7 @@ module GDrive
         "https://www.googleapis.com/auth/drive",
         "https://www.googleapis.com/auth/userinfo.email"
       ]
-      token_store = TokenStore.new
+      token_store = TokenStore.new(klass: config.klass)
       @authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store, callback_url)
     end
   end

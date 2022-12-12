@@ -1,0 +1,19 @@
+<div class="row" id="user-forms">
+  <% if policy(@user).update_info? %>
+    <%= render("full_form") %>
+  <% elsif policy(@user).update_photo? %>
+    <%= render("photo_only_form") %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.AjaxSelect2({el: '.user-form'});
+    window.uploadView = new Gather.Views.FileUploadView(<%=json(
+      el: '#user-forms',
+      maxSize: @max_photo_size
+    )%>);
+    new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
+    new Gather.Views.UserFormView({el: '.user-form'});
+  });
+<% end %>

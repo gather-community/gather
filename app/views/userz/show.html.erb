@@ -1,0 +1,127 @@
+<% content_for(:title, user.name) %>
+<% content_for(:action_links, user.action_links) %>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <%= user.photo_if_permitted(:medium) %>
+        <% user.roles.each do |role| %>
+          <div class="pill pill-normal"><%= icon_tag("star") %> <%= t("roles.#{role.name}") %></div>
+        <% end %>
+        <% @memberships.each do |mship| %>
+          <% icon = mship.manager? ? "users-cog" : "users" %>
+          <%= link_to(icon_tag(icon) << " " << mship.group_name, mship.group, class: "pill pill-normal") %>
+        <% end %>
+      </div>
+      <div class="col-sm-8">
+        <table class="key-value key-value-full">
+          <%= render("households/unit_community", household: user.household) %>
+          <% if user.email? %>
+            <tr>
+              <td>Email</td>
+              <td>
+                <%= user.email_link %>
+                <% if user.unconfirmed_email? && policy(user).update_info? %>
+                  <br/>
+                  <em>
+                    Pending confirmation: <%= user.unconfirmed_email %><br/>
+                    <%= link_to("Resend confirmation instructions",
+                          resend_email_confirmation_user_path(@user), method: :put) %> |
+                    <%= link_to("Cancel change",
+                          cancel_email_change_user_path(@user), method: :delete) %>
+                  </em>
+                <% elsif !user.confirmed? %>
+                  <div class="small">
+                    * This address has not yet been confirmed, use with caution.
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% unless user.no_phones? %>
+            <tr>
+              <td>Phone</td>
+              <td class="phones">
+                <%= safe_join(user.phones.map{ |p| phone_link(p, kind_abbrv: true) }, tag(:br)) %>
+              </td>
+            </tr>
+          <% end %>
+          <% if user.preferred_contact %>
+            <tr>
+              <td>Preferred Contact Method</td>
+              <td><%= t("simple_form.options.user.preferred_contact.#{user.preferred_contact}") %></td>
+            </tr>
+          <% end %>
+          <% if policy(user).show_personal_info? %>
+            <% if user.birthday? %>
+              <tr>
+                <td>Birthday</td>
+                <td><%= user.birthday_formatted %></td>
+              </tr>
+            <% end %>
+            <% if user.age.present? %>
+              <tr>
+                <td>Age</td>
+                <td><%= user.age %></td>
+              </tr>
+            <% end %>
+            <% if user.joined_on.present? %>
+              <tr>
+                <td>Join Date</td>
+                <td><%= user.joined_on %></td>
+              </tr>
+            <% end %>
+            <% %i(school allergies doctor medical).each do |attr| %>
+              <% if user[attr].present? %>
+                <tr>
+                  <td><%= User.human_attribute_name(attr) %></td>
+                  <td><%= user[attr] %></td>
+                </tr>
+              <% end %>
+            <% end %>
+            <% unless @user.custom_data.undefined? %>
+              <%= render("custom_fields/group_entry_show", group_entry: @user.custom_data,
+                                                            hide_title: true) %>
+            <% end %>
+          <% end %>
+          <% @households_and_members.each do |household, members| %>
+            <%= render("households/attribs",
+                  household: household,
+                  members: members,
+                  context: :user,
+                  child: user.child?) %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <% if head_cook_meals.any? %>
+          <h2>Past Head Cook Meals</h2>
+          <table class="index part-width">
+            <tr>
+              <th class="col-md-1">Date</th>
+              <th class="col-md-3">Title</th>
+              <th class="col-md-1">Signups</th>
+            </tr>
+            <% head_cook_meals.each do |meal| %>
+              <tr>
+                <td class="col-md-1">
+                  <%= l(meal.served_at.to_date) %>
+                </td>
+                <td class="col-md-3">
+                  <%= link_to(meal.title_or_no_title, meal_url(meal)) %>
+                </td>
+                <td class="col-md-1">
+                  <%= meal.signup_count %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

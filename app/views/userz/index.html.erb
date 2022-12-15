@@ -57,19 +57,10 @@
     </div>
   <% else %>
     <div id="directory-album" class="flowing-columns-max-3 hidden-print">
-      <% users[0...1].each do |user| %>
+      <% users.each do |user| %>
         <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
           <div class="photo-wrapper">
             <%= link_to(user.photo_if_permitted(:thumb), user) %>
-          </div>
-          <div class="info">
-            <% if user.preferred_contact.present? %>
-              <%= icon_tag(user.preferred_contact_icon,
-                class: "preferred-contact", title: user.preferred_contact_tooltip) %>
-            <% end %>
-            <div><%= link_to(user.name, user) %></div>
-            <div class="email"><%= user.email_link if user.email %></div>
-            <div class="unit-phone"><%= user.unit_and_phone %></div>
           </div>
         </div>
       <% end %>

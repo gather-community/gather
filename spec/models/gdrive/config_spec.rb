@@ -22,6 +22,16 @@ describe GDrive::Config do
   describe "destruction" do
     let!(:config) { create(:gdrive_migration_config) }
 
+    context "with token" do
+      let!(:token) { create(:gdrive_token, gdrive_config: config) }
+
+      it "destroys config and token" do
+        config.destroy
+        expect(GDrive::Token.count).to be_zero
+        expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     context "with file ingestion batch" do
       let!(:batch) { create(:gdrive_file_ingestion_batch, gdrive_config: config) }
 

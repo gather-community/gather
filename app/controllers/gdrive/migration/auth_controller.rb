@@ -22,12 +22,12 @@ module GDrive
       def index
         skip_policy_scope
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        @config = MigrationConfig.find_by!(community: current_community)
-        wrapper = Wrapper.new(config: @config, callback_url: callback_url)
+        @config = MainConfig.find_by!(community: current_community)
+        wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
+                              callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
-        if @config.nil?
-          raise "no config"
-        elsif @config.token.nil?
+
+        if credentials.nil?
           @no_auth = true
           setup_auth_url(wrapper: wrapper)
         elsif @config.folder_id.nil?
@@ -69,8 +69,8 @@ module GDrive
           return
         end
 
-        config = MigrationConfig.find_by!(community: current_community)
-        wrapper = Wrapper.new(config: config, callback_url: callback_url)
+        config = MainConfig.find_by!(community: current_community)
+        wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id, callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
         if config.org_user_id != authenticated_google_id
@@ -78,19 +78,13 @@ module GDrive
             "Please sign in with #{config.org_user_id} instead."
           return
         end
-        wrapper.authorizer.store_credentials(current_community.id, credentials)
+        wrapper.store_credentials(credentials)
       end
 
       def save_folder
         authorize(current_community, policy_class: GDrive::AuthPolicy)
-        MigrationConfig.find_by!(community: current_community).update!(folder_id: params[:folder_id])
+        MainConfig.find_by!(community: current_community).update!(folder_id: params[:folder_id])
         head(:ok)
-      end
-
-      def reset
-        authorize(current_community, policy_class: GDrive::AuthPolicy)
-        MigrationConfig.find_by!(community: current_community).update!(token: nil)
-        redirect_to(gdrive_migration_auth_path(community_id: current_community.id))
       end
 
       private
@@ -114,18 +108,16 @@ module GDrive
 
       def fetch_credentials_from_callback_request(wrapper, request)
         Google::Auth::WebUserAuthorizer.validate_callback_state(@callback_state, request)
-        wrapper.authorizer.get_credentials_from_code(
-          user_id:  current_community.id,
-          code:     @callback_state[Google::Auth::WebUserAuthorizer::AUTH_CODE_KEY],
-          scope:    @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
+        wrapper.get_credentials_from_code(
+          code: @callback_state[Google::Auth::WebUserAuthorizer::AUTH_CODE_KEY],
+          scope: @callback_state[Google::Auth::WebUserAuthorizer::SCOPE_KEY],
           base_url: request.url
         )
       end
 
       def setup_auth_url(wrapper:, config: nil)
         state = {community_id: current_community.id}
-        @auth_url = wrapper.authorizer.get_authorization_url(login_hint: config&.org_user_id, request: request,
-                                                             state: state)
+        @auth_url = wrapper.get_authorization_url(request: request, state: state)
       end
 
       def fetch_email_of_authenticated_account(credentials)

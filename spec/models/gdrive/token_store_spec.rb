@@ -4,39 +4,56 @@ require "rails_helper"
 
 describe GDrive::TokenStore do
   let(:community) { Defaults.community }
+  let(:config) { create(:gdrive_main_config, community: community) }
+  let(:token_store) { described_class.new(config: config) }
 
   describe "#store" do
-    it "updates the token" do
-      config = create(:gdrive_main_config, community: community)
-      described_class.new(klass: config.class).store(community.id.to_s, "atoken")
-      expect(config.reload.token).to eq("atoken")
+    it "creates a new token" do
+      token_store.store("a@example.com", "tokendata")
+
+      token = GDrive::Token.first
+      expect(token.gdrive_config_id).to eq(config.id)
+      expect(token.google_user_id).to eq("a@example.com")
+      expect(token.data).to eq("tokendata")
     end
 
-    it "errors if not found" do
-      expect do
-        described_class.new(klass: GDrive::MainConfig).store(community.id.to_s, "atoken")
-      end.to raise_error(ActiveRecord::RecordNotFound)
+    it "updates if exists already" do
+      token_store.store("a@example.com", "tokendata")
+      token_store.store("a@example.com", "tokendata2")
+
+      expect(GDrive::Token.count).to eq(1)
+      token = GDrive::Token.first
+      expect(token.gdrive_config_id).to eq(config.id)
+      expect(token.google_user_id).to eq("a@example.com")
+      expect(token.data).to eq("tokendata2")
     end
   end
 
   describe "#load" do
-    let!(:config) { create(:gdrive_main_config, community: community, token: "atoken") }
+    before do
+      token_store.store("a@example.com", "tokendata")
+    end
 
     it "loads the token" do
-      expect(described_class.new(klass: config.class).load(community.id.to_s)).to eq("atoken")
+      expect(token_store.load("a@example.com")).to eq("tokendata")
     end
 
     it "returns nil if not found" do
-      expect(described_class.new(klass: config.class).load("7397349148319")).to be_nil
+      expect(token_store.load("b@example.com")).to be_nil
     end
   end
 
   describe "#delete" do
-    let!(:config) { create(:gdrive_main_config, community: community, token: "atoken") }
+    before do
+      token_store.store("a@example.com", "tokendata")
+    end
 
-    it "deletes the config" do
-      described_class.new(klass: config.class).delete(community.id.to_s)
-      expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    it "deletes the token" do
+      expect(GDrive::Token.count).to eq(1)
+      token_store.delete("a@example.com")
+
+      expect(GDrive::Token.count).to eq(0)
+      expect(token_store.load("a@example.com")).to be_nil
     end
   end
 end

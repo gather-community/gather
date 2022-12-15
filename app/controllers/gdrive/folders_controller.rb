@@ -10,7 +10,7 @@ module GDrive
       @auth_policy = GDrive::AuthPolicy.new(current_user, current_community)
       if @config&.complete?
         folder_id = params[:folder_id].presence || @config.folder_id
-        wrapper = Wrapper.new(config: @config)
+        wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
         @ancestors = find_ancestors(wrapper, folder_id)
         @file_list = wrapper.service.list_files(q: "'#{folder_id}' in parents",
                                                 fields: "files(id,name,mimeType,iconLink,webViewLink)",

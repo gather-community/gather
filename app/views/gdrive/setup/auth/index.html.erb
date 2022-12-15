@@ -1,0 +1,13 @@
+<% content_for(:title, "Connection To Google Drive") %>
+<% if @no_auth %>
+  <p>
+    Please click the button below and sign in to Google with the <strong><%= @config.org_user_id %></strong> account.
+  </p>
+  <p>
+    <%= link_to("Authenticate With Google", @auth_url, class: "btn btn-primary") %>
+  </p>
+<% else %>
+  You are connected to Google Drive with <strong><%= @config.org_user_id %></strong>.
+<% end %>
+
+<script src="https://apis.google.com/js/api.js"></script>

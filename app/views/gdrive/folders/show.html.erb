@@ -3,11 +3,14 @@
   <% if @auth_policy.index? %>
     <%= link_to(icon_tag("file-import") << " Migration",
                 gdrive_migration_auth_url(host: Settings.url.host, community_id: current_community.id),
+                class: "btn btn-default") %>
+    <%= link_to(icon_tag("cog") << " Setup",
+                gdrive_setup_auth_url(host: Settings.url.host, community_id: current_community.id),
                 class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
-<% if @config&.complete? %>
+<% if false %>
   <% if @ancestors.any? %>
     <div class="breadcrumbs">
       <%= link_to(icon_tag("home"), gdrive_home_path) %><span class="divider">></span><%=

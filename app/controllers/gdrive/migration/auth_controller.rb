@@ -27,7 +27,7 @@ module GDrive
                               callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
 
-        if credentials.nil?
+        if !wrapper.authenticated?
           @no_auth = true
           setup_auth_url(wrapper: wrapper)
         elsif @config.folder_id.nil?

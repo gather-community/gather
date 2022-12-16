@@ -1,5 +1,10 @@
 <% content_for(:title, "Connection To Google Drive") %>
-<% if @no_auth %>
+<% if @config.nil? %>
+  <div class="center-notice">
+    Your community is not yet configured for integration with Google Drive.
+    Please contact a Gather staff member to get started.
+  </div>
+<% elsif @no_auth %>
   <p>
     Please click the button below and sign in to Google with the <strong><%= @config.org_user_id %></strong> account.
   </p>

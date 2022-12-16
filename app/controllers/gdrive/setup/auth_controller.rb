@@ -22,7 +22,9 @@ module GDrive
       def index
         skip_policy_scope
         authorize(current_community, :setup?, policy_class: SetupPolicy)
-        @config = MainConfig.find_by!(community: current_community)
+        @config = MainConfig.find_by(community: current_community)
+        return if @config.nil?
+
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
                               callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store

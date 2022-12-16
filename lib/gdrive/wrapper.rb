@@ -14,6 +14,10 @@ module GDrive
       self.callback_url = callback_url
     end
 
+    def authenticated?
+      fetch_credentials_from_store.present?
+    end
+
     def service
       return @service if @service
       @service = Google::Apis::DriveV3::DriveService.new

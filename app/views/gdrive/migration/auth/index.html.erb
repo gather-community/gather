@@ -41,14 +41,4 @@
         class: "btn btn-primary") %>
 <% end %>
 
-<% if @config %>
-  <footer id="local-footer" class="footer-links">
-    <%= link_to("Reset Connection", gdrive_migration_auth_reset_path(community_id: current_community.id),
-                data: {
-                  method: :delete,
-                  confirm: "Are you sure you want to reset your community's connection to Google Drive? Any in-process ownership transfers will be aborted."
-                }) %>
-  </footer>
-<% end %>
-
 <script src="https://apis.google.com/js/api.js"></script>

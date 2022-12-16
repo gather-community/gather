@@ -10,7 +10,20 @@
   <% end %>
 <% end %>
 
-<% if false %>
+<% if @config.nil? || @not_authenticated %>
+  <div class="center-notice">
+    Your community is not yet connected to Google Drive.
+    <% if @setup_policy.setup? %>
+      <% if @config.nil? %>
+        Please contact a Gather staff member to get started.
+      <% else %>
+        You can click 'Setup' above to get started.
+      <% end %>
+    <% else %>
+      Please talk to a Gather Admin about getting Google Drive set up.
+    <% end %>
+  </div>
+<% elsif false %>
   <% if @ancestors.any? %>
     <div class="breadcrumbs">
       <%= link_to(icon_tag("home"), gdrive_home_path) %><span class="divider">></span><%=
@@ -34,17 +47,8 @@
       <% end %>
     </table>
   <% else %>
-  <div class="center-notice">
-    No files found in this folder.
-  </div>
+    <div class="center-notice">
+      No files found in this folder.
+    </div>
   <% end %>
-<% else %>
-  <div class="center-notice">
-    Your community has not yet been configured for Google Drive.
-    <% if @setup_policy.setup? %>
-      You can click <strong>Setup</strong> above to get started.
-    <% else %>
-      Please talk to a Gather Admin about getting Google Drive set up.
-    <% end %>
-  </div>
 <% end %>

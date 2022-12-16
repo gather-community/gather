@@ -8,14 +8,18 @@ module GDrive
       authorize(:folder, policy_class: FoldersPolicy)
       @config = MainConfig.find_by(community: current_community)
       @setup_policy = SetupPolicy.new(current_user, current_community)
-      # if @config
-      #   folder_id = params[:folder_id].presence || @config.folder_id
-      #   wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
-      #   @ancestors = find_ancestors(wrapper, folder_id)
-      #   @file_list = wrapper.service.list_files(q: "'#{folder_id}' in parents",
-      #                                           fields: "files(id,name,mimeType,iconLink,webViewLink)",
-      #                                           order_by: "folder,name")
-      # end
+      if @config
+        # folder_id = params[:folder_id].presence || @config.folder_id
+        wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
+        if wrapper.authenticated?
+          # @ancestors = find_ancestors(wrapper, folder_id)
+          # @file_list = wrapper.service.list_files(q: "'#{folder_id}' in parents",
+          #                                         fields: "files(id,name,mimeType,iconLink,webViewLink)",
+          #                                         order_by: "folder,name")
+        else
+          @not_authenticated = true
+        end
+      end
     end
 
     private

@@ -1,6 +1,6 @@
 <% content_for(:title) { "Google Drive" } %>
 <% content_for(:action_links) do %>
-  <% if @auth_policy.index? %>
+  <% if @setup_policy.setup? %>
     <%= link_to(icon_tag("file-import") << " Migration",
                 gdrive_migration_auth_url(host: Settings.url.host, community_id: current_community.id),
                 class: "btn btn-default") %>
@@ -41,7 +41,7 @@
 <% else %>
   <div class="center-notice">
     Your community has not yet been configured for Google Drive.
-    <% if @auth_policy.index? %>
+    <% if @setup_policy.setup? %>
       You can click <strong>Setup</strong> above to get started.
     <% else %>
       Please talk to a Gather Admin about getting Google Drive set up.

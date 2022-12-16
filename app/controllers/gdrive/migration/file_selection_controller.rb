@@ -7,17 +7,17 @@ module GDrive
       before_action -> { nav_context(:wiki, :gdrive, :migration, :file_selection) }
 
       def index
-        authorize(current_community, policy_class: FileSelectionPolicy)
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
         skip_policy_scope
         @config = MigrationConfig.find_by(community: current_community)
-        @auth_policy = AuthPolicy.new(current_user, current_community)
+        @setup_policy = SetupPolicy.new(current_user, current_community)
         if @config&.complete?
           @access_token = Wrapper.new(config: @config).fresh_access_token
         end
       end
 
       def ingest
-        authorize(current_community, policy_class: FileSelectionPolicy)
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
         config = MigrationConfig.find_by(community: current_community)
         batch = FileIngestionBatch.create!(gdrive_config: config, picked: params[:picked])
         FileIngestionJob.perform_later(cluster_id: current_cluster.id, batch_id: batch.id)

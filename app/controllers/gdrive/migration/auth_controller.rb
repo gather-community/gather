@@ -21,7 +21,7 @@ module GDrive
 
       def index
         skip_policy_scope
-        authorize(current_community, policy_class: GDrive::AuthPolicy)
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
         @config = MainConfig.find_by!(community: current_community)
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
                               callback_url: callback_url)
@@ -58,7 +58,7 @@ module GDrive
       end
 
       def callback
-        authorize(current_community, policy_class: GDrive::AuthPolicy)
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
 
         # @redirect_uri is set in set_current_community_from_callback_state
         # We call it up here since we still want to redirect if the following guard clause is true.
@@ -82,7 +82,7 @@ module GDrive
       end
 
       def save_folder
-        authorize(current_community, policy_class: GDrive::AuthPolicy)
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
         MainConfig.find_by!(community: current_community).update!(folder_id: params[:folder_id])
         head(:ok)
       end

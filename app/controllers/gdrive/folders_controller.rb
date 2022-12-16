@@ -6,8 +6,8 @@ module GDrive
 
     def show
       authorize(:folder, policy_class: FoldersPolicy)
-      @config = GDrive::MainConfig.find_by(community: current_community)
-      @auth_policy = GDrive::AuthPolicy.new(current_user, current_community)
+      @config = MainConfig.find_by(community: current_community)
+      @setup_policy = SetupPolicy.new(current_user, current_community)
       # if @config
       #   folder_id = params[:folder_id].presence || @config.folder_id
       #   wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)

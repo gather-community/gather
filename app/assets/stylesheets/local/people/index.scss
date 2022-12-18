@@ -11,23 +11,14 @@
   .user {
     margin-bottom: 20px;
     background-color: $gray-lighterer;
+    display: flex;
 
-    // This trick prevents the layout from collapsing while the images are loading.
-    .photo-wrapper {
-      width: 25%;
-      float: left;
-      height: 0;
-      padding-bottom: 25%;
-      position: relative;
-
-      img {
-        width: 100%;
-        position: absolute;
-      }
+    img {
+      width: 125px;
+      height: 125px;
     }
 
     .info {
-      margin-left: 25%;
       padding: 5px 10px;
       line-height: 1.5;
       overflow-x: hidden;

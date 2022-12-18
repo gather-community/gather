@@ -41,7 +41,6 @@ Rails.application.routes.draw do
       post :unimpersonate
     end
   end
-  get "userz", to: "userz#index"
 
   namespace :meals do
     resource :settings, only: %i[edit update]

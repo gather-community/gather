@@ -58,11 +58,7 @@
   <% else %>
     <div id="directory-album" class="flowing-columns-max-3 hidden-print">
       <% users.each do |user| %>
-        <div class="user section clearfix <%= user.active? ? "" : "inactive" %>">
-          <div class="photo-wrapper">
-            <%= link_to(user.photo_if_permitted(:thumb), user) %>
-          </div>
-        </div>
+        <%= user.photo_if_permitted(:thumb) %>
       <% end %>
     </div>
   <% end %>

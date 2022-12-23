@@ -33,7 +33,7 @@ module Calendars
 
     # end is a reserved word
     define_method("end") do
-      object.all_day? ? object.ends_at.to_date.to_s : object.ends_at.to_fs(:no_zone)
+      object.all_day? ? (object.ends_at.to_date + 1).to_s : object.ends_at.to_fs(:no_zone)
     end
 
     def editable

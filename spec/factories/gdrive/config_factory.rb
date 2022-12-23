@@ -21,22 +21,5 @@ FactoryBot.define do
     client_secret { "xxxxxxxx" }
     api_key { "xxxxxxxx" }
     org_user_id { "abc123@gmail.com" }
-    token do
-      {
-        # This is not a secret.
-        client_id: "xxxxxxxxxxxxxx-qufsbvlpl758tmfv217tlq2qf30haflo.apps.googleusercontent.com",
-        access_token: access_token,
-        refresh_token: refresh_token,
-        scope: [
-          "email",
-          "profile",
-          "https://www.googleapis.com/auth/drive.file",
-          "openid",
-          "https://www.googleapis.com/auth/userinfo.profile",
-          "https://www.googleapis.com/auth/userinfo.email"
-        ],
-        expiration_time_millis: expiration_time_millis
-      }.to_json
-    end
   end
 end

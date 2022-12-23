@@ -23,6 +23,7 @@ module Groups
                                                   foreign_key: :meal_job_requester_id,
                                                   dependent: :nullify,
                                                   inverse_of: :meal_job_requester
+    has_many :shared_drives, class_name: "GDrive::SharedDrive", foreign_key: :group_id, inverse_of: :group
     has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
     scope :in_community, lambda { |c|

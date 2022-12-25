@@ -153,6 +153,11 @@ module Groups
       memberships.find_by(user_id: user)
     end
 
+    def member?(user)
+      mship = membership_for(user)
+      everybody? ? mship.nil? || !mship.opt_out? : !mship.nil?
+    end
+
     def join(user)
       membership = membership_for(user)
       if everybody? && membership&.opt_out?

@@ -19,6 +19,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
                               Meals::Import
                               Meals::Message
                               People::MemberType
+                              Subscription
                               Wiki::Page
                               Wiki::PageVersion
                               Work::JobReminderDelivery

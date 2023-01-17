@@ -13,10 +13,12 @@ describe Community do
     context "with dependent models" do
       let(:community) { create(:community) }
       let!(:meal_type) { create(:meal_type, community: community) }
+      let!(:subscription) { create(:subscription, community: community) }
 
       it "destroys them" do
         community.destroy
         expect { meal_type.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { subscription.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

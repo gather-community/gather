@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_17_004612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -732,6 +732,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
     t.index ["due_on"], name: "index_statements_on_due_on"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "contact_email"
+    t.datetime "created_at", null: false
+    t.string "currency"
+    t.integer "months_per_period"
+    t.decimal "price_per_user", precision: 10, scale: 2
+    t.integer "quantity"
+    t.date "start_date"
+    t.string "stripe_id"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
+    t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
+    t.check_constraint "(stripe_id IS NULL) <> (contact_email IS NULL OR price_per_user IS NULL OR quantity IS NULL OR months_per_period IS NULL OR start_date IS NULL OR currency IS NULL)", name: "stripe_id_or_params"
+  end
+
   create_table "transactions", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "cluster_id", null: false
@@ -1077,6 +1094,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
   add_foreign_key "reminders", "work_jobs", column: "job_id"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
+  add_foreign_key "subscriptions", "clusters"
+  add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "clusters"
   add_foreign_key "transactions", "statements"

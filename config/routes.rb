@@ -282,6 +282,8 @@ Rails.application.routes.draw do
     patch "settings/:type", to: "settings#update"
   end
 
+  get "subscription", to: "subscription#show"
+
   get "sso", to: "single_sign_on#sign_on"
 
   get "ping", to: "landing#ping"

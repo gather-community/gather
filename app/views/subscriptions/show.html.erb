@@ -1,0 +1,48 @@
+<% content_for(:title, "Subscription") %>
+
+<div data-controller="subscription">
+  <% if @subscription.empty? %>
+    <p>Your subscription is not setup yet. Please contact Gather staff to subscribe.</p>
+  <% elsif @subscription.registered? %>
+    <p>Your subscription is already setup.</p>
+  <% else %>
+    <p>Your subscription is not setup yet.</p>
+    <p>
+      You have requested to pay for <%= @subscription.quantity %> users at
+      <%= @subscription.currency %>&nbsp;<%= number_with_precision(@subscription.price_per_user, precision: 2) %>
+      per user.
+    </p>
+    <% if @subscription.start_date.future? %>
+      <p>
+        Your billing period starts on <%= I18n.l(@subscription.start_date) %> 
+        and goes for <%= pluralize(@subscription.months_per_period, "month") %>. 
+        You will enter your payment details now but you won't be charged until <%= I18n.l(@subscription.start_date) %>.
+      </p>
+      <p>
+        If any of this seems wrong, please contact info@gather.coop.
+      </p>      
+      <%= turbo_frame_tag(:payment) do %>
+        <%= form_tag(start_payment_subscription_path, method: :post) do %>
+          <button class="btn btn-primary">
+            Looks good, I'm ready to enter my payment info
+          </button>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p>
+        Your billing period started on <%= I18n.l(@subscription.start_date) %> 
+        and goes for <%= pluralize(@subscription.months_per_period, "month") %>.
+      </p>
+      <p>
+        If any of this seems wrong, please contact info@gather.coop.
+      </p>
+      <%= turbo_frame_tag(:payment) do %>
+        <%= form_tag(start_payment_subscription_path, method: :post) do %>
+          <button class="btn btn-primary">
+            Looks good, I'm ready to pay
+          </button>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

@@ -110,3 +110,7 @@ end
 group :test do
   gem "rspec-github", require: false
 end
+
+gem "stripe", "~> 8.1"
+
+gem "turbo-rails", "~> 1.3"

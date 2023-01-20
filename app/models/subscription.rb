@@ -5,4 +5,12 @@ class Subscription < ApplicationRecord
   acts_as_tenant :cluster
 
   belongs_to :community, inverse_of: :subscription
+
+  def empty?
+    stripe_id.nil? && quantity.nil?
+  end
+
+  def registered?
+    stripe_id.present?
+  end
 end

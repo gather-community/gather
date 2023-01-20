@@ -10,6 +10,10 @@
         &nbsp;
         <%= link_to("Settings", admin_settings_url(type: "community")) %>
       <% end %>
+      <% if policy(Subscription.new(community: current_community)).show? %>
+        &nbsp;
+        <%= link_to("Subscription", subscription_url) %>
+      <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;
         <%= link_to("Accounts", accounts_url) %>

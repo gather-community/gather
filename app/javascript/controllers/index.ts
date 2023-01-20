@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import Gdrive__RootPickerController from "./gdrive/root_picker_controller"
 application.register("gdrive--root-picker", Gdrive__RootPickerController)
+
+import SubscriptionController from "./subscription_controller"
+application.register("subscription", SubscriptionController)

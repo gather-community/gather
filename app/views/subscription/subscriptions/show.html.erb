@@ -22,7 +22,7 @@
         If any of this seems wrong, please contact info@gather.coop.
       </p>      
       <%= turbo_frame_tag(:payment) do %>
-        <%= form_tag(start_payment_subscription_path, method: :post) do %>
+        <%= form_tag(subscription_start_payment_subscription_path, method: :post) do %>
           <button class="btn btn-primary">
             Looks good, I'm ready to enter my payment info
           </button>
@@ -37,7 +37,7 @@
         If any of this seems wrong, please contact info@gather.coop.
       </p>
       <%= turbo_frame_tag(:payment) do %>
-        <%= form_tag(start_payment_subscription_path, method: :post) do %>
+        <%= form_tag(subscription_start_payment_subscription_path, method: :post) do %>
           <button class="btn btn-primary">
             Looks good, I'm ready to pay
           </button>

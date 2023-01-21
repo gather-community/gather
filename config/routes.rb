@@ -282,7 +282,7 @@ Rails.application.routes.draw do
     patch "settings/:type", to: "settings#update"
   end
 
-  scope :subscription do
+  namespace :subscription do
     get "/", to: "subscriptions#show", as: :subscription
     post "/start-payment", to: "subscriptions#start_payment", as: :start_payment_subscription
     get "/payment", to: "subscriptions#payment", as: :payment_subscription

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe SubscriptionPolicy do
+describe Subscription::SubscriptionPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:record) { create(:subscription, community: community) }

@@ -5,15 +5,15 @@ module Subscription
     alias subscription record
 
     def show?
-      active_admin?
+      active_admin_or?(:biller)
     end
 
     def start_payment?
-      active_admin?
+      active_admin_or?(:biller)
     end
 
     def payment?
-      active_admin?
+      active_admin_or?(:biller)
     end
   end
 end

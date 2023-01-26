@@ -8,7 +8,7 @@ describe Subscription::SubscriptionPolicy do
     let(:record) { create(:subscription, community: community) }
 
     permissions :show? do
-      it_behaves_like("permits admins from community")
+      it_behaves_like("permits admins or special role but not regular users", :biller)
     end
   end
 end

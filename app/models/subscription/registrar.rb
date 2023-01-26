@@ -47,7 +47,7 @@ module Subscription
     def create_customer
       Stripe::Customer.create(
         email: subscription.contact_email,
-        description: subscription.community_name,
+        name: subscription.community_name,
         address: ADDRESS_FIELDS.map { |f| [f, subscription["address_#{f}"]] }.to_h
       )
     end

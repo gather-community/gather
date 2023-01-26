@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_17_004612) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_18_004612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -732,27 +732,35 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_17_004612) do
     t.index ["due_on"], name: "index_statements_on_due_on"
   end
 
-  create_table "subscriptions", force: :cascade do |t|
-    t.string "address_city"
-    t.string "address_country"
-    t.string "address_line1"
+  create_table "subscription_intents", force: :cascade do |t|
+    t.string "address_city", null: false
+    t.string "address_country", null: false
+    t.string "address_line1", null: false
     t.string "address_line2"
     t.string "address_postal_code"
     t.string "address_state"
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
-    t.string "contact_email"
+    t.string "contact_email", null: false
     t.datetime "created_at", null: false
-    t.string "currency"
-    t.integer "months_per_period"
-    t.integer "price_per_user_cents"
-    t.integer "quantity"
-    t.date "start_date"
-    t.string "stripe_id"
+    t.string "currency", null: false
+    t.integer "months_per_period", null: false
+    t.integer "price_per_user_cents", null: false
+    t.integer "quantity", null: false
+    t.date "start_date", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscription_intents_on_cluster_id"
+    t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "stripe_id", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
     t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
-    t.check_constraint "stripe_id IS NULL AND contact_email IS NOT NULL AND price_per_user_cents IS NOT NULL AND quantity IS NOT NULL AND currency IS NOT NULL AND months_per_period IS NOT NULL AND start_date IS NOT NULL AND address_city IS NOT NULL AND address_country IS NOT NULL AND address_line1 IS NOT NULL OR stripe_id IS NOT NULL AND contact_email IS NULL AND price_per_user_cents IS NULL AND quantity IS NULL AND currency IS NULL AND months_per_period IS NULL AND start_date IS NULL AND address_city IS NULL AND address_country IS NULL AND address_line1 IS NULL AND address_line2 IS NULL AND address_postal_code IS NULL AND address_state IS NULL", name: "stripe_id_or_params"
   end
 
   create_table "transactions", id: :serial, force: :cascade do |t|
@@ -1100,6 +1108,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_17_004612) do
   add_foreign_key "reminders", "work_jobs", column: "job_id"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
+  add_foreign_key "subscription_intents", "clusters"
+  add_foreign_key "subscription_intents", "communities"
   add_foreign_key "subscriptions", "clusters"
   add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"

@@ -2,13 +2,10 @@
 
 module Subscription
   # Models a subscription of Gather product itself.
-  class Subscription < ApplicationRecord
-    # Override suffix
-    self.table_name = "subscriptions"
-
+  class Intent < ApplicationRecord
     acts_as_tenant :cluster
 
-    belongs_to :community, inverse_of: :subscription
+    belongs_to :community, inverse_of: :subscription_intent
 
     delegate :name, to: :community, prefix: true
 

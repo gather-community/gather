@@ -5,6 +5,10 @@ module Subscription
     def show
       @subscription = Subscription.find_or_initialize_by(community: current_community)
       authorize(@subscription)
+      if @subscription.new_record?
+        intent = Intent.find_by(community: community)
+        @subscription = intent unless intent.nil?
+      end
     end
 
     def start_payment

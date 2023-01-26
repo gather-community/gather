@@ -28,6 +28,7 @@ class Community < ApplicationRecord
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
+  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }

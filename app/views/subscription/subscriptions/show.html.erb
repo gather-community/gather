@@ -7,6 +7,16 @@
 <% elsif @subscription.registered? %>
   <p>Your subscription is already setup.</p>
 <% else %>
+  <table class="key-value">
+    <tr>
+      <td>Number of Users</td>
+      <td><%= @subscription.quantity %></td>
+    </tr>
+    <tr>
+      <td>Price per User</td>
+      <td><%= @subscription.quantity %></td>
+    </tr>
+  </table>
   <p>Your subscription is not setup yet.</p>
   <p>
     You have requested to pay for <%= @subscription.quantity %> users at

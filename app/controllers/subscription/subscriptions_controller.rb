@@ -4,28 +4,35 @@ module Subscription
   class SubscriptionsController < ApplicationController
     def show
       @subscription = Subscription.find_or_initialize_by(community: current_community)
+      @subscription.populate
       authorize(@subscription)
-      if @subscription.new_record?
-        intent = Intent.find_by(community: community)
+
+      if @subscription.incomplete_expired?
+        @incomplete_expired = true
+        @subscription = Intent.find_or_initialize_by(community: current_community)
+      elsif @subscription.new_record?
+        intent = Intent.find_by(community: current_community)
         @subscription = intent unless intent.nil?
       end
     end
 
     def start_payment
-      @subscription = Subscription.find_by!(community: current_community)
-      authorize(@subscription)
-      Registrar.new(subscription: @subscription).register
+      subscription = Subscription.find_or_initialize_by(community: current_community)
+      authorize(subscription, policy_class: SubscriptionPolicy)
+      subscription.populate
+      if subscription.new_record? || subscription.incomplete_expired?
+        intent = Intent.find_by!(community: current_community)
+        Registrar.new(intent: intent).register
+      elsif !(subscription.incomplete? || subscription.past_due?)
+        raise "Invalid subscription status #{subscription.status}"
+      end
       redirect_to(subscription_payment_subscription_path)
     end
 
     def payment
       @subscription = Subscription.find_by!(community: current_community)
       authorize(@subscription)
-      stripe_subscription = Stripe::Subscription.retrieve(
-        id: @subscription.stripe_id,
-        expand: ["latest_invoice.payment_intent"]
-      )
-      @client_secret = stripe_subscription.latest_invoice.payment_intent.client_secret
+      @subscription.populate
     end
   end
 end

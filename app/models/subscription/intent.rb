@@ -10,7 +10,11 @@ module Subscription
     delegate :name, to: :community, prefix: true
 
     def registered?
-      true
+      false
+    end
+
+    def incomplete?
+      false
     end
   end
 end

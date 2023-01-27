@@ -5,7 +5,10 @@
 <%= turbo_frame_tag(:payment) do %>
   <div data-controller="subscription"
       data-subscription-publishable-key-value="<%= Settings.stripe.publishable_key %>"
-      data-subscription-client-secret-value="<%= @client_secret %>">
+      data-subscription-client-secret-value="<%= @subscription.client_secret %>">
+    <div id="amount">
+      <%= number_with_precision(@subscription.last_invoice_amount_cents.to_f / 100, precision: 2) %>
+    </div>
     <div id="payment-element">
       <!-- Elements will create form elements here -->
     </div>

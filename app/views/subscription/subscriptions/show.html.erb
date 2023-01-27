@@ -2,34 +2,43 @@
 <% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
-<% if @subscription.empty? %>
+<% if @subscription.new_record? %>
   <p>Your subscription is not setup yet. Please contact Gather staff to subscribe.</p>
-<% elsif @subscription.registered? %>
-  <p>Your subscription is already setup.</p>
 <% else %>
-  <table class="key-value">
-    <tr>
-      <td>Number of Users</td>
-      <td><%= @subscription.quantity %></td>
-    </tr>
-    <tr>
-      <td>Price per User</td>
-      <td><%= @subscription.quantity %></td>
-    </tr>
-  </table>
-  <p>Your subscription is not setup yet.</p>
+  <% if @incomplete_expired %>
+    <div class="center-notice">Your subscription has expired before payment was completed. Please try again.</div>
+  <% elsif @subscription.incomplete? %>
+    <div class="center-notice">Your subscription is ready for payment.</div>
+  <% else %>
+    <div class="center-notice">Your subscription is not setup yet.</div>
+  <% end %>
   <p>
-    You have requested to pay for <%= @subscription.quantity %> users at
-    <%= @subscription.currency.upcase %>&nbsp;<%= number_with_precision(@subscription.price_per_user_cents / 100, precision: 2) %>
-    per user.
+    <table class="key-value">
+      <tr>
+        <td>Billing Email</td>
+        <td><%= @subscription.contact_email %></td>
+      </tr>
+      <tr>
+        <td>Number of Users</td>
+        <td><%= @subscription.quantity %></td>
+      </tr>
+      <tr>
+        <td>Price per User</td>
+        <td><%= @subscription.currency.upcase %>&nbsp;<%= number_with_precision(@subscription.price_per_user_cents / 100, precision: 2) %></td>
+      </tr>
+      <tr>
+        <td>Billing Period</td>
+        <td>Every <%= pluralize(@subscription.months_per_period, "month") %></td>
+      </tr>
+      <tr>
+        <td>Start Date</td>
+        <td><%= I18n.l(@subscription.start_date) %></td>
+      </tr>
+    </table>
   </p>
   <% if @subscription.start_date.future? %>
     <p>
-      Your billing period starts on <%= I18n.l(@subscription.start_date) %>
-      and goes for <%= pluralize(@subscription.months_per_period, "month") %>.
       You will enter your payment details now but you won't be charged until <%= I18n.l(@subscription.start_date) %>.
-    </p>
-    <p>
       If any of this seems wrong, please contact info@gather.coop.
     </p>
     <%= turbo_frame_tag(:payment) do %>
@@ -41,10 +50,7 @@
     <% end %>
   <% else %>
     <p>
-      Your billing period started on <%= I18n.l(@subscription.start_date) %>
-      and goes for <%= pluralize(@subscription.months_per_period, "month") %>.
-    </p>
-    <p>
+      Your first payment will be prorated to cover the days elapsed since <%= I18n.l(@subscription.start_date) %>.
       If any of this seems wrong, please contact info@gather.coop.
     </p>
     <%= turbo_frame_tag(:payment) do %>

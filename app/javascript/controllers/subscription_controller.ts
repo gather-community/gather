@@ -19,7 +19,7 @@ export default class extends Controller<HTMLFormElement> {
     this.elements = this.stripe.elements(options);
 
     // Create and mount the Payment Element
-    const paymentElement = this.elements.create('payment');
+    const paymentElement = this.elements.create('payment', {fields: {billingDetails: {email: 'never', address: 'never'}}});
     paymentElement.mount('#payment-element');
   }
 

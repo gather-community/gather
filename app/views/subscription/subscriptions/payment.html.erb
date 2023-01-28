@@ -5,14 +5,23 @@
 <%= turbo_frame_tag(:payment) do %>
   <div data-controller="subscription"
       data-subscription-publishable-key-value="<%= Settings.stripe.publishable_key %>"
-      data-subscription-client-secret-value="<%= @subscription.client_secret %>">
-    <div id="amount">
-      <%= number_with_precision(@subscription.last_invoice_amount_cents.to_f / 100, precision: 2) %>
-    </div>
-    <div id="payment-element">
-      <!-- Elements will create form elements here -->
-    </div>
-    <button data-action="click->subscription#confirm">Subscribe</button>
+      data-subscription-client-secret-value="<%= @subscription.client_secret %>"
+      data-subscription-contact-email-value="<%= @subscription.contact_email %>"
+      data-subscription-return-url-value="<%= subscription_success_url %>">
+    <p>
+      <div id="payment-element">
+        <!-- Elements will create form elements here -->
+      </div>
+    </p>
+    <p>
+      <button data-action="click->subscription#confirm" data-subscription-target="submitButton" class="btn btn-primary hiding">
+        <% if @subscription.no_invoice? %>
+          Save My Payment Information
+        <% else %>
+          Pay <%= number_to_currency(@subscription.last_invoice_amount_cents.to_f / 100) %>
+        <% end %>
+      </button>
+    </p>
     <div id="error-message">
       <!-- Display error message to your customers here -->
     </div>

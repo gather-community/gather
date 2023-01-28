@@ -15,5 +15,9 @@ module Subscription
     def payment?
       active_admin_or?(:biller)
     end
+
+    def success?
+      active_admin_or?(:biller)
+    end
   end
 end

@@ -3,11 +3,17 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller<HTMLFormElement> {
   static values = {
     publishableKey: String,
-    clientSecret: String
+    clientSecret: String,
+    contactEmail: String,
+    returnUrl: String
   };
+  static targets = ['submitButton'];
 
   declare publishableKeyValue: string;
   declare clientSecretValue: string;
+  declare contactEmailValue: string;
+  declare returnUrlValue: string;
+  declare submitButtonTarget: HTMLElement;
 
   connect(): void {
     this.stripe = Stripe(this.publishableKeyValue);
@@ -19,15 +25,27 @@ export default class extends Controller<HTMLFormElement> {
     this.elements = this.stripe.elements(options);
 
     // Create and mount the Payment Element
-    const paymentElement = this.elements.create('payment', {fields: {billingDetails: {email: 'never', address: 'never'}}});
+    const paymentElement = this.elements.create('payment', {fields: {billingDetails: {email: 'never'}}});
+    paymentElement.on('ready', this.handleReady.bind(this));
     paymentElement.mount('#payment-element');
   }
 
+  handleReady(): void {
+    this.submitButtonTarget.classList.remove('hiding');
+  }
+
   async confirm(): Promise<T> {
-    const { error } = await this.stripe.confirmPayment({
+    const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
+      this.stripe.confirmPayment : this.stripe.confirmSetup;
+    const { error } = await confirmFunction({
       elements: this.elements,
       confirmParams: {
-        return_url: "https://example.com/order/123/complete",
+        return_url: this.returnUrlValue,
+        payment_method_data: {
+          billing_details: {
+            email: this.contactEmailValue
+          }
+        }
       }
     });
 

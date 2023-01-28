@@ -61,6 +61,9 @@ module Subscription
         payment_behavior: "default_incomplete",
         backdate_start_date: intent.start_date < Time.zone.today ? Time.zone.parse(intent.start_date.to_s).to_i : nil,
         billing_cycle_anchor: intent.start_date > Time.zone.today ? Time.zone.parse(intent.start_date.to_s).to_i : nil,
+        # For future start dates, we don't want to prorate, because in our system this means they are migrating and
+        # they've already paid for the previous billing cycle.
+        proration_behavior: intent.start_date > Time.zone.today ? "none" : nil,
         payment_settings: {
           save_default_payment_method: "on_subscription",
           payment_method_types: %w[us_bank_account acss_debit]

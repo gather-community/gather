@@ -283,9 +283,10 @@ Rails.application.routes.draw do
   end
 
   namespace :subscription do
-    get "/", to: "subscriptions#show", as: :subscription
-    post "/start-payment", to: "subscriptions#start_payment", as: :start_payment_subscription
-    get "/payment", to: "subscriptions#payment", as: :payment_subscription
+    get "/", to: "subscriptions#show"
+    post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
+    get "/payment", to: "subscriptions#payment", as: :payment
+    get "/success", to: "subscriptions#success", as: :success
   end
 
   get "sso", to: "single_sign_on#sign_on"

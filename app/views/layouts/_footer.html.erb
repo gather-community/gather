@@ -12,7 +12,7 @@
       <% end %>
       <% if policy(Subscription::Subscription.new(community: current_community)).show? %>
         &nbsp;
-        <%= link_to("Subscription", subscription_subscription_url) %>
+        <%= link_to("Subscription", subscription_url) %>
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;

@@ -1,0 +1,34 @@
+<p>
+  <table class="key-value">
+    <%= render("base_table", subscription: subscription) %>
+    <tr>
+      <td>Start Date</td>
+      <td>
+        <%= I18n.l(subscription.start_date) %>
+        <% if subscription.start_date > Time.zone.today %>
+          <p>
+            You will enter your payment details now but you won't be charged until <%= I18n.l(subscription.start_date) %>.
+          </p>
+        <% elsif subscription.start_date < Time.zone.today %>
+          <p>
+            Your first payment will be prorated to cover the days elapsed since <%= I18n.l(subscription.start_date) %>.
+          </p>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+</p>
+<p>
+  If any of this information needs to be updated, please contact info@gather.coop.
+</p>
+<%= turbo_frame_tag(:payment) do %>
+  <%= form_tag(subscription_start_payment_path, method: :post) do %>
+    <button class="btn btn-primary">
+      <% if subscription.start_date <= Time.zone.today %>
+        Looks good, I'm ready to pay
+      <% else %>
+        Looks good, I'm ready to enter my payment info
+      <% end %>
+    </button>
+  <% end %>
+<% end %>

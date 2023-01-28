@@ -2,63 +2,48 @@
 <% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
-<% if @subscription.new_record? %>
-  <p>Your subscription is not setup yet. Please contact Gather staff to subscribe.</p>
-<% else %>
-  <% if @incomplete_expired %>
-    <div class="center-notice">Your subscription has expired before payment was completed. Please try again.</div>
-  <% elsif @subscription.incomplete? %>
-    <div class="center-notice">Your subscription is ready for payment.</div>
-  <% else %>
-    <div class="center-notice">Your subscription is not setup yet.</div>
-  <% end %>
+<% if @subscription.incomplete_expired? && @intent %>
+  <div class="center-notice">Your subscription has expired before payment was completed. Please try again.</div>
+  <%= render("pre_payment", subscription: @intent) %>
+<% elsif @intent || @subscription.incomplete? %>
+  <div class="center-notice">Your subscription is ready for payment.</div>
+  <%= render("pre_payment", subscription: @intent || @subscription) %>
+<% elsif @subscription.new_record? %>
+  <div class="center-notice">Your subscription is not setup yet.</div>
+  <p>Please contact Gather staff to subscribe.</p>
+<% elsif @subscription.payment_requires_microdeposits? %>
+  <div class="center-notice">
+    Your bank account requires verification. Please check your email for instructions and check back
+    here once verification is complete.
+  </div>
+  <%= render("post_payment", subscription: @subscription) %>
   <p>
-    <table class="key-value">
-      <tr>
-        <td>Billing Email</td>
-        <td><%= @subscription.contact_email %></td>
-      </tr>
-      <tr>
-        <td>Number of Users</td>
-        <td><%= @subscription.quantity %></td>
-      </tr>
-      <tr>
-        <td>Price per User</td>
-        <td><%= @subscription.currency.upcase %>&nbsp;<%= number_with_precision(@subscription.price_per_user_cents / 100, precision: 2) %></td>
-      </tr>
-      <tr>
-        <td>Billing Period</td>
-        <td>Every <%= pluralize(@subscription.months_per_period, "month") %></td>
-      </tr>
-      <tr>
-        <td>Start Date</td>
-        <td><%= I18n.l(@subscription.start_date) %></td>
-      </tr>
-    </table>
+    You can visit our
+    <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for more information.
   </p>
-  <% if @subscription.start_date.future? %>
-    <p>
-      You will enter your payment details now but you won't be charged until <%= I18n.l(@subscription.start_date) %>.
-      If any of this seems wrong, please contact info@gather.coop.
-    </p>
-    <%= turbo_frame_tag(:payment) do %>
-      <%= form_tag(subscription_start_payment_subscription_path, method: :post) do %>
-        <button class="btn btn-primary">
-          Looks good, I'm ready to enter my payment info
-        </button>
-      <% end %>
-    <% end %>
-  <% else %>
-    <p>
-      Your first payment will be prorated to cover the days elapsed since <%= I18n.l(@subscription.start_date) %>.
-      If any of this seems wrong, please contact info@gather.coop.
-    </p>
-    <%= turbo_frame_tag(:payment) do %>
-      <%= form_tag(subscription_start_payment_subscription_path, method: :post) do %>
-        <button class="btn btn-primary">
-          Looks good, I'm ready to pay
-        </button>
-      <% end %>
-    <% end %>
-  <% end %>
+<% elsif @subscription.payment_processing? %>
+  <div class="center-notice">
+    Your subscription is processing. Please refresh the page in a few moments.
+  </div>
+<% elsif @subscription.needs_payment_method? %>
+  <div class="center-notice">
+    Your subscription is active but we still need to collect your payment information.
+  </div>
+  <%= render("pre_payment", subscription: @subscription) %>
+<% elsif @subscription.active? %>
+  <div class="center-notice">
+    Your subscription is active. Thanks for being a part of Gather!
+  </div>
+  <%= render("post_payment", subscription: @subscription) %>
+  <p>
+    You can visit our
+    <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for more information.
+  </p>
+<% else %>
+  <div class="center-notice">
+    There is a problem with your subscription.
+  </div>
+  <p>
+    Please visit our <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for details.
+  </p>
 <% end %>

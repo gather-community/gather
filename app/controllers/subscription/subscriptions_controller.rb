@@ -36,7 +36,6 @@ module Subscription
     def success
       @subscription = Subscription.find_by!(community: current_community)
       authorize(@subscription)
-      flash[:success] = "Your subscription was successfully paid and is now active!"
       redirect_to(subscription_path)
     end
   end

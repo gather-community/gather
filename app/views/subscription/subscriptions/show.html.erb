@@ -5,12 +5,6 @@
 <% if @subscription.incomplete_expired? && @intent %>
   <div class="center-notice">Your subscription has expired before payment was completed. Please try again.</div>
   <%= render("pre_payment", subscription: @intent) %>
-<% elsif @intent || @subscription.incomplete? %>
-  <div class="center-notice">Your subscription is ready for payment.</div>
-  <%= render("pre_payment", subscription: @intent || @subscription) %>
-<% elsif @subscription.new_record? %>
-  <div class="center-notice">Your subscription is not setup yet.</div>
-  <p>Please contact Gather staff to subscribe.</p>
 <% elsif @subscription.payment_requires_microdeposits? %>
   <div class="center-notice">
     Your bank account requires verification. Please check your email for instructions and check back
@@ -21,6 +15,14 @@
     You can visit our
     <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for more information.
   </p>
+<% # Incomplete can happen if the person clicks "I'm ready to pay" but never "Pay". %>
+<% # But it also happens while microdeposits are pending. %>
+<% elsif @intent || @subscription.incomplete? %>
+  <div class="center-notice">Your subscription is ready for payment.</div>
+  <%= render("pre_payment", subscription: @intent || @subscription) %>
+<% elsif @subscription.new_record? %>
+  <div class="center-notice">Your subscription is not setup yet.</div>
+  <p>Please contact Gather staff to subscribe.</p>
 <% elsif @subscription.payment_processing? %>
   <div class="center-notice">
     Your subscription is processing. Please refresh the page in a few moments.
@@ -35,15 +37,10 @@
     Your subscription is active. Thanks for being a part of Gather!
   </div>
   <%= render("post_payment", subscription: @subscription) %>
-  <p>
-    You can visit our
-    <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for more information.
-  </p>
+  <%= render("billing_portal_link") %>
 <% else %>
   <div class="center-notice">
     There is a problem with your subscription.
   </div>
-  <p>
-    Please visit our <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for details.
-  </p>
+  <%= render("billing_portal_link") %>
 <% end %>

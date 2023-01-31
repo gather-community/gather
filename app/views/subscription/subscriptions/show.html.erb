@@ -3,10 +3,10 @@
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
 <% if @subscription.incomplete_expired? && @intent %>
-  <div class="center-notice">Your subscription has expired before payment was completed. Please try again.</div>
+  <div class="topline">Your subscription has expired before payment was completed. Please try again.</div>
   <%= render("pre_payment", subscription: @intent) %>
 <% elsif @subscription.payment_requires_microdeposits? %>
-  <div class="center-notice">
+  <div class="topline">
     Your bank account requires verification. Please check your email for instructions and check back
     here once verification is complete.
   </div>
@@ -18,28 +18,28 @@
 <% # Incomplete can happen if the person clicks "I'm ready to pay" but never "Pay". %>
 <% # But it also happens while microdeposits are pending. %>
 <% elsif @intent || @subscription.incomplete? %>
-  <div class="center-notice">Your subscription is ready for payment.</div>
+  <div class="topline">Your subscription is ready for payment.</div>
   <%= render("pre_payment", subscription: @intent || @subscription) %>
 <% elsif @subscription.new_record? %>
-  <div class="center-notice">Your subscription is not setup yet.</div>
+  <div class="topline">Your subscription is not setup yet.</div>
   <p>Please contact Gather staff to subscribe.</p>
 <% elsif @subscription.payment_processing? %>
-  <div class="center-notice">
+  <div class="topline">
     Your subscription is processing. Please refresh the page in a few moments.
   </div>
 <% elsif @subscription.needs_payment_method? %>
-  <div class="center-notice">
+  <div class="topline">
     Your subscription is active but we still need to collect your payment information.
   </div>
   <%= render("pre_payment", subscription: @subscription) %>
 <% elsif @subscription.active? %>
-  <div class="center-notice">
+  <div class="topline">
     Your subscription is active. Thanks for being a part of Gather!
   </div>
   <%= render("post_payment", subscription: @subscription) %>
   <%= render("billing_portal_link") %>
 <% else %>
-  <div class="center-notice">
+  <div class="topline">
     There is a problem with your subscription.
   </div>
   <%= render("billing_portal_link") %>

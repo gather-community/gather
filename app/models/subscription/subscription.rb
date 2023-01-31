@@ -25,6 +25,8 @@ module Subscription
         id: stripe_id,
         expand: %w[customer.invoice_settings latest_invoice.payment_intent pending_setup_intent]
       )
+      Rails.logger.info("Loaded subscription: #{stripe_sub}")
+      stripe_sub
     end
 
     def status

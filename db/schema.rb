@@ -733,20 +733,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_17_004612) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
+    t.string "address_city"
+    t.string "address_country"
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "address_postal_code"
+    t.string "address_state"
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.string "contact_email"
     t.datetime "created_at", null: false
     t.string "currency"
     t.integer "months_per_period"
-    t.decimal "price_per_user", precision: 10, scale: 2
+    t.integer "price_per_user_cents"
     t.integer "quantity"
     t.date "start_date"
     t.string "stripe_id"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
     t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
-    t.check_constraint "(stripe_id IS NULL) <> (contact_email IS NULL OR price_per_user IS NULL OR quantity IS NULL OR months_per_period IS NULL OR start_date IS NULL OR currency IS NULL)", name: "stripe_id_or_params"
+    t.check_constraint "stripe_id IS NULL AND contact_email IS NOT NULL AND price_per_user_cents IS NOT NULL AND quantity IS NOT NULL AND currency IS NOT NULL AND months_per_period IS NOT NULL AND start_date IS NOT NULL AND address_city IS NOT NULL AND address_country IS NOT NULL AND address_line1 IS NOT NULL OR stripe_id IS NOT NULL AND contact_email IS NULL AND price_per_user_cents IS NULL AND quantity IS NULL AND currency IS NULL AND months_per_period IS NULL AND start_date IS NULL AND address_city IS NULL AND address_country IS NULL AND address_line1 IS NULL AND address_line2 IS NULL AND address_postal_code IS NULL AND address_state IS NULL", name: "stripe_id_or_params"
   end
 
   create_table "transactions", id: :serial, force: :cascade do |t|

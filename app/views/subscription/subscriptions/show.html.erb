@@ -9,7 +9,7 @@
     <p>Your subscription is not setup yet.</p>
     <p>
       You have requested to pay for <%= @subscription.quantity %> users at
-      <%= @subscription.currency %>&nbsp;<%= number_with_precision(@subscription.price_per_user, precision: 2) %>
+      <%= @subscription.currency %>&nbsp;<%= number_with_precision(@subscription.price_per_user_cents / 100, precision: 2) %>
       per user.
     </p>
     <% if @subscription.start_date.future? %>

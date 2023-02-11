@@ -76,6 +76,11 @@ module Subscription
         needs_payment_method? && stripe_sub.pending_setup_intent&.status == "succeeded"
     end
 
+    def payment_method_types
+      return nil if stripe_sub.nil?
+      payment_or_setup_intent.payment_method_types
+    end
+
     def payment_requires_microdeposits?
       return nil if stripe_sub.nil?
       payment_or_setup_intent&.next_action&.type == "verify_with_microdeposits"

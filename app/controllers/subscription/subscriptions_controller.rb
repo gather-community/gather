@@ -2,6 +2,8 @@
 
 module Subscription
   class SubscriptionsController < ApplicationController
+    decorates_assigned :subscription
+
     def show
       @subscription = load_auth_and_populate_subscription(or_initialize: true)
 
@@ -25,6 +27,7 @@ module Subscription
 
     def payment
       @subscription = load_auth_and_populate_subscription
+      @acss_debit_mode = @subscription.payment_method_types.include?("acss_debit")
     end
 
     def success

@@ -66,7 +66,7 @@ module Subscription
         proration_behavior: intent.start_date > Time.zone.today ? "none" : nil,
         payment_settings: {
           save_default_payment_method: "on_subscription",
-          payment_method_types: %w[us_bank_account acss_debit]
+          payment_method_types: intent.payment_method_types
         }
       )
     end

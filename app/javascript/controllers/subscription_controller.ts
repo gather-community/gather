@@ -5,36 +5,72 @@ export default class extends Controller<HTMLFormElement> {
     publishableKey: String,
     clientSecret: String,
     contactEmail: String,
-    returnUrl: String
+    returnUrl: String,
+    acssDebitMode: Boolean,
   };
-  static targets = ['submitButton'];
+  static targets = ['submitButton', 'form'];
 
   declare publishableKeyValue: string;
   declare clientSecretValue: string;
   declare contactEmailValue: string;
   declare returnUrlValue: string;
+  declare acssDebitModeValue: boolean;
   declare submitButtonTarget: HTMLElement;
+  declare formTarget: HTMLFormElement;
 
   connect(): void {
     this.stripe = Stripe(this.publishableKeyValue);
-    const options = {
-      clientSecret: this.clientSecretValue,
-    };
+    console.log(this.acssDebitModeValue)
+    if (this.acssDebitModeValue) {
+      this.showSubmitButton();
+    } else {
+      this.initPaymentElement();
+    }
+  }
 
-    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 5
+  initPaymentElement(): void {
+    const options = { clientSecret: this.clientSecretValue };
     this.elements = this.stripe.elements(options);
-
-    // Create and mount the Payment Element
-    const paymentElement = this.elements.create('payment', {fields: {billingDetails: {email: 'never'}}});
-    paymentElement.on('ready', this.handleReady.bind(this));
+    const paymentElement = this.elements.create('payment', { fields: { billingDetails: { email: 'never' } } });
+    paymentElement.on('ready', this.showSubmitButton.bind(this));
     paymentElement.mount('#payment-element');
   }
 
-  handleReady(): void {
+  showSubmitButton(): void {
     this.submitButtonTarget.classList.remove('hiding');
   }
 
-  async confirm(): Promise<T> {
+  async handleSubmit(event: Event): Promise<T> {
+    event.preventDefault();
+    if (this.acssDebitModeValue) {
+      this.handleAcssDebitSubmit();
+    } else {
+      this.handlePaymentElementSubmit();
+    }
+  }
+
+  async handleAcssDebitSubmit(): Promise<T> {
+    document.getElementById('glb-load-ind').classList.remove('hiding');
+    const { paymentIntent, error } = await this.stripe.confirmAcssDebitPayment(
+      this.clientSecretValue,
+      {
+        payment_method: {
+          billing_details: {
+            name: this.formTarget['payment[accountholder_name]'].value,
+            email: this.contactEmailValue,
+          },
+        },
+      }
+    );
+    if (error) {
+      document.getElementById('glb-load-ind').classList.add('hiding');
+      console.log(error.message);
+    } else {
+      window.location.href = this.returnUrlValue;
+    }
+  }
+
+  async handlePaymentElementSubmit(): Promise<T> {
     const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
       this.stripe.confirmPayment : this.stripe.confirmSetup;
     await confirmFunction({
@@ -47,6 +83,6 @@ export default class extends Controller<HTMLFormElement> {
           }
         }
       }
-    });
+  });
   }
 }

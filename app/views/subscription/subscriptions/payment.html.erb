@@ -3,24 +3,36 @@
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
 <%= turbo_frame_tag(:payment) do %>
+  <h2>Payment</h2>
   <div data-controller="subscription"
       data-subscription-publishable-key-value="<%= Settings.stripe.publishable_key %>"
       data-subscription-client-secret-value="<%= @subscription.client_secret %>"
       data-subscription-contact-email-value="<%= @subscription.contact_email %>"
+      data-subscription-acss-debit-mode-value="<%= @acss_debit_mode %>"
       data-subscription-return-url-value="<%= subscription_success_url %>">
     <p>
-      <div id="payment-element">
-        <!-- Elements will create form elements here -->
-      </div>
-    </p>
-    <p>
-      <button data-action="click->subscription#confirm" data-subscription-target="submitButton" class="btn btn-primary hiding">
-        <% if @subscription.no_invoice? %>
-          Save My Payment Information
+      <%= gather_form_for(:payment, html: {"data-subscription-target": "form"}) do |f| %>
+        <% if @acss_debit_mode %>
+          <%= f.input(:accountholder_name, ) %>
+          <%= f.input(:payment_method) do %>
+            <strong>Canadian pre-authorized debit</strong><br/>
+            A pop-up window will collect your bank info after you click 'Pay' below.
+          <% end %>
         <% else %>
-          Pay <%= number_to_currency(@subscription.last_invoice_amount_cents.to_f / 100) %>
+          <p>
+            <div id="payment-element">
+              <!-- Elements will create form elements here -->
+            </div>
+          </p>
         <% end %>
-      </button>
+        <div class="buttons">
+          <% if @subscription.no_invoice? %>
+            <%= f.button(:primary, "Save My Payment Information", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
+          <% else %>
+            <%= f.button(:primary, "Pay #{number_to_currency(@subscription.last_invoice_amount_cents.to_f / 100)}", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
+          <% end %>
+        </div>
+      <% end %>
     </p>
   </div>
 <% end %>

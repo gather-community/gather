@@ -108,9 +108,9 @@ module Subscription
       stripe_sub.latest_invoice.nil?
     end
 
-    def current_period_start_date
+    def next_payment_date
       return nil if stripe_sub.nil?
-      Time.zone.at(stripe_sub&.current_period_start).to_date
+      Time.zone.at(stripe_sub&.current_period_end).to_date
     end
 
     def last_invoice_amount_cents

@@ -3,9 +3,9 @@
   <table class="key-value">
     <%= render("email_row", subscription: subscription) %>
     <tr>
-      <td>Current Billing Period Start</td>
+      <td>Next Payment Date</td>
       <td>
-        <%= I18n.l(subscription.current_period_start_date) %>
+        <%= I18n.l(subscription.next_payment_date) %>
       </td>
     </tr>
     <%= render("base_rows", subscription: subscription) %>

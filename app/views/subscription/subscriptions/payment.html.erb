@@ -28,7 +28,8 @@
         <div class="buttons">
           <%= f.button(:primary, subscription.submit_button_label,
                                  "data-action": "click->subscription#handleSubmit",
-                                 "data-subscription-target": "submitButton") %>
+                                 "data-subscription-target": "submitButton",
+                                 class: "hiding") %>
         </div>
       <% end %>
     </p>

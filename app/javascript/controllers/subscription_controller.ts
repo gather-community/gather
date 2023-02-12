@@ -31,7 +31,12 @@ export default class extends Controller<HTMLFormElement> {
   initPaymentElement(): void {
     const options = { clientSecret: this.clientSecretValue };
     this.elements = this.stripe.elements(options);
-    const paymentElement = this.elements.create('payment', { fields: { billingDetails: { email: 'never' } } });
+    const paymentElement = this.elements.create('payment', {
+      fields: { billingDetails: { email: 'never' } },
+      // This is mainly to show us_bank_account first
+      // Also card is likely to be more useful for communities than wallets, so we put that first.
+      paymentMethodOrder: ['us_bank_account', 'card']
+    });
     paymentElement.on('ready', this.showSubmitButton.bind(this));
     paymentElement.mount('#payment-element');
   }

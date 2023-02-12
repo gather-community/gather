@@ -26,11 +26,9 @@
           </p>
         <% end %>
         <div class="buttons">
-          <% if subscription.no_invoice? %>
-            <%= f.button(:primary, "Save My Payment Information", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
-          <% else %>
-            <%= f.button(:primary, "Pay #{subscription.last_invoice_amount}", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
-          <% end %>
+          <%= f.button(:primary, subscription.submit_button_label,
+                                 "data-action": "click->subscription#handleSubmit",
+                                 "data-subscription-target": "submitButton") %>
         </div>
       <% end %>
     </p>

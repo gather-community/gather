@@ -18,5 +18,13 @@ module Subscription
     def last_invoice_amount
       Money.from_cents(last_invoice_amount_cents).format
     end
+
+    def submit_button_label
+      if no_invoice?
+        "Pay #{total_payment_with_months} starting #{I18n.l(start_date)}"
+      else
+        "Pay #{last_invoice_amount} now and then #{total_payment_with_months} from now"
+      end
+    end
   end
 end

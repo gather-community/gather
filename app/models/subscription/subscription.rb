@@ -134,6 +134,11 @@ module Subscription
       stripe_sub.items.data[0].price.unit_amount
     end
 
+    def total_per_invoice
+      return nil if stripe_sub.nil?
+      quantity * price_per_user_cents * months_per_period
+    end
+
     def currency
       return nil if stripe_sub.nil?
       stripe_sub.items.data[0].price.currency

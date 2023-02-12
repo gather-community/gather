@@ -6,8 +6,8 @@
   <h2>Payment</h2>
   <div data-controller="subscription"
       data-subscription-publishable-key-value="<%= Settings.stripe.publishable_key %>"
-      data-subscription-client-secret-value="<%= @subscription.client_secret %>"
-      data-subscription-contact-email-value="<%= @subscription.contact_email %>"
+      data-subscription-client-secret-value="<%= subscription.client_secret %>"
+      data-subscription-contact-email-value="<%= subscription.contact_email %>"
       data-subscription-acss-debit-mode-value="<%= @acss_debit_mode %>"
       data-subscription-return-url-value="<%= subscription_success_url %>">
     <p>
@@ -26,10 +26,10 @@
           </p>
         <% end %>
         <div class="buttons">
-          <% if @subscription.no_invoice? %>
+          <% if subscription.no_invoice? %>
             <%= f.button(:primary, "Save My Payment Information", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
           <% else %>
-            <%= f.button(:primary, "Pay #{number_to_currency(@subscription.last_invoice_amount_cents.to_f / 100)}", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
+            <%= f.button(:primary, "Pay #{subscription.last_invoice_amount}", "data-action": "click->subscription#handleSubmit", "data-subscription-target": "submitButton") %>
           <% end %>
         </div>
       <% end %>

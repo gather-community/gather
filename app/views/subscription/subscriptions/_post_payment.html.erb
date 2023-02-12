@@ -1,12 +1,13 @@
 <h2>Details</h2>
 <p>
   <table class="key-value">
-    <%= render("base_table", subscription: subscription) %>
+    <%= render("email_row", subscription: subscription) %>
     <tr>
       <td>Current Billing Period Start</td>
       <td>
         <%= I18n.l(subscription.current_period_start_date) %>
       </td>
     </tr>
+    <%= render("base_rows", subscription: subscription) %>
   </table>
 </p>

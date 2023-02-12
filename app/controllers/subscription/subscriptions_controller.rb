@@ -2,7 +2,7 @@
 
 module Subscription
   class SubscriptionsController < ApplicationController
-    decorates_assigned :subscription
+    decorates_assigned :subscription, :intent, with: SubscriptionDecorator
 
     def show
       @subscription = load_auth_and_populate_subscription(or_initialize: true)

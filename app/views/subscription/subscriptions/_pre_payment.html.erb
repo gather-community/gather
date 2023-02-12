@@ -1,22 +1,14 @@
 <h2>Details</h2>
 <p>
   <table class="key-value">
-    <%= render("base_table", subscription: subscription) %>
+    <%= render("email_row", subscription: subscription) %>
     <tr>
       <td>Start Date</td>
       <td>
         <%= I18n.l(subscription.start_date) %>
-        <% if subscription.start_date > Time.zone.today %>
-          <p>
-            You will enter your payment details now but you won't be charged until <%= I18n.l(subscription.start_date) %>.
-          </p>
-        <% elsif subscription.start_date < Time.zone.today %>
-          <p>
-            Your first payment will be prorated to cover the days elapsed since <%= I18n.l(subscription.start_date) %>.
-          </p>
-        <% end %>
       </td>
     </tr>
+    <%= render("base_rows", subscription: subscription, prior_to_payment: true) %>
   </table>
 </p>
 <p>

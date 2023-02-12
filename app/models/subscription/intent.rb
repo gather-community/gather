@@ -16,5 +16,9 @@ module Subscription
     def incomplete?
       false
     end
+
+    def total_per_invoice
+      quantity * price_per_user_cents * months_per_period
+    end
   end
 end

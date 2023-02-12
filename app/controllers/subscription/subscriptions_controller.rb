@@ -30,9 +30,11 @@ module Subscription
       @acss_debit_mode = @subscription.payment_method_types.include?("acss_debit")
     end
 
+    # This is where Stripe will redirect users upon successful payment.
+    # The request comes with a bunch of stuff in the query string that we don't care about.
+    # We just want to redirect back to the show action to clear out the query string.
     def success
-      @subscription = Subscription.find_by!(community: current_community)
-      authorize(@subscription)
+      skip_authorization
       redirect_to(subscription_path)
     end
 

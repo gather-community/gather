@@ -3,7 +3,7 @@
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
 <%= turbo_frame_tag(:payment) do %>
-  <h2>Payment</h2>
+  <h2>Payment <%= icon_tag("lock") %></h2>
   <div data-controller="subscription"
       data-subscription-publishable-key-value="<%= Settings.stripe.publishable_key %>"
       data-subscription-client-secret-value="<%= subscription.client_secret %>"

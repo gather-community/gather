@@ -12,7 +12,7 @@
   </table>
 </p>
 <p>
-  If any of this information needs to be updated, please contact info@gather.coop.
+  If any of this information needs to be updated, please contact <%= link_to("info@gather.coop", "mailto:info@gather.coop") %>.
 </p>
 <%= turbo_frame_tag(:payment) do %>
   <%= form_tag(subscription_start_payment_path, method: :post) do %>

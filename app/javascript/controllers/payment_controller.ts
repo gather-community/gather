@@ -55,6 +55,13 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   async handleAcssDebitSubmit(): Promise<T> {
+    const accountHolder = this.formTarget['payment[accountholder_name]'].value.trim();
+
+    if (accountHolder === '') {
+      alert('Please specify the accountholder name.');
+      return;
+    }
+
     document.getElementById('glb-load-ind').classList.remove('hiding');
     const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
       this.stripe.confirmAcssDebitPayment : this.stripe.confirmAcssDebitSetup;
@@ -63,7 +70,7 @@ export default class extends Controller<HTMLFormElement> {
       {
         payment_method: {
           billing_details: {
-            name: this.formTarget['payment[accountholder_name]'].value,
+            name: accountHolder,
             email: this.contactEmailValue,
           },
         },

@@ -11,7 +11,7 @@
       data-payment-acss-debit-mode-value="<%= @acss_debit_mode %>"
       data-payment-return-url-value="<%= subscription_success_url %>">
     <p>
-      <%= gather_form_for(:subscription, html: {"data-payment-target": "form"}) do |f| %>
+      <%= gather_form_for(:payment, html: {"data-payment-target": "form"}) do |f| %>
         <% if @acss_debit_mode %>
           <%= f.input(:accountholder_name) %>
           <%= f.input(:payment_method) do %>

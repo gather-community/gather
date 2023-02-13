@@ -56,7 +56,9 @@ export default class extends Controller<HTMLFormElement> {
 
   async handleAcssDebitSubmit(): Promise<T> {
     document.getElementById('glb-load-ind').classList.remove('hiding');
-    const { paymentIntent, error } = await this.stripe.confirmAcssDebitPayment(
+    const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
+      this.stripe.confirmAcssDebitPayment : this.stripe.confirmAcssDebitSetup;
+    const { paymentIntent, error } = await confirmFunction(
       this.clientSecretValue,
       {
         payment_method: {

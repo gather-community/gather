@@ -23,7 +23,7 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[customer.invoice_settings latest_invoice.payment_intent pending_setup_intent]
+        expand: %w[customer.invoice_settings items.data.price.product latest_invoice.payment_intent pending_setup_intent]
       )
       Rails.logger.info("Loaded subscription: #{stripe_sub}")
       stripe_sub
@@ -142,6 +142,11 @@ module Subscription
     def currency
       return nil if stripe_sub.nil?
       stripe_sub.items.data[0].price.currency
+    end
+
+    def tier
+      return nil if stripe_sub.nil?
+      stripe_sub.items.data[0].price.product.metadata["tier"]
     end
 
     def quantity

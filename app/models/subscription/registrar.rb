@@ -8,9 +8,10 @@ module Subscription
 
     ADDRESS_FIELDS = %i[city country line1 line2 postal_code state].freeze
 
-    attr_accessor :intent, :customer, :price
+    attr_accessor :intent, :customer, :price, :product
 
     def register
+      self.product = find_or_create_product
       self.price = find_or_create_price
       self.customer = find_or_create_customer
       Subscription.where(community: intent.community).destroy_all
@@ -20,10 +21,29 @@ module Subscription
 
     private
 
+    def find_or_create_product
+      match = Stripe::Product.list(active: true).data.detect do |product|
+        product.metadata["months"] == intent.months_per_period.to_s &&
+          product.metadata["tier"] == intent.tier
+      end
+      match || create_product
+    end
+
+    def create_product
+      months = intent.months_per_period == 1 ? "1 month" : "#{intent.months_per_period} months"
+      Stripe::Product.create(
+        name: "Gather user seat, #{months}, #{intent.tier} tier",
+        metadata: {
+          months: intent.months_per_period,
+          tier: intent.tier
+        }
+      )
+    end
+
     def find_or_create_price
       match = Stripe::Price.list.data.detect do |price|
-        price.product == Settings.stripe.product_id &&
-          price.unit_amount == intent.price_per_user_cents &&
+        price.product == product.id &&
+          price.unit_amount == intent.price_per_user_cents * intent.months_per_period &&
           price.currency == intent.currency &&
           price.recurring.interval == "month" &&
           price.recurring.interval_count == intent.months_per_period
@@ -33,10 +53,10 @@ module Subscription
 
     def create_price
       Stripe::Price.create(
-        unit_amount: intent.price_per_user_cents,
+        unit_amount: intent.price_per_user_cents * intent.months_per_period,
         currency: intent.currency,
         recurring: {interval: "month", interval_count: intent.months_per_period},
-        product: Settings.stripe.product_id
+        product: product.id
       )
     end
 

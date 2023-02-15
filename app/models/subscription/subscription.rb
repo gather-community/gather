@@ -131,7 +131,7 @@ module Subscription
 
     def price_per_user_cents
       return nil if stripe_sub.nil?
-      stripe_sub.items.data[0].price.unit_amount
+      stripe_sub.items.data[0].price.unit_amount / months_per_period
     end
 
     def total_per_invoice

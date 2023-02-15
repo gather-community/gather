@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_31_132047) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_15_124248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -749,6 +749,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_31_132047) do
     t.integer "price_per_user_cents", null: false
     t.integer "quantity", null: false
     t.date "start_date", null: false
+    t.string "tier", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_subscription_intents_on_cluster_id"
     t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true

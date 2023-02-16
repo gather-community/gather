@@ -4,6 +4,26 @@ module Subscription
   class SubscriptionsController < ApplicationController
     decorates_assigned :subscription, :intent, with: SubscriptionDecorator
 
+    # For now, we test this flow manually. Important combinations to test:
+    #   * Past start_date, card
+    #   * Past start_date, ACH instant verification
+    #   * Past start_date, ACH manual
+    #   * Past start_date, ACSS instant verification
+    #   * Past start_date, ACSS manual
+    #   * Future start_date, card
+    #   * Future start_date, ACH
+    #   * Today start_date, card
+    #   * Today start_date, ACH
+    #   * Error flows (see conditional branches in show.html.erb)
+    #
+    # To get the manual verification URL:
+    #   Subscription::Subscription.first.populate.latest_invoice.payment_intent
+    #     .next_action.verify_with_microdeposits.hosted_verification_url
+    #
+    # Test numbers:
+    #   * ACH: https://stripe.com/docs/payments/ach-debit#test-account-numbers
+    #   * ACSS: https://stripe.com/docs/billing/subscriptions/acss-debit#test-integration
+
     def show
       @subscription = load_auth_and_populate_subscription(or_initialize: true)
 

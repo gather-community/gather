@@ -282,6 +282,13 @@ Rails.application.routes.draw do
     patch "settings/:type", to: "settings#update"
   end
 
+  namespace :subscription do
+    get "/", to: "subscriptions#show"
+    post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
+    get "/payment", to: "subscriptions#payment", as: :payment
+    get "/success", to: "subscriptions#success", as: :success
+  end
+
   get "sso", to: "single_sign_on#sign_on"
 
   get "ping", to: "landing#ping"

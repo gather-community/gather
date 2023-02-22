@@ -1,0 +1,27 @@
+<h2>Details</h2>
+<p>
+  <table class="key-value">
+    <%= render("email_row", subscription: subscription) %>
+    <tr>
+      <td>Start Date</td>
+      <td>
+        <%= I18n.l(subscription.start_date) %>
+      </td>
+    </tr>
+    <%= render("base_rows", subscription: subscription, prior_to_payment: true) %>
+  </table>
+</p>
+<p>
+  If any of this information needs to be updated, please contact <%= link_to("info@gather.coop", "mailto:info@gather.coop") %>.
+</p>
+<%= turbo_frame_tag(:payment) do %>
+  <%= form_tag(subscription_start_payment_path, method: :post) do %>
+    <button class="btn btn-primary">
+      <% if subscription.start_date <= Time.zone.today %>
+        Looks good, I'm ready to pay
+      <% else %>
+        Looks good, I'm ready to enter my payment info
+      <% end %>
+    </button>
+  <% end %>
+<% end %>

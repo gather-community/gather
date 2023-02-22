@@ -1,0 +1,13 @@
+<h2>Details</h2>
+<p>
+  <table class="key-value">
+    <%= render("email_row", subscription: subscription) %>
+    <tr>
+      <td>Next Payment Date</td>
+      <td>
+        <%= I18n.l(subscription.next_payment_date) %>
+      </td>
+    </tr>
+    <%= render("base_rows", subscription: subscription) %>
+  </table>
+</p>

@@ -19,8 +19,10 @@ module FormHelper
   def gather_form_for(objs, options = {})
     obj = Array.wrap(objs).last # objs may be an array or a single object
     width = options.delete(:width) || :normal
-    name = options.delete(:name) || obj.model_name.name.underscore.dasherize.gsub("/", "--")
     layout = options.delete(:layout) || :narrow_label
+    name = options.delete(:name) ||
+      obj.is_a?(Symbol) && obj.to_s ||
+      obj.model_name.name.underscore.dasherize.gsub("/", "--")
 
     options[:html] ||= {}
 
@@ -37,13 +39,15 @@ module FormHelper
     content_tag(:div, class: "row") do
       simple_form_for(objs, options) do |form|
         top_errors = []
-        if options[:top_error_notification] != false
-          # We include the full error messages for debugging purposes in case the attribute on which
-          # they are set is not included in the form. This shouldn't happen but does occasionally
-          # and is hard to debug when it does.
-          top_errors << form.error_notification(title: obj.errors.full_messages.join(", "))
+        unless obj.is_a?(Symbol)
+          if options[:top_error_notification] != false
+            # We include the full error messages for debugging purposes in case the attribute on which
+            # they are set is not included in the form. This shouldn't happen but does occasionally
+            # and is hard to debug when it does.
+            top_errors << form.error_notification(title: obj.errors.full_messages.join(", "))
+          end
+          top_errors << form.error(:base) if obj.errors[:base].present?
         end
-        top_errors << form.error(:base) if obj.errors[:base].present?
         safe_join(top_errors.push(capture { yield(form) }))
       end
     end

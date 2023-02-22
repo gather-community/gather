@@ -29,6 +29,10 @@ table {
       }
     }
   }
+
+  tr.emphasis {
+    font-weight: bold;
+  }
 }
 
 table.key-value {
@@ -38,7 +42,6 @@ table.key-value {
 
   td:first-of-type {
     color: #999;
-    padding-left: 15px;
     padding-right: 15px;
     vertical-align: top;
   }

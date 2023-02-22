@@ -39,3 +39,10 @@ s3:
   region: region
   bucket: gather
   endpoint: https://region.digitaloceanspaces.com
+
+# These are test-mode settings and should be overridden in production.yml
+stripe:
+  # This is a junk value and should be overridden in production (with real key) and dev/test (with test mode key)
+  api_key: sk_test_xxx
+  publishable_key: pk_test_xxx
+  billing_portal_url: https://billing.stripe.com/p/login/test_xxx

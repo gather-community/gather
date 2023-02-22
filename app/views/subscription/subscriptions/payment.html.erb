@@ -1,0 +1,37 @@
+<% content_for(:title, "Payment") %>
+<% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
+<% content_for(:local_viewport, "minimum-scale=1") %>
+
+<%= turbo_frame_tag(:payment) do %>
+  <h2>Payment <%= icon_tag("lock") %></h2>
+  <div data-controller="payment"
+      data-payment-publishable-key-value="<%= Settings.stripe.publishable_key %>"
+      data-payment-client-secret-value="<%= subscription.client_secret %>"
+      data-payment-contact-email-value="<%= subscription.contact_email %>"
+      data-payment-acss-debit-mode-value="<%= @acss_debit_mode %>"
+      data-payment-return-url-value="<%= subscription_success_url %>">
+    <p>
+      <%= gather_form_for(:payment, html: {"data-payment-target": "form"}) do |f| %>
+        <% if @acss_debit_mode %>
+          <%= f.input(:accountholder_name) %>
+          <%= f.input(:payment_method) do %>
+            <strong>Canadian pre-authorized debit</strong><br/>
+            A pop-up window will collect your bank info after you click 'Pay' below.
+          <% end %>
+        <% else %>
+          <p>
+            <div id="payment-element">
+              <!-- Elements will create form elements here -->
+            </div>
+          </p>
+        <% end %>
+        <div class="buttons">
+          <%= f.button(:primary, subscription.submit_button_label,
+                                 "data-action": "click->payment#handleSubmit",
+                                 "data-payment-target": "submitButton",
+                                 class: "hiding") %>
+        </div>
+      <% end %>
+    </p>
+  </div>
+<% end %>

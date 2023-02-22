@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_130708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -732,6 +732,40 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
     t.index ["due_on"], name: "index_statements_on_due_on"
   end
 
+  create_table "subscription_intents", force: :cascade do |t|
+    t.string "address_city", null: false
+    t.string "address_country", null: false
+    t.string "address_line1", null: false
+    t.string "address_line2"
+    t.string "address_postal_code"
+    t.string "address_state"
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "contact_email", null: false
+    t.datetime "created_at", null: false
+    t.string "currency", null: false
+    t.decimal "discount_percent", precision: 6, scale: 2
+    t.integer "months_per_period", null: false
+    t.jsonb "payment_method_types", null: false
+    t.integer "price_per_user_cents", null: false
+    t.integer "quantity", null: false
+    t.date "start_date", null: false
+    t.string "tier", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscription_intents_on_cluster_id"
+    t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "stripe_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
+    t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
+  end
+
   create_table "transactions", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "cluster_id", null: false
@@ -1077,6 +1111,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_135832) do
   add_foreign_key "reminders", "work_jobs", column: "job_id"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
+  add_foreign_key "subscription_intents", "clusters"
+  add_foreign_key "subscription_intents", "communities"
+  add_foreign_key "subscriptions", "clusters"
+  add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "clusters"
   add_foreign_key "transactions", "statements"

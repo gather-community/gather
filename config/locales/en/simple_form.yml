@@ -11,10 +11,14 @@ en:
     error_notification:
       default_message: "Please review the problems below:"
     labels:
-      # These labels are here instead of activerecord b/c export is not a model.
+      # These labels are here instead of activerecord b/c these are for things that
+      # aren't ActiveRecord models.
       calendars_export:
         dont_personalize: "Don't personalize events"
         own_only: "Include only events you created"
+      payment:
+        accountholder_name: "Accountholder Name"
+        payment_method: "Payment Method"
     placeholders:
       meals_meal:
         title: "e.g. Southern Red Beans and Rice"

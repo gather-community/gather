@@ -6,6 +6,12 @@
   <td>Tier</td>
   <td><%= subscription.tier.capitalize %> (<%= subscription.price_per_user %>/month)</td>
 </tr>
+<% if subscription.discount_percent.present? %>
+  <tr>
+    <td>Discount</td>
+    <td><%= subscription.discount_percent %>%</td>
+  </tr>
+<% end %>
 <tr>
   <td>Currency</td>
   <td>

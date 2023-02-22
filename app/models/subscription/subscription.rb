@@ -23,7 +23,8 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[customer.invoice_settings items.data.price.product latest_invoice.payment_intent pending_setup_intent]
+        expand: %w[customer.invoice_settings items.data.price.product latest_invoice.payment_intent
+                   pending_setup_intent]
       )
       Rails.logger.info("Loaded subscription: #{stripe_sub}")
       stripe_sub
@@ -136,7 +137,7 @@ module Subscription
 
     def total_per_invoice
       return nil if stripe_sub.nil?
-      quantity * price_per_user_cents * months_per_period
+      quantity * price_per_user_cents * months_per_period * (1 - (discount_percent || 0) / 100)
     end
 
     def currency
@@ -152,6 +153,11 @@ module Subscription
     def quantity
       return nil if stripe_sub.nil?
       stripe_sub.items.data[0].quantity
+    end
+
+    def discount_percent
+      return nil if stripe_sub.nil?
+      stripe_sub.discount&.coupon&.percent_off
     end
 
     def address_line1

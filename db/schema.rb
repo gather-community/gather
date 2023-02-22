@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_15_124248) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_130708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -744,6 +744,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_124248) do
     t.string "contact_email", null: false
     t.datetime "created_at", null: false
     t.string "currency", null: false
+    t.decimal "discount_percent", precision: 6, scale: 2
     t.integer "months_per_period", null: false
     t.jsonb "payment_method_types", null: false
     t.integer "price_per_user_cents", null: false

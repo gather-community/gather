@@ -68,7 +68,7 @@ module Subscription
                       end
       authorize(subscription)
       Sentry.configure_scope do |scope|
-        scope.set_context("character", stripe_subscription_id: subscription.stripe_id)
+        scope.set_context("subscription", stripe_subscription_id: subscription.stripe_id)
       end
       subscription.populate
       subscription

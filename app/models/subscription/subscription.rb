@@ -103,6 +103,10 @@ module Subscription
       stripe_sub.start_date < stripe_sub.created
     end
 
+    def future?
+      no_invoice?
+    end
+
     def no_invoice?
       return nil if stripe_sub.nil?
       # If subscription is post-dated, there won't be an invoice since we set proration_behavior to none.

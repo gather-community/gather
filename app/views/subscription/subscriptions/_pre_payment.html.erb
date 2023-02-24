@@ -2,12 +2,14 @@
 <p>
   <table class="key-value">
     <%= render("email_row", subscription: subscription) %>
-    <tr>
-      <td>Start Date</td>
-      <td>
-        <%= I18n.l(subscription.start_date) %>
-      </td>
-    </tr>
+    <% if subscription.start_date.present? %>
+      <tr>
+        <td>Start Date</td>
+        <td>
+          <%= I18n.l(subscription.start_date) %>
+        </td>
+      </tr>
+    <% end %>
     <%= render("base_rows", subscription: subscription, prior_to_payment: true) %>
   </table>
 </p>
@@ -17,10 +19,10 @@
 <%= turbo_frame_tag(:payment) do %>
   <%= form_tag(subscription_start_payment_path, method: :post) do %>
     <button class="btn btn-primary">
-      <% if subscription.start_date <= Time.zone.today %>
-        Looks good, I'm ready to pay
-      <% else %>
+      <% if subscription.future? %>
         Looks good, I'm ready to enter my payment info
+      <% else %>
+        Looks good, I'm ready to pay
       <% end %>
     </button>
   <% end %>

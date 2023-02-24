@@ -20,5 +20,17 @@ module Subscription
     def total_per_invoice
       quantity * price_per_user_cents * months_per_period * (1 - (discount_percent || 0) / 100)
     end
+
+    def future?
+      start_date.present? && start_date > Time.zone.today
+    end
+
+    def backdated?
+      start_date.present? && start_date < Time.zone.today
+    end
+
+    def start_date_to_timestamp
+      start_date.present? ? Time.zone.parse(start_date.to_s).to_i : nil
+    end
   end
 end

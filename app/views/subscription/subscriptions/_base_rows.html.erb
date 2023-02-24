@@ -27,13 +27,15 @@
   <td>
     <%= subscription.total_payment_with_months %>
     <% if local_assigns[:prior_to_payment] %>
-      <% if subscription.start_date > Time.zone.today %>
+      <% if subscription.future? %>
+        *
         <p>
-          You will enter your payment details now but you won't be charged until <%= I18n.l(subscription.start_date) %>.
+          * You will enter your payment details now but you won't be charged until <%= I18n.l(subscription.start_date) %>.
         </p>
-      <% elsif subscription.start_date < Time.zone.today %>
+      <% elsif subscription.backdated? %>
+        *
         <p>
-          Your first payment will be prorated to cover the days elapsed since <%= I18n.l(subscription.start_date) %>.
+          * Your first payment will be prorated to cover the days elapsed since <%= I18n.l(subscription.start_date) %>.
         </p>
       <% end %>
     <% end %>

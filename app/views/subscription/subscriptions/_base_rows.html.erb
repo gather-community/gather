@@ -13,18 +13,13 @@
   </tr>
 <% end %>
 <tr>
-  <td>Currency</td>
-  <td>
-    <%= subscription.currency.upcase %>
-  </td>
-</tr>
-<tr>
   <td>Months Per Bill Cycle</td>
   <td><%= subscription.months_per_period %></td>
 </tr>
 <tr class="emphasis">
   <td>Total Payment</td>
   <td>
+    <%= subscription.currency.upcase %>
     <%= subscription.total_payment_with_months %>
     <% if local_assigns[:prior_to_payment] %>
       <% if subscription.future? %>

@@ -12,7 +12,6 @@ module GDrive
 
     def links
       anchors = ancestors.map do |anc|
-        p anc
         is_drive = anc.is_a?(Google::Apis::DriveV3::Drive)
         path = h.gdrive_folder_path(anc.id, drive: is_drive ? 1 : nil)
         h.link_to(anc.name, path)

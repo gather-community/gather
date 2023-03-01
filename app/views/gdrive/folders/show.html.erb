@@ -1,27 +1,35 @@
 <% content_for(:title) { "Google Drive" } %>
 <% content_for(:action_links) do %>
   <% if @setup_policy.setup? %>
-    <%= link_to(icon_tag("file-import") << " Migration",
-                gdrive_migration_auth_url(host: Settings.url.host, community_id: current_community.id),
-                class: "btn btn-default") %>
+    <% if @config && !@no_auth %>
+      <%= link_to(icon_tag("file-import") << " Migration",
+                  gdrive_migration_auth_url(host: Settings.url.host, community_id: current_community.id),
+                  class: "btn btn-default") %>
+    <% end %>
     <%= link_to(icon_tag("cog") << " Setup",
                 gdrive_setup_auth_url(host: Settings.url.host, community_id: current_community.id),
                 class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
-<% if @config.nil? || @not_authenticated || @no_drives %>
+<% if @config.nil? || @no_auth || @no_drives %>
   <div class="center-notice">
     Your community is not yet connected to Google Drive.
     <% if @setup_policy.setup? %>
       <% if @config.nil? %>
         Please contact a Gather staff member to get started.
-      <% else %>
+      <% elsif @no_auth %>
         You can click 'Setup' above to get started.
+      <% else %>
+        You can click 'Setup' or 'Migration' above to get started.
       <% end %>
     <% else %>
       Please talk to a Gather Admin about getting Google Drive set up.
     <% end %>
+  </div>
+<% elsif @no_accessible_drives %>
+  <div class="center-notice">
+    No files found.
   </div>
 <% else %>
   <% if @ancestors_decorator.any? %>
@@ -30,19 +38,7 @@
         ><%= @ancestors_decorator.links %>
     </div>
   <% end %>
-  <% if @drive_list %>
-    <table class="full-width">
-      <% @drive_list.drives.each do |drive| %>
-        <tr>
-          <td>
-            <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
-                          class: "file-icon") %>
-            <%= link_to(drive.name, gdrive_folder_path(folder_id: drive.id, drive: 1)) %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  <% else %>
+  <% if @file_list %>
     <% if @file_list.files.any? %>
       <table class="full-width">
         <% @file_list.files.each do |file| %>
@@ -63,5 +59,17 @@
         No files found in this folder.
       </div>
     <% end %>
+  <% else %>
+    <table class="full-width">
+      <% @shared_drives.each do |drive| %>
+        <tr>
+          <td>
+            <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+                          class: "file-icon") %>
+            <%= link_to(drive.name, gdrive_folder_path(folder_id: drive.external_id, drive: 1)) %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
 <% end %>

@@ -10,5 +10,15 @@ module GDrive
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
 
     delegate :community, to: :gdrive_config
+
+    attr_accessor :not_found
+    alias not_found? not_found
+
+    def self.sync
+      all
+    end
+
+    def sync
+    end
   end
 end

@@ -17,7 +17,7 @@ FactoryBot.define do
       expiration_time_millis { (Time.now + 1.day).to_i * 1000 }
     end
     community { Defaults.community }
-    client_id { "xxxxxxxxxxxxxx-qufsbvlpl758tmfv217tlq2qf30haflo.apps.googleusercontent.com" }
+    client_id { "236482764-xxx.apps.googleusercontent.com" }
     client_secret { "xxxxxxxx" }
     api_key { "xxxxxxxx" }
     org_user_id { "abc123@gmail.com" }

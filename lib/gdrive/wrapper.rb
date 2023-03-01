@@ -52,7 +52,6 @@ module GDrive
 
     def authorizer
       return @authorizer if @authorizer
-      auth_settings = Settings.gdrive.auth
       client_id = Google::Auth::ClientId.new(config.client_id, config.client_secret)
       scope = [
         "https://www.googleapis.com/auth/drive",

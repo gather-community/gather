@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :gdrive_file_ingestion_batch, class: "GDrive::FileIngestionBatch" do
-    gdrive_config
+    association(:gdrive_config, factory: :gdrive_migration_config)
     picked { {"docs" => [{"id" => "alfskjdkfa"}]} }
     status { "pending" }
   end

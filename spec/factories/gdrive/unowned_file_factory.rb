@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :gdrive_unowned_file, class: "GDrive::UnownedFile" do
-    gdrive_config
+    association(:gdrive_config, factory: :gdrive_migration_config)
     external_id { "asdfafdfsd" }
     owner { "foo@bar.com" }
     data { {name: "Foo"} }

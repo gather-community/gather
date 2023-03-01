@@ -88,7 +88,9 @@ Follow these steps to setup a development environment for Gather.
 1. Start DelayedJob
     1. Open a new console.
     1. Go to the project directory.
-    1. Run `bin/delayed_job start`.
+    1. Run `bin/delayed_job run`.
+    1. The logs for jobs will mostly go to log/development.log. The log/delayed_job.log file is sparse and
+       contains only information about the initialization and resulting state of jobs.
 1. Start using the system
     1. In a browser, go to `https://gather.localhost.tv:3000` to start Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.

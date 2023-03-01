@@ -1,0 +1,307 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/123?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 02:43:18 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Vary:
+      - Origin
+      - X-Origin
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error=invalid_token
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 27 Nov 2022 02:43:18 GMT
+      Expires:
+      - Sun, 27 Nov 2022 02:43:18 GMT
+      Cache-Control:
+      - private, max-age=0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "error": {
+          "errors": [
+           {
+            "domain": "global",
+            "reason": "authError",
+            "message": "Invalid Credentials",
+            "locationType": "header",
+            "location": "Authorization"
+           }
+          ],
+          "code": 401,
+          "message": "Invalid Credentials"
+         }
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 02:43:18 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/123?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 02:43:18 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Vary:
+      - Origin
+      - X-Origin
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error=invalid_token
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Expires:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Cache-Control:
+      - private, max-age=0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "error": {
+          "errors": [
+           {
+            "domain": "global",
+            "reason": "authError",
+            "message": "Invalid Credentials",
+            "locationType": "header",
+            "location": "Authorization"
+           }
+          ],
+          "code": 401,
+          "message": "Invalid Credentials"
+         }
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 02:43:18 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/456?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 02:43:18 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Vary:
+      - Origin
+      - X-Origin
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error=invalid_token
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Expires:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Cache-Control:
+      - private, max-age=0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "error": {
+          "errors": [
+           {
+            "domain": "global",
+            "reason": "authError",
+            "message": "Invalid Credentials",
+            "locationType": "header",
+            "location": "Authorization"
+           }
+          ],
+          "code": 401,
+          "message": "Invalid Credentials"
+         }
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 02:43:19 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/456?fields=id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)
+    body:
+      encoding: UTF-8
+      string: '{"starred":true}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Vary:
+      - Origin
+      - X-Origin
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error=invalid_token
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Expires:
+      - Sun, 27 Nov 2022 02:43:19 GMT
+      Cache-Control:
+      - private, max-age=0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "error": {
+          "errors": [
+           {
+            "domain": "global",
+            "reason": "authError",
+            "message": "Invalid Credentials",
+            "locationType": "header",
+            "location": "Authorization"
+           }
+          ],
+          "code": 401,
+          "message": "Invalid Credentials"
+         }
+        }
+    http_version:
+  recorded_at: Sun, 27 Nov 2022 02:43:19 GMT
+recorded_with: VCR 4.0.0

@@ -23,6 +23,7 @@ module Groups
                                                   foreign_key: :meal_job_requester_id,
                                                   dependent: :nullify,
                                                   inverse_of: :meal_job_requester
+    has_many :shared_drives, class_name: "GDrive::SharedDrive", foreign_key: :group_id, inverse_of: :group
     has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
     scope :in_community, lambda { |c|
@@ -150,6 +151,11 @@ module Groups
     # Returns nil if user not a member.
     def membership_for(user)
       memberships.find_by(user_id: user)
+    end
+
+    def member?(user)
+      mship = membership_for(user)
+      everybody? ? mship.nil? || !mship.opt_out? : !mship.nil?
     end
 
     def join(user)

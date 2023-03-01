@@ -3,7 +3,7 @@
 class ApplicationDecorator < Draper::Decorator
   include MultiCommunityCheck
 
-  delegate :t, :l, :safe_str, to: :h
+  delegate :t, :l, :safe_str, :safe_join, to: :h
 
   def self.collection_decorator_class
     PaginatingDecorator

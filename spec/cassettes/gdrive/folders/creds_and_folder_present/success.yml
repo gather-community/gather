@@ -1,0 +1,606 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink,modifiedTime)&orderBy=folder,name&q=%270B24us5XZC4JyX21yUUw3aHBEYlU%27%20in%20parents
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.21.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 03 Nov 2022 01:37:47 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.6.5 gdcl/1.21.0
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Thu, 03 Nov 2022 01:37:47 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "files": [
+          {
+           "id": "0B24us5XZC4JyTVZ6el83LWFRaFE",
+           "name": "Book of Agreements",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B24us5XZC4JyTVZ6el83LWFRaFE?resourcekey=0-7_tP1JvxSKtU5TaTCuIW1Q",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B24us5XZC4JyUTVaRjFhcXdxWFU",
+           "name": "Children",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B24us5XZC4JyUTVaRjFhcXdxWFU?resourcekey=0-pKwAu2KBR5enHwmHEX-Fag",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0ByZVkiUGfAehRF8zR2k3UlctSW8",
+           "name": "Common House",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0ByZVkiUGfAehRF8zR2k3UlctSW8?resourcekey=0-NpBJEojVm2OzX-2ZJ-hcZw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIubzRLYmlVMGlqeEk",
+           "name": "Facilitation",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIubzRLYmlVMGlqeEk?resourcekey=0-BbRWrk0OzXu_uQCIN7gVew",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B24us5XZC4JyNkVBYUZ1d3FCVmc",
+           "name": "Finance & Legal",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B24us5XZC4JyNkVBYUZ1d3FCVmc?resourcekey=0-l24lkf_JiPrgGrSRt4P3Mg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuZ1RsTTdfcUQyNVE",
+           "name": "Framework",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuZ1RsTTdfcUQyNVE?resourcekey=0-y7cVHlRoJZb3BCz478KE6A",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuT0RqbWRrUmpZaVU",
+           "name": "Grounds",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuT0RqbWRrUmpZaVU?resourcekey=0-c0oFWcRh2xv9bPp8-5-kLw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.992Z"
+          },
+          {
+           "id": "1TvNVzDul57QowuL_4NPv2vn30DYfTSVD",
+           "name": "Kid Safety & Empowerment Ad Hoc committee",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1TvNVzDul57QowuL_4NPv2vn30DYfTSVD",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B24us5XZC4JyakJlbEZBSmdtLTA",
+           "name": "Landscaping & Architecture (LARC)",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B24us5XZC4JyakJlbEZBSmdtLTA?resourcekey=0-SmUb71wgu98zu61pjZQu2A",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuN2dyR053WTJ4NDQ",
+           "name": "Local Issues",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuN2dyR053WTJ4NDQ?resourcekey=0-nNOMetf8-PSXhc3AeLBgoA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuT09NSVdXeHZMTUk",
+           "name": "Maintenance",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuT09NSVdXeHZMTUk?resourcekey=0-8B8pT9W0t9XdPred7O9Kvg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "1eGf-yfUblwAgxUH8ua6_SSu4pFcSo97Q",
+           "name": "Maps",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1eGf-yfUblwAgxUH8ua6_SSu4pFcSo97Q",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuMjNfM3VTNE9xU2s",
+           "name": "Marketing & Membership",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuMjNfM3VTNE9xU2s?resourcekey=0-3ogKjju8n7RUmQ0AYOX-Qg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuQ2xORmN2TTNwNW8",
+           "name": "Meals",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuQ2xORmN2TTNwNW8?resourcekey=0-Lmy3cHLHnAjgSoP28M_TdQ",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B24us5XZC4JyX2pXUFgzem14dkU",
+           "name": "Meeting Minutes",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B24us5XZC4JyX2pXUFgzem14dkU?resourcekey=0-0LDEzx0xcPajoQpwET_BVQ",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuVVRhbm9tcktlZ3c",
+           "name": "Photos",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuVVRhbm9tcktlZ3c?resourcekey=0--ZvTH_Jdt62nhkNntKa9mA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "1CpAkWfYbYE0QjcW5sp-kpD-2yWxmvyiI",
+           "name": "Site and Building Plans",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1CpAkWfYbYE0QjcW5sp-kpD-2yWxmvyiI",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "1p__-V6hmIEVGaCV6mnJ2OVIwxFBQXq3g",
+           "name": "Steering",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1p__-V6hmIEVGaCV6mnJ2OVIwxFBQXq3g",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuREdIR0hCOWVoVmM",
+           "name": "Tech",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuREdIR0hCOWVoVmM?resourcekey=0-rOt4x5t_tPkVA3PmRJXuPA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "1lkhyA4q6PAERgQ6GG3ZfJk8rqmDmQ4oi",
+           "name": "TS Cares",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1lkhyA4q6PAERgQ6GG3ZfJk8rqmDmQ4oi",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          },
+          {
+           "id": "1aaiAjcG88aP-tQl_yI4gDG32JIvCO-aE",
+           "name": "Work",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1aaiAjcG88aP-tQl_yI4gDG32JIvCO-aE",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2022-09-29T19:27:59.993Z"
+          }
+         ]
+        }
+    http_version:
+  recorded_at: Thu, 03 Nov 2022 01:37:47 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/0ByZVkiUGfAehRF8zR2k3UlctSW8?fields=id,name,parents
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.21.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 03 Nov 2022 01:37:49 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.6.5 gdcl/1.21.0
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Thu, 03 Nov 2022 01:37:49 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "0ByZVkiUGfAehRF8zR2k3UlctSW8",
+          "name": "Common House",
+          "parents": [
+            "0B24us5XZC4JyX21yUUw3aHBEYlU"
+          ]
+        }
+    http_version:
+  recorded_at: Thu, 03 Nov 2022 01:37:49 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink,modifiedTime)&orderBy=folder,name&q=%270ByZVkiUGfAehRF8zR2k3UlctSW8%27%20in%20parents
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.21.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 03 Nov 2022 01:37:49 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.6.5 gdcl/1.21.0
+      Authorization:
+      - Bearer xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Thu, 03 Nov 2022 01:37:50 GMT
+      Vary:
+      - Origin
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Security-Policy:
+      - frame-ancestors 'self'
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+         "files": [
+          {
+           "id": "0ByqRYMgnYFjBdVRlaWRmd0FWS3c",
+           "name": "3D printer",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0ByqRYMgnYFjBdVRlaWRmd0FWS3c?resourcekey=0-pj3PjZgYZRcn_QwY4eNpQw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2017-08-08T16:38:07.679Z"
+          },
+          {
+           "id": "0B4EYpGAI-kMlMzFrMXdlYXJ4SlE",
+           "name": "Art",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B4EYpGAI-kMlMzFrMXdlYXJ4SlE?resourcekey=0-Jjg4uJzL2EXKdVuvlON5vQ",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-03-20T15:48:54.756Z"
+          },
+          {
+           "id": "0B3vqeGRChC_McXcteGNuQnhMQVk",
+           "name": "AV Closet",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B3vqeGRChC_McXcteGNuQnhMQVk?resourcekey=0-OQhPn11QkUMAKobGeFBaSg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-02-08T13:34:43.000Z"
+          },
+          {
+           "id": "0BwU8Mrh6wGTqWUt5cFZDZzI3SlE",
+           "name": "CH room coordinators",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0BwU8Mrh6wGTqWUt5cFZDZzI3SlE?resourcekey=0-goA_EQ6qP9CLbeHsyGkymw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-03-15T16:12:38.130Z"
+          },
+          {
+           "id": "1h5FKRoQhltLepKv66r_fgxzdVKabA7ma",
+           "name": "Communications",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1h5FKRoQhltLepKv66r_fgxzdVKabA7ma",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2021-05-21T14:30:48.876Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuUUF6MGtvblFWWDg",
+           "name": "Financial",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuUUF6MGtvblFWWDg?resourcekey=0-4Gb7AQdqO0644-319LbWsA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-03-08T07:01:59.619Z"
+          },
+          {
+           "id": "1M1ML41Xv4Dz6kyQMqJqxU3didfriGj7C",
+           "name": "Guidelines",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/1M1ML41Xv4Dz6kyQMqJqxU3didfriGj7C",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2020-07-13T23:58:08.835Z"
+          },
+          {
+           "id": "0B466TQcthAJMUWRob0xhTnI1cnc",
+           "name": "Guidelines Committee ",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B466TQcthAJMUWRob0xhTnI1cnc?resourcekey=0-Fj5W6dQurKf9ENkMTzdcWA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2015-11-17T01:46:25.442Z"
+          },
+          {
+           "id": "0B1c_DBNPUgIuc0JYclVpWDAtZ3c",
+           "name": "LEED",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B1c_DBNPUgIuc0JYclVpWDAtZ3c?resourcekey=0-PLiVoP7_ssov7WD5H9tiXw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-02-26T21:26:04.365Z"
+          },
+          {
+           "id": "0ByZVkiUGfAehfmF1SkpiSnB2bDB5NzY4UG9UM1ZzQWdySERmVlFBdVg4SzNDZFg1WnVQbzg",
+           "name": "Library",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0ByZVkiUGfAehfmF1SkpiSnB2bDB5NzY4UG9UM1ZzQWdySERmVlFBdVg4SzNDZFg1WnVQbzg?resourcekey=0-hPiGoUzMWTYQ-8FPPVybCg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-01-23T16:07:02.269Z"
+          },
+          {
+           "id": "0B3vqeGRChC_MeEJSOUpUQV9HVm8",
+           "name": "Proposals",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B3vqeGRChC_MeEJSOUpUQV9HVm8?resourcekey=0-h2Bn0LXqpv3pTHQjeJgcpg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-07-01T01:26:50.053Z"
+          },
+          {
+           "id": "0ByZVkiUGfAehdWJQSFhmUld3S1k",
+           "name": "Tables",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0ByZVkiUGfAehdWJQSFhmUld3S1k?resourcekey=0-S_B0IukhGZtePWUE-A2NrA",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2017-04-19T00:22:55.338Z"
+          },
+          {
+           "id": "0B3vqeGRChC_MSV9ZY1RlUTIzSGs",
+           "name": "Windows",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B3vqeGRChC_MSV9ZY1RlUTIzSGs?resourcekey=0-kprDXovIbkVLM-sF8QGHKw",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2016-02-26T21:26:04.685Z"
+          },
+          {
+           "id": "0B4NrA0AYCnaxUlR6RkhoNTdTNWs",
+           "name": "Work - CH Jobs",
+           "mimeType": "application/vnd.google-apps.folder",
+           "webViewLink": "https://drive.google.com/drive/folders/0B4NrA0AYCnaxUlR6RkhoNTdTNWs?resourcekey=0-52S3_0S6s8XqkaVWGUTZmg",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+           "modifiedTime": "2017-07-20T17:36:05.979Z"
+          },
+          {
+           "id": "1HASP8hIJ1qTn0hHggyDmo1a4LvgJheIs4iv4pHrSWqg",
+           "name": "3D printer",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1HASP8hIJ1qTn0hHggyDmo1a4LvgJheIs4iv4pHrSWqg/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2017-04-11T01:59:08.487Z"
+          },
+          {
+           "id": "1hj99ra8q6koxh5pM_nbGsRNr56JFhfBM",
+           "name": "CH Gap Work Cycle Cleanup Commitment",
+           "mimeType": "application/vnd.google-apps.shortcut",
+           "webViewLink": "https://drive.google.com/file/d/1hj99ra8q6koxh5pM_nbGsRNr56JFhfBM/view?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.shortcut",
+           "modifiedTime": "2021-07-28T17:10:06.403Z"
+          },
+          {
+           "id": "1sajCqvwVB9IWDjaQMdtgufCa2z7TKMs2p_HaWjklJ9E",
+           "name": "CH Items to purchase before end of year",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1sajCqvwVB9IWDjaQMdtgufCa2z7TKMs2p_HaWjklJ9E/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2016-12-24T05:17:38.921Z"
+          },
+          {
+           "id": "12yL-AuQOhm-gEIIN9RRIS_TgEoB9MgJk-o_ifH5Ncz4",
+           "name": "CHC 2019 budget proposal",
+           "mimeType": "application/vnd.google-apps.presentation",
+           "webViewLink": "https://docs.google.com/presentation/d/12yL-AuQOhm-gEIIN9RRIS_TgEoB9MgJk-o_ifH5Ncz4/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.presentation",
+           "modifiedTime": "2018-10-03T23:58:40.140Z"
+          },
+          {
+           "id": "1MuQ3e8gxEidMxm0ZR22s-XdURW9fGEzsCfiyx7LeQCA",
+           "name": "checklist for cleaning CH, documentation",
+           "mimeType": "application/vnd.google-apps.spreadsheet",
+           "webViewLink": "https://docs.google.com/spreadsheets/d/1MuQ3e8gxEidMxm0ZR22s-XdURW9fGEzsCfiyx7LeQCA/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+           "modifiedTime": "2018-01-07T15:56:42.274Z"
+          },
+          {
+           "id": "1lFj0SlexSpDRplNMsggnfR00Q9kBnae4ZKxWHpio4h8",
+           "name": "Common House Dining Room Neutral",
+           "mimeType": "application/vnd.google-apps.drawing",
+           "webViewLink": "https://docs.google.com/drawings/d/1lFj0SlexSpDRplNMsggnfR00Q9kBnae4ZKxWHpio4h8/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.drawing",
+           "modifiedTime": "2017-03-03T15:16:30.322Z"
+          },
+          {
+           "id": "1QITKAsZnbJq4gvQJhySYY8H-QMc1rjfBL34yP5SpvXM",
+           "name": "Common House Reservations",
+           "mimeType": "application/vnd.google-apps.spreadsheet",
+           "webViewLink": "https://docs.google.com/spreadsheets/d/1QITKAsZnbJq4gvQJhySYY8H-QMc1rjfBL34yP5SpvXM/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+           "modifiedTime": "2016-05-12T13:01:01.214Z"
+          },
+          {
+           "id": "1Tmfytp5NSuz0_m6WGDmYPYoG6cVS4q1lSyFWAP-fZeM",
+           "name": "Common House Reservations Archive",
+           "mimeType": "application/vnd.google-apps.spreadsheet",
+           "webViewLink": "https://docs.google.com/spreadsheets/d/1Tmfytp5NSuz0_m6WGDmYPYoG6cVS4q1lSyFWAP-fZeM/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+           "modifiedTime": "2021-08-08T13:54:49.831Z"
+          },
+          {
+           "id": "1DhyzlmC-u6SCdgAI3zHjzlxwMRgB3NUYvXhVshDYPn8",
+           "name": "Covid19- TS CH Laundry Schedule",
+           "mimeType": "application/vnd.google-apps.spreadsheet",
+           "webViewLink": "https://docs.google.com/spreadsheets/d/1DhyzlmC-u6SCdgAI3zHjzlxwMRgB3NUYvXhVshDYPn8/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+           "modifiedTime": "2020-03-22T18:41:26.327Z"
+          },
+          {
+           "id": "1-kZ79ldaw9DoRIcKwug4x5f_qis6RX2eq6yJ_NAgLxc",
+           "name": "Dining Room Table Proposal",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1-kZ79ldaw9DoRIcKwug4x5f_qis6RX2eq6yJ_NAgLxc/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2017-03-26T00:25:49.083Z"
+          },
+          {
+           "id": "1Br-G_PdrZ4SlZmJADfWXF-oa1yNCkAQK1YnYg5iUIvU",
+           "name": "Excerpt (CH issues) from 2018-02-18 Sun plenary minutes",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1Br-G_PdrZ4SlZmJADfWXF-oa1yNCkAQK1YnYg5iUIvU/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2019-02-08T20:09:21.976Z"
+          },
+          {
+           "id": "1zDGdxfEsTPCawt7cfn7OkISKt2JXMyIxVE2i9wfK6w8",
+           "name": "Issues within our CH",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1zDGdxfEsTPCawt7cfn7OkISKt2JXMyIxVE2i9wfK6w8/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2018-02-16T20:30:04.658Z"
+          },
+          {
+           "id": "0ByZVkiUGfAehWktSbjFrWnpONTBsbFowbjlZMkNhMHVyWkgw",
+           "name": "Issues within our CH.docx",
+           "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+           "webViewLink": "https://docs.google.com/document/d/0ByZVkiUGfAehWktSbjFrWnpONTBsbFowbjlZMkNhMHVyWkgw/edit?usp=drivesdk&ouid=116607835467887847151&resourcekey=0-QSBRYr_U0qq6UvGUGls75w&rtpof=true&sd=true",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+           "modifiedTime": "2018-02-16T03:00:50.391Z"
+          },
+          {
+           "id": "1btGxGZXfGkbxWlCwZa3IpjMGbpkz_pS5SSMDeAQm-J0",
+           "name": "Keys for Lockbox",
+           "mimeType": "application/vnd.google-apps.spreadsheet",
+           "webViewLink": "https://docs.google.com/spreadsheets/d/1btGxGZXfGkbxWlCwZa3IpjMGbpkz_pS5SSMDeAQm-J0/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet",
+           "modifiedTime": "2016-05-22T04:06:54.156Z"
+          },
+          {
+           "id": "1tUAH3XlKB1oy4aNdb2R8U2HyVm6DPkh4gKyf8zvG6bM",
+           "name": "Suggested purchases with donation money",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1tUAH3XlKB1oy4aNdb2R8U2HyVm6DPkh4gKyf8zvG6bM/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2016-12-01T01:14:04.874Z"
+          },
+          {
+           "id": "1_2dQTwsOZ48S8YChkARNRtqJPtGkQPv228CKoQi5-fQ",
+           "name": "TS Fragrance-Free Common Areas sign 2019",
+           "mimeType": "application/vnd.google-apps.document",
+           "webViewLink": "https://docs.google.com/document/d/1_2dQTwsOZ48S8YChkARNRtqJPtGkQPv228CKoQi5-fQ/edit?usp=drivesdk",
+           "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+           "modifiedTime": "2021-02-16T18:24:53.137Z"
+          }
+         ]
+        }
+    http_version:
+  recorded_at: Thu, 03 Nov 2022 01:37:50 GMT
+recorded_with: VCR 4.0.0

@@ -1,0 +1,44 @@
+<% content_for(:title, "Connection To Google Drive") %>
+<% if @no_auth %>
+  <p>
+    Please click the button below and sign in to Google with the <strong><%= @config.org_user_id %></strong> account.
+  </p>
+  <p>
+    <%= link_to("Authenticate With Google", @auth_url, class: "btn btn-primary") %>
+  </p>
+<% elsif @no_folder %>
+  <p>
+    Please click the button below and choose a folder to migrate.
+  </p>
+  <p>
+    <div data-controller="gdrive--root-picker"
+      data-gdrive--root-picker-client-id-value="<%= @config.client_id %>"
+      data-gdrive--root-picker-api-key-value="<%= @config.api_key %>"
+      data-gdrive--root-picker-access-token-value="<%= @access_token %>"
+      data-gdrive--root-picker-save-folder-url-value="<%= gdrive_migration_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id) %>"
+      data-gdrive--root-picker-test-mode-value="<%= Rails.env.test? %>"
+      >
+      <button data-action="gdrive--root-picker#showPicker"
+        class="btn btn-primary">Pick a Folder to Migrate</button>
+    </div>
+  </p>
+<% else %>
+  <table class="key-value">
+    <tr>
+      <td>Connected Google ID</td>
+      <td><%= @config.org_user_id %></td>
+    </tr>
+    <tr>
+      <td>Root Folder</td>
+      <td>
+        <%= link_to(@folder_name, "https://drive.google.com/drive/folders/#{@config.folder_id}") %>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <%= link_to("Proceed to Select Files",
+        gdrive_migration_file_selection_url(host: Settings.url.host, community_id: current_community.id),
+        class: "btn btn-primary") %>
+<% end %>
+
+<script src="https://apis.google.com/js/api.js"></script>

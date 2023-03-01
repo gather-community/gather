@@ -71,6 +71,7 @@ module Subscription
       Stripe::Customer.create(
         email: intent.contact_email,
         name: intent.community_name,
+        description: intent.community_name,
         address: ADDRESS_FIELDS.map { |f| [f, intent["address_#{f}"]] }.to_h
       )
     end

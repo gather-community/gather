@@ -310,13 +310,18 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
-        elsif context[0..2] == %i[wiki gdrive setup]
+        elsif context[0..2] == %i[wiki gdrive migration]
           depth = 3
           [{
             name: :auth,
-            parents: %i[wiki gdrive setup],
-            path: h.gdrive_auth_path,
-            permitted: GDrive::AuthPolicy.new(user, community).index?,
+            parents: %i[wiki gdrive migration],
+            path: h.gdrive_migration_auth_url(host: Settings.url.host, community_id: community.id),
+            permitted: GDrive::SetupPolicy.new(user, community).setup?,
+          },{
+            name: :file_selection,
+            parents: %i[wiki gdrive migration],
+            path: h.gdrive_migration_file_selection_url(host: Settings.url.host, community_id: community.id),
+            permitted: GDrive::SetupPolicy.new(user, community).setup?
           }]
         end
       @sub_sub_items = filter_and_set_active_items(items, active: context[depth])

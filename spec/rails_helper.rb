@@ -83,6 +83,13 @@ RSpec.configure do |config|
   Capybara.server_port = Settings.url.port
   Capybara.app_host = "http://#{Settings.url.host}"
 
+  config.around(:each, raise_server_errors: false) do |example|
+    Capybara.raise_server_errors = false
+    example.run
+  ensure
+    Capybara.raise_server_errors = true
+  end
+
   config.before(:each, type: :system) do
     driven_by :rack_test
   end

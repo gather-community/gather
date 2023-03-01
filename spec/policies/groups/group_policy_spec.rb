@@ -71,6 +71,14 @@ describe Groups::GroupPolicy do
       it { is_expected.not_to permit(manager, group) }
     end
 
+    context "with shared drive" do
+      let!(:gdrive_shared_drive) { create(:gdrive_shared_drive, group: group) }
+
+      permissions :destroy? do
+        it_behaves_like "forbids all"
+      end
+    end
+
     permissions :activate? do
       let(:group) { create(:group, :inactive, availability: availability, communities: communities) }
       it_behaves_like "permits active admins in group's communities but not regular users"

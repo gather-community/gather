@@ -35,6 +35,10 @@ table {
   }
 }
 
+table.full-width {
+  width: 100%;
+}
+
 table.key-value {
   &.key-value-full {
     width: 100%;

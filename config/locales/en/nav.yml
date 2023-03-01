@@ -34,8 +34,9 @@ en:
       wiki: "Wiki"
       gdrive:
         _self: "Google Drive"
-        setup:
-          auth: "Connection"
+        migration:
+          auth: "Migration Connection"
+          file_selection: "File Selection"
     work:
       _self: "Work"
       signups: "Signups"

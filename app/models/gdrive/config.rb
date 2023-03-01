@@ -6,9 +6,13 @@ module GDrive
     acts_as_tenant :cluster
 
     belongs_to :community
-
-    def incomplete?
-      folder_id.nil?
-    end
+    has_many :tokens, class_name: "GDrive::Token",
+                      foreign_key: :gdrive_config_id,
+                      inverse_of: :gdrive_config,
+                      dependent: :destroy
+    has_many :shared_drives, class_name: "GDrive::SharedDrive",
+                             foreign_key: :gdrive_config_id,
+                             inverse_of: :gdrive_config,
+                             dependent: :destroy
   end
 end

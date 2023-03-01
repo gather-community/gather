@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
+import {jsonFetch} from "../../utils/json_fetch";
 
 export default class extends Controller<HTMLFormElement> {
   static values = {
@@ -59,12 +60,11 @@ export default class extends Controller<HTMLFormElement> {
     }
   }
 
-  saveFolder(id: string): void {
-    $.ajax({
-      url: this.saveFolderUrlValue,
+  async saveFolder(id: string): Promise<void> {
+    await jsonFetch(this.saveFolderUrlValue, {
       method: "PUT",
-      data: {folder_id: id},
-      success: () => window.location.reload()
+      body: {folder_id: id}
     });
+    window.location.reload();
   }
 }

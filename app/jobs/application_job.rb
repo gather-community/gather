@@ -5,10 +5,15 @@ class ApplicationJob < ActiveJob::Base
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    # We usually don't rescue from errors in test mode because doing so makes it hard to see what
-    # is failing when doing TDD. But in some case we may want to rescue.
-    raise exception if Rails.env.test? && ENV["RESCUE_FROM_JOB_EXCEPTIONS"].blank?
-    ErrorReporter.instance.report(exception, data: {job: to_yaml})
+    # We usually don't rescue from errors in dev or test mode because doing so makes it hard to see what
+    # is failing when developing with the test server or doing test-driven development.
+    # But in some case we may want to rescue in tests if we are testing the rescue behavior, so we
+    # check an env var.
+    if Rails.env.development? || (Rails.env.test? && ENV["RESCUE_FROM_JOB_EXCEPTIONS"].blank?)
+      raise exception
+    else
+      ErrorReporter.instance.report(exception, data: {job: to_yaml})
+    end
   end
 
   protected

@@ -110,6 +110,51 @@ describe Groups::Group do
       end
     end
 
+    describe "member?" do
+      let(:group) { create(:group, availability: availability) }
+      let!(:user) { create(:user) }
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+      subject(:is_member) { group.member?(user) }
+
+      context "with everybody group" do
+        let(:availability) { "everybody" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { is_expected.to be(true) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { is_expected.to be(true) }
+        end
+
+        context "with user with opt-out membership" do
+          let(:mbr_kind) { "opt_out" }
+          it { is_expected.to be(false) }
+        end
+      end
+
+      context "with non-everybody group" do
+        let(:availability) { "closed" }
+
+        context "with user with no membership" do
+          let(:mbr_kind) { nil }
+          it { is_expected.to be(false) }
+        end
+
+        context "with user with manager membership" do
+          let(:mbr_kind) { "manager" }
+          it { is_expected.to be(true) }
+        end
+
+        context "with user with joiner membership" do
+          let(:mbr_kind) { "joiner" }
+          it { is_expected.to be(true) }
+        end
+      end
+    end
+
     describe "#join" do
       let(:group) { create(:group, availability: availability) }
       let!(:user) { create(:user) }
@@ -265,17 +310,28 @@ describe Groups::Group do
 
   describe "destroy" do
     let!(:group) { create(:group) }
-    let!(:membership) { create(:group_membership, group: group) }
-    let!(:affiliation) { group.affiliations.first }
-    let!(:job) { create(:work_job, requester: group) }
-    let!(:mailman_list) { create(:group_mailman_list, group: group) }
 
-    it "cascades and nullifies appropriately" do
-      group.reload.destroy
-      expect(Groups::Membership.exists?(membership.id)).to be(false)
-      expect(Groups::Affiliation.exists?(affiliation.id)).to be(false)
-      expect(job.reload.requester).to be_nil
-      expect(Groups::Mailman::List.exists?(mailman_list.id)).to be(false)
+    context "with various associations" do
+      let!(:membership) { create(:group_membership, group: group) }
+      let!(:affiliation) { group.affiliations.first }
+      let!(:job) { create(:work_job, requester: group) }
+      let!(:mailman_list) { create(:group_mailman_list, group: group) }
+
+      it "cascades and nullifies appropriately" do
+        group.reload.destroy
+        expect(Groups::Membership.exists?(membership.id)).to be(false)
+        expect(Groups::Affiliation.exists?(affiliation.id)).to be(false)
+        expect(job.reload.requester).to be_nil
+        expect(Groups::Mailman::List.exists?(mailman_list.id)).to be(false)
+      end
+    end
+
+    context "with shared drive" do
+      let!(:gdrive_shared_drive) { create(:gdrive_shared_drive, group: group) }
+
+      it "errors" do
+        expect { group.reload.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)
+      end
     end
   end
 

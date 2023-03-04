@@ -327,7 +327,7 @@ describe Groups::Group do
     end
 
     context "with shared drive" do
-      let!(:gdrive_shared_drive) { create(:gdrive_shared_drive, group: group) }
+      let!(:gdrive_item) { create(:gdrive_item, group: group) }
 
       it "errors" do
         expect { group.reload.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)

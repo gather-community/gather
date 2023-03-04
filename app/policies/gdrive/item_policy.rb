@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GDrive
-  class SharedDrivePolicy < ApplicationPolicy
-    alias shared_drive record
+  class ItemPolicy < ApplicationPolicy
+    alias item record
 
     class Scope < Scope
       def resolve
@@ -13,7 +13,7 @@ module GDrive
     end
 
     def show?
-      FeatureFlag.lookup(:gdrive).on?(user) && (active_admin? || shared_drive.group.member?(user))
+      FeatureFlag.lookup(:gdrive).on?(user) && (active_admin? || item.group.member?(user))
     end
 
     def permitted_attributes

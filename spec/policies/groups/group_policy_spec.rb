@@ -72,7 +72,7 @@ describe Groups::GroupPolicy do
     end
 
     context "with shared drive" do
-      let!(:gdrive_shared_drive) { create(:gdrive_shared_drive, group: group) }
+      let!(:gdrive_item) { create(:gdrive_item, group: group) }
 
       permissions :destroy? do
         it_behaves_like "forbids all"

@@ -51,7 +51,7 @@ module Groups
     end
 
     def destroy?
-      active? && appropriate_admin? && group.shared_drives.none?
+      active? && appropriate_admin? && group.items.none?
     end
 
     def change_permissions?

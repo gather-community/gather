@@ -47,11 +47,11 @@ describe "gdrive browse", js: true do
       let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
       let!(:group1) { create(:group, joiners: group1_joiners) }
       let!(:group2) { create(:group, joiners: []) }
-      let!(:shared_drive1) do
-        create(:gdrive_shared_drive, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA", group: group1)
+      let!(:item1) do
+        create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA", group: group1)
       end
-      let!(:shared_drive2) do
-        create(:gdrive_shared_drive, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA", group: group2)
+      let!(:item2) do
+        create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA", group: group2)
       end
       let!(:token) do
         create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com")
@@ -78,7 +78,7 @@ describe "gdrive browse", js: true do
         end
 
         scenario "explicit drive ID given for existent but inaccessible drive" do
-          visit(gdrive_folder_path(folder_id: shared_drive2.external_id, drive: 1))
+          visit(gdrive_folder_path(folder_id: item2.external_id, drive: 1))
           expect(page).to have_content("page you were looking for doesn't exist")
         end
 
@@ -103,8 +103,8 @@ describe "gdrive browse", js: true do
       end
 
       # context "with multiple permitted drives" do
-      #   let!(:shared_drive) do
-      #     create(:gdrive_shared_drive, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
+      #   let!(:item) do
+      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
       #                                  group: group)
       #   end
       #

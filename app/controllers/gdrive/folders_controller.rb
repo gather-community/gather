@@ -14,18 +14,18 @@ module GDrive
       return @no_auth = true unless wrapper.authenticated?
 
       # If there are no drives at all connected to the config, then we set a special flag and return.
-      @shared_drives = @config.shared_drives
-      return @no_drives = true if @shared_drives.none?
+      @items = @config.items
+      return @no_drives = true if @items.none?
 
       # From this point on, we only consider drives the user can actually see.
       # If they can't see any, we react differently than if there are none at all connected to the config.
-      @shared_drives = policy_scope(@shared_drives)
-      return @no_accessible_drives = true if @shared_drives.none?
-      multiple_drives = @shared_drives.size > 1
+      @items = policy_scope(@items)
+      return @no_accessible_drives = true if @items.none?
+      multiple_drives = @items.size > 1
 
       if params[:drive] && params[:folder_id]
         validate_gdrive_id(params[:folder_id])
-        return render_not_found unless can_read_shared_drive?(params[:folder_id])
+        return render_not_found unless can_read_item?(params[:folder_id])
         ancestors = find_ancestors(wrapper: wrapper, drive_id: params[:folder_id],
                                    multiple_drives: multiple_drives)
         @file_list = list_files(wrapper, params[:folder_id])
@@ -33,17 +33,17 @@ module GDrive
         validate_gdrive_id(params[:folder_id])
         ancestors = find_ancestors(wrapper: wrapper, folder_id: params[:folder_id],
                                    multiple_drives: multiple_drives)
-        return render_not_found unless can_read_shared_drive?(ancestors[-1].drive_id)
+        return render_not_found unless can_read_item?(ancestors[-1].drive_id)
         @file_list = list_files(wrapper, params[:folder_id])
       else
-        # We don't need to call authorize_shared_drive_by_id in this branch
+        # We don't need to call authorize_item_by_id in this branch
         # because we fetched the drive list using policy_scope.
-        SharedDriveSyncer.new(wrapper, @shared_drives).sync
+        ItemSyncer.new(wrapper, @items).sync
         ancestors = []
         unless multiple_drives
           # At this point there must be exactly one shared drive.
           # If there is only one drive, we don't need to show it as ancestor.
-          @file_list = list_files(wrapper, @shared_drives[0].external_id)
+          @file_list = list_files(wrapper, @items[0].external_id)
         end
       end
       @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -83,7 +83,7 @@ module GDrive
     end
 
     def fetch_drive(wrapper, drive_id)
-      SharedDriveSyncer.new(wrapper, SharedDrive.find_by!(external_id: drive_id)).sync
+      ItemSyncer.new(wrapper, Item.find_by!(external_id: drive_id)).sync
     end
 
     def list_files(wrapper, parent_id)
@@ -94,9 +94,9 @@ module GDrive
                                  include_items_from_all_drives: true)
     end
 
-    def can_read_shared_drive?(drive_id)
-      drive = SharedDrive.find_by!(external_id: drive_id)
-      SharedDrivePolicy.new(current_user, drive).show?
+    def can_read_item?(drive_id)
+      drive = Item.find_by!(external_id: drive_id)
+      ItemPolicy.new(current_user, drive).show?
     end
   end
 end

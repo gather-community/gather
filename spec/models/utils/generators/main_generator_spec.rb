@@ -17,7 +17,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
                               GDrive::FileIngestionBatch
                               GDrive::MainConfig
                               GDrive::MigrationConfig
-                              GDrive::SharedDrive
+                              GDrive::Item
                               GDrive::Token
                               GDrive::UnownedFile
                               Groups::Mailman::List

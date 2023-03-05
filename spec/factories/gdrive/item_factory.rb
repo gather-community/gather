@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :gdrive_item, class: "GDrive::Item" do
     association :gdrive_config, factory: :gdrive_main_config
     group
+    kind { "drive" }
     sequence(:external_id) { |i| "xxx#{i}" }
     sequence(:name) { |i| "Shared Drive #{i}" }
   end

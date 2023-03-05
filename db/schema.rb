@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_05_124551) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_05_125754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -288,6 +288,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_05_124551) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_file_ingestion_batches_on_cluster_id"
     t.index ["gdrive_config_id"], name: "index_gdrive_file_ingestion_batches_on_gdrive_config_id"
+  end
+
+  create_table "gdrive_item_groups", force: :cascade do |t|
+    t.string "access_level", null: false
+    t.datetime "created_at", null: false
+    t.bigint "group_id", null: false
+    t.bigint "item_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
+    t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
+    t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
+    t.check_constraint "access_level::text = ANY (ARRAY['fileOrganizer'::character varying, 'writer'::character varying, 'commenter'::character varying, 'reader'::character varying]::text[])"
   end
 
   create_table "gdrive_items", force: :cascade do |t|
@@ -1089,6 +1101,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_05_124551) do
   add_foreign_key "gdrive_configs", "communities"
   add_foreign_key "gdrive_file_ingestion_batches", "clusters"
   add_foreign_key "gdrive_file_ingestion_batches", "gdrive_configs"
+  add_foreign_key "gdrive_item_groups", "gdrive_items", column: "item_id"
+  add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
   add_foreign_key "gdrive_items", "groups"

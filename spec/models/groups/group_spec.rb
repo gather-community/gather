@@ -316,6 +316,7 @@ describe Groups::Group do
       let!(:affiliation) { group.affiliations.first }
       let!(:job) { create(:work_job, requester: group) }
       let!(:mailman_list) { create(:group_mailman_list, group: group) }
+      let!(:item_group) { create(:gdrive_item_group, group: group) }
 
       it "cascades and nullifies appropriately" do
         group.reload.destroy
@@ -323,6 +324,7 @@ describe Groups::Group do
         expect(Groups::Affiliation.exists?(affiliation.id)).to be(false)
         expect(job.reload.requester).to be_nil
         expect(Groups::Mailman::List.exists?(mailman_list.id)).to be(false)
+        expect(GDrive::ItemGroup.exists?(item_group.id)).to be(false)
       end
     end
 

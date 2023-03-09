@@ -47,14 +47,21 @@ describe "gdrive browse", js: true do
       let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
       let!(:group1) { create(:group, joiners: group1_joiners) }
       let!(:group2) { create(:group, joiners: []) }
-      let!(:item1) do
-        create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA", group: group1)
+      let!(:drive1) do
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA",
+                             group: group1)
       end
-      let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group1) }
-      let!(:item2) do
-        create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA", group: group2)
+      let!(:item_group1) { create(:gdrive_item_group, item: drive1, group: group1) }
+      let!(:drive2) do
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0ABQKSPvPdtPNUk9PVA",
+                             group: group2)
       end
-      let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2) }
+      let!(:item_group2) { create(:gdrive_item_group, item: drive2, group: group2) }
+      let!(:missing_drive) do
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "73bh83UGIkb6BKhBbKb",
+                             group: group1, missing: true)
+      end
+      let!(:item_group3) { create(:gdrive_item_group, item: missing_drive, group: group1) }
       let!(:token) do
         create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com")
       end
@@ -80,7 +87,12 @@ describe "gdrive browse", js: true do
         end
 
         scenario "explicit drive ID given for existent but inaccessible drive" do
-          visit(gdrive_folder_path(folder_id: item2.external_id, drive: 1))
+          visit(gdrive_folder_path(folder_id: drive2.external_id, drive: 1))
+          expect(page).to have_content("page you were looking for doesn't exist")
+        end
+
+        scenario "explicit drive ID given for existent but missing drive" do
+          visit(gdrive_folder_path(folder_id: missing_drive.external_id, drive: 1))
           expect(page).to have_content("page you were looking for doesn't exist")
         end
 

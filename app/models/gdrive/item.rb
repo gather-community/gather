@@ -7,6 +7,7 @@ module GDrive
     belongs_to :gdrive_config, class_name: "GDrive::Config"
     belongs_to :group, class_name: "Groups::Group"
     has_many :item_groups, class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
+    has_many :groups, through: :item_groups
 
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
 

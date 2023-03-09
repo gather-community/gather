@@ -23,20 +23,25 @@ module GDrive
       return @no_accessible_drives = true if @items.none?
       multiple_drives = @items.size > 1
 
+      # Drive accessed explicitly by ID
       if params[:drive] && params[:folder_id]
         validate_gdrive_id(params[:folder_id])
         return render_not_found unless can_read_drive?(params[:folder_id])
         ancestors = find_ancestors(wrapper: wrapper, drive_id: params[:folder_id],
                                    multiple_drives: multiple_drives)
         @file_list = list_files(wrapper, params[:folder_id])
+
+      # Folder accessed explicitly by ID
       elsif params[:folder_id]
         validate_gdrive_id(params[:folder_id])
         ancestors = find_ancestors(wrapper: wrapper, folder_id: params[:folder_id],
                                    multiple_drives: multiple_drives)
         return render_not_found unless can_read_drive?(ancestors[-1].drive_id)
         @file_list = list_files(wrapper, params[:folder_id])
+
+      # No ID given; list all accessible drives
       else
-        # We don't need to call authorize_item_by_id in this branch
+        # We don't need to call can_read_drive? in this branch
         # because we fetched the drive list using policy_scope.
         ItemSyncer.new(wrapper, @items).sync
         ancestors = []

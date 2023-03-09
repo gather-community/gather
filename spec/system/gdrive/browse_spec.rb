@@ -50,9 +50,11 @@ describe "gdrive browse", js: true do
       let!(:item1) do
         create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA", group: group1)
       end
+      let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group1) }
       let!(:item2) do
         create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA", group: group2)
       end
+      let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2) }
       let!(:token) do
         create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com")
       end

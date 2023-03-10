@@ -128,11 +128,20 @@ describe "gdrive browse", js: true do
       end
 
       # context "with multiple permitted drives" do
-      #   let!(:item) do
+      #   let!(:drive) do
       #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
-      #                                  group: group)
+      #                          kind: "drive", group: group)
+      #   end
+      #   let!(:folder) do
+      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
+      #                          kind: "folder", group: group)
+      #   end
+      #   let!(:file) do
+      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
+      #                          kind: "folder", group: group)
       #   end
       #
+      #   # Folders and files shouldn't be shown at top level
       #   scenario "happy path" do
       #   end
       # end

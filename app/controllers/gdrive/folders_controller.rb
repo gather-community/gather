@@ -100,7 +100,8 @@ module GDrive
     end
 
     def can_read_drive?(drive_id)
-      drive = Item.find_by!(external_id: drive_id, kind: "drive")
+      drive = Item.find_by(external_id: drive_id, kind: "drive")
+      return false if drive.nil?
       ItemPolicy.new(current_user, drive).show?
     end
   end

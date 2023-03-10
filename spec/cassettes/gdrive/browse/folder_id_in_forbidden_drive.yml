@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/1R-5rrk68UIdYcidp61CZ54fnLMSiakEi?fields=id,name,parents,driveId&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/12.6 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 27 Dec 2022 16:28:25 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.xxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Date:
+      - Tue, 27 Dec 2022 16:28:26 GMT
+      Vary:
+      - Origin, X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "1R-5rrk68UIdYcidp61CZ54fnLMSiakEi",
+          "name": "Test Folder",
+          "parents": [
+            "0ABQKSPvPdtPNUk9PVA"
+          ],
+          "driveId": "0ABQKSPvPdtPNUk9PVA"
+        }
+    http_version:
+  recorded_at: Tue, 27 Dec 2022 16:28:26 GMT
+recorded_with: VCR 4.0.0

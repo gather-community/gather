@@ -81,9 +81,9 @@ describe "gdrive browse", js: true do
         # scenario "authorization error perhaps from expired refresh token" do
         #   shows an error message requesting gather admin to reauthenticate
 
-        scenario "explicit drive ID given for non-existent drive", raise_server_errors: false do
+        scenario "explicit drive ID given for non-existent drive" do
           visit(gdrive_folder_path(folder_id: "xyzw123", drive: 1))
-          expect(page).to have_content("ActiveRecord::RecordNotFound")
+          expect(page).to have_content("page you were looking for doesn't exist")
         end
 
         scenario "explicit drive ID given for existent but inaccessible drive" do
@@ -103,12 +103,23 @@ describe "gdrive browse", js: true do
           end
         end
 
-        scenario "explicit folder ID given for unknown drive", raise_server_errors: false do
+        scenario "explicit folder ID given for unknown drive" do
           # A cassette is required here because we need to fetch the folder to find out what
           # drive it belongs to before we can check the drive and realize it's inaccessible.
+          # This cassette returns that the folder below is in a drive we have no record of.
           VCR.use_cassette("gdrive/browse/folder_id_in_unknown_drive") do
             visit(gdrive_folder_path(folder_id: "1R-5rrk68UIdYcidp61CZ54fnLMSiakEi"))
-            expect(page).to have_content("ActiveRecord::RecordNotFound")
+            expect(page).to have_content("page you were looking for doesn't exist")
+          end
+        end
+
+        scenario "explicit folder ID given for drive with no permission" do
+          # A cassette is required here because we need to fetch the folder to find out what
+          # drive it belongs to before we can check the drive and realize it's not permitted.
+          # This cassette returns that the folder below is in drive2, which is attached to an empty group.
+          VCR.use_cassette("gdrive/browse/folder_id_in_forbidden_drive") do
+            visit(gdrive_folder_path(folder_id: "1R-5rrk68UIdYcidp61CZ54fnLMSiakEi"))
+            expect(page).to have_content("page you were looking for doesn't exist")
           end
         end
 

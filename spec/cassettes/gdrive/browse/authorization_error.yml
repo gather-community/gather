@@ -1,0 +1,219 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/drives?fields=drives(id,name)&pageSize=100
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sat, 11 Mar 2023 15:39:01 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.xxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error="invalid_token"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sat, 11 Mar 2023 15:39:01 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 401,
+            "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+            "errors": [
+              {
+                "message": "Invalid Credentials",
+                "domain": "global",
+                "reason": "authError",
+                "location": "Authorization",
+                "locationType": "header"
+              }
+            ],
+            "status": "UNAUTHENTICATED"
+          }
+        }
+    http_version:
+  recorded_at: Sat, 11 Mar 2023 15:39:01 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/drives?fields=drives(id,name)&pageSize=100
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sat, 11 Mar 2023 15:39:02 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.xxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error="invalid_token"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sat, 11 Mar 2023 15:39:02 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 401,
+            "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+            "errors": [
+              {
+                "message": "Invalid Credentials",
+                "domain": "global",
+                "reason": "authError",
+                "location": "Authorization",
+                "locationType": "header"
+              }
+            ],
+            "status": "UNAUTHENTICATED"
+          }
+        }
+    http_version:
+  recorded_at: Sat, 11 Mar 2023 15:39:02 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/drives?fields=drives(id,name)&pageSize=100
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sat, 11 Mar 2023 15:39:04 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sat, 11 Mar 2023 15:39:04 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 401,
+            "message": "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+            "errors": [
+              {
+                "message": "Login Required.",
+                "domain": "global",
+                "reason": "required",
+                "location": "Authorization",
+                "locationType": "header"
+              }
+            ],
+            "status": "UNAUTHENTICATED",
+            "details": [
+              {
+                "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                "reason": "CREDENTIALS_MISSING",
+                "domain": "googleapis.com",
+                "metadata": {
+                  "service": "drive.googleapis.com",
+                  "method": "google.apps.drive.v3.DriveDrives.List"
+                }
+              }
+            ]
+          }
+        }
+    http_version:
+  recorded_at: Sat, 11 Mar 2023 15:39:04 GMT
+recorded_with: VCR 4.0.0

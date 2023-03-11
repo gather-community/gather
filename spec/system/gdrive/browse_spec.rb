@@ -1,4 +1,4 @@
-# Copy in the data in the dev config# frozen_string_literal: true
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -78,8 +78,22 @@ describe "gdrive browse", js: true do
       context "when user has accessible drive" do
         let(:group1_joiners) { [actor] }
 
-        # scenario "authorization error perhaps from expired refresh token" do
-        #   shows an error message requesting gather admin to reauthenticate
+        scenario "authorization error perhaps from expired refresh token" do
+          VCR.use_cassette("gdrive/browse/authorization_error") do
+            visit(gdrive_home_path)
+            expect(page).to have_content("There was an error connecting to Google Drive. "\
+              "Please notify a Gather Admin.")
+
+            visit(root_path)
+            expect(page).not_to have_content("There was an error connecting to Google Drive. "\
+              "Please notify a Gather Admin.")
+
+            # Second visit to the page should show same error but via a different code path.
+            visit(gdrive_home_path)
+            expect(page).to(have_content("There was an error connecting to Google Drive. "\
+              "Please notify a Gather Admin."))
+          end
+        end
 
         scenario "explicit drive ID given for non-existent drive" do
           visit(gdrive_folder_path(folder_id: "xyzw123", drive: 1))
@@ -169,14 +183,30 @@ describe "gdrive browse", js: true do
       end
     end
 
-    context "when no shared drives present" do
+    context "when config present" do
       let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
       let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com") }
 
-      scenario "it shows message" do
-        visit(gdrive_home_path)
-        expect(page).to have_content("Your community is not yet connected to Google Drive. "\
-          "You can click 'Setup' or 'Migration' above to get started.")
+      context "when no shared drives present" do
+        scenario "it shows message" do
+          visit(gdrive_home_path)
+          expect(page).to have_content("Your community is not yet connected to Google Drive. "\
+            "You can click 'Setup' above to get started.")
+        end
+      end
+
+      context "when shared drive present" do
+        let!(:drive) do
+          create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA")
+        end
+
+        scenario "authorization error perhaps from expired refresh token" do
+          VCR.use_cassette("gdrive/browse/admin_authorization_error") do
+            visit(gdrive_home_path)
+            expect(page).to(have_content("There was an error connecting to Google Drive. "\
+              "Please click 'Setup' above to re-connect"))
+          end
+        end
       end
     end
   end

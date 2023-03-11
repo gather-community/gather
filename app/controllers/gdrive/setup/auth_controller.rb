@@ -30,7 +30,7 @@ module GDrive
         credentials = wrapper.fetch_credentials_from_store
 
         if credentials.nil?
-          @no_auth = true
+          @no_credentials = true
           setup_auth_url(wrapper: wrapper)
         end
       end

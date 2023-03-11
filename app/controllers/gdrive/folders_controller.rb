@@ -11,7 +11,16 @@ module GDrive
       return unless @config
 
       wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
-      return @no_auth = true unless wrapper.authenticated?
+      unless wrapper.has_credentials?
+        # If there are any items then this community has probably connected before but maybe
+        # their refresh token expired, so we don't want to say they're not yet connected or they
+        # might freak out.
+        if @config.items.any?
+          @authorization_error = true
+        else
+          @no_credentials = true
+        end
+      end
 
       # If there are no drives at all connected to the config, then we set a special flag and return.
       @items = @config.items
@@ -52,6 +61,11 @@ module GDrive
         end
       end
       @ancestors_decorator = AncestorsDecorator.new(ancestors)
+    rescue Google::Apis::AuthorizationError => error
+      # The token for this config (MainConfigs should only have one) is no good anymore
+      # so we destroy it so that when they go to setup they can re-connect.
+      @config.tokens.destroy_all
+      @authorization_error = true
     rescue Google::Apis::ClientError => error
       if error.message.include?("File not found")
         render_not_found

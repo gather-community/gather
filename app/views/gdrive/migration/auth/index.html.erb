@@ -1,5 +1,5 @@
 <% content_for(:title, "Connection To Google Drive") %>
-<% if @no_auth %>
+<% if @no_credentials %>
   <p>
     Please click the button below and sign in to Google with the <strong><%= @config.org_user_id %></strong> account.
   </p>

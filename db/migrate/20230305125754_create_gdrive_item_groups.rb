@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGDriveItemGroups < ActiveRecord::Migration[7.0]
   def change
     create_table :gdrive_item_groups do |t|

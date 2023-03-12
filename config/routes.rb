@@ -248,8 +248,8 @@ Rails.application.routes.draw do
   end
 
   namespace :gdrive do
-    get "/", to: "browse#show", as: :home
-    get "item/:item_id", to: "browse#show", as: :browse
+    get "/", to: "browse#index", as: :home
+    get "item/:item_id", to: "browse#index", as: :browse
 
     namespace :setup do
       get "auth", to: "auth#index", as: :auth

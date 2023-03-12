@@ -4,11 +4,14 @@ module GDrive
   class BrowseController < ApplicationController
     before_action -> { nav_context(:wiki, :gdrive) }
 
-    def show
+    def index
       authorize(:folder, policy_class: BrowsePolicy)
       @config = MainConfig.find_by(community: current_community)
       @setup_policy = SetupPolicy.new(current_user, current_community)
-      return unless @config
+      if !@config
+        skip_policy_scope
+        return
+      end
 
       wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
       unless wrapper.has_credentials?
@@ -24,7 +27,10 @@ module GDrive
 
       # If there are no drives at all connected to the config, then we set a special flag and return.
       @drives = @config.items.drives_only
-      return @no_drives = true if @drives.none?
+      if @drives.none?
+        skip_policy_scope
+        return @no_drives = true
+      end
 
       # From this point on, we only consider drives the user can actually see.
       # If they can't see any, we react differently than if there are none at all connected to the config.

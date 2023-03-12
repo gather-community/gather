@@ -4,7 +4,7 @@ module GDrive
   class BrowsePolicy < ApplicationPolicy
     alias_method :item, :record
 
-    def show?
+    def index?
       FeatureFlag.lookup(:gdrive).on?(user)
     end
   end

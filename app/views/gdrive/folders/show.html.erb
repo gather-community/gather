@@ -47,7 +47,7 @@
   <% end %>
   <% if @file_list %>
     <% if @file_list.files.any? %>
-      <table class="full-width">
+      <table class="full-width item-list">
         <% @file_list.files.each do |file| %>
           <tr>
             <td>
@@ -67,8 +67,8 @@
       </div>
     <% end %>
   <% else %>
-    <table class="full-width">
-      <% @items.each do |drive| %>
+    <table class="full-width item-list">
+      <% @drives.each do |drive| %>
         <tr>
           <td>
             <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",

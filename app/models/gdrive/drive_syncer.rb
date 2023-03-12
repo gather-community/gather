@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
 module GDrive
-  class ItemSyncer
-    attr_accessor :wrapper, :items
+  # Fetches all shared drives and updates the stored names.
+  # Assumes there are less than 100 shared drives in the connected Workspace.
+  class DriveSyncer
+    attr_accessor :wrapper, :drives
 
-    def initialize(wrapper, items)
+    def initialize(wrapper, drives)
       self.wrapper = wrapper
-      self.items = items
+      self.drives = drives
     end
 
     def sync
       drive_list = wrapper.service.list_drives(fields: "drives(id,name)", page_size: 100)
       all_drives_by_id = drive_list.drives.map { |d| [d.id, d] }.to_h
-      Array.wrap(items).each do |drive|
+      Array.wrap(drives).each do |drive|
         match = all_drives_by_id[drive.external_id]
         if match.nil?
           drive.not_found = true
@@ -20,7 +22,7 @@ module GDrive
           drive.update!(name: match.name)
         end
       end
-      items
+      drives
     end
   end
 end

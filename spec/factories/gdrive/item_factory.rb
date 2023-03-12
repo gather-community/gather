@@ -6,6 +6,6 @@ FactoryBot.define do
     group
     kind { "drive" }
     sequence(:external_id) { |i| "xxx#{i}" }
-    sequence(:name) { |i| "Shared Drive #{i}" }
+    sequence(:name) { |i| "#{kind.capitalize} #{i}" }
   end
 end

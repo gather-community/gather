@@ -46,7 +46,7 @@ describe "gdrive browse", js: true do
     context "when authenticated and shared drive present" do
       let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
       let!(:group1) { create(:group, joiners: group1_joiners) }
-      let!(:group2) { create(:group, joiners: []) }
+      let!(:group2) { create(:group, joiners: group2_joiners) }
       let!(:drive1) do
         create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA",
                              group: group1)
@@ -68,6 +68,7 @@ describe "gdrive browse", js: true do
 
       context "when user has no accessible drives" do
         let(:group1_joiners) { [] }
+        let(:group2_joiners) { [] }
 
         scenario do
           visit(gdrive_home_path)
@@ -75,8 +76,9 @@ describe "gdrive browse", js: true do
         end
       end
 
-      context "when user has accessible drive" do
+      context "when user has one accessible drive" do
         let(:group1_joiners) { [actor] }
+        let(:group2_joiners) { [] }
 
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/authorization_error") do
@@ -137,28 +139,45 @@ describe "gdrive browse", js: true do
           end
         end
 
-        # scenario "happy path" do
-        # end
+        scenario "happy path - land on page, see folders in drive, click folder, click file" do
+          VCR.use_cassette("gdrive/browse/one_drive_happy_path") do
+            visit(gdrive_home_path)
+            click_on("Folder A")
+            expect(page).to have_link("Doc 2")
+          end
+        end
       end
 
-      # context "with multiple permitted drives" do
-      #   let!(:drive) do
-      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
-      #                          kind: "drive", group: group)
-      #   end
-      #   let!(:folder) do
-      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
-      #                          kind: "folder", group: group)
-      #   end
-      #   let!(:file) do
-      #     create(:gdrive_item, gdrive_config: config, external_id: "0ABQKSPvPdtPNUk9PVA",
-      #                          kind: "folder", group: group)
-      #   end
-      #
-      #   # Folders and files shouldn't be shown at top level
-      #   scenario "happy path" do
-      #   end
-      # end
+      context "with multiple permitted drives" do
+        let(:group1_joiners) { [actor] }
+        let(:group2_joiners) { [actor] }
+
+        let!(:folder) do
+          create(:gdrive_item, gdrive_config: config, external_id: "1R-5rrk68UIdYcidp61CZ54fnLMSiakEi",
+                               kind: "folder", name: "")
+        end
+        let!(:item_group4) { create(:gdrive_item_group, item: folder, group: group1) }
+        let!(:file) do
+          create(:gdrive_item, gdrive_config: config, external_id: "1s5sjHHrXaVxw5OqlmtZKR2b_GR5qMr8KASfsG9w3dz4",
+                               kind: "file")
+        end
+        let!(:item_group5) { create(:gdrive_item_group, item: file, group: group1) }
+
+        # Folders and files shouldn't be shown at top level
+        scenario("happy path - land on page, see both drives, click one, click folder") do
+          VCR.use_cassette("gdrive/browse/multi_drive_happy_path") do
+            visit(gdrive_home_path)
+            within(".item-list") do
+              expect(page).to have_content("Gather Drive Test A")
+              expect(page).not_to have_content("Folder")
+              expect(page).not_to have_content("File")
+            end
+            click_on("Gather Drive Test A")
+            click_on("Folder A")
+            expect(page).to(have_link("Doc 2"))
+          end
+        end
+      end
     end
   end
 

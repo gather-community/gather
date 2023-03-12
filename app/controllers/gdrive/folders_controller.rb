@@ -23,14 +23,14 @@ module GDrive
       end
 
       # If there are no drives at all connected to the config, then we set a special flag and return.
-      @items = @config.items
-      return @no_drives = true if @items.none?
+      @drives = @config.items.drives_only
+      return @no_drives = true if @drives.none?
 
       # From this point on, we only consider drives the user can actually see.
       # If they can't see any, we react differently than if there are none at all connected to the config.
-      @items = policy_scope(@items)
-      return @no_accessible_drives = true if @items.none?
-      multiple_drives = @items.size > 1
+      @drives = policy_scope(@drives)
+      return @no_accessible_drives = true if @drives.none?
+      multiple_drives = @drives.size > 1
 
       # Drive accessed explicitly by ID
       if params[:drive] && params[:folder_id]
@@ -52,12 +52,12 @@ module GDrive
       else
         # We don't need to call can_read_drive? in this branch
         # because we fetched the drive list using policy_scope.
-        ItemSyncer.new(wrapper, @items).sync
+        DriveSyncer.new(wrapper, @drives).sync
         ancestors = []
         unless multiple_drives
           # At this point there must be exactly one shared drive.
           # If there is only one drive, we don't need to show it as ancestor.
-          @file_list = list_files(wrapper, @items[0].external_id)
+          @file_list = list_files(wrapper, @drives[0].external_id)
         end
       end
       @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -102,7 +102,7 @@ module GDrive
     end
 
     def fetch_drive(wrapper, drive_id)
-      ItemSyncer.new(wrapper, Item.find_by!(external_id: drive_id)).sync
+      DriveSyncer.new(wrapper, Item.find_by!(external_id: drive_id)).sync
     end
 
     def list_files(wrapper, parent_id)

@@ -2,6 +2,17 @@
 
 require "rails_helper"
 
+# To develop on this spec, if the code you're workign on needs to make calls to the GDrive API,
+# 1. Open the GDrive page on the dev server
+# 2. Authenticate to GDrive
+# 3. Open the console and select your tenant.
+# 4. GDrive::Token.all
+# 5. Copy the access_token value
+# 6. Pass it to the :gdrive_token factory as `access_token`
+# 7. Wrap your test code in a VCR cassette
+# 8. Run the test. The API call should work and the request should be captured.
+# 9. Once the test is passing, update all occurrences of the access_token in the cassette with `ya29.xxx`
+# 10. Remove the explict access_token param from the token factory call.
 describe "gdrive browse", js: true do
   include_context "gdrive"
 

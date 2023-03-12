@@ -5,7 +5,6 @@ module GDrive
     acts_as_tenant :cluster
 
     belongs_to :gdrive_config, class_name: "GDrive::Config"
-    belongs_to :group, class_name: "Groups::Group"
     has_many :item_groups, class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
     has_many :groups, through: :item_groups
 
@@ -16,7 +15,7 @@ module GDrive
     delegate :community, to: :gdrive_config
 
     attr_accessor :not_found
-    alias not_found? not_found
+    alias_method :not_found?, :not_found
 
     def self.sync
       all

@@ -16,14 +16,13 @@ module Groups
     has_many :affiliations, class_name: "Groups::Affiliation", dependent: :destroy, inverse_of: :group
     has_many :communities, through: :affiliations
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
-                                                         dependent: :destroy, inverse_of: :group
+      dependent: :destroy, inverse_of: :group
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
-                         inverse_of: :requester
+      inverse_of: :requester
     has_many :work_periods_as_meal_job_requester, class_name: "Work::Period",
-                                                  foreign_key: :meal_job_requester_id,
-                                                  dependent: :nullify,
-                                                  inverse_of: :meal_job_requester
-    has_many :items, class_name: "GDrive::Item", foreign_key: :group_id, inverse_of: :group
+      foreign_key: :meal_job_requester_id,
+      dependent: :nullify,
+      inverse_of: :meal_job_requester
     has_many :gdrive_item_groups, class_name: "GDrive::ItemGroup", dependent: :destroy, inverse_of: :group
     has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
 
@@ -58,7 +57,7 @@ module Groups
     }
     scope :with_user, lambda { |user|
       subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN (?))"
-      memb_clause = "(availability != 'everybody' AND EXISTS #{subq}) OR "\
+      memb_clause = "(availability != 'everybody' AND EXISTS #{subq}) OR " \
         "(availability = 'everybody' AND NOT EXISTS #{subq})"
       affil_clause = "? IN (SELECT community_id FROM group_affiliations WHERE group_id = groups.id)"
       where(memb_clause, user, %w[joiner manager], user, %w[opt_out])
@@ -71,14 +70,14 @@ module Groups
         translated = I18n.t("simple_form.options.groups_group.kind.#{kind}")
         "WHEN '#{kind}' THEN '#{translated}'"
       end
-      order(Arel.sql("LOWER(CASE kind #{whens.join(' ')} END)"))
+      order(Arel.sql("LOWER(CASE kind #{whens.join(" ")} END)"))
     }
 
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :mailman_list, reject_if: :mailman_list_not_present_and_name_blank?,
-                                                 allow_destroy: true
+      allow_destroy: true
 
     before_validation :normalize
 

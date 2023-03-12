@@ -327,14 +327,6 @@ describe Groups::Group do
         expect(GDrive::ItemGroup.exists?(item_group.id)).to be(false)
       end
     end
-
-    context "with shared drive" do
-      let!(:gdrive_item) { create(:gdrive_item, group: group) }
-
-      it "errors" do
-        expect { group.reload.destroy }.to raise_error(ActiveRecord::InvalidForeignKey)
-      end
-    end
   end
 
   def expect_no_membership

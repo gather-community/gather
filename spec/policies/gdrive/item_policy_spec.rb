@@ -14,7 +14,7 @@ describe GDrive::ItemPolicy do
     let(:group1) { create(:group, communities: communities, joiners: [in_user1]) }
     let(:group2) { create(:group, communities: communities, joiners: [in_user2]) }
     let(:config) { create(:gdrive_main_config, community: communities[0]) }
-    let(:item) { create(:gdrive_item, group: group1, gdrive_config: config) }
+    let(:item) { create(:gdrive_item, gdrive_config: config) }
     let!(:item_group1) { create(:gdrive_item_group, item: item, group: group1) }
     let!(:item_group2) { create(:gdrive_item_group, item: item, group: group2) }
     let(:record) { item }
@@ -75,27 +75,27 @@ describe GDrive::ItemPolicy do
 
     # actor is in this group and it's with communities[0]
     let!(:group1) { create(:group, communities: [communities[0]], joiners: [actor]) }
-    let!(:item1) { create(:gdrive_item, group: group1, gdrive_config: config1) }
+    let!(:item1) { create(:gdrive_item, gdrive_config: config1) }
     let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group1) }
 
     # actor is not in this group but it's with communities[0]
     let!(:group2) { create(:group, communities: [communities[0]], joiners: []) }
-    let!(:item2) { create(:gdrive_item, group: group1, gdrive_config: config1) }
+    let!(:item2) { create(:gdrive_item, gdrive_config: config1) }
     let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2) }
 
     # actor is in this group and it's with communities[1]
     let!(:group3) { create(:group, communities: communities, joiners: [actor]) }
-    let!(:item3) { create(:gdrive_item, group: group1, gdrive_config: config2) }
+    let!(:item3) { create(:gdrive_item, gdrive_config: config2) }
     let!(:item_group3) { create(:gdrive_item_group, item: item3, group: group3) }
 
     # actor is not in this group and it's with communities[1]
     let!(:group4) { create(:group, communities: communities, joiners: []) }
-    let!(:item4) { create(:gdrive_item, group: group1, gdrive_config: config2) }
+    let!(:item4) { create(:gdrive_item, gdrive_config: config2) }
     let!(:item_group4) { create(:gdrive_item_group, item: item4, group: group4) }
 
     # actor is in this group and it's with communities[0], but item is missing
     let!(:group5) { create(:group, communities: [communities[0]], joiners: [actor]) }
-    let!(:item5) { create(:gdrive_item, group: group5, gdrive_config: config1, missing: true) }
+    let!(:item5) { create(:gdrive_item, gdrive_config: config1, missing: true) }
     let!(:item_group5) { create(:gdrive_item_group, item: item5, group: group5) }
 
     context "with regular user" do

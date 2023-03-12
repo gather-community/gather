@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_172152) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_12_183215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -309,7 +307,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_172152) do
     t.datetime "created_at", null: false
     t.string "external_id", limit: 255, null: false
     t.bigint "gdrive_config_id", null: false
-    t.bigint "group_id", null: false
     t.string "kind", null: false
     t.boolean "missing", default: false, null: false
     t.string "name", null: false
@@ -317,7 +314,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_172152) do
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
-    t.index ["group_id"], name: "index_gdrive_items_on_group_id"
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
@@ -1108,7 +1104,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_172152) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
-  add_foreign_key "gdrive_items", "groups"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"
   add_foreign_key "gdrive_unowned_files", "clusters"

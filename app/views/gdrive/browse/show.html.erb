@@ -53,7 +53,7 @@
             <td>
               <%= image_tag(file.icon_link, class: "file-icon") %>
               <% if file.mime_type == "application/vnd.google-apps.folder" %>
-                <%= link_to(file.name, gdrive_folder_path(folder_id: file.id)) %>
+                <%= link_to(file.name, gdrive_browse_path(item_id: file.id)) %>
               <% else %>
                 <%= link_to(file.name, file.web_view_link, target: "_blank") %>
               <% end %>
@@ -73,7 +73,7 @@
           <td>
             <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
                           class: "file-icon") %>
-            <%= link_to(drive.name, gdrive_folder_path(folder_id: drive.external_id, drive: 1)) %>
+            <%= link_to(drive.name, gdrive_browse_path(item_id: drive.external_id, drive: 1)) %>
           </td>
         </tr>
       <% end %>

@@ -292,10 +292,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_124919) do
 
   create_table "gdrive_item_groups", force: :cascade do |t|
     t.string "access_level", null: false
+    t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "group_id", null: false
     t.bigint "item_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_item_groups_on_cluster_id"
     t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
     t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
     t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
@@ -1101,6 +1103,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_124919) do
   add_foreign_key "gdrive_configs", "communities"
   add_foreign_key "gdrive_file_ingestion_batches", "clusters"
   add_foreign_key "gdrive_file_ingestion_batches", "gdrive_configs"
+  add_foreign_key "gdrive_item_groups", "clusters"
   add_foreign_key "gdrive_item_groups", "gdrive_items", column: "item_id"
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"

@@ -31,6 +31,10 @@ module GeneralHelpers
     end
   end
 
+  def use_apex_domain
+    set_host(Settings.url.host)
+  end
+
   def use_subdomain(subdomain)
     set_host("#{subdomain}.#{Settings.url.host}")
   end

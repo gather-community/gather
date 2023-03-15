@@ -3,38 +3,78 @@
 require "rails_helper"
 
 describe "nav menu" do
-  let(:community) { create(:community, slug: "foo") }
+  let!(:community) { create(:community, slug: "foo") }
+  let!(:community2) { create(:community, slug: "bar") }
   let(:actor) { create(:user, community: community) }
+  let(:setting) { nil }
 
   before do
-    use_user_subdomain(actor)
     community.settings.main_nav_customizations = setting
     community.save!
     login_as(actor, scope: :user)
   end
 
-  context "basic" do
-    let(:setting) { "" }
+  context "when visiting page on subdomain" do
+    before do
+      use_user_subdomain(actor)
+    end
 
-    scenario "no customizations" do
-      main_nav_test(match: [["People", "http://foo.gather.localhost.tv:31337/users"],
-                            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
-                            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
-                            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
-                            ["Calendars", "http://foo.gather.localhost.tv:31337/calendars/events"],
-                            ["Wiki", "http://foo.gather.localhost.tv:31337/wiki"]])
+    context "basic" do
+      scenario "no customizations" do
+        main_nav_test(match:
+          [
+            ["People", "http://foo.gather.localhost.tv:31337/users"],
+            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
+            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
+            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
+            ["Calendars", "http://foo.gather.localhost.tv:31337/calendars/events"],
+            ["Wiki", "http://foo.gather.localhost.tv:31337/wiki"]
+          ])
+      end
+    end
+
+    context "changes" do
+      let(:setting) { "[Calendars]()[Wiki](http://wikipedia.org) [Google](http://google.com)" }
+
+      scenario "change one link, disable one, add another" do
+        main_nav_test(match:
+          [
+            ["People", "http://foo.gather.localhost.tv:31337/users"],
+            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
+            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
+            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
+            ["Wiki", "http://wikipedia.org"],
+            ["Google", "http://google.com"]
+          ])
+      end
     end
   end
-  context "changes" do
-    let(:setting) { "[Calendars]()[Wiki](http://wikipedia.org) [Google](http://google.com)" }
 
-    scenario "change one link, disable one, add another" do
-      main_nav_test(match: [["People", "http://foo.gather.localhost.tv:31337/users"],
-                            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
-                            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
-                            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
-                            ["Wiki", "http://wikipedia.org"],
-                            ["Google", "http://google.com"]])
+  context "when visiting page on apex domain with community in query string" do
+    let(:actor) { create(:admin, community: community) }
+
+    before do
+      use_apex_domain
+
+      # Only GDrive controllers currently do this.
+      create(:feature_flag, name: "gdrive", status: true)
+    end
+
+    scenario "shows home community subdomain" do
+      # This page does not redirect to a subdomain
+      visit("/gdrive/setup/auth?community_id=#{community.id}")
+      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://foo.gather.localhost.tv:31337/users")
+    end
+  end
+
+  context "when visiting page on other community subdomain" do
+    before do
+      use_subdomain("bar")
+    end
+
+    scenario "keeps same subdomain" do
+      visit("/users")
+      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://bar.gather.localhost.tv:31337/users")
     end
   end
 

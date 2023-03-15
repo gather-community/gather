@@ -171,6 +171,7 @@ en:
           club: "Club"
           crew: "Crew"
           squad: "Squad"
+          circle: "Circle"
           group: "Group"
           other: "Other"
         memberships:

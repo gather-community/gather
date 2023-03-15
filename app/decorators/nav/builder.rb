@@ -303,8 +303,8 @@ module Nav
             name: :general,
             parents: %i[people settings],
             path: h.edit_people_settings_path,
-            permitted: People::SettingsPolicy.new(user, community).edit?,
-          },{
+            permitted: People::SettingsPolicy.new(user, community).edit?
+          }, {
             name: :member_types,
             parents: %i[people settings],
             path: h.people_member_types_path,
@@ -316,8 +316,8 @@ module Nav
             name: :auth,
             parents: %i[wiki gdrive migration],
             path: h.gdrive_migration_auth_url(host: Settings.url.host, community_id: community.id),
-            permitted: GDrive::SetupPolicy.new(user, community).setup?,
-          },{
+            permitted: GDrive::SetupPolicy.new(user, community).setup?
+          }, {
             name: :file_selection,
             parents: %i[wiki gdrive migration],
             path: h.gdrive_migration_file_selection_url(host: Settings.url.host, community_id: community.id),
@@ -369,14 +369,14 @@ module Nav
 
     def link(item, tab: false, icon: true)
       name = if item[:name].is_a?(String)
-               item[:name]
-             else
-               i18n_key_parts = ["nav_links"]
-               i18n_key_parts.concat(Array.wrap(item[:parents]))
-               i18n_key_parts << (item[:i18n_key] || item[:name])
-               i18n_key = i18n_key_parts.join(".")
-               name = t("#{i18n_key}._self", default: t(i18n_key))
-             end
+        item[:name]
+      else
+        i18n_key_parts = ["nav_links"]
+        i18n_key_parts.concat(Array.wrap(item[:parents]))
+        i18n_key_parts << (item[:i18n_key] || item[:name])
+        i18n_key = i18n_key_parts.join(".")
+        name = t("#{i18n_key}._self", default: t(i18n_key))
+      end
       params = {}
       params[:method] = item[:method]
       params[:role] = "tab" if tab
@@ -392,7 +392,7 @@ module Nav
       # We have to add the full host, port, and protocol if it's not given since some pages
       # are under the apex gather domain with community specified through query string but we want the
       # nav links to go back to the subdomain.
-      url = item[:path].match(/\Ahttps?:\/\//) ? item[:path] : h.url_in_home_community(item[:path])
+      url = /\Ahttps?:\/\//.match?(item[:path]) ? item[:path] : h.url_in_community(community, item[:path])
 
       h.link_to(icon_tag << " #{name}", url, params)
     end

@@ -2,12 +2,12 @@
 
 module GDrive
   class ItemPolicy < ApplicationPolicy
-    alias item record
+    alias_method :item, :record
 
     class Scope < Scope
       def resolve
         user_group_ids = Groups::Group.with_user(user).pluck(:id)
-        item_ids = GDrive::ItemGroup.where(group: user_group_ids).pluck(:item_id)
+        item_ids = GDrive::ItemGroup.where(group: user_group_ids).select(:item_id)
         membership_scope = scope.joins(:gdrive_config).where(id: item_ids)
         result = active_admin? ? membership_scope.or(allow_admins_only) : membership_scope
         result.not_missing

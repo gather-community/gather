@@ -6,16 +6,14 @@ module GDrive
 
     class Scope < Scope
       def resolve
-        user_group_ids = Groups::Group.with_user(user).pluck(:id)
+        user_group_ids = Groups::Group.with_user(user).select(:id)
         item_ids = GDrive::ItemGroup.where(group: user_group_ids).select(:item_id)
-        membership_scope = scope.joins(:gdrive_config).where(id: item_ids)
-        membership_scope.not_missing
+        scope.joins(:gdrive_config).where(id: item_ids)
       end
     end
 
     def show?
-      FeatureFlag.lookup(:gdrive).on?(user) && !item.missing? &&
-        item.groups.any? { |g| g.member?(user) }
+      FeatureFlag.lookup(:gdrive).on?(user) && item.groups.any? { |g| g.member?(user) }
     end
 
     def permitted_attributes

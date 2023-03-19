@@ -25,36 +25,24 @@ describe GDrive::ItemPolicy do
           expect(FeatureFlag).to receive(:lookup).and_return(double(on?: true))
         end
 
-        context "when item is not missing" do
-          it "permits users in group1" do
-            expect(subject).to permit(in_user1, record)
-          end
-
-          it "permits users in group2" do
-            expect(subject).to permit(in_user2, record)
-          end
-
-          it "forbids admins not in group but from item community" do
-            expect(subject).not_to permit(cmty1_admin, record)
-          end
-
-          it "forbids admins not in group and not from item community" do
-            expect(subject).not_to permit(cmty2_admin, record)
-          end
-
-          it "forbids users not in either group" do
-            expect(subject).not_to permit(out_user, record)
-          end
+        it "permits users in group1" do
+          expect(subject).to permit(in_user1, record)
         end
 
-        context "when item is missing" do
-          before do
-            item.missing = true
-          end
+        it "permits users in group2" do
+          expect(subject).to permit(in_user2, record)
+        end
 
-          it "forbids users in group1" do
-            expect(subject).not_to permit(in_user1, record)
-          end
+        it "forbids admins not in group but from item community" do
+          expect(subject).not_to permit(cmty1_admin, record)
+        end
+
+        it "forbids admins not in group and not from item community" do
+          expect(subject).not_to permit(cmty2_admin, record)
+        end
+
+        it "forbids users not in either group" do
+          expect(subject).not_to permit(out_user, record)
         end
       end
 
@@ -92,11 +80,6 @@ describe GDrive::ItemPolicy do
     let!(:group4) { create(:group, communities: communities, joiners: []) }
     let!(:item4) { create(:gdrive_item, gdrive_config: config2) }
     let!(:item_group4) { create(:gdrive_item_group, item: item4, group: group4) }
-
-    # actor is in this group and it's with communities[0], but item is missing
-    let!(:group5) { create(:group, communities: [communities[0]], joiners: [actor]) }
-    let!(:item5) { create(:gdrive_item, gdrive_config: config1, missing: true) }
-    let!(:item_group5) { create(:gdrive_item_group, item: item5, group: group5) }
 
     context "with regular user" do
       let(:actor) { create(:user, community: communities[0]) }

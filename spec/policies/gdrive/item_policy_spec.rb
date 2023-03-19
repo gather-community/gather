@@ -96,6 +96,28 @@ describe GDrive::ItemPolicy do
         is_expected.to match_array([item1, item3])
       end
     end
+
+    # Normally we don't have to test children because they can't log in,
+    # but the ItemGroupPolicy that this one relies on is used to compute
+    # Drive permission syncs, so we have to be extra careful.
+    context "with child" do
+      let(:actor) { create(:user, :child, community: communities[0]) }
+
+      it "forbids all" do
+        is_expected.to be_empty
+      end
+    end
+
+    # Normally we don't have to test inactive users because they can't log in,
+    # but the ItemGroupPolicy that this one relies on is used to compute
+    # Drive permission syncs, so we have to be extra careful.
+    context "with inactive user" do
+      let(:actor) { create(:user, :inactive, community: communities[0]) }
+
+      it "forbids all" do
+        is_expected.to be_empty
+      end
+    end
   end
 
   describe "permitted attributes" do

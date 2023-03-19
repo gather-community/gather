@@ -6,6 +6,7 @@ module GDrive
 
     class Scope < Scope
       def resolve
+        return scope.none unless user.active? && user.full_access?
         scope.where(group: Groups::Group.with_user(user).select(:id))
       end
     end

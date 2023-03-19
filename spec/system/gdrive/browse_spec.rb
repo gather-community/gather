@@ -59,18 +59,15 @@ describe "gdrive browse", js: true do
       let!(:group1) { create(:group, joiners: group1_joiners) }
       let!(:group2) { create(:group, joiners: group2_joiners) }
       let!(:drive1) do
-        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA",
-          group: group1)
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA")
       end
       let!(:item_group1) { create(:gdrive_item_group, item: drive1, group: group1) }
       let!(:drive2) do
-        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0ABQKSPvPdtPNUk9PVA",
-          group: group2)
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0ABQKSPvPdtPNUk9PVA")
       end
       let!(:item_group2) { create(:gdrive_item_group, item: drive2, group: group2) }
       let!(:missing_drive) do
-        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "73bh83UGIkb6BKhBbKb",
-          group: group1, missing: true)
+        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "73bh83UGIkb6BKhBbKb", missing: true)
       end
       let!(:item_group3) { create(:gdrive_item_group, item: missing_drive, group: group1) }
       let!(:token) do

@@ -31,6 +31,10 @@ describe GDrive::SyncListener do
           end
         )
       end
+
+      it "enqueues nothing if no google_email" do
+        expect { create(:user, google_email: nil) }.not_to have_enqueued_job(GDrive::PermissionSyncJob)
+      end
     end
 
     context "with no linked items" do
@@ -50,34 +54,79 @@ describe GDrive::SyncListener do
     let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2, access_level: "writer") }
 
     context "when changing google_email" do
-      it "enqueues sync job" do
-        expect { user.update!(google_email: "bar@gmail.com") }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(2)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to be_empty
-            expect(args[1][:key]).to eq(:google_email)
-            expect(args[1][:value]).to eq("bar@gmail.com")
-            expect(args[1][:permissions]).to contain_exactly(
-              {google_email: "bar@gmail.com", item_id: item1.external_id, access_level: "reader"},
-              {google_email: "bar@gmail.com", item_id: item2.external_id, access_level: "writer"}
-            )
-          end
-        )
+      context "from non-nil to non-nil" do
+        it "enqueues sync job" do
+          expect { user.update!(google_email: "bar@gmail.com") }.to(
+            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
+              expect(args.size).to eq(2)
+              expect(args[0][:key]).to eq(:google_email)
+              expect(args[0][:value]).to eq("foo@gmail.com")
+              expect(args[0][:permissions]).to be_empty
+              expect(args[1][:key]).to eq(:google_email)
+              expect(args[1][:value]).to eq("bar@gmail.com")
+              expect(args[1][:permissions]).to contain_exactly(
+                {google_email: "bar@gmail.com", item_id: item1.external_id, access_level: "reader"},
+                {google_email: "bar@gmail.com", item_id: item2.external_id, access_level: "writer"}
+              )
+            end
+          )
+        end
+      end
+
+      context "from nil to non-nil" do
+        let!(:user) { create(:user, google_email: nil) }
+
+        it "enqueues sync job" do
+          expect { user.update!(google_email: "bar@gmail.com") }.to(
+            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
+              expect(args.size).to eq(1)
+              expect(args[0][:key]).to eq(:google_email)
+              expect(args[0][:value]).to eq("bar@gmail.com")
+              expect(args[0][:permissions]).to contain_exactly(
+                {google_email: "bar@gmail.com", item_id: item1.external_id, access_level: "reader"},
+                {google_email: "bar@gmail.com", item_id: item2.external_id, access_level: "writer"}
+              )
+            end
+          )
+        end
+      end
+
+      context "from non-nil to nil" do
+        let!(:user) { create(:user, google_email: "foo@gmail.com") }
+
+        it "enqueues sync job" do
+          expect { user.update!(google_email: nil) }.to(
+            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
+              expect(args.size).to eq(1)
+              expect(args[0][:key]).to eq(:google_email)
+              expect(args[0][:value]).to eq("foo@gmail.com")
+              expect(args[0][:permissions]).to be_empty
+            end
+          )
+        end
       end
     end
 
     context "when deactivated" do
-      it "enqueues sync job" do
-        expect { user.deactivate }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to be_empty
-          end
-        )
+      context "if user has google_email" do
+        it "enqueues sync job if user has google_email" do
+          expect { user.deactivate }.to(
+            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
+              expect(args.size).to eq(1)
+              expect(args[0][:key]).to eq(:google_email)
+              expect(args[0][:value]).to eq("foo@gmail.com")
+              expect(args[0][:permissions]).to be_empty
+            end
+          )
+        end
+      end
+
+      context "if user has no google email" do
+        let!(:user) { create(:user, google_email: nil) }
+
+        it "does not enqueue sync job" do
+          expect { user.deactivate }.not_to have_enqueued_job(GDrive::PermissionSyncJob)
+        end
       end
     end
 

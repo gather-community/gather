@@ -8,6 +8,7 @@ module GDrive
     attr_accessor :last_method_txn_ids
 
     def create_user_successful(user)
+      return if user.google_email.blank?
       item_groups = item_groups_for_user(user)
       return if item_groups.empty?
       enqueue_job([build_job_args(item_groups, google_email: user.google_email)])
@@ -53,9 +54,9 @@ module GDrive
       {key: :google_email, value: google_email, permissions: permissions}
     end
 
-    def enqueue_job(permissions)
-      return if permissions.empty?
-      PermissionSyncJob.perform_later(permissions)
+    def enqueue_job(args)
+      return if args.empty?
+      PermissionSyncJob.perform_later(args)
     end
 
     def user_community_changed?(user)

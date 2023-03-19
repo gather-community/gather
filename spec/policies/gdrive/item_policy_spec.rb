@@ -34,8 +34,8 @@ describe GDrive::ItemPolicy do
             expect(subject).to permit(in_user2, record)
           end
 
-          it "permits admins not in group but from item community" do
-            expect(subject).to permit(cmty1_admin, record)
+          it "forbids admins not in group but from item community" do
+            expect(subject).not_to permit(cmty1_admin, record)
           end
 
           it "forbids admins not in group and not from item community" do
@@ -109,8 +109,8 @@ describe GDrive::ItemPolicy do
     context "with admin" do
       let(:actor) { create(:admin, community: communities[0]) }
 
-      it "returns all drives from user's community plus drives with groups that user is a member of" do
-        is_expected.to match_array([item1, item2, item3])
+      it "behaves the same as a regular user" do
+        is_expected.to match_array([item1, item3])
       end
     end
   end

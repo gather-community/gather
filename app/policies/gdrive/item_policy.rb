@@ -6,8 +6,7 @@ module GDrive
 
     class Scope < Scope
       def resolve
-        user_group_ids = Groups::Group.with_user(user).select(:id)
-        item_ids = GDrive::ItemGroup.where(group: user_group_ids).select(:item_id)
+        item_ids = ItemGroupPolicy::Scope.new(user, ItemGroup).resolve.select(:item_id)
         scope.joins(:gdrive_config).where(id: item_ids)
       end
     end

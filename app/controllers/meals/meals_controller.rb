@@ -114,7 +114,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       if @meal.auto_close_time_in_past?
-        flash[:error] = "You can't reopen this meal because its auto-close time is in the past. "\
+        flash[:error] = "You can't reopen this meal because its auto-close time is in the past. " \
           "Please change or remove the auto-close time before proceeding."
         redirect_to(meal_path(@meal))
       else
@@ -132,7 +132,7 @@ module Meals
       load_signups
       @cost_calculator = CostCalculator.build(@meal)
       return unless @meal.open? && current_user == @meal.head_cook
-      flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. "\
+      flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. " \
         "You should close the meal before printing this summary."
     end
 
@@ -193,7 +193,7 @@ module Meals
       formula = formula_id.nil? ? Formula.default_for(community) : Formula.find(formula_id)
       served_at = Time.current.midnight + 7.days + Meal::DEFAULT_TIME
       meal = Meal.new(served_at: served_at, capacity: community.settings.meals.default_capacity,
-                      community_ids: Community.all.map(&:id), community: community, formula: formula)
+        community_ids: Community.all.map(&:id), community: community, formula: formula)
       (formula&.roles || []).each do |role|
         role.count_per_meal.times { meal.assignments.build(role: role) }
       end
@@ -202,19 +202,19 @@ module Meals
 
     def load_meals(context)
       @meals = policy_scope(Meal)
-      @meals = @meals.hosted_by(context == :index ? lenses[:community].selection : current_community)
+      @meals = @meals.hosted_by((context == :index) ? lenses[:community].selection : current_community)
       @meals = @meals.worked_by(lenses[:user].value) if lenses[:user].present?
 
       @meals = if lenses[:time].finalizable?
-                 @meals.finalizable.where(community_id: current_community).oldest_first
-               elsif lenses[:time].past?
-                 @meals.past.newest_first
-               elsif lenses[:time].all?
-                 @meals.oldest_first
-               else
-                 @meals.future.oldest_first
-               end
-      @meals = @meals.includes(:signups, :invitations)
+        @meals.finalizable.where(community_id: current_community).oldest_first
+      elsif lenses[:time].past?
+        @meals.past.newest_first
+      elsif lenses[:time].all?
+        @meals.oldest_first
+      else
+        @meals.future.oldest_first
+      end
+      @meals = @meals.includes(:calendars, :invitations, assignments: [:role, :user], signups: {parts: :type})
 
       if params[:search].present?
         subq = Assignment.select("DISTINCT meal_id").joins(:user)

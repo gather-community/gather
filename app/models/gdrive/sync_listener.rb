@@ -11,7 +11,7 @@ module GDrive
       return if user.google_email.blank?
       item_groups = item_groups_for_user(user)
       return if item_groups.empty?
-      enqueue_job([build_job_args(item_groups, google_email: user.google_email)])
+      enqueue_job([build_job_args_from_item_groups(item_groups, google_email: user.google_email)])
     end
 
     def update_user_successful(user)
@@ -24,7 +24,7 @@ module GDrive
 
       # Remove all permissions for the old google_email, if there was one and it changed.
       if user.saved_change_to_google_email? && user.saved_changes["google_email"][0].present?
-        args << build_job_args([],
+        args << build_job_args_from_item_groups([],
           google_email: user.saved_changes["google_email"][0],
           revoke: true)
       end
@@ -32,7 +32,17 @@ module GDrive
       # Add current permissions.
       if user.google_email.present?
         item_groups = (user.active? && user.full_access?) ? item_groups_for_user(user) : []
-        args << build_job_args(item_groups, google_email: user.google_email)
+        args << build_job_args_from_item_groups(item_groups, google_email: user.google_email)
+      end
+      enqueue_job(args)
+    end
+
+    def groups_affiliation_committed(affiliation)
+      group = affiliation.group
+      return unless group.everybody?
+      args = group.gdrive_item_groups.map do |item_group|
+        build_job_args_from_users(group.members,
+          item_external_id: item_group.item_external_id, access_level: item_group.access_level)
       end
       enqueue_job(args)
     end
@@ -43,15 +53,25 @@ module GDrive
       ItemGroup.where(group: Groups::Group.with_user(user).select(:id)).includes(:item)
     end
 
-    def build_job_args(item_groups, google_email:, revoke: false)
+    def build_job_args_from_item_groups(item_groups, google_email:, revoke: false)
       permissions = item_groups.map do |item_group|
         {
-          google_email: google_email,
-          item_id: item_group.item_external_id,
+          item_external_id: item_group.item_external_id,
           access_level: revoke ? nil : item_group.access_level
         }
       end
       {key: :google_email, value: google_email, permissions: permissions}
+    end
+
+    def build_job_args_from_users(users, item_external_id:, access_level:)
+      permissions = users.map do |user|
+        next if user.google_email.blank?
+        {
+          google_email: user.google_email,
+          access_level: access_level
+        }
+      end.compact
+      {key: :item_external_id, value: item_external_id, permissions: permissions}
     end
 
     def enqueue_job(args)

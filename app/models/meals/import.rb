@@ -51,14 +51,17 @@ module Meals
     private
 
     def process
-      rows = CSV.new(file.download, converters: ->(f) { f&.strip }).read
-      if rows.size < 2
-        add_error("File is empty")
-      else
-        ActiveRecord::Base.transaction do
-          parse_rows(rows)
-          errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
-          raise ActiveRecord::Rollback unless error_free?
+      file.open do |file|
+        # bom|utf-8 is needed to handle Excel-generated CSVs.
+        rows = CSV.read(file.path, converters: ->(f) { f&.strip }, encoding: "bom|utf-8")
+        if rows.size < 2
+          add_error("File is empty")
+        else
+          ActiveRecord::Base.transaction do
+            parse_rows(rows)
+            errors_by_row.each { |k, v| errors_by_row.delete(k) if v.empty? } # Clear empties
+            raise ActiveRecord::Rollback unless error_free?
+          end
         end
       end
     end
@@ -84,7 +87,7 @@ module Meals
     end
 
     def create_update_or_destroy
-      self.target_meal = row_action == :create ? new_meal : find_matching_meal
+      self.target_meal = (row_action == :create) ? new_meal : find_matching_meal
       return unless target_meal
       target_meal.community = community # May be redundant, needed for permission check
       self.row_policy = Meals::MealPolicy.new(user, target_meal)
@@ -119,7 +122,7 @@ module Meals
 
     def destroy_target_meal
       target_meal.destroy
-    rescue StandardError => error
+    rescue => error
       add_error("Error deleting meal #{target_meal.id}: '#{error}'")
     end
 
@@ -131,8 +134,8 @@ module Meals
         candidates = scope.where(served_at: new_meal.served_at)
         meal = candidates.detect { |m| m.calendars.to_set == new_meal.calendars.to_set }
         return meal if meal.present?
-        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at "\
-          "locations: #{new_meal.calendars.map(&:name).join(', ')}")
+        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub("  ", " ")} at " \
+          "locations: #{new_meal.calendars.map(&:name).join(", ")}")
       end
     end
 
@@ -152,7 +155,7 @@ module Meals
           bad_headers << cell
         end
       end
-      add_error("Invalid column headers: #{bad_headers.join(', ')}") if bad_headers.any?
+      add_error("Invalid column headers: #{bad_headers.join(", ")}") if bad_headers.any?
     end
 
     def check_for_missing_headers

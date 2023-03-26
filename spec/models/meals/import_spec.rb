@@ -45,12 +45,12 @@ describe Meals::Import do
       let!(:outside_role) { create(:meal_role, community: other_community, title: "Vulpt") }
       let(:csv) do
         prepare_fixture("meals/import/bad_headers.csv",
-                            role_id: (roles << outside_role).map(&:id))
+          role_id: (roles << outside_role).map(&:id))
       end
 
       it "returns error listing all bad headers, case insensitive" do
         expect(import.errors_by_row).to eq(
-          "1" => ["Invalid column headers: Junk, Heure, Role999999999999, "\
+          "1" => ["Invalid column headers: Junk, Heure, Role999999999999, " \
             "Vulpt, Role#{outside_role.id}, Inacto"]
         )
       end
@@ -79,10 +79,10 @@ describe Meals::Import do
       end
       let(:csv) do
         prepare_fixture("meals/import/bad_data.csv", role_id: roles.map(&:id),
-                                                         calendar_id: [outside_calendar.id],
-                                                         formula_id: [outside_formula.id],
-                                                         user_id: [outside_user.id],
-                                                         community_id: [outside_community.id])
+          calendar_id: [outside_calendar.id],
+          formula_id: [outside_formula.id],
+          user_id: [outside_user.id],
+          community_id: [outside_community.id])
       end
 
       it "returns all errors" do
@@ -130,7 +130,7 @@ describe Meals::Import do
 
       it "returns errors on valid rows and saves no meals" do
         expect(import.errors_by_row).to eq(
-          "3" => ["The following error(s) occurred in making a Kitchen event for this meal: "\
+          "3" => ["The following error(s) occurred in making a Kitchen event for this meal: " \
             "This event overlaps an existing one."],
           "4" => ["Could not find a meal formula with ID 1234"]
         )
@@ -149,10 +149,10 @@ describe Meals::Import do
       let!(:communities) { [community, other_community, create(:community)] }
       let(:csv) do
         prepare_fixture("meals/import/successful_data.csv",
-                            calendar_id: calendars.map(&:id),
-                            role_id: [asst_cook_role.id],
-                            user_id: users.map(&:id),
-                            community_id: communities.map(&:id))
+          calendar_id: calendars.map(&:id),
+          role_id: [asst_cook_role.id],
+          user_id: users.map(&:id),
+          community_id: communities.map(&:id))
       end
       let(:meals) { Meals::Meal.order(:served_at).to_a }
 
@@ -185,6 +185,16 @@ describe Meals::Import do
         expect(meals[1].assignments_by_role).to be_empty
         expect(meals[1].creator).to eq(user)
         expect(meals[1].capacity).to eq(42)
+      end
+    end
+
+    context "with encoding issue" do
+      let(:csv) { prepare_fixture("meals/import/with_bom.csv") }
+      let!(:calendar) { create(:calendar, name: "Kitchen") }
+      let!(:formula) { create(:meal_formula, is_default: true) }
+
+      it "still works" do
+        expect(import).to be_successful
       end
     end
 
@@ -223,11 +233,11 @@ describe Meals::Import do
         let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", calendars: calendars) }
         let!(:meal2) do
           create(:meal, served_at: "2019-02-01 12:00", calendars: calendars,
-                        formula: formula, head_cook: user1, communities: [community])
+            formula: formula, head_cook: user1, communities: [community])
         end
         let!(:meal3) do
           create(:meal, :finalized, served_at: "2019-02-02 12:00", calendars: calendars,
-                                    formula: formula, head_cook: user1, communities: [community])
+            formula: formula, head_cook: user1, communities: [community])
         end
         let(:csv) { prepare_fixture("meals/import/successful_data_with_actions.csv") }
 

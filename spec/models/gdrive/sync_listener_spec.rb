@@ -10,66 +10,34 @@ describe GDrive::SyncListener do
     let!(:decoy_item) { create(:gdrive_item, gdrive_config: config) }
     let!(:decoy_item_group) { create(:gdrive_item_group, item: decoy_item, group: decoy_group) }
 
-    context "with everybody groups that the user automatically joins" do
-      let!(:group1) { create(:group, availability: "everybody") }
-      let!(:group2) { create(:group, availability: "everybody") }
-      let!(:item1) { create(:gdrive_item, gdrive_config: config) }
-      let!(:item2) { create(:gdrive_item, gdrive_config: config) }
-      let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group1, access_level: "reader") }
-      let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2, access_level: "writer") }
+    context "with everybody group that the user automatically joins" do
+      let!(:group) { create(:group, availability: "everybody") }
+      let!(:item) { create(:gdrive_item, gdrive_config: config) }
+      let!(:item_group) { create(:gdrive_item_group, item: item, group: group, access_level: "reader") }
 
       it "enqueues sync job" do
-        expect { create(:user, google_email: "abc@gmail.com") }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("abc@gmail.com")
-            expect(args[0][:permissions]).to contain_exactly(
-              {item_external_id: item1.external_id, access_level: "reader"},
-              {item_external_id: item2.external_id, access_level: "writer"}
-            )
-          end
-        )
+        expect_enqueues_job_with_users(User.new) { create(:user, google_email: "abc@gmail.com") }
       end
 
       it "enqueues nothing if no google_email" do
-        expect { create(:user, google_email: nil) }.not_to have_enqueued_job(GDrive::PermissionSyncJob)
+        expect_doesnt_enqueue_job { create(:user, google_email: nil) }
       end
     end
 
     context "with no linked items" do
       it "does not enqueue sync job" do
-        expect { create(:user) }.not_to have_enqueued_job(GDrive::PermissionSyncJob)
+        expect_doesnt_enqueue_job { create(:user) }
       end
     end
   end
 
   describe "update user" do
     let!(:user) { create(:user, google_email: "foo@gmail.com") }
-    let!(:group1) { create(:group, joiners: [user]) }
-    let!(:item1) { create(:gdrive_item, gdrive_config: config) }
-    let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group1, access_level: "reader") }
-    let!(:group2) { create(:group, joiners: [user]) }
-    let!(:item2) { create(:gdrive_item, gdrive_config: config) }
-    let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group2, access_level: "writer") }
 
     context "when changing google_email" do
       context "from non-nil to non-nil" do
         it "enqueues sync job" do
-          expect { user.update!(google_email: "bar@gmail.com") }.to(
-            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-              expect(args.size).to eq(2)
-              expect(args[0][:key]).to eq(:google_email)
-              expect(args[0][:value]).to eq("foo@gmail.com")
-              expect(args[0][:permissions]).to be_empty
-              expect(args[1][:key]).to eq(:google_email)
-              expect(args[1][:value]).to eq("bar@gmail.com")
-              expect(args[1][:permissions]).to contain_exactly(
-                {item_external_id: item1.external_id, access_level: "reader"},
-                {item_external_id: item2.external_id, access_level: "writer"}
-              )
-            end
-          )
+          expect_enqueues_job_with_users(user) { user.update!(google_email: "bar@gmail.com") }
         end
       end
 
@@ -77,17 +45,7 @@ describe GDrive::SyncListener do
         let!(:user) { create(:user, google_email: nil) }
 
         it "enqueues sync job" do
-          expect { user.update!(google_email: "bar@gmail.com") }.to(
-            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-              expect(args.size).to eq(1)
-              expect(args[0][:key]).to eq(:google_email)
-              expect(args[0][:value]).to eq("bar@gmail.com")
-              expect(args[0][:permissions]).to contain_exactly(
-                {item_external_id: item1.external_id, access_level: "reader"},
-                {item_external_id: item2.external_id, access_level: "writer"}
-              )
-            end
-          )
+          expect_enqueues_job_with_users(user) { user.update!(google_email: "bar@gmail.com") }
         end
       end
 
@@ -95,29 +53,15 @@ describe GDrive::SyncListener do
         let!(:user) { create(:user, google_email: "foo@gmail.com") }
 
         it "enqueues sync job" do
-          expect { user.update!(google_email: nil) }.to(
-            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-              expect(args.size).to eq(1)
-              expect(args[0][:key]).to eq(:google_email)
-              expect(args[0][:value]).to eq("foo@gmail.com")
-              expect(args[0][:permissions]).to be_empty
-            end
-          )
+          expect_enqueues_job_with_users(user) { user.update!(google_email: nil) }
         end
       end
     end
 
     context "when deactivated" do
       context "if user has google_email" do
-        it "enqueues sync job if user has google_email" do
-          expect { user.deactivate }.to(
-            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-              expect(args.size).to eq(1)
-              expect(args[0][:key]).to eq(:google_email)
-              expect(args[0][:value]).to eq("foo@gmail.com")
-              expect(args[0][:permissions]).to be_empty
-            end
-          )
+        it "enqueues sync job" do
+          expect_enqueues_job_with_users(user) { user.deactivate }
         end
       end
 
@@ -125,7 +69,7 @@ describe GDrive::SyncListener do
         let!(:user) { create(:user, google_email: nil) }
 
         it "does not enqueue sync job" do
-          expect { user.deactivate }.not_to have_enqueued_job(GDrive::PermissionSyncJob)
+          expect_doesnt_enqueue_job { user.deactivate }
         end
       end
     end
@@ -134,30 +78,15 @@ describe GDrive::SyncListener do
       let!(:user) { create(:user, :inactive, google_email: "foo@gmail.com") }
 
       it "enqueues sync job" do
-        expect { user.activate }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to contain_exactly(
-              {item_external_id: item1.external_id, access_level: "reader"},
-              {item_external_id: item2.external_id, access_level: "writer"}
-            )
-          end
-        )
+        expect_enqueues_job_with_users(user) { user.activate }
       end
     end
 
     context "when removing full_access" do
       it "enqueues sync job" do
-        expect { user.update!(child: true, full_access: false, guardians: [create(:user)]) }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to be_empty
-          end
-        )
+        expect_enqueues_job_with_users(user) do
+          user.update!(child: true, full_access: false, guardians: [create(:user)])
+        end
       end
     end
 
@@ -166,17 +95,7 @@ describe GDrive::SyncListener do
 
       it "enqueues sync job" do
         new_attribs = {full_access: true, google_email: "foo@gmail.com", certify_13_or_older: true}
-        expect { user.update!(new_attribs) }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to contain_exactly(
-              {item_external_id: item1.external_id, access_level: "reader"},
-              {item_external_id: item2.external_id, access_level: "writer"}
-            )
-          end
-        )
+        expect_enqueues_job_with_users(user) { user.update!(new_attribs) }
       end
     end
 
@@ -184,33 +103,8 @@ describe GDrive::SyncListener do
       let(:community2) { create(:community) }
       let!(:household) { create(:household, community: community2) }
 
-      # The user shouldn't lose access to this item since it's a multi-community group.
-      let!(:both_cmty_group) { create(:group, communities: [user.community, community2], joiners: [user]) }
-      let!(:item3) { create(:gdrive_item, gdrive_config: config) }
-      let!(:item_group3) { create(:gdrive_item_group, item: item3, group: both_cmty_group) }
-
-      # The user will get access to this item on the community change since it's an everybody group.
-      let!(:other_cmty_ebody_group) { create(:group, communities: [community2], availability: "everybody") }
-      let!(:item4) { create(:gdrive_item, gdrive_config: config) }
-      let!(:item_group4) { create(:gdrive_item_group, item: item4, group: other_cmty_ebody_group) }
-
-      # This item shouldn't get shared since the user isn't a member of the group.
-      let!(:other_cmty_decoy_group) { create(:group, communities: [community2]) }
-      let!(:item5) { create(:gdrive_item, gdrive_config: config) }
-      let!(:item_group5) { create(:gdrive_item_group, item: item5, group: other_cmty_decoy_group) }
-
       it "enqueues sync job" do
-        expect { user.update!(household: household) }.to(
-          have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-            expect(args.size).to eq(1)
-            expect(args[0][:key]).to eq(:google_email)
-            expect(args[0][:value]).to eq("foo@gmail.com")
-            expect(args[0][:permissions]).to contain_exactly(
-              {item_external_id: item3.external_id, access_level: "reader"},
-              {item_external_id: item4.external_id, access_level: "reader"}
-            )
-          end
-        )
+        expect_enqueues_job_with_users(user) { user.update!(household: household) }
       end
     end
 
@@ -218,28 +112,145 @@ describe GDrive::SyncListener do
       let!(:household) { create(:household) }
 
       it "does not enqueue sync job" do
-        expect { user.update!(household: household) }
-          .not_to have_enqueued_job(GDrive::PermissionSyncJob)
+        expect_doesnt_enqueue_job { user.update!(household: household) }
       end
     end
 
     context "when changing other attribute" do
       it "does not enqueue sync job" do
-        expect { user.update!(last_name: "Bostich") }
-          .not_to have_enqueued_job(GDrive::PermissionSyncJob)
+        expect_doesnt_enqueue_job { user.update!(last_name: "Bostich") }
       end
+    end
+  end
+
+  describe "destroy user" do
+    let!(:user) { create(:user, google_email: "foo@gmail.com") }
+
+    context "if user has google_email" do
+      it "enqueues sync job" do
+        expect_enqueues_job_with_users(user) { user.destroy }
+      end
+    end
+
+    context "if user has no google email" do
+      let!(:user) { create(:user, google_email: nil) }
+
+      it "does not enqueue sync job" do
+        expect_doesnt_enqueue_job { user.destroy }
+      end
+    end
+  end
+
+  describe "update household" do
+    let!(:household) { create(:household, member_count: 2) }
+
+    context "with community change" do
+      it "enqueues job for each user" do
+        expect_enqueues_job_with_users(*household.users[0..1]) do
+          household.update!(community: create(:community))
+        end
+      end
+    end
+
+    context "without community change" do
+      it "does not enqueue sync job" do
+        expect_doesnt_enqueue_job { household.update!(name: "Corpthwaite") }
+      end
+    end
+  end
+
+  describe "item group" do
+    let!(:item) { create(:gdrive_item, gdrive_config: config) }
+
+    describe "create item group" do
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item) { create(:gdrive_item_group, item: item) }
+      end
+    end
+
+    describe "update item group" do
+      let!(:item_group) { create(:gdrive_item_group, item: item, access_level: "reader") }
+
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item) { item_group.update!(access_level: "writer") }
+      end
+    end
+
+    describe "destroy item/item group" do
+      let!(:item_group) { create(:gdrive_item_group, item: item, access_level: "reader") }
+
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item) { item.destroy }
+      end
+    end
+  end
+
+  describe "group membership" do
+    let!(:group) { create(:group) }
+    let!(:item1) { create(:gdrive_item, gdrive_config: config) }
+    let!(:item_group1) { create(:gdrive_item_group, group: group, item: item1) }
+    let!(:item2) { create(:gdrive_item, gdrive_config: config) }
+    let!(:item_group2) { create(:gdrive_item_group, group: group, item: item2) }
+    let!(:decoy) { create(:gdrive_item, gdrive_config: config) }
+
+    describe "create group membership" do
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item1, item2) { create(:group_membership, group: group) }
+      end
+    end
+
+    describe "update group membership" do
+      let!(:membership) { create(:group_membership, group: group) }
+
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item1, item2) { membership.update!(kind: "manager") }
+      end
+    end
+
+    describe "destroy membership" do
+      let!(:membership) { create(:group_membership, group: group) }
+
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item1, item2) { membership.destroy }
+      end
+    end
+
+    describe "destroy group and membership at once" do
+      let!(:membership) { create(:group_membership, group: group) }
+
+      it "enqueues sync job" do
+        expect_enqueues_job_with_items(item1, item2) { group.destroy }
+      end
+    end
+  end
+
+  describe "update group" do
+    let!(:group) { create(:group) }
+    let!(:item1) { create(:gdrive_item, gdrive_config: config) }
+    let!(:item_group1) { create(:gdrive_item_group, group: group, item: item1) }
+    let!(:item2) { create(:gdrive_item, gdrive_config: config) }
+    let!(:item_group2) { create(:gdrive_item_group, group: group, item: item2) }
+    let!(:decoy) { create(:gdrive_item, gdrive_config: config) }
+
+    it "enqueues sync job if availability changes" do
+      expect_enqueues_job_with_items(item1, item2) { group.update!(availability: "everybody") }
+    end
+
+    it "enqueues sync job if deactivated/reactivated" do
+      expect_enqueues_job_with_items(item1, item2) { group.deactivate }
+      expect_enqueues_job_with_items(item1, item2) { group.activate }
+    end
+
+    it "does not enqueue if availability/deactivated_at don't change" do
+      expect_doesnt_enqueue_job { group.update!(name: "Foo") }
     end
   end
 
   describe "create group affiliation" do
     let!(:community1) { Defaults.community }
     let!(:community2) { create(:community) }
-    let!(:user1) { create(:user, community: community1, google_email: "user1@gmail.com") }
-    let!(:user2) { create(:user, community: community2, google_email: "user2@gmail.com") }
-    let!(:user3) { create(:user, community: community2, google_email: "user3@gmail.com") }
-    let!(:user4) { create(:user, community: community2, google_email: nil) }
-    let!(:item1) { create(:gdrive_item, gdrive_config: config, external_id: "abcitem1xyz") }
-    let!(:item2) { create(:gdrive_item, gdrive_config: config, external_id: "abcitem2xyz") }
+    let!(:item1) { create(:gdrive_item, gdrive_config: config) }
+    let!(:item2) { create(:gdrive_item, gdrive_config: config) }
 
     context "with mapped items" do
       let!(:item_group1) { create(:gdrive_item_group, item: item1, group: group, access_level: "reader") }
@@ -249,29 +260,7 @@ describe GDrive::SyncListener do
         let!(:group) { create(:group, communities: [community1], availability: "everybody") }
 
         it "enqueues sync job" do
-          expect { group.communities << community2 }.to(
-            have_enqueued_job(GDrive::PermissionSyncJob).once.with do |args|
-              expect(args.size).to eq(2)
-
-              item1_args = args.find { |a| a[:value] == "abcitem1xyz" }
-              expect(item1_args[:key]).to eq(:item_external_id)
-              expect(item1_args[:value]).to eq("abcitem1xyz")
-              expect(item1_args[:permissions]).to contain_exactly(
-                {google_email: "user1@gmail.com", access_level: "reader"},
-                {google_email: "user2@gmail.com", access_level: "reader"},
-                {google_email: "user3@gmail.com", access_level: "reader"}
-              )
-
-              item2_args = args.find { |a| a[:value] == "abcitem2xyz" }
-              expect(item2_args[:key]).to eq(:item_external_id)
-              expect(item2_args[:value]).to eq("abcitem2xyz")
-              expect(item2_args[:permissions]).to contain_exactly(
-                {google_email: "user1@gmail.com", access_level: "writer"},
-                {google_email: "user2@gmail.com", access_level: "writer"},
-                {google_email: "user3@gmail.com", access_level: "writer"}
-              )
-            end
-          )
+          expect_enqueues_job_with_items(item1, item2) { group.communities << community2 }
         end
       end
 
@@ -279,21 +268,40 @@ describe GDrive::SyncListener do
         let!(:group) { create(:group, communities: [community1]) }
 
         it "does not enqueue sync job" do
-          expect { group.communities << community2 }
-            .not_to have_enqueued_job(GDrive::PermissionSyncJob)
+          expect_doesnt_enqueue_job { group.communities << community2 }
         end
       end
     end
 
     context "without mapped items" do
-      context "even if group is an everybody group" do
-        let!(:group) { create(:group, communities: [community1], availability: "everybody") }
+      let!(:group) { create(:group, communities: [community1], availability: "everybody") }
 
-        it "does not enqueue sync job" do
-          expect { group.communities << community2 }
-            .not_to have_enqueued_job(GDrive::PermissionSyncJob)
-        end
+      it "does not enqueue sync job" do
+        expect_doesnt_enqueue_job { group.communities << community2 }
       end
     end
+  end
+
+  def expect_enqueues_job_with_users(*users, &block)
+    expect_enqueues_job_with_objects(users, "User", &block)
+  end
+
+  def expect_enqueues_job_with_items(*items, &block)
+    expect_enqueues_job_with_objects(items, "Item", &block)
+  end
+
+  def expect_enqueues_job_with_objects(objects, class_name, &block)
+    calls = []
+    expect(&block).to have_enqueued_job(GDrive::PermissionSyncJob).exactly(objects.size).times
+      .with { |**args| calls << args }
+    expected_params = objects.map do |obj|
+      expected_id = obj.persisted? ? obj.id : anything
+      {source_class_name: class_name, source_id: expected_id}
+    end
+    expect(calls).to match_array(expected_params)
+  end
+
+  def expect_doesnt_enqueue_job(&block)
+    expect(&block).not_to have_enqueued_job(GDrive::PermissionSyncJob)
   end
 end

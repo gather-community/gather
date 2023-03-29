@@ -11,40 +11,59 @@ module GDrive
       return if user.google_email.blank?
       item_groups = item_groups_for_user(user)
       return if item_groups.empty?
-      enqueue_job([build_job_args_from_item_groups(item_groups, google_email: user.google_email)])
+      enqueue_job(source_class_name: "User", source_id: user.id)
     end
 
     def update_user_successful(user)
       return unless user.saved_change_to_google_email? ||
-        user.saved_change_to_deactivated_at? ||
-        user.saved_change_to_full_access? ||
-        user_community_changed?(user)
+        user.google_email.present? && (
+          user.saved_change_to_deactivated_at? ||
+          user.saved_change_to_full_access? ||
+          user_community_changed?(user)
+        )
 
-      args = []
+      enqueue_job(source_class_name: "User", source_id: user.id)
+    end
 
-      # Remove all permissions for the old google_email, if there was one and it changed.
-      if user.saved_change_to_google_email? && user.saved_changes["google_email"][0].present?
-        args << build_job_args_from_item_groups([],
-          google_email: user.saved_changes["google_email"][0],
-          revoke: true)
+    def destroy_user_successful(user)
+      return if user.google_email.blank?
+
+      enqueue_job(source_class_name: "User", source_id: user.id)
+    end
+
+    def update_household_successful(household)
+      return unless household.saved_change_to_community_id?
+
+      household.users.each do |user|
+        next if user.google_email.blank?
+        enqueue_job(source_class_name: "User", source_id: user.id)
       end
+    end
 
-      # Add current permissions.
-      if user.google_email.present?
-        item_groups = (user.active? && user.full_access?) ? item_groups_for_user(user) : []
-        args << build_job_args_from_item_groups(item_groups, google_email: user.google_email)
+    def gdrive_item_group_committed(item_group)
+      enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+    end
+
+    def update_groups_group_successful(group)
+      return unless group.saved_change_to_availability? || group.saved_change_to_deactivated_at?
+      group.gdrive_item_groups.each do |item_group|
+        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
       end
-      enqueue_job(args)
+    end
+
+    def groups_membership_committed(membership)
+      group = membership.group
+      group.gdrive_item_groups.each do |item_group|
+        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+      end
     end
 
     def groups_affiliation_committed(affiliation)
       group = affiliation.group
       return unless group.everybody?
-      args = group.gdrive_item_groups.map do |item_group|
-        build_job_args_from_users(group.members,
-          item_external_id: item_group.item_external_id, access_level: item_group.access_level)
+      group.gdrive_item_groups.each do |item_group|
+        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
       end
-      enqueue_job(args)
     end
 
     private
@@ -53,29 +72,7 @@ module GDrive
       ItemGroup.where(group: Groups::Group.with_user(user).select(:id)).includes(:item)
     end
 
-    def build_job_args_from_item_groups(item_groups, google_email:, revoke: false)
-      permissions = item_groups.map do |item_group|
-        {
-          item_external_id: item_group.item_external_id,
-          access_level: revoke ? nil : item_group.access_level
-        }
-      end
-      {key: :google_email, value: google_email, permissions: permissions}
-    end
-
-    def build_job_args_from_users(users, item_external_id:, access_level:)
-      permissions = users.map do |user|
-        next if user.google_email.blank?
-        {
-          google_email: user.google_email,
-          access_level: access_level
-        }
-      end.compact
-      {key: :item_external_id, value: item_external_id, permissions: permissions}
-    end
-
     def enqueue_job(args)
-      return if args.empty?
       PermissionSyncJob.perform_later(args)
     end
 

@@ -31,7 +31,7 @@ class User < ApplicationRecord
   include CustomFields
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
-             meals_coordinator wikiist work_coordinator].freeze
+    meals_coordinator wikiist work_coordinator].freeze
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze
   PASSWORD_MIN_ENTROPY = 16
@@ -40,32 +40,38 @@ class User < ApplicationRecord
   rolify
 
   attr_accessor :changing_password
-  alias changing_password? changing_password
+  alias_method :changing_password?, :changing_password
 
   attr_accessor :certify_13_or_older
 
   # Currently, :database_authenticatable is only needed for tha password reset token features
   devise :omniauthable, :trackable, :recoverable, :database_authenticatable, :rememberable,
-         :confirmable, omniauth_providers: [:google_oauth2]
+    :confirmable, omniauth_providers: [:google_oauth2]
 
   belongs_to :household, inverse_of: :users
   belongs_to :job_choosing_proxy, class_name: "User"
   has_many :job_choosing_proxiers, class_name: "User", foreign_key: :job_choosing_proxy_id,
-                                   inverse_of: :job_choosing_proxy, dependent: :nullify
+    inverse_of: :job_choosing_proxy, dependent: :nullify
   has_many :up_guardianships, class_name: "People::Guardianship", foreign_key: :child_id,
-                              dependent: :destroy, inverse_of: :child
+    dependent: :destroy, inverse_of: :child
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
-                                dependent: :destroy, inverse_of: :guardian
+    dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
   has_one :memorial, class_name: "People::Memorial", inverse_of: :user
   has_many :memorial_messages, class_name: "People::MemorialMessage", inverse_of: :author
   has_many :children, through: :down_guardianships
+
+  # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID
+  # in PermissionSyncJob
+  has_many :gdrive_synced_permissions, class_name: "GDrive::SyncedPermission", inverse_of: :user,
+    dependent: nil
+
   has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,
-                               autosave: false
+    autosave: false
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :meal_costs, class_name: "Meals::Cost", foreign_key: :reimbursee_id,
-                        inverse_of: :reimbursee, dependent: :nullify
+    inverse_of: :reimbursee, dependent: :nullify
   has_many :work_assignments, class_name: "Work::Assignment", inverse_of: :user, dependent: :destroy
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
@@ -78,7 +84,7 @@ class User < ApplicationRecord
   scope :in_community, ->(id) { joins(:household).where(households: {community_id: id}) }
   scope :by_name, -> { alpha_order(:first_name).alpha_order(:last_name) }
   scope :by_unit, -> { joins(:household).order("households.unit_num, households.unit_suffix") }
-  scope :sorted_by, ->(s) { s == "unit" ? by_unit : by_name }
+  scope :sorted_by, ->(s) { (s == "unit") ? by_unit : by_name }
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
   scope :inactive_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   scope :including_communities, -> { includes(household: :community) }
@@ -109,7 +115,7 @@ class User < ApplicationRecord
   scope :can_be_guardian, -> { active.where(child: false) }
   scope :adults, -> { where(child: false) }
   scope :full_access, -> { where(full_access: true) }
-  scope :in_life_stage, ->(s) { s.to_sym == :any ? all : where(child: s.to_sym == :child) }
+  scope :in_life_stage, ->(s) { (s.to_sym == :any) ? all : where(child: s.to_sym == :child) }
 
   # Returns users (including children) directly in the household PLUS any children associated by parentage,
   # even if they aren't directly in the household via the foreign key.
@@ -127,7 +133,7 @@ class User < ApplicationRecord
   delegate :name, to: :household, prefix: true
   delegate :account_for, :credit_exceeded?, :other_cluster_communities, to: :household
   delegate :community_id, :community_name, :community_abbrv,
-           :unit_num, :unit_num_and_suffix, :vehicles, to: :household
+    :unit_num, :unit_num_and_suffix, :vehicles, to: :household
   delegate :community, to: :household, allow_nil: true
   delegate :str, :str=, to: :birthday, prefix: :birthday
   delegate :age, :birth_year, to: :birthday
@@ -144,13 +150,13 @@ class User < ApplicationRecord
   validates :email, presence: true, if: :email_required?
   validates :email, uniqueness: true, allow_nil: true
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
-                           unless: ->(u) { u.google_email.blank? }
+    unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?
   validates :password, password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
-                       if: :password_required_and_not_blank?
+    if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
   validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
@@ -163,7 +169,7 @@ class User < ApplicationRecord
   has_one_attached :photo
   accepts_attachment_via_form :photo
   validates :photo, content_type: {in: %w[image/jpg image/jpeg image/png image/gif]},
-                    file_size: {max: Settings.photos.max_size_mb.megabytes}
+    file_size: {max: Settings.photos.max_size_mb.megabytes}
 
   accepts_nested_attributes_for :household
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
@@ -189,7 +195,7 @@ class User < ApplicationRecord
   def household_by_id?
     @household_by_id
   end
-  alias household_by_id household_by_id?
+  alias_method :household_by_id, :household_by_id?
 
   # Setter for household_by_id?
   def household_by_id=(val)
@@ -220,7 +226,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}#{active? ? nil : ' (Inactive)'}"
+    "#{first_name} #{last_name}#{active? ? nil : " (Inactive)"}"
   end
 
   def life_stage

@@ -8,6 +8,11 @@ module GDrive
     has_many :item_groups, class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
     has_many :groups, through: :item_groups
 
+    # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID
+    # in PermissionSyncJob
+    has_many :synced_permissions, class_name: "GDrive::SyncedPermission", inverse_of: :item,
+      dependent: nil
+
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
     scope :not_missing, -> { where(missing: false) }
     scope :drives_only, -> { where(kind: "drive") }

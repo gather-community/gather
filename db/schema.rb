@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_183215) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_154752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -315,6 +315,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_183215) do
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
+  end
+
+  create_table "gdrive_synced_permissions", force: :cascade do |t|
+    t.string "access_level", limit: 32, null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.string "google_email", limit: 256, null: false
+    t.string "item_external_id", limit: 128, null: false
+    t.integer "item_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after item record destroyed so we can search by ID in PermissionSyncJob."
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after user record destroyed so we can search by ID in PermissionSyncJob."
+    t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
+    t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
+    t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|
@@ -1104,6 +1118,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_183215) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
+  add_foreign_key "gdrive_synced_permissions", "clusters"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"
   add_foreign_key "gdrive_unowned_files", "clusters"

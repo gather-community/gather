@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module GDrive
-  # Ingests selected files by starring them and noting any unowned files.
+  # Syncs permissions from Gather to Google Drive.
+  # Keeps track of permissions in the GDrive::SyncedPermission model.
   class PermissionSyncJob < ApplicationJob
   end
 end

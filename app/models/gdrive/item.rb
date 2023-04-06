@@ -9,7 +9,7 @@ module GDrive
     has_many :groups, through: :item_groups
 
     # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID
-    # in PermissionSyncJob
+    # in PermissionSyncJobs
     has_many :synced_permissions, class_name: "GDrive::SyncedPermission", inverse_of: :item,
       dependent: nil
 

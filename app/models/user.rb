@@ -62,7 +62,7 @@ class User < ApplicationRecord
   has_many :children, through: :down_guardianships
 
   # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID
-  # in PermissionSyncJob
+  # in PermissionSyncJobs
   has_many :gdrive_synced_permissions, class_name: "GDrive::SyncedPermission", inverse_of: :user,
     dependent: nil
 

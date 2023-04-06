@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/ClosureTree/with_advisory_lock
+  revision: 00f1cfe81c231aabf1f8c7c3c2b7be844df031c6
+  branch: master
+  specs:
+    with_advisory_lock (5.0.0)
+      activerecord (>= 6.0)
+
+GIT
   remote: https://github.com/derekprior/momentjs-rails
   revision: de473b81db40d0dc19e277895746c79b41a0607a
   branch: main
@@ -745,6 +753,7 @@ DEPENDENCIES
   whenever (~> 0.9)
   wisper (~> 2.0)
   wisper-activerecord (~> 1.0)
+  with_advisory_lock!
 
 BUNDLED WITH
    2.3.25

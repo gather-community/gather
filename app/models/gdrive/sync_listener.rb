@@ -11,7 +11,7 @@ module GDrive
       return if user.google_email.blank?
       item_groups = item_groups_for_user(user)
       return if item_groups.empty?
-      enqueue_job(source_class_name: "User", source_id: user.id)
+      enqueue_user_sync(user_id: user.id)
     end
 
     def update_user_successful(user)
@@ -22,13 +22,13 @@ module GDrive
           user_community_changed?(user)
         )
 
-      enqueue_job(source_class_name: "User", source_id: user.id)
+      enqueue_user_sync(user_id: user.id)
     end
 
     def destroy_user_successful(user)
       return if user.google_email.blank?
 
-      enqueue_job(source_class_name: "User", source_id: user.id)
+      enqueue_user_sync(user_id: user.id)
     end
 
     def update_household_successful(household)
@@ -36,25 +36,25 @@ module GDrive
 
       household.users.each do |user|
         next if user.google_email.blank?
-        enqueue_job(source_class_name: "User", source_id: user.id)
+        enqueue_user_sync(user_id: user.id)
       end
     end
 
     def gdrive_item_group_committed(item_group)
-      enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+      enqueue_item_sync(item_id: item_group.item_id)
     end
 
     def update_groups_group_successful(group)
       return unless group.saved_change_to_availability? || group.saved_change_to_deactivated_at?
       group.gdrive_item_groups.each do |item_group|
-        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+        enqueue_item_sync(item_id: item_group.item_id)
       end
     end
 
     def groups_membership_committed(membership)
       group = membership.group
       group.gdrive_item_groups.each do |item_group|
-        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+        enqueue_item_sync(item_id: item_group.item_id)
       end
     end
 
@@ -62,7 +62,7 @@ module GDrive
       group = affiliation.group
       return unless group.everybody?
       group.gdrive_item_groups.each do |item_group|
-        enqueue_job(source_class_name: "Item", source_id: item_group.item_id)
+        enqueue_item_sync(item_id: item_group.item_id)
       end
     end
 
@@ -72,8 +72,12 @@ module GDrive
       ItemGroup.where(group: Groups::Group.with_user(user).select(:id)).includes(:item)
     end
 
-    def enqueue_job(args)
-      PermissionSyncJob.perform_later(args)
+    def enqueue_user_sync(args)
+      UserPermissionSyncJob.perform_later(args)
+    end
+
+    def enqueue_item_sync(args)
+      ItemPermissionSyncJob.perform_later(args)
     end
 
     def user_community_changed?(user)

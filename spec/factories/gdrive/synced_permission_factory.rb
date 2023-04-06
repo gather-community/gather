@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :gdrive_synced_permission, class: "GDrive::SyncedPermission" do
     user
     association(:item, factory: :gdrive_item)
-    sequence(:item_external_id) { |i| "xxx#{i}" }
-    google_email { "foo@gmail.com" }
+    item_external_id { item.external_id }
+    google_email { user.google_email }
     access_level { "reader" }
   end
 end

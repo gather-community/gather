@@ -247,7 +247,7 @@ describe GDrive::SyncListener do
   end
 
   describe "create group affiliation" do
-    let!(:community1) { Defaults.community }
+    let!(:community1) { create(:community) }
     let!(:community2) { create(:community) }
     let!(:item1) { create(:gdrive_item, gdrive_config: config) }
     let!(:item2) { create(:gdrive_item, gdrive_config: config) }
@@ -283,25 +283,28 @@ describe GDrive::SyncListener do
   end
 
   def expect_enqueues_job_with_users(*users, &block)
-    expect_enqueues_job_with_objects(users, "User", &block)
+    expect_enqueues_job_with_objects(users, GDrive::UserPermissionSyncJob, :user_id, &block)
   end
 
   def expect_enqueues_job_with_items(*items, &block)
-    expect_enqueues_job_with_objects(items, "Item", &block)
+    expect_enqueues_job_with_objects(items, GDrive::ItemPermissionSyncJob, :item_id, &block)
   end
 
-  def expect_enqueues_job_with_objects(objects, class_name, &block)
+  def expect_enqueues_job_with_objects(objects, job_class, id_key, &block)
     calls = []
-    expect(&block).to have_enqueued_job(GDrive::PermissionSyncJob).exactly(objects.size).times
+    expect(&block).to have_enqueued_job(job_class).exactly(objects.size).times
       .with { |**args| calls << args }
     expected_params = objects.map do |obj|
       expected_id = obj.persisted? ? obj.id : anything
-      {source_class_name: class_name, source_id: expected_id}
+      {id_key => expected_id}
     end
     expect(calls).to match_array(expected_params)
   end
 
   def expect_doesnt_enqueue_job(&block)
-    expect(&block).not_to have_enqueued_job(GDrive::PermissionSyncJob)
+    expect_example = expect(&block)
+    expect_example.to have_not_enqueued_job(GDrive::UserPermissionSyncJob).and(
+      have_not_enqueued_job(GDrive::ItemPermissionSyncJob)
+    )
   end
 end

@@ -168,7 +168,7 @@ module Nav
               name: :settings,
               parents: :people,
               path: h.edit_people_settings_path,
-              permitted: People::SettingsPolicy.new(user, community).edit?,
+              permitted: SettingsPolicy.new(user, community).edit?,
               icon: "gear"
             }
           ]
@@ -303,7 +303,7 @@ module Nav
             name: :general,
             parents: %i[people settings],
             path: h.edit_people_settings_path,
-            permitted: People::SettingsPolicy.new(user, community).edit?
+            permitted: SettingsPolicy.new(user, community).edit?
           }, {
             name: :member_types,
             parents: %i[people settings],

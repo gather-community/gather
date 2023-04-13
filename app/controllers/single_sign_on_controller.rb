@@ -10,8 +10,15 @@ class SingleSignOnController < ApplicationController
   # to just ignore impersonation.
   skip_before_action :handle_impersonation, only: :sign_on
 
+  # In order for the SSO attempt to succeed, the user has to be signed in and authorized.
+  # If they are using a subdomain, the subdomain has to be that of their own community
+  # (possibly with exceptions) this is determined by the policy.
+  # Then the key used to sign the SSO request has to match a secret stored locally.
+  # Which secret(s) we check depend on the subdomain:
+  # - For the apex domain, we only check the global one.
+  # - For a subdomain, we try the community one, and then the cluster one if that fails.
   def sign_on
-    authorize(:single_sign_on)
+    authorize(current_community, policy_class: SingleSignOnPolicy)
     handler = build_handler
     handler.email = current_user.email
     handler.external_id = current_user.id

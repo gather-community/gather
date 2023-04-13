@@ -8,19 +8,22 @@ describe "single sign on" do
   let(:subdomain) { nil }
   let(:cluster) { Defaults.cluster }
   let(:community) { Defaults.community }
-  let(:secret) { Settings.single_sign_on.secret }
+  let(:secret_on_foreign_host) { Settings.single_sign_on.secret }
   let(:valid_incoming_url) do
     qs = Rack::Utils.build_query(return_sso_url: "https://example.com/sso/login", nonce: "xyz")
     payload = Base64.strict_encode64(qs)
-    sig = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
+    sig = OpenSSL::HMAC.hexdigest("sha256", secret_on_foreign_host, payload)
     host = [subdomain, Settings.url.host].compact.join(".")
     "#{Settings.url.protocol}://#{host}:#{Settings.url.port}/sso?sso=#{CGI.escape(payload)}&sig=#{sig}"
   end
   let(:valid_redirect) do
+    # By the time we are testing the redirect, we can assume the secret on the foreign
+    # host was correct.
+    secret_for_redirect = secret_on_foreign_host
     payload = "ZW1haWw9dG9tJTQwZXhhbXBsZS5jb20mZXh0ZXJuYWxfaWQ9MTIzNCZuYW1lPVRvbStTbXl0aCZub25jZT14eXomc"\
       "mV0dXJuX3Nzb191cmw9aHR0cHMlM0ElMkYlMkZleGFtcGxlLmNvbSUyRnNzbyUyRmxvZ2luJnVzZXJuYW1lPVRvbS"\
       "tTbXl0aCZjdXN0b20uZmlyc3RfbmFtZT1Ub20mY3VzdG9tLmxhc3RfbmFtZT1TbXl0aA=="
-    sig = OpenSSL::HMAC.hexdigest("sha256", secret, payload)
+    sig = OpenSSL::HMAC.hexdigest("sha256", secret_for_redirect, payload)
     "https://example.com/sso/login?sso=#{CGI.escape(payload)}&sig=#{sig}"
   end
 
@@ -49,41 +52,66 @@ describe "single sign on" do
       end
     end
 
+    shared_examples_for "fails with 403" do
+      scenario do
+        visit(valid_incoming_url)
+        expect(page).to have_content("You are not permitted")
+      end
+    end
+
     context "with valid data" do
       context "when not impersonating" do
+        # This is the same as if the actor is from a different community in the cluster.
+        # The actor in this case is from the default community, but the subdomain AND secret
+        # are for community2. In this case, we don't want to permit the SSO. This is accomplished
+        # by limiting the policy so that a 403 is returned.
+        context "with secret and subdomain for a different community in the cluster" do
+          let(:community2) { create(:community, sso_secret: "community2secret") }
+          let(:secret_on_foreign_host) { "community2secret" }
+          let(:subdomain) { community2.slug }
+          it_behaves_like "fails with 403"
+        end
+
+        context "with community secret and subdomain for a community in a different cluster" do
+          let(:community2) { ActsAsTenant.with_tenant(create(:cluster)) { create(:community) } }
+          let(:secret_on_foreign_host) { "communitysecret" }
+          let(:subdomain) { community2.slug }
+          it_behaves_like "fails with 403"
+        end
+
         context "with global secret and apex domain" do
-          let(:secret) { Settings.single_sign_on.secret }
+          let(:secret_on_foreign_host) { Settings.single_sign_on.secret }
           let(:subdomain) { nil }
           it_behaves_like "redirects appropriately"
         end
 
         context "with cluster secret and subdomain from that cluster" do
-          let(:secret) { "clustersecret" }
+          let(:secret_on_foreign_host) { "clustersecret" }
           let(:subdomain) { community.slug }
           it_behaves_like "redirects appropriately"
         end
 
         context "with community secret and subdomain for that community" do
-          let(:secret) { "communitysecret" }
+          let(:secret_on_foreign_host) { "communitysecret" }
           let(:subdomain) { community.slug }
           it_behaves_like "redirects appropriately"
         end
 
         context "with global secret and subdomain for a community" do
-          let(:secret) { Settings.single_sign_on.secret }
+          let(:secret_on_foreign_host) { Settings.single_sign_on.secret }
           let(:subdomain) { community.slug }
           it_behaves_like "fails with bad signature"
         end
 
         context "with cluster secret and apex domain" do
-          let(:secret) { "clustersecret" }
+          let(:secret_on_foreign_host) { "clustersecret" }
           let(:subdomain) { nil }
           it_behaves_like "fails with bad signature"
         end
 
         context "with community secret and subdomain for a different community in the cluster" do
-          let(:secret) { "communitysecret" }
-          let(:community2) { create(:community) }
+          let(:community2) { create(:community, sso_secret: "community2secret") }
+          let(:secret_on_foreign_host) { "communitysecret" }
           let(:subdomain) { community2.slug }
           it_behaves_like "fails with bad signature"
         end

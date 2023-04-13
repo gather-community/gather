@@ -3,13 +3,13 @@
 class SettingsController < ApplicationController
   def edit
     @community = current_community
-    authorize(current_community)
+    authorize(current_community, policy_class: SettingsPolicy)
     @settings = sub_settings
   end
 
   def update
     @community = current_community
-    authorize(current_community)
+    authorize(current_community, policy_class: SettingsPolicy)
     # We have to call `settings` before `update` to trigger the CustomFields infrastructure to set things
     # up. Otherwise update bypasses the CustomFields infrastructure altogether.
     @community.settings

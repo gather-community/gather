@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe People::SettingsPolicy do
+describe SettingsPolicy do
   describe "permissions" do
     include_context "policy permissions"
 

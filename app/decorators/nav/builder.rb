@@ -124,7 +124,7 @@ module Nav
               name: :settings,
               parents: :meals,
               path: h.edit_meals_settings_path,
-              permitted: Meals::SettingsPolicy.new(user, community).edit?,
+              permitted: SettingsPolicy.new(user, community).edit?,
               icon: "gear"
             }
           ]
@@ -246,7 +246,7 @@ module Nav
               name: :settings,
               parents: :work,
               path: h.edit_work_settings_path,
-              permitted: Work::SettingsPolicy.new(user, community).edit?,
+              permitted: SettingsPolicy.new(user, community).edit?,
               icon: "gear"
             }
           ]

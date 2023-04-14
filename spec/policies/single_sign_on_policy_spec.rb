@@ -9,16 +9,28 @@ describe SingleSignOnPolicy do
     let(:user) { create(:user, community: community) }
 
     permissions :sign_on? do
-      it "permits active users in community" do
-        expect(subject).to permit(user, community)
+      context "with community specified" do
+        it "permits active users in community" do
+          expect(subject).to permit(user, community)
+        end
+
+        it "forbids active users in other community" do
+          expect(subject).not_to permit(user, communityB)
+        end
+
+        it "forbids inactive users" do
+          expect(subject).not_to permit(inactive_user, community)
+        end
       end
 
-      it "forbids active users in other community" do
-        expect(subject).not_to permit(user, communityB)
-      end
+      context "without community specified" do
+        it "permits active users" do
+          expect(subject).to permit(user, nil)
+        end
 
-      it "forbids inactive users" do
-        expect(subject).not_to permit(inactive_user, community)
+        it "forbids inactive users" do
+          expect(subject).not_to permit(inactive_user, nil)
+        end
       end
     end
   end

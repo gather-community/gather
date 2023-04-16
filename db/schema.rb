@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_29_154752) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_14_115639) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -321,6 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_154752) do
     t.string "access_level", limit: 32, null: false
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.string "external_id", null: false
     t.string "google_email", limit: 256, null: false
     t.string "item_external_id", limit: 128, null: false
     t.integer "item_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after item record destroyed so we can search by ID in PermissionSyncJob."

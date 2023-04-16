@@ -3,11 +3,14 @@
 module GDrive
   # Syncs permissions for a given Item from Gather to Google Drive.
   # Keeps track of permissions in the GDrive::SyncedPermission model.
-  class ItemPermissionSyncJob < ApplicationJob
-    def perform(cluster_id:, item_id:)
+  class ItemPermissionSyncJob < PermissionSyncJob
+    def perform(cluster_id:, community_id:, item_id:)
       self.item_id = item_id
 
       with_cluster(Cluster.find(cluster_id)) do
+        self.community = Community.find(community_id)
+        init_api_wrapper
+
         # We shouldn't allow any User syncs to happen while an Item sync is running
         # b/c it could result in a race condition.
         # But this can be a shared lock when held during an Item sync
@@ -41,8 +44,10 @@ module GDrive
         process_permissions_for_item_group(item_group)
       end
 
-      permissions_by_user_id.values.each do |permission|
-        permission.access_level.nil? ? permission.destroy : permission.save!
+      # We sort by persisted b/c we want to ensure we delete before we create.
+      # We sort for google_email test purposes, so that the order of the permissions is consistent.
+      permissions_by_user_id.values.sort_by { |p| [p.persisted? ? 0 : 1, p.google_email] }.each do |perm|
+        apply_permission_changes(perm)
       end
     end
 

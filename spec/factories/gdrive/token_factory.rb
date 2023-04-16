@@ -2,6 +2,11 @@
 
 FactoryBot.define do
   factory :gdrive_token, class: "GDrive::Token" do
+    # When testing using VCR, we should override access_token as needed in the factory call, temporarily,
+    # with a valid access_token taken from the development database.
+    #
+    # Once we have captured the request, remove the overridden values from the factory
+    # call and update the cassette to match.
     transient do
       access_token { "ya29.xxx" }
     end

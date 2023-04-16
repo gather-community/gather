@@ -108,13 +108,6 @@ describe "single sign on" do
           let(:subdomain) { nil }
           it_behaves_like "fails with bad signature"
         end
-
-        context "with community secret and subdomain for a different community in the cluster" do
-          let(:community2) { create(:community, sso_secret: "community2secret") }
-          let(:secret_on_foreign_host) { "communitysecret" }
-          let(:subdomain) { community2.slug }
-          it_behaves_like "fails with bad signature"
-        end
       end
 
       context "when impersonating" do

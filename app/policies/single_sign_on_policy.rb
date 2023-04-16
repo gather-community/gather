@@ -6,6 +6,6 @@ class SingleSignOnPolicy < ApplicationPolicy
   alias community record
 
   def sign_on?
-    active_in_community?
+    community ? active_in_community? : active?
   end
 end

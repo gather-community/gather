@@ -213,10 +213,12 @@ describe "gdrive browse", js: true do
         end
       end
 
-      context "when shared drive present" do
+      context "when permitted shared drive present" do
         let!(:drive) do
           create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0AGH_tsBj1z-0Uk9PVA")
         end
+        let!(:group) { create(:group, joiners: [actor]) }
+        let!(:item_group) { create(:gdrive_item_group, item: drive, group: group) }
 
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/admin_authorization_error") do

@@ -5,11 +5,8 @@ module GDrive
   # Keeps track of permissions in the GDrive::SyncedPermission model.
   class ItemPermissionSyncJob < PermissionSyncJob
     def perform(cluster_id:, community_id:, item_id:)
-      self.item_id = item_id
-
-      with_cluster(Cluster.find(cluster_id)) do
-        self.community = Community.find(community_id)
-        init_api_wrapper
+      with_cluster_and_api_wrapper(cluster_id: cluster_id, community_id: community_id) do
+        self.item_id = item_id
 
         # We shouldn't allow any User syncs to happen while an Item sync is running
         # b/c it could result in a race condition.

@@ -1,0 +1,73 @@
+---
+http_interactions:
+- request:
+    method: delete
+    uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-0Uk9PVA/permissions/nonexistent?supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 16 Apr 2023 21:38:34 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.a0Ael9sCMPTeNxxkfXMuruUgqNWNWGhiGWo52QnzdUV6ibuveSYkFcc0cEpdXSB4Yxq_w8CgXewkrKc3ieM-zvCHjdGaG-xVmnFKHJNVURD7agjGJ8PDKJPA6RXtcF-VeIrSwaoF3_n_xlx_IzN7cIIV7yHKyNkbLo-AaCgYKAR0SARESFQF4udJh78dP-tj8BtC-ilrCan06jw0169
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Cache-Control:
+      - private, max-age=0
+      Expires:
+      - Sun, 16 Apr 2023 21:38:35 GMT
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Sun, 16 Apr 2023 21:38:35 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 404,
+            "message": "Permission not found: nonexistent.",
+            "errors": [
+              {
+                "message": "Permission not found: nonexistent.",
+                "domain": "global",
+                "reason": "notFound",
+                "location": "permissionId",
+                "locationType": "parameter"
+              }
+            ]
+          }
+        }
+    http_version:
+  recorded_at: Sun, 16 Apr 2023 21:38:34 GMT
+recorded_with: VCR 4.0.0

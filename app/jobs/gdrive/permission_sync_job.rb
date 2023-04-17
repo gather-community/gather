@@ -7,6 +7,14 @@ module GDrive
 
     attr_accessor :community, :wrapper
 
+    def with_cluster_and_api_wrapper(cluster_id:, community_id:)
+      with_cluster(Cluster.find(cluster_id)) do
+        self.community = Community.find(community_id)
+        init_api_wrapper
+        yield
+      end
+    end
+
     def init_api_wrapper
       config = MainConfig.find_by!(community_id: community.id)
       self.wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
@@ -23,6 +31,14 @@ module GDrive
         create_permission(new_permission)
       elsif permission.access_level_changed?
         update_permission_access_level(permission)
+      end
+    rescue Google::Apis::ClientError => error
+      if error.message.match?(/notFound: File not found/)
+        item = permission.item
+        item.destroy
+        permission.destroy if permission.persisted?
+      else
+        raise
       end
     end
 
@@ -41,6 +57,16 @@ module GDrive
       )
       permission.external_id = result.id
       permission.save!
+    rescue Google::Apis::ClientError => error
+      # If the user's google_email is not a good google account,
+      # we don't want to raise an error since this is based on bad user
+      # input. In the future we might want to notify the user somehow.
+      # But for now we'll just log it and move on.
+      if error.message.match?(/cannotShareTeamDriveWithNonGoogleAccounts/)
+        Rails.logger.warn("User #{permission.google_email} is not a valid google account")
+      else
+        raise
+      end
     end
 
     def update_permission_access_level(permission)
@@ -53,12 +79,31 @@ module GDrive
         supports_all_drives: true
       )
       permission.save!
+    rescue Google::Apis::ClientError => error
+      if error.message.match?(/notFound: Permission not found/)
+        # If the permission was not found, we'll just create it.
+        Rails.logger.warn("Permission #{permission.external_id} not found for " \
+          "item #{permission.item_external_id}, creating")
+        create_permission(permission)
+      else
+        raise
+      end
     end
 
     def destroy_permission(permission)
       wrapper.service.delete_permission(permission.item_external_id, permission.external_id,
         supports_all_drives: true)
-      permission.destroy!
+      permission.destroy
+    rescue Google::Apis::ClientError => error
+      if error.message.match?(/notFound: Permission not found/)
+        # If the permission was not found, no problem!
+        # Just go ahead and destroy the permission to match.
+        Rails.logger.warn("Permission #{permission.external_id} not found for " \
+          "item #{permission.item_external_id}, skipping delete")
+        permission.destroy
+      else
+        raise
+      end
     end
   end
 end

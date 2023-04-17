@@ -66,10 +66,6 @@ describe "gdrive browse", js: true do
         create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "0ABQKSPvPdtPNUk9PVA")
       end
       let!(:item_group2) { create(:gdrive_item_group, item: drive2, group: group2) }
-      let!(:missing_drive) do
-        create(:gdrive_item, gdrive_config: config, kind: "drive", external_id: "73bh83UGIkb6BKhBbKb", missing: true)
-      end
-      let!(:item_group3) { create(:gdrive_item_group, item: missing_drive, group: group1) }
       let!(:token) do
         create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com")
       end
@@ -112,11 +108,6 @@ describe "gdrive browse", js: true do
 
         scenario "explicit drive ID given for existent but inaccessible drive" do
           visit(gdrive_browse_path(item_id: drive2.external_id, drive: 1))
-          expect(page).to have_content("page you were looking for doesn't exist")
-        end
-
-        scenario "explicit drive ID given for existent but missing drive" do
-          visit(gdrive_browse_path(item_id: missing_drive.external_id, drive: 1))
           expect(page).to have_content("page you were looking for doesn't exist")
         end
 

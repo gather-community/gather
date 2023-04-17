@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_14_115639) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_17_115652) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -308,7 +308,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_14_115639) do
     t.string "external_id", limit: 255, null: false
     t.bigint "gdrive_config_id", null: false
     t.string "kind", null: false
-    t.boolean "missing", default: false, null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"

@@ -26,7 +26,7 @@ module GDrive
       end
 
       # If there are no drives at all connected to the config, then we set a special flag and return.
-      @drives = @config.items.drives_only.not_missing
+      @drives = @config.items.drives_only
       if @drives.none?
         skip_policy_scope
         return @no_drives = true
@@ -122,7 +122,7 @@ module GDrive
     def can_read_drive?(drive_id)
       drive = Item.find_by(external_id: drive_id, kind: "drive")
       return false if drive.nil?
-      ItemPolicy.new(current_user, drive).show? && !drive.missing?
+      ItemPolicy.new(current_user, drive).show?
     end
   end
 end

@@ -14,7 +14,6 @@ module GDrive
       dependent: nil
 
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
-    scope :not_missing, -> { where(missing: false) }
     scope :drives_only, -> { where(kind: "drive") }
 
     delegate :community, to: :gdrive_config

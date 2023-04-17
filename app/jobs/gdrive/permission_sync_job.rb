@@ -35,6 +35,8 @@ module GDrive
     rescue Google::Apis::ClientError => error
       if error.message.match?(/notFound: File not found/)
         item = permission.item
+        Rails.logger.warn("Item #{item.external_id} was not found. " \
+          "Deleting local item #{item.id} and associated records")
         item.destroy
         permission.destroy if permission.persisted?
       else

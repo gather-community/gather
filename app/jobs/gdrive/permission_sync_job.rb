@@ -20,6 +20,22 @@ module GDrive
       self.wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
     end
 
+    def build_synced_permission(user, item, access_level)
+      GDrive::SyncedPermission.new(
+        item_id: item.id,
+        item_external_id: item.external_id,
+        user_id: user.id,
+        google_email: user.google_email,
+        access_level: access_level
+      )
+    end
+
+    def access_level_cmp(level_a, level_b)
+      index_a = ItemGroup::ACCESS_LEVELS.index(level_a) || -1
+      index_b = ItemGroup::ACCESS_LEVELS.index(level_b) || -1
+      index_a <=> index_b
+    end
+
     def apply_permission_changes(permission)
       if permission.access_level.nil?
         destroy_permission(permission)
@@ -46,8 +62,12 @@ module GDrive
 
     private
 
+    def drive_service
+      wrapper.service
+    end
+
     def create_permission(permission)
-      result = wrapper.service.create_permission(
+      result = drive_service.create_permission(
         permission.item_external_id,
         Google::Apis::DriveV3::Permission.new(
           email_address: permission.google_email,
@@ -72,7 +92,7 @@ module GDrive
     end
 
     def update_permission_access_level(permission)
-      wrapper.service.update_permission(
+      drive_service.update_permission(
         permission.item_external_id,
         permission.external_id,
         Google::Apis::DriveV3::Permission.new(
@@ -93,7 +113,7 @@ module GDrive
     end
 
     def destroy_permission(permission)
-      wrapper.service.delete_permission(permission.item_external_id, permission.external_id,
+      drive_service.delete_permission(permission.item_external_id, permission.external_id,
         supports_all_drives: true)
       permission.destroy
     rescue Google::Apis::ClientError => error

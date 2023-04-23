@@ -42,7 +42,8 @@ module GDrive
       end
 
       # We sort by persisted b/c we want to ensure we delete before we create.
-      # We sort for google_email test purposes, so that the order of the permissions is consistent.
+      # We sort by google_email for test purposes, so that the order of the permissions is consistent,
+      # so that the order of requests is also consistent in order to match the cassette.
       permissions_by_user_id.values.sort_by { |p| [p.persisted? ? 0 : 1, p.google_email] }.each do |perm|
         apply_permission_changes(perm)
       end
@@ -62,25 +63,9 @@ module GDrive
             permission.access_level = item_group.access_level
           end
         else
-          permissions_by_user_id[user.id] = build_synced_permission(user, item_group.access_level)
+          permissions_by_user_id[user.id] = build_synced_permission(user, item, item_group.access_level)
         end
       end
-    end
-
-    def access_level_cmp(level_a, level_b)
-      index_a = ItemGroup::ACCESS_LEVELS.index(level_a) || -1
-      index_b = ItemGroup::ACCESS_LEVELS.index(level_b) || -1
-      index_a <=> index_b
-    end
-
-    def build_synced_permission(user, access_level)
-      GDrive::SyncedPermission.new(
-        item_id: item_id,
-        item_external_id: item.external_id,
-        user_id: user.id,
-        google_email: user.google_email,
-        access_level: access_level
-      )
     end
   end
 end

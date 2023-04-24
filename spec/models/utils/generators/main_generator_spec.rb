@@ -20,6 +20,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     GDrive::MigrationConfig
     GDrive::Item
     GDrive::ItemGroup
+    GDrive::SyncedPermission
     GDrive::Token
     GDrive::UnownedFile
     Groups::Mailman::List

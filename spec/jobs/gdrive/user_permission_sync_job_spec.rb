@@ -22,7 +22,6 @@ describe GDrive::UserPermissionSyncJob do
 
   let!(:config) { create(:gdrive_main_config, org_user_id: "drxxxin@example.net") }
   let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "drxxxin@example.net") }
-  let!(:user) { create(:user, google_email: "toxxxth@gmail.com") }
   let!(:group1) { create(:group, joiners: [user]) }
   let!(:group2) { create(:group, joiners: [user]) }
   let!(:group3) { create(:group, joiners: [user]) }
@@ -71,23 +70,63 @@ describe GDrive::UserPermissionSyncJob do
       user_id: user.id)
   end
 
-  it "adds new permissions, updates permissions correctly, removes obsolete permissions" do
-    VCR.use_cassette("gdrive/user_permission_sync_job/happy_path") do
-      perform_job
+  context "with valid user" do
+    let!(:user) { create(:user, google_email: "toxxxth@gmail.com") }
+
+    it "adds new permissions, updates permissions correctly, removes obsolete permissions" do
+      VCR.use_cassette("gdrive/user_permission_sync_job/happy_path") do
+        perform_job
+      end
+      attribs_to_check = %i[item_id item_external_id access_level]
+      synced_permissions = GDrive::SyncedPermission.all
+      sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
+      expect(sp_attribs).to contain_exactly(
+        {item_id: item1.id, item_external_id: item1.external_id, access_level: "commenter"},
+        {item_id: item3.id, item_external_id: item3.external_id, access_level: "reader"},
+        {item_id: item4.id, item_external_id: item4.external_id, access_level: "writer"}
+      )
+      expect(GDrive::SyncedPermission.all.map { |sp| [sp.user_id, sp.google_email] }.uniq)
+        .to eq([[user.id, user.google_email]])
     end
-    attribs_to_check = %i[item_id item_external_id access_level]
-    synced_permissions = GDrive::SyncedPermission.all
-    sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
-    expect(sp_attribs).to contain_exactly(
-      {item_id: item1.id, item_external_id: item1.external_id, access_level: "commenter"},
-      {item_id: item3.id, item_external_id: item3.external_id, access_level: "reader"},
-      {item_id: item4.id, item_external_id: item4.external_id, access_level: "writer"}
-    )
-    expect(GDrive::SyncedPermission.all.map { |sp| [sp.user_id, sp.google_email] }.uniq)
-      .to eq([[user.id, user.google_email]])
   end
 
-  def create_synced_permission(item, external_id, level, google_email = user.google_email)
+  shared_examples "removes all permissions" do
+    it do
+      VCR.use_cassette("gdrive/user_permission_sync_job/invalid_user") do
+        perform_job
+      end
+      expect(GDrive::SyncedPermission.all).to be_empty
+    end
+  end
+
+  context "with inactive user" do
+    let!(:user) { create(:user, :inactive, google_email: "toxxxth@gmail.com") }
+    it_behaves_like "removes all permissions"
+  end
+
+  context "with user with no google_email" do
+    let!(:user) { create(:user, google_email: nil) }
+    it_behaves_like "removes all permissions"
+  end
+
+  context "with deleted user" do
+    let!(:user) { create(:user) }
+
+    it "removes all permissions" do
+      user.destroy
+
+      # The destroy should not delete the synced permissions since they are not
+      # linked with a foreign key.
+      expect(GDrive::SyncedPermission.all).not_to be_empty
+
+      VCR.use_cassette("gdrive/user_permission_sync_job/invalid_user") do
+        perform_job
+      end
+      expect(GDrive::SyncedPermission.all).to be_empty
+    end
+  end
+
+  def create_synced_permission(item, external_id, level, google_email = "toxxxth@gmail.com")
     create(:gdrive_synced_permission, user: user, external_id: external_id, item: item,
       google_email: google_email, access_level: level)
   end

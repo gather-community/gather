@@ -92,22 +92,39 @@ describe GDrive::ItemPermissionSyncJob do
       item_id: item.id)
   end
 
-  it "adds new permissions, updates permissions correctly, removes obsolete permissions" do
-    VCR.use_cassette("gdrive/item_permission_sync_job/happy_path") do
-      perform_job
+  context "with valid item" do
+    it "adds new permissions, updates permissions correctly, removes obsolete permissions" do
+      VCR.use_cassette("gdrive/item_permission_sync_job/happy_path") do
+        perform_job
+      end
+      attribs_to_check = %i[user_id google_email access_level]
+      synced_permissions = GDrive::SyncedPermission.all
+      sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
+      expect(sp_attribs).to contain_exactly(
+        {user_id: user1.id, google_email: "tsxxxch@gmail.com", access_level: "fileOrganizer"},
+        {user_id: user2.id, google_email: "toxxxth@gmail.com", access_level: "reader"},
+        {user_id: user3.id, google_email: "nixxxen@gmail.com", access_level: "reader"},
+        {user_id: user4.id, google_email: "wyxxxnd@gmail.com", access_level: "writer"},
+        {user_id: user5.id, google_email: "rhxxxnd@gmail.com", access_level: "fileOrganizer"}
+      )
+      expect(GDrive::SyncedPermission.all.map { |sp| [sp.item_id, sp.item_external_id] }.uniq)
+        .to eq([[item.id, "0AGH_tsBj1z-0Uk9PVA"]])
     end
-    attribs_to_check = %i[user_id google_email access_level]
-    synced_permissions = GDrive::SyncedPermission.all
-    sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
-    expect(sp_attribs).to contain_exactly(
-      {user_id: user1.id, google_email: "tsxxxch@gmail.com", access_level: "fileOrganizer"},
-      {user_id: user2.id, google_email: "toxxxth@gmail.com", access_level: "reader"},
-      {user_id: user3.id, google_email: "nixxxen@gmail.com", access_level: "reader"},
-      {user_id: user4.id, google_email: "wyxxxnd@gmail.com", access_level: "writer"},
-      {user_id: user5.id, google_email: "rhxxxnd@gmail.com", access_level: "fileOrganizer"}
-    )
-    expect(GDrive::SyncedPermission.all.map { |sp| [sp.item_id, sp.item_external_id] }.uniq)
-      .to eq([[item.id, "0AGH_tsBj1z-0Uk9PVA"]])
+  end
+
+  context "with deleted item" do
+    it "removes all permissions" do
+      item.destroy
+
+      # The destroy should not delete the synced permissions since they are not
+      # linked with a foreign key.
+      expect(GDrive::SyncedPermission.all).not_to be_empty
+
+      VCR.use_cassette("gdrive/item_permission_sync_job/deleted_item") do
+        perform_job
+      end
+      expect(GDrive::SyncedPermission.all).to be_empty
+    end
   end
 
   def create_synced_permission(user, external_id, level, google_email = user.google_email)

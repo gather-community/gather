@@ -37,6 +37,8 @@ module GDrive
       # the permission.
       permissions_by_user_id.values.each { |p| p.access_level = nil }
 
+      # If the item has been destroyed, there can't be any ItemGroups for it
+      # since they are linked by a foreign key. So this loop will be a no-op.
       ItemGroup.where(item_id: item_id).each do |item_group|
         process_permissions_for_item_group(item_group)
       end

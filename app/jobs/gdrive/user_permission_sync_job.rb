@@ -37,7 +37,8 @@ module GDrive
       # the permission.
       permissions_by_item_id.values.each { |p| p.access_level = nil }
 
-      if user.active? && user.google_email.present?
+      # User may have been deleted between when the job was enqueued and when it was run.
+      if user.present? && user.active? && user.google_email.present?
         group_ids = Groups::Group.with_user(user).active.pluck(:id)
         ItemGroup.where(group_id: group_ids).each do |item_group|
           process_permissions_for_item_group(item_group)

@@ -9,12 +9,15 @@ module GDrive
         self.user_id = user_id
 
         # We shouldn't allow any Item syncs to happen while a User sync is running
-        # b/c it could result in a race condition.
+        # b/c it could result in a race condition. e.g. if we start syncing a big
+        # everybody group at the same time as we are updating a User's google_email,
+        # that could get really messy.
         # But this can be a shared lock when held during a User sync
         # b/c we don't care if other User syncs are running.
-        lock_name = "gdrive-permission-sync-all-items"
+        # We also don't care what happens in other communities since they have their own GDrive config.
+        lock_name = "gdrive-permission-sync-all-items-cmty-#{community_id}"
         User.with_advisory_lock!(lock_name, shared: true, timeout_seconds: 120, disable_query_cache: true) do
-          lock_name = "gdrive-permission-sync-user-#{user_id}"
+          lock_name = "gdrive-permission-sync-user-#{user_id}-cmty-#{community_id}"
           Item.with_advisory_lock!(lock_name, timeout_seconds: 120, disable_query_cache: true) do
             handle_user_with_lock(user_id)
           end

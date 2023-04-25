@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe GDrive::SyncListener do
   let(:config) { create(:gdrive_main_config) }
+  let(:community) { Defaults.community }
 
   describe "create user" do
     let!(:decoy_group) { create(:group) }
@@ -104,7 +105,9 @@ describe GDrive::SyncListener do
       let!(:household) { create(:household, community: community2) }
 
       it "enqueues sync job" do
-        expect_enqueues_job_with_users(user) { user.update!(household: household) }
+        expect_enqueues_job_with_users(user, communities: [community, community2]) do
+          user.update!(household: household)
+        end
       end
     end
 
@@ -143,11 +146,12 @@ describe GDrive::SyncListener do
 
   describe "update household" do
     let!(:household) { create(:household, member_count: 2) }
+    let(:community2) { create(:community) }
 
     context "with community change" do
       it "enqueues job for each user" do
-        expect_enqueues_job_with_users(*household.users[0..1]) do
-          household.update!(community: create(:community))
+        expect_enqueues_job_with_users(*household.users[0..1], communities: [community, community2]) do
+          household.update!(community: community2)
         end
       end
     end
@@ -247,7 +251,6 @@ describe GDrive::SyncListener do
   end
 
   describe "create group affiliation" do
-    let!(:community1) { create(:community) }
     let!(:community2) { create(:community) }
     let!(:item1) { create(:gdrive_item, gdrive_config: config) }
     let!(:item2) { create(:gdrive_item, gdrive_config: config) }
@@ -257,15 +260,17 @@ describe GDrive::SyncListener do
       let!(:item_group2) { create(:gdrive_item_group, item: item2, group: group, access_level: "writer") }
 
       context "when group is an everybody group" do
-        let!(:group) { create(:group, communities: [community1], availability: "everybody") }
+        let!(:group) { create(:group, communities: [community], availability: "everybody") }
 
         it "enqueues sync job" do
-          expect_enqueues_job_with_items(item1, item2) { group.communities << community2 }
+          expect_enqueues_job_with_items(item1, item2) do
+            group.communities << community2
+          end
         end
       end
 
       context "when group is a regular group" do
-        let!(:group) { create(:group, communities: [community1]) }
+        let!(:group) { create(:group, communities: [community]) }
 
         it "does not enqueue sync job" do
           expect_doesnt_enqueue_job { group.communities << community2 }
@@ -274,7 +279,7 @@ describe GDrive::SyncListener do
     end
 
     context "without mapped items" do
-      let!(:group) { create(:group, communities: [community1], availability: "everybody") }
+      let!(:group) { create(:group, communities: [community], availability: "everybody") }
 
       it "does not enqueue sync job" do
         expect_doesnt_enqueue_job { group.communities << community2 }
@@ -282,21 +287,25 @@ describe GDrive::SyncListener do
     end
   end
 
-  def expect_enqueues_job_with_users(*users, &block)
-    expect_enqueues_job_with_objects(users, GDrive::UserPermissionSyncJob, :user_id, &block)
+  def expect_enqueues_job_with_users(*users, communities: [Defaults.community], &block)
+    expect_enqueues_job_with_objects(users, job_class: GDrive::UserPermissionSyncJob,
+      id_key: :user_id, communities: communities, &block)
   end
 
   def expect_enqueues_job_with_items(*items, &block)
-    expect_enqueues_job_with_objects(items, GDrive::ItemPermissionSyncJob, :item_id, &block)
+    expect_enqueues_job_with_objects(items, job_class: GDrive::ItemPermissionSyncJob,
+      id_key: :item_id, communities: [items[0].community], &block)
   end
 
-  def expect_enqueues_job_with_objects(objects, job_class, id_key, &block)
+  def expect_enqueues_job_with_objects(objects, job_class:, id_key:, communities:, &block)
     calls = []
-    expect(&block).to have_enqueued_job(job_class).exactly(objects.size).times
+    expect(&block).to have_enqueued_job(job_class).exactly(objects.size * communities.size).times
       .with { |**args| calls << args }
-    expected_params = objects.map do |obj|
-      expected_id = obj.persisted? ? obj.id : anything
-      {id_key => expected_id}
+    expected_params = objects.flat_map do |obj|
+      communities.map do |community|
+        expected_id = obj.persisted? ? obj.id : anything
+        {:cluster_id => Defaults.cluster.id, :community_id => community.id, id_key => expected_id}
+      end
     end
     expect(calls).to match_array(expected_params)
   end

@@ -83,6 +83,8 @@ module GDrive
     # changes on two different GDrive configurations. So we allow
     # the caller to specify the community_id to use.
     def enqueue_user_sync(user, community_id: user.community_id)
+      return unless MainConfig.exists?(community_id: community_id)
+
       UserPermissionSyncJob.perform_later(cluster_id: user.cluster_id,
         community_id: community_id, user_id: user.id)
     end

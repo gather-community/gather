@@ -53,11 +53,11 @@ describe GDrive::Config do
     end
 
     context "with shared drive" do
-      let!(:shared_drive) { create(:gdrive_shared_drive, gdrive_config: config) }
+      let!(:item) { create(:gdrive_item, gdrive_config: config) }
 
       it "destroys config and drive" do
         config.destroy
-        expect(GDrive::SharedDrive.count).to be_zero
+        expect(GDrive::Item.count).to be_zero
         expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

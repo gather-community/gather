@@ -1,7 +1,7 @@
 <% content_for(:title) { "Google Drive" } %>
 <% content_for(:action_links) do %>
   <% if @setup_policy.setup? %>
-    <% if @config && !@no_auth %>
+    <% if @config && !@no_credentials %>
       <%#= link_to(icon_tag("file-import") << " Migration",
                   gdrive_migration_auth_url(host: Settings.url.host, community_id: current_community.id),
                   class: "btn btn-default") %>
@@ -12,16 +12,23 @@
   <% end %>
 <% end %>
 
-<% if @config.nil? || @no_auth || @no_drives %>
+<% if @authorization_error %>
+  <div class="center-notice">
+    There was an error connecting to Google Drive.
+    <% if @setup_policy.setup? %>
+      Please click 'Setup' above to re-connect.
+    <% else %>
+      Please notify a Gather Admin.
+    <% end %>
+  </div>
+<% elsif @config.nil? || @no_credentials || @no_drives %>
   <div class="center-notice">
     Your community is not yet connected to Google Drive.
     <% if @setup_policy.setup? %>
       <% if @config.nil? %>
         Please contact a Gather staff member to get started.
-      <% elsif @no_auth %>
-        You can click 'Setup' above to get started.
       <% else %>
-        You can click 'Setup' or 'Migration' above to get started.
+        You can click 'Setup' above to get started.
       <% end %>
     <% else %>
       Please talk to a Gather Admin about getting Google Drive set up.
@@ -40,13 +47,13 @@
   <% end %>
   <% if @file_list %>
     <% if @file_list.files.any? %>
-      <table class="full-width">
+      <table class="full-width item-list">
         <% @file_list.files.each do |file| %>
           <tr>
             <td>
               <%= image_tag(file.icon_link, class: "file-icon") %>
               <% if file.mime_type == "application/vnd.google-apps.folder" %>
-                <%= link_to(file.name, gdrive_folder_path(folder_id: file.id)) %>
+                <%= link_to(file.name, gdrive_browse_path(item_id: file.id)) %>
               <% else %>
                 <%= link_to(file.name, file.web_view_link, target: "_blank") %>
               <% end %>
@@ -60,13 +67,13 @@
       </div>
     <% end %>
   <% else %>
-    <table class="full-width">
-      <% @shared_drives.each do |drive| %>
+    <table class="full-width item-list">
+      <% @drives.each do |drive| %>
         <tr>
           <td>
             <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
                           class: "file-icon") %>
-            <%= link_to(drive.name, gdrive_folder_path(folder_id: drive.external_id, drive: 1)) %>
+            <%= link_to(drive.name, gdrive_browse_path(item_id: drive.external_id, drive: 1)) %>
           </td>
         </tr>
       <% end %>

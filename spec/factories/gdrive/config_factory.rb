@@ -2,20 +2,6 @@
 
 FactoryBot.define do
   factory :gdrive_config, class: "GDrive::Config" do
-    transient do
-      # When testing using VCR, we should override these values as needed in the factory call, temporarily,
-      # with a valid access_token taken from the development database.
-      #
-      # Once we have captured the request, remove the overridden values from the factory
-      # call. We can leave the valid access_token in the cassette because access tokens are short-lived.
-      access_token do
-        "xxxx.A0ARrdaM_QONGK0_iSoCLftOlsCiWISzolJRKsAvL6Yvjz8V6RUq2cLOfmHA-gS2dEO3W_vFD5g8ChtNQpV5AfqQ8BIPtP_xDbjZavVZ1YeggP2EeWocrEDxdxVrByirrzfY32MExTnpimol114AB7BHdCxxxx"
-      end
-      refresh_token do
-        "xxxx4HCOkvr0wgmNCgYIARAAGAQSNwF-L9IrEdybQAql6Z9OiwLdUuPLUR-dl8H5DhX8SoL_IkITiJ3m64HbqOMVOIFnK52YQ8Jxxxx"
-      end
-      expiration_time_millis { (Time.now + 1.day).to_i * 1000 }
-    end
     community { Defaults.community }
     client_id { "236482764-xxx.apps.googleusercontent.com" }
     client_secret { "xxxxxxxx" }

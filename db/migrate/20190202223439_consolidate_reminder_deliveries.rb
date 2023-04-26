@@ -8,6 +8,6 @@ class ConsolidateReminderDeliveries < ActiveRecord::Migration[5.1]
 
     # Add check constraint to require exactly one of meal_id or shift_id.
     add_check_constraint :reminder_deliveries,
-                         "(shift_id IS NOT NULL AND meal_id is NULL) OR (meal_id IS NOT NULL AND shift_id is NULL)"
+                         "(shift_id IS NOT NULL AND meal_id is NULL) OR (meal_id IS NOT NULL AND shift_id is NULL)", name: :reminder_deliveries_shift_meal
   end
 end

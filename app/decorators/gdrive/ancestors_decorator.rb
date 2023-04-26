@@ -13,7 +13,7 @@ module GDrive
     def links
       anchors = ancestors.map do |anc|
         is_drive = anc.is_a?(Google::Apis::DriveV3::Drive)
-        path = h.gdrive_folder_path(anc.id, drive: is_drive ? 1 : nil)
+        path = h.gdrive_browse_path(anc.id, drive: is_drive ? 1 : nil)
         h.link_to(anc.name, path)
       end
       safe_join(anchors, h.content_tag(:span, " > ", class: "divider"))

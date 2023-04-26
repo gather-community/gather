@@ -16,10 +16,10 @@ gem "chroma", "~> 0.2"
 gem "cocoon", "~> 1.2"
 gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
-    require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
+  require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
-                            branch: "master", submodules: true
+  branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"
 gem "diffy", "~> 3.4"
@@ -72,6 +72,8 @@ gem "uri", "= 0.10.0" # Dealing with CI being finicky, possibly remove later.
 gem "whenever", "~> 0.9"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"
+# Using master branch b/c we want the ! variant of the lock method and disable_query_cache
+gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
   gem "awesome_print", "~> 1.6"
@@ -89,10 +91,11 @@ group :development, :test do
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "rspec-rails", "~> 4.0"
-  gem "rubocop", "0.75.0" # Should match Hound. See: http://help.houndci.com/configuration/rubocop
-  gem "rubocop-rails", "2.3.2"
+  gem "rubocop", "~> 1.0"
+  gem "rubocop-rails", "2.9"
   gem "selenium-webdriver", "~> 3.0"
   gem "spring", "~> 3.0"
+  gem "standard", "~> 1.24"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
   gem "webdrivers", "~> 4.0"

@@ -14,7 +14,7 @@ module GDrive
       self.callback_url = callback_url
     end
 
-    def authenticated?
+    def has_credentials?
       fetch_credentials_from_store.present?
     end
 

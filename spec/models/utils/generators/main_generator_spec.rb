@@ -6,31 +6,35 @@ require "fileutils"
 # Don't delay jobs so that any mails would get sent immediately
 describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   # Classes that are allowed to have no sample data
-  NO_SAMPLE_DATA_CLASSES = %w[Billing::Template
-                              Billing::TemplateMemberType
-                              Calendars::System::OtherCommunitiesMealsCalendar
-                              Domain
-                              DomainOwnership
-                              FeatureFlag
-                              FeatureFlagUser
-                              GDrive::Config
-                              GDrive::FileIngestionBatch
-                              GDrive::MainConfig
-                              GDrive::MigrationConfig
-                              GDrive::SharedDrive
-                              GDrive::Token
-                              GDrive::UnownedFile
-                              Groups::Mailman::List
-                              Groups::Mailman::User
-                              Meals::Import
-                              Meals::Message
-                              People::MemberType
-                              Subscription::Subscription
-                              Subscription::Intent
-                              Wiki::Page
-                              Wiki::PageVersion
-                              Work::JobReminderDelivery
-                              Work::MealJobSyncSetting].freeze
+  NO_SAMPLE_DATA_CLASSES = %w[
+    Billing::Template
+    Billing::TemplateMemberType
+    Calendars::System::OtherCommunitiesMealsCalendar
+    Domain
+    DomainOwnership
+    FeatureFlag
+    FeatureFlagUser
+    GDrive::Config
+    GDrive::FileIngestionBatch
+    GDrive::MainConfig
+    GDrive::MigrationConfig
+    GDrive::Item
+    GDrive::ItemGroup
+    GDrive::SyncedPermission
+    GDrive::Token
+    GDrive::UnownedFile
+    Groups::Mailman::List
+    Groups::Mailman::User
+    Meals::Import
+    Meals::Message
+    People::MemberType
+    Subscription::Subscription
+    Subscription::Intent
+    Wiki::Page
+    Wiki::PageVersion
+    Work::JobReminderDelivery
+    Work::MealJobSyncSetting
+  ].freeze
 
   before do
     FileUtils.rm_rf(Rails.root.join("public", "system", "test"))
@@ -55,7 +59,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
         next if model.test_mock? || NO_SAMPLE_DATA_CLASSES.include?(model.name)
         dataless << model.name if model.none?
       end
-      expect(dataless).to be_empty, "#{dataless.join(', ')} don't have any sample data"
+      expect(dataless).to be_empty, "#{dataless.join(", ")} don't have any sample data"
 
       # Destroy and check
       Utils::SampleDataRemover.new(cluster).remove

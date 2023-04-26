@@ -10,9 +10,9 @@ module GDrive
                       foreign_key: :gdrive_config_id,
                       inverse_of: :gdrive_config,
                       dependent: :destroy
-    has_many :shared_drives, class_name: "GDrive::SharedDrive",
-                             foreign_key: :gdrive_config_id,
-                             inverse_of: :gdrive_config,
-                             dependent: :destroy
+    has_many :items, class_name: "GDrive::Item",
+                     foreign_key: :gdrive_config_id,
+                     inverse_of: :gdrive_config,
+                     dependent: :destroy
   end
 end

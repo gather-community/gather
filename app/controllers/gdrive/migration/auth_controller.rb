@@ -27,8 +27,8 @@ module GDrive
                               callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
 
-        if !wrapper.authenticated?
-          @no_auth = true
+        if !wrapper.has_credentials?
+          @no_credentials = true
           setup_auth_url(wrapper: wrapper)
         elsif @config.folder_id.nil?
           # Ensure we have a fresh token in case the user wants to use the picker.

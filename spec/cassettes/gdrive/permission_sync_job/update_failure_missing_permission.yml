@@ -1,0 +1,136 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-0Uk9PVA/permissions/nonexistent?supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"role":"reader"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 16 Apr 2023 21:35:31 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0Ael9sCMPTeNxxkfXMuruUgqNWNWGhiGWo52QnzdUV6ibuveSYkFcc0cEpdXSB4Yxq_w8CgXewkrKc3ieM-zvCHjdGaG-xVmnFKHJNVURD7agjGJ8PDKJPA6RXtcF-VeIrSwaoF3_n_xlx_IzN7cIIV7yHKyNkbLo-AaCgYKAR0SARESFQF4udJh78dP-tj8BtC-ilrCan06jw0169
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - private, max-age=0
+      Date:
+      - Sun, 16 Apr 2023 21:35:31 GMT
+      Expires:
+      - Sun, 16 Apr 2023 21:35:31 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 404,
+            "message": "Permission not found: nonexistent.",
+            "errors": [
+              {
+                "message": "Permission not found: nonexistent.",
+                "domain": "global",
+                "reason": "notFound",
+                "location": "permissionId",
+                "locationType": "parameter"
+              }
+            ]
+          }
+        }
+    http_version:
+  recorded_at: Sun, 16 Apr 2023 21:35:31 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-0Uk9PVA/permissions?sendNotificationEmail=false&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"emailAddress":"tomsmyth@gmail.com","role":"reader","type":"user"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 16 Apr 2023 21:35:31 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0Ael9sCMPTeNxxkfXMuruUgqNWNWGhiGWo52QnzdUV6ibuveSYkFcc0cEpdXSB4Yxq_w8CgXewkrKc3ieM-zvCHjdGaG-xVmnFKHJNVURD7agjGJ8PDKJPA6RXtcF-VeIrSwaoF3_n_xlx_IzN7cIIV7yHKyNkbLo-AaCgYKAR0SARESFQF4udJh78dP-tj8BtC-ilrCan06jw0169
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 16 Apr 2023 21:35:32 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "12363746022515177322",
+          "type": "user",
+          "role": "writer"
+        }
+    http_version:
+  recorded_at: Sun, 16 Apr 2023 21:35:32 GMT
+recorded_with: VCR 4.0.0

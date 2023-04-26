@@ -2,7 +2,7 @@
 
 module Groups
   class GroupPolicy < ApplicationPolicy
-    alias group record
+    alias_method :group, :record
 
     class Scope < Scope
       def resolve
@@ -51,7 +51,7 @@ module Groups
     end
 
     def destroy?
-      active? && appropriate_admin? && group.shared_drives.none?
+      active? && appropriate_admin?
     end
 
     def change_permissions?

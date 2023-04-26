@@ -71,14 +71,6 @@ describe Groups::GroupPolicy do
       it { is_expected.not_to permit(manager, group) }
     end
 
-    context "with shared drive" do
-      let!(:gdrive_shared_drive) { create(:gdrive_shared_drive, group: group) }
-
-      permissions :destroy? do
-        it_behaves_like "forbids all"
-      end
-    end
-
     permissions :activate? do
       let(:group) { create(:group, :inactive, availability: availability, communities: communities) }
       it_behaves_like "permits active admins in group's communities but not regular users"
@@ -265,7 +257,7 @@ describe Groups::GroupPolicy do
     end
     let(:list_attribs_with_name_edit) do
       [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate
-                                   _destroy name domain_id]]
+        _destroy name domain_id]]
     end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
     let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }

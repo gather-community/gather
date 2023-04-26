@@ -26,15 +26,24 @@ Rails.application.config.after_initialize do
   Groups::Affiliation.subscribe(Groups::MembershipMaintainer.instance)
   Household.subscribe(Groups::MembershipMaintainer.instance)
 
-  # SyncListener must come after MembershipMaintainer because the former
+  # Mailman::SyncListener must come after MembershipMaintainer because the former
   # relies on the latter having removed a user's memberships after e.g. they are deactivated.
   Wisper.subscribe(Groups::Mailman::SyncListener.instance, on: :user_signed_out)
   User.subscribe(Groups::Mailman::SyncListener.instance)
   Household.subscribe(Groups::Mailman::SyncListener.instance)
-  Groups::Group.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Mailman::List.subscribe(Groups::Mailman::SyncListener.instance)
+  Groups::Group.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Affiliation.subscribe(Groups::Mailman::SyncListener.instance)
   Groups::Membership.subscribe(Groups::Mailman::SyncListener.instance)
+
+  # GDrive::SyncListener must come after MembershipMaintainer because the former
+  # relies on the latter having removed a user's memberships after e.g. they are deactivated.
+  User.subscribe(GDrive::SyncListener.instance)
+  Household.subscribe(GDrive::SyncListener.instance)
+  GDrive::ItemGroup.subscribe(GDrive::SyncListener.instance)
+  Groups::Group.subscribe(GDrive::SyncListener.instance)
+  Groups::Affiliation.subscribe(GDrive::SyncListener.instance)
+  Groups::Membership.subscribe(GDrive::SyncListener.instance)
 
   Household.subscribe(Billing::AccountManager.instance)
 end

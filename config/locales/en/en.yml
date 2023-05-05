@@ -259,6 +259,7 @@ en:
         unit_num: "Unit Num"
         unit_suffix: "Unit Suffix"
         birthdate: "Birthday"
+        pronouns: "Pronouns"
         email: "Email"
         child: "Is Child"
         full_access: "Full Access"

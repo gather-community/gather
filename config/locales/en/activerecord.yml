@@ -27,6 +27,7 @@ en:
         child: "User is a child?"
         full_access: "User should have full access to the system?"
         certify_13_or_older: "I certify that this user is 13 years of age or older"
+        pronouns: "Pronouns"
       household:
         name: "Household Name"
         community_id: "Community"

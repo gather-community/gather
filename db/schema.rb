@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_17_115652) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_02_113453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -902,6 +902,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_115652) do
     t.string "paypal_email", limit: 255
     t.string "preferred_contact"
     t.jsonb "privacy_settings", default: {}, null: false
+    t.string "pronouns", limit: 24
     t.string "provider"
     t.datetime "remember_created_at", precision: nil
     t.string "remember_token"

@@ -7,14 +7,14 @@ PII, as described in US privacy law and information security, is information tha
 This document refers to different categories of information as follows. An asterisk (*) indicates required information.
 
 * Adults
-  * **Contact info**: Name \*, unit number \*, email address \*, phone number \*, preferred contact method
+  * **Contact info**: Name \*, unit number \*, email address \*, phone number, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts, allergies, doctor info, medical conditions, names of people with keys to unit, pet information
+  * **Personal info**: Birthdate (with or without year), gender pronouns, Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts, allergies, doctor info, medical conditions, names of people with keys to unit, pet information
   * **Account info**: Meals charges, late fees, credit limit, account balance
 * Children
   * **Contact info**: Name \*, unit number \*, email address, phone number, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), join date, school name, allergies, doctor info, medical conditions
+  * **Personal info**: Birthdate (with or without year), gender pronouns, join date, school name, allergies, doctor info, medical conditions
 
 #### When do we collect information?
 
@@ -61,6 +61,21 @@ We use a tool called “Google Analytics” to collect information about use of 
 Google Analytics collects only the IP address assigned to you on the date you visit this site, rather than your name or other identifying information. We do not combine the information collected through the use of Google Analytics with personally identifiable information.
 
 Although Google Analytics plants a permanent cookie on your web browser to identify you as a unique user the next time you visit this site, the cookie cannot be used by anyone but Google. Google's ability to use and share information collected by Google Analytics about your visits to this site is restricted by the [Google Analytics Terms of Use](http://www.google.com/analytics/tos.html) and the [Google Privacy Policy](http://www.google.com/privacypolicy.html).
+
+#### Google Drive/Google Workspace
+
+In Gather, Community administrators can choose to connect Gather to Google Drive/Google Workspace, the popular file storage and collaboration suite. Specifically, administrators can choose to grant read, write, and delete access for Gather to one or more "Shared Drives". Gather can then read, write, and delete any and all files in said Shared Drive. Gather uses, or has plans to use, this access for the following purposes only:
+
+- Showing listings (within Gather) of the files in the Shared Drive
+- Creating files within the Shared Drive to support certain Gather functionality, such as starting a document for community meeting minutes or proposals
+- Displaying search results using the Google Drive search API
+- Granting permissions on the Shared Drive and items within it to members of the community
+
+Gather also supports communities that have a quantity of files in a "standard" (unpaid) Google Drive folder (not associated with a paid Google Workspace and Shared Drive) in "migrating" those files into a paid Shared Drive. Migrating files in this way centralizes ownership of the files, simplifies permission management, and removes the risk of accidental file deletion by individuals who leave the community.
+
+If a community opts into this migration functionality, they must grant write permission for a Gather-controlled Google account to the standard Google Drive folder. Gather scans the folder and modifies the titles of all files to be imported with a special suffix so that the files can be easily identified. Gather does not use the files in the folder for any other purpose and does not read their contents.
+
+Gather then contacts the owners of files in the standard Google folder and asks their permission to migrate each file they own. This permission is granted by the user selecting the files to be migrated using the Google Picker tool, which resembles the Google Drive user interface. The result of granting permission is explained in clear, unambiguous language on the permission page that file owners are invited to. Files for which permissions are granted are moved into the community's Shared Drive, which transfers ownership of the file to the community. Files thusly transferred are subsequently used in the same ways as described above.
 
 #### How does our site handle "Do Not Track" signals?
 

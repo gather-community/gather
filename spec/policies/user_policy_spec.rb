@@ -402,15 +402,15 @@ describe UserPolicy do
     include_context "policy permissions"
     let(:user2) do
       double(community: community, cluster: cluster, guardians: [],
-             household: double(community: community, cluster: cluster))
+        household: double(community: community, cluster: cluster))
     end
     let(:base_attribs) do
       [:email, :first_name, :last_name, :mobile_phone, :home_phone, :work_phone,
-       :child, :full_access, :certify_13_or_older, :paypal_email,
-       :photo_new_signed_id, :photo_destroy, :birthday_str, :child, :joined_on, :preferred_contact,
-       :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
-       {privacy_settings: [:hide_photo_from_cluster]},
-       {up_guardianships_attributes: %i[id guardian_id _destroy]}]
+        :child, :full_access, :certify_13_or_older, :paypal_email, :pronouns,
+        :photo_new_signed_id, :photo_destroy, :birthday_str, :child, :joined_on, :preferred_contact,
+        :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
+        {privacy_settings: [:hide_photo_from_cluster]},
+        {up_guardianships_attributes: %i[id guardian_id _destroy]}]
     end
     let(:normal_user_attribs) do
       base_attribs + [
@@ -424,7 +424,7 @@ describe UserPolicy do
         :google_email, :role_admin, :role_biller, :role_photographer,
         :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
-                                  old_id old_name member_type_id]
+          old_id old_name member_type_id]
           .concat(nested_hhold_attribs)}
       ]
     end
@@ -433,7 +433,7 @@ describe UserPolicy do
         :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
         :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
-                                  old_id old_name member_type_id]
+          old_id old_name member_type_id]
           .concat(nested_hhold_attribs)}
       ]
     end
@@ -441,7 +441,7 @@ describe UserPolicy do
       [
         {vehicles_attributes: %i[id make model color plate _destroy]},
         {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-                                           email location country_code _destroy]},
+          email location country_code _destroy]},
         {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}
       ]
     end
@@ -517,9 +517,9 @@ describe UserPolicy do
     let(:sample_user) { double(community: community) }
     let(:base_attribs) do
       %i[id first_name last_name unit_num unit_suffix birthdate email child full_access
-         household_id household_name
-         guardian_names mobile_phone home_phone work_phone joined_on preferred_contact
-         garage_nums vehicles keyholders emergency_contacts pets]
+        household_id household_name pronouns
+        guardian_names mobile_phone home_phone work_phone joined_on preferred_contact
+        garage_nums vehicles keyholders emergency_contacts pets]
     end
     subject(:exportable) { described_class.new(actor, sample_user).exportable_attributes }
 

@@ -8,7 +8,7 @@ module People
     delegate :unit_num, :unit_suffix, :garage_nums, :keyholders, to: :household
 
     def birthdate
-      object.birthday&.date&.to_s(object.birthday&.full? ? :default : :no_year)
+      object.birthday&.date&.to_fs(object.birthday&.full? ? :default : :no_year)
     end
 
     def guardian_names
@@ -29,14 +29,14 @@ module People
     end
 
     def vehicles
-      adult? && household.vehicles.any? ? household.vehicles.map(&:to_s).sort.join("; ") : nil
+      (adult? && household.vehicles.any?) ? household.vehicles.map(&:to_s).sort.join("; ") : nil
     end
 
     def emergency_contacts
       return nil if household.emergency_contacts.none?
       chunks = household.emergency_contacts.map do |contact|
         ["#{contact.name} (#{contact.relationship})", contact.location, contact.phone(:main).formatted,
-         contact.phone(:alt).formatted, contact.email].compact.join(", ")
+          contact.phone(:alt).formatted, contact.email].compact.join(", ")
       end
       chunks.sort.join("; ")
     end

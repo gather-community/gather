@@ -32,7 +32,7 @@ SimpleForm.setup do |config|
   config.boolean_label_class = nil
 
   def hint_and_error(builder)
-    builder.use :hint,  wrap_with: {class: "hint"}
+    builder.use :hint, wrap_with: {class: "hint"}
     builder.use :error, wrap_with: {class: "error"}
   end
 
@@ -44,7 +44,7 @@ SimpleForm.setup do |config|
   build_wrapper config, :horizontal_default do |b|
     b.use :html5
     b.use :placeholder
-    b.optional :maxlength
+    b.use :maxlength
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
@@ -77,7 +77,7 @@ SimpleForm.setup do |config|
       wr.wrapper class: "checkbox" do |ba|
         ba.use :label_input
       end
-      wr.use :hint,  wrap_with: {class: "hint"}
+      wr.use :hint, wrap_with: {class: "hint"}
       wr.use :error, wrap_with: {class: "error"}
     end
   end
@@ -98,7 +98,7 @@ SimpleForm.setup do |config|
   build_wrapper config, :nested_fields, class: "control-wrapper" do |b|
     b.use :html5
     b.use :placeholder
-    b.optional :maxlength
+    b.use :maxlength
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
@@ -108,7 +108,7 @@ SimpleForm.setup do |config|
       ba.use :error, wrap_with: {tag: "span", class: "error"}
     end
     b.use :input, class: "form-control"
-    b.use :hint,  wrap_with: {class: "hint"}
+    b.use :hint, wrap_with: {class: "hint"}
   end
 
   config.default_wrapper = :horizontal_default

@@ -39,7 +39,12 @@
         <tbody>
           <% users.each do |user| %>
             <tr class="<%= user.tr_classes %>">
-              <td><%= link_to(user.name, user) %></td>
+              <td>
+                <%= link_to(user.name, user) %>
+                <% if user.pronouns.present? %>
+                  <span class="pronouns">(<%= user.pronouns %>)</span>
+                <% end %>
+              </td>
               <td><%= user.unit_link %></td>
               <td><%= user.email_link if user.email %></td>
               <% %i(mobile home work).each do |kind| %>
@@ -66,6 +71,9 @@
                 class: "preferred-contact", title: user.preferred_contact_tooltip) %>
             <% end %>
             <div><%= link_to(user.name, user) %></div>
+            <% if user.pronouns.present? %>
+              <div class="pronouns">(<%= user.pronouns %>)</div>
+            <% end %>
             <div class="email"><%= user.email_link if user.email %></div>
             <div class="unit-phone"><%= user.unit_and_phone %></div>
           </div>

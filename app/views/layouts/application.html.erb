@@ -1,4 +1,5 @@
 <% (@title = yield(:title)) && @title.blank? && (raise "No page title given") %>
+<% (@title_footnote = yield(:title_footnote)) %>
 <% @title_no_html = yield(:title_no_html) %>
 <!DOCTYPE html>
 <html>
@@ -126,9 +127,15 @@
 
       <div class="title-and-buttons">
         <% title_icons = yield(:title_icons) %>
-        <h1 class="hidden-print"><%= @title %> <%= title_icons %></h1>
+        <h1 class="hidden-print">
+          <%= @title %>
+          <%= content_tag(:span, @title_footnote, class: "title-footnote") %>
+          <%= title_icons %>
+        </h1>
         <h1 class="print-title visible-print">
-          <%= yield(:print_title).presence || @title %> <%= title_icons %>
+          <%= yield(:print_title).presence || @title %>
+          <%= content_tag(:span, @title_footnote, class: "title-footnote") %>
+          <%= title_icons %>
         </h1>
         <div class="top-buttons hidden-print">
           <%= lenses.html(position: "upper") if lenses&.visible? %>

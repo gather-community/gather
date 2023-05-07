@@ -42,6 +42,7 @@
       </div>
     <% end %>
     <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
+    <%= f.input :pronouns %>
     <%= f.input :birthday_str, as: :string %>
     <%= f.input :joined_on, as: :date_picker %>
     <%= f.input :job_choosing_proxy_id, as: :user_select, context: "current_community_full_access",

@@ -280,7 +280,7 @@ module Nav
               name: :gdrive,
               parents: :wiki,
               path: h.gdrive_home_path,
-              permitted: GDrive::BrowsePolicy.new(user, :folder).show?,
+              permitted: GDrive::BrowsePolicy.new(user, :folder).index?,
               icon: {name: "google", style: :brands}
             }
           ]

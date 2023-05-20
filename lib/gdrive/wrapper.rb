@@ -35,6 +35,10 @@ module GDrive
       authorizer.get_credentials(google_user_id)
     end
 
+    def revoke_authorization
+      authorizer.revoke_authorization(google_user_id)
+    end
+
     def get_credentials_from_code(code:, scope:, base_url:)
       authorizer.get_credentials_from_code(user_id: google_user_id, code: code,
         scope: scope, base_url: base_url)

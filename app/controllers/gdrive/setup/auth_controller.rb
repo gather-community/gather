@@ -15,7 +15,7 @@ module GDrive
 
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
-      prepend_before_action :set_current_community_from_query_string, except: :callback
+      prepend_before_action :set_current_community_from_query_string, only: :index
 
       prepend_before_action :stub_g_xsrf_token_in_session if Rails.env.test?
 
@@ -26,7 +26,7 @@ module GDrive
         return if @config.nil?
 
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
-                              callback_url: callback_url)
+          callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
 
         if credentials.nil?
@@ -52,11 +52,21 @@ module GDrive
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
         if config.org_user_id != authenticated_google_id
-          flash[:error] = "You signed into Google with #{authenticated_google_id}. "\
+          flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
             "Please sign in with #{config.org_user_id} instead."
           return
         end
         wrapper.store_credentials(credentials)
+      end
+
+      def revoke
+        authorize(current_community, :setup?, policy_class: SetupPolicy)
+        config = MainConfig.find_by(community: current_community)
+        if config
+          wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
+          wrapper.revoke_authorization
+        end
+        redirect_to(gdrive_home_path)
       end
 
       private

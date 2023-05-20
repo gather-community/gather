@@ -1,0 +1,24 @@
+<% content_for(:title, "Touchstone Cohousing File Reorganization") %>
+
+<p>
+  <a href="#">Touchstone Cohousing</a> is using <a href="https://gather.coop">Gather</a>
+  to reorganize its Google Drive files.
+  Previously, the community's files were owned by whoever created them. This can lead
+  to accidental deletion of files when someone leaves the community.
+  To prevent this, the community is moving all its files into a Shared Drive owned by the
+  community.
+</p>
+<p class="cta">
+  You own about 4 files in Touchstone Cohousing's
+  <a href="#">old Google Drive folder</a>. We need your permission to move them into the
+  new Shared Drive.
+</p>
+<p>
+  You will still retain access to the files as long as you are a member of the community.
+  If you have questions you can reach out to <a href="mailto:tomsmyth@gmail.com">Tom Smyth</a>,
+  who is coordination the reorganization process.
+</p>
+
+<%= link_to("Yes, I am ready help!",
+    gdrive_migration_consent_step1_url(host: Settings.url.host, community_id: current_community.id),
+    class: "btn btn-primary") %>

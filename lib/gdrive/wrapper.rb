@@ -37,7 +37,7 @@ module GDrive
 
     def get_credentials_from_code(code:, scope:, base_url:)
       authorizer.get_credentials_from_code(user_id: google_user_id, code: code,
-                                           scope: scope, base_url: base_url)
+        scope: scope, base_url: base_url)
     end
 
     def store_credentials(credentials)
@@ -54,7 +54,7 @@ module GDrive
       return @authorizer if @authorizer
       client_id = Google::Auth::ClientId.new(config.client_id, config.client_secret)
       scope = [
-        "https://www.googleapis.com/auth/drive",
+        config.drive_api_scope,
         "https://www.googleapis.com/auth/userinfo.email"
       ]
       token_store = TokenStore.new(config: config)

@@ -263,10 +263,11 @@ Rails.application.routes.draw do
     end
 
     namespace :migration do
-      get "auth", to: "auth#index", as: :auth
-      get "auth/callback", to: "auth#callback", as: :auth_callback
-      get "file-selection", to: "file_selection#index", as: :file_selection
-      put "file-selection/ingest", to: "file_selection#ingest", as: :ingest_file_selection
+      get "consent", to: "consent#intro", as: :consent
+      get "consent/step1", to: "consent#step1", as: :consent_step1
+      get "consent/step2", to: "consent#step2", as: :consent_step2
+      get "consent/callback", to: "consent#callback", as: :consent_callback
+      put "consent/ingest", to: "consent#ingest", as: :consent_ingest
     end
   end
 

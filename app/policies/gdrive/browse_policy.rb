@@ -5,7 +5,7 @@ module GDrive
     alias_method :item, :record
 
     def index?
-      FeatureFlag.lookup(:gdrive).on?(user)
+      true
     end
   end
 end

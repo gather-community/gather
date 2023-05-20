@@ -12,7 +12,7 @@ module GDrive
     end
 
     def show?
-      FeatureFlag.lookup(:gdrive).on?(user) && item.groups.any? { |g| g.member?(user) }
+      item.groups.any? { |g| g.member?(user) }
     end
 
     def permitted_attributes

@@ -25,11 +25,13 @@
     <% if @setup_policy.setup? %>
       <% if @config.nil? %>
         Your community is not yet connected to Google Drive. Please contact Gather support to get started.
-      <% else %>
+      <% elsif @no_credentials %>
         <p>
           Your community is not yet connected to Google Drive.
         </p>
         <%= render("auth_button") %>
+      <% elsif @no_drives %>
+        Your community does not have any linked Shared Drives. Please contact Gather support for assistance.
       <% end %>
     <% else %>
       Your community is not yet connected to Google Drive. Please talk to a Gather Admin.

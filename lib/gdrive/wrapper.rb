@@ -48,8 +48,9 @@ module GDrive
       authorizer.store_credentials(google_user_id, credentials)
     end
 
-    def get_authorization_url(request:, state:)
-      authorizer.get_authorization_url(login_hint: google_user_id, request: request, state: state)
+    def get_authorization_url(request:, state:, redirect_to: nil)
+      authorizer.get_authorization_url(login_hint: google_user_id, request: request,
+        state: state, redirect_to: redirect_to)
     end
 
     private

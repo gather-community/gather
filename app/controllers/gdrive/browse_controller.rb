@@ -13,8 +13,10 @@ module GDrive
         return
       end
 
-      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
+      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
+        callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
       unless wrapper.has_credentials?
+        setup_auth_url(wrapper: wrapper)
         # If there are any items then this community has probably connected before but maybe
         # their refresh token expired, so we don't want to say they're not yet connected or they
         # might freak out.
@@ -84,6 +86,12 @@ module GDrive
 
     def validate_gdrive_id(gdrive_id)
       raise ArgumentError, "Invalid ID #{gdrive_id}" unless /\A[A-Za-z0-9_-]*\z/.match?(gdrive_id)
+    end
+
+    def setup_auth_url(wrapper:)
+      state = {community_id: current_community.id}
+      @auth_url = wrapper.get_authorization_url(request: request, state: state,
+        redirect_to: gdrive_home_url)
     end
 
     def find_ancestors(wrapper:, multiple_drives:, folder_id: nil, drive_id: nil)

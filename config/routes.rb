@@ -258,7 +258,6 @@ Rails.application.routes.draw do
     get "item/:item_id", to: "browse#index", as: :browse
 
     namespace :setup do
-      get "auth", to: "auth#index", as: :auth
       get "auth/callback", to: "auth#callback", as: :auth_callback
       delete "auth/revoke", to: "auth#revoke", as: :auth_revoke
     end

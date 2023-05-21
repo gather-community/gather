@@ -12,14 +12,6 @@ module GDrive
       inverse_of: :gdrive_config,
       dependent: :destroy
 
-    def complete?
-      !incomplete?
-    end
-
-    def incomplete?
-      folder_id.nil?
-    end
-
     # drive.file is the restricted, non-sensitive scope.
     def drive_api_scope
       "https://www.googleapis.com/auth/drive.file"

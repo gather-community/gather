@@ -263,6 +263,7 @@ Rails.application.routes.draw do
     end
 
     namespace :migration do
+      get "dashboard", to: "dashboard#show", as: :dashboard
       get "consent", to: "consent#intro", as: :consent
       get "consent/step1", to: "consent#step1", as: :consent_step1
       get "consent/step2", to: "consent#step2", as: :consent_step2

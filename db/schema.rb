@@ -261,19 +261,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
-    t.string "api_key", null: false
-    t.string "client_id", null: false
-    t.string "client_secret", null: false
+    t.string "api_key"
+    t.string "client_id"
+    t.string "client_secret"
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
-    t.string "folder_id", limit: 128
-    t.string "org_user_id", limit: 255, null: false
+    t.string "org_user_id", limit: 255
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
     t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (api_key IS NOT NULL)", name: "api_key_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_id IS NOT NULL)", name: "client_id_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_secret IS NOT NULL)", name: "client_secret_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
   create_table "gdrive_file_ingestion_batches", force: :cascade do |t|

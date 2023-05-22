@@ -9,10 +9,6 @@ module GDrive
       foreign_key: :gdrive_config_id,
       inverse_of: :gdrive_config,
       dependent: :destroy
-    has_many :unowned_files, class_name: "GDrive::UnownedFile",
-      foreign_key: :gdrive_config_id,
-      inverse_of: :gdrive_config,
-      dependent: :destroy
 
     # drive.file is the restricted, non-sensitive scope.
     def drive_api_scope

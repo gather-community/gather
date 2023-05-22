@@ -319,6 +319,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
+  create_table "gdrive_migration_files", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data", null: false
+    t.string "external_id", null: false
+    t.bigint "operation_id", null: false
+    t.string "owner", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
+    t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
+    t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
+  end
+
   create_table "gdrive_migration_operations", force: :cascade do |t|
     t.bigint "config_id", null: false
     t.datetime "created_at", null: false
@@ -352,19 +365,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_tokens_on_cluster_id"
     t.index ["gdrive_config_id"], name: "index_gdrive_tokens_on_gdrive_config_id"
-  end
-
-  create_table "gdrive_unowned_files", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.jsonb "data", null: false
-    t.string "external_id", null: false
-    t.bigint "gdrive_config_id", null: false
-    t.string "owner", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_gdrive_unowned_files_on_cluster_id"
-    t.index ["gdrive_config_id", "external_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id_and_external_id", unique: true
-    t.index ["gdrive_config_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id"
   end
 
   create_table "group_affiliations", force: :cascade do |t|
@@ -1134,12 +1134,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
+  add_foreign_key "gdrive_migration_files", "clusters"
+  add_foreign_key "gdrive_migration_files", "gdrive_configs", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"
-  add_foreign_key "gdrive_unowned_files", "clusters"
-  add_foreign_key "gdrive_unowned_files", "gdrive_configs"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

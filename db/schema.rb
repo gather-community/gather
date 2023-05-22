@@ -319,6 +319,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
+  create_table "gdrive_migration_operations", force: :cascade do |t|
+    t.bigint "config_id", null: false
+    t.datetime "created_at", null: false
+    t.string "dest_folder_id", limit: 255
+    t.string "src_folder_id", limit: 255
+    t.datetime "updated_at", null: false
+    t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
+  end
+
   create_table "gdrive_synced_permissions", force: :cascade do |t|
     t.string "access_level", limit: 32, null: false
     t.bigint "cluster_id", null: false
@@ -1125,6 +1134,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
+  add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"

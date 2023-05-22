@@ -2,10 +2,9 @@
 
 require "rails_helper"
 
-describe GDrive::Config do
+describe GDrive::MainConfig do
   it "has valid factory" do
     create(:gdrive_main_config, org_user_id: "a@example.com")
-    create(:gdrive_migration_config)
   end
 
   # Our approach to destruction is to:

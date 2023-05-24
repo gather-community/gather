@@ -341,6 +341,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.bigint "config_id", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
+    t.string "filename_tag", limit: 8, null: false
     t.string "src_folder_id", limit: 255
     t.datetime "updated_at", null: false
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"

@@ -5,6 +5,7 @@ FactoryBot.define do
     association(:operation, factory: :gdrive_migration_operation)
     external_id { "asdfafdfsd" }
     owner { "foo@bar.com" }
+    status { "pending" }
     data { {name: "Foo"} }
   end
 end

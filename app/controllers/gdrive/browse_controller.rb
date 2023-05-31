@@ -99,7 +99,7 @@ module GDrive
       if folder_id
         ancestor_id = folder_id
         loop do
-          folder = wrapper.service.get_file(ancestor_id, fields: "id,name,parents,driveId",
+          folder = wrapper.get_file(ancestor_id, fields: "id,name,parents,driveId",
             supports_all_drives: true)
           ancestors.unshift(folder)
           # If parent ID is the drive ID, we can stop searching.
@@ -120,7 +120,7 @@ module GDrive
     end
 
     def list_files(wrapper, parent_id)
-      wrapper.service.list_files(q: "'#{parent_id}' in parents",
+      wrapper.list_files(q: "'#{parent_id}' in parents",
         fields: "files(id,name,mimeType,iconLink,webViewLink)",
         order_by: "folder,name",
         supports_all_drives: true,

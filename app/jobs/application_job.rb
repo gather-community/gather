@@ -4,7 +4,27 @@
 class ApplicationJob < ActiveJob::Base
   queue_as :default
 
-  rescue_from(StandardError) do |exception|
+  # Our general approach to error handling in jobs is an opt-in approach to job retries.
+  # So by default, if a job errors out, it will be reported to Sentry by the rescue_from
+  # block below. If a particular job wants to retry on a given error, it can use the
+  # retry_on handler. If all the retries fail, the exception will bubble up to here and
+  # be reported to Sentry. The Sentry report will happen only after all retries fail, so
+  # if observability of all errors is desired, they must be caught and reported manually.
+  #
+  # For retries, our standard best practice is to use:
+  #     retry_on(ArgumentError, wait: :exponentially_longer) # default is 5 attempts
+  #
+  # Logging for the retry behavior can be seen in log/<environment>.log. The Delayed Job log
+  # at log/delayed_job.log will always say "failed after 1 attempt" because the error only
+  # is allowed to bubble up by ActiveJob on the final attempt. This is also why
+  # max_attempts for Delayed Job is set to 1.
+  #
+  # The retry behavior described above has been tested manually and works.
+  rescue_from StandardError, with: :rescue_from_exception
+
+  protected
+
+  def rescue_from_exception(exception)
     # We usually don't rescue from errors in dev or test mode because doing so makes it hard to see what
     # is failing when developing with the test server or doing test-driven development.
     # But in some case we may want to rescue in tests if we are testing the rescue behavior, so we
@@ -16,8 +36,6 @@ class ApplicationJob < ActiveJob::Base
     end
   end
 
-  protected
-
   # Loads the specified object and sets up the cluster context. Assumes
   # the object is cluster-based and responds to `cluster`.
   # Specify either klass or class_name to indicate the class.
@@ -25,10 +43,10 @@ class ApplicationJob < ActiveJob::Base
   def with_object_in_cluster_context(klass: nil, class_name: nil, id: nil, attribs: nil)
     klass ||= class_name.constantize
     object = if id
-               load_object_without_tenant(klass, id)
-             else
-               build_object_without_tenant(klass, attribs)
-             end
+      load_object_without_tenant(klass, id)
+    else
+      build_object_without_tenant(klass, attribs)
+    end
     with_cluster(object.cluster) { yield(object) }
   end
 

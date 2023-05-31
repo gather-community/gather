@@ -17,7 +17,7 @@ describe GDrive::ItemPermissionSyncJob do
   #
   # config = GDrive::MainConfig.find_by(community_id: community_id)
   # wrapper = GDrive::Wrapper.new(config: config, google_user_id: "drxxxin@example.net")
-  # wrapper.service.list_permissions("0AGH_tsBj1z-0Uk9PVA", fields: "permissions(id,emailAddress,role)",
+  # wrapper.list_permissions("0AGH_tsBj1z-0Uk9PVA", fields: "permissions(id,emailAddress,role)",
   #   supports_all_drives: true)
 
   let!(:config) { create(:gdrive_main_config, org_user_id: "drxxxin@example.net") }

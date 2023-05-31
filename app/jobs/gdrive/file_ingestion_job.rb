@@ -2,7 +2,7 @@
 
 module GDrive
   # Ingests selected files by starring them and noting any unowned files.
-  class FileIngestionJob < ApplicationJob
+  class FileIngestionJob < BaseJob
     attr_accessor :batch, :config, :wrapper, :error_count
 
     delegate :gdrive_config, to: :batch
@@ -33,7 +33,7 @@ module GDrive
       # been picked. So we need to handle that gracefully too.
       Rails.logger.info("[GDrive] Marking file #{file_id} as starred")
       begin
-        file = wrapper.service.update_file(
+        file = wrapper.update_file(
           file_id,
           Google::Apis::DriveV3::File.new(starred: true),
           fields: "id,name,mimeType,owners(emailAddress),shortcutDetails(targetId,targetMimeType)"
@@ -85,7 +85,7 @@ module GDrive
     def star_any_unstarred_files
       page_token = nil
       loop do
-        result = wrapper.service.list_files(q: "starred = false", page_size: 1000, page_token: page_token)
+        result = wrapper.list_files(q: "starred = false", page_size: 1000, page_token: page_token)
         if result.files.any?
           Rails.logger.info("[GDrive] Ingesting #{result.files.size} unstarred but accessible files")
           result.files.each do |file|

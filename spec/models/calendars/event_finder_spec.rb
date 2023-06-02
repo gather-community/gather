@@ -28,8 +28,8 @@ describe Calendars::EventFinder do
   end
 
   before do
-    allow(cal2).to receive(:events_between).with(range, actor: user).and_return(event2_1)
-    allow(cal4).to receive(:events_between).with(range, actor: user).and_return(event4_1)
+    allow(cal2).to receive(:events_between).with(range, {actor: user}).and_return(event2_1)
+    allow(cal4).to receive(:events_between).with(range, {actor: user}).and_return(event4_1)
   end
 
   context "with no calendars" do

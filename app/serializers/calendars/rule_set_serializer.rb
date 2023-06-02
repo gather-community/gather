@@ -5,9 +5,9 @@ module Calendars
   class RuleSetSerializer < ApplicationSerializer
     attributes :fixed_start_time, :fixed_end_time, :access_level
 
-    def initialize(rule_set, creator_community:)
+    def initialize(rule_set, options)
       super(rule_set)
-      self.creator_community = creator_community
+      self.creator_community = options[:creator_community]
     end
 
     def access_level

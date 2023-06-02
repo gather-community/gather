@@ -117,10 +117,10 @@ module Meals
       prev_month_range = Time.zone.today.prev_month.beginning_of_month..
         Time.zone.today.prev_month.end_of_month
       range_end = if Meal.hosted_by(community).where(served_at: prev_month_range).finalizable.any?
-                    Time.zone.today.prev_month.prev_month.end_of_month
-                  else
-                    Time.zone.today.prev_month.end_of_month
-                  end
+        Time.zone.today.prev_month.prev_month.end_of_month
+      else
+        Time.zone.today.prev_month.end_of_month
+      end
       range_end.prev_year.next_month.beginning_of_month..range_end
     end
 
@@ -128,12 +128,12 @@ module Meals
       key_func = ->(row) { row["breakout_expr"] } if key_func.nil?
 
       # Get main rows.
-      result = meals_query(sql_options).index_by(&key_func)
+      result = meals_query(**sql_options).index_by(&key_func)
 
       return {} if result.values.all?(&:empty?)
 
       # Get totals.
-      result[:all] = meals_query(sql_options.except(:breakout_expr)).first if totals
+      result[:all] = meals_query(**sql_options.except(:breakout_expr)).first if totals
 
       result
     end
@@ -239,7 +239,7 @@ module Meals
 
     def community_avg_exprs
       communities.map do |c|
-        "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, "\
+        "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, " \
         "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_servings))::real AS avg_from_#{c.id}_pct"
       end.join(",\n")
     end

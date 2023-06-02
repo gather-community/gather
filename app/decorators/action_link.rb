@@ -49,6 +49,6 @@ class ActionLink < ApplicationDecorator
   def confirm_msg
     return @confirm_msg if defined?(@confirm_msg)
     return @confirm_msg = nil unless confirm
-    @confirm_msg = I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", confirm_args)
+    @confirm_msg = I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", **confirm_args)
   end
 end

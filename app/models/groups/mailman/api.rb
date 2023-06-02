@@ -69,11 +69,11 @@ module Groups
       # Assumes list_mship has an associated user remote_id.
       def create_membership(list_mship)
         request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-                                  role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
-                                  pre_approved: "true")
+          role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
+          pre_approved: "true")
       rescue ApiRequestError => e
         # If we get 'is already' error, that's fine, swallow it.
-        e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/ ? nil : (raise e)
+        (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
       end
 
       # Assumes remote_id is set on list_mship
@@ -86,11 +86,11 @@ module Groups
         (request("members/find", :post, **criterion)["entries"] || []).map do |entry|
           mm_user = source.respond_to?(:email) ? source : Mailman::User.new(email: entry["email"])
           ListMembership.new(mailman_user: mm_user,
-                             list_id: entry["list_id"],
-                             role: entry["role"],
-                             moderation_action: entry["moderation_action"],
-                             display_name: entry["display_name"],
-                             remote_id: entry["member_id"])
+            list_id: entry["list_id"],
+            role: entry["role"],
+            moderation_action: entry["moderation_action"],
+            display_name: entry["display_name"],
+            remote_id: entry["member_id"])
         end
       end
 
@@ -98,14 +98,14 @@ module Groups
         response = request("lists", :post, fqdn_listname: list.fqdn_listname)
         response.header("Location").split("/")[-1]
       rescue ApiRequestError => e
-        e.response.body =~ /Mailing list exists/ ? nil : (raise e)
+        /Mailing list exists/.match?(e.response.body) ? nil : (raise e)
       end
 
       def configure_list(list)
         raise ArgumentError, "No config given for list ##{list.id}" if list.config.blank?
         config = list.config.dup
         config.each { |k, v| config[k] = v.to_s if [true, false].include?(v) }
-        request("lists/#{list.fqdn_listname}/config", :patch, config)
+        request("lists/#{list.fqdn_listname}/config", :patch, **config)
       end
 
       def list_config(list)
@@ -121,7 +121,7 @@ module Groups
       def create_domain(domain)
         request("domains", :post, mail_host: domain.name)
       rescue ApiRequestError => e
-        e.response.body =~ /Duplicate email host/ ? nil : (raise e)
+        /Duplicate email host/.match?(e.response.body) ? nil : (raise e)
       end
 
       private
@@ -191,10 +191,10 @@ module Groups
 
         other_mships.each do |mship|
           request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
-                                    delivery_mode: mship["delivery_mode"], role: mship["role"],
-                                    pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+            delivery_mode: mship["delivery_mode"], role: mship["role"],
+            pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
         rescue ApiRequestError => e
-          raise e unless e.response.body =~ /Member already subscribed/
+          raise e unless /Member already subscribed/.match?(e.response.body)
         end
       end
 

@@ -7,7 +7,7 @@ describe Groups::Mailman::ListSyncJob do
 
   let(:api) { double }
   let(:domain) { create(:domain, name: "tscoho.org") }
-  subject(:job) { described_class.new(*job_args) }
+  subject(:job) { described_class.new(**job_args) }
 
   before do
     allow(Groups::Mailman::Api).to receive(:instance).and_return(api)
@@ -22,10 +22,10 @@ describe Groups::Mailman::ListSyncJob do
 
   context "when list just destroyed" do
     let!(:job_args) do
-      [
+      {
         list_attribs: {cluster_id: Defaults.cluster.id, remote_id: "ping.tscoho.org"},
         destroyed: true
-      ]
+      }
     end
 
     it_behaves_like "deletes list"
@@ -33,7 +33,7 @@ describe Groups::Mailman::ListSyncJob do
 
   context "when not syncable" do
     let(:list) { create(:group_mailman_list, name: "foo", domain: domain, remote_id: initial_remote_id) }
-    let!(:job_args) { [list_id: list.id] }
+    let!(:job_args) { {list_id: list.id} }
 
     before do
       list.group.deactivate
@@ -56,7 +56,7 @@ describe Groups::Mailman::ListSyncJob do
 
   context "when list not just destroyed" do
     let(:list) { create(:group_mailman_list, name: "foo", domain: domain, remote_id: initial_remote_id) }
-    let!(:job_args) { [list_id: list.id] }
+    let!(:job_args) { {list_id: list.id} }
 
     context "when remote list doesn't exist" do
       let(:initial_remote_id) { nil }
@@ -66,8 +66,8 @@ describe Groups::Mailman::ListSyncJob do
         expect(api).to receive(:create_list, &with_obj_attribs(fqdn_listname: "foo@tscoho.org")).ordered
           .and_return("foo.tscoho.org")
         expect(api).to receive(:configure_list,
-                               &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
-                                                 config: list.default_config)).ordered
+          &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
+            config: list.default_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
         expect(list.reload.remote_id).to eq("foo.tscoho.org")
@@ -86,8 +86,8 @@ describe Groups::Mailman::ListSyncJob do
         expect(expected_config).to be_instance_of(Hash)
         expect(expected_config.size).to eq(Groups::Mailman::List::ENFORCED_SETTINGS.size)
         expect(api).to receive(:configure_list,
-                               &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
-                                                 config: expected_config)).ordered
+          &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
+            config: expected_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
         expect(list.reload.remote_id).to eq("foo.tscoho.org")

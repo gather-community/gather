@@ -143,8 +143,8 @@ module Groups
     end
 
     # members = managers + (everybody ? all active full users : joiners) - opt outs
-    def members(*args)
-      computed_memberships(*args).map { |mship| mship.opt_out? ? nil : mship.user }.compact
+    def members(**args)
+      computed_memberships(**args).map { |mship| mship.opt_out? ? nil : mship.user }.compact
     end
 
     # Assumes membership records persisted. Assumes used only O(1) times. Use other methods for O(n).

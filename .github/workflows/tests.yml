@@ -3,7 +3,7 @@ on: [push]
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CI: true
       RAILS_ENV: test
@@ -50,11 +50,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}-v2
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}-v3
           # Restore keys will be matched if the main key fails. This may restore older gems to the
           # dir but we don't care because bundle install will check the gems anyway.
           restore-keys: |
-            ${{ runner.os }}-gems-v2
+            ${{ runner.os }}-gems-v3
       - name: Set bundle path
         run: bundle config path vendor/bundle
       - name: Install gems

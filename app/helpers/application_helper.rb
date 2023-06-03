@@ -11,9 +11,9 @@ module ApplicationHelper
   # `l` without the `I18n.` should be used everywhere possible including decorators, views, controllers.
   # Models, inputs, serializers, and specs can use the I18n version but should be careful that they
   # are not assuming nil checking.
-  def l(date_or_time, *args)
+  def l(date_or_time, **args)
     return nil if date_or_time.nil?
-    I18n.l(date_or_time, *args).gsub("  ", " ").strip
+    I18n.l(date_or_time, **args).gsub("  ", " ").strip
   end
 
   def bootstrap_class_for(flash_type)
@@ -34,18 +34,18 @@ module ApplicationHelper
   end
 
   def icon_tag(name, options = {})
-    name = "fa-#{name}" unless name =~ /\Afa-/
+    name = "fa-#{name}" unless /\Afa-/.match?(name)
     style = case options.delete(:style)
-            when :brands then "fab"
-            else "fas"
-            end
+    when :brands then "fab"
+    else "fas"
+    end
     content_tag(:i, "", options.merge(class: "fa #{style} #{name} #{options.delete(:class)}"))
   end
 
   # Sets twitter-bootstrap theme as default for pagination.
-  def paginate(objects, options = {})
+  def paginate(objects, **options)
     options.reverse_merge!(theme: "twitter-bootstrap-3")
-    super(objects, options)
+    super(objects, **options)
   end
 
   def sep(separator)

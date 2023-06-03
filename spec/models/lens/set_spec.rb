@@ -14,11 +14,11 @@ describe Lens::Set do
     let(:session) { double.as_null_object }
     let(:context) do
       double(own_cluster?: own_cluster,
-             current_community: community,
-             controller_path: "x",
-             action_name: "y",
-             request: double(path: "z"),
-             session: session)
+        current_community: community,
+        controller_path: "x",
+        action_name: "y",
+        request: double(path: "z"),
+        session: session)
     end
     let(:route_params) { ActionController::Parameters.new(basic: "foo") }
     let(:set) do

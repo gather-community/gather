@@ -26,7 +26,7 @@ module GeneralHelpers
         expect(options[:default]).to eq(expect_defaults) if expect_defaults
         msg
       else
-        original_translate.call(key_arg, options)
+        original_translate.call(key_arg, **options)
       end
     end
   end

@@ -63,26 +63,6 @@ module Groups
         owner_moderator_memberships + normal_memberships
       end
 
-      # Additional members are members on the list that don't match group memberships.
-      def additional_members
-        @additional_members ||= (remote_memberships - normal_memberships).select do |membership|
-          membership.role == "member"
-        end
-      end
-
-      # Additional senders are nonmembers on the list with moderation actions accept or defer
-      # accept means accept outright
-      # defer means 'default processing', which means the message goes through additional checks
-      #   and is then accepted assuming none of them fail
-      # reject and discard have the obvious meanings
-      # hold means hold for moderation, which is not automatic acceptance
-      # `nil` moderation_action means 'list default', which for a nonmember should always be `hold`
-      def additional_senders
-        @additional_senders ||= remote_memberships.select do |membership|
-          membership.role == "nonmember" && %w[accept defer].include?(membership.moderation_action)
-        end
-      end
-
       def syncable?
         group&.active?
       end
@@ -113,7 +93,7 @@ module Groups
         # Groups that can administer this group must have at least the same communities if not more.
         ability_groups = Group.active.in_communities(group.communities)
         %i[administer moderate].flat_map do |ability|
-          role = ability == :administer ? "owner" : "moderator"
+          role = (ability == :administer) ? "owner" : "moderator"
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
             ability_group.members.map do |member|
               mm_user = find_or_initialize_mm_user_for(member)
@@ -129,11 +109,6 @@ module Groups
           mm_user = find_or_initialize_mm_user_for(mship.user)
           list_memberships_for_group_membership_and_mm_user(mship, mm_user)
         end.compact
-      end
-
-      # Fetches memberships stored on the Mailman server via the API.
-      def remote_memberships
-        @remote_memberships ||= Api.instance.memberships(self)
       end
 
       # Keeps a local hash to prevent initializing multiple Mailman::User objs for the same user.

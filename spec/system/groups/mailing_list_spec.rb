@@ -23,59 +23,56 @@ describe "mailing lists", js: true do
   context "with domains" do
     let!(:domain) { create(:domain, name: "fluff.com") }
 
-    context "with few add'l senders" do
-      let(:api_response) do
-        {
-          entries: [
-            {email: "a@a.com", role: "nonmember", moderation_action: "defer", display_name: "A Tuzz"},
-            {email: "b@b.com", role: "nonmember", moderation_action: "accept", display_name: "Bo Fuzz"},
-            {email: "b@b.com", role: "nonmember", display_name: "Cal Biz"} # default moderation
-          ]
-        }
+    scenario "create, show, delete list" do
+      visit(groups_group_path(group))
+      click_link("Edit")
+
+      # Create the list
+      fill_in("groups_group_mailman_list_attributes_name", with: "knitting")
+      expect(page).to have_content("List members are synchronized")
+      click_button("Save")
+
+      # Open the group page again
+      click_link("Knitting Club")
+      expect(page).to have_content("knitting@fluff.com")
+
+      # Delete the list
+      click_link("Edit")
+      check("Delete this list?")
+      accept_alert { click_button("Save") }
+
+      # Open page again to verify list is gone
+      click_link("Knitting Club")
+      expect(page).to have_content("This group has no attached email list")
+    end
+
+    context "with few add'l members/senders" do
+      let!(:list) do
+        create(:group_mailman_list, group: group, domain: domain, name: "knitting",
+          additional_members: ["a@a.com", "b@b.com"], additional_senders: ["c@c.com", "d@d.com"])
       end
 
-      scenario "show, edit, delete list" do
-        with_env("STUB_MAILMAN" => api_response.to_json) do
-          visit(groups_group_path(group))
-          click_link("Edit")
-          fill_in("groups_group_mailman_list_attributes_name", with: "knitting")
-          expect(page).to have_content("List members are synchronized")
-          click_button("Save")
-
-          click_link("Knitting Club")
-          expect(page).to have_content("knitting@fluff.com")
-          expect(page).to have_content(/These additional senders.*A Tuzz\nBo Fuzz\n/m)
-          expect(page).not_to have_content(/Cal Biz/)
-          click_link("Edit")
-
-          check("Delete this list?")
-          accept_alert { click_button("Save") }
-          click_link("Knitting Club")
-          expect(page).to have_content("This group has no attached email list")
-        end
+      scenario "shows all add'l members/senders" do
+        visit(groups_group_path(group))
+        expect(page).to have_content("knitting@fluff.com")
+        expect(page).to have_content(/These addresses are also members.*a@a\.com.*b@b\.com/m)
+        expect(page).to have_content(/These additional senders.*c@c\.com.*d@d\.com/m)
       end
     end
 
     context "with many add'l senders" do
-      let(:api_response) do
-        {
-          entries: 15.times.map do |i|
-            {email: "#{i}@a.com", role: "nonmember", moderation_action: "accept", display_name: "Lad #{i}"}
-          end
-        }
+      let(:addl_senders) { 15.times.map { |i| "#{i}@a.com" } }
+      let!(:list) do
+        create(:group_mailman_list, group: group, domain: domain, name: "knitting",
+          additional_members: ["a@a.com", "b@b.com"], additional_senders: addl_senders)
       end
 
-      scenario "show, edit, delete list" do
-        with_env("STUB_MAILMAN" => api_response.to_json) do
-          visit(groups_group_path(group))
-          click_link("Edit")
-          fill_in("groups_group_mailman_list_attributes_name", with: "knitting")
-          click_button("Save")
-          click_link("Knitting Club")
-          expect(page).to have_content("knitting@fluff.com")
-          expect(page).to have_content(/These additional senders.*Lad 0\nLad 1\n/m)
-          expect(page).to have_content("+5 more")
-        end
+      scenario "shows subset of senders" do
+        visit(groups_group_path(group))
+        expect(page).to have_content("knitting@fluff.com")
+        expect(page).to have_content(/These addresses are also members.*a@a\.com.*b@b\.com/m)
+        expect(page).to have_content(/These additional senders.*0@a\.com.*1@a\.com.*\+5 more/m)
+        expect(page).not_to have_content(/10@a\.com/m)
       end
     end
   end

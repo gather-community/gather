@@ -31,7 +31,7 @@ module Groups
 
       def email_ul(emails, max: nil)
         overflow = max.nil? ? 0 : emails.size - max
-        email = emails[0...max] if overflow.positive?
+        emails = emails[0...max] if overflow.positive?
         items = emails.map do |email|
           h.content_tag(:li, h.link_to(email, "mailto:#{email}"))
         end

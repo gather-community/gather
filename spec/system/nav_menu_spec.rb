@@ -23,12 +23,12 @@ describe "nav menu" do
       scenario "no customizations" do
         main_nav_test(match:
           [
-            ["People", "http://foo.gather.localhost.tv:31337/users"],
-            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
-            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
-            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
-            ["Calendars", "http://foo.gather.localhost.tv:31337/calendars/events"],
-            ["Wiki", "http://foo.gather.localhost.tv:31337/wiki"]
+            ["People", "http://foo.gatherdev.org:31337/users"],
+            ["Groups", "http://foo.gatherdev.org:31337/groups"],
+            ["Meals", "http://foo.gatherdev.org:31337/meals"],
+            ["Work", "http://foo.gatherdev.org:31337/work/signups"],
+            ["Calendars", "http://foo.gatherdev.org:31337/calendars/events"],
+            ["Wiki", "http://foo.gatherdev.org:31337/wiki"]
           ])
       end
     end
@@ -39,10 +39,10 @@ describe "nav menu" do
       scenario "change one link, disable one, add another" do
         main_nav_test(match:
           [
-            ["People", "http://foo.gather.localhost.tv:31337/users"],
-            ["Groups", "http://foo.gather.localhost.tv:31337/groups"],
-            ["Meals", "http://foo.gather.localhost.tv:31337/meals"],
-            ["Work", "http://foo.gather.localhost.tv:31337/work/signups"],
+            ["People", "http://foo.gatherdev.org:31337/users"],
+            ["Groups", "http://foo.gatherdev.org:31337/groups"],
+            ["Meals", "http://foo.gatherdev.org:31337/meals"],
+            ["Work", "http://foo.gatherdev.org:31337/work/signups"],
             ["Wiki", "http://wikipedia.org"],
             ["Google", "http://google.com"]
           ])
@@ -63,7 +63,7 @@ describe "nav menu" do
     scenario "shows home community subdomain" do
       # This page does not redirect to a subdomain
       visit("/gdrive/setup/auth?community_id=#{community.id}")
-      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://foo.gather.localhost.tv:31337/users")
+      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://foo.gatherdev.org:31337/users")
     end
   end
 
@@ -74,7 +74,7 @@ describe "nav menu" do
 
     scenario "keeps same subdomain" do
       visit("/users")
-      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://bar.gather.localhost.tv:31337/users")
+      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://bar.gatherdev.org:31337/users")
     end
   end
 

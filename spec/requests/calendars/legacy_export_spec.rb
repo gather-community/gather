@@ -96,7 +96,7 @@ describe "legacy calendar exports ICS endpoints" do
         expect(response.body).not_to include("Meal 5")
 
         # Link hostname should get piped in properly and include subdomian
-        expect(response.body.gsub("\r\n ", "")).to include("http://default.gather.localhost.tv:31337/")
+        expect(response.body.gsub("\r\n ", "")).to include("http://default.gatherdev.org:31337/")
       end
     end
 

@@ -6,7 +6,7 @@ describe "gdrive auth index", js: true do
   include_context "gdrive"
 
   let!(:actor) { create(:admin) }
-  let(:url) { "http://gather.localhost.tv:31337/gdrive/auth?community_id=#{Defaults.community.id}" }
+  let(:url) { "http://gatherdev.org:31337/gdrive/auth?community_id=#{Defaults.community.id}" }
 
   before do
     create(:feature_flag, name: "gdrive", status: true)

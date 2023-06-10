@@ -35,16 +35,16 @@ jobs:
         uses: ruby/setup-ruby@v1
       - name: Add to hosts file
         run: |
-          echo "127.0.0.1 gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community1.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community2.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community3.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community4.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community5.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community6.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community7.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community8.gather.localhost.tv" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 community9.gather.localhost.tv" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community1.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community2.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community3.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community4.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community5.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community6.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community7.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community8.gatherdev.org" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 community9.gatherdev.org" | sudo tee -a /etc/hosts
       - name: Ruby gem cache
         id: cache-gems
         uses: actions/cache@v3

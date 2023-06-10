@@ -117,6 +117,6 @@ describe "gdrive auth callback" do
   # end
 
   # def redirect_url
-  #   "http://gather.localhost.tv:31337/gdrive/auth?community_id=#{Defaults.community.id}"
+  #   "http://gatherdev.org:31337/gdrive/auth?community_id=#{Defaults.community.id}"
   # end
 end

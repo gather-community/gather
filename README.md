@@ -80,7 +80,7 @@ Follow these steps to setup a development environment for Gather.
     1. If you installed via Homebrew, try `brew services start redis`.
     1. If you are on Linux try `sudo systemctl start redis` or `sudo service redis start`.
 1. Trust the development certificate
-    1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gather.localhost.tv.crt`.
+    1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gatherdev.org.crt`.
     2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
 1. Start the server
     1. Run `bin/dev`.
@@ -92,7 +92,7 @@ Follow these steps to setup a development environment for Gather.
     1. The logs for jobs will mostly go to log/development.log. The log/delayed_job.log file is sparse and
        contains only information about the initialization and resulting state of jobs.
 1. Start using the system
-    1. In a browser, go to `https://gather.localhost.tv:3000` to start Gather.
+    1. In a browser, go to `https://gatherdev.org:3000` to start Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
     1. Enjoy!
 

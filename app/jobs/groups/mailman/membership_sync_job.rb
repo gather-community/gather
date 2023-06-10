@@ -50,6 +50,7 @@ module Groups
           if source.is_a?(Groups::Mailman::List)
             source.additional_members.sort!
             source.additional_senders.sort!
+            source.last_synced_at = Time.current
             source.save!
           end
         end

@@ -180,6 +180,8 @@ describe Groups::Mailman::MembershipSyncJob do
       mm_list.reload
       expect(mm_list.additional_members).to eq([mm_user7.email])
       expect(mm_list.additional_senders).to eq([mm_user11.email, mm_user10.email])
+
+      expect(Time.current - mm_list.last_synced_at).to be < 1.minute
     end
   end
 

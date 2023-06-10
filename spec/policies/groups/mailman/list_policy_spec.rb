@@ -41,5 +41,13 @@ describe Groups::Mailman::ListPolicy do
         it { is_expected.not_to permit(admin, list) }
       end
     end
+
+    permissions :sync? do
+      it "permits any user in any of the list's group's communities" do
+        expect(subject).to permit(user, list)
+        expect(subject).to permit(user_cmtyC, list)
+        expect(subject).not_to permit(user_cmtyB, list)
+      end
+    end
   end
 end

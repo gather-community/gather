@@ -51,8 +51,8 @@ module Work
       return unless (shift = shift_for_meal_assignment(meal_asst))
       sync_meal_to_shift(meal_asst.meal, shift)
     end
-    alias update_meals_assignment_successful create_meals_assignment_successful
-    alias destroy_meals_assignment_successful create_meals_assignment_successful
+    alias_method :update_meals_assignment_successful, :create_meals_assignment_successful
+    alias_method :destroy_meals_assignment_successful, :create_meals_assignment_successful
 
     private
 
@@ -71,7 +71,7 @@ module Work
       source_ids = meal.assignments.where(role_id: shift.meal_role_id).map(&:user_id)
       dest_ids = shift.assignments.map(&:user_id)
       id_diff(source_ids, dest_ids).each do |uid|
-        shift.assignments.create!(user_id: uid)
+        shift.assignments.create!(user_id: uid, syncing: true)
       end
       id_diff(dest_ids, source_ids).each do |uid|
         destroy_assignment(shift.assignments.find_by(user_id: uid))
@@ -90,7 +90,7 @@ module Work
 
     def shift_for_meal_assignment(meal_asst)
       Work::Shift.joins(:job).find_by(meal_id: meal_asst.meal_id,
-                                      work_jobs: {meal_role_id: meal_asst.role_id})
+        work_jobs: {meal_role_id: meal_asst.role_id})
     end
 
     def destroy_assignment(assignment)

@@ -58,22 +58,15 @@ module Groups
       active? && appropriate_admin?
     end
 
-    def edit_list?
-      active? && appropriate_admin?
-    end
-
-    def edit_list_name?
-      edit_list? && (group.mailman_list.nil? || group.mailman_list.new_record?)
-    end
-
     def permitted_attributes
       permitted = %i[availability description kind name]
       if change_permissions?
         permitted.concat(%i[can_request_jobs can_administer_email_lists can_moderate_email_lists])
       end
-      if edit_list?
+      list_policy = Mailman::ListPolicy.new(user, group.mailman_list)
+      if group.mailman_list && list_policy.edit?
         list_attribs = %i[id managers_can_administer managers_can_moderate _destroy]
-        list_attribs.concat(%i[name domain_id]) if edit_list_name?
+        list_attribs.concat(%i[name domain_id]) if list_policy.edit_name?
         permitted.concat([mailman_list_attributes: list_attribs])
       end
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}
@@ -81,13 +74,13 @@ module Groups
       permitted
     end
 
-    private
-
     def appropriate_admin?
       user.global_role?(:super_admin) ||
         user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
         user.global_role?(:admin) && record_tied_to_user_community?
     end
+
+    private
 
     def membership
       @membership ||= group.membership_for(user)

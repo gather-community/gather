@@ -66,7 +66,7 @@ describe Groups::GroupPolicy do
       it_behaves_like "permits managers but not joiners or opt outs"
     end
 
-    permissions :deactivate?, :destroy?, :change_permissions?, :edit_list? do
+    permissions :deactivate?, :destroy?, :change_permissions? do
       it_behaves_like "permits active admins in group's communities but not regular users"
       it { is_expected.not_to permit(manager, group) }
     end

@@ -24,7 +24,7 @@
     <%= f.input(:can_moderate_email_lists) %>
   <% end %>
 
-  <% if policy(group).edit_list? %>
+  <% if policy(group.mailman_list).edit? %>
     <h2>Email List</h2>
 
     <% if @domain_options.empty? %>
@@ -43,10 +43,10 @@
         </p>
 
         <%= list_form.input(:address) do %>
-          <%= list_form.input(:name, label: false, disabled: !policy(group).edit_list_name?) %>
+          <%= list_form.input(:name, label: false, disabled: !policy(group.mailman_list).edit_name?) %>
           <span><strong>&nbsp;@&nbsp;</strong></span>
           <%= list_form.input(:domain_id, collection: @domain_options,
-                                          disabled: !policy(group).edit_list_name?,
+                                          disabled: !policy(group.mailman_list).edit_name?,
                                           label: false, include_blank: false) %>
         <% end %>
 

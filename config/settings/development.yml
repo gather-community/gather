@@ -2,7 +2,7 @@ smtp:
   address: localhost
   port: 1025
 url:
-  # localhost.tv is a public domain that resolves to 127.0.0.1 for all subdomains.
-  host: gather.localhost.tv
+  # gatherdev.org resolves to 127.0.0.1 for all subdomains.
+  host: gatherdev.org
   port: 3000
   protocol: https

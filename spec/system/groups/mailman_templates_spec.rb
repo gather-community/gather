@@ -11,7 +11,7 @@ describe "mailman templates" do
     scenario do
       visit("/groups/mailman/templates/list:member:regular:footer/foo.example.com/en")
       expect(page).to have_content("To unsubscribe, visit the Group page and leave or opt-out.")
-      expect(page).to have_content("http://gather.localhost.tv:31337/groups/#{list.group_id}")
+      expect(page).to have_content("http://gatherdev.org:31337/groups/#{list.group_id}")
     end
 
     context "visiting group when logged in but with no subdomain" do

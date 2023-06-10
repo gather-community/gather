@@ -5,15 +5,11 @@ require "rails_helper"
 describe Groups::Mailman::ListPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:availability) { "open" }
     let(:communities) { [community, communityC] }
-    let(:group) { create(:group, availability: availability, communities: communities) }
-    let(:record) { group }
+    let(:group) { create(:group, availability: "open", communities: communities) }
     let(:manager) { create(:group_membership, group: group, kind: "manager").user }
-    let(:other_group_manager) { create(:group_membership, kind: "manager").user }
-    let(:joiner) { create(:group_membership, group: group, kind: "joiner").user }
-    let(:opt_out) { create(:group_membership, group: group, kind: "opt_out").user }
     let(:list) { build(:group_mailman_list, group: group) }
+    let(:record) { list }
 
     shared_examples_for "permits active admins in group's communities but not regular users" do
       it do

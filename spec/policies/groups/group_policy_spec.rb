@@ -253,11 +253,11 @@ describe Groups::GroupPolicy do
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:list_attribs) do
-      [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate _destroy]]
+      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate id _destroy]]
     end
     let(:list_attribs_with_name_edit) do
-      [mailman_list_attributes: %i[id managers_can_administer managers_can_moderate
-        _destroy name domain_id]]
+      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate
+        id _destroy name domain_id]]
     end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }
     let(:base_admin_attribs) { base_attribs.concat(permission_attribs).concat(list_attribs) }
@@ -286,7 +286,9 @@ describe Groups::GroupPolicy do
 
       context "with new record" do
         let(:group) { build(:group) }
-        let!(:list) { group.build_mailman_list }
+
+        # We should have ability to create list even if no list exists!
+        let!(:list) { nil }
         let(:list_attribs) { list_attribs_with_name_edit }
 
         it { is_expected.to match_array(base_admin_attribs) }

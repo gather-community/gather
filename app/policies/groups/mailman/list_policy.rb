@@ -5,8 +5,12 @@ module Groups
     class ListPolicy < ApplicationPolicy
       alias_method :list, :record
 
-      def edit?
+      def new?
         active? && list.group && group_policy.appropriate_admin?
+      end
+
+      def edit?
+        new?
       end
 
       def edit_name?
@@ -15,6 +19,10 @@ module Groups
 
       def sync?
         list.group && group_policy.show?
+      end
+
+      def destroy?
+        new?
       end
 
       private

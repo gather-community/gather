@@ -63,12 +63,15 @@ module Groups
       if change_permissions?
         permitted.concat(%i[can_request_jobs can_administer_email_lists can_moderate_email_lists])
       end
-      list_policy = Mailman::ListPolicy.new(user, group.mailman_list)
-      if group.mailman_list && list_policy.edit?
-        list_attribs = %i[id managers_can_administer managers_can_moderate _destroy]
-        list_attribs.concat(%i[name domain_id]) if list_policy.edit_name?
-        permitted.concat([mailman_list_attributes: list_attribs])
-      end
+
+      list_policy = Mailman::ListPolicy.new(user, group.mailman_list || Mailman::List.new(group: group))
+      list_attribs = []
+      list_attribs.concat(%i[managers_can_administer managers_can_moderate]) if list_policy.new?
+      list_attribs << :id if list_policy.new?
+      list_attribs << :_destroy if list_policy.destroy?
+      list_attribs.concat(%i[name domain_id]) if list_policy.edit_name?
+      permitted.concat([mailman_list_attributes: list_attribs]) unless list_attribs.empty?
+
       permitted << {memberships_attributes: %i[id kind user_id _destroy]}
       permitted << {community_ids: []} if user.global_role?(:cluster_admin) || user.global_role?(:super_admin)
       permitted

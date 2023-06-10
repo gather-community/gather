@@ -23,7 +23,7 @@ describe Groups::Mailman::ListPolicy do
       end
     end
 
-    permissions :edit? do
+    permissions :new?, :edit?, :destroy? do
       it_behaves_like "permits active admins in group's communities but not regular users"
       it { is_expected.not_to permit(manager, list) }
     end

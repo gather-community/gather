@@ -36,6 +36,10 @@ describe "mailing lists", js: true do
       click_link("Knitting Club")
       expect(page).to have_content("knitting@fluff.com")
 
+      # Trigger a re-sync
+      click_link("Sync Now")
+      expect(page).to have_content("List sync started")
+
       # Delete the list
       click_link("Edit")
       check("Delete this list?")
@@ -55,8 +59,8 @@ describe "mailing lists", js: true do
       scenario "shows all add'l members/senders" do
         visit(groups_group_path(group))
         expect(page).to have_content("knitting@fluff.com")
-        expect(page).to have_content(/These addresses are also members.*a@a\.com.*b@b\.com/m)
-        expect(page).to have_content(/These additional senders.*c@c\.com.*d@d\.com/m)
+        expect(page).to have_content(/a@a\.com.*b@b\.com.*These addresses are also members/m)
+        expect(page).to have_content(/c@c\.com.*d@d\.com.*These additional senders/m)
       end
     end
 
@@ -70,8 +74,8 @@ describe "mailing lists", js: true do
       scenario "shows subset of senders" do
         visit(groups_group_path(group))
         expect(page).to have_content("knitting@fluff.com")
-        expect(page).to have_content(/These addresses are also members.*a@a\.com.*b@b\.com/m)
-        expect(page).to have_content(/These additional senders.*0@a\.com.*1@a\.com.*\+5 more/m)
+        expect(page).to have_content(/a@a\.com.*b@b\.com.*These addresses are also members/m)
+        expect(page).to have_content(/0@a\.com.*1@a\.com.*Show 5 more.*These additional senders/m)
         expect(page).not_to have_content(/10@a\.com/m)
       end
     end

@@ -24,6 +24,10 @@ describe Work::MealAssignmentSynchronizer do
         expect(shift.assignments.map(&:user_id)).to contain_exactly(user1.id)
         shift = job2.shifts[0]
         expect(shift.assignments.map(&:user_id)).to contain_exactly(user2.id, user3.id)
+
+        # Ensure meal assignments haven't changed unexpectedly
+        expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+        expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id)
       end
     end
   end
@@ -33,7 +37,7 @@ describe Work::MealAssignmentSynchronizer do
     let!(:job) do
       # Create and then load fresh so that syncing flags are not set.
       job = create(:work_job, meal_role: role2, shift_count: 1, meals: [meal],
-                              double_signups_allowed: double_signups_allowed)
+        double_signups_allowed: double_signups_allowed)
       Work::Job.find(job.id)
     end
 
@@ -41,6 +45,9 @@ describe Work::MealAssignmentSynchronizer do
       it "copies new assignment to meals" do
         job.shifts[0].assignments.create!(user: user4)
         expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id)
+
+        # Ensure work assignments haven't changed unexpectedly
+        expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id)
       end
 
       context "when double signups are allowed" do
@@ -50,8 +57,15 @@ describe Work::MealAssignmentSynchronizer do
           a1 = job.shifts[0].assignments.create!(user: user4)
           a2 = job.shifts[0].assignments.create!(user: user4)
           expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id, user4.id)
+
+          # Ensure work assignments haven't changed unexpectedly
+          expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id, user4.id)
+
           a2.reload.destroy
           expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id)
+
+          # Ensure work assignments haven't changed unexpectedly
+          expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id)
         end
       end
     end
@@ -60,6 +74,9 @@ describe Work::MealAssignmentSynchronizer do
       it "removes assignment from meals" do
         job.shifts[0].assignments.find_by(user: user3).destroy
         expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id)
+
+        # Ensure work assignments haven't changed unexpectedly
+        expect(job_assignments).to contain_exactly(user2.id)
       end
     end
 
@@ -68,6 +85,9 @@ describe Work::MealAssignmentSynchronizer do
         it "updates existing meal assignment" do
           job.shifts[0].assignments.find_by(user: user3).update!(user_id: user4.id)
           expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user4.id)
+
+          # Ensure work assignments haven't changed unexpectedly
+          expect(job_assignments).to contain_exactly(user2.id, user4.id)
         end
       end
 
@@ -81,6 +101,9 @@ describe Work::MealAssignmentSynchronizer do
         it "creates new meal assignment" do
           job.shifts[0].assignments.find_by(user: user3).update!(user_id: user4.id)
           expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user4.id)
+
+          # Ensure work assignments haven't changed unexpectedly
+          expect(job_assignments).to contain_exactly(user2.id, user4.id)
         end
       end
     end
@@ -107,6 +130,10 @@ describe Work::MealAssignmentSynchronizer do
 
           meal.assignments.create!(user: user4, role: role2)
           expect(job_assignments).to contain_exactly(user2.id, user3.id, user4.id)
+
+          # Ensure meal assignments haven't changed unexpectedly
+          expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+          expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user3.id, user4.id)
         end
       end
     end
@@ -116,6 +143,10 @@ describe Work::MealAssignmentSynchronizer do
         it "updates existing work assignment" do
           meal.assignments.find_by(user: user3).update!(user_id: user4.id)
           expect(job_assignments).to contain_exactly(user2.id, user4.id)
+
+          # Ensure meal assignments haven't changed unexpectedly
+          expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+          expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user4.id)
         end
       end
 
@@ -129,6 +160,10 @@ describe Work::MealAssignmentSynchronizer do
         it "creates new work assignment" do
           meal.assignments.find_by(user: user3).update!(user_id: user4.id)
           expect(job_assignments).to contain_exactly(user2.id, user4.id)
+
+          # Ensure meal assignments haven't changed unexpectedly
+          expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+          expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id, user4.id)
         end
       end
     end
@@ -137,6 +172,24 @@ describe Work::MealAssignmentSynchronizer do
       it "removes assignment from work" do
         meal.assignments.find_by(user: user3, role: role2).destroy
         expect(job_assignments).to contain_exactly(user2.id)
+
+        # Ensure meal assignments haven't changed unexpectedly
+        expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+        expect(meal_assignments_for_role(role2)).to contain_exactly(user2.id)
+      end
+    end
+
+    context "on meal job signup plus separate unsignup" do
+      it "syncs to work" do
+        meal.update!(assignments_attributes: {
+          "1" => {"id" => assignment2.id, "_destroy" => "1"},
+          "2" => {"user_id" => user4.id, "role_id" => role2.id}
+        })
+        expect(job_assignments).to contain_exactly(user3.id, user4.id)
+
+        # Ensure meal assignments haven't changed unexpectedly
+        expect(meal_assignments_for_role(role1)).to contain_exactly(user1.id)
+        expect(meal_assignments_for_role(role2)).to contain_exactly(user3.id, user4.id)
       end
     end
 

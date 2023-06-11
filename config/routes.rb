@@ -123,6 +123,12 @@ Rails.application.routes.draw do
     namespace :mailman do
       get "templates/:template_name/:list_id/:locale",
         to: "templates#show", constraints: {list_id: /.*/}, defaults: {format: "text"}
+
+      resources :lists, only: [] do
+        member do
+          post :sync
+        end
+      end
     end
   end
 

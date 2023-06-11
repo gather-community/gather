@@ -47,7 +47,7 @@ module Groups
 
         return if user.group_mailman_user.nil?
         SingleSignOnJob.perform_later(user_id: user.id, cluster_id: user.cluster_id,
-                                      action: :sign_out, destroyed: true)
+          action: :sign_out, destroyed: true)
       end
 
       def user_signed_out(user)
@@ -83,9 +83,10 @@ module Groups
       end
 
       def update_groups_mailman_list_successful(list)
-        # The only place where remote_id gets saved is in the ListSyncJob and we don't want
-        # to enqueue the MembershipSyncJob in that case because then it will get enqueued twice.
-        return if list.saved_change_to_remote_id?
+        # We don't allow changing the name, domain, or group after the list is created.
+        # So these are the only fields we care about, and if they change, we only need
+        # to sync members, not the whole list.
+        return unless attribs_changed?(list, %w[managers_can_moderate managers_can_administer])
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 

@@ -54,16 +54,16 @@ describe Groups::Mailman::MembershipSyncJob do
     it "calls correct api methods" do
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).once.and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list1.blah", role: "member"))
+        list_id: "list1.blah", role: "member"))
 
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list2.blah", role: "owner"))
+        list_id: "list2.blah", role: "owner"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list2.blah", role: "moderator"))
+        list_id: "list2.blah", role: "moderator"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
-                                                                   list_id: "list4.blah", role: "member"))
+        list_id: "list4.blah", role: "member"))
       perform_job
     end
   end
@@ -85,6 +85,9 @@ describe Groups::Mailman::MembershipSyncJob do
     let!(:mm_user7) { build(:group_mailman_user, remote_id: nil, user: nil, email: "d@d.com") }
     let!(:mm_user8) { build(:group_mailman_user, remote_id: nil, user: nil, email: "c@c.com") }
     let!(:mm_user9) { build(:group_mailman_user, remote_id: nil, user: nil, email: "x@x.com") }
+    let!(:mm_user10) { build(:group_mailman_user, remote_id: nil, user: nil, email: "h@h.com") }
+    let!(:mm_user11) { build(:group_mailman_user, remote_id: nil, user: nil, email: "f@f.com") }
+    let!(:mm_user12) { build(:group_mailman_user, remote_id: nil, user: nil, email: "g@g.com") }
     let(:local_mships) do
       [
         # This should get created since no matching mship for y@y.com in remote.
@@ -109,15 +112,30 @@ describe Groups::Mailman::MembershipSyncJob do
         # This will stay since it matches a local one by email and role.
         build_mship(remote_id: "f11", mailman_user: mm_user6, list_id: "list3.blah", role: "owner"),
 
-        # This will stay since it doesn't match an email in our database.
-        build_mship(remote_id: "f22", mailman_user: mm_user7, list_id: "list3.blah", role: "moderator"),
+        # This will stay and go in additional_members since it doesn't match an email in our database.
+        build_mship(remote_id: "f22", mailman_user: mm_user7, list_id: "list3.blah", role: "member"),
 
         # This will get deleted because it matches a local email c@c.com but not a local membership.
         build_mship(remote_id: "f33", mailman_user: mm_user8, list_id: "list3.blah", role: "moderator"),
 
         # This will get deleted because it matches a local email and
         # local membership email x@x.com but wrong role (owner vs. member).
-        build_mship(remote_id: "f44", mailman_user: mm_user9, list_id: "list3.blah", role: "member")
+        build_mship(remote_id: "f44", mailman_user: mm_user9, list_id: "list3.blah", role: "member"),
+
+        # This will stay and go in additional_senders since it doesn't match an email in our database
+        # and has moderation action accept.
+        build_mship(remote_id: "f55", mailman_user: mm_user10, list_id: "list3.blah",
+          role: "nonmember", moderation_action: "accept"),
+
+        # This will stay and go in additional_senders since it doesn't match an email in our database
+        # and has moderation action defer.
+        build_mship(remote_id: "f66", mailman_user: mm_user11, list_id: "list3.blah",
+          role: "nonmember", moderation_action: "defer"),
+
+        # This will be ignored since it doesn't match an email in our database
+        # and has moderation action reject.
+        build_mship(remote_id: "f77", mailman_user: mm_user12, list_id: "list3.blah",
+          role: "nonmember", moderation_action: "reject")
       ]
     end
     subject(:job) { described_class.new("Groups::Mailman::List", mm_list.id) }
@@ -130,19 +148,19 @@ describe Groups::Mailman::MembershipSyncJob do
     it "calls correct api methods" do
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "y@y.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "000",
-                                                                   list_id: "list3.blah", role: "member"))
+        list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "a@a.com")).and_return("222")
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).and_return(false)
       expect(api).to receive(:update_user, &with_obj_attribs(email: "a@a.com"))
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "222",
-                                                                   list_id: "list3.blah", role: "member"))
+        list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "b@b.com")).and_return(nil)
       expect(api).to receive(:create_user).with(mm_user5).and_return("333")
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "b@b.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "333",
-                                                                   list_id: "list3.blah", role: "member"))
+        list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(remote_id: "f33"))
       expect(api).to receive(:delete_membership, &with_obj_attribs(remote_id: "f44"))
@@ -154,6 +172,16 @@ describe Groups::Mailman::MembershipSyncJob do
       expect(mm_user7).not_to be_persisted
       expect(mm_user8).not_to be_persisted
       expect(mm_user9).not_to be_persisted
+      expect(mm_user10).not_to be_persisted
+      expect(mm_user11).not_to be_persisted
+      expect(mm_user12).not_to be_persisted
+
+      # These should be sorted
+      mm_list.reload
+      expect(mm_list.additional_members).to eq([mm_user7.email])
+      expect(mm_list.additional_senders).to eq([mm_user11.email, mm_user10.email])
+
+      expect(Time.current - mm_list.last_synced_at).to be < 1.minute
     end
   end
 

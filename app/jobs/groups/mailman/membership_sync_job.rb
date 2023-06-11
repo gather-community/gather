@@ -10,14 +10,49 @@ module Groups
         with_object_in_cluster_context(class_name: source_class_name, id: source_id) do |source|
           self.source = source
           return unless source.syncable?
+
+          if source.is_a?(Groups::Mailman::List)
+            source.additional_members = []
+            source.additional_senders = []
+          end
+
           missing_on_remote, missing_on_local = membership_diff
 
           # Create any memberships that exist locally but not remotely.
-          missing_on_remote.each { |m| create_membership(m) }
+          missing_on_remote.each { |m| create_remote_membership(m) }
 
           # Delete memberships that match emails of Gather users but don't exist locally.
           # This allows remote memberships for non-Gather users to be managed using the Mailman UI.
-          missing_on_local.each { |m| api.delete_membership(m) if email_exists_locally?(m.email) }
+          # If the membership doesn't match a local email but it IS of type member, keep track of
+          # that also if we are syncing a list.
+          missing_on_local.each do |membership|
+            if email_exists_locally?(membership.email)
+              api.delete_membership(membership)
+            elsif source.is_a?(Groups::Mailman::List)
+
+              # Additional members are members on the list that don't match group memberships.
+              if membership.role == "member"
+                source.additional_members << membership.email
+
+              # Additional senders are nonmembers on the list with moderation actions accept or defer
+              # accept means accept outright
+              # defer means 'default processing', which means the message goes through additional checks
+              #   and is then accepted assuming none of them fail
+              # reject and discard have the obvious meanings
+              # hold means hold for moderation, which is not automatic acceptance
+              # `nil` moderation_action means 'list default', which for a nonmember should always be `hold`
+              elsif membership.role == "nonmember" && %w[accept defer].include?(membership.moderation_action)
+                source.additional_senders << membership.email
+              end
+            end
+          end
+
+          if source.is_a?(Groups::Mailman::List)
+            source.additional_members.sort!
+            source.additional_senders.sort!
+            source.last_synced_at = Time.current
+            source.save!
+          end
         end
       end
 
@@ -41,7 +76,7 @@ module Groups
           .pluck(:email).index_by(&:itself)
       end
 
-      def create_membership(mship)
+      def create_remote_membership(mship)
         # `mship` should always have mailman_user set on it by now, though it may not be persisted
         # and may not have a user record.
         # We need to check if the user is syncable (i.e. not fake).

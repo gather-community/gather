@@ -50,33 +50,48 @@
         <%= link_to("List Panel", mailman_list.panel_url) %>
       </td>
     </tr>
-    <% if mailman_list.additional_members.any? %>
+    <% if mailman_list.additional_members.present? %>
       <tr>
         <td><%= Groups::Mailman::List.human_attribute_name(:additional_members) %></td>
         <td>
+          <div class="flowing-columns-max-4">
+            <%= mailman_list.additional_members_ul %>
+          </div>
           <p><small>
             All group members above are automatically members of the list.
             These addresses are also members.
           </small></p>
-          <div class="flowing-columns-max-4">
-            <%= mailman_list.additional_members_ul %>
-          </div>
         </td>
       </tr>
     <% end %>
-    <% if mailman_list.additional_senders.any? %>
+    <% if mailman_list.additional_senders.present? %>
       <tr>
         <td><%= Groups::Mailman::List.human_attribute_name(:additional_senders) %></td>
         <td>
-          <p><small>
-            These additional senders can send to the list but don't receive mail from it.
-          </small></p>
           <div class="flowing-columns-max-4">
             <%= mailman_list.additional_senders_ul %>
           </div>
+          <p><small>
+            These additional senders can send to the list but don't receive mail from it.
+          </small></p>
         </td>
       </tr>
     <% end %>
+    <tr>
+      <td>Last Sync Time</td>
+      <td>
+
+        <p><small>
+          Changes in Gather automatically sync to the mailing list system, but changes made in the mailing list
+          panel do not sync automatically.
+          <% if mailman_list.additional_members.present? || mailman_list.additional_senders.present? %>
+            This includes the list of additional members/senders above.
+          <% end %>
+          <%= link_to("Sync Now", sync_groups_mailman_list_path(group.mailman_list), method: :post) %>
+          to get the freshest information.
+        </small></p>
+      </td>
+    </tr>
   </table>
 <% else %>
   This group has no attached email list.

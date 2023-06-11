@@ -6,13 +6,13 @@ module Groups
       delegate_all
 
       def additional_members_ul
-        membership_ul(additional_members)
+        email_ul(additional_members)
       end
 
       def additional_senders_ul
         # We don't want to show all of these as there can be quite a few and it's not as sensitive
         # as additional members.
-        membership_ul(additional_senders, max: 10)
+        email_ul(additional_senders, initially_visible: 10)
       end
 
       def panel_url
@@ -29,14 +29,29 @@ module Groups
 
       private
 
-      def membership_ul(memberships, max: nil)
-        overflow = max.nil? ? 0 : memberships.size - max
-        memberships = memberships[0...max] if overflow.positive?
-        items = memberships.sort_by { |m| m.name_or_email.downcase }.map do |membership|
-          h.content_tag(:li, h.link_to(membership.name_or_email, membership.email))
+      def email_ul(emails, initially_visible: nil)
+        overflow = initially_visible.nil? ? 0 : emails.size - initially_visible
+        items = []
+        emails.each_with_index do |email, index|
+          li_attribs = if initially_visible && index >= initially_visible
+            {class: "hidden", "data-partial-list-target": "overflow"}
+          else
+            {}
+          end
+          items << h.content_tag(:li, h.link_to(email, "mailto:#{email}"), **li_attribs)
         end
-        items << h.content_tag(:li, "+#{overflow} more") if overflow.positive?
-        h.content_tag(:ul, h.safe_join(items), class: "no-bullets")
+
+        buttons = if initially_visible && emails.size > initially_visible
+          [
+            h.content_tag(:button, "Show #{overflow} more", class: "btn btn-link", "data-action": "partial-list#toggle", "data-partial-list-target": "showButton"),
+            h.content_tag(:button, "Hide", class: "hidden btn btn-link", "data-action": "partial-list#toggle", "data-partial-list-target": "hideButton")
+          ]
+        else
+          []
+        end
+        h.content_tag(:div, "data-controller": "partial-list") do
+          h.content_tag(:ul, h.safe_join(items), class: "no-bullets") << h.safe_join(buttons, "")
+        end
       end
     end
   end

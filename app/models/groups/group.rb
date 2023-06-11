@@ -76,10 +76,10 @@ module Groups
     normalize_attributes :kind, :availability, :name
 
     accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
-    accepts_nested_attributes_for :mailman_list, reject_if: :mailman_list_not_present_and_name_blank?,
-      allow_destroy: true
+    accepts_nested_attributes_for :mailman_list, allow_destroy: true
 
     before_validation :normalize
+    before_validation :clear_mailman_list_if_empty_name
 
     validates :name, presence: true
     validate :name_unique_in_all_communities
@@ -198,9 +198,11 @@ module Groups
       errors.add(:base, :at_least_one_affiliation)
     end
 
-    def mailman_list_not_present_and_name_blank?(attribs)
-      # If list doesn't exist and no name is given, we're assuming they didn't fill in the form.
-      !mailman_list.present? && attribs[:name].blank?
+    def clear_mailman_list_if_empty_name
+      # If list doesn't pre-exist and no name is given, we're assuming they didn't fill in the form.
+      if mailman_list&.new_record? && mailman_list.name.blank?
+        mailman_list.destroy
+      end
     end
   end
 end

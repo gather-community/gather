@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_02_113453) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -366,10 +366,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_02_113453) do
   end
 
   create_table "group_mailman_lists", force: :cascade do |t|
+    t.jsonb "additional_members"
+    t.jsonb "additional_senders"
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "domain_id", null: false
     t.bigint "group_id", null: false
+    t.datetime "last_synced_at"
     t.boolean "managers_can_administer", default: false, null: false
     t.boolean "managers_can_moderate", default: false, null: false
     t.string "name", null: false

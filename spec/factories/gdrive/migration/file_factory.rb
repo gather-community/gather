@@ -7,5 +7,6 @@ FactoryBot.define do
     owner { "foo@bar.com" }
     status { "pending" }
     data { {name: "Foo"} }
+    mime_type { "text/plain" }
   end
 end

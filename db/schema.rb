@@ -322,10 +322,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   create_table "gdrive_migration_files", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.jsonb "data", null: false
     t.string "error_message", limit: 255
     t.string "error_type"
     t.string "external_id", null: false
+    t.string "mime_type", limit: 255, null: false
+    t.text "name", null: false
     t.bigint "operation_id", null: false
     t.string "owner", null: false
     t.string "status", null: false
@@ -338,11 +339,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
+    t.string "cancel_reason"
     t.bigint "config_id", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
+    t.integer "error_count", default: 0, null: false
     t.string "filename_tag", limit: 8, null: false
     t.string "src_folder_id", limit: 255
+    t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
   end

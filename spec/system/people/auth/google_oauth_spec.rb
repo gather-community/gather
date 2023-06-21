@@ -147,7 +147,7 @@ describe "google oauth" do
     context "with invalid query params on callback" do
       it "should show error" do
         expect(ErrorReporter.instance).to receive(:report) do |error|
-          expect(error.message).to eq("oauth failure")
+          expect(error.message).to eq("OAuth failure")
         end
         visit "/people/users/auth/google_oauth2/callback" # No params
         expect(page).to be_signed_out_root

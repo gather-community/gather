@@ -13,6 +13,9 @@ describe "meal create, show, update, delete", js: true do
   let!(:meals) { create_list(:meal, 5, formula: formula, calendars: [location]) }
   let!(:meal) { meals.first }
 
+  # This is to make sure the community checkboxes show.
+  let!(:community2) { create(:community, name: "Funtown") }
+
   before do
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
@@ -35,6 +38,7 @@ describe "meal create, show, update, delete", js: true do
       select2(location.name, from: "#meals_meal_calendar_ids", multiple: true)
 
       # Formula change changes worker roles
+      check("Funtown")
       select("Formula 2", from: "Formula")
       expect(page).not_to have_content("Assistant Cook")
       select("Formula 1", from: "Formula")
@@ -48,6 +52,7 @@ describe "meal create, show, update, delete", js: true do
 
       find("tr", text: users[0].name).find("a", text: "[No Menu]").click
       click_link("Edit")
+      expect(page).to have_field("Funtown", checked: true)
       fill_in_menu
 
       # Show
@@ -95,6 +100,7 @@ describe "meal create, show, update, delete", js: true do
       # Update to add menu
       find("table.index tr", text: actor.name).find("a", text: "[No Menu]").click
       click_link("Edit")
+      expect(page).not_to have_field("Funtown")
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu
 

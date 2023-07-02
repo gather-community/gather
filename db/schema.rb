@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_02_124453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1154,7 +1154,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
   add_foreign_key "gdrive_migration_files", "clusters"
-  add_foreign_key "gdrive_migration_files", "gdrive_configs", column: "operation_id"
+  add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"

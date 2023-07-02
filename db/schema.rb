@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_02_124453) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_02_125522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -334,7 +334,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_124453) do
     t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
-    t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying, 'not_found'::character varying]::text[])", name: "error_type_enum"
+    t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'cant_edit'::character varying::text])", name: "error_type_enum"
     t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'error'::character varying, 'declined'::character varying, 'done'::character varying]::text[])", name: "status_enum"
   end
 

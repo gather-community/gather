@@ -7,6 +7,8 @@ module GDrive
     # assume Google will fix things, hopefully before our last retry happens.
     retry_on(Google::Apis::ServerError, wait: :exponentially_longer)
 
+    # We also retry on rate limit errors specifically. Our API wrapper pulls these out
+    # of more generic ClientErrors and raises this more specific error.
     retry_on(Wrapper::RateLimitError, wait: :exponentially_longer)
   end
 end

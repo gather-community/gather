@@ -8,6 +8,10 @@ module GDrive
         inverse_of: :operation, dependent: :destroy
       has_many :files, class_name: "GDrive::Migration::File",
         inverse_of: :operation, dependent: :destroy
+
+      def paused?
+        status == "paused"
+      end
     end
   end
 end

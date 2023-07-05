@@ -6,7 +6,7 @@ FactoryBot.define do
     external_id { "asdfafdfsd" }
     owner { "foo@bar.com" }
     status { "pending" }
-    data { {name: "Foo"} }
-    mime_type { "text/plain" }
+    name { "Stuff" }
+    mime_type { "application/vnd.google-apps.document" }
   end
 end

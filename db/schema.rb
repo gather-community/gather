@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_02_125522) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_05_004354) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -355,7 +355,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_125522) do
     t.datetime "created_at", null: false
     t.string "folder_id", limit: 128, null: false
     t.bigint "operation_id", null: false
-    t.string "page_token", limit: 128
+    t.text "page_token"
     t.datetime "updated_at", null: false
     t.index ["operation_id"], name: "index_gdrive_migration_scan_tasks_on_operation_id"
   end

@@ -17,36 +17,36 @@ module GDrive
       self.callback_url = callback_url
     end
 
-    def list_files(*args)
-      wrap_api_method { service.list_files(*args) }
+    def list_files(...)
+      wrap_api_method { service.list_files(...) }
     end
 
-    def get_file(*args)
-      wrap_api_method { service.get_file(*args) }
+    def get_file(...)
+      wrap_api_method { service.get_file(...) }
     end
 
-    def update_file(*args)
-      wrap_api_method { service.update_file(*args) }
+    def update_file(...)
+      wrap_api_method { service.update_file(...) }
     end
 
-    def list_drives(*args)
-      wrap_api_method { service.list_drives(*args) }
+    def list_drives(...)
+      wrap_api_method { service.list_drives(...) }
     end
 
-    def list_permissions(*args)
-      wrap_api_method { service.list_permissions(*args) }
+    def list_permissions(...)
+      wrap_api_method { service.list_permissions(...) }
     end
 
-    def create_permission(*args)
-      wrap_api_method { service.create_permission(*args) }
+    def create_permission(...)
+      wrap_api_method { service.create_permission(...) }
     end
 
-    def update_permission(*args)
-      wrap_api_method { service.update_permission(*args) }
+    def update_permission(...)
+      wrap_api_method { service.update_permission(...) }
     end
 
-    def delete_permission(*args)
-      wrap_api_method { service.delete_permission(*args) }
+    def delete_permission(...)
+      wrap_api_method { service.delete_permission(...) }
     end
 
     def has_credentials?

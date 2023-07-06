@@ -17,6 +17,7 @@ module GDrive
           self.scan_task = ScanTask.find(scan_task_id)
           self.operation = scan_task.operation
           do_scan
+          check_for_completeness
         end
       end
 
@@ -34,9 +35,9 @@ module GDrive
         )
 
         # Process files one by one, but check after each one if another task thread
-        # has hit too many errors and paused the operation.
+        # has hit too many errors and cancelled the operation.
         file_list.files.each do |gdrive_file|
-          if operation.reload.paused?
+          if operation.reload.cancelled?
             break
           else
             operation.update!(status: "in_progress")
@@ -44,21 +45,13 @@ module GDrive
           process_file(gdrive_file)
         end
 
-        if file_list.next_page_token
-          new_task = operation.scan_tasks.create!(
-            folder_id: scan_task.folder_id,
-            page_token: file_list.next_page_token
-          )
-          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
+        unless operation.reload.cancelled?
+          scan_next_page(file_list)
         end
       rescue Google::Apis::AuthorizationError
         # If we hit an auth error, it is probably not going to resolve itself, and it
         # is not an issue with our code. So we stop the migration operation and notify the user.
-        operation.update!(status: "paused", cancel_reason: "auth_error")
-      ensure
-        # We don't want to leave scan tasks around b/c we check for them when deciding if the
-        # scanning work is done.
-        scan_task.destroy
+        operation.update!(status: "cancelled", cancel_reason: "auth_error")
       end
 
       def process_file(gdrive_file)
@@ -91,8 +84,33 @@ module GDrive
       def add_file_error(migration_file, type, message)
         migration_file.update!(status: "error", error_type: type, error_message: message)
         operation.increment!(:error_count)
-        if operation.error_count > MAX_ERRORS
-          operation.update!(cancelled: true)
+        if operation.error_count >= MAX_ERRORS
+          operation.update!(status: "cancelled", cancel_reason: "too_many_errors")
+        end
+      end
+
+      def scan_next_page(file_list)
+        if file_list.next_page_token
+          new_task = operation.scan_tasks.create!(
+            folder_id: scan_task.folder_id,
+            page_token: file_list.next_page_token
+          )
+          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
+        end
+      end
+
+      def check_for_completeness
+        # If there is only one ScanTask at this point, we know that
+        # this has to be the last ScanTask, and if we are the last ScanTask in reality
+        # then we know the query has to return only one remaining ScanTask.
+        # We know this because we are in a
+        # critical section (in the scope of this operation), so even if there
+        # is another ScanJob running at the same time, it must have already
+        # deleted its ScanTask, so there is not a chance of us thinking we are
+        # not the last one when in fact we are.
+        scan_task.destroy
+        if ScanTask.where(operation: operation).none?
+          operation.update!(status: "complete")
         end
       end
 

@@ -55,6 +55,10 @@ describe GDrive::Migration::ScanJob do
   describe "when encounters unwritable file" do
     let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
+    # We create this one so that the operation doesn't get marked complete, as an extra check on the
+    # completeness-marking code.
+    let!(:scan_task2) { operation.scan_tasks.create!(folder_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_") }
+
     it "increments error count" do
       VCR.use_cassette("gdrive/migration/scan_job/single_error") do
         perform_job
@@ -68,6 +72,55 @@ describe GDrive::Migration::ScanJob do
       expect(unwritable_file.error_message).to eq("drive.admin@gocoho.net did not have edit permission")
 
       expect(operation.reload.error_count).to eq(1)
+      expect(operation.reload.status).to eq("in_progress")
+    end
+  end
+
+  describe "when there are no more scan tasks left" do
+    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+
+    it "marks operation complete" do
+      VCR.use_cassette("gdrive/migration/scan_job/no_more_tasks") do
+        perform_job
+      end
+
+      expect(GDrive::Migration::ScanTask.count).to eq(0)
+      expect(operation.reload.status).to eq("complete")
+    end
+  end
+
+  describe "auth error" do
+    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+
+    it "cancels operation" do
+      VCR.use_cassette("gdrive/migration/scan_job/auth_error") do
+        perform_job
+      end
+
+      expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect(operation.reload.status).to eq("cancelled")
+      expect(operation.cancel_reason).to eq("auth_error")
+    end
+  end
+
+  describe "when errors reach threshold" do
+    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+
+    before do
+      stub_const("#{described_class.name}::MAX_ERRORS", 1)
+    end
+
+    it "cancels operation" do
+      VCR.use_cassette("gdrive/migration/scan_job/error_threshold") do
+        perform_job
+      end
+
+      expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect(operation.reload.error_count).to eq(1)
+      expect(operation.status).to eq("cancelled")
+      expect(operation.cancel_reason).to eq("too_many_errors")
     end
   end
 end

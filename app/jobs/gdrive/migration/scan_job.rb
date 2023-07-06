@@ -16,6 +16,7 @@ module GDrive
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.scan_task = ScanTask.find(scan_task_id)
           self.operation = scan_task.operation
+          return if operation.cancelled?
           do_scan
           check_for_completeness
         end
@@ -37,21 +38,21 @@ module GDrive
         # Process files one by one, but check after each one if another task thread
         # has hit too many errors and cancelled the operation.
         file_list.files.each do |gdrive_file|
-          if operation.reload.cancelled?
-            break
-          else
-            operation.update!(status: "in_progress")
-          end
+          ensure_operation_status_in_progress_unless_cancelled
+          break if operation.cancelled?
           process_file(gdrive_file)
         end
 
+        # We don't need a critical section/advisory lock here because in the worst case, if there is a
+        # race condition we might schedule an extra job, but when it actually runs it will notice
+        # the cancelled state before it gets very far.
         unless operation.reload.cancelled?
           scan_next_page(file_list)
         end
       rescue Google::Apis::AuthorizationError
         # If we hit an auth error, it is probably not going to resolve itself, and it
         # is not an issue with our code. So we stop the migration operation and notify the user.
-        operation.update!(status: "cancelled", cancel_reason: "auth_error")
+        cancel_operation(reason: "auth_error")
       end
 
       def process_file(gdrive_file)
@@ -85,7 +86,7 @@ module GDrive
         migration_file.update!(status: "error", error_type: type, error_message: message)
         operation.increment!(:error_count)
         if operation.error_count >= MAX_ERRORS
-          operation.update!(status: "cancelled", cancel_reason: "too_many_errors")
+          cancel_operation(reason: "too_many_errors")
         end
       end
 
@@ -99,6 +100,23 @@ module GDrive
         end
       end
 
+      def ensure_operation_status_in_progress_unless_cancelled
+        # We need a critical section here because otherwise we could have a
+        # separate job that updates status to cancelled after we check
+        # but before we set to "in_progress". We would then wipe out the cancellation.
+        with_lock do
+          unless operation.reload.cancelled?
+            operation.update!(status: "in_progress")
+          end
+        end
+      end
+
+      def cancel_operation(reason:)
+        with_lock do
+          operation.update!(status: "cancelled", cancel_reason: reason)
+        end
+      end
+
       def check_for_completeness
         # If there is only one ScanTask at this point, we know that
         # this has to be the last ScanTask, and if we are the last ScanTask in reality
@@ -108,9 +126,13 @@ module GDrive
         # is another ScanJob running at the same time, it must have already
         # deleted its ScanTask, so there is not a chance of us thinking we are
         # not the last one when in fact we are.
-        scan_task.destroy
-        if ScanTask.where(operation: operation).none?
-          operation.update!(status: "complete")
+        with_lock do
+          scan_task.destroy
+          # We need to check again if cancelled in case another job has cancelled
+          # the operation.
+          if ScanTask.where(operation: operation).none? && !operation.reload.cancelled?
+            operation.update!(status: "complete")
+          end
         end
       end
 
@@ -127,6 +149,13 @@ module GDrive
 
       def filename_suffix
         @filename_suffix ||= " [🚚#{operation.filename_tag}]"
+      end
+
+      def with_lock(&block)
+        lock_name = "gdrive-migration-scan-operation-#{operation.id}"
+        Operation.with_advisory_lock!(lock_name, timeout_seconds: 120, disable_query_cache: true) do
+          block.call
+        end
       end
     end
   end

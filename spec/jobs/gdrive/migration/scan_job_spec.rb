@@ -6,7 +6,7 @@ describe GDrive::Migration::ScanJob do
   include_context "jobs"
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "drive.admin@gocoho.net") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AbVbY6NnplfOPO7T1LtXlCVGjFVDA3M9fOekX8V2dm2IqvtgBM-ebCCVRFN0OFdNJ6kK3RQSfT186uICC7y26PR0kWgCwZfrDCzITw7D9JTQ-GFTYJUm8RBaz-ewv_nNktFmhAuA93J49-jINmcZq9hocl5XaCgYKAW8SARESFQFWKvPlSK2jbSqH5seNBkh6PO33ag0163") }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, config: migration_config, dest_folder_id: "0AEFsHNu6aSRGUk9PVA",

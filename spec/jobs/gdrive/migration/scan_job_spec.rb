@@ -48,7 +48,9 @@ describe GDrive::Migration::ScanJob do
       expect(GDrive::Migration::File.all.map(&:name))
         .to contain_exactly("File Root.1", "File Root.2", "Test A", "Test B")
 
-      expect(operation.reload.status).to eq("in_progress")
+      operation.reload
+      expect(operation.scanned_file_count).to eq(4)
+      expect(operation.status).to eq("in_progress")
     end
   end
 

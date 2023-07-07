@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_05_004354) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_07_121332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -345,6 +345,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_05_004354) do
     t.string "dest_folder_id", limit: 255
     t.integer "error_count", default: 0, null: false
     t.string "filename_tag", limit: 8, null: false
+    t.integer "scanned_file_count", default: 0, null: false
     t.string "src_folder_id", limit: 255
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false

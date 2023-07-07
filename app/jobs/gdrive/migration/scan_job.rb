@@ -56,6 +56,7 @@ module GDrive
       end
 
       def process_file(gdrive_file)
+        operation.increment!(:scanned_file_count)
         migration_file = operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
           file.name = gdrive_file.name
           file.mime_type = gdrive_file.mime_type

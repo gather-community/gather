@@ -5,7 +5,7 @@ http_interactions:
     uri: https://www.googleapis.com/drive/v3/files/nonexistent/permissions?sendNotificationEmail=false&supportsAllDrives=true
     body:
       encoding: UTF-8
-      string: '{"emailAddress":"tomsmyth@gmail.com","role":"writer","type":"user"}'
+      string: '{"emailAddress":"example@gmail.com","role":"writer","type":"user"}'
     headers:
       User-Agent:
       - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)

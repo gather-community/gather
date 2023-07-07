@@ -61,7 +61,7 @@ http_interactions:
               "mimeType": "application/vnd.google-apps.document",
               "owners": [
                 {
-                  "emailAddress": "tomsmyth@gmail.com"
+                  "emailAddress": "example@gmail.com"
                 }
               ],
               "id": "1-WKonir69hemPEMX3ktXPuJYPHU1or0rGYtUbXKSQkw",
@@ -74,7 +74,7 @@ http_interactions:
               "mimeType": "application/vnd.google-apps.document",
               "owners": [
                 {
-                  "emailAddress": "tomsmyth@gmail.com"
+                  "emailAddress": "example@gmail.com"
                 }
               ],
               "id": "1StDG48lKzbEnlmE5BboPBQCfhSlqxDrReceXiKes1mo",

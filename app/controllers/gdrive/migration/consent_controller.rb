@@ -14,7 +14,7 @@ module GDrive
       prepend_before_action :set_current_community_from_query_string, except: :callback
 
       # This will get pulled from a model later.
-      TEMP_USER_ID = "tomsmyth@gmail.com"
+      TEMP_USER_ID = "example@gmail.com"
 
       def intro
         @config = MigrationConfig.find_by(community: current_community)

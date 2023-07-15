@@ -5,7 +5,8 @@ module GDrive
     # Ingests selected files by starring them and noting any unowned files.
     class ScanJob < BaseJob
       PAGE_SIZE = 100
-      MAX_ERRORS = 5
+      MIN_ERRORS_TO_CANCEL = 5
+      MAX_ERROR_RATIO = 0.02
 
       retry_on Google::Apis::ServerError
 
@@ -86,7 +87,8 @@ module GDrive
       def add_file_error(migration_file, type, message)
         migration_file.update!(status: "error", error_type: type, error_message: message)
         operation.increment!(:error_count)
-        if operation.error_count >= MAX_ERRORS
+        if operation.error_count >= MIN_ERRORS_TO_CANCEL &&
+            operation.error_count.to_f / operation.scanned_file_count > MAX_ERROR_RATIO
           cancel_operation(reason: "too_many_errors")
         end
       end

@@ -110,7 +110,7 @@ describe GDrive::Migration::ScanJob do
     let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
     before do
-      stub_const("#{described_class.name}::MAX_ERRORS", 1)
+      stub_const("#{described_class.name}::MIN_ERRORS_TO_CANCEL", 1)
     end
 
     it "cancels operation" do

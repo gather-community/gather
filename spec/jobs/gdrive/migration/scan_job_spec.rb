@@ -42,7 +42,11 @@ describe GDrive::Migration::ScanJob do
       page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
       expect(page_tokens.size).to eq(1)
 
-      enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs.map { |j| j["arguments"][0]["scan_task_id"] }
+      task_count = GDrive::Migration::ScanTask.count
+      expect(task_count).to eq(3)
+      enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-task_count..].map do |j|
+        j["arguments"][0]["scan_task_id"]
+      end
       expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
 
       expect(GDrive::Migration::File.all.map(&:name))

@@ -29,7 +29,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin about getting Google Drive set up.")
+          "Please talk to a Gather Admin.")
       end
     end
 
@@ -39,7 +39,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin about getting Google Drive set up.")
+          "Please talk to a Gather Admin.")
       end
     end
 
@@ -50,7 +50,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin about getting Google Drive set up.")
+          "Please talk to a Gather Admin.")
       end
     end
 
@@ -187,7 +187,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please contact a Gather staff member to get started.")
+          "Please contact Gather support to get started")
       end
     end
 
@@ -196,8 +196,8 @@ describe "gdrive browse", js: true do
 
       scenario "it shows message" do
         visit(gdrive_home_path)
-        expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "You can click 'Setup' above to get started.")
+        expect(page).to have_content("Your community is not yet connected to Google Drive.\n" \
+          "Please authenticate with Google")
       end
     end
 
@@ -208,8 +208,8 @@ describe "gdrive browse", js: true do
       context "when no shared drives present" do
         scenario "it shows message" do
           visit(gdrive_home_path)
-          expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-            "You can click 'Setup' above to get started.")
+          expect(page).to have_content("Your community does not have any linked Shared Drives. " \
+            "Please contact Gather support")
         end
       end
 
@@ -223,8 +223,8 @@ describe "gdrive browse", js: true do
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/admin_authorization_error") do
             visit(gdrive_home_path)
-            expect(page).to(have_content("There was an error connecting to Google Drive. " \
-              "Please click 'Setup' above to re-connect"))
+            expect(page).to(have_content("There was an error connecting to Google Drive.\n" \
+              "Please authenticate with Google"))
           end
         end
       end

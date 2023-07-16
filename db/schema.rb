@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_121332) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_16_130306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -340,6 +340,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_121332) do
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
     t.string "cancel_reason"
+    t.integer "cluster_id", null: false
     t.bigint "config_id", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
@@ -353,6 +354,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_121332) do
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
+    t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.string "folder_id", limit: 128, null: false
     t.bigint "operation_id", null: false

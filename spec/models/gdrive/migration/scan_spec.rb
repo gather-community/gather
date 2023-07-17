@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-describe GDrive::Migration::Operation do
+describe GDrive::Migration::Scan do
   it "has a valid factory" do
-    create(:gdrive_migration_operation)
+    create(:gdrive_migration_scan)
   end
 
   # Our approach to destruction is to:
@@ -19,25 +19,15 @@ describe GDrive::Migration::Operation do
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
   describe "destruction" do
-    let!(:operation) { create(:gdrive_migration_operation) }
+    let!(:scan) { create(:gdrive_migration_scan) }
 
-    context "with scan" do
-      let!(:scan) { create(:gdrive_migration_scan, operation: operation) }
+    context "with task" do
+      let!(:task) { create(:gdrive_migration_scan_task, scan: scan) }
 
-      it "destroys operation and scan" do
-        operation.destroy
-        expect(GDrive::Migration::Scan.count).to be_zero
-        expect { operation.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "with files" do
-      let!(:file) { create(:gdrive_migration_file, operation: operation) }
-
-      it "destroys operation and file" do
-        operation.destroy
-        expect(GDrive::Migration::File.count).to be_zero
-        expect { operation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      it "destroys scan and task" do
+        scan.destroy
+        expect(GDrive::Migration::ScanTask.count).to be_zero
+        expect { scan.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

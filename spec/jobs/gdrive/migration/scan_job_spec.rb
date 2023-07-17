@@ -12,6 +12,7 @@ describe GDrive::Migration::ScanJob do
     create(:gdrive_migration_operation, config: migration_config, dest_folder_id: "0AEFsHNu6aSRGUk9PVA",
       filename_tag: "TS", src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
   end
+  let!(:scan) { create(:gdrive_migration_scan, operation: operation) }
   let!(:existing_file) do
     # This file already exists and shouldn't get re-tagged or cause unique key collisions.
     create(:gdrive_migration_file, operation: operation, name: "File Root.1",
@@ -22,7 +23,7 @@ describe GDrive::Migration::ScanJob do
   end
 
   describe "happy path" do
-    let!(:scan_task) { operation.scan_tasks.create!(folder_id: operation.src_folder_id) }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
 
     before do
       stub_const("#{described_class.name}::PAGE_SIZE", 4)
@@ -52,18 +53,18 @@ describe GDrive::Migration::ScanJob do
       expect(GDrive::Migration::File.all.map(&:name))
         .to contain_exactly("File Root.1", "File Root.2", "Test A", "Test B")
 
-      operation.reload
-      expect(operation.scanned_file_count).to eq(4)
-      expect(operation.status).to eq("in_progress")
+      scan.reload
+      expect(scan.scanned_file_count).to eq(4)
+      expect(scan.status).to eq("in_progress")
     end
   end
 
   describe "when encounters unwritable file" do
-    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
     # We create this one so that the operation doesn't get marked complete, as an extra check on the
     # completeness-marking code.
-    let!(:scan_task2) { operation.scan_tasks.create!(folder_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_") }
+    let!(:scan_task2) { scan.scan_tasks.create!(folder_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_") }
 
     it "increments error count" do
       VCR.use_cassette("gdrive/migration/scan_job/single_error") do
@@ -77,13 +78,14 @@ describe GDrive::Migration::ScanJob do
       expect(unwritable_file.error_type).to eq("cant_edit")
       expect(unwritable_file.error_message).to eq("drive.admin@gocoho.net did not have edit permission")
 
-      expect(operation.reload.error_count).to eq(1)
-      expect(operation.reload.status).to eq("in_progress")
+      scan.reload
+      expect(scan.error_count).to eq(1)
+      expect(scan.status).to eq("in_progress")
     end
   end
 
   describe "when there are no more scan tasks left" do
-    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
     it "marks operation complete" do
       VCR.use_cassette("gdrive/migration/scan_job/no_more_tasks") do
@@ -91,12 +93,12 @@ describe GDrive::Migration::ScanJob do
       end
 
       expect(GDrive::Migration::ScanTask.count).to eq(0)
-      expect(operation.reload.status).to eq("complete")
+      expect(scan.reload.status).to eq("complete")
     end
   end
 
   describe "auth error" do
-    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
     it "cancels operation" do
       VCR.use_cassette("gdrive/migration/scan_job/auth_error") do
@@ -105,13 +107,14 @@ describe GDrive::Migration::ScanJob do
 
       expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
-      expect(operation.reload.status).to eq("cancelled")
-      expect(operation.cancel_reason).to eq("auth_error")
+      scan.reload
+      expect(scan.status).to eq("cancelled")
+      expect(scan.cancel_reason).to eq("auth_error")
     end
   end
 
   describe "when errors reach threshold" do
-    let!(:scan_task) { operation.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV") }
 
     before do
       stub_const("#{described_class.name}::MIN_ERRORS_TO_CANCEL", 1)
@@ -124,9 +127,10 @@ describe GDrive::Migration::ScanJob do
 
       expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
-      expect(operation.reload.error_count).to eq(1)
-      expect(operation.status).to eq("cancelled")
-      expect(operation.cancel_reason).to eq("too_many_errors")
+      scan.reload
+      expect(scan.error_count).to eq(1)
+      expect(scan.status).to eq("cancelled")
+      expect(scan.cancel_reason).to eq("too_many_errors")
     end
   end
 end

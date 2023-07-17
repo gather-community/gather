@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_16_130306) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_17_131740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -339,14 +339,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_130306) do
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
-    t.string "cancel_reason"
     t.integer "cluster_id", null: false
     t.bigint "config_id", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
-    t.integer "error_count", default: 0, null: false
     t.string "filename_tag", limit: 8, null: false
-    t.integer "scanned_file_count", default: 0, null: false
     t.string "src_folder_id", limit: 255
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
@@ -357,10 +354,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_130306) do
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.string "folder_id", limit: 128, null: false
-    t.bigint "operation_id", null: false
     t.text "page_token"
+    t.bigint "scan_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["operation_id"], name: "index_gdrive_migration_scan_tasks_on_operation_id"
+    t.index ["scan_id"], name: "index_gdrive_migration_scan_tasks_on_scan_id"
+  end
+
+  create_table "gdrive_migration_scans", force: :cascade do |t|
+    t.string "cancel_reason", limit: 128
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "error_count", default: 0, null: false
+    t.bigint "operation_id", null: false
+    t.integer "scanned_file_count", default: 0, null: false
+    t.string "scope", limit: 16, default: "full", null: false
+    t.string "status", limit: 32, default: "new", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
+    t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
   end
 
   create_table "gdrive_synced_permissions", force: :cascade do |t|
@@ -1159,7 +1170,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_130306) do
   add_foreign_key "gdrive_migration_files", "clusters"
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
-  add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_operations", column: "operation_id"
+  add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
+  add_foreign_key "gdrive_migration_scans", "clusters"
+  add_foreign_key "gdrive_migration_scans", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"

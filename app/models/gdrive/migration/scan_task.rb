@@ -5,7 +5,7 @@ module GDrive
     class ScanTask < ApplicationRecord
       acts_as_tenant :cluster
 
-      belongs_to :operation, inverse_of: :scan_tasks
+      belongs_to :scan, inverse_of: :scan_tasks
     end
   end
 end

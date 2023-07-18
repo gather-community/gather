@@ -133,4 +133,41 @@ describe GDrive::Migration::ScanJob do
       expect(scan.cancel_reason).to eq("too_many_errors")
     end
   end
+
+  describe "delta scan" do
+    let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "delta") }
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
+
+    before do
+      stub_const("#{described_class.name}::PAGE_SIZE", 4)
+    end
+
+    it "paginates but does not schedule other scans" do
+      VCR.use_cassette("gdrive/migration/scan_job/happy_path_delta") do
+        expect { perform_job }.to have_enqueued_job(described_class).exactly(1).times
+      end
+
+      # Original task should be deleted new task for the next
+      # page of the top folder should get added too. But no new folders should get scanned.
+      folder_ids = GDrive::Migration::ScanTask.all.map(&:folder_id)
+      expect(folder_ids).to contain_exactly("1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
+
+      page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
+      expect(page_tokens.size).to eq(1)
+
+      task_count = GDrive::Migration::ScanTask.count
+      expect(task_count).to eq(1)
+      enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-task_count..].map do |j|
+        j["arguments"][0]["scan_task_id"]
+      end
+      expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
+
+      expect(GDrive::Migration::File.all.map(&:name))
+        .to contain_exactly("File Root.1", "File Root.2", "Test A", "Test B")
+
+      scan.reload
+      expect(scan.scanned_file_count).to eq(4)
+      expect(scan.status).to eq("in_progress")
+    end
+  end
 end

@@ -13,6 +13,10 @@ module GDrive
       def cancelled?
         status == "cancelled"
       end
+
+      def delta?
+        scope == "delta"
+      end
     end
   end
 end

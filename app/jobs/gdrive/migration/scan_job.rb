@@ -66,6 +66,7 @@ module GDrive
           file.status = "pending"
         end
         if migration_file.folder?
+          return if scan.delta?
           scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else

@@ -62,7 +62,7 @@ describe "nav menu" do
 
     scenario "shows home community subdomain" do
       # This page does not redirect to a subdomain
-      visit("/gdrive/setup/auth?community_id=#{community.id}")
+      visit("/gdrive/migration/consent?community_id=#{community.id}")
       expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://foo.gatherdev.org:31337/users")
     end
   end

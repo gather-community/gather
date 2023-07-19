@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_17_131740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -261,19 +261,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
-    t.string "api_key", null: false
-    t.string "client_id", null: false
-    t.string "client_secret", null: false
+    t.string "api_key"
+    t.string "client_id"
+    t.string "client_secret"
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
-    t.string "folder_id", limit: 128
-    t.string "org_user_id", limit: 255, null: false
+    t.string "org_user_id", limit: 255
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
     t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (api_key IS NOT NULL)", name: "api_key_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_id IS NOT NULL)", name: "client_id_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_secret IS NOT NULL)", name: "client_secret_non_null_if_main"
+    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
   create_table "gdrive_file_ingestion_batches", force: :cascade do |t|
@@ -316,6 +319,61 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
+  create_table "gdrive_migration_files", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.string "error_message", limit: 255
+    t.string "error_type"
+    t.string "external_id", null: false
+    t.string "mime_type", limit: 255, null: false
+    t.text "name", null: false
+    t.bigint "operation_id", null: false
+    t.string "owner", null: false
+    t.string "status", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
+    t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
+    t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
+    t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'cant_edit'::character varying::text])", name: "error_type_enum"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'error'::character varying, 'declined'::character varying, 'done'::character varying]::text[])", name: "status_enum"
+  end
+
+  create_table "gdrive_migration_operations", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.bigint "config_id", null: false
+    t.datetime "created_at", null: false
+    t.string "dest_folder_id", limit: 255
+    t.string "filename_tag", limit: 8, null: false
+    t.string "src_folder_id", limit: 255
+    t.string "status", default: "new", null: false
+    t.datetime "updated_at", null: false
+    t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
+  end
+
+  create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
+    t.integer "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.string "folder_id", limit: 128, null: false
+    t.text "page_token"
+    t.bigint "scan_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scan_id"], name: "index_gdrive_migration_scan_tasks_on_scan_id"
+  end
+
+  create_table "gdrive_migration_scans", force: :cascade do |t|
+    t.string "cancel_reason", limit: 128
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "error_count", default: 0, null: false
+    t.bigint "operation_id", null: false
+    t.integer "scanned_file_count", default: 0, null: false
+    t.string "scope", limit: 16, default: "full", null: false
+    t.string "status", limit: 32, default: "new", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
+    t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
+  end
+
   create_table "gdrive_synced_permissions", force: :cascade do |t|
     t.string "access_level", limit: 32, null: false
     t.bigint "cluster_id", null: false
@@ -340,19 +398,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_tokens_on_cluster_id"
     t.index ["gdrive_config_id"], name: "index_gdrive_tokens_on_gdrive_config_id"
-  end
-
-  create_table "gdrive_unowned_files", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.jsonb "data", null: false
-    t.string "external_id", null: false
-    t.bigint "gdrive_config_id", null: false
-    t.string "owner", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_gdrive_unowned_files_on_cluster_id"
-    t.index ["gdrive_config_id", "external_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id_and_external_id", unique: true
-    t.index ["gdrive_config_id"], name: "index_gdrive_unowned_files_on_gdrive_config_id"
   end
 
   create_table "group_affiliations", force: :cascade do |t|
@@ -1122,11 +1167,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_153051) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
+  add_foreign_key "gdrive_migration_files", "clusters"
+  add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
+  add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
+  add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
+  add_foreign_key "gdrive_migration_scans", "clusters"
+  add_foreign_key "gdrive_migration_scans", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"
-  add_foreign_key "gdrive_unowned_files", "clusters"
-  add_foreign_key "gdrive_unowned_files", "gdrive_configs"
   add_foreign_key "group_affiliations", "clusters"
   add_foreign_key "group_affiliations", "communities"
   add_foreign_key "group_affiliations", "groups"

@@ -1,0 +1,135 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=4&q=%271FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq%27%20in%20parents&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Wed, 05 Jul 2023 00:48:44 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.a0AbVbY6NcC4BtSBJNPImEKwhMKJFpXKW_4jSbotxJ8E49GqWPLbXD2NyTqlwVbJP8pC3yWHE3UfhUIhbOFIMxkXmD_HFYyODpai1A8sEJs3ER8l3Te4MCUR-clHiaP6T054enWkv5zgNozx-wXsSQ0Ptv88LIaCgYKAeASARESFQFWKvPl14ksQIJ63x4y-QHtFV7Myw0163
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Date:
+      - Wed, 05 Jul 2023 00:48:44 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "{\n  \"nextPageToken\": \"~!!~AI9FV7Q-mZQq7pCjYEpVoExuii3bMG_41rP7hD_b0M5kD_V3VBmbwRvz_H23t_1b4y4LlcbEr40shisJN59xFAFyx12xrqdSaEHt23AdgrR0wGuKASPS32OW2hYD0e6MDBFq5EDrHEcBzLrtSVPTGf_ORllCigdH2GKwMm28U44ZJ8m4dhNccJkbWFXpodL6nGnZMk5TRYDJ5_Jazb9GQs23jB-AoAnSNjgh7WZtpGEAVV0BE0xXYOynP1t26-f9j6FyekPYSkijCDDnWLXF8pcMgfR_54XVGQfLUqz8u6Myat3ewrLW-1k1ICU0YCX-5_BfwrDZe5TdBYZUDI5X_A-7_nsct-eIzQ==\",\n
+        \ \"files\": [\n    {\n      \"mimeType\": \"application/vnd.google-apps.folder\",\n
+        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
+        \       }\n      ],\n      \"id\": \"1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_\",\n
+        \     \"name\": \"Test A\",\n      \"capabilities\": {\n        \"canEdit\":
+        true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.folder\",\n
+        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
+        \       }\n      ],\n      \"id\": \"1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV\",\n
+        \     \"name\": \"Test B\",\n      \"capabilities\": {\n        \"canEdit\":
+        true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.document\",\n
+        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
+        \       }\n      ],\n      \"id\": \"1dLoyEGGapNBqeZaS5_rNV6tZiq9fbBqNkxgGmJlTVzs\",\n
+        \     \"name\": \"File Root.1 [\U0001F69ATS]\",\n      \"capabilities\": {\n
+        \       \"canEdit\": true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.document\",\n
+        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
+        \       }\n      ],\n      \"id\": \"176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y\",\n
+        \     \"name\": \"File Root.2\",\n      \"capabilities\": {\n        \"canEdit\":
+        true\n      }\n    }\n  ]\n}\n"
+    http_version:
+  recorded_at: Wed, 05 Jul 2023 00:48:44 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y
+    body:
+      encoding: UTF-8
+      string: "{\"name\":\"File Root.2 [\U0001F69ATS]\"}"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Wed, 05 Jul 2023 00:48:44 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AbVbY6NcC4BtSBJNPImEKwhMKJFpXKW_4jSbotxJ8E49GqWPLbXD2NyTqlwVbJP8pC3yWHE3UfhUIhbOFIMxkXmD_HFYyODpai1A8sEJs3ER8l3Te4MCUR-clHiaP6T054enWkv5zgNozx-wXsSQ0Ptv88LIaCgYKAeASARESFQFWKvPl14ksQIJ63x4y-QHtFV7Myw0163
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Wed, 05 Jul 2023 00:48:45 GMT
+      Vary:
+      - Origin, X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "{\n  \"kind\": \"drive#file\",\n  \"id\": \"176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y\",\n
+        \ \"name\": \"File Root.2 [\U0001F69ATS]\",\n  \"mimeType\": \"application/vnd.google-apps.document\"\n}\n"
+    http_version:
+  recorded_at: Wed, 05 Jul 2023 00:48:45 GMT
+recorded_with: VCR 4.0.0

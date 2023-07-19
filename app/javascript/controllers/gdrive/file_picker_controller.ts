@@ -7,7 +7,7 @@ export default class extends Controller<HTMLFormElement> {
     apiKey: String,
     accessToken: String,
     rootFolderId: String,
-    ingestFilesUrl: String,
+    ingestUrl: String,
     testMode: Boolean
   };
 
@@ -15,13 +15,14 @@ export default class extends Controller<HTMLFormElement> {
   declare apiKeyValue: string;
   declare accessTokenValue: string;
   declare rootFolderIdValue: string;
-  declare ingestFilesUrlValue: string;
+  declare ingestUrlValue: string;
   declare testModeValue: boolean;
   declare gapiLoaded: boolean;
 
   connect(): void {
     gapi.load("picker", () => {
       this.gapiLoaded = true;
+      this.showPicker();
     });
   }
 
@@ -34,8 +35,8 @@ export default class extends Controller<HTMLFormElement> {
     view.setIncludeFolders(true);
     view.setSelectFolderEnabled(true);
     view.setMode(google.picker.DocsViewMode.LIST);
-    view.setParent(this.rootFolderIdValue);
-    view.setQuery("-is:starred");
+    // view.setParent("1ag0wl1RWHigAz65IPuu8cooeuqgwYNg-");
+    view.setQuery("owner:me [TS_🚚]");
 
     const picker = new google.picker.PickerBuilder()
       .enableFeature(google.picker.Feature.NAV_HIDDEN)
@@ -43,8 +44,8 @@ export default class extends Controller<HTMLFormElement> {
       .setAppId(this.appId)
       .setOAuthToken(this.accessTokenValue)
       .addView(view)
-      .setTitle("Please select files for Gather to use")
-      .setMaxItems(1000)
+      .setTitle("Please select files to transfer to the Shared Drive")
+      .setMaxItems(100)
       .setDeveloperKey(this.apiKeyValue)
       .setCallback(this.callback.bind(this))
       .build();
@@ -53,7 +54,7 @@ export default class extends Controller<HTMLFormElement> {
 
   callback(data: {docs:[{id: string}], action: string}): void {
     if (data.action === google.picker.Action.PICKED) {
-      jsonFetch(this.ingestFilesUrlValue, {
+      jsonFetch(this.ingestUrlValue, {
         method: "PUT",
         body: {picked: data}
       });

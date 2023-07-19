@@ -1,0 +1,141 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 06 Jul 2023 12:12:56 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.a0AbVbY6NnplfOPO7T1LtXlCVGjFVDA3M9fOekX8V2dm2IqvtgBM-ebCCVRFN0OFdNJ6kK3RQSfT186uICC7y26PR0kWgCwZfrDCzITw7D9JTQ-GFTYJUm8RBaz-ewv_nNktFmhAuA93J49-jINmcZq9hocl5XaCgYKAW8SARESFQFWKvPlSK2jbSqH5seNBkh6PO33ag0163
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error="invalid_token"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Thu, 06 Jul 2023 12:12:56 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 401,
+            "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+            "errors": [
+              {
+                "message": "Invalid Credentials",
+                "domain": "global",
+                "reason": "authError",
+                "location": "Authorization",
+                "locationType": "header"
+              }
+            ],
+            "status": "UNAUTHENTICATED"
+          }
+        }
+    http_version:
+  recorded_at: Thu, 06 Jul 2023 12:12:56 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 06 Jul 2023 12:12:57 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.32.0
+      Authorization:
+      - Bearer ya29.a0AbVbY6NnplfOPO7T1LtXlCVGjFVDA3M9fOekX8V2dm2IqvtgBM-ebCCVRFN0OFdNJ6kK3RQSfT186uICC7y26PR0kWgCwZfrDCzITw7D9JTQ-GFTYJUm8RBaz-ewv_nNktFmhAuA93J49-jINmcZq9hocl5XaCgYKAW8SARESFQFWKvPlSK2jbSqH5seNBkh6PO33ag0163
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Www-Authenticate:
+      - Bearer realm="https://accounts.google.com/", error="invalid_token"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Date:
+      - Thu, 06 Jul 2023 12:12:57 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 401,
+            "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+            "errors": [
+              {
+                "message": "Invalid Credentials",
+                "domain": "global",
+                "reason": "authError",
+                "location": "Authorization",
+                "locationType": "header"
+              }
+            ],
+            "status": "UNAUTHENTICATED"
+          }
+        }
+    http_version:
+  recorded_at: Thu, 06 Jul 2023 12:12:57 GMT
+recorded_with: VCR 4.0.0

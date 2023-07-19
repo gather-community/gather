@@ -2,10 +2,9 @@
 
 require "rails_helper"
 
-describe GDrive::Config do
+describe GDrive::MainConfig do
   it "has valid factory" do
     create(:gdrive_main_config, org_user_id: "a@example.com")
-    create(:gdrive_migration_config, org_user_id: "b@example.com")
   end
 
   # Our approach to destruction is to:
@@ -20,7 +19,7 @@ describe GDrive::Config do
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
   describe "destruction" do
-    let!(:config) { create(:gdrive_migration_config) }
+    let!(:config) { create(:gdrive_main_config) }
 
     context "with token" do
       let!(:token) { create(:gdrive_token, gdrive_config: config) }
@@ -28,26 +27,6 @@ describe GDrive::Config do
       it "destroys config and token" do
         config.destroy
         expect(GDrive::Token.count).to be_zero
-        expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "with file ingestion batch" do
-      let!(:batch) { create(:gdrive_file_ingestion_batch, gdrive_config: config) }
-
-      it "destroys config and batch" do
-        config.destroy
-        expect(GDrive::FileIngestionBatch.count).to be_zero
-        expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "with unowned file" do
-      let!(:unowned_file) { create(:gdrive_unowned_file, gdrive_config: config) }
-
-      it "destroys config and unowned file" do
-        config.destroy
-        expect(GDrive::UnownedFile.count).to be_zero
         expect { config.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

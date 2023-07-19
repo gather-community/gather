@@ -75,7 +75,7 @@ http_interactions:
     uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-0Uk9PVA/permissions?sendNotificationEmail=false&supportsAllDrives=true
     body:
       encoding: UTF-8
-      string: '{"emailAddress":"tomsmyth@gmail.com","role":"reader","type":"user"}'
+      string: '{"emailAddress":"example@gmail.com","role":"reader","type":"user"}'
     headers:
       User-Agent:
       - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)

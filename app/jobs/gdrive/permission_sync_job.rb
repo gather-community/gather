@@ -2,7 +2,7 @@
 
 module GDrive
   # Parent class for permission sync jobs.
-  class PermissionSyncJob < ApplicationJob
+  class PermissionSyncJob < BaseJob
     protected
 
     attr_accessor :community, :wrapper
@@ -62,12 +62,8 @@ module GDrive
 
     private
 
-    def drive_service
-      wrapper.service
-    end
-
     def create_permission(permission)
-      result = drive_service.create_permission(
+      result = wrapper.create_permission(
         permission.item_external_id,
         Google::Apis::DriveV3::Permission.new(
           email_address: permission.google_email,
@@ -92,7 +88,7 @@ module GDrive
     end
 
     def update_permission_access_level(permission)
-      drive_service.update_permission(
+      wrapper.update_permission(
         permission.item_external_id,
         permission.external_id,
         Google::Apis::DriveV3::Permission.new(
@@ -113,7 +109,7 @@ module GDrive
     end
 
     def destroy_permission(permission)
-      drive_service.delete_permission(permission.item_external_id, permission.external_id,
+      wrapper.delete_permission(permission.item_external_id, permission.external_id,
         supports_all_drives: true)
       permission.destroy
     rescue Google::Apis::ClientError => error

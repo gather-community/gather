@@ -22,7 +22,10 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     GDrive::ItemGroup
     GDrive::SyncedPermission
     GDrive::Token
-    GDrive::UnownedFile
+    GDrive::Migration::File
+    GDrive::Migration::Operation
+    GDrive::Migration::Scan
+    GDrive::Migration::ScanTask
     Groups::Mailman::List
     Groups::Mailman::User
     Meals::Import

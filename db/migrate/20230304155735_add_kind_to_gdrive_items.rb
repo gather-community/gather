@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddKindToGDriveItems < ActiveRecord::Migration[7.0]
   def change
     add_column :gdrive_items, :kind, :string, index: true

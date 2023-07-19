@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-describe GDrive::UnownedFile do
+describe GDrive::Migration::ScanTask do
   it "has a valid factory" do
-    create(:gdrive_unowned_file)
+    create(:gdrive_migration_scan_task)
   end
 end

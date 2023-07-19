@@ -19,7 +19,7 @@ describe GDrive::PermissionSyncJob do
     let!(:config) { create(:gdrive_main_config, org_user_id: "drive.admin@gocoho.net") }
     let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "drive.admin@gocoho.net", access_token: "ya29.a0Ael9sCMPTeNxxkfXMuruUgqNWNWGhiGWo52QnzdUV6ibuveSYkFcc0cEpdXSB4Yxq_w8CgXewkrKc3ieM-zvCHjdGaG-xVmnFKHJNVURD7agjGJ8PDKJPA6RXtcF-VeIrSwaoF3_n_xlx_IzN7cIIV7yHKyNkbLo-AaCgYKAR0SARESFQF4udJh78dP-tj8BtC-ilrCan06jw0169") }
     let!(:item) { create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA") }
-    let!(:user) { create(:user, google_email: "tomsmyth@gmail.com") }
+    let!(:user) { create(:user, google_email: "example@gmail.com") }
 
     describe "creation failure" do
       context "due to item not found" do

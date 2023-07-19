@@ -13,8 +13,10 @@ module GDrive
         return
       end
 
-      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
+      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
+        callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
       unless wrapper.has_credentials?
+        setup_auth_url(wrapper: wrapper)
         # If there are any items then this community has probably connected before but maybe
         # their refresh token expired, so we don't want to say they're not yet connected or they
         # might freak out.
@@ -86,12 +88,18 @@ module GDrive
       raise ArgumentError, "Invalid ID #{gdrive_id}" unless /\A[A-Za-z0-9_-]*\z/.match?(gdrive_id)
     end
 
+    def setup_auth_url(wrapper:)
+      state = {community_id: current_community.id}
+      @auth_url = wrapper.get_authorization_url(request: request, state: state,
+        redirect_to: gdrive_home_url)
+    end
+
     def find_ancestors(wrapper:, multiple_drives:, folder_id: nil, drive_id: nil)
       ancestors = []
       if folder_id
         ancestor_id = folder_id
         loop do
-          folder = wrapper.service.get_file(ancestor_id, fields: "id,name,parents,driveId",
+          folder = wrapper.get_file(ancestor_id, fields: "id,name,parents,driveId",
             supports_all_drives: true)
           ancestors.unshift(folder)
           # If parent ID is the drive ID, we can stop searching.
@@ -112,7 +120,7 @@ module GDrive
     end
 
     def list_files(wrapper, parent_id)
-      wrapper.service.list_files(q: "'#{parent_id}' in parents",
+      wrapper.list_files(q: "'#{parent_id}' in parents",
         fields: "files(id,name,mimeType,iconLink,webViewLink)",
         order_by: "folder,name",
         supports_all_drives: true,

@@ -1,7 +1,8 @@
 <% content_for(:title) { "Google Drive" } %>
 <% content_for(:action_links) do %>
   <% if @setup_policy.setup? %>
-    <% if @config && !@no_credentials && !@no_drives && !@authorization_error %>
+    <% if FeatureFlag.lookup(:gdrive_migration).on?(current_user) &&
+            @config && !@no_credentials && !@no_drives && !@authorization_error %>
       <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_path,
             class: "btn btn-default") %>
     <% end %>

@@ -8,6 +8,9 @@ module GDrive
       MIN_ERRORS_TO_CANCEL = 5
       MAX_ERROR_RATIO = 0.02
 
+      # If we get a not found error trying to find one of these, we should just terminate gracefully.
+      DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
+
       retry_on Google::Apis::ServerError
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation
@@ -22,6 +25,11 @@ module GDrive
           do_scan_task
           check_for_completeness
         end
+      rescue ActiveRecord::RecordNotFound => error
+        class_name = error.message.match(/Couldn't find (.+) with/).captures[0]
+        raise unless DISAPPEARABLE_CLASSES.include?(class_name)
+        Rails.logger.info(error.message)
+        Rails.logger.info("Exiting gracefully")
       end
 
       private

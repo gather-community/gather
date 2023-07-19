@@ -18,7 +18,7 @@ describe GDrive::Migration::ScanJob do
     create(:gdrive_migration_file, operation: operation, name: "File Root.1",
       external_id: "1dLoyEGGapNBqeZaS5_rNV6tZiq9fbBqNkxgGmJlTVzs")
   end
-  subject(:job) do
+  subject!(:job) do
     described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id)
   end
 
@@ -168,6 +168,18 @@ describe GDrive::Migration::ScanJob do
       scan.reload
       expect(scan.scanned_file_count).to eq(4)
       expect(scan.status).to eq("in_progress")
+    end
+  end
+
+  describe "ScanTask disappears" do
+    let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
+
+    before do
+      scan_task.destroy
+    end
+
+    it "terminates gracefully and makes no network calls" do
+      perform_job
     end
   end
 end

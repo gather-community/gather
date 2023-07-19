@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_131740) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_19_233542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -335,7 +335,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_131740) do
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'cant_edit'::character varying::text])", name: "error_type_enum"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'error'::character varying, 'declined'::character varying, 'done'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|

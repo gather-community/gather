@@ -8,6 +8,12 @@ module GDrive
 
       belongs_to :operation, class_name: "GDrive::Migration::Operation", inverse_of: :files
 
+      scope :pending, -> { where(status: "pending") }
+      scope :transferred, -> { where(status: "transferred") }
+      scope :copied, -> { where(status: "copied") }
+      scope :declined, -> { where(status: "declined") }
+      scope :errored, -> { where(status: "errored") }
+
       def folder?
         mime_type == GDrive::FOLDER_MIME_TYPE
       end

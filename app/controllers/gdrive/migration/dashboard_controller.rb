@@ -11,6 +11,7 @@ module GDrive
         @migration_config = MigrationConfig.find_by(community: current_community)
         @operation = @migration_config.operations.order(created_at: :desc).first
         @latest_scan = @operation.scans.order(created_at: :desc).first
+        @stats = Stats.new(operation: @operation)
       end
     end
   end

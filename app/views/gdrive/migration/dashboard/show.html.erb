@@ -3,3 +3,12 @@
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("synopsis") %>
 </div>
+
+<table>
+  <tr><td>Total Files</td><td><%= number_with_delimiter(@stats.total) %></td></tr>
+  <tr><td>Files Pending</td><td><%= number_with_delimiter(@stats.pending) %></td></tr>
+  <tr><td>Files Transferred</td><td><%= number_with_delimiter(@stats.transferred) %></td></tr>
+  <tr><td>Files Copied</td><td><%= number_with_delimiter(@stats.copied) %></td></tr>
+  <tr><td>Files Declined</td><td><%= number_with_delimiter(@stats.declined) %></td></tr>
+  <tr><td>Files with Errors</td><td><%= number_with_delimiter(@stats.errored) %></td></tr>
+</table>

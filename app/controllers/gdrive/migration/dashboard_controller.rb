@@ -7,6 +7,10 @@ module GDrive
 
       def show
         authorize(current_community, :setup?, policy_class: SetupPolicy)
+        @main_config = MainConfig.find_by(community: current_community)
+        @migration_config = MigrationConfig.find_by(community: current_community)
+        @operation = @migration_config.operations.order(created_at: :desc).first
+        @latest_scan = @operation.scans.order(created_at: :desc).first
       end
     end
   end

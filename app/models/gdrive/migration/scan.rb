@@ -14,6 +14,14 @@ module GDrive
         status == "cancelled"
       end
 
+      def in_progress?
+        status == "in_progress"
+      end
+
+      def complete?
+        status == "complete"
+      end
+
       def delta?
         scope == "delta"
       end

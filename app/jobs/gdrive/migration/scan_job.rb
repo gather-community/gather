@@ -83,6 +83,7 @@ module GDrive
       end
 
       def ensure_filename_tag(gdrive_file, migration_file)
+        return if scan.dry_run?
         return if gdrive_file.name.ends_with?(filename_suffix)
 
         if gdrive_file.capabilities.can_edit

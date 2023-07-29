@@ -6,7 +6,7 @@ module GDrive
     class ScanJob < BaseJob
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
-      MAX_ERROR_RATIO = 0.02
+      MAX_ERROR_RATIO = 0.05
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
@@ -83,10 +83,10 @@ module GDrive
       end
 
       def ensure_filename_tag(gdrive_file, migration_file)
-        return if scan.dry_run?
         return if gdrive_file.name.ends_with?(filename_suffix)
 
         if gdrive_file.capabilities.can_edit
+          return if scan.dry_run?
           new_name = "#{gdrive_file.name}#{filename_suffix}"
           wrapper.update_file(gdrive_file.id, Google::Apis::DriveV3::File.new(name: new_name))
         else
@@ -96,7 +96,7 @@ module GDrive
       end
 
       def add_file_error(migration_file, type, message)
-        migration_file.update!(status: "error", error_type: type, error_message: message)
+        migration_file.update!(status: "errored", error_type: type, error_message: message)
         scan.increment!(:error_count)
         if scan.error_count >= MIN_ERRORS_TO_CANCEL &&
             scan.error_count.to_f / scan.scanned_file_count > MAX_ERROR_RATIO

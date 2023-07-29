@@ -12,6 +12,7 @@ module GDrive
         @operation = @migration_config.operations.order(created_at: :desc).first
         @latest_scan = @operation.scans.order(created_at: :desc).first
         @stats = Stats.new(operation: @operation)
+        @files = @operation.files.page(params[:page])
       end
     end
   end

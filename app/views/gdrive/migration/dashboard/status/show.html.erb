@@ -1,0 +1,15 @@
+<% content_for(:title) { "Google Drive Migration" } %>
+
+<div class="synopsis gdrive-migration-synopsis">
+  <%= render("gdrive/migration/dashboard/synopsis") %>
+</div>
+
+<table>
+  <tr><td>Total Files</td><td><%= number_with_delimiter(@stats.total) %></td></tr>
+  <tr><td>Files Pending</td><td><%= number_with_delimiter(@stats.by_status["pending"]) %></td></tr>
+  <tr><td>Files Declined</td><td><%= number_with_delimiter(@stats.by_status["declined"]) %></td></tr>
+  <tr><td>Files Errored</td><td><%= number_with_delimiter(@stats.by_status["errored"]) %></td></tr>
+  <tr><td>Files Transferred</td><td><%= number_with_delimiter(@stats.by_status["transferred"]) %></td></tr>
+  <tr><td>Files Copied</td><td><%= number_with_delimiter(@stats.by_status["copied"]) %></td></tr>
+  <tr><td>Files Ignored</td><td><%= number_with_delimiter(@stats.by_status["ignored"]) %></td></tr>
+</table>

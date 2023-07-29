@@ -1,0 +1,31 @@
+<% content_for(:title) { "Google Drive Migration" } %>
+
+<div class="synopsis gdrive-migration-synopsis">
+  <%= render("gdrive/migration/dashboard/synopsis") %>
+</div>
+
+<h2>Files</h2>
+<table class="full-width">
+  <tr>
+    <th>Name</th>
+    <th>Owner</th>
+    <th>Type</th>
+    <th>Status</th>
+    <th>Error</th>
+  </tr>
+  <% @files.each do |file| %>
+    <tr>
+      <td><%= file.name %></td>
+      <td><%= file.owner %></td>
+      <td><%= file.mime_type %></td>
+      <td><%= file.status %></td>
+      <td>
+        <% if file.error_type %>
+          <%= file.error_type %>: <%= file.error_message %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= paginate @files %>

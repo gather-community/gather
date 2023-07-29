@@ -310,17 +310,22 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
-        elsif context[0..2] == %i[wiki gdrive migration]
-          depth = 3
+        elsif context[0..3] == %i[wiki gdrive migration dashboard]
+          depth = 4
           [{
-            name: :auth,
-            parents: %i[wiki gdrive migration],
-            path: h.gdrive_migration_auth_url(host: Settings.url.host, community_id: community.id),
+            name: :status,
+            parents: %i[wiki gdrive migration dashboard],
+            path: h.gdrive_migration_dashboard_status_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }, {
-            name: :file_selection,
-            parents: %i[wiki gdrive migration],
-            path: h.gdrive_migration_file_selection_url(host: Settings.url.host, community_id: community.id),
+            name: :owners,
+            parents: %i[wiki gdrive migration dashboard],
+            path: h.gdrive_migration_dashboard_owners_path,
+            permitted: GDrive::SetupPolicy.new(user, community).setup?
+          }, {
+            name: :files,
+            parents: %i[wiki gdrive migration dashboard],
+            path: h.gdrive_migration_dashboard_files_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }]
         end

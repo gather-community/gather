@@ -5,7 +5,7 @@
 <% elsif @latest_scan.in_progress? %>
   File scan in progress. <%= number_with_delimiter(@latest_scan.scanned_file_count) %> files scanned so far.
 <% elsif @latest_scan.complete? %>
-  File scan is complete. Monitoring for changes. Please use dashboard below to proceed with the migration.
+  File scan is complete. Monitoring for changes.
 <% elsif @latest_scan.cancelled? %>
   <% case @latest_scan.cancel_reason %>
   <% when "auth_error" %>

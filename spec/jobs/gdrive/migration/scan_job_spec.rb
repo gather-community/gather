@@ -74,7 +74,7 @@ describe GDrive::Migration::ScanJob do
       expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
       unwritable_file = GDrive::Migration::File.find_by(external_id: "1StDG48lKzbEnlmE5BboPBQCfhSlqxDrReceXiKes1mo")
-      expect(unwritable_file.status).to eq("error")
+      expect(unwritable_file.status).to eq("errored")
       expect(unwritable_file.error_type).to eq("cant_edit")
       expect(unwritable_file.error_message).to eq("drive.admin@gocoho.net did not have edit permission")
 

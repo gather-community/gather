@@ -17,7 +17,7 @@
   </tr>
   <% @stats.owners.each do |owner| %>
     <tr>
-      <td><%= owner %></td>
+      <td><%= link_to(owner, gdrive_migration_dashboard_files_path(owner: owner)) %></td>
       <td><%= number_with_delimiter(@stats.by_owner[owner]) %></td>
       <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "pending"]]) %></td>
       <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "declined"]]) %></td>

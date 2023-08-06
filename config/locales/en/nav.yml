@@ -37,7 +37,7 @@ en:
         migration:
           dashboard:
             status: "Status"
-            owners: "File Owners"
+            owners: "Owners"
             files: "Files"
     work:
       _self: "Work"

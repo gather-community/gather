@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_23_145455) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_06_165733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -325,12 +325,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_23_145455) do
     t.string "error_message", limit: 255
     t.string "error_type"
     t.string "external_id", null: false
+    t.string "icon_link", null: false
     t.string "mime_type", limit: 255, null: false
+    t.datetime "modified_at", null: false
     t.text "name", null: false
     t.bigint "operation_id", null: false
     t.string "owner", null: false
     t.string "status", null: false
     t.datetime "updated_at", null: false
+    t.string "web_view_link", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"

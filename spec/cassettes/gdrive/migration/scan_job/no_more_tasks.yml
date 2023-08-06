@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''
@@ -59,6 +59,9 @@ http_interactions:
           "files": [
             {
               "mimeType": "application/vnd.google-apps.document",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
               "owners": [
                 {
                   "emailAddress": "example@gmail.com"
@@ -72,6 +75,9 @@ http_interactions:
             },
             {
               "mimeType": "application/vnd.google-apps.document",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
               "owners": [
                 {
                   "emailAddress": "example@gmail.com"
@@ -141,8 +147,13 @@ http_interactions:
       - chunked
     body:
       encoding: UTF-8
-      string: "{\n  \"kind\": \"drive#file\",\n  \"id\": \"1-WKonir69hemPEMX3ktXPuJYPHU1or0rGYtUbXKSQkw\",\n
-        \ \"name\": \"File B.1 [\U0001F69ATS]\",\n  \"mimeType\": \"application/vnd.google-apps.document\"\n}\n"
+      string: |
+        {
+          "kind": "drive#file",
+          "id": "1-WKonir69hemPEMX3ktXPuJYPHU1or0rGYtUbXKSQkw",
+          "name": "File B.1 [U0001F69ATS]",
+          "mimeType": "application/vnd.google-apps.document"
+        }
     http_version:
   recorded_at: Wed, 05 Jul 2023 13:26:11 GMT
 recorded_with: VCR 4.0.0

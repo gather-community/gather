@@ -37,7 +37,7 @@ module GDrive
       def do_scan_task
         file_list = wrapper.list_files(
           q: "'#{scan_task.folder_id}' in parents",
-          fields: "files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken",
+          fields: "files(id,name,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
           order_by: "folder,name",
           supports_all_drives: true,
           page_token: scan_task.page_token,
@@ -72,6 +72,9 @@ module GDrive
           file.mime_type = gdrive_file.mime_type
           file.owner = gdrive_file.owners[0].email_address
           file.status = "pending"
+          file.icon_link = gdrive_file.icon_link
+          file.web_view_link = gdrive_file.web_view_link
+          file.modified_at = gdrive_file.modified_time
         end
         if migration_file.folder?
           return if scan.delta?

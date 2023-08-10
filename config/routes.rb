@@ -264,7 +264,7 @@ Rails.application.routes.draw do
 
     namespace :migration do
       namespace :dashboard do
-        get "/", to: redirect("/gdrive/migration/dashboard/status")
+        get "/", to: redirect("/gdrive/migration/dashboard/status"), as: :home
         get "status", to: "status#show", as: :status
         get "owners", to: "owners#index", as: :owners
         get "files", to: "files#index", as: :files

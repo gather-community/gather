@@ -93,12 +93,11 @@ group :development, :test do
   gem "rspec-rails", "~> 4.0"
   gem "rubocop", "~> 1.0"
   gem "rubocop-rails", "2.9"
-  gem "selenium-webdriver", "~> 3.0"
+  gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"
   gem "standard", "~> 1.24"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
-  gem "webdrivers", "~> 4.0"
   gem "webmock", "~> 3.1"
 
   # Great for debugging i18n paths. Uncomment temporarily when neeeded.

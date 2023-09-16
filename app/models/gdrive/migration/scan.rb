@@ -10,8 +10,20 @@ module GDrive
       belongs_to :operation, inverse_of: :scans
       has_many :scan_tasks, inverse_of: :scan, dependent: :destroy
 
+      def new?
+        status == "new"
+      end
+
       def cancelled?
         status == "cancelled"
+      end
+
+      def in_progress?
+        status == "in_progress"
+      end
+
+      def complete?
+        status == "complete"
       end
 
       def delta?

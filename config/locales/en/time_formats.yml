@@ -16,6 +16,7 @@ en:
       no_wday: "%b %d %Y %l:%M%P"
       wday_no_year: "%a %b %d %l:%M%P"
       wday_no_year_no_time: "%a %b %d"
+      day_mo_yr_no_time: "%b %d %Y"
       time_only: "%l:%M%P"
   datepicker:
     dformat: '%b %d %Y'

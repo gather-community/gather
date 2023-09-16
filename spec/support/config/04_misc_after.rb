@@ -12,7 +12,7 @@ RSpec.configure do |config|
   # This produces Selenium::WebDriver::Error::WebDriverError "unknown command" on Travis for some reason.
   unless ENV["CI"]
     config.after(:each, type: :system, js: true) do
-      logs = page.driver.browser.manage.logs.get(:browser).join("\n")
+      logs = page.driver.browser.logs.get(:browser).join("\n")
       unless logs.strip.empty?
         puts("------------ BROWSER LOGS -------------")
         puts(logs)

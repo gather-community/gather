@@ -2,8 +2,8 @@
 <% content_for(:action_links) do %>
   <% if @setup_policy.setup? %>
     <% if FeatureFlag.lookup(:gdrive_migration).on?(current_user) &&
-            @config && !@no_credentials && !@no_drives && !@authorization_error %>
-      <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_path,
+            @config && !@no_credentials && !@no_drives && !@authorization_error && @has_migration %>
+      <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_home_path,
             class: "btn btn-default") %>
     <% end %>
   <% end %>

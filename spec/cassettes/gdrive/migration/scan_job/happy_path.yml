@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=4&q=%271FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq%27%20in%20parents&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=4&q=%271FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq%27%20in%20parents&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''
@@ -54,24 +54,76 @@ http_interactions:
       - chunked
     body:
       encoding: UTF-8
-      string: "{\n  \"nextPageToken\": \"~!!~AI9FV7Q-mZQq7pCjYEpVoExuii3bMG_41rP7hD_b0M5kD_V3VBmbwRvz_H23t_1b4y4LlcbEr40shisJN59xFAFyx12xrqdSaEHt23AdgrR0wGuKASPS32OW2hYD0e6MDBFq5EDrHEcBzLrtSVPTGf_ORllCigdH2GKwMm28U44ZJ8m4dhNccJkbWFXpodL6nGnZMk5TRYDJ5_Jazb9GQs23jB-AoAnSNjgh7WZtpGEAVV0BE0xXYOynP1t26-f9j6FyekPYSkijCDDnWLXF8pcMgfR_54XVGQfLUqz8u6Myat3ewrLW-1k1ICU0YCX-5_BfwrDZe5TdBYZUDI5X_A-7_nsct-eIzQ==\",\n
-        \ \"files\": [\n    {\n      \"mimeType\": \"application/vnd.google-apps.folder\",\n
-        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
-        \       }\n      ],\n      \"id\": \"1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_\",\n
-        \     \"name\": \"Test A\",\n      \"capabilities\": {\n        \"canEdit\":
-        true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.folder\",\n
-        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
-        \       }\n      ],\n      \"id\": \"1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV\",\n
-        \     \"name\": \"Test B\",\n      \"capabilities\": {\n        \"canEdit\":
-        true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.document\",\n
-        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
-        \       }\n      ],\n      \"id\": \"1dLoyEGGapNBqeZaS5_rNV6tZiq9fbBqNkxgGmJlTVzs\",\n
-        \     \"name\": \"File Root.1 [\U0001F69ATS]\",\n      \"capabilities\": {\n
-        \       \"canEdit\": true\n      }\n    },\n    {\n      \"mimeType\": \"application/vnd.google-apps.document\",\n
-        \     \"owners\": [\n        {\n          \"emailAddress\": \"example@gmail.com\"\n
-        \       }\n      ],\n      \"id\": \"176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y\",\n
-        \     \"name\": \"File Root.2\",\n      \"capabilities\": {\n        \"canEdit\":
-        true\n      }\n    }\n  ]\n}\n"
+      string: |
+        {
+          "nextPageToken": "~!!~AI9FV7Q-mZQq7pCjYEpVoExuii3bMG_41rP7hD_b0M5kD_V3VBmbwRvz_H23t_1b4y4LlcbEr40shisJN59xFAFyx12xrqdSaEHt23AdgrR0wGuKASPS32OW2hYD0e6MDBFq5EDrHEcBzLrtSVPTGf_ORllCigdH2GKwMm28U44ZJ8m4dhNccJkbWFXpodL6nGnZMk5TRYDJ5_Jazb9GQs23jB-AoAnSNjgh7WZtpGEAVV0BE0xXYOynP1t26-f9j6FyekPYSkijCDDnWLXF8pcMgfR_54XVGQfLUqz8u6Myat3ewrLW-1k1ICU0YCX-5_BfwrDZe5TdBYZUDI5X_A-7_nsct-eIzQ==",
+          "files": [
+            {
+              "mimeType": "application/vnd.google-apps.folder",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
+              "owners": [
+                {
+                  "emailAddress": "example@gmail.com"
+                }
+              ],
+              "id": "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_",
+              "name": "Test A",
+              "capabilities": {
+                "canEdit": true
+              }
+            },
+            {
+              "mimeType": "application/vnd.google-apps.folder",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
+              "owners": [
+                {
+                  "emailAddress": "example@gmail.com"
+                }
+              ],
+              "id": "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV",
+              "name": "Test B",
+              "capabilities": {
+                "canEdit": true
+              }
+            },
+            {
+              "mimeType": "application/vnd.google-apps.document",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
+              "owners": [
+                {
+                  "emailAddress": "example@gmail.com"
+                }
+              ],
+              "id": "1dLoyEGGapNBqeZaS5_rNV6tZiq9fbBqNkxgGmJlTVzs",
+              "name": "File Root.1 [🚚TS]",
+              "capabilities": {
+                "canEdit": true
+              }
+            },
+            {
+              "mimeType": "application/vnd.google-apps.document",
+              "webViewLink": "https://drive.google.com/file/d/18nyjOaNbbzOWXhYRDXiiotJwwsYVvbE1/view",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+              "modifiedTime": "2023-08-06T13:14:15Z",
+              "owners": [
+                {
+                  "emailAddress": "example@gmail.com"
+                }
+              ],
+              "id": "176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y",
+              "name": "File Root.2",
+              "capabilities": {
+                "canEdit": true
+              }
+            }
+          ]
+        }
     http_version:
   recorded_at: Wed, 05 Jul 2023 00:48:44 GMT
 - request:
@@ -128,8 +180,13 @@ http_interactions:
       - chunked
     body:
       encoding: UTF-8
-      string: "{\n  \"kind\": \"drive#file\",\n  \"id\": \"176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y\",\n
-        \ \"name\": \"File Root.2 [\U0001F69ATS]\",\n  \"mimeType\": \"application/vnd.google-apps.document\"\n}\n"
+      string: |
+        {
+          "kind": "drive#file",
+          "id": "176SlrYlXVkTJAx8UuCcY0HITXf3l_WktCqi-MUBkr5Y",
+          "name": "File Root.2 [🚚TS]",
+          "mimeType": "application/vnd.google-apps.document"
+        }
     http_version:
   recorded_at: Wed, 05 Jul 2023 00:48:45 GMT
 recorded_with: VCR 4.0.0

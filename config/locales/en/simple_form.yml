@@ -231,6 +231,17 @@ en:
         default_calendar_view:
           week: "Week"
           month: "Month"
+      gdrive_migration:
+        owner:
+          any: "Any Owner"
+        status:
+          any: "Any Status"
+          pending: "Pending"
+          errored: "Errored"
+          declined: "Declined"
+          transferred: "Transferred"
+          copied: "Copied"
+          ignored: "Ignored"
       wiki_page:
         editable_by:
           everyone: "Everyone"

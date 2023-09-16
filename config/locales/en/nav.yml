@@ -35,8 +35,10 @@ en:
       gdrive:
         _self: "Google Drive"
         migration:
-          auth: "Migration Connection"
-          file_selection: "File Selection"
+          dashboard:
+            status: "Status"
+            owners: "Owners"
+            files: "Files"
     work:
       _self: "Work"
       signups: "Signups"

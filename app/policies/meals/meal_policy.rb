@@ -2,7 +2,7 @@
 
 module Meals
   class MealPolicy < ApplicationPolicy
-    alias meal record
+    alias_method :meal, :record
 
     class Scope < Scope
       ASSIGNED = "EXISTS (SELECT id FROM meal_assignments
@@ -21,7 +21,7 @@ module Meals
           scope
         elsif user.active?
           scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
-                      user.id, user.community_id, user.household_id)
+            user.id, user.community_id, user.household_id)
         else
           scope.where(SIGNED_UP, user.household_id)
         end
@@ -53,7 +53,7 @@ module Meals
     end
 
     def update?
-      change_date_loc_invites? || change_formula? || change_menu? || change_workers?
+      change_date_loc? || change_invites? || change_formula? || change_menu? || change_workers?
     end
 
     def destroy?
@@ -88,8 +88,12 @@ module Meals
       active_admin_or?(:meals_coordinator, :biller) || head_cook?
     end
 
-    def change_date_loc_invites?
+    def change_date_loc?
       active_admin_or?(:meals_coordinator)
+    end
+
+    def change_invites?
+      active_admin_or?(:meals_coordinator) || meal.community.settings.meals.cooks_can_change_invites? && head_cook?
     end
 
     def change_formula?
@@ -129,7 +133,8 @@ module Meals
       permitted = []
       permitted.concat(worker_attribs) if change_workers?
       permitted.concat(menu_attribs) if change_menu?
-      permitted.concat(date_loc_invite_attribs) if change_date_loc_invites?
+      permitted.concat(date_loc_attribs) if change_date_loc?
+      permitted.concat(invite_attribs) if change_invites?
       permitted.concat(signup_attribs) if change_signups?
       permitted.concat(expense_attribs) if change_expenses?
       permitted << :formula_id if change_formula?
@@ -176,8 +181,12 @@ module Meals
       active? && user == meal.head_cook
     end
 
-    def date_loc_invite_attribs
-      [:served_at, {community_boxes: [Community.all.map(&:id).map(&:to_s)]}, {calendar_ids: []}]
+    def date_loc_attribs
+      [:served_at, {calendar_ids: []}]
+    end
+
+    def invite_attribs
+      [{community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
     end
 
     def menu_attribs

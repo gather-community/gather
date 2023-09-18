@@ -40,6 +40,8 @@ module GDrive
       return @no_accessible_drives = true if @drives.none?
       multiple_drives = @drives.size > 1
 
+      @has_migration = MigrationConfig.find_by(community: current_community)&.operations&.any?
+
       # Drive accessed explicitly by ID
       if params[:drive] && params[:item_id]
         validate_gdrive_id(params[:item_id])

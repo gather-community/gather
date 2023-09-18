@@ -5,7 +5,7 @@ class Community < ApplicationRecord
   include CustomFields
   include SemicolonDisallowable
 
-  SLUG_REGEX = /[a-z][a-z\-]*/.freeze
+  SLUG_REGEX = /[a-z][a-z-]*/
 
   acts_as_tenant :cluster
   resourcify
@@ -20,9 +20,9 @@ class Community < ApplicationRecord
   has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_many :calendar_protocols, class_name: "Calendars::Protocol",
-                                   inverse_of: :community, dependent: :destroy
+    inverse_of: :community, dependent: :destroy
   has_many :calendar_shared_guidelines, class_name: "Calendars::SharedGuidelines",
-                                           inverse_of: :community, dependent: :destroy
+    inverse_of: :community, dependent: :destroy
   has_many :calendars, class_name: "Calendars::Calendar", inverse_of: :community, dependent: :destroy
   has_many :calendar_groups, class_name: "Calendars::Group", inverse_of: :community, dependent: :destroy
   has_many :households, inverse_of: :community, dependent: :destroy
@@ -59,6 +59,8 @@ class Community < ApplicationRecord
         {key: :default_capacity, type: :integer, required: true, default: 50},
         {key: :show_reimb_form, type: :boolean, default: false},
         {key: :cooks_can_finalize, type: :boolean, default: false},
+        {key: :cooks_can_change_invites, type: :boolean, default: false},
+        {key: :default_invites, type: :enum, options: %w[all own], default: "all", required: true},
         {key: :allow_job_signup_on_meal_page, type: :boolean, default: true},
         {key: :reminder_lead_times, type: :group, fields: [
           {key: :diner, type: :integer, required: true, default: 0},

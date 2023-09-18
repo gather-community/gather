@@ -6,7 +6,7 @@ module GDrive
     class ScanJob < BaseJob
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
-      MAX_ERROR_RATIO = 0.02
+      MAX_ERROR_RATIO = 0.05
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
@@ -37,7 +37,7 @@ module GDrive
       def do_scan_task
         file_list = wrapper.list_files(
           q: "'#{scan_task.folder_id}' in parents",
-          fields: "files(id,name,mimeType,owners(emailAddress),capabilities(canEdit)),nextPageToken",
+          fields: "files(id,name,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
           order_by: "folder,name",
           supports_all_drives: true,
           page_token: scan_task.page_token,
@@ -72,6 +72,9 @@ module GDrive
           file.mime_type = gdrive_file.mime_type
           file.owner = gdrive_file.owners[0].email_address
           file.status = "pending"
+          file.icon_link = gdrive_file.icon_link
+          file.web_view_link = gdrive_file.web_view_link
+          file.modified_at = gdrive_file.modified_time
         end
         if migration_file.folder?
           return if scan.delta?
@@ -86,6 +89,7 @@ module GDrive
         return if gdrive_file.name.ends_with?(filename_suffix)
 
         if gdrive_file.capabilities.can_edit
+          return if scan.dry_run?
           new_name = "#{gdrive_file.name}#{filename_suffix}"
           wrapper.update_file(gdrive_file.id, Google::Apis::DriveV3::File.new(name: new_name))
         else
@@ -95,7 +99,7 @@ module GDrive
       end
 
       def add_file_error(migration_file, type, message)
-        migration_file.update!(status: "error", error_type: type, error_message: message)
+        migration_file.update!(status: "errored", error_type: type, error_message: message)
         scan.increment!(:error_count)
         if scan.error_count >= MIN_ERRORS_TO_CANCEL &&
             scan.error_count.to_f / scan.scanned_file_count > MAX_ERROR_RATIO

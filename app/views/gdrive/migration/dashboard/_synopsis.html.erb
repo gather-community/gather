@@ -1,0 +1,24 @@
+<% if @latest_scan.nil? %>
+  File scan has not begun. Please contact Gather Support.
+<% elsif @latest_scan.new? %>
+  File scan has not begun. Please wait.
+<% elsif @latest_scan.in_progress? %>
+  File scan in progress. <%= number_with_delimiter(@latest_scan.scanned_file_count) %> files scanned so far.
+<% elsif @latest_scan.complete? %>
+  File scan is complete. Monitoring for changes.
+<% elsif @latest_scan.cancelled? %>
+  <% case @latest_scan.cancel_reason %>
+  <% when "auth_error" %>
+    File scan cancelled due to authorization error. Please ensure <%= @main_config.org_user_id %> has <strong>edit</strong> access to your
+    <%= link_to("source folder", "https://drive.google.com/drive/u/0/folders/#{@operation.src_folder_id}") %>.
+    Try clicking "Revoke Authorization" and signing in again on the
+    <%= link_to("main Google Drive page", gdrive_home_path) %>.
+    Then try running the scan again.
+  <% when "too_many_errors" %>
+    File scan cancelled due to too many errors. Please see errors below. Correct errors and then try running the scan again.
+  <% else %>
+    File scan cancelled for unknown reason.
+  <% end %>
+<% else %>
+  File scan in unknown state.
+<% end %>

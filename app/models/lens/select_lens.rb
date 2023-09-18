@@ -34,7 +34,11 @@ module Lens
     # True if selection is not base_option.
     def clearable_and_active?
       return false if empty?
-      clearable? && selection != base_option
+      clearable? && active?
+    end
+
+    def active?
+      selection != base_option
     end
 
     def render
@@ -76,9 +80,9 @@ module Lens
 
     def select_tag
       h.select_tag(select_input_name, option_tags,
-                   class: css_classes,
-                   onchange: onchange,
-                   "data-param-name": param_name)
+        class: css_classes,
+        onchange: onchange,
+        "data-param-name": param_name)
     end
 
     # Depends on enabled_options, which depends on possible_options. So if the lens doesn't

@@ -1,0 +1,30 @@
+<% content_for(:title) { "Google Drive Migration" } %>
+
+<div class="synopsis gdrive-migration-synopsis">
+  <%= render("gdrive/migration/dashboard/synopsis") %>
+</div>
+
+<table>
+  <tr>
+    <th>Owner</th>
+    <th>Total Files</th>
+    <th>Pending</th>
+    <th>Declined</th>
+    <th>Errored</th>
+    <th>Transferred</th>
+    <th>Copied</th>
+    <th>Ignored</th>
+  </tr>
+  <% @stats.owners.each do |owner| %>
+    <tr>
+      <td><%= link_to(owner, gdrive_migration_dashboard_files_path(owner: owner)) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner[owner]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "pending"]]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "declined"]]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "errored"]]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
+      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
+    </tr>
+  <% end %>
+</table>

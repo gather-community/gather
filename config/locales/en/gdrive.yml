@@ -1,0 +1,5 @@
+en:
+  gdrive:
+    migration:
+      errors:
+        cant_edit: "No edit permission"

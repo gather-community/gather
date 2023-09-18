@@ -64,7 +64,7 @@ module Meals
     def edit
       @meal = Meal.find(params[:id])
       authorize(@meal)
-      ensure_head_cook_assignment_present
+      ensure_blank_assignments_present
       prep_form_vars
     end
 
@@ -189,11 +189,18 @@ module Meals
       end
     end
 
-    def init_meal(community: current_community, formula_id: nil)
+    def init_meal(formula_id: nil)
+      community = current_community
       formula = formula_id.nil? ? Formula.default_for(community) : Formula.find(formula_id)
       served_at = Time.current.midnight + 7.days + Meal::DEFAULT_TIME
-      meal = Meal.new(served_at: served_at, capacity: community.settings.meals.default_capacity,
-        community_ids: Community.all.map(&:id), community: community, formula: formula)
+      invite_all_communities = current_community.settings.meals.default_invites == "all"
+      meal = Meal.new(
+        served_at: served_at,
+        capacity: community.settings.meals.default_capacity,
+        community_ids: invite_all_communities ? Community.all.map(&:id) : [community.id],
+        community: community,
+        formula: formula
+      )
       (formula&.roles || []).each do |role|
         role.count_per_meal.times { meal.assignments.build(role: role) }
       end
@@ -259,9 +266,13 @@ module Meals
       Meals::Meal.new(community: current_community)
     end
 
-    def ensure_head_cook_assignment_present
-      return unless @meal.head_cook.nil?
-      @meal.assignments.build(role: meal.head_cook_role)
+    def ensure_blank_assignments_present
+      meal.roles.each do |role|
+        current_count = @meal.assignments.count { |a| a.role == role }
+        [0, role.count_per_meal - current_count].max.times do
+          @meal.assignments.build(role: role)
+        end
+      end
     end
 
     def report_lenses

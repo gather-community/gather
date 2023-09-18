@@ -64,7 +64,7 @@ module Meals
     def edit
       @meal = Meal.find(params[:id])
       authorize(@meal)
-      ensure_head_cook_assignment_present
+      ensure_blank_assignments_present
       prep_form_vars
     end
 
@@ -259,9 +259,13 @@ module Meals
       Meals::Meal.new(community: current_community)
     end
 
-    def ensure_head_cook_assignment_present
-      return unless @meal.head_cook.nil?
-      @meal.assignments.build(role: meal.head_cook_role)
+    def ensure_blank_assignments_present
+      meal.roles.each do |role|
+        current_count = @meal.assignments.count { |a| a.role == role }
+        [0, role.count_per_meal - current_count].max.times do
+          @meal.assignments.build(role: role)
+        end
+      end
     end
 
     def report_lenses

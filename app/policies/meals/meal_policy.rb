@@ -93,7 +93,7 @@ module Meals
     end
 
     def change_invites?
-      active_admin_or?(:meals_coordinator)
+      active_admin_or?(:meals_coordinator) || meal.community.settings.meals.cooks_can_change_invites? && head_cook?
     end
 
     def change_formula?

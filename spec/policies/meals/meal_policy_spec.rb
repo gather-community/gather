@@ -58,7 +58,7 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :import?, :change_date_loc?, :change_invites?,
+    permissions :new?, :create?, :import?, :change_date_loc?,
       :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
@@ -117,6 +117,28 @@ describe Meals::MealPolicy do
       it "forbids if day after meal" do
         Timecop.travel(meal.served_at + 1.day) do
           expect(subject).not_to permit(admin, meal)
+        end
+      end
+    end
+
+    permissions :change_invites? do
+      it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
+
+      describe "cooks_can_change_invites setting" do
+        let(:head_cook) { user }
+
+        before do
+          community.settings.meals.cooks_can_change_invites = value
+        end
+
+        context "true" do
+          let(:value) { true }
+          it { is_expected.to permit(user, meal) }
+        end
+
+        context "false" do
+          let(:value) { false }
+          it { is_expected.not_to permit(user, meal) }
         end
       end
     end

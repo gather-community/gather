@@ -58,8 +58,8 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :import?, :change_date_loc_invites?,
-                :change_workers_without_notification? do
+    permissions :new?, :create?, :import?, :change_date_loc?, :change_invites?,
+      :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
 
@@ -68,7 +68,7 @@ describe Meals::MealPolicy do
     end
 
     permissions :change_formula?, :change_menu?, :change_signups?, :change_capacity_close_time?, :change_expenses?,
-                :close?, :cancel? do
+      :close?, :cancel? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
       it_behaves_like "forbids if finalized"
 

@@ -9,7 +9,7 @@ module Meals
 
     BASIC_HEADERS = %i[served_at calendars formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at calendars].freeze
-    DB_ID_REGEX = /\A\d+\z/.freeze
+    DB_ID_REGEX = /\A\d+\z/
 
     acts_as_tenant :cluster
 
@@ -114,7 +114,8 @@ module Meals
 
     def copy_attribs_to_target_meal
       attribs = []
-      attribs.concat(%i[served_at calendars communities]) if row_policy.change_date_loc_invites?
+      attribs.concat(%i[served_at calendars]) if row_policy.change_date_loc?
+      attribs.concat(%i[communities]) if row_policy.change_invites?
       attribs << :formula if row_policy.change_formula?
       attribs << :assignments if row_policy.change_workers?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }

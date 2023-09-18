@@ -189,11 +189,18 @@ module Meals
       end
     end
 
-    def init_meal(community: current_community, formula_id: nil)
+    def init_meal(formula_id: nil)
+      community = current_community
       formula = formula_id.nil? ? Formula.default_for(community) : Formula.find(formula_id)
       served_at = Time.current.midnight + 7.days + Meal::DEFAULT_TIME
-      meal = Meal.new(served_at: served_at, capacity: community.settings.meals.default_capacity,
-        community_ids: Community.all.map(&:id), community: community, formula: formula)
+      invite_all_communities = current_community.settings.meals.default_invites == "all"
+      meal = Meal.new(
+        served_at: served_at,
+        capacity: community.settings.meals.default_capacity,
+        community_ids: invite_all_communities ? Community.all.map(&:id) : [community.id],
+        community: community,
+        formula: formula
+      )
       (formula&.roles || []).each do |role|
         role.count_per_meal.times { meal.assignments.build(role: role) }
       end

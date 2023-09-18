@@ -1,6 +1,6 @@
 <%= meal.form_section(:general, expanded: local_assigns[:expanded]) do %>
   <div class="fields">
-    <% if policy(meal).change_date_loc_invites? %>
+    <% if policy(meal).change_date_loc? %>
       <%= f.input :served_at, as: :datetime_picker, include_day_of_week: true %>
       <%= f.input :calendar_ids, collection: @calendar_options, label_method: :name_with_prefix,
                                  input_html: {multiple: "multiple"} %>
@@ -21,7 +21,7 @@
     <% end %>
 
     <% if multi_community? %>
-      <% if policy(meal).change_date_loc_invites? %>
+      <% if policy(meal).change_invites? %>
         <div class="form-group text optional
           <%= meal.errors[:invitations].present? ? "has-error" : "" %>">
           <label class="text optional col-sm-3 control-label" for="meal_invitations">Communities</label>

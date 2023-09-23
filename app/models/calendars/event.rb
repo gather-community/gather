@@ -16,7 +16,7 @@ module Calendars
     attr_accessor :linkable
 
     attr_writer :uid
-    alias privileged_changer? privileged_changer
+    alias_method :privileged_changer?, :privileged_changer
 
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
@@ -35,7 +35,6 @@ module Calendars
     delegate :household, to: :creator
     delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :creator, prefix: true
-    delegate :name, to: :creator_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
@@ -48,22 +47,11 @@ module Calendars
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
-    validate lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
-               # and sponsor_community for other uses.
-               # Set fixed start/end time
-               # We add an underscore to differentiate from user-specified kinds
-               meal&.event_handler&.validate_event(r)
-             }
+    validate lambda { |r| meal&.event_handler&.validate_event(r) }
 
     before_validation :normalize
 
-    before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
-                  # and sponsor_community for other uses.
-                  # Set fixed start/end time
-                  # We add an underscore to differentiate from user-specified kinds
-                  # rubocop:disable Style/GuardClause # || structure
-                  meal&.event_handler&.sync_resourcings(r)
-                }
+    before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
     normalize_attributes :kind, :note
 

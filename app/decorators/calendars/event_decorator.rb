@@ -31,14 +31,14 @@ module Calendars
       h.safe_render_markdown(note)
     end
 
-    def creator_select2_context
-      access_level(h.current_community) == "sponsor" ? "current_cluster_full_access" : "current_community_full_access"
+    def creator_temp_select2_context
+      (access_level(h.current_community) == "sponsor") ? "current_cluster_full_access" : "current_community_full_access"
     end
 
     def show_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil",
-                                      path: h.edit_calendars_event_path(object, url_params)),
+          path: h.edit_calendars_event_path(object, url_params)),
         cancel_action_link
       )
     end
@@ -51,8 +51,8 @@ module Calendars
 
     def cancel_action_link
       ActionLink.new(object, :destroy, icon: "times",
-                                       path: h.calendars_event_path(object, url_params), confirm: true,
-                                       method: :delete, label_symbol: :cancel, btn_class: "danger")
+        path: h.calendars_event_path(object, url_params), confirm: true,
+        method: :delete, label_symbol: :cancel, btn_class: "danger")
     end
 
     def url_params

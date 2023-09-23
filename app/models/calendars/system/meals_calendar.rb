@@ -20,7 +20,7 @@ module Calendars
           # We don't save the events since that's not how system calendars work.
           events.build(
             name: title,
-            creator_id: meal.creator_id,
+            creator_temp_id: meal.creator_id,
             meal_id: meal.id,
             starts_at: meal.served_at,
             ends_at: meal.served_at + MEAL_DURATION,
@@ -44,10 +44,10 @@ module Calendars
         # If actor is given, we use the MealPolicy scope which is more sensitive and can detect
         # edge-case meals that the actor may be signed up for even if their community is not invited somehow.
         base = if actor.nil?
-                 Meals::Meal.inviting(community)
-               else
-                 Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
-               end
+          Meals::Meal.inviting(community)
+        else
+          Meals::MealPolicy::Scope.new(actor, Meals::Meal).resolve
+        end
         base
           .hosted_by(hosting_communities)
           .not_cancelled

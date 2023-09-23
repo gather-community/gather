@@ -17,7 +17,7 @@ module Calendars
             klass = Rule.class_for(rule_name)
             next if (value = protocol.send(rule_name)).blank?
             rules << klass.new(value: value, community: calendar.community, kinds: protocol.kinds,
-                               calendars: protocol.calendars)
+              calendars: protocol.calendars)
           end
         end
         new(calendar: calendar, kind: kind, rules: rules)
@@ -36,8 +36,8 @@ module Calendars
 
       # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
       # the given creator vis a vis the rule set's calendar.
-      def access_level(creator_community)
-        return "ok" if calendar_community == creator_community
+      def access_level(creator_temp_community)
+        return "ok" if calendar_community == creator_temp_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
       end

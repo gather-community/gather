@@ -2,7 +2,7 @@
 
 module Calendars
   class NodePolicy < ApplicationPolicy
-    alias node record
+    alias_method :node, :record
 
     class Scope < Scope
       def resolve
@@ -13,7 +13,7 @@ module Calendars
         # at database level.
         ids = scope_with_visibility.all.reject do |node|
           next false if node.group?
-          sample_event = Event.new(creator: user, calendar: node)
+          sample_event = Event.new(creator_temp: user, calendar: node)
           sample_event.access_level(user.community) == "forbidden"
         end.map(&:id)
         scope.where(id: ids)

@@ -2,14 +2,14 @@
 
 module Calendars
   class CalendarPolicy < NodePolicy
-    alias calendar record
+    alias_method :calendar, :record
 
     class Scope < NodePolicy::Scope
       # Returns an Array of calendars within the given scope that
       # the user can create events on, according to the EventPolicy.
       def resolve_for_create
         resolve.select do |calendar|
-          sample_event = Event.new(calendar: calendar, creator: user)
+          sample_event = Event.new(calendar: calendar, creator_temp: user)
           EventPolicy.new(user, sample_event).create?
         end
       end
@@ -45,7 +45,7 @@ module Calendars
 
     def permitted_attributes
       base = %i[default_calendar_view abbrv name color
-                photo_new_signed_id photo_destroy group_id selected_by_default]
+        photo_new_signed_id photo_destroy group_id selected_by_default]
       base.concat(%i[meal_hostable guidelines allow_overlap]) unless calendar.system?
       base
     end

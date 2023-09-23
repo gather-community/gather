@@ -43,12 +43,12 @@ describe "event form", js: true do
       end
       let!(:protocol2) do
         create(:calendar_protocol, community: community, calendars: [calendar], max_days_per_year: 1,
-                                   kinds: ["Personal"])
+          kinds: ["Personal"])
       end
       let!(:existing_event) do
         Timecop.freeze("2022-01-01 12:00") do
-          create(:event, creator: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
-                         starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
+          create(:event, creator_temp: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
+            starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
         end
       end
 
@@ -74,7 +74,7 @@ describe "event form", js: true do
 
         expect(evaluate_script("$('.datetimepicker input').val()")).to include("8:00am")
         check("All-day event")
-        expect(evaluate_script("$('.datetimepicker input').val()")). not_to include("8:00am")
+        expect(evaluate_script("$('.datetimepicker input').val()")).not_to include("8:00am")
 
         click_on("Save")
         expect_success
@@ -84,7 +84,7 @@ describe "event form", js: true do
 
         click_on("Edit")
         expect(page).to have_field("calendars_event_all_day", checked: true)
-        expect(evaluate_script("$('.datetimepicker input').val()")). not_to include("12:00am")
+        expect(evaluate_script("$('.datetimepicker input').val()")).not_to include("12:00am")
       end
     end
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Calendars::EventPolicy do
-  let(:creator) { create(:user) }
+  let(:creator_temp) { create(:user) }
   let(:calendar) { create(:calendar) }
 
   describe "permissions" do
@@ -12,27 +12,27 @@ describe Calendars::EventPolicy do
     let(:starts_at) { Time.current + 1.week }
     let(:ends_at) { starts_at + 1.hour }
     let(:event) do
-      create(:event, creator: creator, calendar: calendar, created_at: created_at,
-                     starts_at: starts_at, ends_at: ends_at)
+      create(:event, creator_temp: creator_temp, calendar: calendar, created_at: created_at,
+        starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { event }
 
-    shared_examples_for "permits admins or special role and creator" do
+    shared_examples_for "permits admins or special role and creator_temp" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
       it "permits creator" do
-        expect(subject).to permit(creator, event)
+        expect(subject).to permit(creator_temp, event)
       end
     end
 
-    shared_examples_for "permits admins or special role but not creator" do
+    shared_examples_for "permits admins or special role but not creator_temp" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
       it "forbids creator" do
-        expect(subject).not_to permit(creator, event)
+        expect(subject).not_to permit(creator_temp, event)
       end
     end
 
-    permissions :choose_creator?, :privileged_change? do
-      it_behaves_like "permits admins or special role but not creator"
+    permissions :choose_creator_temp?, :privileged_change? do
+      it_behaves_like "permits admins or special role but not creator_temp"
     end
 
     context "with class instead of object" do
@@ -43,7 +43,7 @@ describe Calendars::EventPolicy do
       end
 
       permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
-                  :choose_creator?, :destroy? do
+        :choose_creator_temp?, :destroy? do
         it_behaves_like "forbids all"
       end
     end
@@ -54,19 +54,19 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or special role and creator"
+        it_behaves_like "permits admins or special role and creator_temp"
 
         context "just-created event with end time in past" do
           let(:starts_at) { 3.hours.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role and creator_temp"
         end
 
         context "not-just-created event with end time in past" do
           let(:created_at) { 90.minutes.ago }
           let(:starts_at) { 3.hours.ago }
 
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role and creator_temp"
         end
       end
 
@@ -81,19 +81,19 @@ describe Calendars::EventPolicy do
       permissions :destroy? do
         context "future event" do
           let(:starts_at) { 1.day.from_now }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role and creator_temp"
         end
 
         context "just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role and creator_temp"
         end
 
         context "not-just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 1.week.ago }
-          it_behaves_like "permits admins or special role but not creator"
+          it_behaves_like "permits admins or special role but not creator_temp"
         end
       end
     end
@@ -135,13 +135,13 @@ describe Calendars::EventPolicy do
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role and creator_temp"
         end
       end
     end
 
     context "meal event" do
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
+      let(:event) { create(:event, creator_temp: creator_temp, calendar: calendar, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -149,15 +149,15 @@ describe Calendars::EventPolicy do
 
       permissions :new?, :create?, :destroy? do
         it "forbids all" do
-          expect(subject).not_to permit(creator, event)
+          expect(subject).not_to permit(creator_temp, event)
           expect(subject).not_to permit(user, event)
           expect(subject).not_to permit(admin, event)
         end
       end
 
       permissions :edit?, :update? do
-        it "permits access to admins, meals/cal coordinators, and meal creator, and forbids others" do
-          expect(subject).to permit(creator, event)
+        it "permits access to admins, meals/cal coordinators, and meal creator_temp, and forbids others" do
+          expect(subject).to permit(creator_temp, event)
           expect(subject).to permit(admin, event)
           expect(subject).to permit(meals_coordinator, event)
           expect(subject).to permit(calendar_coordinator, event)
@@ -168,7 +168,7 @@ describe Calendars::EventPolicy do
 
     context "system calendar event" do
       let(:calendar) { create(:your_meals_calendar) }
-      let(:event) { build(:event, creator: creator, calendar: calendar) }
+      let(:event) { build(:event, creator_temp: creator_temp, calendar: calendar) }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -176,7 +176,7 @@ describe Calendars::EventPolicy do
 
       permissions :new?, :create?, :edit?, :update?, :destroy? do
         it "forbids all" do
-          expect(subject).not_to permit(creator, event)
+          expect(subject).not_to permit(creator_temp, event)
           expect(subject).not_to permit(user, event)
           expect(subject).not_to permit(admin, event)
         end
@@ -198,8 +198,8 @@ describe Calendars::EventPolicy do
   describe "permitted_attributes" do
     include_context "policy permissions"
     let(:event) { create(:event, calendar: calendar) }
-    let(:admin_attribs) { basic_attribs + %i[creator_id] }
-    subject { Calendars::EventPolicy.new(creator, event).permitted_attributes }
+    let(:admin_attribs) { basic_attribs + %i[creator_temp_id] }
+    subject { Calendars::EventPolicy.new(creator_temp, event).permitted_attributes }
 
     shared_examples_for "basic attribs" do
       it "should allow basic attribs" do
@@ -213,7 +213,7 @@ describe Calendars::EventPolicy do
       end
 
       context "calendar_coordinator" do
-        let(:creator) { calendar_coordinator }
+        let(:creator_temp) { calendar_coordinator }
 
         it "should allow admin-only attribs" do
           expect(subject).to contain_exactly(*admin_attribs)
@@ -221,7 +221,7 @@ describe Calendars::EventPolicy do
       end
 
       context "admin" do
-        let(:creator) { admin }
+        let(:creator_temp) { admin }
 
         it "should allow admin-only attribs" do
           expect(subject).to contain_exactly(*admin_attribs)
@@ -229,7 +229,7 @@ describe Calendars::EventPolicy do
       end
 
       context "outside admin" do
-        let(:creator) { admin_cmtyB }
+        let(:creator_temp) { admin_cmtyB }
         it_behaves_like "basic attribs"
       end
     end
@@ -243,7 +243,7 @@ describe Calendars::EventPolicy do
 
     context "meal event" do
       let(:basic_attribs) { %i[starts_at ends_at note origin_page] }
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
+      let(:event) { create(:event, creator_temp: creator_temp, calendar: calendar, kind: "_meal") }
       it_behaves_like "each user type"
     end
   end

@@ -40,8 +40,8 @@ module Meals
           end
         end.join(", ")
         meal.errors.add(:base,
-                        "The following error(s) occurred in making a #{event.calendar_name} event "\
-                        "for this meal: #{errors}.")
+          "The following error(s) occurred in making a #{event.calendar_name} event " \
+          "for this meal: #{errors}.")
       end
 
       # Since we are copying these errors to the meal base, we don't need them in the
@@ -75,7 +75,7 @@ module Meals
     def event_attributes(resourcing)
       starts_at = meal.served_at - resourcing.prep_time.minutes
       {
-        creator: meal.creator,
+        creator_temp: meal.creator,
         name: event_name,
         kind: "_meal",
         starts_at: starts_at,
@@ -92,7 +92,7 @@ module Meals
     def event_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-                       length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+        length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

@@ -27,7 +27,7 @@
   <% else %>
     <tr>
       <td>Reserved By</td>
-      <td><%= event.creator.decorate.link(show_cmty_if_foreign: true) %></td>
+      <td><%= event.creator_temp.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
   <% if event.sponsor %>

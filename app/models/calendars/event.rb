@@ -18,7 +18,7 @@ module Calendars
     attr_writer :uid
     alias_method :privileged_changer?, :privileged_changer
 
-    belongs_to :creator, class_name: "User"
+    belongs_to :creator_temp, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :events
@@ -26,22 +26,22 @@ module Calendars
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
     scope :oldest_first, -> { order(:starts_at, :ends_at) }
-    scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
+    scope :related_to, ->(user) { where(creator_temp: user).or(where(sponsor: user)) }
 
-    # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
+    # Satisfies ducktype expected by policies. Prefer more explicit variants creator_temp_community
     # and sponsor_community for other uses.
     delegate :community, to: :calendar, allow_nil: true
 
-    delegate :household, to: :creator
+    delegate :household, to: :creator_temp
     delegate :users, to: :household, prefix: true
-    delegate :name, :community, to: :creator, prefix: true
+    delegate :name, :community, to: :creator_temp, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
-    validates :calendar_id, :creator_id, :starts_at, :ends_at, presence: true
+    validates :calendar_id, :creator_temp_id, :starts_at, :ends_at, presence: true
     validate :guidelines_accepted
     validate :start_before_end
     validate :restrict_changes_in_past

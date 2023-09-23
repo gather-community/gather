@@ -7,11 +7,11 @@ module Calendars
 
     def initialize(rule_set, options)
       super(rule_set)
-      self.creator_community = options[:creator_community]
+      self.creator_temp_community = options[:creator_temp_community]
     end
 
     def access_level
-      object.access_level(creator_community)
+      object.access_level(creator_temp_community)
     end
 
     def fixed_start_time
@@ -24,6 +24,6 @@ module Calendars
 
     private
 
-    attr_accessor :creator_community
+    attr_accessor :creator_temp_community
   end
 end

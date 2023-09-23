@@ -24,7 +24,7 @@ describe Calendars::System::JoinDatesCalendar do
       starts_at: Time.zone.parse("2021-01-28 00:00"),
       ends_at: Time.zone.parse("2021-01-28 23:59:59"),
       all_day: true,
-      creator_id: nil,
+      creator_temp_id: nil,
       note: nil,
       linkable: user1,
       uid: "join_dates_#{user1.id}"

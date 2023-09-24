@@ -5,7 +5,7 @@
 <% elsif calendars.empty? %>
   <% content_for(:title, "No Calendars") %>
   Your community does not have any calendars on which you can create an event.
-  <% if policy(@sample_calendar).create? %>
+  <% if @can_create_calendar %>
     <%= link_to("You can create one.", calendars_calendars_path) %>
   <% end %>
 <% else %>

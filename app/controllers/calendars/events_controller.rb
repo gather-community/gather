@@ -107,12 +107,12 @@ module Calendars
       # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
       # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
       # Kind-specific rules will be enforced through validation.
-      @sample_event = Event.new(calendar: @calendar, creator_temp: current_user, kind: nil)
-      authorize(@sample_event)
+      sample_event = Event.new(calendar: @calendar, creator_temp: current_user, kind: nil)
+      authorize(sample_event)
       prepare_lenses(*BASE_LENSES)
-      @can_create_event = policy(@sample_event).create?
+      @can_create_event = policy(sample_event).create?
 
-      @rule_set = @sample_event.rule_set
+      @rule_set = sample_event.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
@@ -177,16 +177,22 @@ module Calendars
     end
 
     def render_choose_calendar_page
-      @sample_event = Event.new(calendar: writeable_calendars.first, creator_temp: current_user)
-      authorize(@sample_event)
+      # This sample event is just for authorizing the new action on CalendarEvent.
+      sample_event = Event.new(calendar: writeable_calendars.first, creator_temp: current_user)
+      authorize(sample_event)
+
       @calendars = writeable_calendars
       @url_params = params.permit(:start, :end, :origin_page)
     end
 
     def render_no_calendars
-      @sample_calendar = Calendar.new(community: current_community)
-      @sample_event = Event.new(calendar: @sample_calendar, creator_temp: current_user)
-      authorize(@sample_event)
+      sample_calendar = Calendar.new(community: current_community)
+
+      # This sample event is just for authorizing the new action on CalendarEvent.
+      sample_event = Event.new(calendar: sample_calendar, creator_temp: current_user)
+      authorize(sample_event)
+
+      @can_create_calendar = policy(sample_calendar).create?
       @calendars = []
     end
 

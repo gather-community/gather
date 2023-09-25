@@ -24,7 +24,7 @@ describe Calendars::Event do
 
       context "with all_day true" do
         before do
-          allow(event).to receive(:rule_set).and_return(double("timed_events_only?": timed_only, errors: []))
+          allow(event).to receive(:rule_set).and_return(double(timed_events_only?: timed_only, errors: []))
         end
 
         context "with calendar permitting all day events" do
@@ -54,58 +54,86 @@ describe Calendars::Event do
     end
   end
 
-  describe "no_overlap" do
-    let!(:existing_event) do
-      create(:event, calendar: calendar, starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 15:00")
-    end
-    let(:event) { Calendars::Event.new(calendar: calendar) }
+  describe "validation" do
+    describe "creator_temp_id presence" do
+      context "when not a meal event" do
+        it "should not error if creator present" do
+          event = build(:event, creator_temp_id: create(:user).id)
+          expect(event).to be_valid
+        end
 
-    context "with no overlap allowed" do
-      let(:allow_overlap) { false }
-
-      it "should not set error if no overlap on left" do
-        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
-        expect_no_error(:no_overlap)
+        it "should error if creator not present" do
+          event = build(:event, creator_temp_id: nil)
+          expect(event).to have_errors(creator_temp_id: "can't be blank")
+        end
       end
 
-      it "should not set error if no overlap on right" do
-        event.assign_attributes(starts_at: "2016-04-07 15:00", ends_at: "2016-04-07 15:30")
-        expect_no_error(:no_overlap)
-      end
+      context "when meal event" do
+        it "should not error if creator not present" do
+          meal = create(:meal)
+          event = build(:event, creator_temp_id: nil, kind: "_meal", meal_id: meal.id,
+            starts_at: meal.served_at, ends_at: meal.served_at + 1.hour)
+          expect(event).to be_valid
+        end
 
-      it "should set error if partial overlap on left" do
-        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
-        expect_overlap_error
-      end
-
-      it "should set error if partial overlap on right" do
-        event.assign_attributes(starts_at: "2016-04-07 14:59", ends_at: "2016-04-07 15:30")
-        expect_overlap_error
-      end
-
-      it "should set error if full overlap" do
-        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 15:30")
-        expect_overlap_error
-      end
-
-      it "should set error if interior overlap" do
-        event.assign_attributes(starts_at: "2016-04-07 14:30", ends_at: "2016-04-07 14:45")
-        expect_overlap_error
+        # We don't need to test what happens if creator and meal_id are present since this is not possible
+        # in the UI and the db constraint will take care of it.
       end
     end
 
-    context "with overlap allowed" do
-      let(:allow_overlap) { true }
-
-      it "should not set error if overlap" do
-        event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
-        expect_no_error(:no_overlap)
+    describe "no_overlap" do
+      let!(:existing_event) do
+        create(:event, calendar: calendar, starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 15:00")
       end
-    end
+      let(:event) { Calendars::Event.new(calendar: calendar) }
 
-    def expect_overlap_error
-      event.send(:no_overlap)
-      expect(event.errors[:base]).to eq(["This event overlaps an existing one"])
+      context "with no overlap allowed" do
+        let(:allow_overlap) { false }
+
+        it "should not set error if no overlap on left" do
+          event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+          expect_no_error(:no_overlap)
+        end
+
+        it "should not set error if no overlap on right" do
+          event.assign_attributes(starts_at: "2016-04-07 15:00", ends_at: "2016-04-07 15:30")
+          expect_no_error(:no_overlap)
+        end
+
+        it "should set error if partial overlap on left" do
+          event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
+          expect_overlap_error
+        end
+
+        it "should set error if partial overlap on right" do
+          event.assign_attributes(starts_at: "2016-04-07 14:59", ends_at: "2016-04-07 15:30")
+          expect_overlap_error
+        end
+
+        it "should set error if full overlap" do
+          event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 15:30")
+          expect_overlap_error
+        end
+
+        it "should set error if interior overlap" do
+          event.assign_attributes(starts_at: "2016-04-07 14:30", ends_at: "2016-04-07 14:45")
+          expect_overlap_error
+        end
+      end
+
+      context "with overlap allowed" do
+        let(:allow_overlap) { true }
+
+        it "should not set error if overlap" do
+          event.assign_attributes(starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:01")
+          expect_no_error(:no_overlap)
+        end
+      end
+
+      def expect_overlap_error
+        event.send(:no_overlap)
+        expect(event.errors[:base]).to eq(["This event overlaps an existing one"])
+      end
     end
   end
 
@@ -145,7 +173,7 @@ describe Calendars::Event do
       let(:privileged_changer) { false }
       let(:event) do
         create(:event, created_at: created_at, starts_at: starts_at, ends_at: ends_at,
-                             privileged_changer: privileged_changer)
+          privileged_changer: privileged_changer)
       end
       subject(:changed_event) do
         event.tap { |r| r.starts_at += 10.minutes } # Attempt to change the start time.

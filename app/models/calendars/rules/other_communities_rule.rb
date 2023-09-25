@@ -8,6 +8,7 @@ module Calendars
       VALUES = %i[sponsor read_only forbidden].freeze
 
       def check(event)
+        return true if event.meal?
         case value
         when "forbidden", "read_only"
           event.creator_temp_community == community ||

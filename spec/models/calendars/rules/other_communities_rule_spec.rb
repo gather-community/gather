@@ -63,5 +63,16 @@ describe Calendars::Rules::OtherCommunitiesRule do
           "You must have a sponsor from #{calendar.community.name}"])
       end
     end
+
+    describe "meal event (no creator_temp)" do
+      let(:value) { "forbidden" }
+
+      it "should always pass because only the system can create this kind of event" do
+        event.creator_temp = nil
+        event.kind = "_meal"
+        event.meal = create(:meal)
+        expect(rule.check(event)).to be(true)
+      end
+    end
   end
 end

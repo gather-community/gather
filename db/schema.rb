@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_23_161808) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_25_122632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,7 +90,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_161808) do
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.integer "creator_temp_id", null: false
+    t.integer "creator_temp_id"
     t.datetime "ends_at", precision: nil, null: false
     t.string "kind"
     t.integer "meal_id"

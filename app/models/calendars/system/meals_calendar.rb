@@ -20,7 +20,6 @@ module Calendars
           # We don't save the events since that's not how system calendars work.
           events.build(
             name: title,
-            creator_temp_id: meal.creator_id,
             meal_id: meal.id,
             starts_at: meal.served_at,
             ends_at: meal.served_at + MEAL_DURATION,

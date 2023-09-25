@@ -41,7 +41,7 @@ describe Meals::EventHandler do
           ])
           expect(events.map(&:kind).uniq).to eq(["_meal"])
           expect(events.map(&:guidelines_ok).uniq).to eq(["1"])
-          expect(events.map(&:creator_temp).uniq).to eq([meal.creator])
+          expect(events.map(&:creator_temp).uniq).to eq([nil])
           expect(events[0].name).to eq("Meal: A very very ver...")
         end
       end

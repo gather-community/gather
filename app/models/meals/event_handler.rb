@@ -75,7 +75,6 @@ module Meals
     def event_attributes(resourcing)
       starts_at = meal.served_at - resourcing.prep_time.minutes
       {
-        creator_temp: meal.creator,
         name: event_name,
         kind: "_meal",
         starts_at: starts_at,

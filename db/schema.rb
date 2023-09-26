@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_26_115159) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -108,6 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115159) do
     t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
     t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
     t.check_constraint "(meal_id IS NULL) = (creator_id IS NOT NULL)", name: "meal_or_creator"
+    t.check_constraint "NOT (group_id IS NOT NULL AND creator_id IS NULL)", name: "must_have_creator_if_group"
   end
 
   create_table "calendar_guideline_inclusions", id: :serial, force: :cascade do |t|

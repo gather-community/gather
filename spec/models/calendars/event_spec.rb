@@ -72,7 +72,7 @@ describe Calendars::Event do
         it "should not error if creator not present" do
           meal = create(:meal)
           event = build(:event, creator_id: nil, kind: "_meal", meal_id: meal.id,
-            starts_at: meal.served_at, ends_at: meal.served_at + 1.hour)
+            starts_at: meal.served_at - 1.hour, ends_at: meal.served_at + 1.hour)
           expect(event).to be_valid
         end
 

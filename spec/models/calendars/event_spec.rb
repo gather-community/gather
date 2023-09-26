@@ -7,6 +7,11 @@ describe Calendars::Event do
   let(:calendar) { create(:calendar, allow_overlap: allow_overlap) }
   let(:calendar2) { create(:calendar) }
 
+  it "has a valid factory" do
+    create(:event)
+    create(:event, group: create(:group))
+  end
+
   describe "normalization" do
     let(:event) { build(:event, submitted) }
 

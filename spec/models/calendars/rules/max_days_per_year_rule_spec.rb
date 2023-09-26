@@ -14,31 +14,31 @@ describe Calendars::Rules::MaxDaysPerYearRule do
     # Create 110.5 hours total (8 days) events for calendars 1,2,&3 for household.
     let!(:event1) do
       # 8 hours
-      create(:event, creator_temp: user1, calendar: calendar1, kind: "Special",
+      create(:event, creator: user1, calendar: calendar1, kind: "Special",
         starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00")
     end
     let!(:event2) do
       # 26 hours (2 days)
-      create(:event, creator_temp: user2, calendar: calendar2, kind: "Personal",
+      create(:event, creator: user2, calendar: calendar2, kind: "Personal",
         starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00")
     end
     let!(:event3) do
       # 3.5 hours
-      create(:event, creator_temp: user2, calendar: calendar1,
+      create(:event, creator: user2, calendar: calendar1,
         starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30")
     end
     let!(:event4) do
       # 70 hours (3 days)
-      create(:event, creator_temp: user2, calendar: calendar1, kind: "Official",
+      create(:event, creator: user2, calendar: calendar1, kind: "Official",
         starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00")
     end
     let!(:event5) do
       # 3 hours
-      create(:event, creator_temp: user1, calendar: calendar3,
+      create(:event, creator: user1, calendar: calendar3,
         starts_at: "2016-01-11 13:00", ends_at: "2016-01-11 16:00")
     end
 
-    let(:event) { Calendars::Event.new(creator_temp: user1, starts_at: "2016-01-30 6:00pm") }
+    let(:event) { Calendars::Event.new(creator: user1, starts_at: "2016-01-30 6:00pm") }
 
     context "rule with kinds and calendars" do
       let(:rule) do

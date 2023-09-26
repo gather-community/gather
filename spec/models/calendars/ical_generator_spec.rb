@@ -136,19 +136,19 @@ describe Calendars::IcalGenerator do
     let(:events) do
       [
         create(:event, name: "Some Event",
-          creator_temp: user,
+          creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00",
           note: "This is a description",
           location: "A nice place"),
         create(:event, name: "Some Event",
-          creator_temp: user,
+          creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00",
           note: "Other description",
           location: "Other place"),
         create(:event, name: "Other Event",
-          creator_temp: user,
+          creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00")
       ]

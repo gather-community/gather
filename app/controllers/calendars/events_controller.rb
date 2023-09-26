@@ -52,7 +52,7 @@ module Calendars
     end
 
     def create
-      @event = Event.new(creator_temp: current_user)
+      @event = Event.new(creator: current_user)
       assign_calendar
       @event.assign_attributes(event_params)
       authorize(@event)
@@ -107,7 +107,7 @@ module Calendars
       # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
       # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
       # Kind-specific rules will be enforced through validation.
-      sample_event = Event.new(calendar: @calendar, creator_temp: current_user, kind: nil)
+      sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
       authorize(sample_event)
       prepare_lenses(*BASE_LENSES)
       @can_create_event = policy(sample_event).create?
@@ -116,7 +116,7 @@ module Calendars
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
-      @rule_set_serializer = build_attribute_serializer(@rule_set, creator_temp_community: Community.first,
+      @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
         serializer: RuleSetSerializer)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
@@ -161,7 +161,7 @@ module Calendars
       @calendar = Calendar.find(params[:calendar_id])
       @event = Event.new_with_defaults(
         calendar: @calendar,
-        creator_temp: current_user,
+        creator: current_user,
         starts_at: params[:start],
         ends_at: params[:end],
         origin_page: params[:origin_page]
@@ -178,7 +178,7 @@ module Calendars
 
     def render_choose_calendar_page
       # This sample event is just for authorizing the new action on CalendarEvent.
-      sample_event = Event.new(calendar: writeable_calendars.first, creator_temp: current_user)
+      sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
       authorize(sample_event)
 
       @calendars = writeable_calendars
@@ -189,7 +189,7 @@ module Calendars
       sample_calendar = Calendar.new(community: current_community)
 
       # This sample event is just for authorizing the new action on CalendarEvent.
-      sample_event = Event.new(calendar: sample_calendar, creator_temp: current_user)
+      sample_event = Event.new(calendar: sample_calendar, creator: current_user)
       authorize(sample_event)
 
       @can_create_calendar = policy(sample_calendar).create?

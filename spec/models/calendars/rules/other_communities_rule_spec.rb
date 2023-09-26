@@ -14,12 +14,12 @@ describe Calendars::Rules::OtherCommunitiesRule do
 
     shared_examples_for "insiders only" do
       it "should pass for insider" do
-        event.creator_temp = insider
+        event.creator = insider
         expect(rule.check(event)).to be(true)
       end
 
       it "should fail for outsider even with sponsor" do
-        event.creator_temp = outsider
+        event.creator = outsider
         event.sponsor = insider
         expect(rule.check(event)).to eq([:base,
           "Residents from other communities may not make events"])
@@ -40,35 +40,35 @@ describe Calendars::Rules::OtherCommunitiesRule do
       let(:value) { "sponsor" }
 
       it "should pass if insider has no sponsor" do
-        event.creator_temp = insider
+        event.creator = insider
         expect(rule.check(event)).to be(true)
       end
 
       it "should pass if outsider has sponsor from community" do
-        event.creator_temp = outsider
+        event.creator = outsider
         event.sponsor = insider
         expect(rule.check(event)).to be(true)
       end
 
       it "should fail if outsider has sponsor from outside community" do
-        event.creator_temp = outsider
+        event.creator = outsider
         event.sponsor = outsider2
         expect(rule.check(event)).to eq([:sponsor_id,
           "You must have a sponsor from #{calendar.community.name}"])
       end
 
       it "should fail if outsider has no sponsor" do
-        event.creator_temp = outsider
+        event.creator = outsider
         expect(rule.check(event)).to eq([:sponsor_id,
           "You must have a sponsor from #{calendar.community.name}"])
       end
     end
 
-    describe "meal event (no creator_temp)" do
+    describe "meal event (no creator)" do
       let(:value) { "forbidden" }
 
       it "should always pass because only the system can create this kind of event" do
-        event.creator_temp = nil
+        event.creator = nil
         event.kind = "_meal"
         event.meal = create(:meal)
         expect(rule.check(event)).to be(true)

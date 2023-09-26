@@ -11,7 +11,7 @@ module Calendars
     UID_SIGNATURE = "91a772a5ae4a"
 
     # If all of these are the same for any N calendar events, we should group them together in the export.
-    GROUP_ATTRIBS = %w[starts_at ends_at creator_temp_id meal_id name].freeze
+    GROUP_ATTRIBS = %w[starts_at ends_at creator_id meal_id name].freeze
 
     attr_accessor :calendar_name, :grouped_events, :cal, :url_options, :groups
 

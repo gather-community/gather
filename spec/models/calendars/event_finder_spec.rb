@@ -11,10 +11,10 @@ describe Calendars::EventFinder do
   let!(:cal3) { create(:calendar) }
   let!(:cal4) { create(:other_communities_meals_calendar) }
   let!(:event1_1) do
-    create(:event, calendar: cal1, starts_at: t0 + 1.hour, ends_at: t0 + 2.hours, creator_temp: user)
+    create(:event, calendar: cal1, starts_at: t0 + 1.hour, ends_at: t0 + 2.hours, creator: user)
   end
   let!(:event1_2) do
-    create(:event, calendar: cal1, starts_at: t0 + 2.hours, ends_at: t0 + 3.hours, creator_temp: user)
+    create(:event, calendar: cal1, starts_at: t0 + 2.hours, ends_at: t0 + 3.hours, creator: user)
   end
   let!(:event1_3) { create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours) }
   let!(:event1_4) { create(:event, calendar: cal1, starts_at: t0 + 4.hours, ends_at: t0 + 5.hours) }

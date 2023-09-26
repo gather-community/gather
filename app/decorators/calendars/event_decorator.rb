@@ -31,7 +31,7 @@ module Calendars
       h.safe_render_markdown(note)
     end
 
-    def creator_temp_select2_context
+    def creator_select2_context
       (access_level(h.current_community) == "sponsor") ? "current_cluster_full_access" : "current_community_full_access"
     end
 

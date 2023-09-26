@@ -55,23 +55,23 @@ describe Calendars::Event do
   end
 
   describe "validation" do
-    describe "creator_temp_id presence" do
+    describe "creator_id presence" do
       context "when not a meal event" do
         it "should not error if creator present" do
-          event = build(:event, creator_temp_id: create(:user).id)
+          event = build(:event, creator_id: create(:user).id)
           expect(event).to be_valid
         end
 
         it "should error if creator not present" do
-          event = build(:event, creator_temp_id: nil)
-          expect(event).to have_errors(creator_temp_id: "can't be blank")
+          event = build(:event, creator_id: nil)
+          expect(event).to have_errors(creator_id: "can't be blank")
         end
       end
 
       context "when meal event" do
         it "should not error if creator not present" do
           meal = create(:meal)
-          event = build(:event, creator_temp_id: nil, kind: "_meal", meal_id: meal.id,
+          event = build(:event, creator_id: nil, kind: "_meal", meal_id: meal.id,
             starts_at: meal.served_at, ends_at: meal.served_at + 1.hour)
           expect(event).to be_valid
         end

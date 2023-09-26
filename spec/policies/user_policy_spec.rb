@@ -285,7 +285,7 @@ describe UserPolicy do
       end
 
       context "with own events" do
-        let!(:event) { create(:event, creator_temp: record) }
+        let!(:event) { create(:event, creator: record) }
         it_behaves_like "forbids all"
       end
 

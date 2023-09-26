@@ -37,8 +37,8 @@ module Calendars
       # Returns one of [ok, read_only, sponsor, forbidden] to describe the access level of
       # the given creator vis a vis the rule set's calendar. This is for displaying the calendar
       # or the event page. It doesn't check whether an event is valid. See the .check method for that.
-      def access_level(creator_temp_community)
-        return "ok" if calendar_community == creator_temp_community
+      def access_level(creator_community)
+        return "ok" if calendar_community == creator_community
         ranks = OtherCommunitiesRule::VALUES
         values_for(:other_communities).max_by { |v| ranks.index(v.to_sym) } || "ok"
       end

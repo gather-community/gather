@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_25_123009) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_26_015352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,7 +90,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_123009) do
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.integer "creator_temp_id"
+    t.integer "creator_id"
     t.datetime "ends_at", precision: nil, null: false
     t.string "kind"
     t.integer "meal_id"
@@ -101,7 +101,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_123009) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
     t.index ["cluster_id"], name: "index_calendar_events_on_cluster_id"
-    t.index ["creator_temp_id"], name: "index_calendar_events_on_creator_temp_id"
+    t.index ["creator_id"], name: "index_calendar_events_on_creator_id"
     t.index ["meal_id"], name: "index_calendar_events_on_meal_id"
     t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
     t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
@@ -1140,7 +1140,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_123009) do
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "meals"
-  add_foreign_key "calendar_events", "users", column: "creator_temp_id"
+  add_foreign_key "calendar_events", "users", column: "creator_id"
   add_foreign_key "calendar_events", "users", column: "sponsor_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_guideline_inclusions", "calendar_shared_guidelines", column: "shared_guidelines_id"

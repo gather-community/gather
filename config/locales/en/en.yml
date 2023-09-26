@@ -231,7 +231,6 @@ en:
   select2:
     prompts:
       creator: "Please type a few letters of the creator's name."
-      creator_temp: "Please type a few letters of the creator's name."
       sponsor: "Please type a few letters of the sponsor's name."
       household: "Please type a few letters of the household's name."
       guardian: "Please type a few letters of the guardian's name."
@@ -242,7 +241,6 @@ en:
       reimbursee: "Please type a few letters of the reimbursee's name."
     placeholders:
       creator: "Choose Creator ..."
-      creator_temp: "Choose Creator ..."
       sponsor: "Choose Sponsor ..."
       household: "Choose Household ..."
       guardian: "Choose Guardian ..."

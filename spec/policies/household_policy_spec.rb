@@ -101,7 +101,7 @@ describe HouseholdPolicy do
       end
 
       context "with non-deletable user" do
-        let!(:event) { create(:event, creator_temp: household.users[0]) }
+        let!(:event) { create(:event, creator: household.users[0]) }
         it_behaves_like "forbids all"
       end
 

@@ -28,7 +28,7 @@ module Calendars
           .where.not(id: event.id)
           .where(calendars.present? ? {calendar: calendars} : nil)
           .where(kinds.present? ? {kind: kinds} : nil)
-          .where(creator_temp: event.household_users)
+          .where(creator: event.household_users)
           .where(starts_at: Time.zone.local(year)...Time.zone.local(year + 1))
           .to_a.sum(&unit)
       end

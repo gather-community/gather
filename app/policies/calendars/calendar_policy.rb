@@ -9,7 +9,7 @@ module Calendars
       # the user can create events on, according to the EventPolicy.
       def resolve_for_create
         resolve.select do |calendar|
-          sample_event = Event.new(calendar: calendar, creator_temp: user)
+          sample_event = Event.new(calendar: calendar, creator: user)
           EventPolicy.new(user, sample_event).create?
         end
       end

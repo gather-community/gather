@@ -602,7 +602,7 @@ describe User do
     end
 
     context "with event creator record" do
-      let!(:event) { create(:event, creator_temp: user) }
+      let!(:event) { create(:event, creator: user) }
       it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
     end
 

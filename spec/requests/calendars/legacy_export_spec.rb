@@ -62,9 +62,9 @@ describe "legacy calendar exports ICS endpoints" do
     let!(:calendar1) { create(:calendar, community: community) }
     let!(:calendar2) { create(:calendar, community: community) }
     let!(:calendar3) { create(:calendar, community: communityB) }
-    let!(:event1) { create(:event, calendar: calendar1, name: "Event 1", creator_temp: user) }
+    let!(:event1) { create(:event, calendar: calendar1, name: "Event 1", creator: user) }
     let!(:event2) { create(:event, calendar: calendar2, name: "Event 2") }
-    let!(:event3) { create(:event, calendar: calendar3, name: "Event 3", creator_temp: user) }
+    let!(:event3) { create(:event, calendar: calendar3, name: "Event 3", creator: user) }
 
     # Decoy meal for testing that system cal events not included
     let!(:meal) { create(:meal, :with_menu, title: "Yummy Meal") }

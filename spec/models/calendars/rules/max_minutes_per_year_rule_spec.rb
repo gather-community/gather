@@ -13,27 +13,27 @@ describe Calendars::Rules::MaxMinutesPerYearRule do
 
     # Create 5 hours total events for calendars 1,2,&3 for household.
     let!(:event1) do
-      create(:event, creator_temp: user1, calendar: calendar1, kind: "Special",
+      create(:event, creator: user1, calendar: calendar1, kind: "Special",
         starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 13:00")
     end
     let!(:event2) do
-      create(:event, creator_temp: user2, calendar: calendar2, kind: "Personal",
+      create(:event, creator: user2, calendar: calendar2, kind: "Personal",
         starts_at: "2016-01-03 12:00", ends_at: "2016-01-03 13:00")
     end
     let!(:event3) do
-      create(:event, creator_temp: user2, calendar: calendar1,
+      create(:event, creator: user2, calendar: calendar1,
         starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 10:00")
     end
     let!(:event4) do
-      create(:event, creator_temp: user2, calendar: calendar1, kind: "Official",
+      create(:event, creator: user2, calendar: calendar1, kind: "Official",
         starts_at: "2016-01-11 13:00", ends_at: "2016-01-11 14:00")
     end
     let!(:event5) do
-      create(:event, creator_temp: user1, calendar: calendar3,
+      create(:event, creator: user1, calendar: calendar3,
         starts_at: "2016-01-11 13:00", ends_at: "2016-01-11 14:00")
     end
 
-    let(:event) { Calendars::Event.new(creator_temp: user1, starts_at: "2016-01-30 6:00pm") }
+    let(:event) { Calendars::Event.new(creator: user1, starts_at: "2016-01-30 6:00pm") }
     let(:rule) do
       described_class.new(value: 180, calendars: [calendar1, calendar2], kinds: %w[Personal Special],
         community: Defaults.community)
@@ -55,7 +55,7 @@ describe Calendars::Rules::MaxMinutesPerYearRule do
 
     context "with persisted event" do
       let!(:event) do
-        create(:event, creator_temp: user1, starts_at: "2016-01-30 6:00pm", ends_at: "2016-01-30 7:00pm",
+        create(:event, creator: user1, starts_at: "2016-01-30 6:00pm", ends_at: "2016-01-30 7:00pm",
           calendar: calendar1, kind: "Personal")
       end
 

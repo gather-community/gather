@@ -47,7 +47,7 @@ describe "event form", js: true do
       end
       let!(:existing_event) do
         Timecop.freeze("2022-01-01 12:00") do
-          create(:event, creator_temp: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
+          create(:event, creator: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
             starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
         end
       end

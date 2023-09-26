@@ -35,7 +35,7 @@ module Calendars
 
     def update?
       specific_record? && !calendar.system? && !read_only_by_protocol? &&
-        (admin_or_coord? || active_creator_temp? || (meal? && active_with_community_role?(:meals_coordinator)))
+        (admin_or_coord? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -44,13 +44,13 @@ module Calendars
       update? && admin_or_coord?
     end
 
-    def choose_creator_temp?
+    def choose_creator?
       (update? || create?) && admin_or_coord?
     end
 
     def destroy?
       specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator_temp? && (future? || recently_created?))
+        (admin_or_coord? || active_creator? && (future? || recently_created?))
     end
 
     def permitted_attributes
@@ -58,7 +58,7 @@ module Calendars
       # community check relies on it.
       attribs = %i[starts_at ends_at note origin_page]
       attribs.concat(%i[name kind sponsor_id guidelines_ok all_day]) unless meal?
-      attribs << :creator_temp_id if choose_creator_temp?
+      attribs << :creator_id if choose_creator?
       attribs
     end
 
@@ -70,8 +70,8 @@ module Calendars
       active_admin_or?(:calendar_coordinator)
     end
 
-    def active_creator_temp?
-      active? && event.creator_temp == user
+    def active_creator?
+      active? && event.creator == user
     end
 
     def forbidden_by_protocol?

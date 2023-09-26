@@ -44,7 +44,7 @@ module Calendars
     def class_name
       if object.meal
         "has-meal"
-      elsif object.creator_temp == scope
+      elsif object.creator == scope
         "own-event"
       else
         ""

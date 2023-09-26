@@ -20,7 +20,7 @@ module Utils
           Calendars::Event.create!(row.except("id", "calendar_id").merge(
             starts_at: translate_time(row["starts_at"]),
             ends_at: translate_time(row["ends_at"]),
-            creator_temp: adults.sample,
+            creator: adults.sample,
             calendar: calendar_map[row["calendar_id"]],
             guidelines_ok: "1",
             name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],

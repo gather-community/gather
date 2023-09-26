@@ -40,7 +40,7 @@ describe Calendars::System::BirthdaysCalendar do
       starts_at: Time.zone.parse("2021-01-28 00:00"),
       ends_at: Time.zone.parse("2021-01-28 23:59:59"),
       all_day: true,
-      creator_temp_id: nil,
+      creator_id: nil,
       note: nil,
       linkable: user1,
       uid: "birthdays_#{user1.id}"
@@ -49,7 +49,7 @@ describe Calendars::System::BirthdaysCalendar do
       starts_at: Time.zone.parse("2021-02-19 00:00"),
       ends_at: Time.zone.parse("2021-02-19 23:59:59"),
       all_day: true,
-      creator_temp_id: nil,
+      creator_id: nil,
       note: nil,
       linkable: user3,
       uid: "birthdays_#{user3.id}"
@@ -58,7 +58,7 @@ describe Calendars::System::BirthdaysCalendar do
       starts_at: Time.zone.parse("2021-02-28 00:00"), # Observe Feb 29 on Feb 28 in non-leap year
       ends_at: Time.zone.parse("2021-02-28 23:59:59"),
       all_day: true,
-      creator_temp_id: nil,
+      creator_id: nil,
       note: nil,
       linkable: user2,
       uid: "birthdays_#{user2.id}"

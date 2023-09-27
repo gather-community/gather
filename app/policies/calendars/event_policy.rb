@@ -35,7 +35,7 @@ module Calendars
 
     def update?
       specific_record? && !calendar.system? && !read_only_by_protocol? &&
-        (admin_or_coord? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
+        (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -50,7 +50,7 @@ module Calendars
 
     def destroy?
       specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator? && (future? || recently_created?))
+        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 
     def permitted_attributes
@@ -70,8 +70,8 @@ module Calendars
       active_admin_or?(:calendar_coordinator)
     end
 
-    def active_creator?
-      active? && event.creator == user
+    def active_creator_or_group_member?
+      active? && (event.creator == user || event.group&.member?(user))
     end
 
     def forbidden_by_protocol?

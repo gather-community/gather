@@ -11,16 +11,30 @@ describe Calendars::EventPolicy do
     let(:created_at) { nil }
     let(:starts_at) { Time.current + 1.week }
     let(:ends_at) { starts_at + 1.hour }
+    let(:group) { nil }
     let(:event) do
       create(:event, creator: creator, calendar: calendar, created_at: created_at,
-        starts_at: starts_at, ends_at: ends_at)
+        group: group, starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { event }
 
     shared_examples_for "permits admins or special role and creator" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
-      it "permits creator" do
-        expect(subject).to permit(creator, event)
+
+      context "without group" do
+        it "permits creator" do
+          expect(subject).to permit(creator, event)
+        end
+      end
+
+      context "with group" do
+        let(:joiner) { create(:user) }
+        let(:group) { create(:group, joiners: [joiner]) }
+
+        it "permits creator and group member" do
+          expect(subject).to permit(creator, event)
+          expect(subject).to permit(joiner, event)
+        end
       end
     end
 
@@ -65,7 +79,6 @@ describe Calendars::EventPolicy do
         context "not-just-created event with end time in past" do
           let(:created_at) { 90.minutes.ago }
           let(:starts_at) { 3.hours.ago }
-
           it_behaves_like "permits admins or special role and creator"
         end
       end

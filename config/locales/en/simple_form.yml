@@ -89,6 +89,7 @@ en:
           _destroy: "Check this box to shut down the email list."
       calendars_event:
         all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
+        group_id: "Events with a group can be edited by other members of the group and won't show up in your 'Your events' calendar feed."
       calendars_protocol:
         kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
         calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."

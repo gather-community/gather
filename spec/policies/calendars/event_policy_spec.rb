@@ -236,7 +236,7 @@ describe Calendars::EventPolicy do
 
     context "regular event" do
       let(:basic_attribs) do
-        %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page all_day]
+        %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page all_day group_id]
       end
       it_behaves_like "each user type"
     end

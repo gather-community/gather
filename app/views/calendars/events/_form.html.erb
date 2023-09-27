@@ -27,6 +27,10 @@
     <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context %>
   <% end %>
 
+  <% unless event.meal? %>
+    <%= f.input :group_id, collection: @groups %>
+  <% end %>
+
   <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: event.fixed_start_time? ? "no-time-picker" : "" } %>
 

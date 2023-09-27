@@ -174,6 +174,7 @@ module Calendars
       @calendar ||= @event.calendar
       @rule_set = @event.rule_set
       @kinds = @calendar.kinds # May be nil
+      @groups = Groups::GroupPolicy::Scope.new(current_user, Groups::Group).resolve.in_community(current_community).order(:name)
     end
 
     def render_choose_calendar_page

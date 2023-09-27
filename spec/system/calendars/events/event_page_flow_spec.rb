@@ -10,6 +10,7 @@ describe "event page flow", js: true do
     create(:event, name: "Fun Event", calendar: calendar1,
       starts_at: Time.current.midnight + 8.hours, creator: user)
   end
+  let!(:group) { create(:group, name: "Fun Group") }
 
   before do
     use_user_subdomain(user)
@@ -77,6 +78,10 @@ describe "event page flow", js: true do
       visit(calendars_events_path)
       show_edit_and_save
       expect(page).to have_title("Events & Reservations")
+
+      # Check that group is persisted and displayed
+      click_on("Fun Event")
+      expect(page).to have_content(/Group\s*Fun Group/)
     end
 
     scenario "from single calendar view" do
@@ -89,6 +94,7 @@ describe "event page flow", js: true do
       find("div.fc-title", text: "Fun Event").click
       click_on("Edit")
       fill_in("Event Name", with: "Fun Event Delta")
+      select("Fun Group", from: "Group")
       click_on("Save")
       expect_success
     end

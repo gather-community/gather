@@ -217,7 +217,8 @@ module Calendars
 
     # Pundit built-in helper doesn't work due to namespacing
     def event_params
-      permitted = params.require(:calendars_event).permit(policy(@event).permitted_attributes)
+      permitted_attributes = policy(@event).permitted_attributes(group_id: params[:calendars_event][:group_id])
+      permitted = params.require(:calendars_event).permit(permitted_attributes)
       permitted[:privileged_changer] = true if policy(@event).privileged_change?
       permitted
     end

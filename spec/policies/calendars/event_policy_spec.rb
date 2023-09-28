@@ -211,53 +211,118 @@ describe Calendars::EventPolicy do
   describe "permitted_attributes" do
     include_context "policy permissions"
     let(:event) { create(:event, calendar: calendar) }
-    let(:admin_attribs) { basic_attribs + %i[creator_id] }
-    subject { Calendars::EventPolicy.new(creator, event).permitted_attributes }
-
-    shared_examples_for "basic attribs" do
-      it "should allow basic attribs" do
-        expect(subject).to contain_exactly(*basic_attribs)
-      end
-    end
-
-    shared_examples_for "each user type" do
-      context "regular user" do
-        it_behaves_like "basic attribs"
-      end
-
-      context "calendar_coordinator" do
-        let(:creator) { calendar_coordinator }
-
-        it "should allow admin-only attribs" do
-          expect(subject).to contain_exactly(*admin_attribs)
-        end
-      end
-
-      context "admin" do
-        let(:creator) { admin }
-
-        it "should allow admin-only attribs" do
-          expect(subject).to contain_exactly(*admin_attribs)
-        end
-      end
-
-      context "outside admin" do
-        let(:creator) { admin_cmtyB }
-        it_behaves_like "basic attribs"
-      end
-    end
+    let(:admin_attribs) { basic_attribs + %i[creator_id group_id] }
+    let(:submitted_group_id) { nil }
+    subject { Calendars::EventPolicy.new(user, event).permitted_attributes(group_id: submitted_group_id) }
 
     context "regular event" do
       let(:basic_attribs) do
-        %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page all_day group_id]
+        %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page all_day]
       end
-      it_behaves_like "each user type"
+
+      context "regular user" do
+        let(:user) { create(:user) }
+
+        it "should allow basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+
+        context "when group_id is submitted" do
+          let(:group) { create(:group, joiners: joiners) }
+          let(:submitted_group_id) { group.id }
+
+          context "when user is member of group" do
+            let(:joiners) { [user] }
+
+            it "should also allow group_id" do
+              expect(subject).to contain_exactly(*basic_attribs + [:group_id])
+            end
+          end
+
+          context "when user is not member of group" do
+            let(:joiners) { [] }
+
+            it "should not allow group_id" do
+              expect(subject).to contain_exactly(*basic_attribs)
+            end
+          end
+        end
+      end
+
+      shared_examples_for "admin or coord" do
+        it "should allow admin-only attribs" do
+          expect(subject).to contain_exactly(*admin_attribs)
+        end
+
+        context "when group_id is submitted" do
+          let(:group) { create(:group, joiners: joiners) }
+          let(:submitted_group_id) { group.id }
+
+          context "when user is not member of group" do
+            let(:joiners) { [] }
+
+            it "should allow group_id anyway" do
+              expect(subject).to contain_exactly(*admin_attribs)
+            end
+          end
+        end
+      end
+
+      context "calendar_coordinator" do
+        let(:user) { calendar_coordinator }
+        it_behaves_like "admin or coord"
+      end
+
+      context "admin" do
+        let(:user) { admin }
+        it_behaves_like "admin or coord"
+      end
+
+      context "outside admin" do
+        let(:user) { admin_cmtyB }
+
+        it "should allow basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
     end
 
     context "meal event" do
       let(:basic_attribs) { %i[starts_at ends_at note origin_page] }
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
-      it_behaves_like "each user type"
+      let(:meal) { create(:meal, calendars: [calendar]).tap(&:build_events) }
+      let(:event) { meal.events[0] }
+
+      context "regular user" do
+        let(:user) { create(:user) }
+
+        it "should allow nothing" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "calendar_coordinator" do
+        let(:user) { calendar_coordinator }
+
+        it "should basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
+
+      context "admin" do
+        let(:user) { admin }
+
+        it "should basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
+
+      context "outside admin" do
+        let(:user) { admin_cmtyB }
+
+        it "should allow nothing" do
+          expect(subject).to be_empty
+        end
+      end
     end
   end
 end

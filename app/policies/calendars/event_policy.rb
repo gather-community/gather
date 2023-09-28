@@ -64,12 +64,18 @@ module Calendars
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 
-    def permitted_attributes
+    def permitted_attributes(group_id:)
+      # Meal events have no creators so a regular user can't possibly edit them.
+      return [] if meal? && !admin_or_coord?
+
       # We don't include calendar_id here because that must be set explicitly because the admin
       # community check relies on it.
       attribs = %i[starts_at ends_at note origin_page]
-      attribs.concat(%i[name kind sponsor_id guidelines_ok all_day group_id]) unless meal?
-      attribs << :creator_id if choose_creator?
+      unless meal?
+        attribs.concat(%i[name kind sponsor_id guidelines_ok all_day])
+        attribs << :creator_id if choose_creator?
+        attribs << :group_id if admin_or_coord? || Groups::Group.find_by(id: group_id)&.member?(user)
+      end
       attribs
     end
 

@@ -18,7 +18,7 @@ describe Calendars::EventPolicy do
     end
     let(:record) { event }
 
-    shared_examples_for "permits admins or special role and creator" do
+    shared_examples_for "permits admins or special role or creator but not regular users" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
 
       context "without group" do
@@ -40,6 +40,7 @@ describe Calendars::EventPolicy do
 
     shared_examples_for "permits admins or special role but not creator" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
       it "forbids creator" do
         expect(subject).not_to permit(creator, event)
       end
@@ -68,18 +69,18 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or special role and creator"
+        it_behaves_like "permits admins or special role or creator but not regular users"
 
         context "just-created event with end time in past" do
           let(:starts_at) { 3.hours.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role or creator but not regular users"
         end
 
         context "not-just-created event with end time in past" do
           let(:created_at) { 90.minutes.ago }
           let(:starts_at) { 3.hours.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role or creator but not regular users"
         end
       end
 
@@ -94,13 +95,13 @@ describe Calendars::EventPolicy do
       permissions :destroy? do
         context "future event" do
           let(:starts_at) { 1.day.from_now }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role or creator but not regular users"
         end
 
         context "just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role or creator but not regular users"
         end
 
         context "not-just-created event" do
@@ -148,7 +149,7 @@ describe Calendars::EventPolicy do
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or special role or creator but not regular users"
         end
       end
     end

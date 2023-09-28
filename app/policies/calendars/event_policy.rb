@@ -17,6 +17,17 @@ module Calendars
       end
     end
 
+    # For scoping the groups we show in the group dropdown
+    class GroupScope < Scope
+      def resolve
+        if active_admin?
+          scope
+        else
+          scope.with_user(user).active
+        end
+      end
+    end
+
     def index?
       # If record is a Class (not a specific event), can't check if calendar is active
       (not_specific_record? || calendar.active?) &&

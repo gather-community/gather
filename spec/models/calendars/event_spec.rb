@@ -76,7 +76,7 @@ describe Calendars::Event do
       context "when meal event" do
         it "should not error if creator not present" do
           meal = create(:meal)
-          event = build(:meal_event, meal: meal)
+          event = build(:event, meal: meal, creator: nil, kind: "_meal", starts_at: meal.served_at, ends_at: meal.served_at + 1.hour)
           expect(event).to be_valid
         end
 

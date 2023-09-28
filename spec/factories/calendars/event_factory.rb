@@ -9,13 +9,4 @@ FactoryBot.define do
     sequence(:ends_at) { starts_at + 55.minutes }
     kind { nil }
   end
-
-  factory :meal_event, class: "Calendars::Event" do
-    name { "Noms" }
-    calendar
-    meal
-    starts_at { meal.served_at - 1.hour }
-    ends_at { meal.served_at + 1.hour }
-    kind { "_meal" }
-  end
 end

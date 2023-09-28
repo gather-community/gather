@@ -155,7 +155,8 @@ describe Calendars::EventPolicy do
     end
 
     context "meal event" do
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
+      let(:meal) { create(:meal, calendars: [calendar]) }
+      let(:event) { create(:event, creator: nil, calendar: calendar, meal: meal, starts_at: meal.served_at, ends_at: meal.served_at + 1.hour, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -170,8 +171,7 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it "permits access to admins, meals/cal coordinators, and meal creator, and forbids others" do
-          expect(subject).to permit(creator, event)
+        it "permits access to admins, meals/cal coordinators, and forbids others" do
           expect(subject).to permit(admin, event)
           expect(subject).to permit(meals_coordinator, event)
           expect(subject).to permit(calendar_coordinator, event)

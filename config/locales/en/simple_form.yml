@@ -15,7 +15,7 @@ en:
       # aren't ActiveRecord models.
       calendars_export:
         dont_personalize: "Don't personalize events"
-        own_only: "Include only events you created"
+        own_only: "Include only your events"
       payment:
         accountholder_name: "Accountholder Name"
         payment_method: "Payment Method"
@@ -73,7 +73,7 @@ en:
         member_type_ids: "Select the member type(s) this template applies to."
       calendars_export:
         dont_personalize: "By default, calendar exports are tailored to you and your household so you shouldn't share your export links. If you need a non-personalized link to use in a public place, check this box."
-        own_only: "Check this box to only export events you created. Events from system-generated calendars like 'Your Meals' or 'Birthdays' won't be included."
+        own_only: "Check this box to only export events that you created for yourself. Group events and meal events won't be included."
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."

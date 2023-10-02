@@ -18,7 +18,7 @@ module Calendars
         .between(range)
         .includes(:calendar)
         .where(calendar: non_system_calendars)
-      scope = scope.where(creator: user) if own_only
+      scope = scope.where(creator: user).where(group: nil) if own_only
       scope.to_a
     end
 

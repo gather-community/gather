@@ -45,7 +45,7 @@ module Calendars
       if object.meal
         "has-meal"
       elsif object.creator == scope
-        "own-event"
+        object.group ? "own-group-event" : "own-event"
       else
         ""
       end

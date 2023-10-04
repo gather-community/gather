@@ -174,7 +174,7 @@ module Calendars
       @calendar ||= @event.calendar
       @rule_set = @event.rule_set
       @kinds = @calendar.kinds # May be nil
-      @groups = Calendar::EventPolicy::GroupScope.new(current_user, Groups::Group)
+      @groups = Calendars::EventPolicy::GroupScope.new(current_user, Groups::Group)
         .resolve
         .in_community(current_community)
         .order(:name)

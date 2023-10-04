@@ -10,7 +10,6 @@ describe "event page flow", js: true do
     create(:event, name: "Fun Event", calendar: calendar1,
       starts_at: Time.current.midnight + 8.hours, creator: user)
   end
-  let!(:group) { create(:group, name: "Fun Group") }
 
   before do
     use_user_subdomain(user)
@@ -74,6 +73,8 @@ describe "event page flow", js: true do
   end
 
   describe "edit" do
+    let!(:group) { create(:group, name: "Fun Group", joiners: [user]) }
+
     scenario "from combined view" do
       visit(calendars_events_path)
       show_edit_and_save

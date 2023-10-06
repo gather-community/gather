@@ -21,8 +21,7 @@ module Lens
 
       self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
         controller_path: context.controller_path, action_name: context.action_name,
-        persist: context.own_cluster?)
-      storage.reset if route_params[:clearlenses]
+        persist: context.own_cluster?, reset: route_params[:clearlenses].present?)
       build_lenses(lens_names)
     end
 

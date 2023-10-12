@@ -269,11 +269,11 @@ Rails.application.routes.draw do
         get "owners", to: "owners#index", as: :owners
         get "files", to: "files#index", as: :files
       end
-      get "consent", to: "consent#intro", as: :consent
-      get "consent/step1", to: "consent#step1", as: :consent_step1
-      get "consent/step2", to: "consent#step2", as: :consent_step2
-      get "consent/callback", to: "consent#callback", as: :consent_callback
-      put "consent/ingest", to: "consent#ingest", as: :consent_ingest
+      get "consent/:id", to: "consent#intro", as: :consent
+      get "consent/:id/step1", to: "consent#step1", as: :consent_step1
+      get "consent/:id/step2", to: "consent#step2", as: :consent_step2
+      get "consent/:id/callback", to: "consent#callback", as: :consent_callback
+      put "consent/:id/ingest", to: "consent#ingest", as: :consent_ingest
     end
   end
 

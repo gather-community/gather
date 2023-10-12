@@ -11,20 +11,15 @@ module GDrive
 
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
-      prepend_before_action :set_current_community_from_query_string, except: :callback
-
-      # This will get pulled from a model later.
-      TEMP_USER_ID = "example@gmail.com"
 
       def intro
-        @config = MigrationConfig.find_by(community: current_community)
+        @consent_request = ConsentRequest.find(params[:id])
+        @operation = @consent_request.operation
+        @config = @operation.config
+        @community = current_community
 
-        if @config.nil?
-          @no_config = true
-          return
-        end
-
-        wrapper = Wrapper.new(config: @config, google_user_id: TEMP_USER_ID, callback_url: callback_url)
+        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email,
+          callback_url: callback_url)
         credentials = wrapper.fetch_credentials_from_store
 
         if wrapper.has_credentials?

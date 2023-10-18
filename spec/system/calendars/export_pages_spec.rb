@@ -43,7 +43,7 @@ describe "calendar export pages", js: true do
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
           "/calendars/export.ics?calendars=all&token=#{user_token}")
 
-        check("Include only events you created")
+        check("Include only your events")
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
           "/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
 

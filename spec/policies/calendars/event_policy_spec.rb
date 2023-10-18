@@ -11,28 +11,43 @@ describe Calendars::EventPolicy do
     let(:created_at) { nil }
     let(:starts_at) { Time.current + 1.week }
     let(:ends_at) { starts_at + 1.hour }
+    let(:group) { nil }
     let(:event) do
       create(:event, creator: creator, calendar: calendar, created_at: created_at,
-                     starts_at: starts_at, ends_at: ends_at)
+        group: group, starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { event }
 
-    shared_examples_for "permits admins or special role and creator" do
+    shared_examples_for "permits admins or calendar coord or creator or group member but not regular users" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
-      it "permits creator" do
-        expect(subject).to permit(creator, event)
+
+      context "without group" do
+        it "permits creator" do
+          expect(subject).to permit(creator, event)
+        end
+      end
+
+      context "with group" do
+        let(:joiner) { create(:user) }
+        let(:group) { create(:group, joiners: [joiner]) }
+
+        it "permits creator and group member" do
+          expect(subject).to permit(creator, event)
+          expect(subject).to permit(joiner, event)
+        end
       end
     end
 
-    shared_examples_for "permits admins or special role but not creator" do
+    shared_examples_for "permits admins or calendar coord but not creator" do
       it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
       it "forbids creator" do
         expect(subject).not_to permit(creator, event)
       end
     end
 
     permissions :choose_creator?, :privileged_change? do
-      it_behaves_like "permits admins or special role but not creator"
+      it_behaves_like "permits admins or calendar coord but not creator"
     end
 
     context "with class instead of object" do
@@ -43,7 +58,7 @@ describe Calendars::EventPolicy do
       end
 
       permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
-                  :choose_creator?, :destroy? do
+        :choose_creator?, :destroy? do
         it_behaves_like "forbids all"
       end
     end
@@ -54,19 +69,18 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or special role and creator"
+        it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
 
         context "just-created event with end time in past" do
           let(:starts_at) { 3.hours.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
 
         context "not-just-created event with end time in past" do
           let(:created_at) { 90.minutes.ago }
           let(:starts_at) { 3.hours.ago }
-
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
       end
 
@@ -81,19 +95,19 @@ describe Calendars::EventPolicy do
       permissions :destroy? do
         context "future event" do
           let(:starts_at) { 1.day.from_now }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
 
         context "just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
 
         context "not-just-created event" do
           let(:starts_at) { 1.day.ago }
           let(:created_at) { 1.week.ago }
-          it_behaves_like "permits admins or special role but not creator"
+          it_behaves_like "permits admins or calendar coord but not creator"
         end
       end
     end
@@ -135,13 +149,14 @@ describe Calendars::EventPolicy do
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "permits admins or special role and creator"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
       end
     end
 
     context "meal event" do
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
+      let(:meal) { create(:meal, calendars: [calendar]) }
+      let(:event) { create(:event, creator: nil, calendar: calendar, meal: meal, starts_at: meal.served_at, ends_at: meal.served_at + 1.hour, kind: "_meal") }
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"
@@ -156,8 +171,7 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it "permits access to admins, meals/cal coordinators, and meal creator, and forbids others" do
-          expect(subject).to permit(creator, event)
+        it "permits access to admins, meals/cal coordinators, and forbids others" do
           expect(subject).to permit(admin, event)
           expect(subject).to permit(meals_coordinator, event)
           expect(subject).to permit(calendar_coordinator, event)
@@ -198,53 +212,118 @@ describe Calendars::EventPolicy do
   describe "permitted_attributes" do
     include_context "policy permissions"
     let(:event) { create(:event, calendar: calendar) }
-    let(:admin_attribs) { basic_attribs + %i[creator_id] }
-    subject { Calendars::EventPolicy.new(creator, event).permitted_attributes }
-
-    shared_examples_for "basic attribs" do
-      it "should allow basic attribs" do
-        expect(subject).to contain_exactly(*basic_attribs)
-      end
-    end
-
-    shared_examples_for "each user type" do
-      context "regular user" do
-        it_behaves_like "basic attribs"
-      end
-
-      context "calendar_coordinator" do
-        let(:creator) { calendar_coordinator }
-
-        it "should allow admin-only attribs" do
-          expect(subject).to contain_exactly(*admin_attribs)
-        end
-      end
-
-      context "admin" do
-        let(:creator) { admin }
-
-        it "should allow admin-only attribs" do
-          expect(subject).to contain_exactly(*admin_attribs)
-        end
-      end
-
-      context "outside admin" do
-        let(:creator) { admin_cmtyB }
-        it_behaves_like "basic attribs"
-      end
-    end
+    let(:admin_attribs) { basic_attribs + %i[creator_id group_id] }
+    let(:submitted_group_id) { nil }
+    subject { Calendars::EventPolicy.new(user, event).permitted_attributes(group_id: submitted_group_id) }
 
     context "regular event" do
       let(:basic_attribs) do
         %i[name kind sponsor_id starts_at ends_at guidelines_ok note origin_page all_day]
       end
-      it_behaves_like "each user type"
+
+      context "regular user" do
+        let(:user) { create(:user) }
+
+        it "should allow basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+
+        context "when group_id is submitted" do
+          let(:group) { create(:group, joiners: joiners) }
+          let(:submitted_group_id) { group.id }
+
+          context "when user is member of group" do
+            let(:joiners) { [user] }
+
+            it "should also allow group_id" do
+              expect(subject).to contain_exactly(*basic_attribs + [:group_id])
+            end
+          end
+
+          context "when user is not member of group" do
+            let(:joiners) { [] }
+
+            it "should not allow group_id" do
+              expect(subject).to contain_exactly(*basic_attribs)
+            end
+          end
+        end
+      end
+
+      shared_examples_for "admin or coord" do
+        it "should allow admin-only attribs" do
+          expect(subject).to contain_exactly(*admin_attribs)
+        end
+
+        context "when group_id is submitted" do
+          let(:group) { create(:group, joiners: joiners) }
+          let(:submitted_group_id) { group.id }
+
+          context "when user is not member of group" do
+            let(:joiners) { [] }
+
+            it "should allow group_id anyway" do
+              expect(subject).to contain_exactly(*admin_attribs)
+            end
+          end
+        end
+      end
+
+      context "calendar_coordinator" do
+        let(:user) { calendar_coordinator }
+        it_behaves_like "admin or coord"
+      end
+
+      context "admin" do
+        let(:user) { admin }
+        it_behaves_like "admin or coord"
+      end
+
+      context "outside admin" do
+        let(:user) { admin_cmtyB }
+
+        it "should allow basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
     end
 
     context "meal event" do
       let(:basic_attribs) { %i[starts_at ends_at note origin_page] }
-      let(:event) { create(:event, creator: creator, calendar: calendar, kind: "_meal") }
-      it_behaves_like "each user type"
+      let(:meal) { create(:meal, calendars: [calendar]).tap(&:build_events) }
+      let(:event) { meal.events[0] }
+
+      context "regular user" do
+        let(:user) { create(:user) }
+
+        it "should allow nothing" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "calendar_coordinator" do
+        let(:user) { calendar_coordinator }
+
+        it "should basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
+
+      context "admin" do
+        let(:user) { admin }
+
+        it "should basic attribs" do
+          expect(subject).to contain_exactly(*basic_attribs)
+        end
+      end
+
+      context "outside admin" do
+        let(:user) { admin_cmtyB }
+
+        it "should allow nothing" do
+          expect(subject).to be_empty
+        end
+      end
     end
   end
 end

@@ -25,6 +25,12 @@
       </td>
     </tr>
   <% else %>
+    <% if event.group %>
+      <tr>
+        <td>Group</td>
+        <td><%= link_to(event.group.name, event.group) %></td>
+      </tr>
+    <% end %>
     <tr>
       <td>Reserved By</td>
       <td><%= event.creator.decorate.link(show_cmty_if_foreign: true) %></td>

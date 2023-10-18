@@ -6,6 +6,7 @@ describe Calendars::EventFinder do
   let(:user) { create(:user) }
   let(:t0) { Time.current.midnight }
   let(:range) { (t0 + 2.5.hours)..(t0 + 4.5.hours) }
+  let(:group) { create(:group) }
   let!(:cal1) { create(:calendar) }
   let!(:cal2) { create(:community_meals_calendar) }
   let!(:cal3) { create(:calendar) }
@@ -16,7 +17,9 @@ describe Calendars::EventFinder do
   let!(:event1_2) do
     create(:event, calendar: cal1, starts_at: t0 + 2.hours, ends_at: t0 + 3.hours, creator: user)
   end
-  let!(:event1_3) { create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours) }
+  let!(:event1_3) do
+    create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours, creator: user, group: group)
+  end
   let!(:event1_4) { create(:event, calendar: cal1, starts_at: t0 + 4.hours, ends_at: t0 + 5.hours) }
   let!(:event1_5) { create(:event, calendar: cal1, starts_at: t0 + 5.hours, ends_at: t0 + 6.hours) }
   let!(:event2_1) { build(:event, calendar: cal2, starts_at: t0 + 2.hours, ends_at: t0 + 5.hours) }
@@ -60,7 +63,7 @@ describe Calendars::EventFinder do
     context "with user created events only" do
       let(:own_only) { true }
 
-      it "includes user created events and system calendar events" do
+      it "includes user-created, non-group events only" do
         is_expected.to contain_exactly(event1_2)
       end
     end

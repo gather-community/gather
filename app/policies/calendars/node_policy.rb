@@ -2,7 +2,7 @@
 
 module Calendars
   class NodePolicy < ApplicationPolicy
-    alias node record
+    alias_method :node, :record
 
     class Scope < Scope
       def resolve

@@ -16,12 +16,13 @@ module Calendars
     attr_accessor :linkable
 
     attr_writer :uid
-    alias privileged_changer? privileged_changer
+    alias_method :privileged_changer?, :privileged_changer
 
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
     belongs_to :meal, class_name: "Meals::Meal", inverse_of: :events
+    belongs_to :group, class_name: "Groups::Group", inverse_of: :events
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
@@ -35,35 +36,24 @@ module Calendars
     delegate :household, to: :creator
     delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :creator, prefix: true
-    delegate :name, to: :creator_community, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
-    validates :calendar_id, :creator_id, :starts_at, :ends_at, presence: true
+    validates :calendar_id, :starts_at, :ends_at, presence: true
+    validates :creator_id, presence: true, unless: ->(e) { e.meal? }
     validate :guidelines_accepted
     validate :start_before_end
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
-    validate lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
-               # and sponsor_community for other uses.
-               # Set fixed start/end time
-               # We add an underscore to differentiate from user-specified kinds
-               meal&.event_handler&.validate_event(r)
-             }
+    validate lambda { |r| meal&.event_handler&.validate_event(r) }
 
     before_validation :normalize
 
-    before_save lambda { |r| # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
-                  # and sponsor_community for other uses.
-                  # Set fixed start/end time
-                  # We add an underscore to differentiate from user-specified kinds
-                  # rubocop:disable Style/GuardClause # || structure
-                  meal&.event_handler&.sync_resourcings(r)
-                }
+    before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
     normalize_attributes :kind, :note
 

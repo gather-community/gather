@@ -2,7 +2,7 @@
 
 module Calendars
   class EventPolicy < ApplicationPolicy
-    alias event record
+    alias_method :event, :record
 
     delegate :rule_set, :meal?, to: :event
 
@@ -13,6 +13,17 @@ module Calendars
           scope
         else
           allow_all_records_in_cluster_if_user_is_active
+        end
+      end
+    end
+
+    # For scoping the groups we show in the group dropdown
+    class GroupScope < Scope
+      def resolve
+        if active_admin?
+          scope
+        else
+          scope.with_user(user).active
         end
       end
     end
@@ -35,7 +46,7 @@ module Calendars
 
     def update?
       specific_record? && !calendar.system? && !read_only_by_protocol? &&
-        (admin_or_coord? || active_creator? || (meal? && active_with_community_role?(:meals_coordinator)))
+        (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -50,15 +61,21 @@ module Calendars
 
     def destroy?
       specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator? && (future? || recently_created?))
+        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 
-    def permitted_attributes
+    def permitted_attributes(group_id:)
+      # Meal events have no creators so a regular user can't possibly edit them.
+      return [] if meal? && !admin_or_coord?
+
       # We don't include calendar_id here because that must be set explicitly because the admin
       # community check relies on it.
       attribs = %i[starts_at ends_at note origin_page]
-      attribs.concat(%i[name kind sponsor_id guidelines_ok all_day]) unless meal?
-      attribs << :creator_id if choose_creator?
+      unless meal?
+        attribs.concat(%i[name kind sponsor_id guidelines_ok all_day])
+        attribs << :creator_id if choose_creator?
+        attribs << :group_id if admin_or_coord? || Groups::Group.find_by(id: group_id)&.member?(user)
+      end
       attribs
     end
 
@@ -70,8 +87,8 @@ module Calendars
       active_admin_or?(:calendar_coordinator)
     end
 
-    def active_creator?
-      active? && event.creator == user
+    def active_creator_or_group_member?
+      active? && (event.creator == user || event.group&.member?(user))
     end
 
     def forbidden_by_protocol?

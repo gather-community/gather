@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_06_165733) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,8 +90,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_06_165733) do
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.integer "creator_id", null: false
+    t.integer "creator_id"
     t.datetime "ends_at", precision: nil, null: false
+    t.bigint "group_id"
     t.string "kind"
     t.integer "meal_id"
     t.string "name", limit: 24, null: false
@@ -102,9 +103,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_06_165733) do
     t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
     t.index ["cluster_id"], name: "index_calendar_events_on_cluster_id"
     t.index ["creator_id"], name: "index_calendar_events_on_creator_id"
+    t.index ["group_id"], name: "index_calendar_events_on_group_id"
     t.index ["meal_id"], name: "index_calendar_events_on_meal_id"
     t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
     t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
+    t.check_constraint "(meal_id IS NULL) = (creator_id IS NOT NULL)", name: "meal_or_creator"
+    t.check_constraint "NOT (group_id IS NOT NULL AND creator_id IS NULL)", name: "must_have_creator_if_group"
   end
 
   create_table "calendar_guideline_inclusions", id: :serial, force: :cascade do |t|
@@ -1139,6 +1143,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_06_165733) do
   add_foreign_key "billing_templates", "communities"
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
+  add_foreign_key "calendar_events", "groups"
   add_foreign_key "calendar_events", "meals"
   add_foreign_key "calendar_events", "users", column: "creator_id"
   add_foreign_key "calendar_events", "users", column: "sponsor_id"

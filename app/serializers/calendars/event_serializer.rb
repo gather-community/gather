@@ -6,7 +6,7 @@ module Calendars
     include Rails.application.routes.url_helpers
 
     attributes :id, :url, :title, :start, :end, :editable, :class_name, :calendar_allows_overlap,
-               :calendar_id, :background_color, :border_color
+      :calendar_id, :background_color, :border_color
 
     def url
       if object.linkable.present?
@@ -32,7 +32,7 @@ module Calendars
     end
 
     # end is a reserved word
-    define_method("end") do
+    define_method(:end) do
       object.all_day? ? (object.ends_at.to_date + 1).to_s : object.ends_at.to_fs(:no_zone)
     end
 
@@ -45,7 +45,7 @@ module Calendars
       if object.meal
         "has-meal"
       elsif object.creator == scope
-        "own-event"
+        object.group ? "own-group-event" : "own-event"
       else
         ""
       end

@@ -107,17 +107,17 @@ module Calendars
       # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
       # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
       # Kind-specific rules will be enforced through validation.
-      @sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
-      authorize(@sample_event)
+      sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
+      authorize(sample_event)
       prepare_lenses(*BASE_LENSES)
-      @can_create_event = policy(@sample_event).create?
+      @can_create_event = policy(sample_event).create?
 
-      @rule_set = @sample_event.rule_set
+      @rule_set = sample_event.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
       @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
-                                                                   serializer: RuleSetSerializer)
+        serializer: RuleSetSerializer)
       @other_communities = Community.where("id != ?", @calendar.community_id)
 
       @new_event_path = new_calendar_event_path(@calendar)
@@ -174,19 +174,29 @@ module Calendars
       @calendar ||= @event.calendar
       @rule_set = @event.rule_set
       @kinds = @calendar.kinds # May be nil
+      @groups = Calendars::EventPolicy::GroupScope.new(current_user, Groups::Group)
+        .resolve
+        .in_community(current_community)
+        .order(:name)
     end
 
     def render_choose_calendar_page
-      @sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
-      authorize(@sample_event)
+      # This sample event is just for authorizing the new action on CalendarEvent.
+      sample_event = Event.new(calendar: writeable_calendars.first, creator: current_user)
+      authorize(sample_event)
+
       @calendars = writeable_calendars
       @url_params = params.permit(:start, :end, :origin_page)
     end
 
     def render_no_calendars
-      @sample_calendar = Calendar.new(community: current_community)
-      @sample_event = Event.new(calendar: @sample_calendar, creator: current_user)
-      authorize(@sample_event)
+      sample_calendar = Calendar.new(community: current_community)
+
+      # This sample event is just for authorizing the new action on CalendarEvent.
+      sample_event = Event.new(calendar: sample_calendar, creator: current_user)
+      authorize(sample_event)
+
+      @can_create_calendar = policy(sample_calendar).create?
       @calendars = []
     end
 
@@ -207,7 +217,8 @@ module Calendars
 
     # Pundit built-in helper doesn't work due to namespacing
     def event_params
-      permitted = params.require(:calendars_event).permit(policy(@event).permitted_attributes)
+      permitted_attributes = policy(@event).permitted_attributes(group_id: params[:calendars_event][:group_id])
+      permitted = params.require(:calendars_event).permit(permitted_attributes)
       permitted[:privileged_changer] = true if policy(@event).privileged_change?
       permitted
     end

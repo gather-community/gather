@@ -202,7 +202,7 @@ module Groups
     def clear_mailman_list_if_empty_name
       # If list doesn't pre-exist and no name is given, we're assuming they didn't fill in the form.
       if mailman_list&.new_record? && mailman_list.name.blank?
-        mailman_list.destroy
+        self.mailman_list = nil
       end
     end
   end

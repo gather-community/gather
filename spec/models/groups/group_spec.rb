@@ -110,144 +110,154 @@ describe Groups::Group do
       end
     end
 
-    describe "member?" do
-      let(:group) { create(:group, availability: availability) }
-      let!(:user) { create(:user) }
-      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
-      subject(:is_member) { group.member?(user) }
+    describe "clear_mailman_list_if_empty_name" do
+      let(:group) { create(:group) }
 
-      context "with everybody group" do
-        let(:availability) { "everybody" }
+      it "should remove list entirely if name not filled out and didn't pre-exist" do
+        group.build_mailman_list(name: "")
+        group.save
+        expect(group.mailman_list).to be_nil
+      end
+    end
+  end
 
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { is_expected.to be(true) }
-        end
+  describe "member?" do
+    let(:group) { create(:group, availability: availability) }
+    let!(:user) { create(:user) }
+    let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+    subject(:is_member) { group.member?(user) }
 
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { is_expected.to be(true) }
-        end
+    context "with everybody group" do
+      let(:availability) { "everybody" }
 
-        context "with user with opt-out membership" do
-          let(:mbr_kind) { "opt_out" }
-          it { is_expected.to be(false) }
-        end
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { is_expected.to be(true) }
       end
 
-      context "with non-everybody group" do
-        let(:availability) { "closed" }
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { is_expected.to be(true) }
+      end
 
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { is_expected.to be(false) }
-        end
-
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { is_expected.to be(true) }
-        end
-
-        context "with user with joiner membership" do
-          let(:mbr_kind) { "joiner" }
-          it { is_expected.to be(true) }
-        end
+      context "with user with opt-out membership" do
+        let(:mbr_kind) { "opt_out" }
+        it { is_expected.to be(false) }
       end
     end
 
-    describe "#join" do
-      let(:group) { create(:group, availability: availability) }
-      let!(:user) { create(:user) }
-      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+    context "with non-everybody group" do
+      let(:availability) { "closed" }
 
-      before do
-        group.join(user)
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { is_expected.to be(false) }
       end
 
-      context "with everybody group" do
-        let(:availability) { "everybody" }
-
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { expect_no_membership }
-        end
-
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { expect_single_membership(user, group, "manager") }
-        end
-
-        context "with user with opt-out membership" do
-          let(:mbr_kind) { "opt_out" }
-          it { expect_no_membership }
-        end
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { is_expected.to be(true) }
       end
 
-      context "with non-everybody group" do
-        let(:availability) { "closed" }
+      context "with user with joiner membership" do
+        let(:mbr_kind) { "joiner" }
+        it { is_expected.to be(true) }
+      end
+    end
+  end
 
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { expect_single_membership(user, group, "joiner") }
-        end
+  describe "#join" do
+    let(:group) { create(:group, availability: availability) }
+    let!(:user) { create(:user) }
+    let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
 
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { expect_single_membership(user, group, "manager") }
-        end
+    before do
+      group.join(user)
+    end
 
-        context "with user with joiner membership" do
-          let(:mbr_kind) { "joiner" }
-          it { expect_single_membership(user, group, "joiner") }
-        end
+    context "with everybody group" do
+      let(:availability) { "everybody" }
+
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { expect_no_membership }
+      end
+
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { expect_single_membership(user, group, "manager") }
+      end
+
+      context "with user with opt-out membership" do
+        let(:mbr_kind) { "opt_out" }
+        it { expect_no_membership }
       end
     end
 
-    describe "#leave" do
-      let(:group) { create(:group, availability: availability) }
-      let!(:user) { create(:user) }
-      let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
+    context "with non-everybody group" do
+      let(:availability) { "closed" }
 
-      before do
-        group.leave(user)
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { expect_single_membership(user, group, "joiner") }
       end
 
-      context "with everybody group" do
-        let(:availability) { "everybody" }
-
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { expect_single_membership(user, group, "opt_out") }
-        end
-
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { expect_no_membership }
-        end
-
-        context "with user with opt-out membership" do
-          let(:mbr_kind) { "opt_out" }
-          it { expect_single_membership(user, group, "opt_out") }
-        end
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { expect_single_membership(user, group, "manager") }
       end
 
-      context "with non-everybody group" do
-        let(:availability) { "closed" }
+      context "with user with joiner membership" do
+        let(:mbr_kind) { "joiner" }
+        it { expect_single_membership(user, group, "joiner") }
+      end
+    end
+  end
 
-        context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { expect_no_membership }
-        end
+  describe "#leave" do
+    let(:group) { create(:group, availability: availability) }
+    let!(:user) { create(:user) }
+    let!(:membership) { create(:group_membership, group: group, user: user, kind: mbr_kind) if mbr_kind }
 
-        context "with user with manager membership" do
-          let(:mbr_kind) { "manager" }
-          it { expect_no_membership }
-        end
+    before do
+      group.leave(user)
+    end
 
-        context "with user with joiner membership" do
-          let(:mbr_kind) { "joiner" }
-          it { expect_no_membership }
-        end
+    context "with everybody group" do
+      let(:availability) { "everybody" }
+
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { expect_single_membership(user, group, "opt_out") }
+      end
+
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { expect_no_membership }
+      end
+
+      context "with user with opt-out membership" do
+        let(:mbr_kind) { "opt_out" }
+        it { expect_single_membership(user, group, "opt_out") }
+      end
+    end
+
+    context "with non-everybody group" do
+      let(:availability) { "closed" }
+
+      context "with user with no membership" do
+        let(:mbr_kind) { nil }
+        it { expect_no_membership }
+      end
+
+      context "with user with manager membership" do
+        let(:mbr_kind) { "manager" }
+        it { expect_no_membership }
+      end
+
+      context "with user with joiner membership" do
+        let(:mbr_kind) { "joiner" }
+        it { expect_no_membership }
       end
     end
   end

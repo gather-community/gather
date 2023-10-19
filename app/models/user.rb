@@ -375,7 +375,7 @@ class User < ApplicationRecord
   end
 
   def birthdate_age_certification_agreement
-    return if adult? || !full_access? || !birthday? || age >= 13
+    return if adult? || !full_access? || !birthday? || !age || age >= 13
     errors.add(:birthday_str, :too_young)
   end
 end

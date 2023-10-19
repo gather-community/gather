@@ -180,7 +180,14 @@ describe User do
 
           context "with age certification" do
             context "with no birthday" do
-              subject(:user) { build(:user, :full_access_child, certify_13_or_older: "1") }
+              subject(:user) { build(:user, :full_access_child, certify_13_or_older: "1", birthdate: nil) }
+              it { is_expected.to be_valid }
+            end
+
+            context "with non-year birthday" do
+              subject(:user) do
+                build(:user, :full_access_child, certify_13_or_older: "1", birthdate: "0004-01-01")
+              end
               it { is_expected.to be_valid }
             end
 

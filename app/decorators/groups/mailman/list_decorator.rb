@@ -27,6 +27,11 @@ module Groups
         @archives_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(path)}"
       end
 
+      def all_cmty_members_can_send_hint
+        cardinality = multi_community? ? "multi_community" : "single_community"
+        t("simple_form.hints.groups_group.mailman_list.all_cmty_members_can_send.#{cardinality}")
+      end
+
       private
 
       def email_ul(emails, initially_visible: nil)

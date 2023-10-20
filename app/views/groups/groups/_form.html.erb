@@ -51,6 +51,7 @@
         <% end %>
 
         <div class="list-form-details hiding">
+          <%= list_form.input(:all_cmty_members_can_send, as: :boolean, hint: mailman_list.all_cmty_members_can_send_hint) %>
           <%= list_form.input(:managers_can_administer) %>
           <%= list_form.input(:managers_can_moderate) %>
           <%= list_form.input(:members) do %>

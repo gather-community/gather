@@ -121,6 +121,7 @@ en:
         memberships: "Members"
       groups/mailman/list:
         domain_id: "Domain"
+        all_cmty_members_can_send: "All community members can send to list?"
         managers_can_administer: "Managers can administer list?"
         managers_can_moderate: "Managers can moderate list?"
         members: "List Members"

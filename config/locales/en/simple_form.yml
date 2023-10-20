@@ -84,6 +84,9 @@ en:
         mailman_list:
           name: "The first part of the address. Can only include lower-case letters, numbers, or the characters . - _."
           domain_id: "The domain name for the list address."
+          all_cmty_members_can_send:
+            single_community: "Whether all members of the community can send to this list. If not checked, only members can send mail to the list. Does not affect who receives mail from the list."
+            multi_community: "Whether all members of the group's communities can send to this list. If not checked, only members can send mail to the list. Does not affect who receives mail from the list."
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list via the Mailman admin panel."
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."

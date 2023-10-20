@@ -112,8 +112,12 @@ module Groups
       private
 
       def sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
-        return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
-        sync_list_memberships_for_groups_in_same_communities(group)
+        if group.can_moderate_email_lists? ||
+            group.can_administer_email_lists? ||
+            group.saved_change_to_can_moderate_email_lists? ||
+            group.saved_change_to_can_administer_email_lists?
+          sync_list_memberships_for_groups_in_same_communities(group)
+        end
       end
 
       def sync_memberships_for_group_list(group)

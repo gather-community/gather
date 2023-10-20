@@ -421,10 +421,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_122359) do
   create_table "group_mailman_lists", force: :cascade do |t|
     t.jsonb "additional_members"
     t.jsonb "additional_senders"
+    t.boolean "all_cmty_members_can_send", default: true, null: false
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "domain_id", null: false
-    t.boolean "full_cmtys_can_send", default: true, null: false
     t.bigint "group_id", null: false
     t.datetime "last_synced_at"
     t.boolean "managers_can_administer", default: false, null: false

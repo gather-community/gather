@@ -249,8 +249,11 @@ module Meals
 
     def find_calendar(str)
       attrib = id?(str) ? :id : :name
-      scope = Calendars::CalendarPolicy::Scope.new(user, Calendars::Calendar).resolve
-        .in_community(community).active
+
+      # We don't need to restrict to the current community explicitly. The policy scope,
+      # multi tenant system, and calendar protocols will take care of that if appropriate.
+      scope = Calendars::CalendarPolicy::Scope.new(user, Calendars::Calendar).resolve.active
+
       scope.find_by(id: str) || scope.find_by("LOWER(name) = ?", str.downcase) ||
         add_error(I18n.t("csv.errors.meals/meal.calendar.bad_#{attrib}", str: str))
     end

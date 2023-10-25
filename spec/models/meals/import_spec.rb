@@ -71,7 +71,11 @@ describe Meals::Import do
       let!(:inactive_calendar) { create(:calendar, :inactive, name: "Inacto") }
       let!(:inactive_formula) { create(:meal_formula, :inactive, name: "Inacto") }
       let!(:inactive_user) { create(:user, :inactive, first_name: "I", last_name: "J") }
-      let!(:outside_calendar) { create(:calendar, community: other_community, name: "Plizz") }
+      let!(:outside_calendar) do
+        ActsAsTenant.with_tenant(create(:cluster)) do
+          create(:calendar, community: create(:community), name: "Plizz")
+        end
+      end
       let!(:outside_formula) { create(:meal_formula, community: other_community, name: "Blorph") }
       let!(:outside_user) { create(:user, community: other_community, first_name: "X", last_name: "Q") }
       let!(:outside_community) do

@@ -64,16 +64,26 @@ module Groups
         raise ArgumentError, "Membership not found for #{list_mship.email}" if found["total_size"].zero?
         list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
+        list_mship.moderation_action = found["entries"][0]["moderation_action"]
       end
 
       # Assumes list_mship has an associated user remote_id.
       def create_membership(list_mship)
-        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-          role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
-          pre_approved: "true")
-      rescue ApiRequestError => e
-        # If we get 'is already' error, that's fine, swallow it.
-        (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
+        response = begin
+          request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
+            role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
+            pre_approved: "true")
+        rescue ApiRequestError => e
+          # If we get 'is already subscribed to the mailing list with this role' error, that's fine, swallow it.
+          (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
+        end
+
+        # As of this writing, the POST members end point does not support passing moderation_action unfortunately.
+        # So we have to do another PATCH request to set it if it's not nil.
+        if !list_mship.moderation_action.nil?
+          membership_id = response.header("Location").split("/").last
+          request("members/#{membership_id}", :patch, moderation_action: list_mship.moderation_action)
+        end
       end
 
       # Assumes remote_id is set on list_mship

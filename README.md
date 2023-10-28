@@ -38,18 +38,18 @@ Follow these steps to setup a development environment for Gather.
     1. For Mailman 3:
       1. Mailman is only required if you're working on the Mailman API integration. If so...
         mkdir ../mailman && cd ../mailman
-        python3 -m venv venv
+        python -m venv venv
         source venv/bin/activate
-        pip3 install mailman
+        pip install mailman
         mailman start
         curl -v http://restadmin:restpass@localhost:8001/3.1/lists
-        pip3 install postorius hyperkitty whoosh
+        pip install postorius hyperkitty whoosh
         git clone https://github.com/gather-community/mailman-suite.git
         cd mailman-suite/mailman-suite_project/
         git clone https://github.com/gather-community/discoursessoclient.git
-        python3 manage.py migrate
-        python3 manage.py collectstatic
-        python3 manage.py runserver
+        python manage.py migrate
+        python manage.py collectstatic
+        python manage.py runserver
         curl -v http://localhost:8000 # To test. Run in a new tab.
 1. Retrieve project files using Git
         git clone https://github.com/gather-community/gather.git
@@ -108,7 +108,7 @@ And if working with Mailman, in a separate terminal:
     source venv/bin/activate
     mailman start
     cd mailman-suite/mailman-suite_project/
-    python3 manage.py runserver
+    python manage.py runserver
 
 ## Caching
 

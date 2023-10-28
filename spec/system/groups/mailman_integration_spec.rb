@@ -16,7 +16,7 @@ describe "mailman integration" do
   #     mailman stop && rm -rf var/data/* && mailman start
   #   And in the mailman-suite/mailman-suite_project dir
   #     Ctrl-c (stop server)
-  #     rm mailmansuite.db && python3 manage.py migrate && python3 manage.py runserver
+  #     rm mailmansuite.db && python manage.py migrate && python manage.py runserver
   # Then run the spec.
 
   context "general" do
@@ -92,7 +92,7 @@ describe "mailman integration" do
       perform_enqueued_jobs do
         step("create_all") do
           create(:group, name: "Regular", availability: "open", joiners: [user1, user2],
-                         mailman_list_attributes: {name: "foo", domain_id: domain.id})
+            mailman_list_attributes: {name: "foo", domain_id: domain.id})
         end
       end
     end

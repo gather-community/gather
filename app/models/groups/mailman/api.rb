@@ -210,7 +210,7 @@ module Groups
         other_mships = request("members/find", :post, subscriber: email)["entries"]
 
         # Need to remove other user and set the new preferred address before re-creating the memberships
-        # b/c owner/moderator type memberships are only associated with addresses (mailman bug).
+        # b/c owner/moderator/nonmember type memberships are only associated with addresses (mailman bug).
         request("users/#{other_user_id}", :delete)
         request("users/#{mm_user.remote_id}/addresses", :post, email: email)
         verify_address_and_set_preferred(mm_user.email)

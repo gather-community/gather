@@ -21,10 +21,11 @@ module Groups
       delegate :email, to: :mailman_user
       delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 
-      # We compare based on email and list_id because those are the two key pieces.
+      # We compare based on email, list_id, and moderation_action because those are the distinguishing features.
       # user_remote_id may or may not be available depending on what this ListMembership was built from.
       def ==(other)
-        email == other.email && list_id == other.list_id && role == other.role
+        email == other.email && list_id == other.list_id && role == other.role &&
+          moderation_action == other.moderation_action
       end
 
       def eql?(other)
@@ -37,6 +38,14 @@ module Groups
 
       def name_or_email
         @name_or_email ||= display_name.presence || email
+      end
+
+      def owner_or_mod?
+        %w[owner moderator].include?(role)
+      end
+
+      def default_or_accept?
+        moderation_action.nil? || moderation_action == "accept"
       end
 
       def subscriber

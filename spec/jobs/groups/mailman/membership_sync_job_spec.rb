@@ -57,10 +57,10 @@ describe Groups::Mailman::MembershipSyncJob do
         list_id: "list1.blah", role: "member"))
 
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list2.blah", role: "owner"))
+        list_id: "list2.blah", role: "owner", moderation_action: "accept"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list2.blah", role: "moderator"))
+        list_id: "list2.blah", role: "moderator", moderation_action: "accept"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
         list_id: "list4.blah", role: "member"))
@@ -185,7 +185,13 @@ describe Groups::Mailman::MembershipSyncJob do
     end
   end
 
-  def build_mship(*params)
-    Groups::Mailman::ListMembership.new(*params)
+  def build_mship(**params)
+    # Mailman automatically sets owners & moderators as "accept" so we need
+    # to match that so that the diff works properly. We do this in the app
+    # code also so we should match it here.
+    if %w[owner moderator].include?(params[:role])
+      params[:moderation_action] = "accept"
+    end
+    Groups::Mailman::ListMembership.new(**params)
   end
 end

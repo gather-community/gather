@@ -201,7 +201,7 @@ describe Groups::Mailman::Api do
         end
         let(:mship3) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user2,
-            role: "owner")
+            role: "owner", moderation_action: "accept")
         end
         let(:mship4) do
           Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org", mailman_user: mm_user2,
@@ -268,7 +268,7 @@ describe Groups::Mailman::Api do
 
     describe "#populate_membership" do
       let(:mship) do
-        Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user, role: "owner")
+        Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user, role: "owner", moderation_action: "accept")
       end
       let(:mship_copy) do
         Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
@@ -331,7 +331,7 @@ describe Groups::Mailman::Api do
       context "with owner role" do
         let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-            mailman_user: mm_user, role: "owner")
+            mailman_user: mm_user, role: "owner", moderation_action: "accept")
         end
         let(:mship_copy) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
@@ -412,7 +412,7 @@ describe Groups::Mailman::Api do
           end
           let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org",
-              mailman_user: mm_user, role: "owner")
+              mailman_user: mm_user, role: "owner", moderation_action: "accept")
           end
 
           it "gets memberships" do
@@ -451,7 +451,7 @@ describe Groups::Mailman::Api do
           end
           let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-              mailman_user: mm_user2, role: "owner")
+              mailman_user: mm_user2, role: "owner", moderation_action: "accept")
           end
           let(:mm_user2) do
             build(:group_mailman_user,

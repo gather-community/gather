@@ -77,7 +77,17 @@ module Groups
           roles << "owner" if managers_can_administer?
           roles << "moderator" if managers_can_moderate?
         end
-        roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
+        roles.map do |role|
+          ListMembership.new(
+            mailman_user: mm_user,
+            list_id: remote_id,
+            role: role,
+
+            # Mailman automatically sets owners & moderators as "accept" so we need
+            # to match that so that the diff works properly.
+            moderation_action: %w[owner moderator].include?(role) ? "accept" : nil
+          )
+        end
       end
 
       def default_config
@@ -97,7 +107,14 @@ module Groups
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
             ability_group.members.map do |member|
               mm_user = find_or_initialize_mm_user_for(member)
-              ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
+              # Mailman automatically sets owners & moderators as "accept" so we need
+              # to match that so that the diff works properly.
+              ListMembership.new(
+                mailman_user: mm_user,
+                list_id: remote_id,
+                role: role,
+                moderation_action: "accept"
+              )
             end
           end
         end

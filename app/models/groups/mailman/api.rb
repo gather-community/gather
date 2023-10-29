@@ -94,7 +94,9 @@ module Groups
 
         # As of this writing, the POST members end point does not support passing moderation_action unfortunately.
         # So we have to do another PATCH request to set it if it's not nil.
-        if !list_mship.moderation_action.nil?
+        # Exception to this rule: if the role is owner or moderator, Mailman automatically sets the
+        # moderation_action to "accept", so we can skip this call in that case.
+        if !list_mship.moderation_action.nil? && !(list_mship.owner_or_mod? && list_mship.default_or_accept?)
           membership_id = response.header("Location").split("/").last
           request("members/#{membership_id}", :patch, moderation_action: list_mship.moderation_action)
         end

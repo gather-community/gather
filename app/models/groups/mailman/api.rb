@@ -74,8 +74,22 @@ module Groups
             role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
             pre_approved: "true")
         rescue ApiRequestError => e
-          # If we get 'is already subscribed to the mailing list with this role' error, that's fine, swallow it.
-          (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
+          # If we get 'is already subscribed to the mailing list with this role' error,
+          # that means there is already a matching subscription for the given list, subscriber,
+          # and role. That shouldn't really happen because we should detect that when we're
+          # doing the diff. But I think it may have been happening before which is why we were
+          # swallowing it. So let's add some observability.
+          if e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/
+            Rails.logger.error("Mailman subscription already exists: " \
+              "list #{list_mship.list_id}, subscriber: #{list_mship.subscriber}, role: #{list_mship.role}")
+            ErrorReporter.instance.report(
+              StandardError.new("Mailman subscription already exists"),
+              data: {list: list_mship.list_id, subscriber: list_mship.subscriber, role: list_mship.role}
+            )
+            return
+          else
+            raise e
+          end
         end
 
         # As of this writing, the POST members end point does not support passing moderation_action unfortunately.

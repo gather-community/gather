@@ -12,7 +12,7 @@ module Meals
     DEFAULT_TIME = 18.hours + 15.minutes
     DEFAULT_CAPACITY = 64
     ALLERGENS = %w[gluten shellfish soy corn dairy eggs peanuts almonds
-                   tree_nuts pineapple bananas tofu eggplant].freeze
+      tree_nuts pineapple bananas tofu eggplant].freeze
     DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}.freeze
     MENU_ITEMS = %w[entrees side kids dessert notes].freeze
 
@@ -24,23 +24,23 @@ module Meals
     belongs_to :creator, class_name: "User"
     belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
     has_many :assignments, -> { by_role }, class_name: "Meals::Assignment",
-                                           dependent: :destroy, inverse_of: :meal
+      dependent: :destroy, inverse_of: :meal
     has_many :invitations, class_name: "Meals::Invitation", dependent: :destroy
     has_many :communities, through: :invitations
     has_many :signups, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
     has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
-                                   dependent: :destroy
+      dependent: :destroy
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
-                            dependent: :restrict_with_exception, inverse_of: :statementable
+      dependent: :restrict_with_exception, inverse_of: :statementable
 
     # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.
     has_many :resourcings, dependent: :destroy
     has_many :calendars, -> { order(:id) }, class_name: "Calendars::Calendar", through: :resourcings
     has_many :events, -> { order(:id) }, class_name: "Calendars::Event", autosave: true,
-                                         dependent: :destroy, inverse_of: :meal
+      dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
     scope :inviting, ->(community) {
@@ -71,7 +71,7 @@ module Meals
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
     accepts_nested_attributes_for :cost,
-                                  reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
+      reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
     delegate :cluster, to: :community
@@ -165,7 +165,13 @@ module Meals
     end
 
     def signup_count
-      signups.sum(&:total)
+      # The signups collection may contain a new_record? signup that shouldn't count
+      # toward the total.
+      signups.select(&:persisted?).sum(&:total)
+    end
+
+    def spots_left
+      [capacity - signup_count, 0].max
     end
 
     def signup_totals
@@ -179,10 +185,6 @@ module Meals
       end
     end
 
-    def spots_left
-      @spots_left ||= [capacity - signup_count, 0].max
-    end
-
     def menu_posted?
       allergens? || title? || MENU_ITEMS.any? { |a| self[a].present? }
     end
@@ -193,7 +195,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at > ? OR served_at = ? AND
           (communities.name > ? OR communities.name = ? AND meals.id > ?)",
-               served_at, served_at, community_name, community_name, id)
+          served_at, served_at, community_name, community_name, id)
     end
 
     # Returns a relation for all meals before the current one.
@@ -202,7 +204,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at < ? OR served_at = ? AND
           (communities.name < ? OR communities.name = ? AND meals.id < ?)",
-               served_at, served_at, community_name, community_name, id)
+          served_at, served_at, community_name, community_name, id)
     end
 
     def allergen?(allergen)

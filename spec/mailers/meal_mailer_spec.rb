@@ -31,7 +31,7 @@ describe MealMailer do
     end
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Meal Reminder: #{meal.title} on Sun Jan 01 12:00pm at #{ca} CH")
+      expect(mail.subject).to eq("Meal Reminder: Sun Jan 01 12:00pm - #{meal.title} at #{ca} CH")
     end
 
     it "renders the correct name and URL in the body" do

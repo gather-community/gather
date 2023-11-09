@@ -19,15 +19,13 @@
       <%= link_to("old Google Drive folder", @operation.src_folder_url) %>
       for <%= @community.name %>.
     <% end %>
-  </p>
-  <p class="cta">
     We need your permission to move them into the new drive.
   </p>
   <p>
-    You will still retain access to the files as long as you are a member of the community.
+    You will still retain access to the files if you are a member of the community.
   </p>
   <p>
-    If you have questions, you can reach out to <%= link_to(@operation.contact_name, "mailto:#{@operation.contact_email}") %>,
+    If you have questions or concerns, you can reach out to <%= link_to(@operation.contact_name, "mailto:#{@operation.contact_email}") %>,
     who is coordinating the reorganization process.
   </p>
 

@@ -24,11 +24,11 @@ describe "groups", js: true do
       expect(page).to have_title("Groups")
       expect(page).to have_css("table.index tr", count: 5) # Header plus four rows
       expect(page.all("td.name a").map(&:text)).to eq(["All Hands", "Knitting Club",
-                                                       "Meals Committee", "Fun Team (Inactive)"])
+        "Meals Committee", "Fun Team (Inactive)"])
 
       select_lens_and_wait(:sort, "By Type")
       expect(page.all("td.name a").map(&:text)).to eq(["Knitting Club", "Meals Committee", "All Hands",
-                                                       "Fun Team (Inactive)"])
+        "Fun Team (Inactive)"])
 
       select2_lens_and_wait(:user, manager1.decorate.full_name, url_value: manager1.id)
       expect(page.all("td.name a").map(&:text)).to eq(["Knitting Club", "All Hands"])
@@ -113,6 +113,32 @@ describe "groups", js: true do
       end
 
       check(community2.name)
+
+      within(all(".nested-fields")[0]) do
+        select2(user3.name, from: find("select.user_select"))
+      end
+
+      click_button("Save")
+      click_link("Knitting Club")
+      expect(page).to have_content("#{user3.name} (#{community2.abbrv})")
+    end
+  end
+
+  context "as manager with two communities" do
+    let(:actor) { manager1 }
+    let!(:community2) { create(:community) }
+    let!(:user3) { create(:user, community: community2) }
+
+    before do
+      group1.communities << community2
+    end
+
+    scenario "edit" do
+      visit(groups_groups_path)
+      click_link(group1.name)
+      click_link("Edit")
+
+      expect(page).not_to have_content("What communities this group is available")
 
       within(all(".nested-fields")[0]) do
         select2(user3.name, from: find("select.user_select"))

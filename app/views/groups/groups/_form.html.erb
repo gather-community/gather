@@ -123,9 +123,13 @@
     new Gather.Views.AjaxSelect2({
       el: '.groups--group-form',
       extraData: function() {
+        <% if @community_options %>
         // Get an array of selected community IDs
         return $("[name='groups_group[community_ids][]']:checked")
           .map(function() { return this.value; }).get();
+        <% else %>
+          return <%= group.community_ids.to_json %>;
+        <% end %>
       }
     });
   });

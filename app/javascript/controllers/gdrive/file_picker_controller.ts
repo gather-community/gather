@@ -4,19 +4,21 @@ import {jsonFetch} from "../../utils/json_fetch";
 export default class extends Controller<HTMLFormElement> {
   static values = {
     clientId: String,
-    apiKey: String,
     accessToken: String,
     rootFolderId: String,
     ingestUrl: String,
-    testMode: Boolean
+    testMode: Boolean,
+    searchToken: String,
+    communityName: String,
   };
 
   declare clientIdValue: string;
-  declare apiKeyValue: string;
   declare accessTokenValue: string;
   declare rootFolderIdValue: string;
   declare ingestUrlValue: string;
   declare testModeValue: boolean;
+  declare searchTokenValue: string;
+  declare communityNameValue: string;
   declare gapiLoaded: boolean;
 
   connect(): void {
@@ -36,7 +38,7 @@ export default class extends Controller<HTMLFormElement> {
     view.setSelectFolderEnabled(true);
     view.setMode(google.picker.DocsViewMode.LIST);
     // view.setParent("1ag0wl1RWHigAz65IPuu8cooeuqgwYNg-");
-    view.setQuery("owner:me [TS_🚚]");
+    view.setQuery(`owner:me ${this.searchTokenValue}`);
 
     const picker = new google.picker.PickerBuilder()
       .enableFeature(google.picker.Feature.NAV_HIDDEN)
@@ -44,9 +46,8 @@ export default class extends Controller<HTMLFormElement> {
       .setAppId(this.appId)
       .setOAuthToken(this.accessTokenValue)
       .addView(view)
-      .setTitle("Please select files to transfer to the Shared Drive")
+      .setTitle(`Please select files ending with ${this.searchTokenValue}. Hold the Shift key to select multiple.`)
       .setMaxItems(100)
-      .setDeveloperKey(this.apiKeyValue)
       .setCallback(this.callback.bind(this))
       .build();
     picker.setVisible(true);

@@ -9,6 +9,10 @@ module GDrive
       skip_before_action :authenticate_user!
       skip_after_action :verify_authorized
 
+      # For signed-in pages, we redirect to the appropriate community.
+      # Here we should 404 if no community, except for the callback endpoint
+      before_action :ensure_community
+
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
 
@@ -17,71 +21,60 @@ module GDrive
         @operation = @consent_request.operation
         @config = @operation.config
         @community = current_community
-
-        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email,
-          callback_url: callback_url)
-        credentials = wrapper.fetch_credentials_from_store
-
-        if wrapper.has_credentials?
-          # Ensure we have a fresh token for the picker.
-          credentials.fetch_access_token!
-        else
-          @no_credentials = true
-          setup_auth_url(wrapper: wrapper)
-        end
       end
 
       def step1
-        @config = MigrationConfig.find_by(community: current_community)
+        @consent_request = ConsentRequest.find(params[:id])
+        @operation = @consent_request.operation
+        @config = @operation.config
+        @community = current_community
 
-        if @config.nil?
-          @no_config = true
-          return
-        end
-
-        wrapper = Wrapper.new(config: @config, google_user_id: TEMP_USER_ID, callback_url: callback_url)
+        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email, callback_url: callback_url)
 
         if wrapper.has_credentials?
-          redirect_to(gdrive_migration_consent_step2_url(host: Settings.url.host, community_id: current_community.id))
+          redirect_to(gdrive_migration_consent_step2_url)
         else
-          setup_auth_url(wrapper: wrapper)
+          setup_auth_url(wrapper: wrapper, consent_request_id: @consent_request.id)
         end
       end
 
       def callback
+        state = JSON.parse(params["state"]).symbolize_keys
+        consent_request = ConsentRequest.find(state[:consent_request_id])
+
         if params[:error] == "access_denied"
           flash[:error] = "It looks like you cancelled the Google authentication flow."
-          redirect_to(gdrive_migration_consent_step1_url(host: Settings.url.host, community_id: current_community.id))
+          redirect_to(gdrive_migration_consent_step1_url(id: consent_request.id))
           return
         end
 
-        config = MigrationConfig.find_by!(community: current_community)
-        wrapper = Wrapper.new(config: config, google_user_id: TEMP_USER_ID, callback_url: callback_url)
+        operation = consent_request.operation
+        config = operation.config
+        wrapper = Wrapper.new(config: config, google_user_id: consent_request.google_email, callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
-        if TEMP_USER_ID != authenticated_google_id
+        if consent_request.google_email != authenticated_google_id
           flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-            "Please sign in with #{config.org_user_id} instead."
-          redirect_to(gdrive_migration_consent_step1_url(host: Settings.url.host, community_id: current_community.id))
+            "Please sign in with #{consent_request.google_email} instead."
+          redirect_to(gdrive_migration_consent_step1_url(id: consent_request.id))
           return
         end
         wrapper.store_credentials(credentials)
-        redirect_to(gdrive_migration_consent_step2_url(host: Settings.url.host, community_id: current_community.id))
+        redirect_to(gdrive_migration_consent_step2_url(id: consent_request.id))
       end
 
       def step2
-        @config = MigrationConfig.find_by(community: current_community)
-
-        if @config.nil?
-          @no_config = true
-          return
-        end
-
-        wrapper = Wrapper.new(config: @config, google_user_id: TEMP_USER_ID, callback_url: callback_url)
+        consent_request = ConsentRequest.find(params[:id])
+        operation = consent_request.operation
+        @config = operation.config
+        @search_token = operation.filename_suffix
+        @ingest_url = gdrive_migration_consent_ingest_url(id: consent_request.id)
+        wrapper = Wrapper.new(config: @config, google_user_id: consent_request.google_email, callback_url: callback_url)
 
         if !wrapper.has_credentials?
-          redirect_to(gdrive_migration_consent_step1_url(host: Settings.url.host, community_id: current_community.id))
+          redirect_to(gdrive_migration_consent_step1_url(id: consent_request.id))
         else
+          # Fetch a fresh access token for the picker.
           credentials = wrapper.fetch_credentials_from_store
           credentials.fetch_access_token!
           @access_token = credentials.access_token
@@ -92,6 +85,10 @@ module GDrive
 
       def callback_url
         gdrive_migration_consent_callback_url(host: Settings.url.host)
+      end
+
+      def ensure_community
+        render_not_found unless current_community
       end
 
       def set_current_community_from_callback_state
@@ -112,8 +109,8 @@ module GDrive
         )
       end
 
-      def setup_auth_url(wrapper:, config: nil)
-        state = {community_id: current_community.id}
+      def setup_auth_url(wrapper:, consent_request_id:, config: nil)
+        state = {community_id: current_community.id, consent_request_id: consent_request_id}
         @auth_url = wrapper.get_authorization_url(request: request, state: state)
       end
 

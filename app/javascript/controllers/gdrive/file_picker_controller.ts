@@ -7,19 +7,27 @@ export default class extends Controller<HTMLFormElement> {
     accessToken: String,
     rootFolderId: String,
     ingestUrl: String,
+    ingestStatusUrl: String,
     testMode: Boolean,
     searchToken: String,
     communityName: String,
   };
 
+  static targets = ["loader"];
+
   declare clientIdValue: string;
   declare accessTokenValue: string;
   declare rootFolderIdValue: string;
   declare ingestUrlValue: string;
+  declare ingestStatusUrlValue: string;
   declare testModeValue: boolean;
   declare searchTokenValue: string;
   declare communityNameValue: string;
   declare gapiLoaded: boolean;
+
+  declare readonly loaderTarget: HTMLElement
+
+  declare pollingInterval: number;
 
   connect(): void {
     gapi.load("picker", () => {
@@ -37,7 +45,6 @@ export default class extends Controller<HTMLFormElement> {
     view.setIncludeFolders(true);
     view.setSelectFolderEnabled(true);
     view.setMode(google.picker.DocsViewMode.LIST);
-    // view.setParent("1ag0wl1RWHigAz65IPuu8cooeuqgwYNg-");
     view.setQuery(`owner:me ${this.searchTokenValue}`);
 
     const picker = new google.picker.PickerBuilder()
@@ -53,12 +60,29 @@ export default class extends Controller<HTMLFormElement> {
     picker.setVisible(true);
   }
 
-  callback(data: {docs:[{id: string}], action: string}): void {
+  async callback(data: {docs:[{id: string}], action: string}): Promise<void> {
     if (data.action === google.picker.Action.PICKED) {
-      jsonFetch(this.ingestUrlValue, {
+      this.loaderTarget.style.display = 'block';
+      await jsonFetch(this.ingestUrlValue, {
         method: "PUT",
         body: {picked: data}
       });
+      this.startPollingForIngestStatus();
+    }
+  }
+
+  startPollingForIngestStatus(): void {
+    this.pollingInterval = setInterval(this.pollForIngestStatus.bind(this), 2000);
+  }
+
+  async pollForIngestStatus(): Promise<void> {
+    const result = await jsonFetch(this.ingestStatusUrlValue, {
+      method: "GET"
+    });
+
+    if (result.status == "done") {
+      clearInterval(this.pollingInterval);
+      this.loaderTarget.style.display = '';
     }
   }
 }

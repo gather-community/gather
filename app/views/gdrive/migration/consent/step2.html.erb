@@ -4,10 +4,16 @@
   data-gdrive--file-picker-client-id-value="<%= @config.client_id %>"
   data-gdrive--file-picker-access-token-value="<%= @access_token %>"
   data-gdrive--file-picker-ingest-url-value="<%= @ingest_url %>"
+  data-gdrive--file-picker-ingest-status-url-value="<%= @ingest_status_url %>"
   data-gdrive--file-picker-test-mode-value="<%= Rails.env.test? %>"
   data-gdrive--file-picker-search-token-value="<%= @search_token %>"
   data-gdrive--file-picker-community-name-value="<%= current_community.name %>"
   >
+
+  <div class="foreground-loader hiding" data-gdrive--file-picker-target="loader">
+    <%= image_tag("glb-load-ind.gif") %>
+    <div>Processing files</div>
+  </div>
 </div>
 
 <script src="https://apis.google.com/js/api.js"></script>

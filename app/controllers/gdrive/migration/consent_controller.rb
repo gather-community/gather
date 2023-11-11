@@ -69,6 +69,7 @@ module GDrive
         @config = operation.config
         @search_token = operation.filename_suffix
         @ingest_url = gdrive_migration_consent_ingest_url
+        @ingest_status_url = gdrive_migration_consent_ingest_status_url
         wrapper = Wrapper.new(config: @config, google_user_id: consent_request.google_email, callback_url: callback_url)
 
         if !wrapper.has_credentials?
@@ -79,6 +80,15 @@ module GDrive
           credentials.fetch_access_token!
           @access_token = credentials.access_token
         end
+      end
+
+      def ingest
+        sleep(1)
+        head :no_content
+      end
+
+      def ingest_status
+        render json: {status: "done"}
       end
 
       private

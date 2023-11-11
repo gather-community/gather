@@ -270,10 +270,10 @@ Rails.application.routes.draw do
         get "files", to: "files#index", as: :files
       end
       get "consent/callback", to: "consent#callback", as: :consent_callback
-      get "consent/:id", to: "consent#intro", as: :consent
-      get "consent/:id/step1", to: "consent#step1", as: :consent_step1
-      get "consent/:id/step2", to: "consent#step2", as: :consent_step2
-      put "consent/:id/ingest", to: "consent#ingest", as: :consent_ingest
+      get "consent/:token", to: "consent#intro", as: :consent
+      get "consent/:token/step1", to: "consent#step1", as: :consent_step1
+      get "consent/:token/step2", to: "consent#step2", as: :consent_step2
+      put "consent/:token/ingest", to: "consent#ingest", as: :consent_ingest
     end
   end
 

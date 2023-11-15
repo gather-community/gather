@@ -64,13 +64,12 @@ module GDrive
       end
 
       def step2
-        consent_request = ConsentRequest.find_by!(token: params[:token])
-        operation = consent_request.operation
+        @consent_request = ConsentRequest.find_by!(token: params[:token])
+        operation = @consent_request.operation
         @config = operation.config
         @search_token = operation.filename_suffix
-        @ingest_url = gdrive_migration_consent_ingest_url
-        @ingest_status_url = gdrive_migration_consent_ingest_status_url
-        wrapper = Wrapper.new(config: @config, google_user_id: consent_request.google_email, callback_url: callback_url)
+        @community = current_community
+        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email, callback_url: callback_url)
 
         if !wrapper.has_credentials?
           redirect_to(gdrive_migration_consent_step1_url)

@@ -1,18 +1,35 @@
 <% content_for(:title, "#{current_community.name} File Reorganization") %>
 
-<div data-controller="gdrive--file-picker"
-  data-gdrive--file-picker-client-id-value="<%= @config.client_id %>"
-  data-gdrive--file-picker-access-token-value="<%= @access_token %>"
-  data-gdrive--file-picker-ingest-url-value="<%= @ingest_url %>"
-  data-gdrive--file-picker-ingest-status-url-value="<%= @ingest_status_url %>"
-  data-gdrive--file-picker-test-mode-value="<%= Rails.env.test? %>"
-  data-gdrive--file-picker-search-token-value="<%= @search_token %>"
-  data-gdrive--file-picker-community-name-value="<%= current_community.name %>"
-  >
+<div class="simple">
+  <div data-controller="gdrive--file-picker"
+    data-gdrive--file-picker-client-id-value="<%= @config.client_id %>"
+    data-gdrive--file-picker-access-token-value="<%= @access_token %>"
+    data-gdrive--file-picker-ingest-url-value="<%= gdrive_migration_consent_ingest_url %>"
+    data-gdrive--file-picker-ingest-status-url-value="<%= gdrive_migration_consent_ingest_status_url %>"
+    data-gdrive--file-picker-test-mode-value="<%= Rails.env.test? %>"
+    data-gdrive--file-picker-search-token-value="<%= @search_token %>"
+    data-gdrive--file-picker-community-name-value="<%= current_community.name %>"
+    >
 
-  <div class="foreground-loader hiding" data-gdrive--file-picker-target="loader">
-    <%= image_tag("glb-load-ind.gif") %>
-    <div>Processing files</div>
+    <div data-gdrive--file-picker-target="instructions">
+      <h2>File Selection</h2>
+      <p>
+        You own about <%= number_with_delimiter(@consent_request.file_count) %> files in the old
+        <%= @community.name %> folder. Please use the picker to
+        select the ones you're willing to move. Gather will handle the move once you select the files.
+      </p>
+      <p>
+        <%= button_tag("Select Files", class: "btn btn-primary", data: {action: "click->gdrive--file-picker#showPicker"}) %>
+      </p>
+      <p class="weak">
+        If you'd rather not move any files or something went wrong, you can <%= link_to("cancel", gdrive_migration_consent_cancel_url) %>
+      </p>
+    </div>
+
+    <div class="foreground-loader hiding" data-gdrive--file-picker-target="loader">
+      <%= image_tag("glb-load-ind.gif") %>
+      <div>Processing files</div>
+    </div>
   </div>
 </div>
 

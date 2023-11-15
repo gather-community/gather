@@ -1,6 +1,13 @@
 <% content_for(:title, "#{current_community.name} File Reorganization") %>
 
-<p>Thanks for being willing to help!</p>
-<p>Please authorize Gather to access your <strong><%= @consent_request.google_email %></strong> Google account.</p>
+<div class="simple">
+  <h2>Authorization</h2>
 
-<%= link_to("Authorize", @auth_url, class: "btn btn-primary") %>
+  <p>Thanks for being willing to help!</p>
+  <p>
+    Please authorize Gather to access your <strong><%= @consent_request.google_email %></strong> Google account.
+    Gather will only be able to move files that you choose.
+  </p>
+
+  <%= link_to("Authorize", @auth_url, class: "btn btn-primary") %>
+</div>

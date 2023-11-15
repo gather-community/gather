@@ -13,7 +13,7 @@ export default class extends Controller<HTMLFormElement> {
     communityName: String,
   };
 
-  static targets = ["loader"];
+  static targets = ["instructions", "loader"];
 
   declare clientIdValue: string;
   declare accessTokenValue: string;
@@ -25,6 +25,7 @@ export default class extends Controller<HTMLFormElement> {
   declare communityNameValue: string;
   declare gapiLoaded: boolean;
 
+  declare readonly instructionsTarget: HTMLElement
   declare readonly loaderTarget: HTMLElement
 
   declare pollingInterval: number;
@@ -32,7 +33,6 @@ export default class extends Controller<HTMLFormElement> {
   connect(): void {
     gapi.load("picker", () => {
       this.gapiLoaded = true;
-      this.showPicker();
     });
   }
 
@@ -62,6 +62,7 @@ export default class extends Controller<HTMLFormElement> {
 
   async callback(data: {docs:[{id: string}], action: string}): Promise<void> {
     if (data.action === google.picker.Action.PICKED) {
+      this.instructionsTarget.style.display = 'none';
       this.loaderTarget.style.display = 'block';
       await jsonFetch(this.ingestUrlValue, {
         method: "PUT",
@@ -82,7 +83,7 @@ export default class extends Controller<HTMLFormElement> {
 
     if (result.status == "done") {
       clearInterval(this.pollingInterval);
-      this.loaderTarget.style.display = '';
+      this.loaderTarget.style.display = 'none';
     }
   }
 }

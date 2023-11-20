@@ -82,12 +82,36 @@ module GDrive
       end
 
       def ingest
-        sleep(1)
+        @consent_request = ConsentRequest.find_by!(token: params[:token])
+        @consent_request.update!(
+          ingest_requested_at: Time.current,
+          ingest_file_ids: params[:file_ids],
+          ingest_status: "new"
+        )
         head :no_content
       end
 
       def ingest_status
-        render json: {status: "done"}
+        @consent_request = ConsentRequest.find_by!(token: params[:token])
+
+        # Fake!
+        if @consent_request.ingest_status.present?
+          @consent_request.update!(
+            ingest_status: "done",
+            file_count: @consent_request.file_count - @consent_request.ingest_file_ids.size
+          )
+        end
+
+        result = {status: @consent_request.ingest_status}
+        if @consent_request.ingest_status == "done"
+          result[:instructions] = render_to_string(partial: "instructions",
+            locals: {consent_request: @consent_request, community: current_community})
+        end
+        render json: result
+
+        if @consent_request.ingest_status.present?
+          @consent_request.clear_ingestion
+        end
       end
 
       private

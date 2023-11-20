@@ -9,6 +9,10 @@ module GDrive
 
       before_create :generate_token
 
+      def clear_ingestion
+        update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil)
+      end
+
       private
 
       def generate_token

@@ -66,7 +66,7 @@ export default class extends Controller<HTMLFormElement> {
       this.loaderTarget.style.display = 'block';
       await jsonFetch(this.ingestUrlValue, {
         method: "PUT",
-        body: {picked: data}
+        body: {file_ids: data.docs.map((f) => f.id)}
       });
       this.startPollingForIngestStatus();
     }
@@ -84,6 +84,8 @@ export default class extends Controller<HTMLFormElement> {
     if (result.status == "done") {
       clearInterval(this.pollingInterval);
       this.loaderTarget.style.display = 'none';
+      this.instructionsTarget.innerHTML = result.instructions;
+      this.instructionsTarget.style.display = '';
     }
   }
 }

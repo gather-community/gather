@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_11_141225) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_15_131407) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -316,6 +316,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_11_141225) do
     t.datetime "created_at", null: false
     t.integer "file_count", null: false
     t.string "google_email", limit: 255, null: false
+    t.jsonb "ingest_file_ids"
+    t.datetime "ingest_requested_at"
+    t.string "ingest_status"
     t.bigint "operation_id", null: false
     t.string "status", limit: 16, null: false
     t.string "token", null: false
